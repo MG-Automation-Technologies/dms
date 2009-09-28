@@ -14,19 +14,19 @@ import javax.swing.SwingUtilities;
 
 import netscape.javascript.JSObject;
 
-public class OKMApplet extends JApplet implements ActionListener {
+public class Scanner extends JApplet implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(OKMApplet.class.getName());
+	private static Logger log = Logger.getLogger(Scanner.class.getName());
 	private static ScannerManager app;
 	private String token;
 	private String path;
 	private String url;
 	private JSObject win;
 	
-	public OKMApplet() {
+	public Scanner() {
 		super();
 		ImageIO.scanForPlugins();
 	}
