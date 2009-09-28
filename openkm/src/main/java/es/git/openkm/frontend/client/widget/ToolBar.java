@@ -1835,7 +1835,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	 * Create html applet code 
 	 */
 	public void setApplet(String token, String path) {
-		applet.setHTML("<applet code=\"es.git.openkm.applet.OKMApplet\" name=\"OKMApplet\" width=\"20\" height=\"20\" mayscript archive=\"../okm_applet.jar\">"+
+		applet.setHTML("<applet code=\"es.git.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
 				"<param name=\"token\" value=\""+token+"\">"+
 				"<param name=\"path\" value=\""+path+"\">"+
 				//"<param name=\"separate_jvm\" value=\"true\">"+
