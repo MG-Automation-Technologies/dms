@@ -70,8 +70,8 @@ public class StatsPanel extends Composite {
 		uuid = new HTML();
 		support = new HTML("<a href=\"mailto:support@openkm.com\">support@openkm.com</a>");
 		
-		table.setHTML(0, 0, "<b>OpenKM Enterprise Edition</b>");
-		table.setHTML(1, 0, "Version: 3.0");
+		table.setHTML(0, 0, "<b>OpenKM</b>");
+		table.setHTML(1, 0, "Version: 4.0");
 		table.setHTML(2, 0, "<br>");
 		table.setHTML(3, 0, "&copy; GIT Consultors S.L.");
 		table.setHTML(4, 0, "Francesc Rover 2-B");
