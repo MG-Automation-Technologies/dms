@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import uk.co.mmscomputing.device.sane.jsane;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
+@SuppressWarnings("serial")
 public class Applet extends JApplet implements ActionListener {
 	
 	public Applet() {}
@@ -55,7 +56,7 @@ public class Applet extends JApplet implements ActionListener {
 			//device.getDeviceNames();
 			jsane.init();
 			String[] x = jsane.getDevices(true);
-			//System.out.println("LEN: "+x.length);
+			System.out.println("LEN: "+x.length);
 			//for (int i=0; i<x.length; i++) {
 				//System.out.println("--> "+x[i]);
 			//}
