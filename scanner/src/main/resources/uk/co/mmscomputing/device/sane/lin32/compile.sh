@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVA_HOME="/usr/lib/jvm/java-1.5.0-sun"
+JAVA_HOME="/usr/lib/jvm/java-6-sun"
 
 #g++ -g -Wall -fPIC -pthread -D_REENTRANT -D_GNU_SOURCE -shared \
 #	-o libjsane.so jsane.cpp jdesc.cpp jnu.cpp \
