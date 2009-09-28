@@ -45,13 +45,13 @@ public class AboutPopup extends DialogBox implements ClickListener {
 	private HTML text;
 	private Button button;
 	private String msg1 = "<b>Be Open, my friend!</b><br>";
-	private String copy = "&nbsp;&copy 2006 - 2008 GIT Consultors S.L. <br><br>";
+	private String copy = "&nbsp;&copy 2006 - 2009 GIT Consultors S.L. <br><br>";
 	private String team = "<b>OpenKM Team</b><br>" + 
 							"Francisco José Ávila Bermejo (<i>Monkiki</i>)<br>"+
 							"Josep Llort Tella (<i>Darkman97i</i>)<br><br>";
 	
 	private String web = "<a href=\"http://www.openkm.com\" target=\"_blank\">http://www.openkm.com</a><br><br>";
-	private String version = "Version 3.0 Enterprise&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	private String version = "Version 4.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	
 	private Futurama futurama;
 	
