@@ -18,7 +18,7 @@
 	<h1>OpenKM Administration</h1>
 	<table width="200px" class="form" align="center" style="margin-top: 25px">
 		<tr><td><b>OpenKM Enterprise Edition</b></td></tr>
-		<tr><td>Version: 3.0</td></tr>
+		<tr><td>Version: 4.0</td></tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr><td>&copy; GIT Consultors S.L.</td></tr>
 		<tr><td>C/ Los Doscientos, 35 4º Izq</td></tr>
