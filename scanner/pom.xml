@@ -32,7 +32,7 @@
 
   <properties>
     <!--  tell the compiler we can use 1.6 -->
-    <maven.compiler>1.6</maven.compiler>
+    <java.compiler>1.6</java.compiler>
   </properties>
 
   <dependencies>
@@ -96,8 +96,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>${maven.compiler}</source>
-          <target>${maven.compiler}</target>
+          <source>${java.compiler}</source>
+          <target>${java.compiler}</target>
         </configuration>
       </plugin>
     </plugins>
