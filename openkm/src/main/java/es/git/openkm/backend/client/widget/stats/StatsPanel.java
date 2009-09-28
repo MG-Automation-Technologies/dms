@@ -74,20 +74,19 @@ public class StatsPanel extends Composite {
 		table.setHTML(1, 0, "Version: 4.0");
 		table.setHTML(2, 0, "<br>");
 		table.setHTML(3, 0, "&copy; GIT Consultors S.L.");
-		table.setHTML(4, 0, "Francesc Rover 2-B");
-		table.setHTML(5, 0, "07003 Palma de Mallorca");
-		table.setHTML(6, 0, "(Balearic Islands)");
-		table.setHTML(7, 0, "Spain");
+		table.setHTML(4, 0, "C/ Los Doscientos, 35 4º Izq");
+		table.setHTML(5, 0, "03007 Alicante");
+		table.setHTML(6, 0, "Spain");
+		table.setHTML(7, 0, "<br>");
 		table.setHTML(8, 0, "<br>");
-		table.setHTML(9, 0, "Tel. +34 971 49 83 10");
-		table.setHTML(10, 0, "Fax. +34 971 49 61 89");
-		table.setHTML(11, 0, "<br>");
+		table.setHTML(9, 0, "<br>");
+		table.setHTML(10, 0, "<br>");
 		
-		table.setHTML(12, 0, "<b>" + Main.i18n("stats.support") + "</b>");
-		table.setWidget(13, 0, support);
-		table.setHTML(14, 0, "<br>");
-		table.setHTML(15, 0, "<b>" + Main.i18n("stats.installation.id") + "</b>");
-		table.setWidget(16, 0, uuid);
+		table.setHTML(11, 0, "<b>" + Main.i18n("stats.support") + "</b>");
+		table.setWidget(12, 0, support);
+		table.setHTML(13, 0, "<br>");
+		table.setHTML(14, 0, "<b>" + Main.i18n("stats.installation.id") + "</b>");
+		table.setWidget(15, 0, uuid);
 		
 		HTML space = new HTML("");
 		leftPanel.add(space);
@@ -128,8 +127,8 @@ public class StatsPanel extends Composite {
 	public void langRefresh() {
 		graphicalStats.langRefresh();
 		usersPanel.langRefresh();
-		table.setHTML(12, 0, "<b>" + Main.i18n("stats.support") + "</b>");
-		table.setHTML(15, 0, "<b>" + Main.i18n("stats.installation.id") + "</b>");
+		table.setHTML(11, 0, "<b>" + Main.i18n("stats.support") + "</b>");
+		table.setHTML(14, 0, "<b>" + Main.i18n("stats.installation.id") + "</b>");
 	}
 	
 	/**
