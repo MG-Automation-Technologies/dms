@@ -1,17 +1,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.monkiki</groupId>
-  <artifactId>okm_applet</artifactId>
+  <groupId>org.monkiki.openkm</groupId>
+  <artifactId>scanner</artifactId>
   <packaging>jar</packaging>
   <name>OpenKM Scanner Applet</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1</version>
   <url>http://www.openkm.com</url>
+  <description>Java applet used to scan document directly from OpenKM web interface.</description>
+  
+  <licenses>
+    <license>
+      <name>GPLv2</name>
+      <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</url>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>monkiki</id>
+      <name>Paco Avila</name>
+      <email>monkiki@gmail.com</email>
+      <url>http://monkiki.wordpress.com</url>
+      <timezone>+1</timezone>
+      <roles>
+        <role>manager</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
 
   <properties>
-    <!--  tell the compiler we can use 1.5 -->
-    <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
+    <!--  tell the compiler we can use 1.6 -->
+    <maven.compiler>1.6</maven.compiler>
   </properties>
 
   <dependencies>
@@ -29,7 +50,7 @@
   </dependencies>
 
   <build>
-    <finalName>okm_applet</finalName>
+    <finalName>scanner</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +85,7 @@
             <id>make-assembly</id>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>attached</goal>
             </goals>
           </execution>
         </executions>
@@ -75,8 +96,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
+          <source>${maven.compiler}</source>
+          <target>${maven.compiler}</target>
         </configuration>
       </plugin>
     </plugins>
