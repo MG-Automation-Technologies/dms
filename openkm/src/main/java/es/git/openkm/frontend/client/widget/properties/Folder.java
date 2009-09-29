@@ -155,12 +155,12 @@ public class Folder extends Composite {
 		setRowWordWarp(4, 1, true, tableProperties);
 		
 		// Remove all table rows >= 1
-		while (tableSubscribedUsers.getRowCount()>1) {
+		while (tableSubscribedUsers.getRowCount() > 1) {
 			tableSubscribedUsers.removeRow(1);
 		}
 		
 		// Sets the folder subscribers
-		for (Iterator<String> it= folder.getSubscriptors().iterator(); it.hasNext(); ) {
+		for (Iterator<String> it = folder.getSubscriptors().iterator(); it.hasNext(); ) {
 			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
@@ -185,7 +185,7 @@ public class Folder extends Composite {
 			}
 		}
 		
-		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+		tableSubscribedUsers.setHTML(0, 0, "<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 		copyWebdavToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
 	}
 }
