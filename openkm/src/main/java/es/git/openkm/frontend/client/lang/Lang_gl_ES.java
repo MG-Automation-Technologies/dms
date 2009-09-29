@@ -287,6 +287,7 @@ public class Lang_gl_ES {
 	    lang.put("document.history.size", "Tamaño do histórico");
 	    lang.put("document.subscribed.users", "Usuarios suscritos");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Añadir note");
 	    lang.put("document.keywords.cloud", "Nube de palabras clave");
 	    
@@ -300,6 +301,7 @@ public class Lang_gl_ES {
 	    lang.put("folder.subscribed.yes", "Si");
 	    lang.put("folder.subscribed.no", "Non");
 	    lang.put("folder.subscribed.users", "Usuarios suscritos");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Versión");

@@ -287,6 +287,7 @@ public class Lang_ja_JP {
 		lang.put("document.history.size", "合計サイズ");
 		lang.put("document.subscribed.users", "認証ユーザ");
 		lang.put("document.url", "URL");
+		lang.put("document.webdav", "WebDAV");
 		lang.put("document.add.note", "Add note");
 		lang.put("document.keywords.cloud", "Keywords cloud");
 		
@@ -300,6 +301,7 @@ public class Lang_ja_JP {
 		lang.put("folder.subscribed.yes", "はい");
 		lang.put("folder.subscribed.no", "いいえ");
 		lang.put("folder.subscribed.users", "認証ユーザ");
+		lang.put("folder.webdav", "WebDAV");
 		
 		// Version
 		lang.put("version.name", "バージョン");

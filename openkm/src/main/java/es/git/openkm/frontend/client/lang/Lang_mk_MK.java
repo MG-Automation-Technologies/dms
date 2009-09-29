@@ -287,6 +287,7 @@ public class Lang_mk_MK {
 	    lang.put("document.history.size", "Големина на историја");
 	    lang.put("document.subscribed.users", "Преплатени корисници");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Додај белешка");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_mk_MK {
 	    lang.put("folder.subscribed.yes", "Да");
 	    lang.put("folder.subscribed.no", "Не");
 	    lang.put("folder.subscribed.users", "Преплатени корисници");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Верзија");

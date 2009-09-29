@@ -287,6 +287,7 @@ public class Lang_el_GR {
 	    lang.put("document.history.size", "Μέγεθος ιστορικού");
 	    lang.put("document.subscribed.users", "Εγγεγραμμένοι χρήστες");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Προσθήκη Σημείωσης");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_el_GR {
 	    lang.put("folder.subscribed.yes", "Ναι");
 	    lang.put("folder.subscribed.no", "Όχι");
 	    lang.put("folder.subscribed.users", "Εγγεγραμμένοι χρήστες");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Έκδοση");

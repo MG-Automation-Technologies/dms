@@ -286,6 +286,7 @@ public class Lang_zh_CN {
 	    lang.put("document.history.size", "历史大小");
 	    lang.put("document.subscribed.users", "已订阅用户");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -299,6 +300,7 @@ public class Lang_zh_CN {
 	    lang.put("folder.subscribed.yes", "是");
 	    lang.put("folder.subscribed.no", "否");
 	    lang.put("folder.subscribed.users", "订阅用户");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "版本");

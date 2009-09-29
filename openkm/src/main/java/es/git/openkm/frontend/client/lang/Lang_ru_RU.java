@@ -292,6 +292,7 @@ public class Lang_ru_RU {
 	    lang.put("document.history.size", "Размер истории");
 	    lang.put("document.subscribed.users", "Подписанные пользователи");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Добавить заметку");
 	    lang.put("document.keywords.cloud", "Облако ключевых слов");
 	    
@@ -305,6 +306,7 @@ public class Lang_ru_RU {
 	    lang.put("folder.subscribed.yes", "Да");
 	    lang.put("folder.subscribed.no", "Нет");
 	    lang.put("folder.subscribed.users", "Подписанные пользователи");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Версия");

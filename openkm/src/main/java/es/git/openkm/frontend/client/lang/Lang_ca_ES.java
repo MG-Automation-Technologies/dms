@@ -287,6 +287,7 @@ public class Lang_ca_ES {
 	    lang.put("document.history.size", "Grandària de l'històric");
 	    lang.put("document.subscribed.users", "Usuaris subscrits");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Afegir nota");
 	    lang.put("document.keywords.cloud", "Núvol de paraules clau");
 	    
@@ -300,6 +301,7 @@ public class Lang_ca_ES {
 	    lang.put("folder.subscribed.yes", "Si");
 	    lang.put("folder.subscribed.no", "No");
 	    lang.put("folder.subscribed.users", "Usuaris subscrits");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Versió");

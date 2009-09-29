@@ -287,6 +287,7 @@ public class Lang_hu_HU {
 	    lang.put("document.history.size", "Verziók mérete");
 	    lang.put("document.subscribed.users", "Változásokról értesített felhasználok");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Jegyzet írása");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_hu_HU {
 	    lang.put("folder.subscribed.yes", "Igen");
 	    lang.put("folder.subscribed.no", "Nem");
 	    lang.put("folder.subscribed.users", "Változásokról értesített felhasználók");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Verzió");

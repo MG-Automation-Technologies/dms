@@ -287,6 +287,7 @@ public class Lang_lv_LV {
 	    lang.put("document.history.size", "Vēstures izmērs");
 	    lang.put("document.subscribed.users", "Lietotāji, kuri abonējuši");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Pievienot piezīme");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_lv_LV {
 	    lang.put("folder.subscribed.yes", "Jā");
 	    lang.put("folder.subscribed.no", "Nē");
 	    lang.put("folder.subscribed.users", "Lietotāji, kuri abonējuši");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Versija");

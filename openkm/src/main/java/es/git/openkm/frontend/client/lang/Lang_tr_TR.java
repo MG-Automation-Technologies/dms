@@ -287,6 +287,7 @@ public class Lang_tr_TR {
 	    lang.put("document.history.size", "Geçmiþ Boyut");
 	    lang.put("document.subscribed.users", "Onaylanmýþ Kullanýcýlar");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_tr_TR {
 	    lang.put("folder.subscribed.yes", "Evet");
 	    lang.put("folder.subscribed.no", "Hayýr");
 	    lang.put("folder.subscribed.users", "Onaylanmýþ Kullanýcýlar");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Sürüm");

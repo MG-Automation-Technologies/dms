@@ -288,6 +288,7 @@ public class Lang_ro_RO {
 	    lang.put("document.history.size", "Dimensiune istoric");
 	    lang.put("document.subscribed.users", "Utilizatori subscrisi");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 
@@ -301,6 +302,7 @@ public class Lang_ro_RO {
 	    lang.put("folder.subscribed.yes", "Da");
 	    lang.put("folder.subscribed.no", "Nu");
 	    lang.put("folder.subscribed.users", "Utilizatori subscrisi");
+	    lang.put("folder.webdav", "WebDAV");
 
 	    // Version
 	    lang.put("version.name", "Versiune");

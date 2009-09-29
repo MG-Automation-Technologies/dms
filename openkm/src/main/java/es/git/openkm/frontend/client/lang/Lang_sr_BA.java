@@ -287,6 +287,7 @@ public class Lang_sr_BA {
 	    lang.put("document.history.size", "Veličina istorije");
 	    lang.put("document.subscribed.users", "Potpisani korisnici");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_sr_BA {
 	    lang.put("folder.subscribed.yes", "Da");
 	    lang.put("folder.subscribed.no", "Ne");
 	    lang.put("folder.subscribed.users", "Potpisani korisnici");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "Verzija");

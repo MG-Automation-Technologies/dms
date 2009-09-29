@@ -287,6 +287,7 @@ public class Lang_fa_FA {
 	    lang.put("document.history.size", "History size");
 	    lang.put("document.subscribed.users", "Subscribed users");
 	    lang.put("document.url", "URL");
+	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
 	    
@@ -300,6 +301,7 @@ public class Lang_fa_FA {
 	    lang.put("folder.subscribed.yes", "Yes");
 	    lang.put("folder.subscribed.no", "No");
 	    lang.put("folder.subscribed.users", "Subscribed users");
+	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
 	    lang.put("version.name", "ورژن");
