@@ -22,15 +22,19 @@ package es.git.openkm.frontend.client.widget.properties;
 import java.util.Iterator;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.panel.PanelDefinition;
+import es.git.openkm.frontend.client.util.Util;
 
 public class Folder extends Composite {
 	
@@ -39,6 +43,7 @@ public class Folder extends Composite {
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
 	private GWTFolder folder;
+	private Button copyWebdavToClipBoard;
 	
 	/**
 	 * The folder
@@ -48,6 +53,17 @@ public class Folder extends Composite {
 		tableProperties = new FlexTable();
 		tableSubscribedUsers = new FlexTable();
 		scrollPanel = new ScrollPanel(table);
+		
+		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
+			public void onClick(Widget sender) {
+				String url = Main.get().workspaceUserProperties.getApplicationURL();
+				int idx = url.lastIndexOf('/');
+				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
+				Util.copyToClipboard(url);
+			}
+		});
+		
+		copyWebdavToClipBoard.setStyleName("okm-Button");
 		
 		tableProperties.setWidth("100%");
 		tableProperties.setHTML(0, 0, "<b>"+Main.i18n("folder.uuid")+"</b>");
@@ -60,6 +76,8 @@ public class Folder extends Composite {
 		tableProperties.setHTML(3, 1, "");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
 		tableProperties.setHTML(4, 1, "");
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setWidget(5, 1, copyWebdavToClipBoard);
 		
 		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 				
@@ -142,8 +160,8 @@ public class Folder extends Composite {
 		}
 		
 		// Sets the folder subscribers
-		for (Iterator it= folder.getSubscriptors().iterator(); it.hasNext(); ) {
-			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, (String) it.next());
+		for (Iterator<String> it= folder.getSubscriptors().iterator(); it.hasNext(); ) {
+			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 	}
@@ -157,6 +175,8 @@ public class Folder extends Composite {
 		tableProperties.setHTML(2, 0, "<b>"+Main.i18n("folder.parent")+"</b>");
 		tableProperties.setHTML(3, 0, "<b>"+Main.i18n("folder.created")+"</b>");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		
 		if (folder!=null) {
 			if (folder.isSubscribed()) {
 				tableProperties.setHTML(4, 1, Main.i18n("folder.subscribed.yes"));
@@ -164,6 +184,8 @@ public class Folder extends Composite {
 				tableProperties.setHTML(4, 1, Main.i18n("folder.subscribed.no"));
 			}
 		}
+		
 		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
+		copyWebdavToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
 	}
 }

@@ -68,7 +68,8 @@ public class Document extends Composite {
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
 	private GWTDocument document;
-	private Button copyToClipBoard;
+	private Button copyUrlToClipBoard;
+	private Button copyWebdavToClipBoard;
 	private HorizontalPanel keywordPanel;
 	private SimplePanel sp;
 	private ScrollPanel scrollPanel;
@@ -93,18 +94,28 @@ public class Document extends Composite {
 		sp = new SimplePanel();
 		sp.setWidth("16px");
 
-		copyToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
+		copyUrlToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
 			public void onClick(Widget sender) {
-				Util.copyToClipboard(Main.get().workspaceUserProperties.getApplicationURL() + 
-									 "?docPath=" + URL.encodeComponent(document.getPath()));
+				String url = Main.get().workspaceUserProperties.getApplicationURL();
+				url += "?docPath=" + URL.encodeComponent(document.getPath());
+				Util.copyToClipboard(url);
 			}
 		});
-		
+
+		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
+			public void onClick(Widget sender) {
+				String url = Main.get().workspaceUserProperties.getApplicationURL();
+				int idx = url.lastIndexOf('/');
+				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + document.getPath();
+				Util.copyToClipboard(url);
+			}
+		});
+
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
-		suggestKey.addKeyboardListener(new KeyboardListener(){
+		suggestKey.addKeyboardListener(new KeyboardListener() {
 			public void onKeyDown(Widget sender, char keyCode, int modifiers) {
 			}
 
@@ -143,7 +154,8 @@ public class Document extends Composite {
 		
 		keywordPanel.add(vPanel);
 		keywordPanel.add(sp);
-		copyToClipBoard.setStyleName("okm-Button");
+		copyUrlToClipBoard.setStyleName("okm-Button");
+		copyWebdavToClipBoard.setStyleName("okm-Button");
 		
 		tableProperties.setHTML(0, 0, "<b>"+Main.i18n("document.uuid")+"</b>");
 		tableProperties.setHTML(0, 1, "");
@@ -168,7 +180,9 @@ public class Document extends Composite {
 		tableProperties.setHTML(10, 0, "<b>"+Main.i18n("document.history.size")+"</b>");
 		tableProperties.setHTML(10, 1, "");
 		tableProperties.setHTML(11, 0, "<b>"+Main.i18n("document.url")+"</b>");
-		tableProperties.setWidget(11, 1, copyToClipBoard);
+		tableProperties.setWidget(11, 1, copyUrlToClipBoard);
+		tableProperties.setHTML(12, 0, "<b>"+Main.i18n("document.webdav")+"</b>");
+		tableProperties.setWidget(12, 1, copyWebdavToClipBoard);
 		
 		tableProperties.getCellFormatter().setVerticalAlignment(7, 0, HasAlignment.ALIGN_TOP);
 		
@@ -336,6 +350,7 @@ public class Document extends Composite {
 		tableProperties.setHTML(9, 0, "<b>"+Main.i18n("document.subscribed")+"</b>");
 		tableProperties.setHTML(10, 0, "<b>"+Main.i18n("document.history.size")+"</b>");
 		tableProperties.setHTML(11, 0, "<b>"+Main.i18n("document.url")+"</b>");
+		tableProperties.setHTML(12, 0, "<b>"+Main.i18n("document.webdav")+"</b>");
 		//keywordsCloudText.setHTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		subcribedUsersText.setHTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
 		
@@ -364,7 +379,8 @@ public class Document extends Composite {
 			}
 		}
 		
-		copyToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
+		copyUrlToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
+		copyWebdavToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
 	}	
 	
 	/**
