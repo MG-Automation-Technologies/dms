@@ -33,10 +33,9 @@
       </form>
     </div>
   </div>
-  
-  <% if (Config.SYSTEM_DEMO.equalsIgnoreCase("on")) { %>				
-		<jsp:include flush="true" page="login_demo_users.jsp"/>
+
+  <% if (Config.SYSTEM_DEMO.equalsIgnoreCase("on")) { %>
+    <jsp:include flush="true" page="login_demo_users.jsp"/>
   <% } %>
-  
 </body>
 </html>
