@@ -8,6 +8,11 @@
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses Jboss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
+  
+  <scm>
+    <url>http://openkm.svn.sourceforge.net/viewvc/openkm/</url>
+    <connection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm</connection>
+  </scm>
 
   <licenses>
     <license>
