@@ -44,7 +44,6 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 		String token = (String) request.getSession().getAttribute("token");
 		String fileName = null;
 		byte[] content = null;
-		boolean menu = true;
 		PrintWriter out = null;
 
 		try {
@@ -63,9 +62,6 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 					FileItem item = it.next();
 									
 					if (item.isFormField()) {
-						if (item.getFieldName().equals("menu")) {
-							menu = false;
-						}
 					} else {
 						fileName = item.getName();
 						content = item.get();
@@ -82,7 +78,7 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 					is.close();
 				}
 				
-				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/wf_processes.jsp"+(!menu?"?menu=0":""));
+				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/wf_processes.jsp");
 			}
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
