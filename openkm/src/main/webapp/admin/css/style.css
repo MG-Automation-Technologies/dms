@@ -78,9 +78,14 @@ div.error {
 	text-align: center;
 }
 
+div.warn {
+	color: maroon;
+	text-align: left;
+}
+	
 div.ok {
 	color: green;
-	text-align: center;
+	text-align: left;
 }
 
 span.vanadium-invalid {
