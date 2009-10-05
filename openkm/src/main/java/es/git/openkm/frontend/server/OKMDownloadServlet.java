@@ -76,6 +76,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		String ver = req.getParameter("ver");
 		String export = req.getParameter("export");
 		String toPdf = req.getParameter("toPdf");
+		String inline = req.getParameter("inline");
 		File tmp = File.createTempFile("okm", "mkk");
 		Document doc = null;
 		InputStream is = null;
@@ -104,7 +105,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			// Send document
 			if (export != null) {
 				String fileName = FileUtils.getName(path)+".zip";
-				sendFile(req, resp, fileName, "application/zip", is);
+				sendFile(req, resp, fileName, "application/zip", inline != null, is);
 				is.close();
 				tmp.delete();
 			} else if (doc != null) {
@@ -123,7 +124,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 					is = new FileInputStream(tmp); 
 				}
 				
-				sendFile(req, resp, fileName, doc.getMimeType(), is);
+				sendFile(req, resp, fileName, doc.getMimeType(), inline != null, is);
 				is.close();
 				tmp.delete();
 			}
@@ -152,7 +153,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	 * @throws IOException If there is a communication error.
 	 */
 	private void sendFile(HttpServletRequest req, HttpServletResponse resp, 
-			String fileName, String mimeType, InputStream is) throws IOException {
+			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
 		String agent = req.getHeader("USER-AGENT");
 		
 		// Disable browser cache
@@ -173,8 +174,12 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		} else {
 			log.debug("Agent: Unknown");
 		}
-					
-		resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
+		
+		if (inline) {
+			resp.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
+		} else {
+			resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
+		}
 
 		// Set length
 		resp.setContentLength(is.available());
