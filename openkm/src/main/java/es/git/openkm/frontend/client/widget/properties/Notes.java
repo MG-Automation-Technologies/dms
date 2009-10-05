@@ -35,7 +35,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -62,7 +61,6 @@ public class Notes extends Composite {
 	private FlexTable table;
 	private GWTDocument document;
 	private Button add;
-	private SimplePanel sp;
 	private ScrollPanel scrollPanel;
 	private RichTextArea richTextArea;
 	private RichTextToolbar toolbar;
@@ -75,9 +73,6 @@ public class Notes extends Composite {
 		table = new FlexTable();
 		tableNotes = new FlexTable();
 		scrollPanel = new ScrollPanel(table);
-		sp = new SimplePanel();
-		sp.setWidth("16px");
-		
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("document.add.note") + "</b>");
 		richTextArea = new RichTextArea();
