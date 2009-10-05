@@ -116,7 +116,7 @@ public class OKMGeneralUtilsServletAdmin extends OKMRemoteServiceServletAdmin im
 			
 			try {
 				StringWriter out = new StringWriter();
-				RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out);
+				RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator());
 				msg = out.toString();
 
 			} catch (IOException e) {
