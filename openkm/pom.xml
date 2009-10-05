@@ -55,16 +55,16 @@
   <repositories>
     <!-- Needed for org.jbpm -->
     <repository>
-      <id>jboss</id>
-      <name>JBoss Release Repository</name>
+      <id>jboss.org</id>
+      <name>JBoss Maven Repository</name>
       <url>http://repository.jboss.org/maven2</url>
     </repository>
-
-    <!-- Needed for gwt gchart -->
+    
+    <!-- Needed for com.google.gwt:gchart -->
     <repository>
-      <id>gchart</id>
-      <name>GChart Maven repository</name>
-      <url>http://www.yp5.be/maven2</url>
+      <id>jboss.com</id>
+      <name>JBoss Maven Repository</name>
+      <url>http://repository.jboss.com/maven2</url>
     </repository>
   </repositories>
 
@@ -271,11 +271,10 @@
     </dependency>
 
     <!-- GWT plugins -->
-    <!-- http://code.google.com/p/gchart/issues/detail?id=15 -->
     <dependency>
-      <groupId>gchart</groupId>
+      <groupId>com.google.gwt</groupId>
       <artifactId>gchart</artifactId>
-      <version>2.1</version>
+      <version>2.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
