@@ -36,28 +36,27 @@ public class RepositoryStatistics extends Composite {
 	 */
 	public RepositoryStatistics() {
 		table = new FlexTable();
-		table.setHTML(0,0,"Tamaño");
-		table.setHTML(1,0,"Ficheros");
-		table.setHTML(2,0,"Carpetas");
-		table.setHTML(3,0,"Grupos de propiedades");
-		table.setHTML(4,0,"Ficheros indexados");
-		table.setHTML(5,0,"Tamaño personales");
-		table.setHTML(6,0,"Ficheros personales");
-		table.setHTML(7,0,"Carpetas personales");
-		table.setHTML(8,0,"Tamaño plantillas");
-		table.setHTML(9,0,"Ficheros plantillas");
-		table.setHTML(10,0,"Carpetas plantillas");
-		table.setHTML(11,0,"Tamaño papeleras");
-		table.setHTML(12,0,"Ficheros papeleras");
-		table.setHTML(13,0,"Carpetas papeleras");
-		table.setHTML(14,0,"Ficheros auditados");
-		table.setHTML(15,0,"Carpetas auditadas");
-		table.setHTML(16,0,"Ficheros editados");
-		table.setHTML(17,0,"Ficheros bloqueados");
-		table.setHTML(18,0,"Version");
-		table.setHTML(19,0,"UUID");
+		table.setHTML(0, 0, "Tamaño");
+		table.setHTML(1, 0, "Ficheros");
+		table.setHTML(2, 0, "Carpetas");
+		table.setHTML(3, 0, "Grupos de propiedades");
+		table.setHTML(4, 0, "Ficheros indexados");
+		table.setHTML(5, 0, "Tamaño personales");
+		table.setHTML(6, 0, "Ficheros personales");
+		table.setHTML(7, 0, "Carpetas personales");
+		table.setHTML(8, 0, "Tamaño plantillas");
+		table.setHTML(9, 0, "Ficheros plantillas");
+		table.setHTML(10, 0, "Carpetas plantillas");
+		table.setHTML(11, 0, "Tamaño papeleras");
+		table.setHTML(12, 0, "Ficheros papeleras");
+		table.setHTML(13, 0, "Carpetas papeleras");
+		table.setHTML(14, 0, "Ficheros auditados");
+		table.setHTML(15, 0, "Carpetas auditadas");
+		table.setHTML(16, 0, "Ficheros editados");
+		table.setHTML(17, 0, "Ficheros bloqueados");
+		table.setHTML(18, 0, "Version");
+		table.setHTML(19, 0, "UUID");
 		
 		initWidget(table);
 	}
-	
 }
