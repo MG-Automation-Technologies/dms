@@ -56,15 +56,15 @@ public class RepositoryImporter {
 	 * @throws javax.jcr.RepositoryException 
 	 * @throws IOException 
 	 */
-	public static boolean importDocuments(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
+	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
 			throws PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("importDocuments(" + token + ", " + fs + ", " + fldPath + ")");
-		boolean ok = true;
+		log.debug("importDocuments(" + token + ", " + fs + ", " + fldPath + ", " + deco + ")");
+		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
-				ok = importDocumentsHelper(token, fs, fldPath, out, deco);
+				stats = importDocumentsHelper(token, fs, fldPath, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -88,8 +88,8 @@ public class RepositoryImporter {
 			throw e;
 		}
 				
-		log.debug("importDocuments: "+ok);
-		return ok;
+		log.debug("importDocuments: "+stats);
+		return stats;
 	}
 	
 	/**
@@ -108,13 +108,13 @@ public class RepositoryImporter {
 	 * @throws FileSizeExceededException 
 	 * @throws UnsupportedMimeTypeException 
 	 */
-	private static boolean importDocumentsHelper(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
+	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
 			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
 			ItemExistsException, RepositoryException, IOException {
-		log.debug("importDocumentsHelper("+token+", "+fs+", "+fldPath+")");
+		log.debug("importDocumentsHelper("+token+", "+fs+", "+fldPath+", "+out+", "+deco+")");
 		File[] files = fs.listFiles();
-		boolean allOk = true;
-				
+		ImpExpStats stats = new ImpExpStats();
+		
 		for (int i=0; i<files.length; i++) {
 			if (files[i].isDirectory()) {
 				Folder fld = new Folder();
@@ -122,41 +122,52 @@ public class RepositoryImporter {
 				
 				try {
 					ModuleManager.getFolderModule().create(token, fld);
-					allOk &= importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
+					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
+					
+					// Stats
+					stats.setOk(stats.isOk() && tmp.isOk());
+					stats.setSize(stats.getSize() + tmp.getSize());
+					stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
+					stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: "+e.getMessage());
 					out.write(deco.print(files[i].getPath(), "ItemExists"));
 					out.flush();
-					allOk = false;
+					stats.setOk(false);
 				}
 			} else {
 				Document doc = new Document();
 				doc.setPath(fldPath + "/" + files[i].getName());
 				FileInputStream fisContent = new FileInputStream(files[i]);
+				int size = fisContent.available();
 				boolean docOk = true;
 				
 				try {
 					ModuleManager.getDocumentModule().create(token, doc, fisContent);
+					
+					// Stats
+					stats.setSize(stats.getSize() + size);
+					stats.setDocuments(stats.getDocuments() + 1);
 				} catch (UnsupportedMimeTypeException e) {
 					log.warn("UnsupportedMimeTypeException: "+e.getMessage());
 					out.write(deco.print(files[i].getPath(), "UnsupportedMimeType"));
 					out.flush();
-					allOk = docOk = false;
+					stats.setOk(docOk = false);
 				} catch (FileSizeExceededException e) {
 					log.warn("FileSizeExceededException: "+e.getMessage());
 					out.write(deco.print(files[i].getPath(), "FileSizeExceeded"));
 					out.flush();
-					allOk = docOk = false;
+					stats.setOk(docOk = false);
 				} catch (VirusDetectedException e) {
 					log.warn("VirusWarningException: "+e.getMessage());
 					out.write(deco.print(files[i].getPath(), "VirusWarningException"));
 					out.flush();
-					allOk = docOk = false;
+					stats.setOk(docOk = false);
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: "+e.getMessage());
 					out.write(deco.print(files[i].getPath(), "ItemExists"));
 					out.flush();
-					allOk = docOk = false;
+					stats.setOk(docOk = false);
 				} finally {
 					fisContent.close();					
 				}
@@ -168,7 +179,7 @@ public class RepositoryImporter {
 			}
 		}
 		
-		log.debug("importDocumentsHelper: "+allOk);
-		return allOk;
+		log.debug("importDocumentsHelper: "+stats);
+		return stats;
 	}
 }

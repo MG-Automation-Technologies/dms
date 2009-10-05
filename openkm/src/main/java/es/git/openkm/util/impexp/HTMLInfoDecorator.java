@@ -25,9 +25,9 @@ public class HTMLInfoDecorator implements InfoDecorator {
 		StringBuffer sb = new StringBuffer();
 		
 		if (error != null) {
-			sb.append("<span class=\"error\">");
+			sb.append("<div class=\"warn\">");
 		} else {
-			sb.append("<span>");
+			sb.append("<div>");
 		}
 		
 		sb.append(path);
@@ -37,7 +37,7 @@ public class HTMLInfoDecorator implements InfoDecorator {
 			sb.append(error);
 		}
 				
-		sb.append("</span><br>\n");
+		sb.append("</div>\n");
 		
 		return sb.toString();
 	}

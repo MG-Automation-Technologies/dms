@@ -56,15 +56,16 @@ public class RepositoryExporter {
 	 * @param fsPath
 	 * @throws RepositoryException
 	 */
-	public static void exportDocuments(String token, String fldPath, File fs, Writer out)
+	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out, InfoDecorator deco)
 			throws PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("exportDocuments(" + fldPath + "," + fs + ")");
-
+		log.debug("exportDocuments(" + fldPath + "," + fs + ", " + out + ", " + deco + ")");
+		ImpExpStats stats;
+		
 		try {
 			if (fs.exists()) {
 				firstTime = true;
-				exportDocumentsHelper(token, fldPath, fs, out);
+				stats = exportDocumentsHelper(token, fldPath, fs, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -85,7 +86,8 @@ public class RepositoryExporter {
 			throw e;
 		}
 
-		log.debug("exportDocuments: void");
+		log.debug("exportDocuments: "+stats);
+		return stats;
 	}
 
 	/**
@@ -101,10 +103,11 @@ public class RepositoryExporter {
 	 * @throws IOException
 	 * @throws RepositoryException
 	 */
-	private static void exportDocumentsHelper(String token, String fldPath, File fs,  Writer out)
+	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs,  Writer out, InfoDecorator deco)
 			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("exportDocumentsHelper(" + token + ", " + fldPath + ", " + fs + ", " + out + ")");
+		log.debug("exportDocumentsHelper(" + token + ", " + fldPath + ", " + fs + ", " + out + ", " + deco + ")");
+		ImpExpStats stats = new ImpExpStats();
 		String path = null;
 		
 		if (firstTime) {
@@ -127,16 +130,27 @@ public class RepositoryExporter {
 			IOUtils.copy(is, fos);
 			is.close();
 			fos.close();
-			out.write(docChild.getPath() + "<br>\n");
+			out.write(deco.print(docChild.getPath(), null));
 			out.flush();
+			
+			// Stats
+			stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
+			stats.setDocuments(stats.getDocuments() + 1);
 		}
 
 		FolderModule fm = ModuleManager.getFolderModule();
 		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
-			exportDocumentsHelper(token, fldChild.getPath(), fsPath, out);
+			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, out, deco);
+			
+			// Stats
+			stats.setSize(stats.getSize() + tmp.getSize());
+			stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
+			stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
+			stats.setOk(stats.isOk() && tmp.isOk());
 		}
 
-		log.debug("exportDocumentsHelper: void");
+		log.debug("exportDocumentsHelper: "+stats);
+		return stats;
 	}
 }
