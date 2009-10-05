@@ -98,8 +98,6 @@ public class Status extends PopupPanel {
 		}
 	}
 	
-	
-	
 	/**
 	 * Sets get graph flag
 	 */
