@@ -1,7 +1,10 @@
 <%@ page import="java.io.File" %>
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.core.SessionManager" %>
+<%@ page import="es.git.openkm.util.FormatUtil"%>
 <%@ page import="es.git.openkm.util.impexp.RepositoryExporter" %>
+<%@ page import="es.git.openkm.util.impexp.HTMLInfoDecorator" %>
+<%@ page import="es.git.openkm.util.impexp.ImpExpStats"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -42,12 +45,19 @@
 
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
-				out.println("<hr/>");
 				SessionManager sm = SessionManager.getInstance();
 				String token = sm.getTokenByUserId(Config.SYSTEM_USER);
-				RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out);
 				out.println("<hr/>");
-				out.println("<span class=\"ok\">Folder '"+repoPath+"' exported to '"+new File(fsPath).getAbsolutePath()+"'<span>");
+				long begin = System.currentTimeMillis();
+				ImpExpStats stats = RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator());
+				long end = System.currentTimeMillis();
+				out.println("<hr/>");
+				out.println("<div class=\"ok\">Folder '"+repoPath+"' exported to '"+new File(fsPath).getAbsolutePath()+"'</div>");
+				out.println("<br/>");
+				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
+				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
+				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
+				out.println("<b>Time:</b> "+FormatUtil.formatTime(end - begin)+"<br/>");
 			}
 		} catch (Exception e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
