@@ -215,8 +215,8 @@ public class VerticalToolBar extends Composite implements MouseListener {
 			hPanel.setCellHorizontalAlignment(vPanel, HasAlignment.ALIGN_CENTER);
 			hPanel.setCellVerticalAlignment(vPanel, HasAlignment.ALIGN_MIDDLE);
 			
-			vPanel.setCellWidth(hSpace1, "5");
-			vPanel.setCellWidth(hSpace2, "5");
+			vPanel.setCellHeight(hSpace1, "5");
+			vPanel.setCellHeight(hSpace2, "5");
 			hPanel.setHeight("50");
 			vPanel.setWidth("100%");
 			hPanel.setWidth("100%");
@@ -233,7 +233,7 @@ public class VerticalToolBar extends Composite implements MouseListener {
 			setCellWidth(vSpace1, "5");
 			setCellWidth(vSpace2, "5");
 			
-			setHeight("75");
+			setHeight("50");
 			setWidth("100%");
 		}
 		
