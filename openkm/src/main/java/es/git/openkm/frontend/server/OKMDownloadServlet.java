@@ -50,6 +50,7 @@ import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.util.DocConverter;
 import es.git.openkm.util.FileUtils;
+import es.git.openkm.util.impexp.HTMLInfoDecorator;
 import es.git.openkm.util.impexp.RepositoryExporter;
 
 /**
@@ -77,7 +78,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		String export = req.getParameter("export");
 		String toPdf = req.getParameter("toPdf");
 		String inline = req.getParameter("inline");
-		File tmp = File.createTempFile("okm", "mkk");
+		File tmp = File.createTempFile("okm", ".mkk");
 		Document doc = null;
 		InputStream is = null;
 		
@@ -213,7 +214,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(token, path, tmp, out);
+			RepositoryExporter.exportDocuments(token, path, tmp, out, new HTMLInfoDecorator());
 			out.close();
 			
 			// Zip files

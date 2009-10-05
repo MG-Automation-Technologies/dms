@@ -38,6 +38,7 @@ import es.git.openkm.core.UnsupportedMimeTypeException;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.widget.upload.FancyFileUpload;
 import es.git.openkm.util.FileUtils;
+import es.git.openkm.util.impexp.ImpExpStats;
 import es.git.openkm.util.impexp.RepositoryImporter;
 import es.git.openkm.util.impexp.TextInfoDecorator;
 
@@ -224,7 +225,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			
 			// Import files
 			StringWriter out = new StringWriter();
-			if (!RepositoryImporter.importDocuments(token, tmp, path, out, new TextInfoDecorator(tmp))) {
+			ImpExpStats stats = RepositoryImporter.importDocuments(token, tmp, path, out, new TextInfoDecorator(tmp));
+			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}
 			out.close();
