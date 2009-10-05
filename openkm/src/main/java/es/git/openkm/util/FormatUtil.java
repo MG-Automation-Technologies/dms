@@ -19,7 +19,9 @@
 
 package es.git.openkm.util;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,21 +44,30 @@ public class FormatUtil {
 	 * Format the document size for human readers
 	 */
 	public static String formatSize(long size) {
-		DecimalFormat sf = new DecimalFormat("#0.0");
+		DecimalFormat df = new DecimalFormat("#0.0");
 		String str;
 		
 		if (size / 1024 < 1) {
 			str = size + " B";
 		} else if (size / 1048576 < 1) {
-			str = sf.format(size / 1024.0) + " KB";
+			str = df.format(size / 1024.0) + " KB";
 		} else if (size / 1073741824 < 1) {
-			str = sf.format(size / 1048576.0) + " MB";
+			str = df.format(size / 1048576.0) + " MB";
 		} else if (size /  1099511627776L < 1) {
-			str = sf.format(size / 1073741824.0) + " GB";
+			str = df.format(size / 1073741824.0) + " GB";
 		} else {
 			str = "BIG";
 		}
 					
+		return str;
+	}
+
+	/**
+	 * Format elapse time for human readers
+	 */
+	public static String formatTime(long size) {
+		DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS"); 
+		String str = df.format(size);
 		return str;
 	}
 	
