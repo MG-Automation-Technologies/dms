@@ -245,8 +245,8 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("create(" + token + ", " + doc + ")");
 		Document newDocument = null;
 		Node parentNode = null;
-		File tmpJcr = File.createTempFile("okm", "jcr");
-		File tmpAvr = File.createTempFile("okm", "avr");
+		File tmpJcr = File.createTempFile("okm", ".jcr");
+		File tmpAvr = File.createTempFile("okm", ".avr");
 
 		try {
 			String parent = FileUtils.getParent(doc.getPath());
@@ -499,8 +499,8 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, IOException {
 		log.debug("setContent(" + token + ", " + docPath + ", " + is + ")");
 		Node contentNode = null;
-		File tmpJcr = File.createTempFile("okm", "jcr");
-		File tmpAvr = File.createTempFile("okm", "avr");
+		File tmpJcr = File.createTempFile("okm", ".jcr");
+		File tmpAvr = File.createTempFile("okm", ".avr");
 
 		try {
 			int size = is.available();
