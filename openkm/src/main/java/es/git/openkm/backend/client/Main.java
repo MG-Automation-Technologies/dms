@@ -139,7 +139,7 @@ public final class Main implements EntryPoint, WindowCloseListener {
 	private void refreshSize() {
 		int width = Window.getClientWidth();
 		int height = Window.getClientHeight();
-		int verticalToolBarWidth = 100;
+		int verticalToolBarWidth = 75;
 		
 		topPanel.setSize(width,10); 
 		bottomPanel.setSize(width,10);
