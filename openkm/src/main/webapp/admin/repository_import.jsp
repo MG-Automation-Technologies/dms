@@ -57,7 +57,7 @@
 				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
 				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
 				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
-				out.println("<b>Time:</b> "+FormatUtil.formatTime(end - begin)+"<br/>");
+				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 			}
 		} catch (Exception e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
