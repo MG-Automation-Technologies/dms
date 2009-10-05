@@ -65,7 +65,6 @@
 			out.println("<form action=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowUploadServletAdmin\" method=\"POST\" enctype='multipart/form-data'>");
 			out.println("<table class=\"form\" align=\"center\">");
 			out.println("<tr><td>");
-			out.println(request.getParameter("menu")!=null?"<input type\"hidden\" name=\"menu\" value=\"0\">":"");
 			out.println("<input type=\"file\" name=\"definition\">");
 			out.println("</td></tr>");
 			out.println("<tr><td align=\"right\">");
