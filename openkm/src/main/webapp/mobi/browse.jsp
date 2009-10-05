@@ -83,7 +83,7 @@
   </table>
   <table class="results">
     <tr><th colspan="4">Path: <span style="font-weight: normal"><%=path %></span></th></tr>
-    <tr><th></th><th>Name</th><th></th><th>Size</th></tr>
+    <tr><th></th><th>Name</th><th style="width: 25px"></th><th>Size</th></tr>
     <%=sb.toString()%>
   </table>
 </body>
