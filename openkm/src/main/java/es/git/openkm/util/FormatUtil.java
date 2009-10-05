@@ -63,12 +63,30 @@ public class FormatUtil {
 	}
 
 	/**
-	 * Format elapse time for human readers
+	 * Format time for human readers
 	 */
-	public static String formatTime(long size) {
-		DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS"); 
-		String str = df.format(size);
+	public static String formatTime(long time) {
+		DateFormat df = new SimpleDateFormat("hh:mm:ss.SSS"); 
+		String str = df.format(time);
 		return str;
+	}
+	
+	/**
+	 * Format time interval for humans 
+	 */
+	public static String formatSeconds(long time) {
+		long hours, minutes, seconds, mseconds;
+		mseconds = time % 1000;
+		time = time / 1000;
+		hours = time / 3600;
+		time = time - (hours * 3600);
+		minutes = time / 60;
+		time = time - (minutes * 60);
+		seconds = time;
+		return (hours<10?"0"+hours:hours)+":"+
+			(minutes<10?"0"+minutes:minutes)+":"+
+			(seconds<10?"0"+seconds:seconds)+"."+
+			(mseconds<10?"00"+mseconds:(mseconds<100?"0"+mseconds:mseconds));
 	}
 	
 	/**
