@@ -82,7 +82,7 @@ public class Util {
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		gWTFolder.setPath(fld.getPath());
-		gWTFolder.setParentPath(Util.getParent(fld.getPath()));;
+		gWTFolder.setParentPath(Util.getParent(fld.getPath()));
 		gWTFolder.setName(Util.getName(fld.getPath()));
 		gWTFolder.setHasChilds(fld.getHasChilds());
 		gWTFolder.setCreated(fld.getCreated().getTime());
