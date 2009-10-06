@@ -77,7 +77,7 @@ public class GeneralUtilsPanel extends Composite {
 	public void setMsg(String text){
 		removeAllWidgets();
 		sp.add(msg);
-		msg.setText(text);
+		msg.setHTML(text);
 	}
 	
 	/**
