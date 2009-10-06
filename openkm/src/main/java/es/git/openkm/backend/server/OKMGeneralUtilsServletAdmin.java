@@ -42,7 +42,9 @@ import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.direct.DirectRepositoryModule;
+import es.git.openkm.util.FormatUtil;
 import es.git.openkm.util.impexp.HTMLInfoDecorator;
+import es.git.openkm.util.impexp.ImpExpStats;
 import es.git.openkm.util.impexp.RepositoryExporter;
 import es.git.openkm.util.impexp.RepositoryImporter;
 
@@ -73,7 +75,14 @@ public class OKMGeneralUtilsServletAdmin extends OKMRemoteServiceServletAdmin im
 
 			try {
 				StringWriter out = new StringWriter();
-				RepositoryImporter.importDocuments(token, new File(fsPath), repoPath, out, new HTMLInfoDecorator());
+				long begin = System.currentTimeMillis();
+				ImpExpStats stats = RepositoryImporter.importDocuments(token, new File(fsPath), repoPath, out, new HTMLInfoDecorator());
+				long end = System.currentTimeMillis();
+				out.append("<br/>");
+				out.append("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
+				out.append("<b>Folders:</b> "+stats.getFolders()+"<br/>");
+				out.append("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
+				out.append("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 				msg = out.toString();
 
 			} catch (IOException e) {
@@ -116,7 +125,14 @@ public class OKMGeneralUtilsServletAdmin extends OKMRemoteServiceServletAdmin im
 			
 			try {
 				StringWriter out = new StringWriter();
-				RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator());
+				long begin = System.currentTimeMillis();
+				ImpExpStats stats = RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator());
+				long end = System.currentTimeMillis();
+				out.append("<br/>");
+				out.append("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
+				out.append("<b>Folders:</b> "+stats.getFolders()+"<br/>");
+				out.append("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
+				out.append("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 				msg = out.toString();
 
 			} catch (IOException e) {
