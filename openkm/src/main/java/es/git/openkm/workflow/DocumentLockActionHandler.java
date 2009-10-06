@@ -3,8 +3,6 @@
  */
 package es.git.openkm.workflow;
 
-import java.util.Iterator;
-
 import org.jbpm.graph.def.ActionHandler;
 import org.jbpm.graph.exe.ExecutionContext;
 import org.slf4j.Logger;
@@ -14,8 +12,6 @@ import es.git.openkm.api.OKMDocument;
 import es.git.openkm.core.LockException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.SessionManager;
-import es.git.openkm.module.direct.DirectAuthModule;
-import es.git.openkm.module.direct.DirectRepositoryModule;
 
 /**
  * @author pavila
