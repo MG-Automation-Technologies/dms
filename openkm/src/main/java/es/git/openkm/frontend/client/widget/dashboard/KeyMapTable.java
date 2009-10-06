@@ -199,7 +199,7 @@ public class KeyMapTable extends Composite {
 		tableProperties.setHTML(3, 0, "<b>"+Main.i18n("document.lastmodified")+"</b>");
 		tableProperties.setHTML(3, 1, dtf.format(doc.getLastModified())+" "+Main.i18n("document.by")+" "+doc.getActualVersion().getAuthor());
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("document.mimetype")+"</b>");
-		tableProperties.setHTML(5, 1, doc.getMimeType());;
+		tableProperties.setHTML(5, 1, doc.getMimeType());
 		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("document.status")+"</b>");
 		tableProperties.setHTML(6, 1, "");
 		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("document.subscribed")+"</b>");
