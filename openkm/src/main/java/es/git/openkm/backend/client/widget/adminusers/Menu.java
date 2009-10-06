@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import es.git.openkm.backend.client.Main;
-import es.git.openkm.backend.client.config.Config;
 import es.git.openkm.backend.client.util.Util;
 import es.git.openkm.backend.client.widget.ConfirmPopup;
 
@@ -47,7 +46,7 @@ public class Menu extends Composite {
 	/**
 	 * Browser menu
 	 */
-	public Menu() {;
+	public Menu() {
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
