@@ -113,6 +113,5 @@ public class Score extends HTML {
 		}
 		
 		setWordWrap(false);
-
 	}
 }
