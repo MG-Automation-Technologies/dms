@@ -48,7 +48,7 @@ public class Menu extends Composite {
 	/**
 	 * Browser menu
 	 */
-	public Menu() {;
+	public Menu() {
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
