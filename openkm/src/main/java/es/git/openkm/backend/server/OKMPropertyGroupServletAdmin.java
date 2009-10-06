@@ -37,7 +37,6 @@ import es.git.openkm.backend.client.config.ErrorCode;
 import es.git.openkm.backend.client.service.OKMPropertyGroupService;
 import es.git.openkm.bean.MetaData;
 import es.git.openkm.core.RepositoryException;
-import es.git.openkm.backend.server.Util;
 
 /**
  * Servlet Class
