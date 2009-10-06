@@ -442,7 +442,7 @@ public class UserData extends Composite {
 		
 		public void onFailure(Throwable caught) {
 			create.setEnabled(true);
-			Main.get().showError("createUser", caught);;
+			Main.get().showError("createUser", caught);
 		}
 	};
 	
@@ -457,7 +457,7 @@ public class UserData extends Composite {
 		
 		public void onFailure(Throwable caught) {
 			update.setEnabled(true);
-			Main.get().showError("updateUser", caught);;
+			Main.get().showError("updateUser", caught);
 		}
 	};
 	
@@ -483,7 +483,7 @@ public class UserData extends Composite {
 		
 		public void onFailure(Throwable caught) {
 			create.setEnabled(false);
-			Main.get().showError("findAllRoles", caught);;
+			Main.get().showError("findAllRoles", caught);
 		}
 	};
 	
