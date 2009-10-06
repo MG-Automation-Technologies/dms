@@ -114,7 +114,7 @@ public class FolderSelectTree extends Composite implements TreeListener {
 				if (directAdd) {
 					evaluesFolderIcon(folderItem);
 					actualItem.addItem(folderItem);
-				} else {;
+				} else {
 					// sequentially activate items and refreshes values
 					addFolder(actualItem,folderItem);
 				}
@@ -248,7 +248,7 @@ public class FolderSelectTree extends Composite implements TreeListener {
 			folder = (GWTFolder) actualItem.getChild(i).getUserObject();
 			// If item is found actualizate values
 			if ((folder).getPath().equals(folderPath)) {
-				found = true;;
+				found = true;
 				actualItem.getChild(i).setVisible(true);
 				actualItem.getChild(i).setUserObject(newFolder);
 				evaluesFolderIcon(actualItem.getChild(i));
