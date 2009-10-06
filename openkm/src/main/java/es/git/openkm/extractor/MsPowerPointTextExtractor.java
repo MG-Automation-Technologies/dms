@@ -71,6 +71,7 @@ public class MsPowerPointTextExtractor extends AbstractTextExtractor {
             try {
                 stream.close();
             } catch (IOException ignored) {
+            	// Ignore exception
             }
         }
     }
