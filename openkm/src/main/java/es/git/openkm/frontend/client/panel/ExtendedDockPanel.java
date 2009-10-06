@@ -275,7 +275,7 @@ public class ExtendedDockPanel extends Composite {
 		Util.setSize(leftBorderPanel, leftBar);
 		Util.setSize(leftPanel, left);
 		Util.setSize(verticalBarPanel, verticalBar);
-		centerPanel.setSize(center.getWidth(), center.getHeight());;
+		centerPanel.setSize(center.getWidth(), center.getHeight());
 		Util.setSize(rightBorderPanel, rightBar);
 		Util.setSize(bottomPanel, bottom);
 	}
@@ -621,9 +621,9 @@ public class ExtendedDockPanel extends Composite {
 										
 										// Evaluates destination folder grant to copy
 										GWTFolder folder = Main.get().activeFolderTree.getFolder();
-										if(folderSelectPopup.evaluateActionSecurity(folder)) {
+										if (folderSelectPopup.evaluateActionSecurity(folder)) {
 											Main.get().mainPanel.bottomPanel.resetStatus();
-											folderSelectPopup.executeAction(folder.getPath(),true);
+											folderSelectPopup.executeAction(folder.getPath(), true);
 										}
 									}
 								}
