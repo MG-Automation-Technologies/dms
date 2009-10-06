@@ -8,7 +8,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
-import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.panel.ExtendedDockPanel;
 import es.git.openkm.frontend.client.util.Util;
 
