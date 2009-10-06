@@ -351,24 +351,22 @@ public class DirectNotificationModule implements NotificationModule {
 		 * Twitter notification
 		 */
 		try {
-			if (users != null && !users.isEmpty()) {
-				if (!Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
-					Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
+			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
+				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
+				
+				String[] bodyArgs = { Mail.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()),
+					node.getPath(),	node.getName(), user, eventType, comment };
+				String status = MessageFormat.format(Config.SUBSCRIPTION_TWITTER_STATUS, bodyArgs);
+				AuthDAO auth = AuthDAO.getInstance();
+				
+				for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
+					String itUser = itUsers.next();
+					Collection<TwitterAccount> twitterAccounts = auth.findTwitterAccountsByUser(itUser, true);
 					
-					String[] bodyArgs = { Mail.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()),
-						node.getPath(),	node.getName(), user, eventType, comment };
-					String status = MessageFormat.format(Config.SUBSCRIPTION_TWITTER_STATUS, bodyArgs);
-					AuthDAO auth = AuthDAO.getInstance();
-					
-					for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
-						String itUser = itUsers.next();
-						Collection<TwitterAccount> twitterAccounts = auth.findTwitterAccountsByUser(itUser, true);
-						
-						for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
-							TwitterAccount ta = itTwitter.next();
-							log.info("Twitter Notify from "+twitter.getUserId()+" to "+ta.getTwitterUser()+" ("+itUser+") - "+status);
-							twitter.sendDirectMessage(ta.getTwitterUser(), status);
-						}
+					for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
+						TwitterAccount ta = itTwitter.next();
+						log.info("Twitter Notify from "+twitter.getUserId()+" to "+ta.getTwitterUser()+" ("+itUser+") - "+status);
+						twitter.sendDirectMessage(ta.getTwitterUser(), status);
 					}
 				}
 			}
