@@ -19,7 +19,6 @@
 
 package es.git.openkm.frontend.client.widget.filebrowser;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
