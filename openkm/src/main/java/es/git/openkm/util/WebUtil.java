@@ -76,7 +76,7 @@ public class WebUtil {
 			try {
 				intValue = Integer.parseInt(strValue);
 			} catch (Throwable t) {
-				;
+				// Ignore
 			}
 		}
 		return intValue;
@@ -97,7 +97,7 @@ public class WebUtil {
 			try {
 				intValue = Integer.parseInt(strValue);
 			} catch (Throwable t) {
-				;
+				// Ignore
 			}
 		}
 		return intValue;
