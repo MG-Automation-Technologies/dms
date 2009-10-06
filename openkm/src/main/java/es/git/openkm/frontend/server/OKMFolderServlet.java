@@ -303,7 +303,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		String token = getToken();
 		
 		try {
-			return new Boolean(OKMFolder.getInstance().isValid(token, fldPath));
+			return Boolean.valueOf(OKMFolder.getInstance().isValid(token, fldPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
