@@ -735,7 +735,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#getKeywords(java.lang.String, java.util.Collection)
 	 */
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException {
-		log.info("getKeywords("+token+", "+filter+")");
+		log.info("getKeywordMap("+token+", "+filter+")");
 		String statement = "/jcr:root//element(*,okm:document)";
 		Session session = SessionManager.getInstance().get(token);
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
@@ -771,7 +771,7 @@ public class DirectSearchModule implements SearchModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.info("getKeywords: "+cloud);
+		log.info("getKeywordMap: "+cloud);
 		return cloud;
 	}
 }
