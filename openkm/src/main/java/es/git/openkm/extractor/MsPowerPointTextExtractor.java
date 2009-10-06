@@ -38,7 +38,7 @@ public class MsPowerPointTextExtractor extends AbstractTextExtractor {
     /**
      * Logger instance.
      */
-    private static final Logger logger = LoggerFactory.getLogger(MsPowerPointTextExtractor.class);
+    private static final Logger log = LoggerFactory.getLogger(MsPowerPointTextExtractor.class);
 
     /**
      * Force loading of dependent class.
@@ -65,13 +65,13 @@ public class MsPowerPointTextExtractor extends AbstractTextExtractor {
             PowerPointExtractor extractor = new PowerPointExtractor(stream);
             return new StringReader(extractor.getText(true, true));
         } catch (RuntimeException e) {
-            logger.warn("Failed to extract PowerPoint text content", e);
+            log.warn("Failed to extract PowerPoint text content", e);
             return new StringReader("");
         } finally {
             try {
                 stream.close();
             } catch (IOException ignored) {
-            	// Ignore exception
+            	log.warn(ignored.getMessage());
             }
         }
     }
