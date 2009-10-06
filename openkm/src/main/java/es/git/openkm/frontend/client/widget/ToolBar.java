@@ -1570,7 +1570,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	 */
 	public void evaluateShowIcons() {
 		if (toolBarOption.createDirectoryOption) {enableCreateDirectory(); } else {disableCreateDirectory(); }
-		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); };
+		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); }
 		if (toolBarOption.checkoutOption) { enableCheckout(); } else { disableCheckout(); }
 		if (toolBarOption.checkinOption) { enableCheckin(); } else { disableCheckin(); }
 		if (toolBarOption.cancelCheckoutOption) { enableCancelCheckout(); } else { disableCancelCheckout(); }
@@ -1586,7 +1586,6 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 			removePropertyGroup.setHTML(Util.imageHTML("img/icon/actions/remove_property_group_disabled.gif",Main.i18n("filebrowser.menu.remove.property.group")));
 		}
-		
 		
 		if (toolBarOption.workflowOption) { enableWorkflow(); } else { disableWorkflow();}
 		if (toolBarOption.addSubscription) { enableAddSubscription(); } else { disableAddSubscription(); }
