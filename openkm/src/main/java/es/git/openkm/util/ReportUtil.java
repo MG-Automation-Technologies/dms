@@ -24,8 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.UnavailableException;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -87,7 +85,7 @@ public class ReportUtil {
 				exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
 				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
-				exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	new Boolean(false));
+				exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	Boolean.FALSE);
 				exporter.exportReport();
 				break;
 			}
