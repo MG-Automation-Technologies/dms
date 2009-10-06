@@ -61,8 +61,7 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
 									
-					if (item.isFormField()) {
-					} else {
+					if (!item.isFormField()) {
 						fileName = item.getName();
 						content = item.get();
 					}
