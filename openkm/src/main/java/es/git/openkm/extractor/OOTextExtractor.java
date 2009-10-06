@@ -53,7 +53,6 @@ public class OOTextExtractor extends AbstractTextExtractor {
      * Logger instance.
      */
     private static final Logger log = LoggerFactory.getLogger(OOTextExtractor.class);
-    
     private static OpenOfficeConnection connection = null;
 
     /**
@@ -86,7 +85,6 @@ public class OOTextExtractor extends AbstractTextExtractor {
     /**
      * {@inheritDoc}
      */ 
-	@SuppressWarnings("unchecked")
 	public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
 		String ret = "";
 		
@@ -118,8 +116,8 @@ public class OOTextExtractor extends AbstractTextExtractor {
                     if (doc != null) {
                         doc.close();
                     }
-                } catch (IOException e) {
-                    // ignore
+                } catch (IOException ignored) {
+                	log.warn(ignored.getMessage());
                 }
             }
     		
