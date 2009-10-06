@@ -27,12 +27,8 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.bean.GWTUser;
@@ -109,7 +105,7 @@ public class Users extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("findAllUsers", caught);;
+			Main.get().showError("findAllUsers", caught);
 		}
 	};
 	
@@ -125,7 +121,7 @@ public class Users extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("deleteUser", caught);;
+			Main.get().showError("deleteUser", caught);
 		}
 	};
 	
