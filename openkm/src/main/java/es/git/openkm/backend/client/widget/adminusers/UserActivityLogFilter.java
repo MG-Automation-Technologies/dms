@@ -124,7 +124,7 @@ public class UserActivityLogFilter extends Composite {
 			}
 		});
 		
-		filter.addClickListener(new ClickListener(){
+		filter.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 
 			}
@@ -133,7 +133,7 @@ public class UserActivityLogFilter extends Composite {
 		fromDateIcon = new Image("img/icon/user/calendar.gif");
 		toDateIcon =  new Image("img/icon/user/calendar.gif");
 		
-		fromDateIcon.addClickListener(new ClickListener(){
+		fromDateIcon.addClickListener(new ClickListener() {
 			public void onClick(Widget arg0) {
 				calendarFired = CALENDAR_FIRED_FROM;
 				calendarPopup.setPopupPosition(fromDateIcon.getAbsoluteLeft(), fromDateIcon.getAbsoluteTop()-2);
@@ -141,7 +141,7 @@ public class UserActivityLogFilter extends Composite {
 			}
 		});
 		
-		toDateIcon.addClickListener(new ClickListener(){
+		toDateIcon.addClickListener(new ClickListener() {
 			public void onClick(Widget arg0) {
 				calendarFired = CALENDAR_FIRED_TO;
 				calendarPopup.setPopupPosition(toDateIcon.getAbsoluteLeft(), toDateIcon.getAbsoluteTop()-2);
@@ -178,9 +178,7 @@ public class UserActivityLogFilter extends Composite {
 		
 		actionList.addItem("", "");
 		for (int i=0 ; i<actions.length; i++) {
-			if (actions[i].equals("Auth") || actions[i].equals("Document") || actions[i].equals("File")) {
-				
-			} else {
+			if (!actions[i].equals("Auth") && !actions[i].equals("Document") && !actions[i].equals("File")) {
 				actionList.addItem(actions[i], actions[i]);
 			}
 		}
@@ -191,9 +189,7 @@ public class UserActivityLogFilter extends Composite {
 		usersList.setStyleName("okm-Input");
 		filter.setStyleName("okm-Button");
 		
-		
 		vPanel.add(table);
-		
 		initWidget(vPanel);
 	}
 	
@@ -225,7 +221,7 @@ public class UserActivityLogFilter extends Composite {
 		
 		public void onFailure(Throwable caught) {
 			filter.setEnabled(true);
-			Main.get().showError("findActivityByFilter", caught);;
+			Main.get().showError("findActivityByFilter", caught);
 			Main.get().centerPanel.adminUsersPanel.userActivityLog.status.unsetFlag_search();
 		}
 	};
