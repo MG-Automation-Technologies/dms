@@ -88,10 +88,8 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 			for (StringTokenizer st = new StringTokenizer((String) e.nextElement(), ","); st.hasMoreTokens(); ) {
 				String role = st.nextToken();
 				
-				if (!Config.DEFAULT_ADMIN_ROLE.equals(role)) {
-					if (!list.contains(role)) {
-						list.add(role);
-					}
+				if (!Config.DEFAULT_ADMIN_ROLE.equals(role) && !list.contains(role)) {
+					list.add(role);
 				}
 			}
 		}
