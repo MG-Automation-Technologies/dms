@@ -91,7 +91,7 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 				if (dragging) {
 					int posX = DOM.eventGetClientX(event) -5;
 					
-					if ((clientWidth-CORNER_RIGHT_MARGIN) < (posX)) {; 
+					if ((clientWidth-CORNER_RIGHT_MARGIN) < (posX)) { 
 						RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , clientWidth-CORNER_RIGHT_MARGIN, posY );
 					} else if (CORNER_LEFT_MARGIN > posX) {
 						RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , CORNER_LEFT_MARGIN, posY );
@@ -114,7 +114,7 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 				
 				RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , posX , posY);
 
-				if ((clientWidth-CORNER_RIGHT_MARGIN) < (posX)) {; 
+				if ((clientWidth-CORNER_RIGHT_MARGIN) < (posX)) {
 					Main.get().mainPanel.verticalResize(clientWidth-CORNER_RIGHT_MARGIN);
 				} else if (CORNER_LEFT_MARGIN > posX) {
 					Main.get().mainPanel.verticalResize(CORNER_LEFT_MARGIN);
@@ -132,8 +132,7 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 		panel.setStyleName("okm-Popup-VerticalBar");
 		panel.setVisible(false);
 		
-		initWidget(panel);
-		
+		initWidget(panel);	
 	}
 	
 	/**
@@ -186,14 +185,14 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator(){
+	public Iterator iterator() {
 		return null;
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#remove(com.google.gwt.user.client.ui.Widget)
 	 */
-	public boolean remove(Widget w){
+	public boolean remove(Widget w) {
 		return true;
 	}
 }
