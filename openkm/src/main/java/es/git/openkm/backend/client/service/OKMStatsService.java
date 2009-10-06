@@ -33,5 +33,5 @@ import es.git.openkm.backend.client.bean.GWTStatsInfo;
 public interface OKMStatsService extends RemoteService {
 	public GWTStatsInfo getFoldersByContext() throws OKMException;
 	public GWTStatsInfo getDocumentsByContext() throws OKMException;
-	public GWTStatsInfo getSizeContext() throws OKMException;
+	public GWTStatsInfo getDocumentsSizeByContext() throws OKMException;
 }
