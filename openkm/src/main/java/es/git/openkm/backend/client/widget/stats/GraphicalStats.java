@@ -134,7 +134,7 @@ public class GraphicalStats extends Composite {
 	/**
 	 * Call back get size by context
 	 */
-	final AsyncCallback callbackGetSizeContext = new AsyncCallback() {
+	final AsyncCallback callbackGetDocumentsSizeByContext = new AsyncCallback() {
 		public void onSuccess(Object result) {
 			getDocumentsByContext();
 			GWTStatsInfo statsInfo = (GWTStatsInfo) result;
@@ -192,7 +192,6 @@ public class GraphicalStats extends Composite {
 		status.refresh(vPanel);
 		ServiceDefTarget endPoint = (ServiceDefTarget) statsService;
 		endPoint.setServiceEntryPoint(Config.OKMStatsService);	
-		statsService.getSizeContext(callbackGetSizeContext);
+		statsService.getDocumentsSizeByContext(callbackGetDocumentsSizeByContext);
 	}
-	
 }
