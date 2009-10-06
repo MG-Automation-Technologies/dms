@@ -58,10 +58,10 @@ public class OKMStatsServletAdmin extends OKMRemoteServiceServletAdmin implement
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMStatsService#getSizeContext()
+	 * @see es.git.openkm.backend.client.service.OKMStatsService#getContextSize()
 	 */
-	public GWTStatsInfo getSizeContext() throws OKMException {
-		log.debug("getSizeContext()");
-		return Util.copy(RepositoryInfo.getSizeContext());
+	public GWTStatsInfo getDocumentsSizeByContext() throws OKMException {
+		log.debug("getDocumentsSizeByContext()");
+		return Util.copy(RepositoryInfo.getDocumentsSizeByContext());
 	}
 }
