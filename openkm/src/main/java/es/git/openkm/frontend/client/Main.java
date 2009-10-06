@@ -198,7 +198,7 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		externalURLPopup.setStyleName("okm-Popup");
 		logoutPopup = new LogoutPopup();
 		logoutPopup.setWidth("250");
-		logoutPopup.setHeight("110");;
+		logoutPopup.setHeight("110");
 		logoutPopup.setStyleName("okm-Popup");
 		logoutPopup.addStyleName("okm-DisableSelect");
 		securityPopup = new SecurityPopup();
