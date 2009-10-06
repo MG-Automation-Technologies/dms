@@ -38,7 +38,7 @@ public class MenuPopup extends PopupPanel {
 		super(true,true);
 		panel = new VerticalPanel();
 		menu = new Menu();
-		panel.add(menu);;	
+		panel.add(menu);
 		setWidget(panel);
 	}
 	
