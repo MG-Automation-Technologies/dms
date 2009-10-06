@@ -36,10 +36,10 @@ public class MenuPopup extends PopupPanel {
 	
 	public MenuPopup() {
 		// Establishes auto-close when click outside
-		super(true,true);
+		super(true, true);
 		panel = new VerticalPanel();
 		menu = new Menu();
-		panel.add(menu);;	
+		panel.add(menu);
 		setWidget(panel);
 	}
 	
