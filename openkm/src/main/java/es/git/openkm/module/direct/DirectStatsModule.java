@@ -155,8 +155,8 @@ public class DirectStatsModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public StatsInfo getSizeContext(String token) throws RepositoryException {
-		log.debug("getSizeContext(" + token + ")");
+	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
+		log.debug("getDocumentsSizeByContext(" + token + ")");
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
@@ -189,7 +189,7 @@ public class DirectStatsModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getSizeByContext: " + si);
+		log.debug("getDocumentsSizeByContext: " + si);
 		return si;
 	}
 	
