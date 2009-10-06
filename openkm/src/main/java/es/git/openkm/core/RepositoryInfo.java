@@ -31,7 +31,7 @@ public class RepositoryInfo extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(RepositoryInfo.class);
 	private static StatsInfo documentsByContext = new StatsInfo();
 	private static StatsInfo foldersByContext = new StatsInfo();
-	private static StatsInfo sizeContext = new StatsInfo();
+	private static StatsInfo documentsSizeByContext = new StatsInfo();
 	
 	public void run() {
 		log.debug("*** Begin repository info ***");
@@ -40,7 +40,7 @@ public class RepositoryInfo extends TimerTask {
 		try {
 			documentsByContext = new DirectStatsModule().getDocumentsByContext(systemToken);
 			foldersByContext = new DirectStatsModule().getFoldersByContext(systemToken);
-			sizeContext = new DirectStatsModule().getSizeContext(systemToken);
+			documentsSizeByContext = new DirectStatsModule().getDocumentsSizeByContext(systemToken);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 		}
@@ -65,7 +65,7 @@ public class RepositoryInfo extends TimerTask {
 	/**
 	 * @return
 	 */
-	public static StatsInfo getSizeContext() {
-		return sizeContext;
+	public static StatsInfo getDocumentsSizeByContext() {
+		return documentsSizeByContext;
 	}
 }
