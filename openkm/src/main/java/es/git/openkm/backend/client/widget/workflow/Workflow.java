@@ -139,7 +139,7 @@ public class Workflow extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("findLatestProcessDefinitions", caught);;
+			Main.get().showError("findLatestProcessDefinitions", caught);
 		}
 	};
 	
