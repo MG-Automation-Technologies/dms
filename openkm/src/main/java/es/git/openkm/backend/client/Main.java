@@ -220,7 +220,7 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		}
 		
 		public void onFailure(Throwable caught) {
-			Main.get().showError("isAdmin", caught);;
+			Main.get().showError("isAdmin", caught);
 		}
 	};
 	
