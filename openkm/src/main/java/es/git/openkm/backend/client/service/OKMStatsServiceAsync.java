@@ -30,5 +30,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface OKMStatsServiceAsync {
 	public void getFoldersByContext(AsyncCallback callback);
 	public void getDocumentsByContext(AsyncCallback callback);
-	public void getSizeContext(AsyncCallback callback);
+	public void getDocumentsSizeByContext(AsyncCallback callback);
 }
