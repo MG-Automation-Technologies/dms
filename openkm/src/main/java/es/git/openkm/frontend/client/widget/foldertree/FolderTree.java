@@ -164,7 +164,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 				if (directAdd) {
 					evaluesFolderIcon(folderItem);
 					actualItem.addItem(folderItem);
-				} else {;
+				} else {
 					// sequentially activate items and refreshes values
 					addFolder(actualItem,folderItem);
 				}
@@ -175,13 +175,13 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 
 			// while tmpAllPathFolder is not empty must refresh path array
 			// values on inverse order
-			if (!tmpAllPathFolder.isEmpty()){
-				int index = tmpAllPathFolder.size()-1;
+			if (!tmpAllPathFolder.isEmpty()) {
+				int index = tmpAllPathFolder.size() - 1;
 				String tmpPath = tmpAllPathFolder.get(index);
 				tmpAllPathFolder.remove(index);
 				
 				if (index>0) {
-					setActiveNode(tmpPath,false);
+					setActiveNode(tmpPath, false);
 				} else if (tmpFldPath!=null && !tmpFldPath.equals("")) {
 					// Sets tmpFldPath at the last folder node to open
 					if (tmpFldPath.equals(tmpPath)) {
@@ -204,8 +204,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 				folderParent = (GWTFolder) actualItem.getParentItem().getUserObject();
 			}
 			Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions((GWTFolder) actualItem.getUserObject(), 
-																			 folderParent,
-																			 TREE_ROOT);
+																			 folderParent, TREE_ROOT);
 			
 			Main.get().mainPanel.navigator.status.unsetFlagChilds();
 			
@@ -255,7 +254,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 				if (directAdd) {
 					evaluesFolderIcon(folderItem);
 					actualItem.addItem(folderItem);
-				} else {;
+				} else {
 					// sequentially activate items and refreshes values
 					addFolder(actualItem,folderItem);
 				}
@@ -1011,7 +1010,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 			folder = (GWTFolder) actualItem.getChild(i).getUserObject();
 			// If item is found actualizate values
 			if ((folder).getPath().equals(folderPath)) {
-				found = true;;
+				found = true;
 				actualItem.getChild(i).setVisible(true);
 				actualItem.getChild(i).setUserObject(newFolder);
 				evaluesFolderIcon(actualItem.getChild(i));
@@ -1192,15 +1191,13 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 	 * user changes to other active view or active panel to create folder
 	 * or remove the tmp folder
 	 */
-	public void evaluateSpecialTmpFolderCases(){
-		if (folderAction == ACTION_CREATE || folderAction == ACTION_RENAME ) {
-			if (folderAction == ACTION_CREATE) {
-				FolderTextBox folder = (FolderTextBox) actualItem.getWidget();
-				if (folder.getText().length()>0) {
-					create(folder.getText());
-				} else {
-					removeTmpFolderCreate();
-				}
+	public void evaluateSpecialTmpFolderCases() {
+		if (folderAction == ACTION_CREATE) {
+			FolderTextBox folder = (FolderTextBox) actualItem.getWidget();
+			if (folder.getText().length()>0) {
+				create(folder.getText());
+			} else {
+				removeTmpFolderCreate();
 			}
 		}
 	}
