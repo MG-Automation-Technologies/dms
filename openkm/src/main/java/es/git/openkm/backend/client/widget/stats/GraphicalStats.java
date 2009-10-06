@@ -104,7 +104,7 @@ public class GraphicalStats extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getFoldersByContext", caught);;
+			Main.get().showError("getFoldersByContext", caught);
 		}
 	};
 	
@@ -127,7 +127,7 @@ public class GraphicalStats extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getDocumentsByContext", caught);;
+			Main.get().showError("getDocumentsByContext", caught);
 		}
 	};
 	
@@ -162,7 +162,7 @@ public class GraphicalStats extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getDocumentsByContext", caught);;
+			Main.get().showError("getDocumentsByContext", caught);
 		}
 	};
 	
