@@ -20,6 +20,7 @@
 package es.git.openkm.backend.server;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -112,6 +114,7 @@ public class OKMReportServletAdmin extends HttpServlet {
 	            // Only when downloading
 		        // Setting headers 
 		        String agent = request.getHeader("USER-AGENT");
+		        
 		        // Disable browser cache
 		        response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
 		        response.setHeader("Cache-Control", "max-age=0, must-revalidate");
@@ -120,6 +123,16 @@ public class OKMReportServletAdmin extends HttpServlet {
 		        
 		        // Set MIME type
 		        response.setContentType(mimeType);
+		        
+		        if (null != agent && -1 != agent.indexOf("MSIE")) {
+					log.debug("Agent: Explorer");
+					fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+				} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
+					log.debug("Agent: Mozilla");
+					fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
+				} else {
+					log.debug("Agent: Unknown");
+				}
 		        
 		        // Setting filename
 		        response.setHeader("Content-disposition", "attachment; filename=\""+ fileName +"\"");
