@@ -108,7 +108,8 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		});
 		
 		// Sets some events
-		DOM.sinkEvents(getDataWrapper(),Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEDOWN | Event.ONMOUSEUP | Event.ONMOUSEMOVE | Event.ONMOUSEUP);
+		DOM.sinkEvents(getDataWrapper(), Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEDOWN |
+				Event.ONMOUSEUP | Event.ONMOUSEMOVE | Event.ONMOUSEUP);
 	}
 	
 	/**
@@ -203,7 +204,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		dataTable.setHTML(selectedRow, 0, dataTable.getHTML(selectedRow,0) + Util.imageItemHTML("img/icon/note.gif"));
 	}
 	
-	
 	/**
 	 * Sets the document to the row
 	 * 
@@ -228,10 +228,10 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		if (doc.isSubscribed()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
 		}
+		
 		if (doc.getNotes().size()>0) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
 		}
-		
 		
 		dataTable.setHTML(row, 1, Util.mimeImageHTML(doc.getMimeType()));
 		dataTable.setHTML(row, 2, doc.getName());
