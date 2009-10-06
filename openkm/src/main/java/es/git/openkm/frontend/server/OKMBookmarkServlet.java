@@ -35,7 +35,6 @@ import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTBookmark;
-import es.git.openkm.frontend.server.Util;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMBookmarkService;
 import es.git.openkm.frontend.client.util.BookmarkComparator;
