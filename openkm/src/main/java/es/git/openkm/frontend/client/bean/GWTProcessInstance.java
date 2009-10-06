@@ -20,7 +20,6 @@
 package es.git.openkm.frontend.client.bean;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
