@@ -67,7 +67,7 @@ public class Lang_en_GB {
 		lang.put("advanced.search.query", "Query");
 		lang.put("advanced.search.predefined", "Predefined query");
 		lang.put("advanced.search.predefined.locked.documents", "Locked documents");
-		lang.put("advanced.search.predefined.documents.created.by.admin", "Documents created by user 'admin'");
+		lang.put("advanced.search.predefined.documents.created.by.admin", "Documents created by user 'okmAdmin'");
 		lang.put("advanced.search.predefined.documents.with.property.group.test", "Documents with property group 'okg:test'");
 		lang.put("advanced.search.predefined.documents.observed", "Documents observed");
 		lang.put("advanced.search.status.search", "Searching");
