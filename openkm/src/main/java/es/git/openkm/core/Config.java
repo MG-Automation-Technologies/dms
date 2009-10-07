@@ -57,62 +57,110 @@ public class Config {
 	// Configuration properties
 	public static String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static String PROPERTY_REPOSITORY_HOME = "repository.home";
+	
 	public static String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
+	
 	public static String PROPERTY_PRINCIPAL_ADAPTER = "principal.adapter";
+	
 	public static String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
-	public static String PROPERTY_PRINCIPAL_LDAP_SEARCH = "principal.ldap.search";
+	public static String PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL = "principal.ldap.security.principal";
+	public static String PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS = "principal.ldap.security.credentials";
+	
+	public static String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE = "principal.ldap.user.search.base";
+	public static String PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_FILTER = "principal.ldap.user.search.filter";
+	public static String PROPERTY_PRINCIPAL_LDAP_USER_ATTRIBUTE = "principal.ldap.user.atribute";
+	
+	public static String PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_BASE = "principal.ldap.role.search.base";
+	public static String PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = "principal.ldap.role.search.filter";
+	public static String PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE = "principal.ldap.role.atribute";
+	
+	public static String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE = "principal.ldap.mail.search.base";
+	public static String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = "principal.ldap.mail.search.filter";
+	public static String PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE = "principal.ldap.mail.atribute";
+	
 	public static String PROPERTY_MAX_FILE_SIZE = "max.file.size";
+	public static String PROPERTY_MAX_SEARCH_RESULTS = "max.search.results";
+	
 	public static String PROPERTY_RESTRICT_FILE_MIME = "restrict.file.mime";
 	public static String PROPERTY_RESTRICT_FILE_EXTENSION = "restrict.file.extension";
-	public static String PROPERTY_MAX_SEARCH_RESULTS = "max.search.results";
-	public static String PROPERTY_APPLICATION_URL = "application.url";
+	
 	public static String PROPERTY_NOTIFY_MESSAGE_BODY = "notify.message.body";
 	public static String PROPERTY_NOTIFY_MESSAGE_SUBJECT = "notify.message.subject";
+	
 	public static String PROPERTY_SUBSCRIPTION_MESSAGE_BODY = "subscription.message.body";
 	public static String PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT = "subscription.message.subject";
+	
 	public static String PROPERTY_SUBSCRIPTION_TWITTER_USER = "notify.twitter.user";
 	public static String PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD = "notify.twitter.password";
 	public static String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
-	public static String PROPERTY_UPDATE_INFO = "update.info";
+	
 	public static String PROPERTY_SYSTEM_DEMO = "system.demo";
 	public static String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static String PROPERTY_SYSTEM_OCR = "system.ocr";
 	public static String PROPERTY_SYSTEM_OPENOFFICE = "system.openoffice";
 	public static String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
+
+	public static String PROPERTY_UPDATE_INFO = "update.info";
+	public static String PROPERTY_APPLICATION_URL = "application.url";
 	public static String PROPERTY_DEFAULT_LANG = "default.lang";
 	
 	// Default values
 	public static String REPOSITORY_CONFIG = "repository"+INSTALL+".xml";
 	public static String REPOSITORY_HOME = "repository"+INSTALL;
+	
 	public static String SYSTEM_USER = "system";
 	public static String ADMIN_USER = "okmAdmin";
+	
 	public static String DEFAULT_USER_ROLE = "UserRole";
 	public static String DEFAULT_ADMIN_ROLE = "AdminRole";
+	
 	public static String PRINCIPAL_ADAPTER = "es.git.openkm.principal.DatabasePrincipalAdapter";
-	public static String PRINCIPAL_LDAP_SERVER = ""; // ldap://vp1135.vp.in:389
-	public static String PRINCIPAL_LDAP_SEARCH = ""; // dc=vp1135,dc=vp,dc=in
+	
+	public static String PRINCIPAL_LDAP_SERVER = ""; // ldap://phoenix.server:389
+	public static String PRINCIPAL_LDAP_SECURITY_PRINCIPAL = ""; //"cn=Administrator,cn=Users,dc=openkm,dc=com"
+	public static String PRINCIPAL_LDAP_SECURITY_CREDENTIALS = ""; // "xxxxxx"
+	
+	public static String PRINCIPAL_LDAP_USER_SEARCH_BASE = ""; // ou=people,dc=openkm,dc=com
+	public static String PRINCIPAL_LDAP_USER_SEARCH_FILTER = ""; // (&(objectClass=posixAccount)(!(objectClass=gosaUserTemplate)))
+	public static String PRINCIPAL_LDAP_USER_ATTRIBUTE = ""; // uid
+	
+	public static String PRINCIPAL_LDAP_ROLE_SEARCH_BASE = ""; // ou=groups,dc=openkm,dc=com
+	public static String PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = ""; // (&(objectClass=posixGroup)(cn=*)(|(description=*OpenKM*)(cn=users)))
+	public static String PRINCIPAL_LDAP_ROLE_ATTRIBUTE = ""; // cn
+	
+	public static String PRINCIPAL_LDAP_MAIL_SEARCH_BASE = ""; // uid={0},ou=people,dc=openkm,dc=com
+	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = ""; // (&(objectClass=inetOrgPerson)(mail=*))
+	public static String PRINCIPAL_LDAP_MAIL_ATTRIBUTE = ""; // mail
+	
 	private static String MAX_FILE_SIZE_STR = "25"; // 25 Megas
-	public static String RESTRICT_FILE_MIME = "off";
-	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
 	public static int MAX_FILE_SIZE = Integer.parseInt(MAX_FILE_SIZE_STR) * 1024 * 1024;
 	private static String MAX_SEARCH_RESULTS_STR = "25"; // 25 Documents
 	public static int MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
-	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/es.git.openkm.frontend.Main/index.jsp";
+	
+	public static String RESTRICT_FILE_MIME = "off";
+	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
+
 	public static String NOTIFY_MESSAGE_BODY = "<b>Document: </b><a href=\"{0}\">{1}</a><br/><b>User: </b>{3}<br/><b>Message: </b>{4}<br/>";
 	public static String NOTIFY_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - {0}";
+
 	public static String SUBSCRIPTION_MESSAGE_BODY = "<b>Document: </b><a href=\"{0}\">{1}</a><br/><b>User: </b>{3}<br/><b>Event: </b>{4}<br/><b>Comment: </b>{5}<br/>";
 	public static String SUBSCRIPTION_MESSAGE_SUBJECT = "OpenKM - {0} - {1}";
+	
 	public static String SUBSCRIPTION_TWITTER_USER = "";
 	public static String SUBSCRIPTION_TWITTER_PASSWORD = "";
 	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - {0} - {1} - {3} - {4}";
-	public static String UPDATE_INFO = "on";
+	
 	public static String SYSTEM_DEMO = "off";
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
 	public static String SYSTEM_OPENOFFICE = "";
 	public static String SYSTEM_ANTIVIR = "";
+	
+	public static String UPDATE_INFO = "on";
+	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/es.git.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
+
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
 	
@@ -132,31 +180,54 @@ public class Config {
 			
 			REPOSITORY_CONFIG = config.getProperty(PROPERTY_REPOSITORY_CONFIG, REPOSITORY_CONFIG);
 			REPOSITORY_HOME = config.getProperty(PROPERTY_REPOSITORY_HOME, REPOSITORY_HOME);
+			
 			DEFAULT_USER_ROLE = config.getProperty(PROPERTY_DEFAULT_USER_ROLE, DEFAULT_USER_ROLE);
 			DEFAULT_ADMIN_ROLE = config.getProperty(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
+			
 			PRINCIPAL_ADAPTER = config.getProperty(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
+
 			PRINCIPAL_LDAP_SERVER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SERVER, PRINCIPAL_LDAP_SERVER);
-			PRINCIPAL_LDAP_SEARCH = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SEARCH, PRINCIPAL_LDAP_SEARCH);
+			PRINCIPAL_LDAP_SECURITY_PRINCIPAL = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL, PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
+			PRINCIPAL_LDAP_SECURITY_CREDENTIALS = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, PRINCIPAL_LDAP_SECURITY_CREDENTIALS);
+			
+			PRINCIPAL_LDAP_USER_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE, PRINCIPAL_LDAP_USER_SEARCH_BASE);
+			PRINCIPAL_LDAP_USER_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_FILTER, PRINCIPAL_LDAP_USER_SEARCH_FILTER);
+			PRINCIPAL_LDAP_USER_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USER_ATTRIBUTE, PRINCIPAL_LDAP_USER_ATTRIBUTE);
+
+			PRINCIPAL_LDAP_ROLE_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_BASE, PRINCIPAL_LDAP_ROLE_SEARCH_BASE);
+			PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_ROLE_SEARCH_FILTER);
+			PRINCIPAL_LDAP_ROLE_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
+			
+			PRINCIPAL_LDAP_MAIL_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);
+			PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, PRINCIPAL_LDAP_MAIL_SEARCH_FILTER);
+			PRINCIPAL_LDAP_MAIL_ATTRIBUTE= config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE, PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
+			
 			MAX_FILE_SIZE_STR = config.getProperty(PROPERTY_MAX_FILE_SIZE, MAX_FILE_SIZE_STR);
 			MAX_FILE_SIZE = Integer.parseInt(MAX_FILE_SIZE_STR) * 1024 * 1024;
-			RESTRICT_FILE_MIME = config.getProperty(PROPERTY_RESTRICT_FILE_MIME, RESTRICT_FILE_MIME);
-			RESTRICT_FILE_EXTENSION = config.getProperty(PROPERTY_RESTRICT_FILE_EXTENSION, RESTRICT_FILE_EXTENSION);
 			MAX_SEARCH_RESULTS_STR = config.getProperty(PROPERTY_MAX_SEARCH_RESULTS, MAX_SEARCH_RESULTS_STR);
 			MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
-			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
+
+			RESTRICT_FILE_MIME = config.getProperty(PROPERTY_RESTRICT_FILE_MIME, RESTRICT_FILE_MIME);
+			RESTRICT_FILE_EXTENSION = config.getProperty(PROPERTY_RESTRICT_FILE_EXTENSION, RESTRICT_FILE_EXTENSION);
+			
 			SUBSCRIPTION_TWITTER_USER = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_USER, SUBSCRIPTION_TWITTER_USER);
 			SUBSCRIPTION_TWITTER_PASSWORD = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD, SUBSCRIPTION_TWITTER_PASSWORD);
 			SUBSCRIPTION_TWITTER_STATUS = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
+
 			NOTIFY_MESSAGE_BODY = config.getProperty(PROPERTY_NOTIFY_MESSAGE_BODY, NOTIFY_MESSAGE_BODY);
 			NOTIFY_MESSAGE_SUBJECT = config.getProperty(PROPERTY_NOTIFY_MESSAGE_SUBJECT, NOTIFY_MESSAGE_SUBJECT);
+			
 			SUBSCRIPTION_MESSAGE_BODY = config.getProperty(PROPERTY_SUBSCRIPTION_MESSAGE_BODY, SUBSCRIPTION_MESSAGE_BODY);
 			SUBSCRIPTION_MESSAGE_SUBJECT = config.getProperty(PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT, SUBSCRIPTION_MESSAGE_SUBJECT);
-			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
+			
 			SYSTEM_DEMO = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO);
 			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
+
+			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
+			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 						
 			fis.close();
@@ -169,28 +240,51 @@ public class Config {
 			log.info("{"+
 					PROPERTY_REPOSITORY_CONFIG+"="+REPOSITORY_CONFIG+", "+
 					PROPERTY_REPOSITORY_HOME+"="+REPOSITORY_HOME+", "+
+					
 					PROPERTY_DEFAULT_USER_ROLE+"="+DEFAULT_USER_ROLE+", "+
 					PROPERTY_DEFAULT_ADMIN_ROLE+"="+DEFAULT_ADMIN_ROLE+", "+
+					
 					PROPERTY_PRINCIPAL_ADAPTER+"="+PRINCIPAL_ADAPTER+", "+
+					
 					PROPERTY_PRINCIPAL_LDAP_SERVER+"="+PRINCIPAL_LDAP_SERVER+", "+
-					PROPERTY_PRINCIPAL_LDAP_SEARCH+"="+PRINCIPAL_LDAP_SEARCH+", "+
+					PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL+"="+PRINCIPAL_LDAP_SECURITY_PRINCIPAL+","+
+					PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS+"="+PRINCIPAL_LDAP_SECURITY_CREDENTIALS+","+
+
+					PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_BASE+"="+PRINCIPAL_LDAP_USER_SEARCH_BASE+", "+
+					PROPERTY_PRINCIPAL_LDAP_USER_SEARCH_FILTER+"="+PRINCIPAL_LDAP_USER_SEARCH_FILTER+", "+
+					PROPERTY_PRINCIPAL_LDAP_USER_ATTRIBUTE+"="+PRINCIPAL_LDAP_USER_ATTRIBUTE+", "+
+
+					PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_BASE+"="+PRINCIPAL_LDAP_ROLE_SEARCH_BASE+", "+
+					PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER+"="+PRINCIPAL_LDAP_ROLE_SEARCH_FILTER+", "+
+					PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE+"="+PRINCIPAL_LDAP_ROLE_ATTRIBUTE+", "+
+
+					PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE+"="+PRINCIPAL_LDAP_MAIL_SEARCH_BASE+", "+
+					PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER+"="+PRINCIPAL_LDAP_MAIL_SEARCH_FILTER+", "+
+					PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE+"="+PRINCIPAL_LDAP_MAIL_ATTRIBUTE+", "+
+
 					PROPERTY_MAX_FILE_SIZE+"="+(MAX_FILE_SIZE/ 1024 / 1024)+", "+
+					PROPERTY_MAX_SEARCH_RESULTS+"="+MAX_SEARCH_RESULTS+", "+
+					
 					PROPERTY_RESTRICT_FILE_MIME+"="+RESTRICT_FILE_MIME+", "+
 					PROPERTY_RESTRICT_FILE_EXTENSION+"="+RESTRICT_FILE_EXTENSION+", "+
-					PROPERTY_MAX_SEARCH_RESULTS+"="+MAX_SEARCH_RESULTS+", "+
-					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
+					
 					PROPERTY_NOTIFY_MESSAGE_BODY+"="+NOTIFY_MESSAGE_BODY+", "+
 					PROPERTY_NOTIFY_MESSAGE_SUBJECT+"="+NOTIFY_MESSAGE_SUBJECT+", "+
+					
 					PROPERTY_SUBSCRIPTION_MESSAGE_BODY+"="+SUBSCRIPTION_MESSAGE_BODY+", "+
 					PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT+"="+SUBSCRIPTION_MESSAGE_SUBJECT+", "+
+					
 					PROPERTY_SUBSCRIPTION_TWITTER_USER+"="+SUBSCRIPTION_TWITTER_USER+", "+
 					PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD+"="+SUBSCRIPTION_TWITTER_PASSWORD+", "+
 					PROPERTY_SUBSCRIPTION_TWITTER_STATUS+"="+SUBSCRIPTION_TWITTER_STATUS+", "+
-					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
+					
 					PROPERTY_SYSTEM_DEMO+"="+SYSTEM_DEMO+", "+
 					PROPERTY_SYSTEM_READONLY+"="+SYSTEM_READONLY+", "+
 					PROPERTY_SYSTEM_OCR+"="+SYSTEM_OCR+", "+
 					PROPERTY_SYSTEM_OPENOFFICE+"="+SYSTEM_OPENOFFICE+", "+
+
+					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
+					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
 					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+"}");
 			
 			if (TRIAL) {
