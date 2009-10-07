@@ -43,7 +43,9 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.search.FlagTerm;
 import javax.naming.InitialContext;
@@ -130,10 +132,32 @@ public class Mail {
 		m.setRecipients(Message.RecipientType.TO, to);
 		m.setSubject(subject, "UTF-8");
 		m.setSentDate(new Date());
-		m.setContent("<html><body>"+text+"</body></html>", "text/html ; charset=UTF-8");
 		
+		// Build a multiparted mail with HTML and text content for better SPAM behaviour
+		MimeMultipart content = new MimeMultipart("alternative");
+		
+		// HTML Part
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		StringBuilder htmlContent = new StringBuilder();
+		htmlContent.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+		htmlContent.append("<html>\n<head>\n");
+		htmlContent.append("<meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\"/>\n");
+		htmlContent.append("</head>\n<body>\n");
+		htmlContent.append(text);
+		htmlContent.append("\n</body>\n</html>");
+		htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
+		htmlPart.setHeader("Content-Type", "text/html");
+		
+		// Text part
+		MimeBodyPart textPart = new MimeBodyPart();
+		textPart.setText(text.replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
+		textPart.setHeader("Content-Type", "text/plain");
+		
+        content.addBodyPart(textPart);
+        content.addBodyPart(htmlPart);
+        m.setContent(content);		
 		Transport.send(m);
-		log.debug("send: void");
+		log.debug("send: void");		
 	}
 	
 	/**
