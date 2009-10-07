@@ -19,6 +19,7 @@
 
 package es.git.openkm.principal;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -56,9 +57,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		log.debug("getUsers()");
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> ldap = ldapSearch(
-				"cn=users,"+Config.PRINCIPAL_LDAP_SEARCH, 
-				"(objectclass=person)", 
-				"uid");
+				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE,
+				Config.PRINCIPAL_LDAP_USER_SEARCH_FILTER,
+				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
@@ -80,9 +81,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		log.debug("getRoles()");
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> ldap = ldapSearch(
-				"cn=groups,"+Config.PRINCIPAL_LDAP_SEARCH, 
-				"(objectclass=posixGroup)", 
-				"cn");
+				Config.PRINCIPAL_LDAP_ROLE_SEARCH_BASE, 
+				Config.PRINCIPAL_LDAP_ROLE_SEARCH_FILTER,
+				Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String role = it.next();
@@ -108,9 +109,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		for (Iterator<String> it = users.iterator(); it.hasNext();) {
 			String user = it.next();
 			ArrayList<String> ldap = ldapSearch(
-					"uid="+user+",cn=users,"+Config.PRINCIPAL_LDAP_SEARCH, 
-					"(objectclass=person)", 
-					"mail");
+					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
+					Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
+					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
 			if (!ldap.isEmpty()) {
 				list.add(ldap.get(0));
 			}
@@ -130,12 +131,15 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		ArrayList<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
 
-		// env.put(Context.SECURITY_PRINCIPAL,
-		// "CN=Administrator,CN=Users,DC=ANTIPODES,DC=COM");
-		// env.put(Context.SECURITY_CREDENTIALS, "XXXXXX");
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
 		env.put(Context.PROVIDER_URL, Config.PRINCIPAL_LDAP_SERVER);
+
+		// Optional is some cases (Max OS/X)
+		if (!Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL.equals(""))
+			env.put(Context.SECURITY_PRINCIPAL, Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
+		if (!Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS.equals(""))
+			env.put(Context.SECURITY_CREDENTIALS, Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS);			
 		
 		try {
 			DirContext ctx = new InitialDirContext(env);
