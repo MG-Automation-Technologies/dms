@@ -31,12 +31,15 @@ public class Lang {
 	
 	// Languages
 	public static final String LANG_en_GB = "en-GB";
+	public static final String LANG_de_DE = "de-DE";
 
 	public static HashMap<String,String> getLang(String lang) {
 		HashMap<String,String> hLang = new HashMap<String,String>();
 		
 		if (LANG_en_GB.equalsIgnoreCase(lang) || LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_en_GB.lang;
+		} else if (LANG_de_DE.equalsIgnoreCase(lang) || LANG_de_DE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			hLang = Lang_de_DE.lang;
 		} else  {
 			hLang = Lang_en_GB.lang;
 		}
