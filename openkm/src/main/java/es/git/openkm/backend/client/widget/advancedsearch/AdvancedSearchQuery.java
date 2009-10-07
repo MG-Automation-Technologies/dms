@@ -54,7 +54,7 @@ public class AdvancedSearchQuery extends Composite {
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	
 	private static final String PREDEFINED_QUERY_LOCKED_DOCUMENTS = "/jcr:root/okm:root//element(*,okm:document)[@jcr:lockOwner]/@jcr:lockOwner";
-	private static final String PREDEFINED_DOC_CREATED_ADMIN = "/jcr:root/okm:root//element(*, okm:document)[@okm:author='admin']/(@jcr:lockOwner|@jcr:created)";
+	private static final String PREDEFINED_DOC_CREATED_ADMIN = "/jcr:root/okm:root//element(*, okm:document)[@okm:author='okmAdmin']/(@jcr:lockOwner|@jcr:created)";
 	private static final String PREDEFINED_DOC_WITH_PG_TEST = "/jcr:root/okm:root//element(*, okg:test)";
 	private static final String PREDEFINED_DOC_OBSERVED = "/jcr:root/okm:root//element(*, mix:notification)";
 	
