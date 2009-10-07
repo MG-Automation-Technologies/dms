@@ -79,9 +79,16 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.JBOSS_HOME+"/"+Config.REPOSITORY_CONFIG;
-		String repHome = Config.JBOSS_HOME+"/"+Config.REPOSITORY_HOME; 
+		String repConfig = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_CONFIG;
+		String repHome = null;
 		WorkspaceConfig wc = null;
+		
+		// Allow absolute repository path
+		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+			repHome = Config.REPOSITORY_HOME;
+		} else {
+			repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
+		}
 		
 		if (repository == null) {
 			// Repository config
@@ -344,8 +351,17 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized void remove() throws RepositoryException {
 		log.debug("remove()");
+		String repHome = null;
+		
+		// Allow absolute repository path
+		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+			repHome = Config.REPOSITORY_HOME;
+		} else {
+			repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
+		}
+		
 		try {
-			FileUtils.deleteDirectory(new File(Config.JBOSS_HOME+"/"+Config.REPOSITORY_HOME));
+			FileUtils.deleteDirectory(new File(repHome));
 		} catch (IOException e) {
 			System.err.println("No previous repository found");
 		}
