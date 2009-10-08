@@ -68,15 +68,20 @@ import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.SearchModule;
+import es.git.openkm.util.Serializer;
 import es.git.openkm.util.UserActivity;
 
+@SuppressWarnings("unchecked")
 public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
 	private static HashMap<String,ArrayList<String>> keywordMaps;
 	
 	static {
-		// TODO Load serialized values.
 		keywordMaps = new HashMap<String, ArrayList<String>>();
+		Object obj = Serializer.read(keywordMaps.getClass());
+		if (obj != null) {
+			keywordMaps = (HashMap<String, ArrayList<String>>)obj;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -857,8 +862,7 @@ public class DirectSearchModule implements SearchModule {
 				}
 				
 				keywordMaps.put(session.getUserID(), keywordCollection);
-				
-				// TODO Serialize keyword map
+				Serializer.write(keywordMaps);
 			}
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
