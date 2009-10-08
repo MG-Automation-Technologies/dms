@@ -104,6 +104,7 @@ public class Config {
 	public static String PROPERTY_UPDATE_INFO = "update.info";
 	public static String PROPERTY_APPLICATION_URL = "application.url";
 	public static String PROPERTY_DEFAULT_LANG = "default.lang";
+	public static String PROPERTY_KEYWORD_MAP_LIVE = "keyword.map.live";
 	
 	// Default values
 	public static String REPOSITORY_CONFIG = "repository"+INSTALL+".xml";
@@ -160,6 +161,7 @@ public class Config {
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/es.git.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
+	public static String KEYWORD_MAP_LIVE = "off";
 
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
@@ -229,6 +231,7 @@ public class Config {
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
+			KEYWORD_MAP_LIVE = config.getProperty(PROPERTY_KEYWORD_MAP_LIVE, KEYWORD_MAP_LIVE);
 						
 			fis.close();
 		} catch (FileNotFoundException e) {
@@ -285,7 +288,8 @@ public class Config {
 
 					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
-					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+"}");
+					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+", "+
+					PROPERTY_KEYWORD_MAP_LIVE+"="+KEYWORD_MAP_LIVE+"}");
 			
 			if (TRIAL) {
 				log.info("*** *** *** *** *** *** *** ***");
