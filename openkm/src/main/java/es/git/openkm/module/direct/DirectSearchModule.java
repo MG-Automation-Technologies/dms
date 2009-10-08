@@ -72,6 +72,12 @@ import es.git.openkm.util.UserActivity;
 
 public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
+	private static HashMap<String,ArrayList<String>> keywordMaps;
+	
+	static {
+		// TODO Load serialized values.
+		keywordMaps = new HashMap<String, ArrayList<String>>();
+	}
 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
@@ -736,6 +742,26 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMap("+token+", "+filter+")");
+		Map<String, Integer> cloud = null;
+		
+		if (Config.KEYWORD_MAP_LIVE.equals("on")) {
+			cloud = getKeywordMapLive(token, filter);
+		} else {
+			cloud = getKeywordMapCached(token, filter);
+		}
+		
+		log.info("getKeywordMap: "+cloud);
+		return cloud;
+	}
+	
+	/**
+	 * @param token
+	 * @param filter
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private Map<String, Integer> getKeywordMapLive(String token, Collection<String> filter) throws RepositoryException {
+		log.info("getKeywordMapLive("+token+", "+filter+")");
 		String statement = "/jcr:root//element(*,okm:document)";
 		Session session = SessionManager.getInstance().get(token);
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
@@ -771,7 +797,74 @@ public class DirectSearchModule implements SearchModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.info("getKeywordMap: "+cloud);
+		log.info("getKeywordMapLive: "+cloud);
 		return cloud;
+	}
+
+	/**
+	 * @param token
+	 * @param filter
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
+		log.info("getKeywordMapCached("+token+", "+filter+")");
+		Session session = SessionManager.getInstance().get(token);
+		ArrayList<String> keywordCollection = keywordMaps.get(session.getUserID());
+		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
+		
+		if (keywordCollection == null) {
+			updateKeywordMaps(session);
+			keywordCollection = keywordMaps.get(session.getUserID());
+		}
+		
+		if (filter != null && keywordCollection.containsAll(filter)) {
+			for (Iterator<String> it = keywordCollection.iterator(); it.hasNext(); ) {
+				String keyword = it.next();
+				if (!filter.contains(keyword)) {
+					Integer occurs = keywordMap.get(keyword)!=null?keywordMap.get(keyword):0;
+					keywordMap.put(keyword, occurs+1);
+				}
+			}
+		}
+		
+		log.info("getKeywordMapCached: "+keywordMap);
+		return keywordMap;
+	}
+	
+	/**
+	 * @param session
+	 * @throws RepositoryException
+	 */
+	private synchronized void updateKeywordMaps(Session session) throws RepositoryException {
+		log.info("updateKeywordMaps("+session+")");
+		String statement = "/jcr:root//element(*,okm:document)";
+		
+		try {
+			Workspace workspace = session.getWorkspace();
+			QueryManager queryManager = workspace.getQueryManager();
+			Query query = queryManager.createQuery(statement, Query.XPATH);
+			javax.jcr.query.QueryResult qResult = query.execute();
+			
+			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
+				Node doc = nit.nextNode();
+				String keywordsString = doc.getProperty(Document.KEYWORDS).getString();
+				ArrayList<String> keywordCollection = new ArrayList<String>();
+				
+				for (StringTokenizer st = new StringTokenizer(keywordsString); st.hasMoreTokens(); ) {
+					String keyword = st.nextToken();
+					keywordCollection.add(keyword);
+				}
+				
+				keywordMaps.put(session.getUserID(), keywordCollection);
+				
+				// TODO Serialize keyword map
+			}
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.info("updateKeywordMaps: void");
 	}
 }
