@@ -52,6 +52,7 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.bean.CachedUserDocumentsKeywords;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
@@ -74,13 +75,13 @@ import es.git.openkm.util.UserActivity;
 @SuppressWarnings("unchecked")
 public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
-	private static HashMap<String,ArrayList<String>> keywordMaps;
+	private static HashMap<String, CachedUserDocumentsKeywords> cachedUsersDocsKeywords;
 	
 	static {
-		keywordMaps = new HashMap<String, ArrayList<String>>();
-		Object obj = Serializer.read(keywordMaps.getClass());
+		cachedUsersDocsKeywords = new HashMap<String, CachedUserDocumentsKeywords>();
+		Object obj = Serializer.read(cachedUsersDocsKeywords.getClass());
 		if (obj != null) {
-			keywordMaps = (HashMap<String, ArrayList<String>>)obj;
+			cachedUsersDocsKeywords = (HashMap<String, CachedUserDocumentsKeywords>)obj;
 		}
 	}
 
@@ -815,20 +816,25 @@ public class DirectSearchModule implements SearchModule {
 	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMapCached("+token+", "+filter+")");
 		Session session = SessionManager.getInstance().get(token);
-		ArrayList<String> keywordCollection = keywordMaps.get(session.getUserID());
+		CachedUserDocumentsKeywords cachedUserDocsKeywords = cachedUsersDocsKeywords.get(session.getUserID());
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		
-		if (keywordCollection == null) {
+		if (cachedUserDocsKeywords == null) {
 			updateKeywordMaps(session);
-			keywordCollection = keywordMaps.get(session.getUserID());
+			cachedUserDocsKeywords = cachedUsersDocsKeywords.get(session.getUserID());
 		}
 		
-		if (filter != null && keywordCollection.containsAll(filter)) {
-			for (Iterator<String> it = keywordCollection.iterator(); it.hasNext(); ) {
-				String keyword = it.next();
-				if (!filter.contains(keyword)) {
-					Integer occurs = keywordMap.get(keyword)!=null?keywordMap.get(keyword):0;
-					keywordMap.put(keyword, occurs+1);
+		ArrayList<ArrayList<String>> docsKeywords = cachedUserDocsKeywords.getDocsKeywords();
+		for (Iterator<ArrayList<String>> itDocsKeywords = docsKeywords.iterator(); itDocsKeywords.hasNext(); ) {
+			ArrayList<String> docKeywords = itDocsKeywords.next();
+			
+			if (filter != null && docKeywords.containsAll(filter)) {
+				for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
+					String keyword = itDocKeywords.next();
+					if (!filter.contains(keyword)) {
+						Integer occurs = keywordMap.get(keyword)!=null?keywordMap.get(keyword):0;
+						keywordMap.put(keyword, occurs+1);
+					}
 				}
 			}
 		}
@@ -841,7 +847,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @param session
 	 * @throws RepositoryException
 	 */
-	private synchronized void updateKeywordMaps(Session session) throws RepositoryException {
+	private static synchronized void updateKeywordMaps(Session session) throws RepositoryException {
 		log.info("updateKeywordMaps("+session+")");
 		String statement = "/jcr:root//element(*,okm:document)";
 		
@@ -850,20 +856,24 @@ public class DirectSearchModule implements SearchModule {
 			QueryManager queryManager = workspace.getQueryManager();
 			Query query = queryManager.createQuery(statement, Query.XPATH);
 			javax.jcr.query.QueryResult qResult = query.execute();
+			ArrayList<ArrayList<String>> docsKeywords = new ArrayList<ArrayList<String>>();
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node doc = nit.nextNode();
-				String keywordsString = doc.getProperty(Document.KEYWORDS).getString();
-				ArrayList<String> keywordCollection = new ArrayList<String>();
+				String docKeywordStr = doc.getProperty(Document.KEYWORDS).getString();
+				ArrayList<String> docKeywords = new ArrayList<String>();
 				
-				for (StringTokenizer st = new StringTokenizer(keywordsString); st.hasMoreTokens(); ) {
+				for (StringTokenizer st = new StringTokenizer(docKeywordStr); st.hasMoreTokens(); ) {
 					String keyword = st.nextToken();
-					keywordCollection.add(keyword);
+					docKeywords.add(keyword);
 				}
 				
-				keywordMaps.put(session.getUserID(), keywordCollection);
-				Serializer.write(keywordMaps);
+				docsKeywords.add(docKeywords);
 			}
+			
+			CachedUserDocumentsKeywords cachedUserDocsKeywords = new CachedUserDocumentsKeywords(docsKeywords);
+			cachedUsersDocsKeywords.put(session.getUserID(), cachedUserDocsKeywords);
+			Serializer.write(cachedUsersDocsKeywords);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
