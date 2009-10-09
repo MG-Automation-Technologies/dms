@@ -54,6 +54,7 @@ import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.Repository;
+import es.git.openkm.bean.Version;
 import es.git.openkm.core.CachedUserDocuments;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
@@ -562,7 +563,7 @@ public class DirectDashboardModule implements DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public long getUserDocumentsSizeLive(String token) throws RepositoryException {
+	private long getUserDocumentsSizeLive(String token) throws RepositoryException {
 		log.info("getUserDocumentsSizeLive(" + token + ")");
 		long size = 0;
 		
@@ -593,7 +594,7 @@ public class DirectDashboardModule implements DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public long getUserDocumentsSizeCached(String token) throws RepositoryException {
+	private long getUserDocumentsSizeCached(String token) throws RepositoryException {
 		log.info("getUserDocumentsSizeCached(" + token + ")");
 		Session session = SessionManager.getInstance().get(token);
 		CachedDocumentSearch cachedDocumentSearch = CachedUserDocuments.getCachedDocumentSearch(session);
@@ -602,7 +603,11 @@ public class DirectDashboardModule implements DashboardModule {
 		
 		for (Iterator<Document> docIt = documents.iterator(); docIt.hasNext(); ) {
 			Document doc = docIt.next();
-			size += doc.getActualVersion().getSize();
+			Version ver = doc.getActualVersion();
+			
+			if (ver.getAuthor().equals(session.getUserID())) {
+				size += doc.getActualVersion().getSize();
+			}
 		}
 		
 		log.info("getUserDocumentsSizeCached: " + size);
