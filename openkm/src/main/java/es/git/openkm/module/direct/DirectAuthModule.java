@@ -52,6 +52,7 @@ import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.core.AccessDeniedException;
+import es.git.openkm.core.CachedUserDocuments;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
@@ -333,6 +334,10 @@ public class DirectAuthModule implements AuthModule {
 				for (int i=0; i<sessionLockTokens.length; i++) {
 					log.info(session.getUserID()+" # sessionLockTokens saved: "+sessionLockTokens[i]);
 				}
+
+				// Activity log
+				UserActivity.log(session, "PRE_LOGOUT", null, null);
+				CachedUserDocuments.updateCachedDocumentSearch(session);
 
 				// Activity log
 				UserActivity.log(session, "LOGOUT", null, null);

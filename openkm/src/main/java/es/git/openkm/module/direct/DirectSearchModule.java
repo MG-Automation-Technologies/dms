@@ -52,7 +52,7 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.CachedUserDocumentsKeywords;
+import es.git.openkm.bean.CachedDocumentSearch;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
@@ -63,27 +63,17 @@ import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.ResultSet;
 import es.git.openkm.core.AccessDeniedException;
+import es.git.openkm.core.CachedUserDocuments;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.SearchModule;
-import es.git.openkm.util.Serializer;
 import es.git.openkm.util.UserActivity;
 
-@SuppressWarnings("unchecked")
 public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
-	private static HashMap<String, CachedUserDocumentsKeywords> cachedUsersDocsKeywords;
-	
-	static {
-		cachedUsersDocsKeywords = new HashMap<String, CachedUserDocumentsKeywords>();
-		Object obj = Serializer.read(cachedUsersDocsKeywords.getClass());
-		if (obj != null) {
-			cachedUsersDocsKeywords = (HashMap<String, CachedUserDocumentsKeywords>)obj;
-		}
-	}
 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
@@ -816,17 +806,19 @@ public class DirectSearchModule implements SearchModule {
 	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMapCached("+token+", "+filter+")");
 		Session session = SessionManager.getInstance().get(token);
-		CachedUserDocumentsKeywords cachedUserDocsKeywords = cachedUsersDocsKeywords.get(session.getUserID());
+		CachedDocumentSearch cachedDocumentSearch = CachedUserDocuments.getCachedDocumentSearch(session);
+		ArrayList<Document> documents = cachedDocumentSearch.getDocuments();
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		
-		if (cachedUserDocsKeywords == null) {
-			updateKeywordMaps(session);
-			cachedUserDocsKeywords = cachedUsersDocsKeywords.get(session.getUserID());
-		}
-		
-		ArrayList<ArrayList<String>> docsKeywords = cachedUserDocsKeywords.getDocsKeywords();
-		for (Iterator<ArrayList<String>> itDocsKeywords = docsKeywords.iterator(); itDocsKeywords.hasNext(); ) {
-			ArrayList<String> docKeywords = itDocsKeywords.next();
+		for (Iterator<Document> docIt = documents.iterator(); docIt.hasNext(); ) {
+			Document doc = docIt.next();
+			String keywordsStr = doc.getKeywords();
+			ArrayList<String> docKeywords = new ArrayList<String>();
+			
+			for (StringTokenizer st = new StringTokenizer(keywordsStr); st.hasMoreTokens(); ) {
+				String keyword = st.nextToken();
+				docKeywords.add(keyword);
+			}
 			
 			if (filter != null && docKeywords.containsAll(filter)) {
 				for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
@@ -841,44 +833,5 @@ public class DirectSearchModule implements SearchModule {
 		
 		log.info("getKeywordMapCached: "+keywordMap);
 		return keywordMap;
-	}
-	
-	/**
-	 * @param session
-	 * @throws RepositoryException
-	 */
-	private static synchronized void updateKeywordMaps(Session session) throws RepositoryException {
-		log.info("updateKeywordMaps("+session+")");
-		String statement = "/jcr:root//element(*,okm:document)";
-		
-		try {
-			Workspace workspace = session.getWorkspace();
-			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, Query.XPATH);
-			javax.jcr.query.QueryResult qResult = query.execute();
-			ArrayList<ArrayList<String>> docsKeywords = new ArrayList<ArrayList<String>>();
-			
-			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
-				Node doc = nit.nextNode();
-				String docKeywordStr = doc.getProperty(Document.KEYWORDS).getString();
-				ArrayList<String> docKeywords = new ArrayList<String>();
-				
-				for (StringTokenizer st = new StringTokenizer(docKeywordStr); st.hasMoreTokens(); ) {
-					String keyword = st.nextToken();
-					docKeywords.add(keyword);
-				}
-				
-				docsKeywords.add(docKeywords);
-			}
-			
-			CachedUserDocumentsKeywords cachedUserDocsKeywords = new CachedUserDocumentsKeywords(docsKeywords);
-			cachedUsersDocsKeywords.put(session.getUserID(), cachedUserDocsKeywords);
-			Serializer.write(cachedUsersDocsKeywords);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		}
-		
-		log.info("updateKeywordMaps: void");
 	}
 }
