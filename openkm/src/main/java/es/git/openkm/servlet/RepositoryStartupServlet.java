@@ -102,7 +102,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Scheduler
         timer = new Timer();
-
+        
         // Workflow
         log.info("*** Initializing workflow engine... ***");
         WorkflowDAO.getInstance().closeConnection(WorkflowDAO.getInstance().getConnection());
@@ -118,7 +118,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	 ui = new UpdateInfo();
         	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
         }
-        
+		
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
         timer.schedule(ri, 60*1000, 24*60*60*1000); // First in 1 min, next each 24 hours
