@@ -159,9 +159,11 @@ public class Util {
 	    if (size / 1024 < 1) {
 			str = size + " Bytes";
 		} else if (size / 1048576 < 1) {
-			str = (size / 1024).toFixed(1) + " KBytes";
+			str = (size / 1024).toFixed(1) + " KB";
 		} else if (size / 1073741824 < 1) {
-			str = (size / 1048576).toFixed(1) + " MBytes";
+			str = (size / 1048576).toFixed(1) + " MB";
+		} else if (size / 1099511627776 < 1) {
+			str = (size / 1073741824).toFixed(1) + " GB";
 		} else {
 			str = "BIG";
 		}
