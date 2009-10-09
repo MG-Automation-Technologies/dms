@@ -23,30 +23,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CachedUserDocumentsKeywords implements Serializable {
+public class CachedDocumentSearch implements Serializable {
 
 	private static final long serialVersionUID = -9193245646856878625L;
-	Calendar calendar;
-	ArrayList<ArrayList<String>> docsKeywords;
+	Calendar searchDate;
+	ArrayList<Document> documents;
 
-	public CachedUserDocumentsKeywords(ArrayList<ArrayList<String>> docsKeywords) {
-		this.docsKeywords = docsKeywords;
-		this.calendar = Calendar.getInstance();
+	public Calendar getSearchDate() {
+		return searchDate;
 	}
-	
-	public Calendar getCalendar() {
-		return calendar;
+
+	public void setSearchDate(Calendar searchDate) {
+		this.searchDate = searchDate;
 	}
-	
-	public void setCalendar(Calendar calendar) {
-		this.calendar = calendar;
+
+	public ArrayList<Document> getDocuments() {
+		return documents;
 	}
-	
-	public ArrayList<ArrayList<String>> getDocsKeywords() {
-		return docsKeywords;
-	}
-	
-	public void setDocsKeywords(ArrayList<ArrayList<String>> docsKeywords) {
-		this.docsKeywords = docsKeywords;
+
+	public void setDocuments(ArrayList<Document> documents) {
+		this.documents = documents;
 	}
 }
