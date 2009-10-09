@@ -39,8 +39,7 @@ public class Serializer {
 	/**
 	 * @param obj
 	 */
-	public static void write(Object obj) {
-		String filename = obj.getClass().getCanonicalName();
+	public static void write(String filename, Object obj) {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		
@@ -61,9 +60,7 @@ public class Serializer {
 	/**
 	 * @param obj
 	 */
-	@SuppressWarnings("unchecked")
-	public static Object read(Class clazz) {
-		String filename = clazz.getCanonicalName();
+	public static Object read(String filename) {
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		Object obj = null;
