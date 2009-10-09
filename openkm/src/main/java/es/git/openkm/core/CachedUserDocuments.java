@@ -85,6 +85,7 @@ public class CachedUserDocuments {
 				Version ver = new Version();
 				
 				ver.setSize(cntNode.getProperty(Document.SIZE).getLong());
+				ver.setAuthor(cntNode.getProperty(Document.AUTHOR).getString());
 				doc.setKeywords(docNode.getProperty(Document.KEYWORDS).getString());
 				doc.setActualVersion(ver);
 				
