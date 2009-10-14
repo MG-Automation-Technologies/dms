@@ -40,9 +40,6 @@ public class GWTFormField implements IsSerializable {
 	private String label;
 	private String name;
 	private String value;
-	
-	public void GWTFormField(){
-	}
 
 	public int getType() {
 		return type;

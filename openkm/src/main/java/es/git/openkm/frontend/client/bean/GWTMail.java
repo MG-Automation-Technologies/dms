@@ -169,6 +169,14 @@ public class GWTMail implements IsSerializable {
 		this.attachments = attachments;
 	}
 
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
@@ -186,13 +194,5 @@ public class GWTMail implements IsSerializable {
 		sb.append(", attachments="); sb.append(attachments);
 		sb.append("]");
 		return sb.toString();
-	}
-
-	public String getParent() {
-		return parent;
-	}
-
-	public void setParent(String parent) {
-		this.parent = parent;
 	}
 }
