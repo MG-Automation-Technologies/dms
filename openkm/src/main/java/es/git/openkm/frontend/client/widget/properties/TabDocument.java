@@ -59,6 +59,7 @@ public class TabDocument extends Composite implements TabListener {
 	private List propertyGroup;
 	private GWTDocument doc;
 	private Notes notes;
+	private Preview preview;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
@@ -72,6 +73,7 @@ public class TabDocument extends Composite implements TabListener {
 		notes = new Notes();
 		version = new VersionScrollTable();
 		security = new SecurityScrollTable();
+		preview = new Preview("", "");
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList();
 
@@ -79,6 +81,7 @@ public class TabDocument extends Composite implements TabListener {
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
 		tabPanel.add(version, Main.i18n("tab.document.history"));
 		tabPanel.add(security, Main.i18n("tab.document.security"));
+		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		
 		tabPanel.selectTab(0);
 		tabPanel.addTabListener(this);
@@ -129,6 +132,7 @@ public class TabDocument extends Composite implements TabListener {
 		security.setPath(doc.getPath());
 		version.getVersionHistory();
 		security.GetGrands();
+		preview = new Preview(doc.getPath(), doc.getMimeType());
 		
 		if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked()) {
 			security.setChangePermision(true);
@@ -170,6 +174,7 @@ public class TabDocument extends Composite implements TabListener {
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
 		tabPanel.add(version, Main.i18n("tab.document.history"));
 		tabPanel.add(security, Main.i18n("tab.document.security"));
+		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		
 		// Refresh lang property group
 		if (!propertyGroup.isEmpty()) {
