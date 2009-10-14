@@ -34,6 +34,7 @@ import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 
 import org.apache.commons.io.FileUtils;
@@ -50,10 +51,13 @@ import org.apache.jackrabbit.core.nodetype.compact.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.Repository;
+import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.OKMSystemSession;
@@ -560,7 +564,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
 				Node child = it.nextNode();
-				child.remove();
+				purgeTrashHelper(session, child);
 			}
 			
 			userTrash.save();
@@ -580,6 +584,34 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("purgeTrash: void");
 	}
 
+	/**
+	 * @param session
+	 * @param node
+	 * @throws javax.jcr.PathNotFoundException
+	 * @throws ValueFormatException
+	 * @throws javax.jcr.RepositoryException
+	 */
+	private void purgeTrashHelper(Session session, Node node) 
+			throws javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.RepositoryException {
+		UserItems userItems = UserItemsManager.get(session.getUserID());
+		
+		if (node.isNodeType(Document.TYPE)) {
+			Node content = node.getNode(Document.CONTENT);
+			long size = content.getProperty(Document.SIZE).getLong();
+			userItems.decSize(size);
+			userItems.decDocument();
+			UserItemsManager.put(session.getUserID(), userItems);
+		} else if (node.isNodeType(Folder.TYPE)) {
+			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
+				userItems.decFolder();
+				UserItemsManager.put(session.getUserID(), userItems);
+				purgeTrashHelper(session, node);
+			}	
+		}
+		
+		node.remove();
+	}
+	
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getUpdateMessage(java.lang.String)
 	 */
