@@ -9,6 +9,7 @@ import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.util.Serializer;
 
 public class UserItemsManager {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
 	private static final String FILEALIZATION = "UserItemsManager";
 	private static HashMap<String, UserItems> userItemsMgr;
