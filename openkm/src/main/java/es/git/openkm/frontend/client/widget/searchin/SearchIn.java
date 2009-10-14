@@ -239,7 +239,8 @@ public class SearchIn extends Composite {
 		
 		cleanButton = new Button(Main.i18n("button.clean"), new ClickListener() {
 			public void onClick(Widget sender) {
-				context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+				//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+				context.setSelectedIndex(PanelDefinition.NAVIGATOR_TAXONOMY);
 				content.setText("");
 				path.setText("");
 				name.setText("");
@@ -981,7 +982,8 @@ public class SearchIn extends Composite {
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTrash())) {
 			context.setSelectedIndex(PanelDefinition.NAVIGATOR_TRASH);
 		} else {
-			context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+			//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+			context.setSelectedIndex(PanelDefinition.NAVIGATOR_TAXONOMY);
 		}
 		
 		// Detecting if user has setting some folder path filter or there's only a context one
