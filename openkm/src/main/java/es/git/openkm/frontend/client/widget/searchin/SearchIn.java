@@ -333,8 +333,9 @@ public class SearchIn extends Composite {
 		context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
 		context.addItem(Main.i18n("leftpanel.label.mail"),"");
 		context.addItem(Main.i18n("leftpanel.label.trash"),"");
-		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
-		context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+		//context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
+		//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+		context.setSelectedIndex(PanelDefinition.NAVIGATOR_TAXONOMY);
 		
 		context.addChangeListener(new ChangeListener() {
 			public void onChange(Widget arg0) {
@@ -736,7 +737,7 @@ public class SearchIn extends Composite {
 		context.setItemText(PanelDefinition.NAVIGATOR_PERSONAL,Main.i18n("leftpanel.label.my.documents"));
 		context.setItemText(PanelDefinition.NAVIGATOR_MAIL,Main.i18n("leftpanel.label.mail"));
 		context.setItemText(PanelDefinition.NAVIGATOR_TRASH,Main.i18n("leftpanel.label.trash"));
-		context.setItemText(PanelDefinition.NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
+		//context.setItemText(PanelDefinition.NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
 		
 		document.setHTML(Main.i18n("search.type.document"));
 		folder.setHTML(Main.i18n("search.type.folder"));
