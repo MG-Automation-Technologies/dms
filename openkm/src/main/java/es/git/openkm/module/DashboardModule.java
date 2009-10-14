@@ -175,5 +175,5 @@ public interface DashboardModule {
 	 * @param source
 	 * @throws RepositoryException
 	 */
-	public void visiteNode(String token, String source, String node, Calendar date) throws RepositoryException;	
+	public void visiteNode(String token, String source, String node, Calendar date) throws RepositoryException;
 }
