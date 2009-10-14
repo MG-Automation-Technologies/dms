@@ -410,12 +410,16 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 				if (!headerFired && getSelectedRow() >= 0) {
 					if (isFolderSelected()) {
 						Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
-						Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(getFolder());
+						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
+							Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(getFolder());
+						}
 						Main.get().activeFolderTree.setActiveNode(getFolder().getPath(),true);
 					} else if (isMailSelected()) {				
 						Main.get().mainPanel.browser.tabMultiple.enableTabMail();
 						GWTMail mail = getMail();
-						Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
+							Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+						}
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
 								 														 Main.get().activeFolderTree.getFolder());
 					} else {
@@ -424,7 +428,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						}
 						Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
 						GWTDocument doc = getDocument();
-						Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
+							Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+						}
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 					}
 				}
