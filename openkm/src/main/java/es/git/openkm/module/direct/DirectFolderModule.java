@@ -46,6 +46,8 @@ import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.Notification;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
+import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
@@ -157,6 +159,11 @@ public class DirectFolderModule implements FolderModule {
 		folderNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
 		
 		parentNode.save();
+		
+		// Update user items
+		UserItems userItems = UserItemsManager.get(session.getUserID());
+		userItems.incFolder();
+		UserItemsManager.put(session.getUserID(), userItems);
 		
 		return folderNode;
 	}
@@ -359,7 +366,12 @@ public class DirectFolderModule implements FolderModule {
 			parentNode = folderNode.getParent();
 			folderNode.remove();
 			parentNode.save();
-						
+			
+			// Update user items
+			UserItems userItems = UserItemsManager.get(session.getUserID());
+			userItems.decFolder();
+			UserItemsManager.put(session.getUserID(), userItems);
+			
 			// Check scripting
 			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "PURGE_FOLDER");
 
