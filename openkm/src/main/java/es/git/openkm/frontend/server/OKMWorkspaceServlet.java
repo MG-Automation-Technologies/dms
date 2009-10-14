@@ -109,14 +109,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	 * @see es.git.openkm.frontend.client.service.OKMWorkspaceService#updateUserWorkspace(es.git.openkm.frontend.client.bean.GWTWorkspace)
 	 */
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
-		Log.info("host:"+workspace.getImapHost());
-		Log.info("folder:"+workspace.getImapFolder());
-		Log.info("user:"+workspace.getImapUser());
-		Log.info("imat password:"+workspace.getImapPassword());
-		Log.info("password:"+workspace.getPassword());
-		Log.info("user:"+workspace.getUser());
-		Log.info("PRINCIPAL_ADAPTER:"+Config.PRINCIPAL_ADAPTER);
-	
 		// For updating user
 		User user = new User();
 		user.setId(workspace.getUser());
