@@ -26,7 +26,7 @@
     <div id="form">
       <form name="login" method="post" action="j_security_check">
         <label for="j_username">User</label><br/>
-        <input name="j_username" id="j_username" type="text"/><br/><br/>
+        <input name="j_username" id="j_username" type="text" <%=(Config.SYSTEM_LOGIN_USERNAME_LOWERCASE.equalsIgnoreCase("on"))?"onkeyup=\"makeUppercase();\"":""%>/><br/><br/>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
         <input value="Login" name="submit" type="submit"/><br/>
@@ -37,5 +37,11 @@
   <% if (Config.SYSTEM_DEMO.equalsIgnoreCase("on")) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>
   <% } %>
+  
+  <script type="text/javascript">
+  	function makeUppercase() {
+		document.login.j_username.value = document.login.j_username.value.toLowerCase();
+	}
+  </script>
 </body>
 </html>
