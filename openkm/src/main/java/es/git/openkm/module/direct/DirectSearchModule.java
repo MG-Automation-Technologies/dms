@@ -52,7 +52,6 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.CachedDocumentSearch;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
@@ -62,8 +61,9 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.ResultSet;
+import es.git.openkm.bean.cache.UserKeywords;
+import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.AccessDeniedException;
-import es.git.openkm.core.CachedUserDocuments;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
 import es.git.openkm.core.PathNotFoundException;
@@ -806,13 +806,12 @@ public class DirectSearchModule implements SearchModule {
 	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMapCached("+token+", "+filter+")");
 		Session session = SessionManager.getInstance().get(token);
-		CachedDocumentSearch cachedDocumentSearch = CachedUserDocuments.getCachedDocumentSearch(session);
-		ArrayList<Document> documents = cachedDocumentSearch.getDocuments();
+		UserKeywords userKeywords = UserKeywordsManager.get(session);
+		ArrayList<String> keywords = userKeywords.getKeywords();
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		
-		for (Iterator<Document> docIt = documents.iterator(); docIt.hasNext(); ) {
-			Document doc = docIt.next();
-			String keywordsStr = doc.getKeywords();
+		for (Iterator<String> kwIt = keywords.iterator(); kwIt.hasNext(); ) {
+			String keywordsStr = kwIt.next();
 			ArrayList<String> docKeywords = new ArrayList<String>();
 			
 			for (StringTokenizer st = new StringTokenizer(keywordsStr); st.hasMoreTokens(); ) {
