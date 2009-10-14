@@ -53,6 +53,8 @@ import es.git.openkm.bean.Notification;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.Version;
+import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.FileSizeExceededException;
@@ -195,7 +197,8 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Document.KEYWORDS, keywords);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
-
+		long size = is.available();
+			
 		// Get parent node auth info
 		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
 		String[] usersRead = JCRUtils.usrValue2String(usersReadParent, session.getUserID());
@@ -214,7 +217,7 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
 
 		Node contentNode = documentNode.addNode(Document.CONTENT, Document.CONTENT_TYPE);
-		contentNode.setProperty(Document.SIZE, is.available());
+		contentNode.setProperty(Document.SIZE, size);
 		contentNode.setProperty(Document.AUTHOR, session.getUserID());
 		contentNode.setProperty(Document.VERSION_COMMENT, "");
 		contentNode.setProperty(JcrConstants.JCR_MIMETYPE, mimeType);
@@ -231,6 +234,12 @@ public class DirectDocumentModule implements DocumentModule {
 		// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
 		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
 		contentNode.checkin();
+		
+		// Update user items
+		UserItems userItems = UserItemsManager.get(session.getUserID());
+		userItems.incSize(size);
+		userItems.incDocument();
+		UserItemsManager.put(session.getUserID(), userItems);
 		
 		return documentNode; 
 	}
@@ -916,6 +925,12 @@ public class DirectDocumentModule implements DocumentModule {
 			t.end();
 			t.commit();
 			
+			// Update user items
+			long size = contentNode.getProperty(Document.SIZE).getLong();
+			UserItems userItems = UserItemsManager.get(session.getUserID());
+			userItems.incSize(size);
+			UserItemsManager.put(session.getUserID(), userItems);
+			
 			// Add comment (as system user)
 			String systemToken = SessionManager.getInstance().getSystemToken();
 			addNote(systemToken, docPath, "New version "+version.getName()+" by "+session.getUserID()+": "+version.getComment());
@@ -1168,6 +1183,8 @@ public class DirectDocumentModule implements DocumentModule {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
+			String author = contentNode.getProperty(Document.AUTHOR).getString();
+			long size = contentNode.getProperty(Document.SIZE).getLong();
 			VersionHistory vh = contentNode.getVersionHistory();
 			parentNode = documentNode.getParent();
 			documentNode.remove();
@@ -1184,6 +1201,12 @@ public class DirectDocumentModule implements DocumentModule {
 					vh.removeVersion(versionName);
 				}
 			}
+			
+			// Update user items
+			UserItems userItems = UserItemsManager.get(author);
+			userItems.decSize(size);
+			userItems.decDocument();
+			UserItemsManager.put(author, userItems);
 
 			// Activity log
 			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);
