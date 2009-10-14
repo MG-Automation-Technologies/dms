@@ -57,14 +57,12 @@ public class Mail extends Composite {
 	private FlexTable dataTable;
 	private ExtendedFlexTable attachmentsTable;
 	private HorizontalPanel contentPanel;
-	private GWTMail mail;
 	private ScrollPanel scrollPanel;
 	private HTML content;
 	public MenuPopup menuPopup;
 	private Map<Integer, GWTDocument> attachmentsList;
 	
 	public Mail() {
-		mail = new GWTMail();
 		table = new FlexTable();
 		dataTable = new FlexTable();
 		attachmentsTable = new ExtendedFlexTable();
@@ -158,7 +156,6 @@ public class Mail extends Composite {
 	 * @param mail The document object
 	 */
 	public void set(GWTMail mail) {
-		this.mail = mail;
 		Hyperlink hFrom = new Hyperlink();
 		final String mailFrom = mail.getFrom().substring(mail.getFrom().indexOf("<")+1, mail.getFrom().indexOf(">"));
 		hFrom.setHTML(mail.getFrom().replace("<", "&lt;").replace(">", "&gt;"));
@@ -214,7 +211,7 @@ public class Mail extends Composite {
 		
 		dataTable.setHTML(3, 1, mail.getSubject());
 		if (mail.getMimeType().equals("text/plain")) {
-			content.setHTML(mail.getContent().replace("\n", "<BR>"));
+			content.setHTML(mail.getContent().replace("\n", "<br/>"));
 		} else {
 			content.setHTML(mail.getContent());
 		}
