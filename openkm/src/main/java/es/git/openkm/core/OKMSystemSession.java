@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 public class OKMSystemSession extends SessionImpl {
 
     private static Logger log = LoggerFactory.getLogger(OKMSystemSession.class);
+    private static final boolean DEBUG = false;
 
     /**
      * Package private factory method
@@ -57,13 +58,13 @@ public class OKMSystemSession extends SessionImpl {
      */
     public static OKMSystemSession create(RepositoryImpl rep, WorkspaceConfig wspConfig)
             throws RepositoryException {
-    	log.debug("create()");
+    	if (DEBUG) log.debug("create()");
         // create subject with SystemPrincipal
         Set<SystemPrincipal> principals = new HashSet<SystemPrincipal>();
         principals.add(new SystemPrincipal());
         Subject subject = new Subject(true, principals, Collections.EMPTY_SET, Collections.EMPTY_SET);
         OKMSystemSession oss = new OKMSystemSession(rep, subject, wspConfig);
-        log.debug("create: "+oss);
+        if (DEBUG) log.debug("create: "+oss);
         return oss;
     }
 
@@ -82,9 +83,9 @@ public class OKMSystemSession extends SessionImpl {
      * @see javax.jcr.Session#logout()
      */
     public synchronized void logout() {
-    	log.warn("logout()");
+    	if (DEBUG) log.warn("logout()");
     	super.logout();
-    	log.warn("logout: void");
+    	if (DEBUG) log.warn("logout: void");
     }
 
     /**
