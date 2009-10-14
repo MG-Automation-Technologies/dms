@@ -422,6 +422,7 @@ public class SearchIn extends Composite {
 		
 		// Type of search
 		searchTypePanel = new HorizontalPanel();
+		searchTypePanel.setVisible(false);  // On OpenKM 4.0 has hidden AND / OR option list
 		searchTypeAnd = new CheckBox("AND");
 		searchTypeOr = new CheckBox("OR");
 		searchTypeAnd.setChecked(true);
@@ -527,8 +528,8 @@ public class SearchIn extends Composite {
 		table.setWidget(4, 1, pathExplorerPanel);
 		table.setHTML(5, 0, Main.i18n("search.type"));
 		table.setWidget(5, 1, typePanel);
-		table.setHTML(6, 0, Main.i18n("search.type"));
-		table.setWidget(6, 1, searchTypePanel);
+		// table.setHTML(6, 0, Main.i18n("search.type"));	// On OpenKM 4.0 has hidden AND / OR option list
+		//table.setWidget(6, 1, searchTypePanel);			// On OpenKM 4.0 has hidden AND / OR option list
 		table.setHTML(7, 0, Main.i18n("search.mimetype"));
 		table.setWidget(7, 1, mimeTypes);
 		table.setHTML(8, 0, Main.i18n("search.user"));
@@ -719,11 +720,12 @@ public class SearchIn extends Composite {
 		table.setHTML(3, 0, Main.i18n("search.keywords"));
 		table.setHTML(4, 0, Main.i18n("search.folder"));
 		table.setHTML(5, 0, Main.i18n("search.type"));
-		table.setHTML(6, 0, Main.i18n("search.mimetype"));
-		table.setHTML(7, 0, Main.i18n("search.user"));
-		table.setHTML(8, 0, Main.i18n("search.date.range"));
-		table.setHTML(9, 0, Main.i18n("search.page.results"));
-		table.setHTML(10, 0, Main.i18n("search.save.as.news"));
+		// table.setHTML(6, 0, Main.i18n("search.type"));	// On OpenKM 4.0 has hidden AND / OR option list
+		table.setHTML(7, 0, Main.i18n("search.mimetype"));
+		table.setHTML(8, 0, Main.i18n("search.user"));
+		table.setHTML(9, 0, Main.i18n("search.date.range"));
+		table.setHTML(10, 0, Main.i18n("search.page.results"));
+		table.setHTML(11, 0, Main.i18n("search.save.as.news"));
 		
 		tableMail.setHTML(0, 0, Main.i18n("mail.from"));
 		tableMail.setHTML(1, 0, Main.i18n("mail.to"));
