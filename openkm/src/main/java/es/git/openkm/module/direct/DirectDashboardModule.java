@@ -45,7 +45,6 @@ import javax.jcr.query.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.CachedDocumentSearch;
 import es.git.openkm.bean.DashboardStatsDocumentResult;
 import es.git.openkm.bean.DashboardStatsFolderResult;
 import es.git.openkm.bean.DashboardStatsMailResult;
@@ -54,8 +53,8 @@ import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.Repository;
-import es.git.openkm.bean.Version;
-import es.git.openkm.core.CachedUserDocuments;
+import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
@@ -597,21 +596,10 @@ public class DirectDashboardModule implements DashboardModule {
 	private long getUserDocumentsSizeCached(String token) throws RepositoryException {
 		log.info("getUserDocumentsSizeCached(" + token + ")");
 		Session session = SessionManager.getInstance().get(token);
-		CachedDocumentSearch cachedDocumentSearch = CachedUserDocuments.getCachedDocumentSearch(session);
-		ArrayList<Document> documents = cachedDocumentSearch.getDocuments();
-		long size = 0;
+		UserItems usrItems = UserItemsManager.get(session.getUserID());
 		
-		for (Iterator<Document> docIt = documents.iterator(); docIt.hasNext(); ) {
-			Document doc = docIt.next();
-			Version ver = doc.getActualVersion();
-			
-			if (ver.getAuthor().equals(session.getUserID())) {
-				size += doc.getActualVersion().getSize();
-			}
-		}
-		
-		log.info("getUserDocumentsSizeCached: " + size);
-		return size;
+		log.info("getUserDocumentsSizeCached: " + usrItems.getSize());
+		return usrItems.getSize();
 	}
 	
 	/* (non-Javadoc)
