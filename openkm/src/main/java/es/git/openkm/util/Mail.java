@@ -241,6 +241,7 @@ public class Mail {
 				mail.setSentDate(sentDate);
 				
 				String body = getText(msg);
+				log.info("getText: "+body);
 				if (body.charAt(0) == 'H') {
 					mail.setMimeType("text/html");
 				} else if (body.charAt(0) == 'T') {
@@ -317,9 +318,9 @@ public class Mail {
 			for (int i = 0; i < mp.getCount(); i++) {
 				Part bp = mp.getBodyPart(i);
 				if (bp.isMimeType("text/plain")) {
-					if (text == null)
-						text = getText(bp);
-					continue;
+					String s = getText(bp);
+					if (s != null)
+						return s;
 				} else if (bp.isMimeType("text/html")) {
 					String s = getText(bp);
 					if (s != null)
