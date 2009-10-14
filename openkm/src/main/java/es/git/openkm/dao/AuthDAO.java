@@ -774,19 +774,28 @@ public class AuthDAO extends AbstractDAO {
 	public void updateMailAccount(MailAccount vo) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ma_mpass=?, ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "UPDATE mail_accounts SET ";
+		
+		if ( vo.getMailPassword().length()>0 ) {
+			sql += "ma_mpass=?, ";	
+		}
+		
+		sql += "ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
 
 		try {
 			con = getConnection();
+			int count = 1;
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getMailPassword());
-				stmt.setString(2, vo.getMailFolder());
-				stmt.setBoolean(3, vo.isActive());
-				stmt.setString(4, vo.getUser());
-				stmt.setString(5, vo.getMailHost());
-				stmt.setString(6, vo.getMailUser());
+				if ( vo.getMailPassword().length()>0 ) {
+					stmt.setString(count++, vo.getMailPassword());
+				}
+				stmt.setString(count++, vo.getMailFolder());
+				stmt.setBoolean(count++, vo.isActive());
+				stmt.setString(count++, vo.getUser());
+				stmt.setString(count++, vo.getMailHost());
+				stmt.setString(count++, vo.getMailUser());
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");

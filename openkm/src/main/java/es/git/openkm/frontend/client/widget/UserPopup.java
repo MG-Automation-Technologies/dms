@@ -113,6 +113,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 					workspace.setUser(Main.get().workspaceUserProperties.getUser());
 					workspace.setImapFolder(folderText.getText());
 					workspace.setImapHost(hostText.getText());
+					workspace.setImapUser(imapUserText.getText());
 					workspace.setImapPassword(imapUserPasswordText.getText());
 					workspace.setPassword(userPasswordText.getText());
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;

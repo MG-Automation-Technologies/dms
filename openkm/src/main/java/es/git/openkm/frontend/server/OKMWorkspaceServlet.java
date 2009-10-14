@@ -20,6 +20,7 @@
 package es.git.openkm.frontend.server;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import es.git.openkm.api.OKMDashboard;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.dao.AuthDAO;
+import es.git.openkm.dao.bean.MailAccount;
 import es.git.openkm.dao.bean.User;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTWorkspace;
@@ -63,11 +65,20 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
-		workspace.setImapHost("imap host");
-		workspace.setImapUser("imat user");
-		workspace.setImapFolder("imap folder");
 		
 		if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
+			AuthDAO authDAO = AuthDAO.getInstance();
+			try {
+				for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
+					MailAccount mailAccount = it.next();
+					workspace.setImapHost(mailAccount.getMailHost());
+					workspace.setImapUser(mailAccount.getMailUser());
+					workspace.setImapFolder(mailAccount.getMailFolder());
+				}
+			} catch (SQLException e) {
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+			}
+			
 			workspace.setChangePassword(true);
 		} else {
 			workspace.setChangePassword(false);
@@ -106,13 +117,30 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		Log.info("user:"+workspace.getUser());
 		Log.info("PRINCIPAL_ADAPTER:"+Config.PRINCIPAL_ADAPTER);
 	
+		// For updating user
 		User user = new User();
 		user.setId(workspace.getUser());
 		user.setPass(workspace.getPassword());
+		
+		// For updating imap mail
+		MailAccount mailAccount = new MailAccount();
+		mailAccount.setActive(true);
+		mailAccount.setMailFolder(workspace.getImapFolder());
+		mailAccount.setMailHost(workspace.getImapHost());
+		mailAccount.setMailPassword(workspace.getImapPassword());
+		mailAccount.setMailUser(workspace.getImapUser());
+		mailAccount.setUser(workspace.getUser());
+		
 		try {
 			// Can change password
 			if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
-				AuthDAO.getInstance().updatePassword(user);
+				AuthDAO authDAO = AuthDAO.getInstance();
+				authDAO.updatePassword(user);
+				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size()>0) {
+					authDAO.updateMailAccount(mailAccount);
+				} else {
+					authDAO.createMailAccount(mailAccount);
+				}
 			}
 		} catch (SQLException e) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
