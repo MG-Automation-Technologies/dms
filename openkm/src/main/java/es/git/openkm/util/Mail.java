@@ -312,7 +312,7 @@ public class Mail {
 				return "X"+s;
 			}
 		} else if (p.isMimeType("multipart/alternative")) {
-			// prefer html text over plain text
+			// prefer plain text over html
 			Multipart mp = (Multipart)p.getContent();
 			String text = null;
 			for (int i = 0; i < mp.getCount(); i++) {
