@@ -55,6 +55,7 @@ import es.git.openkm.module.direct.DirectRepositoryModule;
  */
 public class OKMAccessManager implements AccessManager {
 	private static Logger log = LoggerFactory.getLogger(OKMAccessManager.class);
+	private static final boolean DEBUG = false;
 	private Subject subject = null;
 	private HierarchyManager hierMgr = null;
 	private String principalUser = null;
@@ -112,8 +113,8 @@ public class OKMAccessManager implements AccessManager {
 	 * @see org.apache.jackrabbit.core.security.AccessManager#close()
 	 */
 	public void close() throws Exception {
-		log.debug("close()");
-		log.debug("close: void");
+		if (DEBUG) log.debug("close()");
+		if (DEBUG) log.debug("close: void");
 	}
 
 	/*
@@ -125,9 +126,9 @@ public class OKMAccessManager implements AccessManager {
 	public void checkPermission(ItemId id, int permissions)
 			throws AccessDeniedException, ItemNotFoundException,
 			RepositoryException {
-		log.debug("checkPermission()");
+		if (DEBUG) log.debug("checkPermission()");
 		// TODO Auto-generated method stub
-		log.debug("checkPermission: void");
+		if (DEBUG) log.debug("checkPermission: void");
 	}
 
 	/*
@@ -137,7 +138,7 @@ public class OKMAccessManager implements AccessManager {
 	 *      int)
 	 */
 	public boolean isGranted(ItemId id, int permissions) throws ItemNotFoundException, RepositoryException {
-		log.debug("isGranted(" + subject.getPrincipals() + ", " + id + ", "
+		if (DEBUG) log.debug("isGranted(" + subject.getPrincipals() + ", " + id + ", "
 					+ (permissions == AccessManager.READ ? "READ"
 							: (permissions == AccessManager.WRITE ? "WRITE"
 									: (permissions == AccessManager.REMOVE ? "REMOVE"
@@ -150,23 +151,23 @@ public class OKMAccessManager implements AccessManager {
 			access = true;
 		} else {
 			NodeId nodeId = null;
-			log.debug(subject.getPrincipals()+" Item Id: "+id);
+			if (DEBUG) log.debug(subject.getPrincipals()+" Item Id: "+id);
 						
 			// Workaround because of transiente node visibility
 			try {
-				log.debug(subject.getPrincipals()+" Item Path: "+hierMgr.getPath(id));
+				if (DEBUG) log.debug(subject.getPrincipals()+" Item Path: "+hierMgr.getPath(id));
 			} catch (ItemNotFoundException e) {
 				access = true;
-				log.debug(subject.getPrincipals()+" hierMgr.getPath() > ItemNotFoundException: "+e.getMessage());
+				if (DEBUG) log.debug(subject.getPrincipals()+" hierMgr.getPath() > ItemNotFoundException: "+e.getMessage());
 			}
 
 			if (id instanceof NodeId) {
 				nodeId = (NodeId) id;
-				log.debug(subject.getPrincipals()+" This is a NODE");
+				if (DEBUG) log.debug(subject.getPrincipals()+" This is a NODE");
 			} else {
 				PropertyId propertyId = (PropertyId) id;
 				nodeId = propertyId.getParentId();
-				log.debug(subject.getPrincipals()+" This is a PROPERTY");
+				if (DEBUG) log.debug(subject.getPrincipals()+" This is a PROPERTY");
 			}
 			
 			if (access || hierMgr.getPath(nodeId).denotesRoot()) {
@@ -179,24 +180,24 @@ public class OKMAccessManager implements AccessManager {
 				try {
 					node = ((SessionImpl) systemSession).getNodeById(nodeId);
 				} catch (ItemNotFoundException e1) {
-					log.debug(subject.getPrincipals()+" systemSession.getNodeById() > ItemNotFoundException: "+e1.getMessage());
+					if (DEBUG) log.debug(subject.getPrincipals()+" systemSession.getNodeById() > ItemNotFoundException: "+e1.getMessage());
 				}
 				
 				if (node == null) {
 					access = true;
 				} else {
-					log.debug(subject.getPrincipals()+" Node Name: " + node.getPath());
-					log.debug(subject.getPrincipals()+" Node Type: " + node.getPrimaryNodeType().getName());
+					if (DEBUG) log.debug(subject.getPrincipals()+" Node Name: " + node.getPath());
+					if (DEBUG) log.debug(subject.getPrincipals()+" Node Type: " + node.getPrimaryNodeType().getName());
 				
 					if (node.isNodeType(Document.CONTENT_TYPE)) {
-						log.debug(subject.getPrincipals()+" Node is CONTENT_TYPE");
+						if (DEBUG) log.debug(subject.getPrincipals()+" Node is CONTENT_TYPE");
 						node = node.getParent();
-						log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+						if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
 					} else if (node.isNodeType("nt:frozenNode")) {
-						log.debug(subject.getPrincipals()+" Node is FROZEN_NODE");
+						if (DEBUG) log.debug(subject.getPrincipals()+" Node is FROZEN_NODE");
 						String realNodeId = node.getProperty("jcr:frozenUuid").getString();
 						node = systemSession.getNodeByUUID(realNodeId).getParent();
-						log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+						if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
 					} else if (node.isNodeType("nt:version")) {
 						log.debug(subject.getPrincipals()+" Node is VERSION");
 						Node frozenNode = node.getNode("jcr:frozenNode");
@@ -205,23 +206,22 @@ public class OKMAccessManager implements AccessManager {
 						
 						try {
 							node = systemSession.getNodeByUUID(realNodeId).getParent();
-							log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+							if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
 						} catch (javax.jcr.ItemNotFoundException e) {
-							log.debug(subject.getPrincipals()+" **************");
-							log.debug(subject.getPrincipals()+" **************");
-							log.debug(subject.getPrincipals()+" -> "+e.getMessage());
+							if (DEBUG) log.debug(subject.getPrincipals()+" **************");
+							if (DEBUG) log.debug(subject.getPrincipals()+" -> "+e.getMessage());
 						}
 					} else if (node.isNodeType("nt:versionHistory")) {
-						log.debug(subject.getPrincipals()+" Node is VERSION_HISTORY");
+						if (DEBUG) log.debug(subject.getPrincipals()+" Node is VERSION_HISTORY");
 						String realNodeId = node.getProperty("jcr:versionableUuid").getString();
 						
 						try {
 							node = systemSession.getNodeByUUID(realNodeId).getParent();
-							log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+							if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
 						} catch (javax.jcr.ItemNotFoundException e) {
-							log.debug(subject.getPrincipals()+" **************");
-							log.debug(subject.getPrincipals()+" **************");
-							log.debug(subject.getPrincipals()+" -> "+e.getMessage());
+							if (DEBUG) log.debug(subject.getPrincipals()+" **************");
+							if (DEBUG) log.debug(subject.getPrincipals()+" **************");
+							if (DEBUG) log.debug(subject.getPrincipals()+" -> "+e.getMessage());
 						}
 					}
 					
@@ -230,7 +230,7 @@ public class OKMAccessManager implements AccessManager {
 						try {
 							access = checkRead(node);
 						} catch (PathNotFoundException e) {
-							log.debug(subject.getPrincipals()+" PathNotFoundException: "+e.getMessage()+
+							if (DEBUG) log.debug(subject.getPrincipals()+" PathNotFoundException: "+e.getMessage()+
 									" in "+node.getPrimaryNodeType().getName());
 							access = true;
 						}
@@ -239,7 +239,7 @@ public class OKMAccessManager implements AccessManager {
 						try {
 							access = checkWrite(node);
 						} catch (PathNotFoundException e) {
-							log.debug(subject.getPrincipals()+" PropertyNotFoundException: "+e.getMessage()+" in "+
+							if (DEBUG) log.debug(subject.getPrincipals()+" PropertyNotFoundException: "+e.getMessage()+" in "+
 								node.getPrimaryNodeType().getName());
 							access = true;
 						}
@@ -250,16 +250,16 @@ public class OKMAccessManager implements AccessManager {
 
 		// Workaround because of transiente node visibility
 		try {
-			log.debug(subject.getPrincipals()+" Path: " + hierMgr.getPath(id));
+			if (DEBUG) log.debug(subject.getPrincipals()+" Path: " + hierMgr.getPath(id));
 		} catch (ItemNotFoundException e) {
-			log.debug(subject.getPrincipals()+" hierMgr.getPath() > ItemNotFoundException: "+e.getMessage());
+			if (DEBUG) log.debug(subject.getPrincipals()+" hierMgr.getPath() > ItemNotFoundException: "+e.getMessage());
 		}
 		
-		log.debug(subject.getPrincipals()+" isGranted "+(permissions == AccessManager.READ ? "READ" 
+		if (DEBUG) log.debug(subject.getPrincipals()+" isGranted "+(permissions == AccessManager.READ ? "READ" 
 				: (permissions == AccessManager.WRITE ? "WRITE" 
 						: (permissions == AccessManager.REMOVE ? "REMOVE" 
 								: "NONE")))+": " + access);
-		log.debug("-------------------------------------");
+		if (DEBUG) log.debug("-------------------------------------");
 		return access;
 	}
 
@@ -271,8 +271,8 @@ public class OKMAccessManager implements AccessManager {
 	public boolean canAccess(String workspaceName)
 			throws NoSuchWorkspaceException, RepositoryException {
 		boolean access = true;
-		log.debug("canAccess(" + workspaceName + ")");
-		log.debug("canAccess: " + access);
+		if (DEBUG) log.debug("canAccess(" + workspaceName + ")");
+		if (DEBUG) log.debug("canAccess: " + access);
 		return access;
 	}
 
@@ -285,14 +285,14 @@ public class OKMAccessManager implements AccessManager {
 	 * @throws PathNotFoundException
 	 */
 	private boolean checkRead(Node node) throws ValueFormatException, RepositoryException, PathNotFoundException {
-		log.debug("checkRead("+node+")");
+		if (DEBUG) log.debug("checkRead("+node+")");
 		// Propiedad no definida en nt:versionHistory, nt:version,
 		// nt:frozenNode y okm:resource
 		Value[] users = node.getProperty(Permission.USERS_READ).getValues();
 		boolean access = false;
 		
 		for (int i = 0; i < users.length; i++) {
-			log.debug(Permission.USERS_READ+" User: " + users[i].getString());
+			if (DEBUG) log.debug(Permission.USERS_READ+" User: " + users[i].getString());
 			
 			if (principalUser.equals(users[i].getString())) {
 				access = true;
@@ -306,7 +306,7 @@ public class OKMAccessManager implements AccessManager {
 			Value[] roles = node.getProperty(Permission.ROLES_READ).getValues();
 			
 			for (int i = 0; i < roles.length; i++) {
-				log.debug(Permission.ROLES_READ+" Rol: " + roles[i].getString());
+				if (DEBUG) log.debug(Permission.ROLES_READ+" Rol: " + roles[i].getString());
 				
 				if (principalRoles.contains(roles[i].getString())) {
 					access = true;
@@ -314,7 +314,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 		
-		log.debug("checkRead: "+access);
+		if (DEBUG) log.debug("checkRead: "+access);
 		return access;
 	}
 
@@ -327,13 +327,13 @@ public class OKMAccessManager implements AccessManager {
 	 * @throws PathNotFoundException
 	 */
 	private boolean checkWrite(Node node) throws ValueFormatException, RepositoryException, PathNotFoundException {
-		log.debug("checkWrite("+node+")");
+		if (DEBUG) log.debug("checkWrite("+node+")");
 		// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
 		Value[] users = node.getProperty(Permission.USERS_WRITE).getValues();
 		boolean access = false;
 		
 		for (int i = 0; i < users.length; i++) {
-			log.debug(Permission.USERS_WRITE+" User: " + users[i].getString());
+			if (DEBUG) log.debug(Permission.USERS_WRITE+" User: " + users[i].getString());
 			
 			if (principalUser.equals(users[i].getString())) {
 				access = true;
@@ -347,7 +347,7 @@ public class OKMAccessManager implements AccessManager {
 			Value[] roles = node.getProperty(Permission.ROLES_WRITE).getValues();
 			
 			for (int i = 0; i < roles.length; i++) {
-				log.debug(Permission.ROLES_WRITE+" Rol: " + roles[i].getString());
+				if (DEBUG) log.debug(Permission.ROLES_WRITE+" Rol: " + roles[i].getString());
 				
 				if (principalRoles.contains(roles[i].getString())) {
 					access = true;
@@ -355,7 +355,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 		
-		log.debug("checkWrite: "+access);
+		if (DEBUG) log.debug("checkWrite: "+access);
 		return access;
 	}
 }
