@@ -1,4 +1,5 @@
 <%@ page import="es.git.openkm.module.direct.DirectFolderModule" %>
+<%@ page import="es.git.openkm.api.OKMFolder"%>
 <%@ page import="es.git.openkm.bean.ContentInfo" %>
 <%@ page import="es.git.openkm.bean.Document" %>
 <%@ page import="es.git.openkm.bean.Folder" %>
@@ -130,7 +131,7 @@
 			if (session.getAttribute("stats") != null) {
 				out.println("<span style=\"font-size: 10px;\"> - (<a href=\"repository_view.jsp?path="+URLEncoder.encode(path, "UTF-8")+"&stats=0\">Deactivate</a>)</span>");
 				out.println("</h2>");
-				ContentInfo ci = new DirectFolderModule().getContentInfoHelper(node);
+				ContentInfo ci = OKMFolder.getInstance().getContentInfo(token, node.getPath());
 				out.println(" - <b>Size</b>: "+formatSize(ci.getSize())+"<br>");
 				out.println(" - <b>Folders</b>: "+ci.getFolders()+"<br>");
 				out.println(" - <b>Documents</b>: "+ci.getDocuments()+"<br>");
