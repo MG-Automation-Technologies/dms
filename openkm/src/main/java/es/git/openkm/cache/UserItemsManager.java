@@ -14,10 +14,6 @@ public class UserItemsManager {
 	private static final String FILEALIZATION = "UserItemsManager";
 	private static HashMap<String, UserItems> userItemsMgr;
 	
-	static {
-		deserialize();
-	}
-	
 	/**
 	 * 
 	 */
@@ -34,15 +30,61 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void put(String uid, UserItems userItems) {
+	public static synchronized void incDocuments(String uid) {
+		UserItems userItems = get(uid);
+		userItems.setDocuments(userItems.getDocuments() + 1);
 		userItemsMgr.put(uid, userItems);
-		serialize();
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized void decDocuments(String uid) {
+		UserItems userItems = get(uid);
+		userItems.setDocuments(userItems.getDocuments() - 1);
+		userItemsMgr.put(uid, userItems);
 	}
 	
 	/**
 	 * 
 	 */
-	private static synchronized void serialize() {
+	public static synchronized void incFolders(String uid) {
+		UserItems userItems = get(uid);
+		userItems.setFolders(userItems.getFolders() + 1);
+		userItemsMgr.put(uid, userItems);
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized void decFolders(String uid) {
+		UserItems userItems = get(uid);
+		userItems.setFolders(userItems.getFolders() - 1);
+		userItemsMgr.put(uid, userItems);
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized void incSize(String uid, long size) {
+		UserItems userItems = get(uid);
+		userItems.setSize(userItems.getSize() + size);
+		userItemsMgr.put(uid, userItems);
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized void decSize(String uid, long size) {
+		UserItems userItems = get(uid);
+		userItems.setSize(userItems.getSize() - size);
+		userItemsMgr.put(uid, userItems);
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized void serialize() {
 		Serializer.write(FILEALIZATION, userItemsMgr);
 	}
 	
@@ -50,7 +92,7 @@ public class UserItemsManager {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	private static synchronized void deserialize() {
+	public static synchronized void deserialize() {
 		userItemsMgr = new HashMap<String, UserItems>();
 		Object obj = Serializer.read(FILEALIZATION);
 		if (obj != null) {
