@@ -35,6 +35,7 @@ import es.git.openkm.bean.Bookmark;
 import es.git.openkm.bean.Comment;
 import es.git.openkm.bean.DashboardStatsDocumentResult;
 import es.git.openkm.bean.DashboardStatsFolderResult;
+import es.git.openkm.bean.DashboardStatsMailResult;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.FormField;
@@ -53,6 +54,7 @@ import es.git.openkm.frontend.client.bean.GWTBookmark;
 import es.git.openkm.frontend.client.bean.GWTComment;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.bean.GWTFormField;
@@ -451,6 +453,25 @@ public class Util {
 		
 		return gwtDashboardStatsFolderResult;
 	}
+	
+	
+	/**
+	 * Copy the DashboardStatsMailResult data to GWTDashboardStatsMailResult
+	 * 
+	 * @param dsMailResult The original DashboardStatsMailResult
+	 * @return The GWTDashboardStatsMailResult object with data values from de original
+	 * DashboardStatsMailResult
+	 */
+	public static GWTDashboardStatsMailResult copy(DashboardStatsMailResult dsmailResult) {
+		GWTDashboardStatsMailResult gwtDashboardStatsMailResult = new GWTDashboardStatsMailResult();
+		
+		gwtDashboardStatsMailResult.setMail(copy(dsmailResult.getMail()));
+		gwtDashboardStatsMailResult.setVisited(dsmailResult.isVisited());
+		gwtDashboardStatsMailResult.setDate(dsmailResult.getDate().getTime());
+		
+		return gwtDashboardStatsMailResult;
+	}
+	
 	
 	/**
 	 * Copy to ProcessDefinition data to  GWTProcessDefinition

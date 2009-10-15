@@ -47,8 +47,10 @@ import com.google.gwt.user.client.ui.Widget;
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
+import es.git.openkm.frontend.client.bean.GWTMail;
 import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMDashboardService;
@@ -85,6 +87,7 @@ public class DashboardWidget extends Composite {
 	private boolean flagZoom = true;
 	private List<GWTDashboardStatsDocumentResult> lastDocList = new ArrayList<GWTDashboardStatsDocumentResult>();
 	private List<GWTDashboardStatsFolderResult> lastFolderList = new ArrayList<GWTDashboardStatsFolderResult>();
+	private List<GWTDashboardStatsMailResult> lastMailList = new ArrayList<GWTDashboardStatsMailResult>();
 	private WidgetToFire widgetToFire;
 	private String source;
 	public Status status;
@@ -293,6 +296,53 @@ public class DashboardWidget extends Composite {
 	}
 	
 	/**
+	 * Setting mails
+	 * 
+	 * @param mailList mail list
+	 */
+	public void setMails(List<GWTDashboardStatsMailResult> mailList) {
+		int documentsNotViewed = 0;
+		removeAllRows();
+		
+		for (ListIterator<GWTDashboardStatsMailResult> it = mailList.listIterator(); it.hasNext();) {
+			int row = table.getRowCount();
+			final GWTDashboardStatsMailResult dsMailResult = it.next();
+			final GWTMail mail = dsMailResult.getMail();
+			Hyperlink mailName = new Hyperlink();
+			mailName.setText(mail.getSubject());
+			mailName.setTitle(mail.getPath());
+			mailName.addClickListener(new ClickListener() {
+				public void onClick(Widget sender) {
+					if (!dsMailResult.isVisited()) {
+						markPathAsViewed(mail.getPath());
+					}
+					String mailPath = mail.getPath();
+					visiteNode(source, mailPath, dsMailResult.getDate());
+					String path = mailPath.substring(0, mailPath.lastIndexOf("/"));
+					CommonUI.openAllFolderPath(path, mailPath);
+				}
+			});
+			mailName.setStyleName("okm-Hyperlink");
+						
+			table.setHTML(row, 0, Util.mimeImageHTML(mail.getMimeType()));
+			table.setWidget(row, 1, mailName);
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+			table.setHTML(row, 2, dtf.format(dsMailResult.getDate()));
+			table.getCellFormatter().setWidth(row, 0, "20"); 
+			table.getCellFormatter().setWidth(row, 1, "100%"); // Table sets de 100% of space
+			table.getCellFormatter().setHorizontalAlignment(row, 2, HasAlignment.ALIGN_RIGHT);
+			
+			if (!dsMailResult.isVisited()) {
+				documentsNotViewed++;
+				table.getRowFormatter().setStyleName(row, "okm-NotViewed");
+			} 
+		}
+		
+		header.setHeaderNotViewedResults(documentsNotViewed);
+		lastMailList = mailList; // Saves actual list
+	}
+	
+	/**
 	 * Mark all table rows as viewed
 	 */
 	public void markAllRowsAsViewed() {
@@ -315,6 +365,14 @@ public class DashboardWidget extends Composite {
 			if (!folderResult.isVisited()) {
 				visiteNode(source, folderResult.getFolder().getPath(), folderResult.getDate());
 				folderResult.setVisited(true);
+			}
+		}
+		
+		for (ListIterator<GWTDashboardStatsMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
+			GWTDashboardStatsMailResult mailResult =  it.next();
+			if (!mailResult.isVisited()) {
+				visiteNode(source, mailResult.getMail().getPath(), mailResult.getDate());
+				mailResult.setVisited(true);
 			}
 		}
 		
@@ -355,6 +413,18 @@ public class DashboardWidget extends Composite {
 				table.getRowFormatter().removeStyleName(count++, "okm-NotViewed");
 				decrement++;
 				dsFolderResult.setVisited(true);
+			} else {
+				count++;
+			}
+		}
+		
+		count = 0;
+		for (ListIterator<GWTDashboardStatsMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
+			GWTDashboardStatsMailResult dsMailResult = it.next();
+			if (dsMailResult.getMail().getPath().equals(path)) {
+				table.getRowFormatter().removeStyleName(count++, "okm-NotViewed");
+				decrement++;
+				dsMailResult.setVisited(true);
 			} else {
 				count++;
 			}

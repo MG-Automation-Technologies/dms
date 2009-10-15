@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMDashboardService;
 import es.git.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -49,7 +50,7 @@ public class MailDashboard extends Composite {
 	private VerticalPanel vPanelLeft;
 	private VerticalPanel vPanelRight;
 	
-	private DashboardWidget lastWeekTopDownloadedDocuments;
+	private DashboardWidget getUserLastImportedMails;
 	private DashboardWidget lastImportedAttachments;
 	
 	private boolean firstTime = true;
@@ -62,10 +63,10 @@ public class MailDashboard extends Composite {
 		vPanelRight = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
-		lastWeekTopDownloadedDocuments = new DashboardWidget("LastWeekTopDownloadedDocuments","dashboard.mail.last.imported.mails", "img/icon/actions/download.gif", true);
+		getUserLastImportedMails = new DashboardWidget("LastWeekTopDownloadedDocuments","dashboard.mail.last.imported.mails", "img/icon/actions/download.gif", true);
 		lastImportedAttachments = new DashboardWidget("LastImportedAttachments", "dashboard.mail.last.imported.attached.documents", "img/icon/actions/checkin.gif", true);
 		
-		vPanelLeft.add(lastWeekTopDownloadedDocuments);
+		vPanelLeft.add(getUserLastImportedMails);
 		vPanelRight.add(lastImportedAttachments);
 		
 		hPanel.add(vPanelLeft);
@@ -83,7 +84,7 @@ public class MailDashboard extends Composite {
 	 * Refreshing language
 	 */
 	public void langRefresh() {
-		lastWeekTopDownloadedDocuments.langRefresh();
+		getUserLastImportedMails.langRefresh();
 		lastImportedAttachments.langRefresh();
 	}
 	
@@ -96,23 +97,23 @@ public class MailDashboard extends Composite {
 		int columnWidth = width/NUMBER_OF_COLUMNS;
 		
 		// Trying to distribute widgets on columns with max size
-		lastWeekTopDownloadedDocuments.setWidth(columnWidth);
+		getUserLastImportedMails.setWidth(columnWidth);
 		lastImportedAttachments.setWidth(columnWidth);
 	}
 	
 	/**
-	 * Get last week top downloaded documents callback
+	 * Get last user imported mails callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastWeekTopDownloadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
-			lastWeekTopDownloadedDocuments.setDocuments(result);
-			lastWeekTopDownloadedDocuments.setHeaderResults(result.size());
-			lastWeekTopDownloadedDocuments.unsetRefreshing();
+	final AsyncCallback<List<GWTDashboardStatsMailResult>> callbackGetUserLastImportedMails = new AsyncCallback<List<GWTDashboardStatsMailResult>>() {
+		public void onSuccess(List<GWTDashboardStatsMailResult> result){
+			getUserLastImportedMails.setMails(result);
+			getUserLastImportedMails.setHeaderResults(result.size());
+			getUserLastImportedMails.unsetRefreshing();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getLastWeekTopDownloadedDocuments", caught);
-			lastWeekTopDownloadedDocuments.unsetRefreshing();
+			Main.get().showError("getUserLastImportedMails", caught);
+			getUserLastImportedMails.unsetRefreshing();
 		}
 	};
 	
@@ -135,13 +136,13 @@ public class MailDashboard extends Composite {
 	/**
 	 * getLastWeekTopDownloadedDocuments
 	 */
-	public void getLastWeekTopDownloadedDocuments() {
+	public void getUserLastImportedMails() {
 		if (!firstTime) {
-			lastWeekTopDownloadedDocuments.setRefreshing();
+			getUserLastImportedMails.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
 		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
-		dashboardService.getLastWeekTopDownloadedDocuments(callbackGetLastWeekTopDownloadedDocuments);
+		dashboardService.getUserLastImportedMails(callbackGetUserLastImportedMails);
 	}
 	
 	/**
@@ -160,7 +161,7 @@ public class MailDashboard extends Composite {
 	 * Refresh all panels
 	 */
 	public void refreshAll() {
-		getLastWeekTopDownloadedDocuments();
+		getUserLastImportedMails();
 		getUserLastImportedMailAttachments();
 	}
 }

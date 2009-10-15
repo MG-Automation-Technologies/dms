@@ -26,6 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 
 /**
  * @author jllort
@@ -48,5 +49,6 @@ public interface OKMDashboardServiceAsync {
 	public void getLastModifiedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
 	public void getLastUploadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
 	public void getUserLastImportedMailAttachments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
+	public void getUserLastImportedMails(AsyncCallback<List<GWTDashboardStatsMailResult>> callback);
 	public void visiteNode(String source, String node, Date date, AsyncCallback callback);
 }

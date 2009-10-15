@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 
 /**
  * @author jllort
@@ -49,5 +50,6 @@ public interface OKMDashboardService extends RemoteService {
 	public List<GWTDashboardStatsDocumentResult> getLastModifiedDocuments() throws OKMException;
 	public List<GWTDashboardStatsDocumentResult> getLastUploadedDocuments() throws OKMException;
 	public List<GWTDashboardStatsDocumentResult> getUserLastImportedMailAttachments() throws OKMException;
+	public List<GWTDashboardStatsMailResult> getUserLastImportedMails() throws OKMException;
 	public void visiteNode(String source, String node, Date date) throws OKMException;
 }

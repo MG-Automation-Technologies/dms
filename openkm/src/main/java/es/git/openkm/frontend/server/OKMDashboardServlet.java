@@ -33,10 +33,12 @@ import org.slf4j.LoggerFactory;
 import es.git.openkm.api.OKMDashboard;
 import es.git.openkm.bean.DashboardStatsDocumentResult;
 import es.git.openkm.bean.DashboardStatsFolderResult;
+import es.git.openkm.bean.DashboardStatsMailResult;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMDashboardService;
 
@@ -424,6 +426,28 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		
 		log.debug("getUserLastImportedMailAttachments:"+docList);
 		return docList;
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMDashboardService#getUserLastImportedMails()
+	 */
+	public List<GWTDashboardStatsMailResult> getUserLastImportedMails() throws OKMException {
+		log.debug("getUserLastImportedMails()");
+		List<GWTDashboardStatsMailResult> mailList = new ArrayList<GWTDashboardStatsMailResult>();
+		String token = getToken();
+		
+		try {
+			for (Iterator<DashboardStatsMailResult> it = OKMDashboard.getInstance().getUserLastImportedMails(token).iterator(); it.hasNext(); ) {
+				mailList.add(Util.copy(it.next()));
+			}
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		
+		log.debug("getUserLastImportedMails:"+mailList);
+		return mailList;
+		
 	}
 
 	/* (non-Javadoc)
