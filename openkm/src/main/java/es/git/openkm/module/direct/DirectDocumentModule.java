@@ -53,7 +53,6 @@ import es.git.openkm.bean.Notification;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.Version;
-import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
@@ -236,10 +235,8 @@ public class DirectDocumentModule implements DocumentModule {
 		contentNode.checkin();
 		
 		// Update user items
-		UserItems userItems = UserItemsManager.get(session.getUserID());
-		userItems.incSize(size);
-		userItems.incDocument();
-		UserItemsManager.put(session.getUserID(), userItems);
+		UserItemsManager.incSize(session.getUserID(), size);
+		UserItemsManager.incDocuments(session.getUserID());
 		
 		return documentNode; 
 	}
@@ -927,9 +924,7 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Update user items
 			long size = contentNode.getProperty(Document.SIZE).getLong();
-			UserItems userItems = UserItemsManager.get(session.getUserID());
-			userItems.incSize(size);
-			UserItemsManager.put(session.getUserID(), userItems);
+			UserItemsManager.incSize(session.getUserID(), size);
 			
 			// Add comment (as system user)
 			String systemToken = SessionManager.getInstance().getSystemToken();
@@ -1203,10 +1198,8 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Update user items
-			UserItems userItems = UserItemsManager.get(author);
-			userItems.decSize(size);
-			userItems.decDocument();
-			UserItemsManager.put(author, userItems);
+			UserItemsManager.decSize(author, size);
+			UserItemsManager.decDocuments(author);
 
 			// Activity log
 			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);

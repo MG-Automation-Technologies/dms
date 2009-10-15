@@ -36,6 +36,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
+import javax.naming.NamingException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jackrabbit.core.RepositoryImpl;
@@ -56,7 +57,6 @@ import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.Repository;
-import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
@@ -593,18 +593,14 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	private void purgeTrashHelper(Session session, Node node) 
 			throws javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.RepositoryException {
-		UserItems userItems = UserItemsManager.get(session.getUserID());
-		
 		if (node.isNodeType(Document.TYPE)) {
 			Node content = node.getNode(Document.CONTENT);
 			long size = content.getProperty(Document.SIZE).getLong();
-			userItems.decSize(size);
-			userItems.decDocument();
-			UserItemsManager.put(session.getUserID(), userItems);
+			UserItemsManager.decSize(session.getUserID(), size);
+			UserItemsManager.decDocuments(session.getUserID());
 		} else if (node.isNodeType(Folder.TYPE)) {
 			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
-				userItems.decFolder();
-				UserItemsManager.put(session.getUserID(), userItems);
+				UserItemsManager.decFolders(session.getUserID());
 				purgeTrashHelper(session, node);
 			}	
 		}
