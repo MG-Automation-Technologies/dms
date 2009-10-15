@@ -55,12 +55,12 @@ import es.git.openkm.frontend.client.service.OKMNotifyServiceAsync;
 import es.git.openkm.frontend.client.widget.ConfirmPopup;
 import es.git.openkm.frontend.client.widget.MenuPopup;
 import es.git.openkm.frontend.client.widget.OriginPanel;
+import es.git.openkm.frontend.client.widget.filebrowser.menu.MailMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.PersonalMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TaxonomyMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TemplatesMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TrashMenu;
 import es.git.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
-import es.git.openkm.frontend.client.widget.filebrowser.menu.MailMenu;
 import es.git.openkm.frontend.client.widget.startup.StartUp;
 
 /**
