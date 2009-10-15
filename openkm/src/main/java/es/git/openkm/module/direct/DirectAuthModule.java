@@ -71,6 +71,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public synchronized String login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
 			RepositoryException {
@@ -307,6 +308,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#login()
 	 */
+	@Override
 	public String login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
 		log.debug("login()");
 		String token = login(null, null);
@@ -317,6 +319,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#logout(java.lang.String)
 	 */
+	@Override
 	public synchronized void logout(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("logout(" + token + ")");
 		Session session = SessionManager.getInstance().get(token);
@@ -354,6 +357,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#grantUser(java.lang.String, java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public void grantUser(String token, String nodePath, String user,
 			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("grantUser(" + token + ", " + nodePath + ", " + user
@@ -453,6 +457,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#revokeUser(java.lang.String, java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public void revokeUser(String token, String nodePath, String user,
 			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("revokeUser(" + token + ", " + nodePath + ", " + user
@@ -549,6 +554,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#grantRole(java.lang.String, java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public void grantRole(String token, String nodePath, String role,
 			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("grantRole(" + token + ", " + nodePath + ", " + role
@@ -648,6 +654,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#revokeRole(java.lang.String, java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("revokeRole(" + token + ", " + nodePath + ", " + role
 				+ ", " + permissions + ", " + recursive + ")");
@@ -743,6 +750,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#getGrantedUsers(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("getGrantedUsers(" + token + ", " + nodePath + ")");
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
@@ -783,6 +791,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#getGrantedRoles(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("getGrantedRoles(" + token + ", " + nodePath + ")");
 		HashMap<String, Byte> roles = new HashMap<String, Byte>();
@@ -871,6 +880,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#getUsers(java.lang.String)
 	 */
+	@Override
 	public Collection<String> getUsers(String token) throws RepositoryException {
 		log.debug("getUsers("+token+")");
 		Collection<String> list = null;
@@ -890,6 +900,7 @@ public class DirectAuthModule implements AuthModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.AuthModule#getRoles(java.lang.String)
 	 */
+	@Override
 	public Collection<String> getRoles(String token) throws RepositoryException {
 		log.debug("getRoles("+token+")");
 		Collection<String> list = null;
@@ -909,6 +920,7 @@ public class DirectAuthModule implements AuthModule {
 	/**
 	 * Get mail user list from user list. 
 	 */
+	@Override
 	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException {
 		log.debug("getMails("+token+")");
 		Collection<String> list = null;
