@@ -45,6 +45,7 @@ public class OKMScripting implements ScriptingModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.ScriptingModule#setScript(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void setScript(String token, String nodePath, String code)
 			throws PathNotFoundException, AccessDeniedException,
 			RepositoryException {
@@ -57,6 +58,7 @@ public class OKMScripting implements ScriptingModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.ScriptingModule#removeScript(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void removeScript(String token, String nodePath)
 			throws PathNotFoundException, AccessDeniedException,
 			RepositoryException {
@@ -69,6 +71,7 @@ public class OKMScripting implements ScriptingModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.ScriptingModule#getScript(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public String getScript(String token, String nodePath)
 			throws PathNotFoundException, AccessDeniedException,
 			RepositoryException {

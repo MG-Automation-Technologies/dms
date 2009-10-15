@@ -52,6 +52,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#create(java.lang.String, es.git.openkm.bean.Folder)
 	 */
+	@Override
 	public Folder create(String token, Folder fldPath) throws PathNotFoundException, 
 			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("create("+token+", " + fldPath + ")");
@@ -64,6 +65,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#getProperties(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException {
 		log.debug("getProperties("+token+", " + fldPath + ")");
@@ -76,6 +78,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void delete(String token, String fldPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
 		log.debug("delete("+token+", " + fldPath + ")");
@@ -87,6 +90,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#purge(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void purge(String token, String fldPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
 		log.debug("purge("+token+", " + fldPath + ")");
@@ -98,6 +102,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("rename("+token+", " + fldPath + ")");
@@ -110,6 +115,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("move("+token+", " + fldPath + ", " + dstPath + ")");
@@ -121,6 +127,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#copy(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
 		log.debug("copy("+token+", " + fldPath + ", " + dstPath + ")");
@@ -132,6 +139,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
 		log.debug("getChilds(" + token + ", " + fldPath + ")");
@@ -144,6 +152,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#getContentInfo(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
 		log.debug("getContentInfo(" + token + ", " + fldPath + ")");
@@ -156,6 +165,7 @@ public class OKMFolder implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
 		log.debug("isValid("+token+", "+fldPath+")");

@@ -52,6 +52,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#create(java.lang.String, es.git.openkm.bean.Mail)
 	 */
+	@Override
 	public Mail create(String token, Mail mail) throws PathNotFoundException, 
 			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException {
 		log.debug("create("+token+", " + mail + ")");
@@ -64,6 +65,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#getProperties(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
 			RepositoryException {
 		log.debug("getProperties("+token+", " + mailPath + ")");
@@ -76,6 +78,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#delete(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
 		log.debug("delete("+token+", " + mailPath + ")");
@@ -87,6 +90,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#purge(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void purge(String token, String mailPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
 		log.debug("purge("+token+", " + mailPath + ")");
@@ -98,6 +102,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("rename("+token+", " + mailPath + ")");
@@ -110,6 +115,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("move("+token+", " + mailPath + ", " + dstPath + ")");
@@ -121,6 +127,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#copy(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
 		log.debug("copy("+token+", " + mailPath + ", " + dstPath + ")");
@@ -132,6 +139,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
 		log.debug("getChilds(" + token + ", " + fldPath + ")");
@@ -144,6 +152,7 @@ public class OKMMail implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#isValid(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
 		log.debug("isValid("+token+", "+mailPath+")");

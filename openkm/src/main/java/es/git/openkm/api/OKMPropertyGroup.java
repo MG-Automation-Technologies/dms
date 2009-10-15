@@ -53,6 +53,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#addGroup(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void addGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
@@ -65,6 +66,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#removeGroup(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void removeGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException, 
 			RepositoryException {
@@ -77,6 +79,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#getGroups(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<String> getGroups(String token, String docPath)
 			throws PathNotFoundException, RepositoryException {
 		log.debug("getGroups(" + token + ", " + docPath + ")");
@@ -89,6 +92,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#getAllGroups(java.lang.String)
 	 */
+	@Override
 	public Collection<String> getAllGroups(String token) throws RepositoryException {
 		log.debug("getAllGroups(" + token + ")");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
@@ -100,6 +104,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#getProperties(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
 		log.debug("getProperties(" + token + ", " + docPath + ", " + grpName + ")");
@@ -112,6 +117,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
+	@Override
 	public void setProperties(String token, String docPath, String grpName, HashMap<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
@@ -124,6 +130,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#getValues(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HashMap<String, MetaData> getMetaData(String token, String grpName) throws IOException, RepositoryException {
 		log.debug("getMetaData(" + token + ", " + grpName + ")");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
@@ -135,6 +142,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.PropertyGroupModule#getTranslations(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public HashMap<String, String> getTranslations(String token, String lang) throws IOException, RepositoryException {
 		log.debug("getTranslations(" + token + ", " + lang + ")");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();

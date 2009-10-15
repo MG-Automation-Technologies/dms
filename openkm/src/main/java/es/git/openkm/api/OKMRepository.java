@@ -42,6 +42,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getRootFolder(java.lang.String)
 	 */
+	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getRootFolder("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -53,6 +54,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getTrashFolder(java.lang.String)
 	 */
+	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTrashFolder("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -64,6 +66,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getTemplate(java.lang.String)
 	 */
+	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTemplatesFolder("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -75,6 +78,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
 	 */
+	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
 		log.debug("getPersonalFolder("+token+")");
@@ -87,6 +91,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
 	 */
+	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
 		log.debug("getMailFolder("+token+")");
@@ -99,6 +104,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
 	 */
+	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("purgeTrash("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -109,6 +115,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getUpdateMessage(java.lang.String)
 	 */
+	@Override
 	public String getUpdateMessage(String token) throws RepositoryException {
 		log.debug("getUpdateMessage("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -120,6 +127,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#getUuid(java.lang.String)
 	 */
+	@Override
 	public String getUuid(String token) throws RepositoryException {
 		log.debug("getUuid("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -131,6 +139,7 @@ public class OKMRepository implements RepositoryModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
 		log.debug("hasNode("+token+" , "+path+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
