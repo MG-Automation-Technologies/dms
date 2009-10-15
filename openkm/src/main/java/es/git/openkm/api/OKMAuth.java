@@ -175,4 +175,16 @@ public class OKMAuth implements AuthModule {
 		log.debug("getRoles: "+roles);
 		return roles;
 	}
+
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.AuthModule#getMails(java.lang.String, java.util.Collection)
+	 */
+	@Override
+	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException {
+		log.debug("getMails("+token+", "+users+")");
+		AuthModule am = ModuleManager.getAuthModule();
+		Collection<String> mails = am.getMails(token, users);
+		log.debug("getMails: "+mails);
+		return mails;
+	}
 }
