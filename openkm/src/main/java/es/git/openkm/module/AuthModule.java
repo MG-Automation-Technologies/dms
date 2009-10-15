@@ -170,4 +170,14 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
 	public Collection<String> getRoles(String token) throws RepositoryException;
+	
+	/**
+	 * Retrieves the user mails from an user list.
+	 * 
+	 * @param token The session authorization token.
+	 * @param users A collection of user names.
+	 * @return A collection of user mails.
+	 * @throws RepositoryException If there is any error retrieving the mail list.
+	 */
+	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException;
 }
