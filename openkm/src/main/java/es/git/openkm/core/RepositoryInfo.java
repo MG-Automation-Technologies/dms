@@ -24,8 +24,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.api.OKMStats;
 import es.git.openkm.bean.StatsInfo;
-import es.git.openkm.module.direct.DirectStatsModule;
 
 public class RepositoryInfo extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(RepositoryInfo.class);
@@ -36,11 +36,12 @@ public class RepositoryInfo extends TimerTask {
 	public void run() {
 		log.debug("*** Begin repository info ***");
 		String systemToken = SessionManager.getInstance().getSystemToken();
-
+		OKMStats okmStats = OKMStats.getInstance();
+		
 		try {
-			documentsByContext = new DirectStatsModule().getDocumentsByContext(systemToken);
-			foldersByContext = new DirectStatsModule().getFoldersByContext(systemToken);
-			documentsSizeByContext = new DirectStatsModule().getDocumentsSizeByContext(systemToken);
+			documentsByContext = okmStats.getDocumentsByContext(systemToken);
+			foldersByContext = okmStats.getFoldersByContext(systemToken);
+			documentsSizeByContext = okmStats.getDocumentsSizeByContext(systemToken);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 		}
