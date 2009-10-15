@@ -941,32 +941,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	public Collection<DashboardStatsDocumentResult> getUserLastMails(String token)
-			throws RepositoryException {
-		log.debug("getUserLastMails(" + token + ")");
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
-		String statement = "SELECT act_item, act_date FROM activity "+
-			"WHERE act_action='CREATE_MAIL_ATTACHMENT' "+
-			"AND act_user=? ORDER BY act_date DESC";
-	
-		try {
-			Session session = SessionManager.getInstance().get(token);
-			al = getDocuments(session, statement);
-			
-			// Check for already visited results
-			checkVisitedDocuments(session.getUserID(), "UserLastMails", al);
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		}
-
-		log.debug("getUserLastMails: "+al);
-		return al;
-	}
-
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.DashboardModule#visiteNode(java.lang.String, java.lang.String, java.lang.String, java.util.Calendar)
 	 */
