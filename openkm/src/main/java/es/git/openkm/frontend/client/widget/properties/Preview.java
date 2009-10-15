@@ -40,7 +40,7 @@ public class Preview extends Composite {
 		String code = "<object data=\""+url+"\" type=\""+mime+"\" width=\"100%\" height=\"100%\">"+
 			"<embed src=\""+url+"\" type=\""+mime+"\"  width=\"100%\" height=\"100%\"/>"+
 			"</object>";
-		html = new HTML(code);
+		html = new HTML("code");
 		initWidget(html);
 		setPixelSize(500, 500);
 		html.setPixelSize(500, 500);
