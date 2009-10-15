@@ -164,13 +164,6 @@ public interface DashboardModule {
 
 	/**
 	 * @param token
-	 * @return
-	 * @throws RepositoryException
-	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastMails(String token) throws RepositoryException;	
-
-	/**
-	 * @param token
 	 * @param node
 	 * @param source
 	 * @throws RepositoryException
