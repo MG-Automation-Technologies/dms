@@ -258,6 +258,7 @@ public class Lang_fr_FR {
 	    lang.put("tab.document.status.purge.version.history", "Compacter l'historique du document");
 	    lang.put("tab.document.status.restore.version", "Restaurer la version du document");
 	    lang.put("tab.document.security", "Securité");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Propriétés");
 	    lang.put("tab.folder.security", "Securité");
 	    
@@ -533,6 +534,8 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.keyword.related", "Mots-clés connexes");
 	    lang.put("dashboard.keyword.goto.document", "Aller au document");
 	    lang.put("dashboard.keyword.clean.keywords", "Effacer les mots-clés");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Démarrage workflow");

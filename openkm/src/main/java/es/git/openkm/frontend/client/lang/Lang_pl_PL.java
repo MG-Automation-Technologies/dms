@@ -260,6 +260,7 @@ public class Lang_pl_PL {
 	    lang.put("tab.document.status.purge.version.history", "Kompresja historii dokumentu");
 	    lang.put("tab.document.status.restore.version", "Przywracanie historii dokumentu");
 	    lang.put("tab.document.security", "Uprawnienia");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Właściwości");
 	    lang.put("tab.folder.security", "Uprawnienia");
 	    
@@ -535,6 +536,8 @@ public class Lang_pl_PL {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Uruchom obieg dokumentu");

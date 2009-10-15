@@ -258,6 +258,7 @@ public class Lang_fa_FA {
 	    lang.put("tab.document.status.purge.version.history", "Compacting document history");
 	    lang.put("tab.document.status.restore.version", "Restoring document versión");
 	    lang.put("tab.document.security", "امنیت");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "خواص");
 	    lang.put("tab.folder.security", "امنیت");
 	    
@@ -533,6 +534,8 @@ public class Lang_fa_FA {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Start workflow");

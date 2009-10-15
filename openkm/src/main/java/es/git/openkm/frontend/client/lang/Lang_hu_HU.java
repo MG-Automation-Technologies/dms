@@ -258,6 +258,7 @@ public class Lang_hu_HU {
 	    lang.put("tab.document.status.purge.version.history", "Verziók eltávolítása...");
 	    lang.put("tab.document.status.restore.version", "Verzió visszaállítása...");
 	    lang.put("tab.document.security", "Biztonság");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Tulajdonságok");
 	    lang.put("tab.folder.security", "Biztonság");
 	    
@@ -533,6 +534,8 @@ public class Lang_hu_HU {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Munkafolyamat indítása");

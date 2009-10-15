@@ -258,6 +258,7 @@ public class Lang_ja_JP {
 		lang.put("tab.document.status.purge.version.history", "文書の履歴を削除中...");
 		lang.put("tab.document.status.restore.version", "文書のバージョンを復元中...");
 		lang.put("tab.document.security", "セキュリティ");
+		lang.put("tab.document.preview", "Preview");
 		lang.put("tab.folder.properties", "プロパティ");
 		lang.put("tab.folder.security", "セキュリティ");
 		
@@ -533,6 +534,8 @@ public class Lang_ja_JP {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Start workflow");

@@ -52,7 +52,6 @@ public class MailDashboard extends Composite {
 	
 	private DashboardWidget userLastImportedMails;
 	private DashboardWidget lastImportedAttachments;
-	private DashboardWidget userLastMails;
 	
 	private boolean firstTime = true;
 	
@@ -64,12 +63,10 @@ public class MailDashboard extends Composite {
 		vPanelRight = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
-		userLastImportedMails = new DashboardWidget("LastWeekTopDownloadedDocuments","dashboard.mail.last.imported.mails", "img/icon/actions/download.gif", true);
-		lastImportedAttachments = new DashboardWidget("LastImportedAttachments", "dashboard.mail.last.imported.attached.documents", "img/icon/actions/checkin.gif", true);
-		userLastMails = new DashboardWidget("UserLastMails", "dashboard.mail.user.last.mails", "img/icon/actions/checkin.gif", true);
+		userLastImportedMails = new DashboardWidget("LastWeekTopDownloadedDocuments","dashboard.mail.last.imported.mails", "img/email.gif", true);
+		lastImportedAttachments = new DashboardWidget("LastImportedAttachments", "dashboard.mail.last.imported.attached.documents", "img/email_attach.gif", true);
 		
 		vPanelLeft.add(userLastImportedMails);
-		vPanelLeft.add(userLastMails);
 		vPanelRight.add(lastImportedAttachments);
 		
 		hPanel.add(vPanelLeft);
@@ -88,7 +85,6 @@ public class MailDashboard extends Composite {
 	 */
 	public void langRefresh() {
 		userLastImportedMails.langRefresh();
-		userLastMails.langRefresh();
 		lastImportedAttachments.langRefresh();
 	}
 	
@@ -102,7 +98,6 @@ public class MailDashboard extends Composite {
 		
 		// Trying to distribute widgets on columns with max size
 		userLastImportedMails.setWidth(columnWidth);
-		userLastMails.setWidth(columnWidth);
 		lastImportedAttachments.setWidth(columnWidth);
 	}
 	
@@ -137,22 +132,6 @@ public class MailDashboard extends Composite {
 			lastImportedAttachments.unsetRefreshing();
 		}
 	};
-	
-	/**
-	 * Get last user mails callback
-	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLastMails = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
-			userLastMails.setDocuments(result);
-			userLastMails.setHeaderResults(result.size());
-			userLastMails.unsetRefreshing();
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("getUserLastMails", caught);
-			userLastMails.unsetRefreshing();
-		}
-	};
 
 	/**
 	 * getLastWeekTopDownloadedDocuments
@@ -179,23 +158,10 @@ public class MailDashboard extends Composite {
 	}
 	
 	/**
-	 * getLastModifiedDocuments
-	 */
-	public void getUserLastMails() {
-		if (!firstTime) {
-			userLastMails.setRefreshing();
-		}
-		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
-		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
-		dashboardService.getUserLastMails(callbackGetUserLastMails);
-	}
-	
-	/**
 	 * Refresh all panels
 	 */
 	public void refreshAll() {
 		getUserLastImportedMails();
-		getUserLastMails();
 		getUserLastImportedMailAttachments();
 	}
 }

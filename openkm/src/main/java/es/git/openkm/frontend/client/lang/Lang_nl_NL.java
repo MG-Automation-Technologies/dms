@@ -252,6 +252,7 @@ public class Lang_nl_NL {
 	    lang.put("tab.document.history", "Geschiedenis");
 	    lang.put("tab.document.status.history", "Geschiedenis bijwerken");
 	    lang.put("tab.document.security", "Beveiliging bestanden");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.status.security.role", "Beveiliging: groepen bijwerken");
 	    lang.put("tab.status.security.user", "Beveiliging: gebruikers bijwerken");
 	    lang.put("tab.document.status.group.properties", "Property group bijwerken");
@@ -534,6 +535,8 @@ public class Lang_nl_NL {
 	    lang.put("dashboard.keyword.related", "Gerelateerde sleutelwoorden");
 	    lang.put("dashboard.keyword.goto.document", "Go naar document");
 	    lang.put("dashboard.keyword.clean.keywords", "Sleutelwoorden opruimen");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Start workflow");

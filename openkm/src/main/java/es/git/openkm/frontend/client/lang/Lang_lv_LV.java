@@ -258,6 +258,7 @@ public class Lang_lv_LV {
 	    lang.put("tab.document.status.purge.version.history", "Saspiež dokumenta vēsturi");
 	    lang.put("tab.document.status.restore.version", "Atjauno dokumenta versiju");
 	    lang.put("tab.document.security", "Drošība");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Īpašības");
 	    lang.put("tab.folder.security", "Drošība");
 	    
@@ -533,6 +534,8 @@ public class Lang_lv_LV {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Sākam darbplūsmu");

@@ -257,6 +257,7 @@ public class Lang_zh_TW {
 		lang.put("tab.document.status.purge.version.history", "正在壓縮文件歷史");
 	    lang.put("tab.document.status.restore.version", "正在重新載入文件版本");
 	    lang.put("tab.document.security", "安全");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "屬性");
 	    lang.put("tab.folder.security", "安全");
 	    
@@ -531,6 +532,8 @@ public class Lang_zh_TW {
 	    lang.put("dashboard.keyword.related", "Related keywords");
 	    lang.put("dashboard.keyword.goto.document", "Goto document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 		lang.put("workflow.label", "開始流程");

@@ -263,6 +263,7 @@ public class Lang_ru_RU {
 	    lang.put("tab.document.status.purge.version.history", "Удаляю историю документа");
 	    lang.put("tab.document.status.restore.version", "Восстанавливаю версию документа");
 	    lang.put("tab.document.security", "Безопасность");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Свойства");
 	    lang.put("tab.folder.security", "Безопасность");
 	    
@@ -538,6 +539,8 @@ public class Lang_ru_RU {
 	    lang.put("dashboard.keyword.related", "Схожие ключевые слова");
 	    lang.put("dashboard.keyword.goto.document", "Перейти к документу");
 	    lang.put("dashboard.keyword.clean.keywords", "Очистить ключевые слова");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Начать рабочий процесс");

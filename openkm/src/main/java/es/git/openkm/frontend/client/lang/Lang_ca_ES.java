@@ -258,6 +258,7 @@ public class Lang_ca_ES {
 	    lang.put("tab.document.status.purge.version.history", "S'està compactant l'històric del document");
 	    lang.put("tab.document.status.restore.version", "S'està restaurant la versió del document");
 	    lang.put("tab.document.security", "Seguretat");
+	    lang.put("tab.document.preview", "Previsualitzar");
 	    lang.put("tab.folder.properties", "Propietats");
 	    lang.put("tab.folder.security", "Seguretat");
 	    	    
@@ -533,6 +534,8 @@ public class Lang_ca_ES {
 	    lang.put("dashboard.keyword.related", "Paraules clau relacionades");
 	    lang.put("dashboard.keyword.goto.document", "Anar al document");
 	    lang.put("dashboard.keyword.clean.keywords", "Neteja paraules clau");
+	    lang.put("dashboard.mail.last.imported.mails", "Correu electrònic");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Documents adjunts");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Iniciar workflow");

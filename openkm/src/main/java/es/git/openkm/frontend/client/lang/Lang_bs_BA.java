@@ -258,6 +258,7 @@ public class Lang_bs_BA {
 	    lang.put("tab.document.status.purge.version.history", "Zbijanje historije dokumenta");
 	    lang.put("tab.document.status.restore.version", "Vraćanje verzije dokumenta");
 	    lang.put("tab.document.security", "Sigurnost");
+	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Osobine");
 	    lang.put("tab.folder.security", "Sigurnost");
 	    
@@ -533,6 +534,8 @@ public class Lang_bs_BA {
 	    lang.put("dashboard.keyword.related", "Ključne riječi koje se odnose na");
 	    lang.put("dashboard.keyword.goto.document", "Idi na dokument");
 	    lang.put("dashboard.keyword.clean.keywords", "Očisti ključne riječi");
+	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Počni tok rada");
