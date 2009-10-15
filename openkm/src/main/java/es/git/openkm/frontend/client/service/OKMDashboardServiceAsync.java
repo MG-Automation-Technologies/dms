@@ -50,6 +50,5 @@ public interface OKMDashboardServiceAsync {
 	public void getLastUploadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
 	public void getUserLastImportedMailAttachments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
 	public void getUserLastImportedMails(AsyncCallback<List<GWTDashboardStatsMailResult>> callback);
-	public void getUserLastMails(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
 	public void visiteNode(String source, String node, Date date, AsyncCallback callback);
 }
