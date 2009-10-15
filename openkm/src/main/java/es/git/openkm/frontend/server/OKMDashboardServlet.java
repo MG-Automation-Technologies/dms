@@ -449,6 +449,27 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		return mailList;
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMDashboardService#getUserLastMails()
+	 */
+	public List<GWTDashboardStatsDocumentResult> getUserLastMails() throws OKMException {
+		log.debug("getUserLastMails()");
+		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		String token = getToken();
+		
+		try {
+			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getUserLastImportedMailAttachments(token).iterator(); it.hasNext(); ) {
+				docList.add(Util.copy(it.next()));
+			}
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		
+		log.debug("getUserLastMails:"+docList);
+		return docList;
+	}
 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMDashboardService#visiteNode(java.lang.String, java.lang.String, java.util.Date)
