@@ -32,6 +32,7 @@ import org.jbpm.JbpmConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.DataStoreGarbageCollector;
@@ -84,6 +85,9 @@ public class RepositoryStartupServlet extends HttpServlet {
         } catch (Exception e) {
         	throw new ServletException(e.getMessage());
         }
+        
+        // Deserialize
+        UserItemsManager.deserialize();
         
         log.info("*** User database initialized ***");
         AuthDAO auth = AuthDAO.getInstance();
@@ -183,6 +187,9 @@ public class RepositoryStartupServlet extends HttpServlet {
 				e.printStackTrace();
 			}
         }
+        
+        // Serialize
+        UserItemsManager.serialize();
         
         // Preserve system user config
         DirectRepositoryModule.shutdown();
