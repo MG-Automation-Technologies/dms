@@ -281,19 +281,6 @@ public class OKMDashboard implements DashboardModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastMails(java.lang.String)
-	 */
-	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLastMails(String token) 
-			throws RepositoryException {
-		log.debug("getUserLastMails(" + token + ")");
-		DashboardModule dm = ModuleManager.getDashboardModule();
-		Collection<DashboardStatsDocumentResult> result = dm.getUserLastMails(token);
-		log.debug("getUserLastMails: "+result);
-		return result;
-	}
-	
-	/* (non-Javadoc)
 	 * @see es.git.openkm.module.DashboardModule#visiteNode(java.lang.String, java.lang.String, java.lang.String, java.util.Calendar)
 	 */
 	@Override
