@@ -55,7 +55,7 @@ public class TestServlet extends HttpServlet {
 		response.setContentType("text/html");
 		
 		try {
-			es.git.openkm.util.Mail.importMessages(token, "imap.mail.com", "xxx", "xxx", "INBOX");
+			es.git.openkm.util.Mail.importMessages(token, "imap.gmail.com", "jlltella@gmail.com", "darkman97i", "OpenKM");
 			//ArrayList<String> al = new ArrayList<String>();
 			//al.add("banana");
 			//new DirectSearchModule().getKeywordMap(token, al);

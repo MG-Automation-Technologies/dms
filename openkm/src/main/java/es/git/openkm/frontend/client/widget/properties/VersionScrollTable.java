@@ -368,6 +368,7 @@ public class VersionScrollTable extends Composite implements ClickListener  {
 		public void onSuccess(Object result) {
 			Main.get().mainPanel.browser.tabMultiple.status.unsetPurgeVersionHistory();
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();
+			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {

@@ -283,7 +283,6 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 			showTabFolderProperties();
 			Main.get().mainPanel.navigator.status.unsetFlagDelete();
 			refresh(true);
-			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -1372,6 +1371,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 			while (actualItem.getChildCount() > 0) {
 				actualItem.removeItems();
 			}
+			Main.get().workspaceUserProperties.getUserDocumentsSize();
 			Main.get().mainPanel.navigator.status.unsetFlagPurgeTrash();
 			// After purge trash must refresh desktop
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();

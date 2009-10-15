@@ -469,7 +469,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			mantainSelectedRow();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentDelete();
 			refresh(fldId);
-			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -490,7 +489,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			mantainSelectedRow();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailDelete();
 			refresh(fldId);
-			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -508,6 +506,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
+			Main.get().workspaceUserProperties.getUserDocumentsSize();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentPurge();
 			refresh(fldId);
 		}
@@ -527,6 +526,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
+			Main.get().workspaceUserProperties.getUserDocumentsSize();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailPurge();
 			refresh(fldId);
 		}
@@ -550,7 +550,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			mantainSelectedRow();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderDelete();
 			refresh(fldId);
-			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -570,6 +569,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
+			Main.get().workspaceUserProperties.getUserDocumentsSize();
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderPurge();
 			refresh(fldId);
 		}
