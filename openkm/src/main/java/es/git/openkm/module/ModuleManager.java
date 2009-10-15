@@ -31,6 +31,7 @@ public class ModuleManager {
 	private static DashboardModule dashboardModule = null;
 	private static WorkflowModule workflowModule = null;
 	private static ScriptingModule scriptingModule = null;
+	private static StatsModule statsModule = null;
 	private static MailModule mailModule = null;
 	
 	/**
@@ -163,6 +164,18 @@ public class ModuleManager {
 		}
 		
 		return scriptingModule;
+	}
+
+	/**
+	 * 
+	 */
+	public static synchronized StatsModule getStatsModule() {
+		if (statsModule == null) {
+			statsModule = new es.git.openkm.module.direct.DirectStatsModule();
+			//scriptingModule = new es.git.openkm.module.ejb.EJBStatsModule();
+		}
+		
+		return statsModule;
 	}
 
 	/**
