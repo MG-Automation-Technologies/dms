@@ -83,4 +83,10 @@ public class EJBAuthModule implements es.git.openkm.module.AuthModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Collection<String> getMails(String token, Collection<String> users)
+			throws RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
