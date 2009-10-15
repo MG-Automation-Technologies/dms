@@ -63,6 +63,7 @@ public class DirectNotificationModule implements NotificationModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void subscribe(String token, String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("subscribe(" + token + ", " + nodePath + ")");
@@ -150,6 +151,7 @@ public class DirectNotificationModule implements NotificationModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void unsubscribe(String token, String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("unsubscribe(" + token + ", " + nodePath + ")");
@@ -232,6 +234,7 @@ public class DirectNotificationModule implements NotificationModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("getSusbcriptions(" + token + ", " + nodePath + ")");
 		ArrayList<String> users = new ArrayList<String>();
@@ -262,6 +265,7 @@ public class DirectNotificationModule implements NotificationModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
 	 */
+	@Override
 	public void notify(String token, String nodePath, Collection<String> users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify("+token+", "+nodePath+", "+users+", "+message+")");
 		

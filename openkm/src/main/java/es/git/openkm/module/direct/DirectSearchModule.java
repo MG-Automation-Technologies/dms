@@ -63,7 +63,6 @@ import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.ResultSet;
 import es.git.openkm.bean.cache.UserKeywords;
 import es.git.openkm.cache.UserKeywordsManager;
-import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
 import es.git.openkm.core.PathNotFoundException;
@@ -78,6 +77,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<QueryResult> findByContent(String token, String words) throws RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 
@@ -98,6 +98,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<QueryResult> findByName(String token, String words) throws RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 
@@ -118,6 +119,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<QueryResult> findByKeywords(String token, String words) throws RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 
@@ -138,6 +140,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#find(java.lang.String, es.git.openkm.bean.QuestionParams)
 	 */
+	@Override
 	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
@@ -148,6 +151,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findPaginated(java.lang.String, es.git.openkm.bean.QueryParams, int, int)
 	 */
+	@Override
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException {
 		log.debug("findPaginated(" + token + ", " + params + ")");
 		String query = prepareStatement(params);
@@ -375,6 +379,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByStatement(java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public Collection<QueryResult> findByStatement(String token, String statement, String type) throws RepositoryException {
 		log.debug("findByStatement(" + token + ", " + statement + ")");
 		Collection<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, Config.MAX_SEARCH_RESULTS).getResults();
@@ -385,6 +390,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByStatementPaginated(java.lang.String, java.lang.String, java.lang.String, int, int)
 	 */
+	@Override
 	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, int limit) throws RepositoryException {
 		log.debug("findByStatement(" + token + ", " + statement + ", " + type + ", " + offset + ", " + limit + ")");
 		ResultSet rs = new ResultSet();
@@ -471,6 +477,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#saveSearch(java.lang.String, es.git.openkm.bean.QueryParams, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void saveSearch(String token, QueryParams params, String name) throws ItemExistsException, RepositoryException {
 		log.debug("saveSearch("+token+", "+params+", "+name+")");
 		
@@ -546,6 +553,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#runSearch(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public QueryParams getSearch(String token, String name) throws PathNotFoundException, RepositoryException {
 		log.debug("getSearch("+token+", "+name+")");
 		QueryParams qp = new QueryParams();
@@ -630,6 +638,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#getAllSearchs(java.lang.String)
 	 */
+	@Override
 	public Collection<String> getAllSearchs(String token) throws RepositoryException {
 		log.debug("getAllSearchs("+token+")");
 		Collection<String> ret = new ArrayList<String>();
@@ -659,6 +668,7 @@ public class DirectSearchModule implements SearchModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#deleteSearch(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void deleteSearch(String token, String name) throws PathNotFoundException, RepositoryException {
 		log.debug("deleteSearch("+token+", "+name+")");
 		
@@ -690,52 +700,11 @@ public class DirectSearchModule implements SearchModule {
 		
 		log.debug("deleteSearch: void");
 	}
-	
-	/**
-	 * 
-	 * @param token
-	 * @param statement
-	 * @return
-	 * @throws AccessDeniedException
-	 * @throws RepositoryException
-	 */
-	public Collection<Folder> findFolderByStatement(String token, String statement) throws AccessDeniedException, RepositoryException {
-		log.debug("findByStatement(" + token + ", " + statement + ")");
-		ArrayList<Folder> ret = new ArrayList<Folder>();
-
-		try {
-			Session session = SessionManager.getInstance().get(token);
-			Workspace workspace = session.getWorkspace();
-			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, javax.jcr.query.Query.XPATH);
-			javax.jcr.query.QueryResult result = query.execute();
-
-			for (NodeIterator it = result.getNodes(); it.hasNext();) {
-				try {
-					Node node = (Node) it.next();
-					ret.add(new DirectFolderModule().getProperties(session, node.getUUID()));
-				} catch (javax.jcr.PathNotFoundException e) {
-					log.error(e.getMessage(), e);
-				}
-			}
-			
-			// Activity log
-			UserActivity.log(session, "FIND_FOLDER", null, statement);
-		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		}
-		
-		log.debug("findByStatement: " + ret);
-		return ret;
-	}
 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#getKeywords(java.lang.String, java.util.Collection)
 	 */
+	@Override
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMap("+token+", "+filter+")");
 		Map<String, Integer> cloud = null;

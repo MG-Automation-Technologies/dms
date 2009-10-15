@@ -35,8 +35,9 @@ import es.git.openkm.bean.Document;
 import es.git.openkm.bean.StatsInfo;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
+import es.git.openkm.module.StatsModule;
 
-public class DirectStatsModule {
+public class DirectStatsModule implements StatsModule {
 	private static Logger log = LoggerFactory.getLogger(DirectStatsModule.class);
 
 	private static String TAXONOMY_DOCUMENTS = "/jcr:root/okm:root//element(*,okm:document)";
@@ -48,13 +49,10 @@ public class DirectStatsModule {
 	private static String TRASH_DOCUMENTS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:document)";
 	private static String TRASH_FOLDERS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:folder)";
 	
-	/**
-	 * Get number of documents per context
-	 * 
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.StatsModule#getDocumentsByContext(java.lang.String)
 	 */
+	@Override
 	public StatsInfo getDocumentsByContext(String token) throws RepositoryException {
 		log.debug("getDocumentsByContext(" + token + ")");
 		StatsInfo si = new StatsInfo();
@@ -93,13 +91,10 @@ public class DirectStatsModule {
 		return si;
 	}
 
-	/**
-	 * Get number of folders per context
-	 * 
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.StatsModule#getFoldersByContext(java.lang.String)
 	 */
+	@Override
 	public StatsInfo getFoldersByContext(String token) throws RepositoryException {
 		log.debug("getFoldersByContext(" + token + ")");
 		StatsInfo si = new StatsInfo();
@@ -148,13 +143,10 @@ public class DirectStatsModule {
 		return result.getRows().getSize();
 	}
 
-	/**
-	 * Get sizer of documents per context
-	 * 
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.StatsModule#getDocumentsSizeByContext(java.lang.String)
 	 */
+	@Override
 	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
 		log.debug("getDocumentsSizeByContext(" + token + ")");
 		StatsInfo si = new StatsInfo();

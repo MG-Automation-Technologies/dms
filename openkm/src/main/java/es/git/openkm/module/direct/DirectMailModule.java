@@ -181,6 +181,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#create(java.lang.String, es.git.openkm.bean.Mail)
 	 */
+	@Override
 	public Mail create(String token, Mail mail) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, VirusDetectedException {
 		log.debug("create(" + token + ", " + mail + ")");
@@ -247,6 +248,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#getProperties(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, RepositoryException {
 		log.debug("get:(" + token + ", " + mailPath + ")");
 		Mail mail = null;
@@ -272,6 +274,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#delete(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void delete(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + mailPath + ")");
 		Session session = null;
@@ -319,6 +322,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#purge(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void purge(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + mailPath + ")");
 		Node parentNode = null;
@@ -354,6 +358,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + mailPath + ", " + newName + ")");
 		Mail renamedMail = null;
@@ -412,6 +417,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("move(" + token + ", " + mailPath + ", " + dstPath + ")");
 		Session session = null;
@@ -492,6 +498,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#copy(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
 		log.debug("copy(" + token + ", " + mailPath + ", " + dstPath + ")");
@@ -543,6 +550,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("findChilds(" + token + ", " + fldPath + ")");
 		ArrayList<Mail> childs = new ArrayList<Mail>();
@@ -576,6 +584,7 @@ public class DirectMailModule implements MailModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.MailModule#isValid(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean isValid(String token, String mailPath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("isValid(" + token + ", " + mailPath + ")");

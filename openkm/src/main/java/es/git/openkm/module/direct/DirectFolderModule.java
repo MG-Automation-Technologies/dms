@@ -168,6 +168,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#create(java.lang.String, es.git.openkm.bean.Folder)
 	 */
+	@Override
 	public Folder create(String token, Folder fld) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("create(" + token + ", " + fld + ")");
@@ -219,6 +220,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#get(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("get:(" + token + ", " + fldPath + ")");
 		Folder fld = null;
@@ -244,6 +246,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void delete(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + fldPath + ")");
 		Session session = null;
@@ -353,6 +356,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#purge(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void purge(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + fldPath + ")");
 		Node parentNode = null;
@@ -391,6 +395,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + fldPath + ", " + newName + ")");
 		Folder renamedFolder = null;
@@ -449,6 +454,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("move(" + token + ", " + fldPath + ", " + dstPath + ")");
 		Session session = null;
@@ -485,6 +491,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#copy(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void copy(String token, String fldPath, String dstPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
 		log.debug("copy(" + token + ", " + fldPath + ", " + dstPath + ")");
@@ -568,6 +575,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("findChilds(" + token + ", " + fldPath + ")");
 		ArrayList<Folder> childs = new ArrayList<Folder>();
@@ -601,6 +609,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#getContentInfo(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("getContentInfo(" + token + ", " + fldPath + ")");
 		ContentInfo contentInfo = new ContentInfo();
@@ -635,7 +644,7 @@ public class DirectFolderModule implements FolderModule {
 	 * @throws RepositoryException
 	 * @throws PathNotFoundException
 	 */
-	public ContentInfo getContentInfoHelper(Node folderNode) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	private ContentInfo getContentInfoHelper(Node folderNode) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("getContentInfoHelper(" + folderNode + ")");
 		ContentInfo contentInfo = new ContentInfo();
 
@@ -677,6 +686,7 @@ public class DirectFolderModule implements FolderModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public boolean isValid(String token, String fldPath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("isValid(" + token + ", " + fldPath + ")");

@@ -48,6 +48,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#add(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Bookmark add(String token, String nodePath, String name) throws
 			PathNotFoundException, ItemExistsException, RepositoryException {
 		log.debug("add("+token+", "+nodePath+", "+name+")");
@@ -90,6 +91,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#remove(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void remove(String token, String name) throws PathNotFoundException,
 			RepositoryException {
 		log.debug("remove("+token+", "+name+")");
@@ -121,6 +123,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
+	@Override
 	public Bookmark rename(String token, String name, String newName) throws
 			PathNotFoundException, ItemExistsException, RepositoryException {
 		log.debug("rename:(" + token + ", " + name + ", " + newName + ")");
@@ -174,6 +177,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#getAll(java.lang.String)
 	 */
+	@Override
 	public Collection<Bookmark> getAll(String token) throws RepositoryException {
 		log.debug("getAll("+token+")");
 		Collection<Bookmark> ret = new ArrayList<Bookmark>();
@@ -202,6 +206,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#setUserHome(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void setUserHome(String token, String nodePath) throws RepositoryException {
 		log.debug("setUserHome("+token+", "+nodePath+")");
 		Node userConfig = null;
@@ -228,6 +233,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.BookmarkModule#getUserHome(java.lang.String)
 	 */
+	@Override
 	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getUserHome("+token+")");
 		Bookmark ret = new Bookmark();
