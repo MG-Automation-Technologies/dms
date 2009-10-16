@@ -49,6 +49,7 @@ import javax.jcr.version.VersionException;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.util.ISO8601;
+import org.apache.jackrabbit.util.ISO9075;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -239,7 +240,7 @@ public class DirectSearchModule implements SearchModule {
 				(params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null)) {
 			
 			// Construct the query
-			sb.append("/jcr:root"+params.getPath()+"//*[@jcr:primaryType eq 'okm:void'");
+			sb.append("/jcr:root"+ISO9075.encodePath(params.getPath())+"//*[@jcr:primaryType eq 'okm:void'");
 
 			/**
 			 * DOCUMENT
