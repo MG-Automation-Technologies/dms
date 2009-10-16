@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -53,6 +56,7 @@ import es.git.openkm.bean.Notification;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.Version;
+import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
@@ -236,7 +240,7 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		// Update user items
 		UserItemsManager.incSize(session.getUserID(), size);
-		UserItemsManager.incDocuments(session.getUserID());
+		UserItemsManager.incDocuments(session.getUserID(), 1);
 		
 		return documentNode; 
 	}
@@ -1197,30 +1201,20 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			Node contentNode = documentNode.getNode(Document.CONTENT);
-			String author = contentNode.getProperty(Document.AUTHOR).getString();
-			long size = contentNode.getProperty(Document.SIZE).getLong();
-			VersionHistory vh = contentNode.getVersionHistory();
 			parentNode = documentNode.getParent();
-			documentNode.remove();
+			HashMap<String, UserItems> userItemsHash = purgeHelper(session, documentNode);
 			parentNode.save();
 			
-			// Unreferenced VersionHistory should be deleted automatically
-			// https://issues.apache.org/jira/browse/JCR-134
-			for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
-				javax.jcr.version.Version ver = vi.nextVersion();
-				String versionName = ver.getName();
-				
-				// The rootVersion is not a "real" version node.
-				if (!versionName.equals(JcrConstants.JCR_ROOTVERSION)) {
-					vh.removeVersion(versionName);
-				}
+			// Update user items
+			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+				Entry<String, UserItems> entry = it.next();
+				String uid = entry.getKey();
+				UserItems userItems = entry.getValue();
+				UserItemsManager.decSize(uid, userItems.getSize());
+				UserItemsManager.decDocuments(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getDocuments());
 			}
 			
-			// Update user items
-			UserItemsManager.decSize(author, size);
-			UserItemsManager.decDocuments(author);
-
 			// Activity log
 			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -1238,6 +1232,54 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		log.debug("purge: void");
+	}
+	
+	/**
+	 * 
+	 */
+	public HashMap<String, UserItems> purgeHelper(Session session, Node docNode) 
+			throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
+		Node contentNode = docNode.getNode(Document.CONTENT);
+		long size = contentNode.getProperty(Document.SIZE).getLong();
+		String author = contentNode.getProperty(Document.AUTHOR).getString();
+		VersionHistory vh = contentNode.getVersionHistory();
+		String baseVersion = contentNode.getBaseVersion().getName();
+		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
+		
+		// Unreferenced VersionHistory should be deleted automatically
+		// https://issues.apache.org/jira/browse/JCR-134
+		// http://markmail.org/message/7aildokt74yeoar5
+		// http://markmail.org/message/nhbwe7o3c7pd4sga
+		// TODO Re-evaluate this issue when switch to Jackrabbit 1.6
+		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
+			javax.jcr.version.Version ver = vi.nextVersion();
+			String versionName = ver.getName();
+			
+			// The rootVersion is not a "real" version node.
+			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
+				Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
+				size = frozenNode.getProperty(Document.SIZE).getLong();
+				author = frozenNode.getProperty(Document.AUTHOR).getString();
+				vh.removeVersion(versionName);
+				
+				// Update local user items for versions
+				UserItems userItems = userItemsHash.get(author);
+				if (userItems == null) userItems = new UserItems();
+				userItems.setSize(userItems.getSize() + size);
+				userItems.setDocuments(userItems.getDocuments() + 1);
+				userItemsHash.put(author, userItems);
+			}
+		}
+
+		// Update local user items for working version
+		UserItems userItems = userItemsHash.get(author);
+		if (userItems == null) userItems = new UserItems();
+		userItems.setSize(userItems.getSize() + size);
+		userItems.setDocuments(userItems.getDocuments() + 1);
+		userItemsHash.put(author, userItems);
+		
+		docNode.remove();
+		return userItemsHash;
 	}
 
 	/* (non-Javadoc)

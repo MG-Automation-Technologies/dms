@@ -22,6 +22,9 @@ package es.git.openkm.module.direct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -46,6 +49,7 @@ import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.Notification;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
+import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
@@ -160,7 +164,7 @@ public class DirectFolderModule implements FolderModule {
 		parentNode.save();
 		
 		// Update user items
-		UserItemsManager.incFolders(session.getUserID());
+		UserItemsManager.incFolders(session.getUserID(), 1);
 		
 		return folderNode;
 	}
@@ -365,11 +369,18 @@ public class DirectFolderModule implements FolderModule {
 			Session session = SessionManager.getInstance().get(token);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			parentNode = folderNode.getParent();
-			folderNode.remove();
+			HashMap<String, UserItems> userItemsHash = purgeHelper(session, folderNode);
 			parentNode.save();
 			
 			// Update user items
-			UserItemsManager.decFolders(session.getUserID());
+			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+				Entry<String, UserItems> entry = it.next();
+				String uid = entry.getKey();
+				UserItems userItems = entry.getValue();
+				UserItemsManager.decSize(uid, userItems.getSize());
+				UserItemsManager.decDocuments(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getDocuments());
+			}
 			
 			// Check scripting
 			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "PURGE_FOLDER");
@@ -391,12 +402,49 @@ public class DirectFolderModule implements FolderModule {
 		}
 		log.debug("purge: void");
 	}
+	
+	/**
+	 * 
+	 */
+	public HashMap<String, UserItems> purgeHelper(Session session, Node fldNode) throws VersionException, 
+			javax.jcr.lock.LockException, ConstraintViolationException, javax.jcr.RepositoryException {
+		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
+		
+		for (NodeIterator nit = fldNode.getNodes(); nit.hasNext(); ) {
+			HashMap<String, UserItems> userItemsHashRet = new HashMap<String, UserItems>();
+			Node node = nit.nextNode();
+			
+			if (node.isNodeType(Document.TYPE)) {
+				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node);
+			} else if (node.isNodeType(Folder.TYPE)) {
+				userItemsHashRet = purgeHelper(session, node);
+				//String author = node.getProperty(Folder.AUTHOR).getString();
+				//userItemsHashRet.get(key)
+			}
+			
+			// Join hash maps
+			for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
+				Entry<String, UserItems> entry = entIt.next();
+				String uid = entry.getKey();
+				UserItems userItem = entry.getValue();
+				UserItems userItemTmp = userItemsHash.get(uid);
+				if (userItemTmp == null) userItemTmp = new UserItems();
+				userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
+				userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
+				userItemsHash.put(uid, userItemTmp);
+			}
+		}
+		
+		fldNode.remove();
+		return userItemsHash;
+	}
 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
+	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException, 
+			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + fldPath + ", " + newName + ")");
 		Folder renamedFolder = null;
 		Session session = null;

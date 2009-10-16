@@ -24,8 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.jcr.LoginException;
 import javax.jcr.NamespaceException;
@@ -34,7 +36,6 @@ import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 import javax.naming.NamingException;
 
@@ -57,6 +58,7 @@ import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.Repository;
+import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
@@ -567,13 +569,42 @@ public class DirectRepositoryModule implements RepositoryModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
+				HashMap<String, UserItems> userItemsHashRet = new HashMap<String, UserItems>();
 				Node child = it.nextNode();
-				purgeTrashHelper(session, child);
+				
+				if (child.isNodeType(Document.TYPE)) {
+					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child);
+				} else if (child.isNodeType(Folder.TYPE)) {
+					userItemsHashRet = new DirectFolderModule().purgeHelper(session, child);
+				}
+				
+				// Join hash maps
+				for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
+					Entry<String, UserItems> entry = entIt.next();
+					String uid = entry.getKey();
+					UserItems userItem = entry.getValue();
+					UserItems userItemTmp = userItemsHash.get(uid);
+					if (userItemTmp == null) userItemTmp = new UserItems();
+					userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
+					userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
+					userItemsHash.put(uid, userItemTmp);
+				}
 			}
 			
 			userTrash.save();
+			
+			// Update user items
+			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+				Entry<String, UserItems> entry = it.next();
+				String uid = entry.getKey();
+				UserItems userItems = entry.getValue();
+				UserItemsManager.decSize(uid, userItems.getSize());
+				UserItemsManager.decDocuments(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getDocuments());
+			}
 			
 			// Activity log
 			UserActivity.log(session, "PURGE_TRASH", null, null);
@@ -588,30 +619,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 		
 		log.debug("purgeTrash: void");
-	}
-
-	/**
-	 * @param session
-	 * @param node
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws ValueFormatException
-	 * @throws javax.jcr.RepositoryException
-	 */
-	private void purgeTrashHelper(Session session, Node node) 
-			throws javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.RepositoryException {
-		if (node.isNodeType(Document.TYPE)) {
-			Node content = node.getNode(Document.CONTENT);
-			long size = content.getProperty(Document.SIZE).getLong();
-			UserItemsManager.decSize(session.getUserID(), size);
-			UserItemsManager.decDocuments(session.getUserID());
-		} else if (node.isNodeType(Folder.TYPE)) {
-			for (NodeIterator it = node.getNodes(); it.hasNext(); ) {
-				UserItemsManager.decFolders(session.getUserID());
-				purgeTrashHelper(session, node);
-			}	
-		}
-		
-		node.remove();
 	}
 	
 	/* (non-Javadoc)
