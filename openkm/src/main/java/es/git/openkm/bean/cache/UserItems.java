@@ -32,4 +32,14 @@ public class UserItems implements Serializable {
 	public void setSize(long size) {
 		this.size = size;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		sb.append("size="); sb.append(size);
+		sb.append(", documents="); sb.append(documents);
+		sb.append(", folders="); sb.append(folders);
+		sb.append("]");
+		return sb.toString();
+	}
 }
