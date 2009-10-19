@@ -19,11 +19,12 @@
 
 package es.git.openkm.frontend.client.widget.properties;
 
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import es.git.openkm.frontend.client.config.Config;
+import es.git.openkm.frontend.client.util.Util;
 
 /**
  * Notes
@@ -33,29 +34,29 @@ import es.git.openkm.frontend.client.config.Config;
  */
 public class Preview extends Composite {
 
-	private HTML html;
+	private HorizontalPanel hPanel;
+	private HTML text;
+	private int width = 0;
+	private int height = 0;
 	
-	public Preview (String path, String mime) {
-		String url =  Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path)+"&inline=true";
-		String code = "<object data=\""+url+"\" type=\""+mime+"\" width=\"100%\" height=\"100%\">"+
-			"<embed src=\""+url+"\" type=\""+mime+"\"  width=\"100%\" height=\"100%\"/>"+
-			"</object>";
-		html = new HTML("code");
-		initWidget(html);
-		setPixelSize(500, 500);
-		html.setPixelSize(500, 500);
+	public Preview () {
+		hPanel = new HorizontalPanel();
+		text= new HTML("<div id=\"pdfviewercontainer\"></div>\n");
+		hPanel.add(text);
+		hPanel.setCellHorizontalAlignment(text, HasAlignment.ALIGN_CENTER);
+		hPanel.setCellVerticalAlignment(text, HasAlignment.ALIGN_MIDDLE);
+		
+		initWidget(hPanel);
 	}
 	
-	/**
-	 * Sets the document values
-	 */
-	/*
-	public void set(String path, String mime) {
-		String url =  Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path)+"&inline=true";
-		String code = "<object data=\""+url+"\" type=\""+mime+"\" width=\"100%\" height=\"100%\">"+
-			"<embed src=\""+url+"\" type=\""+mime+"\"  width=\"100%\" height=\"100%\"/>"+
-			"</object>";
-		html.setHTML(code);
+	public void setPixelSize(int width, int height) {
+		super.setPixelSize(width, height);
+		this.width = width;
+		this.height = height;
 	}
-	*/
+	
+	public void init() {
+		text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
+		Util.createPDFViewer("/OpenKM/js/zviewer/test.swf", ""+(width-20), ""+(height-20));
+	}
 }

@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -40,6 +41,7 @@ import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
+import es.git.openkm.frontend.client.util.Util;
 
 /**
  * The tab document
@@ -73,7 +75,7 @@ public class TabDocument extends Composite implements TabListener {
 		notes = new Notes();
 		version = new VersionScrollTable();
 		security = new SecurityScrollTable();
-		preview = new Preview("", "");
+		preview = new Preview();
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList();
 
@@ -104,6 +106,7 @@ public class TabDocument extends Composite implements TabListener {
 	public void setSize(int width, int height) {
 		tabPanel.setPixelSize(width, height);
 		document.setPixelSize(width,height-20); // Substract tab height
+		preview.setPixelSize(width,height-20); // Substract tab height
 		notes.setPixelSize(width,height-20); // Substract tab height
 		version.setPixelSize(width-2,height-22); // Substract tab height
 		version.fillWidth();
@@ -114,6 +117,9 @@ public class TabDocument extends Composite implements TabListener {
 				PropertyGroup group =  it.next();
 				group.setPixelSize(width,height-20);
 			}
+		}
+		if (selectedTab==4) {
+			preview.init();
 		}
 	}
 	
@@ -132,7 +138,6 @@ public class TabDocument extends Composite implements TabListener {
 		security.setPath(doc.getPath());
 		version.getVersionHistory();
 		security.GetGrands();
-		preview = new Preview(doc.getPath(), doc.getMimeType());
 		
 		if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked()) {
 			security.setChangePermision(true);
@@ -270,6 +275,7 @@ public class TabDocument extends Composite implements TabListener {
 		
 		// Sets the new selected tab
 		tabPanel.selectTab(selectedTab);
+		
 	}
 	
 	/**
@@ -309,5 +315,9 @@ public class TabDocument extends Composite implements TabListener {
 	 */
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
 		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
+		selectedTab = tabIndex;
+		if (tabIndex==4) {
+			preview.init();
+		}
 	}
 }

@@ -199,19 +199,13 @@ public class Util {
         } catch ( e ) { return 'unknown' }
     }-*/;
     
-    public static native void createMediaPlayer(String mediaUrl, String width, String height) /*-{
-    	var so = new $wnd.SWFObject('/OpenKM/js/mediaplayer/player.swf','jsmediaplayer',width, height,'8');
-		so.addParam('allowscriptaccess','always');
-		so.addParam('allowfullscreen','true');
-		so.addVariable('width',width);
-		so.addVariable('height',height);
-		so.addVariable('overstretch', 'false');
-		so.addVariable('file',mediaUrl);
-		so.addVariable('javascriptid','jsmediaplayer');
-		so.addVariable('enablejs','true');
-		so.addVariable('autostart','true');
-		so.write('mediaplayercontainer');
+    public static native void createMediaPlayer(String mediaUrl, String width, String height) /*-{    	
+    	$wnd.swfobject.embedSWF("/OpenKM/js/mediaplayer/player-licensed.swf", "mediaplayercontainer", width, height, "9.0.0","/OpenKM/js/mediaplayer/expressInstall.swf", {file:mediaUrl,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
     }-*/;
+    
+    public static native void createPDFViewer(String pdfUrl, String width, String height) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf","pdfviewercontainer",width, height,"9.0.0","/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
+	}-*/;
     
     public static native void copyToClipboard(String text) /*-{
     	new $wnd.copyToClipboard(text);
