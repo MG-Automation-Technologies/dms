@@ -78,9 +78,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (Config.APPLICATION_URL.equals("")) {
         	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/es.git.openkm.frontend.Main/index.jsp";
         }
-        
+
+        // Initialize folder pdf cache
+        File pdfCacheFolder = new File(Config.PDF_CACHE);
+        if (!pdfCacheFolder.exists()) pdfCacheFolder.mkdirs();
+
         // Initialize folder preview cache
-        File previewCacheFolder = new File(Config.PREVIEW_CACHE);
+        File previewCacheFolder = new File(Config.SWF_CACHE);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
         try {
