@@ -42,7 +42,8 @@ public class Config {
 	public static String JBOSS_HOME = System.getProperty("jboss.home.dir");
 	
 	// Preview cache
-	public static String PREVIEW_CACHE = JBOSS_HOME+File.separator+"preview";
+	public static String PDF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"pdf";
+	public static String SWF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"swf";
 	
 	// Multihost
 	public static String INSTALL = "";
