@@ -19,11 +19,13 @@
 
 package es.git.openkm.frontend.client.widget.properties;
 
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
+import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.util.Util;
 
 /**
@@ -55,8 +57,9 @@ public class Preview extends Composite {
 		this.height = height;
 	}
 	
-	public void init() {
+	public void init(String path) {
+		String url = Config.OKMDownloadServlet +"?toSwf&inline&id=" + URL.encodeComponent(path);
 		text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
-		Util.createPDFViewer("/OpenKM/js/zviewer/test.swf", ""+(width-20), ""+(height-20));
+		Util.createPDFViewer(url, ""+(width-20), ""+(height-20));
 	}
 }
