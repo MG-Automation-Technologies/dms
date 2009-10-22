@@ -115,52 +115,35 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 				
 				if (Config.SYSTEM_OPENOFFICE.equals("on")) {
 					if (toPdf != null) {
-						log.info("** Convert from "+doc.getMimeType()+" to PDF ("+is.available()+") **");
-						DocConverter dc = new DocConverter();
-						FileOutputStream os = new FileOutputStream(tmp);
-						dc.convert(is, doc.getMimeType(), os, "application/pdf");
+						doc2pdf(is, doc.getMimeType(), tmp);
+						is = new FileInputStream(tmp);
 						doc.setMimeType("application/pdf");
 						fileName = FileUtils.getFileName(fileName)+".pdf";
-						os.flush();
-						os.close();
-						is.close();
-						is = new FileInputStream(tmp);
 					} else if (toSwf != null && !Config.SYSTEM_PDF2SWF.equals("")) {
-						log.info("** Convert from "+doc.getMimeType()+" to SWF ("+is.available()+") **");
+						File prvTmp = File.createTempFile("okm", ".prv");
 						
-						// Doc to PDF
-						File tmpPdf = File.createTempFile("okm", ".mkk");
-						DocConverter dc = new DocConverter();
-						FileOutputStream os = new FileOutputStream(tmpPdf);
-						dc.convert(is, doc.getMimeType(), os, "application/pdf");
-						os.flush();
-						os.close();
-						is.close();
-						
-						// PDF to SWF
 						try {
-							ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, tmpPdf.getPath(), "-o", tmp.getPath());
-							Process process = pb.start();
-							process.waitFor();
-							String info = IOUtils.toString(process.getInputStream());
-							process.destroy();
-							
-							// Check return code
-							if (process.exitValue() == 1) {
-								log.warn(info);
+							if (doc.getMimeType().equals("application/pdf")) {
+								FileOutputStream fos = new FileOutputStream(prvTmp);
+								IOUtils.copy(is, fos);
+								fos.flush();
+								fos.close();
+								pdf2swf(prvTmp, tmp);
+								is = new FileInputStream(tmp);
+							} else {
+								doc2pdf(is, doc.getMimeType(), prvTmp);
+								pdf2swf(prvTmp, tmp);
+								is = new FileInputStream(tmp);
 							}
-						} catch (InterruptedException e) {
-							log.warn("Failed to check for viruses", e);
-						} catch (IOException e) {
-							log.warn("Failed to check for viruses", e);
+						} finally {
+							prvTmp.delete();
 						}
 						
-						tmpPdf.delete();
-						fileName = FileUtils.getFileName(fileName)+".swf";
 						doc.setMimeType("application/x-shockwave-flash");
-						is = new FileInputStream(tmp);
+						fileName = FileUtils.getFileName(fileName)+".swf";
 					}
 				}
+				
 				
 				sendFile(req, resp, fileName, doc.getMimeType(), inline != null, is);
 				is.close();
@@ -320,5 +303,39 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		}
 		
 		log.debug("exportZipHelper: void");
+	}
+	
+	/**
+	 * 
+	 */
+	private void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
+		log.info("** Convert from "+mimeType+" to PDF **");
+		DocConverter dc = new DocConverter();
+		FileOutputStream os = new FileOutputStream(output);
+		dc.convert(is, mimeType, os, "application/pdf");
+		os.flush();
+		os.close();
+		is.close();
+	}
+	
+	/**
+	 * 
+	 */
+	private void pdf2swf(File input, File output) throws IOException {
+		log.info("** Convert from PDF to SWF **");
+		try {
+			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath());
+			Process process = pb.start();
+			process.waitFor();
+			String info = IOUtils.toString(process.getInputStream());
+			process.destroy();
+		
+			// Check return code
+			if (process.exitValue() == 1) {
+				log.warn(info);
+			}
+		} catch (InterruptedException e) {
+			log.error("Error in PDF to SWF conversion", e);
+		}
 	}
 }
