@@ -945,8 +945,9 @@ public class DirectDocumentModule implements DocumentModule {
 			long size = contentNode.getProperty(Document.SIZE).getLong();
 			UserItemsManager.incSize(session.getUserID(), size);
 			
-			// Remove preview from cache
-			new File(Config.PREVIEW_CACHE+File.separator+documentNode.getUUID()).delete();
+			// Remove pdf & preview from cache
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()).delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()).delete();
 			
 			// Add comment (as system user)
 			String systemToken = SessionManager.getInstance().getSystemToken();
