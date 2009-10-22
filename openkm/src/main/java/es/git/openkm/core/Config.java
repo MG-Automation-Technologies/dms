@@ -99,6 +99,7 @@ public class Config {
 	public static String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static String PROPERTY_SYSTEM_OCR = "system.ocr";
 	public static String PROPERTY_SYSTEM_OPENOFFICE = "system.openoffice";
+	public static String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 
 	public static String PROPERTY_UPDATE_INFO = "update.info";
@@ -157,7 +158,8 @@ public class Config {
 	public static String SYSTEM_DEMO = "off";
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
-	public static String SYSTEM_OPENOFFICE = "";
+	public static String SYSTEM_OPENOFFICE = "off";
+	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
 	
 	public static String UPDATE_INFO = "on";
@@ -230,6 +232,7 @@ public class Config {
 			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
+			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
@@ -291,6 +294,8 @@ public class Config {
 					PROPERTY_SYSTEM_READONLY+"="+SYSTEM_READONLY+", "+
 					PROPERTY_SYSTEM_OCR+"="+SYSTEM_OCR+", "+
 					PROPERTY_SYSTEM_OPENOFFICE+"="+SYSTEM_OPENOFFICE+", "+
+					PROPERTY_SYSTEM_PDF2SWF+"="+SYSTEM_PDF2SWF+", "+
+					PROPERTY_SYSTEM_ANTIVIR+"="+SYSTEM_ANTIVIR+", "+
 
 					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
