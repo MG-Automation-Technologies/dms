@@ -19,6 +19,7 @@
 
 package es.git.openkm.servlet;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Timer;
@@ -77,6 +78,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (Config.APPLICATION_URL.equals("")) {
         	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/es.git.openkm.frontend.Main/index.jsp";
         }
+        
+        // Initialize folder preview cache
+        File previewCacheFolder = new File(Config.PREVIEW_CACHE);
+        if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
         
         try {
         	log.info("*** Repository initializing... ***");
