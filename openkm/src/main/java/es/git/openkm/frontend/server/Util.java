@@ -49,6 +49,7 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.TaskInstance;
 import es.git.openkm.bean.Version;
+import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.bean.GWTBookmark;
 import es.git.openkm.frontend.client.bean.GWTComment;
@@ -104,6 +105,13 @@ public class Util {
 		gWTDoc.setSubscriptors(doc.getSubscriptors());
 		gWTDoc.setUuid(doc.getUuid());
 		gWTDoc.setNotes(copy(doc.getNotes()));
+		
+		for (Iterator<Note> it = doc.getNotes().iterator(); it.hasNext() && !gWTDoc.isHasNotes();) {
+			Note note = it.next();
+			if (!note.getUser().equals(Config.SYSTEM_USER)) {
+				gWTDoc.setHasNotes(true);
+			}
+		}
 		
 		log.debug("copy: "+gWTDoc);
 		return gWTDoc;

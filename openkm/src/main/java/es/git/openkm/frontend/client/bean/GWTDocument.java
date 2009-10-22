@@ -52,7 +52,8 @@ public class GWTDocument implements IsSerializable {
 	private boolean convertibleToSwf;
 	private String uuid;
 	private boolean isAttachment = false;
-	
+	private boolean hasNotes = false;
+
 	private Collection<String> subscriptors;
 	private Collection<GWTNote> notes;
 	
@@ -242,5 +243,13 @@ public class GWTDocument implements IsSerializable {
 
 	public void setAttachment(boolean isAttachment) {
 		this.isAttachment = isAttachment;
+	}
+	
+	public boolean isHasNotes() {
+		return hasNotes;
+	}
+
+	public void setHasNotes(boolean hasNotes) {
+		this.hasNotes = hasNotes;
 	}
 }

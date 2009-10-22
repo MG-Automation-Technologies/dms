@@ -229,7 +229,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/subscribed.gif"));
 		}
 		
-		if (doc.getNotes().size()>0) {
+		if (doc.isHasNotes()) {
 			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
 		}
 		
