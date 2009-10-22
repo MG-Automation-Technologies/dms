@@ -166,6 +166,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setSubscriptors(subscriptorList);
 		doc.setConvertibleToPdf(new DocConverter().isValid(doc.getMimeType()));
+		doc.setConvertibleToSwf(doc.isConvertibleToPdf() || doc.getMimeType().equals("application/pdf"));
 		
 		// Get comments
 		ArrayList<Note> notes = new ArrayList<Note>();
