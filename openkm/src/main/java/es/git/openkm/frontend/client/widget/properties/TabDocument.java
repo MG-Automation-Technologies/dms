@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,7 +40,6 @@ import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
-import es.git.openkm.frontend.client.util.Util;
 
 /**
  * The tab document
@@ -118,8 +116,8 @@ public class TabDocument extends Composite implements TabListener {
 				group.setPixelSize(width,height-20);
 			}
 		}
-		if (selectedTab==4) {
-			preview.init();
+		if (selectedTab == 4) {
+			preview.init(doc.getPath());
 		}
 	}
 	
@@ -316,8 +314,8 @@ public class TabDocument extends Composite implements TabListener {
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
 		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
 		selectedTab = tabIndex;
-		if (tabIndex==4) {
-			preview.init();
+		if (tabIndex == 4) {
+			preview.init(doc.getPath());
 		}
 	}
 }
