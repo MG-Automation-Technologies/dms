@@ -40,7 +40,8 @@
   
   <script type="text/javascript">
   	function makeUppercase() {
-		document.login.j_username.value = document.login.j_username.value.toLowerCase();
+  	  	var username = document.getElementById('j_username'); 
+  	  	username.value = username.value.toLowerCase();
 	}
   </script>
 </body>
