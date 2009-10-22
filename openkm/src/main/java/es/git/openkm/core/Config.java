@@ -106,11 +106,11 @@ public class Config {
 	public static String PROPERTY_SYSTEM_OPENOFFICE = "system.openoffice";
 	public static String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
+	public static String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
 
 	public static String PROPERTY_UPDATE_INFO = "update.info";
 	public static String PROPERTY_APPLICATION_URL = "application.url";
 	public static String PROPERTY_DEFAULT_LANG = "default.lang";
-	public static String PROPERTY_USERNAME_LOWERCASE = "system.login.username.lowercase";
 	public static String PROPERTY_KEYWORD_MAP_LIVE = "keyword.map.live";
 	public static String PROPERTY_USER_DOCUMENTS_SIZE_LIVE = "user.documents.size.live";
 	
@@ -166,11 +166,11 @@ public class Config {
 	public static String SYSTEM_OPENOFFICE = "off";
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
+	public static String SYSTEM_LOGIN_LOWERCASE = "off";
 	
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/es.git.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
-	public static String SYSTEM_LOGIN_USERNAME_LOWERCASE = "off";
 	public static String KEYWORD_MAP_LIVE = "off";
 	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
 
@@ -238,11 +238,11 @@ public class Config {
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
 			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
-
+			SYSTEM_LOGIN_LOWERCASE = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE);
+			
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
-			SYSTEM_LOGIN_USERNAME_LOWERCASE = config.getProperty(PROPERTY_USERNAME_LOWERCASE, SYSTEM_LOGIN_USERNAME_LOWERCASE);
 			KEYWORD_MAP_LIVE = config.getProperty(PROPERTY_KEYWORD_MAP_LIVE, KEYWORD_MAP_LIVE);
 			USER_DOCUMENTS_SIZE_LIVE = config.getProperty(PROPERTY_USER_DOCUMENTS_SIZE_LIVE, USER_DOCUMENTS_SIZE_LIVE);
 						
