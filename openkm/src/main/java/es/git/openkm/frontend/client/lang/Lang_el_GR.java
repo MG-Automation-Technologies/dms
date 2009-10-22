@@ -323,6 +323,9 @@ public class Lang_el_GR {
 	    lang.put("security.users", "Χρήστες");
 	    lang.put("security.groups", "Ομάδες");
 	    lang.put("security.recursive", "Αναδρομικές αλλαγές αδειών ");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

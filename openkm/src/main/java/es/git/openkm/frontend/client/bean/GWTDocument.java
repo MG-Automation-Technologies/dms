@@ -49,6 +49,7 @@ public class GWTDocument implements IsSerializable {
 	private GWTLock lockInfo;
 	private boolean subscribed;
 	private boolean convertibleToPdf;
+	private boolean convertibleToSwf;
 	private String uuid;
 	private boolean isAttachment = false;
 	
@@ -195,6 +196,14 @@ public class GWTDocument implements IsSerializable {
 
 	public void setConvertibleToPdf(boolean convertibleToPdf) {
 		this.convertibleToPdf = convertibleToPdf;
+	}
+	
+	public boolean isConvertibleToSwf() {
+		return convertibleToSwf;
+	}
+
+	public void setConvertibleToSwf(boolean convertibleToSwf) {
+		this.convertibleToSwf = convertibleToSwf;
 	}
 	
 	/**

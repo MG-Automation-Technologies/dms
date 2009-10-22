@@ -324,6 +324,9 @@ public class Lang_de_DE {
 	    lang.put("security.groups", "Gruppen");
 	    lang.put("security.recursive", "Rekursive Änderung der Berechtigungen");
 	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
+	    
 	    // Mail
 	    lang.put("mail.from", "From");
 	    lang.put("mail.reply", "Reply to");

@@ -323,6 +323,9 @@ public class Lang_sr_BA {
 	    lang.put("security.users", "Korisnici");
 	    lang.put("security.groups", "Grupe");
 	    lang.put("security.recursive", "Rekurzivna izmjena privilegija");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

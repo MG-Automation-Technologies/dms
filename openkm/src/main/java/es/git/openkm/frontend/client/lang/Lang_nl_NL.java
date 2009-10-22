@@ -324,6 +324,9 @@ public class Lang_nl_NL {
 	    lang.put("security.users", "Gebruikers");
 	    lang.put("security.groups", "Groepen");
 	    lang.put("security.recursive", "Overerfbare rechten");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "Van");

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
+import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.util.Util;
 
@@ -40,8 +41,12 @@ public class Preview extends Composite {
 	private HTML text;
 	private int width = 0;
 	private int height = 0;
+	private boolean previewAvailable = false;
 	
-	public Preview () {
+	/**
+	 * Preview
+	 */
+	public Preview() {
 		hPanel = new HorizontalPanel();
 		text= new HTML("<div id=\"pdfviewercontainer\"></div>\n");
 		hPanel.add(text);
@@ -51,15 +56,40 @@ public class Preview extends Composite {
 		initWidget(hPanel);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.UIObject#setPixelSize(int, int)
+	 */
 	public void setPixelSize(int width, int height) {
 		super.setPixelSize(width, height);
 		this.width = width;
 		this.height = height;
 	}
 	
-	public void init(String path) {
-		String url = Config.OKMDownloadServlet +"?toSwf&inline&id=" + URL.encodeComponent(path);
-		text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
-		Util.createPDFViewer(url, ""+(width-20), ""+(height-20));
+	public void showEmbedSWF(String path) {
+		if (previewAvailable) {
+			String url = Config.OKMDownloadServlet +"?toSwf&inline&id=" + URL.encodeComponent(path);
+			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
+			Util.createPDFViewer(url, ""+(width-20), ""+(height-20));
+		} else {
+			text.setHTML("<div id=\"pdfviewercontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n"); // needed for rewriting purpose
+		}
+	}
+	
+	/**
+	 * Sets the boolean value if previewing document is available
+	 * 
+	 * @param previewAvailable
+	 */
+	public void setPreviewAvailable(boolean previewAvailable) {
+		this.previewAvailable = previewAvailable;
+	}
+	
+	/**
+	 * langRefresh
+	 */
+	public void langRefresh() {
+		if (!previewAvailable) {
+			text.setHTML("<div id=\"pdfviewercontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n"); // needed for rewriting purpose
+		}
 	}
 }

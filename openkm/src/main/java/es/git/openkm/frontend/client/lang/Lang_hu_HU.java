@@ -323,6 +323,9 @@ public class Lang_hu_HU {
 	    lang.put("security.users", "Felhasználók");
 	    lang.put("security.groups", "Csoportok");
 	    lang.put("security.recursive", "Jogosultságok rekurzív módosítása");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

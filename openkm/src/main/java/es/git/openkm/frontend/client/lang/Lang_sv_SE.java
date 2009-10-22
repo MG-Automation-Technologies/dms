@@ -323,6 +323,9 @@ public class Lang_sv_SE {
 	    lang.put("security.users", "Användare");
 	    lang.put("security.groups", "Grupper");
 	    lang.put("security.recursive", "Rekursiva behörighetsförändringar");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

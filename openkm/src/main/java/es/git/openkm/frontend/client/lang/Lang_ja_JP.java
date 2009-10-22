@@ -323,6 +323,9 @@ public class Lang_ja_JP {
 		lang.put("security.users", "ユーザ");
 		lang.put("security.groups", "グループ");
 		lang.put("security.recursive", "アクセス許可を再帰的に子フォルダ適用する");
+		
+		// Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

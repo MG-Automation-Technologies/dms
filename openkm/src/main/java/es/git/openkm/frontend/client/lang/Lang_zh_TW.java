@@ -322,6 +322,9 @@ public class Lang_zh_TW {
 	    lang.put("security.users", "使用者");
 	    lang.put("security.groups", "群組");
 	    lang.put("security.recursive", "Recursive permission changes");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

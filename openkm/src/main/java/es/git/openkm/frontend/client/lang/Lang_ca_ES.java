@@ -324,6 +324,10 @@ public class Lang_ca_ES {
 	    lang.put("security.groups", "Grups");
 	    lang.put("security.recursive", "Aplica canvis de forma recursiva");
 	    
+
+	    // Preview
+	    lang.put("preview.unavailable", "Previsualització no disponible");
+	    
 	    // Mail
 	    lang.put("mail.from", "Desde");
 	    lang.put("mail.reply", "Contestar a");

@@ -100,6 +100,7 @@ public class Util {
 		gWTDoc.setPermissions(doc.getPermissions());
 		gWTDoc.setLockInfo(copy(doc.getLockInfo()));
 		gWTDoc.setConvertibleToPdf(doc.isConvertibleToPdf());
+		gWTDoc.setConvertibleToSwf(doc.isConvertibleToSwf());
 		gWTDoc.setSubscriptors(doc.getSubscriptors());
 		gWTDoc.setUuid(doc.getUuid());
 		gWTDoc.setNotes(copy(doc.getNotes()));

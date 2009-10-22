@@ -323,6 +323,9 @@ public class Lang_tr_TR {
 	    lang.put("security.users", "Kullanýcýlar");
 	    lang.put("security.groups", "Gruplar");
 	    lang.put("security.recursive", "Deðiþimlere Ýzin Ver");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

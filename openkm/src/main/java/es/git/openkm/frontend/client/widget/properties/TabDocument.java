@@ -49,6 +49,8 @@ import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  */
 public class TabDocument extends Composite implements TabListener {
 	
+	public static final int TAB_PREVIEW = 4;
+	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 
 	public TabPanel tabPanel;
@@ -116,8 +118,8 @@ public class TabDocument extends Composite implements TabListener {
 				group.setPixelSize(width,height-20);
 			}
 		}
-		if (selectedTab == 4) {
-			preview.init(doc.getPath());
+		if (selectedTab == TAB_PREVIEW) {
+			preview.showEmbedSWF(doc.getPath());
 		}
 	}
 	
@@ -136,6 +138,7 @@ public class TabDocument extends Composite implements TabListener {
 		security.setPath(doc.getPath());
 		version.getVersionHistory();
 		security.GetGrands();
+		preview.setPreviewAvailable(doc.isConvertibleToSwf());
 		
 		if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked()) {
 			security.setChangePermision(true);
@@ -192,6 +195,7 @@ public class TabDocument extends Composite implements TabListener {
 		version.langRefresh();
 		security.langRefresh();
 		notes.langRefresh();
+		preview.langRefresh();
 		
 		tabPanel.selectTab(selectedTab);
 		
@@ -314,8 +318,8 @@ public class TabDocument extends Composite implements TabListener {
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
 		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
 		selectedTab = tabIndex;
-		if (tabIndex == 4) {
-			preview.init(doc.getPath());
+		if (tabIndex == TAB_PREVIEW) {
+			preview.showEmbedSWF(doc.getPath());
 		}
 	}
 }

@@ -323,6 +323,9 @@ public class Lang_fa_FA {
 	    lang.put("security.users", "کاربران");
 	    lang.put("security.groups", "گروه ها");
 	    lang.put("security.recursive", "تغییر دسترسی بازگشتی");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

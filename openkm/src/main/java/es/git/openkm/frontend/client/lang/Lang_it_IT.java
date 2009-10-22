@@ -323,6 +323,9 @@ public class Lang_it_IT {
 	    lang.put("security.users", "Utenti");
 	    lang.put("security.groups", "Gruppi");
 	    lang.put("security.recursive", "Cambia permessi ricorsivamente");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

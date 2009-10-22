@@ -322,6 +322,9 @@ public class Lang_zh_CN {
 	    lang.put("security.users", "用户");
 	    lang.put("security.groups", "组");
 	    lang.put("security.recursive", "递归修改权限");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

@@ -323,6 +323,9 @@ public class Lang_en_GB {
 	    lang.put("security.users", "Users");
 	    lang.put("security.groups", "Groups");
 	    lang.put("security.recursive", "Recursive permission changes");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

@@ -325,6 +325,9 @@ public class Lang_pl_PL {
 	    lang.put("security.users", "Użytkownik");
 	    lang.put("security.groups", "Grupy");
 	    lang.put("security.recursive", "Dziedziczenie uprawnień");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

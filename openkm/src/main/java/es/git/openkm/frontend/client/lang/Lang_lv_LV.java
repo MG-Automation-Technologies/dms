@@ -323,6 +323,9 @@ public class Lang_lv_LV {
 	    lang.put("security.users", "Lietotāji");
 	    lang.put("security.groups", "Grupas");
 	    lang.put("security.recursive", "Rekursīvas tiesību maiņas");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "From");

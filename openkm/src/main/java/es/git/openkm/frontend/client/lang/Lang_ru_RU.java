@@ -328,6 +328,9 @@ public class Lang_ru_RU {
 	    lang.put("security.users", "Пользователи");
 	    lang.put("security.groups", "Группы");
 	    lang.put("security.recursive", "Рекурсивное изменение прав");
+	    
+	    // Preview
+	    lang.put("preview.unavailable", "Preview unavailable");
 
 	    // Mail
 	    lang.put("mail.from", "От");
