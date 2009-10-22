@@ -77,6 +77,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		String ver = req.getParameter("ver");
 		String export = req.getParameter("export");
 		String toPdf = req.getParameter("toPdf");
+		String toSwf = req.getParameter("toSwf");
 		String inline = req.getParameter("inline");
 		File tmp = File.createTempFile("okm", ".mkk");
 		Document doc = null;
@@ -84,7 +85,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		
 		try {
 			token = getToken(req);
-						
+			
 			// Get document
 			if (export != null) {
 				FileOutputStream os = new FileOutputStream(tmp);
@@ -112,17 +113,53 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			} else if (doc != null) {
 				String fileName = FileUtils.getName(doc.getPath());
 				
-				if (Config.SYSTEM_OPENOFFICE.equals("on") && toPdf != null) {
-					log.info("** Convert from "+doc.getMimeType()+" to PDF ("+is.available()+") **");
-					DocConverter dc = new DocConverter();
-					FileOutputStream os = new FileOutputStream(tmp);
-					dc.convert(is, doc.getMimeType(), os, "application/pdf");
-					doc.setMimeType("application/pdf");
-					fileName = FileUtils.getFileName(fileName)+".pdf";
-					os.flush();
-					os.close();
-					is.close();
-					is = new FileInputStream(tmp); 
+				if (Config.SYSTEM_OPENOFFICE.equals("on")) {
+					if (toPdf != null) {
+						log.info("** Convert from "+doc.getMimeType()+" to PDF ("+is.available()+") **");
+						DocConverter dc = new DocConverter();
+						FileOutputStream os = new FileOutputStream(tmp);
+						dc.convert(is, doc.getMimeType(), os, "application/pdf");
+						doc.setMimeType("application/pdf");
+						fileName = FileUtils.getFileName(fileName)+".pdf";
+						os.flush();
+						os.close();
+						is.close();
+						is = new FileInputStream(tmp);
+					} else if (toSwf != null && !Config.SYSTEM_PDF2SWF.equals("")) {
+						log.info("** Convert from "+doc.getMimeType()+" to SWF ("+is.available()+") **");
+						
+						// Doc to PDF
+						File tmpPdf = File.createTempFile("okm", ".mkk");
+						DocConverter dc = new DocConverter();
+						FileOutputStream os = new FileOutputStream(tmpPdf);
+						dc.convert(is, doc.getMimeType(), os, "application/pdf");
+						os.flush();
+						os.close();
+						is.close();
+						
+						// PDF to SWF
+						try {
+							ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, tmpPdf.getPath(), "-o", tmp.getPath());
+							Process process = pb.start();
+							process.waitFor();
+							String info = IOUtils.toString(process.getInputStream());
+							process.destroy();
+							
+							// Check return code
+							if (process.exitValue() == 1) {
+								log.warn(info);
+							}
+						} catch (InterruptedException e) {
+							log.warn("Failed to check for viruses", e);
+						} catch (IOException e) {
+							log.warn("Failed to check for viruses", e);
+						}
+						
+						tmpPdf.delete();
+						fileName = FileUtils.getFileName(fileName)+".swf";
+						doc.setMimeType("application/x-shockwave-flash");
+						is = new FileInputStream(tmp);
+					}
 				}
 				
 				sendFile(req, resp, fileName, doc.getMimeType(), inline != null, is);
@@ -155,6 +192,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	 */
 	private void sendFile(HttpServletRequest req, HttpServletResponse resp, 
 			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
+		log.info("sendFile("+req+", "+resp+", "+fileName+", "+mimeType+", "+inline+", "+is+")");
 		String agent = req.getHeader("USER-AGENT");
 		
 		// Disable browser cache
