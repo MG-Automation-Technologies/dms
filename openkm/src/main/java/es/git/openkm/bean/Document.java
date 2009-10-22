@@ -55,6 +55,7 @@ public class Document implements Serializable {
 	private String uuid;
 	private boolean subscribed;
 	private boolean convertibleToPdf;
+	private boolean convertibleToSwf;
 	private Collection<String> subscriptors;
 	private Collection<Note> notes;
 
@@ -186,6 +187,14 @@ public class Document implements Serializable {
 		this.convertibleToPdf = convertibleToPdf;
 	}
 
+	public boolean isConvertibleToSwf() {
+		return convertibleToSwf;
+	}
+
+	public void setConvertibleToSwf(boolean convertibleToSwf) {
+		this.convertibleToSwf = convertibleToSwf;
+	}
+	
 	public Collection<Note> getNotes() {
 		return notes;
 	}
@@ -210,6 +219,7 @@ public class Document implements Serializable {
 		sb.append(", subscribed="); sb.append(subscribed);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
+		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
 		sb.append(", notes="); sb.append(notes);
 		sb.append("]");
 		return sb.toString();
