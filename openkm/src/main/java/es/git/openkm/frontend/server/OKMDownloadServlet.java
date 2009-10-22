@@ -85,8 +85,9 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		
 		try {
 			token = getToken(req);
-			File prvCache = null;
-			
+			File pdfCache = null;
+			File swfCache = null;
+						
 			// Get document
 			if (export != null) {
 				FileOutputStream os = new FileOutputStream(tmp);
@@ -97,9 +98,11 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			} else {
 				OKMDocument okmDoc = OKMDocument.getInstance();
 				doc = okmDoc.getProperties(token, path);
-				prvCache = new File(Config.PREVIEW_CACHE+File.separator+doc.getUuid()); 
+				pdfCache = new File(Config.PDF_CACHE+File.separator+doc.getUuid());
+				swfCache = new File(Config.SWF_CACHE+File.separator+doc.getUuid());
 				
-				if (toSwf == null || toSwf != null && !Config.SYSTEM_PDF2SWF.equals("") && !prvCache.exists()) {
+				if (toSwf == null || toSwf != null && !Config.SYSTEM_PDF2SWF.equals("") && !swfCache.exists() ||
+						toPdf == null || toPdf != null && !pdfCache.exists()) {
 					if (ver != null && !ver.equals("")) {
 						is = okmDoc.getContentByVersion(token, path, ver);
 					} else {
@@ -119,13 +122,18 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 				
 				if (Config.SYSTEM_OPENOFFICE.equals("on")) {
 					if (toPdf != null) {
-						doc2pdf(is, doc.getMimeType(), tmp);
-						is = new FileInputStream(tmp);
+						if (pdfCache.exists()) {
+							is = new FileInputStream(pdfCache);
+						} else {
+							doc2pdf(is, doc.getMimeType(), pdfCache);
+							is = new FileInputStream(pdfCache);
+						}
+						
 						doc.setMimeType("application/pdf");
 						fileName = FileUtils.getFileName(fileName)+".pdf";
 					} else if (toSwf != null && !Config.SYSTEM_PDF2SWF.equals("")) {
-						if (prvCache.exists()) {
-							is = new FileInputStream(prvCache);
+						if (swfCache.exists()) {
+							is = new FileInputStream(swfCache);
 						} else {
 							File prvTmp = File.createTempFile("okm", ".prv");
 							
@@ -135,12 +143,12 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 									IOUtils.copy(is, fos);
 									fos.flush();
 									fos.close();
-									pdf2swf(prvTmp, prvCache);
-									is = new FileInputStream(prvCache);
+									pdf2swf(prvTmp, swfCache);
+									is = new FileInputStream(swfCache);
 								} else {
 									doc2pdf(is, doc.getMimeType(), prvTmp);
-									pdf2swf(prvTmp, prvCache);
-									is = new FileInputStream(prvCache);
+									pdf2swf(prvTmp, swfCache);
+									is = new FileInputStream(swfCache);
 								}
 							} finally {
 								prvTmp.delete();
