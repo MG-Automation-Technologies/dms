@@ -20,6 +20,7 @@
 package es.git.openkm.core;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class Config {
 	
 	// JBoss home
 	public static String JBOSS_HOME = System.getProperty("jboss.home.dir");
+	
+	// Preview cache
+	public static String PREVIEW_CACHE = JBOSS_HOME+File.separator+"preview";
 	
 	// Multihost
 	public static String INSTALL = "";
@@ -171,7 +175,6 @@ public class Config {
 
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
-	
 	
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = null;
