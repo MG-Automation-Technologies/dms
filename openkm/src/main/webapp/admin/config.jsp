@@ -64,12 +64,13 @@
 		<tr class="even"><td><b><%=Config.PROPERTY_SYSTEM_READONLY %></b></td><td><%=Config.SYSTEM_READONLY %></td></tr>
 		<tr class="odd"><td><b><%=Config.PROPERTY_SYSTEM_OCR %></b></td><td><%=Config.SYSTEM_OCR %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_SYSTEM_OPENOFFICE %></b></td><td><%=Config.SYSTEM_OPENOFFICE %></td></tr>
-		<tr class="odd"><td><b><%=Config.PROPERTY_SYSTEM_ANTIVIR %></b></td><td><%=Config.SYSTEM_ANTIVIR %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_SYSTEM_PDF2SWF %></b></td><td><%=Config.SYSTEM_PDF2SWF %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_SYSTEM_ANTIVIR %></b></td><td><%=Config.SYSTEM_ANTIVIR %></td></tr>
 		
-		<tr class="even"><td><b><%=Config.PROPERTY_APPLICATION_URL %></b></td><td><%=Config.APPLICATION_URL %></td></tr>
-		<tr class="odd"><td><b><%=Config.PROPERTY_DEFAULT_LANG %></b></td><td><%=Config.DEFAULT_LANG %></td></tr>
-		<tr class="even"><td><b><%=Config.PROPERTY_KEYWORD_MAP_LIVE %></b></td><td><%=Config.KEYWORD_MAP_LIVE %></td></tr>
-		<tr class="odd"><td><b><%=Config.PROPERTY_USER_DOCUMENTS_SIZE_LIVE %></b></td><td><%=Config.USER_DOCUMENTS_SIZE_LIVE %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_APPLICATION_URL %></b></td><td><%=Config.APPLICATION_URL %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_DEFAULT_LANG %></b></td><td><%=Config.DEFAULT_LANG %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_KEYWORD_MAP_LIVE %></b></td><td><%=Config.KEYWORD_MAP_LIVE %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_USER_DOCUMENTS_SIZE_LIVE %></b></td><td><%=Config.USER_DOCUMENTS_SIZE_LIVE %></td></tr>
 	</table>
 	
 	<h2>MIME types</h2>
