@@ -1275,6 +1275,10 @@ public class DirectDocumentModule implements DocumentModule {
 				userItemsHash.put(author, userItems);
 			}
 		}
+		
+		// Remove pdf & preview from cache
+		new File(Config.PDF_CACHE+File.separator+docNode.getUUID()).delete();
+		new File(Config.SWF_CACHE+File.separator+docNode.getUUID()).delete();
 
 		// Update local user items for working version
 		UserItems userItems = userItemsHash.get(author);
