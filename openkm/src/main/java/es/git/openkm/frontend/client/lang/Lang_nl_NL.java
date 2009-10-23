@@ -548,11 +548,11 @@ public class Lang_nl_NL {
 	    lang.put("user.preferences.label", "User configuration");
 	    lang.put("user.preferences.name", "Name");
 	    lang.put("user.preferences.password", "Password");
-	    lang.put("user.preferences.imap.host", "Imap server");
-	    lang.put("user.preferences.imap.user", "Imap user name");
-	    lang.put("user.preferences.imap.user.password", "Imap user password");
-	    lang.put("user.preferences.imap.folder", "Imap folder");
-	    lang.put("user.preferences.password.error", "Error passwords are diferents");
+	    lang.put("user.preferences.imap.host", "IMAP server");
+	    lang.put("user.preferences.imap.user", "IMAP user name");
+	    lang.put("user.preferences.imap.user.password", "IMAP user password");
+	    lang.put("user.preferences.imap.folder", "IMAP folder");
+	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Bestand toegang geweigerd");

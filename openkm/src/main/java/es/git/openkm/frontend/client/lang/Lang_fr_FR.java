@@ -547,11 +547,11 @@ public class Lang_fr_FR {
 	    lang.put("user.preferences.label", "Configuration");
 	    lang.put("user.preferences.name", "Nom");
 	    lang.put("user.preferences.password", "Mot de passe");
-	    lang.put("user.preferences.imap.host", "Serveur Imap");
-	    lang.put("user.preferences.imap.user", "Identifiant Imap");
-	    lang.put("user.preferences.imap.user.password", "Mot de passe Imap");
-	    lang.put("user.preferences.imap.folder", "Dossier Imap");
-	    lang.put("user.preferences.password.error", "Erreur mots de passe différents");
+	    lang.put("user.preferences.imap.host", "Serveur IMAP");
+	    lang.put("user.preferences.imap.user", "Identifiant IMAP");
+	    lang.put("user.preferences.imap.user.password", "Mot de passe IMAP");
+	    lang.put("user.preferences.imap.folder", "Dossier IMAP");
+	    lang.put("user.preferences.password.error", "Erreur: mots de passe différents");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce document");

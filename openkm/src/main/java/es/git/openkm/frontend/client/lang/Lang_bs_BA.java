@@ -548,11 +548,11 @@ public class Lang_bs_BA {
 	    lang.put("user.preferences.label", "Korisnička konfiguracija");
 	    lang.put("user.preferences.name", "Ime");
 	    lang.put("user.preferences.password", "Šifra");
-	    lang.put("user.preferences.imap.host", "Imap server");
-	    lang.put("user.preferences.imap.user", "Imap korisničko ime");
-	    lang.put("user.preferences.imap.user.password", "Imap korisnička šifra");
-	    lang.put("user.preferences.imap.folder", "Imap datoteka");
-	    lang.put("user.preferences.password.error", "Greška šifre su različite");
+	    lang.put("user.preferences.imap.host", "IMAP server");
+	    lang.put("user.preferences.imap.user", "IMAP korisničko ime");
+	    lang.put("user.preferences.imap.user.password", "IMAP korisnička šifra");
+	    lang.put("user.preferences.imap.folder", "IMAP datoteka");
+	    lang.put("user.preferences.password.error", "Greška: šifre su različite");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Prisup dokumentima odbijen");
