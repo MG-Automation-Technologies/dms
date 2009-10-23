@@ -547,11 +547,11 @@ public class Lang_es_ES {
 	    lang.put("user.preferences.label", "Configuración de usuario");
 	    lang.put("user.preferences.name", "Nombre");
 	    lang.put("user.preferences.password", "Clave");
-	    lang.put("user.preferences.imap.host", "Servidor de imap");
-	    lang.put("user.preferences.imap.user", "Usuario de imap");
-	    lang.put("user.preferences.imap.user.password", "Clave de imap");
-	    lang.put("user.preferences.imap.folder", "Carpeta de imap");
-	    lang.put("user.preferences.password.error", "Error las claves son distintas");
+	    lang.put("user.preferences.imap.host", "Servidor de IMAP");
+	    lang.put("user.preferences.imap.user", "Usuario de IMAP");
+	    lang.put("user.preferences.imap.user.password", "Clave de IMAP");
+	    lang.put("user.preferences.imap.folder", "Carpeta de IMAP");
+	    lang.put("user.preferences.password.error", "Error: las claves son distintas");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");
