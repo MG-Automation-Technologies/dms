@@ -25,8 +25,6 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.allen_sauer.gwt.log.client.Log;
-
 import es.git.openkm.api.OKMDashboard;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
@@ -123,19 +121,25 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		mailAccount.setMailUser(workspace.getImapUser());
 		mailAccount.setUser(workspace.getUser());
 		
-		try {
-			// Can change password
-			if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
+		// Disable user configuration modification in demo
+		if (!Config.SYSTEM_DEMO.equalsIgnoreCase("on")) {
+			try {
 				AuthDAO authDAO = AuthDAO.getInstance();
-				authDAO.updatePassword(user);
-				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size()>0) {
+				
+				// Can change password
+				if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
+					authDAO.updateUserPassword(user);
+				}
+			
+				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
 					authDAO.updateMailAccount(mailAccount);
+					if (!mailAccount.getMailPassword().equals("")) authDAO.updateMailAccountPassword(mailAccount);
 				} else {
 					authDAO.createMailAccount(mailAccount);
 				}
+			} catch (SQLException e) {
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
-		} catch (SQLException e) {
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 		}
 	}
 }
