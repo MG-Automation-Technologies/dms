@@ -118,7 +118,7 @@ public class AuthDAO extends AbstractDAO {
 	public void updateUser(User vo) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE users set usr_email=?, usr_active=?, usr_name=? where usr_id=?";
+		String sql = "UPDATE users SET usr_email=?, usr_active=?, usr_name=? WHERE usr_id=?";
 
 		try {
 			con = getConnection();
@@ -148,7 +148,7 @@ public class AuthDAO extends AbstractDAO {
 	public void updateUserPassword(User vo) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE users set usr_pass=? where usr_id=?";
+		String sql = "UPDATE users SET usr_pass=? WHERE usr_id=?";
 
 		try {
 			con = getConnection();
@@ -216,7 +216,7 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rsUser = null;
 		ResultSet rsUserRoles = null;
 		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users ORDER BY usr_id";
-		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? order by ur_role";
+		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
 		
 		try {
@@ -274,7 +274,7 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rsUser = null;
 		ResultSet rsUserRoles = null;
 		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? ORDER BY usr_id";
-		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user = ? order by ur_role";
+		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user = ? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
 		
 		try {
@@ -334,7 +334,7 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rsUser = null;
 		ResultSet rsUserRoles = null;
 		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users WHERE usr_id=?";
-		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? order by ur_role";
+		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? ORDER BY ur_role";
 		User user = null;
 		
 		try {
