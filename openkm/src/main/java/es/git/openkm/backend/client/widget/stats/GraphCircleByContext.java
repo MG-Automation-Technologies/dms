@@ -100,6 +100,7 @@ public class GraphCircleByContext extends GChart {
 		 }
 		 table.setHTML(rows, 2, "");
 		 table.getCellFormatter().setHorizontalAlignment(rows, 1, HasAlignment.ALIGN_RIGHT);
+		 table.addStyleName("okm-NoWrap");
 		 setChartFootnotes(table);
 		 update();
 	}
