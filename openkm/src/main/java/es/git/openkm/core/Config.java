@@ -171,7 +171,7 @@ public class Config {
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/es.git.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
-	public static String KEYWORD_MAP_LIVE = "off";
+	public static String KEYWORD_MAP_LIVE = "on";
 	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
 
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
