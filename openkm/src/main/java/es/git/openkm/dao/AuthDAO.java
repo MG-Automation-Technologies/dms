@@ -145,7 +145,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @param vo
 	 * @throws SQLException
 	 */
-	public void updatePassword(User vo) throws SQLException {
+	public void updateUserPassword(User vo) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE users set usr_pass=? where usr_id=?";
@@ -774,28 +774,46 @@ public class AuthDAO extends AbstractDAO {
 	public void updateMailAccount(MailAccount vo) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ";
+		String sql = "UPDATE mail_accounts SET ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
 		
-		if ( vo.getMailPassword().length()>0 ) {
-			sql += "ma_mpass=?, ";	
-		}
-		
-		sql += "ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
-
 		try {
 			con = getConnection();
-			int count = 1;
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				if ( vo.getMailPassword().length()>0 ) {
-					stmt.setString(count++, vo.getMailPassword());
-				}
-				stmt.setString(count++, vo.getMailFolder());
-				stmt.setBoolean(count++, vo.isActive());
-				stmt.setString(count++, vo.getUser());
-				stmt.setString(count++, vo.getMailHost());
-				stmt.setString(count++, vo.getMailUser());
+				stmt.setString(1, vo.getMailFolder());
+				stmt.setBoolean(2, vo.isActive());
+				stmt.setString(3, vo.getUser());
+				stmt.setString(4, vo.getMailHost());
+				stmt.setString(5, vo.getMailUser());
+				stmt.execute();
+			} else {
+				log.error("Can't connect to auth database");
+			}
+		} finally {
+			closeStatement(stmt);
+			closeConnection(con);
+		}
+	}
+	
+	/**
+	 * @param vo
+	 * @throws SQLException
+	 */
+	public void updateMailAccountPassword(MailAccount vo) throws SQLException {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE mail_accounts SET ma_pass=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+
+		try {
+			con = getConnection();
+			
+			if (con != null && vo.getMailPassword().length() > 0) {
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, vo.getMailPassword());
+				stmt.setString(2, vo.getUser());
+				stmt.setString(3, vo.getMailHost());
+				stmt.setString(4, vo.getMailUser());
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
