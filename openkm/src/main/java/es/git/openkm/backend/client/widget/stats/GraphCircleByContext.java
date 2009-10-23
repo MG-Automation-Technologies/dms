@@ -36,9 +36,10 @@ public class GraphCircleByContext extends GChart {
 		String[] pieColors = {"green", "red", "maroon", "yellow"};
 		long total = 0;
 		  
-		this.setChartSize(150, 120);
+		setChartSize(150, 120);
 		setChartTitle("<b>" + charTitle + "</b>");
-		this.setLegendVisible(true);
+		setChartTitleThickness(32);
+		setLegendVisible(true);
 		getXAxis().setAxisVisible(false);
 		getYAxis().setAxisVisible(false);
 		getXAxis().setAxisMin(0);
@@ -102,6 +103,7 @@ public class GraphCircleByContext extends GChart {
 		 table.getCellFormatter().setHorizontalAlignment(rows, 1, HasAlignment.ALIGN_RIGHT);
 		 table.addStyleName("okm-NoWrap");
 		 setChartFootnotes(table);
+		 setChartFootnotesThickness(100);
 		 update();
 	}
 }
