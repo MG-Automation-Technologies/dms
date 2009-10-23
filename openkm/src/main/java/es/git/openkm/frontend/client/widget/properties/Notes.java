@@ -225,8 +225,9 @@ public class Notes extends Composite {
 			richTextArea.setText("");
 			document.getNotes().add(note);
 			// If is added first note must adding some icon on filebrowser
-			if (document.getNotes().size()==1) {
+			if (!document.isHasNotes()) {
 				Main.get().mainPanel.browser.fileBrowser.addNoteIconToSelectedRow();
+				document.setHasNotes(true);
 			}
 		}
 
