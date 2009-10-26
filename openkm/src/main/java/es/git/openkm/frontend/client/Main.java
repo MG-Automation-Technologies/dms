@@ -355,7 +355,8 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		} else if (caught instanceof InvocationException) {
 			InvocationException ie = (InvocationException) caught;
 			Log.error("InvocationException("+callback+"): "+ie);
-			errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
+			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
+			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
 		} else {
 			Log.error("UnknownException("+callback+"): "+caught.getMessage());
 			errorPopupLogout.show(callback+": "+caught.getMessage());
