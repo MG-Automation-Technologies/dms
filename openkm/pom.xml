@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-core</artifactId>
-      <version>1.4.10</version>
+      <version>1.4.11</version>
       <exclusions>
         <!-- We want to use the last POI version -->
         <exclusion>
