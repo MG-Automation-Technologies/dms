@@ -26,6 +26,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.InvocationException;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import es.git.openkm.frontend.client.bean.GWTBookmark;
@@ -357,7 +358,12 @@ public final class Main implements EntryPoint, WindowCloseListener {
 			Log.error("InvocationException("+callback+"): "+ie);
 			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
 			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
-		} else {
+		} else if (caught instanceof StatusCodeException) {
+			StatusCodeException ie = (StatusCodeException) caught;
+			Log.error("StatusCodeException("+callback+"): "+ie + " <br>HTTP status code error:"+ie.getStatusCode());
+			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
+			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
+		}else {
 			Log.error("UnknownException("+callback+"): "+caught.getMessage());
 			errorPopupLogout.show(callback+": "+caught.getMessage());
 		}
