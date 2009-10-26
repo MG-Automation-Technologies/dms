@@ -150,6 +150,9 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 									pdf2swf(prvTmp, swfCache);
 									is = new FileInputStream(swfCache);
 								}
+							} catch (Exception e) {
+								log.error(e.getMessage(), e);
+								is = OKMDownloadServlet.class.getResourceAsStream("preview_problem.swf");
 							} finally {
 								prvTmp.delete();
 							}
