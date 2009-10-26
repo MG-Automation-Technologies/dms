@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -134,6 +135,7 @@ public class UsersMonitor extends Composite {
 			final int updateRow = Integer.parseInt((String) hUser.get(si.getUserID())) ;
 			activeUsers.add(""+updateRow); // Sets to active user list
 			table.setWidget(updateRow,1, new Image("img/icon/user/user_green.gif"));
+			table.setHTML(updateRow, 2, si.getToken());
 			table.setHTML(updateRow, 3, new SimpleDate(si.getCreation()).toString("DD/MM/YYYY HH:MM:SS"));
 			table.setHTML(updateRow, 4, new SimpleDate(si.getAccess()).toString("DD/MM/YYYY HH:MM:SS"));
 			
@@ -147,6 +149,9 @@ public class UsersMonitor extends Composite {
 					}
 				});
 				logoutUser.setStyleName("okm-Input");
+				table.setWidget(updateRow, 5, logoutUser);
+				table.getCellFormatter().setVerticalAlignment(updateRow, 1, HasAlignment.ALIGN_MIDDLE);
+				table.getCellFormatter().setHorizontalAlignment(updateRow, 1, HasAlignment.ALIGN_CENTER);
 			}
 		}
 	}
@@ -197,12 +202,12 @@ public class UsersMonitor extends Composite {
 		for (int i=1; i<table.getRowCount(); i++) {
 			if(!activeUsers.contains(""+i)) {
 				diableTableUser(i);
-			}
+			} 
 		}
 	}
 	
 	/**
-	 * Disables de user
+	 * Disables the user
 	 * 
 	 * @param row User row
 	 */
