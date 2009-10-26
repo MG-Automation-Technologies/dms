@@ -838,4 +838,48 @@ public class KeyMapDashboard extends Composite {
 	public List<GWTKeyword> getAllKeywordList() {
 		return allKeywordList;
 	}
+	
+	/**
+	 * Increase the keyword rate with one
+	 * 
+	 * @param keyword The keyword to change rate
+	 */
+	public void increaseKeywordRate(String keyword) {
+		if (rateMap.keySet().contains((keyword))) {
+			int rate = Integer.parseInt(rateMap.get(keyword));
+			rate++;
+			rateMap.put(keyword,""+rate);
+			refreshFrequencies();
+		}
+	}
+	
+	/**
+	 * Decrease the keyword rate with one
+	 * 
+	 * @param keyword The keyword to change rate
+	 */
+	public void decreaseKeywordRate(String keyword) {
+		if (rateMap.keySet().contains((keyword))) {
+			int rate = Integer.parseInt(rateMap.get(keyword));
+			rate--;
+			if (rate<=0) {
+				// Case that is needed to remove some keyword is better to refreshing all data to prevent 
+				// visualization inconsistenses
+				refreshAll();
+			} else {
+				rateMap.put(keyword,""+rate);
+				refreshFrequencies();
+			}
+		}
+	}
+	
+	/**
+	 * refreshing the frequencies
+	 */
+	private void refreshFrequencies() {
+		tagCloud.calculateFrequencies(allKeywordList);
+		// Sets the maximun an minumum frequencies ( used by document properties tag cloud )
+		totalMaxFrequency = tagCloud.getMaxFrequency();
+		totalMinFrequency = tagCloud.getMinFrequency();
+	}
 }

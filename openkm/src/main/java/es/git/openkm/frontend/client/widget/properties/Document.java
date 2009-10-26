@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,6 +38,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -51,10 +53,12 @@ import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTKeyword;
 import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.config.Config;
+import es.git.openkm.frontend.client.panel.PanelDefinition;
 import es.git.openkm.frontend.client.service.OKMDocumentService;
 import es.git.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import es.git.openkm.frontend.client.util.Util;
 import es.git.openkm.frontend.client.widget.dashboard.ImageHover;
+import es.git.openkm.frontend.client.widget.dashboard.TagCloud;
 
 /**
  * Document
@@ -77,10 +81,10 @@ public class Document extends Composite {
 	private MultiWordSuggestOracle multiWordkSuggestKey; 
 	private FlowPanel hKeyPanel;
 	private Map<String,Widget> keywordMap;
-	//private TagCloud keywordsCloud;
+	private TagCloud keywordsCloud;
 	private boolean visible = true;
 	private HTML subcribedUsersText;
-	//private HTML keywordsCloudText;
+	private HTML keywordsCloudText;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -88,7 +92,7 @@ public class Document extends Composite {
 		table = new FlexTable();
 		tableProperties = new FlexTable();
 		tableSubscribedUsers = new FlexTable();
-		//keywordsCloud = new TagCloud();
+		keywordsCloud = new TagCloud();
 		scrollPanel = new ScrollPanel(table);
 		keywordPanel = new HorizontalPanel();
 		sp = new SimplePanel();
@@ -187,15 +191,15 @@ public class Document extends Composite {
 		tableProperties.getCellFormatter().setVerticalAlignment(7, 0, HasAlignment.ALIGN_TOP);
 		
 		// Sets the tagcloud
-		//keywordsCloud.setWidth("350");
+		keywordsCloud.setWidth("350");
 		
 		VerticalPanel vPanel2 = new VerticalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
-		//keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
+		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		vPanel2.add(subcribedUsersText);
 		vPanel2.add(tableSubscribedUsers);
-		//vPanel2.add(keywordsCloudText);
-		//vPanel2.add(keywordsCloud);
+		vPanel2.add(keywordsCloudText);
+		vPanel2.add(keywordsCloud);
 		
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0, 1, "");
@@ -219,7 +223,7 @@ public class Document extends Composite {
 		suggestKey.setStyleName("okm-KeyMap-Suggest");
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
-		//keywordsCloud.setStylePrimaryName("okm-cloudWrap");
+		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
 		
 		initWidget(scrollPanel);
 	}
@@ -316,21 +320,21 @@ public class Document extends Composite {
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 		
-		//drawTagCloud(keywords);
+		drawTagCloud(keywords);
 		
 		// Some preoperties only must be visible on taxonomy or trash view
-		//int actualView = Main.get().mainPanel.navigator.getStackIndex();
-		//if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ){
-		//	tableProperties.getCellFormatter().setVisible(7,0,true);
-		//	tableProperties.getCellFormatter().setVisible(7,1,true);
-		//	tableProperties.getCellFormatter().setVisible(9,0,true);
-		//	tableProperties.getCellFormatter().setVisible(9,1,true);
-		//} else {
-		//	tableProperties.getCellFormatter().setVisible(7,0,false);
-		//	tableProperties.getCellFormatter().setVisible(7,1,false);
-		//	tableProperties.getCellFormatter().setVisible(9,0,false);
-		//	tableProperties.getCellFormatter().setVisible(9,1,false);
-		//}
+		int actualView = Main.get().mainPanel.navigator.getStackIndex();
+		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ){
+			tableProperties.getCellFormatter().setVisible(7,0,true);
+			tableProperties.getCellFormatter().setVisible(7,1,true);
+			tableProperties.getCellFormatter().setVisible(9,0,true);
+			tableProperties.getCellFormatter().setVisible(9,1,true);
+		} else {
+			tableProperties.getCellFormatter().setVisible(7,0,false);
+			tableProperties.getCellFormatter().setVisible(7,1,false);
+			tableProperties.getCellFormatter().setVisible(9,0,false);
+			tableProperties.getCellFormatter().setVisible(9,1,false);
+		}
 
 	}
 	
@@ -351,7 +355,7 @@ public class Document extends Composite {
 		tableProperties.setHTML(10, 0, "<b>"+Main.i18n("document.history.size")+"</b>");
 		tableProperties.setHTML(11, 0, "<b>"+Main.i18n("document.url")+"</b>");
 		tableProperties.setHTML(12, 0, "<b>"+Main.i18n("document.webdav")+"</b>");
-		//keywordsCloudText.setHTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
+		keywordsCloudText.setHTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		subcribedUsersText.setHTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
 		
 		if (document != null) {
@@ -461,7 +465,8 @@ public class Document extends Composite {
 			}
 			document.setKeywords(keywords);
 			setProperties();
-			//drawTagCloud(keywordsArray);
+			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
+			drawTagCloud(keywordsArray);
 		}
 	}
 	
@@ -487,7 +492,8 @@ public class Document extends Composite {
 			hKeyPanel.add(keywordButton);
 			document.setKeywords(keywords);
 			setProperties();
-			//drawTagCloud(keywordsArray);
+			Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
+			drawTagCloud(keywordsArray);
 		}
 	}
 	
@@ -528,7 +534,6 @@ public class Document extends Composite {
 	/**
 	 * Draws a tag cloud
 	 */
-	/*
 	private void drawTagCloud(String keywords[]) {
 		// Deletes all tag clouds keys
 		keywordsCloud.clear();
@@ -549,5 +554,4 @@ public class Document extends Composite {
 			keywordsCloud.add(tagLink);
 		}
 	}
-	*/
 }
