@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -45,6 +46,7 @@ import es.git.openkm.frontend.client.bean.GWTNote;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMDocumentService;
 import es.git.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import es.git.openkm.frontend.client.util.Util;
 import es.git.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
 /**
@@ -64,6 +66,7 @@ public class Notes extends Composite {
 	private ScrollPanel scrollPanel;
 	private RichTextArea richTextArea;
 	private RichTextToolbar toolbar;
+	private TextArea textArea;
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
 	private Grid gridRichText;
@@ -76,7 +79,9 @@ public class Notes extends Composite {
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("document.add.note") + "</b>");
 		richTextArea = new RichTextArea();
+		textArea = new TextArea();
 		richTextArea.setSize("100%", "14em");
+		textArea.setSize("500px", "200px");
 		toolbar = new RichTextToolbar(richTextArea);
 	    toolbar.setWidth("100%");
 	    
@@ -95,6 +100,7 @@ public class Notes extends Composite {
 		newNotePanel.add(space);
 		newNotePanel.add(addNote);
 		newNotePanel.add(gridRichText);
+		newNotePanel.add(textArea);
 		HTML space2 = new HTML("");
 		newNotePanel.add(space2);
 		newNotePanel.add(add);
@@ -113,6 +119,14 @@ public class Notes extends Composite {
 		tableNotes.setWidth("100%");
 		table.setWidth("100%");
 		gridRichText.setStyleName("cw-RichText");
+		textArea.setStyleName("okm-Input");
+		
+		//Show hides panels depending browser to prevent problems with IE
+		if (Util.getUserAgent().startsWith("ie")) {
+			gridRichText.setVisible(false);
+		} else {
+			textArea.setVisible(false);
+		}
 		
 		initWidget(scrollPanel);
 	}
@@ -223,6 +237,7 @@ public class Notes extends Composite {
 			writeNote(note);
 			writeAddNote();
 			richTextArea.setText("");
+			textArea.setText("");
 			document.getNotes().add(note);
 			// If is added first note must adding some icon on filebrowser
 			if (!document.isHasNotes()) {
@@ -242,6 +257,14 @@ public class Notes extends Composite {
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-		documentService.addNote(document.getPath(), richTextArea.getHTML() , callbackAddNote);
+		String noteText = "";
+		//Show hides panels depending browser to prevent problems with IE
+		if (Util.getUserAgent().startsWith("ie")) {
+			noteText = textArea.getText();
+		} else {
+			noteText = richTextArea.getHTML();
+		}
+		
+		documentService.addNote(document.getPath(), noteText, callbackAddNote);
 	}
 }

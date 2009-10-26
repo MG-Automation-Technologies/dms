@@ -195,6 +195,7 @@ public class Util {
             if ( ua.indexOf('webkit' ) != -1 ) return 'safari';
             if ( ua.indexOf('msie 6.0') != -1 ) return 'ie6';
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
+            if ( ua.indexOf('msie 8.0') != -1 ) return 'ie8';
             if ( ua.indexOf('gecko') != -1 ) return 'gecko';
             return 'unknown';
         } catch ( e ) { return 'unknown' }
