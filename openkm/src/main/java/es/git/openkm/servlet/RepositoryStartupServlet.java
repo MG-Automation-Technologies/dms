@@ -101,7 +101,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** User database initialized ***");
         AuthDAO auth = AuthDAO.getInstance();
         auth.closeConnection(auth.getConnection());
-
+        
         // Test for datastore
         SessionManager sm = SessionManager.getInstance();
 		String sysToken = sm.getSystemToken();
@@ -121,7 +121,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         WorkflowDAO.getInstance().closeConnection(WorkflowDAO.getInstance().getConnection());
         JbpmConfiguration.getInstance().createJbpmContext().getGraphSession();
         JbpmConfiguration.getInstance().getJobExecutor().start();//startJobExecutor();
-
+        
         log.info("*** Activating watchdog ***");
         wd = new Watchdog();
         timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
