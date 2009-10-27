@@ -456,6 +456,7 @@ public class Lang_gl_ES {
 	    lang.put("status.keep.alive.error", "Detectada perdida de conexión co servidor (keep alive)");
 	    lang.put("status.debug.enabled", "Debug activado");
 	    lang.put("status.debug.disabled", "Debug desactivado");
+	    lang.put("status.network.error.detected", "Detectado error de red");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Domingo");

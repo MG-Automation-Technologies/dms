@@ -456,6 +456,7 @@ public class Lang_ja_JP {
 		lang.put("status.keep.alive.error", "Detected lost connection to server (keep alive)");
 		lang.put("status.debug.enabled", "デバッグ有効化");
 		lang.put("status.debug.disabled", "デバッグ無効化");
+		lang.put("status.network.error.detected", "Detected network error");
 		
 		// Calendar
 		lang.put("calendar.day.sunday", "日曜日");

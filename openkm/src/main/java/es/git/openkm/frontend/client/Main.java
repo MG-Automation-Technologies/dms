@@ -362,10 +362,11 @@ public final class Main implements EntryPoint, WindowCloseListener {
 			StatusCodeException ie = (StatusCodeException) caught;
 			Log.error("StatusCodeException("+callback+"): "+ie + " <br>HTTP status code error:"+ie.getStatusCode());
 			//errorPopupLogout.show(Main.i18n("error.invocation")+" ("+callback+")");
-			errorPopup.show(Main.i18n("error.invocation")+" ("+callback+")");
-		}else {
+			mainPanel.bottomPanel.setStatus("status.network.error.detected", true, ie.getStatusCode());
+		} else {
 			Log.error("UnknownException("+callback+"): "+caught.getMessage());
-			errorPopupLogout.show(callback+": "+caught.getMessage());
+			//errorPopupLogout.show(callback+": "+caught.getMessage());
+			errorPopup.show(callback+": "+caught.getMessage());
 		}
 	}
 	

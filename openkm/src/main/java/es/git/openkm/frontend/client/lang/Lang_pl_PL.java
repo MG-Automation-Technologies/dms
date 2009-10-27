@@ -458,6 +458,7 @@ public class Lang_pl_PL {
 	    lang.put("status.keep.alive.error", "Wykryto zerwanie połączenia z serwerem (mechanizm utrzymywania połączenia)");
 	    lang.put("status.debug.enabled", "Debug włączony");
 	    lang.put("status.debug.disabled", "Debug wyłączony");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Niedziela");

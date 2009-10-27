@@ -457,6 +457,7 @@ public class Lang_bs_BA {
 	    lang.put("status.keep.alive.error", "Detektovana izgubljena konekcija prema serveru");
 	    lang.put("status.debug.enabled", "Debagiranje omogućeno");
 	    lang.put("status.debug.disabled", "Debagiranje onemogućeno");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Nedjelja");

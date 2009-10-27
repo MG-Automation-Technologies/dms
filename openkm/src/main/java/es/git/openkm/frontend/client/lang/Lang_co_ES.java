@@ -456,6 +456,7 @@ public class Lang_co_ES {
 	    lang.put("status.keep.alive.error", "Detectada pérdida de conexión con el servidor (keep alive)");
 	    lang.put("status.debug.enabled", "Depuración activada");
 	    lang.put("status.debug.disabled", "Depuración desactivada");
+	    lang.put("status.network.error.detected", "Detectado error de red");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Domingo");

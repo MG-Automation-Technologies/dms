@@ -94,6 +94,7 @@ public class BottomPanel extends ExtendedSizeComposite {
 	 * Sets the status
 	 * 
 	 * @param key The status value
+	 * @param error Is error or not
 	 */
 	public void setStatus(String key, boolean error) {
 		this.key = key;
@@ -103,6 +104,23 @@ public class BottomPanel extends ExtendedSizeComposite {
 			statusMsg.removeStyleName("okm-Input-Error");
 		}
 		statusMsg.setText(" "+Main.i18n(key));
+	}
+	
+	/**
+	 * Sets the status code
+	 * 
+	 * @param key The status code key
+	 * @param error Is error or not
+	 * @param errorCode The code error
+	 */
+	public void setStatus(String key, boolean error, int errorCode) {
+		this.key = key;
+		if (error) {
+			statusMsg.addStyleName("okm-Input-Error");
+		} else {
+			statusMsg.removeStyleName("okm-Input-Error");
+		}
+		statusMsg.setText(" "+Main.i18n(key) + " (" + errorCode +")");
 	}
 	
 	/**

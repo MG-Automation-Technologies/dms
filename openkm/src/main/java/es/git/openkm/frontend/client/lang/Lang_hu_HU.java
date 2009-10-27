@@ -456,6 +456,7 @@ public class Lang_hu_HU {
 	    lang.put("status.keep.alive.error", "Kapcsolat megszakadt a szerverrel (kapcsolatfenntartás)");
 	    lang.put("status.debug.enabled", "Hibakeresés bekapcsolva");
 	    lang.put("status.debug.disabled", "Hibakeresés kikapcsolva");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Vasárnap");

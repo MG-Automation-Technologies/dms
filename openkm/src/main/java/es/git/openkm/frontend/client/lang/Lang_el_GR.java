@@ -456,6 +456,7 @@ public class Lang_el_GR {
 	    lang.put("status.keep.alive.error", "Απώλεια σύνδεσης με διακομιστή");
 	    lang.put("status.debug.enabled", "Debug ενεργοποιημένο");
 	    lang.put("status.debug.disabled", "Debug απενεργοποιημένο");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Κυριακή");

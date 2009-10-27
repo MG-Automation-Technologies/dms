@@ -456,6 +456,7 @@ public class Lang_mk_MK {
 	    lang.put("status.keep.alive.error", "Детектирана е изгубена врска до серверот (одржи во живот)");
 	    lang.put("status.debug.enabled", "Дебагирај овозможено");
 	    lang.put("status.debug.disabled", "Дебагирај оневозможено");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Недела");

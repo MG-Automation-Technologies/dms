@@ -461,6 +461,7 @@ public class Lang_ru_RU {
 	    lang.put("status.keep.alive.error", "Потеря соединения с сервером (поддержка соединения)");
 	    lang.put("status.debug.enabled", "Отладка включена");
 	    lang.put("status.debug.disabled", "Отладка выключена");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Воскресение");

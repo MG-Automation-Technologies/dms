@@ -457,6 +457,7 @@ public class Lang_ro_RO {
 	    lang.put("status.keep.alive.error", "A fost detectata o pierdere a conexiunii cu serverul (conexiunea permanenta)");
 	    lang.put("status.debug.enabled", "Depanare pornita");
 	    lang.put("status.debug.disabled", "Depanare oprita");
+	    lang.put("status.network.error.detected", "Detected network error");
 
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Duminica");

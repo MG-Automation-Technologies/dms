@@ -457,6 +457,7 @@ public class Lang_ca_ES {
 	    lang.put("status.keep.alive.error", "Detectada pèrdua de connexió amb el servidor (keep alive)");
 	    lang.put("status.debug.enabled", "Debug activat");
 	    lang.put("status.debug.disabled", "Debug desactivat");
+	    lang.put("status.network.error.detected", "Detectat error de red");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Diumenge");

@@ -456,6 +456,7 @@ public class Lang_fr_FR {
 	    lang.put("status.keep.alive.error", "Connexion au serveur perdue (surveillance)");
 	    lang.put("status.debug.enabled", "Activation déboggage");
 	    lang.put("status.debug.disabled", "Désactivation déboggage");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Dimanche");

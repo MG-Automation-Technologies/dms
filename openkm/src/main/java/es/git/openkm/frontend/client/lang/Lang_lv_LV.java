@@ -456,6 +456,7 @@ public class Lang_lv_LV {
 	    lang.put("status.keep.alive.error", "Savienojums ar serveri pazudis (keep alive)");
 	    lang.put("status.debug.enabled", "Atkļūdošana atļauta");
 	    lang.put("status.debug.disabled", "Atkļūdošana aizliegta");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Svētdiena");

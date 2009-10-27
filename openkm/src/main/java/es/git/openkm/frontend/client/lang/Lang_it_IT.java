@@ -456,6 +456,7 @@ public class Lang_it_IT {
 	    lang.put("status.keep.alive.error", "La connession al server è stata persa (keep alive)");
 	    lang.put("status.debug.enabled", "Debug abilitato");
 	    lang.put("status.debug.disabled", "Debug disabilitato");
+	    lang.put("status.network.error.detected", "Detected network error");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Domenica");
