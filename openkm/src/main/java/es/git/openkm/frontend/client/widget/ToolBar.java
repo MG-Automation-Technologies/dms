@@ -660,6 +660,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			disableRename();
 			disableCopy();
 			disableMove();
+			disableAddNote();
 			
 			// On folder parent don't enables subscription
 			if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
@@ -745,6 +746,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			disableCopy();
 			disableMove();
 			disableExport();
+			disableAddNote();
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
@@ -773,6 +775,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 					disableCheckin();
 					disableCancelCheckout();
 					disableUnlock();
+					enableAddNote();
 
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 						enableDelete();
@@ -803,6 +806,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 							disableDelete();
 							enableAddPropertyGroup();
 							enableRemovePropertyGroup();
+							enableAddNote();
 						} else {
 							disable = true;
 						}
@@ -816,6 +820,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 							disableDelete();
 							enableAddPropertyGroup();
 							enableRemovePropertyGroup();
+							enableAddNote();
 						} else {
 							disable = true;
 						}
@@ -858,6 +863,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			
 			// Sets the permission to main menu
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
+			
+			// Sets the visible values to note tab
+			Main.get().mainPanel.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
 		}
 	}
 	
@@ -887,6 +895,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			disableCancelCheckout();
 			disableWorkflow();
 			disableAddDocument();
+			disableAddNote();
 			
 			if ((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 
@@ -1339,6 +1348,20 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	public void disableExport() {
 		toolBarOption.exportOption = false;
 	}
+	
+	/**
+	 * Enables add note
+	 */
+	public void enableAddNote() {
+		toolBarOption.addNoteOption = true;
+	}
+	
+	/**
+	 * Disable add note
+	 */
+	public void disableAddNote() {
+		toolBarOption.addNoteOption = false;
+	}
 
 	/**
 	 * Gets the defatul Tool Bar object values for root
@@ -1369,6 +1392,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1401,6 +1425,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1433,6 +1458,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1465,6 +1491,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1497,6 +1524,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1529,6 +1557,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1561,6 +1590,7 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		tmpToolBarOption.moveOption 					= false;
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
 		return tmpToolBarOption;
 	}
 	

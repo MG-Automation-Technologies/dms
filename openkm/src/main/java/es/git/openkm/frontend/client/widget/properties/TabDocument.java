@@ -60,7 +60,7 @@ public class TabDocument extends Composite implements TabListener {
 	private VerticalPanel panel;
 	private List propertyGroup;
 	private GWTDocument doc;
-	private Notes notes;
+	public Notes notes;
 	private Preview preview;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 

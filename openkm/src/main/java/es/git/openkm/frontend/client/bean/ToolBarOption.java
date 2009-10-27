@@ -43,4 +43,5 @@ public class ToolBarOption {
 	public boolean moveOption;
 	public boolean exportOption;
 	public boolean workflowOption;
+	public boolean addNoteOption;
 }

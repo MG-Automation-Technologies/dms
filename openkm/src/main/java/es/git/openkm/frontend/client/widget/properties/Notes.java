@@ -24,6 +24,7 @@ import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -70,6 +71,7 @@ public class Notes extends Composite {
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
 	private Grid gridRichText;
+	boolean visibleButtons = true;
 	
 	public Notes () {
 		document = new GWTDocument();
@@ -165,7 +167,7 @@ public class Notes extends Composite {
 		
 		writeAddNote();
 		
-		// Sets wordWrap for al rows
+		// Sets wordWrap for all rows
 		for (int i=0; i<tableNotes.getRowCount(); i++) {
 			setRowWordWarp(i, 1, true, tableNotes);
 		}
@@ -220,8 +222,31 @@ public class Notes extends Composite {
 	 * 
 	 * @param visible The visible value
 	 */
-	public void setVisibleButtons(boolean visible){
+	public void setVisibleButtons(boolean visible) {
+		visibleButtons = visible;
 		add.setVisible(visible);
+		addNote.setVisible(visible);
+		if (Util.getUserAgent().startsWith("ie")) {
+			textArea.setVisible(visible);
+		} else {
+			gridRichText.setVisible(visible);
+		}
+	}
+	
+	/**
+	 * Sets the visible add note or not
+	 * 
+	 * @param visible The visible value
+	 */
+	public void setVisibleAddNote(boolean visible) {
+		boolean addNoteOption = visible && visibleButtons;
+		add.setVisible(addNoteOption);
+		addNote.setVisible(addNoteOption);
+		if (Util.getUserAgent().startsWith("ie")) {
+			textArea.setVisible(addNoteOption);
+		} else {
+			gridRichText.setVisible(addNoteOption);
+		}
 	}
 	
 	/**
