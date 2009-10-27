@@ -41,6 +41,7 @@ import es.git.openkm.util.UUIDGenerator;
  */
 public class SessionManager {
 	private static Logger log = LoggerFactory.getLogger(SessionManager.class);
+	private static final boolean DEBUG = false;
 	private static SessionManager instance;
 	private static String systemToken;
 	private HashMap<String, SessionInfo> sessions = new HashMap<String, SessionInfo>();
@@ -51,12 +52,12 @@ public class SessionManager {
 	 * @return
 	 */
 	public static SessionManager getInstance() {
-		log.debug("getInstance()");
+		if (DEBUG) log.debug("getInstance()");
 		if (instance == null) {
 			instance = new SessionManager();
 		}
 		
-		log.debug("getInstance: "+instance);
+		if (DEBUG) log.debug("getInstance: "+instance);
 		return instance;
 	}
 	
@@ -82,13 +83,13 @@ public class SessionManager {
 	 * @param session
 	 */
 	public void put(String token, Session session) {
-		log.debug("put("+token+" ,"+session+")");
+		if (DEBUG) log.debug("put("+token+" ,"+session+")");
 		SessionInfo si = new SessionInfo();
 		si.setSession(session);
 		si.setCreation(Calendar.getInstance());
 		si.setAccess(Calendar.getInstance());
 		sessions.put(token, si);
-		log.debug("put: void");
+		if (DEBUG) log.debug("put: void");
 	}
 	
 	/**
@@ -98,7 +99,7 @@ public class SessionManager {
 	 * @return
 	 */
 	public Session get(String token) {
-		log.debug("get("+token+")");
+		if (DEBUG) log.debug("get("+token+")");
 		SessionInfo si = (SessionInfo) sessions.get(token);
 		Session session = null;
 		
@@ -107,7 +108,7 @@ public class SessionManager {
 			session = si.getSession();
 		}
 		
-		log.debug("get: "+session);
+		if (DEBUG) log.debug("get: "+session);
 		return session;
 	}
 
@@ -117,9 +118,9 @@ public class SessionManager {
 	 * @return
 	 */
 	public SessionInfo getInfo(String token) {
-		log.debug("get("+token+")");
+		if (DEBUG) log.debug("get("+token+")");
 		SessionInfo si = (SessionInfo) sessions.get(token);
-		log.debug("get: "+si);
+		if (DEBUG) log.debug("get: "+si);
 		return si;
 	}
 	
@@ -129,16 +130,16 @@ public class SessionManager {
 	 * @param token
 	 */
 	public void remove(String token) {
-		log.debug("remove("+token+")");
+		if (DEBUG) log.debug("remove("+token+")");
 		sessions.remove(token);
-		log.debug("remove: void");
+		if (DEBUG) log.debug("remove: void");
 	}
 	
 	/**
 	 * Return all active tokens
 	 */
 	public Collection<String> getTokens() {
-		log.debug("getActiveTokens()");
+		if (DEBUG) log.debug("getActiveTokens()");
 		ArrayList<String> list = new ArrayList<String>();
 		
 		for (Iterator<String> it = sessions.keySet().iterator(); it.hasNext(); ) {
@@ -149,7 +150,7 @@ public class SessionManager {
 			}
 		}
 		
-		log.debug("getActiveTokens: "+list);
+		if (DEBUG) log.debug("getActiveTokens: "+list);
 		return list;
 	}
 
@@ -159,7 +160,7 @@ public class SessionManager {
 	 * @param token
 	 */
 	public String getTokenByUserId(String userId) {
-		log.debug("getTokenByUserId("+userId+")");
+		if (DEBUG) log.debug("getTokenByUserId("+userId+")");
 		String token = null;
 		
 		for (Iterator<Entry<String, SessionInfo>> it = sessions.entrySet().iterator(); it.hasNext(); ) {
@@ -171,7 +172,7 @@ public class SessionManager {
 			}
 		}
 		
-		log.debug("getTokenByUserId: "+token);
+		if (DEBUG) log.debug("getTokenByUserId: "+token);
 		return token;
 	}
 
