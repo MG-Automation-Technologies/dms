@@ -83,6 +83,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void createUser(User vo) throws SQLException {
+		log.debug("createUser("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "INSERT INTO users (usr_id, usr_name, usr_pass, usr_email, usr_active) VALUES (?, ?, ?, ?, ?)";
@@ -107,6 +108,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("createUser: void");
 	}
 
 	/**
@@ -116,6 +119,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void updateUser(User vo) throws SQLException {
+		log.debug("updateUser("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE users SET usr_email=?, usr_active=?, usr_name=? WHERE usr_id=?";
@@ -137,6 +141,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("updateUser: void");
 	}
 	
 	/**
@@ -146,6 +152,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void updateUserPassword(User vo) throws SQLException {
+		log.debug("updateUserPassword("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE users SET usr_pass=? WHERE usr_id=?";
@@ -167,6 +174,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("updateUserPassword: void");
 	}
 	
 	/**
@@ -176,6 +185,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void deleteUser(User vo) throws SQLException {
+		log.debug("deleteUser("+vo+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtRole = null;
@@ -201,6 +211,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmtRole);
 			closeConnection(con);
 		}
+		
+		log.debug("deleteUser: void");
 	}
 	
 	/**
@@ -210,6 +222,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public Collection<User> findAllUsers() throws SQLException {
+		log.debug("findAllUsers()");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
@@ -258,6 +271,7 @@ public class AuthDAO extends AbstractDAO {
 			closeConnection(con);
 		}
 		
+		log.debug("findAllUsers: "+al);
 		return al;
 	}
 
@@ -268,6 +282,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public Collection<User> findUsersByRole(String role) throws SQLException {
+		log.debug("findUsersByRole("+role+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
@@ -317,6 +332,7 @@ public class AuthDAO extends AbstractDAO {
 			closeConnection(con);
 		}
 		
+		log.debug("findUsersByRole: "+al);
 		return al;
 	}
 	
@@ -328,6 +344,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public User findUserByPk(String userId) throws SQLException {
+		log.debug("findUserByPk("+userId+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
@@ -375,6 +392,7 @@ public class AuthDAO extends AbstractDAO {
 			closeConnection(con);
 		}
 		
+		log.debug("findUserByPk: "+user);
 		return user;
 	}
 
@@ -385,6 +403,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void createRole(Role vo) throws SQLException {
+		log.debug("createRole("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "INSERT INTO roles (rol_id) VALUES (?)";
@@ -403,6 +422,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("createRole: void");
 	}
 
 	/**
@@ -412,6 +433,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void deleteRole(Role vo) throws SQLException {
+		log.debug("deleteRole("+vo+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
@@ -437,6 +459,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmtUserRoles);
 			closeConnection(con);
 		}
+		
+		log.debug("deleteRole: void");
 	}
 
 	/**
@@ -446,6 +470,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public Collection<Role> findAllRoles() throws SQLException {
+		log.debug("findAllRoles()");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -474,6 +499,7 @@ public class AuthDAO extends AbstractDAO {
 			closeConnection(con);
 		}
 		
+		log.debug("findAllRoles: "+al);
 		return al;
 	}
 	
@@ -483,6 +509,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public Role findRoleByPk(String roleId) throws SQLException {
+		log.debug("findRoleByPk("+roleId+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -510,6 +537,7 @@ public class AuthDAO extends AbstractDAO {
 			closeConnection(con);
 		}
 		
+		log.debug("findRoleByPk: "+role);
 		return role;
 	}
 
@@ -521,6 +549,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void grantRole(String user, String role) throws SQLException {
+		log.debug("grantRole("+user+", "+role+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "INSERT INTO user_role (ur_user, ur_role) VALUES (?, ?)";
@@ -540,6 +569,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("grantRole: void");
 	}
 
 	/**
@@ -550,6 +581,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void revokeRole(String user, String role) throws SQLException {
+		log.debug("revokeRole("+user+", "+role+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "DELETE FROM user_role WHERE ur_user=? AND ur_role=?";
@@ -569,6 +601,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("revokeRole: void");
 	}
 	
 	/**
@@ -578,6 +612,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void deleteUserRoles(User vo) throws SQLException {
+		log.debug("deleteUserRoles("+vo+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtRole = null;
@@ -598,6 +633,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmtRole);
 			closeConnection(con);
 		}
+		
+		log.debug("deleteUserRoles: void");
 	}
 	
 	/**
@@ -772,6 +809,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void updateMailAccount(MailAccount vo) throws SQLException {
+		log.debug("updateMailAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE mail_accounts SET ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
@@ -794,6 +832,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("updateMailAccount: void");
 	}
 	
 	/**
@@ -801,9 +841,10 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void updateMailAccountPassword(MailAccount vo) throws SQLException {
+		log.debug("updateMailAccountPassword("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ma_pass=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "UPDATE mail_accounts SET ma_mpass=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
 
 		try {
 			con = getConnection();
@@ -822,6 +863,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("updateMailAccountPassword: void");
 	}
 	
 	/**
@@ -829,6 +872,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void deleteMailAccount(MailAccount vo) throws SQLException {
+		log.debug("deleteMailAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "DELETE FROM mail_accounts WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
@@ -849,6 +893,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("deleteMailAccount: void");
 	}
 
 	/**
@@ -1009,6 +1055,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void updateTwitterAccount(TwitterAccount vo) throws SQLException {
+		log.debug("updateTwitterAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE twitter_accounts SET ta_active=? WHERE ta_user=? AND ta_tuser=?";
@@ -1029,6 +1076,8 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("updateTwitterAccount: void");
 	}
 	
 	/**
@@ -1036,6 +1085,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @throws SQLException
 	 */
 	public void deleteTwitterAccount(TwitterAccount vo) throws SQLException {
+		log.debug("deleteTwitterAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "DELETE FROM twitter_accounts WHERE ta_user=? AND ta_tuser=?";
@@ -1055,5 +1105,7 @@ public class AuthDAO extends AbstractDAO {
 			closeStatement(stmt);
 			closeConnection(con);
 		}
+		
+		log.debug("deleteTwitterAccount: void");
 	}
 }
