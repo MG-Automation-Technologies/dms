@@ -62,7 +62,6 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.ResultSet;
-import es.git.openkm.bean.cache.UserKeywords;
 import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
@@ -776,18 +775,11 @@ public class DirectSearchModule implements SearchModule {
 	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMapCached("+token+", "+filter+")");
 		Session session = SessionManager.getInstance().get(token);
-		UserKeywords userKeywords = UserKeywordsManager.get(session);
-		ArrayList<String> keywords = userKeywords.getKeywords();
+		HashMap<String, ArrayList<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		
-		for (Iterator<String> kwIt = keywords.iterator(); kwIt.hasNext(); ) {
-			String keywordsStr = kwIt.next();
-			ArrayList<String> docKeywords = new ArrayList<String>();
-			
-			for (StringTokenizer st = new StringTokenizer(keywordsStr); st.hasMoreTokens(); ) {
-				String keyword = st.nextToken();
-				docKeywords.add(keyword);
-			}
+		for (Iterator<ArrayList<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
+			ArrayList<String> docKeywords = kwIt.next();
 			
 			if (filter != null && docKeywords.containsAll(filter)) {
 				for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {

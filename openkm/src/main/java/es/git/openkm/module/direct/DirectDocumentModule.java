@@ -58,6 +58,7 @@ import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.Version;
 import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
+import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.FileSizeExceededException;
@@ -747,6 +748,9 @@ public class DirectDocumentModule implements DocumentModule {
 			// Set document node properties
 			documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
 			documentNode.save();
+			
+			// Update document keyword cache
+			UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);

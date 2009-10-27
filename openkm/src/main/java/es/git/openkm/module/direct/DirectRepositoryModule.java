@@ -488,7 +488,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
-			mailFolder = new DirectFolderModule().getProperties(session, "/"+Repository.HOME+"/"+session.getUserID()+"/"+Repository.MAIL);
+			String mailPath = "/"+Repository.HOME+"/"+session.getUserID()+"/"+Repository.MAIL;
+			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
 			// Activity log
 			UserActivity.log(session, "GET_MAIL_FOLDER", null, mailFolder.getPath());
