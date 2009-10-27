@@ -66,6 +66,7 @@ import es.git.openkm.api.OKMFolder;
 import es.git.openkm.api.OKMMail;
 import es.git.openkm.api.OKMRepository;
 import es.git.openkm.bean.Document;
+import es.git.openkm.bean.Repository;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.FileSizeExceededException;
@@ -161,18 +162,12 @@ public class Mail {
 	}
 	
 	/**
-	 * @param host
-	 * @param user
-	 * @param password
-	 * @throws RepositoryException 
-	 * @throws AccessDeniedException 
-	 * @throws ItemExistsException 
-	 * @throws PathNotFoundException 
+	 * 
 	 */
-	public static void importMessages(String token, String host, String user, String password,
+	public static void importMessages(String token, String uid, String host, String user, String password,
 			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
 			AccessDeniedException, RepositoryException {
-		log.info("importMessages("+token+", "+host+", "+user+", "+password+", "+imapFolder+")");
+		log.info("importMessages("+token+", "+uid+", "+host+", "+user+", "+password+", "+imapFolder+")");
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		
@@ -180,115 +175,117 @@ public class Mail {
 			OKMRepository okmRepository = OKMRepository.getInstance();
 			OKMFolder okmFolder = OKMFolder.getInstance();
 			OKMMail okmMail = OKMMail.getInstance();
+			String mailPath = "/"+Repository.HOME+"/"+uid+"/"+Repository.MAIL;
 			
-			// Open connection
-			//Store store = session.getStore("pop3");
-			Store store = session.getStore("imaps");
-			store.connect(host, user, password);
-			
-			Folder folder = store.getFolder(imapFolder);
-			folder.open(Folder.READ_ONLY);
-			//Message messages[] = folder.getMessages();
-			Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+			if (okmRepository.hasNode(token, mailPath)) {
+				// Open connection
+				Store store = session.getStore("imaps");
+				store.connect(host, user, password);
+				
+				Folder folder = store.getFolder(imapFolder);
+				folder.open(Folder.READ_ONLY);
+				//Message messages[] = folder.getMessages();
+				Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 						
-			for (int i=0; i < messages.length; i++) {
-				Message msg = messages[i];
-				//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
-				//log.info("Received: "+msg.getReceivedDate());
-				//log.info("Sent: "+msg.getSentDate());
-				
-				Calendar receivedDate = Calendar.getInstance();
-				Calendar sentDate = Calendar.getInstance();
-				
-				// Can be void
-				if (msg.getReceivedDate() != null) {
-					receivedDate.setTime(msg.getReceivedDate());
-				}
-				
-				// Can be void
-				if (msg.getSentDate() != null) {
-					sentDate.setTime(msg.getSentDate());
-				}
-				
-				log.info(i+" -> "+msg.getSubject()+" - "+msg.getReceivedDate());
-				String path = okmRepository.getMailFolder(token).getPath()+"/"+receivedDate.get(Calendar.YEAR);
-				
-				if (!okmRepository.hasNode(token, path)) {
-					es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
-					fld.setPath(path);
-					okmFolder.create(token, fld);
-				}
-				
-				path += "/"+(receivedDate.get(Calendar.MONTH)+1);
-				
-				if (!okmRepository.hasNode(token, path)) {
-					es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
-					fld.setPath(path);
-					okmFolder.create(token, fld);
-				}
-				
-				path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
-				
-				if (!okmRepository.hasNode(token, path)) {
-					es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
-					fld.setPath(path);
-					okmFolder.create(token, fld);
-				}
-				
-				es.git.openkm.bean.Mail mail = new es.git.openkm.bean.Mail();
-				mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
-				mail.setReceivedDate(receivedDate);
-				mail.setSentDate(sentDate);
-				
-				String body = getText(msg);
-				log.info("getText: "+body);
-				if (body.charAt(0) == 'H') {
-					mail.setMimeType("text/html");
-				} else if (body.charAt(0) == 'T') {
-					mail.setMimeType("text/plain");
-				} else {
-					mail.setMimeType("unknown");
-				}
-				
-				mail.setContent(body.substring(1));
-				
-				if (msg.getFrom().length > 0) {
-					mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
-				}
-				
-				mail.setSize(msg.getSize());
-				mail.setSubject(msg.getSubject());
-				mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
-				mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
-				mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
-
-				String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-				log.info("newMailPath: "+newMailPath);
-				
-				if (!okmRepository.hasNode(token, newMailPath)) {
-					okmMail.create(token, mail);
-					try {
-						addAttachments(token, mail, msg);
-					} catch (UnsupportedMimeTypeException e) {
-						e.printStackTrace();
-					} catch (FileSizeExceededException e) {
-						e.printStackTrace();
+				for (int i=0; i < messages.length; i++) {
+					Message msg = messages[i];
+					//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
+					//log.info("Received: "+msg.getReceivedDate());
+					//log.info("Sent: "+msg.getSentDate());
+					
+					Calendar receivedDate = Calendar.getInstance();
+					Calendar sentDate = Calendar.getInstance();
+					
+					// Can be void
+					if (msg.getReceivedDate() != null) {
+						receivedDate.setTime(msg.getReceivedDate());
 					}
+					
+					// Can be void
+					if (msg.getSentDate() != null) {
+						sentDate.setTime(msg.getSentDate());
+					}
+					
+					log.info(i+" -> "+msg.getSubject()+" - "+msg.getReceivedDate());
+					String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
+					
+					if (!okmRepository.hasNode(token, path)) {
+						es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
+						fld.setPath(path);
+						okmFolder.create(token, fld);
+					}
+					
+					path += "/"+(receivedDate.get(Calendar.MONTH)+1);
+					
+					if (!okmRepository.hasNode(token, path)) {
+						es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
+						fld.setPath(path);
+						okmFolder.create(token, fld);
+					}
+					
+					path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
+					
+					if (!okmRepository.hasNode(token, path)) {
+						es.git.openkm.bean.Folder fld = new es.git.openkm.bean.Folder();
+						fld.setPath(path);
+						okmFolder.create(token, fld);
+					}
+					
+					es.git.openkm.bean.Mail mail = new es.git.openkm.bean.Mail();
+					mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+					mail.setReceivedDate(receivedDate);
+					mail.setSentDate(sentDate);
+					
+					String body = getText(msg);
+					//log.info("getText: "+body);
+					if (body.charAt(0) == 'H') {
+						mail.setMimeType("text/html");
+					} else if (body.charAt(0) == 'T') {
+						mail.setMimeType("text/plain");
+					} else {
+						mail.setMimeType("unknown");
+					}
+					
+					mail.setContent(body.substring(1));
+					
+					if (msg.getFrom().length > 0) {
+						mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
+					}
+					
+					mail.setSize(msg.getSize());
+					mail.setSubject(msg.getSubject());
+					mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
+					mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
+					mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
+					
+					String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
+					log.info("newMailPath: "+newMailPath);
+					
+					if (!okmRepository.hasNode(token, newMailPath)) {
+						okmMail.create(token, mail);
+						try {
+							addAttachments(token, mail, msg);
+						} catch (UnsupportedMimeTypeException e) {
+							e.printStackTrace();
+						} catch (FileSizeExceededException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					// Set message as seen
+					//msg.setFlag(Flags.Flag.SEEN, true);
 				}
-				
-				// Set message as seen
-				//msg.setFlag(Flags.Flag.SEEN, true);
-			}
 			
-			// Close connection 
-			folder.close(false);
-			store.close();
+				// Close connection 
+				folder.close(false);
+				store.close();
+			}
 		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		
 		log.info("importMessages: void");
