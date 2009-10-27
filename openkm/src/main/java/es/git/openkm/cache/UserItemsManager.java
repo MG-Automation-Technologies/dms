@@ -2,14 +2,23 @@ package es.git.openkm.cache;
 
 import java.util.HashMap;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.Workspace;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.bean.Document;
 import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.core.RepositoryException;
 import es.git.openkm.util.Serializer;
 
 public class UserItemsManager {
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
 	private static final String FILEALIZATION = "UserItemsManager";
 	private static HashMap<String, UserItems> userItemsMgr;
@@ -86,6 +95,36 @@ public class UserItemsManager {
 		UserItems userItems = get(uid);
 		userItems.setSize(userItems.getSize() - size);
 		userItemsMgr.put(uid, userItems);
+	}
+	
+	/**
+	 * TODO: Not fully implemented
+	 */
+	public static synchronized void refreshUserItems(Session session) throws RepositoryException {
+		log.info("refreshUserItems("+session+")");
+		
+		try {
+			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
+			Workspace workspace = session.getWorkspace();
+			QueryManager queryManager = workspace.getQueryManager();
+			Query query = queryManager.createQuery(statement, "xpath");
+			QueryResult result = query.execute();
+			long size = 0;
+			
+			for (NodeIterator nit = result.getNodes(); nit.hasNext(); ) {
+				Node node = nit.nextNode();
+				Node contentNode = node.getNode(Document.CONTENT);
+				size += contentNode.getProperty(Document.SIZE).getLong();
+			}
+			
+			UserItems userItems = new UserItems();
+			userItemsMgr.put(session.getUserID(), userItems);
+ 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+ 		
+ 		log.info("refreshUserItems: void");
 	}
 
 	/**
