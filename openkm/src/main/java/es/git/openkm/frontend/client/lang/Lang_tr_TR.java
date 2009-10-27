@@ -456,7 +456,7 @@ public class Lang_tr_TR {
 	    lang.put("status.keep.alive.error", "Sunucu Baðlantý Kesintisi (Lütfen Bekleyin !)");
 	    lang.put("status.debug.enabled", "Hata Belirlendi");
 	    lang.put("status.debug.disabled", "Hata Belirlenemedi");
-	    lang.put("status.network.error.detected", "Detected network error");
+	    lang.put("status.network.error.detected", "Network error detected");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Pazar");

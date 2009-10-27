@@ -456,7 +456,7 @@ public class Lang_sv_SE {
 	    lang.put("status.keep.alive.error", "Har upptäckt en förlorad kontakt med servern (keep alive)");
 	    lang.put("status.debug.enabled", "Avbuggning aktiverad");
 	    lang.put("status.debug.disabled", "Avbuggning avaktiverad");
-	    lang.put("status.network.error.detected", "Detected network error");
+	    lang.put("status.network.error.detected", "Network error detected");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Söndag");

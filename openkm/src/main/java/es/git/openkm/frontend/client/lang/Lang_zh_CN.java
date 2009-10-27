@@ -454,7 +454,7 @@ public class Lang_zh_CN {
 	    lang.put("status.keep.alive.error", "已检测到和服务器断开连接(保持活动)");
 	    lang.put("status.debug.enabled", "允许调试");
 	    lang.put("status.debug.disabled", "不允许调试");
-	    lang.put("status.network.error.detected", "Detected network error");
+	    lang.put("status.network.error.detected", "Network error detected");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "周日");

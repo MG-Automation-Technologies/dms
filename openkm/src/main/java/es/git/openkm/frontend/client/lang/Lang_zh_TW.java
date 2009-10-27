@@ -454,7 +454,7 @@ public class Lang_zh_TW {
 	    lang.put("status.keep.alive.error", "偵測到與主機連線中斷");
 	    lang.put("status.debug.enabled", "啟動除錯");
 	    lang.put("status.debug.disabled", "取消除錯");
-	    lang.put("status.network.error.detected", "Detected network error");
+	    lang.put("status.network.error.detected", "Network error detected");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "星期日");
