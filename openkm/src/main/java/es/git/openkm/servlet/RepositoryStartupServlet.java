@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.cache.UserItemsManager;
+import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.DataStoreGarbageCollector;
@@ -41,6 +42,7 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.RepositoryInfo;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.core.UpdateInfo;
+import es.git.openkm.core.UserMailImporter;
 import es.git.openkm.core.Watchdog;
 import es.git.openkm.dao.AuthDAO;
 import es.git.openkm.dao.WorkflowDAO;
@@ -62,6 +64,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private Watchdog wd;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
+	private UserMailImporter umi;
 	private DataStoreGarbageCollector dsgc;
 	private boolean hasConfiguredDataStore;
 
@@ -97,6 +100,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Deserialize
         UserItemsManager.deserialize();
+        UserKeywordsManager.deserialize();
         
         log.info("*** User database initialized ***");
         AuthDAO auth = AuthDAO.getInstance();
@@ -136,6 +140,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         ri = new RepositoryInfo();
         timer.schedule(ri, 60*1000, 24*60*60*1000); // First in 1 min, next each 24 hours
         
+        log.info("*** Activating user mail importer ***");
+        umi = new UserMailImporter();
+        timer.schedule(umi, 5*60*1000, 60*60*1000); // First in 5 mins, next each 1 hours
+        
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
         	dsgc = new DataStoreGarbageCollector();
@@ -160,6 +168,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         	else log.info("*** Shutting down datastore garbage collection... ***");
         	dsgc.cancel();
         }
+        
+        if (log == null) log("*** Shutting down user mail importer ***");
+        else log.info("*** Shutting down user mail importer ***");
+        umi.cancel();
         
         if (log == null) log("*** Shutting down repository info... ***");
         else log.info("*** Shutting down repository info... ***");
@@ -199,6 +211,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Serialize
         UserItemsManager.serialize();
+        UserKeywordsManager.serialize();
         
         // Preserve system user config
         DirectRepositoryModule.shutdown();
