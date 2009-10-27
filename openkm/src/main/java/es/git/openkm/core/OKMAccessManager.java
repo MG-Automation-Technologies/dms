@@ -177,7 +177,7 @@ public class OKMAccessManager implements AccessManager {
 			} else {
 				Node node = null;
 				
-				// Workaround because of transiente node visibility
+				// Workaround because of transient node visibility
 				try {
 					node = ((SessionImpl) systemSession).getNodeById(nodeId);
 				} catch (ItemNotFoundException e1) {
@@ -241,6 +241,7 @@ public class OKMAccessManager implements AccessManager {
 						} catch (PathNotFoundException e) {
 							if (DEBUG) log.debug(subject.getPrincipals()+" PathNotFoundException: "+e.getMessage()+
 									" in "+node.getPrimaryNodeType().getName());
+							access = true;
 						}
 					} else if (permissions == AccessManager.WRITE || permissions == AccessManager.REMOVE) {
 						// Comprueba los usuarios de escritura
@@ -249,6 +250,7 @@ public class OKMAccessManager implements AccessManager {
 						} catch (PathNotFoundException e) {
 							if (DEBUG) log.debug(subject.getPrincipals()+" PropertyNotFoundException: "+e.getMessage()+" in "+
 								node.getPrimaryNodeType().getName());
+							access = true;
 						}
 					}
 				}
