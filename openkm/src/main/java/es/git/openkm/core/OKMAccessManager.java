@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.Document;
+import es.git.openkm.bean.Note;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.module.direct.DirectRepositoryModule;
 
@@ -193,6 +194,14 @@ public class OKMAccessManager implements AccessManager {
 						if (DEBUG) log.debug(subject.getPrincipals()+" Node is CONTENT_TYPE");
 						node = node.getParent();
 						if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+					} else if (node.isNodeType(Note.LIST_TYPE)) {
+						if (DEBUG) log.debug(subject.getPrincipals()+" Node is NOTE_LIST_TYPE");
+						node = node.getParent();
+						if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+					} else if (node.isNodeType(Note.TYPE)) {
+						if (DEBUG) log.debug(subject.getPrincipals()+" Node is NOTE_TYPE");
+						node = node.getParent().getParent();
+						if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
 					} else if (node.isNodeType("nt:frozenNode")) {
 						if (DEBUG) log.debug(subject.getPrincipals()+" Node is FROZEN_NODE");
 						String realNodeId = node.getProperty("jcr:frozenUuid").getString();
@@ -232,7 +241,6 @@ public class OKMAccessManager implements AccessManager {
 						} catch (PathNotFoundException e) {
 							if (DEBUG) log.debug(subject.getPrincipals()+" PathNotFoundException: "+e.getMessage()+
 									" in "+node.getPrimaryNodeType().getName());
-							access = true;
 						}
 					} else if (permissions == AccessManager.WRITE || permissions == AccessManager.REMOVE) {
 						// Comprueba los usuarios de escritura
@@ -241,7 +249,6 @@ public class OKMAccessManager implements AccessManager {
 						} catch (PathNotFoundException e) {
 							if (DEBUG) log.debug(subject.getPrincipals()+" PropertyNotFoundException: "+e.getMessage()+" in "+
 								node.getPrimaryNodeType().getName());
-							access = true;
 						}
 					}
 				}
