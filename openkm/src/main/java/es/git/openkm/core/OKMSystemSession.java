@@ -23,16 +23,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.security.auth.Subject;
-
-import javax.jcr.RepositoryException;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.NoSuchWorkspaceException;
+import javax.jcr.RepositoryException;
+import javax.security.auth.Subject;
+
 import org.apache.jackrabbit.core.HierarchyManager;
 import org.apache.jackrabbit.core.ItemId;
 import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.XASessionImpl;
 import org.apache.jackrabbit.core.config.WorkspaceConfig;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A <code>SystemSession</code> ...
  */
-public class OKMSystemSession extends SessionImpl {
+public class OKMSystemSession extends XASessionImpl {
 
     private static Logger log = LoggerFactory.getLogger(OKMSystemSession.class);
     private static final boolean DEBUG = false;
