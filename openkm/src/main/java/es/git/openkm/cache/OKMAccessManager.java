@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.Document;
+import es.git.openkm.bean.Note;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.cache.NodePermissions;
 import es.git.openkm.core.Config;
@@ -203,6 +204,13 @@ public class OKMAccessManager implements AccessManager {
 							if (DEBUG) log.debug(subject.getPrincipals() + " Node is CONTENT_TYPE");
 							node = node.getParent();
 							if (DEBUG) log.debug(subject.getPrincipals() + " Real -> " + node.getPath());
+						} else if (node.isNodeType(Note.LIST_TYPE)) {
+							if (DEBUG) log.debug(subject.getPrincipals()+" Node is NOTE_LIST_TYPE");
+							node = node.getParent();
+							if (DEBUG) log.debug(subject.getPrincipals()+" Real -> "+node.getPath());
+						} else if (node.isNodeType(Note.TYPE)) {
+							if (DEBUG) log.debug(subject.getPrincipals()+" Node is NOTE_TYPE");
+							node = node.getParent().getParent();
 						} else if (node.isNodeType("nt:frozenNode")) {
 							if (DEBUG) log.debug(subject.getPrincipals() + " Node is FROZEN_NODE");
 							String realNodeId = node.getProperty("jcr:frozenUuid").getString();
