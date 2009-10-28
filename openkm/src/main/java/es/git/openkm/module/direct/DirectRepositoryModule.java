@@ -68,6 +68,7 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.RepositoryModule;
 import es.git.openkm.util.JCRUtils;
+import es.git.openkm.util.Mail;
 import es.git.openkm.util.UUIDGenerator;
 import es.git.openkm.util.UserActivity;
 
@@ -488,7 +489,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
-			String mailPath = "/"+Repository.HOME+"/"+session.getUserID()+"/"+Repository.MAIL;
+			String mailPath = Mail.getUserMailPath(session.getUserID());
 			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
 			// Activity log

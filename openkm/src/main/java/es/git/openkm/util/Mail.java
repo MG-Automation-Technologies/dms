@@ -175,7 +175,7 @@ public class Mail {
 			OKMRepository okmRepository = OKMRepository.getInstance();
 			OKMFolder okmFolder = OKMFolder.getInstance();
 			OKMMail okmMail = OKMMail.getInstance();
-			String mailPath = "/"+Repository.HOME+"/"+uid+"/"+Repository.MAIL;
+			String mailPath = getUserMailPath(uid);
 			
 			if (okmRepository.hasNode(token, mailPath)) {
 				// Open connection
@@ -390,6 +390,13 @@ public class Mail {
 		}
 		
 		return (String[]) list.toArray(new String[0]);
+	}
+	
+	/**
+	 * 
+	 */
+	public static String getUserMailPath(String uid) {
+		return "/"+Repository.HOME+"/"+uid+"/"+Repository.MAIL;
 	}
 	
 	/**
