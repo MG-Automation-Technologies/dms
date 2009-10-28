@@ -1,4 +1,5 @@
 <%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.util.WebUtil"%>
 <%@ page import="es.git.openkm.dao.AuthDAO"%>
 <%@ page import="es.git.openkm.dao.bean.TwitterAccount"%>
 <%@ page import="java.sql.SQLException" %>
@@ -18,18 +19,18 @@
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
-		String user = request.getParameter("user");
-		String tuser = request.getParameter("tuser");
-		String action = request.getParameter("action");
-		if (user != null) user = new String(user.getBytes("ISO-8859-1"), "UTF-8");
-		if (tuser != null) tuser = new String(tuser.getBytes("ISO-8859-1"), "UTF-8");
+		String action = WebUtil.getString(request, "action");
+		int id = WebUtil.getInt(request, "id");
+		String user = WebUtil.getString(request, "user");
 		AuthDAO dao = AuthDAO.getInstance();
 		
 		try {
 			TwitterAccount ta = new TwitterAccount();
 			
 			if (action.equals("u") || action.equals("d")) {
-				ta = dao.findTwitterAccountByPk(user, tuser);
+				ta = dao.findTwitterAccountByPk(id);
+			} else {
+				ta.setUser(user);
 			}
 			
 			if (action.equals("c")) {
@@ -42,9 +43,10 @@
 			
 			out.println("<form action=\"twitter_action.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
+			out.println("<input type=\"hidden\" name=\"ta_id\" value=\""+id+"\">");
 			out.println("<table class=\"form\" width=\"330px\" align=\"center\">");
-			out.println("<tr><td>OKM user</td><td><input class=\":required\" name=\"ta_user\" value=\""+user+"\" readonly></td></tr>");
-			out.println("<tr><td>Twitter user</td><td><input class=\":required\" name=\"ta_tuser\" value=\""+ta.getTwitterUser()+"\""+(action.equals("c")?"":"readonly")+"></td></tr>");
+			out.println("<tr><td>OKM user</td><td><input class=\":required\" name=\"ta_user\" value=\""+ta.getUser()+"\" readonly></td></tr>");
+			out.println("<tr><td>Twitter user</td><td><input class=\":required\" name=\"ta_tuser\" value=\""+ta.getTwitterUser()+"\"></td></tr>");
 			out.println("<tr><td>Active</td><td><input name=\"ta_active\" type=\"checkbox\" "+(ta.isActive()?"checked":"")+"></td></tr>");
 			out.println("<tr><td colspan=\"2\" align=\"right\">");
 			out.println("<input type=\"button\" onclick=\"javascript:window.history.back()\" value=\"Cancel\">");

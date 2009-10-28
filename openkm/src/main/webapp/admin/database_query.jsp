@@ -58,12 +58,7 @@
 				stmt = con.prepareStatement(statement);
 				out.println("<br/>");
 				
-				if (statement.toUpperCase().indexOf("INSERT") > -1 ||
-						statement.toUpperCase().indexOf("UPDATE") > -1 ||
-						statement.toUpperCase().indexOf("DELETE") > -1) {
-					int ret = stmt.executeUpdate();
-					out.println("Row Count: "+ret);
-				} else {
+				if (statement.toUpperCase().startsWith("SELECT")) {
 					rs = stmt.executeQuery();
 					ResultSetMetaData meta = rs.getMetaData();
 					
@@ -85,6 +80,9 @@
 					}
 				
 					out.println("</table>");
+				} else {
+					int ret = stmt.executeUpdate();
+					out.println("<center>Row Count: "+ret+"<center>");
 				}
 			} catch (SQLException e) {
 				out.println("<div class=\"error\">"+e.getMessage()+"<div>");

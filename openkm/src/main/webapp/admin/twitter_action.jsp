@@ -1,6 +1,7 @@
 <%@ page import="es.git.openkm.core.SessionManager"%>
-<%@ page import="es.git.openkm.util.UserActivity"%>
 <%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.util.UserActivity"%>
+<%@ page import="es.git.openkm.util.WebUtil"%>
 <%@ page import="es.git.openkm.dao.AuthDAO"%>
 <%@ page import="es.git.openkm.dao.bean.TwitterAccount"%>
 <%@ page import="java.sql.SQLException" %>
@@ -21,13 +22,15 @@
 		String token = (String) session.getAttribute("token");
 		Session jcrSession = SessionManager.getInstance().get(token);
 		request.setCharacterEncoding("UTF-8");
-		String action = request.getParameter("action");
-		String ta_user = request.getParameter("ta_user") != null?request.getParameter("ta_user"):"";
-		String ta_tuser = request.getParameter("ta_tuser") != null?request.getParameter("ta_tuser"):"";
-		boolean ta_active = request.getParameter("ta_active")!=null && request.getParameter("ta_active").equals("on");
+		String action = WebUtil.getString(request, "action");
+		int ta_id = WebUtil.getInt(request, "ta_id");
+		String ta_user = WebUtil.getString(request, "ta_user");
+		String ta_tuser = WebUtil.getString(request, "ta_tuser");
+		boolean ta_active = WebUtil.getBoolean(request, "ta_active");
 
 		AuthDAO dao = AuthDAO.getInstance();
 		TwitterAccount ta = new TwitterAccount();
+		ta.setId(ta_id);
 		ta.setUser(new String(ta_user.getBytes("ISO-8859-1"), "UTF-8"));
 		ta.setTwitterUser(new String(ta_tuser.getBytes("ISO-8859-1"), "UTF-8"));
 		ta.setActive(ta_active);
@@ -38,7 +41,7 @@
 			} else if (action.equals("u")) {
 				dao.updateTwitterAccount(ta);
 			} else if (action.equals("d")) {
-				dao.deleteTwitterAccount(ta);
+				dao.deleteTwitterAccount(ta_id);
 			}
 			
 			// Activity log
