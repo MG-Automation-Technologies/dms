@@ -19,6 +19,10 @@
 
 package es.git.openkm.frontend.client.panel.bottom;
 
+import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -43,6 +47,8 @@ public class BottomPanel extends ExtendedSizeComposite {
 	private SimplePanel spRight;
 	public UserInfo userInfo;
 	private String key = "";
+	private Timer removeStatus;
+	private String aditionalErrorMsg = "";
 	
 	/**
 	 * BottomPanel
@@ -98,12 +104,30 @@ public class BottomPanel extends ExtendedSizeComposite {
 	 */
 	public void setStatus(String key, boolean error) {
 		this.key = key;
+		aditionalErrorMsg = "";
+		
+		// Always we ensure remove status here might be disabled to prevent removing new status data
+		if (removeStatus!=null) {
+			removeStatus.cancel();
+			removeStatus = null;
+		}
+		
 		if (error) {
 			statusMsg.addStyleName("okm-Input-Error");
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.hour.pattern"));
+			aditionalErrorMsg = " - " + dtf.format(new Date());
+			// On error case we reset status at 2 minutes
+			removeStatus = new Timer() {
+				public void run() {
+					resetStatus();
+				}
+			};
+			removeStatus.schedule(120*1000); // 2 min
+			
 		} else {
 			statusMsg.removeStyleName("okm-Input-Error");
 		}
-		statusMsg.setText(" "+Main.i18n(key));
+		statusMsg.setText(" "+Main.i18n(key) + aditionalErrorMsg );
 	}
 	
 	/**
@@ -115,12 +139,29 @@ public class BottomPanel extends ExtendedSizeComposite {
 	 */
 	public void setStatus(String key, boolean error, int errorCode) {
 		this.key = key;
+		aditionalErrorMsg = "";
+		
+		// Always we ensure remove status here might be disabled to prevent removing new status data
+		if (removeStatus!=null) {
+			removeStatus.cancel();
+			removeStatus = null;
+		}
+		
 		if (error) {
 			statusMsg.addStyleName("okm-Input-Error");
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.hour.pattern"));
+			aditionalErrorMsg = " (" + errorCode +") - " + dtf.format(new Date());
+			// On error case we reset status at 2 minutes
+			removeStatus = new Timer() {
+				public void run() {
+					resetStatus();
+				}
+			};
+			removeStatus.schedule(120*1000); // 2 min
 		} else {
 			statusMsg.removeStyleName("okm-Input-Error");
 		}
-		statusMsg.setText(" "+Main.i18n(key) + " (" + errorCode +")");
+		statusMsg.setText(" "+Main.i18n(key) + aditionalErrorMsg);
 	}
 	
 	/**
@@ -135,7 +176,7 @@ public class BottomPanel extends ExtendedSizeComposite {
 	 * Lang refresh
 	 */
 	public void langRefresh() {
-		statusMsg.setText(" "+Main.i18n(key));
+		statusMsg.setText(" "+Main.i18n(key) + aditionalErrorMsg);
 		userInfo.langRefresh();
 	}
 }

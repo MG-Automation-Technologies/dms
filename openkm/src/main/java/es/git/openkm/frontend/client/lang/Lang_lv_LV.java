@@ -36,6 +36,7 @@ public class Lang_lv_LV {
 	    
 	    // General configuration
 	    lang.put("general.date.pattern", "dd.MM.yyyy hh:mm:ss");
+	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup  taxonomy - sistemātika
 	    lang.put("startup.openkm", "Ielādē OpenKM");

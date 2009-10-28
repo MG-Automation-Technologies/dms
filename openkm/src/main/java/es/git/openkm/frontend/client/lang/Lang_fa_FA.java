@@ -36,6 +36,7 @@ public class Lang_fa_FA {
 	    
 	    // General configuration
 	    lang.put("general.date.pattern", "yyyy/MM/dd hh:mm:ss");
+	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "Loading OpenKM");

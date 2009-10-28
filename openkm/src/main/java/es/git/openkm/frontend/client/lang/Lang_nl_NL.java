@@ -37,6 +37,7 @@ public class Lang_nl_NL {
 	    
 	    // General configuration
 	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
+	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "OpenKM laden");
