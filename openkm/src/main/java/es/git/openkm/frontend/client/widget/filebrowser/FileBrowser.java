@@ -77,6 +77,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public static final int ACTION_SECURITY_REFRESH_FOLDER	 = 0;
 	public static final int ACTION_SECURITY_REFRESH_DOCUMENT = 1;
 	public static final int ACTION_RENAME					 = 2;
+	public static final int ACTION_SECURITY_REFRESH_MAIL 	 = 3;
 	
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
@@ -740,6 +741,29 @@ public class FileBrowser extends Composite implements OriginPanel {
 	};
 	
 	/**
+	 * Gets actual mail row selected
+	 */
+	final AsyncCallback<GWTMail> callbackGetMailProperties = new AsyncCallback<GWTMail>() {
+		public void onSuccess(GWTMail result) {
+			if (fileBrowserAction == ACTION_SECURITY_REFRESH_MAIL) {
+				GWTMail gWTMail = result;
+				table.setMail(gWTMail);
+				Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(gWTMail);
+				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(gWTMail,
+																				 Main.get().activeFolderTree.getFolder());
+				Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailProperties();
+				fileBrowserAction = ACTION_NONE;
+			}
+		}
+
+		public void onFailure(Throwable caught) {
+			fileBrowserAction = ACTION_NONE; // Ensures on error folder action be restores
+			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailProperties();
+			Main.get().showError("Get", caught);
+		}
+	};
+	
+	/**
 	 * Adds a subscription
 	 */
 	final AsyncCallback<Object> callbackAddSubscription = new AsyncCallback<Object>() {
@@ -830,7 +854,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);
 		Main.get().mainPanel.browser.fileBrowser.status.setFlagGetFolder();
-		folderService.getProperties( ((GWTFolder)table.getFolder()).getPath() ,callbackGetFolder);
+		folderService.getProperties(((GWTFolder)table.getFolder()).getPath() ,callbackGetFolder);
 	}
 	
 	/**
@@ -842,6 +866,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 		Main.get().mainPanel.browser.fileBrowser.status.setFlagGetDocument();
 		documentService.get( ((GWTDocument) table.getDocument()).getPath() ,callbackGetDocument);
 	}
+	
+	/**
+	 * Gets the actual folder (actualItem) and refresh all information on it
+	 */
+	private void refreshMailValues() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
+		endPoint.setServiceEntryPoint(Config.OKMMailService);
+		Main.get().mainPanel.browser.fileBrowser.status.setFlagMailProperties();
+		mailService.getProperties(((GWTMail) table.getMail()).getPath() ,callbackGetMailProperties);
+	}
+	
 	
 	/**
 	 * Show the browser menu
@@ -1414,6 +1449,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 		} else if(isDocumentSelected()) {
 			fileBrowserAction = ACTION_SECURITY_REFRESH_DOCUMENT;
 			refreshDocumentValues();
+		} else if (isMailSelected()) {
+			fileBrowserAction = ACTION_SECURITY_REFRESH_MAIL;
+			refreshMailValues();
 		}
 	}
 	

@@ -30,9 +30,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class TabMultiple extends Composite {
 	
-	private int TAB_FOLDER 		= 0;
-	private int TAB_DOCUMENT 	= 1;
-	private int TAB_MAIL 		= 2;
+	private final int TAB_FOLDER 	= 0;
+	private final int TAB_DOCUMENT 	= 1;
+	private final int TAB_MAIL 		= 2;
 	private int actualTab = -1;
 	
 	private VerticalPanel panel;
@@ -106,6 +106,7 @@ public class TabMultiple extends Composite {
 		if (actualTab != TAB_MAIL) {
 			removeAll();
 			panel.add(tabMail);
+			tabMail.resizingIncubatorWidgets();
 			actualTab = TAB_MAIL;
 		}
 	}
@@ -132,10 +133,16 @@ public class TabMultiple extends Composite {
 	 * Refresh security values
 	 */
 	public void securityRefresh() {
-		if (actualTab == TAB_FOLDER) {
-			tabFolder.securityRefresh();
-		} else {
-			tabDocument.securityRefresh();
+		switch (actualTab) {
+			case TAB_FOLDER:
+				tabFolder.securityRefresh();
+				break;
+			case TAB_DOCUMENT:
+				tabDocument.securityRefresh();
+				break;
+			case TAB_MAIL:
+				tabMail.securityRefresh();
+				break;
 		}
 	}
 	

@@ -57,6 +57,7 @@ public class Status extends PopupPanel {
 	private boolean flag_RemoveSubscription = false;
 	private boolean flag_Mail_delete		= false;
 	private boolean flag_Mail_purge			= false;
+	private boolean flag_Mail_getProperties	= false;
 	
 	/**
 	 * Status
@@ -95,7 +96,7 @@ public class Status extends PopupPanel {
 				|| flag_Document_rename || flag_Folder_rename || flag_Document_purge 
 				|| flag_Folder_purge || flag_GetFolder || flag_GetDocument
 				|| flag_AddSubscription || flag_RemoveSubscription || flag_Mail_getChilds 
-				|| flag_Mail_delete || flag_Mail_purge) {
+				|| flag_Mail_delete || flag_Mail_purge || flag_Mail_getProperties) {
 			int left = ((Main.get().mainPanel.center.getWidth()-200)/2) + Main.get().mainPanel.left.getWidth() + 10;
 			int top = ((Main.get().mainPanel.browser.topHeight-40)/2) + Main.get().mainPanel.center.getY() ;
 			setPopupPosition(left,top);
@@ -410,6 +411,23 @@ public class Status extends PopupPanel {
 	 */
 	public void unsetFlagGetDocument() {
 		flag_GetDocument = false;
+		refresh();
+	}
+	
+	/**
+	 * Set mail properties flag
+	 */
+	public void setFlagMailProperties() {
+		msg.setHTML(Main.i18n("filebrowser.status.refresh.mail.properties"));
+		flag_Mail_getProperties = true;
+		refresh();
+	}
+	
+	/**
+	 * Unset mail properties flag
+	 */
+	public void unsetFlagMailProperties() {
+		flag_Mail_getProperties = false;
 		refresh();
 	}
 }

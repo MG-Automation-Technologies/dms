@@ -31,4 +31,5 @@ public interface OKMMailServiceAsync {
 	public void move(String docPath, String destPath, AsyncCallback<?> callback);
 	public void purge(String mailPath, AsyncCallback<?> callback);
 	public void copy(String mailPath, String fldPath, AsyncCallback<?> callback);
+	public void getProperties(String mailPath, AsyncCallback<?> callback);
 }

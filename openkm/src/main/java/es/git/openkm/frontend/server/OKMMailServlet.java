@@ -201,4 +201,30 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		
 		log.debug("copy: void");
 	}
+	
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMMailService#getProperties(java.lang.String)
+	 */
+	public GWTMail getProperties(String mailPath) throws OKMException {
+		log.debug("getProperties("+mailPath+ ")");
+		String token = getToken();
+		GWTMail mailClient = new GWTMail();
+		
+		try {
+			mailClient = Util.copy(OKMMail.getInstance().getProperties(token, mailPath));
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("copy: getProperties");
+		
+		return mailClient;
+	}
 }

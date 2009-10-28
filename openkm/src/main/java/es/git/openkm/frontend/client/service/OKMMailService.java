@@ -37,4 +37,5 @@ public interface OKMMailService extends RemoteService {
 	public void move(String docPath, String destPath) throws OKMException;
 	public void purge(String mailPath) throws OKMException;
 	public void copy(String mailPath, String fldPath) throws OKMException;
+	public GWTMail getProperties(String mailPath) throws OKMException;
 }

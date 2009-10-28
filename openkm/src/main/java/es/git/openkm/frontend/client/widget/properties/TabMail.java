@@ -19,6 +19,8 @@
 
 package es.git.openkm.frontend.client.widget.properties;
 
+import java.util.Iterator;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
@@ -29,6 +31,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTMail;
+import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -44,6 +47,7 @@ public class TabMail extends Composite implements TabListener {
 
 	public TabPanel tabPanel;
 	public Mail mail;
+	public SecurityScrollTable security;
 	private VerticalPanel panel;
 	private GWTMail gWTMail;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
@@ -56,9 +60,11 @@ public class TabMail extends Composite implements TabListener {
 	public TabMail() {
 		tabPanel = new TabPanel();
 		mail = new Mail();
+		security = new SecurityScrollTable();
 		panel = new VerticalPanel();
 
 		tabPanel.add(mail, Main.i18n("tab.document.properties"));
+		tabPanel.add(security, Main.i18n("tab.document.security"));
 		
 		tabPanel.selectTab(0);
 		tabPanel.addTabListener(this);
@@ -82,6 +88,8 @@ public class TabMail extends Composite implements TabListener {
 	public void setSize(int width, int height) {
 		tabPanel.setPixelSize(width, height);
 		mail.setPixelSize(width,height-20); // Substract tab height
+		security.setPixelSize(width-2,height-22); // Substract tab height
+		security.fillWidth();
 	}
 	
 	/**
@@ -92,6 +100,15 @@ public class TabMail extends Composite implements TabListener {
 	public void setProperties(GWTMail gWTMail) {	
 		this.gWTMail = gWTMail;
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
+		
+		security.setPath(gWTMail.getPath());
+		security.GetGrands();
+		
+		if ((gWTMail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+			security.setChangePermision(true);
+		} else {
+			security.setChangePermision(false);
+		}
 		
 		mail.set(gWTMail);
 	}
@@ -115,10 +132,14 @@ public class TabMail extends Composite implements TabListener {
 		}
 		
 		tabPanel.add(mail, Main.i18n("tab.document.properties"));
+		tabPanel.add(security, Main.i18n("tab.document.security"));
 		
 		mail.langRefresh();
+		security.langRefresh();
 		
 		tabPanel.selectTab(selectedTab);
+		
+		resizingIncubatorWidgets();
 	}
 	
 	/**
@@ -128,6 +149,7 @@ public class TabMail extends Composite implements TabListener {
 	 */
 	public void setVisibleButtons(boolean visible){
 		this.visibleButton = visible;  // Save to be used by property group
+		security.setVisibleButtons(visible);
 	}
 	
 	/**
@@ -137,6 +159,15 @@ public class TabMail extends Composite implements TabListener {
 	 */
 	private boolean isSelectedTabGroupPropety(int tabIndex){
 		return (tabPanel.getWidget(tabIndex) instanceof PropertyGroup);
+	}
+	
+	/**
+	 * resizingIncubatorWidgets 
+	 * 
+	 * Needs resizing if not widgets disapears
+	 */
+	public void resizingIncubatorWidgets() {
+		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 	}
 	
 	/* (non-Javadoc)

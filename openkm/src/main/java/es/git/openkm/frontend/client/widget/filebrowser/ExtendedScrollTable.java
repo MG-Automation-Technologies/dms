@@ -715,6 +715,32 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * Sets the mail to the row
+	 * 
+	 * @param rows The table row
+	 * @param doc The document
+	 */
+	public void setMail(GWTMail mail) {
+		if (isMailSelected()) {
+			int row = getSelectedRow();
+			data.put(Integer.parseInt(dataTable.getText(getSelectedRow(),7)),mail);
+			
+			if (mail.getAttachments().size()>0) {
+				dataTable.setHTML(row, 1, Util.imageItemHTML("img/email_attach.gif"));
+			} else {
+				dataTable.setHTML(row, 1, Util.imageItemHTML("img/email.gif"));
+			}
+			
+			// Mail is never checkout or subscribed ( because can not be changed )
+			dataTable.setHTML(row, 2, mail.getSubject());
+			dataTable.setHTML(row, 3, Util.formatSize(mail.getSize()));
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+			dataTable.setHTML(row, 4, dtf.format(mail.getReceivedDate()));
+			dataTable.setHTML(row, 5, mail.getFrom());
+		}
+	}
+	
+	/**
 	 * Sets the folder to the selected row
 	 * 
 	 * @param folder The folder object
