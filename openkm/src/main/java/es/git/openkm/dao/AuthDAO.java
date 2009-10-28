@@ -189,9 +189,13 @@ public class AuthDAO extends AbstractDAO {
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtRole = null;
+		PreparedStatement stmtMail = null;
+		PreparedStatement stmtTwitter = null;
 		String sqlUser = "DELETE FROM users WHERE usr_id=?";
 		String sqlRole = "DELETE FROM user_role WHERE ur_user=?";
-
+		String sqlMail = "DELETE FROM mail_accounts WHERE ma_user=?";
+		String sqlTwitter = "DELETE FROM twitter_accounts WHERE ta_user=?";
+		
 		try {
 			con = getConnection();
 			
@@ -203,6 +207,14 @@ public class AuthDAO extends AbstractDAO {
 				stmtRole = con.prepareStatement(sqlRole);
 				stmtRole.setString(1, vo.getId());
 				stmtRole.execute();
+
+				stmtMail = con.prepareStatement(sqlMail);
+				stmtMail.setString(1, vo.getId());
+				stmtMail.execute();
+
+				stmtTwitter = con.prepareStatement(sqlTwitter);
+				stmtTwitter.setString(1, vo.getId());
+				stmtTwitter.execute();
 			} else {
 				log.error("Can't connect to auth database");
 			}
@@ -648,7 +660,7 @@ public class AuthDAO extends AbstractDAO {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_user=?"+(filterByActive?" AND ma_active='true'":"");
+		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_user=? "+(filterByActive?"AND ma_active='true'":"")+" ORDER BY ma_id";
 		ArrayList<MailAccount> al = new ArrayList<MailAccount>();
 				
 		try {
@@ -661,12 +673,13 @@ public class AuthDAO extends AbstractDAO {
 
 				while (rs.next()) {
 					MailAccount ma = new MailAccount();
-					ma.setUser(rs.getString(1));
-					ma.setMailHost(rs.getString(2));
-					ma.setMailFolder(rs.getString(3));
-					ma.setMailUser(rs.getString(4));
-					ma.setMailPassword(rs.getString(5));
-					ma.setActive(rs.getBoolean(6));
+					ma.setId(rs.getInt(1));
+					ma.setUser(rs.getString(2));
+					ma.setMailHost(rs.getString(3));
+					ma.setMailFolder(rs.getString(4));
+					ma.setMailUser(rs.getString(5));
+					ma.setMailPassword(rs.getString(6));
+					ma.setActive(rs.getBoolean(7));
 					al.add(ma);
 				}
 			} else {
@@ -691,7 +704,7 @@ public class AuthDAO extends AbstractDAO {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts";
+		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts ORDER BY ma_id";
 		ArrayList<MailAccount> al = new ArrayList<MailAccount>();
 				
 		try {
@@ -703,12 +716,13 @@ public class AuthDAO extends AbstractDAO {
 
 				while (rs.next()) {
 					MailAccount ma = new MailAccount();
-					ma.setUser(rs.getString(1));
-					ma.setMailHost(rs.getString(2));
-					ma.setMailFolder(rs.getString(3));
-					ma.setMailUser(rs.getString(4));
-					ma.setMailPassword(rs.getString(5));
-					ma.setActive(rs.getBoolean(6));
+					ma.setId(rs.getInt(1));
+					ma.setUser(rs.getString(2));
+					ma.setMailHost(rs.getString(3));
+					ma.setMailFolder(rs.getString(4));
+					ma.setMailUser(rs.getString(5));
+					ma.setMailPassword(rs.getString(6));
+					ma.setActive(rs.getBoolean(7));
 					al.add(ma);
 				}
 			} else {
@@ -731,12 +745,12 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public MailAccount findMailAccountByPk(String user, String mailHost, String mailUser) throws SQLException {
-		log.debug("findMailAccountByPk("+user+", "+mailHost+", "+mailUser+")");
+	public MailAccount findMailAccountByPk(int id) throws SQLException {
+		log.debug("findMailAccountByPk("+id+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_id=?";
 		MailAccount ma = null;
 				
 		try {
@@ -744,19 +758,18 @@ public class AuthDAO extends AbstractDAO {
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, user);
-				stmt.setString(2, mailHost);
-				stmt.setString(3, mailUser);
+				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 
 				if (rs.next()) {
 					ma = new MailAccount();
-					ma.setUser(rs.getString(1));
-					ma.setMailHost(rs.getString(2));
-					ma.setMailFolder(rs.getString(3));
-					ma.setMailUser(rs.getString(4));
-					ma.setMailPassword(rs.getString(5));
-					ma.setActive(rs.getBoolean(6));
+					ma.setId(rs.getInt(1));
+					ma.setUser(rs.getString(2));
+					ma.setMailHost(rs.getString(3));
+					ma.setMailFolder(rs.getString(4));
+					ma.setMailUser(rs.getString(5));
+					ma.setMailPassword(rs.getString(6));
+					ma.setActive(rs.getBoolean(7));
 				}
 			} else {
 				log.error("Can't connect to auth database");
@@ -812,18 +825,19 @@ public class AuthDAO extends AbstractDAO {
 		log.debug("updateMailAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ma_mfolder=?, ma_active=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "UPDATE mail_accounts SET ma_user=?, ma_mhost=?, ma_muser=?, ma_mfolder=?, ma_active=? WHERE ma_id=?";
 		
 		try {
 			con = getConnection();
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getMailFolder());
-				stmt.setBoolean(2, vo.isActive());
-				stmt.setString(3, vo.getUser());
-				stmt.setString(4, vo.getMailHost());
-				stmt.setString(5, vo.getMailUser());
+				stmt.setString(1, vo.getUser());
+				stmt.setString(2, vo.getMailHost());
+				stmt.setString(3, vo.getMailUser());
+				stmt.setString(4, vo.getMailFolder());
+				stmt.setBoolean(5, vo.isActive());
+				stmt.setInt(6, vo.getId());
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
@@ -844,7 +858,7 @@ public class AuthDAO extends AbstractDAO {
 		log.debug("updateMailAccountPassword("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ma_mpass=? WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "UPDATE mail_accounts SET ma_pass=? WHERE ma_id=?";
 
 		try {
 			con = getConnection();
@@ -852,9 +866,7 @@ public class AuthDAO extends AbstractDAO {
 			if (con != null && vo.getMailPassword().length() > 0) {
 				stmt = con.prepareStatement(sql);
 				stmt.setString(1, vo.getMailPassword());
-				stmt.setString(2, vo.getUser());
-				stmt.setString(3, vo.getMailHost());
-				stmt.setString(4, vo.getMailUser());
+				stmt.setInt(2, vo.getId());
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
@@ -871,20 +883,18 @@ public class AuthDAO extends AbstractDAO {
 	 * @param vo
 	 * @throws SQLException
 	 */
-	public void deleteMailAccount(MailAccount vo) throws SQLException {
-		log.debug("deleteMailAccount("+vo+")");
+	public void deleteMailAccount(int id) throws SQLException {
+		log.debug("deleteMailAccount("+id+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "DELETE FROM mail_accounts WHERE ma_user=? AND ma_mhost=? AND ma_muser=?";
+		String sql = "DELETE FROM mail_accounts WHERE ma_id=?";
 
 		try {
 			con = getConnection();
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getUser());
-				stmt.setString(2, vo.getMailHost());
-				stmt.setString(3, vo.getMailUser());
+				stmt.setInt(1, id);
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
@@ -908,7 +918,7 @@ public class AuthDAO extends AbstractDAO {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_user=?"+(filterByActive?" AND ta_active='true'":"");
+		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_user=? "+(filterByActive?"AND ta_active='true'":"")+" ORDER BY ta_id";
 		ArrayList<TwitterAccount> al = new ArrayList<TwitterAccount>();
 				
 		try {
@@ -921,9 +931,10 @@ public class AuthDAO extends AbstractDAO {
 
 				while (rs.next()) {
 					TwitterAccount ta = new TwitterAccount();
-					ta.setUser(rs.getString(1));
-					ta.setTwitterUser(rs.getString(2));
-					ta.setActive(rs.getBoolean(3));
+					ta.setId(rs.getInt(1));
+					ta.setUser(rs.getString(2));
+					ta.setTwitterUser(rs.getString(3));
+					ta.setActive(rs.getBoolean(4));
 					al.add(ta);
 				}
 			} else {
@@ -948,7 +959,7 @@ public class AuthDAO extends AbstractDAO {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ta_user, ta_tuser, ta_active FROM twitter_accounts";
+		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts ORDER BY ta_id";
 		ArrayList<TwitterAccount> al = new ArrayList<TwitterAccount>();
 				
 		try {
@@ -960,9 +971,10 @@ public class AuthDAO extends AbstractDAO {
 
 				while (rs.next()) {
 					TwitterAccount ta = new TwitterAccount();
-					ta.setUser(rs.getString(1));
-					ta.setTwitterUser(rs.getString(2));
-					ta.setActive(rs.getBoolean(3));
+					ta.setId(rs.getInt(1));
+					ta.setUser(rs.getString(2));
+					ta.setTwitterUser(rs.getString(3));
+					ta.setActive(rs.getBoolean(4));
 					al.add(ta);
 				}
 			} else {
@@ -984,12 +996,12 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public TwitterAccount findTwitterAccountByPk(String user, String twitterUser) throws SQLException {
-		log.debug("findTwitterAccountByPk("+user+", "+twitterUser+")");
+	public TwitterAccount findTwitterAccountByPk(int id) throws SQLException {
+		log.debug("findTwitterAccountByPk("+id+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_user=? AND ta_tuser=?";
+		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_id=?";
 		TwitterAccount ta = null;
 				
 		try {
@@ -997,15 +1009,15 @@ public class AuthDAO extends AbstractDAO {
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, user);
-				stmt.setString(2, twitterUser);
+				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 
 				if (rs.next()) {
 					ta = new TwitterAccount();
-					ta.setUser(rs.getString(1));
-					ta.setTwitterUser(rs.getString(2));
-					ta.setActive(rs.getBoolean(3));
+					ta.setId(rs.getInt(1));
+					ta.setUser(rs.getString(2));
+					ta.setTwitterUser(rs.getString(3));
+					ta.setActive(rs.getBoolean(4));
 				}
 			} else {
 				log.error("Can't connect to auth database");
@@ -1058,16 +1070,17 @@ public class AuthDAO extends AbstractDAO {
 		log.debug("updateTwitterAccount("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE twitter_accounts SET ta_active=? WHERE ta_user=? AND ta_tuser=?";
+		String sql = "UPDATE twitter_accounts SET ta_user=?, ta_tuser=?, ta_active=? WHERE ta_id=?";
 
 		try {
 			con = getConnection();
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setBoolean(1, vo.isActive());
-				stmt.setString(2, vo.getUser());
-				stmt.setString(3, vo.getTwitterUser());
+				stmt.setString(1, vo.getUser());
+				stmt.setString(2, vo.getTwitterUser());
+				stmt.setBoolean(3, vo.isActive());
+				stmt.setInt(4, vo.getId());
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
@@ -1084,19 +1097,18 @@ public class AuthDAO extends AbstractDAO {
 	 * @param vo
 	 * @throws SQLException
 	 */
-	public void deleteTwitterAccount(TwitterAccount vo) throws SQLException {
-		log.debug("deleteTwitterAccount("+vo+")");
+	public void deleteTwitterAccount(int id) throws SQLException {
+		log.debug("deleteTwitterAccount("+id+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "DELETE FROM twitter_accounts WHERE ta_user=? AND ta_tuser=?";
+		String sql = "DELETE FROM twitter_accounts WHERE ta_id=?";
 
 		try {
 			con = getConnection();
 			
 			if (con != null) {
 				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getUser());
-				stmt.setString(2, vo.getTwitterUser());
+				stmt.setInt(1, id);
 				stmt.execute();
 			} else {
 				log.error("Can't connect to auth database");
