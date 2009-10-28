@@ -21,9 +21,18 @@ package es.git.openkm.dao.bean;
 
 
 public class TwitterAccount {
+	private int id = 0;
 	private String user = "";
 	private String twitterUser = "";
 	private boolean active = false;
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getUser() {
 		return user;
@@ -52,7 +61,8 @@ public class TwitterAccount {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("user="); sb.append(user);
+		sb.append("id="); sb.append(id);
+		sb.append(", user="); sb.append(user);
 		sb.append(", twitterUser="); sb.append(twitterUser);
 		sb.append(", active="); sb.append(active);
 		sb.append("]");

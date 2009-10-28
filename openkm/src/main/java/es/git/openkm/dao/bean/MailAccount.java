@@ -21,12 +21,21 @@ package es.git.openkm.dao.bean;
 
 
 public class MailAccount {
+	private int id = 0;
 	private String user = "";
 	private String mailHost = "";
 	private String mailFolder = "";
 	private String mailUser = "";
 	private String mailPassword = "";
 	private boolean active = false;
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getUser() {
 		return user;
@@ -79,7 +88,8 @@ public class MailAccount {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("user="); sb.append(user);
+		sb.append("id="); sb.append(id);
+		sb.append(", user="); sb.append(user);
 		sb.append(", mailHost="); sb.append(mailHost);
 		sb.append(", mailFolder="); sb.append(mailFolder);
 		sb.append(", mailUser="); sb.append(mailUser);
