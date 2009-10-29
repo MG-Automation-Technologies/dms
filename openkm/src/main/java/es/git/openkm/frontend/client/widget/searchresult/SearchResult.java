@@ -146,8 +146,8 @@ public class SearchResult extends Composite {
 	    headerTable.setHTML(0, 6, Main.i18n("search.result.version"));
 		
 		// Format    
-	    table.setColumnWidth(0,90);
-	    table.setColumnWidth(1,47);
+	    table.setColumnWidth(0,70);
+	    table.setColumnWidth(1,25);
 	    table.setColumnWidth(2,150);
 	    table.setColumnWidth(3,100);
 	    table.setColumnWidth(4,150);
