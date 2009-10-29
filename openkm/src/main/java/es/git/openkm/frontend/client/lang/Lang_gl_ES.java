@@ -556,6 +556,7 @@ public class Lang_gl_ES {
 	    lang.put("user.preferences.password.error", "Error las claves son distintas");
 	    lang.put("user.preferences.user.data", "Cuenta de usuario");
 	    lang.put("user.preferences.mail.data", "Cuenta de correo");
+	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Non ten permisos para acceder ao documento");

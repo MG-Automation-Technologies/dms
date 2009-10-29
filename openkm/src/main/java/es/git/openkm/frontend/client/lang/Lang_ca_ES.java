@@ -557,6 +557,7 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.password.error", "Error la clau no coincideix");
 	    lang.put("user.preferences.user.data", "Compte d'usuari");
 	    lang.put("user.preferences.mail.data", "Compte de mail");
+	    lang.put("user.preferences.imap.error", "Tots els camps son obligatoris per configurar el correu");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");

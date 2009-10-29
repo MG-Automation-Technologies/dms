@@ -556,6 +556,7 @@ public class Lang_fr_FR {
 	    lang.put("user.preferences.password.error", "Erreur: mots de passe différents");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
+	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce document");

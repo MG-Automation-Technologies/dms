@@ -558,6 +558,7 @@ public class Lang_pl_PL {
 	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
+	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Brak dostępu do dokumentu");
