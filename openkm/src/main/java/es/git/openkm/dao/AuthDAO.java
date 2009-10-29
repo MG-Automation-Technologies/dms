@@ -860,7 +860,7 @@ public class AuthDAO extends AbstractDAO {
 		log.debug("updateMailAccountPassword("+vo+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE mail_accounts SET ma_pass=? WHERE ma_id=?";
+		String sql = "UPDATE mail_accounts SET ma_mpass=? WHERE ma_id=?";
 
 		try {
 			con = getConnection();
