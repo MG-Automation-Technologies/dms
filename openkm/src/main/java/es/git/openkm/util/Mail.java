@@ -273,7 +273,7 @@ public class Mail {
 					}
 					
 					// Set message as seen
-					//msg.setFlag(Flags.Flag.SEEN, true);
+					msg.setFlag(Flags.Flag.SEEN, true);
 				}
 			
 				// Close connection 
