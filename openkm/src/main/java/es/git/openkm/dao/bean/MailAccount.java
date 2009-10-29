@@ -21,7 +21,7 @@ package es.git.openkm.dao.bean;
 
 
 public class MailAccount {
-	private int id = 0;
+	private int id = -1;
 	private String user = "";
 	private String mailHost = "";
 	private String mailFolder = "";
