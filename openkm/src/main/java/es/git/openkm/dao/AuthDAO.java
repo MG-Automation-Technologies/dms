@@ -160,11 +160,13 @@ public class AuthDAO extends AbstractDAO {
 		try {
 			con = getConnection();
 			
-			if (con != null && vo.getPass().length()>0) {
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, SecureStore.md5Encode(vo.getPass().getBytes()));
-				stmt.setString(2, vo.getId());
-				stmt.execute();
+			if (con != null) {
+				if (vo.getPass().trim().length() > 0) {
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, SecureStore.md5Encode(vo.getPass().getBytes()));
+					stmt.setString(2, vo.getId());
+					stmt.execute();
+				}
 			} else {
 				log.error("Can't connect to auth database");
 			}
@@ -863,11 +865,13 @@ public class AuthDAO extends AbstractDAO {
 		try {
 			con = getConnection();
 			
-			if (con != null && vo.getMailPassword().length() > 0) {
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getMailPassword());
-				stmt.setInt(2, vo.getId());
-				stmt.execute();
+			if (con != null) {
+				if (vo.getMailPassword().trim().length() > 0) {
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, vo.getMailPassword());
+					stmt.setInt(2, vo.getId());
+					stmt.execute();
+				}
 			} else {
 				log.error("Can't connect to auth database");
 			}
