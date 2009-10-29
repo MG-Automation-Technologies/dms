@@ -80,7 +80,7 @@ public class Lang_en_GB {
 		lang.put("users.refreshing.every.1.minute", "1 minute");
 		lang.put("users.refreshing.every.5.minutes", "5 minutes");
 		lang.put("users.refreshing.every.15.minutes", "15 minutes");
-		lang.put("users.uid", "UID");
+		lang.put("users.uid", "User");
 		lang.put("users.active", "Active");
 		lang.put("users.token", "Token");
 		lang.put("users.creation", "Creation");
@@ -92,7 +92,7 @@ public class Lang_en_GB {
 		lang.put("users.active.yes", "Yes");
 		lang.put("users.active.no", "No");
 		lang.put("users.roles", "Roles");
-		lang.put("users.activity.log.uid", "UID");
+		lang.put("users.activity.log.uid", "User");
 		lang.put("users.activity.log.date.from", "From date");
 		lang.put("users.activity.log.date.to", "To date");
 		lang.put("users.activity.log.action", "Action");

@@ -79,7 +79,7 @@ public class Lang_de_DE {
 		lang.put("users.refreshing.every.1.minute", "1 Minuten");
 		lang.put("users.refreshing.every.5.minutes", "5 Minuten");
 		lang.put("users.refreshing.every.15.minutes", "15 Minuten");
-		lang.put("users.uid", "UID");
+		lang.put("users.uid", "User");
 		lang.put("users.active", "Aktiv");
 		lang.put("users.token", "Token");
 		lang.put("users.creation", "Erzeugt");
@@ -91,7 +91,7 @@ public class Lang_de_DE {
 		lang.put("users.active.yes", "Ja");
 		lang.put("users.active.no", "Nein");
 		lang.put("users.roles", "Rollen");
-		lang.put("users.activity.log.uid", "UID");
+		lang.put("users.activity.log.uid", "User");
 		lang.put("users.activity.log.date.from", "Von Datum");
 		lang.put("users.activity.log.date.to", "Bis Datum");
 		lang.put("users.activity.log.action", "Aktion");
