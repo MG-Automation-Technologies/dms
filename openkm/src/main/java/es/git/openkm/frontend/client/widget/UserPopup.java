@@ -84,7 +84,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		vPanel = new VerticalPanel();
 		flexTable = new FlexTable();
 		
-		userName = new HTML(Main.i18n("user.preferences.name"));
+		userName = new HTML(Main.i18n("user.preferences.user"));
 		userPassword = new HTML(Main.i18n("user.preferences.password"));
 		imapHost = new HTML(Main.i18n("user.preferences.imap.host"));
 		imapUser = new HTML(Main.i18n("user.preferences.imap.user"));
@@ -205,7 +205,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 	 */
 	public void langRefresh() {
 		setText(Main.i18n("user.preferences.label"));
-		userName.setHTML(Main.i18n("user.preferences.name"));
+		userName.setHTML(Main.i18n("user.preferences.user"));
 		userPassword.setHTML(Main.i18n("user.preferences.password"));
 		imapHost.setHTML(Main.i18n("user.preferences.imap.host"));
 		imapUser.setHTML(Main.i18n("user.preferences.imap.user"));
