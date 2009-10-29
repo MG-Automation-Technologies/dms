@@ -136,7 +136,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
 					authDAO.updateMailAccount(mailAccount);
 					if (!mailAccount.getMailPassword().equals("")) authDAO.updateMailAccountPassword(mailAccount);
-				} else {
+				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0) {
 					authDAO.createMailAccount(mailAccount);
 				}
 			} catch (SQLException e) {
