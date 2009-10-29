@@ -548,7 +548,7 @@ public class Lang_bs_BA {
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "Korisnička konfiguracija");
-	    lang.put("user.preferences.name", "Ime");
+	    lang.put("user.preferences.user", "Ime");
 	    lang.put("user.preferences.password", "Šifra");
 	    lang.put("user.preferences.imap.host", "IMAP server");
 	    lang.put("user.preferences.imap.user", "IMAP korisničko ime");

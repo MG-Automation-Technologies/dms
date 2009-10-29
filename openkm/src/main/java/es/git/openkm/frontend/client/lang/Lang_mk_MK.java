@@ -547,7 +547,7 @@ public class Lang_mk_MK {
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "User configuration");
-	    lang.put("user.preferences.name", "Name");
+	    lang.put("user.preferences.user", "User");
 	    lang.put("user.preferences.password", "Password");
 	    lang.put("user.preferences.imap.host", "IMAP server");
 	    lang.put("user.preferences.imap.user", "IMAP user name");

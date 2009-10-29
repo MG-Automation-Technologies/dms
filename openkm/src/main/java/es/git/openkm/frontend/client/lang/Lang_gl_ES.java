@@ -547,7 +547,7 @@ public class Lang_gl_ES {
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "Configuración de usuario");
-	    lang.put("user.preferences.name", "Nombre");
+	    lang.put("user.preferences.user", "Usuario");
 	    lang.put("user.preferences.password", "Clave");
 	    lang.put("user.preferences.imap.host", "Servidor de imap");
 	    lang.put("user.preferences.imap.user", "Usuario de imap");
