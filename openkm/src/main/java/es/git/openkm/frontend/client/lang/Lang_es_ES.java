@@ -557,6 +557,7 @@ public class Lang_es_ES {
 	    lang.put("user.preferences.user.data", "Cuenta de usuario");
 	    lang.put("user.preferences.mail.data", "Cuenta de correo");
 	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");
+	    lang.put("user.preferences.imap.password.error.void", "La clave del imap no puede ser vacia en la creación");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

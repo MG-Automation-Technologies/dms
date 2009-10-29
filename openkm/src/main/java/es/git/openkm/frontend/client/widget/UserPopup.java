@@ -74,6 +74,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 	private Button delete;
 	private HorizontalPanel hPanel; 
 	private HTML passwordError;
+	private HTML imapPassordError;
 	private HTML imapError;
 	private GroupBoxPanel userGroupBoxPanel;
 	private GroupBoxPanel mailGroupBoxPanel;
@@ -111,9 +112,11 @@ public class UserPopup extends DialogBox implements ClickListener {
 		imapUserPasswordText = new PasswordTextBox();
 		imapUserPasswordTextVerify = new PasswordTextBox();
 		passwordError = new HTML(Main.i18n("user.preferences.password.error"));
+		imapPassordError = new HTML(Main.i18n("user.preferences.imap.password.error.void"));
 		imapError = new HTML(Main.i18n("user.preferences.imap.error"));
 		
 		passwordError.setVisible(false);
+		imapPassordError.setVisible(false);
 		imapError.setVisible(false);
 		
 		hostText = new TextBox();
@@ -122,15 +125,19 @@ public class UserPopup extends DialogBox implements ClickListener {
 		
 		update = new Button(Main.i18n("button.update"), new ClickListener(){
 			public void onClick(Widget sender) {
+				passwordError.setVisible(false);
+				imapPassordError.setVisible(false);
+				imapError.setVisible(false);
 				if (!userPasswordText.getText().equals(userPasswordTextVerify.getText()) || 
 					!imapUserPasswordText.getText().equals(imapUserPasswordTextVerify.getText())) {
 					passwordError.setVisible(true);
-				} else if( (imapUserPasswordText.getText().length()>0 || folderText.getText().length()>0 || imapUserText.getText().length()>0 ||
-							hostText.getText().length()>0) && !(imapUserPasswordText.getText().length()>0 && folderText.getText().length()>0 &&
-							imapUserText.getText().length()>0 && hostText.getText().length()>0) ) {
+				} else if (Main.get().workspaceUserProperties.getWorkspace().getImapID()<0 && imapUserPasswordText.getText().equals("")) {
+					imapPassordError.setVisible(true);
+			    } else if( (imapUserPasswordText.getText().length()>0 || folderText.getText().length()>0 || imapUserText.getText().length()>0 ||
+							hostText.getText().length()>0) && !(folderText.getText().length()>0 && imapUserText.getText().length()>0 
+							&& hostText.getText().length()>0) ) {
 					imapError.setVisible(true);
 				} else {
-					passwordError.setVisible(false);
 					GWTWorkspace workspace = new GWTWorkspace();
 					workspace.setUser(Main.get().workspaceUserProperties.getUser());
 					workspace.setImapFolder(folderText.getText());
@@ -211,6 +218,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(mailGroupBoxPanel);
 		vPanel.add(passwordError);
+		vPanel.add(imapPassordError);
 		vPanel.add(imapError);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
@@ -220,6 +228,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		vPanel.setCellHorizontalAlignment(mailGroupBoxPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(passwordError, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(imapPassordError, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(imapError, HasAlignment.ALIGN_CENTER);
 		
 		userName.addStyleName("okm-NoWrap");
@@ -236,6 +245,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		imapUserPasswordTextVerify.setStyleName("okm-Input");
 		folderText.setStyleName("okm-Input");
 		passwordError.setStyleName("okm-Input-Error");
+		imapPassordError.setStyleName("okm-Input-Error");
 		imapError.setStyleName("okm-Input-Error");
 		update.setStyleName("okm-Button");
 		cancel.setStyleName("okm-Button");
@@ -266,6 +276,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		imapPassword.setHTML(Main.i18n("user.preferences.imap.user.password"));
 		imapFolder.setHTML(Main.i18n("user.preferences.imap.folder"));
 		passwordError.setHTML(Main.i18n("user.preferences.password.error"));
+		imapPassordError.setHTML(Main.i18n("user.preferences.imap.password.error.void"));
 		imapError.setHTML(Main.i18n("user.preferences.imap.error"));
 		update.setText(Main.i18n("button.update"));
 		cancel.setText(Main.i18n("button.cancel"));
@@ -299,6 +310,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		userFlexTable.setText(0, 1, workspace.getUser());
 		
 		passwordError.setVisible(false);
+		imapPassordError.setVisible(false);
 		imapError.setVisible(false);
 		
 		if (workspace.isChangePassword()) {

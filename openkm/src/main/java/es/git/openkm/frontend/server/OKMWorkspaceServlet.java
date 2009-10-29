@@ -66,7 +66,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
 			AuthDAO authDAO = AuthDAO.getInstance();
-			try {
+			try {				
 				for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
 					MailAccount mailAccount = it.next();
 					workspace.setImapHost(mailAccount.getMailHost());
@@ -136,7 +136,8 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
 					authDAO.updateMailAccount(mailAccount);
 					if (!mailAccount.getMailPassword().equals("")) authDAO.updateMailAccountPassword(mailAccount);
-				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0) {
+				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0 &&
+						   !mailAccount.getMailPassword().equals("")) {
 					authDAO.createMailAccount(mailAccount);
 				}
 			} catch (SQLException e) {
