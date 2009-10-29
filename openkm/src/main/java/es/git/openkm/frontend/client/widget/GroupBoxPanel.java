@@ -17,20 +17,47 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package es.git.openkm.frontend.client.service;
+package es.git.openkm.frontend.client.widget;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-
-import es.git.openkm.frontend.client.OKMException;
-import es.git.openkm.frontend.client.bean.GWTWorkspace;
-
+import com.google.gwt.user.client.DOM;  
+import com.google.gwt.user.client.Element;  
+import com.google.gwt.user.client.ui.FlowPanel;  
+   
 /**
+ * GroupBoxPanel
+ * 
  * @author jllort
  *
  */
-public interface OKMWorkspaceService extends RemoteService {
-	public GWTWorkspace getUserWorkspace() throws OKMException ;
-	public Double getUserDocumentsSize() throws OKMException;
-	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException;
-	public void deleteMailAccount(int id)  throws OKMException;
-}
+public class GroupBoxPanel extends FlowPanel {  
+   
+	private Element legend;  
+   
+	/**
+	 * GroupBoxPanel
+	 */
+	public GroupBoxPanel() {  
+		Element fieldset = DOM.createFieldSet();  
+		this.legend = DOM.createLegend();  
+		DOM.appendChild(fieldset, legend);  
+		setElement(fieldset);  
+	}  
+	   
+	/**
+	 * getCaption
+	 * 
+	 * @return
+	 */
+	public String getCaption() {  
+		return DOM.getInnerText(this.legend);  
+	}  
+   
+	/**
+	 * setCaption
+	 * 
+	 * @param caption
+	 */
+	public void setCaption(String caption) {  
+		DOM.setInnerText(this.legend, caption);  
+	}  
+}  

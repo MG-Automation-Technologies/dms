@@ -554,6 +554,8 @@ public class Lang_gl_ES {
 	    lang.put("user.preferences.imap.user.password", "Clave de imap");
 	    lang.put("user.preferences.imap.folder", "Carpeta de imap");
 	    lang.put("user.preferences.password.error", "Error las claves son distintas");
+	    lang.put("user.preferences.user.data", "Cuenta de usuario");
+	    lang.put("user.preferences.mail.data", "Cuenta de correo");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Non ten permisos para acceder ao documento");

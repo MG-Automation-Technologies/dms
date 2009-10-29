@@ -555,6 +555,8 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.imap.user.password", "Clau de l'usuari de imap");
 	    lang.put("user.preferences.imap.folder", "Carpeta de imap");
 	    lang.put("user.preferences.password.error", "Error la clau no coincideix");
+	    lang.put("user.preferences.user.data", "Compte d'usuari");
+	    lang.put("user.preferences.mail.data", "Compte de mail");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");

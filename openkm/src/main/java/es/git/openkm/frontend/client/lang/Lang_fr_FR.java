@@ -554,6 +554,8 @@ public class Lang_fr_FR {
 	    lang.put("user.preferences.imap.user.password", "Mot de passe IMAP");
 	    lang.put("user.preferences.imap.folder", "Dossier IMAP");
 	    lang.put("user.preferences.password.error", "Erreur: mots de passe différents");
+	    lang.put("user.preferences.user.data", "User account");
+	    lang.put("user.preferences.mail.data", "Mail account");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce document");

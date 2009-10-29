@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -52,7 +54,8 @@ public class UserPopup extends DialogBox implements ClickListener {
 	private final OKMWorkspaceServiceAsync workspaceService = (OKMWorkspaceServiceAsync) GWT.create(OKMWorkspaceService.class);
 	
 	private VerticalPanel vPanel;
-	private FlexTable flexTable;
+	private FlexTable userFlexTable;
+	private FlexTable mailFlexTable;
 	private HTML userName;
 	private HTML userPassword;
 	private HTML imapHost;
@@ -68,8 +71,11 @@ public class UserPopup extends DialogBox implements ClickListener {
 	private PasswordTextBox imapUserPasswordTextVerify;
 	private Button update;
 	private Button cancel;
+	private Button delete;
 	private HorizontalPanel hPanel; 
 	private HTML passwordError;
+	private GroupBoxPanel userGroupBoxPanel;
+	private GroupBoxPanel mailGroupBoxPanel;
 	
 	/**
 	 * User popup
@@ -82,7 +88,16 @@ public class UserPopup extends DialogBox implements ClickListener {
 		int top = (Window.getClientHeight()-220)/2;
 		
 		vPanel = new VerticalPanel();
-		flexTable = new FlexTable();
+		userFlexTable = new FlexTable();
+		mailFlexTable = new FlexTable();
+		
+		userGroupBoxPanel = new GroupBoxPanel();
+		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
+		userGroupBoxPanel.add(userFlexTable);
+		
+		mailGroupBoxPanel = new GroupBoxPanel();
+		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
+		mailGroupBoxPanel.add(mailFlexTable);
 		
 		userName = new HTML(Main.i18n("user.preferences.user"));
 		userPassword = new HTML(Main.i18n("user.preferences.password"));
@@ -116,6 +131,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 					workspace.setImapUser(imapUserText.getText());
 					workspace.setImapPassword(imapUserPasswordText.getText());
 					workspace.setPassword(userPasswordText.getText());
+					workspace.setImapID(Main.get().workspaceUserProperties.getWorkspace().getImapID());
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
 					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
 					workspaceService.updateUserWorkspace(workspace, callbackUpdateUserWorkspace);
@@ -129,44 +145,71 @@ public class UserPopup extends DialogBox implements ClickListener {
 			}			
 		});
 		
+		delete = new Button(Main.i18n("button.delete"), new ClickListener(){
+			public void onClick(Widget sender) {
+				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
+				if (Id>=0) {
+					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
+					endPoint.setServiceEntryPoint(Config.OKMWorkspaceService);
+					workspaceService.deleteMailAccount(Id, callbackDeleteMailAccount);
+				}
+			}			
+		});
+		
 		hPanel = new HorizontalPanel();
 		hPanel.add(update);
 		hPanel.add(new HTML("&nbsp;&nbsp;"));
 		hPanel.add(cancel);
 		
-		flexTable.setCellPadding(0);
-		flexTable.setCellSpacing(2);
-		flexTable.setWidth("95%");
+		userFlexTable.setCellPadding(0);
+		userFlexTable.setCellSpacing(2);
+		userFlexTable.setWidth("95%");
 		
-		flexTable.setWidget(0, 0, userName);
-		flexTable.setWidget(1, 0, userPassword);
-		flexTable.setWidget(2, 0, imapHost);
-		flexTable.setWidget(3, 0, imapUser);
-		flexTable.setWidget(4, 0, imapPassword);
-		flexTable.setWidget(5, 0, imapFolder);
+		userFlexTable.setWidget(0, 0, userName);
+		userFlexTable.setWidget(1, 0, userPassword);
 		
-		flexTable.setWidget(1, 1, userPasswordText);
-		flexTable.setWidget(1, 2, userPasswordTextVerify);
-		flexTable.setWidget(2, 1, hostText);
-		flexTable.setWidget(3, 1, imapUserText);
-		flexTable.setWidget(4, 1, imapUserPasswordText);
-		flexTable.setWidget(4, 2, imapUserPasswordTextVerify);
-		flexTable.setWidget(5, 1, folderText);
+		userFlexTable.setWidget(1, 1, userPasswordText);
+		userFlexTable.setWidget(1, 2, userPasswordTextVerify);
 		
-		flexTable.getFlexCellFormatter().setColSpan(2, 1, 2);
+		mailFlexTable.setCellPadding(0);
+		mailFlexTable.setCellSpacing(2);
+		mailFlexTable.setWidth("95%");
+		
+		mailFlexTable.setWidget(1, 0, imapHost);
+		mailFlexTable.setWidget(2, 0, imapUser);
+		mailFlexTable.setWidget(3, 0, imapPassword);
+		mailFlexTable.setWidget(4, 0, imapFolder);
+		
+		mailFlexTable.setWidget(1, 1, hostText);
+		mailFlexTable.setWidget(2, 1, imapUserText);
+		mailFlexTable.setWidget(3, 1, imapUserPasswordText);
+		mailFlexTable.setWidget(3, 2, imapUserPasswordTextVerify);
+		mailFlexTable.setWidget(4, 1, folderText);
+		mailFlexTable.setWidget(5, 0, new HTML("&nbsp;"));
+		mailFlexTable.setWidget(5, 1, new HTML("&nbsp;"));
+		mailFlexTable.setWidget(5, 2, delete);
+		
+		mailFlexTable.getFlexCellFormatter().setColSpan(1, 1, 2);
+		mailFlexTable.getFlexCellFormatter().setAlignment(5, 2, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+		
 		hostText.setWidth("275");
+		userGroupBoxPanel.setWidth("370px");
+		mailGroupBoxPanel.setWidth("370px");
 		
-		vPanel.setWidth("400px");
+		vPanel.setWidth("410px");
 		vPanel.setHeight("195px");
 		
 		vPanel.add(new HTML("<br>"));
-		vPanel.add(flexTable);
+		vPanel.add(userGroupBoxPanel);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(mailGroupBoxPanel);
 		vPanel.add(passwordError);
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
 		
-		vPanel.setCellHorizontalAlignment(flexTable, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(userGroupBoxPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(mailGroupBoxPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(passwordError, HasAlignment.ALIGN_CENTER);
 		
@@ -186,6 +229,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		passwordError.setStyleName("okm-Input-Error");
 		update.setStyleName("okm-Button");
 		cancel.setStyleName("okm-Button");
+		delete.setStyleName("okm-Button");
 		
 		setPopupPosition(left,top);
 
@@ -214,6 +258,9 @@ public class UserPopup extends DialogBox implements ClickListener {
 		passwordError.setHTML(Main.i18n("user.preferences.password.error"));
 		update.setText(Main.i18n("button.update"));
 		cancel.setText(Main.i18n("button.cancel"));
+		delete.setText(Main.i18n("button.delete"));
+		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
+		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
 	}
 	
 	/**
@@ -238,7 +285,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		hostText.setText(workspace.getImapHost());
 		imapUserText.setText(workspace.getImapUser());
 		folderText.setText(workspace.getImapFolder());
-		flexTable.setText(0, 1, workspace.getUser());
+		userFlexTable.setText(0, 1, workspace.getUser());
 		
 		if (workspace.isChangePassword()) {
 			userPasswordText.setVisible(true);
@@ -246,6 +293,13 @@ public class UserPopup extends DialogBox implements ClickListener {
 		} else {
 			userPasswordText.setVisible(false);
 			userPasswordTextVerify.setVisible(false);
+		}
+		
+		// Enables delete button only if there's some imap server configured to be removed
+		if (workspace.getImapID()>=0) {
+			delete.setVisible(true);
+		} else {
+			delete.setVisible(false);
 		}
 		
 		super.show();
@@ -264,4 +318,24 @@ public class UserPopup extends DialogBox implements ClickListener {
 			Main.get().showError("callbackUpdateUserWorkspace", caught);
 		}
 	};
+	
+	/**
+	 * Call back delete mail account
+	 */
+	final AsyncCallback<Object> callbackDeleteMailAccount = new AsyncCallback<Object>() {
+		public void onSuccess(Object result){
+			Main.get().workspaceUserProperties.getUserWorkspace(); // Refreshing workspace saved values
+			hostText.setText("");
+			imapUserText.setText("");
+			imapUserPasswordText.setText("");
+			imapUserPasswordTextVerify.setText("");
+			folderText.setText("");
+			delete.setVisible(false);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("callbackDeleteMailAccount", caught);
+		}
+	};
+	
 }

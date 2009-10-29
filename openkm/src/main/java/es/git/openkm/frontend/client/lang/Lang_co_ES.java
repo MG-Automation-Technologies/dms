@@ -554,6 +554,8 @@ public class Lang_co_ES {
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
 	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.user.data", "Cuenta de usuario");
+	    lang.put("user.preferences.mail.data", "Cuenta de mail");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

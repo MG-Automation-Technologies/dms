@@ -37,6 +37,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String imapUser = "";
 	private String imapPassword = "";
 	private String imapFolder = "";
+	private int imapID = -1;
 	private String password = "";
 	private boolean changePassword = true;
 
@@ -124,5 +125,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setChangePassword(boolean changePassword) {
 		this.changePassword = changePassword;
+	}
+	
+	public int getImapID() {
+		return imapID;
+	}
+
+	public void setImapID(int imapID) {
+		this.imapID = imapID;
 	}
 }

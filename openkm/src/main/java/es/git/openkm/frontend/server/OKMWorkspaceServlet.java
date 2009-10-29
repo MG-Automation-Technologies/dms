@@ -72,6 +72,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 					workspace.setImapHost(mailAccount.getMailHost());
 					workspace.setImapUser(mailAccount.getMailUser());
 					workspace.setImapFolder(mailAccount.getMailFolder());
+					workspace.setImapID(mailAccount.getId());
 				}
 			} catch (SQLException e) {
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
@@ -120,6 +121,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		mailAccount.setMailPassword(workspace.getImapPassword());
 		mailAccount.setMailUser(workspace.getImapUser());
 		mailAccount.setUser(workspace.getUser());
+		mailAccount.setId(workspace.getImapID());
 		
 		// Disable user configuration modification in demo
 		if (!Config.SYSTEM_DEMO.equalsIgnoreCase("on")) {
@@ -137,6 +139,21 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				} else {
 					authDAO.createMailAccount(mailAccount);
 				}
+			} catch (SQLException e) {
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+			}
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMWorkspaceService#deleteMailAccount(int)
+	 */
+	public void deleteMailAccount(int id)  throws OKMException {
+		// Disable user configuration modification in demo
+		if (!Config.SYSTEM_DEMO.equalsIgnoreCase("on")) {
+			try {
+				AuthDAO authDAO = AuthDAO.getInstance();
+				authDAO.deleteMailAccount(id);
 			} catch (SQLException e) {
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}

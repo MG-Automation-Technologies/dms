@@ -554,6 +554,8 @@ public class Lang_ja_JP {
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
 	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.user.data", "User account");
+	    lang.put("user.preferences.mail.data", "Mail account");
 	    
 		// Errors
 		lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "文書へのアクセスが拒否されました");
