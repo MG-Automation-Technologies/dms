@@ -28,6 +28,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -130,8 +131,12 @@ public class Document extends Composite {
 				if (keyCode == (char)KeyboardListener.KEY_ENTER ) {
 					boolean remove = ((document.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE 
 							          && !document.isCheckedOut() && !document.isLocked());
-					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-					addKey(suggestKey.getText().replaceAll(" ", ""), remove); // Removes all spaces, keywords must have no space
+					Main.get().mainPanel.enableKeyShorcuts(); 			// Enables general keys applications
+					String keys[] = suggestKey.getText().split(" "); 	// Separates keywords by space
+					for (int i=0;i<keys.length;i++) {
+						addKey(keys[i], remove); 						// Add each keyword
+					}
+					
 					suggestKey.setText("");
 				}
 			}
@@ -476,7 +481,7 @@ public class Document extends Composite {
 	 * @param keyword The keyword to be added
 	 */
 	public void addKey(String keyword, boolean remove) {
-		if (!keywordMap.containsKey(keyword)) {
+		if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
 			String keywords = "";
 			String[] keywordsArray = new String[keywordMap.keySet().size()+1];
 			int count = 0;
