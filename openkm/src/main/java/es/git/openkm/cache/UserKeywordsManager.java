@@ -61,6 +61,10 @@ public class UserKeywordsManager {
 	 * 
 	 */
 	public static synchronized void put(String uid, String doc, String keywords) {
+		if (userDocKeywordsMgr.get(uid) == null) {
+			userDocKeywordsMgr.put(uid, new HashMap<String, ArrayList<String>>());
+		}
+		
 		userDocKeywordsMgr.get(uid).put(doc, splitKeywords(keywords));
 	}
 	
