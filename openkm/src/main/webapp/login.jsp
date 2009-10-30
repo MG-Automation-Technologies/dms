@@ -26,7 +26,7 @@
     <div id="form">
       <form name="login" method="post" action="j_security_check">
         <label for="j_username">User</label><br/>
-        <input name="j_username" id="j_username" type="text" <%=(Config.SYSTEM_LOGIN_LOWERCASE.equalsIgnoreCase("on"))?"onkeyup=\"makeUppercase();\"":""%>/><br/><br/>
+        <input name="j_username" id="j_username" type="text" <%=(Config.SYSTEM_LOGIN_LOWERCASE.equals("on"))?"onkeyup=\"makeLowercase();\"":""%>/><br/><br/>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
         <input value="Login" name="submit" type="submit"/><br/>
@@ -39,7 +39,7 @@
   <% } %>
   
   <script type="text/javascript">
-  	function makeUppercase() {
+  	function makeLowercase() {
   	  	var username = document.getElementById('j_username'); 
   	  	username.value = username.value.toLowerCase();
 	}
