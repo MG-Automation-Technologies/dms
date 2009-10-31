@@ -99,6 +99,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         // Deserialize
+        log.info("*** Cache deserialization ***");
         UserItemsManager.deserialize();
         UserKeywordsManager.deserialize();
         
@@ -210,6 +211,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         // Serialize
+        log.info("*** Cache serialization ***");
         UserItemsManager.serialize();
         UserKeywordsManager.serialize();
         
