@@ -89,7 +89,7 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
 				String userId = it.next();
 				es.git.openkm.dao.bean.User user = AuthDAO.getInstance().findUserByPk(userId);
-				if (!user.getEmail().equals("")) {
+				if (user != null && !user.getEmail().equals("")) {
 					list.add(user.getEmail());
 				}
 			}
