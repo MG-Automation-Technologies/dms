@@ -21,8 +21,6 @@ package es.git.openkm.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,10 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import es.git.openkm.api.OKMDashboard;
-import es.git.openkm.bean.DashboardStatsDocumentResult;
-import es.git.openkm.bean.DashboardStatsMailResult;
 
 /**
  * Servlet Class
@@ -55,21 +49,7 @@ public class TestServlet extends HttpServlet {
 		response.setContentType("text/html");
 		
 		try {
-			es.git.openkm.util.Mail.importMessages(token, "imap.gmail.com", "jlltella@gmail.com", "darkman97i", "OpenKM");
-			//ArrayList<String> al = new ArrayList<String>();
-			//al.add("banana");
-			//new DirectSearchModule().getKeywordMap(token, al);
-			out.println("<hr>");
-			Collection<DashboardStatsMailResult> col1 = OKMDashboard.getInstance().getUserLastImportedMails(token);
-			for (Iterator<DashboardStatsMailResult> it = col1.iterator(); it.hasNext(); ) {
-				out.println("<li>"+it.next().getMail().getPath()+"</li>");
-			}
-			out.println("<hr>");
-			Collection<DashboardStatsDocumentResult> col2 = OKMDashboard.getInstance().getUserLastImportedMailAttachments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col2.iterator(); it.hasNext(); ) {
-				out.println("<li>"+it.next().getDocument().getPath()+"</li>");
-			}
-			out.println("<hr>");
+			// Dummy
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
