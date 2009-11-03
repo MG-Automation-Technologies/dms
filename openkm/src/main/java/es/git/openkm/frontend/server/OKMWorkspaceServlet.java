@@ -64,20 +64,20 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
 		
-		if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
-			AuthDAO authDAO = AuthDAO.getInstance();
-			try {				
-				for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
-					MailAccount mailAccount = it.next();
-					workspace.setImapHost(mailAccount.getMailHost());
-					workspace.setImapUser(mailAccount.getMailUser());
-					workspace.setImapFolder(mailAccount.getMailFolder());
-					workspace.setImapID(mailAccount.getId());
-				}
-			} catch (SQLException e) {
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+		AuthDAO authDAO = AuthDAO.getInstance();
+		try {				
+			for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
+				MailAccount mailAccount = it.next();
+				workspace.setImapHost(mailAccount.getMailHost());
+				workspace.setImapUser(mailAccount.getMailUser());
+				workspace.setImapFolder(mailAccount.getMailFolder());
+				workspace.setImapID(mailAccount.getId());
 			}
-			
+		} catch (SQLException e) {
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+		}
+		
+		if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
 			workspace.setChangePassword(true);
 		} else {
 			workspace.setChangePassword(false);
