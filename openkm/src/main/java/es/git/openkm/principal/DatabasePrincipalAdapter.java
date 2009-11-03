@@ -27,6 +27,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.core.Config;
 import es.git.openkm.dao.AuthDAO;
 import es.git.openkm.dao.bean.Role;
 import es.git.openkm.dao.bean.User;
@@ -46,7 +47,10 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 			
 			for (Iterator<User> it = col.iterator(); it.hasNext(); ) {
 				User dbUser = it.next();
-				list.add(dbUser.getId());
+				
+				if (!Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS.equals("on") || dbUser.isActive()) {
+					list.add(dbUser.getId());
+				}
 			}
 		} catch (SQLException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
