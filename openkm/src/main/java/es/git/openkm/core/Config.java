@@ -67,6 +67,7 @@ public class Config {
 	public static String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
 	
 	public static String PROPERTY_PRINCIPAL_ADAPTER = "principal.adapter";
+	public static String PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "principal.database.filter.inactive.users";
 	
 	public static String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
 	public static String PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL = "principal.ldap.security.principal";
@@ -125,6 +126,7 @@ public class Config {
 	public static String DEFAULT_ADMIN_ROLE = "AdminRole";
 	
 	public static String PRINCIPAL_ADAPTER = "es.git.openkm.principal.DatabasePrincipalAdapter";
+	public static String PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "on";
 	
 	public static String PRINCIPAL_LDAP_SERVER = ""; // ldap://phoenix.server:389
 	public static String PRINCIPAL_LDAP_SECURITY_PRINCIPAL = ""; //"cn=Administrator,cn=Users,dc=openkm,dc=com"
@@ -197,6 +199,7 @@ public class Config {
 			DEFAULT_ADMIN_ROLE = config.getProperty(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 			
 			PRINCIPAL_ADAPTER = config.getProperty(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
+			PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = config.getProperty(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
 
 			PRINCIPAL_LDAP_SERVER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SERVER, PRINCIPAL_LDAP_SERVER);
 			PRINCIPAL_LDAP_SECURITY_PRINCIPAL = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL, PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
@@ -261,6 +264,7 @@ public class Config {
 					PROPERTY_DEFAULT_ADMIN_ROLE+"="+DEFAULT_ADMIN_ROLE+", "+
 					
 					PROPERTY_PRINCIPAL_ADAPTER+"="+PRINCIPAL_ADAPTER+", "+
+					PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS+"="+PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS+", "+
 					
 					PROPERTY_PRINCIPAL_LDAP_SERVER+"="+PRINCIPAL_LDAP_SERVER+", "+
 					PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL+"="+PRINCIPAL_LDAP_SECURITY_PRINCIPAL+","+
