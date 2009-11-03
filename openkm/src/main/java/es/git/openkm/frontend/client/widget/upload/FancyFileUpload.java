@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -237,9 +238,8 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			HorizontalPanel hPBPanel = new HorizontalPanel();
 			hPBPanel.add(progressBar); 
 			hPBPanel.setCellVerticalAlignment(progressBar, HasAlignment.ALIGN_MIDDLE);
-			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT); // Corrects some problem with centering progress status 
+			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_CENTER); // Corrects some problem with centering progress status 
 			progressBar.setSize("260", "20"); 
-			
 			
 			pendingPanel.setWidth("260");
 			pendingPanel.setVisible(true);
@@ -263,8 +263,6 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		 */
 		private void setPending() {
 			status.setHTML(Main.i18n("fileupload.status.sending"));
-			hFileUpload.setVisible(false);
-			pendingPanel.setVisible(true);
 			pendingPanel.setStyleName("fancyfileupload-pending");
 			widgetState = PENDING_STATE;
 			fireChangeEvent();
@@ -277,6 +275,8 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		 */
 		public void setLoading() {
 			pendingPanel.setStyleName("fancyfileupload-loading");
+			hFileUpload.setVisible(false);
+			pendingPanel.setVisible(true);
 			widgetState = UPLOADING_STATE;
 			fileUplodingStartedFlag = true; // Activates flash uploading is started
 			getFileUploadStatus();
