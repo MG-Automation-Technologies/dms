@@ -108,11 +108,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	 * @see es.git.openkm.frontend.client.service.OKMWorkspaceService#updateUserWorkspace(es.git.openkm.frontend.client.bean.GWTWorkspace)
 	 */
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
-		// For updating user
-		User user = new User();
-		user.setId(workspace.getUser());
-		user.setPass(workspace.getPassword());
-		
 		// For updating imap mail
 		MailAccount mailAccount = new MailAccount();
 		mailAccount.setActive(true);
@@ -130,7 +125,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				
 				// Can change password
 				if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
-					authDAO.updateUserPassword(user);
+					authDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
 				}
 			
 				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
