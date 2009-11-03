@@ -146,13 +146,13 @@ public class AuthDAO extends AbstractDAO {
 	}
 	
 	/**
-	 * Update user in database
+	 * Update user password in database
 	 * 
 	 * @param vo
 	 * @throws SQLException
 	 */
-	public void updateUserPassword(User vo) throws SQLException {
-		log.debug("updateUserPassword("+vo+")");
+	public void updateUserPassword(String usrId, String usrPass) throws SQLException {
+		log.debug("updateUserPassword("+usrId+", "+usrPass+")");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String sql = "UPDATE users SET usr_pass=? WHERE usr_id=?";
@@ -161,10 +161,10 @@ public class AuthDAO extends AbstractDAO {
 			con = getConnection();
 			
 			if (con != null) {
-				if (vo.getPass().trim().length() > 0) {
+				if (usrPass != null && usrPass.trim().length() > 0) {
 					stmt = con.prepareStatement(sql);
-					stmt.setString(1, SecureStore.md5Encode(vo.getPass().getBytes()));
-					stmt.setString(2, vo.getId());
+					stmt.setString(1, SecureStore.md5Encode(usrPass.getBytes()));
+					stmt.setString(2, usrId);
 					stmt.execute();
 				}
 			} else {
@@ -178,6 +178,39 @@ public class AuthDAO extends AbstractDAO {
 		}
 		
 		log.debug("updateUserPassword: void");
+	}
+	
+	/**
+	 * Update user email in database
+	 * 
+	 * @param vo
+	 * @throws SQLException
+	 */
+	public void updateUserEmail(String usrId, String usrEmail) throws SQLException {
+		log.debug("updateUserEmail("+usrId+", "+usrEmail+")");
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE users SET usr_email=? WHERE usr_id=?";
+
+		try {
+			con = getConnection();
+			
+			if (con != null) {
+				if (usrEmail != null && usrEmail.trim().length() > 0) {
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, usrEmail);
+					stmt.setString(2, usrId);
+					stmt.execute();
+				}
+			} else {
+				log.error("Can't connect to auth database");
+			}
+		} finally {
+			closeStatement(stmt);
+			closeConnection(con);
+		}
+		
+		log.debug("updateUserEmail: void");
 	}
 	
 	/**
