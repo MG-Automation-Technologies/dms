@@ -28,7 +28,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -39,7 +38,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -546,17 +544,16 @@ public class Document extends Composite {
 		keywordsCloud.setMaxFrequency(Main.get().mainPanel.dashboard.keyMapDashboard.getTotalMaxFrequency());
 		
 		for (int i=0; i<keywords.length; i++) {
-			Hyperlink tagLink = new Hyperlink(keywords[i], null); 
-			tagLink.setStylePrimaryName("okm-cloudTags");  
-			Style linkStyle = tagLink.getElement().getFirstChildElement().getStyle();
-			tagLink.getElement().getFirstChildElement().setClassName("okm-cloudTags");
+			HTML tagKey = new HTML(keywords[i]);
+			tagKey.setStyleName("okm-cloudTags");
+			Style linkStyle = tagKey.getElement().getStyle();
 			int fontSize = keywordsCloud.getLabelSize(Main.get().mainPanel.dashboard.keyMapDashboard.getKeywordRate(keywords[i]));
 			linkStyle.setProperty("fontSize", fontSize+"pt");
 			linkStyle.setProperty("color", keywordsCloud.getColor(fontSize));
 			if (fontSize>0) {
 				linkStyle.setProperty("top", (keywordsCloud.getMaxFontSize()-fontSize)/2+"px" );
 			} 
-			keywordsCloud.add(tagLink);
+			keywordsCloud.add(tagKey);
 		}
 	}
 }
