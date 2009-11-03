@@ -546,14 +546,15 @@ public class Lang_co_ES {
 	    lang.put("workflow.label", "Iniciar flujo");
 	    
 	    // User configuration
-	    lang.put("user.preferences.label", "User configuration");
-	    lang.put("user.preferences.user", "User");
+	    lang.put("user.preferences.label", "Configuración de usuario");
+	    lang.put("user.preferences.user", "Usuario");
 	    lang.put("user.preferences.password", "Password");
-	    lang.put("user.preferences.imap.host", "IMAP server");
-	    lang.put("user.preferences.imap.user", "IMAP user name");
-	    lang.put("user.preferences.imap.user.password", "IMAP user password");
-	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.mail", "Correo electrónico");
+	    lang.put("user.preferences.imap.host", "IMAP servidor");
+	    lang.put("user.preferences.imap.user", "IMAP nombre de usuario");
+	    lang.put("user.preferences.imap.user.password", "IMAP clave");
+	    lang.put("user.preferences.imap.folder", "IMAP carpeta");
+	    lang.put("user.preferences.password.error", "Error: las claves son distintas");
 	    lang.put("user.preferences.user.data", "Cuenta de usuario");
 	    lang.put("user.preferences.mail.data", "Cuenta de mail");
 	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");

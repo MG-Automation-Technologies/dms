@@ -58,6 +58,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 	private FlexTable mailFlexTable;
 	private HTML userName;
 	private HTML userPassword;
+	private HTML userMail;
 	private HTML imapHost;
 	private HTML imapUser;
 	private HTML imapPassword;
@@ -67,6 +68,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 	private TextBox folderText;
 	private PasswordTextBox userPasswordText;
 	private PasswordTextBox userPasswordTextVerify;
+	private TextBox userMailText;
 	private PasswordTextBox imapUserPasswordText;
 	private PasswordTextBox imapUserPasswordTextVerify;
 	private Button update;
@@ -103,12 +105,14 @@ public class UserPopup extends DialogBox implements ClickListener {
 		
 		userName = new HTML(Main.i18n("user.preferences.user"));
 		userPassword = new HTML(Main.i18n("user.preferences.password"));
+		userMail = new HTML(Main.i18n("user.preferences.mail"));
 		imapHost = new HTML(Main.i18n("user.preferences.imap.host"));
 		imapUser = new HTML(Main.i18n("user.preferences.imap.user"));
 		imapPassword = new HTML(Main.i18n("user.preferences.imap.user.password"));
 		imapFolder = new HTML(Main.i18n("user.preferences.imap.folder"));
 		userPasswordText = new PasswordTextBox();
 		userPasswordTextVerify = new PasswordTextBox();
+		userMailText = new TextBox();
 		imapUserPasswordText = new PasswordTextBox();
 		imapUserPasswordTextVerify = new PasswordTextBox();
 		passwordError = new HTML(Main.i18n("user.preferences.password.error"));
@@ -140,6 +144,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 				} else {
 					GWTWorkspace workspace = new GWTWorkspace();
 					workspace.setUser(Main.get().workspaceUserProperties.getUser());
+					workspace.setEmail(userMailText.getText());
 					workspace.setImapFolder(folderText.getText());
 					workspace.setImapHost(hostText.getText());
 					workspace.setImapUser(imapUserText.getText());
@@ -181,9 +186,13 @@ public class UserPopup extends DialogBox implements ClickListener {
 		
 		userFlexTable.setWidget(0, 0, userName);
 		userFlexTable.setWidget(1, 0, userPassword);
+		userFlexTable.setWidget(2, 0, userMail);
 		
 		userFlexTable.setWidget(1, 1, userPasswordText);
 		userFlexTable.setWidget(1, 2, userPasswordTextVerify);
+		userFlexTable.setWidget(2, 1, userMailText);
+		
+		userFlexTable.getFlexCellFormatter().setColSpan(2, 1, 2);
 		
 		mailFlexTable.setCellPadding(0);
 		mailFlexTable.setCellSpacing(2);
@@ -206,6 +215,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		mailFlexTable.getFlexCellFormatter().setColSpan(1, 1, 2);
 		mailFlexTable.getFlexCellFormatter().setAlignment(5, 2, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 		
+		userMailText.setWidth("275");
 		hostText.setWidth("275");
 		userGroupBoxPanel.setWidth("370px");
 		mailGroupBoxPanel.setWidth("370px");
@@ -233,12 +243,14 @@ public class UserPopup extends DialogBox implements ClickListener {
 		
 		userName.addStyleName("okm-NoWrap");
 		userPassword.addStyleName("okm-NoWrap");
+		userMail.addStyleName("okm-NoWrap");
 		imapHost.addStyleName("okm-NoWrap");
 		imapUser.addStyleName("okm-NoWrap");
 		imapPassword.addStyleName("okm-NoWrap");
 		imapFolder.addStyleName("okm-NoWrap");
 		userPasswordText.setStyleName("okm-Input");
 		userPasswordTextVerify.setStyleName("okm-Input");
+		userMailText.setStyleName("okm-Input");
 		hostText.setStyleName("okm-Input");
 		imapUserText.setStyleName("okm-Input");
 		imapUserPasswordText.setStyleName("okm-Input");
@@ -271,6 +283,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 		setText(Main.i18n("user.preferences.label"));
 		userName.setHTML(Main.i18n("user.preferences.user"));
 		userPassword.setHTML(Main.i18n("user.preferences.password"));
+		userMail.setHTML(Main.i18n("user.preferences.mail"));
 		imapHost.setHTML(Main.i18n("user.preferences.imap.host"));
 		imapUser.setHTML(Main.i18n("user.preferences.imap.user"));
 		imapPassword.setHTML(Main.i18n("user.preferences.imap.user.password"));
@@ -308,15 +321,23 @@ public class UserPopup extends DialogBox implements ClickListener {
 		imapUserText.setText(workspace.getImapUser());
 		folderText.setText(workspace.getImapFolder());
 		userFlexTable.setText(0, 1, workspace.getUser());
+		userFlexTable.getFlexCellFormatter().setColSpan(0, 1, 2);
+		userMailText.setText(workspace.getEmail());
 		
 		passwordError.setVisible(false);
 		imapPassordError.setVisible(false);
 		imapError.setVisible(false);
 		
 		if (workspace.isChangePassword()) {
+			userMail.setVisible(true);
+		    userMailText.setVisible(true);
+		    userPassword.setVisible(true);
 			userPasswordText.setVisible(true);
 			userPasswordTextVerify.setVisible(true);
 		} else {
+			userMail.setVisible(true);
+			userMailText.setVisible(false);
+			userPassword.setVisible(false);
 			userPasswordText.setVisible(false);
 			userPasswordTextVerify.setVisible(false);
 		}

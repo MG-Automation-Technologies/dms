@@ -65,7 +65,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
-		try {				
+		try {			
+			User user = authDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
+			workspace.setEmail(user.getEmail());
+			
 			for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
 				MailAccount mailAccount = it.next();
 				workspace.setImapHost(mailAccount.getMailHost());
@@ -108,6 +111,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	 * @see es.git.openkm.frontend.client.service.OKMWorkspaceService#updateUserWorkspace(es.git.openkm.frontend.client.bean.GWTWorkspace)
 	 */
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
+		// For updating user
+		User user = new User();
+		user.setId(workspace.getUser());
+		user.setPass(workspace.getPassword());
+		user.setEmail(workspace.getEmail());
+		
 		// For updating imap mail
 		MailAccount mailAccount = new MailAccount();
 		mailAccount.setActive(true);
@@ -126,6 +135,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				// Can change password
 				if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
 					authDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
+					if (!user.getEmail().equals("")) authDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
 				}
 			
 				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {

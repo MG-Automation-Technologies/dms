@@ -549,6 +549,7 @@ public class Lang_fr_FR {
 	    lang.put("user.preferences.label", "Configuration");
 	    lang.put("user.preferences.user", "User");
 	    lang.put("user.preferences.password", "Mot de passe");
+	    lang.put("user.preferences.mail", "E-mail");
 	    lang.put("user.preferences.imap.host", "Serveur IMAP");
 	    lang.put("user.preferences.imap.user", "Identifiant IMAP");
 	    lang.put("user.preferences.imap.user.password", "Mot de passe IMAP");

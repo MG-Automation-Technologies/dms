@@ -550,6 +550,7 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.label", "Configuración del usuario");
 	    lang.put("user.preferences.user", "Usuari");
 	    lang.put("user.preferences.password", "Clau");
+	    lang.put("user.preferences.mail", "Correu electrònic");
 	    lang.put("user.preferences.imap.host", "Servidor de imap");
 	    lang.put("user.preferences.imap.user", "Nom d'usuari de imap");
 	    lang.put("user.preferences.imap.user.password", "Clau de l'usuari de imap");
