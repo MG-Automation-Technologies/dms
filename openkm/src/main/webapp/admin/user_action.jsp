@@ -51,7 +51,7 @@
 				}
 			} else if (action.equals("u")) {
 				dao.updateUser(usr);
-				if (!usr.getPass().equals("")) dao.updateUserPassword(usr);
+				if (!usr.getPass().equals("")) dao.updateUserPassword(usr.getId(), usr.getPass());
 				dao.deleteUserRoles(usr);
 				
 				for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
