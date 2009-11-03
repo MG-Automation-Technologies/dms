@@ -324,20 +324,26 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	}
 	
 	/**
-	 * 
+	 * Convert document to PDF.
 	 */
 	private void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
 		log.info("** Convert from "+mimeType+" to PDF **");
-		DocConverter dc = new DocConverter();
-		FileOutputStream os = new FileOutputStream(output);
-		dc.convert(is, mimeType, os, "application/pdf");
-		os.flush();
-		os.close();
-		is.close();
+		try {
+			DocConverter dc = new DocConverter();
+			FileOutputStream os = new FileOutputStream(output);
+			dc.convert(is, mimeType, os, "application/pdf");
+			os.flush();
+			os.close();
+			is.close();
+		} catch (Exception e) {
+			log.error("Error in "+mimeType+" to PDF conversion", e);
+			output.delete();
+			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
+		}
 	}
 	
 	/**
-	 * 
+	 * Convert PDF to SWF (for document preview feature).
 	 */
 	private void pdf2swf(File input, File output) throws IOException {
 		log.info("** Convert from PDF to SWF **");
@@ -352,8 +358,10 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			if (process.exitValue() == 1) {
 				log.warn(info);
 			}
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			log.error("Error in PDF to SWF conversion", e);
+			output.delete();
+			throw new IOException("Error in PDF to SWF conversion", e);
 		}
 	}
 }
