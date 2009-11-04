@@ -42,17 +42,14 @@ public class WarUtils {
 			Attributes atts = mf.getMainAttributes();
 			String impVersion = atts.getValue("Implementation-Version");
 			String impBuild = atts.getValue("Implementation-Build");
+			log.info("Implementation-Version: "+impVersion);
+			log.info("Implementation-Build: "+impBuild);
 			
-			if (impVersion != null && impBuild != null) {
-				if (impVersion.indexOf('.') > 0) {
-					String[] version = impVersion.split(".");
-					appVersion.setMajor(version[0]);
-					appVersion.setMinor(version[1]);
-					appVersion.setBuild(impBuild);
-				} else {
-					log.warn("Implementation-Version: "+impVersion);
-					log.warn("Implementation-Build: "+impBuild);
-				}
+			if (impVersion != null && impBuild != null && impVersion.indexOf('.') > 0) {
+				String[] version = impVersion.split("\\.");
+				appVersion.setMajor(version[0]);
+				appVersion.setMinor(version[1]);
+				appVersion.setBuild(impBuild);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
