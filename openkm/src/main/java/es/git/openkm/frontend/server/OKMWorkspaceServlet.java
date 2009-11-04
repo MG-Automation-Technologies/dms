@@ -35,6 +35,7 @@ import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTWorkspace;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMWorkspaceService;
+import es.git.openkm.util.WarUtils;
 
 /**
  * Servlet Class
@@ -63,6 +64,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
+		workspace.setAppVersion(WarUtils.getAppVersion().toString());
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
