@@ -30,6 +30,7 @@ import es.git.openkm.backend.client.service.OKMRepositoryService;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
+import es.git.openkm.util.WarUtils;
 
 /**
  * Servlet Class
@@ -116,5 +117,12 @@ public class OKMRepositoryServletAdmin extends OKMRemoteServiceServletAdmin impl
 		
 		log.debug("getUuid: ");
 		return uuid;
+	}
+	
+	/* (non-Javadoc)
+	 * @see es.git.openkm.backend.client.service.OKMRepositoryService#getAppVersion()
+	 */
+	public String getAppVersion() throws OKMException {
+		return WarUtils.getAppVersion().toString();
 	}
 }

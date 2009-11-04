@@ -107,7 +107,7 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 	/* (non-Javadoc)
 	 * @see es.git.openkm.backend.client.service.OKMUserService#findAllUsers()
 	 */
-	public List<GWTUser>  findAllUsers() throws OKMException {
+	public List<GWTUser> findAllUsers() throws OKMException {
 		log.debug("findAllUsers()");
 		List<GWTUser> al = new ArrayList<GWTUser>();
 		
