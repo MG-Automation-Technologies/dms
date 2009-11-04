@@ -41,6 +41,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String password = "";
 	private boolean changePassword = true;
 	private String email = "";
+	private String appVersion = "";
 
 	/**
 	 * GWTWorkspace
@@ -142,5 +143,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getAppVersion() {
+		return appVersion;
+	}
+	
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
 	}
 }
