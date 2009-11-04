@@ -48,7 +48,7 @@ public class Update {
 			URL url = new URL("http://update.openkm.com");
 			HttpURLConnection urlConn =(HttpURLConnection)url.openConnection();
 			String content = "okm_uuid="+URLEncoder.encode(uuid, "UTF-8")+
-				"&okm_version="+URLEncoder.encode(Repository.VERSION, "UTF-8")+
+				"&okm_version="+URLEncoder.encode(WarUtils.getAppVersion().toString(), "UTF-8")+
 				"&os_name="+URLEncoder.encode(System.getProperty("os.name"), "UTF-8")+
 				"&os_version="+URLEncoder.encode(System.getProperty("os.version"), "UTF-8")+
 				"&java_vendor="+URLEncoder.encode(System.getProperty("java.vm.vendor"), "UTF-8")+
