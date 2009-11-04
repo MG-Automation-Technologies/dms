@@ -1,9 +1,9 @@
 package es.git.openkm.bean;
 
 public class AppVersion {
-	private String major;
-	private String minor;
-	private String build;
+	private String major = "0";
+	private String minor = "0";
+	private String build = "0";
 	
 	public String getMajor() {
 		return major;
