@@ -30,6 +30,6 @@ public class AppVersion {
 	}
 	
 	public String toString() {
-		return major+"."+minor+" build-"+build;
+		return major+"."+minor+" (build: "+build+")";
 	}
 }
