@@ -54,7 +54,7 @@ import es.git.openkm.dao.bean.TwitterAccount;
 import es.git.openkm.module.NotificationModule;
 import es.git.openkm.util.FileUtils;
 import es.git.openkm.util.JCRUtils;
-import es.git.openkm.util.Mail;
+import es.git.openkm.util.MailUtils;
 import es.git.openkm.util.UserActivity;
 
 public class DirectNotificationModule implements NotificationModule {
@@ -287,7 +287,7 @@ public class DirectNotificationModule implements NotificationModule {
 					String[] subjectArgs = { nodePath, FileUtils.getName(nodePath) };
 					String body = MessageFormat.format(Config.NOTIFY_MESSAGE_BODY, bodyArgs);
 					String subject = MessageFormat.format(Config.NOTIFY_MESSAGE_SUBJECT, subjectArgs);
-					Mail.send((String) from.get(0), emails, subject, body);
+					MailUtils.send((String) from.get(0), emails, subject, body);
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -334,7 +334,7 @@ public class DirectNotificationModule implements NotificationModule {
 					String[] subjectArgs = { eventType, node.getPath(), node.getName() };
 					String body = MessageFormat.format(Config.SUBSCRIPTION_MESSAGE_BODY, bodyArgs);
 					String subject = MessageFormat.format(Config.SUBSCRIPTION_MESSAGE_SUBJECT, subjectArgs);
-					Mail.send(emails, subject, body);
+					MailUtils.send(emails, subject, body);
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -358,7 +358,7 @@ public class DirectNotificationModule implements NotificationModule {
 			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
 				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
 				
-				String[] bodyArgs = { Mail.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()),
+				String[] bodyArgs = { MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()),
 					node.getPath(),	node.getName(), user, eventType, comment };
 				String status = MessageFormat.format(Config.SUBSCRIPTION_TWITTER_STATUS, bodyArgs);
 				AuthDAO auth = AuthDAO.getInstance();
