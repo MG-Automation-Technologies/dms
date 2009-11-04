@@ -55,6 +55,7 @@ public class StatsPanel extends Composite {
 	private HorizontalPanel leftPanel;
 	private HTML uuid;
 	private HTML support;
+	private HTML version;
 	
 	/**
 	 * UsersPanel
@@ -69,9 +70,10 @@ public class StatsPanel extends Composite {
 		leftPanel = new HorizontalPanel();
 		uuid = new HTML();
 		support = new HTML("<a href=\"mailto:support@openkm.com\">support@openkm.com</a>");
+		version = new HTML("0.0");
 		
 		table.setHTML(0, 0, "<b>OpenKM</b>");
-		table.setHTML(1, 0, "Version: 4.0");
+		table.setWidget(1, 0, version);
 		table.setHTML(2, 0, "<br>");
 		table.setHTML(3, 0, "&copy; GIT Consultors S.L.");
 		table.setHTML(4, 0, "C/ Los Doscientos, 35 4º Izq");
@@ -116,6 +118,7 @@ public class StatsPanel extends Composite {
 		leftPanel.setCellWidth(space, "15");
 		
 		getUuid();
+		getAppVersion();
 		
 		initWidget(verticalSplitPanel);
 		
@@ -132,7 +135,7 @@ public class StatsPanel extends Composite {
 	}
 	
 	/**
-	 * Gets asyncronous get uuis
+	 * Get asyncronous uuid
 	 */
 	final AsyncCallback callbackGetUuid = new AsyncCallback() {
 		public void onSuccess(Object result) {
@@ -147,11 +150,33 @@ public class StatsPanel extends Composite {
 	};
 	
 	/**
-	 * Gets the uuid
+	 * Get uuid
 	 */
 	public void getUuid() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getUuid(callbackGetUuid);
+	}
+	
+	/**
+	 * Get asyncronous version
+	 */
+	final AsyncCallback callbackGetAppVersion = new AsyncCallback() {
+		public void onSuccess(Object result) {
+			version.setHTML("Version: " + result);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("getAppVersion", caught);
+		}
+	};
+	
+	/**
+	 * Get version
+	 */
+	public void getAppVersion() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		repositoryService.getAppVersion(callbackGetAppVersion);
 	}
 }
