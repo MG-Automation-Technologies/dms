@@ -20,6 +20,11 @@
   OKMDocument okmDocument = OKMDocument.getInstance();
   OKMFolder okmFolder = OKMFolder.getInstance();
   StringBuilder sb = new StringBuilder();
+  String ctxTaxonomy = "/okm:root";
+  String ctxTemplates = "/okm:templates";
+  String ctxPersonal = "/okm:home/"+jcrSession.getUserID()+"/okm:personal";
+  String ctxMail = "/okm:home/"+jcrSession.getUserID()+"/okm:mail";
+  String ctxTrash = "/okm:home/"+jcrSession.getUserID()+"/okm:trash";
   int i = 0;
 
   if (path == null || path.equals("")) {
@@ -44,7 +49,7 @@
     sb.append(URLEncoder.encode(fld.getPath(), "UTF-8"));
     sb.append("\"><img src=\"img/properties.png\"></a></td><td nowrap=\"nowrap\"></td></tr>");
   }
-    
+  
   for (Iterator<Document> it = okmDocument.getChilds(token, path).iterator(); it.hasNext(); ) {
     Document doc = it.next();
     sb.append("<tr class=\"");
@@ -76,7 +81,18 @@
 <body>
   <table width="100%" cellpadding="2" cellspacing="2">
     <tr>
-      <td><form action="search.jsp"><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
+      <td>
+        <form id="context" action="browse.jsp">
+          <select name="path" onchange="document.getElementById('context').submit()">
+            <option value="<%=ctxTaxonomy%>" <%=path.startsWith(ctxTaxonomy)?"selected":""%>>Taxonomy</option>
+            <option value="<%=ctxTemplates%>" <%=path.startsWith(ctxTemplates)?"selected":""%>>Templates</option>
+            <option value="<%=ctxPersonal%>" <%=path.startsWith(ctxPersonal)?"selected":""%>>My documents</option>
+            <!-- <option value="<%=ctxMail%>" <%=path.startsWith(ctxMail)?"selected":""%>>E-mail</option> -->
+            <option value="<%=ctxTrash%>" <%=path.startsWith(ctxTrash)?"selected":""%>>Trash</option>
+          </select>
+        </form>
+      </td>
+      <td><form id="search" action="search.jsp"><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
       <td></td>
       <td align="right"><a href="logout.jsp"><img src="img/logout.png" /></a></td>
     </tr>
