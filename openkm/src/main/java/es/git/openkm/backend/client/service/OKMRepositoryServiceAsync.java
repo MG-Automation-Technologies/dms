@@ -29,4 +29,5 @@ public interface OKMRepositoryServiceAsync {
 	public void getRoot(AsyncCallback callback);
 	public void getTemplate(AsyncCallback callback); 
 	public void getUuid(AsyncCallback callback);
+	public void getAppVersion(AsyncCallback callback);
 }

@@ -32,4 +32,5 @@ public interface OKMRepositoryService extends RemoteService {
 	public GWTFolder getRoot() throws OKMException;
 	public GWTFolder getTemplate() throws OKMException;
 	public String getUuid() throws OKMException;
+	public String getAppVersion() throws OKMException;
 }
