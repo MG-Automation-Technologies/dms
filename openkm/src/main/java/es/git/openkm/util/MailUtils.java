@@ -76,8 +76,8 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.UnsupportedMimeTypeException;
 import es.git.openkm.core.VirusDetectedException;
 
-public class Mail {
-	private static Logger log = LoggerFactory.getLogger(Mail.class);
+public class MailUtils {
+	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
 	
 	/**
 	 * Send mail without FROM addresses.
