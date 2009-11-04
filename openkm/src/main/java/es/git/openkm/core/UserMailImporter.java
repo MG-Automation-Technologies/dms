@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import es.git.openkm.api.OKMAuth;
 import es.git.openkm.dao.AuthDAO;
 import es.git.openkm.dao.bean.MailAccount;
-import es.git.openkm.util.Mail;
+import es.git.openkm.util.MailUtils;
 
 public class UserMailImporter extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(UserMailImporter.class);
@@ -49,7 +49,7 @@ public class UserMailImporter extends TimerTask {
 				
 				for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
 					MailAccount ma = maIt.next();
-					Mail.importMessages(systemToken, uid, ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
+					MailUtils.importMessages(systemToken, uid, ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
 				}
 			}
 		} catch (RepositoryException e) {

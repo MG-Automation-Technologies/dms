@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.Notification;
 import es.git.openkm.module.direct.DirectRepositoryModule;
-import es.git.openkm.util.Mail;
+import es.git.openkm.util.MailUtils;
 
 public class OKMEventListener implements EventListener {
 	private static Logger log = LoggerFactory.getLogger(OKMEventListener.class);
@@ -113,7 +113,7 @@ public class OKMEventListener implements EventListener {
 							"User: " + evn.getUserID() + "\n" +
 							"Action: " + eventType;
 						
-						Mail.send("pavila@git.es", emails, "OpenKM notification", body);
+						MailUtils.send("pavila@git.es", emails, "OpenKM notification", body);
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
