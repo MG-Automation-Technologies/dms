@@ -71,6 +71,7 @@ import es.git.openkm.util.JCRUtils;
 import es.git.openkm.util.MailUtils;
 import es.git.openkm.util.UUIDGenerator;
 import es.git.openkm.util.UserActivity;
+import es.git.openkm.util.WarUtils;
 
 public class DirectRepositoryModule implements RepositoryModule {
 	private static Logger log = LoggerFactory.getLogger(DirectRepositoryModule.class);
@@ -310,7 +311,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Repository.setUuid(uuid);
 				
 				// Set repository version
-				okmConfig.setProperty(Repository.SYS_CONFIG_VERSION, Repository.VERSION);
+				okmConfig.setProperty(Repository.SYS_CONFIG_VERSION, WarUtils.getAppVersion().getMajor());
 				
 				root.save();
 			} else {
@@ -325,8 +326,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 				// Test repository version
 				String repoVer = okmConfig.getProperty(Repository.SYS_CONFIG_VERSION).getString();
 				
-				if (!Repository.VERSION.equals(repoVer)) {
-					log.warn("### Repository version ("+repoVer+") differs from application version ("+Repository.VERSION+") ###");
+				if (!WarUtils.getAppVersion().getMajor().equals(repoVer)) {
+					log.warn("### Actual repository version ("+repoVer+") differs from application repository version ("+WarUtils.getAppVersion().getMajor()+") ###");
 					log.warn("### You should upgrade the repository ###");
 				}
 			}
