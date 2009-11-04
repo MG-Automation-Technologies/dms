@@ -10,10 +10,13 @@ import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.AppVersion;
 
 public class WarUtils {
+	private static Logger log = LoggerFactory.getLogger(WarUtils.class);
 	private static AppVersion appVersion = null;
 	
 	/**
@@ -41,14 +44,15 @@ public class WarUtils {
 			String impBuild = atts.getValue("Implementation-Build");
 			
 			if (impVersion != null && impBuild != null) {
-				String[] version = impVersion.split(".");
-				appVersion.setMajor(version[0]);
-				appVersion.setMinor(version[1]);
-				appVersion.setBuild(impBuild);
-			} else {
-				appVersion.setMajor("0");
-				appVersion.setMinor("0");
-				appVersion.setBuild("0");
+				if (impVersion.indexOf('.') > 0) {
+					String[] version = impVersion.split(".");
+					appVersion.setMajor(version[0]);
+					appVersion.setMinor(version[1]);
+					appVersion.setBuild(impBuild);
+				} else {
+					log.warn("Implementation-Version: "+impVersion);
+					log.warn("Implementation-Build: "+impBuild);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
