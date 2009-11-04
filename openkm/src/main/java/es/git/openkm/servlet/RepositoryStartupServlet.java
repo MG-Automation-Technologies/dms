@@ -48,6 +48,7 @@ import es.git.openkm.dao.AuthDAO;
 import es.git.openkm.dao.WorkflowDAO;
 import es.git.openkm.module.direct.DirectAuthModule;
 import es.git.openkm.module.direct.DirectRepositoryModule;
+import es.git.openkm.util.WarUtils;
 
 /**
  * Servlet Class
@@ -81,6 +82,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (Config.APPLICATION_URL.equals("")) {
         	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/es.git.openkm.frontend.Main/index.jsp";
         }
+        
+        // Get OpenKM version
+        WarUtils.readAppVersion(getServletContext());
+        log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
 
         // Initialize folder pdf cache
         File pdfCacheFolder = new File(Config.PDF_CACHE);
