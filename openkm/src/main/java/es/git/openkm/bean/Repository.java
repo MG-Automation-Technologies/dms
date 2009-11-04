@@ -43,7 +43,6 @@ public class Repository implements Serializable {
 	public static final String USER_CONFIG = "okm:config";
 	public static final String USER_CONFIG_TYPE = "okm:userConfig";
 	public static final String LOCK_TOKENS = "okm:lockTokens";
-	public static final String VERSION = "4.0";
 	
 	private static String uuid;
 	private static String updateMsg; 
