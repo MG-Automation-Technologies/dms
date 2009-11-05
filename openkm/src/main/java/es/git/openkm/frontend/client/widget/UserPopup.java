@@ -138,7 +138,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 					passwordError.setVisible(true);
 				// Case creation
 				} else if (Main.get().workspaceUserProperties.getWorkspace().getImapID()<0 && imapUserPasswordText.getText().equals("") && 
-						  !(folderText.getText().length()>0 && imapUserText.getText().length()>0 && hostText.getText().length()>0) ) {
+						  (folderText.getText().length()>0 || imapUserText.getText().length()>0 || hostText.getText().length()>0) ) {
 					imapPassordError.setVisible(true);
 				// Case update 
 			    } else if( (imapUserPasswordText.getText().length()>0 || folderText.getText().length()>0 || imapUserText.getText().length()>0 ||
