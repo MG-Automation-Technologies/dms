@@ -550,15 +550,15 @@ public class Lang_co_ES {
 	    lang.put("user.preferences.user", "Usuario");
 	    lang.put("user.preferences.password", "Password");
 	    lang.put("user.preferences.mail", "Correo electrónico");
-	    lang.put("user.preferences.imap.host", "IMAP servidor");
-	    lang.put("user.preferences.imap.user", "IMAP nombre de usuario");
-	    lang.put("user.preferences.imap.user.password", "IMAP clave");
-	    lang.put("user.preferences.imap.folder", "IMAP carpeta");
+	    lang.put("user.preferences.imap.host", "Servidor de IMAP");
+	    lang.put("user.preferences.imap.user", "Usuario de IMAP");
+	    lang.put("user.preferences.imap.user.password", "Clave de IMAP");
+	    lang.put("user.preferences.imap.folder", "Carpeta de IMAP");
 	    lang.put("user.preferences.password.error", "Error: las claves son distintas");
 	    lang.put("user.preferences.user.data", "Cuenta de usuario");
 	    lang.put("user.preferences.mail.data", "Cuenta de mail");
 	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");
-	    lang.put("user.preferences.imap.password.error.void", "La clave del imap no puede ser vacio en la creación");
+	    lang.put("user.preferences.imap.password.error.void", "La clave de IMAP no puede estar vacía en la creación");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

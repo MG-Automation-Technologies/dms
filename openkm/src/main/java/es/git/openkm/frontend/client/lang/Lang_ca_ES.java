@@ -551,15 +551,15 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.user", "Usuari");
 	    lang.put("user.preferences.password", "Clau");
 	    lang.put("user.preferences.mail", "Correu electrònic");
-	    lang.put("user.preferences.imap.host", "Servidor de imap");
-	    lang.put("user.preferences.imap.user", "Nom d'usuari de imap");
-	    lang.put("user.preferences.imap.user.password", "Clau de l'usuari de imap");
-	    lang.put("user.preferences.imap.folder", "Carpeta de imap");
+	    lang.put("user.preferences.imap.host", "Servidor de IMAP");
+	    lang.put("user.preferences.imap.user", "Nom d'usuari de IMAP");
+	    lang.put("user.preferences.imap.user.password", "Clau de l'usuari de IMAP");
+	    lang.put("user.preferences.imap.folder", "Carpeta de IMAP");
 	    lang.put("user.preferences.password.error", "Error la clau no coincideix");
 	    lang.put("user.preferences.user.data", "Compte d'usuari");
 	    lang.put("user.preferences.mail.data", "Compte de mail");
 	    lang.put("user.preferences.imap.error", "Tots els camps son obligatoris per configurar el correu");
-	    lang.put("user.preferences.imap.password.error.void", "El clau del imap no pot ser buit en la creació");
+	    lang.put("user.preferences.imap.password.error.void", "El clau de IMAP no pot ser buit en la creació");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");
