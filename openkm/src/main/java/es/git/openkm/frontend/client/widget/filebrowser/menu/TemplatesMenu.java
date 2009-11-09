@@ -20,7 +20,6 @@
 package es.git.openkm.frontend.client.widget.filebrowser.menu;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
