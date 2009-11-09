@@ -380,11 +380,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
-			// Case document is created by template, must rename it after is showed
-			if (createdFromTemplate){
-				rename();
-				createdFromTemplate = false;
-			}
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
 			getMailChilds(fldId);
 		}
@@ -448,6 +443,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 			
 			selectedRowId = ""; // Always initializes value
+			
+			// Case document is created by template, must rename it after is showed
+			if (createdFromTemplate){
+				rename();
+				createdFromTemplate = false;
+			}
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TEMPLATES);
