@@ -255,7 +255,11 @@ public class Notes extends Composite {
 	final AsyncCallback<Object> callbackAddNote = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			GWTNote note = new GWTNote();
-			note.setText(richTextArea.getHTML());
+			if (Util.getUserAgent().startsWith("ie")) {
+				note.setText(textArea.getText());
+			} else {
+				note.setText(richTextArea.getHTML());
+			}
 			note.setDate(new Date());
 			note.setUser(Main.get().workspaceUserProperties.getUser());
 			table.removeRow(table.getRowCount()-1); // Deletes last row = addComment
