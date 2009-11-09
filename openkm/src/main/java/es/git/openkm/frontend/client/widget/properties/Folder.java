@@ -164,6 +164,13 @@ public class Folder extends Composite {
 			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
+		
+		// Some data must not be visible on personal view
+		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
+			tableSubscribedUsers.setVisible(false);
+		} else {
+			tableSubscribedUsers.setVisible(true);
+		}
 	}
 		
 	/**

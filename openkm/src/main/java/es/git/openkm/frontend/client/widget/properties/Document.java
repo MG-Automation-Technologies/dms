@@ -332,11 +332,24 @@ public class Document extends Composite {
 			tableProperties.getCellFormatter().setVisible(7,1,true);
 			tableProperties.getCellFormatter().setVisible(9,0,true);
 			tableProperties.getCellFormatter().setVisible(9,1,true);
+			keywordsCloudText.setVisible(true);
+			keywordsCloud.setVisible(true);
 		} else {
 			tableProperties.getCellFormatter().setVisible(7,0,false);
 			tableProperties.getCellFormatter().setVisible(7,1,false);
 			tableProperties.getCellFormatter().setVisible(9,0,false);
 			tableProperties.getCellFormatter().setVisible(9,1,false);
+			keywordsCloudText.setVisible(false);
+			keywordsCloud.setVisible(false);
+		}
+		
+		// Some data must not be visible on personal view
+		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
+			subcribedUsersText.setVisible(false);
+			tableSubscribedUsers.setVisible(false);
+		} else {
+			subcribedUsersText.setVisible(true);
+			tableSubscribedUsers.setVisible(true);
 		}
 
 	}
