@@ -90,7 +90,7 @@ public class NotifyPopup extends DialogBox  {
 		buttonPanel = new VerticalPanel();
 		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
 		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
-		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
+		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
 		
 		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickListener(){
 			public void onClick(Widget sender) {
@@ -152,6 +152,8 @@ public class NotifyPopup extends DialogBox  {
 		vPanel.setCellHorizontalAlignment(hUserPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(vButtonPanel, VerticalPanel.ALIGN_CENTER);
 		
+		vPanel.setWidth("100%");
+		
 		notifyTable.addStyleName("okm-Input");
 		userTable.addStyleName("okm-Input");
 		closeButton.setStyleName("okm-Button");
@@ -173,7 +175,7 @@ public class NotifyPopup extends DialogBox  {
 		setText(Main.i18n("notify.label"));
 		closeButton.setHTML(Main.i18n("button.close")); 
 		sendButton.setHTML(Main.i18n("fileupload.send"));
-		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
+		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
 		notifyTable.langRefresh();
 		userTable.langRefresh();
 	}
