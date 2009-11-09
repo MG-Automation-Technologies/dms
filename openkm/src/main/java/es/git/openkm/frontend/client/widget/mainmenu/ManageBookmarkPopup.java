@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -225,6 +226,8 @@ public class ManageBookmarkPopup extends DialogBox {
 		vPanel.setCellHorizontalAlignment(hPanel, HorizontalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(scrollPanel, HorizontalPanel.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(cancelButton, HorizontalPanel.ALIGN_CENTER);
+		
+		vPanel.setWidth("100%");
 		
 		center();
 		hide();
