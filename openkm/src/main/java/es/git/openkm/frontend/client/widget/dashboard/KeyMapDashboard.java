@@ -253,6 +253,8 @@ public class KeyMapDashboard extends Composite {
 					table.reset();
 					context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
 					controlSearchIn.refreshControl(0);
+					
+					getKeywordMap(); // Gets related keyMap 
 					refreshClean();
 				}
 			}
