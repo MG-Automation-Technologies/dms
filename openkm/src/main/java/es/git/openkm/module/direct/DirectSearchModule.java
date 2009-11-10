@@ -313,9 +313,18 @@ public class DirectSearchModule implements SearchModule {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("jcr:contains(@okm:name,'"+ params.getName()+ "')");
 				}
+				
+				if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
+					sb.append(" "+params.getOperator()+" ");
+					sb.append("(");
+					sb.append("@jcr:created >= xs:dateTime('" + ISO8601.format(params.getLastModifiedFrom()) +"')");				
+					sb.append(" and ");
+					sb.append("@jcr:created <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) +"')");
+					sb.append(")");
+				}
 
 				sb.append(")");
-			} 
+			}
 
 			/**
 			 * MAIL
