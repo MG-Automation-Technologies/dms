@@ -38,25 +38,29 @@ public class CommonUI {
 	public static void openAllFolderPath(String path, String docPath) {
 		boolean found = false;
 		
-		if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath())) {
-			Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
-			found = true;
-		} else if (path.startsWith(Main.get().mainPanel.navigator.personalTree.folderRoot.getPath())) {
-			Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
-			found = true;
-		} else if (path.startsWith(Main.get().mainPanel.navigator.templateTree.folderRoot.getPath())) {
-			Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TEMPLATES, false);
-			found = true;
-		} else if (path.startsWith(Main.get().mainPanel.navigator.trashTree.folderRoot.getPath())) {
-			Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
-			found = true;
-		} else if (path.startsWith(Main.get().mainPanel.navigator.mailTree.folderRoot.getPath())) {
-			Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
+		if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath()) || 
+			path.startsWith(Main.get().mainPanel.navigator.personalTree.folderRoot.getPath()) ||
+			path.startsWith(Main.get().mainPanel.navigator.templateTree.folderRoot.getPath()) || 
+			path.startsWith(Main.get().mainPanel.navigator.trashTree.folderRoot.getPath()) || 
+			path.startsWith(Main.get().mainPanel.navigator.mailTree.folderRoot.getPath())) {
 			found = true;
 		}
 		
 		if (found) {
 			Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DESKTOP);
+			
+			if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.personalTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.templateTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TEMPLATES, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.trashTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.mailTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
+			}
+			
 			Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 		}
 	}
