@@ -34,6 +34,7 @@ import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.Coordenates;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
+import es.git.openkm.frontend.client.bean.GWTMail;
 import es.git.openkm.frontend.client.panel.bottom.BottomPanel;
 import es.git.openkm.frontend.client.panel.center.Administration;
 import es.git.openkm.frontend.client.panel.center.Browser;
@@ -528,7 +529,8 @@ public class ExtendedDockPanel extends Composite {
 									propagate = false;
 								} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption && (
 										   Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() || 
-										   Main.get().mainPanel.browser.fileBrowser.isFolderSelected()) ) {
+										   Main.get().mainPanel.browser.fileBrowser.isFolderSelected() ||
+										   Main.get().mainPanel.browser.fileBrowser.isMailSelected())) {
 									
 									Main.get().mainPanel.topPanel.toolBar.executeDelete();
 									propagate = false;
@@ -568,7 +570,8 @@ public class ExtendedDockPanel extends Composite {
 										
 									} else if (Main.get().mainPanel.topPanel.toolBar.getToolBarOption().copyOption && 
 											   (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() || 
-											    Main.get().mainPanel.browser.fileBrowser.isFolderSelected()) ) {
+											    Main.get().mainPanel.browser.fileBrowser.isFolderSelected() ||
+											    Main.get().mainPanel.browser.fileBrowser.isMailSelected()) ) {
 																				
 										// Saves the document or folder to be copied
 										folderSelectPopup.setEntryPoint(FolderSelectPopup.ENTRYPOINT_KEYBOARD);
@@ -582,6 +585,18 @@ public class ExtendedDockPanel extends Composite {
 												case Keyboard.KEY_X:
 													Main.get().mainPanel.bottomPanel.setStatus("status.document.cut",false);
 													folderSelectPopup.setToMove(document);
+													break;
+											}
+										} else if (Main.get().mainPanel.browser.fileBrowser.isMailSelected()) {
+											GWTMail mail = Main.get().mainPanel.browser.fileBrowser.getMail();
+											switch (keyCode) {
+												case Keyboard.KEY_C:
+													Main.get().mainPanel.bottomPanel.setStatus("status.document.copied",false);
+													folderSelectPopup.setToCopy(mail);
+													break;
+												case Keyboard.KEY_X:
+													Main.get().mainPanel.bottomPanel.setStatus("status.document.cut",false);
+													folderSelectPopup.setToMove(mail);
 													break;
 											}
 										} else {
