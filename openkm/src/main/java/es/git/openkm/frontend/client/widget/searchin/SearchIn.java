@@ -183,7 +183,7 @@ public class SearchIn extends Composite {
 		calendar.addChangeListener(new ChangeListener() {
 			public void onChange(Widget sender) {
 				calendarPopup.hide();
-				DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+				DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 				
 				switch (calendarFired) {
 					case CALENDAR_FIRED_START:
@@ -1057,7 +1057,7 @@ public class SearchIn extends Composite {
 		
 		if (gWTParams.getLastModifiedFrom()!=null) {
 			modifyDateFrom = gWTParams.getLastModifiedFrom();
-			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 			startDate.setText(dtf.format(modifyDateFrom));
 			advancedSearchFlag = true;
 		} else {
@@ -1067,7 +1067,7 @@ public class SearchIn extends Composite {
 		
 		if (gWTParams.getLastModifiedTo()!=null) {
 			modifyDateTo = gWTParams.getLastModifiedTo();
-			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 			endDate.setText(dtf.format(modifyDateTo));
 			advancedSearchFlag = true;
 		} else {

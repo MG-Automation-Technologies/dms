@@ -39,6 +39,7 @@ public class Lang_ru_RU {
 	    
 	    // General configuration
 	    lang.put("general.date.pattern", "dd-MM-yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "dd-MM-yyyy");
 	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup

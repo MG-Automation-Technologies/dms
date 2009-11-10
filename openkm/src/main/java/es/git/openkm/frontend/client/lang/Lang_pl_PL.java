@@ -38,6 +38,7 @@ public class Lang_pl_PL {
 	    
 	    // General configuration
 	    lang.put("general.date.pattern", "dd.MM.yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "dd.MM.yyyy");
 	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup
