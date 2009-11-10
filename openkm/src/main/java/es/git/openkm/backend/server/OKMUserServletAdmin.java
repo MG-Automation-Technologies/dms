@@ -170,6 +170,7 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 			
 			AuthDAO.getInstance().deleteUserRoles(Util.copy(gWTUser));
 			AuthDAO.getInstance().updateUser(Util.copy(gWTUser));
+			AuthDAO.getInstance().updateUserPassword(gWTUser.getId(), gWTUser.getPass());
 			for (Iterator it = gWTUser.getRoles().iterator(); it.hasNext();) {
 				String role = (String) it.next();
 				
