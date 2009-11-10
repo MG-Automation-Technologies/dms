@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
@@ -303,5 +304,42 @@ public class KeywordWidget extends Composite {
 	 */
 	public void unsetRefreshing() {
 		status.unsetFlag_getDashboard();
+	}
+	
+	/**
+	 * Increase the keyword rate with one
+	 * 
+	 * @param keyword The keyword to change rate
+	 */
+	public void increaseKeywordRate(String keyword, boolean add) {
+		if (keywordTableMap.containsKey(keyword)) {
+			int row = Integer.valueOf(keywordTableMap.get(keyword));
+			int value = Integer.valueOf(table.getHTML(row, 1)) + 1;
+			table.setHTML(row, 1, ""+value);
+		} else if (add) {
+			GWTKeyword key = new GWTKeyword();
+			key.setFrequency(1);
+			key.setKeyword(keyword);
+			key.setTop10(false);
+			add(key);
+		}
+	}
+	
+	/**
+	 * Decrease the keyword rate with one
+	 * 
+	 * @param keyword The keyword to change rate
+	 */
+	public void decreaseKeywordRate(String keyword) {
+		if (keywordTableMap.containsKey(keyword)) {
+			int row = Integer.valueOf(keywordTableMap.get(keyword));
+			int value = Integer.valueOf(table.getHTML(row, 1)) - 1;
+			if (value>0) {
+				table.setHTML(row, 1, ""+value);
+			} else {
+				// This case is not possible in KeyMapDashBoard controls case <=0 
+				table.setHTML(row, 1, "0");
+			}
+		}
 	}
 }

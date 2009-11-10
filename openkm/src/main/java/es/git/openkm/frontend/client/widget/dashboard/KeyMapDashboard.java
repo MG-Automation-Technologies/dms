@@ -847,11 +847,21 @@ public class KeyMapDashboard extends Composite {
 	 * @param keyword The keyword to change rate
 	 */
 	public void increaseKeywordRate(String keyword) {
+		int rate = 1;
 		if (rateMap.keySet().contains((keyword))) {
-			int rate = Integer.parseInt(rateMap.get(keyword));
-			rate++;
-			rateMap.put(keyword,""+rate);
-			refreshFrequencies();
+			rate = Integer.parseInt(rateMap.get(keyword));
+			rate++; 
+		} 
+		rateMap.put(keyword,""+rate);
+		keyAllTable.increaseKeywordRate(keyword, true);
+		keyTopTable.increaseKeywordRate(keyword, false);
+		keyRelatedTable.increaseKeywordRate(keyword, false);
+		refreshFrequencies();
+		// In case keyword is selected must change results
+		if (selectedKeyMap.containsKey(keyword)) {
+			controlSearchIn.executeSearch(limit);
+			getKeywordMap(getFiltering()); // Gets related keyMap 
+			refreshClean();
 		}
 	}
 	
@@ -867,10 +877,23 @@ public class KeyMapDashboard extends Composite {
 			if (rate<=0) {
 				// Case that is needed to remove some keyword is better to refreshing all data to prevent 
 				// visualization inconsistenses
+				if (selectedKeyMap.containsKey(keyword)) {
+					selectedKeyPanel.remove((Widget) selectedKeyMap.get(keyword)); // removes selected keyword
+				}
 				refreshAll();
 			} else {
 				rateMap.put(keyword,""+rate);
+				keyAllTable.decreaseKeywordRate(keyword);
+				keyTopTable.decreaseKeywordRate(keyword);
+				keyRelatedTable.decreaseKeywordRate(keyword);
 				refreshFrequencies();
+				
+				// In case keyword is selected must change results
+				if (selectedKeyMap.containsKey(keyword)) {
+					controlSearchIn.executeSearch(limit);
+					getKeywordMap(getFiltering()); // Gets related keyMap 
+					refreshClean();
+				}
 			}
 		}
 	}
