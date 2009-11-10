@@ -29,6 +29,13 @@ public class WarUtils {
 	/**
 	 * 
 	 */
+	public static void setAppVersion(AppVersion newAppVersion) {
+		appVersion = newAppVersion;
+	}
+	
+	/**
+	 * 
+	 */
 	public static synchronized void readAppVersion(ServletContext sc) {
 		String appServerHome = sc.getRealPath("/");
 		File manifestFile = new File(appServerHome, "META-INF/MANIFEST.MF");
