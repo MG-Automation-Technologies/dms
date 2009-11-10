@@ -8,7 +8,7 @@
   <name>OpenKM Web Application</name>
   <url>http://www.openkm.com</url>
   <description>OpenKM is powerful scalable Document Management System (DMS). OpenKM uses JBoss + J2EE + Ajax web (GWT) + Jackrabbit (lucene) open source technologies.</description>
-  
+
   <scm>
     <url>http://openkm.svn.sourceforge.net/viewvc/openkm/</url>
     <connection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm</connection>
@@ -60,7 +60,7 @@
       <name>JBoss Maven Repository</name>
       <url>http://repository.jboss.org/maven2</url>
     </repository>
-    
+
     <!-- Needed for com.google.gwt:gchart -->
     <repository>
       <id>jboss.com</id>
@@ -310,7 +310,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>buildnumber-maven-plugin</artifactId>
@@ -324,16 +324,17 @@
           </execution>
         </executions>
         <configuration>
-          <doCheck>false</doCheck>
-          <doUpdate>false</doUpdate>
+          <doCheck>true</doCheck>
+          <doUpdate>true</doUpdate>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>2.1-beta-1</version>
         <configuration>
+          <attachClasses>true</attachClasses>
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -344,7 +345,7 @@
           </archive>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -356,7 +357,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <reporting>
     <plugins>
       <plugin>
