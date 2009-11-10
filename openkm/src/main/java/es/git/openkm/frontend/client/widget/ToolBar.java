@@ -890,6 +890,8 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			disableCheckout();
 			disableLock();
 			disableUnlock();
+			disableAddPropertyGroup();
+			disableRemovePropertyGroup();
 			disableCheckout();
 			disableCheckin();
 			disableCancelCheckout();
@@ -917,8 +919,6 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 					} 
 				} else {
 					disableDelete();
-					disableAddPropertyGroup();
-					disableRemovePropertyGroup();
 				}				
 			} else {
 				disable = true;
@@ -926,8 +926,6 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 			
 			if (disable) {
 				disableDelete();
-				disableAddPropertyGroup();
-				disableRemovePropertyGroup();
 			} 
 			
 			// Onnly on taxonomy enables to send document link by mail 
