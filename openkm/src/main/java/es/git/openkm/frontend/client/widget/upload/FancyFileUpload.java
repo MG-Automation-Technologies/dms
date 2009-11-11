@@ -521,6 +521,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 						vNotifyPanel.setVisible(true);
 						importZip.setChecked(false);
 					} else {
+						errorUserNotify.setVisible(false);
 						vNotifyPanel.setVisible(false);
 					}
 				}
