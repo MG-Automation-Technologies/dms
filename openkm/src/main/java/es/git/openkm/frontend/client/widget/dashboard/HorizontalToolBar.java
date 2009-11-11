@@ -152,6 +152,7 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		user.setStyleName("okm-ToolBar-Big-selected");
 		hPanel.setStyleName("okm-ToolBar");
 		hPanel.addStyleName("okm-ToolBar-Border");
+		hPanel.addStyleName("okm-DisableSelect");
 		
 		initWidget(hPanel);
 	}

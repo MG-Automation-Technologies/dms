@@ -94,6 +94,8 @@ public class TabDocument extends Composite implements TabListener {
 		notes.setSize("100%", "100%");
 		panel.setSize("100%", "100%");
 		
+		tabPanel.setStyleName("okm-DisableSelect");
+		
 		initWidget(panel);
 	}
 	
