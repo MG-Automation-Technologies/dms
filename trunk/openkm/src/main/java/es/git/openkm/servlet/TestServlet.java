@@ -21,6 +21,8 @@ package es.git.openkm.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import es.git.openkm.bean.kea.Term;
+import es.git.openkm.kea.RDFVocabulary;
 
 /**
  * Servlet Class
@@ -42,6 +47,15 @@ public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 8388111332983911121L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		List<Term> terms = RDFVocabulary.getInstance().getISMTTerms();
+		
+		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
+			Term term = it.next();
+			log.info("id:"+term.getId() + " text:" +term.getText());
+		}
+		
+		System.out.println("estic aqui");
+		
 		String token = (String)request.getSession().getAttribute("token");
 		PrintWriter out = response.getWriter();
 		log.info("Token: "+token);
