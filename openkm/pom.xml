@@ -298,9 +298,8 @@
     <!-- KEA -->
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
-      <artifactId>sesame</artifactId>
-      <version>2.2.2</version>
-      <type>pom</type>
+      <artifactId>sesame-runtime</artifactId>
+      <version>2.2.4</version>
     </dependency>
   </dependencies>
 
