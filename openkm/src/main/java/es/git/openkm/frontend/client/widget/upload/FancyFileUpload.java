@@ -237,7 +237,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			HorizontalPanel hPBPanel = new HorizontalPanel();
 			hPBPanel.add(progressBar); 
 			hPBPanel.setCellVerticalAlignment(progressBar, HasAlignment.ALIGN_MIDDLE);
-			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_CENTER); // Corrects some problem with centering progress status 
+			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT); // Corrects some problem with centering progress status 
 			progressBar.setSize("260", "20"); 
 			
 			pendingPanel.setWidth("260");
