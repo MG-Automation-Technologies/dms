@@ -287,6 +287,13 @@
       <artifactId>gwt-incubator</artifactId>
       <version>1.5-Dec_28</version>
     </dependency>
+    
+    <!-- KEA -->
+    <dependency>
+      <groupId>org.openrdf</groupId>
+      <artifactId>sesame</artifactId>
+      <version>1.2.7</version>
+    </dependency>
   </dependencies>
 
   <build>
