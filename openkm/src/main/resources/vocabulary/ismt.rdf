@@ -1,0 +1,1021 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp -->
+<!--     using base file:/home/adh/ismt1.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2004/02/skos/core#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dct="http://purl.org/dc/terms/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+    <ConceptScheme rdf:about="http://cain.nbii.org/thesauri/ismt.rdf">
+        <dc:creator>Deanne DiPietro</dc:creator>
+        <dc:description>A subject thesaurus intended to help in invasive species management.</dc:description>
+        <dc:language>en</dc:language>
+        <dc:language>es</dc:language>
+        <dc:language>pt</dc:language>
+        <dc:title>Invasive Species Management Thesaurus</dc:title>
+        <dct:created>2002-09-16</dct:created>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Agriculture"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#AquaticEcology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Botany"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Census"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Chemicals"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Communication"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Conservation"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Disturbance"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Ecology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Entomology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalEducation"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalLaw"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalRegulation"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Genetics"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#GeographicInformationSystems"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#HabitatMapping"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Horticulture"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Impacts"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InformationResources"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InformationTechnology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesEcology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Mapping"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Methods"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Mitigation"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Modeling"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Monitoring"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#NativeEcosystems"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Outreach"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Pathogens"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Pathology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Pathways"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Permitting"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#PlantEcology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#PlantPhysiology"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#PopulationDynamics"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#RangelandWeed"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#RemoteSensing"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Research"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Restoration"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SoilScience"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Species"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesDistribution"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesIdentification"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Taxonomy"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Vectors"/>
+        <hasTopConcept rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#WeedScience"/>
+    </ConceptScheme>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#AgriculturalLand">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Agricultural land</prefLabel>
+        <prefLabel xml:lang="pt">Terra agrícola</prefLabel>
+        <prefLabel xml:lang="es">Tierra agrícola</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Agriculture">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Agricultura</prefLabel>
+        <prefLabel xml:lang="pt">Agricultura</prefLabel>
+        <prefLabel xml:lang="en">Agriculture</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Amphibians">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Amphibians</prefLabel>
+        <prefLabel xml:lang="es">Anfibios</prefLabel>
+        <prefLabel xml:lang="pt">Anfíbios</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#AquaticEcology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Aquatic ecology</prefLabel>
+        <prefLabel xml:lang="pt">Ecologia aquática</prefLabel>
+        <prefLabel xml:lang="es">Ecología acuática</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#AquaticInvasives">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Aquatic invasives</prefLabel>
+        <prefLabel xml:lang="es">Invasoras acuáticas</prefLabel>
+        <prefLabel xml:lang="pt">Invasoras aquáticas</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Barren">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Barren</prefLabel>
+        <prefLabel xml:lang="pt">Solo sem vegetação</prefLabel>
+        <prefLabel xml:lang="es">Terreno sin vegetación</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#BiologicalControl">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Biological control</prefLabel>
+        <prefLabel xml:lang="es">Control biológico</prefLabel>
+        <prefLabel xml:lang="pt">Controle biológico</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Birds">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Aves</prefLabel>
+        <prefLabel xml:lang="pt">Aves</prefLabel>
+        <prefLabel xml:lang="en">Birds</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Botany">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Botany</prefLabel>
+        <prefLabel xml:lang="es">Botánica</prefLabel>
+        <prefLabel xml:lang="pt">Botânica</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Census">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Censo</prefLabel>
+        <prefLabel xml:lang="es">Censos</prefLabel>
+        <prefLabel xml:lang="en">Census</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Chaparral">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Chaparral</prefLabel>
+        <prefLabel xml:lang="es">Chaparral</prefLabel>
+        <prefLabel xml:lang="pt">Chaparral</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ChemicalControl">
+        <altLabel xml:lang="es">Control con herbicida</altLabel>
+        <altLabel xml:lang="pt">Controle de herbicida</altLabel>
+        <altLabel xml:lang="en">Herbicide control</altLabel>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Chemical control</prefLabel>
+        <prefLabel xml:lang="es">Control químico</prefLabel>
+        <prefLabel xml:lang="pt">Controle químico</prefLabel>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Chemicals"/>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Herbicides"/>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Chemicals">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Herbicides"/>
+        <prefLabel xml:lang="en">Chemicals</prefLabel>
+        <prefLabel xml:lang="es">Productos Químicos</prefLabel>
+        <prefLabel xml:lang="pt">Produtos Químicos</prefLabel>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ChemicalControl"/>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#CoastalScrub">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Coastal scrub</prefLabel>
+        <prefLabel xml:lang="es">Matorral costero</prefLabel>
+        <prefLabel xml:lang="pt">Restinga</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#CoastalVegetation">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Coastal vegetation</prefLabel>
+        <prefLabel xml:lang="es">Vegetación costera</prefLabel>
+        <prefLabel xml:lang="pt">Vegetação costeira</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#CoastalWaters">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Aguas costeras</prefLabel>
+        <prefLabel xml:lang="en">Coastal waters</prefLabel>
+        <prefLabel xml:lang="pt">Águas costeiras</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Communication">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Communication</prefLabel>
+        <prefLabel xml:lang="es">Comunicación</prefLabel>
+        <prefLabel xml:lang="pt">Comunicação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ConiferForest">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Bosque de coníferas</prefLabel>
+        <prefLabel xml:lang="en">Conifer forest</prefLabel>
+        <prefLabel xml:lang="pt">Floresta de coníferas</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Conservation">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Conservación</prefLabel>
+        <prefLabel xml:lang="en">Conservation</prefLabel>
+        <prefLabel xml:lang="pt">Conservação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#DesertOasis">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Desert oasis</prefLabel>
+        <prefLabel xml:lang="es">Oasis</prefLabel>
+        <prefLabel xml:lang="pt">Oásis</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#DesertScrub">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Desert scrub</prefLabel>
+        <prefLabel xml:lang="es">Matorral desértico</prefLabel>
+        <prefLabel xml:lang="pt">Semi-árido</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Diseases">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Diseases</prefLabel>
+        <prefLabel xml:lang="pt">Doenças</prefLabel>
+        <prefLabel xml:lang="es">Enfermedades</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Disturbance">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Erosion"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Fire"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Flood"/>
+        <prefLabel xml:lang="en">Disturbance</prefLabel>
+        <prefLabel xml:lang="es">Perturbación</prefLabel>
+        <prefLabel xml:lang="pt">Perturbação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#DisturbedAreas">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Disturbed areas</prefLabel>
+        <prefLabel xml:lang="es">Áreas perturbadas</prefLabel>
+        <prefLabel xml:lang="pt">Áreas perturbadas</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Dunes">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Dunas</prefLabel>
+        <prefLabel xml:lang="pt">Dunas</prefLabel>
+        <prefLabel xml:lang="en">Dunes</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Ecology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#WildlifeEcology"/>
+        <prefLabel xml:lang="pt">Ecologia</prefLabel>
+        <prefLabel xml:lang="en">Ecology</prefLabel>
+        <prefLabel xml:lang="es">Ecología</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Entomology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Entomologia</prefLabel>
+        <prefLabel xml:lang="en">Entomology</prefLabel>
+        <prefLabel xml:lang="es">Entomología</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalEducation">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Educación ambiental</prefLabel>
+        <prefLabel xml:lang="pt">Educação Ambiental</prefLabel>
+        <prefLabel xml:lang="en">Environmental education</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalLaw">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Environmental law</prefLabel>
+        <prefLabel xml:lang="es">Legislación ambiental</prefLabel>
+        <prefLabel xml:lang="pt">Legislação Ambiental</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#EnvironmentalRegulation">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Environmental regulation</prefLabel>
+        <prefLabel xml:lang="es">Reglamentación ambiental</prefLabel>
+        <prefLabel xml:lang="pt">Regulamentação Ambiental</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Erosion">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Disturbance"/>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Erosion</prefLabel>
+        <prefLabel xml:lang="es">Erosión</prefLabel>
+        <prefLabel xml:lang="pt">Erosão</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Estuary">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Estuario</prefLabel>
+        <prefLabel xml:lang="en">Estuary</prefLabel>
+        <prefLabel xml:lang="pt">Estuário</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Fire">
+        <altLabel xml:lang="en">Wildfire</altLabel>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Disturbance"/>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Fire</prefLabel>
+        <prefLabel xml:lang="es">Incendio</prefLabel>
+        <prefLabel xml:lang="pt">Incêndio</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Fish">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Fish</prefLabel>
+        <prefLabel xml:lang="es">Peces</prefLabel>
+        <prefLabel xml:lang="pt">Peixes</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Flood">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Disturbance"/>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Flood</prefLabel>
+        <prefLabel xml:lang="es">Inundación</prefLabel>
+        <prefLabel xml:lang="pt">Inundação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Forest">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#HardwoodForest"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Rainforest"/>
+        <prefLabel xml:lang="es">Bosque</prefLabel>
+        <prefLabel xml:lang="pt">Floresta</prefLabel>
+        <prefLabel xml:lang="en">Forest</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Genetics">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Genetics</prefLabel>
+        <prefLabel xml:lang="es">Genética</prefLabel>
+        <prefLabel xml:lang="pt">Genética</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#GeographicInformationSystems">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Geographic information systems</prefLabel>
+        <prefLabel xml:lang="pt">Sistemas de Informação Geográfica</prefLabel>
+        <prefLabel xml:lang="es">Sistemas de información geográfica</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Grassland">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Campos</prefLabel>
+        <prefLabel xml:lang="en">Grassland</prefLabel>
+        <prefLabel xml:lang="es">Pastizal</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#HabitatMapping">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Habitat mapping</prefLabel>
+        <prefLabel xml:lang="pt">Mapeamento do habitat</prefLabel>
+        <prefLabel xml:lang="es">Mapeo de hábitat</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Habitats">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#AgriculturalLand"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Barren"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Chaparral"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#CoastalScrub"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#CoastalVegetation"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#CoastalWaters"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ConiferForest"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#DesertOasis"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#DesertScrub"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#DisturbedAreas"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Dunes"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Estuary"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Forest"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Grassland"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Ice"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Intertidal"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Lake"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Marine"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Marsh"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Meadow"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Orchard"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Pasture"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Riparian"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#River"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Shrubland"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#TransportCorridor"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Tundra"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#UrbanArea"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Wetland"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Woodland"/>
+        <prefLabel xml:lang="pt">Habitat</prefLabel>
+        <prefLabel xml:lang="en">Habitats</prefLabel>
+        <prefLabel xml:lang="es">Hábitats</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#HardwoodForest">
+        <altLabel xml:lang="en">Deciduous forest</altLabel>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Forest"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Bosque deciduo</prefLabel>
+        <prefLabel xml:lang="pt">Floresta temperada</prefLabel>
+        <prefLabel xml:lang="en">Hardwood forest</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Hazards">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Diseases"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Erosion"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Fire"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Flood"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#HealthHazards"/>
+        <prefLabel xml:lang="en">Hazards</prefLabel>
+        <prefLabel xml:lang="es">Riesgos</prefLabel>
+        <prefLabel xml:lang="pt">Risco</prefLabel>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfInvasiveSpecies"/>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#HealthHazards">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Health hazards</prefLabel>
+        <prefLabel xml:lang="es">Riesgos de salud</prefLabel>
+        <prefLabel xml:lang="pt">Riscos de Doenças</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Herbicides">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Chemicals"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Herbicidas</prefLabel>
+        <prefLabel xml:lang="pt">Herbicidas</prefLabel>
+        <prefLabel xml:lang="en">Herbicides</prefLabel>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ChemicalControl"/>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Horticulture">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Horticultura</prefLabel>
+        <prefLabel xml:lang="pt">Horticultura</prefLabel>
+        <prefLabel xml:lang="en">Horticulture</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Ice">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Gelo</prefLabel>
+        <prefLabel xml:lang="es">Hielo</prefLabel>
+        <prefLabel xml:lang="en">Ice</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Impacts">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfHerbicides"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfInvasiveSpecies"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfInvasiveSpeciesControl"/>
+        <prefLabel xml:lang="es">Impactos</prefLabel>
+        <prefLabel xml:lang="pt">Impactos</prefLabel>
+        <prefLabel xml:lang="en">Impacts</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfHerbicides">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Impacts"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Impacto de los herbicidas</prefLabel>
+        <prefLabel xml:lang="pt">Impacto dos herbicidas</prefLabel>
+        <prefLabel xml:lang="en">Impacts of herbicides</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfInvasiveSpecies">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Impacts"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Impactos das espécies invasoras</prefLabel>
+        <prefLabel xml:lang="es">Impactos de las especies invasoras</prefLabel>
+        <prefLabel xml:lang="en">Impacts of invasive species</prefLabel>
+        <related rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Hazards"/>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ImpactsOfInvasiveSpeciesControl">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Impacts"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Impacto del control de las especies invasoras</prefLabel>
+        <prefLabel xml:lang="pt">Impacto do controle de espécies invasoras</prefLabel>
+        <prefLabel xml:lang="en">Impacts of invasive species control</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InformationResources">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Information resources</prefLabel>
+        <prefLabel xml:lang="es">Recursos de información</prefLabel>
+        <prefLabel xml:lang="pt">Recursos de informação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InformationTechnology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Information technology</prefLabel>
+        <prefLabel xml:lang="es">Informática</prefLabel>
+        <prefLabel xml:lang="pt">Tecnologia de informação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Insects">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Insectos</prefLabel>
+        <prefLabel xml:lang="en">Insects</prefLabel>
+        <prefLabel xml:lang="pt">Insetos</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#IntegratedPestManagement">
+        <altLabel xml:lang="en">IPM</altLabel>
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Control integrado de plagas</prefLabel>
+        <prefLabel xml:lang="pt">Controle integrado de pragas</prefLabel>
+        <prefLabel xml:lang="en">Integrated pest management</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Intertidal">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Intertidal</prefLabel>
+        <prefLabel xml:lang="es">Zona del intermareal</prefLabel>
+        <prefLabel xml:lang="pt">Zona entre-marés</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvadedRange">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesDistribution"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Invaded range</prefLabel>
+        <prefLabel xml:lang="es">Rango invadido</prefLabel>
+        <prefLabel xml:lang="pt">Área invadida</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveAnimals">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Animais invasores</prefLabel>
+        <prefLabel xml:lang="es">Animales invasors</prefLabel>
+        <prefLabel xml:lang="en">Invasive animals</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvasivePlants">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Invasive plants</prefLabel>
+        <prefLabel xml:lang="es">Plantas invasoras</prefLabel>
+        <prefLabel xml:lang="pt">Plantas invasoras</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#AquaticInvasives"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveAnimals"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasivePlants"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#TerrestrialInvasives"/>
+        <prefLabel xml:lang="es">Especies invasoras</prefLabel>
+        <prefLabel xml:lang="pt">Espécies invasoras</prefLabel>
+        <prefLabel xml:lang="en">Invasive species</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#BiologicalControl"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ChemicalControl"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#IntegratedPestManagement"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#MechanicalControl"/>
+        <prefLabel xml:lang="es">Control de especies invasoras</prefLabel>
+        <prefLabel xml:lang="pt">Controle de espécies invasoras</prefLabel>
+        <prefLabel xml:lang="en">Invasive species control</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesEcology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ecologia de espécies invasoras</prefLabel>
+        <prefLabel xml:lang="es">Ecología de especies invasoras</prefLabel>
+        <prefLabel xml:lang="en">Invasive species ecology</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Lake">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Lago</prefLabel>
+        <prefLabel xml:lang="pt">Lago</prefLabel>
+        <prefLabel xml:lang="en">Lake</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Mammals">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Mammals</prefLabel>
+        <prefLabel xml:lang="es">Mamíferos</prefLabel>
+        <prefLabel xml:lang="pt">Mamíferos</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Mapping">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesMapping"/>
+        <prefLabel xml:lang="pt">Mapeamento</prefLabel>
+        <prefLabel xml:lang="es">Mapeo</prefLabel>
+        <prefLabel xml:lang="en">Mapping</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Marine">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Marine</prefLabel>
+        <prefLabel xml:lang="pt">Marinho</prefLabel>
+        <prefLabel xml:lang="es">Marino</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Marsh">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Brejo</prefLabel>
+        <prefLabel xml:lang="es">Marisma</prefLabel>
+        <prefLabel xml:lang="en">Marsh</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Meadow">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Meadow</prefLabel>
+        <prefLabel xml:lang="es">Pastizal</prefLabel>
+        <prefLabel xml:lang="pt">Pasto</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#MechanicalControl">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpeciesControl"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Control mecánico</prefLabel>
+        <prefLabel xml:lang="pt">Controle mecânico</prefLabel>
+        <prefLabel xml:lang="en">Mechanical control</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Methods">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Methods</prefLabel>
+        <prefLabel xml:lang="es">Métodos</prefLabel>
+        <prefLabel xml:lang="pt">Métodos</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Mitigation">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Mitigación</prefLabel>
+        <prefLabel xml:lang="en">Mitigation</prefLabel>
+        <prefLabel xml:lang="pt">Mitigação</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Modeling">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Modelación</prefLabel>
+        <prefLabel xml:lang="pt">Modelagem</prefLabel>
+        <prefLabel xml:lang="en">Modeling</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Monitoring">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Monitoramento</prefLabel>
+        <prefLabel xml:lang="es">Monitoreo</prefLabel>
+        <prefLabel xml:lang="en">Monitoring</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#NativeEcosystems">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Ecosistemas nativos</prefLabel>
+        <prefLabel xml:lang="pt">Ecossistemas Nativos</prefLabel>
+        <prefLabel xml:lang="en">Native ecosystems</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#NativeRange">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesDistribution"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Native range</prefLabel>
+        <prefLabel xml:lang="es">Rango natural</prefLabel>
+        <prefLabel xml:lang="pt">Área Natural</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#NativeSpecies">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Especies nativas</prefLabel>
+        <prefLabel xml:lang="pt">Espécies nativas</prefLabel>
+        <prefLabel xml:lang="en">Native species</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Orchard">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Huerto</prefLabel>
+        <prefLabel xml:lang="en">Orchard</prefLabel>
+        <prefLabel xml:lang="pt">Pomar</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Outreach">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Extensión pública</prefLabel>
+        <prefLabel xml:lang="pt">Extensão</prefLabel>
+        <prefLabel xml:lang="en">Outreach</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Pasture">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Pastagem</prefLabel>
+        <prefLabel xml:lang="en">Pasture</prefLabel>
+        <prefLabel xml:lang="es">Zona de pastoreo</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Pathogens">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Pathogens</prefLabel>
+        <prefLabel xml:lang="es">Patógenos</prefLabel>
+        <prefLabel xml:lang="pt">Patógenos</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Pathology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Pathology</prefLabel>
+        <prefLabel xml:lang="pt">Patologia</prefLabel>
+        <prefLabel xml:lang="es">Patología</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Pathways">
+        <altLabel xml:lang="en">Routes</altLabel>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Pathways</prefLabel>
+        <prefLabel xml:lang="pt">Rotas de dispersão</prefLabel>
+        <prefLabel xml:lang="es">Vías de dispersión</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Permitting">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Autorización</prefLabel>
+        <prefLabel xml:lang="pt">Autorização</prefLabel>
+        <prefLabel xml:lang="en">Permitting</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#PlantEcology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ecologia vegetal</prefLabel>
+        <prefLabel xml:lang="es">Ecología vegetal</prefLabel>
+        <prefLabel xml:lang="en">Plant ecology</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#PlantPhysiology">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Fisiologia vegetal</prefLabel>
+        <prefLabel xml:lang="es">Fisiología vegetal</prefLabel>
+        <prefLabel xml:lang="en">Plant physiology</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Plants">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Plantas</prefLabel>
+        <prefLabel xml:lang="pt">Plantas</prefLabel>
+        <prefLabel xml:lang="en">Plants</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#PopulationDynamics">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Dinámica poblacional</prefLabel>
+        <prefLabel xml:lang="pt">Dinâmica Populacional</prefLabel>
+        <prefLabel xml:lang="en">Population dynamics</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Rainforest">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Forest"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Bosque lluvioso</prefLabel>
+        <prefLabel xml:lang="pt">Floresta úmida</prefLabel>
+        <prefLabel xml:lang="en">Rainforest</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#RangelandWeed">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ervas daninhas de pastagens</prefLabel>
+        <prefLabel xml:lang="es">Maleza de pastizal</prefLabel>
+        <prefLabel xml:lang="en">Rangeland weed</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#RareSpecies">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Especies raras</prefLabel>
+        <prefLabel xml:lang="pt">Espécies raras</prefLabel>
+        <prefLabel xml:lang="en">Rare species</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#RemoteSensing">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Remote sensing</prefLabel>
+        <prefLabel xml:lang="pt">Sensoriamento Remoto</prefLabel>
+        <prefLabel xml:lang="es">Teledetección</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Reptiles">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Reptiles</prefLabel>
+        <prefLabel xml:lang="es">Reptiles</prefLabel>
+        <prefLabel xml:lang="pt">Répteis</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Research">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Investigación</prefLabel>
+        <prefLabel xml:lang="pt">Pesquisa</prefLabel>
+        <prefLabel xml:lang="en">Research</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Restoration">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Recuperação</prefLabel>
+        <prefLabel xml:lang="es">Restauración</prefLabel>
+        <prefLabel xml:lang="en">Restoration</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Riparian">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ribeirinho</prefLabel>
+        <prefLabel xml:lang="es">Ribereño</prefLabel>
+        <prefLabel xml:lang="en">Riparian</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#River">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Rio</prefLabel>
+        <prefLabel xml:lang="en">River</prefLabel>
+        <prefLabel xml:lang="es">Río</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Shrubland">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Matorral</prefLabel>
+        <prefLabel xml:lang="pt">Semi-árido arbustivo</prefLabel>
+        <prefLabel xml:lang="en">Shrubland</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#SoilScience">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ciência do solo</prefLabel>
+        <prefLabel xml:lang="es">Edafología</prefLabel>
+        <prefLabel xml:lang="en">Soil science</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Species">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Amphibians"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Birds"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Fish"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Insects"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Mammals"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#NativeSpecies"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Plants"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#RareSpecies"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Reptiles"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#ThreatenedAndEndangeredSpecies"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Wildlife"/>
+        <prefLabel xml:lang="es">Especies</prefLabel>
+        <prefLabel xml:lang="pt">Espécies</prefLabel>
+        <prefLabel xml:lang="en">Species</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesDistribution">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvadedRange"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#NativeRange"/>
+        <prefLabel xml:lang="es">Distribución de especies</prefLabel>
+        <prefLabel xml:lang="pt">Distribuição das espécies</prefLabel>
+        <prefLabel xml:lang="en">Species distribution</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesIdentification">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Identificación de especies</prefLabel>
+        <prefLabel xml:lang="pt">Identificação de espécies</prefLabel>
+        <prefLabel xml:lang="en">Species identification</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesMapping">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Mapping"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#WeedMapping"/>
+        <prefLabel xml:lang="pt">Mapeamento de espécies</prefLabel>
+        <prefLabel xml:lang="es">Mapeo de especies</prefLabel>
+        <prefLabel xml:lang="en">Species mapping</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Taxonomy">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Taxonomia</prefLabel>
+        <prefLabel xml:lang="en">Taxonomy</prefLabel>
+        <prefLabel xml:lang="es">Taxonomía</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#TerrestrialInvasives">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#InvasiveSpecies"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <narrower rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#WildlandWeed"/>
+        <prefLabel xml:lang="es">Invasoras terrestres</prefLabel>
+        <prefLabel xml:lang="pt">Invasores terrestres</prefLabel>
+        <prefLabel xml:lang="en">Terrestrial invasives</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#ThreatenedAndEndangeredSpecies">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Especies en peligro de extinción o amenazadas</prefLabel>
+        <prefLabel xml:lang="pt">Espécies ameaçadas de extinção</prefLabel>
+        <prefLabel xml:lang="en">Threatened and endangered species</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#TransportCorridor">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Corredor de transporte</prefLabel>
+        <prefLabel xml:lang="pt">Corredor de transporte</prefLabel>
+        <prefLabel xml:lang="en">Transport corridor</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Tundra">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Tundra</prefLabel>
+        <prefLabel xml:lang="es">Tundra</prefLabel>
+        <prefLabel xml:lang="pt">Tundra</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#UrbanArea">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="en">Urban area</prefLabel>
+        <prefLabel xml:lang="pt">Área Urbana</prefLabel>
+        <prefLabel xml:lang="es">Área urbana</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Vectors">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Vectores</prefLabel>
+        <prefLabel xml:lang="en">Vectors</prefLabel>
+        <prefLabel xml:lang="pt">Vetores</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#WeedMapping">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#SpeciesMapping"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Mapeamento de ervas daninhas</prefLabel>
+        <prefLabel xml:lang="es">Mapeo de malezas</prefLabel>
+        <prefLabel xml:lang="en">Weed mapping</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#WeedScience">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Estudio de malezas</prefLabel>
+        <prefLabel xml:lang="pt">Estudo de espécies daninhas</prefLabel>
+        <prefLabel xml:lang="en">Weed science</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Wetland">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Campo úmido</prefLabel>
+        <prefLabel xml:lang="es">Humedal</prefLabel>
+        <prefLabel xml:lang="en">Wetland</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#WildlandWeed">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Espécies ruderais</prefLabel>
+        <prefLabel xml:lang="es">Maleza de áreas naturales</prefLabel>
+        <prefLabel xml:lang="en">Wildland weed</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Wildlife">
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Vida Selvagem</prefLabel>
+        <prefLabel xml:lang="es">Vida silvestre</prefLabel>
+        <prefLabel xml:lang="en">Wildlife</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#WildlifeEcology">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Ecology"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="pt">Ecologia animal</prefLabel>
+        <prefLabel xml:lang="es">Ecología de la vida silvestre</prefLabel>
+        <prefLabel xml:lang="en">Wildlife ecology</prefLabel>
+    </Concept>
+
+    <Concept rdf:about="http://cain.nbii.org/thesauri/ismt.rdf#Woodland">
+        <broader rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf#Habitats"/>
+        <inScheme rdf:resource="http://cain.nbii.org/thesauri/ismt.rdf"/>
+        <prefLabel xml:lang="es">Bosque abierto</prefLabel>
+        <prefLabel xml:lang="pt">Floresta aberta</prefLabel>
+        <prefLabel xml:lang="en">Woodland</prefLabel>
+    </Concept>
+</rdf:RDF>
