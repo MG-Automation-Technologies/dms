@@ -81,6 +81,7 @@
       <name>Aperture Maven Repository</name>
       <url>http://aperture.sourceforge.net/maven</url>
   	</repository>
+  	
   </repositories>
 
   <dependencies>
@@ -328,6 +329,12 @@
       <version>2.9.1</version>
     </dependency>
     
+    <dependency>
+      <groupId>weka</groupId>
+      <artifactId>weka</artifactId>
+      <version>3.7</version>
+    </dependency>
+    
   </dependencies>
 
   <build>
@@ -344,7 +351,7 @@
         <executions>
           <execution>
             <goals>
-              <!-- <goal>compile</goal> -->
+              <goal>compile</goal>
               <!-- <goal>generateAsync</goal>  -->
               <goal>test</goal>
             </goals>
