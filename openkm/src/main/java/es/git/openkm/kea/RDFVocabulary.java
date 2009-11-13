@@ -59,8 +59,16 @@ public class RDFVocabulary {
 
 
     private static String queryStr = "SELECT X,lab FROM {X} prefLabel {lab}"
-                                     + " WHERE lang(lab) = \"en\"" + NAMESPACE;
+                                     + " WHERE lang(lab) = \"es\"" + NAMESPACE;
 
+    
+    /**
+     * RDFVocabulary
+     */
+    private RDFVocabulary() {
+        ISMT = getMemStoreRepository();
+    }
+    
     /**
      * getInstance
      * 
@@ -102,13 +110,6 @@ public class RDFVocabulary {
             }
             return terms;
         }
-    }
-
-    /**
-     * RDFVocabulary
-     */
-    private RDFVocabulary() {
-        ISMT = getMemStoreRepository();
     }
 
     /**
