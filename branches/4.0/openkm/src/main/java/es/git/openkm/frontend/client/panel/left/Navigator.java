@@ -114,7 +114,7 @@ public class Navigator extends ExtendedSizeComposite {
 		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		stackPanel.showStack(0);
 		stackPanel.setStyleName("okm-StackPanel");
-		stackPanel.addStyleName("okm-DisableSelect");
+		//stackPanel.addStyleName("okm-DisableSelect");
 		stackPanel.setFirsTime(false); 
 		
 		initWidget(stackPanel);
