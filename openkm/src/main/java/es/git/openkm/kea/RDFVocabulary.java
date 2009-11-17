@@ -59,8 +59,18 @@ public class RDFVocabulary {
 
 
     private static String queryStr = "SELECT X,lab FROM {X} prefLabel {lab}"
-                                     + " WHERE lang(lab) = \"es\"" + NAMESPACE;
+                                     + " WHERE lang(lab) = \"en\"" + NAMESPACE;
+    
+    private static String NAMESPACE2 = " USING NAMESPACE "
+    						+ "rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>,"
+    						+ "skos=<http://www.w3.org/2004/02/skos/core#>,"
+    						+ "rdfs=<http://www.w3.org/2000/01/rdf-schema#>,"
+    						+ "dc=<http://purl.org/dc/elements/1.1/>,"
+    						+ "dcterms=<http://purl.org/dc/terms/>,"
+    						+ "foaf=<http://xmlns.com/foaf/0.1/>";
 
+    private static String queryStr2 = "SELECT X,lab FROM {X} skos:prefLabel {lab}"
+        				 + " WHERE lang(lab) = \"en\"" + NAMESPACE2;
     
     /**
      * RDFVocabulary
@@ -75,9 +85,10 @@ public class RDFVocabulary {
      * @return
      */
     public static RDFVocabulary getInstance() {
-        if (instance == null) {
+        //if (instance == null) {
+    	// Contruimos temporalmente siempre el vocabulario
             instance = new RDFVocabulary();
-        }
+        //}
         return instance;
     }
 
@@ -94,7 +105,8 @@ public class RDFVocabulary {
 
         try {
             con = ISMT.getConnection();
-            query = con.prepareTupleQuery(QueryLanguage.SERQL, queryStr);
+            query = con.prepareTupleQuery(QueryLanguage.SERQL, queryStr2);
+            System.out.println("query:"+queryStr2);
             TupleQueryResult result = query.evaluate();
             while (result.hasNext()) {
                 BindingSet bindingSet = result.next();
@@ -120,9 +132,12 @@ public class RDFVocabulary {
     private Repository getMemStoreRepository() {
         InputStream is;
         Repository repository = null;
-        String baseURL = "http://cain.ice.ucdavis.edu/thesauri/ismt.rdf";
+        String baseURL = "http://cain.nbii.org/thesauri/ismt.rdf";
+        baseURL = "http://www.fao.org/aos/agrovoc";
+        
         try {
             is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/ismt.rdf");
+            is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/agrovoc.rdf");
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             RepositoryConnection con = repository.getConnection();
