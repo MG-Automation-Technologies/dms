@@ -19,7 +19,6 @@
 
 package es.git.openkm.kea.filter;
 
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,13 +26,9 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import es.git.openkm.kea.stemmers.SremovalStemmer;
-import es.git.openkm.kea.stemmers.Stemmer;
-import es.git.openkm.kea.stopwords.Stopwords;
-import es.git.openkm.kea.stopwords.StopwordsSpanish;
-import es.git.openkm.kea.stopwords.StopwordsEnglish;
-import es.git.openkm.kea.util.Counter;
-import es.git.openkm.kea.vocab.Vocabulary;
+import weka.classifiers.Classifier;
+import weka.classifiers.meta.FilteredClassifier;
+import weka.classifiers.meta.RegressionByDiscretization;
 import weka.core.Attribute;
 import weka.core.Capabilities;
 import weka.core.FastVector;
@@ -45,9 +40,12 @@ import weka.core.Utils;
 import weka.core.Capabilities.Capability;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.Discretize;
-import weka.classifiers.Classifier;
-import weka.classifiers.meta.FilteredClassifier;
-import weka.classifiers.meta.RegressionByDiscretization;
+import es.git.openkm.kea.stemmers.SremovalStemmer;
+import es.git.openkm.kea.stemmers.Stemmer;
+import es.git.openkm.kea.stopwords.Stopwords;
+import es.git.openkm.kea.stopwords.StopwordsEnglish;
+import es.git.openkm.kea.util.Counter;
+import es.git.openkm.kea.vocab.Vocabulary;
 
 /**
  * This filter converts the incoming data into data appropriate for

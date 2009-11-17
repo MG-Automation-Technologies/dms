@@ -54,10 +54,11 @@ public class KEAFilterBank {
 
     private KEAFilterBank() throws MetadataExtractionException {
         Date start = new Date();
-        KEAFilter ipsvFilter = buildIPSVFilter();
-        filters.put(IPSV,ipsvFilter);
-        KEAFilter generalFilter = buildGeneralFilter();
-        filters.put(GEN,generalFilter);
+        // Comentado ahora solo generamos el filtro ismt
+        //KEAFilter ipsvFilter = buildIPSVFilter();
+        //filters.put(IPSV,ipsvFilter);
+        //KEAFilter generalFilter = buildGeneralFilter();
+        //filters.put(GEN,generalFilter);
         KEAFilter ismtFilter = buildIsmtFilter();
         filters.put(ISMT,ismtFilter);
         Date stop = new Date();
@@ -182,14 +183,18 @@ public class KEAFilterBank {
 
         } catch (FileNotFoundException e) {
             log.error("Unable to find ISMT KEA model file",e);
+            e.printStackTrace();
             throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
         } catch (IOException e) {
             log.error("Cannot read ISMT KEA model from stream",e);
+            e.printStackTrace();
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (ClassNotFoundException e) {
+        	e.printStackTrace();
             log.error("Class cast- ISMT KEA model.",e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (Throwable e) {
+        	e.printStackTrace();
             log.error("Unexpected error with ISMT model",e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         }
