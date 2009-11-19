@@ -331,7 +331,7 @@ public class DirectDocumentModule implements DocumentModule {
 	        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 	        	Term term =  it.next();
 	        	log.info("Term:" + term.getText());
-	        	keywords += term.getText() + " ";
+	        	keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
 	        }        
 	        // Ends KEA
 
