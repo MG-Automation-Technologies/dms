@@ -59,8 +59,31 @@ public class KEAFilterBank {
         //filters.put(IPSV,ipsvFilter);
         //KEAFilter generalFilter = buildGeneralFilter();
         //filters.put(GEN,generalFilter);
-        KEAFilter ismtFilter = buildIsmtFilter();
-        filters.put(ISMT,ismtFilter);
+//        KEAFilter ismtFilter = buildIsmtFilter();
+//        filters.put(ISMT,ismtFilter);
+        
+        String modelPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+        									.append(File.separator).append("agrovoc.model")
+        									.toString();
+        
+        String vocabularyPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+        									.append(File.separator)
+        									.append("agrovoc.rdf")
+        									.toString();
+        
+        String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+											.append(File.separator)
+											.append("vocabulary")
+											.append(File.separator)
+											.append("stopwords_en.txt").toString();
+        
+        modelPath = this.getClass().getClassLoader().getResource("vocabulary/agrovoc.model").getPath();
+        vocabularyPath = this.getClass().getClassLoader().getResource("vocabulary/agrovoc.rdf").getPath();
+        stopWordsPath = this.getClass().getClassLoader().getResource("vocabulary/stopwords_en.txt").getPath();
+        
+        KEAFilter newFilter = buildFilter(modelPath, vocabularyPath, "skos", "en", new SremovalStemmer(), new StopwordsEnglish(stopWordsPath));
+        filters.put(ISMT, newFilter);
+        
         Date stop = new Date();
         long time = (stop.getTime() - start.getTime());
         log.info("KEA filters built in " + time + "ms");
@@ -73,129 +96,167 @@ public class KEAFilterBank {
 
 
 
-    private KEAFilter buildIPSVFilter() throws MetadataExtractionException {
+//    private KEAFilter buildIPSVFilter() throws MetadataExtractionException {
+//
+//        KEAFilter filter = null;
+//        Stemmer stemmer = new SremovalStemmer();
+//        Stopwords stopwords = new StopwordsEnglish();
+//        try {
+//
+//            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
+//                                                  .append(File.separator).append("ipsv_model")
+//                                                  .toString();
+//            BufferedInputStream bis =
+//                    new BufferedInputStream(new FileInputStream(modelPath));
+//            ObjectInputStream ois = new ObjectInputStream(bis);
+//            filter = (KEAFilter) ois.readObject();
+//            String vocabulary = new StringBuilder().append(WorkspaceHelper.getDataDir())
+//                                            .append(File.separator)
+//                                            .append("ipsv-skos.rdf")
+//                                            .toString();
+//            filter.setVocabulary(vocabulary);
+//            filter.setDocumentLanguage("en");
+//            filter.setVocabularyFormat("skos");
+//            filter.setStemmer(stemmer);
+//            filter.setStopwords(stopwords);
+//            filter.loadThesaurus(stemmer,stopwords);
+//            filter.setNumPhrases(12);
+//
+//            return filter;
+//
+//        } catch (FileNotFoundException e) {
+//            log.error("Unable to find IPSV KEA model file",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
+//        } catch (IOException e) {
+//            log.error("Cannot read IPSV KEA model from stream",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        } catch (ClassNotFoundException e) {
+//            log.error("problem loading IPSV KEA model.",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        }
+//    }
+
+//    private KEAFilter buildGeneralFilter() throws MetadataExtractionException {
+//
+//        KEAFilter filter = null;
+//        Stemmer stemmer = new SremovalStemmer();
+//        Stopwords stopwords = new StopwordsEnglish();
+//        try {
+//
+//            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
+//                                                  .append(File.separator).append("general_model")
+//                                                  .toString();
+//            BufferedInputStream bis =
+//                    new BufferedInputStream(new FileInputStream(modelPath));
+//            ObjectInputStream ois = new ObjectInputStream(bis);
+//            filter = (KEAFilter) ois.readObject();
+//            String vocabulary = "none";
+//            filter.setVocabulary(vocabulary);
+//            filter.setVocabularyFormat(null);
+//            filter.setDocumentLanguage("en");
+//            filter.setStemmer(stemmer);
+//            filter.setStopwords(stopwords);
+//            filter.setNumPhrases(5);
+//
+//            return filter;
+//
+//        } catch (FileNotFoundException e) {
+//            log.error("Unable to find General KEA model file",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
+//        } catch (IOException e) {
+//            log.error("Cannot read genenal KEA model from stream",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        } catch (ClassNotFoundException e) {
+//            log.error("Class cast- General KEA model.",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        } catch (Throwable e) {
+//            log.error("Unexpected error with general model",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        }
+//    }
+
+//    private KEAFilter buildIsmtFilter() throws MetadataExtractionException {
+//
+//        KEAFilter filter = null;
+//        Stemmer stemmer = new SremovalStemmer();
+//        Stopwords stopwords = new StopwordsEnglish();
+//        try {
+//
+//            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
+//                                                  .append(File.separator).append("ismt_model")
+//                                                  .toString();
+//            BufferedInputStream bis =
+//                    new BufferedInputStream(new FileInputStream(modelPath));
+//            ObjectInputStream ois = new ObjectInputStream(bis);
+//            filter = (KEAFilter) ois.readObject();
+//            String vocabulary = new StringBuilder().append(WorkspaceHelper.getDataDir())
+//                                            .append(File.separator)
+//                                            .append("ismt.rdf")
+//                                            .toString();
+//            
+//            filter.setVocabulary(vocabulary);
+//            filter.setVocabularyFormat("skos");
+//            filter.setDocumentLanguage("en");
+//            filter.setStemmer(stemmer);
+//            filter.setStopwords(stopwords);
+//            filter.loadThesaurus(stemmer,stopwords);
+//            filter.setNumPhrases(5);
+//
+//            return filter;
+//
+//        } catch (FileNotFoundException e) {
+//            log.error("Unable to find ISMT KEA model file",e);
+//            e.printStackTrace();
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
+//        } catch (IOException e) {
+//            log.error("Cannot read ISMT KEA model from stream",e);
+//            e.printStackTrace();
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        } catch (ClassNotFoundException e) {
+//        	e.printStackTrace();
+//            log.error("Class cast- ISMT KEA model.",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        } catch (Throwable e) {
+//        	e.printStackTrace();
+//            log.error("Unexpected error with ISMT model",e);
+//            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
+//        }
+//    }
+    
+    private KEAFilter buildFilter(String modelPath, String vocabularyPath, String vocabularyFormat,
+    							  String language, Stemmer stemmer, Stopwords stopwords) throws MetadataExtractionException {
 
         KEAFilter filter = null;
-        Stemmer stemmer = new SremovalStemmer();
-        Stopwords stopwords = new StopwordsEnglish();
         try {
-
-            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
-                                                  .append(File.separator).append("ipsv_model")
-                                                  .toString();
-            BufferedInputStream bis =
-                    new BufferedInputStream(new FileInputStream(modelPath));
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(modelPath));
             ObjectInputStream ois = new ObjectInputStream(bis);
             filter = (KEAFilter) ois.readObject();
-            String vocabulary = new StringBuilder().append(WorkspaceHelper.getDataDir())
-                                            .append(File.separator)
-                                            .append("ipsv-skos.rdf")
-                                            .toString();
-            filter.setVocabulary(vocabulary);
-            filter.setDocumentLanguage("en");
-            filter.setVocabularyFormat("skos");
+
+            filter.setVocabulary(vocabularyPath);
+            filter.setVocabularyFormat(vocabularyFormat);
+            filter.setDocumentLanguage(language);
             filter.setStemmer(stemmer);
             filter.setStopwords(stopwords);
             filter.loadThesaurus(stemmer,stopwords);
-            filter.setNumPhrases(12);
-
-            return filter;
-
-        } catch (FileNotFoundException e) {
-            log.error("Unable to find IPSV KEA model file",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
-        } catch (IOException e) {
-            log.error("Cannot read IPSV KEA model from stream",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
-        } catch (ClassNotFoundException e) {
-            log.error("problem loading IPSV KEA model.",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
-        }
-    }
-
-    private KEAFilter buildGeneralFilter() throws MetadataExtractionException {
-
-        KEAFilter filter = null;
-        Stemmer stemmer = new SremovalStemmer();
-        Stopwords stopwords = new StopwordsEnglish();
-        try {
-
-            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
-                                                  .append(File.separator).append("general_model")
-                                                  .toString();
-            BufferedInputStream bis =
-                    new BufferedInputStream(new FileInputStream(modelPath));
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            filter = (KEAFilter) ois.readObject();
-            String vocabulary = "none";
-            filter.setVocabulary(vocabulary);
-            filter.setVocabularyFormat(null);
-            filter.setDocumentLanguage("en");
-            filter.setStemmer(stemmer);
-            filter.setStopwords(stopwords);
             filter.setNumPhrases(5);
 
             return filter;
 
         } catch (FileNotFoundException e) {
-            log.error("Unable to find General KEA model file",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
-        } catch (IOException e) {
-            log.error("Cannot read genenal KEA model from stream",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
-        } catch (ClassNotFoundException e) {
-            log.error("Class cast- General KEA model.",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
-        } catch (Throwable e) {
-            log.error("Unexpected error with general model",e);
-            throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
-        }
-    }
-
-    private KEAFilter buildIsmtFilter() throws MetadataExtractionException {
-
-        KEAFilter filter = null;
-        Stemmer stemmer = new SremovalStemmer();
-        Stopwords stopwords = new StopwordsEnglish();
-        try {
-
-            String modelPath = new StringBuilder().append(WorkspaceHelper.getDataDir())
-                                                  .append(File.separator).append("ismt_model")
-                                                  .toString();
-            BufferedInputStream bis =
-                    new BufferedInputStream(new FileInputStream(modelPath));
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            filter = (KEAFilter) ois.readObject();
-            String vocabulary = new StringBuilder().append(WorkspaceHelper.getDataDir())
-                                            .append(File.separator)
-                                            .append("ismt.rdf")
-                                            .toString();
-            
-            filter.setVocabulary(vocabulary);
-            filter.setVocabularyFormat("skos");
-            filter.setDocumentLanguage("en");
-            filter.setStemmer(stemmer);
-            filter.setStopwords(stopwords);
-            filter.loadThesaurus(stemmer,stopwords);
-            filter.setNumPhrases(5);
-
-            return filter;
-
-        } catch (FileNotFoundException e) {
-            log.error("Unable to find ISMT KEA model file",e);
+            log.error("Unable to find KEA model file",e);
             e.printStackTrace();
             throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
         } catch (IOException e) {
-            log.error("Cannot read ISMT KEA model from stream",e);
+            log.error("Cannot read KEA model from stream",e);
             e.printStackTrace();
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (ClassNotFoundException e) {
         	e.printStackTrace();
-            log.error("Class cast- ISMT KEA model.",e);
+            log.error("Class cast- KEA model.",e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (Throwable e) {
         	e.printStackTrace();
-            log.error("Unexpected error with ISMT model",e);
+            log.error("Unexpected error with model",e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         }
     }

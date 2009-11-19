@@ -121,7 +121,7 @@ public class Vocabulary implements Serializable {
             SKOS = new File(vocabularyName);
             //SKOS = new File("VOCABULARIES/" + vocabularyName + ".rdf");
 			if (!SKOS.exists()){
-				System.err.println("File VOCABULARIES/" + vocabularyName + ".rdf does not exist.");
+				System.err.println("File " + vocabularyName + " does not exist.");
 				System.exit(1);
 			} 
 			useSkos = true;

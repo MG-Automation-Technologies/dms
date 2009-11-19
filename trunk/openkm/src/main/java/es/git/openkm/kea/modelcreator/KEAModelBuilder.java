@@ -1,4 +1,3 @@
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (C) 2006  GIT Consultors
@@ -33,8 +32,10 @@ import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.Utils;
 import es.git.openkm.kea.filter.KEAFilter;
+import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.kea.stemmers.*;
 import es.git.openkm.kea.stopwords.*;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -145,7 +146,7 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 	private Stemmer m_Stemmer = new SremovalStemmer();
 	
 	/** The list of stop words to be used */
-	private Stopwords m_Stopwords = new StopwordsEnglish();
+	private Stopwords m_Stopwords;
 	
 	/** Determines whether check for proper nouns is performed */
 	private boolean m_CheckForProperNouns = true;
@@ -576,13 +577,13 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 		
 		String stopwordsString = Utils.getOption('s', options);
 		if (stopwordsString.length() > 0) {
-			stopwordsString = "com.willow.atlantis.kea.stopwords.".concat(stopwordsString);
+			stopwordsString = " es.git.openkm.kea.stopwords.".concat(stopwordsString);
 			setStopwords((Stopwords)Class.forName(stopwordsString).newInstance());
 		}
 		
 		String stemmerString = Utils.getOption('t', options);
 		if (stemmerString.length() > 0) {
-			stemmerString = "com.willow.atlantis.kea.stemmers.".concat(stemmerString);
+			stemmerString = " es.git.openkm.kea.stemmers.".concat(stemmerString);
 			setStemmer((Stemmer)Class.forName(stemmerString).newInstance());
 		}
 		setDebug(Utils.getFlag('d', options));
@@ -743,7 +744,18 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 		Instances data = new Instances("keyphrase_training_data", atts, 0);
 		
 		// Build model
-		m_KEAFilter = new KEAFilter();
+		String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+												.append(File.separator)
+												.append("src")	
+												.append(File.separator)
+												.append("main")
+												.append(File.separator)
+												.append("resources")
+												.append(File.separator)
+												.append("vocabulary")
+												.append(File.separator)
+												.append("stopwords_en.txt").toString();
+		m_KEAFilter = new KEAFilter(new StopwordsEnglish(stopWordsPath));
 		
 		m_KEAFilter.setDebug(m_debug);
 		m_KEAFilter.setDisallowInternalPeriods(getDisallowIPeriods());
