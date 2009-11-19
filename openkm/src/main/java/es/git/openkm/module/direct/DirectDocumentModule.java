@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import javax.jcr.Node;
@@ -57,6 +58,8 @@ import es.git.openkm.bean.Permission;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.Version;
 import es.git.openkm.bean.cache.UserItems;
+import es.git.openkm.bean.kea.MetadataDTO;
+import es.git.openkm.bean.kea.Term;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.AccessDeniedException;
@@ -71,6 +74,9 @@ import es.git.openkm.core.UnsupportedMimeTypeException;
 import es.git.openkm.core.VersionException;
 import es.git.openkm.core.VirusDetectedException;
 import es.git.openkm.core.VirusDetection;
+import es.git.openkm.kea.metadata.MetadataExtractionException;
+import es.git.openkm.kea.metadata.MetadataExtractor;
+import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.module.DocumentModule;
 import es.git.openkm.util.DocConverter;
 import es.git.openkm.util.FileUtils;
@@ -264,6 +270,10 @@ public class DirectDocumentModule implements DocumentModule {
 		Node parentNode = null;
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
+		
+		// Added to kea
+		String fileExtention = doc.getPath().substring(doc.getPath().indexOf('.')); // Must have the same extension
+		File tmpKea = File.createTempFile("kea", fileExtention, new File(WorkspaceHelper.getTempDir()));
 
 		try {
 			String parent = FileUtils.getParent(doc.getPath());
@@ -285,15 +295,19 @@ public class DirectDocumentModule implements DocumentModule {
 			byte[] buff = new byte[4*1024];
 			FileOutputStream fosJcr = new FileOutputStream(tmpJcr);
 			FileOutputStream fosAvr = new FileOutputStream(tmpAvr);
+			FileOutputStream fosKea = new FileOutputStream(tmpKea);
 			int read;
 			while ((read = is.read(buff)) != -1) {
 				fosJcr.write(buff, 0, read);
 				fosAvr.write(buff, 0, read);
+				fosKea.write(buff, 0, read);
 			}
 			fosJcr.flush();
 			fosJcr.close();
 			fosAvr.flush();
 			fosAvr.close();
+			fosKea.flush();
+			fosKea.close();
 			is.close();
 			is = new FileInputStream(tmpJcr);
 
@@ -304,10 +318,26 @@ public class DirectDocumentModule implements DocumentModule {
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
 				VirusDetection.detect(tmpAvr);
 			}
+			
+			// Init KEA
+	        String filter = "ISMT";
+	        int subjectLimit = 10;
+	        
+	        log.info("KEA:");
+	        MetadataExtractor mdExtractor = new MetadataExtractor(filter, subjectLimit);
+	        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
+	        
+	        String keywords = doc.getKeywords() + (doc.getKeywords().length()>0?" ":""); // Adding automatic keywords
+	        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
+	        	Term term =  it.next();
+	        	log.info("Term:" + term.getText());
+	        	keywords += term.getText() + " ";
+	        }        
+	        // Ends KEA
 
 			Session session = SessionManager.getInstance().get(token);
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, doc.getKeywords(), mimeType, is);
+			Node documentNode = create(session, parentNode, name, keywords, mimeType, is);
 
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
@@ -320,6 +350,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 			// Activity log
 			UserActivity.log(session, "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
+			
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -340,9 +371,14 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw e;
+		} catch (MetadataExtractionException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			tmpJcr.delete();
 			tmpAvr.delete();
+			tmpKea.delete();
 		}
 
 		log.debug("create: " + newDocument);

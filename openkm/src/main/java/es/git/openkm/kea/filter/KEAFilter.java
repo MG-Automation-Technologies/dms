@@ -19,12 +19,15 @@
 
 package es.git.openkm.kea.filter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import bsh.This;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.meta.FilteredClassifier;
@@ -40,6 +43,7 @@ import weka.core.Utils;
 import weka.core.Capabilities.Capability;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.Discretize;
+import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.kea.stemmers.SremovalStemmer;
 import es.git.openkm.kea.stemmers.Stemmer;
 import es.git.openkm.kea.stopwords.Stopwords;
@@ -179,11 +183,14 @@ public class KEAFilter extends Filter implements OptionHandler {
 	
 	
 	/** The list of stop words to be used */
-	private Stopwords m_Stopwords = new StopwordsEnglish();
+	private Stopwords m_Stopwords;
 	
 	/** The default language to be used */
 	private String m_documentLanguage = "en";
 	
+	public KEAFilter(Stopwords m_Stopwords) {
+		this.m_Stopwords = m_Stopwords;
+	}
 	
 	/** The Vocabulary object */
     /**
@@ -2103,10 +2110,21 @@ public class KEAFilter extends Filter implements OptionHandler {
 	public static void main(String [] argv) {
 		
 		try {
+			String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+													.append(File.separator)
+													.append("src")	
+													.append(File.separator)
+													.append("main")
+													.append(File.separator)
+													.append("resources")
+													.append(File.separator)
+													.append("vocabulary")
+													.append(File.separator)
+													.append("stopwords_en.txt").toString();
 			if (Utils.getFlag('b', argv)) {
-				Filter.batchFilterFile(new KEAFilter(), argv);
+				Filter.batchFilterFile(new KEAFilter(new StopwordsEnglish(stopWordsPath)), argv);
 			} else {
-				Filter.filterFile(new KEAFilter(), argv);
+				Filter.filterFile(new KEAFilter(new StopwordsEnglish(stopWordsPath)), argv);
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.getMessage());

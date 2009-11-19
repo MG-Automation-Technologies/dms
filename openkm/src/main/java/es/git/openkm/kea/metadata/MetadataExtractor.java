@@ -19,34 +19,38 @@
 
 package es.git.openkm.kea.metadata;
 
-import es.git.openkm.bean.kea.MetadataDTO;
-
-import java.io.*;
-import java.util.Set;
-import java.util.List;
-import java.util.Iterator;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.semanticdesktop.aperture.rdf.RDFContainer;
-import org.semanticdesktop.aperture.rdf.impl.RDFContainerImpl;
-import org.semanticdesktop.aperture.mime.identifier.MimeTypeIdentifier;
-import org.semanticdesktop.aperture.mime.identifier.magic.MagicMimeTypeIdentifier;
-import org.semanticdesktop.aperture.extractor.ExtractorRegistry;
-import org.semanticdesktop.aperture.extractor.ExtractorFactory;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.semanticdesktop.aperture.extractor.Extractor;
 import org.semanticdesktop.aperture.extractor.ExtractorException;
+import org.semanticdesktop.aperture.extractor.ExtractorFactory;
+import org.semanticdesktop.aperture.extractor.ExtractorRegistry;
 import org.semanticdesktop.aperture.extractor.impl.DefaultExtractorRegistry;
+import org.semanticdesktop.aperture.mime.identifier.MimeTypeIdentifier;
+import org.semanticdesktop.aperture.mime.identifier.magic.MagicMimeTypeIdentifier;
+import org.semanticdesktop.aperture.rdf.RDFContainer;
+import org.semanticdesktop.aperture.rdf.impl.RDFContainerImpl;
 import org.semanticdesktop.aperture.util.IOUtil;
 import org.semanticdesktop.aperture.vocabulary.NCO;
 import org.semanticdesktop.aperture.vocabulary.NIE;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import es.git.openkm.bean.kea.MetadataDTO;
 
 /**
  * MetadataExtractor
@@ -74,22 +78,37 @@ public class MetadataExtractor {
     }
 
 
+    /**
+     * getTempFile
+     * 
+     * @return
+     */
     public File getTempFile() {
         return tempFile;
     }
 
+    /**
+     * getOriginalFileName
+     * 
+     * @return
+     */
     public String getOriginalFileName() {
         return mdDTO.getFileName();
     }
 
 
+    /**
+     * getMdDTO
+     * 
+     * @return
+     */
     public MetadataDTO getMdDTO() {
         return mdDTO;
     }
 
-    public MetadataDTO extract(InputStream is, String fileName) throws MetadataExtractionException {
+    public MetadataDTO extract(InputStream is, File tempFile) throws MetadataExtractionException {
         try {
-            copyFileToWorkspace(is, fileName);
+        	this.tempFile = tempFile;
             loadRDF();
             extractMetadataFromRDF();
             extractSuggestedSubjects();
@@ -99,26 +118,6 @@ public class MetadataExtractor {
             log.error("Metadata Extraction error: " + e.getMessage(), e);
             throw e;
         }
-    }
-
-    public void copyFileToWorkspace(InputStream is, String fileName) {
-        mdDTO.setFileName(fileName);
-        try {
-            String fileExtention = fileName.substring(fileName.indexOf('.'));
-            tempFile = File.createTempFile("doc", fileExtention, new File(WorkspaceHelper.getTempDir()));
-            tempFile.deleteOnExit();
-            OutputStream os = new FileOutputStream(tempFile);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                os.write(buf, 0, len);
-            }
-            is.close();
-            os.close();
-        } catch (IOException e) {
-            log.error("Temporary file create for: " + fileName + " failed.", e);
-        }
-        mdDTO.setTempFileName(tempFile.getName());
     }
 
     public void loadRDF() {
@@ -181,9 +180,9 @@ public class MetadataExtractor {
         //URI creatorURI = rdf.getURI(NCO.creator);
         //RDFContainer creatorRDF = new RDFContainerImpl(rdf.getModel(), creatorURI);
         String creator = "";
-        Collection creators = rdf.getAll(NCO.creator);
-        for (Iterator iterator = creators.iterator(); iterator.hasNext();) {
-            Node node = (Node) iterator.next();
+        Collection<Node> creators = rdf.getAll(NCO.creator);
+        for (Iterator<Node> iterator = creators.iterator(); iterator.hasNext();) {
+            Node node = iterator.next();
             RDFContainer container = new RDFContainerImpl(rdf.getModel(), node.asURI());
             //System.out.println(container.getString(NCO.fullname));
             creator = container.getString(NCO.fullname);
@@ -202,21 +201,10 @@ public class MetadataExtractor {
 
     public void extractSuggestedSubjects() throws MetadataExtractionException {
         //SubjectExtractor subExt = new SubjectExtractor();
-        List<String> sugSubjects =
-                subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
+        List<String> sugSubjects = subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
         Iterator iter = sugSubjects.iterator();
         while (iter.hasNext()) {
             mdDTO.addSubject((String) iter.next());
         }
     }
-
-    private void printRDF() {
-        Collection types = rdf.getAll(RDF.type);
-        for (Iterator iterator = types.iterator(); iterator.hasNext();) {
-            Node node = (Node) iterator.next();
-            System.out.println(node);
-        }
-    }
-
-
 }

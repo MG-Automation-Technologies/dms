@@ -39,14 +39,14 @@ public class WorkspaceHelper {
     private static final String MAIN_DIR = "atlantis";
     private static final String EXTRACT_DIR = "KPE";
     private static final String KP_DATA = "data_files";
-    private static final String TEMP_DIR = "temp";
+    private static final String TEMP_DIR = getTemporaryBaseDir();
 
     // the paths
-    private static final String tempDirPath =
-               new StringBuilder().append(BASE_DIR).append(File.separator)
-                                  .append(MAIN_DIR).append(File.separator)
-                                  .append(EXTRACT_DIR).append(File.separator)
-                                  .append(TEMP_DIR).toString();
+    private static final String tempDirPath = TEMP_DIR;
+//               new StringBuilder().append(BASE_DIR).append(File.separator)
+//                                  .append(MAIN_DIR).append(File.separator)
+//                                  .append(EXTRACT_DIR).append(File.separator)
+//                                  .append(TEMP_DIR).toString();
     private static final String dataDirPath =
               new StringBuilder().append(BASE_DIR).append(File.separator)
                                   .append(MAIN_DIR).append(File.separator)
@@ -95,6 +95,10 @@ public class WorkspaceHelper {
 
     public static String getExtractDir() {
         return extractDirPath;
+    }
+    
+    public static String getRealRootDir() {
+    	return BASE_DIR;
     }
 
     public static void setUpDiskArea() {
@@ -180,6 +184,12 @@ public class WorkspaceHelper {
         }
 
     }
+    
+    private static String getTemporaryBaseDir() {
+        // try JBoss
+        String dir = System.getProperty("java.io.tmpdir");
+        return dir;
+    }
 
     private static String getSystemBaseDir() {
         // try JBoss
@@ -198,4 +208,5 @@ public class WorkspaceHelper {
         dir = System.getProperty("user.dir");
         log.info("Using default dir: " + dir);
         return dir;
-}     }
+    }    
+}
