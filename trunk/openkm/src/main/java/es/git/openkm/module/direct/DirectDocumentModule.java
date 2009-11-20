@@ -320,11 +320,10 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Init KEA
-	        String filter = "ISMT";
 	        int subjectLimit = 10;
 	        
 	        log.info("KEA:");
-	        MetadataExtractor mdExtractor = new MetadataExtractor(filter, subjectLimit);
+	        MetadataExtractor mdExtractor = new MetadataExtractor(subjectLimit);
 	        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
 	        
 	        String keywords = doc.getKeywords() + (doc.getKeywords().length()>0?" ":""); // Adding automatic keywords

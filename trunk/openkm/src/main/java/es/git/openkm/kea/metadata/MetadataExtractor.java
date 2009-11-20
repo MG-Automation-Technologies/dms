@@ -67,14 +67,25 @@ public class MetadataExtractor {
     private RDFContainer rdf;
     private SubjectExtractor subjectExtractor;
 
+    /**
+     * MetadataExtractor
+     * 
+     * @throws MetadataExtractionException
+     */
     public MetadataExtractor() throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
         subjectExtractor = new SubjectExtractor();
     }
 
-    public MetadataExtractor(String vocabulary, int subjectLimit) throws MetadataExtractionException {
+    /**
+     * MetadataExtractor
+     * 
+     * @param subjectLimit
+     * @throws MetadataExtractionException
+     */
+    public MetadataExtractor(int subjectLimit) throws MetadataExtractionException {
         mdDTO = new MetadataDTO();
-        subjectExtractor = new SubjectExtractor(vocabulary, subjectLimit);
+        subjectExtractor = new SubjectExtractor(subjectLimit);
     }
 
 
@@ -120,8 +131,10 @@ public class MetadataExtractor {
         }
     }
 
+    /**
+     * loadRDF
+     */
     public void loadRDF() {
-
         MimeTypeIdentifier identifier = new MagicMimeTypeIdentifier();
         ExtractorRegistry extractorRegistry = new DefaultExtractorRegistry();
         String mimeType;
@@ -174,6 +187,9 @@ public class MetadataExtractor {
 
     }
 
+    /**
+     * extractMetadataFromRDF
+     */
     public void extractMetadataFromRDF() {
 
         // set up secondary RDF container for creator
@@ -199,6 +215,11 @@ public class MetadataExtractor {
 
     }
 
+    /**
+     * extractSuggestedSubjects
+     * 
+     * @throws MetadataExtractionException
+     */
     public void extractSuggestedSubjects() throws MetadataExtractionException {
         //SubjectExtractor subExt = new SubjectExtractor();
         List<String> sugSubjects = subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
