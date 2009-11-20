@@ -53,19 +53,15 @@ public class SubjectExtractor {
     private double subjectRelLimit = 1.2;
     private boolean additionalInfo = false;
 
-
     private KEAFilter filter = null;
-    //private Stemmer stemmer = new SremovalStemmer();
-    //private Stopwords stopwords = new StopwordsEnglish();
-
 
     public SubjectExtractor() throws MetadataExtractionException {
-        filter = KEAFilterBank.getFilter(KEAFilterBank.IPSV);
+        filter = KEAFilterBank.getFilter();
     }
 
-    public SubjectExtractor(String vocabulary, int limit) throws MetadataExtractionException {
+    public SubjectExtractor(int limit) throws MetadataExtractionException {
         subjectNumLimit = limit;
-        filter = KEAFilterBank.getFilter(vocabulary);
+        filter = KEAFilterBank.getFilter();
     }
 
 
