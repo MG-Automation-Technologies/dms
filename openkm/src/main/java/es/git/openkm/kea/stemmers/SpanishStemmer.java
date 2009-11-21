@@ -30,6 +30,8 @@ package es.git.openkm.kea.stemmers;
 
 public class SpanishStemmer extends Stemmer {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private SpanishStemmerSB stemmer = new SpanishStemmerSB();		
 	
 	public String stemSB(String str) {
@@ -37,11 +39,9 @@ public class SpanishStemmer extends Stemmer {
 		stemmer.stem();
 		return stemmer.getCurrent();
 	}
+
 	
-	
-	
-	/*  Spanish stemmer tring to remove inflectional suffixes */
-	
+	/*  Spanish stemmer tring to remove inflectional suffixes */	
 	public String stem(String word) {
 		
 		int len = word.length()-1;
@@ -82,11 +82,11 @@ public class SpanishStemmer extends Stemmer {
 	
 	private String removeSpanishAccent (String word)
 	{ 
-		word = word.replaceAll("�|�|�|�","a");
-		word = word.replaceAll("�|�|�|�","o");
-		word = word.replaceAll("�|�|�|�","e");
-		word = word.replaceAll("�|�|�|�","a");
-		word = word.replaceAll("�|�|�|�","a");
+		word = word.replaceAll("à|á|â|ä","a");
+		word = word.replaceAll("ò|ó|ô|ö","o");
+		word = word.replaceAll("è|é|ê|ë","e");
+		word = word.replaceAll("ù|ú|û|ü","a");
+		word = word.replaceAll("ì|í|î|ï","a");
 
 		return word;
 	}
