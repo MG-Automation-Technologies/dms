@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-import es.git.openkm.kea.stemmers.Stemmer;
-import es.git.openkm.kea.stopwords.Stopwords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -38,6 +38,9 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+
+import es.git.openkm.kea.stemmers.Stemmer;
+import es.git.openkm.kea.stopwords.Stopwords;
 
 
 /**
@@ -51,6 +54,8 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 */
 
 public class Vocabulary implements Serializable {
+	
+	private static Logger log = LoggerFactory.getLogger(Vocabulary.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -79,14 +84,14 @@ public class Vocabulary implements Serializable {
 	private boolean useSkos;
 	
 	/** <i>Vocabulary</i> index */
-	private HashMap VocabularyEN = null;
+	private HashMap<String,String> VocabularyEN = null;
 	/** <i>Vocabulary</i> reverse index */
-	private HashMap VocabularyENrev = null;
+	private HashMap<String,String> VocabularyENrev = null;
 	/** <i>Vocabulary</i> non-descriptors - descriptors list */
-	private HashMap VocabularyUSE = null;
+	private HashMap<String,String> VocabularyUSE = null;
 	/** <i>Vocabulary</i> related terms */
-	private HashMap VocabularyREL = null;
-	private HashMap VocabularyRT = null;
+	private HashMap<String, Vector<String>> VocabularyREL = null;
+	private HashMap<String, String> VocabularyRT = null;
 	
 	/** The document language */
 	private String m_language;
@@ -121,7 +126,7 @@ public class Vocabulary implements Serializable {
             SKOS = new File(vocabularyName);
             //SKOS = new File("VOCABULARIES/" + vocabularyName + ".rdf");
 			if (!SKOS.exists()){
-				System.err.println("File " + vocabularyName + " does not exist.");
+				log.info("File " + vocabularyName + " does not exist.");
 				System.exit(1);
 			} 
 			useSkos = true;
@@ -133,19 +138,19 @@ public class Vocabulary implements Serializable {
 		//	RT = new File("vocabularyName + ".pairs.p1");
 			
 			if (!EN.exists()) {
-				System.err.println(vocabularyName + ".en does not exist.");
+				log.info(vocabularyName + ".en does not exist.");
 				System.exit(1);
 			}		
 			if (!USE.exists()) {
-				System.err.println(vocabularyName + ".list.use does not exist.");
+				log.info(vocabularyName + ".list.use does not exist.");
 				System.exit(1);
 			}
 			if (!REL.exists()) {
-				System.err.println(vocabularyName + ".rel.p1 does not exist.");
+				log.info(vocabularyName + ".rel.p1 does not exist.");
 				System.exit(1);
 			}
 //			if (!RT.exists()) {
-//				System.err.println(vocabularyName + ".pairs.p1 does not exist.");
+//				log.info(vocabularyName + ".pairs.p1 does not exist.");
 //				System.exit(1);
 //			}
 
@@ -197,11 +202,11 @@ public class Vocabulary implements Serializable {
 	 */
 	public void buildSKOS() throws Exception {
 		
-		VocabularyEN = new HashMap();
-		VocabularyENrev = new HashMap();
-		VocabularyUSE = new HashMap();
-		VocabularyREL = new HashMap();
-		VocabularyRT = new HashMap();
+		VocabularyEN = new HashMap<String,String>();
+		VocabularyENrev = new HashMap<String,String>();
+		VocabularyUSE = new HashMap<String,String>();
+		VocabularyREL = new HashMap<String, Vector<String>>();
+		VocabularyRT = new HashMap<String, String>();
 		
         // create an empty model
         Model model = ModelFactory.createDefaultModel();
@@ -287,11 +292,11 @@ public class Vocabulary implements Serializable {
         	    	String id_related = val;
         	    	
         	    	if (VocabularyREL.get(id) == null) {
-        	    		Vector rt = new Vector();
+        	    		Vector<String> rt = new Vector<String>();
         	    		rt.add(id_related);         	    		
         	    		VocabularyREL.put(id,rt);
         	    	}	else {      	    		
-        	    		Vector rt = (Vector)VocabularyREL.get(id);
+        	    		Vector<String> rt = (Vector<String>)VocabularyREL.get(id);
         	    		rt.add(id_related);         	    		
         	    		VocabularyREL.put(id,rt);        	    		        	    		
         	    	}
@@ -356,8 +361,8 @@ public class Vocabulary implements Serializable {
 	 */
 	public void build() throws Exception {
 		
-		VocabularyEN = new HashMap();
-		VocabularyENrev = new HashMap();
+		VocabularyEN = new HashMap<String,String>();
+		VocabularyENrev = new HashMap<String,String>();
 		
 		String readline;
 		String term;
@@ -391,7 +396,7 @@ public class Vocabulary implements Serializable {
 	 */
 	public void buildUSE() throws Exception {
 		if (!useSkos) {
-			VocabularyUSE = new HashMap();
+			VocabularyUSE = new HashMap<String,String>();
 			String readline;
 			String[] entry;
 			
@@ -419,7 +424,7 @@ public class Vocabulary implements Serializable {
 	public void buildREL() throws Exception {
 		if (!useSkos) {
 			
-			VocabularyREL = new HashMap();
+			VocabularyREL = new HashMap<String, Vector<String>>();
 			
 			String readline;
 			String[] entry;
@@ -431,7 +436,7 @@ public class Vocabulary implements Serializable {
 				while((readline=br.readLine()) != null) {
 					entry = split(readline,"\t");
 					String[] temp = split(entry[1]," ");
-					Vector rt = new Vector();
+					Vector<String> rt = new Vector<String>();
 					for (int i = 0; i < temp.length; i++) {
 						rt.add(temp[i]);
 					}
@@ -462,7 +467,7 @@ public class Vocabulary implements Serializable {
 //				
 //			}
 //		} catch (Exception e) {
-//			System.err.println("You need to put the .pairs file into KEA directory"); 	
+//			log.info("You need to put the .pairs file into KEA directory"); 	
 //		}
 //		
 //	}
@@ -521,8 +526,8 @@ public class Vocabulary implements Serializable {
 	 * @param id
 	 * @return a vector with ids related to the input id
 	 */
-	public Vector getRelated(String id) {
-		return (Vector)VocabularyREL.get(id);
+	public Vector<String> getRelated(String id) {
+		return (Vector<String>)VocabularyREL.get(id);
 	}
 	
 	
@@ -535,7 +540,7 @@ public class Vocabulary implements Serializable {
 	 */
 	public Vector<String> getRelated (String id, String relation) {
 		Vector<String> related = new Vector<String>(); 
-		Vector<String> all_related = (Vector) VocabularyREL.get(id);
+		Vector<String> all_related = (Vector<String>) VocabularyREL.get(id);
 		if (all_related != null) {
     	
 			for (int d = 0; d < all_related.size(); d++) {
@@ -548,7 +553,7 @@ public class Vocabulary implements Serializable {
 						related.add(rel_id);
 					}
 				} else {
-					System.err.println("Problem with " + getOrig(id) + " and " + getOrig(rel_id));	
+					log.info("Problem with " + getOrig(id) + " and " + getOrig(rel_id));	
 				}
 			}
     	}

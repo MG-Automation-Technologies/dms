@@ -86,9 +86,9 @@ public class KEAPhraseFilter extends Filter implements OptionHandler {
    *
    * @return an enumeration of all the available options
    */
-  public Enumeration listOptions() {
+  public Enumeration<Option> listOptions() {
 
-    Vector newVector = new Vector(3);
+    Vector<Option> newVector = new Vector<Option>(3);
 
     newVector.addElement(new Option(
               "\tSpecify list of attributes to process. First and last are valid\n"
