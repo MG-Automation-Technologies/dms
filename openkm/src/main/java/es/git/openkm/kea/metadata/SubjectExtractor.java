@@ -197,8 +197,9 @@ public class SubjectExtractor {
             stop = new Date();
             long time = (stop.getTime() - start.getTime());
             log.info("Subject extraction completed in " + time + "ms");
-            return subjects;
         }
+        
+        return subjects;
     }
 
 
