@@ -162,11 +162,11 @@ public class MetadataExtractor {
             // create extractor
             ExtractorFactory extractorFactory;
             Extractor extractor;
-            Set factories = extractorRegistry.getExtractorFactories(mimeType);
+            Set<ExtractorFactory> factories = extractorRegistry.getExtractorFactories(mimeType);
             if (factories == null || factories.isEmpty()) {
                 throw new MetadataExtractionException("Unable to find extractor factory for: " + mimeType);
             } else {
-                extractorFactory = (ExtractorFactory) factories.iterator().next();
+                extractorFactory = factories.iterator().next();
                 extractor = extractorFactory.get();
             }
 
