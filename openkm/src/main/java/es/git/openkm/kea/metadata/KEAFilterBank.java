@@ -119,20 +119,20 @@ public class KEAFilterBank {
             return newFilter;
 
         } catch (FileNotFoundException e) {
-            log.warn("Unable to find KEA model file");
-            log.warn(e.getMessage(), e);
+            log.error("Unable to find KEA model file");
+            log.error(e.getMessage(), e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for details.");
         } catch (IOException e) {
-            log.warn("Cannot read KEA model from stream");
-            log.warn(e.getMessage(), e);
+            log.error("Cannot read KEA model from stream");
+            log.error(e.getMessage(), e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (ClassNotFoundException e) {
-            log.warn("Class cast- KEA model.",e);
-            log.warn(e.getMessage(), e);
+            log.error("Class cast- KEA model.",e);
+            log.error(e.getMessage(), e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         } catch (Throwable e) {
-        	log.warn("Unexpected error with model");
-        	log.warn(e.getMessage(), e);
+        	log.error("Unexpected error with model");
+        	log.error(e.getMessage(), e);
             throw new MetadataExtractionException("Subject Extraction failed (see trace for source.");
         }
     }
