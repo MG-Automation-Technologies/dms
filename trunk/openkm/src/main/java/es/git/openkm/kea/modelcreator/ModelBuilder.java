@@ -21,6 +21,9 @@ package es.git.openkm.kea.modelcreator;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.kea.stemmers.PorterStemmer;
 import es.git.openkm.kea.stopwords.StopwordsEnglish;
@@ -33,10 +36,11 @@ import es.git.openkm.kea.stopwords.StopwordsEnglish;
  *
  */
 public class ModelBuilder {
+	
+	private static Logger log = LoggerFactory.getLogger(ModelBuilder.class);
 
 	private KEAModelBuilder km;
 	private KEAKeyphraseExtractor ke;
-	
 	
 	private void setOptionsTraining() {
 		
@@ -175,13 +179,12 @@ public class ModelBuilder {
 		ke.setNumPhrases(10);
 		
 		// 10. Set to true, if you want to compute global dictionaries from the test collection
-		ke.setBuildGlobal(false);		
-		
-		
+		ke.setBuildGlobal(false);			
 	}
-	
-	
-	
+
+	/**
+	 * createModel
+	 */
 	private void createModel() {
 		try {
 			km.buildModel(km.collectStems());
@@ -192,6 +195,9 @@ public class ModelBuilder {
 		
 	}
 
+	/**
+	 * extractKeyphrases
+	 */
 	private void extractKeyphrases() {
 		try {
 			ke.loadModel();
@@ -209,25 +215,22 @@ public class ModelBuilder {
 	 */
 	public static void main(String[] args) {
 		
-		
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
 		// to create a model from manually indexed documents,
-		System.err.println("Creating the model... ");
+		log.info("Creating the model... ");
 		modelBuilder.setOptionsTraining();
 		modelBuilder.createModel();
 		
 		// to extract keyphrases from new documents,
-		System.err.println("Extracting keyphrases from test documents... ");
+		log.info("Extracting keyphrases from test documents... ");
 		
 		String m_testdir = "testdocs/en/test";
 		// String m_testdir = "/Users/alyona/Documents/corpora/term_assignment/FAO_30/test1";
 		
 		modelBuilder.setOptionsTesting(m_testdir);
 		modelBuilder.extractKeyphrases();
-		System.err.println("Look into " + m_testdir + " to see the results");
-		System.err.println("and compare them to " + m_testdir + "/manual_keyphrases/.");
-		
+		log.info("Look into " + m_testdir + " to see the results");
+		log.info("and compare them to " + m_testdir + "/manual_keyphrases/.");
 	}
-
 }

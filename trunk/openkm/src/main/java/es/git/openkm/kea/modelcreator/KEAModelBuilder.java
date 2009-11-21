@@ -19,10 +19,19 @@
 
 package es.git.openkm.kea.modelcreator;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -33,10 +42,10 @@ import weka.core.OptionHandler;
 import weka.core.Utils;
 import es.git.openkm.kea.filter.KEAFilter;
 import es.git.openkm.kea.metadata.WorkspaceHelper;
-import es.git.openkm.kea.stemmers.*;
-import es.git.openkm.kea.stopwords.*;
-
-import org.apache.log4j.Logger;
+import es.git.openkm.kea.stemmers.SremovalStemmer;
+import es.git.openkm.kea.stemmers.Stemmer;
+import es.git.openkm.kea.stopwords.Stopwords;
+import es.git.openkm.kea.stopwords.StopwordsEnglish;
 
 /**
  * Builds a keyphrase extraction model from the documents in a given
@@ -101,7 +110,7 @@ import org.apache.log4j.Logger;
  */
 public class KEAModelBuilder implements OptionHandler {
 	
-private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.class);
+	private static Logger log = LoggerFactory.getLogger(KEAModelBuilder.class);
 
 	/** Name of directory */
 	String m_dirName = null;
@@ -650,9 +659,9 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 	 *
 	 * @return an enumeration of all the available options
 	 */
-	public Enumeration listOptions() {
+	public Enumeration<Option> listOptions() {
 		
-		Vector newVector = new Vector(14);
+		Vector<Option> newVector = new Vector<Option>(14);
 		
 		newVector.addElement(new Option(
 				"\tSpecifies name of directory.",
@@ -706,9 +715,9 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 	/**
 	 * Collects the stems of the file names.
 	 */
-	public Hashtable collectStems() throws Exception {
+	public Hashtable<String, Double> collectStems() throws Exception {
 		
-		Hashtable stems = new Hashtable();
+		Hashtable<String, Double> stems = new Hashtable<String, Double>();
 		
 		try {
 			File dir = new File(m_dirName);
@@ -731,7 +740,7 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 	/**
 	 * Builds the model from the files
 	 */
-	public void buildModel(Hashtable stems) throws Exception {
+	public void buildModel(Hashtable<String, Double> stems) throws Exception {
 		
 		// Check whether there is actually any data
 		if (stems.size() == 0) {
@@ -779,11 +788,11 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 		}
 		m_KEAFilter.setNumFeature();
 		
-		System.err.println("-- Reading the Documents... ");
+		log.error("-- Reading the Documents... ");
 		
-		Enumeration elem = stems.keys();
+		Enumeration<String> elem = stems.keys();
 		while (elem.hasMoreElements()) {
-			String str = (String)elem.nextElement();
+			String str = elem.nextElement();
 			
 			double[] newInst = new double[2];
 			try {
@@ -803,7 +812,7 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 				newInst[0] = (double)data.attribute(0).addStringValue(txtStr.toString());
 			} catch (Exception e) {
 				if (m_debug) {
-					System.err.println("Can't find document for stem " + str + ".");
+					log.error("Can't find document for stem " + str + ".");
 				}
 				newInst[0] = Instance.missingValue();
 			}
@@ -823,7 +832,7 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 				newInst[1] = (double)data.attribute(1).addStringValue(keyStr.toString());
 			} catch (Exception e) {
 				if (m_debug) {
-					System.err.println("Can't find keyphrases for stem " + str + ".");
+					log.error("Can't find keyphrases for stem " + str + ".");
 				}
 				newInst[1] = Instance.missingValue();
 			}
@@ -834,7 +843,6 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 		m_KEAFilter.batchFinished();
 		
 		while ((m_KEAFilter.output()) != null) {};
-        int x = 10;
     }
 	
 	/** 
@@ -868,23 +876,22 @@ private static org.apache.log4j.Logger log = Logger.getLogger(KEAModelBuilder.cl
 		KEAModelBuilder kmb = new KEAModelBuilder();
 		try {
 			kmb.setOptions(ops);
-			System.err.print("Building model with options: ");
+			log.error("Building model with options: ");
 			String[] optionSettings = kmb.getOptions();
 			for (int i = 0; i < optionSettings.length; i++) {
-				System.err.print(optionSettings[i] + " ");
+				log.error(optionSettings[i] + " ");
 			}
-			System.err.println();
 			kmb.buildModel(kmb.collectStems());
 			kmb.saveModel();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println(e.getMessage());
-			System.err.println("\nOptions:\n");
-			Enumeration en = kmb.listOptions();
+			log.error(e.getMessage());
+			log.error("\nOptions:\n");
+			Enumeration<Option> en = kmb.listOptions();
 			while (en.hasMoreElements()) {
-				Option option = (Option) en.nextElement();
-				System.err.println(option.synopsis());
-				System.err.println(option.description());
+				Option option = en.nextElement();
+				log.error(option.synopsis());
+				log.error(option.description());
 			}
 		}
 	}

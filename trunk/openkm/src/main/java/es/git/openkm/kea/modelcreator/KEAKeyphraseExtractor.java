@@ -52,6 +52,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -118,6 +121,8 @@ import es.git.openkm.kea.util.Counter;
  * @version 1.0
  */
 public class KEAKeyphraseExtractor implements OptionHandler {
+	
+	private static Logger log = LoggerFactory.getLogger(KEAKeyphraseExtractor.class);
 
     /**
      * Name of directory
@@ -613,9 +618,9 @@ public class KEAKeyphraseExtractor implements OptionHandler {
      *
      * @return an enumeration of all the available options
      */
-    public Enumeration listOptions() {
+    public Enumeration<Option> listOptions() {
 
-        Vector newVector = new Vector(13);
+        Vector<Option> newVector = new Vector<Option>(13);
 
         newVector.addElement(new Option(
                 "\tSpecifies name of directory.",
@@ -660,9 +665,9 @@ public class KEAKeyphraseExtractor implements OptionHandler {
     /**
      * Collects the stems of the file names.
      */
-    public Hashtable collectStems() throws Exception {
+    public Hashtable<String, Double> collectStems() throws Exception {
 
-        Hashtable stems = new Hashtable();
+        Hashtable<String, Double> stems = new Hashtable<String, Double>();
 
         try {
             File dir = new File(m_dirName);
@@ -684,9 +689,9 @@ public class KEAKeyphraseExtractor implements OptionHandler {
     /**
      * Builds the model from the files
      */
-    public void extractKeyphrases(Hashtable stems) throws Exception {
+    public void extractKeyphrases(Hashtable<String, Double> stems) throws Exception {
 
-        Vector stats = new Vector();
+        Vector<Double> stats = new Vector<Double>();
 
         // Check whether there is actually any data
         // = if there any files in the directory
@@ -718,10 +723,10 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
         System.err.println("-- Extracting Keyphrases... ");
         // Extract keyphrases
-        Enumeration elem = stems.keys();
+        Enumeration<String> elem = stems.keys();
         // Enumeration over all files in the directory (now in the hash):
         while (elem.hasMoreElements()) {
-            String str = (String) elem.nextElement();
+            String str = elem.nextElement();
 
             double[] newInst = new double[2];
             try {
@@ -742,7 +747,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
             } catch (Exception e) {
                 if (m_debug) {
-                    System.err.println("Can't read document " + str + ".txt");
+                    log.error("Can't read document " + str + ".txt");
                 }
                 newInst[0] = Instance.missingValue();
             }
@@ -768,7 +773,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
                 newInst[1] = (double) data.attribute(1).addStringValue(keyStr.toString());
             } catch (Exception e) {
                 if (m_debug) {
-                    System.err.println("No existing keyphrases for stem " + str + ".");
+                    log.error("No existing keyphrases for stem " + str + ".");
                 }
                 newInst[1] = Instance.missingValue();
             }
@@ -782,7 +787,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
             data = data.stringFreeStructure();
             if (m_debug) {
-                System.err.println("-- Document: " + str);
+                log.error("-- Document: " + str);
             }
             Instance[] topRankedInstances = new Instance[m_numPhrases];
             Instance inst;
@@ -799,7 +804,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
             }
 
             if (m_debug) {
-                System.err.println("-- Keyphrases and feature values:");
+                log.error("-- Keyphrases and feature values:");
             }
             FileOutputStream out = null;
             PrintWriter printer = null;
@@ -847,14 +852,14 @@ public class KEAKeyphraseExtractor implements OptionHandler {
                             printer.println();
                         }
                         if (m_debug) {
-                            System.err.println(topRankedInstances[i]);
+                            log.error(""+topRankedInstances[i]);
                         }
                     }
                 }
             }
             if (numExtracted > 0) {
                 if (m_debug) {
-                    System.err.println("-- " + numCorrect + " correct");
+                    log.error("-- " + numCorrect + " correct");
                 }
                 stats.addElement(new Double(numCorrect));
             }
@@ -871,27 +876,26 @@ public class KEAKeyphraseExtractor implements OptionHandler {
         double avg = Utils.mean(st);
         double stdDev = Math.sqrt(Utils.variance(st));
 
-        System.err.println("Avg. number of matching keyphrases compared to existing ones : " +
+        log.error("Avg. number of matching keyphrases compared to existing ones : " +
                 Utils.doubleToString(avg, 2) + " +/- " +
                 Utils.doubleToString(stdDev, 2));
-        System.err.println("Based on " + stats.size() + " documents");
+        log.error("Based on " + stats.size() + " documents");
         // m_KEAFilter.batchFinished();
     }
 
-    private void buildGlobalDictionaries(Hashtable stems) throws Exception {
+    private void buildGlobalDictionaries(Hashtable<String, Double> stems) throws Exception {
 
-        System.err.println("--- Building global dictionaries from the test collection.. ");
+        log.error("--- Building global dictionaries from the test collection.. ");
 
         // Build dictionary of n-grams with associated
         // document frequencies
+        m_KEAFilter.m_Dictionary = new HashMap<String, Counter>();
 
-        m_KEAFilter.m_Dictionary = new HashMap();
-
-        Enumeration elem = stems.keys();
+        Enumeration<String> elem = stems.keys();
 
         // Enumeration over all files in the directory (now in the hash):
         while (elem.hasMoreElements()) {
-            String str = (String) elem.nextElement();
+            String str = elem.nextElement();
 
             File txt = new File(m_dirName + "/" + str + ".txt");
             InputStreamReader is;
@@ -908,10 +912,10 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
             KEAPhraseFilter kpf = new KEAPhraseFilter();
 
-            HashMap hash = m_KEAFilter.getPhrasesForDictionary(kpf.tokenize(txtStr.toString()));
-            Iterator it = hash.keySet().iterator();
+            HashMap<String, Counter> hash = m_KEAFilter.getPhrasesForDictionary(kpf.tokenize(txtStr.toString()));
+            Iterator<String> it = hash.keySet().iterator();
             while (it.hasNext()) {
-                String phrase = (String) it.next();
+                String phrase = it.next();
                 Counter counter = (Counter) m_KEAFilter.m_Dictionary.get(phrase);
                 if (counter == null) {
                     m_KEAFilter.m_Dictionary.put(phrase, new Counter());
@@ -936,7 +940,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
         // If TFxIDF values are to be computed from the test corpus
         if (m_buildGlobal == true) {
             if (m_debug) {
-                System.err.println("-- The global dictionaries will be built from this test collection..");
+                log.error("-- The global dictionaries will be built from this test collection..");
             }
             m_KEAFilter.m_Dictionary = null;
         }
@@ -962,17 +966,16 @@ public class KEAKeyphraseExtractor implements OptionHandler {
         try {
             // Checking and Setting Options selected by the user:
             kmb.setOptions(ops);
-            System.err.print("Extracting keyphrases with options: ");
+            log.error("Extracting keyphrases with options: ");
 
             // Reading Options, which were set above and output them:
             String[] optionSettings = kmb.getOptions();
             for (int i = 0; i < optionSettings.length; i++) {
-                System.err.print(optionSettings[i] + " ");
+                log.error(optionSettings[i] + " ");
             }
-            System.err.println();
 
             // Loading selected Model:
-            System.err.println("-- Loading the Model... ");
+            log.error("-- Loading the Model... ");
             kmb.loadModel();
             // Extracting Keyphrases from all files in the selected directory
             // stem == the name of the file without ".txt"
@@ -981,13 +984,13 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println(e.getMessage());
-            System.err.println("\nOptions:\n");
-			Enumeration en = kmb.listOptions();
+            log.error(e.getMessage());
+            log.error("\nOptions:\n");
+			Enumeration<Option> en = kmb.listOptions();
 			while (en.hasMoreElements()) {
-				Option option = (Option) en.nextElement();
-				System.err.println(option.synopsis());
-				System.err.println(option.description());
+				Option option = en.nextElement();
+				log.error(option.synopsis());
+				log.error(option.description());
 			}
 		}
 	}
