@@ -127,25 +127,25 @@ public class Vocabulary implements Serializable {
 			useSkos = true;
 			
 		} else if (vocabularyFormat.equals("text")) {
-			EN = new File("VOCABULARIES/" + vocabularyName + ".en");
-			USE = new File("VOCABULARIES/" + vocabularyName + ".use");
-			REL = new File("VOCABULARIES/" + vocabularyName + ".rel");
-		//	RT = new File("VOCABULARIES/" + vocabularyName + ".pairs.p1");
+			EN = new File(vocabularyName + ".en");
+			USE = new File(vocabularyName + ".use");
+			REL = new File(vocabularyName + ".rel");
+		//	RT = new File("vocabularyName + ".pairs.p1");
 			
 			if (!EN.exists()) {
-				System.err.println("File VOCABULARIES/" + vocabularyName + ".en does not exist.");
+				System.err.println(vocabularyName + ".en does not exist.");
 				System.exit(1);
 			}		
 			if (!USE.exists()) {
-				System.err.println("File VOCABULARIES/" + vocabularyName + ".list.use does not exist.");
+				System.err.println(vocabularyName + ".list.use does not exist.");
 				System.exit(1);
 			}
 			if (!REL.exists()) {
-				System.err.println("File VOCABULARIES/" + vocabularyName + ".rel.p1 does not exist.");
+				System.err.println(vocabularyName + ".rel.p1 does not exist.");
 				System.exit(1);
 			}
 //			if (!RT.exists()) {
-//				System.err.println("File VOCABULARIES/" + vocabularyName + ".pairs.p1 does not exist.");
+//				System.err.println(vocabularyName + ".pairs.p1 does not exist.");
 //				System.exit(1);
 //			}
 
@@ -159,7 +159,6 @@ public class Vocabulary implements Serializable {
 	 */
 	public void initialize() {
 		
-		//System.err.println("-- Loading the Index...");
 		if (useSkos) {
 			try {
 				buildSKOS();
@@ -182,10 +181,9 @@ public class Vocabulary implements Serializable {
 	 * @param newStemmer The new Stemmer value.
 	 */
 	public void setStemmer(Stemmer newStemmer) {	
-
 			this.m_Stemmer = newStemmer;
-		
 	}
+	
 	/**
 	 * Set the M_Stopwords value.
 	 * @param newM_Stopwords The new M_Stopwords value.
@@ -194,14 +192,10 @@ public class Vocabulary implements Serializable {
 		this.m_Stopwords = newM_Stopwords;
 	}
 	
-	
 	/**
 	 * Builds the vocabulary indexes from SKOS file.
 	 */
 	public void buildSKOS() throws Exception {
-		
-		
-		//System.err.println("-- Building the Vocabulary index from SKOS file");
 		
 		VocabularyEN = new HashMap();
 		VocabularyENrev = new HashMap();
@@ -209,13 +203,10 @@ public class Vocabulary implements Serializable {
 		VocabularyREL = new HashMap();
 		VocabularyRT = new HashMap();
 		
-		
         // create an empty model
         Model model = ModelFactory.createDefaultModel();
-        
-        
-        try {
 
+        try {
     	    model.read(new InputStreamReader(new FileInputStream(SKOS),"UTF-8"), "");
             
     	    StmtIterator iter;
@@ -223,9 +214,7 @@ public class Vocabulary implements Serializable {
     	    Property relation;
     	    Resource concept;
     	    RDFNode value;
-    	    
-    	    
-    	    
+
     	    int count = 1;
     	    // Iterating over all statements in the SKOS file
     	    iter = model.listStatements();
@@ -245,19 +234,13 @@ public class Vocabulary implements Serializable {
     	    	value = stmt.getObject();  	    	
     	    	String val = value.toString();
     	    	
-    	    	//System.out.println("Concept " + concept);
-    	    	//System.out.println("Relation " + rel);    	    	
-    	    	//System.out.println("Value " + val);
-    	    	
     	    	if (rel.equals("prefLabel")) {
     	    		
     	    		String descriptor;
     	    		
     	    		if (val.contains("@")) {
     	    			String[] val_components = val.split("@");
-    	    			// System.err.println(val_components[1] + " " + m_language);
     	    			if (val_components[1].equals(m_language)) {
-    	    			//	System.err.println("Yes");
     	    				descriptor = val_components[0];
     	    			} else {
     	    				continue;
@@ -271,19 +254,10 @@ public class Vocabulary implements Serializable {
     	    			avterm = descriptor;
     	    		}
     	    		
-    	    		// System.out.println(descriptor + " ==> " + avterm);
-    	    		
     				if (avterm.length() > 1) {    					
     					VocabularyEN.put(avterm, id);
     					VocabularyENrev.put(id,descriptor);
     				}	
-    				
-    	    		// fill here the index hash
-    	    		
-    	    		// id => descriptor
-    	    		//if (id.equals("http://www.fao.org/aos/agrovoc#c_4314")) {
-    	    		//	System.out.println("Descriptor " + descriptor + " (" + id + ")");
-    	    		//}
     	    		
     	    	} else if (rel.equals("altLabel") || (rel.equals("hiddenLabel"))) {
     	    		
@@ -291,9 +265,7 @@ public class Vocabulary implements Serializable {
     	    		
     	    		if (val.contains("@")) {
     	    			String[] val_components = val.split("@");
-    	    			// System.err.println(val_components[1] + " " + m_language);
     	    			if (val_components[1].equals(m_language)) {
-    	    			//	System.err.println("Yes");
     	    				non_descriptor = val_components[0];
     	    			} else {
     	    				continue;
@@ -301,16 +273,9 @@ public class Vocabulary implements Serializable {
     	    		} else {
     	    			non_descriptor = val;
     	    		}
-    	    		// System.out.println("Descriptor " + non_descriptor);
-    	    		// first add the non_descriptor to the index hash	
-    	    		// then fill here non-descriptor hash
-    	    		
-    	    		// id => id_non_descriptor
+
     	    		 addNonDescriptor (count, id, non_descriptor);                   
                      count++;
-    				
-    	    		//System.out.println("Descriptor " + VocabularyENrev.get(id) + " with id (" + id + ")" +
-    	    			//	" has a non-descriptor " + non_descriptor + " (" + id_non_descriptor + ")");    	    		
     	    		
     	    	} else if (rel.equals("broader") 
     	    		|| rel.equals("narrower") 
@@ -320,12 +285,6 @@ public class Vocabulary implements Serializable {
     	    		|| rel.equals("related")) {
     	    		    	    	
         	    	String id_related = val;
-        	    	
-        	    	// System.out.println("Descriptor " + VocabularyENrev.get(id) + " with id " + id + 
-    	    		//		" has a " + rel + " term " + VocabularyENrev.get(id_related) + " with id (" + id_related + ")");    
-        	    	
-        	    	// fill here semantic relations hash
-        	    	// id => id_related
         	    	
         	    	if (VocabularyREL.get(id) == null) {
         	    		Vector rt = new Vector();
@@ -341,28 +300,20 @@ public class Vocabulary implements Serializable {
         	    	if (rel.equals("related")) {
         	    		VocabularyRT.put(id_related + "-" + id,rel);
         	    	}
-    				
-        	    	
-        	    	// VocabularyRT.put("id-id_related","1");
-        	    	// VocabularyRT.put("id_related-id","1");
-    				
     	    	}
-    	    	
-    	    }
-    	   
-    	    // Some statistics:
-    	 //    System.out.println(VocabularyEN.size() + " terms in total");
-    	 //   System.out.println(VocabularyUSE.size() + " non-descriptors");
-    	  //   System.out.println(VocabularyREL.size() + " terms have related terms");
-    	    
+    	    }    	    
     	} catch (Exception e) {
     	   e.printStackTrace(); 
     	}
 	}
-	
-	
 
-   
+    /**
+     * addNonDescriptor
+     * 
+     * @param count
+     * @param id_descriptor
+     * @param non_descriptor
+     */
     private void addNonDescriptor (int count, String id_descriptor, String non_descriptor) {
         //     id => id_non_descriptor
         String id_non_descriptor = "d_" + count;
@@ -376,6 +327,13 @@ public class Vocabulary implements Serializable {
         VocabularyUSE.put(id_non_descriptor,id_descriptor);
     }
    
+    /**
+     * remove
+     * 
+     * @param words
+     * @param i
+     * @return
+     */
     public String remove (String[] words, int i) {
 
         String result = "";
@@ -397,8 +355,6 @@ public class Vocabulary implements Serializable {
 	 * Builds the vocabulary index from the text files.
 	 */
 	public void build() throws Exception {
-		
-		System.err.println("-- Building the Vocabulary index");
 		
 		VocabularyEN = new HashMap();
 		VocabularyENrev = new HashMap();
@@ -446,10 +402,6 @@ public class Vocabulary implements Serializable {
 				while((readline=br.readLine()) != null) {
 					entry = split(readline,"\t");
 					
-//					if more than one descriptors for
-//					one non-descriptors are used, ignore it!
-//					probably just related terms (cf. latest edition of Agrovoc)
-					
 					if ((entry[1].indexOf(" ")) == -1) {
 						VocabularyUSE.put(entry[0],entry[1]);
 					}
@@ -467,13 +419,10 @@ public class Vocabulary implements Serializable {
 	public void buildREL() throws Exception {
 		if (!useSkos) {
 			
-			System.err.println("-- Building the Vocabulary index with related pairs");
-			
 			VocabularyREL = new HashMap();
 			
 			String readline;
 			String[] entry;
-			
 			
 			try {	  
 				
@@ -584,13 +533,13 @@ public class Vocabulary implements Serializable {
 	 * @param id, relation
 	 * @return a vector with ids related to the input id by a specified relation
 	 */
-	public Vector getRelated (String id, String relation) {
-		Vector related = new Vector(); 
-		Vector all_related = (Vector)VocabularyREL.get(id);
+	public Vector<String> getRelated (String id, String relation) {
+		Vector<String> related = new Vector<String>(); 
+		Vector<String> all_related = (Vector) VocabularyREL.get(id);
 		if (all_related != null) {
     	
 			for (int d = 0; d < all_related.size(); d++) {
-				String rel_id = (String)all_related.elementAt(d);	
+				String rel_id = (String) all_related.elementAt(d);	
 			
 				String rel = (String)VocabularyRT.get(id + "-" + rel_id);
 
@@ -613,7 +562,7 @@ public class Vocabulary implements Serializable {
 	 */
 	public String[] split(String str,String separator) {
 		
-		ArrayList lst = new ArrayList();
+		ArrayList<String> lst = new ArrayList<String>();
 		String word = ""; 
 		
 		for (int i = 0; i < str.length(); i++) {
@@ -641,15 +590,12 @@ public class Vocabulary implements Serializable {
 	 * which are stemmed and sorted into alphabetical order. 
 	 */
 	public String pseudoPhrase(String str) {
-		// System.err.print(str + "\t");
 		String[] pseudophrase;
 		String[] words;
 		String str_nostop;
 		String stemmed;
 		
-		
 		str = str.toLowerCase();
-		
 		
 		// This is often the case with Mesh Terms,
 		// where a term is accompanied by another specifying term
@@ -667,20 +613,15 @@ public class Vocabulary implements Serializable {
 			str = elements[0];			
 		}	
 
-	
-		
 		// Remove some non-alphanumeric characters
-		
 		// str = str.replace('/', ' ');
 		str = str.replace('-', ' ');
 		str = str.replace('&', ' ');
 		
-
 		str = str.replaceAll("\\*", "");
 		str = str.replaceAll("\\, "," ");
 		str = str.replaceAll("\\. "," ");
 		str = str.replaceAll("\\:","");
-	
 		
 		str = str.trim();
 		
@@ -707,9 +648,7 @@ public class Vocabulary implements Serializable {
 		}
 
 		stemmed = m_Stemmer.stemString(str_nostop);
-		// System.err.println(stemmed + "\t" + str_nostop + "\t"+ str);
 		pseudophrase = sort(stemmed.split(" "));
-		//System.err.println(join(pseudophrase));
 		return join(pseudophrase);
 	}
 	
@@ -727,9 +666,7 @@ public class Vocabulary implements Serializable {
 		}
 		return result;
 	}	
-	
-	
-    
+
 	/** 
 	 * overloaded swap method: exchange 2 locations in an array of Strings.
 	 */
@@ -738,7 +675,6 @@ public class Vocabulary implements Serializable {
 		a [loc1] = a [loc2];
 		a [loc2] = temp;
 	} // end swap
-	
 	
 	/**
 	 * Sorts an array of Strings into alphabetic order
@@ -774,7 +710,6 @@ public class Vocabulary implements Serializable {
 		}
 		return a;
 	} // end method selectionSort
-	
 }
 
 
