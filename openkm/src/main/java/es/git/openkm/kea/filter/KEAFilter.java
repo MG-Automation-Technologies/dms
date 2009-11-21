@@ -167,10 +167,10 @@ public class KEAFilter extends Filter implements OptionHandler {
 	private Classifier m_Classifier = null;
 	
 	/** The dictionary containing the document frequencies */
-	public HashMap m_Dictionary = null;
+	public HashMap<String, Counter> m_Dictionary = null;
 	
 	/** The dictionary containing the keyphrases */
-	private HashMap m_KeyphraseDictionary = null;
+	private HashMap<String, Counter> m_KeyphraseDictionary = null;
 	
 	/** The number of documents in the global frequencies corpus */
 	private int m_NumDocs = 0;
@@ -858,13 +858,13 @@ public class KEAFilter extends Filter implements OptionHandler {
 		
 		// Build dictionary of n-grams with associated
 		// document frequencies
-		m_Dictionary = new HashMap();
+		m_Dictionary = new HashMap<String, Counter>();
 		for (int i = 0; i < getInputFormat().numInstances(); i++) {
 			String str = getInputFormat().instance(i).stringValue(m_DocumentAtt);
-			HashMap hash = getPhrasesForDictionary(str);
-			Iterator it = hash.keySet().iterator();
+			HashMap<String, Counter> hash = getPhrasesForDictionary(str);
+			Iterator<String> it = hash.keySet().iterator();
 			while (it.hasNext()) {
-				String phrase = (String)it.next();
+				String phrase = it.next();
 				Counter counter = (Counter)m_Dictionary.get(phrase);
 				if (counter == null) {
 					m_Dictionary.put(phrase, new Counter());
@@ -881,15 +881,15 @@ public class KEAFilter extends Filter implements OptionHandler {
 			
 			// Build dictionary of n-grams that occur as keyphrases
 			// with associated keyphrase frequencies
-			m_KeyphraseDictionary = new HashMap();
+			m_KeyphraseDictionary = new HashMap<String, Counter>();
 			for (int i = 0; i < getInputFormat().numInstances(); i++) {
 				String str = getInputFormat().instance(i).stringValue(m_KeyphrasesAtt);
 				HashMap hash = getGivenKeyphrases(str, false);
 				if (hash != null) {
-					Iterator it = hash.keySet().iterator();
+					Iterator<String> it = hash.keySet().iterator();
 					while (it.hasNext()) {
-						String phrase = (String)it.next();
-						Counter counter = (Counter)m_KeyphraseDictionary.get(phrase);
+						String phrase = it.next();
+						Counter counter = m_KeyphraseDictionary.get(phrase);
 						if (counter == null) {
 							m_KeyphraseDictionary.put(phrase, new Counter());
 						} else {
@@ -1634,10 +1634,10 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * with the stemmed n-grams occuring in the given string
 	 * (as keys) and the number of times it occurs.
 	 */
-	public HashMap getPhrasesForDictionary(String str) {
+	public HashMap<String, Counter> getPhrasesForDictionary(String str) {
 		
 		String[] buffer = new String[m_MaxPhraseLength];
-		HashMap hash = new HashMap();
+		HashMap<String, Counter> hash = new HashMap<String, Counter>();
 		
 		StringTokenizer tok = new StringTokenizer(str, "\n");
 		while (tok.hasMoreTokens()) {
@@ -1911,10 +1911,10 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * hashtable.  Also stores the original version of the stemmed
 	 * phrase in the hash table.  
 	 */
-	private HashMap getGivenKeyphrases(String str,
+	private HashMap<String, Counter> getGivenKeyphrases(String str,
 			boolean forEval) {
 		
-		HashMap hash = new HashMap();
+		HashMap<String, Counter> hash = new HashMap<String, Counter>();
 		// m_Indexers = 1;
 		
 		StringTokenizer tok = new StringTokenizer(str, "\n");
@@ -1932,7 +1932,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 			}	
 			
 			orig = pseudoPhrase(orig);
-			//System.err.println(orig);
 			if (orig.length() > 0) {
 				
 				String id;
