@@ -126,7 +126,8 @@ public class MetadataExtractor {
             rdf.dispose();
             return mdDTO;
         } catch (MetadataExtractionException e) {
-            log.error("Metadata Extraction error: " + e.getMessage(), e);
+            log.error("Metadata Extraction error: ");
+            log.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -193,26 +194,21 @@ public class MetadataExtractor {
     public void extractMetadataFromRDF() {
 
         // set up secondary RDF container for creator
-        //URI creatorURI = rdf.getURI(NCO.creator);
-        //RDFContainer creatorRDF = new RDFContainerImpl(rdf.getModel(), creatorURI);
         String creator = "";
         Collection<Node> creators = rdf.getAll(NCO.creator);
         for (Iterator<Node> iterator = creators.iterator(); iterator.hasNext();) {
             Node node = iterator.next();
             RDFContainer container = new RDFContainerImpl(rdf.getModel(), node.asURI());
-            //System.out.println(container.getString(NCO.fullname));
             creator = container.getString(NCO.fullname);
             if (creator!=null && !creator.equals("")) break;
         }
 
         // copy values to metadataDTO
         mdDTO.setTitle(rdf.getString(NIE.title));
-        //mdDTO.setCreator(creatorRDF.getString(NCO.fullname));
         mdDTO.setCreator(creator);
         mdDTO.addSubject(rdf.getString(NIE.subject));
         mdDTO.setContentCreated(rdf.getDate(NIE.contentCreated));
         mdDTO.setContentLastModified(rdf.getDate(NIE.contentLastModified));
-
     }
 
     /**
@@ -221,11 +217,10 @@ public class MetadataExtractor {
      * @throws MetadataExtractionException
      */
     public void extractSuggestedSubjects() throws MetadataExtractionException {
-        //SubjectExtractor subExt = new SubjectExtractor();
         List<String> sugSubjects = subjectExtractor.extractSuggestedSubjects(rdf.getString(NIE.plainTextContent));
-        Iterator iter = sugSubjects.iterator();
+        Iterator<String> iter = sugSubjects.iterator();
         while (iter.hasNext()) {
-            mdDTO.addSubject((String) iter.next());
+            mdDTO.addSubject(iter.next());
         }
     }
 }

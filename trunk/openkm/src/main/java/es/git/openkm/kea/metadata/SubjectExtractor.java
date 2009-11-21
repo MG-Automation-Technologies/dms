@@ -52,13 +52,23 @@ public class SubjectExtractor {
     private int subjectNumLimit = 12;
     private double subjectRelLimit = 1.2;
     private boolean additionalInfo = false;
-
     private KEAFilter filter = null;
 
+    /**
+     * SubjectExtractor
+     * 
+     * @throws MetadataExtractionException
+     */
     public SubjectExtractor() throws MetadataExtractionException {
         filter = KEAFilterBank.getFilter();
     }
 
+    /**
+     * SubjectExtractor
+     * 
+     * @param limit
+     * @throws MetadataExtractionException
+     */
     public SubjectExtractor(int limit) throws MetadataExtractionException {
         subjectNumLimit = limit;
         filter = KEAFilterBank.getFilter();
@@ -137,7 +147,13 @@ public class SubjectExtractor {
         this.additionalInfo = additionalInfo;
     }
 
-    public List<String> extractSuggestedSubjects(String documentText) {
+    /**
+     * extractSuggestedSubjects
+     * 
+     * @param documentText
+     * @return
+     */
+	public List<String> extractSuggestedSubjects(String documentText) {
 
         Date start,stop;
 
@@ -171,8 +187,7 @@ public class SubjectExtractor {
             }
             for (int i = 0; i < subjectNumLimit; i++) {
                 if (rankedSubjects[i] != null) {
-                    subjects.add(rankedSubjects[i]
-                            .stringValue(filter.getUnstemmedPhraseIndex()));
+                    subjects.add(rankedSubjects[i].stringValue(filter.getUnstemmedPhraseIndex()));
                 }
             }
 
