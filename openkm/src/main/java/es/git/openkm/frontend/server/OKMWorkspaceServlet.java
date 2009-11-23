@@ -68,8 +68,17 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
-			User user = authDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
-			workspace.setEmail(user.getEmail());
+			User user = new User();
+			if (Config.PRINCIPAL_ADAPTER.equals("es.git.openkm.principal.DatabasePrincipalAdapter")) {
+				user = authDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
+				workspace.setEmail(user.getEmail());
+			} else {
+				user.setId(getThreadLocalRequest().getRemoteUser());
+				user.setName("");
+				user.setEmail("");
+				user.setActive(true);
+				user.setPass("");
+			}
 			
 			for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
 				MailAccount mailAccount = it.next();
