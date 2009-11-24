@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
@@ -48,7 +50,7 @@ public class RDFVocabulary {
 
 	private static Logger log = LoggerFactory.getLogger(RDFVocabulary.class);
 
-    private static Repository ISMT = null;
+    private static Repository repository = null;
     private static RDFVocabulary instance;
 
     private static String NAMESPACE = " USING NAMESPACE "
@@ -76,7 +78,7 @@ public class RDFVocabulary {
      * RDFVocabulary
      */
     private RDFVocabulary() {
-        ISMT = getMemStoreRepository();
+        repository = getMemStoreRepository();
     }
     
     /**
@@ -85,10 +87,9 @@ public class RDFVocabulary {
      * @return
      */
     public static RDFVocabulary getInstance() {
-        //if (instance == null) {
-    	// Contruimos temporalmente siempre el vocabulario
+        if (instance == null) {
             instance = new RDFVocabulary();
-        //}
+        }
         return instance;
     }
 
@@ -104,24 +105,29 @@ public class RDFVocabulary {
         TupleQuery query;
 
         try {
-            con = ISMT.getConnection();
-            query = con.prepareTupleQuery(QueryLanguage.SERQL, queryStr2);
-            System.out.println("query:"+queryStr2);
-            TupleQueryResult result = query.evaluate();
+            con = repository.getConnection();
+			query = con.prepareTupleQuery(QueryLanguage.SERQL, queryStr2); 
+            log.info("query:"+queryStr2);
+            TupleQueryResult result;
+			result = query.evaluate();
             while (result.hasNext()) {
                 BindingSet bindingSet = result.next();
                 terms.add(new Term(bindingSet.getValue("lab").stringValue(),""));
             }
         } catch (RepositoryException e) {
-            log.error("could not obtain connection to ISMT respository",e);
-        } finally {
+            log.error("could not obtain connection to respository",e);
+        } catch (MalformedQueryException e) {
+        	log.error(e.getMessage(),e);
+		} catch (QueryEvaluationException e) {
+			log.error(e.getMessage(),e);
+		} finally {
             try {
                  con.close();
             } catch (Throwable e) {
                 log.error("Could not close connection....", e);
             }
-            return terms;
         }
+        return terms;
     }
 
     /**
@@ -147,15 +153,13 @@ public class RDFVocabulary {
 
         } catch (RepositoryException e) {
             log.error("Cannot make connection to RDF repository.", e);
-            //throw new IpsvRepositoryException("Cannot make connection to RDF repository.",e);
         } catch (IOException e) {
             log.error("cannot locate/read file ismt.rdfs", e);
         } catch (RDFParseException e) {
             log.error("Cannot parse file ipsv-skos.rdf");
         } catch (Throwable t) {
             log.error("Unexpected exception loading repository",t);
-        } finally {
-            return repository;
-        }
+        } 
+        return repository;
     }
 }
