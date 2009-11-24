@@ -150,6 +150,8 @@ public class MediaPlayerPopup extends DialogBox {
 	 */
 	public void setMediaFile(String mediaUrl) {
 		this.mediaUrl = mediaUrl;
+		Util.removeMediaPlayer();
+		text.setHTML("<div id=\"mediaplayercontainer\"></div>\n");
 		Util.createMediaPlayer(mediaUrl, "400", "280");
 		actualZoom.setHTML("x"+actualRatio + "&nbsp;");
 	}
