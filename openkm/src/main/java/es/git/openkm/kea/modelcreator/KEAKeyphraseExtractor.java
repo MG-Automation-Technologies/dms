@@ -721,7 +721,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
             buildGlobalDictionaries(stems);
         }
 
-        System.err.println("-- Extracting Keyphrases... ");
+        log.info("-- Extracting Keyphrases... ");
         // Extract keyphrases
         Enumeration<String> elem = stems.keys();
         // Enumeration over all files in the directory (now in the hash):

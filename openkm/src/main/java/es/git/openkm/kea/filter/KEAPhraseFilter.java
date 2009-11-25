@@ -19,11 +19,21 @@
 
 package es.git.openkm.kea.filter;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import weka.core.*;
-import weka.filters.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import weka.core.Capabilities;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Option;
+import weka.core.OptionHandler;
+import weka.core.Range;
+import weka.core.Utils;
 import weka.core.Capabilities.Capability;
+import weka.filters.Filter;
 
 /**
  * This filter splits the text in selected string
@@ -58,6 +68,8 @@ import weka.core.Capabilities.Capability;
  * @version 1.0
  */
 public class KEAPhraseFilter extends Filter implements OptionHandler {
+	
+	private static Logger log = LoggerFactory.getLogger(KEAPhraseFilter.class);
 
   /**
 	 * 
@@ -261,7 +273,7 @@ public class KEAPhraseFilter extends Filter implements OptionHandler {
 	Filter.filterFile(new KEAPhraseFilter(), argv);
       }
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      log.error(ex.getMessage(), ex);
     }
   }
  
@@ -290,7 +302,7 @@ public class KEAPhraseFilter extends Filter implements OptionHandler {
 	String tokenized = tokenize(str);
 	
 	// aly: resultStr is the clean version of str
-	// System.out.println(resultStr.toString());
+	// log.info(resultStr.toString());
 	int index = getOutputFormat().attribute(i).
 	  addStringValue(tokenized);
 	instVals[i] = (double)index;

@@ -25,6 +25,11 @@ import weka.filters.*;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import es.git.openkm.module.direct.DirectDocumentModule;
+
 /**
  * Removes all numbers from all the string attributes in the given
  * dataset. Assumes that words are separated by whitespace.
@@ -33,6 +38,8 @@ import java.util.*;
  * @version 1.0
  */
 public class NumbersFilter extends Filter {
+	
+	private static Logger log = LoggerFactory.getLogger(NumbersFilter.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -143,7 +150,7 @@ public class NumbersFilter extends Filter {
 	Filter.filterFile(new NumbersFilter(), argv);
       }
     } catch (Exception ex) {
-      System.out.println(ex.getMessage());
+      log.info(ex.getMessage());
     }
   }
  

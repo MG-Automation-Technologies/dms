@@ -19,6 +19,9 @@
 
 package es.git.openkm.kea.stemmers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implements the iterated version of the Lovins stemmer.
  *
@@ -31,6 +34,8 @@ public class IteratedLovinsStemmer extends LovinsStemmer {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static Logger log = LoggerFactory.getLogger(IteratedLovinsStemmer.class);
 
 /**
    * Iterated stemming of the given word.
@@ -65,11 +70,11 @@ public class IteratedLovinsStemmer extends LovinsStemmer {
 	  wordBuffer.append(c);
 	} else {
 	  if (wordBuffer.length() > 0) {
-	    System.out.print(ls.stem(wordBuffer.toString().
+	    log.info(ls.stem(wordBuffer.toString().
 				     toLowerCase()));
 	    wordBuffer = new StringBuffer();
 	  }
-	  System.out.print(c);
+	  log.info(""+c);
 	}
       }
     } catch (Exception e) {

@@ -20,8 +20,11 @@
 package es.git.openkm.kea.stemmers;
 
 
-import java.util.*;
-import java.io.*;
+import java.io.Serializable;
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /** 
@@ -31,6 +34,8 @@ import java.io.*;
  * @version 1.0
  */
 public class LovinsStemmer extends Stemmer implements Serializable {
+	
+	private static Logger log = LoggerFactory.getLogger(LovinsStemmer.class);
 
   /**
 	 * 
@@ -883,15 +888,15 @@ public class LovinsStemmer extends Stemmer implements Serializable {
 	  wordBuffer.append(c);
 	} else {
 	  if (wordBuffer.length() > 0) {
-	    System.out.print(ls.stem(wordBuffer.toString().
+	    log.info(ls.stem(wordBuffer.toString().
 				     toLowerCase()));
 	    wordBuffer = new StringBuffer();
 	  }
-	  System.out.print(c);
+	  log.info(""+c);
 	}
       }
     } catch (Exception e) {
-      System.err.println(e.getMessage());
+      log.error(e.getMessage(),e);
     }
   }
 }
