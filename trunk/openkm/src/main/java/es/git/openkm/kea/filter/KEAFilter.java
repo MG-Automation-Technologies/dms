@@ -872,7 +872,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		
 		if (m_KFused) {       
 			if (m_Debug) {
-				System.out.println("KF_used feature");
+				log.info("KF_used feature");
 			}
 			
 			// Build dictionary of n-grams that occur as keyphrases
@@ -1053,7 +1053,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		m_Classifier = rvd;
 		
 		
-		// System.out.print(m_ClassifierData);   
+		// log.info(m_ClassifierData);   
 		//System.exit(1);
 		m_Classifier.buildClassifier(m_ClassifierData);
 		
@@ -1159,7 +1159,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 					}					
 				}
 			}
-			// System.out.println("Node feature for " + m_Vocabulary.getOrig(id) + " = " + intern);
+			// log.info("Node feature for " + m_Vocabulary.getOrig(id) + " = " + intern);
 			
 			newInst[m_NodeIndex] = (double)intern;
 			
@@ -1464,7 +1464,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 				int pos = 0;
 				for (int i = 0; i < instance.numAttributes(); i++) {
 					if (i == m_DocumentAtt) {
-						// System.out.println("Here: " + phrase);
+						// log.info("Here: " + phrase);
 						// Add phrase
 						int index = outputFormatPeek().attribute(pos).
 						addStringValue(phrase);
@@ -1797,7 +1797,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 							id = (String)m_Vocabulary.getID(orig);
 						}
 						
-					//	 System.out.println(orig + "\t" + pseudo + " \t " + id);
+					//	 log.info(orig + "\t" + pseudo + " \t " + id);
 						
 						if (id != null) {
 							
@@ -1967,7 +1967,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * which are stemmed and sorted into alphabetical order. 
 	 */
 	public String pseudoPhrase(String str) {
-		//System.err.print(str + "\t");
+		//log.error(str + "\t");
 		String[] pseudophrase;
 		String[] words;
 		String str_nostop;

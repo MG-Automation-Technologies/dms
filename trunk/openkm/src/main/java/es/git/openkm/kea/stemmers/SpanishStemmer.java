@@ -19,6 +19,9 @@
 
 package es.git.openkm.kea.stemmers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Wrapper for the Snowball stemmer for Spanish // use stemSB
  * Or translation of the Stemmer implemented in C
@@ -29,6 +32,8 @@ package es.git.openkm.kea.stemmers;
  */
 
 public class SpanishStemmer extends Stemmer {
+	
+	private static Logger log = LoggerFactory.getLogger(SpanishStemmer.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -97,7 +102,7 @@ public class SpanishStemmer extends Stemmer {
 	public static void main(String[] ops) {
 	
 		SpanishStemmer s = new SpanishStemmer();
-		System.out.println(s.stem("veces"));	
+		log.info(s.stem("veces"));	
 	}
 	
 	
