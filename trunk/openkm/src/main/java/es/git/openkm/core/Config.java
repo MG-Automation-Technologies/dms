@@ -115,7 +115,18 @@ public class Config {
 	public static String PROPERTY_KEYWORD_MAP_LIVE = "keyword.map.live";
 	public static String PROPERTY_USER_DOCUMENTS_SIZE_LIVE = "user.documents.size.live";
 	
-	// Default values
+	// KEA
+	public static String PROPERTY_KEA_THESAURUS_FILE = "kea.thesaurus.file";
+	public static String PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL = "kea.thesaurus.vocabulary.serql";
+	public static String PROPERTY_KEA_THESAURUS_BASE_URL = "kea.thesaurus.base.url";
+	public static String PROPERTY_KEA_MODEL_FILE = "kea.model.file";
+	public static String PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "kea.automatic.keyword.extraction.number";
+	public static String PROPERTY_KEA_STOPWORDS_FILE = "kea.stopwords.file";
+	public static String PROPERTY_KEA_STOPWORDS_LANGUAGE = "kea.stopwords.language";
+	
+	/**
+	 *  Default values
+	 */
 	public static String REPOSITORY_CONFIG = "repository"+INSTALL+".xml";
 	public static String REPOSITORY_HOME = "repository"+INSTALL;
 	
@@ -176,6 +187,15 @@ public class Config {
 	public static String KEYWORD_MAP_LIVE = "on";
 	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
 
+	// KEA
+	public static String KEA_THESAURUS_FILE = "agrovoc.rdf";
+	public static String KEA_THESAURUS_VOCABULARY_SERQL = "SELECT X,lab FROM {X} skos:prefLabel {lab} WHERE lang(lab) =\"en\" USING NAMESPACE rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>, skos=<http://www.w3.org/2004/02/skos/core#>, rdfs=<http://www.w3.org/2000/01/rdf-schema#>, dc=<http://purl.org/dc/elements/1.1/>, dcterms=<http://purl.org/dc/terms/>, foaf=<http://xmlns.com/foaf/0.1/>";
+	public static String KEA_THESAURUS_BASE_URL = "http://www.fao.org/aos/agrovoc";
+	public static String KEA_MODEL_FILE = "agrovoc.model";
+	public static String KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "10";
+	public static String KEA_STOPWORDS_FILE = "stopwords_en.txt";
+	public static String KEA_STOPWORDS_LANGUAGE = "en";
+	
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
 	
@@ -248,7 +268,16 @@ public class Config {
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 			KEYWORD_MAP_LIVE = config.getProperty(PROPERTY_KEYWORD_MAP_LIVE, KEYWORD_MAP_LIVE);
 			USER_DOCUMENTS_SIZE_LIVE = config.getProperty(PROPERTY_USER_DOCUMENTS_SIZE_LIVE, USER_DOCUMENTS_SIZE_LIVE);
-						
+			
+			// KEA
+			KEA_THESAURUS_FILE = config.getProperty(PROPERTY_KEA_THESAURUS_FILE, KEA_THESAURUS_FILE);
+			KEA_THESAURUS_VOCABULARY_SERQL = config.getProperty(PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL, KEA_THESAURUS_VOCABULARY_SERQL);
+			KEA_THESAURUS_BASE_URL = config.getProperty(PROPERTY_KEA_THESAURUS_BASE_URL, KEA_THESAURUS_BASE_URL);
+			KEA_MODEL_FILE = config.getProperty(PROPERTY_KEA_MODEL_FILE, KEA_MODEL_FILE);
+			KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = config.getProperty(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER, KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
+			KEA_STOPWORDS_FILE = config.getProperty(PROPERTY_KEA_STOPWORDS_FILE, KEA_STOPWORDS_FILE);
+			KEA_STOPWORDS_LANGUAGE = config.getProperty(PROPERTY_KEA_STOPWORDS_LANGUAGE, KEA_STOPWORDS_LANGUAGE);
+			
 			fis.close();
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+CONFIG_FILE+" file found, set default config **");
@@ -309,8 +338,16 @@ public class Config {
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
 					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+", "+
 					PROPERTY_KEYWORD_MAP_LIVE+"="+KEYWORD_MAP_LIVE+
-					PROPERTY_USER_DOCUMENTS_SIZE_LIVE+"="+USER_DOCUMENTS_SIZE_LIVE+"}");
+					PROPERTY_USER_DOCUMENTS_SIZE_LIVE+"="+USER_DOCUMENTS_SIZE_LIVE+", "+
 			
+					// KEA
+					PROPERTY_KEA_THESAURUS_FILE+"="+KEA_THESAURUS_FILE+", "+
+					PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL+"="+KEA_THESAURUS_VOCABULARY_SERQL+", "+
+					PROPERTY_KEA_THESAURUS_BASE_URL+"="+KEA_THESAURUS_BASE_URL+", "+
+					PROPERTY_KEA_MODEL_FILE+"="+KEA_MODEL_FILE+", "+
+					PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+"="+KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+", "+
+					PROPERTY_KEA_STOPWORDS_FILE+"="+KEA_STOPWORDS_FILE+", "+
+					PROPERTY_KEA_STOPWORDS_LANGUAGE+"="+KEA_STOPWORDS_LANGUAGE+"}");
 			if (TRIAL) {
 				log.info("*** *** *** *** *** *** *** ***");
 				log.info("*** OPENKM ENTERPRISE TRIAL ***");
