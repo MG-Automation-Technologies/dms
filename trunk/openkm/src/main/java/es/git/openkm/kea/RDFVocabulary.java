@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.kea.Term;
+import es.git.openkm.core.Config;
 
 /**
  * @author jllort
@@ -52,27 +53,16 @@ public class RDFVocabulary {
 
     private static Repository repository = null;
     private static RDFVocabulary instance;
-
-    private static String NAMESPACE = " USING NAMESPACE "
-                            + "dc=<http://purl.org/dc/elements/1.1/>,"
-                            + "dct=<http://purl.org/dc/terms/>,"
-                            + "rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>,"
-                            + "skos=<http://www.w3.org/2004/02/skos/core#>";
-
-
-    private static String queryStr = "SELECT X,lab FROM {X} prefLabel {lab}"
-                                     + " WHERE lang(lab) = \"en\"" + NAMESPACE;
     
-    private static String NAMESPACE2 = " USING NAMESPACE "
-    						+ "rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>,"
-    						+ "skos=<http://www.w3.org/2004/02/skos/core#>,"
-    						+ "rdfs=<http://www.w3.org/2000/01/rdf-schema#>,"
-    						+ "dc=<http://purl.org/dc/elements/1.1/>,"
-    						+ "dcterms=<http://purl.org/dc/terms/>,"
-    						+ "foaf=<http://xmlns.com/foaf/0.1/>";
-
-    private static String queryStr2 = "SELECT X,lab FROM {X} skos:prefLabel {lab}"
-        				 + " WHERE lang(lab) = \"en\"" + NAMESPACE2;
+    /**
+     * getConnection
+     * 
+     * @return
+     * @throws RepositoryException 
+     */
+    public RepositoryConnection getConnection() throws RepositoryException {
+    	return repository.getConnection();
+    }
     
     /**
      * RDFVocabulary
@@ -94,11 +84,11 @@ public class RDFVocabulary {
     }
 
     /**
-     * getISMTTerms
+     * getTerms
      * 
      * @return
      */
-    public List<Term> getISMTTerms() {
+    public List<Term> getTerms() {
 
         List<Term> terms = new ArrayList<Term>();
         RepositoryConnection con = null;
@@ -106,8 +96,8 @@ public class RDFVocabulary {
 
         try {
             con = repository.getConnection();
-			query = con.prepareTupleQuery(QueryLanguage.SERQL, queryStr2); 
-            log.info("query:"+queryStr2);
+			query = con.prepareTupleQuery(QueryLanguage.SERQL, Config.KEA_THESAURUS_VOCABULARY_SERQL); 
+            log.info("query:"+Config.KEA_THESAURUS_VOCABULARY_SERQL);
             TupleQueryResult result;
 			result = query.evaluate();
             while (result.hasNext()) {
@@ -138,25 +128,24 @@ public class RDFVocabulary {
     private Repository getMemStoreRepository() {
         InputStream is;
         Repository repository = null;
-        String baseURL = "http://cain.nbii.org/thesauri/ismt.rdf";
-        baseURL = "http://www.fao.org/aos/agrovoc";
+        String baseURL = Config.KEA_THESAURUS_BASE_URL;
         
         try {
-            is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/ismt.rdf");
-            is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/agrovoc.rdf");
+            is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/"+ Config.KEA_THESAURUS_FILE);
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             RepositoryConnection con = repository.getConnection();
             con.add(is, baseURL, RDFFormat.RDFXML);
             con.close();
-            log.info("New SAIL memstore created for ISMT");
+            log.info("New SAIL memstore created for RDF");
 
         } catch (RepositoryException e) {
             log.error("Cannot make connection to RDF repository.", e);
         } catch (IOException e) {
-            log.error("cannot locate/read file ismt.rdfs", e);
+            log.error("cannot locate/read file", e);
+            e.printStackTrace();
         } catch (RDFParseException e) {
-            log.error("Cannot parse file ipsv-skos.rdf");
+            log.error("Cannot parse file", e);
         } catch (Throwable t) {
             log.error("Unexpected exception loading repository",t);
         } 
