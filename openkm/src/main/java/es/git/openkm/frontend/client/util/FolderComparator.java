@@ -23,16 +23,16 @@ import java.util.Comparator;
 
 import es.git.openkm.frontend.client.bean.GWTFolder;
 
-public class FolderComparator implements Comparator {
-	private static final Comparator INSTANCE  = new FolderComparator();
+public class FolderComparator implements Comparator<GWTFolder> {
+	private static final Comparator<GWTFolder> INSTANCE  = new FolderComparator();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTFolder> getInstance() {
 		return INSTANCE;
 	}
 
-	public int compare(Object arg0, Object arg1) {
-		GWTFolder first = ((GWTFolder) arg0);
-		GWTFolder second = ((GWTFolder) arg1);
+	public int compare(GWTFolder arg0, GWTFolder arg1) {
+		GWTFolder first = arg0;
+		GWTFolder second = arg1;
 		return first.getName().compareTo(second.getName());
 	}
 }
