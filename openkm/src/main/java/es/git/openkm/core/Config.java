@@ -188,13 +188,13 @@ public class Config {
 	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
 
 	// KEA
-	public static String KEA_THESAURUS_FILE = "agrovoc.rdf";
-	public static String KEA_THESAURUS_VOCABULARY_SERQL = "SELECT X,lab FROM {X} skos:prefLabel {lab} WHERE lang(lab) =\"en\" USING NAMESPACE rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>, skos=<http://www.w3.org/2004/02/skos/core#>, rdfs=<http://www.w3.org/2000/01/rdf-schema#>, dc=<http://purl.org/dc/elements/1.1/>, dcterms=<http://purl.org/dc/terms/>, foaf=<http://xmlns.com/foaf/0.1/>";
-	public static String KEA_THESAURUS_BASE_URL = "http://www.fao.org/aos/agrovoc";
-	public static String KEA_MODEL_FILE = "agrovoc.model";
-	public static String KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "10";
-	public static String KEA_STOPWORDS_FILE = "stopwords_en.txt";
-	public static String KEA_STOPWORDS_LANGUAGE = "en";
+	public static String KEA_THESAURUS_FILE = "";
+	public static String KEA_THESAURUS_VOCABULARY_SERQL = "";
+	public static String KEA_THESAURUS_BASE_URL = "";
+	public static String KEA_MODEL_FILE = "";
+	public static String KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "0";
+	public static String KEA_STOPWORDS_FILE = "";
+	public static String KEA_STOPWORDS_LANGUAGE = "";
 	
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
