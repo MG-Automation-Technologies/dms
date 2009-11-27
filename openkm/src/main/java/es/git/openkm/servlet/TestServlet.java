@@ -21,6 +21,8 @@ package es.git.openkm.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.bean.kea.Term;
+import es.git.openkm.kea.RDFVocabulary;
 import es.git.openkm.kea.tree.KEATree;
 
 /**
@@ -47,14 +51,14 @@ public class TestServlet extends HttpServlet {
 		
 		String token = (String)request.getSession().getAttribute("token");
 		
-		KEATree.recursiveGenerateTree(null, 0, token, "/okm:root/borrar");
+	//	KEATree.recursiveGenerateTree(null, 0, token, "/okm:root/borrar");
 		
-//		List<Term> terms = RDFVocabulary.getInstance().getTerms();
-//		
-//		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
-//			Term term = it.next();
-//			log.info("id:"+term.getId() + " text:" +term.getText());
-//		}		
+		List<Term> terms = RDFVocabulary.getInstance().getTerms();
+		
+		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
+			Term term = it.next();
+			log.info("id:"+term.getId() + " text:" +term.getText());
+		}		
 		
 		PrintWriter out = response.getWriter();
 		log.info("Token: "+token);
