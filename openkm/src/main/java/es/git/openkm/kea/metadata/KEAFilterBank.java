@@ -33,8 +33,13 @@ import es.git.openkm.kea.filter.KEAFilter;
 import es.git.openkm.kea.stemmers.SremovalStemmer;
 import es.git.openkm.kea.stemmers.Stemmer;
 import es.git.openkm.kea.stopwords.Stopwords;
-import es.git.openkm.kea.stopwords.StopwordsEnglish;
 
+/**
+ * KEAFilterBank
+ * 
+ * @author jllort
+ *
+ */
 public class KEAFilterBank {
 
 	private static Logger log = LoggerFactory.getLogger(KEAFilterBank.class);
@@ -63,12 +68,22 @@ public class KEAFilterBank {
     private KEAFilterBank() throws MetadataExtractionException {
         Date start = new Date();
         
-        String modelPath = this.getClass().getClassLoader().getResource("vocabulary/agrovoc.model").getPath();
-        String vocabularyPath = this.getClass().getClassLoader().getResource("vocabulary/agrovoc.rdf").getPath();
-        String stopWordsPath = this.getClass().getClassLoader().getResource("vocabulary/stopwords_en.txt").getPath();
+        String modelPath = WorkspaceHelper.KEA_MODEL_PATH;
+        String vocabularyPath = WorkspaceHelper.RDF_VOVABULARY_PATH;
         int numPhrases = 5;
         
-        filter = buildFilter(modelPath, vocabularyPath, "skos", "en", new SremovalStemmer(), new StopwordsEnglish(stopWordsPath), numPhrases);
+        String className = WorkspaceHelper.KEA_STOPWORDS_CLASSNAME;
+        Stopwords stopwords = null;
+		if (className != null) {
+			try {
+				Class clazz = Class.forName(className);
+				stopwords = (Stopwords) clazz.newInstance();
+			} catch (Exception e) {
+				log.error("Error creating class instance", e);
+			}
+		}
+        
+        filter = buildFilter(modelPath, vocabularyPath, "skos", WorkspaceHelper.KEA_LANGUAGE, new SremovalStemmer(), stopwords, numPhrases);
         
         Date stop = new Date();
         long time = (stop.getTime() - start.getTime());

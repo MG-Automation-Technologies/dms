@@ -19,10 +19,12 @@
 
 package es.git.openkm.kea.metadata;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import es.git.openkm.core.Config;
 
 /**
  * WorkspaceHelper
@@ -35,19 +37,84 @@ public class WorkspaceHelper {
 	private static Logger log = LoggerFactory.getLogger(WorkspaceHelper.class);
 
     // the directory names
-    private static final String BASE_DIR = getSystemBaseDir();
+    private static final String WORK_DIR = getWorkingBaseDir();
     private static final String TEMP_DIR = getTemporaryBaseDir();
+    
+    // The files path
+    public static final String RDF_VOVABULARY_PATH 	= WORK_DIR + 
+	 										 	   	  (Config.KEA_THESAURUS_FILE.startsWith(File.separator)?"":File.separator) +
+	 										 	   	  Config.KEA_THESAURUS_FILE;
+    
+    public static final String KEA_MODEL_PATH 		= WORK_DIR + 
+	   												  (Config.KEA_MODEL_FILE.startsWith(File.separator)?"":File.separator) +
+	   												  Config.KEA_MODEL_FILE;
+    
+    // It's not final because model builder must change this path ( to solve problem with stopwords file on stopwordX class )
+    public static String KEA_STOPWORDS_PATH 		= WORK_DIR + 
+		  											  (Config.KEA_STOPWORDS_FILE.startsWith(File.separator)?"":File.separator) +
+		  											  Config.KEA_STOPWORDS_FILE;
+    
+    // Language
+    public static final String KEA_LANGUAGE = getLanguage();
+    
+    // Stop words class name
+    public static final String KEA_STOPWORDS_CLASSNAME = getStopWordsClassName();
 
     /**
-     *  Static public helper methods
+     * getTempDir
+     * 
+     * @return OS temp dir
      */
-
     public static String getTempDir() {
         return TEMP_DIR;
     }
     
-    public static String getRealRootDir() {
-    	return BASE_DIR;
+    /**
+     * getWorkingDir
+     * 
+     * @return jboss / tomcat / or user working dir
+     */
+    public static String getWorkingDir() {
+    	return WORK_DIR;
+    }
+    
+    /**
+     * getLanguage
+     * 
+     * @return The language
+     */
+    public static String getLanguage() {
+    	String lang =  "";
+    	
+    	if (!Config.KEA_STOPWORDS_FILE.equals("")) {
+    		lang = Config.KEA_STOPWORDS_FILE.substring(Config.KEA_STOPWORDS_FILE.indexOf("_")+1,
+    												   Config.KEA_STOPWORDS_FILE.indexOf("."));
+    	}
+				   										   
+    	return lang;
+    }
+    
+    /**
+     * getStopWordsClassName
+     * 
+     * @return The class name
+     */
+    public static String getStopWordsClassName() {
+    	String className = null;
+    	
+    	if (KEA_LANGUAGE.equals("en")) {
+    		className = "es.git.openkm.kea.stopwords.StopwordsEnglish";
+    	} else if (KEA_LANGUAGE.equals("es")) {
+    		className = "es.git.openkm.kea.stopwords.StopwordsSpanish";
+    	} else if (KEA_LANGUAGE.equals("de")) {
+    		className = "es.git.openkm.kea.stopwords.StopwordsGerman";
+    	} else if (KEA_LANGUAGE.equals("fr")) {
+    		className = "es.git.openkm.kea.stopwords.StopwordsFrench";
+    	} else {
+    		className = "es.git.openkm.kea.stopwords.Stopwords";
+    	}
+    	
+    	return className;
     }
     
     /**
@@ -71,12 +138,12 @@ public class WorkspaceHelper {
      * 
      * @return The system base dir
      */
-    private static String getSystemBaseDir() {
+    private static String getWorkingBaseDir() {
         // try JBoss
-        String dir = System.getProperty("jboss.server.home.dir");
+        String dir = System.getProperty("jboss.home.dir");
         if (dir!=null) {
             log.info("Using JBoss: " + dir);
-            return dir + File.separator + "data";
+            return dir;
         }
         // try Tomcat
         dir = System.getProperty("catalina.home");
