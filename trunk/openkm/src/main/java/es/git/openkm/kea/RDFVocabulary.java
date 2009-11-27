@@ -19,6 +19,8 @@
 
 package es.git.openkm.kea;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.kea.Term;
 import es.git.openkm.core.Config;
+import es.git.openkm.kea.metadata.WorkspaceHelper;
 
 /**
  * @author jllort
@@ -131,7 +134,8 @@ public class RDFVocabulary {
         String baseURL = Config.KEA_THESAURUS_BASE_URL;
         
         try {
-            is = this.getClass().getClassLoader().getResourceAsStream("vocabulary/"+ Config.KEA_THESAURUS_FILE);
+        	log.info(WorkspaceHelper.RDF_VOVABULARY_PATH);
+        	is = new FileInputStream(WorkspaceHelper.RDF_VOVABULARY_PATH);
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             RepositoryConnection con = repository.getConnection();
