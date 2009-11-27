@@ -951,7 +951,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
      * The main method.
      */
     public static void main(String[] ops) {
-    	String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+    	String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
 												.append(File.separator)
 												.append("src")
 												.append(File.separator)
@@ -962,7 +962,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 												.append("vocabulary")
 												.append(File.separator)
 												.append("stopwords_en.txt").toString();
-        KEAKeyphraseExtractor kmb = new KEAKeyphraseExtractor(new StopwordsEnglish(stopWordsPath));
+        KEAKeyphraseExtractor kmb = new KEAKeyphraseExtractor(new StopwordsEnglish());
         try {
             // Checking and Setting Options selected by the user:
             kmb.setOptions(ops);
