@@ -25,6 +25,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import es.git.openkm.kea.metadata.WorkspaceHelper;
+
 /**
  * Class that can test whether a given string is a stop word.
  * Lowercases all words before the test.
@@ -53,13 +55,13 @@ public class StopwordsGerman extends Stopwords {
 	 * 
 	 * @param path
 	 */
-	public StopwordsGerman(String path) {
+	public StopwordsGerman() {
 		
 		if (m_Stopwords == null) {
 			m_Stopwords = new Hashtable<String,Double>();
 			Double dummy = new Double(0);
           
-          File txt = new File(path);
+          File txt = new File(WorkspaceHelper.KEA_STOPWORDS_PATH);
           InputStreamReader is;
 			String sw = null;
 			try {
