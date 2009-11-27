@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.kea.stemmers.PorterStemmer;
+import es.git.openkm.kea.stemmers.Stemmer;
+import es.git.openkm.kea.stopwords.Stopwords;
 import es.git.openkm.kea.stopwords.StopwordsEnglish;
 
 /**
@@ -42,7 +44,9 @@ public class ModelBuilder {
 	private KEAModelBuilder km;
 	private KEAKeyphraseExtractor ke;
 	
-	private void setOptionsTraining() {
+	private void setOptionsTraining(String trainingFilesPath, String modelFilePath, String vocabularyFilePath,
+									String vocabularyType, String documentEncoding, String lang, 
+									Stemmer stemmer, Stopwords stopwords) {
 		
 		km = new KEAModelBuilder();
 		
@@ -52,54 +56,32 @@ public class ModelBuilder {
 		//    documents should be in txt format with an extention "txt"
 		//    keyphrases with the same name as documents, but extension "key"
 		//    one keyphrase per line!
-		km.setDirName("testdocs/en/train");
+		km.setDirName(trainingFilesPath);
 		
 		// 2. Name of the model -- give the path to where the model is to be stored and its name
-		km.setModelName("src/main/resources/vocabulary/agrovoc.model");
+		km.setModelName(modelFilePath);
 		 
 		// 3. Name of the vocabulary -- name of the file (without extension) that is stored in VOCABULARIES
 		//    or "none" if no Vocabulary is used (free keyphrase extraction).		
-		String vocabPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
-        									  .append(File.separator)
-        									  .append("src")
-        									  .append(File.separator)
-        									  .append("main")
-        									  .append(File.separator)
-        									  .append("resources")
-        									  .append(File.separator)
-        									  .append("vocabulary")
-        									  .append(File.separator)
-        									  .append("agrovoc.rdf").toString();
-		km.setVocabulary(vocabPath);
+		km.setVocabulary(vocabularyFilePath);
 		
 		// 4. Format of the vocabulary in 3. Leave empty if vocabulary = "none", use "skos" or "txt" otherwise.
-		km.setVocabularyFormat("skos");
+		km.setVocabularyFormat(vocabularyType);
 		
 		// B. optional arguments if you want to change the defaults
 		// 5. Encoding of the document
-		km.setEncoding("UTF-8");
+		km.setEncoding(documentEncoding);
 		
 		// 6. Language of the document -- use "es" for Spanish, "fr" for French
 		//    or other languages as specified in your "skos" vocabulary 
-		km.setDocumentLanguage("en"); // es for Spanish, fr for French
+		km.setDocumentLanguage(lang); // es for Spanish, fr for French
 		
 		// 7. Stemmer -- adjust if you use a different language than English or if you want to alterate results
 		// (We have obtained better results for Spanish and French with NoStemmer) 		
-		km.setStemmer(new PorterStemmer()); 
+		km.setStemmer(stemmer); 
 		
 		// 8. Stopwords -- adjust if you use a different language than English!
-		String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
-												.append(File.separator)
-												.append("src")
-												.append(File.separator)
-												.append("main")
-												.append(File.separator)
-												.append("resources")
-												.append(File.separator)
-												.append("vocabulary")
-												.append(File.separator)
-												.append("stopwords_en.txt").toString();
-		km.setStopwords(new StopwordsEnglish(stopWordsPath));
+		km.setStopwords(stopwords);
 		
 		// 9. Maximum length of a keyphrase
 		km.setMaxPhraseLength(5);
@@ -116,19 +98,11 @@ public class ModelBuilder {
 	}
 	
 	
-	private void setOptionsTesting(String m_testdir) {
-		String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
-												.append(File.separator)
-												.append("src")
-												.append(File.separator)
-												.append("main")
-												.append(File.separator)
-												.append("resources")
-												.append(File.separator)
-												.append("vocabulary")
-												.append(File.separator)
-												.append("stopwords_en.txt").toString();
-		ke = new KEAKeyphraseExtractor(new StopwordsEnglish(stopWordsPath));
+	private void setOptionsTesting(String m_testdir, String trainingFilesPath, String modelFilePath, String vocabularyFilePath,
+								   String vocabularyType, String documentEncoding, String lang, 
+								   Stemmer stemmer, Stopwords stopwords) {
+		
+		ke = new KEAKeyphraseExtractor(stopwords);
 		
 		// A. required arguments (no defaults):
 		
@@ -140,40 +114,29 @@ public class ModelBuilder {
 		ke.setDirName(m_testdir);
 		
 		// 2. Name of the model -- give the path to the model 
-		ke.setModelName("src/main/resources/vocabulary/agrovoc.model");
+		ke.setModelName(modelFilePath);
 		 
 		// 3. Name of the vocabulary -- name of the file (without extension) that is stored in VOCABULARIES
 		//    or "none" if no Vocabulary is used (free keyphrase extraction).
-		String vocabPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
-		  												.append(File.separator)
-		  												.append("src")
-		  												.append(File.separator)
-		  												.append("main")
-		  												.append(File.separator)
-		  												.append("resources")
-		  												.append(File.separator)
-		  												.append("vocabulary")
-		  												.append(File.separator)
-		  												.append("agrovoc.rdf").toString();
-		ke.setVocabulary(vocabPath);
+		ke.setVocabulary(vocabularyFilePath);
 		
 		// 4. Format of the vocabulary in 3. Leave empty if vocabulary = "none", use "skos" or "txt" otherwise.
-		ke.setVocabularyFormat("skos");
+		ke.setVocabularyFormat(vocabularyType);
 		
 		// B. optional arguments if you want to change the defaults
 		// 5. Encoding of the document
-		ke.setEncoding("UTF-8");
+		ke.setEncoding(documentEncoding);
 		
 		// 6. Language of the document -- use "es" for Spanish, "fr" for French
 		//    or other languages as specified in your "skos" vocabulary 
-		ke.setDocumentLanguage("en"); // es for Spanish, fr for French
+		ke.setDocumentLanguage(lang); // es for Spanish, fr for French
 		
 		// 7. Stemmer -- adjust if you use a different language than English or want to alterate results
 		// (We have obtained better results for Spanish and French with NoStemmer)
-		ke.setStemmer(new PorterStemmer());
+		ke.setStemmer(stemmer);
 		
 		// 8. Stopwords
-		ke.setStopwords(new StopwordsEnglish(stopWordsPath));
+		ke.setStopwords(stopwords);
 		
 		// 9. Number of Keyphrases to extract
 		ke.setNumPhrases(10);
@@ -185,9 +148,9 @@ public class ModelBuilder {
 	/**
 	 * createModel
 	 */
-	private void createModel() {
+	private void createModel(Stopwords stopwords) {
 		try {
-			km.buildModel(km.collectStems());
+			km.buildModel(km.collectStems(), stopwords);
 			km.saveModel();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,18 +180,59 @@ public class ModelBuilder {
 		
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
+		String trainingFilesPath = "testdocs/en/train";
+		String modelFilePath = "vocabulary/agrovoc.model";
+		String vocabularyFilePath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
+		  											   .append(File.separator)
+		  											   .append("vocabulary")
+		  											   .append(File.separator)
+		  											   .append("agrovoc.rdf").toString();
+		String vocabularyType = "skos";
+		String documentEncoding = "UTF-8";
+		String lang = "en";
+		
+		String stemerClassName = "es.git.openkm.kea.stemmers.PorterStemmer";
+		Stemmer stemmer = null;
+		if (stemerClassName != null) {
+			try {
+				Class clazz = Class.forName(stemerClassName);
+				stemmer = (Stemmer) clazz.newInstance();
+			} catch (Exception e) {
+				log.error("Error creating class instance", e);
+			}
+		}
+		
+		// Must change stopwords path used by stopwords class
+		WorkspaceHelper.KEA_STOPWORDS_PATH = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
+		   														.append(File.separator)
+		   														.append("vocabulary")
+		   														.append(File.separator)
+		   														.append("stopwords_en.txt").toString();
+		
+		String stopwordsClassName = "es.git.openkm.kea.stopwords.StopwordsEnglish";
+        Stopwords stopwords = null;
+		if (stopwordsClassName != null) {
+			try {
+				Class clazz = Class.forName(stopwordsClassName);
+				stopwords = (Stopwords) clazz.newInstance();
+			} catch (Exception e) {
+				log.error("Error creating class instance", e);
+			}
+		}
+		
+		String m_testdir = "testdocs/en/test";
+		
 		// to create a model from manually indexed documents,
 		log.info("Creating the model... ");
-		modelBuilder.setOptionsTraining();
-		modelBuilder.createModel();
+		modelBuilder.setOptionsTraining(trainingFilesPath, modelFilePath, vocabularyFilePath, vocabularyType, documentEncoding, 
+										lang, stemmer, stopwords);
+		modelBuilder.createModel(stopwords);
 		
 		// to extract keyphrases from new documents,
 		log.info("Extracting keyphrases from test documents... ");
-		
-		String m_testdir = "testdocs/en/test";
-		// String m_testdir = "/Users/alyona/Documents/corpora/term_assignment/FAO_30/test1";
-		
-		modelBuilder.setOptionsTesting(m_testdir);
+
+		modelBuilder.setOptionsTesting(m_testdir,trainingFilesPath, modelFilePath, vocabularyFilePath, vocabularyType, documentEncoding, 
+									   lang, stemmer, stopwords);
 		modelBuilder.extractKeyphrases();
 		log.info("Look into " + m_testdir + " to see the results");
 		log.info("and compare them to " + m_testdir + "/manual_keyphrases/.");

@@ -740,7 +740,7 @@ public class KEAModelBuilder implements OptionHandler {
 	/**
 	 * Builds the model from the files
 	 */
-	public void buildModel(Hashtable<String, Double> stems) throws Exception {
+	public void buildModel(Hashtable<String, Double> stems, Stopwords stopwords) throws Exception {
 		
 		// Check whether there is actually any data
 		if (stems.size() == 0) {
@@ -753,18 +753,7 @@ public class KEAModelBuilder implements OptionHandler {
 		Instances data = new Instances("keyphrase_training_data", atts, 0);
 		
 		// Build model
-		String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
-												.append(File.separator)
-												.append("src")	
-												.append(File.separator)
-												.append("main")
-												.append(File.separator)
-												.append("resources")
-												.append(File.separator)
-												.append("vocabulary")
-												.append(File.separator)
-												.append("stopwords_en.txt").toString();
-		m_KEAFilter = new KEAFilter(new StopwordsEnglish(stopWordsPath));
+		m_KEAFilter = new KEAFilter(stopwords);
 		
 		m_KEAFilter.setDebug(m_debug);
 		m_KEAFilter.setDisallowInternalPeriods(getDisallowIPeriods());
@@ -881,7 +870,7 @@ public class KEAModelBuilder implements OptionHandler {
 			for (int i = 0; i < optionSettings.length; i++) {
 				log.error(optionSettings[i] + " ");
 			}
-			kmb.buildModel(kmb.collectStems());
+			kmb.buildModel(kmb.collectStems(), new StopwordsEnglish());
 			kmb.saveModel();
 		} catch (Exception e) {
 			e.printStackTrace();
