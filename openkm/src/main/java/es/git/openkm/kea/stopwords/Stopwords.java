@@ -32,10 +32,10 @@ public abstract class Stopwords implements Serializable {
   
 	private static final long serialVersionUID = -930038504373236219L;
 
-/** 
+	/** 
    * Returns true if the given string is a stop word.
    */
-  public abstract boolean isStopword(String str);
+	public abstract boolean isStopword(String str);
 }
 
 
