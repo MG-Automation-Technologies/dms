@@ -319,19 +319,18 @@ public class DirectDocumentModule implements DocumentModule {
 				VirusDetection.detect(tmpAvr);
 			}
 			
-			// Init KEA
-	        int subjectLimit = 10;
-	        
-	        log.info("KEA:");
-	        MetadataExtractor mdExtractor = new MetadataExtractor(subjectLimit);
-	        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
-	        
-	        String keywords = doc.getKeywords() + (doc.getKeywords().length()>0?" ":""); // Adding automatic keywords
-	        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
-	        	Term term =  it.next();
-	        	log.info("Term:" + term.getText());
-	        	keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
-	        }        
+			// Start KEA        
+			String keywords = doc.getKeywords() + (doc.getKeywords().length()>0?" ":""); // Adding automatic keywords
+	        if (!Config.KEA_MODEL_FILE.equals("")) {
+		        MetadataExtractor mdExtractor = new MetadataExtractor(Integer.parseInt(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER));
+		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
+		        
+		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
+		        	Term term =  it.next();
+		        	log.info("Term:" + term.getText());
+		        	keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        }        
+	        }
 	        // Ends KEA
 
 			Session session = SessionManager.getInstance().get(token);
