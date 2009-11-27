@@ -2105,7 +2105,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	public static void main(String [] argv) {
 		
 		try {
-			String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getRealRootDir())
+			String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
 													.append(File.separator)
 													.append("src")	
 													.append(File.separator)
@@ -2117,9 +2117,9 @@ public class KEAFilter extends Filter implements OptionHandler {
 													.append(File.separator)
 													.append("stopwords_en.txt").toString();
 			if (Utils.getFlag('b', argv)) {
-				Filter.batchFilterFile(new KEAFilter(new StopwordsEnglish(stopWordsPath)), argv);
+				Filter.batchFilterFile(new KEAFilter(new StopwordsEnglish()), argv);
 			} else {
-				Filter.filterFile(new KEAFilter(new StopwordsEnglish(stopWordsPath)), argv);
+				Filter.filterFile(new KEAFilter(new StopwordsEnglish()), argv);
 			}
 		} catch (Exception ex) {
 			log.info(ex.getMessage());
