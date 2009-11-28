@@ -11,8 +11,8 @@
 	<!-- Specify the app entry point class.                   -->
 	<entry-point class='es.git.openkm.frontend.client.Main'/>
 	
-	<!-- Compile for firefox only: quicker for developement  --> 
-	<set-property name="user.agent" value="gecko"/> 
+	<!-- Compile for firefox only: quicker for developement   
+	<set-property name="user.agent" value="gecko"/> -->
 	
 	<!-- Compile debug levels -->
 	<extend-property name="log_level" values="DEBUG" />
