@@ -25,8 +25,8 @@ import es.git.openkm.frontend.client.config.ErrorCode;
 
 /**
  * Chinese (China) 
- * 
- * @author unknown
+ * email: mingjie.mj@gmail.com 
+ * @author wmj2003 
  */
 public class Lang_zh_CN {
 	
@@ -43,10 +43,9 @@ public class Lang_zh_CN {
 	    lang.put("startup.openkm", "加载OpenKM");
 	    lang.put("startup.starting.loading", "开始加载OpenKM");
 	    lang.put("startup.taxonomy", "正在获得分类根节点");
-	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "正在获得模板根节点");
 	    lang.put("startup.personal", "正在获得个人根节点");
-	    lang.put("startup.mail", "Getting e-mail root node");
+	    lang.put("startup.mail", "获取 e-mail根节点");
         lang.put("startup.trash", "正在获得垃回收站节点");
 	    lang.put("startup.user.home", "正在获得用户根目录节点");
 	    lang.put("startup.bookmarks", "正在获得书签");
@@ -56,11 +55,12 @@ public class Lang_zh_CN {
         lang.put("startup.loading.taxonomy.open.path", "正在加载分类- 打开路径");
         lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "正在加载分类- 正在获得文件夹");
         lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "正在加载分类- 正在获得文档");
-        lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
-	    lang.put("startup.loading.personal", "正在加载个人");
+        lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "正在加载邮件 - 正在获取邮件");
+	    lang.put("startup.loading.personal", "正在加载个人文档");
+	    lang.put("startup.loading.mail", "正在加载邮件信息");
+	    lang.put("startup.loading.templates", "正在加载模板");
 	    lang.put("startup.loading.mail", "Loading e-mails");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
-	    lang.put("startup.loading.templates", "正在加载模板");
 	    lang.put("startup.loading.trash", "正在加载回收站");
 	    lang.put("startup.loading.history.search", "加载历史检索");
 	    lang.put("startup.loading.user.values", "加载用户值");
@@ -78,8 +78,8 @@ public class Lang_zh_CN {
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "模板");
 	    lang.put("leftpanel.label.my.documents", "我的文档");
-	    lang.put("leftpanel.label.user.search", "User news");
-	    lang.put("leftpanel.label.all.repository", "All repository");
+	    lang.put("leftpanel.label.user.search", "用户消息");//User news
+	    lang.put("leftpanel.label.all.repository", "所有存储文件"); //All repository
 	    
 	    // Tree
 	    lang.put("tree.menu.directory.create", "新建文件夹");
@@ -119,7 +119,7 @@ public class Lang_zh_CN {
 	    lang.put("general.menu.edit", "编辑");
 			lang.put("general.menu.file.create.directory", "新建文件夹");
 			lang.put("general.menu.file.download.document", "下载文档");
-			lang.put("general.menu.file.download.document.pdf", "Download document as PDF");
+			lang.put("general.menu.file.download.document.pdf", "下载保存为pdf");
 			lang.put("general.menu.file.send.link", "发送文档链接");
 			lang.put("general.menu.file.lock", "上锁");
 			lang.put("general.menu.file.unlock", "解锁");
@@ -134,12 +134,12 @@ public class Lang_zh_CN {
 	    	lang.put("general.menu.tools.skin", "皮肤");
     			lang.put("general.menu.tools.skin.default", "默认");
     			lang.put("general.menu.tools.skin.default2", "默认2");
-    			lang.put("general.menu.tools.skin.mediumfont", "Medium font");
+    			lang.put("general.menu.tools.skin.mediumfont", "中号字体");
     			lang.put("general.menu.tools.skin.bigfont", "大号字体");
     		lang.put("general.menu.debug.console", "调试命令行");
-    		lang.put("general.menu.administration", "Show administration");
-    		lang.put("general.menu.tools.preferences", "Prefererences");
-    			lang.put("general.menu.tools.user.preferences", "User configuration");
+    		lang.put("general.menu.administration", "显示管理");
+    		lang.put("general.menu.tools.preferences", "Prefererences首选项");
+    			lang.put("general.menu.tools.user.preferences", "用户配置");
     	lang.put("general.menu.bookmark", "书签");
 	    	lang.put("general.menu.bookmark.home", "根目录");
 	    	lang.put("general.menu.bookmark.default.home", "设为默认根目录");
@@ -174,7 +174,7 @@ public class Lang_zh_CN {
 	    lang.put("filebrowser.menu.create.from.template", "从模板新建");
 	    lang.put("filebrowser.menu.add.property.group", "新增属性组");
 	    lang.put("filebrowser.menu.remove.property.group", "移除属性组");
-	    lang.put("filebrowser.menu.start.workflow", "Start workflow");
+	    lang.put("filebrowser.menu.start.workflow", "启动工作流");
 	    lang.put("filebrowser.menu.add.subscription", "新增订阅");
 	    lang.put("filebrowser.menu.remove.subscription", "移除订阅");
 	    lang.put("filebrowser.menu.add.bookmark", "新增书签");
@@ -185,7 +185,7 @@ public class Lang_zh_CN {
 	    lang.put("filebrowser.menu.image.viewer", "图片查看器");
 	    lang.put("filebrowser.status.refresh.folder", "正在更新文件夹列表");
 	    lang.put("filebrowser.status.refresh.document", "正在更新文档列表");
-	    lang.put("filebrowser.status.refresh.mail", "Updating mail list");
+	    lang.put("filebrowser.status.refresh.mail", "正在更新邮件列表");
 	    lang.put("filebrowser.status.refresh.delete.folder", "正在删除文件夹");
 	    lang.put("filebrowser.status.refresh.delete.document", "正在删除文档");
 	    lang.put("filebrowser.status.refresh.checkout", "签出文档");
@@ -200,13 +200,13 @@ public class Lang_zh_CN {
 	    lang.put("filebrowser.status.refresh.add.subscription", "正在新增订阅");
 	    lang.put("filebrowser.status.refresh.remove.subscription", "正在删除订阅");
 	    lang.put("filebrowser.status.refresh.get.user.home", "正在获得用户根目录");
-	    lang.put("filebrowser.status.refresh.delete.mail", "Deleting mail");
-	    lang.put("filebrowser.status.refresh.mail.purge", "Deleting mail");
+	    lang.put("filebrowser.status.refresh.delete.mail", "正在删除邮件");
+	    lang.put("filebrowser.status.refresh.mail.purge", "正在清理右键");
 	    
 	    // File Upload
 	    lang.put("fileupload.send", "发送");
 	    lang.put("fileupload.status.sending", "文件上传中...");
-	    lang.put("fileupload.status.indexing", "Indexing file...");
+	    lang.put("fileupload.status.indexing", "文件索引中...");
 	    lang.put("fileupload.status.ok", "文件正确上传");
 	    lang.put("fileupload.upload.status", "上传状态");
 	    lang.put("fileupload.upload.uploaded", "已上传");
@@ -216,11 +216,11 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.button.close", "关闭");
 	    lang.put("fileupload.button.add.other.file", "新增另一文件");
 	    lang.put("fileupload.status.move.file", "文件移动中...");
-	    lang.put("fileupload.status.move.mail", "Moving mail...");
+	    lang.put("fileupload.status.move.mail", "邮件移动中...");
 	    lang.put("fileupload.status.copy.file", "文件复制中...");
-	    lang.put("fileupload.status.copy.mail", "Coping mail...");
+	    lang.put("fileupload.status.copy.mail", "邮件复制中...");
 	    lang.put("fileupload.status.restore.file", "文件恢复中...");
-	    lang.put("fileupload.status.restore.mail", "Restoring mail...");
+	    lang.put("fileupload.status.restore.mail", "邮件恢复中...");
 	    lang.put("fileupload.status.move.folder", "文件夹移动中...");
 	    lang.put("fileupload.status.copy.folder", "文件夹复制中...");
 	    lang.put("fileupload.status.restore.folder", "文件夹恢复中...");
@@ -233,15 +233,15 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.label.users.to.notify",  "被通知的用户");
 	    lang.put("fileupload.label.users",  "用户");
 	    lang.put("fileupload.label.must.select.users",  "你必须选择通知的用户");
-	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
+	    lang.put("fileupload.label.importZip", "从zip压缩包中导入文档");
 	    lang.put("fileupload.label.notify.comment", "通知消息");
 	    lang.put("fileupload.label.error.importing.zip", "导入文件错误");
 	    lang.put("fileupload.label.error.move.file", "移动文件错误");
-	    lang.put("fileupload.label.error.move.mail", "Error moving mail");
+	    lang.put("fileupload.label.error.move.mail", "移动邮件错误");
 	    lang.put("fileupload.label.error.copy.file", "复制文件错误");
-	    lang.put("fileupload.label.error.copy.mail", "Error coping mail");
+	    lang.put("fileupload.label.error.copy.mail", "复制邮件错误");
 	    lang.put("fileupload.label.error.restore.file", "恢复文件错误");
-	    lang.put("fileupload.label.error.restore.mail", "Error restoring mail");
+	    lang.put("fileupload.label.error.restore.mail", "恢复邮件错误");
 	    lang.put("fileupload.label.error.move.folder", "移动文件夹错误");
 	    lang.put("fileupload.label.error.copy.folder", "复制文件夹错误");
 	    lang.put("fileupload.label.error.restore.folder", "恢复文件夹错误");
@@ -270,8 +270,8 @@ public class Lang_zh_CN {
 	    // Workspace tabs
 	    lang.put("tab.workspace.desktop", "桌面");
 	    lang.put("tab.workspace.search", "检索");
-	    lang.put("tab.workspace.dashboard", "DashBoard");
-	    lang.put("tab.workspace.administration", "Administration");
+	    lang.put("tab.workspace.dashboard", "个人仪表盘");
+	    lang.put("tab.workspace.administration", "管理面板");
 	    
 	    //  Document
 	    lang.put("document.uuid", "UUID");
@@ -294,8 +294,8 @@ public class Lang_zh_CN {
 	    lang.put("document.subscribed.users", "已订阅用户");
 	    lang.put("document.url", "URL");
 	    lang.put("document.webdav", "WebDAV");
-	    lang.put("document.add.note", "Add note");
-	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.add.note", "新增备注");
+	    lang.put("document.keywords.cloud", "关键字云");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");
@@ -330,13 +330,13 @@ public class Lang_zh_CN {
 	    lang.put("security.recursive", "递归修改权限");
 	    
 	    // Preview
-	    lang.put("preview.unavailable", "Preview unavailable");
+	    lang.put("preview.unavailable", "预览不可用");
 
 	    // Mail
-	    lang.put("mail.from", "From");
-	    lang.put("mail.reply", "Reply to");
-	    lang.put("mail.to", "To");
-	    lang.put("mail.subject", "Subject");
+	    lang.put("mail.from", "寄信人(From)");
+	    lang.put("mail.reply", "答复(Reply to)");//Reply to
+	    lang.put("mail.to", "收信人(To)");
+	    lang.put("mail.subject", "主题(Subject)");
 	    
 	    // Error
 	    lang.put("error.label", "系统产生了一个错误");
@@ -362,9 +362,9 @@ public class Lang_zh_CN {
         lang.put("confirm.purge.version.history.document", "你真的想删除文档历史?");
 	    lang.put("confirm.purge.restore.document", "你真的想恢复这个文档版本?");
 	    lang.put("confirm.set.default.home", "你真的想设为默认根目录?");
-	    lang.put("confirm.delete.saved.search", "¿ Do you really want to delete saved search ?");
-	    lang.put("confirm.delete.user.news", "¿ Do you really want to delete user news ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.delete.saved.search", "你真的想删除查询条件吗？");//¿ Do you really want to delete saved search ?
+	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？");//¿ Do you really want to delete user news ?
+	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？");//¿ Do you really want to delete mail ?
 	    
 	    // Search inputs
 	    lang.put("search.context", "范围");
@@ -377,18 +377,18 @@ public class Lang_zh_CN {
 	    lang.put("search.page.results", "每页显示结果数");
 	    lang.put("search.add.property.group", "新增属性组");
 	    lang.put("search.mimetype", "Mime 类型");
-	    lang.put("search.type", "Type");
-	    lang.put("search.type.document", "Document");
-	    lang.put("search.type.folder", "Folder");
-	    lang.put("search.type.mail", "Mail");
+	    lang.put("search.type", "类型");
+	    lang.put("search.type.document", "文档");
+	    lang.put("search.type.folder", "文件夹");
+	    lang.put("search.type.mail", "邮件");
 	    lang.put("search.advanced", "高级检索");
 	    lang.put("search.user", "用户");
 	    lang.put("search.date.and", "至");
 	    lang.put("search.date.range", "日期范围从");
-	    lang.put("search.save.as.news", "Save as user news");
+	    lang.put("search.save.as.news", "作为用户信息保存");
 
 	    // search folder filter popup
-	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.folder.filter", "按文件夹过滤");
 	    
 	    // Search results
 	    lang.put("search.result.name", "名称");
@@ -400,7 +400,7 @@ public class Lang_zh_CN {
 	    lang.put("search.result.path", "路径");
 	    lang.put("search.result.menu.download", "下载");
 	    lang.put("search.result.menu.go.folder", "转到文件夹");
-	    lang.put("search.result.menu.go.document", "Go to document");
+	    lang.put("search.result.menu.go.document", "转到文档");
 	    lang.put("search.result.status.findPaginated", "正在更新检索");
 	    lang.put("search.result.status.runsearch", "正在更新已保存的检索");
 	    
@@ -410,7 +410,7 @@ public class Lang_zh_CN {
 	    lang.put("search.saved.status.getsearchs", "正在刷新已保存的检索");
         lang.put("search.saved.status.savesearch", "正在更新已保存的检索");
         lang.put("search.saved.status.deletesearch", "正在删除已保存的检索");
-        lang.put("search.saved.status.getusernews", "Refreshing user news");
+        lang.put("search.saved.status.getusernews", "正在更新游湖信息");
 	    
 	    // Button
 	    lang.put("button.close", "关闭");
@@ -431,9 +431,9 @@ public class Lang_zh_CN {
 	    lang.put("button.create", "创建");
 	    lang.put("button.show", "展示");
 	    lang.put("button.memory", "更新");
-	    lang.put("button.copy.clipboard", "Copy to clipboard");	
-	    lang.put("button.start", "Start");
-	    lang.put("button.select", "Select");
+	    lang.put("button.copy.clipboard", "复制到剪切板");	//Copy to clipboard
+	    lang.put("button.start", "开始");
+	    lang.put("button.select", "选择");
 	    
 	    // Group
 	    lang.put("group.label", "新增属性组");
@@ -460,7 +460,7 @@ public class Lang_zh_CN {
 	    lang.put("status.keep.alive.error", "已检测到和服务器断开连接(保持活动)");
 	    lang.put("status.debug.enabled", "允许调试");
 	    lang.put("status.debug.disabled", "不允许调试");
-	    lang.put("status.network.error.detected", "Network error detected");
+	    lang.put("status.network.error.detected", "监测到网络错误");//Network error detected
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "周日");
@@ -496,70 +496,70 @@ public class Lang_zh_CN {
 	    lang.put("debug.enable.disable", "CTRL+Z 切换允许或不允许调试模式");
 
 	    // Dashboard tab
-	    lang.put("dashboard.tab.general", "General");
-	    lang.put("dashboard.tab.news", "News");
-	    lang.put("dashboard.tab.user", "User");
-	    lang.put("dashboard.tab.workflow", "Workflow");
-	    lang.put("dashboard.tab.mail", "Mail");
-	    lang.put("dashboard.tab.keymap", "Keyword map");
+	    lang.put("dashboard.tab.general", "概括信息");//General
+	    lang.put("dashboard.tab.news", "信息");//News
+	    lang.put("dashboard.tab.user", "用户");//User
+	    lang.put("dashboard.tab.workflow", "工作流");//Workflow
+	    lang.put("dashboard.tab.mail", "邮件");//Mail
+	    lang.put("dashboard.tab.keymap", "关键字地图");//Keyword map
 
 	    // Dahboard general
 	    lang.put("dashboard.new.items", "New");
-	    lang.put("dashboard.user.locked.documents", "Locked documents");
-	    lang.put("dashboard.user.checkout.documents", "Checkout documents");
-	    lang.put("dashboard.user.last.modified.documents", "Last modified documents");
-	    lang.put("dashboard.user.last.downloaded.documents", "Last downloaded documents");
-	    lang.put("dashboard.user.subscribed.documents", "Subscribed documents");
-	    lang.put("dashboard.user.subscribed.folders", "Subscribed folders");
-	    lang.put("dashboard.user.last.uploaded.documents", "Last uploaded documents");
-	    lang.put("dashboard.general.last.week.top.downloaded.documents", "Last week top viewed documents");
-	    lang.put("dashboard.general.last.month.top.downloaded.documents", "Last month top viewed documents");
-	    lang.put("dashboard.general.last.week.top.modified.documents", "Last week top modified documents");
-	    lang.put("dashboard.general.last.month.top.modified.documents", "Last month top viewed documents");
-	    lang.put("dashboard.general.last.uploaded.documents", "Last uploaded documents");
-	    lang.put("dashboard.workflow.pending.tasks", "Pending tasks");
-	    lang.put("dashboard.workflow.task", "Task");
+	    lang.put("dashboard.user.locked.documents", "被锁定的文档");//Locked documents
+	    lang.put("dashboard.user.checkout.documents", "检出的文档");//Checkout documents
+	    lang.put("dashboard.user.last.modified.documents", "最近修改过的文档");//Last modified documents
+	    lang.put("dashboard.user.last.downloaded.documents", "最近被下载的文档");//Last downloaded documents
+	    lang.put("dashboard.user.subscribed.documents", "被订阅的文档");//Subscribed documents
+	    lang.put("dashboard.user.subscribed.folders", "被订阅的文件夹");//Subscribed folders
+	    lang.put("dashboard.user.last.uploaded.documents", "最近上传的文档");//Last uploaded documents
+	    lang.put("dashboard.general.last.week.top.downloaded.documents", "上周被查看次数最多的文档");//Last week top viewed documents
+	    lang.put("dashboard.general.last.month.top.downloaded.documents", "上个月被查看次数最多的文档");//Last month top viewed documents
+	    lang.put("dashboard.general.last.week.top.modified.documents", "上周被修改次数最多的文档");//Last week top modified documents
+	    lang.put("dashboard.general.last.month.top.modified.documents", "上个月被修改次数最多的文档");//Last month top modified documents
+	    lang.put("dashboard.general.last.uploaded.documents", "最近上传的文档");//Last uploaded documents
+	    lang.put("dashboard.workflow.pending.tasks", "挂起的任务");//Pending tasks
+	    lang.put("dashboard.workflow.task", "任务");//Task
 	    lang.put("dashboard.workflow.task.id", "ID");
-	    lang.put("dashboard.workflow.task.name", "Name");
-	    lang.put("dashboard.workflow.task.created", "Creation date");
-	    lang.put("dashboard.workflow.task.start", "Start date");
-	    lang.put("dashboard.workflow.task.duedate", "Due date");
-	    lang.put("dashboard.workflow.task.end", "End date");
-	    lang.put("dashboard.workflow.task.description", "Description");
-	    lang.put("dashboard.workflow.task.process.instance", "Process instance");
-	    lang.put("dashboard.workflow.task.process.id", "ID");
-	    lang.put("dashboard.workflow.task.process.version", "Version");
-	    lang.put("dashboard.workflow.task.process.name", "Name");
-	    lang.put("dashboard.workflow.task.process.description", "Description");
-	    lang.put("dashboard.workflow.task.process.data", "Data");
-	    lang.put("dashboard.workflow.task.process.definition", "Process definition");
-	    lang.put("dashboard.workflow.task.process.path", "Path");
-	    lang.put("dashboard.refreshing", "Refreshing");
-	    lang.put("dashboard.keyword", "Keywords");
-	    lang.put("dashboard.keyword.suggest", "Type the keyword");
-	    lang.put("dashboard.keyword.all", "All keywords");
-	    lang.put("dashboard.keyword.top", "Top keywords");
-	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Goto document");
-	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
-	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
-	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
+	    lang.put("dashboard.workflow.task.name", "名称");//Name
+	    lang.put("dashboard.workflow.task.created", "创建日期");//Creation date
+	    lang.put("dashboard.workflow.task.start", "开始日期");//Start date
+	    lang.put("dashboard.workflow.task.duedate", "到期日期");//Due date
+	    lang.put("dashboard.workflow.task.end", "结束日期");//End date
+	    lang.put("dashboard.workflow.task.description", "描述");//Description
+	    lang.put("dashboard.workflow.task.process.instance", "流程实例");//Process instance
+	    lang.put("dashboard.workflow.task.process.id", "流程ID");//
+	    lang.put("dashboard.workflow.task.process.version", "版本");//Version
+	    lang.put("dashboard.workflow.task.process.name", "名称");
+	    lang.put("dashboard.workflow.task.process.description", "描述");
+	    lang.put("dashboard.workflow.task.process.data", "数据");//Data
+	    lang.put("dashboard.workflow.task.process.definition", "流程定义");//Process definition
+	    lang.put("dashboard.workflow.task.process.path", "路径");//Path
+	    lang.put("dashboard.refreshing", "刷新中");//Refreshing
+	    lang.put("dashboard.keyword", "关键字");//Keywords
+	    lang.put("dashboard.keyword.suggest", "关键字类型");//Type the keyword
+	    lang.put("dashboard.keyword.all", "所有关键字");//All keywords
+	    lang.put("dashboard.keyword.top", "排在最前面的关键字");//Top keywords
+	    lang.put("dashboard.keyword.related", "关联关键字");//Related keywords
+	    lang.put("dashboard.keyword.goto.document", "转到文档");//Goto document
+	    lang.put("dashboard.keyword.clean.keywords", "清楚关键字");//Clean keywords
+	    lang.put("dashboard.mail.last.imported.mails", "电子邮件");//Electronic mails
+	    lang.put("dashboard.mail.last.imported.attached.documents", "附件");//Attachments
 	    
 	    // Workflow
-	    lang.put("workflow.label", "Start workflow");
+	    lang.put("workflow.label", "启动工作流");
 	    
 	    // User configuration
-	    lang.put("user.preferences.label", "User configuration");
-	    lang.put("user.preferences.user", "User");
-	    lang.put("user.preferences.password", "Password");
-	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.label", "用户信息配置");//User configuration
+	    lang.put("user.preferences.user", "用户名"); //User
+	    lang.put("user.preferences.password", "密码");//Password
+	    lang.put("user.preferences.mail", "E-mail");//E-mail
 	    lang.put("user.preferences.imap.host", "IMAP server");
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
-	    lang.put("user.preferences.user.data", "User account");
-	    lang.put("user.preferences.mail.data", "Mail account");
+	    lang.put("user.preferences.password.error", "错误：两次输入的密码不相同。");//Error: passwords are diferents
+	    lang.put("user.preferences.user.data", "用户账号");//User account
+	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
 	    
