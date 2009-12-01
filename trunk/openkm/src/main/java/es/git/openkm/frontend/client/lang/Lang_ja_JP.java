@@ -43,6 +43,7 @@ public class Lang_ja_JP {
 		lang.put("startup.openkm", "OpenKM起動中");
 		lang.put("startup.starting.loading", "OpenKM読込中");
 		lang.put("startup.taxonomy", "階層ルート取得中");
+		lang.put("startup.thesaurus", "Getting thesaurus root node");
 		lang.put("startup.template", "テンプレートルート取得中");
 		lang.put("startup.personal", "個別ルートノードの生成中");
 		lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_ja_JP {
 		lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 		lang.put("startup.loading.personal", "Loading personal");
 		lang.put("startup.loading.mail", "Loading e-mails");
+		lang.put("startup.loading.thesaurus", "Loading thesaurus");
 		lang.put("startup.loading.templates", "テンプレートの読込中");
 		lang.put("startup.loading.trash", "ごみ箱の読込中");
 		lang.put("startup.loading.history.search", "検索履歴の読込中");
@@ -73,6 +75,7 @@ public class Lang_ja_JP {
 		lang.put("leftpanel.label.trash", "ごみ箱");
 		lang.put("leftpanel.label.mail", "E-mail");
 		lang.put("leftpanel.label.stored.search", "保存検索条件");
+		lang.put("leftpanel.label.thesaurus", "Thesaurus");
 		lang.put("leftpanel.label.templates", "テンプレート");
 		lang.put("leftpanel.label.my.documents", "マイドキュメント");
 		lang.put("leftpanel.label.user.search", "User news");

@@ -47,6 +47,7 @@ public class Lang_ru_RU {
 	    lang.put("startup.starting.loading", "Начинаю загрузку OpenKM");
 		// taxonomy = классификатор?
 	    lang.put("startup.taxonomy", "Получаю корневой узел классификатора");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Получаю корневой узел шаблонов");
 	    lang.put("startup.personal", "Получаю корневой узел персонального раздела");
 	    lang.put("startup.mail", "Получаю корневой узел e-mail");
@@ -62,6 +63,7 @@ public class Lang_ru_RU {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Загружаю классификатор - получаю почтовые сообщения");
 	    lang.put("startup.loading.personal", "Загружаю персональный раздел");
 	    lang.put("startup.loading.mail", "Загружаю сообщения e-mail");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Загружаю шаблоны");
 	    lang.put("startup.loading.trash", "Загружаю корзину");
 	    lang.put("startup.loading.history.search", "Загружаю поиск по истории");
@@ -78,6 +80,7 @@ public class Lang_ru_RU {
 	    lang.put("leftpanel.label.trash", "Корзина");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Сохраненный поиск");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Шаблоны");
 	    lang.put("leftpanel.label.my.documents", "Мои документы");
 	    lang.put("leftpanel.label.user.search", "Новости пользователей"); // ??

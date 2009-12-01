@@ -20,7 +20,7 @@
 package es.git.openkm.frontend.client.panel;
 
 /**
- * Defines contants values for the difetent panels
+ * Defines contants values for the diferent panels
  * 
  * @author jllort
  *
@@ -29,14 +29,15 @@ public class PanelDefinition {
 	
 	// Navigator stack panel definition
 	public static final int NAVIGATOR_TAXONOMY 		= 0; // Number indicates ordering
-	public static final int NAVIGATOR_TEMPLATES 	= 1;
-	public static final int NAVIGATOR_PERSONAL  	= 2;
-	public static final int NAVIGATOR_MAIL  		= 3;
-	public static final int NAVIGATOR_TRASH  		= 4;
-	public static final int NAVIGATOR_ALL_CONTEXT 	= 5; // Used to indicate operation to all context ( search ) really it's not a panel
+	public static final int NAVIGATOR_THESAURUS		= 1;
+	public static final int NAVIGATOR_TEMPLATES 	= 2;
+	public static final int NAVIGATOR_PERSONAL  	= 3;
+	public static final int NAVIGATOR_MAIL  		= 4;
+	public static final int NAVIGATOR_TRASH  		= 5;
+	public static final int NAVIGATOR_ALL_CONTEXT 	= 6; // Used to indicate operation to all context ( search ) really it's not a panel
 	public static final int SEARCH_SAVED 			= 0;
 	public static final int SEARCH_USER_NEWS		= 1;
-	public static final int NUMBER_OF_STACKS 		= 5;
+	public static final int NUMBER_OF_STACKS 		= 6;
 	public static final int STACK_HEIGHT     		= 22;
 	
 }

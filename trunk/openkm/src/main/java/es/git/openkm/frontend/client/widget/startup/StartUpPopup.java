@@ -105,6 +105,7 @@ public class StartUpPopup extends DialogBox implements ClickListener {
 		
 		// We've jumped normally due to errors, must mark as incorrect
 		if (this.actual+1 < actual) {
+			Window.alert("error: actual:" +this.actual +" nou:"+actual);
 			for (int i = this.actual+1; i<actual; i++) {
 				tmpHTML= new HTML("&nbsp;" + Main.get().startUp.getStatusMsg(i));
 				tmpHTML.setStyleName("okm-Input-Error");

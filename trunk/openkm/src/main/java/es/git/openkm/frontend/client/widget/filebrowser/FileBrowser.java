@@ -451,7 +451,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TEMPLATES);
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_THESAURUS);
 		}
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();

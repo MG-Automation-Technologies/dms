@@ -45,6 +45,7 @@ public class Lang_pl_PL {
 	    lang.put("startup.openkm", "Trwa ładowanie OpenKM");
 	    lang.put("startup.starting.loading", "Rozpoczynam ładowanie OpenKM");
 	    lang.put("startup.taxonomy", "Pobieranie korzenia repozytorium");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Pobieranie korzenia repozytorium szablonów");
 	    lang.put("startup.personal", "Pobieranie korzenia repozytorium osobistego");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -60,6 +61,7 @@ public class Lang_pl_PL {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Ładowanie ustawień");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Ładowanie szablonów");
 	    lang.put("startup.loading.trash", "Ładowanie śmietnika");
 	    lang.put("startup.loading.history.search", "Ładowanie historii wyszukiwania");
@@ -75,6 +77,7 @@ public class Lang_pl_PL {
 	    lang.put("leftpanel.label.trash", "Śmietnik");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Zapamiętane wyszukiwanie");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Szablony");
 	    lang.put("leftpanel.label.my.documents", "Moje dokumenty");
 	    lang.put("leftpanel.label.user.search", "Nowości");

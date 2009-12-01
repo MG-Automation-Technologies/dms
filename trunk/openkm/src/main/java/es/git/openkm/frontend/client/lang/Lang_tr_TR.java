@@ -44,6 +44,7 @@ public class Lang_tr_TR {
 	    lang.put("startup.openkm", "OpenKM Yükleniyor..");
 	    lang.put("startup.starting.loading", "OpenKM Yüklemesi Baþlýyor");
 	    lang.put("startup.taxonomy", "Sýnýflandýrma Merkezi Oluþturuluyor ");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Þablon Merkezi Oluþturuluyor");
 	    lang.put("startup.personal", "Kiþiler Merkezi Oluþturuluyor");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -59,6 +60,7 @@ public class Lang_tr_TR {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Kiþiler Yükleniyor");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Þablonlar Yükleniyor");
 	    lang.put("startup.loading.trash", "Geri Dönüþüm Kutusu Yükleniyor..");
 	    lang.put("startup.loading.history.search", "Arama Geçmiþi yükleniyor");
@@ -74,6 +76,7 @@ public class Lang_tr_TR {
 	    lang.put("leftpanel.label.trash", "Geri Dönüþüm Kutusu");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Araþtýrma Dosyasý");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Þablonlar");
 	    lang.put("leftpanel.label.my.documents", "Dokümanlarým");
 	    lang.put("leftpanel.label.user.search", "User news");
