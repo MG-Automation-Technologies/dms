@@ -43,6 +43,7 @@ public class Lang_hu_HU {
 	    lang.put("startup.openkm", "Indul az OpenKM");
 	    lang.put("startup.starting.loading", "OpenKM töltődik");
 	    lang.put("startup.taxonomy", "Dokumentumok gyökérelem töltődik");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Vázlat gyökérelem töltődik");
 	    lang.put("startup.personal", "Személyes dokumentumok gyökérelem töltődik");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_hu_HU {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Személyes dokumentumok töltődnek");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Vázlatok töltődnek");
 	    lang.put("startup.loading.trash", "Kuka töltődik");
 	    lang.put("startup.loading.history.search", "Elmentett keresések töltődnek");
@@ -73,6 +75,7 @@ public class Lang_hu_HU {
 	    lang.put("leftpanel.label.trash", "Kuka");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Elmentett keresések");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Vázlatok");
 	    lang.put("leftpanel.label.my.documents", "Személyes dokumentumok");
 	    lang.put("leftpanel.label.user.search", "Hírek");

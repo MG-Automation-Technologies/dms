@@ -43,6 +43,7 @@ public class Lang_bs_BA {
 	    lang.put("startup.openkm", "Učitavanje OpenKM");
 	    lang.put("startup.starting.loading", "Početak punjenja OpenKM");
 	    lang.put("startup.taxonomy", "Dobavljanje glavnog direktorija javnih dokumenata");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Dobavljanje glavnog direktorija predložaka");
 	    lang.put("startup.personal", "Dobavljanje glavnog direktorija ličnih dokumenata");
 	    lang.put("startup.mail", "Dobavljanje glavnog e-mail direktorija");
@@ -58,6 +59,7 @@ public class Lang_bs_BA {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Učitavanje javnih dokumenata - Dobavljanje pošte");
 	    lang.put("startup.loading.personal", "Učitavanje ličnih podataka");
 	    lang.put("startup.loading.mail", "Učitavanje pošte");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Učitavanje predloška");
 	    lang.put("startup.loading.trash", "Učitavanje kante za smeće");
 	    lang.put("startup.loading.history.search", "Učitavanje historijskog pretraživanja");
@@ -73,6 +75,7 @@ public class Lang_bs_BA {
 	    lang.put("leftpanel.label.trash", "Smeće");
 	    lang.put("leftpanel.label.mail", "Pošta");
 	    lang.put("leftpanel.label.stored.search", "Pohranjena pretraživanja");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Predlošci");
 	    lang.put("leftpanel.label.my.documents", "Moji dokumenti");
 	    lang.put("leftpanel.label.user.search", "Korisničke vijesti");

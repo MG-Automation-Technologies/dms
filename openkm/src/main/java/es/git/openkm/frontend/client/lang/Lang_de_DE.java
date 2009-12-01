@@ -43,6 +43,7 @@ public class Lang_de_DE {
 	    lang.put("startup.openkm", "Lade OpenKM");
 	    lang.put("startup.starting.loading", "Starte das Laden von OpenKM");
 	    lang.put("startup.taxonomy", "Hole Taxonomie Wurzelknoten");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Hole Vorlagen Wurzelknoten");
 	    lang.put("startup.personal", "Hole persönlichen Wurzelknoten ");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_de_DE {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Lade persönliche");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Lade Vorlagen");
 	    lang.put("startup.loading.trash", "Lade Papierkorb");
 	    lang.put("startup.loading.history.search", "Lade historische Suchen");
@@ -73,6 +75,7 @@ public class Lang_de_DE {
 	    lang.put("leftpanel.label.trash", "Papierkorb");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Gespeicherte Suchen");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Vorlagen");
 	    lang.put("leftpanel.label.my.documents", "Eigene Dokumente");
 	    lang.put("leftpanel.label.user.search", "User news");

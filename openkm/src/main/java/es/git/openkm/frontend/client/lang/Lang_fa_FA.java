@@ -43,6 +43,7 @@ public class Lang_fa_FA {
 	    lang.put("startup.openkm", "Loading OpenKM");
 	    lang.put("startup.starting.loading", "Starting loading OpenKM");
 	    lang.put("startup.taxonomy", "Getting taxonomy root node");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Getting template root node");
 	    lang.put("startup.personal", "Getting personal root node");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_fa_FA {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Loading personal");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Loading templates");
 	    lang.put("startup.loading.trash", "Loading trash");
 	    lang.put("startup.loading.history.search", "Loading history search");
@@ -73,6 +75,7 @@ public class Lang_fa_FA {
 	    lang.put("leftpanel.label.trash", "زباله");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "جستجوهای ذخیره شده");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Templates");
 	    lang.put("leftpanel.label.my.documents", "My documents");
 	    lang.put("leftpanel.label.user.search", "User news");

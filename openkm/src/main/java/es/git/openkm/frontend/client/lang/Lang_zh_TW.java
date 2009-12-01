@@ -43,6 +43,7 @@ public class Lang_zh_TW {
 	    lang.put("startup.openkm", "載入OpenKM");
 		lang.put("startup.starting.loading", "開始載入OpenKM");
 		lang.put("startup.taxonomy", "正在取得分類根節點");
+		lang.put("startup.thesaurus", "Getting thesaurus root node");
 		lang.put("startup.template", "正在取得樣板根節點");
 		lang.put("startup.personal", "正在取得個人根節點");
 		lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_zh_TW {
 		lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 		lang.put("startup.loading.personal", "正在取得個人化資料");
 		lang.put("startup.loading.mail", "Loading e-mails");
+		lang.put("startup.loading.thesaurus", "Loading thesaurus");
 		lang.put("startup.loading.templates", "正在取得樣板");
 		lang.put("startup.loading.trash", "正在取得回收筒");
 		lang.put("startup.loading.history.search", "正在取得歷史搜尋");
@@ -73,6 +75,7 @@ public class Lang_zh_TW {
 	    lang.put("leftpanel.label.trash", "回收筒");
 	    lang.put("leftpanel.label.mail", "E-mail");
 		lang.put("leftpanel.label.stored.search", "已儲存的搜尋");
+		lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "樣板");
 	    lang.put("leftpanel.label.my.documents", "我的文件");
 	    lang.put("leftpanel.label.user.search", "使用者新進文件");

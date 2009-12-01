@@ -43,6 +43,7 @@ public class Lang_gl_ES {
 	    lang.put("startup.openkm", "Cargando OpenKM");
 	    lang.put("startup.starting.loading", "Comezando a carga de OpenKM");
 	    lang.put("startup.taxonomy", "Obtendo o nodo principal da taxonomia");
+	    lang.put("startup.thesaurus", "Otendo o nodo principal de thesaurus");
 	    lang.put("startup.template", "Obtendo o nodo principal dos modelos");
 	    lang.put("startup.personal", "Obtenndo o nodo principal de persoal");
 	    lang.put("startup.mail", "Otenenndo o nodo principal de correo");
@@ -58,6 +59,7 @@ public class Lang_gl_ES {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Cargando taxonomia - Obtendo correos electronicos");
 	    lang.put("startup.loading.personal", "Cargando personais");
 	    lang.put("startup.loading.mail", "Cargando correos");
+	    lang.put("startup.loading.thesaurus", "Cargando thesaurus");
 	    lang.put("startup.loading.templates", "Cargando modelos");
 	    lang.put("startup.loading.trash", "Carregando lixo");
 	    lang.put("startup.loading.history.search", "Carregantdo histórico de procuras");
@@ -73,6 +75,7 @@ public class Lang_gl_ES {
 	    lang.put("leftpanel.label.trash", "Lixo");
 	    lang.put("leftpanel.label.mail", "Correo electrónico");
 	    lang.put("leftpanel.label.stored.search", "Procuras almacenadas");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Modelos");
 	    lang.put("leftpanel.label.my.documents", "Documentos personais");
 	    lang.put("leftpanel.label.user.search", "Novedades de usuario");

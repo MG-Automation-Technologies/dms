@@ -19,6 +19,8 @@
 
 package es.git.openkm.frontend.client.widget.trash;
 
+import com.google.gwt.user.client.Window;
+
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.panel.PanelDefinition;

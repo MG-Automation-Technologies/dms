@@ -114,13 +114,14 @@ public final class Main implements EntryPoint, WindowCloseListener {
 	public HashMap hPropertyGroupI18n;
 	
 	// The nodePath parameter
-	public String fldPath = "";  // Used for folderTree because docPath is set to null by filebroeser on thi case the refreshing
+	public String fldPath = "";  // Used for folderTree because docPath is set to null by filebroeser on this case the refreshing
 									// panels are not sincronized ( loading )
-	public String docPath = "";  // Used for folderTree because docPath is set to null by filebroeser on thi case the refreshing
+	public String docPath = "";  // Used for folderTree because docPath is set to null by filebroeser on this case the refreshing
 									// panels are not sincronized ( loading )
 	
 	// Main root folders and user home general values for all app
 	public GWTFolder taxonomyRootFolder;
+	public GWTFolder thesaurusRootFolder;
 	public GWTFolder personalRootFolder;
 	public GWTFolder templatesRootFolder;
 	public GWTFolder mailRootFolder;

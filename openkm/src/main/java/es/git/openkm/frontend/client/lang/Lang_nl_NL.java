@@ -44,6 +44,7 @@ public class Lang_nl_NL {
 	    lang.put("startup.openkm", "OpenKM laden");
 	    lang.put("startup.starting.loading", "Starten met laden van OpenKM");
 	    lang.put("startup.taxonomy", "Taxonomie root node ophalen");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Template root node ophalen");
 	    lang.put("startup.personal", "Persoonlijke root node ophalen");
 	    lang.put("startup.mail", "e-mail root node ophalen");
@@ -59,6 +60,7 @@ public class Lang_nl_NL {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Taxonomie - e-mails ophalen");
 	    lang.put("startup.loading.personal", "Persoonlijk laden");
 	    lang.put("startup.loading.mail", "e-mails laden");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Templates laden");
 	    lang.put("startup.loading.trash", "Prullenbak laden");
 	    lang.put("startup.loading.history.search", "Historische zoekopdrachten laden");
@@ -74,6 +76,7 @@ public class Lang_nl_NL {
 	    lang.put("leftpanel.label.trash", "Prullenbak");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Opgeslagen zoekopdrachten");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Templates");
 	    lang.put("leftpanel.label.my.documents", "Mijn documenten");
 	    lang.put("leftpanel.label.user.search", "Gebruiker zoeken");

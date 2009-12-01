@@ -43,6 +43,7 @@ public class Lang_el_GR {
 	    lang.put("startup.openkm", "Φόρτωση OpenKM");
 	    lang.put("startup.starting.loading", "Έναρξκ φόρτωσης OpenKM");
 	    lang.put("startup.taxonomy", "Λήψη ριζικού κόμβου δένδρου");
+	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Λήψη ριζικού κόμβου προτύπων");
 	    lang.put("startup.personal", "Λήψη προσωπικού ριζικού κόμβου");
 	    lang.put("startup.mail", "Getting e-mail root node");
@@ -58,6 +59,7 @@ public class Lang_el_GR {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Φόρτωση προσωπικών");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Φόρτωση προτύπων");
 	    lang.put("startup.loading.trash", "Φόρτωση διεγραμμένων");
 	    lang.put("startup.loading.history.search", "Φόρτωση ιστορικού αναζήτησης");
@@ -73,6 +75,7 @@ public class Lang_el_GR {
 	    lang.put("leftpanel.label.trash", "Απορρίματα");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Αποθηκευμένες αναζητήσεις");
+	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Πρότυπα");
 	    lang.put("leftpanel.label.my.documents", "Τα έγγραφά μου");
 	    lang.put("leftpanel.label.user.search", "Νέα χρήστη");

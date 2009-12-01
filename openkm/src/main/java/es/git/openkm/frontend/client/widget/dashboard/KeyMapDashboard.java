@@ -53,7 +53,6 @@ import es.git.openkm.frontend.client.bean.GWTQueryParams;
 import es.git.openkm.frontend.client.bean.GWTQueryResult;
 import es.git.openkm.frontend.client.bean.GWTResultSet;
 import es.git.openkm.frontend.client.config.Config;
-import es.git.openkm.frontend.client.panel.PanelDefinition;
 import es.git.openkm.frontend.client.service.OKMSearchService;
 import es.git.openkm.frontend.client.service.OKMSearchServiceAsync;
 
@@ -64,6 +63,14 @@ import es.git.openkm.frontend.client.service.OKMSearchServiceAsync;
  *
  */
 public class KeyMapDashboard extends Composite {
+	
+	private static final int SELECT_NAVIGATOR_TAXONOMY 		= 0;
+	private static final int SELECT_NAVIGATOR_TEMPLATES 	= 1;
+	private static final int SELECT_NAVIGATOR_PERSONAL 		= 2;
+	private static final int SELECT_NAVIGATOR_MAIL 			= 3;
+	private static final int SELECT_NAVIGATOR_TRASH 		= 4;
+	private static final int SELECT_NAVIGATOR_ALL_CONTEXT 	= 5;
+	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	private HorizontalSplitPanel horizontalSplitPanel;
 	private KeywordWidget keyAllTable;
@@ -251,7 +258,7 @@ public class KeyMapDashboard extends Composite {
 					keyRelatedTable.unselectAllRows();
 					keyRelatedTable.setVisible(false);
 					table.reset();
-					context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+					context.setSelectedIndex(SELECT_NAVIGATOR_ALL_CONTEXT);
 					controlSearchIn.refreshControl(0);
 					
 					getKeywordMap(); // Gets related keyMap 
@@ -291,7 +298,7 @@ public class KeyMapDashboard extends Composite {
 		context.addItem(Main.i18n("leftpanel.label.mail"),"");
 		context.addItem(Main.i18n("leftpanel.label.trash"),"");
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
-		context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
+		context.setSelectedIndex(SELECT_NAVIGATOR_ALL_CONTEXT);
 		
 		context.addChangeListener(new ChangeListener(){
 			public void onChange(Widget sender) {
@@ -411,12 +418,12 @@ public class KeyMapDashboard extends Composite {
 		resultPageTXT.setHTML(Main.i18n("search.page.results"));
 		controlSearchIn.langRefresh();
 		
-		context.setItemText(PanelDefinition.NAVIGATOR_TAXONOMY,Main.i18n("leftpanel.label.taxonomy"));
-		context.setItemText(PanelDefinition.NAVIGATOR_TEMPLATES,Main.i18n("leftpanel.label.templates"));
-		context.setItemText(PanelDefinition.NAVIGATOR_PERSONAL,Main.i18n("leftpanel.label.my.documents"));
-		context.setItemText(PanelDefinition.NAVIGATOR_MAIL,Main.i18n("leftpanel.label.mail"));
-		context.setItemText(PanelDefinition.NAVIGATOR_TRASH,Main.i18n("leftpanel.label.trash"));
-		context.setItemText(PanelDefinition.NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
+		context.setItemText(SELECT_NAVIGATOR_TAXONOMY,Main.i18n("leftpanel.label.taxonomy"));
+		context.setItemText(SELECT_NAVIGATOR_TEMPLATES,Main.i18n("leftpanel.label.templates"));
+		context.setItemText(SELECT_NAVIGATOR_PERSONAL,Main.i18n("leftpanel.label.my.documents"));
+		context.setItemText(SELECT_NAVIGATOR_MAIL,Main.i18n("leftpanel.label.mail"));
+		context.setItemText(SELECT_NAVIGATOR_TRASH,Main.i18n("leftpanel.label.trash"));
+		context.setItemText(SELECT_NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
 		
 		table.langRefresh();
 	}
@@ -583,22 +590,22 @@ public class KeyMapDashboard extends Composite {
 		limit = Integer.parseInt(resultPage.getItemText(resultPage.getSelectedIndex()));
 		
 		switch (context.getSelectedIndex()) {
-			case PanelDefinition.NAVIGATOR_TAXONOMY:
+			case SELECT_NAVIGATOR_TAXONOMY:
 				params.setPath(Main.get().repositoryContext.getContextTaxonomy());
 				break;
-			case PanelDefinition.NAVIGATOR_TEMPLATES:
+			case SELECT_NAVIGATOR_TEMPLATES:
 				params.setPath(Main.get().repositoryContext.getContextTemplates());
 				break;
-			case PanelDefinition.NAVIGATOR_PERSONAL:
+			case SELECT_NAVIGATOR_PERSONAL:
 				params.setPath(Main.get().repositoryContext.getContextPersonal());
 				break;
-			case PanelDefinition.NAVIGATOR_MAIL:
+			case SELECT_NAVIGATOR_MAIL:
 				params.setPath(Main.get().repositoryContext.getContextMail());
 				break;
-			case PanelDefinition.NAVIGATOR_TRASH:
+			case SELECT_NAVIGATOR_TRASH:
 				params.setPath(Main.get().repositoryContext.getContextTrash());
 				break;
-			case PanelDefinition.NAVIGATOR_ALL_CONTEXT:
+			case SELECT_NAVIGATOR_ALL_CONTEXT:
 				params.setPath("");
 				break;
 		}

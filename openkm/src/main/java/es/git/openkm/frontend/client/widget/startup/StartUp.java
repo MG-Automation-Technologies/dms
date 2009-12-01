@@ -47,27 +47,29 @@ public class StartUp {
 	
 	public static final int STARTUP_STARTING								= 0;
 	public static final int STARTUP_GET_TAXONOMY_ROOT						= 1;
-	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 2;
-	public static final int STARTUP_GET_PERSONAL 	  						= 3;
-	public static final int STARTUP_GET_MAIL 	  							= 4;
-	public static final int STARTUP_GET_TRASH 	 	  						= 5;
-	public static final int STARTUP_GET_USER_HOME 	  						= 6;
-	public static final int STARTUP_GET_BOOKMARKS							= 7;
-	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 8;
-	public static final int STARTUP_LOADING_TAXONOMY						= 9;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 10;
-	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 11;
-	public static final int STARTUP_LOADING_OPEN_PATH						= 12;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 13;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 15;
-	public static final int STARTUP_LOADING_TEMPLATES						= 16;
-	public static final int STARTUP_LOADING_PERSONAL						= 17;
-	public static final int STARTUP_LOADING_MAIL							= 18;	
-	public static final int STARTUP_LOADING_TRASH							= 19;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 20;
-	public static final int STARTUP_GET_USER_VALUES							= 21;
-	public static final int STARTUP_KEEP_ALIVE								= 22;
+	public static final int STARTUP_GET_THESAURUS_ROOT 						= 2;
+	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 3;
+	public static final int STARTUP_GET_PERSONAL 	  						= 4;
+	public static final int STARTUP_GET_MAIL 	  							= 5;
+	public static final int STARTUP_GET_TRASH 	 	  						= 6;
+	public static final int STARTUP_GET_USER_HOME 	  						= 7;
+	public static final int STARTUP_GET_BOOKMARKS							= 8;
+	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 9;
+	public static final int STARTUP_LOADING_TAXONOMY						= 10;
+	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 11;
+	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 12;
+	public static final int STARTUP_LOADING_OPEN_PATH						= 13;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 14;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 15;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 16;
+	public static final int STARTUP_LOADING_THESAURUS						= 17;
+	public static final int STARTUP_LOADING_TEMPLATES						= 18;
+	public static final int STARTUP_LOADING_PERSONAL						= 19;
+	public static final int STARTUP_LOADING_MAIL							= 20;	
+	public static final int STARTUP_LOADING_TRASH							= 21;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 22;
+	public static final int STARTUP_GET_USER_VALUES							= 23;
+	public static final int STARTUP_KEEP_ALIVE								= 24;
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -94,7 +96,7 @@ public class StartUp {
 			//Only executes on initalization and evalues root Node permissions
 			Main.get().taxonomyRootFolder = result;
 			Main.get().mainPanel.browser.fileBrowser.table.fillWidth(); // Sets de columns size
-			nextStatus(STARTUP_GET_TEMPLATE_ROOT);
+			nextStatus(STARTUP_GET_THESAURUS_ROOT);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -131,13 +133,28 @@ public class StartUp {
 			Main.get().showError("getMail", caught);
 		}
 	};
+	
+	/**
+	 * Gets asyncronous thesaurus root node
+	 */
+	final AsyncCallback<GWTFolder> callbackGetThesaurus = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
+			// Only executes on initalization
+			Main.get().thesaurusRootFolder = result;
+			nextStatus(STARTUP_GET_TEMPLATE_ROOT);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("getThesaurus", caught);
+		}
+	};
 
 	/**
 	 * Callback get user home
 	 */
-	final AsyncCallback callbackGetUserHome = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			Main.get().userHome = (GWTBookmark) result;
+	final AsyncCallback<GWTBookmark> callbackGetUserHome = new AsyncCallback<GWTBookmark>() {
+		public void onSuccess(GWTBookmark result) {
+			Main.get().userHome = result;
 			nextStatus(STARTUP_GET_BOOKMARKS);
 		}
 
@@ -247,6 +264,15 @@ public class StartUp {
 	}
 	
 	/**
+	 * Gets the thesaurus
+	 */
+	public void getThesaurus() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		repositoryService.getThesaurus(callbackGetThesaurus);
+	}
+	
+	/**
 	 * Gets the taxonomy
 	 */
 	public void getRoot() {
@@ -300,6 +326,11 @@ public class StartUp {
 					case STARTUP_GET_TAXONOMY_ROOT:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.taxonomy"), STARTUP_GET_TAXONOMY_ROOT);
 						getRoot();
+						break;
+						
+					case STARTUP_GET_THESAURUS_ROOT:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.thesaurus"), STARTUP_GET_THESAURUS_ROOT);
+						getThesaurus();
 						break;
 					
 					case STARTUP_GET_TEMPLATE_ROOT:
@@ -369,7 +400,12 @@ public class StartUp {
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy.getting.filebrowser.mails"),
 														  STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
 						break;
-
+						
+					case STARTUP_LOADING_THESAURUS:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.thesaurus"), STARTUP_LOADING_THESAURUS);
+						Main.get().mainPanel.navigator.thesaurusTree.init();	  	// Initialize thesaurus
+						break;
+						
 					case STARTUP_LOADING_TEMPLATES:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.templates"), STARTUP_LOADING_TEMPLATES);
 						Main.get().mainPanel.navigator.templateTree.init();	   		// Initialize templates
@@ -382,7 +418,7 @@ public class StartUp {
 
 					case STARTUP_LOADING_MAIL:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.mail"), STARTUP_LOADING_MAIL);
-						Main.get().mainPanel.navigator.mailTree.init();			// Initialize mail
+						Main.get().mainPanel.navigator.mailTree.init();				// Initialize mail
 						break;
 
 					case STARTUP_LOADING_TRASH:
@@ -392,7 +428,7 @@ public class StartUp {
 					
 					case STARTUP_LOADING_HISTORY_SEARCH:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.history.search"), STARTUP_LOADING_HISTORY_SEARCH);
-						Main.get().mainPanel.historySearch.searchSaved.init();		// Inititlize history saved
+						Main.get().mainPanel.historySearch.searchSaved.init();		// Initialize history saved
 						Main.get().mainPanel.historySearch.userNews.init();
 						Main.get().mainPanel.setVisible(true);
 						break;
@@ -436,8 +472,8 @@ public class StartUp {
 				nextStatus(status+1); // Tries to execute next initializing
 			
 			// This range must start with loading personal ( sequential in this range is break )
-			} else if (status<STARTUP_LOADING_TEMPLATES) {
-				nextStatus(STARTUP_LOADING_TEMPLATES); // Tries to execute next initializing
+			} else if (status<STARTUP_LOADING_THESAURUS) {
+				nextStatus(STARTUP_LOADING_THESAURUS); // Tries to execute next initializing
 			
             // This range are sequential calls
 			} else {
@@ -458,6 +494,10 @@ public class StartUp {
 				
 			case STARTUP_GET_TAXONOMY_ROOT:
 				msg = Main.i18n("startup.taxonomy");
+				break;
+				
+			case STARTUP_GET_THESAURUS_ROOT:
+				msg = Main.i18n("startup.thesaurus");
 				break;
 			
 			case STARTUP_GET_TEMPLATE_ROOT:
@@ -515,6 +555,10 @@ public class StartUp {
 			
 			case STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS:
 				msg = Main.i18n("startup.loading.taxonomy.getting.filebrowser.mails");
+				break;
+				
+			case STARTUP_LOADING_THESAURUS:
+				msg = Main.i18n("startup.loading.thesaurus");
 				break;
 				
 			case STARTUP_LOADING_TEMPLATES:
