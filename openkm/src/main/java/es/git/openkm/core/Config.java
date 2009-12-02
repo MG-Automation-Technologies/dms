@@ -116,9 +116,12 @@ public class Config {
 	public static String PROPERTY_USER_DOCUMENTS_SIZE_LIVE = "user.documents.size.live";
 	
 	// KEA
-	public static String PROPERTY_KEA_THESAURUS_FILE = "kea.thesaurus.file";
+	public static String PROPERTY_KEA_THESAURUS_SKOS_FILE = "kea.thesaurus.skos.file";
+	public static String PROPERTY_KEA_THESAURUS_OWL_FILE = "kea.thesaurus.owl.file";
 	public static String PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL = "kea.thesaurus.vocabulary.serql";
 	public static String PROPERTY_KEA_THESAURUS_BASE_URL = "kea.thesaurus.base.url";
+	public static String PROPERTY_KEA_THESAURUS_TREE_ROOT = "kea.thesaurus.tree.root";
+	public static String PROPERTY_KEA_THESAURUS_TREE_CHILDS = "kea.thesaurus.tree.childs";
 	public static String PROPERTY_KEA_MODEL_FILE = "kea.model.file";
 	public static String PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "kea.automatic.keyword.extraction.number";
 	public static String PROPERTY_KEA_STOPWORDS_FILE = "kea.stopwords.file";
@@ -188,13 +191,16 @@ public class Config {
 	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
 
 	// KEA
-	public static String KEA_THESAURUS_FILE = "";
+	public static String KEA_THESAURUS_SKOS_FILE = "";
+	public static String KEA_THESAURUS_OWL_FILE = "";
 	public static String KEA_THESAURUS_VOCABULARY_SERQL = "";
 	public static String KEA_THESAURUS_BASE_URL = "";
+	public static String KEA_THESAURUS_TREE_ROOT = "";
+	public static String KEA_THESAURUS_TREE_CHILDS = "";
 	public static String KEA_MODEL_FILE = "";
 	public static String KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = "0";
 	public static String KEA_STOPWORDS_FILE = "";
-	public static String KEA_STOPWORDS_LANGUAGE = "";
+
 	
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
 	public static Set<String> mimeAccept = new TreeSet<String>();
@@ -270,14 +276,16 @@ public class Config {
 			USER_DOCUMENTS_SIZE_LIVE = config.getProperty(PROPERTY_USER_DOCUMENTS_SIZE_LIVE, USER_DOCUMENTS_SIZE_LIVE);
 			
 			// KEA
-			KEA_THESAURUS_FILE = config.getProperty(PROPERTY_KEA_THESAURUS_FILE, KEA_THESAURUS_FILE);
+			KEA_THESAURUS_SKOS_FILE = config.getProperty(PROPERTY_KEA_THESAURUS_SKOS_FILE, KEA_THESAURUS_SKOS_FILE);
+			KEA_THESAURUS_OWL_FILE = config.getProperty(PROPERTY_KEA_THESAURUS_OWL_FILE, KEA_THESAURUS_OWL_FILE);
 			KEA_THESAURUS_VOCABULARY_SERQL = config.getProperty(PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL, KEA_THESAURUS_VOCABULARY_SERQL);
 			KEA_THESAURUS_BASE_URL = config.getProperty(PROPERTY_KEA_THESAURUS_BASE_URL, KEA_THESAURUS_BASE_URL);
+			KEA_THESAURUS_TREE_ROOT = config.getProperty(PROPERTY_KEA_THESAURUS_TREE_ROOT, KEA_THESAURUS_TREE_ROOT);
+			KEA_THESAURUS_TREE_CHILDS = config.getProperty(PROPERTY_KEA_THESAURUS_TREE_CHILDS, KEA_THESAURUS_TREE_CHILDS);
 			KEA_MODEL_FILE = config.getProperty(PROPERTY_KEA_MODEL_FILE, KEA_MODEL_FILE);
 			KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER = config.getProperty(PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER, KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
 			KEA_STOPWORDS_FILE = config.getProperty(PROPERTY_KEA_STOPWORDS_FILE, KEA_STOPWORDS_FILE);
-			KEA_STOPWORDS_LANGUAGE = config.getProperty(PROPERTY_KEA_STOPWORDS_LANGUAGE, KEA_STOPWORDS_LANGUAGE);
-			
+						
 			fis.close();
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+CONFIG_FILE+" file found, set default config **");
@@ -341,13 +349,15 @@ public class Config {
 					PROPERTY_USER_DOCUMENTS_SIZE_LIVE+"="+USER_DOCUMENTS_SIZE_LIVE+", "+
 			
 					// KEA
-					PROPERTY_KEA_THESAURUS_FILE+"="+KEA_THESAURUS_FILE+", "+
+					PROPERTY_KEA_THESAURUS_SKOS_FILE+"="+KEA_THESAURUS_SKOS_FILE+", "+
+					PROPERTY_KEA_THESAURUS_OWL_FILE+"="+KEA_THESAURUS_OWL_FILE+", "+
 					PROPERTY_KEA_THESAURUS_VOCABULARY_SERQL+"="+KEA_THESAURUS_VOCABULARY_SERQL+", "+
 					PROPERTY_KEA_THESAURUS_BASE_URL+"="+KEA_THESAURUS_BASE_URL+", "+
+					PROPERTY_KEA_THESAURUS_TREE_ROOT+"="+KEA_THESAURUS_TREE_ROOT+", "+
+					PROPERTY_KEA_THESAURUS_TREE_CHILDS+"="+KEA_THESAURUS_TREE_CHILDS+", "+
 					PROPERTY_KEA_MODEL_FILE+"="+KEA_MODEL_FILE+", "+
 					PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+"="+KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+", "+
-					PROPERTY_KEA_STOPWORDS_FILE+"="+KEA_STOPWORDS_FILE+", "+
-					PROPERTY_KEA_STOPWORDS_LANGUAGE+"="+KEA_STOPWORDS_LANGUAGE+"}");
+					PROPERTY_KEA_STOPWORDS_FILE+"="+KEA_STOPWORDS_FILE+"}");
 			if (TRIAL) {
 				log.info("*** *** *** *** *** *** *** ***");
 				log.info("*** OPENKM ENTERPRISE TRIAL ***");
