@@ -22,6 +22,8 @@ package es.git.openkm.bean.kea;
 import java.io.Serializable;
 
 /**
+ * Term
+ * 
  * @author jllort
  *
  */
@@ -30,12 +32,9 @@ public class Term implements Serializable {
 	private static final long serialVersionUID = 290660580424913769L;
 	
 	private String text;
-    private String id;
-    private String comment = "";
-    private String prefTermID = null;
-    private boolean isLeaf = false;
+    private String uid;
 
-    /**
+	/**
      * Term
      */
     public Term() {
@@ -44,11 +43,11 @@ public class Term implements Serializable {
     /**
      * Term
      * @param text
-     * @param id
+     * @param uid
      */
-    public Term(String text, String id) {
+    public Term(String uid, String text) {
+    	this.uid = uid;
         this.text = text;
-        this.id = id;
     }
 
     public String getText() {
@@ -58,55 +57,22 @@ public class Term implements Serializable {
     public void setText(String text) {
         this.text = text;
     }
+    
+    public String getUid() {
+		return uid;
+	}
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-
-    public String getPrefTermID() {
-        if (prefTermID==null) return "";
-        return prefTermID;
-    }
-
-    public void setPrefTermID(String prefTermID) {
-        this.prefTermID = prefTermID;
-    }
-
-    public boolean isPreferred() {
-        return prefTermID == null ? true : false;
-    }
-
-
-    public boolean isLeaf() {
-        return isLeaf;
-    }
-
-    public void setLeaf(boolean leaf) {
-        isLeaf = leaf;
-    }
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
 
     public boolean equals(Object o) {
         if (this == o) return true;
         if ((o == null) || !(o instanceof Term)) return false;
 
         Term term = (Term) o;
-
-        if (comment != null ? !comment.equals(term.comment) : term.comment != null) return false;
-        if (id != null ? !id.equals(term.id) : term.id != null) return false;
+        
+        if (uid != null ? !uid.equals(term.uid) : term.uid != null) return false;
         if (text != null ? !text.equals(term.text) : term.text != null) return false;
 
         return true;
@@ -115,8 +81,7 @@ public class Term implements Serializable {
     public int hashCode() {
         int result;
         result = (text != null ? text.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (uid != null ? uid.hashCode() : 0);
         return result;
     }
 }

@@ -18,7 +18,6 @@
  */
 package es.git.openkm.kea.tree;
 
-import org.openrdf.model.ValueFactory;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
@@ -27,154 +26,72 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.core.Config;
+
+/**
+ * QueryBank
+ * 
+ * @author jllort
+ *
+ */
 public class QueryBank {
 	
 	private static Logger log = LoggerFactory.getLogger(QueryBank.class);
 
-    private static String namespace = " USING NAMESPACE "
-                                    + "ipsv=<http://www.esd.org.uk/standards/ipsv/2.00/ipsv-schema#>,"
-                                    + "dc=<http://purl.org/dc/elements/1.1/>,"
-                                    + "egms =<http://www.esd.org.uk/standards/egms/3.0/egms-schema#>";
+    private static QueryBank instance;
 
-
-    private static String searchQueryStr = new StringBuilder()
-                            .append("SELECT target, lbl, id ")
-                            .append("FROM {Target} rdfs:label {lbl}; dc:identifier {id} ")
-                            .append("WHERE lbl LIKE ").toString();
-
-    private static String searchQueryStr1 = "SELECT " + Names.TERM + "," + Names.LABEL + "," + Names.ID + "," + Names.PREF
-                                + " FROM {" + Names.TERM + "} rdfs:label {" + Names.LABEL + "}; dc:identifier {" + Names.ID + "},"
-                                + "[{" + Names.TERM + "} ipsv:useItem {} dc:identifier {" + Names.PREF + "}]"
-                                + " WHERE " + Names.LABEL + " LIKE ";
-
-    private static String getIdFromlabelQueryStr = "SELECT " + Names.TERM + "," + Names.LABEL + "," + Names.ID
-                                                 + " FROM {" + Names.TERM + "} rdfs:label {" + Names.LABEL + "}; dc:identifier {" + Names.ID + "}"
-                                                 + " WHERE " + Names.LABEL + " LIKE ";
-
-    private static String rMapQueryStr = "SELECT " + Names.TERM + "," + Names.LABEL + "," + Names.ID
-                                + " FROM {" + Names.TERM + "} rdf:type {rdfs:Class}, "
-                                + "{" + Names.TERM + "} dc:identifier {p_termID};"
-                                + "rdfs:label {" + Names.LABEL + "}; dc:identifier {" + Names.ID + "}"
-                                + " UNION SELECT " + Names.SUB + "," + Names.LABEL + "," + Names.ID
-                                + " FROM {" + Names.SUB + "} rdfs:subClassOf {"+ Names.TERM + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.SUB + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.SUB + "} dc:identifier {" + Names.ID + "}"
-                                + " UNION SELECT " + Names.REL + "," + Names.LABEL + "," + Names.ID
-                                + " FROM {" + Names.REL + "} dc:relation  {"+ Names.TERM + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.REL + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.REL + "} dc:identifier {" + Names.ID + "}"
-                                + " UNION SELECT DISTINCT " + Names.SIB + "," + Names.LABEL + "," + Names.ID
-                                + " FROM {" + Names.SIB + "," + Names.TERM + "} rdfs:subClassOf {"+ Names.SUPER + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.SIB + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.SIB + "} dc:identifier {" + Names.ID + "}"
-                                + " UNION SELECT " + Names.SUPER + "," + Names.LABEL + "," + Names.ID
-                                + " FROM {" + Names.TERM + "} rdfs:subClassOf {" + Names.SUPER + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.SUPER + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.SUPER + "} dc:identifier {" + Names.ID + "}"
-                                ;
-
-    private static String treeTopQueryStr =
-                                "SELECT " + Names.TERM + "," + Names.LABEL + "," + Names.ID + "," + Names.SUPER + "," + Names.GRANDCHILD
-                                + " FROM {" + Names.TERM + "} rdf:type {rdfs:Class},"
-                                + "{" + Names.TERM + "} rdfs:subClassOf {" + Names.SUPER + "},"
-                                + "{" + Names.TERM + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.TERM + "} dc:identifier {" + Names.ID + "},"
-                                + "[{" + Names.GRANDCHILD + "} rdfs:subClassOf {" + Names.TERM + "}]"
-                                + " WHERE " + Names.SUPER + " = egms:SubjectCategoryClass";
-
-    private static final String treeNextLayerQueryStr =
-                                "SELECT " + Names.SUB + "," + Names.LABEL + "," + Names.ID + "," + Names.GRANDCHILD
-                                + " FROM {" + Names.SUB + "} rdfs:subClassOf {" + Names.TERM + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.SUB + "} rdfs:label {" + Names.LABEL + "},"
-                                + "{" + Names.SUB + "} dc:identifier {" + Names.ID + "},"
-                                + "[{" + Names.GRANDCHILD + "} rdfs:subClassOf {" + Names.SUB + "}]";
-
-
-    private static final String superClassQueryStr =
-                                "SELECT " + Names.TERM + "," + Names.ID + "," + Names.SUPER
-                                + " FROM {" + Names.TERM + "} rdfs:subClassOf {" + Names.SUPER + "},"
-                                + "{" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.SUPER + "} dc:identifier {" + Names.ID + "}";
-
-    private static final String nodeToRootQueryStr1 =
-                                "SELECT " + Names.TERM + ",1,2,3,4,5,6,7,8,9"
-                                + " FROM {" + Names.TERM + "} dc:identifier {p_termID},"
-                                + "{" + Names.TERM + "} rdfs:subClassOf {" + Names.SUPER + "},"
-                                + "{" + Names.SUPER + "} dc:identifier {" + Names.ID + "}";
-
-
-
-    private static QueryBank ourInstance;
-
+    /**
+     * QueryBank
+     */
     private QueryBank() {
-
     }
 
+    /**
+     * QueryBank
+     * 
+     * @return
+     */
     public static QueryBank getInstance() {
-        if (ourInstance==null) {
-            ourInstance = new QueryBank();
+        if (instance==null) {
+            instance = new QueryBank();
         }
-        return ourInstance;
+        return instance;
     }
 
-    public TupleQuery getSearchQuery(String searchArg, RepositoryConnection con) {
-        TupleQuery searchQuery = null;
-        try {
-            String querySuffix;
-            if (searchArg.length() < 3) {
-                querySuffix = "\""+searchArg + "*\" IGNORE CASE" + namespace;
-            } else {
-                querySuffix = "\"*"+searchArg + "*\" IGNORE CASE" + namespace;
-            }
-
-            searchQuery = con.prepareTupleQuery(QueryLanguage.SERQL, searchQueryStr1 + querySuffix);
-
-        } catch (RepositoryException e) {
-            log.error("Error preparing search query",e);
-        } catch (MalformedQueryException e) {
-            log.error("malformed search query",e);
-        }
-
-        return searchQuery;
-    }
-    public TupleQuery getIdFromLabelQuery(String label, RepositoryConnection con) {
-        TupleQuery idFromLabelQuery = null;
-        try {
-            String querySuffix = "\""+ label + "\" IGNORE CASE" + namespace;
-            idFromLabelQuery = con.prepareTupleQuery(QueryLanguage.SERQL, searchQueryStr1 + querySuffix);
-
-        } catch (RepositoryException e) {
-            log.error("Error preparing search query",e);
-        } catch (MalformedQueryException e) {
-            log.error("malformed search query",e);
-        }
-
-        return idFromLabelQuery;
-    }
-
-
-    public TupleQuery getRMapQuery(String targetID, RepositoryConnection con) {
-        TupleQuery rMapQuery = null;
-        try {
-            rMapQuery = con.prepareTupleQuery(QueryLanguage.SERQL, rMapQueryStr + namespace);
-            ValueFactory valFac = con.getRepository().getValueFactory();
-            rMapQuery.setBinding("p_termID", valFac.createLiteral(targetID));
-        } catch (RepositoryException e) {
-            log.error("Error preparing rMap query",e);
-        } catch (MalformedQueryException e) {
-            log.error("malformed rMap query",e);
-        }
-        return rMapQuery;
-    }
-
+    /**
+     * getTreeTopQuery
+     * 
+     * @param con Repository connection
+     * 
+     * @return
+     */
     public TupleQuery getTreeTopQuery(RepositoryConnection con) {
         try {
-            return con.prepareTupleQuery(QueryLanguage.SERQL, treeTopQueryStr + namespace);
+
+//        	query = "SELECT C, tipus FROM {C} rdfs:subClassOf {tipus} ";
+//        	
+//        	query = "SELECT C, tipus FROM {C} tipus {Z} "; // Treu totes les relacions
+//        	
+//        	// La consulta del miracle que treu els fills !!! l'invent de la comparacio esta en transformar-ho a string
+//        	// en la comparació
+//        	query = "SELECT C, tipus FROM {C} rdfs:subClassOf {tipus} where xsd:string(tipus) = \"http://www.fao.org/aos/agrovoc#c_50113\"";
+//        	
+//        	// Aquesta es la consulta que ens retorna els nodes que no tenen pare
+//        	query = "SELECT C, tipus FROM {C} Y {tipus}; [rdfs:subClassOf {classe}] where not bound(classe) ";
+        	
+//        	String query = "SELECT DISTINCT UID, TEXT FROM {UID} Y {OBJECT}, {UID} rdfs:label {TEXT} ; "+
+//        			"[rdfs:subClassOf {CLAZZ}] where not bound(CLAZZ) and lang(TEXT)=\"es\" "+
+//        			"USING NAMESPACE " +
+//        			"foaf=<http://xmlns.com/foaf/0.1/>, " +
+//        			"dcterms=<http://purl.org/dc/terms/>, "+
+//        			"rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>, " +
+//        			"owl=<http://www.w3.org/2002/07/owl#>, " +
+//        			"rdfs=<http://www.w3.org/2000/01/rdf-schema#>, " +
+//        			"skos=<http://www.w3.org/2004/02/skos/core#>, " +
+//        			"dc=<http://purl.org/dc/elements/1.1/> ";
+//        	
+//        	System.out.println(query);
+            return con.prepareTupleQuery(QueryLanguage.SERQL, Config.KEA_THESAURUS_TREE_ROOT);
         } catch (RepositoryException e) {
             log.error("Error preparing tree top query",e);
         } catch (MalformedQueryException e) {
@@ -183,31 +100,34 @@ public class QueryBank {
         return null;
     }
 
-    public TupleQuery getTreeNextLayerQuery(String parentID, RepositoryConnection con) {
-        TupleQuery treeNextLayerQuery = null;
+    /**
+     * getTreeNextLayerQuery
+     * 
+     * @param parentID The parent id
+     * @param con The repository connection
+     * 
+     * @return
+     */
+    public TupleQuery getTreeNextLayerQuery(String RDFparentID, RepositoryConnection con) {
         try {
-            treeNextLayerQuery = con.prepareTupleQuery(QueryLanguage.SERQL, treeNextLayerQueryStr + namespace);
-            ValueFactory valFac = con.getRepository().getValueFactory();
-            treeNextLayerQuery.setBinding("p_termID", valFac.createLiteral(parentID));
+//        	String query = "SELECT DISTINCT UID, TEXT FROM {UID} rdfs:subClassOf {CLAZZ}, {UID} rdfs:label {TEXT} "+
+//        	"where xsd:string(CLAZZ) = \"RDFparentID\" and lang(TEXT)=\"es\" "+
+//			"USING NAMESPACE " +
+//			"foaf=<http://xmlns.com/foaf/0.1/>, " +
+//			"dcterms=<http://purl.org/dc/terms/>, "+
+//			"rdf=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>, " +
+//			"owl=<http://www.w3.org/2002/07/owl#>, " +
+//			"rdfs=<http://www.w3.org/2000/01/rdf-schema#>, " +
+//			"skos=<http://www.w3.org/2004/02/skos/core#>, " +
+//			"dc=<http://purl.org/dc/elements/1.1/> ";
+//        	
+//        	query = query.replace("RDFparentID", RDFparentID);
+        	return con.prepareTupleQuery(QueryLanguage.SERQL, Config.KEA_THESAURUS_TREE_CHILDS.replace("RDFparentID", RDFparentID));
         } catch (RepositoryException e) {
             log.error("Error preparing rMap query",e);
         } catch (MalformedQueryException e) {
             log.error("malformed next tree layer query",e);
         }
-        return treeNextLayerQuery;
-    }
-
-    public TupleQuery getSuperClassQuery(String nodeID, RepositoryConnection con) {
-        TupleQuery superClassQuery = null;
-        try {
-            superClassQuery = con.prepareTupleQuery(QueryLanguage.SERQL, superClassQueryStr + namespace);
-            ValueFactory valFac = con.getRepository().getValueFactory();
-            superClassQuery.setBinding("p_termID", valFac.createLiteral(nodeID));
-        } catch (RepositoryException e) {
-            log.error("Error preparing super class query",e);
-        } catch (MalformedQueryException e) {
-            log.error("malformed super class query",e);
-        }
-        return superClassQuery;
+        return null;
     }
 }

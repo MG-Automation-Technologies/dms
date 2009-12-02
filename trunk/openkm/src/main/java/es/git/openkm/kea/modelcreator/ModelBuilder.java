@@ -181,12 +181,12 @@ public class ModelBuilder {
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
 		String trainingFilesPath = "testdocs/en/train";
-		String modelFilePath = "vocabulary/agrovoc.model";
+		String modelFilePath = "vocabulary/ag_skos_20070219.model";
 		String vocabularyFilePath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
 		  											   .append(File.separator)
 		  											   .append("vocabulary")
 		  											   .append(File.separator)
-		  											   .append("agrovoc.rdf").toString();
+		  											   .append("ag_skos_20070219.rdf").toString();
 		String vocabularyType = "skos";
 		String documentEncoding = "UTF-8";
 		String lang = "en";
