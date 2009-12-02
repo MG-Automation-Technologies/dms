@@ -41,18 +41,22 @@ public class WorkspaceHelper {
     private static final String TEMP_DIR = getTemporaryBaseDir();
     
     // The files path
-    public static final String RDF_VOVABULARY_PATH 	= WORK_DIR + 
-	 										 	   	  (Config.KEA_THESAURUS_FILE.startsWith(File.separator)?"":File.separator) +
-	 										 	   	  Config.KEA_THESAURUS_FILE;
+    public static final String RDF_SKOS_VOVABULARY_PATH	= WORK_DIR + 
+	 										 	   	  	  (Config.KEA_THESAURUS_SKOS_FILE.startsWith(File.separator)?"":File.separator) +
+	 										 	   	  	  Config.KEA_THESAURUS_SKOS_FILE;
     
-    public static final String KEA_MODEL_PATH 		= WORK_DIR + 
-	   												  (Config.KEA_MODEL_FILE.startsWith(File.separator)?"":File.separator) +
-	   												  Config.KEA_MODEL_FILE;
+    public static final String RDF_OWL_VOVABULARY_PATH	= WORK_DIR + 
+	  	  												  (Config.KEA_THESAURUS_OWL_FILE.startsWith(File.separator)?"":File.separator) +
+	  	  												  Config.KEA_THESAURUS_OWL_FILE;
+    
+    public static final String KEA_MODEL_PATH 			= WORK_DIR + 
+	   												  	  (Config.KEA_MODEL_FILE.startsWith(File.separator)?"":File.separator) +
+	   												  	  Config.KEA_MODEL_FILE;
     
     // It's not final because model builder must change this path ( to solve problem with stopwords file on stopwordX class )
-    public static String KEA_STOPWORDS_PATH 		= WORK_DIR + 
-		  											  (Config.KEA_STOPWORDS_FILE.startsWith(File.separator)?"":File.separator) +
-		  											  Config.KEA_STOPWORDS_FILE;
+    public static String KEA_STOPWORDS_PATH 			= WORK_DIR + 
+		  											  	  (Config.KEA_STOPWORDS_FILE.startsWith(File.separator)?"":File.separator) +
+		  											  	  Config.KEA_STOPWORDS_FILE;
     
     // Language
     public static final String KEA_LANGUAGE = getLanguage();

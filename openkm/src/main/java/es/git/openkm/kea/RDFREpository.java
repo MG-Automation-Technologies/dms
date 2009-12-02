@@ -19,7 +19,6 @@
 
 package es.git.openkm.kea;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,12 +49,13 @@ import es.git.openkm.kea.metadata.WorkspaceHelper;
  * @author jllort
  *
  */
-public class RDFVocabulary {
+public class RDFREpository {
 
-	private static Logger log = LoggerFactory.getLogger(RDFVocabulary.class);
+	private static Logger log = LoggerFactory.getLogger(RDFREpository.class);
 
-    private static Repository repository = null;
-    private static RDFVocabulary instance;
+    private static Repository SKOSRepository = null;
+    private static Repository OWLRepository = null;
+    private static RDFREpository instance;
     
     /**
      * getConnection
@@ -63,15 +63,26 @@ public class RDFVocabulary {
      * @return
      * @throws RepositoryException 
      */
-    public RepositoryConnection getConnection() throws RepositoryException {
-    	return repository.getConnection();
+    public RepositoryConnection getSKOSConnection() throws RepositoryException {
+    	return SKOSRepository.getConnection();
+    }
+    
+    /**
+     * getConnection
+     * 
+     * @return
+     * @throws RepositoryException 
+     */
+    public RepositoryConnection getOWLConnection() throws RepositoryException {
+    	return OWLRepository.getConnection();
     }
     
     /**
      * RDFVocabulary
      */
-    private RDFVocabulary() {
-        repository = getMemStoreRepository();
+    private RDFREpository() {
+        SKOSRepository = getSKOSMemStoreRepository();
+        OWLRepository = getOWLMemStoreRepository();
     }
     
     /**
@@ -79,9 +90,9 @@ public class RDFVocabulary {
      * 
      * @return
      */
-    public static RDFVocabulary getInstance() {
+    public static RDFREpository getInstance() {
         if (instance == null) {
-            instance = new RDFVocabulary();
+            instance = new RDFREpository();
         }
         return instance;
     }
@@ -98,7 +109,7 @@ public class RDFVocabulary {
         TupleQuery query;
 
         try {
-            con = repository.getConnection();
+            con = SKOSRepository.getConnection();
 			query = con.prepareTupleQuery(QueryLanguage.SERQL, Config.KEA_THESAURUS_VOCABULARY_SERQL); 
             log.info("query:"+Config.KEA_THESAURUS_VOCABULARY_SERQL);
             TupleQueryResult result;
@@ -124,24 +135,57 @@ public class RDFVocabulary {
     }
 
     /**
-     * getMemStoreRepository
+     * getSKOSMemStoreRepository
      * 
      * @return
      */
-    private Repository getMemStoreRepository() {
+    private Repository getSKOSMemStoreRepository() {
         InputStream is;
         Repository repository = null;
         String baseURL = Config.KEA_THESAURUS_BASE_URL;
         
         try {
-        	log.info(WorkspaceHelper.RDF_VOVABULARY_PATH);
-        	is = new FileInputStream(WorkspaceHelper.RDF_VOVABULARY_PATH);
+        	log.info(WorkspaceHelper.RDF_SKOS_VOVABULARY_PATH);
+        	is = new FileInputStream(WorkspaceHelper.RDF_SKOS_VOVABULARY_PATH);
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             RepositoryConnection con = repository.getConnection();
             con.add(is, baseURL, RDFFormat.RDFXML);
             con.close();
-            log.info("New SAIL memstore created for RDF");
+            log.info("New SAIL memstore created for SKOS RDF");
+
+        } catch (RepositoryException e) {
+            log.error("Cannot make connection to RDF repository.", e);
+        } catch (IOException e) {
+            log.error("cannot locate/read file", e);
+            e.printStackTrace();
+        } catch (RDFParseException e) {
+            log.error("Cannot parse file", e);
+        } catch (Throwable t) {
+            log.error("Unexpected exception loading repository",t);
+        } 
+        return repository;
+    }
+    
+    /**
+     * getOWLMemStoreRepository
+     * 
+     * @return
+     */
+    private Repository getOWLMemStoreRepository() {
+        InputStream is;
+        Repository repository = null;
+        String baseURL = Config.KEA_THESAURUS_BASE_URL;
+        
+        try {
+        	log.info(WorkspaceHelper.RDF_OWL_VOVABULARY_PATH);
+        	is = new FileInputStream(WorkspaceHelper.RDF_OWL_VOVABULARY_PATH);
+            repository = new SailRepository(new MemoryStore());
+            repository.initialize();
+            RepositoryConnection con = repository.getConnection();
+            con.add(is, baseURL, RDFFormat.RDFXML);
+            con.close();
+            log.info("New SAIL memstore created for OWL RDF");
 
         } catch (RepositoryException e) {
             log.error("Cannot make connection to RDF repository.", e);

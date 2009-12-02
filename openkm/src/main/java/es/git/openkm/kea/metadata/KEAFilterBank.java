@@ -69,7 +69,7 @@ public class KEAFilterBank {
         Date start = new Date();
         
         String modelPath = WorkspaceHelper.KEA_MODEL_PATH;
-        String vocabularyPath = WorkspaceHelper.RDF_VOVABULARY_PATH;
+        String vocabularyPath = WorkspaceHelper.RDF_SKOS_VOVABULARY_PATH;
         int numPhrases = 5;
         
         String className = WorkspaceHelper.KEA_STOPWORDS_CLASSNAME;

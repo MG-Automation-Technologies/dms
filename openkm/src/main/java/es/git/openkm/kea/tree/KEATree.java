@@ -22,6 +22,7 @@ package es.git.openkm.kea.tree;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ListIterator;
+import java.util.Vector;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
@@ -38,7 +39,7 @@ import es.git.openkm.bean.kea.Term;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.ItemExistsException;
 import es.git.openkm.core.PathNotFoundException;
-import es.git.openkm.kea.RDFVocabulary;
+import es.git.openkm.kea.RDFREpository;
 
 /**
  * KEA Tree
@@ -53,17 +54,24 @@ public class KEATree {
 	/**
 	 * Generate tree
 	 */
-	public static void recursiveGenerateTree(String termID, int level, String token, String parentPath) {        
+	public static void recursiveGenerateTree(String termID, int level, String token, String parentPath, Vector<String> parentUIDS) {        
         for (ListIterator<Term> it = getParentTerms(termID).listIterator(); it.hasNext();) {
         	try {
+        		Vector<String> newParentUIDS = (Vector<String>) parentUIDS.clone();
 	        	String path = parentPath;
 	        	Term term = it.next();
-	        	drawTerm(term, level);
+	        	if (level==0) {
+	        		drawTerm(term, level);
+	        	}
 	        	path += "/" + term.getText();
 	        	Folder folder = new Folder();
 	    		folder.setPath(path);
 				OKMFolder.getInstance().create(token, folder);
-				recursiveGenerateTree(term.getId(), level+1, token, path); // recursive generation
+				// To solve infinite loop ( nodes must not be in a infinite cycle )
+				if (!newParentUIDS.contains(term.getUid())) {
+					newParentUIDS.add(term.getUid());
+					recursiveGenerateTree(term.getUid(), level+1, token, path, newParentUIDS); // recursive generation
+				} 
 			} catch (PathNotFoundException e) {
 				log.error("path not found",e);
 			} catch (ItemExistsException e) {
@@ -87,7 +95,7 @@ public class KEATree {
 		for (int i=0; i<level; i++) {
 			levelSeparator += "-";
 		}
-		log.info("term " + levelSeparator +">" + term.getId() + " - " + term.getText());
+		log.info("term " + levelSeparator +">" + term.getUid() + " - " + term.getText());
 	}
 	
 	/**
@@ -104,7 +112,7 @@ public class KEATree {
 
 		try {
 			
-			con = RDFVocabulary.getInstance().getConnection();
+			con = RDFREpository.getInstance().getOWLConnection();
 			
 			if (termID==null) {
 				query = QueryBank.getInstance().getTreeTopQuery(con);
@@ -113,11 +121,11 @@ public class KEATree {
 			}
 	        
 	        TupleQueryResult result = query.evaluate();
+	        
 	        while (result.hasNext()) {
 	
 	            BindingSet bindingSet = result.next();
-	            Term term = new Term(bindingSet.getValue(Names.LABEL).stringValue(), bindingSet.getValue(Names.ID).stringValue());
-	            term.setLeaf(bindingSet.getValue(Names.GRANDCHILD) == null ? true : false);
+	            Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT").stringValue());
 	            // need to ignore duplicates casued by grandchild problem
 	            if (!childTerms.contains(term)) {
 	                childTerms.add(term);
