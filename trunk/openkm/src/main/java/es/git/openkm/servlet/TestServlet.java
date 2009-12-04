@@ -53,14 +53,14 @@ public class TestServlet extends HttpServlet {
 		
 		String token = (String)request.getSession().getAttribute("token");
 		
-		KEATree.recursiveGenerateTree(null, 0, token, "/okm:root/borrar", new Vector<String>());
+		//KEATree.recursiveGenerateTree(null, 0, token, "/okm:root/borrar", new Vector<String>());
 		
-//		List<Term> terms = RDFVocabulary.getInstance().getTerms();
-//		
-//		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
-//			Term term = it.next();
-//			log.info("id:"+term.getId() + " text:" +term.getText());
-//		}		
+		List<Term> terms = RDFREpository.getInstance().getTerms();
+		
+		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
+			Term term = it.next();
+			log.info("id:"+term.getUid() + " text:" +term.getText());
+		}		
 		
 		PrintWriter out = response.getWriter();
 		log.info("Token: "+token);

@@ -56,8 +56,6 @@ public class StopwordsEnglish extends Stopwords {
 		if (m_Stopwords == null) {
 			m_Stopwords = new Hashtable<String,Double>();
 			Double dummy = new Double(0);
-            
-			System.out.println("aquestes son les stopwords :" +WorkspaceHelper.KEA_STOPWORDS_PATH);
 			
             File txt = new File(WorkspaceHelper.KEA_STOPWORDS_PATH);
             InputStreamReader is;
