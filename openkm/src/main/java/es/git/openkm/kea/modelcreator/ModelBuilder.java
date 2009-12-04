@@ -25,10 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.kea.metadata.WorkspaceHelper;
-import es.git.openkm.kea.stemmers.PorterStemmer;
 import es.git.openkm.kea.stemmers.Stemmer;
 import es.git.openkm.kea.stopwords.Stopwords;
-import es.git.openkm.kea.stopwords.StopwordsEnglish;
 
 /**
  * Class that demonstrates how Kea works.
@@ -181,12 +179,12 @@ public class ModelBuilder {
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
 		String trainingFilesPath = "testdocs/en/train";
-		String modelFilePath = "vocabulary/ag_skos_20070219.model";
+		String modelFilePath = "vocabulary/agrovoc.model";
 		String vocabularyFilePath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
 		  											   .append(File.separator)
 		  											   .append("vocabulary")
 		  											   .append(File.separator)
-		  											   .append("ag_skos_20070219.rdf").toString();
+		  											   .append("agrovoc.rdf").toString();
 		String vocabularyType = "skos";
 		String documentEncoding = "UTF-8";
 		String lang = "en";

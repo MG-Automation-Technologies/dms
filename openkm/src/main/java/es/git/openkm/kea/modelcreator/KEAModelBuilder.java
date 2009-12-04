@@ -777,7 +777,7 @@ public class KEAModelBuilder implements OptionHandler {
 		}
 		m_KEAFilter.setNumFeature();
 		
-		log.error("-- Reading the Documents... ");
+		log.info("-- Reading the Documents... ");
 		
 		Enumeration<String> elem = stems.keys();
 		while (elem.hasMoreElements()) {
