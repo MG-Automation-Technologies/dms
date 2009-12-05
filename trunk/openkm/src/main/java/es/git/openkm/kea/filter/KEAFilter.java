@@ -19,7 +19,6 @@
 
 package es.git.openkm.kea.filter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -44,7 +43,6 @@ import weka.core.Utils;
 import weka.core.Capabilities.Capability;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.Discretize;
-import es.git.openkm.kea.metadata.WorkspaceHelper;
 import es.git.openkm.kea.stemmers.SremovalStemmer;
 import es.git.openkm.kea.stemmers.Stemmer;
 import es.git.openkm.kea.stopwords.Stopwords;
@@ -2105,17 +2103,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 	public static void main(String [] argv) {
 		
 		try {
-			String stopWordsPath = new StringBuilder().append(WorkspaceHelper.getWorkingDir())
-													.append(File.separator)
-													.append("src")	
-													.append(File.separator)
-													.append("main")
-													.append(File.separator)
-													.append("resources")
-													.append(File.separator)
-													.append("vocabulary")
-													.append(File.separator)
-													.append("stopwords_en.txt").toString();
 			if (Utils.getFlag('b', argv)) {
 				Filter.batchFilterFile(new KEAFilter(new StopwordsEnglish()), argv);
 			} else {
