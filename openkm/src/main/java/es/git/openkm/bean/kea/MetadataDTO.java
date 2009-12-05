@@ -68,7 +68,7 @@ public class MetadataDTO implements Serializable {
         List<Term> terms = new ArrayList<Term>();
         Iterator<String> iter = subjects.iterator();
         while (iter.hasNext()) {
-            terms.add(new Term(iter.next(),""));
+            terms.add(new Term("",iter.next()));
         }
         return terms;
     }
