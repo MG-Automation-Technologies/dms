@@ -153,6 +153,10 @@
     <servlet-name>OKMFolderServletAdmin</servlet-name>
     <servlet-class>es.git.openkm.backend.server.OKMFolderServletAdmin</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>OKMThesaurusServletAdmin</servlet-name>
+    <servlet-class>es.git.openkm.backend.server.OKMThesaurusServletAdmin</servlet-class>
+  </servlet>
 
   <!-- WebServices -->
   <servlet>
@@ -314,6 +318,10 @@
   <servlet-mapping>
     <servlet-name>OKMFolderServletAdmin</servlet-name>
     <url-pattern>/OKMFolderServletAdmin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMThesaurusServletAdmin</servlet-name>
+    <url-pattern>/OKMThesaurusServletAdmin</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->

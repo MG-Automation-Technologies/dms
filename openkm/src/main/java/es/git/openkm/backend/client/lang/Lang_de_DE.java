@@ -117,7 +117,9 @@ public class Lang_de_DE {
 		lang.put("general.util.filesystem.path", "Pfad im Dateisystem");
 		lang.put("general.util.repository.path", "Pfad im Repositorie");
 		lang.put("general.util.register.property.groups", "Gruppeneigenschaften registrieren");
+		lang.put("general.util.register.thesaurus","Register thesaurus");
 		lang.put("general.util.property.group.definition.path", "Pfad der Definition für die Gruppeneigenschaften");
+		lang.put("general.util.thesaurus.show.level","Show level");
 		lang.put("general.util.folder.destination", "Ziel");
 		lang.put("general.util.folder.destination.taxonomy", "Taxonomie");
 		lang.put("general.util.folder.destination.templates", "Vorlagen");

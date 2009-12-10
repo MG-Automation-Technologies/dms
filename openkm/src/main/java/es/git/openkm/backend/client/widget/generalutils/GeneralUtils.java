@@ -67,6 +67,9 @@ public class GeneralUtils extends Composite {
 	private Image folderExportExplorer;
     private ListBox reportTypeList;
     private Button executeReportButton;
+    private Button registerThesaurus;
+    private ListBox showLevelList;
+    private HTML levelText;
     public Status status;
 	
 	/**
@@ -85,6 +88,7 @@ public class GeneralUtils extends Composite {
 		importButton = new Button(Main.i18n("general.util.import"));
 		exportButton = new Button(Main.i18n("general.util.export"));
 		registerButton = new Button(Main.i18n("general.util.register"));
+		registerThesaurus = new Button(Main.i18n("general.util.register"));
 		folderSelectPopup = new FolderSelectPopup();
 		folderImportExplorer = new Image("img/icon/general/folder_explore.gif");
 		folderExportExplorer = new Image("img/icon/general/folder_explore.gif");
@@ -167,7 +171,34 @@ public class GeneralUtils extends Composite {
 		table.setHTML(7, 0, Main.i18n("general.util.property.group.definition.path"));
 		table.setWidget(7, 1, propertyGroupPath);
 		table.setWidget(7, 2, registerButton);
-		table.getFlexCellFormatter().setColSpan(7, 2, 2);
+		//table.getFlexCellFormatter().setColSpan(7, 2, 2);
+		
+		// Thesaurus
+		levelText = new HTML(Main.i18n("general.util.thesaurus.show.level"));
+		showLevelList = new ListBox();
+		showLevelList.addItem("1", "0");
+		showLevelList.addItem("2", "1");
+		showLevelList.addItem("3", "2");
+		showLevelList.addItem("4", "3");
+		showLevelList.addItem("5", "4");
+		
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(levelText);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(showLevelList);
+		hPanel.setCellVerticalAlignment(levelText, HasAlignment.ALIGN_MIDDLE);
+		hPanel.setCellVerticalAlignment(showLevelList, HasAlignment.ALIGN_MIDDLE);
+		
+		table.setHTML(6, 3, "<b>"+Main.i18n("general.util.register.thesaurus")+"</b>");
+		table.setWidget(7, 3, hPanel);
+		table.setWidget(7, 4, registerThesaurus);
+		
+		registerThesaurus.addClickListener(new ClickListener(){
+			public void onClick(Widget sender) {
+					String level = showLevelList.getValue(showLevelList.getSelectedIndex());
+					Main.get().centerPanel.generalUtilsPanel.setUrlResult(Config.OKMThesaurusServletAdmin + "?level="+level);
+			}
+		});
 		
 		// Space
 		table.setHTML(8, 0, "&nbsp;");
@@ -239,6 +270,8 @@ public class GeneralUtils extends Composite {
 		registerButton.setStyleName("okm-Input");
 		reportTypeList.setStyleName("okm-Input");
 		executeReportButton.setStyleName("okm-Input");
+		registerThesaurus.setStyleName("okm-Input");
+		showLevelList.setStyleName("okm-Input");
 		folderSelectPopup.setStyleName("okm-Popup");
 		folderSelectPopup.addStyleName("okm-DisableSelect");
 		
@@ -256,12 +289,16 @@ public class GeneralUtils extends Composite {
 		table.setHTML(4, 0, Main.i18n("general.util.repository.path"));
 		table.setHTML(4, 2, Main.i18n("general.util.filesystem.path"));
 		table.setHTML(6, 0, "<b>"+Main.i18n("general.util.register.property.groups")+"</b>");
+		table.setHTML(6, 3, "<b>"+Main.i18n("general.util.register.thesaurus")+"</b>");
 		table.setHTML(7, 0, Main.i18n("general.util.property.group.definition.path"));
+		table.setHTML(7, 3, Main.i18n("general.util.thesaurus.show.level"));
 		table.setHTML(9, 0, "<b>"+Main.i18n("general.util.report")+"</b>");
 		table.setHTML(10, 0, Main.i18n("general.util.report.type"));
 		importButton.setText(Main.i18n("general.util.import"));
 		exportButton.setText(Main.i18n("general.util.export"));
 		registerButton.setText(Main.i18n("general.util.register"));
+		registerThesaurus.setText(Main.i18n("general.util.register"));
+		levelText.setHTML(Main.i18n("general.util.thesaurus.show.level"));
 		folderSelectPopup.langRefresh();
 	}
 	
