@@ -35,15 +35,15 @@ public class Lang_fr_FR {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "dd.MM.yyyy hh:mm:ss");
-	    lang.put("general.day.pattern", "dd.MM.yyyy");
+	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "dd/MM/yyyy");
 	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "Chargement de OpenKM");
 	    lang.put("startup.starting.loading", "Démarrage du chargement de OpenKM");
 	    lang.put("startup.taxonomy", "Récupération du noeud racine taxinomie");
-	    lang.put("startup.thesaurus", "Getting thesaurus root node");
+	    lang.put("startup.thesaurus", "Récupération du noeud racine thésaurus");
 	    lang.put("startup.template", "Récupération du noeud racine modèle");
 	    lang.put("startup.personal", "Récupération du noeud racine personnel");
 	    lang.put("startup.mail", "Récupération du noeud racine courriel");
@@ -59,7 +59,7 @@ public class Lang_fr_FR {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Chargement taxonomie - récupération courriels");
 	    lang.put("startup.loading.personal", "Chargement personnel");
 	    lang.put("startup.loading.mail", "Chargement courriels");
-	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
+	    lang.put("startup.loading.thesaurus", "Chargement thésaurus");
 	    lang.put("startup.loading.templates", "Chargement modèles");
 	    lang.put("startup.loading.trash", "Chargement corbeille");
 	    lang.put("startup.loading.history.search", "Chargement historique recherche");
@@ -75,7 +75,7 @@ public class Lang_fr_FR {
 	    lang.put("leftpanel.label.trash", "Corbeille");
 	    lang.put("leftpanel.label.mail", "Courriel");
 	    lang.put("leftpanel.label.stored.search", "Recherches sauvegardées");
-	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
+	    lang.put("leftpanel.label.thesaurus", "Thésaurus");
 	    lang.put("leftpanel.label.templates", "Modèles");
 	    lang.put("leftpanel.label.my.documents", "Mes documents");
 	    lang.put("leftpanel.label.user.search", "Brèves utilisateur");
@@ -138,7 +138,7 @@ public class Lang_fr_FR {
     			lang.put("general.menu.tools.skin.bigfont", "Grande police");
     		lang.put("general.menu.debug.console", "Console d'erreur");
     		lang.put("general.menu.administration", "Montrer l'administration");
-    		lang.put("general.menu.tools.preferences", "Prefererences");
+    		lang.put("general.menu.tools.preferences", "Préférerences");
     			lang.put("general.menu.tools.user.preferences", "Configuration personnelle");
     	lang.put("general.menu.bookmark", "Signets");
 	    	lang.put("general.menu.bookmark.home", "Accueil");
@@ -167,7 +167,7 @@ public class Lang_fr_FR {
 	    lang.put("filebrowser.menu.rename", "Renommer");
 	    lang.put("filebrowser.menu.checkout.cancel", "Annuler emprunt");
 	    lang.put("filebrowser.menu.lock", "Verrouiller");
-	    lang.put("filebrowser.menu.unlock", "Deverrouiller");
+	    lang.put("filebrowser.menu.unlock", "Déverrouiller");
 	    lang.put("filebrowser.menu.download", "Télécharger");
 	    lang.put("filebrowser.menu.move", "Déplacer");
 	    lang.put("filebrowser.menu.copy", "Copier");
@@ -263,7 +263,7 @@ public class Lang_fr_FR {
 	    lang.put("tab.document.status.purge.version.history", "Compacter l'historique du document");
 	    lang.put("tab.document.status.restore.version", "Restaurer la version du document");
 	    lang.put("tab.document.security", "Securité");
-	    lang.put("tab.document.preview", "Preview");
+	    lang.put("tab.document.preview", "Aperçu");
 	    lang.put("tab.folder.properties", "Propriétés");
 	    lang.put("tab.folder.security", "Securité");
 	    
@@ -283,7 +283,7 @@ public class Lang_fr_FR {
 	    lang.put("document.mimetype", "Type");
 	    lang.put("document.keywords", "Mots-clés");
 	    lang.put("document.by", "par");
-	    lang.put("document.status", "Status");
+	    lang.put("document.status", "Statut");
 	    lang.put("document.status.checkout", "Emprunté par");
 	    lang.put("document.status.locked", "Verrouillé par");
 	    lang.put("document.status.normal", "Disponible");
@@ -314,7 +314,7 @@ public class Lang_fr_FR {
 	    lang.put("version.created", "Date");
 	    lang.put("version.author", "Auteur");
 	    lang.put("version.size", "Taille");
-	    lang.put("version.purge.document", "Unir historique");
+	    lang.put("version.purge.document", "Fusion historique");
 	    lang.put("version.comment", "Commentaire");
 	    
 	    // Security
@@ -330,7 +330,7 @@ public class Lang_fr_FR {
 	    lang.put("security.recursive", "Appliquer les changements de façon recursive");
 	    
 	    // Preview
-	    lang.put("preview.unavailable", "Preview unavailable");
+	    lang.put("preview.unavailable", "Aperçu indisponible");
 
 	    // Mail
 	    lang.put("mail.from", "De");
@@ -461,7 +461,7 @@ public class Lang_fr_FR {
 	    lang.put("status.keep.alive.error", "Connexion au serveur perdue (surveillance)");
 	    lang.put("status.debug.enabled", "Activation déboggage");
 	    lang.put("status.debug.disabled", "Désactivation déboggage");
-	    lang.put("status.network.error.detected", "Network error detected");
+	    lang.put("status.network.error.detected", "Erreur réseau détectée");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Dimanche");
@@ -543,26 +543,26 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.keyword.related", "Mots-clés connexes");
 	    lang.put("dashboard.keyword.goto.document", "Aller au document");
 	    lang.put("dashboard.keyword.clean.keywords", "Effacer les mots-clés");
-	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
-	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
+	    lang.put("dashboard.mail.last.imported.mails", "Courriels");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Pièces-jointes");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Démarrage workflow");
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "Configuration");
-	    lang.put("user.preferences.user", "User");
+	    lang.put("user.preferences.user", "Utilisateur");
 	    lang.put("user.preferences.password", "Mot de passe");
-	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.mail", "Courriel");
 	    lang.put("user.preferences.imap.host", "Serveur IMAP");
 	    lang.put("user.preferences.imap.user", "Identifiant IMAP");
 	    lang.put("user.preferences.imap.user.password", "Mot de passe IMAP");
 	    lang.put("user.preferences.imap.folder", "Dossier IMAP");
-	    lang.put("user.preferences.password.error", "Erreur: mots de passe différents");
-	    lang.put("user.preferences.user.data", "User account");
-	    lang.put("user.preferences.mail.data", "Mail account");
-	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
-	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+	    lang.put("user.preferences.password.error", "Erreur : mots de passe différents");
+	    lang.put("user.preferences.user.data", "Compte utilisateur");
+	    lang.put("user.preferences.mail.data", "Compte de courriel");
+	    lang.put("user.preferences.imap.error", "Tous les champs sont obligatoires pour valider la configuration courriel");
+	    lang.put("user.preferences.imap.password.error.void", "Le mot de passe ne peut être vide pour une connexion en IMAP");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce document");
@@ -572,14 +572,14 @@ public class Lang_fr_FR {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_UnLock, "Impossible de déverrouiller ce document");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "Erreur interne du dépôt");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "Erreur interne de l'application");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "Chemin document non trouvé");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "Chemin du document non trouvé");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce dossier");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemNotFound, "Il n'existe pas de document portant ce nom");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemExists, "Il existe déjà un dossier portant ce nom");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_Repository, "Erreur interne du dépôt");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_General, "Erreur interne de l'application");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "Chemin dossier non trouvé");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "Chemin du dossier non trouvé");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthServlet+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à cette item");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthServlet+ErrorCode.CAUSE_ItemNotFound, "Il n'existe pas d'élément avec ce nom");
@@ -595,10 +595,10 @@ public class Lang_fr_FR {
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "La session a été fermée");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Generic error executing query");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Erreur lors de l'exécution de la requête");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "Le nom de la recherche enregistrée doit être unique");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "The bookmark name must be unique");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "Le nom du signet doit être unique");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRemoteService+ErrorCode.CAUSE_SessionLost , "Session perdue");
 	    
