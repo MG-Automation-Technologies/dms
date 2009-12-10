@@ -118,7 +118,9 @@ public class Lang_en_GB {
 		lang.put("general.util.filesystem.path", "Filesystem path");
 		lang.put("general.util.repository.path", "Repository path");
 		lang.put("general.util.register.property.groups", "Register property groups");
+		lang.put("general.util.register.thesaurus","Register thesaurus");
 		lang.put("general.util.property.group.definition.path", "Property Group definition path");
+		lang.put("general.util.thesaurus.show.level","Show level");
 		lang.put("general.util.folder.destination", "Destination");
 		lang.put("general.util.folder.destination.taxonomy", "Taxonomy");
 		lang.put("general.util.folder.destination.templates", "Templates");

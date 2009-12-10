@@ -19,10 +19,16 @@
 
 package es.git.openkm.kea.tree;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
+
+import javax.servlet.ServletOutputStream;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
@@ -32,6 +38,8 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 import es.git.openkm.api.OKMFolder;
 import es.git.openkm.bean.Folder;
@@ -53,15 +61,23 @@ public class KEATree {
 	
 	/**
 	 * Generate tree
+	 * @throws IOException 
 	 */
-	public static void recursiveGenerateTree(String termID, int level, String token, String parentPath, Vector<String> parentUIDS) {        
-        for (ListIterator<Term> it = getParentTerms(termID).listIterator(); it.hasNext();) {
+	public static void recursiveGenerateTree(String termID, int level, int levelToDraw, String token, String parentPath, 
+											 Vector<String> parentUIDS, ServletOutputStream out) throws IOException {        
+		
+		List<Term> lisTerms = getParentTerms(termID);
+		if (level<=levelToDraw) {
+			out.println("Founded " + lisTerms.size() + " terms in level " + (level+1) + "<br>");
+			out.flush();
+		}
+        for (ListIterator<Term> it = lisTerms.listIterator(); it.hasNext();) {
         	try {
         		Vector<String> newParentUIDS = (Vector<String>) parentUIDS.clone();
 	        	String path = parentPath;
 	        	Term term = it.next();
-	        	if (level==0) {
-	        		drawTerm(term, level);
+	        	if (level<=levelToDraw) {
+	        		drawTerm(term, level, out);
 	        	}
 	        	path += "/" + term.getText();
 	        	Folder folder = new Folder();
@@ -70,7 +86,7 @@ public class KEATree {
 				// To solve infinite loop ( nodes must not be in a infinite cycle )
 				if (!newParentUIDS.contains(term.getUid())) {
 					newParentUIDS.add(term.getUid());
-					recursiveGenerateTree(term.getUid(), level+1, token, path, newParentUIDS); // recursive generation
+					recursiveGenerateTree(term.getUid(), level+1, levelToDraw, token, path, newParentUIDS, out); // recursive generation
 				} 
 			} catch (PathNotFoundException e) {
 				log.error("path not found",e);
@@ -89,13 +105,17 @@ public class KEATree {
 	 * 
 	 * @param term The term
 	 * @param level The level
+	 * @throws IOException 
 	 */
-	private static void drawTerm(Term term, int level) {
+	private static void drawTerm(Term term, int level, ServletOutputStream out) throws IOException {
 		String levelSeparator = "";
 		for (int i=0; i<level; i++) {
 			levelSeparator += "-";
 		}
-		log.info("term " + levelSeparator +">" + term.getUid() + " - " + term.getText());
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		out.println(dtf.format(cal.getTime()) + " Creating term " + levelSeparator +"> [" + term.getText() + "] - with uid:" + term.getUid() + "<br>");
+		out.flush();
 	}
 	
 	/**
@@ -105,8 +125,8 @@ public class KEATree {
 	 * 
 	 * @return List of child terms
 	 */
-	private static ArrayList<Term> getParentTerms(String termID) {
-		ArrayList<Term> childTerms = new ArrayList<Term>();
+	private static List<Term> getParentTerms(String termID) {
+		List<Term> childTerms = new ArrayList<Term>();
 		RepositoryConnection con = null;
 		TupleQuery query;
 

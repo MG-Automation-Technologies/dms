@@ -38,6 +38,7 @@ public class Config {
 	public static final String OKMWorkflowUploadService = "/OpenKM"+INSTALL+"/OKMWorkflowUploadServletAdmin";
 	public static final String OKMWorkflowServletService= "/OpenKM"+INSTALL+"/OKMWorkflowServletAdmin";
 	public static final String OKMReportServletAdmin= "/OpenKM"+INSTALL+"/OKMReportServletAdmin";
+	public static final String OKMThesaurusServletAdmin= "/OpenKM"+INSTALL+"/OKMThesaurusServletAdmin";
 	public static final String OKMConfig = "/OpenKM"+INSTALL+"/admin/config.jsp";
 	public static final String OKMViewRepository = "/OpenKM"+INSTALL+"/admin/repository_view.jsp";
 	
