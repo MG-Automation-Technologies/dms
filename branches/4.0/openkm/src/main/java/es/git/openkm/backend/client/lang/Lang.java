@@ -21,8 +21,6 @@ package es.git.openkm.backend.client.lang;
 
 import java.util.HashMap;
 
-import es.git.openkm.frontend.client.lang.Lang_zh_CN;
-
 /**
  * Language
  * 
