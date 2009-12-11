@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMWorkflow;
 import es.git.openkm.bean.FormField;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.TaskInstance;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTFormField;
