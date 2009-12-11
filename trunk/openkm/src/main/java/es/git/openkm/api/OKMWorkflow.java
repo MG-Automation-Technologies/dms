@@ -27,10 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.FormField;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.ProcessInstance;
-import es.git.openkm.bean.TaskInstance;
-import es.git.openkm.bean.Token;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.ProcessInstance;
+import es.git.openkm.bean.workflow.TaskInstance;
+import es.git.openkm.bean.workflow.Token;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.ModuleManager;
 import es.git.openkm.module.WorkflowModule;
