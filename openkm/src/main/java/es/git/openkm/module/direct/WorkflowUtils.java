@@ -23,12 +23,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import es.git.openkm.bean.Comment;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.ProcessInstance;
-import es.git.openkm.bean.TaskInstance;
-import es.git.openkm.bean.Token;
-import es.git.openkm.bean.Transition;
+import es.git.openkm.bean.workflow.Comment;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.ProcessInstance;
+import es.git.openkm.bean.workflow.TaskInstance;
+import es.git.openkm.bean.workflow.Token;
+import es.git.openkm.bean.workflow.Transition;
 
 public class WorkflowUtils {
 	/**
