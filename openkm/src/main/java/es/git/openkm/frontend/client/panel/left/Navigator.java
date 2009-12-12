@@ -120,7 +120,7 @@ public class Navigator extends ExtendedSizeComposite {
 		scrollMailPanel.add(verticalMailPanel);
 		
 		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
-		stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+		stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
 		stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
@@ -139,7 +139,7 @@ public class Navigator extends ExtendedSizeComposite {
 	 */
 	public void langRefresh() {	
 		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
-		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		stackPanel.setStackText(2, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
 		stackPanel.setStackText(3, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		stackPanel.setStackText(4, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
