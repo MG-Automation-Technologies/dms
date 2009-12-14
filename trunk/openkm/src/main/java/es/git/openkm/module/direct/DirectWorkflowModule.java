@@ -63,6 +63,7 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.WorkflowModule;
 import es.git.openkm.util.UserActivity;
+import es.git.openkm.util.WorkflowUtils;
 
 public class DirectWorkflowModule implements WorkflowModule {
 	private static Logger log = LoggerFactory.getLogger(DirectWorkflowModule.class);
