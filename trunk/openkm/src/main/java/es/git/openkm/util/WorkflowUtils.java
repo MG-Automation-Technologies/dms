@@ -267,7 +267,7 @@ public class WorkflowUtils {
 		return vo;
 	}
 	
-	public static WorkflowUtils.DiagramInfo get(InputStream is) {
+	public static WorkflowUtils.DiagramInfo getDiagramInfo(InputStream is) {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setFeature("http://xml.org/sax/features/validation", false);
