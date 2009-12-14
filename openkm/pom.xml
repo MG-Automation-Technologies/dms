@@ -345,8 +345,14 @@
 	  <groupId>com.hp.hpl.jena</groupId>
 	  <artifactId>jena</artifactId>
 	  <version>2.6.2</version>
-	  <type>jar</type>
-	  <optional>false</optional>
+      <exclusions>
+        <!-- JBoss already have its own log4j.jar -->
+        <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
 	</dependency>
     
   </dependencies>
