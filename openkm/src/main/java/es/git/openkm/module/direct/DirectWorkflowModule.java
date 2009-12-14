@@ -164,7 +164,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			FileDefinition fileDef = pd.getFileDefinition();
 			//image = fileDef.getBytes("processimage.jpg");
 			
-			WorkflowUtils.DiagramInfo dInfo = WorkflowUtils.get(fileDef.getInputStream("gpd.xml"));
+			WorkflowUtils.DiagramInfo dInfo = WorkflowUtils.getDiagramInfo(fileDef.getInputStream("gpd.xml"));
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
