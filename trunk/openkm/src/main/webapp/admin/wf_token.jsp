@@ -1,9 +1,9 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
-<%@ page import="es.git.openkm.bean.ProcessInstance"%>
-<%@ page import="es.git.openkm.bean.ProcessDefinition"%>
-<%@ page import="es.git.openkm.bean.Transition"%>
-<%@ page import="es.git.openkm.bean.Token"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
+<%@ page import="es.git.openkm.bean.workflow.Transition"%>
+<%@ page import="es.git.openkm.bean.workflow.Token"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
