@@ -267,6 +267,9 @@ public class WorkflowUtils {
 		return vo;
 	}
 	
+	/**
+	 * 
+	 */
 	public static WorkflowUtils.DiagramInfo getDiagramInfo(InputStream is) {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -302,6 +305,7 @@ public class WorkflowUtils {
 	                    diagramNodeInfoList.add(nodeInfo);
 	                }
 	            }
+	            
 	            final DiagramInfo diagramInfo = new DiagramInfo(
 	                Integer.parseInt(heightString),
 	                Integer.parseInt(widthString),
@@ -321,6 +325,9 @@ public class WorkflowUtils {
 		return null;
 	}
 	
+	/**
+	 * 
+	 */
 	public static final class DiagramInfo implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -355,6 +362,9 @@ public class WorkflowUtils {
         }
     }
 
+	/**
+	 * 
+	 */
 	public static final class DiagramNodeInfo implements Serializable {
         private static final long serialVersionUID = 1L;
 
