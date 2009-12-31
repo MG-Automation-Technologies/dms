@@ -47,7 +47,7 @@
 
   <properties>
     <!-- convenience to define GWT version in one place -->
-    <gwt.version>1.5.3</gwt.version>
+    <gwt.version>1.6.4</gwt.version>
 
     <!--  tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -81,6 +81,14 @@
       <name>Aperture Maven Repository</name>
       <url>http://aperture.sourceforge.net/maven</url>
   	</repository>
+  	
+  	<!-- Needed for GWT incubator -->
+  	<repository>
+    	<id>mule-deps</id>
+    	<name>Mule Dependencies</name>
+    	<url>http://dist.codehaus.org/mule/dependencies/maven2</url>
+    </repository>
+  	
   	
   </repositories>
 
@@ -288,19 +296,19 @@
 
     <!-- GWT plugins -->
     <dependency>
-      <groupId>com.google.gwt</groupId>
+      <groupId>com.googlecode.gchart</groupId>
       <artifactId>gchart</artifactId>
-      <version>2.2</version>
+      <version>2.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
       <artifactId>gwt-log</artifactId>
-      <version>2.5.3</version>
+      <version>2.6.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>1.5-Dec_28</version>
+      <version>march-02-2009</version>
     </dependency>
     
     <!-- KEA -->
@@ -367,6 +375,7 @@
         <version>1.1</version>
         <configuration>
             <runTarget>es.git.openkm.frontend.Main/index.html</runTarget>
+            <extraJvmArgs>-Xmx512m -Xss1024k</extraJvmArgs>
         </configuration>
         <executions>
           <execution>
