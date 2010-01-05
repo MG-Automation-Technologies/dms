@@ -20,11 +20,13 @@
 package es.git.openkm.frontend.client.widget.dashboard;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -32,7 +34,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -79,8 +80,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		workflow.addMouseListener(this);
 		keywordMap.addMouseListener(this);
 		
-		user.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		user.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -88,8 +91,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 			}
 		});
 		
-		mail.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		mail.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -97,8 +102,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 			}
 		});
 		
-		news.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		news.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				    Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -106,8 +113,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 			}
 		});
 		
-		general.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		general.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -115,8 +124,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 			}
 		});
 		
-		workflow.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		workflow.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -124,8 +135,10 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 			}
 		});
 		
-		keywordMap.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		keywordMap.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Widget sender = (Widget) event.getSource();
 				enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
 				sender.setStyleName("okm-ToolBar-Big-selected");
 				enabledWidget = sender;
@@ -175,9 +188,8 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 	 * @author jllort
 	 *
 	 */
-	private class ToolBarBox extends HorizontalPanel implements SourcesClickEvents, SourcesMouseEvents {
+	private class ToolBarBox extends HorizontalPanel implements HasClickHandlers, SourcesMouseEvents {
 		
-		private ClickListenerCollection clickListeners;
 		private MouseListenerCollection mouseListeners;
 		private VerticalPanel vPanel;
 		private Image image;
@@ -236,22 +248,11 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		}
 		
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesClickEvents#addClickListener(com.google.gwt.user.client.ui.ClickListener)
+		 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
 		 */
-		public void addClickListener(ClickListener listener) {
-		    if (clickListeners == null) {
-		      clickListeners = new ClickListenerCollection();
-		    }
-		    clickListeners.add(listener);
-		  }
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesClickEvents#removeClickListener(com.google.gwt.user.client.ui.ClickListener)
-		 */
-		public void removeClickListener(ClickListener listener) {
-			if (clickListeners != null) {
-				clickListeners.remove(listener);
-			}
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+			return addHandler(handler, ClickEvent.getType());
 		}
 		
 		/* (non-Javadoc)
@@ -277,14 +278,7 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
 		 */
 		public void onBrowserEvent(Event event) {
-		    switch (DOM.eventGetType(event)) {
-		    	case Event.ONCLICK: {
-		    		if (clickListeners != null) {
-		    			clickListeners.fireClick(this);
-		    		}
-		    		break;
-		    	}
-		    	
+		    switch (DOM.eventGetType(event)) {	    	
 		    	case Event.ONMOUSEDOWN:
 		        case Event.ONMOUSEUP:
 		        case Event.ONMOUSEMOVE:

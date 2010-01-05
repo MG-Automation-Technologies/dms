@@ -23,22 +23,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTKeyword;
@@ -198,9 +196,8 @@ public class KeywordWidget extends Composite {
 	 * @author jllort
 	 *
 	 */
-	private class Header extends HorizontalPanel implements SourcesClickEvents {
+	private class Header extends HorizontalPanel implements HasClickHandlers {
 		
-		private ClickListenerCollection clickListeners;
 		private Image zoomImage;
 		private HTML headerText;
 		
@@ -230,8 +227,9 @@ public class KeywordWidget extends Composite {
 			setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
 			setCellVerticalAlignment(headerText, HasAlignment.ALIGN_MIDDLE);
 			
-			addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
 					zoom = !zoom;
 					table.setVisible(zoom);
 					if (zoom) {
@@ -253,37 +251,11 @@ public class KeywordWidget extends Composite {
 		}
 
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesClickEvents#addClickListener(com.google.gwt.user.client.ui.ClickListener)
+		 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
 		 */
-		public void addClickListener(ClickListener listener) {
-		    if (clickListeners == null) {
-		      clickListeners = new ClickListenerCollection();
-		    }
-		    clickListeners.add(listener);
-		  }
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesClickEvents#removeClickListener(com.google.gwt.user.client.ui.ClickListener)
-		 */
-		public void removeClickListener(ClickListener listener) {
-			if (clickListeners != null) {
-				clickListeners.remove(listener);
-			}
-		}
-		
-		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
-		 */
-		public void onBrowserEvent(Event event) {
-		    switch (DOM.eventGetType(event)) {
-		    	case Event.ONCLICK: {
-		    		if (clickListeners != null) {
-		    			clickListeners.fireClick(this);
-		    		}
-		    		break;
-		    	}
-		    }
-		    super.onBrowserEvent(event);
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+			return addHandler(handler, ClickEvent.getType());
 		}
 	}
 	
