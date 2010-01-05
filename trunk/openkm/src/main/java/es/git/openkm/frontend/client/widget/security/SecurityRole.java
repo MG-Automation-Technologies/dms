@@ -116,7 +116,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		public void onClick(ClickEvent event) {
 			if (unassignedRole.getRole() != null) {
 				tmpRole = unassignedRole.getRole();
-				addRole(tmpRole, GWTPermission.READ, Main.get().securityPopup.recursive.isChecked());
+				addRole(tmpRole, GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
 			}
 		}
 	};
@@ -129,7 +129,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 		public void onClick(ClickEvent event) {
 			if (assignedRole.getRole() != null) {
 				tmpRole = assignedRole.getRole();
-				revokeRole(tmpRole, Main.get().securityPopup.recursive.isChecked());
+				revokeRole(tmpRole, Main.get().securityPopup.recursive.getValue());
 			}
 		}
 	};

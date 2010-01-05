@@ -235,8 +235,8 @@ public class SearchIn extends Composite {
 		advancedSearch.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				enableAdvancedSearch(advancedSearch.isChecked());
-				resizeScreenToAdvancedMode(advancedSearch.isChecked());
+				enableAdvancedSearch(advancedSearch.getValue());
+				resizeScreenToAdvancedMode(advancedSearch.getValue());
 			}
 		});
 		
@@ -265,9 +265,9 @@ public class SearchIn extends Composite {
 				saveSearchButton.setEnabled(false);
 				controlSearch.setVisible(false);
 				removeTablePropertiesRows();
-				typeDocument.setChecked(true);
-				typeFolder.setChecked(false);
-				typeMail.setChecked(false);
+				typeDocument.setValue(true);
+				typeFolder.setValue(false);
+				typeMail.setValue(false);
 				mimeTypes.setSelectedIndex(0);
 				userListBox.setSelectedIndex(0);
 				startDate.setText("");
@@ -299,23 +299,23 @@ public class SearchIn extends Composite {
 				params.setAuthor(userListBox.getValue(userListBox.getSelectedIndex()));
 				params.setLastModifiedFrom(modifyDateFrom);
 				params.setLastModifiedTo(modifyDateTo);
-				params.setDashboard(dashboard.isChecked());
+				params.setDashboard(dashboard.getValue());
 				params.setFrom(from.getText());
 				params.setTo(to.getText());
 				params.setSubject(subject.getText());
 				
-				if (typeDocument.isChecked()) {
+				if (typeDocument.getValue()) {
 					domain += GWTQueryParams.DOCUMENT;
 				}
-				if (typeFolder.isChecked()) {
+				if (typeFolder.getValue()) {
 					domain += GWTQueryParams.FOLDER;
 				}
-				if (typeMail.isChecked()) {
+				if (typeMail.getValue()) {
 					domain += GWTQueryParams.MAIL;
 				}
 				params.setDomain(domain);
 				
-				if (searchTypeAnd.isChecked()) {
+				if (searchTypeAnd.getValue()) {
 					operator = GWTQueryParams.OPERATOR_AND;
 				} else {
 					operator = GWTQueryParams.OPERATOR_OR;
@@ -323,7 +323,7 @@ public class SearchIn extends Composite {
 				params.setOperator(operator);
 				
 				// Removes dates if dashboard is checked
-				if (dashboard.isChecked()) {
+				if (dashboard.getValue()) {
 					params.setLastModifiedFrom(null);
 					params.setLastModifiedTo(null);
 				}
@@ -410,17 +410,17 @@ public class SearchIn extends Composite {
 		// Sets type document
 		typePanel = new HorizontalPanel();
 		typeDocument = new CheckBox();
-		typeDocument.setChecked(true);
+		typeDocument.setValue(true);
 		document = new HTML(Main.i18n("search.type.document"));
 		typeFolder = new CheckBox();
-		typeFolder.setChecked(false);
+		typeFolder.setValue(false);
 		folder = new HTML(Main.i18n("search.type.folder"));
 		typeMail = new CheckBox();
-		typeMail.setChecked(false);
+		typeMail.setValue(false);
 		typeMail.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (typeMail.isChecked()){
+				if (typeMail.getValue()){
 					tableMail.setVisible(true);
 				} else {
 					tableMail.setVisible(false);
@@ -447,20 +447,20 @@ public class SearchIn extends Composite {
 		searchTypePanel.setVisible(false);  // On OpenKM 4.0 has hidden AND / OR option list
 		searchTypeAnd = new CheckBox("AND");
 		searchTypeOr = new CheckBox("OR");
-		searchTypeAnd.setChecked(true);
-		searchTypeOr.setChecked(false);
+		searchTypeAnd.setValue(true);
+		searchTypeOr.setValue(false);
 		
 		searchTypeAnd.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				searchTypeOr.setChecked(!searchTypeAnd.isChecked()); // Always set changed between and and or type
+				searchTypeOr.setValue(!searchTypeAnd.getValue()); // Always set changed between and and or type
 			}
 		});
 		
 		searchTypeOr.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				searchTypeAnd.setChecked(!searchTypeOr.isChecked()); // Always set changed between and and or type
+				searchTypeAnd.setValue(!searchTypeOr.getValue()); // Always set changed between and and or type
 			}
 		});
 		
@@ -504,7 +504,7 @@ public class SearchIn extends Composite {
 		resultPage.addItem("20", "20");
 		resultPage.addItem("30", "30");
 		
-		advancedSearch.setChecked(false);
+		advancedSearch.setValue(false);
 		
 		hPanelSearchConfig.add(resultPage);
 		hPanelSearchConfig.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
@@ -816,7 +816,7 @@ public class SearchIn extends Composite {
 		gwtParams.setTo(to.getText());
 		gwtParams.setSubject(subject.getText());
 		
-		if (searchTypeAnd.isChecked()) {
+		if (searchTypeAnd.getValue()) {
 			gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
 		} else {
 			gwtParams.setOperator(GWTQueryParams.OPERATOR_OR);
@@ -830,13 +830,13 @@ public class SearchIn extends Composite {
 			gwtParams.setLastModifiedTo(null);
 		}
 		
-		if (typeDocument.isChecked()) {
+		if (typeDocument.getValue()) {
 			domain += GWTQueryParams.DOCUMENT;
 		}
-		if (typeFolder.isChecked()) {
+		if (typeFolder.getValue()) {
 			domain += GWTQueryParams.FOLDER;
 		}
-		if (typeMail.isChecked()) {
+		if (typeMail.getValue()) {
 			domain += GWTQueryParams.MAIL;
 		}
 		gwtParams.setDomain(domain);
@@ -1029,36 +1029,36 @@ public class SearchIn extends Composite {
 		content.setText(gWTParams.getContent());
 		name.setText(gWTParams.getName());
 		keywords.setText(gWTParams.getKeywords());
-		dashboard.setChecked(gWTParams.isDashboard());
+		dashboard.setValue(gWTParams.isDashboard());
 		
 		from.setText(gWTParams.getFrom());
 		to.setText(gWTParams.getTo());
 		subject.setText(gWTParams.getSubject());
 		
 		if (gWTParams.getOperator().equals(GWTQueryParams.OPERATOR_AND)) {
-			searchTypeAnd.setChecked(true);
-			searchTypeOr.setChecked(false);
+			searchTypeAnd.setValue(true);
+			searchTypeOr.setValue(false);
 		} else {
-			searchTypeAnd.setChecked(false);
-			searchTypeOr.setChecked(true);
+			searchTypeAnd.setValue(false);
+			searchTypeOr.setValue(true);
 		}
 		
 		// Document type
 		if ((gWTParams.getDomain() & GWTQueryParams.DOCUMENT) != 0) {
-			typeDocument.setChecked(true);
+			typeDocument.setValue(true);
 		} else {
-			typeDocument.setChecked(false);
+			typeDocument.setValue(false);
 		}
 		if ((gWTParams.getDomain() & GWTQueryParams.FOLDER) != 0) {
-			typeFolder.setChecked(true);
+			typeFolder.setValue(true);
 		} else {
-			typeFolder.setChecked(false);
+			typeFolder.setValue(false);
 		}
 		if ((gWTParams.getDomain() & GWTQueryParams.MAIL) != 0) {
-			typeMail.setChecked(true);
+			typeMail.setValue(true);
 			tableMail.setVisible(true);
 		} else {
-			typeMail.setChecked(false);
+			typeMail.setValue(false);
 			tableMail.setVisible(false);
 		}
 		
@@ -1109,7 +1109,7 @@ public class SearchIn extends Composite {
 		evaluateSearchButtonVisible();
 		enableAdvancedSearch(advancedSearchFlag);
 		resizeScreenToAdvancedMode(advancedSearchFlag);
-		advancedSearch.setChecked(advancedSearchFlag);
+		advancedSearch.setValue(advancedSearchFlag);
 		executeSearch();
 	}
 	

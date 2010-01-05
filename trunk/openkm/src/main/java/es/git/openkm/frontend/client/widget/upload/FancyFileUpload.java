@@ -185,7 +185,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			send.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					if (notifyToUser.isChecked() && users.getText().equals("")) {
+					if (notifyToUser.getValue() && users.getText().equals("")) {
 						errorUserNotify.setVisible(true);
 					} else {
 						if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
@@ -334,7 +334,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				progressBar.setMaxProgress(100);
 				progressBar.setProgress(100);
 			}
-			if (importZip.isChecked()) {
+			if (importZip.getValue()) {
 				statusZipNotify.setHTML(msg.replaceAll("\n","<br>"));
 				statusZipNotifyScroll.setVisible(true);
 				pendingPanel.setVisible(true);
@@ -378,8 +378,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			
 			errorUserNotify.setVisible(false);
 			vNotifyPanel.setVisible(false);
-			notifyToUser.setChecked(false);
-			importZip.setChecked(false);
+			notifyToUser.setValue(false);
+			importZip.setValue(false);
 			hFileUpload.setVisible(true);
 			pendingPanel.setVisible(false);
 			
@@ -405,7 +405,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		private void refresh() {
 			// Must preservate the selected row after refreshing
 			Main.get().mainPanel.browser.fileBrowser.mantainSelectedRow();
-			if (importZip.isChecked()) {
+			if (importZip.getValue()) {
 				Main.get().activeFolderTree.refresh(true);
 			} else {
 				Main.get().mainPanel.browser.fileBrowser.refresh(Main.get().activeFolderTree.getActualPath());
@@ -498,8 +498,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		importZip.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-					if (importZip.isChecked()) {
-						notifyToUser.setChecked(false);
+					if (importZip.getValue()) {
+						notifyToUser.setValue(false);
 						vNotifyPanel.setVisible(false);
 					} 
 				}
@@ -523,9 +523,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		notifyToUser.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-					if (notifyToUser.isChecked()) {
+					if (notifyToUser.getValue()) {
 						vNotifyPanel.setVisible(true);
-						importZip.setChecked(false);
+						importZip.setValue(false);
 					} else {
 						errorUserNotify.setVisible(false);
 						vNotifyPanel.setVisible(false);

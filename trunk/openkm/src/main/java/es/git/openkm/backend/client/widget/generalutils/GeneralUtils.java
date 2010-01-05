@@ -215,7 +215,7 @@ public class GeneralUtils extends Composite {
 		// Make some radio buttons, all in one group.
 	    RadioButton pdf = new RadioButton("reportType", "pdf");
 	    final RadioButton html = new RadioButton("reportType", "html");
-	    pdf.setChecked(true);
+	    pdf.setValue(true);
 
 		executeReportButton = new Button(Main.i18n("button.execute"));
 		reportTypeList = new ListBox();
@@ -246,7 +246,7 @@ public class GeneralUtils extends Composite {
 				if (reportTypeList.getSelectedIndex()>0) {
 					String jasperFile = reportTypeList.getValue(reportTypeList.getSelectedIndex());
 					String type = "pdf";
-					if (html.isChecked()) {
+					if (html.getValue()) {
 						type="html";
 						Main.get().centerPanel.generalUtilsPanel.setUrlResult(Config.OKMReportServletAdmin + "?jasperFile=" + jasperFile + "&type="+type);
 					} else {
