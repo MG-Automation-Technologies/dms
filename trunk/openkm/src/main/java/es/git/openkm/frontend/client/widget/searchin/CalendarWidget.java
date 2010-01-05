@@ -21,12 +21,13 @@ package es.git.openkm.frontend.client.widget.searchin;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -41,9 +42,9 @@ import es.git.openkm.frontend.client.Main;
 /**
  * CalendarWidget
  */
-public class CalendarWidget extends Composite implements ClickListener, SourcesChangeEvents {
+public class CalendarWidget extends Composite implements ClickHandler, SourcesChangeEvents {
 
-	private class NavBar extends Composite implements ClickListener {
+	private class NavBar extends Composite implements ClickHandler {
 	
 		public final DockPanel bar = new DockPanel();
 		public final Button prevMonth = new Button("&lt;", this);
@@ -87,9 +88,11 @@ public class CalendarWidget extends Composite implements ClickListener, SourcesC
 		}
 		
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+		 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 		 */
-		public void onClick(Widget sender) {
+		@Override
+		public void onClick(ClickEvent event) {
+			Widget sender = (Widget) event.getSource();
 			if (sender == prevMonth) {
 				calendar.prevMonth();
 			} else if (sender == prevYear) {
@@ -180,7 +183,7 @@ public class CalendarWidget extends Composite implements ClickListener, SourcesC
 					grid.setHTML(i, k, "&nbsp;");
 				} else {
 					HTML html = new CellHTML("<span>" + String.valueOf(displayNum) + "</span>",displayNum);
-					html.addClickListener(this);
+					html.addClickHandler(this);
 					grid.getCellFormatter().setStyleName(i, k, "cell");
 					if (displayNum == today) {
 						grid.getCellFormatter().addStyleName(i, k, "today");
@@ -346,10 +349,11 @@ public class CalendarWidget extends Composite implements ClickListener, SourcesC
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
-		CellHTML cell = (CellHTML)sender;
+	@Override
+	public void onClick(ClickEvent event) {
+		CellHTML cell = (CellHTML) event.getSource();
 		setDate(getYear(), getMonth(), cell.getDay());
 		drawCalendar();
 		if (changeListeners != null) {
