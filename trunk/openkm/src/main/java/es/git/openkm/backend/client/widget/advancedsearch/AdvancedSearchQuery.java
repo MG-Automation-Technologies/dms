@@ -24,11 +24,13 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -37,7 +39,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.config.Config;
@@ -80,16 +81,18 @@ public class AdvancedSearchQuery extends Composite {
 		sqlTextArea = new TextArea();
 		vPanel = new HorizontalPanel();
 		buttonPanel = new HorizontalPanel();
-		searchButton = new Button(Main.i18n("button.search"), new ClickListener() {
-			public void onClick(Widget sender) {
+		searchButton = new Button(Main.i18n("button.search"), new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!sqlTextArea.getText().equals("")) {
 					getSearch();
 				}
 			}	
 		});
 		
-		cleanButton = new Button(Main.i18n("button.clean"), new ClickListener() {
-			public void onClick(Widget sender) {
+		cleanButton = new Button(Main.i18n("button.clean"), new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				typeList.setSelectedIndex(0); // Selects XPath query
 				predefinedQueryList.setSelectedIndex(0);
 				sqlTextArea.setText("");
@@ -106,8 +109,9 @@ public class AdvancedSearchQuery extends Composite {
 		predefinedQueryList.addItem(Main.i18n("advanced.search.predefined.documents.with.property.group.test"));
 		predefinedQueryList.addItem(Main.i18n("advanced.search.predefined.documents.observed"));
 		
-		predefinedQueryList.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
+		predefinedQueryList.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent arg0) {
 				if (predefinedQueryList.getSelectedIndex()>0) {
 					switch (predefinedQueryList.getSelectedIndex()) {
 						case 1:

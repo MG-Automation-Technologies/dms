@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -187,8 +189,9 @@ public class WorkflowWidget extends Composite {
 			Hyperlink taskName = new Hyperlink();
 			taskName.setText(taskInstanceResult.getName());
 			taskName.setTitle(taskInstanceResult.getProcessInstance().getProcessDefinition().getName());
-			taskName.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			taskName.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
 				}
 			});

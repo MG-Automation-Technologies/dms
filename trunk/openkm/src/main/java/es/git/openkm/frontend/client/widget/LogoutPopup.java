@@ -21,15 +21,15 @@ package es.git.openkm.frontend.client.widget;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.config.Config;
@@ -42,7 +42,7 @@ import es.git.openkm.frontend.client.service.OKMAuthServiceAsync;
  * @author jllort
  *
  */
-public class LogoutPopup extends DialogBox implements ClickListener {
+public class LogoutPopup extends DialogBox implements ClickHandler {
 	
 	private VerticalPanel vPanel;
 	private HTML text;
@@ -95,9 +95,9 @@ public class LogoutPopup extends DialogBox implements ClickListener {
 	};
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		super.hide();
 		Main.get().redirect = true;
 		Window.open("/OpenKM"+Config.INSTALL+"/", "_self", null);

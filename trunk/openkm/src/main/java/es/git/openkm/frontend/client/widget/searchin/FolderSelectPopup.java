@@ -18,16 +18,16 @@
 
 package es.git.openkm.frontend.client.widget.searchin;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -73,14 +73,16 @@ public class FolderSelectPopup extends DialogBox  {
 		verticalDirectoryPanel.add(folderSelectTree);
 		scrollDirectoryPanel.add(verticalDirectoryPanel);
 		
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickListener() {
-			public void onClick(Widget sender) {
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
 		
-		actionButton = new Button(Main.i18n("button.select"), new ClickListener() {
-			public void onClick(Widget sender) {
+		actionButton = new Button(Main.i18n("button.select"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				setRepositoryPath(folderSelectTree.getActualPath(), false);
 			}	public static final int NAVIGATOR_TAXONOMY 	= 0;
 			public static final int NAVIGATOR_TEMPLATES = 1;

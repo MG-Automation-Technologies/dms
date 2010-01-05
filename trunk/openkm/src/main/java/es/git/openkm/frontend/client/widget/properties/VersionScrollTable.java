@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
@@ -31,7 +33,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -61,7 +62,7 @@ import es.git.openkm.frontend.client.widget.ConfirmPopup;
  * @author jllort
  *
  */
-public class VersionScrollTable extends Composite implements ClickListener  {
+public class VersionScrollTable extends Composite implements ClickHandler  {
 	
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private GWTDocument doc;
@@ -257,8 +258,9 @@ public class VersionScrollTable extends Composite implements ClickListener  {
 				dataTable.selectRow(rows,true);
 			}
 			
-			Button viewButton = new Button(Main.i18n("button.view"), new ClickListener() {
-				public void onClick(Widget sender) {
+			Button viewButton = new Button(Main.i18n("button.view"), new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					String path = doc.getPath();
 					ArrayList versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
 					String ver = (String) versions.get(rows);
@@ -266,8 +268,9 @@ public class VersionScrollTable extends Composite implements ClickListener  {
 				}
 			});
 			
-			Button restoreButton = new Button(Main.i18n("button.restore"), new ClickListener() {
-				public void onClick(Widget sender) {
+			Button restoreButton = new Button(Main.i18n("button.restore"), new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					ArrayList versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
 					String ver = (String) versions.get(rows);
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_RESTORE_HISTORY_DOCUMENT);
@@ -423,9 +426,9 @@ public class VersionScrollTable extends Composite implements ClickListener  {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_PURGE_VERSION_HISTORY_DOCUMENT);
 		Main.get().confirmPopup.show();
 	}

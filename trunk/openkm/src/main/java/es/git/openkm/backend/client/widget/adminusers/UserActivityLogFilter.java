@@ -24,11 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -93,8 +94,9 @@ public class UserActivityLogFilter extends Composite {
 		
 		usersList.addItem("-", "");
 		
-		filter.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		filter.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				filter.setEnabled(false);
 				findActivityByFilter();
 			}
@@ -124,25 +126,27 @@ public class UserActivityLogFilter extends Composite {
 			}
 		});
 		
-		filter.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-
+		filter.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 			}
 		});
 		
 		fromDateIcon = new Image("img/icon/user/calendar.gif");
 		toDateIcon =  new Image("img/icon/user/calendar.gif");
 		
-		fromDateIcon.addClickListener(new ClickListener() {
-			public void onClick(Widget arg0) {
+		fromDateIcon.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_FROM;
 				calendarPopup.setPopupPosition(fromDateIcon.getAbsoluteLeft(), fromDateIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
 			}
 		});
 		
-		toDateIcon.addClickListener(new ClickListener() {
-			public void onClick(Widget arg0) {
+		toDateIcon.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_TO;
 				calendarPopup.setPopupPosition(toDateIcon.getAbsoluteLeft(), toDateIcon.getAbsoluteTop()-2);
 				calendarPopup.show();

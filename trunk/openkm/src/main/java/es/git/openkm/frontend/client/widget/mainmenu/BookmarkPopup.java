@@ -19,8 +19,9 @@
 
 package es.git.openkm.frontend.client.widget.mainmenu;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -86,8 +87,9 @@ public class BookmarkPopup extends DialogBox {
 			}
 		});
 
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickListener() {
-				public void onClick(Widget sender)  {
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					reset();
 					hide();
 				}
@@ -95,8 +97,9 @@ public class BookmarkPopup extends DialogBox {
 		);
 		cancelButton.setStyleName("okm-Button");
 		
-		acceptButton = new Button(Main.i18n("button.accept"), new ClickListener() {
-				public void onClick(Widget sender)  {
+		acceptButton = new Button(Main.i18n("button.accept"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					if (!nodePath.equals("") && !textBox.getText().equals("")) {
 						Main.get().mainPanel.topPanel.mainMenu.bookmark.add(nodePath, textBox.getText());
 					}

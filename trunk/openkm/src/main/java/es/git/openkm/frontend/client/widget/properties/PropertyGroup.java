@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -93,8 +93,9 @@ public class PropertyGroup extends Composite {
 		this.doc = doc;
 		this.orderedKey = new String[0];
 		
-		changeButton = new Button(Main.i18n("button.change"), new ClickListener() {
-			public void onClick(Widget sender) {
+		changeButton = new Button(Main.i18n("button.change"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!editValues) {
 					Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
 					changeButton.setHTML(Main.i18n("button.memory"));
@@ -113,8 +114,9 @@ public class PropertyGroup extends Composite {
 			}
 		});
 		
-		removeButton = new Button(Main.i18n("button.delete"), new ClickListener() {
-			public void onClick(Widget sender) {
+		removeButton = new Button(Main.i18n("button.delete"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!editValues) {
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP);
 					Main.get().confirmPopup.show();
@@ -122,8 +124,9 @@ public class PropertyGroup extends Composite {
 			}
 		});
 		
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickListener() {
-			public void onClick(Widget sender) {
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (editValues) {
 					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
 					changeButton.setHTML(Main.i18n("button.change"));
@@ -384,8 +387,9 @@ public class PropertyGroup extends Composite {
 						// Table for values
 						FlexTable tableMulti = new FlexTable();
 						
-						Button addButton = new Button(Main.i18n("button.add"),new ClickListener() {
-							public void onClick(Widget sender) {
+						Button addButton = new Button(Main.i18n("button.add"),new ClickHandler() { 
+							@Override
+							public void onClick(ClickEvent event) {
 								HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 								FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 								ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -396,8 +400,10 @@ public class PropertyGroup extends Composite {
 									int rowTableMulti  = tableMulti.getRowCount();
 									
 									Image removeImage = new Image("img/icon/actions/delete.gif");
-									removeImage.addClickListener(new ClickListener(){
-										public void onClick(Widget arg0) {
+									removeImage.addClickHandler(new ClickHandler() { 
+										@Override
+										public void onClick(ClickEvent event) {
+											Widget sender = (Widget) event.getSource();
 											HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 											FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 											ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -411,7 +417,7 @@ public class PropertyGroup extends Composite {
 											}
 											// Looking for row to delete 
 											for (int i=0; i<tableMulti.getRowCount(); i++){
-												if (tableMulti.getWidget(i,1).equals(arg0)) {
+												if (tableMulti.getWidget(i,1).equals(sender)) {
 													tableMulti.removeRow(i);
 												}
 											}
@@ -465,8 +471,10 @@ public class PropertyGroup extends Composite {
 										HTML htmlValue = new HTML(value);
 										
 										Image removeImage = new Image("img/icon/actions/delete.gif");
-										removeImage.addClickListener(new ClickListener(){
-											public void onClick(Widget arg0) {
+										removeImage.addClickHandler(new ClickHandler() { 
+											@Override
+											public void onClick(ClickEvent event) {
+												Widget sender = (Widget) event.getSource();
 												HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 												FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 												ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -479,7 +487,7 @@ public class PropertyGroup extends Composite {
 												}
 												// Looking for row to delete 
 												for (int i=0; i<tableMulti.getRowCount(); i++){
-													if (tableMulti.getWidget(i,1).equals(arg0)) {
+													if (tableMulti.getWidget(i,1).equals(sender)) {
 														tableMulti.removeRow(i);
 													}
 												}
@@ -789,8 +797,10 @@ public class PropertyGroup extends Composite {
 							HTML htmlValue = new HTML(value);
 							
 							Image removeImage = new Image("img/icon/actions/delete.gif");
-							removeImage.addClickListener(new ClickListener(){
-								public void onClick(Widget arg0) {
+							removeImage.addClickHandler(new ClickHandler() { 
+								@Override
+								public void onClick(ClickEvent event) {
+									Widget sender = (Widget) event.getSource();
 									HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 									FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 									ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -803,7 +813,7 @@ public class PropertyGroup extends Composite {
 									}
 									// Looking for row to delete 
 									for (int i=0; i<tableMulti.getRowCount(); i++){
-										if (tableMulti.getWidget(i,1).equals(arg0)) {
+										if (tableMulti.getWidget(i,1).equals(sender)) {
 											tableMulti.removeRow(i);
 										}
 									}

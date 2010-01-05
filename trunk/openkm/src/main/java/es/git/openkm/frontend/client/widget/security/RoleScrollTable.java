@@ -20,11 +20,12 @@
 package es.git.openkm.frontend.client.widget.security;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -188,9 +189,11 @@ public class RoleScrollTable extends Composite {
 		CheckBox checkReadPermission = new CheckBox();
 		CheckBox checkWritePermission = new CheckBox();
 		
-		ClickListener checkBoxReadListener = new ClickListener() {
-			public void onClick(Widget sender) {
+		ClickHandler checkBoxReadListener = new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				flag_property = PROPERTY_READ;
+				Widget sender = (Widget) event.getSource();
 				
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
@@ -202,9 +205,11 @@ public class RoleScrollTable extends Composite {
 			}
 		};
 		
-		ClickListener checkBoxWriteListener = new ClickListener() {
-			public void onClick(Widget sender) {
+		ClickHandler checkBoxWriteListener = new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				flag_property = PROPERTY_WRITE;
+				Widget sender = (Widget) event.getSource();
 				
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
@@ -216,7 +221,7 @@ public class RoleScrollTable extends Composite {
 			}
 		};
 		
-		checkReadPermission.addClickListener(checkBoxReadListener);
+		checkReadPermission.addClickHandler(checkBoxReadListener);
 		
 		if ((permission.byteValue() & GWTPermission.READ) == GWTPermission.READ) {
 			checkReadPermission.setChecked(true);
@@ -228,7 +233,7 @@ public class RoleScrollTable extends Composite {
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,1,HasAlignment.ALIGN_CENTER);
 		}
 		
-		checkWritePermission.addClickListener(checkBoxWriteListener);
+		checkWritePermission.addClickHandler(checkBoxWriteListener);
 		
 		if ((permission.byteValue() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 			checkWritePermission.setChecked(true);

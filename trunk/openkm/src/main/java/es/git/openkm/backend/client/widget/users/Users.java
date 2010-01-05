@@ -23,13 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -77,8 +78,9 @@ public class Users extends Composite {
 		refreshingIndicator = new HorizontalPanel();
 		refreshingIndicator.setVisible(false);
 		
-		refresh.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		refresh.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				refreshingCheckBox.setEnabled(false);
 				refresh.setEnabled(false);
 				setVisibleRefreshing(true);
@@ -106,8 +108,9 @@ public class Users extends Composite {
 		});
 		
 		refreshingCheckBox = new CheckBox();
-		refreshingCheckBox.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		refreshingCheckBox.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (refreshingCheckBox.isChecked()) {
 					refresh.setEnabled(false);
 					settingTimer();

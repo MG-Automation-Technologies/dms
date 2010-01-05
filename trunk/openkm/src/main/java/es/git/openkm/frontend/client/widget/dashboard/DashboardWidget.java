@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -209,8 +211,9 @@ public class DashboardWidget extends Composite {
 			Hyperlink docName = new Hyperlink();
 			docName.setText(doc.getName());
 			docName.setTitle(doc.getPath());
-			docName.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			docName.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					if (!dsDocumentResult.isVisited()) {
 						markPathAsViewed(doc.getPath());
 					}
@@ -270,8 +273,9 @@ public class DashboardWidget extends Composite {
 			Hyperlink folderName = new Hyperlink(); 
 			folderName.setText(folder.getName());
 			folderName.setTitle(folder.getPath());
-			folderName.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			folderName.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					if (!folderResult.isVisited()) {
 						markPathAsViewed(folder.getPath());
 						visiteNode(source, folder.getPath(), folderResult.getDate());
@@ -311,8 +315,9 @@ public class DashboardWidget extends Composite {
 			Hyperlink mailName = new Hyperlink();
 			mailName.setText(mail.getSubject());
 			mailName.setTitle(mail.getPath());
-			mailName.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			mailName.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					if (!dsMailResult.isVisited()) {
 						markPathAsViewed(mail.getPath());
 					}
@@ -518,8 +523,9 @@ public class DashboardWidget extends Composite {
 			viewedImage = new Image("img/viewed.gif");
 			viewedImage.setStyleName("okm-Hyperlink");
 			
-			viewedImage.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			viewedImage.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					flagZoom = false;
 					markAllRowsAsViewed();
 				}

@@ -19,9 +19,10 @@
 
 package es.git.openkm.frontend.client.widget.upload;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -58,16 +59,18 @@ public class FileUpload extends DialogBox {
 		vPanel = new VerticalPanel();
 		vButtonPanel = new HorizontalPanel();
 		
-		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickListener(){
-				public void onClick(Widget sender) {
+		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					hide();
 					addButton.setVisible(false);
 				}
 			}
 		);
 		
-		addButton = new Button(Main.i18n("fileupload.button.add.other.file"), new ClickListener(){
-				public void onClick(Widget sender) {
+		addButton = new Button(Main.i18n("fileupload.button.add.other.file"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					ffUpload.reset(enableImport);
 					addButton.setVisible(false); // Add new file button must be unvisible after clicking
 				}

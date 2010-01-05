@@ -19,9 +19,10 @@
 
 package es.git.openkm.frontend.client.widget;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -38,7 +39,7 @@ import es.git.openkm.frontend.client.widget.eastereggs.Futurama;
  * @author jllort
  *
  */
-public class AboutPopup extends DialogBox implements ClickListener {
+public class AboutPopup extends DialogBox implements ClickHandler {
 	
 	private VerticalPanel vPanel;
 	private Image logo;
@@ -111,9 +112,9 @@ public class AboutPopup extends DialogBox implements ClickListener {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		super.hide();
 	}
 	

@@ -23,19 +23,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import es.git.openkm.backend.client.service.OKMPropertyGroupService;
-import es.git.openkm.backend.client.service.OKMPropertyGroupServiceAsync;
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.config.Config;
+import es.git.openkm.backend.client.service.OKMPropertyGroupService;
+import es.git.openkm.backend.client.service.OKMPropertyGroupServiceAsync;
 
 /**
  * PropertyGroup
@@ -84,14 +84,15 @@ public class PropertyGroup extends Composite {
 	 */
 	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
 		public void onSuccess(Object result){
-			List groupList = (List) result;
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				final String group = (String) it.next();
+			List<String> groupList = (List) result;
+			for (Iterator<String> it = groupList.iterator(); it.hasNext();) {
+				final String group = it.next();
 				int rows = table.getRowCount();
 				table.setHTML(rows, 0, group);
 				Button edit = new Button(Main.i18n("button.view"));
-				edit.addClickListener(new ClickListener(){
-					public void onClick(Widget sender) {
+				edit.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
 						Main.get().centerPanel.propertyGroupPanel.propertyGroupDetail.getMetaData(group);
 					}
 				});

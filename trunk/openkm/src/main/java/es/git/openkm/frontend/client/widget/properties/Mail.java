@@ -22,9 +22,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -33,7 +34,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
@@ -162,8 +162,9 @@ public class Mail extends Composite {
 		hFrom.setTitle("mailto:"+mailFrom);
 		hFrom.setStyleName("okm-Mail-Link");
 		hFrom.addStyleName("okm-NoWrap");
-		hFrom.addClickListener(new ClickListener(){
-			public void onClick(Widget arg0) {
+		hFrom.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().redirect = true;
 				Window.open("mailto:"+mailFrom, "_self", "");
 				Main.get().redirect = false;
@@ -179,8 +180,9 @@ public class Mail extends Composite {
 			hReply.setTitle("mailto:"+mailReply);
 			hReply.setStyleName("okm-Mail-Link");
 			hReply.addStyleName("okm-NoWrap");
-			hReply.addClickListener(new ClickListener(){
-				public void onClick(Widget arg0) {
+			hReply.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					Main.get().redirect = true;
 					Window.open("mailto:"+mailReply, "_self", "");
 					Main.get().redirect = false;
@@ -198,8 +200,9 @@ public class Mail extends Composite {
 			hTo.setTitle("mailto:"+mailTo);
 			hTo.setStyleName("okm-Mail-Link");
 			hTo.addStyleName("okm-NoWrap");
-			hTo.addClickListener(new ClickListener(){
-				public void onClick(Widget arg0) {
+			hTo.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					Main.get().redirect = true;
 					Window.open("mailto:"+mailTo, "_self", "");
 					Main.get().redirect = false;
@@ -228,8 +231,9 @@ public class Mail extends Composite {
 			hLink.setHTML(attach.getName());
 			hLink.setTitle(attach.getName());
 			hLink.setStyleName("okm-Mail-Link");
-			hLink.addClickListener(new ClickListener(){
-				public void onClick(Widget arg0) {
+			hLink.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					Main.get().redirect = true;
 					Window.open(Config.OKMDownloadServlet + "?id=" + URL.encodeComponent(attach.getPath()), "_self", "");
 					Main.get().redirect = false;

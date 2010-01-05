@@ -19,10 +19,11 @@
 
 package es.git.openkm.frontend.client.widget.security;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
@@ -40,7 +41,7 @@ import es.git.openkm.frontend.client.Main;
  * @author jllort
  *
  */
-public class SecurityPopup extends DialogBox implements ClickListener, TabListener {
+public class SecurityPopup extends DialogBox implements ClickHandler, TabListener {
 	
 	private VerticalPanel vPanel;
 	private TabPanel tabPanel;
@@ -94,11 +95,11 @@ public class SecurityPopup extends DialogBox implements ClickListener, TabListen
 		super.hide();
 		setWidget(vPanel);
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		Main.get().mainPanel.browser.tabMultiple.securityRefresh();
 		super.hide();
 	}

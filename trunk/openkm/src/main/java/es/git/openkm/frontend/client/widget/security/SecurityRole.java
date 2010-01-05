@@ -26,9 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -89,8 +90,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 		buttonPanel.add(spHeight); // separator
 		buttonPanel.add(removeButtom);
 		
-		addButtom.addClickListener(addButtomListener);
-		removeButtom.addClickListener(removeButtomListener);
+		addButtom.addClickHandler(addButtomListener);
+		removeButtom.addClickHandler(removeButtomListener);
 		
 		panel.add(spLeft);
 		panel.add(assignedRole);
@@ -110,8 +111,9 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Add buttom listener
 	 */
-	ClickListener addButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (unassignedRole.getRole() != null) {
 				tmpRole = unassignedRole.getRole();
 				addRole(tmpRole, GWTPermission.READ, Main.get().securityPopup.recursive.isChecked());
@@ -122,8 +124,9 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Remove buttom listener
 	 */
-	ClickListener removeButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler removeButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (assignedRole.getRole() != null) {
 				tmpRole = assignedRole.getRole();
 				revokeRole(tmpRole, Main.get().securityPopup.recursive.isChecked());

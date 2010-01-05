@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -89,8 +91,9 @@ public class WorkflowFormPanel extends Composite {
 		formTable = new FlexTable();
 		submitForm = new Button(Main.i18n("button.accept"));
 		
-		submitForm.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		submitForm.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				setTaskInstanceValues(taskInstance.getId(), null); 
 			}
 		});
@@ -231,8 +234,9 @@ public class WorkflowFormPanel extends Composite {
 			final String docPath = (String) processInstance.getVariables().get("path");
 			link.setText(docPath);
 			table.setWidget(10, 1, link);
-			link.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
+			link.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					String path = docPath.substring(0,docPath.lastIndexOf("/"));
 					CommonUI.openAllFolderPath(path, docPath);	
 				}
@@ -242,8 +246,9 @@ public class WorkflowFormPanel extends Composite {
 			// Clones link
 			documentLink = new Hyperlink();
 			documentLink.setText(docPath);
-			documentLink.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
+			documentLink.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					String path = docPath.substring(0,docPath.lastIndexOf("/"));
 					CommonUI.openAllFolderPath(path, docPath);	
 				}
@@ -392,8 +397,9 @@ public class WorkflowFormPanel extends Composite {
 					hPanel.setCellWidth(space, "5px");
 					
 					// Setting submit button
-					transButton.addClickListener(new ClickListener(){
-						public void onClick(Widget sender) {
+					transButton.addClickHandler(new ClickHandler() { 
+						@Override
+						public void onClick(ClickEvent event) {
 							setTaskInstanceValues(taskInstance.getId(), formField.getName()); 
 						}
 					});

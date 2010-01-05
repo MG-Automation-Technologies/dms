@@ -20,15 +20,15 @@
 package es.git.openkm.frontend.client.widget;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -62,9 +62,10 @@ public class ExternalURLPopup extends DialogBox {
 		//DOM.setElementProperty(iframe.getElement(), "z-index", "10000");
 		iframe.setStyleName("okm-Popup-text");
 		
-		button = new Button(Main.i18n("button.close"), new ClickListener(){
-			public void onClick(Widget sender) {
-				Log.debug("onClick("+sender+")");
+		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.debug("onClick("+event+")");
 				hide();
 				
 				Log.debug("onClick: void");

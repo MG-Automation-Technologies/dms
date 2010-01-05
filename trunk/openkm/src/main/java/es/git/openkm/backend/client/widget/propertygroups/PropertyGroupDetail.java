@@ -24,11 +24,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -74,8 +75,9 @@ public class PropertyGroupDetail extends Composite {
 		status.setStyleName("okm-StatusPopup");
 		addProperty = new Button(Main.i18n("button.add"));
 		
-		addProperty.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		addProperty.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 
 			}
 		});

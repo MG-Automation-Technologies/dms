@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -107,8 +108,9 @@ public class ManageBookmarkPopup extends DialogBox {
 			}
 		});
 		
-		cancelButton = new Button(Main.i18n("button.close"), new ClickListener() {
-				public void onClick(Widget sender)  {
+		cancelButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					Main.get().mainPanel.topPanel.mainMenu.bookmark.getAll(); // Refreshing menu after edit bookmarks
 					hide();
 				}
@@ -116,8 +118,9 @@ public class ManageBookmarkPopup extends DialogBox {
 		);
 		cancelButton.setStyleName("okm-Button");
 		
-		deleteButton = new Button(Main.i18n("button.delete"), new ClickListener() {
-				public void onClick(Widget sender)  {
+		deleteButton = new Button(Main.i18n("button.delete"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					if (selectedRow>=0) {
 						remove(table.getText(selectedRow,1));
 					}
@@ -127,8 +130,9 @@ public class ManageBookmarkPopup extends DialogBox {
 		deleteButton.setStyleName("okm-Button");
 		deleteButton.setEnabled(false);
 		
-		updateButton = new Button(Main.i18n("button.update"), new ClickListener() {
-				public void onClick(Widget sender)  {
+		updateButton = new Button(Main.i18n("button.update"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					if (selectedRow>=0) {
 						textBox.setText(table.getHTML(selectedRow,1));
 						tableBookmark.setWidget(0,1,textBox);

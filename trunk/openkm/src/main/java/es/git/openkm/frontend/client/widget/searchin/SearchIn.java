@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -208,8 +210,9 @@ public class SearchIn extends Composite {
 			}
 		});
 		
-		startCalendarIcon.addClickListener(new ClickListener(){
-			public void onClick(Widget arg0) {
+		startCalendarIcon.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_START;
 				calendarPopup.setPopupPosition(startCalendarIcon.getAbsoluteLeft(), startCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
@@ -217,8 +220,9 @@ public class SearchIn extends Composite {
 			
 		});
 		
-		endCalendarIcon.addClickListener(new ClickListener(){
-			public void onClick(Widget arg0) {
+		endCalendarIcon.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				calendarFired = CALENDAR_FIRED_END;
 				calendarPopup.setPopupPosition(endCalendarIcon.getAbsoluteLeft(), endCalendarIcon.getAbsoluteTop()-2);
 				calendarPopup.show();
@@ -227,8 +231,9 @@ public class SearchIn extends Composite {
 		});
 		
 		// Advanced search
-		advancedSearch.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		advancedSearch.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				enableAdvancedSearch(advancedSearch.isChecked());
 				resizeScreenToAdvancedMode(advancedSearch.isChecked());
 			}
@@ -238,14 +243,16 @@ public class SearchIn extends Composite {
 		tableProperties.setCellPadding(0);
 		tableProperties.setCellSpacing(0);
 		
-		searchButton = new Button(Main.i18n("button.search"), new ClickListener() {
-			public void onClick(Widget sender) {
+		searchButton = new Button(Main.i18n("button.search"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				executeSearch();
 			}
 		});
 		
-		cleanButton = new Button(Main.i18n("button.clean"), new ClickListener() {
-			public void onClick(Widget sender) {
+		cleanButton = new Button(Main.i18n("button.clean"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
 				context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
 				content.setText("");
@@ -273,8 +280,9 @@ public class SearchIn extends Composite {
 			}
 		});
 		
-		saveSearchButton= new Button(Main.i18n("button.save.search"), new ClickListener() {
-			public void onClick(Widget sender) {
+		saveSearchButton= new Button(Main.i18n("button.save.search"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				long domain = 0;
 				String operator = GWTQueryParams.OPERATOR_AND;
 				params = new GWTQueryParams();
@@ -328,8 +336,9 @@ public class SearchIn extends Composite {
 			}
 		});
 		
-		addGroup = new Button(Main.i18n("search.add.property.group"), new ClickListener() {
-			public void onClick(Widget sender) {
+		addGroup = new Button(Main.i18n("search.add.property.group"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				groupPopup.show();
 			}
 		});
@@ -387,8 +396,9 @@ public class SearchIn extends Composite {
 		pathExplorerPanel.add(new HTML("&nbsp;"));
 		pathExplorerPanel.add(pathExplorer);
 		
-		pathExplorer.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		pathExplorer.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				folderSelectPopup.show();
 			}
 		});
@@ -405,8 +415,9 @@ public class SearchIn extends Composite {
 		folder = new HTML(Main.i18n("search.type.folder"));
 		typeMail = new CheckBox();
 		typeMail.setChecked(false);
-		typeMail.addClickListener(new ClickListener(){
-			public void onClick(Widget arg0) {
+		typeMail.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (typeMail.isChecked()){
 					tableMail.setVisible(true);
 				} else {
@@ -437,14 +448,16 @@ public class SearchIn extends Composite {
 		searchTypeAnd.setChecked(true);
 		searchTypeOr.setChecked(false);
 		
-		searchTypeAnd.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		searchTypeAnd.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				searchTypeOr.setChecked(!searchTypeAnd.isChecked()); // Always set changed between and and or type
 			}
 		});
 		
-		searchTypeOr.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		searchTypeOr.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				searchTypeAnd.setChecked(!searchTypeOr.isChecked()); // Always set changed between and and or type
 			}
 		});
@@ -887,9 +900,11 @@ public class SearchIn extends Composite {
 					tableProperties.setWidget(rows, 2, textBox);
 					
 					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickListener(new ClickListener(){
-						public void onClick(Widget arg0) {
-							Main.get().mainPanel.search.searchIn.removeProperty(arg0,propertyName);
+					removeImage.addClickHandler(new ClickHandler() { 
+						@Override
+						public void onClick(ClickEvent event) {
+							Widget sender = (Widget) event.getSource();
+							Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
 							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 						}
 					});
@@ -930,9 +945,11 @@ public class SearchIn extends Composite {
 					tableProperties.setWidget(rows, 2, listBox);
 					
 					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickListener(new ClickListener(){
-						public void onClick(Widget arg0) {
-							Main.get().mainPanel.search.searchIn.removeProperty(arg0,propertyName);
+					removeImage.addClickHandler(new ClickHandler() { 
+						@Override
+						public void onClick(ClickEvent event) {
+							Widget sender = (Widget) event.getSource();
+							Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
 							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 						}
 					});

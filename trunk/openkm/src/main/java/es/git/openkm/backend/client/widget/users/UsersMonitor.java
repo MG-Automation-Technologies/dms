@@ -25,17 +25,16 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.bean.GWTSessionInfo;
@@ -117,8 +116,9 @@ public class UsersMonitor extends Composite {
 			table.setHTML(rows, 3, new SimpleDate(si.getCreation()).toString("DD/MM/YYYY HH:MM:SS"));
 			table.setHTML(rows, 4, new SimpleDate(si.getAccess()).toString("DD/MM/YYYY HH:MM:SS"));
 			Button logoutUser = new Button(Main.i18n("button.logout"));
-			logoutUser.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
+			logoutUser.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					activeUsers.remove(""+rows);
 					Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.Logout(token);
 					diableTableUser(rows);
@@ -141,8 +141,9 @@ public class UsersMonitor extends Composite {
 			
 			if (table.getWidget(updateRow,5)==null || !(table.getWidget(updateRow,5) instanceof Button)) {
 				Button logoutUser = new Button(Main.i18n("button.logout"));
-				logoutUser.addClickListener(new ClickListener(){
-					public void onClick(Widget sender) {
+				logoutUser.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
 						activeUsers.remove(""+updateRow);
 						Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.Logout(token);
 						diableTableUser(updateRow);

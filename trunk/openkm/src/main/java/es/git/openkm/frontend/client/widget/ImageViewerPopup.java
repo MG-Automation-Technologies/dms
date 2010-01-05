@@ -19,17 +19,20 @@
 
 package es.git.openkm.frontend.client.widget;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.LoadListener;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -76,10 +79,11 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		super(false,true);
 		
 		/**
-		 * Zoom in listener
+		 * Zoom in handler
 		 */
-		ClickListener zoomInListener = new ClickListener() {
-			public void onClick(Widget sender) {
+		ClickHandler zoomInListener = new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (loaded && actualZoom<zoomValues.length) {
 					if (actual_ratio >= ZOOM_RATIO) {
 						actualZoom++;
@@ -100,10 +104,11 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		};
 		
 		/**
-		 * Zoom out listener
+		 * Zoom out handler
 		 */
-		ClickListener zoomOutListener = new ClickListener() {
-			public void onClick(Widget sender) {
+		ClickHandler zoomOutListener = new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (loaded && actual_ratio>0.1) {
 					if (actual_ratio > ZOOM_RATIO) {
 						actualZoom--;
@@ -123,8 +128,9 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		image = new Image();
 		scrollPanel = new ScrollPanel(image);
 		setText(Main.i18n("image.viewer.label"));
-		button = new Button(Main.i18n("button.close"), new ClickListener() {
-			public void onClick(Widget sender) {
+		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
@@ -132,8 +138,8 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		
 		zoomIn = new HTML(Util.imageHTML("img/icon/actions/zoom_in.gif",Main.i18n("image.viewer.zoom.in")));
 		zoomOut = new HTML(Util.imageHTML("img/icon/actions/zoom_out.gif",Main.i18n("image.viewer.zoom.out")));
-		zoomIn.addClickListener(zoomInListener);
-		zoomOut.addClickListener(zoomOutListener);
+		zoomIn.addClickHandler(zoomInListener);
+		zoomOut.addClickHandler(zoomOutListener);
 		zoomIn.addMouseListener(this);
 		zoomOut.addMouseListener(this);
 		zoomIn.setStyleName("okm-ToolBar-button");
@@ -155,8 +161,9 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 			listZoom.addItem(zoomTextValues[i],""+i);
 		}
 		listZoom.setStyleName("okm-Input");
-		listZoom.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
+		listZoom.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent arg0) {
 				actualZoom = Integer.parseInt(listZoom.getValue(listZoom.getSelectedIndex()));
 				if (actualZoom > 0) {
 					actual_ratio = zoomValues[actualZoom];
@@ -215,12 +222,9 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		scrollPanel.remove(image);
 		image = new Image(imageUrl);
 		scrollPanel.add(image); // Always remove image and set newer
-		image.addLoadListener(new LoadListener() {
-
-			public void onError(Widget sender) {
-			}
-
-			public void onLoad(Widget sender) {
+		image.addLoadHandler(new LoadHandler(){
+			@Override
+			public void onLoad(LoadEvent arg0) {
 				// Only executes on first time loading, because onLoad every time is image size changed is fired
 				// and don't wants to make nothing on this cases
 				if (!loaded) {

@@ -23,9 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -92,8 +93,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Directory listener
 	 */
-	ClickListener createDirectoryListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler createDirectoryListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.createDirectoryOption) {
 				executeCreateDirectory();
 			}
@@ -110,8 +112,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Lock listener
 	 */
-	ClickListener lockListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler lockListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.lockOption) {
 				executeLock();
 			}
@@ -128,8 +131,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Unlock listener
 	 */
-	ClickListener unLockListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler unLockListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.unLockOption) {
 				executeUnlock();
 			}
@@ -146,8 +150,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Add document listener
 	 */
-	ClickListener addDocumentListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addDocumentListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.addDocumentOption) {
 				executeAddDocument();
 			}
@@ -166,8 +171,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Delete listener
 	 */
-	ClickListener deleteListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler deleteListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.deleteOption) {
 				executeDelete();
 			}
@@ -221,8 +227,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Edit listener
 	 */
-	ClickListener checkoutListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler checkoutListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.checkoutOption){
 				executeCheckout();
 			}
@@ -239,8 +246,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Checkin listener
 	 */
-	ClickListener checkinListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler checkinListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.checkinOption) {
 				exectuteCheckin();
 			}
@@ -259,8 +267,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Checkout cancel listener
 	 */
-	ClickListener cancelCheckoutListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler cancelCheckoutListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
 				executeCancelCheckout();
 			}
@@ -277,8 +286,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Download listener
 	 */
-	ClickListener downloadListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler downloadListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.downloadOption) {
 				executeDownload();
 			}
@@ -288,8 +298,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Download as PDF listener
 	 */
-	ClickListener downloadPdfListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler downloadPdfListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.downloadPdfOption) {
 				executeDownloadPdf();
 			}
@@ -313,8 +324,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Add property group listener
 	 */
-	ClickListener addPropertyGroupListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addPropertyGroupListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.addPropertyGroupOption) {
 				executeAddPropertyGroup();
 			}
@@ -338,8 +350,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Remove property group listener
 	 */
-	ClickListener removePropertyGroupListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler removePropertyGroupListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.removePropertyGroupOption && toolBarOption.firedRemovePropertyGroupOption) {
 				executeRemovePropertyGroup();
 			}
@@ -349,8 +362,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Add workflow listener
 	 */
-	ClickListener addWorkflowListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addWorkflowListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.workflowOption) {
 				executeAddWorkflow();
 			}
@@ -368,8 +382,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Add subscription
 	 */
-	ClickListener addSubscriptionListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addSubscriptionListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.addSubscription) {
 				executeAddSubscription();
 			}
@@ -390,8 +405,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Remove subscription
 	 */
-	ClickListener removeSubscriptionListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler removeSubscriptionListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.removeSubscription) {
 				executeRemoveSubscription();
 			}
@@ -412,8 +428,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Arrow rotate clock wise listener
 	 */
-	ClickListener arrowRefreshListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler arrowRefreshListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.refreshOption) {
 				executeRefresh();
 			}
@@ -453,8 +470,9 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	/**
 	 * Arrow rotate clock wise listener
 	 */
-	ClickListener arrowHomeListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler arrowHomeListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (toolBarOption.homeOption) {
 				executeGoToUserHome();
 			}
@@ -538,23 +556,23 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		refresh  = new HTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
 		applet = new HTML("");
 		
-		createDirectory.addClickListener(createDirectoryListener);
-		lock.addClickListener(lockListener);
-		unLock.addClickListener(unLockListener);
-		addDocument.addClickListener(addDocumentListener);
-		delete.addClickListener(deleteListener);
-		edit.addClickListener(checkoutListener);
-		checkin.addClickListener(checkinListener);
-		cancelCheckout.addClickListener(cancelCheckoutListener);
-		download.addClickListener(downloadListener);
-		downloadPdf.addClickListener(downloadPdfListener);
-		addPropertyGroup.addClickListener(addPropertyGroupListener);
-		removePropertyGroup.addClickListener(removePropertyGroupListener);
-		startWorkflow.addClickListener(addWorkflowListener);
-		addSubscription.addClickListener(addSubscriptionListener);
-		removeSubscription.addClickListener(removeSubscriptionListener);
-		home.addClickListener(arrowHomeListener);
-		refresh.addClickListener(arrowRefreshListener);
+		createDirectory.addClickHandler(createDirectoryListener);
+		lock.addClickHandler(lockListener);
+		unLock.addClickHandler(unLockListener);
+		addDocument.addClickHandler(addDocumentListener);
+		delete.addClickHandler(deleteListener);
+		edit.addClickHandler(checkoutListener);
+		checkin.addClickHandler(checkinListener);
+		cancelCheckout.addClickHandler(cancelCheckoutListener);
+		download.addClickHandler(downloadListener);
+		downloadPdf.addClickHandler(downloadPdfListener);
+		addPropertyGroup.addClickHandler(addPropertyGroupListener);
+		removePropertyGroup.addClickHandler(removePropertyGroupListener);
+		startWorkflow.addClickHandler(addWorkflowListener);
+		addSubscription.addClickHandler(addSubscriptionListener);
+		removeSubscription.addClickHandler(removeSubscriptionListener);
+		home.addClickHandler(arrowHomeListener);
+		refresh.addClickHandler(arrowRefreshListener);
 		
 		createDirectory.addMouseListener(this);
 		lock.addMouseListener(this);
