@@ -23,13 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -38,7 +39,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.bean.GWTSessionInfo;
@@ -99,8 +99,9 @@ public class Users extends Composite {
 		timerList.addItem(Main.i18n("users.refreshing.every.1.minute"));
 		timerList.addItem(Main.i18n("users.refreshing.every.5.minutes"));
 		timerList.addItem(Main.i18n("users.refreshing.every.15.minutes"));
-		timerList.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
+		timerList.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				if (refreshingCheckBox.isChecked() && refreshingTimer!=null) {
 					refreshingTimer.scheduleRepeating(timerValues[timerList.getSelectedIndex()]);
 				}

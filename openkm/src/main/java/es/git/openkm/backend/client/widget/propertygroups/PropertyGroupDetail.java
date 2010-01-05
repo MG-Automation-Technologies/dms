@@ -24,12 +24,13 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -102,8 +103,9 @@ public class PropertyGroupDetail extends Composite {
 		typeList.addItem(Main.i18n("group.property.group.type.select"), ""+GWTMetaData.SELECT);
 		typeList.addItem(Main.i18n("group.property.group.type.select.multiple"), ""+GWTMetaData.SELECT_MULTI);
 		
-		typeList.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
+		typeList.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				//addProperty.setEnabled(testAddButtonProperty());
 			}
 		});

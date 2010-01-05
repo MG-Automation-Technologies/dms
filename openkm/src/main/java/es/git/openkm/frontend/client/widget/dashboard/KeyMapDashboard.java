@@ -28,11 +28,12 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -306,8 +307,9 @@ public class KeyMapDashboard extends Composite {
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
 		context.setSelectedIndex(SELECT_NAVIGATOR_ALL_CONTEXT);
 		
-		context.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
+		context.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				controlSearchIn.executeSearch(limit);
 			}
 		});
@@ -317,8 +319,9 @@ public class KeyMapDashboard extends Composite {
 		resultPage.addItem("20", "20");
 		resultPage.addItem("30", "30");
 		
-		resultPage.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
+		resultPage.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				limit = Integer.valueOf(resultPage.getValue(resultPage.getSelectedIndex()));
 				controlSearchIn.executeSearch(limit);
 			}
