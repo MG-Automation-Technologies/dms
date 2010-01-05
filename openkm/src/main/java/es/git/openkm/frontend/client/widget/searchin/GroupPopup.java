@@ -25,12 +25,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -38,7 +40,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTMetaData;
@@ -81,14 +82,16 @@ public class GroupPopup extends DialogBox {
 		propertyLabel = new Label(Main.i18n("group.property.group"));
 		table = new FlexTable();
 		
-		button = new Button(Main.i18n("button.close"), new ClickListener(){ 
-			public void onClick(Widget sender) {
+		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
 		
-		addButton = new Button(Main.i18n("button.add"), new ClickListener(){ 
-			public void onClick(Widget sender) {
+		addButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (propertyListBox.getSelectedIndex()>0) {
 					String grpName = groupListBox.getValue(groupListBox.getSelectedIndex());
 					String propertyName = propertyListBox.getValue(propertyListBox.getSelectedIndex());
@@ -100,8 +103,9 @@ public class GroupPopup extends DialogBox {
 		});
 
 		groupListBox = new ListBox();
-		groupListBox.addChangeListener(new ChangeListener(){
-			public void onChange(Widget widget){
+		groupListBox.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				if (groupListBox.getSelectedIndex()>0) {
 					propertyListBox.clear();
 					getMetaData();
@@ -116,8 +120,9 @@ public class GroupPopup extends DialogBox {
 		groupListBox.setStyleName("okm-Select");
 		
 		propertyListBox = new ListBox();
-		propertyListBox.addChangeListener(new ChangeListener(){
-			public void onChange(Widget widget){
+		propertyListBox.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				if (propertyListBox.getSelectedIndex()>0) {
 					addButton.setEnabled(true);
 				} else {

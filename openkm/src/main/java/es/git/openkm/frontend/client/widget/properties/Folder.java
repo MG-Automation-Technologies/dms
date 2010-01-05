@@ -21,14 +21,14 @@ package es.git.openkm.frontend.client.widget.properties;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
@@ -54,8 +54,9 @@ public class Folder extends Composite {
 		tableSubscribedUsers = new FlexTable();
 		scrollPanel = new ScrollPanel(table);
 		
-		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
-			public void onClick(Widget sender) {
+		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				String url = Main.get().workspaceUserProperties.getApplicationURL();
 				int idx = url.lastIndexOf('/');
 				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();

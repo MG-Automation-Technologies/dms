@@ -20,11 +20,12 @@
 package es.git.openkm.frontend.client.widget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -35,7 +36,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTWorkspace;
@@ -49,7 +49,7 @@ import es.git.openkm.frontend.client.service.OKMWorkspaceServiceAsync;
  * @author jllort
  *
  */
-public class UserPopup extends DialogBox implements ClickListener {
+public class UserPopup extends DialogBox implements ClickHandler {
 	
 	private final OKMWorkspaceServiceAsync workspaceService = (OKMWorkspaceServiceAsync) GWT.create(OKMWorkspaceService.class);
 	
@@ -127,8 +127,9 @@ public class UserPopup extends DialogBox implements ClickListener {
 		imapUserText = new TextBox();
 		folderText = new TextBox();
 		
-		update = new Button(Main.i18n("button.update"), new ClickListener(){
-			public void onClick(Widget sender) {
+		update = new Button(Main.i18n("button.update"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				passwordError.setVisible(false);
 				imapPassordError.setVisible(false);
 				imapError.setVisible(false);
@@ -162,14 +163,16 @@ public class UserPopup extends DialogBox implements ClickListener {
 			}			
 		});
 		
-		cancel = new Button(Main.i18n("button.cancel"), new ClickListener(){
-			public void onClick(Widget sender) {
+		cancel = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}			
 		});
 		
-		delete = new Button(Main.i18n("button.delete"), new ClickListener(){
-			public void onClick(Widget sender) {
+		delete = new Button(Main.i18n("button.delete"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				int Id = Main.get().workspaceUserProperties.getWorkspace().getImapID();
 				if (Id>=0) {
 					ServiceDefTarget endPoint = (ServiceDefTarget) workspaceService;
@@ -276,7 +279,7 @@ public class UserPopup extends DialogBox implements ClickListener {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		super.hide();
 	}
 	

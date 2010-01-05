@@ -19,15 +19,15 @@
 
 package es.git.openkm.backend.client.widget;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 
@@ -37,7 +37,7 @@ import es.git.openkm.backend.client.Main;
  * @author jllort
  *
  */
-public class ErrorPopup extends DialogBox implements ClickListener {
+public class ErrorPopup extends DialogBox implements ClickHandler {
 	//private PopupPanel panel;
 	private VerticalPanel vPanel;
 	private HTML text;
@@ -88,9 +88,9 @@ public class ErrorPopup extends DialogBox implements ClickListener {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		hide();
 		// Removes all previous text for next errors messages, varios errors can be added simultanealy
 		// on show(String msg )

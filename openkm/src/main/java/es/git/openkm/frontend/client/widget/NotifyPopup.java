@@ -23,17 +23,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -92,8 +92,9 @@ public class NotifyPopup extends DialogBox  {
 		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
 		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
 		
-		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickListener(){
-			public void onClick(Widget sender) {
+		closeButton = new Button(Main.i18n("fileupload.button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 				reset();
 				
@@ -101,8 +102,9 @@ public class NotifyPopup extends DialogBox  {
 		}
 		);
 		
-		sendButton = new Button(Main.i18n("fileupload.send"), new ClickListener(){
-			public void onClick(Widget sender) {
+		sendButton = new Button(Main.i18n("fileupload.send"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				// Only sends if there's some user selected
 				if (!users.equals("")) {
 					sendLinkNotification();
@@ -120,8 +122,8 @@ public class NotifyPopup extends DialogBox  {
 		messageScroll = new ScrollPanel(message);
 		messageScroll.setAlwaysShowScrollBars(false);
 		
-		addButtom.addClickListener(addButtomListener);
-		removeButtom.addClickListener(removeButtomListener);
+		addButtom.addClickHandler(addButtomListener);
+		removeButtom.addClickHandler(removeButtomListener);
 		
 		buttonPanel.add(addButtom);
 		buttonPanel.add(new HTML("<br><br><br>")); // separator
@@ -194,8 +196,9 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Add buttom listener
 	 */
-	ClickListener addButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (userTable.getUser() != null) {
 				notifyTable.addRow(userTable.getUser());	
 				notifyTable.selectLastRow();
@@ -208,8 +211,9 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Remove buttom listener
 	 */
-	ClickListener removeButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler removeButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (notifyTable.getUser() != null) {
 				userTable.addRow(notifyTable.getUser());
 				userTable.selectLastRow();

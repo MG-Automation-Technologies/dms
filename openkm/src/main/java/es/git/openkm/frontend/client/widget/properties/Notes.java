@@ -23,12 +23,12 @@ import java.util.Date;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
@@ -92,8 +91,9 @@ public class Notes extends Composite {
 	    gridRichText.setWidget(0, 0, toolbar);
 	    gridRichText.setWidget(1, 0, richTextArea);
 	    
-		add = new Button(Main.i18n("button.add"), new ClickListener() {
-			public void onClick(Widget sender) {
+		add = new Button(Main.i18n("button.add"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				addNote();
 			}
 		});

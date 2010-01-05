@@ -26,6 +26,8 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -97,16 +99,18 @@ public class Document extends Composite {
 		sp = new SimplePanel();
 		sp.setWidth("16px");
 
-		copyUrlToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
-			public void onClick(Widget sender) {
+		copyUrlToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				String url = Main.get().workspaceUserProperties.getApplicationURL();
 				url += "?docPath=" + URL.encodeComponent(document.getPath());
 				Util.copyToClipboard(url);
 			}
 		});
 
-		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickListener() {
-			public void onClick(Widget sender) {
+		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				String url = Main.get().workspaceUserProperties.getApplicationURL();
 				int idx = url.lastIndexOf('/');
 				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + document.getPath();
@@ -140,13 +144,14 @@ public class Document extends Composite {
 			}
 			
 		});
-		suggestKey.addClickListener(new ClickListener(){
+		suggestKey.addClickListener(new ClickListener() { 
+			@Override
 			public void onClick(Widget sender) {
 				if (suggestKey.getText().equals(Main.i18n("dashboard.keyword.suggest"))) {
 					suggestKey.setText("");
 				}
 				Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
-			}			
+			}		
 		});
 		
 		VerticalPanel vPanel = new VerticalPanel();
@@ -525,8 +530,9 @@ public class Document extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		HTML space = new HTML();
 		ImageHover add = new ImageHover("img/icon/actions/delete_disabled.gif","img/icon/actions/delete.gif");
-		add.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		add.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
 				hKeyPanel.remove(externalPanel);
 			}

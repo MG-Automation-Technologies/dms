@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -179,8 +181,9 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			send.setText(Main.i18n("fileupload.send"));
 			send.setStyleName("okm-Button");
 			// Set up a click listener on the proceed check box
-			send.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			send.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					if (notifyToUser.isChecked() && users.getText().equals("")) {
 						errorUserNotify.setVisible(true);
 					} else {
@@ -491,8 +494,9 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		
 		// Ads unzip file
 		importZip = new CheckBox();
-		importZip.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+		importZip.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					if (importZip.isChecked()) {
 						notifyToUser.setChecked(false);
 						vNotifyPanel.setVisible(false);
@@ -515,8 +519,9 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		users.setName("users");
 		users.setVisible(false);
 		notifyToUser = new CheckBox();
-		notifyToUser.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+		notifyToUser.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					if (notifyToUser.isChecked()) {
 						vNotifyPanel.setVisible(true);
 						importZip.setChecked(false);
@@ -555,8 +560,8 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		buttonPanel.add(new HTML("<br><br><br>")); // separator
 		buttonPanel.add(removeButtom);
 		
-		addButtom.addClickListener(addButtomListener);
-		removeButtom.addClickListener(removeButtomListener);
+		addButtom.addClickHandler(addButtomListener);
+		removeButtom.addClickHandler(removeButtomListener);
 		
 		hUserPanel = new HorizontalPanel();
 		hUserPanel.setSize("260","140");
@@ -753,8 +758,9 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 	/**
 	 * Add buttom listener
 	 */
-	ClickListener addButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler addButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (userTable.getUser() != null) {
 				notifyTable.addRow(userTable.getUser());	
 				notifyTable.selectLastRow();
@@ -768,8 +774,9 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 	/**
 	 * Remove buttom listener
 	 */
-	ClickListener removeButtomListener = new ClickListener() {
-		public void onClick(Widget sender) {
+	ClickHandler removeButtomListener = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
 			if (notifyTable.getUser() != null) {
 				userTable.addRow(notifyTable.getUser());
 				userTable.selectLastRow();

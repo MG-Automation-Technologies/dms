@@ -19,12 +19,14 @@
 package es.git.openkm.frontend.client.widget.foldertree;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -34,7 +36,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -116,8 +117,9 @@ public class FolderSelectPopup extends DialogBox  {
 		contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
 		contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
 		contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
-		contextListBox.addChangeListener(new ChangeListener() {
-				public void onChange(Widget sender) {
+		contextListBox.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 					folderSelectTree.changeView(Integer.parseInt(contextListBox.getValue(contextListBox.getSelectedIndex())));
 				}
 			}
@@ -141,15 +143,17 @@ public class FolderSelectPopup extends DialogBox  {
 		verticalDirectoryPanel.add(folderSelectTree);
 		scrollDirectoryPanel.add(verticalDirectoryPanel);
 		
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickListener() {
-			public void onClick(Widget sender) {
+		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				action = ACTION_NONE;
 				hide();
 			}
 		});
 		
-		actionButton = new Button(Main.i18n("button.move"), new ClickListener() {
-			public void onClick(Widget sender) {
+		actionButton = new Button(Main.i18n("button.move"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				executeAction(folderSelectTree.getActualPath(), false);
 			}
 		});

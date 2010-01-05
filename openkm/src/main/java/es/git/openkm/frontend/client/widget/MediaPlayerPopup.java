@@ -19,15 +19,15 @@
 
 package es.git.openkm.frontend.client.widget;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.util.Util;
@@ -61,8 +61,9 @@ public class MediaPlayerPopup extends DialogBox {
 		hPanel = new HorizontalPanel();
 		text= new HTML("<div id=\"mediaplayercontainer\"></div>\n");
 		setText(Main.i18n("media.player.label"));
-		button = new Button(Main.i18n("button.close"), new ClickListener(){
-			public void onClick(Widget sender) {
+		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
@@ -72,8 +73,9 @@ public class MediaPlayerPopup extends DialogBox {
 		zoomOut = new HTML(Util.imageHTML("img/icon/actions/zoom_out.gif",Main.i18n("image.viewer.zoom.out")));
 		actualZoom = new HTML("x"+actualRatio);
 		
-		zoomIn.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		zoomIn.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (actualRatio<3) {
 					actualRatio++;
 					changeMediaFileSize();
@@ -81,8 +83,9 @@ public class MediaPlayerPopup extends DialogBox {
 			}
 		});
 		
-		zoomOut.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		zoomOut.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (actualRatio>1) {
 					actualRatio--;
 					changeMediaFileSize();

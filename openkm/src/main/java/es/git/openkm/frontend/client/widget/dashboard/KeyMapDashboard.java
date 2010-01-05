@@ -28,6 +28,8 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -182,8 +184,9 @@ public class KeyMapDashboard extends Composite {
 		HTML space1 = new HTML();
 		HTML space2 = new HTML();
 		small = new Image("img/icon/actions/description_small_disabled.gif");
-		small.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		small.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (table.getActualDetail()!=KeyMapTable.VISIBLE_SMALL) {
 					disableAllDetailIcons();
 					table.changeVisibilityDetail(KeyMapTable.VISIBLE_SMALL);
@@ -192,8 +195,9 @@ public class KeyMapDashboard extends Composite {
 			}
 		});
 		medium = new Image("img/icon/actions/description_medium.gif"); // It's enabled view by default
-		medium.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		medium.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (table.getActualDetail()!=KeyMapTable.VISIBLE_MEDIUM) {
 					disableAllDetailIcons();
 					table.changeVisibilityDetail(KeyMapTable.VISIBLE_MEDIUM);
@@ -202,8 +206,9 @@ public class KeyMapDashboard extends Composite {
 			}
 		});
 		big = new Image("img/icon/actions/description_big_disabled.gif");
-		big.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		big.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (table.getActualDetail()!=KeyMapTable.VISIBLE_BIG) {
 					disableAllDetailIcons();
 					table.changeVisibilityDetail(KeyMapTable.VISIBLE_BIG);
@@ -245,8 +250,9 @@ public class KeyMapDashboard extends Composite {
 		suggestKeyPanel = new HorizontalPanel();
 		HTML space4 = new HTML();
 		clean = new Image("img/icon/actions/clean_disabled.gif");
-		clean.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		clean.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (selectedKeyMap.keySet().size()>0) {
 					// Resets keywordPanel
 					for (Iterator<String> it = selectedKeyMap.keySet().iterator(); it.hasNext();) {
@@ -640,8 +646,9 @@ public class KeyMapDashboard extends Composite {
 			HTML html = new HTML();
 			HTML space = new HTML();
 			ImageHover remove = new ImageHover("img/icon/actions/delete_disabled.gif","img/icon/actions/delete.gif");
-			remove.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			remove.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					// remove keyword on all keyword panels
 					keyAllTable.unselectRow(keyword);
 					keyTopTable.unselectRow(keyword);
@@ -761,8 +768,9 @@ public class KeyMapDashboard extends Composite {
 			for (Iterator<GWTKeyword> it = relatedKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
 				Hyperlink tagLink = new Hyperlink(keyword.getKeyword(), null); 
-				tagLink.addClickListener(new ClickListener(){
-					public void onClick(Widget sender) {
+				tagLink.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
 						selectKey(keyword.getKeyword());
 					}
 				});
@@ -785,8 +793,9 @@ public class KeyMapDashboard extends Composite {
 			for (Iterator<GWTKeyword> it = allKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
 				Hyperlink tagLink = new Hyperlink(keyword.getKeyword(), null); 
-				tagLink.addClickListener(new ClickListener(){
-					public void onClick(Widget sender) {
+				tagLink.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
 						selectKey(keyword.getKeyword());
 					}
 				});

@@ -20,12 +20,12 @@
 package es.git.openkm.frontend.client.widget;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -35,7 +35,7 @@ import es.git.openkm.frontend.client.Main;
  * @author jllort
  *
  */
-public class DebugConsolePopup extends DialogBox implements ClickListener {
+public class DebugConsolePopup extends DialogBox implements ClickHandler {
 	
 	private VerticalPanel vPanel;
 	private Button button;
@@ -69,9 +69,9 @@ public class DebugConsolePopup extends DialogBox implements ClickListener {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
-	public void onClick(Widget sender) {
+	public void onClick(ClickEvent event) {
 		super.hide();
 	}
 	

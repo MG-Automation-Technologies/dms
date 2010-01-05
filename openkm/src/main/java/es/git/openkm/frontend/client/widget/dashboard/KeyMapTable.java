@@ -25,8 +25,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -36,7 +37,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
@@ -122,8 +122,9 @@ public class KeyMapTable extends Composite {
 		final String docPath = doc.getPath();
 		
 		Image gotoDocument = new Image("img/icon/actions/goto_document.gif");
-		gotoDocument.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		gotoDocument.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				CommonUI.openAllFolderPath(docPath.substring(0,docPath.lastIndexOf("/")), docPath);
 			}
 			
@@ -252,8 +253,9 @@ public class KeyMapTable extends Composite {
 				HorizontalPanel hPanel = new HorizontalPanel();
 				HTML space = new HTML();
 				ImageHover add = new ImageHover("img/icon/actions/add_disabled.gif","img/icon/actions/add.gif");
-				add.addClickListener(new ClickListener() {
-					public void onClick(Widget sender) {
+				add.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
 						// remove keyword on all keyword panels
 						Main.get().mainPanel.dashboard.keyMapDashboard.selectKey(keyword);
 					}
@@ -279,8 +281,9 @@ public class KeyMapTable extends Composite {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			HTML space = new HTML();
 			ImageHover add = new ImageHover("img/icon/actions/delete_disabled.gif","img/icon/actions/delete.gif");
-			add.addClickListener(new ClickListener() {
-				public void onClick(Widget sender) {
+			add.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
 					// remove keyword on all keyword panels
 					Main.get().mainPanel.dashboard.keyMapDashboard.removeKey(keyword);
 				}

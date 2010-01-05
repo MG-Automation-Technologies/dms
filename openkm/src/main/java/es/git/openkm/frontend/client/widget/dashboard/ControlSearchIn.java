@@ -19,13 +19,13 @@
 
 package es.git.openkm.frontend.client.widget.dashboard;
 
-import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -55,8 +55,9 @@ public class ControlSearchIn extends Composite {
 		previous = new Image("img/icon/search/resultset_previous.gif");
 		next = new Image("img/icon/search/resultset_next.gif");
 		
-		previous.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		previous.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (previousEnabled) {
 					offset -= limit; 
 					Main.get().mainPanel.dashboard.keyMapDashboard.findPaginated(offset, limit);
@@ -64,8 +65,9 @@ public class ControlSearchIn extends Composite {
 			}
 		});
 		
-		next.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		next.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (nextEnabled) {
 					offset += limit; 
 					Main.get().mainPanel.dashboard.keyMapDashboard.findPaginated(offset, limit);

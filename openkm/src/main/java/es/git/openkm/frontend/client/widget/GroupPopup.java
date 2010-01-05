@@ -23,18 +23,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -68,20 +69,16 @@ public class GroupPopup extends DialogBox {
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
-		button = new Button(Main.i18n("button.close"), new ClickListener(){ 
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
-			 */
-			public void onClick(Widget sender) {
+		button = new Button(Main.i18n("button.close"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
 		
-		addButton = new Button(Main.i18n("button.add"), new ClickListener(){ 
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.ClickListener#onClick(com.google.gwt.user.client.ui.Widget)
-			 */
-			public void onClick(Widget sender) {
+		addButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				addGroup();
 				hide();
 				if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
@@ -97,8 +94,9 @@ public class GroupPopup extends DialogBox {
 		});
 
 		listBox = new ListBox();
-		listBox.addChangeListener(new ChangeListener(){
-			public void onChange(Widget widget){
+		listBox.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent arg0) {
 				if (listBox.getSelectedIndex()>0) {
 					addButton.setEnabled(true);
 				} else {

@@ -1,11 +1,11 @@
 package es.git.openkm.frontend.client.widget;
 
-import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.panel.ExtendedDockPanel;
@@ -59,36 +59,41 @@ public class UserInfo extends Composite {
 		imgNewsDocuments.setVisible(false);
 		imgWorkflows.setVisible(false);
 		
-		imgLockedDocuments.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		imgLockedDocuments.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
 		
-		imgCheckoutDocuments.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		imgCheckoutDocuments.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
 		
-		imgSubscriptions.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		imgSubscriptions.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showUserView();
 			}
 		});
 		
-		imgNewsDocuments.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		imgNewsDocuments.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showNewsView();
 			}
 		});
 		
-		imgWorkflows.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		imgWorkflows.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.topPanel.tabWorkspace.changeSelectedTab(ExtendedDockPanel.DASHBOARD);
 				Main.get().mainPanel.dashboard.horizontalToolBar.showWorkflowView();
 			}
@@ -98,8 +103,9 @@ public class UserInfo extends Composite {
 		advertisement = new Image("img/icon/actions/warning.gif");
 		advertisement.setVisible(false);
 		
-		advertisement.addClickListener( new ClickListener() {
-			public void onClick(Widget sender) {
+		advertisement.addClickHandler( new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().msgPopup.show("openkm.update.available", msg, 400, 200);
 			}
 		});

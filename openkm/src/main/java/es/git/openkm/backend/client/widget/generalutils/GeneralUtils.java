@@ -20,11 +20,12 @@
 package es.git.openkm.backend.client.widget.generalutils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -93,20 +94,23 @@ public class GeneralUtils extends Composite {
 		folderImportExplorer = new Image("img/icon/general/folder_explore.gif");
 		folderExportExplorer = new Image("img/icon/general/folder_explore.gif");
 
-		folderImportExplorer.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		folderImportExplorer.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				folderSelectPopup.show(FolderSelectPopup.ACTION_IMPORT);
 			}
 		});
 		
-		folderExportExplorer.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		folderExportExplorer.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				folderSelectPopup.show(FolderSelectPopup.ACTION_EXPORT);
 			}
 		});
 		
-		importButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		importButton.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!importFileSystemPath.getText().equals("") && !importRepositoryPath.getText().equals("")) {
 					repositoryImport(importRepositoryPath.getText(), importFileSystemPath.getText());
 					setEnabledButtons(false);
@@ -114,8 +118,9 @@ public class GeneralUtils extends Composite {
 			}
 		});
 		
-		exportButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		exportButton.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!exportFileSystemPath.getText().equals("") && !exportRepositoryPath.getText().equals("")) {
 					repositoryExport(exportRepositoryPath.getText(), exportFileSystemPath.getText());
 					setEnabledButtons(false);
@@ -123,8 +128,9 @@ public class GeneralUtils extends Composite {
 			}
 		});
 		
-		registerButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		registerButton.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (!propertyGroupPath.getText().equals("")) {
 					registerCustomNodeTypes(propertyGroupPath.getText());
 					setEnabledButtons(false);
@@ -193,8 +199,9 @@ public class GeneralUtils extends Composite {
 		table.setWidget(7, 3, hPanel);
 		table.setWidget(7, 4, registerThesaurus);
 		
-		registerThesaurus.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		registerThesaurus.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 					String level = showLevelList.getValue(showLevelList.getSelectedIndex());
 					Main.get().centerPanel.generalUtilsPanel.setUrlResult(Config.OKMThesaurusServletAdmin + "?level="+level);
 			}
@@ -233,8 +240,9 @@ public class GeneralUtils extends Composite {
 		table.setWidget(10, 1, hReportPanel);
 		table.setWidget(10, 2, executeReportButton);
 		
-		executeReportButton.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		executeReportButton.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
 				if (reportTypeList.getSelectedIndex()>0) {
 					String jasperFile = reportTypeList.getValue(reportTypeList.getSelectedIndex());
 					String type = "pdf";
