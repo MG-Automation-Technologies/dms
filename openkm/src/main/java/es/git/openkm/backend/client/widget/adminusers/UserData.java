@@ -326,7 +326,7 @@ public class UserData extends Composite {
 		mail.setText(user.getEmail());
 		pwd.setText("");
 		pwd2.setText("");
-		active.setChecked(user.isActive());
+		active.setValue(user.isActive());
 		setUserRoles(user.getRoles());
 		setAction(ACTION_UPDATE);
 	}
@@ -343,7 +343,7 @@ public class UserData extends Composite {
 		mail.setText(user.getEmail());
 		pwd.setText("");
 		pwd2.setText("");
-		active.setChecked(user.isActive());
+		active.setValue(user.isActive());
 		setUserRoles(user.getRoles());
 		setAction(ACTION_VIEW);
 	}
@@ -359,7 +359,7 @@ public class UserData extends Composite {
 		mail.setText("");
 		pwd.setText("");
 		pwd2.setText("");
-		active.setChecked(user.isActive());
+		active.setValue(user.isActive());
 		setUserRoles(user.getRoles());
 		setAction(ACTION_CREATE);
 	}
@@ -522,7 +522,7 @@ public class UserData extends Composite {
 	private void collectUserData() {
 		user.setId(uid.getText());
 		user.setEmail(mail.getText());
-		user.setActive(active.isChecked());
+		user.setActive(active.getValue());
 		
 		// We mantain by default the same pwd
 		if (!pwd.getText().equals("")) {
@@ -539,7 +539,7 @@ public class UserData extends Composite {
 		mail.setText("");
 		pwd.setText("");
 		pwd2.setText("");
-		active.setChecked(false);
+		active.setValue(false);
 		
 		// Removing roles
 		while(rolesTable.getRowCount()>3) {

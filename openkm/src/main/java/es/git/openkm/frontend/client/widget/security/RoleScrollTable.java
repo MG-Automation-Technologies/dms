@@ -197,10 +197,10 @@ public class RoleScrollTable extends Composite {
 				
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
-				if (((CheckBox) sender).isChecked()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.isChecked());
+				if (((CheckBox) sender).getValue()) {
+					grant(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.isChecked());
+					revoke(dataTable.getText(rows, 0), GWTPermission.READ, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -213,10 +213,10 @@ public class RoleScrollTable extends Composite {
 				
 				// Actions are inverse to check value because before user perform check on checkbox
 				// it has inverse value
-				if (((CheckBox) sender).isChecked()) {
-					grant(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.isChecked());
+				if (((CheckBox) sender).getValue()) {
+					grant(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
 				} else {
-					revoke(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.isChecked());
+					revoke(dataTable.getText(rows, 0), GWTPermission.WRITE, Main.get().securityPopup.recursive.getValue());
 				}
 			}
 		};
@@ -224,11 +224,11 @@ public class RoleScrollTable extends Composite {
 		checkReadPermission.addClickHandler(checkBoxReadListener);
 		
 		if ((permission.byteValue() & GWTPermission.READ) == GWTPermission.READ) {
-			checkReadPermission.setChecked(true);
+			checkReadPermission.setValue(true);
 			dataTable.setWidget(rows, 1, checkReadPermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,1,HasAlignment.ALIGN_CENTER);
 		} else {
-			checkReadPermission.setChecked(false);
+			checkReadPermission.setValue(false);
 			dataTable.setWidget(rows,1, checkReadPermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,1,HasAlignment.ALIGN_CENTER);
 		}
@@ -236,11 +236,11 @@ public class RoleScrollTable extends Composite {
 		checkWritePermission.addClickHandler(checkBoxWriteListener);
 		
 		if ((permission.byteValue() & GWTPermission.WRITE) == GWTPermission.WRITE) {
-			checkWritePermission.setChecked(true);
+			checkWritePermission.setValue(true);
 			dataTable.setWidget(rows, 2, checkWritePermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,2,HasAlignment.ALIGN_CENTER);
 		} else {
-			checkWritePermission.setChecked(false);
+			checkWritePermission.setValue(false);
 			dataTable.setWidget(rows, 2, checkWritePermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,2,HasAlignment.ALIGN_CENTER);
 		}
@@ -327,10 +327,10 @@ public class RoleScrollTable extends Composite {
 		public void onFailure(Throwable caught) {
 			switch (flag_property) {
 				case PROPERTY_READ:
-					((CheckBox) dataTable.getWidget(rowIndex, 1)).setChecked(false);
+					((CheckBox) dataTable.getWidget(rowIndex, 1)).setValue(false);
 					break;
 				case PROPERTY_WRITE:
-					((CheckBox) dataTable.getWidget(rowIndex, 2)).setChecked(false);
+					((CheckBox) dataTable.getWidget(rowIndex, 2)).setValue(false);
 					break;
 			}
 			
@@ -346,8 +346,8 @@ public class RoleScrollTable extends Composite {
 			// If user has no grants must be deleted
 			if (!dataTable.getSelectedRows().isEmpty()) {
 				int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
-				if (!((CheckBox) dataTable.getWidget(selectedRow, 1)).isChecked() && 
-						!((CheckBox) dataTable.getWidget(selectedRow, 2)).isChecked()) {
+				if (!((CheckBox) dataTable.getWidget(selectedRow, 1)).getValue() && 
+						!((CheckBox) dataTable.getWidget(selectedRow, 2)).getValue()) {
 					Main.get().securityPopup.securityRole.unassignedRole.addRow(dataTable.getText(selectedRow, 0));
 					removeSelectedRow();
 				}
@@ -357,10 +357,10 @@ public class RoleScrollTable extends Composite {
 		public void onFailure(Throwable caught) {
 			switch (flag_property) {
 				case PROPERTY_READ:
-					((CheckBox) dataTable.getWidget(rowIndex, 1)).setChecked(true);
+					((CheckBox) dataTable.getWidget(rowIndex, 1)).setValue(true);
 					break;
 				case PROPERTY_WRITE:
-					((CheckBox) dataTable.getWidget(rowIndex, 2)).setChecked(true);
+					((CheckBox) dataTable.getWidget(rowIndex, 2)).setValue(true);
 					break;
 			}
 			

@@ -117,7 +117,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		public void onClick(ClickEvent event) {
 			if (unassignedUser.getUser() != null) {
 				tmpUser = unassignedUser.getUser();
-				addUser(tmpUser, GWTPermission.READ, Main.get().securityPopup.recursive.isChecked());				
+				addUser(tmpUser, GWTPermission.READ, Main.get().securityPopup.recursive.getValue());				
 			}
 		}
 	};
@@ -130,7 +130,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 		public void onClick(ClickEvent event) {
 			if (assignedUser.getUser() != null) {
 				tmpUser = assignedUser.getUser();
-				removeUser(tmpUser, Main.get().securityPopup.recursive.isChecked());
+				removeUser(tmpUser, Main.get().securityPopup.recursive.getValue());
 			}
 		}
 	};

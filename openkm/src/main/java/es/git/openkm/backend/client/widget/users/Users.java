@@ -102,7 +102,7 @@ public class Users extends Composite {
 		timerList.addChangeHandler(new ChangeHandler(){
 			@Override
 			public void onChange(ChangeEvent event) {
-				if (refreshingCheckBox.isChecked() && refreshingTimer!=null) {
+				if (refreshingCheckBox.getValue() && refreshingTimer!=null) {
 					refreshingTimer.scheduleRepeating(timerValues[timerList.getSelectedIndex()]);
 				}
 			}			
@@ -112,7 +112,7 @@ public class Users extends Composite {
 		refreshingCheckBox.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (refreshingCheckBox.isChecked()) {
+				if (refreshingCheckBox.getValue()) {
 					refresh.setEnabled(false);
 					settingTimer();
 				} else {
@@ -172,13 +172,13 @@ public class Users extends Composite {
 			Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.refreshingActiveUsersIcons();
 			
 			// Setting timer if it's needed
-			if (refreshingCheckBox.isChecked()) {
+			if (refreshingCheckBox.getValue()) {
 				settingTimer();
 			} 
 			setVisibleRefreshing(false);
 			
 			// Enables or disables refresh button ( depens if checkbox is checked ).
-			refresh.setEnabled(!refreshingCheckBox.isChecked());
+			refresh.setEnabled(!refreshingCheckBox.getValue());
 			refreshingCheckBox.setEnabled(true);
 		}
 
