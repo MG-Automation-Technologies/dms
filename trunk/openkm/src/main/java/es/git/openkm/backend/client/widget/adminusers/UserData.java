@@ -24,10 +24,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
@@ -240,8 +241,9 @@ public class UserData extends Composite {
 		});
 		addNewRole.setEnabled(false);
 		
-		rolesList.addChangeListener(new ChangeListener(){
-			public void onChange(Widget sender) {
+		rolesList.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				if (rolesList.getSelectedIndex()>0) {
 					addRole.setEnabled(true);
 				}

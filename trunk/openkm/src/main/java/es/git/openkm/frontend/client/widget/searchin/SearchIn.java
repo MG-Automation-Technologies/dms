@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -354,8 +356,9 @@ public class SearchIn extends Composite {
 		//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
 		context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
 		
-		context.addChangeListener(new ChangeListener() {
-			public void onChange(Widget arg0) {
+		context.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				path.setText(""); // each time list is changed must clean folder
 			}
 		});
@@ -484,14 +487,16 @@ public class SearchIn extends Composite {
 		mimeTypes.addItem("TXT", "text/plain");
 		mimeTypes.addItem("XML", "text/xml");
 		
-		mimeTypes.addChangeListener(new ChangeListener() {
-			public void onChange(Widget arg0) {
+		mimeTypes.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				evaluateSearchButtonVisible();							
 			}
 		});
 		
-		userListBox.addChangeListener(new ChangeListener() {
-			public void onChange(Widget arg0) {
+		userListBox.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				evaluateSearchButtonVisible();							
 			}
 		});
@@ -922,8 +927,9 @@ public class SearchIn extends Composite {
 					ListBox listBox = new ListBox();
 					listBox.setStyleName("okm-Select");
 					listBox.addItem("",""); // Always we set and empty value
-					listBox.addChangeListener(new ChangeListener(){
-						public void onChange(Widget arg0) {
+					listBox.addChangeHandler(new ChangeHandler(){
+						@Override
+						public void onChange(ChangeEvent event) {
 							evaluateSearchButtonVisible();							
 						}
 					});
