@@ -191,8 +191,9 @@ public class SearchIn extends Composite {
 		// Calendar widget
 		calendarPopup.setWidget(calendar);
 
-		calendar.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
+		calendar.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
 				calendarPopup.hide();
 				DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 				

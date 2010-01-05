@@ -21,20 +21,24 @@ package es.git.openkm.frontend.client.widget.searchin;
 
 import java.util.Date;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
@@ -42,7 +46,7 @@ import es.git.openkm.frontend.client.Main;
 /**
  * CalendarWidget
  */
-public class CalendarWidget extends Composite implements ClickHandler, SourcesChangeEvents {
+public class CalendarWidget extends Composite implements ClickHandler, HasChangeHandlers {
 
 	private class NavBar extends Composite implements ClickHandler {
 	
@@ -132,8 +136,6 @@ public class CalendarWidget extends Composite implements ClickHandler, SourcesCh
 	};
 	
 	private Date date = new Date();
-	
-	private ChangeListenerCollection changeListeners;
 	
 	private String[] days = new String[] { "", "", "", "", "", "", "" };
 	
@@ -356,26 +358,26 @@ public class CalendarWidget extends Composite implements ClickHandler, SourcesCh
 		CellHTML cell = (CellHTML) event.getSource();
 		setDate(getYear(), getMonth(), cell.getDay());
 		drawCalendar();
-		if (changeListeners != null) {
-			changeListeners.fireChange(this);
+		if (getHandlerCount(ChangeEvent.getType())>0) {
+			fireChange();
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesChangeEvents#addChangeListener(com.google.gwt.user.client.ui.ChangeListener)
+	/**
+	 * fire a change event
 	 */
-	public void addChangeListener(ChangeListener listener) {
-		if (changeListeners == null)
-		  changeListeners = new ChangeListenerCollection();
-		changeListeners.add(listener);
+	private void fireChange() {
+		 NativeEvent nativeEvent = Document.get().createChangeEvent();
+		 ChangeEvent.fireNativeEvent(nativeEvent, this);
 	}
+
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesChangeEvents#removeChangeListener(com.google.gwt.user.client.ui.ChangeListener)
+	 * @see com.google.gwt.event.dom.client.HasChangeHandlers#addChangeHandler(com.google.gwt.event.dom.client.ChangeHandler)
 	 */
-	public void removeChangeListener(ChangeListener listener) {
-		if (changeListeners != null)
-		  changeListeners.remove(listener);
+	@Override
+	public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+		return addDomHandler(handler, ChangeEvent.getType());
 	}
 	
 	/**
@@ -401,5 +403,5 @@ public class CalendarWidget extends Composite implements ClickHandler, SourcesCh
 		months[9] = Main.i18n("calendar.month.october");
 		months[10] = Main.i18n("calendar.month.november");
 		months[11] = Main.i18n("calendar.month.december");
-	}
+	}	
 }  
