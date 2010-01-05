@@ -47,7 +47,7 @@
 
   <properties>
     <!-- convenience to define GWT version in one place -->
-    <gwt.version>1.6.4</gwt.version>
+    <gwt.version>1.7.1</gwt.version>
 
     <!--  tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -308,7 +308,7 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>march-02-2009</version>
+      <version>july-14-2009</version>
     </dependency>
     
     <!-- KEA -->
