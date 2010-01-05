@@ -4,16 +4,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -26,11 +29,9 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SourcesChangeEvents;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ProgressBar;
 import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 
@@ -50,7 +51,7 @@ import es.git.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class FancyFileUpload extends Composite implements HasText, SourcesChangeEvents {
+public class FancyFileUpload extends Composite implements HasText, HasChangeHandlers {
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
@@ -267,7 +268,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			status.setHTML(Main.i18n("fileupload.status.sending"));
 			pendingPanel.setStyleName("fancyfileupload-pending");
 			widgetState = PENDING_STATE;
-			fireChangeEvent();
+			fireChange();
 		}
 
 		/**
@@ -282,7 +283,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			widgetState = UPLOADING_STATE;
 			fileUplodingStartedFlag = true; // Activates flash uploading is started
 			getFileUploadStatus();
-			fireChangeEvent();
+			fireChange();
 		}
 		
 		/**
@@ -312,7 +313,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			widgetState = UPLOADED_STATE;
 			fileUplodingStartedFlag = false;
 			refresh();
-			fireChangeEvent();
+			fireChange();
 			Main.get().mainPanel.dashboard.userDashboard.getUserLastModifiedDocuments();
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
 			Main.get().mainPanel.dashboard.userDashboard.getUserLastUploadedDocuments();
@@ -345,7 +346,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 			widgetState = FAILED_STATE;
 			fileUplodingStartedFlag = false;
 			refresh();
-			fireChangeEvent();
+			fireChange();
 		}
 
 		/**
@@ -354,7 +355,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		 */
 		private void reset(boolean enableImport) {
 			widgetState = EMPTY_STATE;
-			fireChangeEvent();
+			fireChange();
 			
 			// Reseting values
 			fileName = "";			
@@ -601,7 +602,7 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 		uploadForm.addFormHandler(new FormHandler() {
 			public void onSubmitComplete(FormSubmitCompleteEvent event) {
 				// Fire an onChange Event
-				fireChangeEvent();
+				fireChange();
 				// Cancel all timers to be absolutely sure nothing is going on.
 				p.cancel();
 				// Ensure that the form encoding is set correctly.
@@ -626,15 +627,6 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 				// No validation in this version.
 			}
 		});
-	}
-
-	/**
-	 * Fire a change event to anyone listening to us.
-	 * 
-	 */
-	private void fireChangeEvent() {
-		if (changeListeners != null)
-			changeListeners.fireChange(this);
 	}
 
 	/**
@@ -693,28 +685,21 @@ public class FancyFileUpload extends Composite implements HasText, SourcesChange
 	public int getPendingDelay() {
 		return pendingUpdateDelay;
 	}
-
-	private ChangeListenerCollection changeListeners;
-
+	
 	/**
-	 * Add a change listener
-	 * 
-	 * @param listener
+	 * fire a change event
 	 */
-	public void addChangeListener(ChangeListener listener) {
-		if (changeListeners == null)
-			changeListeners = new ChangeListenerCollection();
-		changeListeners.add(listener);
+	private void fireChange() {
+		 NativeEvent nativeEvent = Document.get().createChangeEvent();
+		 ChangeEvent.fireNativeEvent(nativeEvent, this);
 	}
 
-	/**
-	 * Remove a change listener
-	 * 
-	 * @param listener
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasChangeHandlers#addChangeHandler(com.google.gwt.event.dom.client.ChangeHandler)
 	 */
-	public void removeChangeListener(ChangeListener listener) {
-		if (changeListeners != null)
-			changeListeners.remove(listener);
+	@Override
+	public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+		return addDomHandler(handler, ChangeEvent.getType());
 	}
 
 	public void setAction(int action) {

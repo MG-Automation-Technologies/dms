@@ -19,15 +19,15 @@
 
 package es.git.openkm.frontend.client.widget.upload;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -84,8 +84,9 @@ public class FileUpload extends DialogBox {
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(ffUpload);
 		        
-		ffUpload.addChangeListener(new ChangeListener() {
-            public void onChange(Widget sender) {
+		ffUpload.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event) {
             	if (ffUpload.getUploadState() == FancyFileUpload.PENDING_STATE ||
             		ffUpload.getUploadState() == FancyFileUpload.UPLOADING_STATE) {
             		closeButton.setEnabled(false);
