@@ -19,14 +19,15 @@
 
 package es.git.openkm.frontend.client.widget.dashboard;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.SourcesMouseEvents;
 
 /**
@@ -35,8 +36,7 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
  * @author jllort
  *
  */
-public class ImageHover extends Image implements SourcesClickEvents, SourcesMouseEvents {
-	private ClickListenerCollection clickListeners;
+public class ImageHover extends Image implements HasClickHandlers, SourcesMouseEvents {
 	private MouseListenerCollection mouseListeners;
 	private String url = "";
 	private String urlHover = "";
@@ -49,22 +49,11 @@ public class ImageHover extends Image implements SourcesClickEvents, SourcesMous
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesClickEvents#addClickListener(com.google.gwt.user.client.ui.ClickListener)
+	 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
 	 */
-	public void addClickListener(ClickListener listener) {
-	    if (clickListeners == null) {
-	      clickListeners = new ClickListenerCollection();
-	    }
-	    clickListeners.add(listener);
-	  }
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesClickEvents#removeClickListener(com.google.gwt.user.client.ui.ClickListener)
-	 */
-	public void removeClickListener(ClickListener listener) {
-		if (clickListeners != null) {
-			clickListeners.remove(listener);
-		}
+	@Override
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addHandler(handler, ClickEvent.getType());
 	}
 	
 	/* (non-Javadoc)
@@ -90,14 +79,7 @@ public class ImageHover extends Image implements SourcesClickEvents, SourcesMous
 	 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
 	public void onBrowserEvent(Event event) {
-	    switch (DOM.eventGetType(event)) {
-	    	case Event.ONCLICK: {
-	    		if (clickListeners != null) {
-	    			clickListeners.fireClick(this);
-	    		}
-	    		break;
-	    	}
-	    	
+	    switch (DOM.eventGetType(event)) {    	
 	    	case Event.ONMOUSEDOWN:
 	        case Event.ONMOUSEUP:
 	        case Event.ONMOUSEMOVE:
