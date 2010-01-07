@@ -31,7 +31,7 @@
 			if (user != null && !user.equals("")) {
 				mailAccounts = dao.findMailAccountsByUser(user, false);
 			} else {
-				mailAccounts = dao.findAllMailAccounts();
+				mailAccounts = dao.findAllMailAccounts(false);
 			}
 			
 			int i = 0;
