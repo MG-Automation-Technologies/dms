@@ -43,14 +43,12 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		ArrayList<String> list = new ArrayList<String>();
 
 		try {
-			Collection<User> col = AuthDAO.getInstance().findAllUsers();
+			boolean filterByActive = Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS.equals("on");
+			Collection<User> col = AuthDAO.getInstance().findAllUsers(filterByActive);
 			
 			for (Iterator<User> it = col.iterator(); it.hasNext(); ) {
 				User dbUser = it.next();
-				
-				if (!Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS.equals("on") || dbUser.isActive()) {
-					list.add(dbUser.getId());
-				}
+				list.add(dbUser.getId());
 			}
 		} catch (SQLException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
