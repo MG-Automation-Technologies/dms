@@ -1,8 +1,8 @@
 package es.git.openkm.bean.form;
 
 public class TextArea extends Component {
-	private String cols;
-	private String rows;
+	private String cols = "";
+	private String rows = "";
 
 	public String getCols() {
 		return cols;

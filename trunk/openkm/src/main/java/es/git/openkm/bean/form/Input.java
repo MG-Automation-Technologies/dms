@@ -1,9 +1,10 @@
 package es.git.openkm.bean.form;
 
 public class Input extends Component {
-	public static final String TEXT = "text";
-	private String type;
-	private String size;
+	public static final String TYPE_TEXT = "text";
+	public static final String TYPE_DATE = "date";
+	private String type = TYPE_TEXT;
+	private String size = "";
 
 	public String getType() {
 		return type;
