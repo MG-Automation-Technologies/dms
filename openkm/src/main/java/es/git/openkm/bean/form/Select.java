@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Select extends Component {
-	public static final String SIMPLE = "simple";
-	public static final String MULTIPLE = "multiple";
+	public static final String TYPE_SIMPLE = "simple";
+	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<Option> options = new ArrayList<Option>();
-	private String type;
-	private String size;
+	private String type = TYPE_SIMPLE;
+	private String size = "";
 
 	public Collection<Option> getOptions() {
 		return options;

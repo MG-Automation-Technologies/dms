@@ -1,8 +1,8 @@
 package es.git.openkm.bean.form;
 
 public class Option {
-	private String name;
-	private String value;
+	private String name = "";
+	private String value = "";
 	
 	public String getName() {
 		return name;
