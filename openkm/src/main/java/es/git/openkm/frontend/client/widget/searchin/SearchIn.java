@@ -32,6 +32,11 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -43,7 +48,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -106,7 +110,8 @@ public class SearchIn extends Composite {
 	private HashMap<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private FlexTable tableProperties;
 	private HorizontalPanel hPanel;
-	private KeyboardListener keyboardListener;
+	private KeyPressHandler keyPressHandler;
+	private KeyUpHandler keyUpHandler;
 	private FuturamaWalking futuramaWalking;
 	private List<Integer> advancedSearchIndexList = new ArrayList<Integer>();
 	private CheckBox advancedSearch;
@@ -362,29 +367,34 @@ public class SearchIn extends Composite {
 			}
 		});
 		
-		// To enable enter on textBox
-		keyboardListener = new KeyboardListener() {
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {}
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-				evaluateSearchButtonVisible();
-			}
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-				if ((char)KeyboardListener.KEY_ENTER == keyCode && searchButton.isEnabled()) {
+		keyPressHandler = new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if ((char)KeyCodes.KEY_ENTER == event.getCharCode() && searchButton.isEnabled()) {
 					executeSearch();
 				}
 			}
 		};
 		
-		content.addKeyboardListener(keyboardListener);
-		name.addKeyboardListener(keyboardListener);
-		keywords.addKeyboardListener(keyboardListener);
+		keyUpHandler = new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				evaluateSearchButtonVisible();
+			}
+		};
 		
-		searchSavedName.addKeyboardListener(new KeyboardListener() {
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {}
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+		content.addKeyPressHandler(keyPressHandler);
+		content.addKeyUpHandler(keyUpHandler);
+		name.addKeyPressHandler(keyPressHandler);
+		name.addKeyUpHandler(keyUpHandler);
+		keywords.addKeyPressHandler(keyPressHandler);
+		keywords.addKeyUpHandler(keyUpHandler);
+		
+		searchSavedName.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
 				evalueSaveSearchButtonVisible();
 			}
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {}
 		});
 		
 		// Sets the folder explorer
@@ -595,9 +605,12 @@ public class SearchIn extends Composite {
 		setRowWordWarp(tableMail, 3, 2, false);
 		tableMail.setVisible(false);
 		
-		from.addKeyboardListener(keyboardListener);
-		to.addKeyboardListener(keyboardListener);
-		subject.addKeyboardListener(keyboardListener);
+		from.addKeyPressHandler(keyPressHandler);
+		from.addKeyUpHandler(keyUpHandler);
+		to.addKeyPressHandler(keyPressHandler);
+		to.addKeyUpHandler(keyUpHandler);
+		subject.addKeyPressHandler(keyPressHandler);
+		subject.addKeyUpHandler(keyUpHandler);
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
@@ -897,7 +910,8 @@ public class SearchIn extends Composite {
 				case GWTMetaData.TEXT_AREA:
 					TextBox textBox = new TextBox(); // Create a widget for this property
 					textBox.setStyleName("okm-Input");
-					textBox.addKeyboardListener(keyboardListener);
+					textBox.addKeyPressHandler(keyPressHandler);
+					textBox.addKeyUpHandler(keyUpHandler);
 					hWidgetProperties.put(propertyName,textBox);
 					tableProperties.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(grpName) + " :</b>");
 					tableProperties.setHTML(rows, 1, "&nbsp;" + Main.propertyGroupI18n(propertyName) + "&nbsp;");

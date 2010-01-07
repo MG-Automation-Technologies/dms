@@ -24,8 +24,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,11 +32,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import es.git.openkm.backend.client.Main;
@@ -85,30 +81,11 @@ public class PropertyGroupDetail extends Composite {
 		
 		addProperty.setEnabled(false);
 		
-		uniqueId.addKeyboardListener(new KeyboardListener(){
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-				//addProperty.setEnabled(testAddButtonProperty());
-			}
-		});
-		
 		typeList.addItem("","");
 		typeList.addItem(Main.i18n("group.property.group.type.textarea"), ""+GWTMetaData.TEXT_AREA);
 		typeList.addItem(Main.i18n("group.property.group.type.input"), ""+GWTMetaData.INPUT);
 		typeList.addItem(Main.i18n("group.property.group.type.select"), ""+GWTMetaData.SELECT);
 		typeList.addItem(Main.i18n("group.property.group.type.select.multiple"), ""+GWTMetaData.SELECT_MULTI);
-		
-		typeList.addChangeHandler(new ChangeHandler(){
-			@Override
-			public void onChange(ChangeEvent event) {
-				//addProperty.setEnabled(testAddButtonProperty());
-			}
-		});
 		
 		table.setBorderWidth(0);
 		table.setCellPadding(4);
@@ -158,8 +135,8 @@ public class PropertyGroupDetail extends Composite {
 			int rows = table.getRowCount();
 			FlexCellFormatter cellFormatter = table.getFlexCellFormatter();
 
-			for (Iterator it = hMetaData.keySet().iterator(); it.hasNext();) {
-				final String propertyName = (String) it.next();
+			for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
+				final String propertyName = it.next();
 				GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
 				
 				table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
@@ -185,8 +162,8 @@ public class PropertyGroupDetail extends Composite {
 						tableSelect.setCellSpacing(0);
 						int tsRows = tableSelect.getRowCount();
 						
-						for (Iterator itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-							String value = (String) itData.next();
+						for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
+							String value = itData.next();
 							tableSelect.setHTML(tsRows, 0, value);
 							tsRows++;
 						}
@@ -207,8 +184,8 @@ public class PropertyGroupDetail extends Composite {
 						tableSelectMultiple.setCellSpacing(0);
 						int tsmRows = tableSelectMultiple.getRowCount();
 
-						for (Iterator itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-							String value = (String) itData.next();
+						for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
+							String value = itData.next();
 							tableSelectMultiple.setHTML(tsmRows, 0, value);
 							tsmRows++;
 						}

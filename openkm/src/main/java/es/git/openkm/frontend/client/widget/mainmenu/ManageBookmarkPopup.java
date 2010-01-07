@@ -27,21 +27,21 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
@@ -87,24 +87,19 @@ public class ManageBookmarkPopup extends DialogBox {
 		textBox.setStyleName("okm-Input");
 		textBox.setVisibleLength(40);
 		textBox.setMaxLength(90);
-		textBox.addKeyboardListener(new KeyboardListener() {
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-				if ((char)KeyboardListener.KEY_ENTER == keyCode ) {
+		textBox.addKeyPressHandler(new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if ((char)KeyCodes.KEY_ENTER == event.getCharCode() ) {
 					if (textBox.getText().length()>0) {
 						rename(table.getText(selectedRow,1),textBox.getText());
 					}
 					
-				} else if ((char)KeyboardListener.KEY_ESCAPE == keyCode ) {
+				} else if ((char)KeyCodes.KEY_ESCAPE == event.getCharCode() ) {
 					tableBookmark.setHTML(0,1,table.getText(selectedRow,1));
 					deleteButton.setEnabled(true);
 					updateButton.setEnabled(true);
-				}		
-			}
-
-			public void onKeyDown(Widget arg0, char arg1, int arg2) {
-			}
-
-			public void onKeyUp(Widget arg0, char arg1, int arg2) {
+				}	
 			}
 		});
 		

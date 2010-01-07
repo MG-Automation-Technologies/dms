@@ -19,10 +19,11 @@
 
 package es.git.openkm.frontend.client.widget.filebrowser;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -32,7 +33,7 @@ import es.git.openkm.frontend.client.Main;
  * @author jllort
  *
  */
-public class FileTextBox extends Composite implements KeyboardListener {
+public class FileTextBox extends Composite {
 	
 	public static final int ACTION_NONE = -1;
 	public static final int ACTION_RENAME = 0;
@@ -44,51 +45,37 @@ public class FileTextBox extends Composite implements KeyboardListener {
 	 */
 	public FileTextBox() {
 		textBox = new TextBox();
-		textBox.addKeyboardListener(this);
+		textBox.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				switch (event.getNativeKeyCode()) {
+				case (char)KeyCodes.KEY_ENTER: 
+					switch(action) {
+						case ACTION_RENAME:
+							if (textBox.getText().length() > 0) {
+								Main.get().mainPanel.browser.fileBrowser.rename(textBox.getText());
+							} else {
+								Main.get().mainPanel.browser.fileBrowser.hideRename();
+							}
+							break;
+					}
+				    Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+				    break;
+				    
+				case (char)KeyCodes.KEY_ESCAPE: 
+					switch(action) {
+						case ACTION_RENAME:
+							Main.get().mainPanel.browser.fileBrowser.hideRename();
+							break;
+					}
+					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+				    break;
+				}
+			}
+		});
 		textBox.setVisibleLength(20);
 		textBox.setStyleName("okm-FileBrowser-TextBox");
 		initWidget(textBox);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyDown(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyPress(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyUp(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-		switch (keyCode) {
-			case (char)KeyboardListener.KEY_ENTER: 
-				switch(action) {
-					case ACTION_RENAME:
-						if (textBox.getText().length() > 0) {
-							Main.get().mainPanel.browser.fileBrowser.rename(textBox.getText());
-						} else {
-							Main.get().mainPanel.browser.fileBrowser.hideRename();
-						}
-						break;
-				}
-			    Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-			    break;
-			    
-			case (char)KeyboardListener.KEY_ESCAPE: 
-				switch(action) {
-					case ACTION_RENAME:
-						Main.get().mainPanel.browser.fileBrowser.hideRename();
-						break;
-				}
-				Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-			    break;
-		}
 	}
 	
 	/**

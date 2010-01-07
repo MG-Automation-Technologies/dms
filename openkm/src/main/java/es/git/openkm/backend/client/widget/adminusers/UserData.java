@@ -26,21 +26,22 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.backend.client.Main;
 import es.git.openkm.backend.client.OKMException;
@@ -110,8 +111,9 @@ public class UserData extends Composite {
 			add(new HTML("&nbsp;"));
 			add(roleHTML);
 			this.setCellVerticalAlignment(roleHTML, HasAlignment.ALIGN_MIDDLE);
-			delete.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
+			delete.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
 					// If role was on exiting role list must restore on list
 					if(completeRoleList.contains(role)) {
 						rolesList.addItem(role, role);
@@ -174,8 +176,9 @@ public class UserData extends Composite {
 		staticRolesTable.setCellSpacing(0);
 		
 		create = new Button (Main.i18n("button.create.user"));
-		create.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		create.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				collectUserData();
 				if (validateUserBeforeAction()) {
 					createUser(user);
@@ -184,8 +187,9 @@ public class UserData extends Composite {
 		});
 		
 		update = new Button (Main.i18n("button.update.user"));
-		update.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		update.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				collectUserData();
 				if (validateUserBeforeAction()) {
 					updateUser(user);
@@ -194,8 +198,9 @@ public class UserData extends Composite {
 		});
 		
 		cancel = new Button (Main.i18n("button.cancel"));
-		cancel.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		cancel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				Main.get().centerPanel.adminUsersPanel.users.updateUser(user); // To restore delete button must restore all row
 				resetUserData();
 				setAction(ACTION_CREATE);
@@ -203,8 +208,9 @@ public class UserData extends Composite {
 		});
 		
 		addRole = new Button (Main.i18n("button.add"));
-		addRole.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		addRole.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				if (rolesList.getSelectedIndex()>0) {
 					addRole.setEnabled(false);
 					String role = rolesList.getValue(rolesList.getSelectedIndex());
@@ -212,25 +218,20 @@ public class UserData extends Composite {
 					rolesTable.setWidget(rolesTable.getRowCount(), 0, new RolePanel(role));
 					rolesList.removeItem(rolesList.getSelectedIndex());
 				}
-				
 			}
 		});
 		
-		newRole.addKeyboardListener(new KeyboardListener(){
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
+		newRole.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
 				addNewRole.setEnabled(!newRole.getText().equals(""));
 			}
 		});
 		
 		addNewRole = new Button (Main.i18n("button.add.new.role"));
-		addNewRole.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		addNewRole.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				if (validateNewRole(newRole.getText())) {
 					String role = newRole.getText();
 					user.getRoles().add(role);

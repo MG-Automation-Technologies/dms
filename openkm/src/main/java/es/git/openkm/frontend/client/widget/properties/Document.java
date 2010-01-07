@@ -28,6 +28,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,7 +43,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -122,15 +124,10 @@ public class Document extends Composite {
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
-		suggestKey.addKeyboardListener(new KeyboardListener() {
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-				if (keyCode == (char)KeyboardListener.KEY_ENTER ) {
+		suggestKey.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 					boolean remove = ((document.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE 
 							          && !document.isCheckedOut() && !document.isLocked());
 					Main.get().mainPanel.enableKeyShorcuts(); 			// Enables general keys applications
@@ -142,16 +139,15 @@ public class Document extends Composite {
 					suggestKey.setText("");
 				}
 			}
-			
 		});
-		suggestKey.addClickListener(new ClickListener() { 
+		suggestKey.addClickListener(new ClickListener() {
 			@Override
 			public void onClick(Widget sender) {
 				if (suggestKey.getText().equals(Main.i18n("dashboard.keyword.suggest"))) {
 					suggestKey.setText("");
 				}
 				Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
-			}		
+			}
 		});
 		
 		VerticalPanel vPanel = new VerticalPanel();

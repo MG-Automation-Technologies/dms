@@ -32,6 +32,9 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -42,7 +45,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -153,20 +155,14 @@ public class KeyMapDashboard extends Composite {
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
-		suggestKey.addKeyboardListener(new KeyboardListener(){
-			public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-			}
-
-			public void onKeyUp(Widget sender, char keyCode, int modifiers) {
-				if (keyCode == (char)KeyboardListener.KEY_ENTER ) {
+		suggestKey.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() ) {
 					selectKey(suggestKey.getText());
 					suggestKey.setText("");
 				}
 			}
-			
 		});
 		suggestKey.addClickListener(new ClickListener(){
 			public void onClick(Widget sender) {
