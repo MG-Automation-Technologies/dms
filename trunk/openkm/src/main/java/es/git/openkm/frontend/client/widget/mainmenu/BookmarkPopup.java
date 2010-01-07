@@ -21,16 +21,17 @@ package es.git.openkm.frontend.client.widget.mainmenu;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -69,21 +70,16 @@ public class BookmarkPopup extends DialogBox {
 		textBox.setVisibleLength(40);
 		textBox.setMaxLength(90);
 		
-		textBox.addKeyboardListener(new KeyboardListener() {
-			public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-				if ((char)KeyboardListener.KEY_ENTER == keyCode ) {
+		textBox.addKeyPressHandler(new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if ((char)KeyCodes.KEY_ENTER == event.getCharCode() ) {
 					if (!nodePath.equals("") && !textBox.getText().equals("")) {
 						Main.get().mainPanel.topPanel.mainMenu.bookmark.add(nodePath, textBox.getText());
 					}
 					reset();
 					hide();
 				}	
-			}
-
-			public void onKeyDown(Widget arg0, char arg1, int arg2) {
-			}
-
-			public void onKeyUp(Widget arg0, char arg1, int arg2) {
 			}
 		});
 

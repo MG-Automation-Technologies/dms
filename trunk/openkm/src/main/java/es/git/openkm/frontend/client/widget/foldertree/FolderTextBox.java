@@ -21,11 +21,13 @@ package es.git.openkm.frontend.client.widget.foldertree;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,7 +40,7 @@ import es.git.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class FolderTextBox extends Composite implements KeyboardListener, HasWidgets {
+public class FolderTextBox extends Composite implements HasWidgets {
 	private TextBox textBox;
 	
 	/**
@@ -48,71 +50,57 @@ public class FolderTextBox extends Composite implements KeyboardListener, HasWid
 		HorizontalPanel panel = new HorizontalPanel();
 		//panel.setSize("100%", "100%");
 		textBox = new TextBox();
-		textBox.addKeyboardListener(this);
+		textBox.addKeyDownHandler(new KeyDownHandler() {
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+				int action = Main.get().activeFolderTree.getFolderAction();
+				
+				switch (event.getNativeKeyCode()) {
+					case (char)KeyCodes.KEY_ENTER: 
+						switch(action) {
+							case FolderTree.ACTION_CREATE:
+								Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
+								if (textBox.getText().length() > 0) {
+									Main.get().activeFolderTree.create(textBox.getText());
+								} else {
+									Main.get().activeFolderTree.removeTmpFolderCreate();		
+								}
+								break;
+								
+							case FolderTree.ACTION_RENAME:
+								Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
+								if (textBox.getText().length() > 0) {
+									Main.get().activeFolderTree.rename(textBox.getText());
+								} else {
+									Main.get().activeFolderTree.cancelRename();
+								}
+								break;
+						}
+						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+					    break;
+					    
+					case (char)KeyCodes.KEY_ESCAPE: 
+						switch(action) {
+							case FolderTree.ACTION_CREATE:
+								Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
+								Main.get().activeFolderTree.removeTmpFolderCreate();
+								break;
+								
+							case FolderTree.ACTION_RENAME:
+								Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
+								Main.get().activeFolderTree.cancelRename();
+								break;
+						}
+						Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
+					    break;
+				}
+			}
+		});
 		textBox.setVisibleLength(20);
 		textBox.setStyleName("okm-FileBrowser-TextBox");
 		panel.add(new HTML(Util.imageItemHTML("img/menuitem_empty.gif", "", "top")));
 		panel.add(textBox);
 		initWidget(panel);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyDown(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyDown(Widget sender, char keyCode, int modifiers) {
-		int action = Main.get().activeFolderTree.getFolderAction();
-		
-		switch (keyCode) {
-			case (char)KeyboardListener.KEY_ENTER: 
-				switch(action) {
-					case FolderTree.ACTION_CREATE:
-						Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
-						if (textBox.getText().length() > 0) {
-							Main.get().activeFolderTree.create(textBox.getText());
-						} else {
-							Main.get().activeFolderTree.removeTmpFolderCreate();		
-						}
-						break;
-						
-					case FolderTree.ACTION_RENAME:
-						Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
-						if (textBox.getText().length() > 0) {
-							Main.get().activeFolderTree.rename(textBox.getText());
-						} else {
-							Main.get().activeFolderTree.cancelRename();
-						}
-						break;
-				}
-				Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-			    break;
-			    
-			case (char)KeyboardListener.KEY_ESCAPE: 
-				switch(action) {
-					case FolderTree.ACTION_CREATE:
-						Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
-						Main.get().activeFolderTree.removeTmpFolderCreate();
-						break;
-						
-					case FolderTree.ACTION_RENAME:
-						Main.get().activeFolderTree.rootItem.addStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection
-						Main.get().activeFolderTree.cancelRename();
-						break;
-				}
-				Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-			    break;
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyPress(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyPress(Widget sender, char keyCode, int modifiers) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.KeyboardListener#onKeyUp(com.google.gwt.user.client.ui.Widget, char, int)
-	 */
-	public void onKeyUp(Widget sender, char keyCode, int modifiers) {
 	}
 	
 	/**
