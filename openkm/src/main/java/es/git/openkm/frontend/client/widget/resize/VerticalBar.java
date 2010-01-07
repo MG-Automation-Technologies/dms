@@ -19,10 +19,10 @@
 
 package es.git.openkm.frontend.client.widget.resize;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.panel.ExtendedSizeComposite;
@@ -33,11 +33,10 @@ import es.git.openkm.frontend.client.panel.ExtendedSizeComposite;
  * @author jllort
  *
  */
-public class VerticalBar extends ExtendedSizeComposite implements MouseListener {
+public class VerticalBar extends ExtendedSizeComposite {
 	
 	private VerticalPanel panel;
 	private Label label;
-	//public VerticalBarPopup verticalBarPopup;
 	
 	/**
 	 * Vertical Bar
@@ -45,12 +44,18 @@ public class VerticalBar extends ExtendedSizeComposite implements MouseListener 
 	public VerticalBar(){
 		label = new Label();
 		panel = new VerticalPanel();
-		//verticalBarPopup = new VerticalBarPopup();
 		
 		panel.setStyleName("okm-VerticalBar");
 		label.setSize("100%","100%");
 		label.setStyleName("okm-VerticalBar-Point");
-		label.addMouseListener(this);
+		label.addMouseDownHandler(new MouseDownHandler(){
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				int height = Main.get().mainPanel.getLeftPanelHeight();
+				Main.get().verticalBarSplitter.setSize(label.getAbsoluteLeft(), label.getAbsoluteTop(), height);
+				Main.get().verticalBarSplitter.setPosition();
+				Main.get().verticalBarSplitter.show();
+			}});
 		
 		panel.add(label);
 		initWidget(panel);
@@ -64,39 +69,5 @@ public class VerticalBar extends ExtendedSizeComposite implements MouseListener 
 	 */
 	public void setSize(int width, int height) {
 		panel.setSize(""+width, ""+height);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseDown(Widget sender, int x, int y){
-		int height = Main.get().mainPanel.getLeftPanelHeight();
-		Main.get().verticalBarSplitter.setSize(label.getAbsoluteLeft(), label.getAbsoluteTop(), height);
-		Main.get().verticalBarSplitter.setPosition();
-		Main.get().verticalBarSplitter.show();
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseEnter(com.google.gwt.user.client.ui.Widget)
-	 */
-	public void onMouseEnter(Widget sender) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseLeave(com.google.gwt.user.client.ui.Widget)
-	 */
-	public void onMouseLeave(Widget sender) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseMove(Widget sender, int x, int y) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseUp(Widget sender, int x, int y) {
 	}
 }

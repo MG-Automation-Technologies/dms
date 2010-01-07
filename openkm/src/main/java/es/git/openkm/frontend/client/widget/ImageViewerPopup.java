@@ -23,8 +23,22 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -33,7 +47,6 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,7 +60,7 @@ import es.git.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class ImageViewerPopup extends DialogBox implements MouseListener {
+public class ImageViewerPopup extends DialogBox implements HasAllMouseHandlers {
 
 	private static final double ZOOM_RATIO = 0.25;
 	private static final double ZOOM_RATIO_MINOR = 0.01;
@@ -140,8 +153,39 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 		zoomOut = new HTML(Util.imageHTML("img/icon/actions/zoom_out.gif",Main.i18n("image.viewer.zoom.out")));
 		zoomIn.addClickHandler(zoomInListener);
 		zoomOut.addClickHandler(zoomOutListener);
-		zoomIn.addMouseListener(this);
-		zoomOut.addMouseListener(this);
+		
+		zoomIn.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		zoomIn.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		zoomOut.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		zoomOut.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
 		zoomIn.setStyleName("okm-ToolBar-button");
 		zoomOut.setStyleName("okm-ToolBar-button");		
 		panel = new HorizontalPanel();
@@ -328,39 +372,44 @@ public class ImageViewerPopup extends DialogBox implements MouseListener {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
+	 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
 	 */
-	public void onMouseDown(Widget sender, int x, int y) {
-		super.onMouseDown(sender, x, y);
+	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+	    return addDomHandler(handler, MouseDownEvent.getType());
 	}
-	
+	  
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseEnter(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
 	 */
-	public void onMouseEnter(Widget sender) {
-		sender.addStyleName("okm-ToolBar-selected");
-		super.onMouseEnter(sender);
+	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		return addDomHandler(handler, MouseMoveEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseLeave(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
 	 */
-	public void onMouseLeave(Widget sender) {
-		sender.removeStyleName("okm-ToolBar-selected");
-		super.onMouseLeave(sender);
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+	    return addDomHandler(handler, MouseOutEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
+	 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
 	 */
-	public void onMouseMove(Widget sender, int x, int y) {
-		super.onMouseMove(sender, x, y);
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+	    return addDomHandler(handler, MouseOverEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
+	 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
 	 */
-	public void onMouseUp(Widget sender, int x, int y) {
-		super.onMouseUp(sender, x, y);
+	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+	    return addDomHandler(handler, MouseUpEvent.getType());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
+	 */
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+	    return addDomHandler(handler, MouseWheelEvent.getType());
 	}
 }

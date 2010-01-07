@@ -22,9 +22,21 @@ package es.git.openkm.frontend.client.widget.dashboard;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
@@ -32,9 +44,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,7 +57,7 @@ import es.git.openkm.frontend.client.panel.center.Dashboard;
  * @author jllort
  *
  */
-public class HorizontalToolBar extends Composite implements MouseListener {
+public class HorizontalToolBar extends Composite {
 	private DashboardImageBundle dbImageBundle = (DashboardImageBundle) GWT.create(DashboardImageBundle.class);
 	private HorizontalPanel hPanel;
 	private ToolBarBox user;
@@ -73,12 +82,101 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		
 		enabledWidget = user; // Setting the enabled widget
 		
-		user.addMouseListener(this);
-		mail.addMouseListener(this);
-		news.addMouseListener(this);
-		general.addMouseListener(this);
-		workflow.addMouseListener(this);
-		keywordMap.addMouseListener(this);
+		user.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		user.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		mail.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		mail.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		news.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		news.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+
+		general.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		general.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		workflow.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		workflow.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		keywordMap.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
+		
+		keywordMap.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+			}
+		});
 		
 		user.addClickHandler(new ClickHandler(){
 			@Override
@@ -188,9 +286,8 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 	 * @author jllort
 	 *
 	 */
-	private class ToolBarBox extends HorizontalPanel implements HasClickHandlers, SourcesMouseEvents {
+	private class ToolBarBox extends HorizontalPanel implements HasClickHandlers, HasAllMouseHandlers {
 		
-		private MouseListenerCollection mouseListeners;
 		private VerticalPanel vPanel;
 		private Image image;
 		private HTML html;
@@ -256,42 +353,45 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		}
 		
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesMouseEvents#addMouseListener(com.google.gwt.user.client.ui.MouseListener)
+		 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
 		 */
-		public void addMouseListener(MouseListener listener) {
-		    if (mouseListeners == null) {
-		      mouseListeners = new MouseListenerCollection();
-		    }
-		    mouseListeners.add(listener);
-		  }
-		
+		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+		    return addDomHandler(handler, MouseDownEvent.getType());
+		}
+		  
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.SourcesMouseEvents#removeMouseListener(com.google.gwt.user.client.ui.MouseListener)
+		 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
 		 */
-		public void removeMouseListener(MouseListener listener) {
-		    if (mouseListeners != null) {
-		      mouseListeners.remove(listener);
-		    }
-		  }
-		
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+			return addDomHandler(handler, MouseMoveEvent.getType());
+		}
+
 		/* (non-Javadoc)
-		 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
+		 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
 		 */
-		public void onBrowserEvent(Event event) {
-		    switch (DOM.eventGetType(event)) {	    	
-		    	case Event.ONMOUSEDOWN:
-		        case Event.ONMOUSEUP:
-		        case Event.ONMOUSEMOVE:
-		        case Event.ONMOUSEOVER:
-		        case Event.ONMOUSEOUT: {
-		          if (mouseListeners != null) {
-		            mouseListeners.fireMouseEvent(this, event);
-		          }
-		          break;
-		        }
-		    	
-		    }
-		    super.onBrowserEvent(event);
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		    return addDomHandler(handler, MouseOutEvent.getType());
+		}
+
+		/* (non-Javadoc)
+		 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
+		 */
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		    return addDomHandler(handler, MouseOverEvent.getType());
+		}
+
+		/* (non-Javadoc)
+		 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
+		 */
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+		    return addDomHandler(handler, MouseUpEvent.getType());
+		}
+
+		/* (non-Javadoc)
+		 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
+		 */
+		public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+		    return addDomHandler(handler, MouseWheelEvent.getType());
 		}
 	}
 	
@@ -323,25 +423,5 @@ public class HorizontalToolBar extends Composite implements MouseListener {
 		workflow.setStyleName("okm-ToolBar-Big-selected");
 		enabledWidget = news;
 		Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_WORKFLOW);
-	}
-	
-	public void onMouseDown(Widget sender, int x, int y) {
-		// TODO Auto-generated method stub
-	}
-
-	public void onMouseEnter(Widget sender) {
-		sender.addStyleName("okm-ToolBar-BigTMP-selected");
-	}
-
-	public void onMouseLeave(Widget sender) {
-		sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-	}
-
-	public void onMouseMove(Widget sender, int x, int y) {
-		// TODO Auto-generated method stub
-	}
-
-	public void onMouseUp(Widget sender, int x, int y) {
-		// TODO Auto-generated method stub
 	}
 }

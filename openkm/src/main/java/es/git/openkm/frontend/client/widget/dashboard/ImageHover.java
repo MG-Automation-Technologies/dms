@@ -21,14 +21,24 @@ package es.git.openkm.frontend.client.widget.dashboard;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.MouseListenerCollection;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
 
 /**
  * Image hovering on mouse over
@@ -36,16 +46,29 @@ import com.google.gwt.user.client.ui.SourcesMouseEvents;
  * @author jllort
  *
  */
-public class ImageHover extends Image implements HasClickHandlers, SourcesMouseEvents {
-	private MouseListenerCollection mouseListeners;
+public class ImageHover extends Image implements HasClickHandlers, HasAllMouseHandlers {
 	private String url = "";
 	private String urlHover = "";
 	
-	public ImageHover(String url, String urlHover) {
+	public ImageHover(final String url, final String urlHover) {
 		super(url);
 		sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS);
 		this.url = url;
 		this.urlHover = urlHover;
+		
+		addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				setUrl(urlHover);
+			}
+		});
+		
+		addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				setUrl(url);
+			}
+		});
 	}
 	
 	/* (non-Javadoc)
@@ -57,23 +80,46 @@ public class ImageHover extends Image implements HasClickHandlers, SourcesMouseE
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesMouseEvents#addMouseListener(com.google.gwt.user.client.ui.MouseListener)
+	 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
 	 */
-	public void addMouseListener(MouseListener listener) {
-	    if (mouseListeners == null) {
-	      mouseListeners = new MouseListenerCollection();
-	    }
-	    mouseListeners.add(listener);
-	  }
-	
+	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+	    return addDomHandler(handler, MouseDownEvent.getType());
+	}
+	  
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.SourcesMouseEvents#removeMouseListener(com.google.gwt.user.client.ui.MouseListener)
+	 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
 	 */
-	public void removeMouseListener(MouseListener listener) {
-	    if (mouseListeners != null) {
-	      mouseListeners.remove(listener);
-	    }
-	  }
+	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		return addDomHandler(handler, MouseMoveEvent.getType());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
+	 */
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+	    return addDomHandler(handler, MouseOutEvent.getType());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
+	 */
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+	    return addDomHandler(handler, MouseOverEvent.getType());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
+	 */
+	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+	    return addDomHandler(handler, MouseUpEvent.getType());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
+	 */
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+	    return addDomHandler(handler, MouseWheelEvent.getType());
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
@@ -87,16 +133,10 @@ public class ImageHover extends Image implements HasClickHandlers, SourcesMouseE
 	        	if (!super.getUrl().equals(urlHover)) {
 	        		super.setUrl(urlHover);
 	        	}
-	        	if (mouseListeners != null) {
-	        		mouseListeners.fireMouseEvent(this, event);
-		        }
 		        break;
 	        case Event.ONMOUSEOUT: {
 	        	if (!super.getUrl().equals(url)) {
 	        		super.setUrl(url);
-	        	}
-	        	if (mouseListeners != null) {
-	        		mouseListeners.fireMouseEvent(this, event);
 	        	}
 	          break;
 	        }

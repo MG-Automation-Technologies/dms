@@ -21,6 +21,12 @@ package es.git.openkm.frontend.client.widget.resize;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
@@ -28,7 +34,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -74,22 +79,20 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 		label.sinkEvents(Event.MOUSEEVENTS);
 		label.addStyleName("okm-Popup-VerticalBar-Point");
 		label.setSize("100%","10");
-		label.addMouseListener(new MouseListenerAdapter() {
-			
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseDown(Widget sender, int x, int y) {
+		
+		label.addMouseDownHandler(new MouseDownHandler(){
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
 				dragging = true;
-				RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , x, y);
+				RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , event.getClientX(), event.getClientY());
 			}
-			
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseMove(Widget sender, int x, int y) {
+		});
+		
+		label.addMouseMoveHandler(new MouseMoveHandler(){
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
 				if (dragging) {
-					int posX = DOM.eventGetClientX(event) -5;
+					int posX = event.getClientX() -5;
 					
 					if ((clientWidth-CORNER_RIGHT_MARGIN) < (posX)) { 
 						RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , clientWidth-CORNER_RIGHT_MARGIN, posY );
@@ -99,18 +102,16 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 						RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , posX, posY );
 					}
 				}
-				
-				super.onMouseMove(sender, x, y);
 			}
-			
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseUp(Widget sender, int x, int y) {
+		});
+		
+		label.addMouseUpHandler(new MouseUpHandler(){
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
 				DOM.releaseCapture(label.getElement());
 				DOM.removeEventPreview(eventPreview);
 				dragging = false;
-				int posX = DOM.eventGetClientX(event) -5;
+				int posX = event.getClientX() -5;
 				
 				RootPanel.get().setWidgetPosition(Main.get().verticalBarSplitter , posX , posY);
 
@@ -123,10 +124,7 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 				}
 				panel.setVisible(false);
 				
-				super.onMouseUp(sender, x, y);
-			}
-			
-		});
+			}});
 		
 		panel.add(label);
 		panel.setStyleName("okm-Popup-VerticalBar");
@@ -185,7 +183,7 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator() {
+	public Iterator<Widget> iterator() {
 		return null;
 	}
 	

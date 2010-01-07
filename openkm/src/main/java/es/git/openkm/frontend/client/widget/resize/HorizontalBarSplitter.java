@@ -21,13 +21,18 @@ package es.git.openkm.frontend.client.widget.resize;
 
 import java.util.Iterator;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -74,21 +79,20 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 		label.sinkEvents(Event.MOUSEEVENTS);
 		label.setStyleName("okm-Popup-HorizontalBar-Point");
 		label.setSize("10","100%");
-		label.addMouseListener(new MouseListenerAdapter(){
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseDown(Widget sender, int x, int y) {
+		
+		label.addMouseDownHandler(new MouseDownHandler(){
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
 				dragging = true;
-			    dragStartY = y;
+			    dragStartY = event.getClientY();			
 			}
-						
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseMove(Widget sender, int x, int y) {
+		});
+		
+		label.addMouseMoveHandler(new MouseMoveHandler(){
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
 				if (dragging) {
-					int posY = DOM.eventGetClientY(event) -5;
+					int posY = event.getClientY() -5;
 					
 					if (minTopY > posY) {
 						RootPanel.get().setWidgetPosition(Main.get().horizontalBarSplitter , posX, minTopY );
@@ -98,18 +102,17 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 						RootPanel.get().setWidgetPosition(Main.get().horizontalBarSplitter , posX, posY );
 					}
 				}
-				super.onMouseMove(sender, x, y);
 			}
-			
-			/* (non-Javadoc)
-			 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-			 */
-			public void onMouseUp(Widget sender, int x, int y) {
+		});
+		
+		label.addMouseUpHandler(new MouseUpHandler(){
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
 				DOM.releaseCapture(label.getElement());
 				DOM.removeEventPreview(eventPreview);
 				
 				dragging = false;
-				int posY = DOM.eventGetClientY(event);
+				int posY = event.getClientY();
 				
 				if (minTopY > posY) {
 					Main.get().mainPanel.horizontalResize(minTopY - dragStartY);
@@ -120,8 +123,6 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 				}
 				
 				panel.setVisible(false);
-				
-				super.onMouseUp(sender, x, y);
 			}
 		});
 		
@@ -188,7 +189,7 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator(){
+	public Iterator<Widget> iterator(){
 		return null;
 	}
 	

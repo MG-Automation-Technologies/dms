@@ -22,6 +22,10 @@ package es.git.openkm.frontend.client.widget;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -31,7 +35,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
@@ -89,14 +92,11 @@ public class Dragable extends Composite implements OriginPanel {
                 return true;
             }
 		};
-
-		floater.addMouseListener(new MouseListenerAdapter() {
-			
-            /* (non-Javadoc)
-             * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-             */
-            public void onMouseUp(Widget sender, int x, int y) {
-            	if (timer!=null) {
+		
+		floater.addMouseUpHandler(new MouseUpHandler(){
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				if (timer!=null) {
             		timer.cancel(); // Cancel timer
             		timer = null;
             	}
@@ -118,7 +118,8 @@ public class Dragable extends Composite implements OriginPanel {
 	        		// Action depends on origin dragable
 	        		switch(originPanel) {
 	        			case TREE_ROOT :
-	        				TreeItem clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget(event));
+	        				
+	        				TreeItem clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
 	        				if (clickedTreeItem!=null && 
 	        					(((GWTFolder)clickedTreeItem.getUserObject()).getPermissions()& GWTPermission.WRITE) == GWTPermission.WRITE ){
 	        					TreeItem draggedTreeItem = Main.get().activeFolderTree.getActualItem();
@@ -162,7 +163,7 @@ public class Dragable extends Composite implements OriginPanel {
 	        				break;
 	        				
 	    				case FILE_BROWSER :
-	    					clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget(event));
+	    					clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
 	    					TreeItem actualTreeItem = Main.get().activeFolderTree.getActualItem();
 	    					
 	        				if (clickedTreeItem!=null && Main.get().mainPanel.browser.fileBrowser.isSelectedRow() &&
@@ -254,14 +255,14 @@ public class Dragable extends Composite implements OriginPanel {
 	            
         		// Always we destroy possible timers to automatic up / down scroll
         		Main.get().mainPanel.navigator.scrollTaxonomyPanel.destroyTimer();
-                super.onMouseUp(sender, x, y);
-            }
-
-            /* (non-Javadoc)
-             * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
-             */
-            public void onMouseMove(Widget sender, int x, int y) {
-                if (dragged && event!=null) {
+				
+			}
+		});
+		
+		floater.addMouseMoveHandler(new MouseMoveHandler(){
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				if (dragged && event!=null) {
                 	
                 	floater.setVisible(true); // Sets the floater visible
                 	
@@ -271,12 +272,12 @@ public class Dragable extends Composite implements OriginPanel {
 	                	timer = null;
                 	}
 
-                    int posX = DOM.eventGetClientX(event);
-                    int posY = DOM.eventGetClientY(event);
+                    int posX = event.getClientX();
+                    int posY = event.getClientY();
                     RootPanel.get().setWidgetPosition(Main.get().dragable, posX + 1, posY);
                     
                     // Sets selected tree style to indicate posible selected destination
-                    selectedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget(event));
+                    selectedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
                     TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
                     
                     // Removes always style of las selected treeItem
@@ -304,9 +305,7 @@ public class Dragable extends Composite implements OriginPanel {
                     // Action depends dragables destinations widgets
          			Main.get().mainPanel.navigator.scrollTaxonomyPanel.ScrollOnDragDrop(posX + 1, posY);
                 }
-
-                super.onMouseMove(sender, x, y);
-            }
+			}
 		});
 		
 		initWidget(floater);
@@ -323,14 +322,12 @@ public class Dragable extends Composite implements OriginPanel {
 		floater.setHTML(html);
 		
 		// Initialize values
-// dragged=false;
 		dragged=true;
 		selectedTreeItem = null;
 		lastSelectedTreeItem = null;
 
 		timer = new Timer() {
 			public void run() {
-//				dragged=true;
 				dropEnabled=true;
 			}
 		};
@@ -383,7 +380,7 @@ public class Dragable extends Composite implements OriginPanel {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator() {
+	public Iterator<Widget> iterator() {
 		return null;
 	}
 	
