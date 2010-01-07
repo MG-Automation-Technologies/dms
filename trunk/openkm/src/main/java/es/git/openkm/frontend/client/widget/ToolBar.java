@@ -25,12 +25,25 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
@@ -58,7 +71,7 @@ import es.git.openkm.frontend.client.widget.upload.FancyFileUpload;
  * @author jllort
  *
  */
-public class ToolBar extends Composite implements MouseListener, OriginPanel {
+public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPanel {
 	
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
@@ -574,23 +587,277 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 		home.addClickHandler(arrowHomeListener);
 		refresh.addClickHandler(arrowRefreshListener);
 		
-		createDirectory.addMouseListener(this);
-		lock.addMouseListener(this);
-		unLock.addMouseListener(this);
-		addDocument.addMouseListener(this);
-		delete.addMouseListener(this);
-		edit.addMouseListener(this);
-		checkin.addMouseListener(this);
-		cancelCheckout.addMouseListener(this);
-		download.addMouseListener(this);
-		downloadPdf.addMouseListener(this);
-		addPropertyGroup.addMouseListener(this);
-		removePropertyGroup.addMouseListener(this);
-		startWorkflow.addMouseListener(this);
-		addSubscription.addMouseListener(this);
-		removeSubscription.addMouseListener(this);
-		home.addMouseListener(this);
-		refresh.addMouseListener(this);
+		createDirectory.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		createDirectory.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		lock.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		lock.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		unLock.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		unLock.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		addDocument.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		addDocument.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		delete.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		delete.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+
+		edit.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		edit.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		checkin.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		checkin.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		cancelCheckout.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		cancelCheckout.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+
+		download.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		download.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		downloadPdf.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		downloadPdf.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+
+		addPropertyGroup.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		addPropertyGroup.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		removePropertyGroup.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		removePropertyGroup.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		startWorkflow.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		startWorkflow.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+
+		addSubscription.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		addSubscription.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		removeSubscription.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		removeSubscription.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		home.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		home.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		refresh.addMouseOverHandler(new MouseOverHandler(){
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.addStyleName("okm-ToolBar-selected");
+			}
+		});
+		
+		refresh.addMouseOutHandler(new MouseOutHandler(){
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Widget sender = (Widget) event.getSource();
+				sender.removeStyleName("okm-ToolBar-selected");
+			}
+		});
 		
 		createDirectory.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
@@ -1910,36 +2177,46 @@ public class ToolBar extends Composite implements MouseListener, OriginPanel {
 	public ToolBarOption getToolBarOption() {
 		return toolBarOption;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
+	 */
+	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+	    return addDomHandler(handler, MouseDownEvent.getType());
+	}
+	  
+	/* (non-Javadoc)
+	 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
+	 */
+	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		return addDomHandler(handler, MouseMoveEvent.getType());
+	}
 
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
+	 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
 	 */
-	public void onMouseDown(Widget sender, int x, int y) {
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+	    return addDomHandler(handler, MouseOutEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseEnter(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
 	 */
-	public void onMouseEnter(Widget sender) {
-		sender.addStyleName("okm-ToolBar-selected");
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+	    return addDomHandler(handler, MouseOverEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseLeave(com.google.gwt.user.client.ui.Widget)
+	 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
 	 */
-	public void onMouseLeave(Widget sender) {
-		sender.removeStyleName("okm-ToolBar-selected");
+	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+	    return addDomHandler(handler, MouseUpEvent.getType());
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
+	 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
 	 */
-	public void onMouseMove(Widget sender, int x, int y) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseUp(Widget sender, int x, int y) {
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+	    return addDomHandler(handler, MouseWheelEvent.getType());
 	}
 }

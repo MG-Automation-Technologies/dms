@@ -21,13 +21,13 @@ package es.git.openkm.frontend.client.widget.foldertree;
 
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.MouseListenerAdapter;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -52,12 +52,11 @@ public class ExtendedTree extends Tree {
 		
 		sinkEvents(Event.MOUSEEVENTS);
 		
-		// Adds mouse listener to determine drag & drop start
-		addMouseListener(new MouseListenerAdapter() {
-            public void onMouseDown(Widget sender, int x, int y) {
-            	dragged = true;
-                super.onMouseDown(sender, x, y);
-            }
+		addMouseDownHandler(new MouseDownHandler(){
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				dragged = true;
+			}
 		});
 	}
 	

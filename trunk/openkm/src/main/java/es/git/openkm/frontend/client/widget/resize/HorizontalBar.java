@@ -19,11 +19,11 @@
 
 package es.git.openkm.frontend.client.widget.resize;
 
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.Coordenates;
@@ -34,7 +34,7 @@ import es.git.openkm.frontend.client.bean.Coordenates;
  * @author jllort
  *
  */
-public class HorizontalBar extends Composite implements MouseListener {
+public class HorizontalBar extends Composite {
 	
 	private HorizontalPanel panel;
 	private Label label;
@@ -48,44 +48,20 @@ public class HorizontalBar extends Composite implements MouseListener {
 		label = new Label("");
 		label.setSize("100%", "10px");
 		label.setStyleName("okm-HorizontalBar-Point");
-		label.addMouseListener(this);
+		
+		label.addMouseDownHandler(new MouseDownHandler(){
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				int width = Main.get().mainPanel.getCenterCoordenates().getWidth();
+				Coordenates verticalBar = Main.get().mainPanel.getVerticalBarCoordenates();
+		    	int realPosX =  verticalBar.getX()+verticalBar.getWidth();
+		    	Main.get().horizontalBarSplitter.setSize(label.getAbsoluteLeft(), label.getAbsoluteTop(),width, realPosX);
+		    	Main.get().horizontalBarSplitter.setPosition();
+		    	Main.get().horizontalBarSplitter.show();
+			}
+		});
+		
 		panel.add(label);
 		initWidget(panel);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseDown(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseDown(Widget sender, int x, int y) {
-		int width = Main.get().mainPanel.getCenterCoordenates().getWidth();
-		Coordenates verticalBar = Main.get().mainPanel.getVerticalBarCoordenates();
-    	int realPosX =  verticalBar.getX()+verticalBar.getWidth();
-    	Main.get().horizontalBarSplitter.setSize(label.getAbsoluteLeft(), label.getAbsoluteTop(),width, realPosX);
-    	Main.get().horizontalBarSplitter.setPosition();
-    	Main.get().horizontalBarSplitter.show();
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseEnter(com.google.gwt.user.client.ui.Widget)
-	 */
-	public void onMouseEnter(Widget sender) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseLeave(com.google.gwt.user.client.ui.Widget)
-	 */
-	public void onMouseLeave(Widget sender) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseMove(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseMove(Widget sender, int x, int y) {
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.MouseListener#onMouseUp(com.google.gwt.user.client.ui.Widget, int, int)
-	 */
-	public void onMouseUp(Widget sender, int x, int y) {
 	}
 }
