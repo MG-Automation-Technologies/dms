@@ -45,9 +45,9 @@
 			Collection<User> users = null;
 			
 			if (roleFilter == null || roleFilter.equals("")) {
-				users = dao.findAllUsers();
+				users = dao.findAllUsers(false);
 			} else {
-				users = dao.findUsersByRole(roleFilter);
+				users = dao.findUsersByRole(false, roleFilter);
 			}
 			
 			int i = 0;

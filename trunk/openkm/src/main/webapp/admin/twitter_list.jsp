@@ -31,7 +31,7 @@
 			if (user != null && !user.equals("")) {
 				twitterAccounts = dao.findTwitterAccountsByUser(user, false);
 			} else {
-				twitterAccounts = dao.findAllTwitterAccounts();
+				twitterAccounts = dao.findAllTwitterAccounts(false);
 			}
 			
 			int i = 0;
