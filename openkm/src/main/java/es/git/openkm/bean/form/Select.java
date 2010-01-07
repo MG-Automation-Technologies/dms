@@ -8,7 +8,7 @@ public class Select extends Component {
 	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<Option> options = new ArrayList<Option>();
 	private String type = TYPE_SIMPLE;
-	private String size = "";
+	private String size = "1";
 
 	public Collection<Option> getOptions() {
 		return options;
