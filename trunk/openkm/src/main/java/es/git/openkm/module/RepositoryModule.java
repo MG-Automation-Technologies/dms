@@ -64,8 +64,7 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, 
-			RepositoryException;
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the personal mails folder of the repository.
@@ -75,8 +74,17 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getMailFolder(String token) throws PathNotFoundException, 
-			RepositoryException;
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException;
+
+	/**
+	 * Obtain the thesaurus folder of the repository.
+	 * 
+	 * @param token The session authorization token.
+	 * @return A folder object with the thesaurus folder node properties.
+	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Remove all the items in the user trash folder for ever. You can't 
