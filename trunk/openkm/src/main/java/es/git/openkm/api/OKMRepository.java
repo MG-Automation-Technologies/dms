@@ -79,8 +79,7 @@ public class OKMRepository implements RepositoryModule {
 	 * @see es.git.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
 	 */
 	@Override
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, 
-			RepositoryException {
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getPersonalFolder("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolder(token);
@@ -92,13 +91,24 @@ public class OKMRepository implements RepositoryModule {
 	 * @see es.git.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
 	 */
 	@Override
-	public Folder getMailFolder(String token) throws PathNotFoundException, 
-			RepositoryException {
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getMailFolder("+token+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolder(token);
 		log.debug("getMailFolder: "+mailFolder);
 		return mailFolder;
+	}
+
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
+	 */
+	@Override
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
+		log.debug("getThesaurusFolder("+token+")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder thesaurusFolder = rm.getThesaurusFolder(token);
+		log.debug("getThesaurusFolder: "+thesaurusFolder);
+		return thesaurusFolder;
 	}
 
 	/* (non-Javadoc)
