@@ -90,16 +90,16 @@ public class DirectRepositoryModule implements RepositoryModule {
 		String repConfig = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_CONFIG;
 		String repHome = null;
 		WorkspaceConfig wc = null;
-		
-		// Allow absolute repository path
-		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
-			repHome = Config.REPOSITORY_HOME;
-		} else {
-			repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
-		}
-		
+				
 		if (repository == null) {
-			// Repository config
+			// Allow absolute repository path
+			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+				repHome = Config.REPOSITORY_HOME;
+			} else {
+				repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
+			}
+			
+			// Repository configuration
 			try {
 				RepositoryConfig config = RepositoryConfig.create(repConfig, repHome);
 				wc = config.getWorkspaceConfig(config.getDefaultWorkspaceName());
@@ -273,8 +273,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 
 				okmRootPath = okmRoot.getPath();
 				
-				// Create root base node
-				log.info("Create home node");
+				// Create user home base node
+				log.info("Create user home base node");
 				Node okmHome = root.addNode(Repository.HOME, Folder.TYPE);
 
 				// Add basic properties
@@ -288,7 +288,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmHome.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create template base node
-				log.info("Create template node");
+				log.info("Create template base node");
 				Node okmTemplate = root.addNode(Repository.TEMPLATES, Folder.TYPE);
 
 				// Add basic properties
@@ -300,6 +300,20 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmTemplate.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmTemplate.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmTemplate.setProperty(Permission.ROLES_WRITE, new String[] {});
+				
+				// Create thesaurus base node
+				log.info("Create thesaurus base node");
+				Node okmThesaurus = root.addNode(Repository.THESAURUS, Folder.TYPE);
+
+				// Add basic properties
+				okmThesaurus.setProperty(Folder.AUTHOR, session.getUserID());
+				okmThesaurus.setProperty(Folder.NAME, Repository.HOME);
+
+				// Auth info
+				okmThesaurus.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+				okmThesaurus.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+				okmThesaurus.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
+				okmThesaurus.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create config base node
 				log.info("Create config node");
@@ -507,6 +521,32 @@ public class DirectRepositoryModule implements RepositoryModule {
 		return mailFolder;
 	}
 
+	/* (non-Javadoc)
+	 * @see es.git.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
+	 */
+	@Override
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
+		log.debug("getThesaurusFolder(" + token + ")");
+		Folder thesaurusFolder = new Folder();
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			thesaurusFolder = new DirectFolderModule().getProperties(session, "/"+Repository.THESAURUS);
+			
+			// Activity log
+			UserActivity.log(session, "GET_THESAURUS_FOLDER", null, thesaurusFolder.getPath());
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.debug("getThesaurusFolder: "+thesaurusFolder);
+		return thesaurusFolder;
+	}
+	
 	/**
 	 * Register custom node definition from file.
 	 * 
