@@ -50,6 +50,11 @@ public class EJBRepositoryModule implements es.git.openkm.module.RepositoryModul
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
