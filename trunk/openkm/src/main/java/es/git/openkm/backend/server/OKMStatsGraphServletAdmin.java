@@ -43,20 +43,21 @@ import es.git.openkm.core.RepositoryInfo;
 public class OKMStatsGraphServletAdmin extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(OKMStatsGraphServletAdmin.class);
 	private static final long serialVersionUID = 1L;
-	private static final String TITLE = "Documents by context";
+	private static final String TITLE = "Number of documents";
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		try {
 			response.setContentType("image/png");
 			StatsInfo si = RepositoryInfo.getDocumentsByContext();
 			String[] sizes = si.getSizes();
+			double[] percents = si.getPercents();
 			DefaultPieDataset dataset = new DefaultPieDataset();
+			dataset.setValue("Taxonomy ("+sizes[0]+")", percents[0]);
+			dataset.setValue("Personal ("+sizes[1]+")", percents[1]);
+			dataset.setValue("Template ("+sizes[2]+")", percents[2]);
+			dataset.setValue("Trash ("+sizes[3]+")", percents[3]);
 			
-			for (int i=0; i<sizes.length; i++) {
-				dataset.setValue(sizes[i], new Integer(sizes[i]));
-			}
-			
-			JFreeChart chart = ChartFactory.createPieChart(TITLE, dataset, true, true, true);
+			JFreeChart chart = ChartFactory.createPieChart(TITLE, dataset, true, true, false);
 			OutputStream out = response.getOutputStream();
 			ChartUtilities.writeChartAsPNG(out, chart, 300, 300);
 			out.flush();
