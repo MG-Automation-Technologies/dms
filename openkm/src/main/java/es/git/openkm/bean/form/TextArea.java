@@ -1,6 +1,6 @@
 package es.git.openkm.bean.form;
 
-public class TextArea extends Component {
+public class TextArea extends FormField {
 	private String cols = "20";
 	private String rows = "2";
 

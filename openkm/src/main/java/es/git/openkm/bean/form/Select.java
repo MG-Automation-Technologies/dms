@@ -3,7 +3,7 @@ package es.git.openkm.bean.form;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Select extends Component {
+public class Select extends FormField {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<Option> options = new ArrayList<Option>();

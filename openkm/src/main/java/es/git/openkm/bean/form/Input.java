@@ -1,6 +1,6 @@
 package es.git.openkm.bean.form;
 
-public class Input extends Component {
+public class Input extends FormField {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	private String type = TYPE_TEXT;
