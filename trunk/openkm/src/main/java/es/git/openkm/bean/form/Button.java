@@ -1,10 +1,9 @@
 package es.git.openkm.bean.form;
 
-public class Button extends Component {
-	public static final String TYPE_SAVE = "save";
-	public static final String TYPE_CANCEL = "cancel";
+public class Button extends FormField {
+	public static final String TYPE_SUBMIT = "submit";
 	public static final String TYPE_TRANSITION = "transition";
-	private String type = TYPE_SAVE;
+	private String type = TYPE_SUBMIT;
 	
 	public String getType() {
 		return type;

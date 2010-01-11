@@ -1,6 +1,6 @@
 package es.git.openkm.bean.form;
 
-public class Component {
+public class FormField {
 	protected String label = "";
 	protected String name = "";
 	protected String value = "";
