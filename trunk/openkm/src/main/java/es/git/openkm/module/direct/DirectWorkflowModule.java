@@ -54,7 +54,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import es.git.openkm.bean.FormField;
+import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.Input;
+import es.git.openkm.bean.form.Option;
+import es.git.openkm.bean.form.Select;
+import es.git.openkm.bean.form.TextArea;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
@@ -213,40 +218,8 @@ public class DirectWorkflowModule implements WorkflowModule {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
-						
-			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				dbf.setFeature("http://xml.org/sax/features/validation", false);
-				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				InputStream is = fileDef.getInputStream("forms.xml");
-				
-				if (is != null) {
-					Document doc = db.parse(is);
-					doc.getDocumentElement().normalize();
-					NodeList nodeLst = doc.getElementsByTagName("form");
-					
-					for (int s = 0; s < nodeLst.getLength(); s++) {
-						Node fstNode = nodeLst.item(s);
-						if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-							String taskName = fstNode.getAttributes().getNamedItem("task").getNodeValue();
-							String formFile = fstNode.getAttributes().getNamedItem("form").getNodeValue();
-							InputStream is2 = fileDef.getInputStream(formFile);
-							Collection<FormField> formFields = parseFormFields(is2);
-							forms.put(taskName, formFields);
-							is2.close();
-						}
-					}
-					
-					is.close();
-				}
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			InputStream is = fileDef.getInputStream("forms.xml");
+			forms = parseFormFields(is);
 			
 			// Activity log
 			UserActivity.log(session, "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
@@ -265,82 +238,116 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 * @param is
 	 * @return
 	 */
-	private Collection<FormField> parseFormFields(InputStream is) {
+	public Map<String, Collection<FormField>> parseFormFields(InputStream is) {
 		log.debug("parseFormFields("+is+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
-		Collection <FormField> form = new ArrayList<FormField>();
+		Map<String, Collection<FormField>> forms = new HashMap<String, Collection<FormField>>();
 				
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setFeature("http://xml.org/sax/features/validation", false);
 			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			//log.info("Dom-Init-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 			
 			if (is != null) {
 				Document doc = db.parse(is);
-				//log.info("Dom-Parse-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 				doc.getDocumentElement().normalize();
-				NodeList datacellNodeLst = doc.getElementsByTagName("jbpm:datacell");
-								
-				for (int i = 0; i < datacellNodeLst.getLength(); i++) {
-					Node datacellNode = datacellNodeLst.item(i);
-					//log.info("Dom-Nodes-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
+				NodeList nlForm = doc.getElementsByTagName("form");
+				
+				for (int i = 0; i < nlForm.getLength(); i++) {
+					Node nForm = nlForm.item(i);
 					
-					if (datacellNode.getNodeType() == Node.ELEMENT_NODE) {
-						//log.info(" - "+datacellNode.getNodeName());
-						NodeList nodeLst = datacellNode.getChildNodes();
-						String label = null;
+					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
+						String taskName = nForm.getAttributes().getNamedItem("task").getNodeValue();
+						NodeList nlField = nForm.getChildNodes();
+						ArrayList<FormField> fFields = new ArrayList<FormField>();
 						
-						for (int j = 0; j < nodeLst.getLength(); j++) {
-							Node fstNode = nodeLst.item(j);
-							
-							if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-								//log.info(" -- "+fstNode.getNodeName());
+						for (int j = 0; j < nlField.getLength(); j++) {
+							Node nField = nlField.item(j);
+														
+							if (nField.getNodeType() == Node.ELEMENT_NODE) {
+								String fieldComponent = nField.getNodeName();
 								
-								if (fstNode.getNodeName().equals("f:facet")) {
-									NodeList facetChilds = fstNode.getChildNodes();
+								if (fieldComponent.equals("input")) {
+									Input input = new Input();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) input.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) input.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) input.setType(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("size");
+									if (item != null) input.setSize(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) input.setValue(item.getNodeValue());
+									log.info("Input: "+input);
+									fFields.add(input);
+								} else if (fieldComponent.equals("textarea")) {
+									TextArea textArea = new TextArea();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) textArea.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) textArea.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("cols");
+									if (item != null) textArea.setCols(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("rows");
+									if (item != null) textArea.setRows(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) textArea.setValue(item.getNodeValue());
+									log.info("TextArea: "+textArea);
+									fFields.add(textArea);
+								} else if (fieldComponent.equals("button")) {
+									Button button = new Button();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) button.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) button.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) button.setValue(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) button.setType(item.getNodeValue());
+									log.info("Button: "+button);
+									fFields.add(button);
+								} else if (fieldComponent.equals("select")) {
+									Select select = new Select();
+									ArrayList<Option> options = new ArrayList<Option>();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) select.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) select.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) select.setType(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("size");
+									if (item != null) select.setSize(item.getNodeValue());
 									
-									for (int k = 0; k < facetChilds.getLength(); k++) {
-										Node facetChild = facetChilds.item(k);
+									NodeList nlOptions = nField.getChildNodes();
+									for (int k = 0; k < nlOptions.getLength(); k++) {
+										Node nOption = nlOptions.item(k);
 										
-										if (facetChild.getNodeType() == Node.ELEMENT_NODE) {
-											//log.info(" ---- facetChild: "+facetChild.getNodeName());
-											label = facetChild.getAttributes().getNamedItem("value").getNodeValue();
+										if (nOption.getNodeType() == Node.ELEMENT_NODE) {
+											if (nOption.getNodeName().equals("option")) {
+												Option option = new Option();
+												item = nOption.getAttributes().getNamedItem("name");
+												if (item != null) option.setName(item.getNodeValue());
+												item = nOption.getAttributes().getNamedItem("value");
+												if (item != null) option.setValue(item.getNodeValue());
+												options.add(option);
+											}
 										}
 									}
-								} else if (fstNode.getNodeName().equals("h:inputText")) {
-									String name = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									name = name.substring(name.indexOf('\'')+1, name.lastIndexOf('\''));
-									//sb.append("<input type=\"text\" name=\""+value+"\"><br>\n");
-									FormField ff = new FormField();
-									ff.setType(FormField.INPUT);
-									ff.setLabel(label);
-									ff.setName(name);
-									form.add(ff);
-								} else if (fstNode.getNodeName().equals("tf:saveButton")) {
-									//String value = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									//sb.append("<input type=\"submit\" value=\""+value+"\">");
-									//FormField ff = new FormField();
-									//ff.setType(FormField.SAVE);
-									//ff.setText(text);
-									//ff.setValue(value);
-									//form.add(ff);
-								} else if (fstNode.getNodeName().equals("tf:transitionButton")) {
-									String transition = fstNode.getAttributes().getNamedItem("transition").getNodeValue();
-									String value = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									//sb.append("<input type=\"submit\" value=\""+value+"\" action=\""+transition+"\">");
-									FormField ff = new FormField();
-									ff.setType(FormField.TRANSITION);
-									ff.setLabel(label);
-									ff.setName(transition);
-									ff.setValue(value);
-									form.add(ff);
+									
+									select.setOptions(options);
+									log.info("Select: "+select);
+									fFields.add(select);
 								}
 							}
 						}
+
+						forms.put(taskName, fFields);
 					}
 				}
+				
+				is.close();
 			}
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -350,16 +357,16 @@ public class DirectWorkflowModule implements WorkflowModule {
 			e.printStackTrace();
 		}
 				
-		log.debug("parseFormFields: "+form);
+		log.debug("parseFormFields: "+forms);
 		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-		return form;
+		return forms;
 	}
 	
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.WorkflowModule#runProcessDefinition(java.lang.String, long, java.util.Map)
 	 */
 	@Override
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String> variables)
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String[]> variables)
 			throws RepositoryException {
 		log.debug("runProcessDefinition("+token+", "+processDefinitionId+", "+variables+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -377,7 +384,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
 				org.jbpm.taskmgmt.exe.TaskInstance ti = tmi.createStartTaskInstance();
 				ti.start();
-				ti.end();
+				//ti.end();
 			} else {
 				pi.getRootToken().signal();
 			}
