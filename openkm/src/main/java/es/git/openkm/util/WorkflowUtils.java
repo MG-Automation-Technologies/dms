@@ -267,6 +267,10 @@ public class WorkflowUtils {
 		return vo;
 	}
 	
+	public static void getForms(InputStream is) {
+		
+	}
+	
 	/**
 	 * 
 	 */
