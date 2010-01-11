@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,12 +18,20 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.Input;
+import es.git.openkm.bean.form.Option;
+import es.git.openkm.bean.form.Select;
+import es.git.openkm.bean.form.TextArea;
 import es.git.openkm.bean.workflow.Comment;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
@@ -31,6 +40,8 @@ import es.git.openkm.bean.workflow.Token;
 import es.git.openkm.bean.workflow.Transition;
 
 public class WorkflowUtils {
+	private static Logger log = LoggerFactory.getLogger(WorkflowUtils.class);
+	
 	/**
 	 * @param pd
 	 * @return
@@ -267,10 +278,6 @@ public class WorkflowUtils {
 		return vo;
 	}
 	
-	public static void getForms(InputStream is) {
-		
-	}
-	
 	/**
 	 * 
 	 */
@@ -406,4 +413,132 @@ public class WorkflowUtils {
             return y;
         }
     }
+	
+	/**
+	 * @param is
+	 * @return
+	 */
+	public static Map<String, Collection<FormField>> parseFormFields(InputStream is) {
+		log.debug("parseFormFields("+is+")");
+		//long begin = Calendar.getInstance().getTimeInMillis();
+		Map<String, Collection<FormField>> forms = new HashMap<String, Collection<FormField>>();
+				
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setFeature("http://xml.org/sax/features/validation", false);
+			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			if (is != null) {
+				Document doc = db.parse(is);
+				doc.getDocumentElement().normalize();
+				NodeList nlForm = doc.getElementsByTagName("form");
+				
+				for (int i = 0; i < nlForm.getLength(); i++) {
+					Node nForm = nlForm.item(i);
+					
+					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
+						String taskName = nForm.getAttributes().getNamedItem("task").getNodeValue();
+						NodeList nlField = nForm.getChildNodes();
+						ArrayList<FormField> fFields = new ArrayList<FormField>();
+						
+						for (int j = 0; j < nlField.getLength(); j++) {
+							Node nField = nlField.item(j);
+														
+							if (nField.getNodeType() == Node.ELEMENT_NODE) {
+								String fieldComponent = nField.getNodeName();
+								
+								if (fieldComponent.equals("input")) {
+									Input input = new Input();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) input.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) input.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) input.setType(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("size");
+									if (item != null) input.setSize(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) input.setValue(item.getNodeValue());
+									log.info("Input: "+input);
+									fFields.add(input);
+								} else if (fieldComponent.equals("textarea")) {
+									TextArea textArea = new TextArea();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) textArea.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) textArea.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("cols");
+									if (item != null) textArea.setCols(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("rows");
+									if (item != null) textArea.setRows(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) textArea.setValue(item.getNodeValue());
+									log.info("TextArea: "+textArea);
+									fFields.add(textArea);
+								} else if (fieldComponent.equals("button")) {
+									Button button = new Button();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) button.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) button.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("value");
+									if (item != null) button.setValue(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) button.setType(item.getNodeValue());
+									log.info("Button: "+button);
+									fFields.add(button);
+								} else if (fieldComponent.equals("select")) {
+									Select select = new Select();
+									ArrayList<Option> options = new ArrayList<Option>();
+									Node item = nField.getAttributes().getNamedItem("label");
+									if (item != null) select.setLabel(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("name");
+									if (item != null) select.setName(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("type");
+									if (item != null) select.setType(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("size");
+									if (item != null) select.setSize(item.getNodeValue());
+									
+									NodeList nlOptions = nField.getChildNodes();
+									for (int k = 0; k < nlOptions.getLength(); k++) {
+										Node nOption = nlOptions.item(k);
+										
+										if (nOption.getNodeType() == Node.ELEMENT_NODE) {
+											if (nOption.getNodeName().equals("option")) {
+												Option option = new Option();
+												item = nOption.getAttributes().getNamedItem("name");
+												if (item != null) option.setName(item.getNodeValue());
+												item = nOption.getAttributes().getNamedItem("value");
+												if (item != null) option.setValue(item.getNodeValue());
+												options.add(option);
+											}
+										}
+									}
+									
+									select.setOptions(options);
+									log.info("Select: "+select);
+									fFields.add(select);
+								}
+							}
+						}
+
+						forms.put(taskName, fFields);
+					}
+				}
+				
+				is.close();
+			}
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+				
+		log.debug("parseFormFields: "+forms);
+		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
+		return forms;
+	}
 }
