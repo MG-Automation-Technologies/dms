@@ -26,7 +26,7 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.FormField;
+import es.git.openkm.bean.form.FormField;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
@@ -117,7 +117,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public ProcessInstance runProcessDefinition(String token,
-			long processDefinitionId, Map<String, String> variables) throws RepositoryException {
+			long processDefinitionId, Map<String, String[]> variables) throws RepositoryException {
 		log.debug("runProcessDefinition(" + token + ", " + processDefinitionId + ", " + variables + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		ProcessInstance result = wm.runProcessDefinition(token, processDefinitionId, variables);
