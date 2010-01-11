@@ -5,7 +5,11 @@
 <%@ page import="es.git.openkm.bean.workflow.TaskInstance"%>
 <%@ page import="es.git.openkm.bean.workflow.Transition"%>
 <%@ page import="es.git.openkm.bean.workflow.Comment"%>
-<%@ page import="es.git.openkm.bean.FormField"%>
+<%@ page import="es.git.openkm.bean.form.FormField"%>
+<%@ page import="es.git.openkm.bean.form.Input"%>
+<%@ page import="es.git.openkm.bean.form.TextArea"%>
+<%@ page import="es.git.openkm.bean.form.Select"%>
+<%@ page import="es.git.openkm.bean.form.Button"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
@@ -86,7 +90,7 @@
 			Collection<FormField> form = forms.get(ti.getName());
 			out.println("<h2>Task Form</h2>");
 			out.println("<table class=\"results\">");
-			out.println("<tr><th>Label</th><th>Name</th><th>Type</th><th>Value</th></tr>");
+			out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Type</th><th>Others</th></tr>");
 
 			if (form != null) {
 				int i = 0;
@@ -95,8 +99,28 @@
 					out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 					out.print("<td>"+ff.getLabel()+"</td>");
 					out.print("<td>"+ff.getName()+"</td>");
-					out.print("<td>"+FormField.TYPE[ff.getType()]+"</td>");
 					out.print("<td>"+ff.getValue()+"</td>");
+					if (ff instanceof Input) {
+						Input input = (Input) ff;
+						out.print("<td>Input</td>");
+						out.print("<td><i>Type:</i> "+input.getType()+", ");
+						out.print("<i>Size:</i> "+input.getSize()+"</td>");
+					} else if (ff instanceof TextArea) {
+						TextArea textArea = (TextArea) ff;
+						out.print("<td>TextArea</td>");
+						out.print("<td><i>Cols:</i> "+textArea.getCols()+", ");
+						out.print("<i>Rows:</i> "+textArea.getRows()+"</td>");
+					} else if (ff instanceof Select) {
+						Select select = (Select) ff;
+						out.print("<td>Select</td>");
+						out.print("<td><i>Type:</i> "+select.getType()+", ");
+						out.print("<i>Size:</i> "+select.getSize()+", ");
+						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
+					} else if (ff instanceof Button) {
+						Button button = (Button) ff;
+						out.print("<td>Button</td>");
+						out.print("<td><i>Type:</i> "+button.getType());
+					}
 					out.println("</tr>");
 				}
 			}
