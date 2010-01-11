@@ -69,6 +69,7 @@ public class Config {
 	public static String PROPERTY_PRINCIPAL_ADAPTER = "principal.adapter";
 	public static String PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "principal.database.filter.inactive.users";
 	
+	// LDAP
 	public static String PROPERTY_PRINCIPAL_LDAP_SERVER = "principal.ldap.server";
 	public static String PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL = "principal.ldap.security.principal";
 	public static String PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS = "principal.ldap.security.credentials";
@@ -139,9 +140,12 @@ public class Config {
 	public static String DEFAULT_USER_ROLE = "UserRole";
 	public static String DEFAULT_ADMIN_ROLE = "AdminRole";
 	
+	public static String WORKFLOW_RUN_CONFIG_FORM = "run_config";
+	
 	public static String PRINCIPAL_ADAPTER = "es.git.openkm.principal.DatabasePrincipalAdapter";
 	public static String PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "on";
 	
+	// LDAP
 	public static String PRINCIPAL_LDAP_SERVER = ""; // ldap://phoenix.server:389
 	public static String PRINCIPAL_LDAP_SECURITY_PRINCIPAL = ""; //"cn=Administrator,cn=Users,dc=openkm,dc=com"
 	public static String PRINCIPAL_LDAP_SECURITY_CREDENTIALS = ""; // "xxxxxx"
@@ -227,6 +231,7 @@ public class Config {
 			PRINCIPAL_ADAPTER = config.getProperty(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
 			PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = config.getProperty(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
 
+			// LDAP
 			PRINCIPAL_LDAP_SERVER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SERVER, PRINCIPAL_LDAP_SERVER);
 			PRINCIPAL_LDAP_SECURITY_PRINCIPAL = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SECURITY_PRINCIPAL, PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
 			PRINCIPAL_LDAP_SECURITY_CREDENTIALS = config.getProperty(PROPERTY_PRINCIPAL_LDAP_SECURITY_CREDENTIALS, PRINCIPAL_LDAP_SECURITY_CREDENTIALS);
