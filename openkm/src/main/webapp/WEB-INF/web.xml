@@ -130,6 +130,10 @@
     <servlet-class>es.git.openkm.backend.server.OKMStatsServletAdmin</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
+    <servlet-class>es.git.openkm.backend.server.OKMStatsGraphServletAdmin</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>OKMSearchServletAdmin</servlet-name>
     <servlet-class>es.git.openkm.backend.server.OKMSearchServletAdmin</servlet-class>
   </servlet>
@@ -157,7 +161,7 @@
     <servlet-name>OKMThesaurusServletAdmin</servlet-name>
     <servlet-class>es.git.openkm.backend.server.OKMThesaurusServletAdmin</servlet-class>
   </servlet>
-
+  
   <!-- WebServices -->
   <servlet>
     <servlet-name>OKMDocument</servlet-name>
@@ -294,6 +298,10 @@
   <servlet-mapping>
     <servlet-name>OKMStatsServletAdmin</servlet-name>
     <url-pattern>/OKMStatsServletAdmin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
+    <url-pattern>/OKMStatsGraphServletAdmin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMSearchServletAdmin</servlet-name>
