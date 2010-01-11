@@ -294,7 +294,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId,
-			String transitionName, Map<String, String> values)
+			String transitionName, Map<String, String[]> values)
 			throws RepositoryException {
 		log.debug("setTaskInstanceValues(" + token + ", " + taskInstanceId + ", " + transitionName + ", " + values + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();

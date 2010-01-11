@@ -195,7 +195,7 @@ public interface WorkflowModule {
 	 * @param values
 	 * @throws RepositoryException
 	 */
-	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, String> values) throws RepositoryException;
+	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, String[]> values) throws RepositoryException;
 	
 	/**
 	 * @param token

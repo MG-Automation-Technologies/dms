@@ -800,7 +800,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
-			Map<String, String> values) throws RepositoryException {
+			Map<String, String[]> values) throws RepositoryException {
 		log.info("setTaskInstanceValues("+token+", "+taskInstanceId+", "+transitionName+", "+values+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
