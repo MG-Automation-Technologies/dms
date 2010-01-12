@@ -86,6 +86,8 @@ public class NotifyPopup extends DialogBox  {
 		message = new TextArea();
 		notifyTable = new UserScrollTable(true);
 		userTable = new UserScrollTable(false);
+		notifyTable.reset();
+		userTable.reset();
 		hUserPanel = new HorizontalPanel();
 		buttonPanel = new VerticalPanel();
 		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
@@ -230,8 +232,8 @@ public class NotifyPopup extends DialogBox  {
 		public void onSuccess(Object result) {
 			List users = (List) result;
 			
-			for (Iterator it = users.iterator(); it.hasNext(); ) {
-				String userName = (String) it.next();
+			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
+				String userName = it.next();
 				userTable.addRow(userName);
 			}
 		}

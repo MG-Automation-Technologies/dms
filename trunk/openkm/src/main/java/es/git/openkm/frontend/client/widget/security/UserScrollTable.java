@@ -22,6 +22,13 @@ package es.git.openkm.frontend.client.widget.security;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -30,13 +37,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ResizePolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollPolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTPermission;
@@ -73,21 +73,7 @@ public class UserScrollTable extends Composite {
 	public UserScrollTable(boolean isAssigned) {
 		this.isAssigned = isAssigned;
 		
-		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
+		ScrollTableImages scrollTableImages = new ScrollTableImages(){			
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -97,7 +83,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
@@ -111,7 +97,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
@@ -125,7 +111,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
@@ -154,9 +140,7 @@ public class UserScrollTable extends Composite {
 		}
 		
 		// Table data
-	    //dataTable.setHoveringPolicy(SortableFixedWidthGrid.HOVERING_POLICY_CELL);
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
 	    table.setResizePolicy(ResizePolicy.UNCONSTRAINED);
 	    table.setScrollPolicy(ScrollPolicy.BOTH);
 
@@ -184,6 +168,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void addRow(String userName, Byte permission) {		
 		final int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, userName);
 		
 		CheckBox checkReadPermission = new CheckBox();
@@ -253,6 +238,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void addRow(String userName) {
 		int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, userName);
 	}
 	
@@ -414,11 +400,11 @@ public class UserScrollTable extends Composite {
 	}
 	
 	/**
-	 * autoFitColumnWidth
+	 * getDataTable
 	 * 
-	 * @param column The column value
+	 * @return FixedWidthGrid
 	 */
-	public void autoFitColumnWidth(int column) {
-		//table.autoFitColumnWidth(column);
+	public FixedWidthGrid getDataTable(){
+		return table.getDataTable();
 	}
 }

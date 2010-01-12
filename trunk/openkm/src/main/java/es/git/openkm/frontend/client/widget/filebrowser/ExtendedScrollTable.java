@@ -37,6 +37,10 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
@@ -44,10 +48,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -99,9 +99,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		this.headerTable = headerTable;
 		
 		// Table data  SortableFixedWidthGrid.HOVERING_POLICY_CELL
-	    //dataTable.setHoveringPolicy( );
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
 	    setResizePolicy(ResizePolicy.UNCONSTRAINED);
 	    setScrollPolicy(ScrollPolicy.BOTH);
 	    	    
@@ -162,6 +160,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	 */
 	public void addRow(GWTFolder folder) {
 		int row = dataTable.getRowCount();
+		dataTable.insertRow(row);
 		
 		// Sets folder object
 		data.put(dataIndexValue,folder);
@@ -226,6 +225,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	 */
 	public void addRow(GWTDocument doc) {
 		int row = dataTable.getRowCount();
+		dataTable.insertRow(row);
 		
 		// Sets document object
 		data.put(dataIndexValue,doc);
@@ -282,6 +282,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	 */
 	public void addRow(GWTMail mail) {
 		int row = dataTable.getRowCount();
+		dataTable.insertRow(row);
 		
 		// Sets document object
 		data.put(dataIndexValue,mail);

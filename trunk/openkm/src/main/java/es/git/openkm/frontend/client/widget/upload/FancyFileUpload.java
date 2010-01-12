@@ -20,10 +20,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasText;
@@ -32,6 +29,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.widgetideas.client.ProgressBar;
 import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 
@@ -553,6 +552,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		userTable = new UserScrollTable(false);
 		notifyTable.addStyleName("okm-Input");
 		userTable.addStyleName("okm-Input");
+		notifyTable.reset();
+		userTable.reset();
 		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
 		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
 		buttonPanel = new VerticalPanel();
@@ -599,8 +600,10 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		initWidget(uploadForm);
 
 		// Add an event handler to the form.
-		uploadForm.addFormHandler(new FormHandler() {
-			public void onSubmitComplete(FormSubmitCompleteEvent event) {
+		uploadForm.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+			
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
 				// Fire an onChange Event
 				fireChange();
 				// Cancel all timers to be absolutely sure nothing is going on.
@@ -621,10 +624,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				} else {
 					uploadItem.setFailed(msg);
 				}
-			}
-
-			public void onSubmit(FormSubmitEvent event) {
-				// No validation in this version.
 			}
 		});
 	}

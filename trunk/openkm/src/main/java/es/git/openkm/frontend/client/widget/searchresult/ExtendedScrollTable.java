@@ -23,14 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -66,6 +67,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		this.dataTable = dataTable;
 		this.headerTable = headerTable;
 		
+		dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
 		setResizePolicy(ResizePolicy.UNCONSTRAINED);
 		setScrollPolicy(ScrollPolicy.BOTH);
 		
@@ -222,6 +224,7 @@ public class ExtendedScrollTable extends ScrollTable {
 	 */
 	private void addDocumentRow(GWTQueryResult gwtQueryResult, Score score) {
 		int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		
 		GWTDocument doc = new GWTDocument();
 		if (gwtQueryResult.getDocument()!=null) {
@@ -281,6 +284,7 @@ public class ExtendedScrollTable extends ScrollTable {
 	 */
 	private void addFolderRow(GWTQueryResult gwtQueryResult, Score score) {
 		int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		
 		GWTFolder folder = gwtQueryResult.getFolder();
 		
@@ -337,6 +341,7 @@ public class ExtendedScrollTable extends ScrollTable {
 	 */
 	private void addMailRow(GWTQueryResult gwtQueryResult, Score score) {
 		int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		
 		GWTMail mail = gwtQueryResult.getMail();
 		

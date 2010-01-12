@@ -26,6 +26,13 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
@@ -37,14 +44,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ResizePolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollPolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -65,43 +64,33 @@ import es.git.openkm.frontend.client.widget.ConfirmPopup;
 public class VersionScrollTable extends Composite implements ClickHandler  {
 	
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	
+	// Number of columns
+	public static final int NUMBER_OF_COLUMNS	= 7;
+	
 	private GWTDocument doc;
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
 	private FixedWidthGrid dataTable;
-	public ArrayList versions;
+	public List<String> versions;
 	private boolean visibleButtons = true;
 	private Button purge;
-	private List buttonView;
-	private List buttonRestore;
+	private List<Button> buttonView;
+	private List<Button> buttonRestore;
 	
 	/**
 	 * Version
 	 */
 	public VersionScrollTable() {
-		versions = new ArrayList();
-		buttonView = new ArrayList();
-		buttonRestore = new ArrayList();
+		versions = new ArrayList<String>();
+		buttonView = new ArrayList<Button>();
+		buttonRestore = new ArrayList<Button>();
 		
 		purge = new Button(Main.i18n("version.purge.document"),this);
 		purge.setStyleName("okm-Button");
 		purge.setEnabled(false);
 		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -111,7 +100,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
@@ -125,7 +114,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
@@ -139,7 +128,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
@@ -158,6 +147,11 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	    table.setColumnWidth(3,100);
 	    table.setColumnWidth(4,100);
     	table.setColumnWidth(5,150);
+    	
+    	table.setPreferredColumnWidth(0, 70);
+		table.setPreferredColumnWidth(1, 150);
+		
+		table.setColumnSortable(5, false);
 		
 		// Level 1 headers
 	    headerTable.setHTML(0, 0, Main.i18n("version.name"));
@@ -172,9 +166,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	    headerTable.getCellFormatter().setVerticalAlignment(0,5,HasAlignment.ALIGN_MIDDLE);
 	    
 	    // Table data
-	    //dataTable.setHoveringPolicy(SortableFixedWidthGrid.HOVERING_POLICY_CELL);
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
 	    table.setResizePolicy(ResizePolicy.UNCONSTRAINED);
 	    table.setScrollPolicy(ScrollPolicy.BOTH);
 	    
@@ -197,15 +189,15 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		
 		// Translate all view buttons
 		if (!buttonView.isEmpty()) {
-			for (Iterator it = buttonView.iterator(); it.hasNext();) {
-				Button button = (Button) it.next();
+			for (Iterator<Button> it = buttonView.iterator(); it.hasNext();) {
+				Button button = it.next();
 				button.setHTML(Main.i18n("button.view"));
 			}
 		}
 		
 		if (!buttonRestore.isEmpty()) {
-			for (Iterator it = buttonRestore.iterator(); it.hasNext();) {
-				Button button = (Button) it.next();
+			for (Iterator<Button> it = buttonRestore.iterator(); it.hasNext();) {
+				Button button = it.next();
 				button.setHTML(Main.i18n("button.restore"));
 			}
 		}
@@ -228,8 +220,8 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
 		}
-		
-		versions = new ArrayList();
+		dataTable.resize(0, NUMBER_OF_COLUMNS);
+		versions = new ArrayList<String>();
 	}
 	
 	/**
@@ -239,6 +231,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	private void addRow(GWTVersion version) {
 		final int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, version.getName());
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
 		dataTable.setHTML(rows, 1, dtf.format(version.getCreated()));
@@ -262,7 +255,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 				@Override
 				public void onClick(ClickEvent event) {
 					String path = doc.getPath();
-					ArrayList versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
+					List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
 					String ver = (String) versions.get(rows);
 					Window.open(Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path) + "&ver=" + ver, "_self", "");
 				}
@@ -271,7 +264,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			Button restoreButton = new Button(Main.i18n("button.restore"), new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					ArrayList versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
+					List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
 					String ver = (String) versions.get(rows);
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_RESTORE_HISTORY_DOCUMENT);
 					Main.get().confirmPopup.setValue(ver);
@@ -306,13 +299,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	final AsyncCallback callbackGetVersionHistory = new AsyncCallback() {
 		public void onSuccess(Object result) {
-			List versionList = (List) result;
+			List<GWTVersion> versionList = (List<GWTVersion>) result;
 			boolean autofit = false;
 			removeAllRows();
 			
 			// Initializes buttons lists ( to make language translations )
-			buttonView = new ArrayList();
-			buttonRestore = new ArrayList();
+			buttonView = new ArrayList<Button>();
+			buttonRestore = new ArrayList<Button>();
 			
 			// When there's more than one version document can purge it
 			if (versionList.size()>1) {
@@ -321,23 +314,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 				purge.setEnabled(false);
 			}
 			
-			for (Iterator it = versionList.iterator(); it.hasNext();) {
-				GWTVersion version = (GWTVersion) it.next();
+			for (Iterator<GWTVersion> it = versionList.iterator(); it.hasNext();) {
+				GWTVersion version = it.next();
 				// Sets the autofit columns only is there¡s some content there
 				if (version.getComment()!=null && !version.getComment().equals("")) {
 					autofit = true;
 				}
 				addRow(version);
-			}
-			
-			// 	Only sets column auto size if rows are returned
-			if (versionList.size()>0) {
-				//table.autoFitColumnWidth(2);
-				//table.autoFitColumnWidth(3);
-				// Sets the autofit columns only is there¡s some content there
-				if (autofit) {
-					//table.autoFitColumnWidth(6);
-				}
 			}
 			
 			Main.get().mainPanel.browser.tabMultiple.status.unsetVersionHistory();

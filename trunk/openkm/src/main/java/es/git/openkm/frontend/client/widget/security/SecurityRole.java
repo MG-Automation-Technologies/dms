@@ -57,6 +57,10 @@ public class SecurityRole extends Composite implements HasWidgets {
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
+	// Number of columns
+	public static final int ASSIGNED_ROLES_NUMBER_OF_COLUMNS	= 3;
+	public static final int UNASSIGNED_ROLES_NUMBER_OF_COLUMNS	= 1;
+	
 	public RoleScrollTable assignedRole;
 	public RoleScrollTable unassignedRole;
 	private HorizontalPanel panel;
@@ -148,6 +152,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 	public void reset() {
 		assignedRole.reset();
 		unassignedRole.reset();
+		assignedRole.getDataTable().resize(0, ASSIGNED_ROLES_NUMBER_OF_COLUMNS);
+		unassignedRole.getDataTable().resize(0, UNASSIGNED_ROLES_NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -159,20 +165,15 @@ public class SecurityRole extends Composite implements HasWidgets {
 			List rolesList = new ArrayList();
 			
 			// Ordering grant roles to list
-			for (Iterator it = roles.keySet().iterator(); it.hasNext(); ) {
-				rolesList.add((String) it.next());
+			for (Iterator<String> it = roles.keySet().iterator(); it.hasNext(); ) {
+				rolesList.add(it.next());
 			}
 			Collections.sort(rolesList, RoleComparator.getInstance());
 			
-			for (Iterator it = rolesList.iterator(); it.hasNext(); ) {
-				String groupName = (String) it.next();
+			for (Iterator<String> it = rolesList.iterator(); it.hasNext(); ) {
+				String groupName = it.next();
 				Byte permission = (Byte) roles.get(groupName);
 				assignedRole.addRow(groupName, permission);
-			}
-			
-			// Only auto fit column when there's some values
-			if (roles.keySet().size()>0) {
-				assignedRole.autoFitColumnWidth(0);
 			}
 		}
 
@@ -191,11 +192,6 @@ public class SecurityRole extends Composite implements HasWidgets {
 			for (Iterator it = roles.iterator(); it.hasNext(); ) {
 				String groupName = (String) it.next();
 				unassignedRole.addRow(groupName);
-			}
-			
-			// Only auto fit column when there's some values
-			if (roles.size()>0) {
-				assignedRole.autoFitColumnWidth(0);
 			}
 		}
 
@@ -317,7 +313,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator() {
+	public Iterator<Widget> iterator() {
 		return null;
 	}
 	

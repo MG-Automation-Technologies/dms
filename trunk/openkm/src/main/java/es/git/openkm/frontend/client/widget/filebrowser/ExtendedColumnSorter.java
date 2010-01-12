@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Window;
-import com.google.gwt.widgetideas.table.client.SortableGrid;
-import com.google.gwt.widgetideas.table.client.SortableGrid.ColumnSorter;
-import com.google.gwt.widgetideas.table.client.SortableGrid.ColumnSorterCallback;
-import com.google.gwt.widgetideas.table.client.TableModel.ColumnSortList;
+import com.google.gwt.gen2.table.client.SortableGrid;
+import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorter;
+import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorterCallback;
+import com.google.gwt.gen2.table.client.TableModelHelper.ColumnSortList;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
