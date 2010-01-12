@@ -281,7 +281,7 @@ public class Lang_gl_ES {
 	    lang.put("document.created", "Creado");
 	    lang.put("document.lastmodified", "Modificado");
 	    lang.put("document.mimetype", "Tipo MIME");
-	    lang.put("document.keywords", "Palablas chave");
+	    lang.put("document.keywords", "Palabras chave");
 	    lang.put("document.by", "por");
 	    lang.put("document.status", "Estado");
 	    lang.put("document.status.checkout", "Editado por");

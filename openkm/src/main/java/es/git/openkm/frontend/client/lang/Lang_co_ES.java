@@ -281,7 +281,7 @@ public class Lang_co_ES {
 	    lang.put("document.created", "Creado");
 	    lang.put("document.lastmodified", "Modificado");
 	    lang.put("document.mimetype", "Tipo MIME");
-	    lang.put("document.keywords", "Palablas clave");
+	    lang.put("document.keywords", "Palabras clave");
 	    lang.put("document.by", "por");
 	    lang.put("document.status", "Estado");
 	    lang.put("document.status.checkout", "Editado por");
