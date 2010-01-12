@@ -22,6 +22,9 @@ package es.git.openkm.frontend.client.widget.searchresult;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,10 +32,6 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -56,6 +55,9 @@ public class SearchResult extends Composite {
 	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	
+	// Number of columns
+	public static final int NUMBER_OF_COLUMNS	= 8;
+	
 	public ExtendedScrollTable table;
 	private FixedWidthFlexTable headerTable;
 	private FixedWidthGrid dataTable;
@@ -72,20 +74,6 @@ public class SearchResult extends Composite {
 		status.setStyleName("okm-StatusPopup");
 		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -95,7 +83,7 @@ public class SearchResult extends Composite {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
@@ -109,7 +97,7 @@ public class SearchResult extends Composite {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
@@ -123,7 +111,7 @@ public class SearchResult extends Composite {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
@@ -154,10 +142,9 @@ public class SearchResult extends Composite {
 	    table.setColumnWidth(5,110);
 	    table.setColumnWidth(6,90);
 	    
-	    // Table data
-	    //dataTable.setHoveringPolicy(SortableFixedWidthGrid.HOVERING_POLICY_CELL);
-	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
+	    table.setPreferredColumnWidth(0, 70);
+		table.setPreferredColumnWidth(1, 25);
+		table.setPreferredColumnWidth(4, 150);
 		
 		table.addStyleName("okm-DisableSelect");
 		table.addStyleName("okm-Input");
@@ -188,6 +175,7 @@ public class SearchResult extends Composite {
 		}
 		
 		table.reset();
+		table.getDataTable().resize(0, NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -305,15 +293,6 @@ public class SearchResult extends Composite {
 				
 				addRow(gwtQueryResult);
 				size++;
-			}
-			
-			// Only sets column auto size if rows are returned
-			if (size>0) {
-				// Sets the columns that mus auto fit column size
-			    //table.autoFitColumnWidth(2);
-			    //table.autoFitColumnWidth(3);
-			    //table.autoFitColumnWidth(5);
-			    //table.autoFitColumnWidth(7);
 			}
 			
 			status.unsetFlag_findPaginated(); // TODO : falta modificar el nombre del flag

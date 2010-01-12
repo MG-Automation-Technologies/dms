@@ -28,22 +28,20 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ResizePolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollPolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTPermission;
@@ -63,6 +61,10 @@ import es.git.openkm.frontend.client.util.Util;
 public class SecurityScrollTable extends Composite implements ClickHandler  {
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	
+	// Number of columns
+	public static final int NUMBER_OF_COLUMNS	= 7;
+	
 	private String path;	
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -77,22 +79,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	 * SecurityScrollTable
 	 */
 	public SecurityScrollTable() {
-		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -102,7 +89,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
@@ -116,7 +103,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
@@ -130,7 +117,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
@@ -151,6 +138,12 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	    table.setColumnWidth(5,90);
 	    table.setColumnWidth(6,90);
 	    
+	    table.setPreferredColumnWidth(0, 110);
+		table.setPreferredColumnWidth(1, 90);
+		table.setPreferredColumnWidth(4, 110);
+		
+		table.setColumnSortable(3, false);
+	    
 		button = new Button(Main.i18n("button.update"), this);
 		button.setStyleName("okm-Button");
 		
@@ -167,9 +160,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	    headerTable.getCellFormatter().setVerticalAlignment(0,3,HasAlignment.ALIGN_MIDDLE);
 
 	    // Table data
-	    //dataTable.setHoveringPolicy(SortableFixedWidthGrid.HOVERING_POLICY_CELL);
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
 	    table.setResizePolicy(ResizePolicy.UNCONSTRAINED);
 	    table.setScrollPolicy(ScrollPolicy.BOTH);
 	    
@@ -211,6 +202,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
 		}
+		dataTable.resize(0, NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -220,7 +212,10 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	 * @param permission The permission value
 	 */
 	private void addUserRow(String userName, Byte permission) {
-		int rows = userRow++; 
+		int rows = userRow++;
+		if (dataTable.getRowCount()<=rows) {
+			dataTable.insertRow(rows);
+		}
 		
 		dataTable.setHTML(rows, 4, userName);
 		
@@ -248,6 +243,9 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	 */
 	private void addRolRow(String groupName, Byte permission) {
 		int rows = rolRow++; 
+		if (dataTable.getRowCount()<=rows) {
+			dataTable.insertRow(rows);
+		}
 		
 		dataTable.setHTML(rows, 0, groupName);
 		
@@ -277,20 +275,15 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 			List usersList = new ArrayList();
 			
 			// Ordering grant roles to list
-			for (Iterator it = users.keySet().iterator(); it.hasNext(); ) {
-				usersList.add((String) it.next());
+			for (Iterator<String> it = users.keySet().iterator(); it.hasNext(); ) {
+				usersList.add(it.next());
 			}
 			Collections.sort(usersList, UserComparator.getInstance());
 			
-			for (Iterator it = usersList.iterator(); it.hasNext(); ) {
-				String userName = (String) it.next();
+			for (Iterator<String> it = usersList.iterator(); it.hasNext(); ) {
+				String userName = it.next();
 				Byte permission = (Byte) users.get(userName);
 				addUserRow(userName, permission);
-			}
-			
-			// Only auto fit when theres some rows
-			if (users.keySet().size()>0) {
-				//table.autoFitColumnWidth(4);
 			}
 			
 			Main.get().mainPanel.browser.tabMultiple.status.unsetUserSecurity();
@@ -311,20 +304,15 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 			List rolesList = new ArrayList();
 			
 			// Ordering grant roles to list
-			for (Iterator it = roles.keySet().iterator(); it.hasNext(); ) {
-				rolesList.add((String) it.next());
+			for (Iterator<String> it = roles.keySet().iterator(); it.hasNext(); ) {
+				rolesList.add(it.next());
 			}
 			Collections.sort(rolesList, RoleComparator.getInstance());
 			
-			for (Iterator it = rolesList.iterator(); it.hasNext(); ) {
-				String groupName = (String) it.next();
+			for (Iterator<String> it = rolesList.iterator(); it.hasNext(); ) {
+				String groupName = it.next();
 				Byte permission = (Byte) roles.get(groupName);
 				addRolRow(groupName, permission);
-			}
-			
-			// Only auto fit when theres some rows
-			if (roles.keySet().size()>0) {
-				//table.autoFitColumnWidth(0);
 			}
 			
 			Main.get().mainPanel.browser.tabMultiple.status.unsetRoleSecurity();

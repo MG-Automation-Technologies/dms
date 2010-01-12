@@ -19,15 +19,15 @@
 
 package es.git.openkm.frontend.client.widget.upload;
 
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollPolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable;
-import com.google.gwt.widgetideas.table.client.SelectionGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollPolicy;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -38,6 +38,9 @@ import es.git.openkm.frontend.client.Main;
  *
  */
 public class UserScrollTable extends Composite {
+	// Number of columns
+	public static final int NUMBER_OF_COLUMNS	= 1;
+	
 	private ScrollTable table;
 	private boolean isUserToNofity = false;
 	private FixedWidthFlexTable headerTable;
@@ -51,21 +54,7 @@ public class UserScrollTable extends Composite {
 	public UserScrollTable(boolean isUserToNofity) {
 		this.isUserToNofity = isUserToNofity;
 		
-		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
+		ScrollTableImages scrollTableImages = new ScrollTableImages(){			
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -75,7 +64,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
@@ -89,7 +78,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
@@ -103,7 +92,7 @@ public class UserScrollTable extends Composite {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
@@ -127,9 +116,7 @@ public class UserScrollTable extends Composite {
 	    table.setColumnWidth(0,120);
 	    
 	    // Table data
-	    //dataTable.setHoveringPolicy(SortableFixedWidthGrid.HOVERING_POLICY_CELL);
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
-	    //dataTable.setMinHoverRow(0);
 	    
 	    table.setScrollPolicy(ScrollPolicy.BOTH);
 	    
@@ -143,6 +130,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void addRow(String userName) {
 		int rows = dataTable.getRowCount();
+		dataTable.insertRow(rows);
 		dataTable.setHTML(rows, 0, userName);
 	}
 	
@@ -215,7 +203,7 @@ public class UserScrollTable extends Composite {
 	/**
 	 * Removes all rows except the first
 	 */
-	public void removeAllRows() {
+	private void removeAllRows() {
 		// Purge all rows 
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
@@ -227,6 +215,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void reset() {
 		removeAllRows();
+		getDataTable().resize(0, NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -238,5 +227,14 @@ public class UserScrollTable extends Composite {
 		} else {
 			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
 		}
+	}
+	
+	/**
+	 * getDataTable
+	 * 
+	 * @return FixedWidthGrid
+	 */
+	public FixedWidthGrid getDataTable(){
+		return table.getDataTable();
 	}
 }

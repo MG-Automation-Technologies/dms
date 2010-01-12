@@ -25,6 +25,9 @@ import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
+import com.google.gwt.gen2.table.client.FixedWidthGrid;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,9 +37,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.widgetideas.table.client.FixedWidthFlexTable;
-import com.google.gwt.widgetideas.table.client.FixedWidthGrid;
-import com.google.gwt.widgetideas.table.client.ScrollTable.ScrollTableImages;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
@@ -79,6 +79,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public static final int ACTION_RENAME					 = 2;
 	public static final int ACTION_SECURITY_REFRESH_MAIL 	 = 3;
 	
+	// Number of columns
+	public static final int NUMBER_OF_COLUMNS	= 8;
+	
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
@@ -115,22 +118,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 		panel = new VerticalPanel();
 		filePath = new FilePath();
 		
-		ScrollTableImages scrollTableImages = new ScrollTableImages(){
-			@SuppressWarnings("unused")
-			public AbstractImagePrototype fillWidth() {
-				return new AbstractImagePrototype() {
-					public void applyTo(Image image) {
-						image.setUrl("img/fill_width.gif");
-					}
-					public Image createImage() {
-						return  new Image("img/fill_width.gif");
-					}
-					public String getHTML(){
-						return "<img/>";
-					}
-				};
-			}
-			
+		ScrollTableImages scrollTableImages = new ScrollTableImages(){			
+			/* (non-Javadoc)
+			 * @see com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages#scrollTableAscending()
+			 */
 			public AbstractImagePrototype scrollTableAscending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -140,11 +131,14 @@ public class FileBrowser extends Composite implements OriginPanel {
 						return  new Image("img/sort_asc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_asc.gif\"/>";
 					}
 				};
 			}
 			
+			/* (non-Javadoc)
+			 * @see com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages#scrollTableDescending()
+			 */
 			public AbstractImagePrototype scrollTableDescending() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -154,11 +148,14 @@ public class FileBrowser extends Composite implements OriginPanel {
 						return  new Image("img/sort_desc.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/sort_desc.gif\"/>";
 					}
 				};
 			}
 
+			/* (non-Javadoc)
+			 * @see com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages#scrollTableFillWidth()
+			 */
 			public AbstractImagePrototype scrollTableFillWidth() {
 				return new AbstractImagePrototype() {
 					public void applyTo(Image image) {
@@ -168,13 +165,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 						return  new Image("img/fill_width.gif");
 					}
 					public String getHTML(){
-						return "<img/>";
+						return "<img border=\"0\" src=\"img/fill_width.gif\"/>";
 					}
 				};
 			}
 		};
 		headerTable = new FixedWidthFlexTable();
-	    dataTable = new FixedWidthGrid();
+	    dataTable = new FixedWidthGrid(10,8);
 
 		table = new ExtendedScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setSize("540","140");
@@ -189,6 +186,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 		table.setColumnWidth(5,110);
 		table.setColumnWidth(6,90);
 		table.setColumnWidth(7,0);
+		
+		table.setPreferredColumnWidth(0, 60);
+		table.setPreferredColumnWidth(1, 25);
+		table.setPreferredColumnWidth(4, 150);
 		
 		headerTable.addStyleName("okm-DisableSelect");
 		table.addStyleName("okm-Input");
@@ -288,6 +289,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
 		}
+		table.getDataTable().resize(0, NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -341,13 +343,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 				addRow(folder);
 			}
 			
-			// Only must set auto fit column if there's some content
-			if (folderList.size()>0) {
-			//	table.autoFitColumnWidth(2);
-			//	table.autoFitColumnWidth(5);
-			//	table.autoFitColumnWidth(7);
-			}
-			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS);
 			getDocumentChilds(fldId);
@@ -369,13 +364,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			for (Iterator<GWTDocument> it = documentList.iterator(); it.hasNext();){
 				GWTDocument doc = it.next();
 				addRow(doc);
-			}
-			
-			// Only must set auto fit column if there's some content
-			if (documentList.size()>0) {
-				//table.autoFitColumnWidth(2);
-				//table.autoFitColumnWidth(5);
-				//table.autoFitColumnWidth(7);
 			}
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();

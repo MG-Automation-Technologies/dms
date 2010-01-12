@@ -57,6 +57,10 @@ public class SecurityUser extends Composite implements HasWidgets {
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
+	// Number of columns
+	public static final int ASSIGNED_USER_NUMBER_OF_COLUMNS		= 3;
+	public static final int UNASSIGNED_USER_NUMBER_OF_COLUMNS	= 1;
+	
 	public UserScrollTable assignedUser;
 	public UserScrollTable unassignedUser;
 	private HorizontalPanel panel;
@@ -149,6 +153,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	public void reset() {
 		assignedUser.reset();
 		unassignedUser.reset();
+		assignedUser.getDataTable().resize(0, ASSIGNED_USER_NUMBER_OF_COLUMNS);
+		unassignedUser.getDataTable().resize(0, UNASSIGNED_USER_NUMBER_OF_COLUMNS);
 	}
 	
 	/**
@@ -160,20 +166,15 @@ public class SecurityUser extends Composite implements HasWidgets {
 			List usersList = new ArrayList();
 			
 			// Ordering grant roles to list
-			for (Iterator it = users.keySet().iterator(); it.hasNext(); ) {
-				usersList.add((String) it.next());
+			for (Iterator<String> it = users.keySet().iterator(); it.hasNext(); ) {
+				usersList.add(it.next());
 			}
 			Collections.sort(usersList, UserComparator.getInstance());
 			
-			for (Iterator it = usersList.iterator(); it.hasNext(); ) {
-				String userName = (String) it.next();
+			for (Iterator<String> it = usersList.iterator(); it.hasNext(); ) {
+				String userName = it.next();
 				Byte permission = (Byte) users.get(userName);
 				assignedUser.addRow(userName, permission);
-			}
-			
-			// Only auto fit column when there's some values
-			if (users.keySet().size()>0) {
-				unassignedUser.autoFitColumnWidth(0);
 			}
 		}
 
@@ -187,16 +188,11 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 */
 	final AsyncCallback callbackGetUngrantedUsers = new AsyncCallback() {
 		public void onSuccess(Object result) {
-			List roles = (List) result;
+			List<String> roles = (List<String>) result;
 			
-			for (Iterator it = roles.iterator(); it.hasNext(); ) {
-				String userName = (String) it.next();
+			for (Iterator<String> it = roles.iterator(); it.hasNext(); ) {
+				String userName = it.next();
 				unassignedUser.addRow(userName);
-			}
-			
-			// Only auto fit column when there's some values
-			if (roles.size()>0) {
-				unassignedUser.autoFitColumnWidth(0);
 			}
 		}
 
@@ -319,7 +315,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.HasWidgets#iterator()
 	 */
-	public Iterator iterator() {
+	public Iterator<Widget> iterator() {
 		return null;
 	}
 	
