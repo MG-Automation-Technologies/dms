@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMWorkflow;
-import es.git.openkm.bean.FormField;
+import es.git.openkm.bean.form.FormField;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.core.RepositoryException;
@@ -158,12 +158,12 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		log.debug("setTaskInstanceValues()");
 		String token = getToken();
 		
-		try {
-			OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
-		}
+//		try {
+//			//OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
+//		} catch (RepositoryException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+//		}
 		log.debug("setTaskInstanceValues:");
 	}
 	

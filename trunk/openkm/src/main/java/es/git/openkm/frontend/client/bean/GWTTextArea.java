@@ -21,38 +21,35 @@ package es.git.openkm.frontend.client.bean;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
- * GWTFormField
- * 
- * @author jllort
- *
- */
-public class GWTFormField implements IsSerializable {
-		protected String label = "";
-		protected String name = "";
-		protected String value = "";
-		
-		public String getLabel() {
-			return label;
-		}
-		
-		public void setLabel(String label) {
-			this.label = label;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public void setName(String name) {
-			this.name = name;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public void setValue(String value) {
-			this.value = value;
-		}
+public class GWTTextArea extends GWTFormField implements IsSerializable{
+	private String cols = "20";
+	private String rows = "2";
+
+	public String getCols() {
+		return cols;
+	}
+
+	public void setCols(String cols) {
+		this.cols = cols;
+	}
+
+	public String getRows() {
+		return rows;
+	}
+
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("cols="); sb.append(cols);
+		sb.append(", rows="); sb.append(rows);
+		sb.append(", label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append(", value="); sb.append(value);
+		sb.append("}");
+		return sb.toString();
+	}
 }

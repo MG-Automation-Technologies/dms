@@ -19,13 +19,11 @@
 
 package es.git.openkm.frontend.client.bean;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 /**
  * @author jllort
  *
  */
-public class GWTObjectToOrder implements IsSerializable {
+public class GWTObjectToOrder {
 	
 	private Object object;
 	private String dataId;
