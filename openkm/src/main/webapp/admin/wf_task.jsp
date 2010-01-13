@@ -1,5 +1,6 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
+<%@ page import="es.git.openkm.util.FormatUtil"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
 <%@ page import="es.git.openkm.bean.workflow.TaskInstance"%>
@@ -154,7 +155,7 @@
 			out.println("</td></tr>");
 			out.println("</table>");
 			
-			Map<String, String> vars = ti.getVariables();
+			Map<String, String[]> vars = ti.getVariables();
 			out.println("<h2>Process Variables</h2>");
 			out.println("<table class=\"results\">");
 			out.println("<tr><th>Name</th><th>Value</th><th>Actions</th></tr>");
@@ -164,7 +165,7 @@
 				String key = it.next();
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+vars.get(key)+"</td>");
+				out.print("<td>"+FormatUtil.formatArray(vars.get(key))+"</td>");
 				out.print("<td>");
 				out.print("<a href=\"wf_task.jsp?action=removeVar&id="+ti.getId()+"&name="+key+"\">Remove</a>");
 				out.print("</td>");
