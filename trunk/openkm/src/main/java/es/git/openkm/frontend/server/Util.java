@@ -549,7 +549,6 @@ public class Util {
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setProcessDefinition(copy(processInstance.getProcessDefinition()));
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
-		System.out.println("path" +processInstance.getVariables().get("path"));
 		gWTProcessInstance.setVariables(processInstance.getVariables());
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
