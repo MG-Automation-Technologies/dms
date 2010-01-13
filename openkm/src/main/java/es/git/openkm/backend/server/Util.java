@@ -213,7 +213,6 @@ public class Util {
 	public static GWTProcessInstance copy(ProcessInstance processInstance) {
 		GWTProcessInstance gWTProcessInstance = new GWTProcessInstance();
 		
-//		gWTProcessInstance.setCurrentNodes(processInstance.getCurrentNodes());
 		gWTProcessInstance.setEnded(processInstance.isEnded());
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());

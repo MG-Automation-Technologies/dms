@@ -63,9 +63,8 @@ public class WorkflowInstancesData extends Composite {
 		table.setHTML(0, 1, Main.i18n("workflow.version"));
 		table.setHTML(0, 2, Main.i18n("workflow.ended"));
 		table.setHTML(0, 3, Main.i18n("workflow.suspended"));
-		table.setHTML(0, 4, Main.i18n("workflow.current.nodes"));
-		table.setHTML(0, 5, Main.i18n("workflow.variables"));
-		table.setHTML(0, 6, "");
+		table.setHTML(0, 4, Main.i18n("workflow.variables"));
+		table.setHTML(0, 5, "");
 		
 		table.getCellFormatter().setStyleName(0, 0, "okm-Table-Title");
 		table.getCellFormatter().setStyleName(0, 1, "okm-Table-Title");
@@ -73,21 +72,18 @@ public class WorkflowInstancesData extends Composite {
 		table.getCellFormatter().setStyleName(0, 3, "okm-Table-Title");
 		table.getCellFormatter().setStyleName(0, 4, "okm-Table-Title");
 		table.getCellFormatter().setStyleName(0, 5, "okm-Table-Title");
-		table.getCellFormatter().setStyleName(0, 6, "okm-Table-Title");
 		table.getCellFormatter().addStyleName(0, 1, "okm-Table-Title-LeftBorder");
 		table.getCellFormatter().addStyleName(0, 2, "okm-Table-Title-LeftBorder");
 		table.getCellFormatter().addStyleName(0, 3, "okm-Table-Title-LeftBorder");
 		table.getCellFormatter().addStyleName(0, 4, "okm-Table-Title-LeftBorder");
 		table.getCellFormatter().addStyleName(0, 5, "okm-Table-Title-LeftBorder");
-		table.getCellFormatter().addStyleName(0, 6, "okm-Table-Title-LeftBorder");
 		table.getCellFormatter().addStyleName(0, 0, "okm-Table-Title-RightBorder");
 		table.getCellFormatter().addStyleName(0, 1, "okm-Table-Title-RightBorder");
 		table.getCellFormatter().addStyleName(0, 2, "okm-Table-Title-RightBorder");
 		table.getCellFormatter().addStyleName(0, 3, "okm-Table-Title-RightBorder");
 		table.getCellFormatter().addStyleName(0, 4, "okm-Table-Title-RightBorder");
-		table.getCellFormatter().addStyleName(0, 5, "okm-Table-Title-RightBorder");
 		
-		table.getCellFormatter().setWidth(0, 6, "100%");
+		table.getCellFormatter().setWidth(0, 5, "100%");
 		
 		vPanel.add(table);
 		
@@ -108,19 +104,9 @@ public class WorkflowInstancesData extends Composite {
 				table.setHTML(rows, 1, ""+processInstance.getVersion());
 				table.setHTML(rows, 2, ""+processInstance.isEnded());
 				table.setHTML(rows, 3, ""+processInstance.isSuspended());
-				String currentNodes = "";
-				boolean first = true;
-				for (Iterator<String> itn = processInstance.getCurrentNodes().iterator(); itn.hasNext();) {
-					if (!first) {
-						currentNodes +="<br>";
-					}
-					currentNodes += itn.next();
-					first=false;
-				}
-				table.setHTML(rows, 4, currentNodes);
 				
 				String variables = "";
-				first=true;
+				boolean first=true;
 				for (Iterator<String> itv = processInstance.getVariables().keySet().iterator(); itv.hasNext();) {
 					if (!first) {
 						variables +="<br>";
@@ -128,9 +114,9 @@ public class WorkflowInstancesData extends Composite {
 					variables += processInstance.getVariables().get(itv.next());
 					first=false;
 				}
-				table.setHTML(rows, 5, variables);
+				table.setHTML(rows, 4, variables);
 				
-				table.setHTML(rows, 6, "");
+				table.setHTML(rows, 5, "");
 				table.getCellFormatter().setHorizontalAlignment(rows, 0, HasAlignment.ALIGN_CENTER);
 				table.getCellFormatter().setHorizontalAlignment(rows, 1, HasAlignment.ALIGN_CENTER);
 				table.getCellFormatter().setHorizontalAlignment(rows, 2, HasAlignment.ALIGN_CENTER);

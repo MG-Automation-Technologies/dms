@@ -157,6 +157,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
 		String token = getToken();
+		//OKMWorkflow.getInstance().endTaskInstance(token, taskInstanceId, transitionName);
 		
 //		try {
 //			//OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
