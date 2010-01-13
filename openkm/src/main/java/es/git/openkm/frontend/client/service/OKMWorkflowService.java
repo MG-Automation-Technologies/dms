@@ -39,5 +39,5 @@ public interface OKMWorkflowService extends RemoteService {
 	public void runProcessDefinition(String docPath, double id) throws OKMException;
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException;
 	public Map<String, Collection<GWTFormField>> getProcessDefinitionForms(double id) throws OKMException;
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values ) throws OKMException;
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, String[]> values ) throws OKMException;
 }

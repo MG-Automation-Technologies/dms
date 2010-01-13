@@ -154,17 +154,17 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#setTaskInstanceValues(double, java.lang.String, java.util.Map)
 	 */
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values ) throws OKMException {
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, String[]> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
 		String token = getToken();
-		//OKMWorkflow.getInstance().endTaskInstance(token, taskInstanceId, transitionName);
-		
-//		try {
-//			//OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
-//		} catch (RepositoryException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
-//		}
+	
+		try {
+			OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
+			OKMWorkflow.getInstance().endTaskInstance(token, new Double(id).longValue(), transitionName);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
 		log.debug("setTaskInstanceValues:");
 	}
 	

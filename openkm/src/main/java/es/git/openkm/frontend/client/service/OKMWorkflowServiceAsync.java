@@ -39,5 +39,5 @@ public interface OKMWorkflowServiceAsync {
 	public void runProcessDefinition(String docPath, double id, AsyncCallback<?> callback);
 	public void findUserTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
 	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormField>>> callback);
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values, AsyncCallback<?> callback );
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, String[]> values, AsyncCallback<?> callback );
 }

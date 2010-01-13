@@ -364,7 +364,7 @@ public class WorkflowFormPanel extends Composite {
 			Widget widget = null;
 			
 			if (formField instanceof GWTButton) {
-				GWTButton gWTButton = (GWTButton) formField;
+				final GWTButton gWTButton = (GWTButton) formField;
 				submitForm.setVisible(false); // Always set form unvisible because there's new buttons
 				
 				Button transButton = new Button(gWTButton.getLabel());
@@ -374,11 +374,16 @@ public class WorkflowFormPanel extends Composite {
 				hPanel.add(space);
 				hPanel.setCellWidth(space, "5px");
 				
+				
 				// Setting submit button
 				transButton.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
-						setTaskInstanceValues(taskInstance.getId(), formField.getName()); 
+						if (gWTButton.getType().equals(GWTButton.TYPE_TRANSITION)) {
+							setTaskInstanceValues(taskInstance.getId(), gWTButton.getValue());
+						} else {
+							setTaskInstanceValues(taskInstance.getId(), null);
+						}
 					}
 				});
 			} else if (formField instanceof GWTInput) {
@@ -420,32 +425,13 @@ public class WorkflowFormPanel extends Composite {
 //					listBox.setStyleName("okm-Input");
 //					formTable.setWidget(row, 1, listBox);
 //					break;
-					
-//				case GWTFormField.TRANSITION:
-//					submitForm.setVisible(false); // Always set form unvisible because there's new buttons
-//					Button transButton = new Button(formField.getName());
-//					transButton.setStyleName("okm-Button");
-//					HTML space = new HTML("&nbsp;");
-//					hPanel.add(transButton);
-//					hPanel.add(space);
-//					hPanel.setCellWidth(space, "5px");
-//					
-//					// Setting submit button
-//					transButton.addClickHandler(new ClickHandler() { 
-//						@Override
-//						public void onClick(ClickEvent event) {
-//							setTaskInstanceValues(taskInstance.getId(), formField.getName()); 
-//						}
-//					});
-//					break;
 //			}
 			
 			// Saves widget
-//			if (widget!=null) {
-//				fw.setWidget(widget);
-//				fw.setType(formField.getType()); // AIXO NO HA DE ANAR  COMENTAT OJO AL DATO !!!
-//				formWidgetList.add(fw);
-//			}
+			if (widget!=null) {
+				fw.setWidget(widget);
+				formWidgetList.add(fw);
+			}
 		}
 		
 		// Adds submit button
@@ -479,28 +465,13 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	private void setTaskInstanceValues(double id, String transitionName) {
 		// Init values hashmap
-		Map<String, String> values = new HashMap<String, String>();
+		Map<String, String[]> values = new HashMap<String, String[]>();
 		for (Iterator<FormWidget> it = formWidgetList.iterator(); it.hasNext();) {
 			FormWidget fw = it.next();
-//			switch(fw.getType()) {
-//				case GWTFormField.CHECKBOX:
-//					break;
-//					
-//				case GWTFormField.INPUT:
-//					TextBox textBox = (TextBox) fw.getWidget();
-//					values.put(textBox.getName(), textBox.getText());
-//					break;
-//					
-//				case GWTFormField.TEXT_AREA:
-//					break;
-//					
-//				case GWTFormField.SELECT:
-//				case GWTFormField.SELECT_MULTI:
-//					break;
-//					
-//				case GWTFormField.TRANSITION:
-//					break;
-//			}
+			if (fw.getWidget() instanceof TextBox) {
+				TextBox textBox = (TextBox) fw.getWidget();
+				values.put(textBox.getName(), new String[]{textBox.getValue()});
+			}
 		}
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
@@ -517,7 +488,6 @@ public class WorkflowFormPanel extends Composite {
 	class FormWidget {
 		
 		private Widget widget;
-		private int type = 0;
 		
 		/**
 		 * FormWidget
@@ -531,14 +501,6 @@ public class WorkflowFormPanel extends Composite {
 
 		public void setWidget(Widget widget) {
 			this.widget = widget;
-		}
-
-		public int getType() {
-			return type;
-		}
-
-		public void setType(int type) {
-			this.type = type;
 		}
 	}
 	
