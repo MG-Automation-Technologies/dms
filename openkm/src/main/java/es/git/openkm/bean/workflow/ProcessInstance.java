@@ -40,7 +40,7 @@ public class ProcessInstance implements Serializable {
 	private boolean ended;
 	private boolean suspended;
 	private Token rootToken;
-	private Map<String, String> variables;
+	private Map<String, String[]> variables;
 	private Collection<Token> allTokens;
 	private ProcessDefinition processDefinition;
 	
@@ -79,11 +79,11 @@ public class ProcessInstance implements Serializable {
 		this.suspended = suspended;
 	}
 
-	public Map<String, String> getVariables() {
+	public Map<String, String[]> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Map<String, String> variables) {
+	public void setVariables(Map<String, String[]> variables) {
 		this.variables = variables;
 	}
 

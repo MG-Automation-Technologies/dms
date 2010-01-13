@@ -37,7 +37,7 @@ public class GWTProcessInstance implements IsSerializable {
 	private Date start;
 	private boolean ended;
 	private boolean suspended;
-	private Map variables;
+	private Map<String, String[]> variables;
 	private GWTProcessDefinition processDefinition;
 	
 	/**
@@ -78,11 +78,11 @@ public class GWTProcessInstance implements IsSerializable {
 		this.suspended = suspended;
 	}
 
-	public Map getVariables() {
+	public Map<String, String[]> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Map variables) {
+	public void setVariables(Map<String, String[]> variables) {
 		this.variables = variables;
 	}
 
