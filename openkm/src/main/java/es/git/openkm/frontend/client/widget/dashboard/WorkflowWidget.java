@@ -64,11 +64,8 @@ public class WorkflowWidget extends Composite {
 	private SimplePanel panelData;
 	private FlexTable table;
 	private Image zoomImage;
-	// private Image viewedImage;
 	private boolean zoom = false;
 	private boolean flagZoom = true;
-	private List<GWTTaskInstance> lastTaskInstanceList = new ArrayList<GWTTaskInstance>();
-	private WidgetToFire widgetToFire;
 	public Status status;
 	private String headerTextKey;
 	
@@ -124,15 +121,6 @@ public class WorkflowWidget extends Composite {
 		vPanel.addStyleName("okm-DisableSelect");
 		
 		initWidget(vPanel);
-	}
-	
-	/**
-	 * Sets the widget to be fired
-	 * 
-	 * @param widgetToFire
-	 */
-	public void setWidgetToFire(WidgetToFire widgetToFire){
-		this.widgetToFire = widgetToFire;
 	}
 	
 	/**
@@ -207,7 +195,6 @@ public class WorkflowWidget extends Composite {
 		}
 		
 		header.setHeaderNotViewedResults(tasksNotViewed);
-		lastTaskInstanceList = taskIntanceList; // Saves actual list
 	}
 	
 	/**
@@ -263,16 +250,6 @@ public class WorkflowWidget extends Composite {
 			}
 			zoomImage.setStyleName("okm-Hyperlink");
 			
-//			viewedImage = new Image("img/viewed.gif");
-//			viewedImage.setStyleName("okm-Hyperlink");
-//			
-//			viewedImage.addClickListener(new ClickListener() {
-//				public void onClick(Widget sender) {
-//					flagZoom = false;
-//					//markAllRowsAsViewed();
-//				}
-//			});
-			
 			addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -309,23 +286,19 @@ public class WorkflowWidget extends Composite {
 			center.add(iconImagePanel);
 			center.add(titlePanel);
 			center.add(headerNotViewedResults);
-			//center.add(viewedImage);
 			center.add(zoomImage);
 			
 			spLeft.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
 			center.setWidth("100%");
 			center.setCellVerticalAlignment(iconImagePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(iconImagePanel, HasAlignment.ALIGN_LEFT);
-			//center.setCellHorizontalAlignment(viewedImage, HasAlignment.ALIGN_LEFT);
 			center.setCellHorizontalAlignment(zoomImage, HasAlignment.ALIGN_RIGHT);
 			center.setCellVerticalAlignment(titlePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(headerNotViewedResults, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(headerNotViewedResults, HasAlignment.ALIGN_RIGHT);
 	
-			//center.setCellVerticalAlignment(viewedImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellWidth(iconImagePanel, "22");
-			//center.setCellWidth(viewedImage, "22");
 			center.setCellWidth(zoomImage, "16");
 			center.setHeight(""+HEADER_SQUARE);
 			spRight.setSize(""+HEADER_SQUARE, ""+HEADER_SQUARE);
@@ -377,22 +350,12 @@ public class WorkflowWidget extends Composite {
 				headerNotViewedResults.setHTML("&nbsp;" + value + "&nbsp;&nbsp;");
 				titlePanel.setStyleName("okm-NotViewed");
 				headerNotViewedResults.setStyleName("okm-NotViewed");
-				//viewedImage.setUrl("img/viewed_pending.gif");
 				
 			} else {
 				headerNotViewedResults.setHTML("");
 				titlePanel.removeStyleName("okm-NotViewed");
 				headerNotViewedResults.removeStyleName("okm-NotViewed");
-				//viewedImage.setUrl("img/viewed.gif");
 			}
-		}
-		
-		/**
-		 * Decrements viewed
-		 */
-		public void decrementNotViewed(int value) {
-			notViewed -= value;
-			setHeaderNotViewedResults(notViewed);
 		}
 		
 		/**

@@ -4,7 +4,7 @@ public class Input extends FormField {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	private String type = TYPE_TEXT;
-	private String size = "20";
+	private String size = "100";
 
 	public String getType() {
 		return type;

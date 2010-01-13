@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,12 @@ import es.git.openkm.bean.DashboardStatsFolderResult;
 import es.git.openkm.bean.DashboardStatsMailResult;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
-import es.git.openkm.bean.FormField;
+import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.Input;
+import es.git.openkm.bean.form.Option;
+import es.git.openkm.bean.form.Select;
+import es.git.openkm.bean.form.TextArea;
 import es.git.openkm.bean.Lock;
 import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.MetaData;
@@ -52,6 +58,7 @@ import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.bean.GWTBookmark;
+import es.git.openkm.frontend.client.bean.GWTButton;
 import es.git.openkm.frontend.client.bean.GWTComment;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
@@ -59,16 +66,20 @@ import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTInput;
 import es.git.openkm.frontend.client.bean.GWTLock;
 import es.git.openkm.frontend.client.bean.GWTMail;
 import es.git.openkm.frontend.client.bean.GWTMetaData;
 import es.git.openkm.frontend.client.bean.GWTNote;
+import es.git.openkm.frontend.client.bean.GWTOption;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTProcessInstance;
 import es.git.openkm.frontend.client.bean.GWTPropertyParams;
 import es.git.openkm.frontend.client.bean.GWTQueryParams;
 import es.git.openkm.frontend.client.bean.GWTQueryResult;
+import es.git.openkm.frontend.client.bean.GWTSelect;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
+import es.git.openkm.frontend.client.bean.GWTTextArea;
 import es.git.openkm.frontend.client.bean.GWTVersion;
 
 public class Util {
@@ -538,6 +549,7 @@ public class Util {
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setProcessDefinition(copy(processInstance.getProcessDefinition()));
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
+		System.out.println("path" +processInstance.getVariables().get("path"));
 		gWTProcessInstance.setVariables(processInstance.getVariables());
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
@@ -551,14 +563,52 @@ public class Util {
 	 * @return The GWTFormField object with data values from original FormField
 	 */
 	public static GWTFormField copy(FormField formField) {
-		GWTFormField gWTFormField = new GWTFormField();
-		
-		gWTFormField.setLabel(formField.getLabel());
-		gWTFormField.setName(formField.getName());
-		gWTFormField.setType(formField.getType());
-		gWTFormField.setValue(formField.getValue());
-		
-		return gWTFormField;
+		if (formField instanceof Button) {
+			GWTButton gWTButton = new GWTButton();
+			gWTButton.setLabel(formField.getLabel());
+			gWTButton.setName(formField.getName());
+			gWTButton.setValue(formField.getValue());
+			gWTButton.setType(((Button) formField).getType());
+			return gWTButton;
+		} else if (formField instanceof Input) {
+			GWTInput gWTInput = new GWTInput();
+			gWTInput.setLabel(formField.getLabel());
+			gWTInput.setName(formField.getName());
+			gWTInput.setValue(formField.getValue());
+			gWTInput.setType(((Input) formField).getType());
+			gWTInput.setSize(((Input) formField).getSize());
+			return gWTInput;
+		} else if (formField instanceof Select) {
+			GWTSelect gWTselect = new GWTSelect();
+			gWTselect.setLabel(formField.getLabel());
+			gWTselect.setName(formField.getName());
+			gWTselect.setValue(formField.getValue());
+			gWTselect.setType(((Select) formField).getType());
+			gWTselect.setSize(((Select) formField).getSize());
+			Collection<GWTOption> options = new ArrayList<GWTOption>();
+			for (Iterator<Option> it = ((Select) formField).getOptions().iterator(); it.hasNext();) {
+				options.add(copy(it.next()));
+			}
+			gWTselect.setOptions(options);
+			return gWTselect;
+		} else if (formField instanceof TextArea) {
+			GWTTextArea gWTTextArea= new GWTTextArea();
+			return gWTTextArea;
+		} else {
+			return new GWTFormField();
+		}
+	}
+	
+	/**
+	 * Copy to Option data to  GWTOption
+	 * @param Option the original data
+	 * @return The GWTOption object with data values from original Option
+	 */
+	public static GWTOption copy(Option option) {
+		GWTOption gWTOption = new GWTOption();
+		gWTOption.setName(option.getName());
+		gWTOption.setValue(option.getValue());
+		return gWTOption;
 	}
 	
 	/**

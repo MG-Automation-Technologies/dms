@@ -22,37 +22,30 @@ package es.git.openkm.frontend.client.bean;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * GWTFormField
- * 
  * @author jllort
  *
  */
-public class GWTFormField implements IsSerializable {
-		protected String label = "";
-		protected String name = "";
-		protected String value = "";
-		
-		public String getLabel() {
-			return label;
-		}
-		
-		public void setLabel(String label) {
-			this.label = label;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public void setName(String name) {
-			this.name = name;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public void setValue(String value) {
-			this.value = value;
-		}
+public class GWTButton extends GWTFormField implements IsSerializable {
+	public static final String TYPE_SUBMIT = "submit";
+	public static final String TYPE_TRANSITION = "transition";
+	private String type = TYPE_SUBMIT;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("type="); sb.append(type);
+		sb.append(", label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append(", value="); sb.append(value);
+		sb.append("}");
+		return sb.toString();
+	}
 }
