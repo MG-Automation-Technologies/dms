@@ -456,11 +456,12 @@ public class WorkflowUtils {
 									if (item != null) input.setName(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("type");
 									if (item != null) input.setType(item.getNodeValue());
-									item = nField.getAttributes().getNamedItem("size");
-									if (item != null) input.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("value");
 									if (item != null) input.setValue(item.getNodeValue());
-									log.info("Input: "+input);
+									item = nField.getAttributes().getNamedItem("width");
+									if (item != null) input.setWidth(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("height");
+									if (item != null) input.setHeight(item.getNodeValue());
 									fFields.add(input);
 								} else if (fieldComponent.equals("textarea")) {
 									TextArea textArea = new TextArea();
@@ -474,7 +475,10 @@ public class WorkflowUtils {
 									if (item != null) textArea.setHeight(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("value");
 									if (item != null) textArea.setValue(item.getNodeValue());
-									log.info("TextArea: "+textArea);
+									item = nField.getAttributes().getNamedItem("width");
+									if (item != null) textArea.setWidth(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("height");
+									if (item != null) textArea.setHeight(item.getNodeValue());
 									fFields.add(textArea);
 								} else if (fieldComponent.equals("button")) {
 									Button button = new Button();
@@ -486,7 +490,10 @@ public class WorkflowUtils {
 									if (item != null) button.setValue(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("type");
 									if (item != null) button.setType(item.getNodeValue());
-									log.info("Button: "+button);
+									item = nField.getAttributes().getNamedItem("width");
+									if (item != null) button.setWidth(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("height");
+									if (item != null) button.setHeight(item.getNodeValue());
 									fFields.add(button);
 								} else if (fieldComponent.equals("select")) {
 									Select select = new Select();
@@ -497,8 +504,10 @@ public class WorkflowUtils {
 									if (item != null) select.setName(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("type");
 									if (item != null) select.setType(item.getNodeValue());
-									item = nField.getAttributes().getNamedItem("size");
+									item = nField.getAttributes().getNamedItem("width");
 									if (item != null) select.setWidth(item.getNodeValue());
+									item = nField.getAttributes().getNamedItem("height");
+									if (item != null) select.setHeight(item.getNodeValue());
 									
 									NodeList nlOptions = nField.getChildNodes();
 									for (int k = 0; k < nlOptions.getLength(); k++) {
@@ -511,13 +520,14 @@ public class WorkflowUtils {
 												if (item != null) option.setName(item.getNodeValue());
 												item = nOption.getAttributes().getNamedItem("value");
 												if (item != null) option.setValue(item.getNodeValue());
+												item = nOption.getAttributes().getNamedItem("selected");
+												if (item != null) option.setSelected(Boolean.parseBoolean(item.getNodeValue()));
 												options.add(option);
 											}
 										}
 									}
 									
 									select.setOptions(options);
-									log.info("Select: "+select);
 									fFields.add(select);
 								}
 							}
