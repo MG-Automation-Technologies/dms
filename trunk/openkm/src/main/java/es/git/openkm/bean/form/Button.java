@@ -20,6 +20,8 @@ public class Button extends FormField {
 		sb.append(", label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
+		sb.append(", width="); sb.append(width);
+		sb.append(", height="); sb.append(height);
 		sb.append("}");
 		return sb.toString();
 	}
