@@ -90,7 +90,7 @@
 			Collection<FormField> form = forms.get(ti.getName());
 			out.println("<h2>Task Form</h2>");
 			out.println("<table class=\"results\">");
-			out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Type</th><th>Others</th></tr>");
+			out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 
 			if (form != null) {
 				int i = 0;
@@ -100,21 +100,20 @@
 					out.print("<td>"+ff.getLabel()+"</td>");
 					out.print("<td>"+ff.getName()+"</td>");
 					out.print("<td>"+ff.getValue()+"</td>");
+					out.print("<td>"+ff.getWidth()+"</td>");
+					out.print("<td>"+ff.getHeight()+"</td>");
+					
 					if (ff instanceof Input) {
 						Input input = (Input) ff;
 						out.print("<td>Input</td>");
-						out.print("<td><i>Type:</i> "+input.getType()+", ");
-						out.print("<i>Size:</i> "+input.getSize()+"</td>");
+						out.print("<td><i>Type:</i> "+input.getType());
 					} else if (ff instanceof TextArea) {
 						TextArea textArea = (TextArea) ff;
 						out.print("<td>TextArea</td>");
-						out.print("<td><i>Cols:</i> "+textArea.getCols()+", ");
-						out.print("<i>Rows:</i> "+textArea.getRows()+"</td>");
 					} else if (ff instanceof Select) {
 						Select select = (Select) ff;
 						out.print("<td>Select</td>");
 						out.print("<td><i>Type:</i> "+select.getType()+", ");
-						out.print("<i>Size:</i> "+select.getSize()+", ");
 						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
 					} else if (ff instanceof Button) {
 						Button button = (Button) ff;
