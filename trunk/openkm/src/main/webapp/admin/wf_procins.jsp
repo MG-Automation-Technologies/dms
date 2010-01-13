@@ -1,6 +1,7 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
 <%@ page import="es.git.openkm.api.OKMAuth"%>
+<%@ page import="es.git.openkm.util.FormatUtil"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
 <%@ page import="es.git.openkm.bean.workflow.TaskInstance"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
@@ -257,7 +258,7 @@
 				String key = it.next();
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+vars.get(key)+"</td>");
+				out.print("<td>"+FormatUtil.formatArray(vars.get(key))+"</td>");
 				out.print("<td>");
 				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\">Remove</a>");
 				out.print("</td>");
