@@ -44,6 +44,8 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -52,6 +54,7 @@ import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTButton;
 import es.git.openkm.frontend.client.bean.GWTFormField;
 import es.git.openkm.frontend.client.bean.GWTInput;
+import es.git.openkm.frontend.client.bean.GWTOption;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTProcessInstance;
 import es.git.openkm.frontend.client.bean.GWTSelect;
@@ -232,34 +235,34 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(8, 1, ""+processInstance.getId());
 		table.setHTML(9, 1, ""+processInstance.getVersion());
 		
-//		if (processInstance.getVariables()!=null && processInstance.getVariables().keySet().contains("path")) {
-//			Hyperlink link = new Hyperlink();
-//			final String docPath = (String) processInstance.getVariables().get("path");
-//			link.setText(docPath);
-//			table.setWidget(10, 1, link);
-//			link.addClickHandler(new ClickHandler() { 
-//				@Override
-//				public void onClick(ClickEvent event) {
-//					String path = docPath.substring(0,docPath.lastIndexOf("/"));
-//					CommonUI.openAllFolderPath(path, docPath);	
-//				}
-//			});
-//			link.setStyleName("okm-Hyperlink");
-//			
-//			// Clones link
-//			documentLink = new Hyperlink();
-//			documentLink.setText(docPath);
-//			documentLink.addClickHandler(new ClickHandler() { 
-//				@Override
-//				public void onClick(ClickEvent event) {
-//					String path = docPath.substring(0,docPath.lastIndexOf("/"));
-//					CommonUI.openAllFolderPath(path, docPath);	
-//				}
-//			});
-//			documentLink.setStyleName("okm-Hyperlink");
-//		} else {
-//			documentLink = null;
-//		}
+		if (processInstance.getVariables().keySet().contains("path")) {
+			Hyperlink link = new Hyperlink();
+			final String docPath = ((String[]) processInstance.getVariables().get("path"))[0];
+			link.setText(docPath);
+			table.setWidget(10, 1, link);
+			link.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
+					String path = docPath.substring(0,docPath.lastIndexOf("/"));
+					CommonUI.openAllFolderPath(path, docPath);	
+				}
+			});
+			link.setStyleName("okm-Hyperlink");
+			
+			// Clones link
+			documentLink = new Hyperlink();
+			documentLink.setText(docPath);
+			documentLink.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
+					String path = docPath.substring(0,docPath.lastIndexOf("/"));
+					CommonUI.openAllFolderPath(path, docPath);	
+				}
+			});
+			documentLink.setStyleName("okm-Hyperlink");
+		} else {
+			documentLink = null;
+		}
 		
 		table.setHTML(12, 1, ""+processDefinition.getId());
 		table.setHTML(13, 1, ""+processDefinition.getName());
@@ -354,11 +357,6 @@ public class WorkflowFormPanel extends Composite {
 			final GWTFormField formField = it.next();
 			int row = formTable.getRowCount();
 			
-			// On button case must not create new row
-//			if (formField.getType()!=GWTFormField.TRANSITION) {
-//				formTable.setHTML(row, 0, "<b>" + formField.getLabel() + "</b>");
-//			}
-			
 			// Prepares to save widget list values
 			FormWidget fw = new FormWidget();
 			Widget widget = null;
@@ -394,38 +392,33 @@ public class WorkflowFormPanel extends Composite {
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
 					textBox.setEnabled(false);
 				}
-				textBox.setWidth(gWTInput.getSize());
+				textBox.setWidth(gWTInput.getWidth());
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textBox);
 				widget = textBox;
 			} else if (formField instanceof GWTSelect) {
-				Window.alert("select");
+				GWTSelect gWTSelect = (GWTSelect) formField;
+				ListBox listBox = new ListBox();
+				listBox.setName(gWTSelect.getName());
+				listBox.setWidth(gWTSelect.getWidth());
+				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
+					GWTOption option = itx.next();
+					listBox.addItem(option.getName(), option.getValue());
+				}
+				listBox.setStyleName("okm-Input");
+				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
+				formTable.setWidget(row, 1, listBox);
 			} else if (formField instanceof GWTTextArea) {
-				Window.alert("textarea");
-			} else {
-				Window.alert("malament anem si veiem aixo !!!");
-			}
-			
-//			switch (formField.getType()) {
-//				case GWTFormField.CHECKBOX:
-//					CheckBox chkBox = new CheckBox();
-//					formTable.setWidget(row, 1, chkBox);
-//					break;
-				
-//				case GWTFormField.TEXT_AREA:
-//					TextArea textArea = new TextArea();
-//					textArea.setStyleName("okm-Input");
-//					formTable.setWidget(row, 1, textArea);
-//					break;
-
-//				case GWTFormField.SELECT:
-//				case GWTFormField.SELECT_MULTI:
-//					ListBox listBox = new ListBox();
-//					listBox.setStyleName("okm-Input");
-//					formTable.setWidget(row, 1, listBox);
-//					break;
-//			}
+				GWTTextArea gWTTextArea = (GWTTextArea) formField;
+				TextArea textArea = new TextArea();
+				textArea.setName(gWTTextArea.getName());
+				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
+				textArea.setValue(gWTTextArea.getValue());
+				textArea.setStyleName("okm-Input");
+				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
+				formTable.setWidget(row, 1, textArea);
+			} 
 			
 			// Saves widget
 			if (widget!=null) {
@@ -471,6 +464,12 @@ public class WorkflowFormPanel extends Composite {
 			if (fw.getWidget() instanceof TextBox) {
 				TextBox textBox = (TextBox) fw.getWidget();
 				values.put(textBox.getName(), new String[]{textBox.getValue()});
+			} else if (fw.getWidget() instanceof TextArea) {
+				TextArea textArea = (TextArea) fw.getWidget();
+				values.put(textArea.getName(), new String[]{textArea.getValue()});
+			} else if (fw.getWidget() instanceof ListBox) {
+				ListBox listBox = (ListBox) fw.getWidget();
+				values.put(listBox.getName(), new String[]{listBox.getValue(listBox.getSelectedIndex())});
 			}
 		}
 		
