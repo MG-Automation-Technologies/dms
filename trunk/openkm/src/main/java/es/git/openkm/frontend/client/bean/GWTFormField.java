@@ -31,7 +31,25 @@ public class GWTFormField implements IsSerializable {
 		protected String label = "";
 		protected String name = "";
 		protected String value = "";
+		protected String width = "100px";
+		protected String height = "25px";
 		
+		public String getWidth() {
+			return width;
+		}
+
+		public void setWidth(String width) {
+			this.width = width;
+		}
+
+		public String getHeight() {
+			return height;
+		}
+
+		public void setHeight(String height) {
+			this.height = height;
+		}
+
 		public String getLabel() {
 			return label;
 		}

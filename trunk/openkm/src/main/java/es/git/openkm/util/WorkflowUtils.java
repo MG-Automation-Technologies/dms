@@ -457,7 +457,7 @@ public class WorkflowUtils {
 									item = nField.getAttributes().getNamedItem("type");
 									if (item != null) input.setType(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("size");
-									if (item != null) input.setSize(item.getNodeValue());
+									if (item != null) input.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("value");
 									if (item != null) input.setValue(item.getNodeValue());
 									log.info("Input: "+input);
@@ -469,9 +469,9 @@ public class WorkflowUtils {
 									item = nField.getAttributes().getNamedItem("name");
 									if (item != null) textArea.setName(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("cols");
-									if (item != null) textArea.setCols(item.getNodeValue());
+									if (item != null) textArea.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("rows");
-									if (item != null) textArea.setRows(item.getNodeValue());
+									if (item != null) textArea.setHeight(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("value");
 									if (item != null) textArea.setValue(item.getNodeValue());
 									log.info("TextArea: "+textArea);
@@ -498,7 +498,7 @@ public class WorkflowUtils {
 									item = nField.getAttributes().getNamedItem("type");
 									if (item != null) select.setType(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("size");
-									if (item != null) select.setSize(item.getNodeValue());
+									if (item != null) select.setWidth(item.getNodeValue());
 									
 									NodeList nlOptions = nField.getChildNodes();
 									for (int k = 0; k < nlOptions.getLength(); k++) {
