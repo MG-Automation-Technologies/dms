@@ -26,6 +26,8 @@ import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * @author pavila
  *
@@ -94,5 +96,16 @@ public class FormatUtil {
 	 */
 	public static String formatDate(Calendar cal) {
 		return cal.getTime().toString();
+	}
+	
+	/**
+	 * Format string array
+	 */
+	public static String formatArray(String[] values) {
+		if (values.length == 1) {
+			return values[0];
+		} else {
+			return ArrayUtils.toString(values);
+		}
 	}
 }
