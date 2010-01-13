@@ -160,7 +160,6 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	
 		try {
 			OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
-			OKMWorkflow.getInstance().endTaskInstance(token, new Double(id).longValue(), transitionName);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
