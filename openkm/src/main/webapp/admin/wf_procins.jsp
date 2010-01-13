@@ -247,7 +247,7 @@
 			
 			out.println("</table>");
 			
-			Map<String, String> vars = pi.getVariables();
+			Map<String, String[]> vars = pi.getVariables();
 			out.println("<h2>Process Variables</h2>");
 			out.println("<table class=\"results\">");
 			out.println("<tr><th>Name</th><th>Value</th><th>Actions</th></tr>");
