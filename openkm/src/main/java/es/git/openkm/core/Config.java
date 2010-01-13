@@ -164,8 +164,8 @@ public class Config {
 	
 	private static String MAX_FILE_SIZE_STR = "25"; // 25 Megas
 	public static int MAX_FILE_SIZE = Integer.parseInt(MAX_FILE_SIZE_STR) * 1024 * 1024;
-	private static String MAX_SEARCH_RESULTS_STR = "25"; // 25 Documents
-	public static int MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
+	private static String MAX_SEARCH_RESULTS_STR = "";
+	public static int MAX_SEARCH_RESULTS = Integer.MAX_VALUE; // Almost infinite
 	
 	public static String RESTRICT_FILE_MIME = "off";
 	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
