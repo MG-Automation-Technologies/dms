@@ -53,7 +53,7 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words)	throws RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByContent(token, words);
