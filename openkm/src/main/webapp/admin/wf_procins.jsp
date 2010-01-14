@@ -248,7 +248,7 @@
 			
 			out.println("</table>");
 			
-			Map<String, String[]> vars = pi.getVariables();
+			Map<String, Object> vars = pi.getVariables();
 			out.println("<h2>Process Variables</h2>");
 			out.println("<table class=\"results\">");
 			out.println("<tr><th>Name</th><th>Value</th><th>Actions</th></tr>");
@@ -258,7 +258,7 @@
 				String key = it.next();
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+FormatUtil.formatArray(vars.get(key))+"</td>");
+				out.print("<td>"+FormatUtil.formatObject(vars.get(key))+"</td>");
 				out.print("<td>");
 				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\">Remove</a>");
 				out.print("</td>");
