@@ -94,6 +94,7 @@ public class KeyMapDashboard extends Composite {
 	private Map<String, Widget> selectedKeyMap;
 	private SuggestBox suggestKey;
 	private MultiWordSuggestOracle multiWordkSuggestKey; 
+	private List<String> keywordList;
 	public ScrollPanel scrollTable;
 	HTML flowPanelDivisor;
 	public KeyMapTable table;
@@ -152,6 +153,7 @@ public class KeyMapDashboard extends Composite {
 		paginationPanel = new HorizontalPanel();
 		selectedKeyMap = new HashMap<String, Widget>();
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
+		keywordList = new ArrayList<String>();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
@@ -440,6 +442,7 @@ public class KeyMapDashboard extends Composite {
 		public void onSuccess(List<GWTKeyword> result){
 			List<GWTKeyword> top10List = new ArrayList<GWTKeyword>();
 			multiWordkSuggestKey.clear();
+			keywordList = new ArrayList<String>();
 			keyAllTable.reset();
 			allKeywordList.clear();
 			rateMap.clear();
@@ -449,6 +452,7 @@ public class KeyMapDashboard extends Composite {
 				keyAllTable.add(keyword);
 				rateMap.put(keyword.getKeyword(), ""+keyword.getFrequency());
 				multiWordkSuggestKey.add(keyword.getKeyword());
+				keywordList.add(keyword.getKeyword());
 				if (keyword.isTop10()) {
 					top10List.add(keyword);
 				}
@@ -836,7 +840,7 @@ public class KeyMapDashboard extends Composite {
 	 * @param keyword The keywrod
 	 * 
 	 * @return The keyword rate
-	 */
+	 */	
 	public int getKeywordRate(String keyword) {
 		int rate = 1;
 		
@@ -877,6 +881,11 @@ public class KeyMapDashboard extends Composite {
 			controlSearchIn.executeSearch(limit);
 			getKeywordMap(getFiltering()); // Gets related keyMap 
 			refreshClean();
+		}
+		// We add new keyword in suggest list
+		if (!keywordList.contains(keyword)) {
+			multiWordkSuggestKey.add(keyword);
+			keywordList.add(keyword);
 		}
 	}
 	

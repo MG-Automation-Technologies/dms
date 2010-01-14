@@ -59,6 +59,7 @@ import es.git.openkm.frontend.client.widget.filebrowser.menu.MailMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.PersonalMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TaxonomyMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TemplatesMenu;
+import es.git.openkm.frontend.client.widget.filebrowser.menu.ThesaurusMenu;
 import es.git.openkm.frontend.client.widget.filebrowser.menu.TrashMenu;
 import es.git.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import es.git.openkm.frontend.client.widget.startup.StartUp;
@@ -94,6 +95,7 @@ public class FileBrowser extends Composite implements OriginPanel {
     private FixedWidthGrid dataTable;
 	private FilePath filePath;
 	public MenuPopup taxonomyMenuPopup;
+	public MenuPopup thesaurusMenuPopup;
 	public MenuPopup trashMenuPopup;
 	public MenuPopup templatesMenuPopup;
 	public MenuPopup personalMenuPopup;
@@ -196,6 +198,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 		
 		taxonomyMenuPopup = new MenuPopup(new TaxonomyMenu());
 		taxonomyMenuPopup.setStyleName("okm-FileBrowser-MenuPopup");
+		thesaurusMenuPopup = new MenuPopup(new ThesaurusMenu());
+		thesaurusMenuPopup.setStyleName("okm-Tree-MenuPopup");
 		trashMenuPopup = new MenuPopup(new TrashMenu());
 		trashMenuPopup.setStyleName("okm-Tree-MenuPopup");
 		templatesMenuPopup = new MenuPopup(new TemplatesMenu());
@@ -253,6 +257,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		headerTable.setHTML(0,6,Main.i18n("filebrowser.version"));
 		filePath.langRefresh();
 		taxonomyMenuPopup.langRefresh();
+		thesaurusMenuPopup.langRefresh();
 		trashMenuPopup.langRefresh();
 		personalMenuPopup.langRefresh();
 		templatesMenuPopup.langRefresh();
@@ -894,6 +899,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 		switch(actualView){
 			case PanelDefinition.NAVIGATOR_TAXONOMY:
 				menuPopup = taxonomyMenuPopup;
+				break;
+				
+			case PanelDefinition.NAVIGATOR_THESAURUS:
+				menuPopup = thesaurusMenuPopup;
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TRASH:
