@@ -50,7 +50,7 @@ public class TaskInstance implements Serializable, Comparable<TaskInstance> {
 	private List<Comment> comments;
 	private Token token;
 	private Collection<Transition> availableTransitions;
-	private Map<String, String[]> variables;
+	private Map<String, Object> variables;
 	private ProcessInstance processInstance;
 
 	public String getName() {
@@ -185,11 +185,11 @@ public class TaskInstance implements Serializable, Comparable<TaskInstance> {
 		this.token = token;
 	}
 	
-	public Map<String, String[]> getVariables() {
+	public Map<String, Object> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Map<String, String[]> variables) {
+	public void setVariables(Map<String, Object> variables) {
 		this.variables = variables;
 	}
 	
