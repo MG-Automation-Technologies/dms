@@ -83,7 +83,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	 */
 	public void runProcessDefinition(String docPath, double id) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		Map<String,String[]> variables = new HashMap<String,String[]>();
+		Map<String,Object> variables = new HashMap<String,Object>();
 		variables.put("path", new String[] { docPath });
 		String token = getToken();
 		
@@ -154,7 +154,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#setTaskInstanceValues(double, java.lang.String, java.util.Map)
 	 */
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String[]> values ) throws OKMException {
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
 		String token = getToken();
 	
