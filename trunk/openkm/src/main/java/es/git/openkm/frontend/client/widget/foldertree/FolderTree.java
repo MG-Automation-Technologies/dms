@@ -860,7 +860,10 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 			menuPopup.checkMenuOptionPermissions((GWTFolder) actualItem.getUserObject(), folderParent);
 			menuPopup.evaluateMenuOptions();
 			menuPopup.setPopupPosition(tree.mouseX,tree.mouseY);
-			menuPopup.show();
+			// In thesaurus view must not be showed the menu popup
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+				menuPopup.show();
+			}
 		}
 		
 		// Enables dragged if is tree dragged and none action is started like rename or folder creation

@@ -328,6 +328,7 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		debugConsolePopup.langRefresh();
 		// Refreshing all menus on tabs not only the active
 		mainPanel.navigator.taxonomyTree.langRefresh();
+		mainPanel.navigator.thesaurusTree.langRefresh();
 		mainPanel.navigator.personalTree.langRefresh();
 		mainPanel.navigator.templateTree.langRefresh();
 		mainPanel.navigator.trashTree.langRefresh();

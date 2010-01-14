@@ -459,6 +459,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
 				switch (actualView){
 					case PanelDefinition.NAVIGATOR_TAXONOMY:
+					case PanelDefinition.NAVIGATOR_THESAURUS:
 					case PanelDefinition.NAVIGATOR_TEMPLATES:
 					case PanelDefinition.NAVIGATOR_PERSONAL:
 					case PanelDefinition.NAVIGATOR_MAIL:
@@ -587,277 +588,56 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		home.addClickHandler(arrowHomeListener);
 		refresh.addClickHandler(arrowRefreshListener);
 		
-		createDirectory.addMouseOverHandler(new MouseOverHandler(){
+		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
 				Widget sender = (Widget) event.getSource();
 				sender.addStyleName("okm-ToolBar-selected");
 			}
-		});
+		};
 		
-		createDirectory.addMouseOutHandler(new MouseOutHandler(){
+		MouseOutHandler mouseOutHandler = new MouseOutHandler(){
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				Widget sender = (Widget) event.getSource();
 				sender.removeStyleName("okm-ToolBar-selected");
 			}
-		});
+		};
 		
-		lock.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		lock.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		unLock.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		unLock.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		addDocument.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		addDocument.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		delete.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		delete.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-
-		edit.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		edit.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		checkin.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		checkin.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		cancelCheckout.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		cancelCheckout.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-
-		download.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		download.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		downloadPdf.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		downloadPdf.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-
-		addPropertyGroup.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		addPropertyGroup.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		removePropertyGroup.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		removePropertyGroup.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		startWorkflow.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		startWorkflow.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-
-		addSubscription.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		addSubscription.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		removeSubscription.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		removeSubscription.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		home.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		home.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		refresh.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-selected");
-			}
-		});
-		
-		refresh.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-selected");
-			}
-		});
+		createDirectory.addMouseOverHandler(mouseOverHandler);
+		createDirectory.addMouseOutHandler(mouseOutHandler);
+		lock.addMouseOverHandler(mouseOverHandler);
+		lock.addMouseOutHandler(mouseOutHandler);
+		unLock.addMouseOverHandler(mouseOverHandler);
+		unLock.addMouseOutHandler(mouseOutHandler);
+		addDocument.addMouseOverHandler(mouseOverHandler);
+		addDocument.addMouseOutHandler(mouseOutHandler);
+		delete.addMouseOverHandler(mouseOverHandler);
+		delete.addMouseOutHandler(mouseOutHandler);
+		edit.addMouseOverHandler(mouseOverHandler);
+		edit.addMouseOutHandler(mouseOutHandler);
+		checkin.addMouseOverHandler(mouseOverHandler);
+		checkin.addMouseOutHandler(mouseOutHandler);
+		cancelCheckout.addMouseOverHandler(mouseOverHandler);
+		cancelCheckout.addMouseOutHandler(mouseOutHandler);
+		download.addMouseOverHandler(mouseOverHandler);
+		download.addMouseOutHandler(mouseOutHandler);
+		downloadPdf.addMouseOverHandler(mouseOverHandler);
+		downloadPdf.addMouseOutHandler(mouseOutHandler);
+		addPropertyGroup.addMouseOverHandler(mouseOverHandler);
+		addPropertyGroup.addMouseOutHandler(mouseOutHandler);
+		removePropertyGroup.addMouseOverHandler(mouseOverHandler);
+		removePropertyGroup.addMouseOutHandler(mouseOutHandler);
+		startWorkflow.addMouseOverHandler(mouseOverHandler);
+		startWorkflow.addMouseOutHandler(mouseOutHandler);
+		addSubscription.addMouseOverHandler(mouseOverHandler);
+		addSubscription.addMouseOutHandler(mouseOutHandler);
+		removeSubscription.addMouseOverHandler(mouseOverHandler);
+		removeSubscription.addMouseOutHandler(mouseOutHandler);
+		home.addMouseOverHandler(mouseOverHandler);
+		home.addMouseOutHandler(mouseOutHandler);
+		refresh.addMouseOverHandler(mouseOverHandler);
+		refresh.addMouseOutHandler(mouseOutHandler);
 		
 		createDirectory.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
@@ -949,6 +729,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			
 			// On folder parent don't enables subscription
 			if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
+				Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
 				Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
 				Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
 				Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
@@ -973,6 +754,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				}
 				// Evaluates special case root node that must not be deleted;
 				if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
+					Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
 					Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
 					Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
 					Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
@@ -996,7 +778,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 			
 			// On templates stack panel always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES || 
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
@@ -1005,6 +788,13 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableFiredRemovePropertyGroup();
 				disableAddSubscription();
 				disableRemoveSubscription();
+			}
+			
+			// Disables add document, delete and create directory from thesaurus view
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+				disableAddDocument();
+				disableDelete();
+				disableCreateDirectory();
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
@@ -1069,7 +859,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						enableMove();
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
-						if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES && 
+						if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
+							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
@@ -1135,7 +926,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 			
 			// Excepts on taxonomy panel always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES || 
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS ||
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
@@ -1192,7 +984,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					enableCopy();
 					enableMove();
 					enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
-					if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES && 
+					if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
+						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS && 
 						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
 						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
 						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
@@ -1221,7 +1014,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 			
 			// Excepts on taxonomy panel always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES || 
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
@@ -1680,6 +1474,39 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
+	 * Gets the defatul Tool Bar object values for thesaurus
+	 * 
+	 * @return The default toolBarOption for templates
+	 */
+	public ToolBarOption getDefaultThesaurusToolBar() {
+		ToolBarOption tmpToolBarOption = new ToolBarOption();
+		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.addDocumentOption 				= false;
+		tmpToolBarOption.checkoutOption 				= false;
+		tmpToolBarOption.checkinOption 					= false;
+		tmpToolBarOption.cancelCheckoutOption 			= false;
+		tmpToolBarOption.lockOption						= false;
+		tmpToolBarOption.unLockOption 					= false;
+		tmpToolBarOption.downloadOption					= false;
+		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.deleteOption					= false;
+		tmpToolBarOption.addPropertyGroupOption 		= false;
+		tmpToolBarOption.removePropertyGroupOption  	= false;
+		tmpToolBarOption.addSubscription  				= false;
+		tmpToolBarOption.removeSubscription 		 	= false;
+		tmpToolBarOption.firedRemovePropertyGroupOption = false;
+		tmpToolBarOption.homeOption						= false;
+		tmpToolBarOption.refreshOption					= true;
+		tmpToolBarOption.renameOption 					= false;
+		tmpToolBarOption.copyOption 					= false;
+		tmpToolBarOption.moveOption 					= false;
+		tmpToolBarOption.exportOption					= false;
+		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
+		return tmpToolBarOption;
+	}
+	
+	/**
 	 * Gets the defatul Tool Bar object values for trash
 	 * 
 	 * @return The default toolBarOption for trash
@@ -1953,6 +1780,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						viewValues.put("view_root:option", toolBarOption);
 						break;
 						
+					case PanelDefinition.NAVIGATOR_THESAURUS:
+						viewValues.put("view_thesaurus:option", toolBarOption);
+						break;
+						
 					case PanelDefinition.NAVIGATOR_TRASH:
 						viewValues.put("view_trash:option", toolBarOption);
 						break;
@@ -1994,6 +1825,15 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						}
 						toolBarEnabled = true;
 						break;
+					
+					case PanelDefinition.NAVIGATOR_THESAURUS:
+						if (viewValues.containsKey("view_thesaurus:option")){
+							toolBarOption = (ToolBarOption) viewValues.get("view_thesaurus:option");
+						} else {
+							toolBarOption = getDefaultThesaurusToolBar();
+						}
+						toolBarEnabled = true;
+						break;
 						
 					case PanelDefinition.NAVIGATOR_TRASH:
 						if (viewValues.containsKey("view_trash:option")){
@@ -2017,7 +1857,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						if (viewValues.containsKey("view_my_documents:option")){
 							toolBarOption = (ToolBarOption) viewValues.get("view_my_documents:option");
 						} else {
-							toolBarOption = getDefaultTemplatesToolBar();
+							toolBarOption = getDefaultMyDocumentsToolBar();
 						}
 						toolBarEnabled = true;
 						break;

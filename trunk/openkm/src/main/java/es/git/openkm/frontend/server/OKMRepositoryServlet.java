@@ -259,7 +259,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			folder =  OKMRepository.getInstance().getMailFolder(token);
+			folder =  OKMRepository.getInstance().getThesaurusFolder(token);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -272,7 +272,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getMail: "+gWTFolder);
+		log.debug("getThesaurus: "+gWTFolder);
 		return gWTFolder;
 	}
 }

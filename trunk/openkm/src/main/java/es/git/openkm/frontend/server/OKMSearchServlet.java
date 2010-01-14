@@ -204,6 +204,46 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		return gwtResultSet;
 	}
 	
+
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMSearchService#find(es.git.openkm.frontend.client.bean.GWTQueryParams)
+	 */
+	public GWTResultSet find(GWTQueryParams params) throws OKMException {
+		log.debug("find()");
+		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
+		String token = getToken();
+		Collection<QueryResult> results;
+		GWTResultSet gwtResultSet = new GWTResultSet();
+		QueryParams queryParams = new QueryParams();
+		
+		try {
+			queryParams = Util.copy(params);
+			results = OKMSearch.getInstance().find(token, queryParams);
+			
+			for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
+				QueryResult queryResult = it.next();
+				GWTQueryResult gwtQueryResult = Util.copy(queryResult);
+				
+				resultList.add(gwtQueryResult);
+			}
+			
+			gwtResultSet.setTotal(results.size());
+			gwtResultSet.setResults(resultList);
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("find: "+resultList);
+		return gwtResultSet;
+	}
+	
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMSearchService#getKeywordMap(java.util.Collection)
 	 */
