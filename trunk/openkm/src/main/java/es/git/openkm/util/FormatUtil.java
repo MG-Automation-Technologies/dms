@@ -118,7 +118,7 @@ public class FormatUtil {
 	 */
 	public static String formatObject(Object value) {
 		if (value != null) {
-			if (value instanceof String[]) {
+			if (value instanceof Object[]) {
 				return ArrayUtils.toString(value);
 			} else {
 				return value.toString();
