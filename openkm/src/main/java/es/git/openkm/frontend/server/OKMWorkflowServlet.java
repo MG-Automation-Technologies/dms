@@ -84,7 +84,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public void runProcessDefinition(String docPath, double id) throws OKMException  {
 		log.debug("runProcessDefinition()");
 		Map<String,Object> variables = new HashMap<String,Object>();
-		variables.put("path", new String[] { docPath });
+		variables.put("path", docPath);
 		String token = getToken();
 		
 		try {
