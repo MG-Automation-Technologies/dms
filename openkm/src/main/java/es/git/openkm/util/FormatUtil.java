@@ -102,10 +102,29 @@ public class FormatUtil {
 	 * Format string array
 	 */
 	public static String formatArray(String[] values) {
-		if (values.length == 1) {
-			return values[0];
+		if (values != null) {
+			if (values.length == 1) {
+				return values[0];
+			} else {
+				return ArrayUtils.toString(values);
+			}
 		} else {
-			return ArrayUtils.toString(values);
+			return "NULL";
+		}
+	}
+	
+	/**
+	 * Format object
+	 */
+	public static String formatObject(Object value) {
+		if (value != null) {
+			if (value instanceof String[]) {
+				return ArrayUtils.toString(value);
+			} else {
+				return value.toString();
+			}
+		} else {
+			return "NULL";
 		}
 	}
 }
