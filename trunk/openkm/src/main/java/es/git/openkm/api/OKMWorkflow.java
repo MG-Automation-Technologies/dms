@@ -117,7 +117,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public ProcessInstance runProcessDefinition(String token,
-			long processDefinitionId, Map<String, String[]> variables) throws RepositoryException {
+			long processDefinitionId, Map<String, Object> variables) throws RepositoryException {
 		log.debug("runProcessDefinition(" + token + ", " + processDefinitionId + ", " + variables + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		ProcessInstance result = wm.runProcessDefinition(token, processDefinitionId, variables);
@@ -240,11 +240,11 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
+	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
-			String value) throws RepositoryException {
+			Object value) throws RepositoryException {
 		log.debug("addProcessInstanceVariable(" + token + ", " + processInstanceId + ", " + name + ", " + value + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.addProcessInstanceVariable(token, processInstanceId, name, value);
@@ -294,7 +294,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId,
-			String transitionName, Map<String, String[]> values)
+			String transitionName, Map<String, Object> values)
 			throws RepositoryException {
 		log.debug("setTaskInstanceValues(" + token + ", " + taskInstanceId + ", " + transitionName + ", " + values + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
@@ -340,11 +340,11 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
+	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void addTaskInstanceVariable(String token, long taskInstanceId,
-			String name, String value) throws RepositoryException {
+			String name, Object value) throws RepositoryException {
 		log.debug("addTaskInstanceVariable(" + token + ", " + taskInstanceId + ", " + name + ", " + value + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.addTaskInstanceVariable(token, taskInstanceId, name, value);
