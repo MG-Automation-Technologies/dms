@@ -99,7 +99,7 @@ public class ExtendedStackPanel extends StackPanel {
 				if (refresh) {
 					Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 				}
-				Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(false);
+				Main.get().mainPanel.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
 				break;
 			
 			case PanelDefinition.NAVIGATOR_TEMPLATES:
