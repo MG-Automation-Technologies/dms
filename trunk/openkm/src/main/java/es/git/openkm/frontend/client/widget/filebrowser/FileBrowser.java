@@ -369,7 +369,11 @@ public class FileBrowser extends Composite implements OriginPanel {
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
-			getMailChilds(fldId);
+			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+				getMailChilds(fldId);
+			} else {
+				selectSelectedRowInTable();
+			}
 		}
 
 		public void onFailure(Throwable caught) {
@@ -389,48 +393,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 				addRow(it.next());
 			}
 			
-			// If selectedRow > 0 must continue selecting the row ( after refreshing )
-			if (!selectedRowId.equals("")) {
-				int selectedRow = table.findSelectedRowById(selectedRowId);
-				table.setSelectedRow(selectedRow);
-				
-				// Ensures selected row is visible before resfreshing
-				// Must create a tmp widget to ensure row is visible and after we restore values
-				String tmpHTML = dataTable.getHTML(selectedRow,0);
-				HTML tmpWidget = new HTML("");
-				dataTable.setWidget(selectedRow,0,tmpWidget);
-				//fileBrowserPanel.ensureVisible(tmpWidget); // TODO: El ensure visible ha cambiado al ser un ScrollTable !! 
-				dataTable.setHTML(selectedRow,0,tmpHTML);
-				
-				setSelectedPanel(true);
-				GWTDocument doc = table.getDocument();
-				if (doc != null) {
-					// Every time refreshing document properties can be changed ( multi user activity for example )
-					Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
-					Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
-					Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
-				} else {
-					GWTMail mail = table.getMail();
-					if (mail!=null) {
-						// Every time refreshing document properties can be changed ( multi user activity for example )
-						Main.get().mainPanel.browser.tabMultiple.enableTabMail();
-						Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
-						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,Main.get().activeFolderTree.getFolder());
-					} else {
-					GWTFolder folder = table.getFolder();
-						if (folder != null) {
-							// Every time refreshing folder properties can be changed ( multi user activity for example )
-							Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
-							Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(folder);
-							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
-																							 Main.get().activeFolderTree.getFolder(),
-																							 FILE_BROWSER);
-						}
-					}
-				}
-			}
-			
-			selectedRowId = ""; // Always initializes value
+			// Selects the selected row in table
+			selectSelectedRowInTable();
 			
 			// Case document is created by template, must rename it after is showed
 			if (createdFromTemplate){
@@ -446,6 +410,54 @@ public class FileBrowser extends Composite implements OriginPanel {
 			Main.get().showError("GetMailChilds", caught);
 		}
 	};
+	
+	/**
+	 * selectSelectedRowInTable
+	 */
+	private void selectSelectedRowInTable() {
+		// If selectedRow > 0 must continue selecting the row ( after refreshing )
+		if (!selectedRowId.equals("")) {
+			int selectedRow = table.findSelectedRowById(selectedRowId);
+			table.setSelectedRow(selectedRow);
+			
+			// Ensures selected row is visible before resfreshing
+			// Must create a tmp widget to ensure row is visible and after we restore values
+			String tmpHTML = dataTable.getHTML(selectedRow,0);
+			HTML tmpWidget = new HTML("");
+			dataTable.setWidget(selectedRow,0,tmpWidget);
+			//fileBrowserPanel.ensureVisible(tmpWidget); // TODO: El ensure visible ha cambiado al ser un ScrollTable !! 
+			dataTable.setHTML(selectedRow,0,tmpHTML);
+			
+			setSelectedPanel(true);
+			GWTDocument doc = table.getDocument();
+			if (doc != null) {
+				// Every time refreshing document properties can be changed ( multi user activity for example )
+				Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
+			} else {
+				GWTMail mail = table.getMail();
+				if (mail!=null) {
+					// Every time refreshing document properties can be changed ( multi user activity for example )
+					Main.get().mainPanel.browser.tabMultiple.enableTabMail();
+					Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+					Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,Main.get().activeFolderTree.getFolder());
+				} else {
+				GWTFolder folder = table.getFolder();
+					if (folder != null) {
+						// Every time refreshing folder properties can be changed ( multi user activity for example )
+						Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
+						Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(folder);
+						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
+																						 Main.get().activeFolderTree.getFolder(),
+																						 FILE_BROWSER);
+					}
+				}
+			}
+		}
+		
+		selectedRowId = ""; // Always initializes value
+	}
 	
 	/**
 	 * Deletes a document
