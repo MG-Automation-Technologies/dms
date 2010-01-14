@@ -78,6 +78,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				fldPath = OKMRepository.getInstance().getRootFolder(token).getPath();
 			}
 			
+			// Case thesaurus view must search documents in keywords 
 			if (fldPath.startsWith("/okm:thesaurus")){
 				QueryParams queryParams = new QueryParams();
 				queryParams.setKeywords(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));

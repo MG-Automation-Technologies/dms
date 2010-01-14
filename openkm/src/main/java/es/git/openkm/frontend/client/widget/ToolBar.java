@@ -777,9 +777,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableDelete();
 			}
 			
-			// On templates stack panel always disabling 
+			// Except taxonomy and thesaurus stack panels always disabling 
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
@@ -795,6 +794,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableAddDocument();
 				disableDelete();
 				disableCreateDirectory();
+				disableAddSubscription();
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
@@ -829,12 +829,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableDownloadPdf();
 			}
 			
-			// Looks for subscription case
-			// Uncoment if must consider not to subcribe on documents checkout or locked
-			/*if (doc.isLocked() || doc.isCheckedOut() ){
-				disableAddSubscription();
-				disableRemoveSubscription();
-			} else  */
 			if (doc.isSubscribed()) {
 				disableAddSubscription();
 				enableRemoveSubscription();
@@ -851,8 +845,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					disableCancelCheckout();
 					disableUnlock();
 					enableAddNote();
-
-					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+					
+					// In thesaurus view must not evaluate write folder permissions
+					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
+						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
 						enableDelete();
 						enableRename();
 						enableCopy();
@@ -918,16 +914,16 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableWorkflow();
 			} 
 			
-			// Onnly on taxonomy enables to send document link by mail 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY) {
+			// Only on taxonomy and thesaurus enables to send document link by mail 
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
 				enableSendDocumentLink();
 			} else {
 				disableSendDocumentLink();
 			}
 			
-			// Excepts on taxonomy panel always disabling 
+			// Excepts on taxonomy and thesaurus panel always disabling 
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS ||
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
@@ -984,13 +980,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					enableCopy();
 					enableMove();
 					enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
-					if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
-						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS && 
-						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
-						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
-						Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
-						//getAllGroups(); // Evaluates enable or disable property group buttons
-					}
 					// On mail panel is not able to uploading files
 					if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL ) {
 						enableAddDocument();
@@ -1013,9 +1002,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableSendDocumentLink();
 			}
 			
-			// Excepts on taxonomy panel always disabling 
+			// Excepts on taxonomy and thesaurus panel always disabling 
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
