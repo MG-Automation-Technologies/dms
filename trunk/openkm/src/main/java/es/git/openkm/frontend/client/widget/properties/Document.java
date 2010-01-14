@@ -248,6 +248,7 @@ public class Document extends Composite {
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
+		thesaurusImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(scrollPanel);
 	}

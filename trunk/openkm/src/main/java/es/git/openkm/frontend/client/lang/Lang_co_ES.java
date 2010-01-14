@@ -563,6 +563,9 @@ public class Lang_co_ES {
 	    lang.put("user.preferences.mail.data", "Cuenta de mail");
 	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");
 	    lang.put("user.preferences.imap.password.error.void", "La clave de IMAP no puede estar vacía en la creación");
+
+	    // Thesaurus
+	    lang.put("thesaurus.directory.select.label", "Añadir una palabra clave del thesaurus");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

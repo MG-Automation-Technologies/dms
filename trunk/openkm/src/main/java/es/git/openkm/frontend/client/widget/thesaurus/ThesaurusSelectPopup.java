@@ -40,8 +40,6 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;
 	private Button actionButton;
-	private Object node; // Document or folder to be restored, copyed etc...
-	private String msgProperty = "";
 	
 	public ThesaurusSelectPopup() {
 		// Establishes auto-close when click outside
@@ -63,14 +61,14 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		verticalDirectoryPanel.add(folderSelectTree);
 		scrollDirectoryPanel.add(verticalDirectoryPanel);
 		
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+		cancelButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
 			}
 		});
 		
-		actionButton = new Button(Main.i18n("button.accept"), new ClickHandler() { 
+		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				executeAction(folderSelectTree.getActualPath());
@@ -112,9 +110,9 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		setText(Main.i18n("trash.directory.select.label"));
-		cancelButton.setText(Main.i18n("button.cancel"));
-		actionButton.setText(Main.i18n("button.accept"));		
+		setText(Main.i18n("thesaurus.directory.select.label"));
+		cancelButton.setText(Main.i18n("button.close"));
+		actionButton.setText(Main.i18n("button.add"));		
 	}
 	
 	/**
@@ -125,7 +123,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
-		setText(Main.i18n("trash.directory.select.label"));
+		setText(Main.i18n("thesaurus.directory.select.label"));
 		
 		// Resets to initial tree value
 		folderSelectTree.reset();
