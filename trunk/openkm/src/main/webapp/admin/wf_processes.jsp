@@ -25,7 +25,7 @@
 		
 		if (action != null && !action.equals("")) {
 			if (action.equals("start") && id != null && !id.equals("")) {
-				HashMap<String, String[]> variables = new HashMap<String, String[]>();
+				HashMap<String, Object> variables = new HashMap<String, Object>();
 				ProcessInstance pi = OKMWorkflow.getInstance().runProcessDefinition(token, Long.parseLong(id), variables);
 				response.sendRedirect("wf_procins.jsp?id="+pi.getId());
 			} else if (action.equals("delete") && id != null && !id.equals("")) {
