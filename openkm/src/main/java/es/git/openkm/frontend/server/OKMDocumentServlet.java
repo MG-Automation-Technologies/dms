@@ -31,7 +31,10 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMDocument;
 import es.git.openkm.api.OKMRepository;
+import es.git.openkm.api.OKMSearch;
 import es.git.openkm.bean.Document;
+import es.git.openkm.bean.QueryParams;
+import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Version;
 import es.git.openkm.core.AccessDeniedException;
 import es.git.openkm.core.ItemExistsException;
@@ -41,6 +44,8 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.VersionException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTDocument;
+import es.git.openkm.frontend.client.bean.GWTQueryParams;
+import es.git.openkm.frontend.client.bean.GWTQueryResult;
 import es.git.openkm.frontend.client.bean.GWTVersion;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMDocumentService;
@@ -73,16 +78,30 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				fldPath = OKMRepository.getInstance().getRootFolder(token).getPath();
 			}
 			
-			log.debug("ParentFolder: "+fldPath);
-			Collection<Document> col = OKMDocument.getInstance().getChilds(token, fldPath);
+			if (fldPath.startsWith("/okm:thesaurus")){
+				QueryParams queryParams = new QueryParams();
+				queryParams.setKeywords(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
+				Collection<QueryResult> results = OKMSearch.getInstance().find(token, queryParams);
+				for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
+					QueryResult queryResult = it.next();
+					if (queryResult.getDocument()!=null) {
+						GWTDocument docClient = Util.copy(queryResult.getDocument());
+						docList.add(docClient);
+					}
+				}
+			} else {
 			
-			for (Iterator<Document> it = col.iterator(); it.hasNext();) {		
-				Document doc = it.next();
-				log.debug("Document: "+doc);
-				GWTDocument docClient = Util.copy(doc);
-
-				log.debug("Document: "+doc+" -> DocumentClient: "+docClient);
-				docList.add(docClient);
+				log.debug("ParentFolder: "+fldPath);
+				Collection<Document> col = OKMDocument.getInstance().getChilds(token, fldPath);
+				
+				for (Iterator<Document> it = col.iterator(); it.hasNext();) {		
+					Document doc = it.next();
+					log.debug("Document: "+doc);
+					GWTDocument docClient = Util.copy(doc);
+	
+					log.debug("Document: "+doc+" -> DocumentClient: "+docClient);
+					docList.add(docClient);
+				}
 			}
 			
 			Collections.sort(docList, DocumentComparator.getInstance());

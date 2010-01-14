@@ -806,10 +806,16 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 * @param fldId The path id
 	 */
 	public void getFolderChilds(String fldId) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderChilds();		
-		folderService.getChilds(fldId, callbackGetFolderChilds);
+		// In thesaurus view must not be showed folders only documents
+		if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
+			endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderChilds();		
+			folderService.getChilds(fldId, callbackGetFolderChilds);
+		} else {
+			removeAllRows();
+			getDocumentChilds(fldId);	
+		}
 	}
 	
 	/**

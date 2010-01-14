@@ -20,7 +20,6 @@
 package es.git.openkm.backend.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -70,7 +69,7 @@ public class OKMThesaurusServletAdmin extends HttpServlet {
 				out.println("<b>Don't close this window meanwhile OpenKM is creating thesaurus.</b><br>");
 				out.println("It'll be displayed creation information while creating nodes until level "+(level+1) + ", please be patient because tree deep level could be big.<br><br>");
 				out.flush();
-				KEATree.recursiveGenerateTree(null, 0, level, token, "/okm:root/borrar", new Vector<String>(), out );
+				KEATree.recursiveGenerateTree(null, 0, level, token, "/okm:thesaurus", new Vector<String>(), out );
 				out.println("<br><b>Finished thesaurus creation.</b><br>");
 			} else {
 				out.println("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");

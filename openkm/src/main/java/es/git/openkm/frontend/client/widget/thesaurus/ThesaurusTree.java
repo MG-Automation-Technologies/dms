@@ -36,8 +36,8 @@ public class ThesaurusTree extends FolderTree {
 	 * Inits on first load
 	 */
 	public void init() {
-		menuPopup = new MenuPopup(new ThesaurusMenu());
-		menuPopup.setStyleName("okm-Tree-MenuPopup");
+		//menuPopup = new MenuPopup(new ThesaurusMenu());
+		//menuPopup.setStyleName("okm-Tree-MenuPopup");
 		
 		folderRoot = Main.get().thesaurusRootFolder;
 		
@@ -59,21 +59,11 @@ public class ThesaurusTree extends FolderTree {
 	 * Move folder on file browser ( only trash mode )
 	 */
 	public void move() {
-//		GWTFolder folderToRestore = (GWTFolder) actualItem.getUserObject();
-//		folderSelectPopup.setEntryPoint(FolderSelectPopup.ENTRYPOINT_MY_DOCUMENTS);
-//		folderSelectPopup.setToMove(folderToRestore);
-//		showDirectorySelectPopup();
-		hideMenuPopup();
 	}
 	
 	/**
 	 * Copy folder on file browser ( only trash mode )
 	 */
 	public void copy() {
-//		GWTFolder folderToCopy = (GWTFolder) actualItem.getUserObject();
-//		folderSelectPopup.setEntryPoint(FolderSelectPopup.ENTRYPOINT_MY_DOCUMENTS);
-//		folderSelectPopup.setToCopy(folderToCopy);
-//		showDirectorySelectPopup();
-		hideMenuPopup();
 	}	
 }
