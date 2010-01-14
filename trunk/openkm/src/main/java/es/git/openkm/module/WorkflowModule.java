@@ -82,7 +82,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String[]> variables) throws RepositoryException;
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -163,7 +163,7 @@ public interface WorkflowModule {
 	 * @param value
 	 * @throws RepositoryException
 	 */
-	public void addProcessInstanceVariable(String token, long processInstanceId, String name, String value) throws RepositoryException;
+	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -195,7 +195,7 @@ public interface WorkflowModule {
 	 * @param values
 	 * @throws RepositoryException
 	 */
-	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, String[]> values) throws RepositoryException;
+	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, Object> values) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -228,7 +228,7 @@ public interface WorkflowModule {
 	 * @param value
 	 * @throws RepositoryException
 	 */
-	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, String value) throws RepositoryException;
+	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, Object value) throws RepositoryException;
 	
 	/**
 	 * @param token
