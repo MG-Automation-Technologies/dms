@@ -564,6 +564,9 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.mail.data", "Compte de mail");
 	    lang.put("user.preferences.imap.error", "Tots els camps son obligatoris per configurar el correu");
 	    lang.put("user.preferences.imap.password.error.void", "El clau de IMAP no pot ser buit en la creació");
+
+	    // Thesaurus
+	    lang.put("thesaurus.directory.select.label", "Afegir una paraula clau del thesaurus");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");

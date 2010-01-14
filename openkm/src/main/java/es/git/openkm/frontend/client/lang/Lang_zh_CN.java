@@ -562,6 +562,9 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+
+	    // Thesaurus
+	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");
