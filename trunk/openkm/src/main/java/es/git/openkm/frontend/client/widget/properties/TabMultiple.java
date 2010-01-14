@@ -76,6 +76,15 @@ public class TabMultiple extends Composite {
 	}
 	
 	/**
+	 * Sets visibility to buttons ( true / false )
+	 * 
+	 */
+	public void setVisibleButtonsOnlyDocuments(){
+		tabFolder.setVisibleButtons(false);
+		tabDocument.setVisibleButtons(true);
+	}
+	
+	/**
 	 * Enables tab folder
 	 */
 	public void enableTabFolder() {

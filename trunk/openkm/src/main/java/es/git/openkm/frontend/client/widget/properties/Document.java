@@ -19,9 +19,11 @@
 
 package es.git.openkm.frontend.client.widget.properties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
@@ -33,6 +35,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -53,6 +56,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
+import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.bean.GWTKeyword;
 import es.git.openkm.frontend.client.bean.GWTPermission;
 import es.git.openkm.frontend.client.config.Config;
@@ -82,6 +86,7 @@ public class Document extends Composite {
 	private ScrollPanel scrollPanel;
 	private SuggestBox suggestKey;
 	private MultiWordSuggestOracle multiWordkSuggestKey; 
+	private List<String> keywordList;
 	private FlowPanel hKeyPanel;
 	private Map<String,Widget> keywordMap;
 	private TagCloud keywordsCloud;
@@ -121,6 +126,7 @@ public class Document extends Composite {
 		});
 
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
+		keywordList = new ArrayList<String>();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
@@ -281,8 +287,11 @@ public class Document extends Composite {
 		
 		// Reloading keyword list
 		multiWordkSuggestKey.clear();
+		keywordList = new ArrayList<String>();
 		for (Iterator<GWTKeyword> it = Main.get().mainPanel.dashboard.keyMapDashboard.getAllKeywordList().iterator(); it.hasNext();) {
-			multiWordkSuggestKey.add(it.next().getKeyword());
+			String keyword = it.next().getKeyword();
+			multiWordkSuggestKey.add(keyword);
+			keywordList.add(keyword);
 		}
 		
 		if (doc.isCheckedOut()) {
@@ -328,7 +337,8 @@ public class Document extends Composite {
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.navigator.getStackIndex();
-		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ){
+		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ||
+			actualView==PanelDefinition.NAVIGATOR_THESAURUS){
 			tableProperties.getCellFormatter().setVisible(7,0,true);
 			tableProperties.getCellFormatter().setVisible(7,1,true);
 			tableProperties.getCellFormatter().setVisible(9,0,true);
@@ -484,6 +494,13 @@ public class Document extends Composite {
 			setProperties();
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
 			drawTagCloud(keywordsArray);
+			if (Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
+				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
+				// When remove the keyword for which are browsing must refreshing filebrowser view
+				if (folder.getPath().substring(folder.getPath().lastIndexOf("/")+1).replace(" ", "_").equals(keyword)) {
+					Main.get().mainPanel.browser.fileBrowser.refresh(folder.getPath());	
+				}
+			}
 		}
 	}
 	
@@ -501,6 +518,10 @@ public class Document extends Composite {
 				String key = it.next();
 				keywords += key +" ";
 				keywordsArray[count++] = key; 
+				if (!keywordList.contains(key)) {
+					multiWordkSuggestKey.add(key);
+					keywordList.add(key);
+				}
 			}
 			keywords += keyword +" ";
 			keywordsArray[count++] = keyword; 
@@ -513,6 +534,8 @@ public class Document extends Composite {
 			drawTagCloud(keywordsArray);
 		}
 	}
+	
+	
 	
 	/**
 	 * Get a new widget keyword
