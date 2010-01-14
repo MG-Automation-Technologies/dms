@@ -236,7 +236,7 @@ public class WorkflowFormPanel extends Composite {
 		
 		if (processInstance.getVariables().keySet().contains("path")) {
 			Hyperlink link = new Hyperlink();
-			final String docPath = ((String[]) processInstance.getVariables().get("path"))[0];
+			final String docPath = (String) processInstance.getVariables().get("path");
 			link.setText(docPath);
 			table.setWidget(10, 1, link);
 			link.addClickHandler(new ClickHandler() { 
@@ -458,18 +458,18 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	private void setTaskInstanceValues(double id, String transitionName) {
 		// Init values hashmap
-		Map<String, String[]> values = new HashMap<String, String[]>();
+		Map<String, Object> values = new HashMap<String, Object>();
 		for (Iterator<FormWidget> it = formWidgetList.iterator(); it.hasNext();) {
 			FormWidget fw = it.next();
 			if (fw.getWidget() instanceof TextBox) {
 				TextBox textBox = (TextBox) fw.getWidget();
-				values.put(textBox.getName(), new String[]{textBox.getValue()});
+				values.put(textBox.getName(), textBox.getValue());
 			} else if (fw.getWidget() instanceof TextArea) {
 				TextArea textArea = (TextArea) fw.getWidget();
-				values.put(textArea.getName(), new String[]{textArea.getValue()});
+				values.put(textArea.getName(), textArea.getValue());
 			} else if (fw.getWidget() instanceof ListBox) {
 				ListBox listBox = (ListBox) fw.getWidget();
-				values.put(listBox.getName(), new String[]{listBox.getValue(listBox.getSelectedIndex())});
+				values.put(listBox.getName(), listBox.getValue(listBox.getSelectedIndex()));
 			}
 		}
 		
