@@ -277,7 +277,6 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		startUpPopup.show();
 		startUp = new StartUp();
 		startUp.init();
-		
 	}
 	
 	native void initJavaScriptApi() /*-{

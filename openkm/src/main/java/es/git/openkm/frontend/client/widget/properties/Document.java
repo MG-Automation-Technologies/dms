@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -93,6 +94,7 @@ public class Document extends Composite {
 	private boolean visible = true;
 	private HTML subcribedUsersText;
 	private HTML keywordsCloudText;
+	private Image thesaurusImage;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -156,10 +158,22 @@ public class Document extends Composite {
 			}
 		});
 		
+		thesaurusImage = new Image("img/icon/stackpanel/book_open.gif");
+		thesaurusImage.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show();
+			}
+		});
+		
 		VerticalPanel vPanel = new VerticalPanel();
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(suggestKey);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(thesaurusImage);
 		hKeyPanel = new FlowPanel();
 		HTML space = new HTML("");
-		vPanel.add(suggestKey);
+		vPanel.add(hPanel);
 		vPanel.add(space);
 		vPanel.add(hKeyPanel);
 		
