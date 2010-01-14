@@ -80,7 +80,7 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	 */
 	public void runProcessDefinition(String docPath, double id) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		Map<String,String[]> variables = new HashMap<String,String[]>();
+		Map<String,Object> variables = new HashMap<String,Object>();
 		variables.put("path", new String[] { docPath });
 		String token = getToken();
 		
