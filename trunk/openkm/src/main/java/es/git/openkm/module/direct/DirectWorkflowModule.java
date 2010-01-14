@@ -225,7 +225,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 * @see es.git.openkm.module.WorkflowModule#runProcessDefinition(java.lang.String, long, java.util.Map)
 	 */
 	@Override
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String[]> variables)
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables)
 			throws RepositoryException {
 		log.debug("runProcessDefinition("+token+", "+processDefinitionId+", "+variables+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -531,11 +531,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
+	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
-			String value) throws RepositoryException {
+			Object value) throws RepositoryException {
 		log.info("addProcessInstanceVariable("+token+", "+processInstanceId+", "+name+", "+value+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
@@ -659,7 +659,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
-			Map<String, String[]> values) throws RepositoryException {
+			Map<String, Object> values) throws RepositoryException {
 		log.info("setTaskInstanceValues("+token+", "+taskInstanceId+", "+transitionName+", "+values+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
@@ -768,12 +768,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
+	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
 	 */
 	@Override
 	// TODO Esto creo que sobra pq no se puede hacer
 	public void addTaskInstanceVariable(String token, long taskInstanceId,
-			String name, String value) throws RepositoryException {
+			String name, Object value) throws RepositoryException {
 		log.debug("addTaskInstanceVariable("+token+", "+taskInstanceId+", "+name+", "+value+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
