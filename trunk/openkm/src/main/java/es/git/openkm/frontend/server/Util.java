@@ -568,6 +568,8 @@ public class Util {
 			gWTButton.setName(formField.getName());
 			gWTButton.setValue(formField.getValue());
 			gWTButton.setType(((Button) formField).getType());
+			gWTButton.setWidth(((Input) formField).getWidth());
+			gWTButton.setHeight(((Input) formField).getHeight());
 			return gWTButton;
 		} else if (formField instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
@@ -576,6 +578,7 @@ public class Util {
 			gWTInput.setValue(formField.getValue());
 			gWTInput.setType(((Input) formField).getType());
 			gWTInput.setWidth(((Input) formField).getWidth());
+			gWTInput.setHeight(((Input) formField).getHeight());
 			return gWTInput;
 		} else if (formField instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
@@ -583,7 +586,8 @@ public class Util {
 			gWTselect.setName(formField.getName());
 			gWTselect.setValue(formField.getValue());
 			gWTselect.setType(((Select) formField).getType());
-			gWTselect.setWidth(((Select) formField).getWidth());
+			gWTselect.setWidth(((Input) formField).getWidth());
+			gWTselect.setHeight(((Input) formField).getHeight());
 			Collection<GWTOption> options = new ArrayList<GWTOption>();
 			for (Iterator<Option> it = ((Select) formField).getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
@@ -592,6 +596,11 @@ public class Util {
 			return gWTselect;
 		} else if (formField instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
+			gWTTextArea.setLabel(formField.getLabel());
+			gWTTextArea.setName(formField.getName());
+			gWTTextArea.setValue(formField.getValue());
+			gWTTextArea.setWidth(((Input) formField).getWidth());
+			gWTTextArea.setHeight(((Input) formField).getHeight());
 			return gWTTextArea;
 		} else {
 			return new GWTFormField();
