@@ -20,6 +20,7 @@
 package es.git.openkm.frontend.client.widget.thesaurus;
 
 import es.git.openkm.frontend.client.Main;
+import es.git.openkm.frontend.client.widget.MenuPopup;
 import es.git.openkm.frontend.client.widget.foldertree.FolderTree;
 import es.git.openkm.frontend.client.widget.startup.StartUp;
 
@@ -37,8 +38,8 @@ public class ThesaurusTree extends FolderTree {
 	 * Inits on first load
 	 */
 	public void init() {
-		//menuPopup = new MenuPopup(new ThesaurusMenu());
-		//menuPopup.setStyleName("okm-Tree-MenuPopup");
+		menuPopup = new MenuPopup(new ThesaurusMenu());
+		menuPopup.setStyleName("okm-Tree-MenuPopup");
 		
 		thesaurusSelectPopup = new ThesaurusSelectPopup();
 		thesaurusSelectPopup.setWidth("300");
