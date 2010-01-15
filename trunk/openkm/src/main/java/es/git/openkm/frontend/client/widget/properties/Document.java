@@ -35,11 +35,9 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -148,9 +146,9 @@ public class Document extends Composite {
 				}
 			}
 		});
-		suggestKey.addClickListener(new ClickListener() {
+		suggestKey.getTextBox().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(Widget sender) {
+			public void onClick(ClickEvent event) {
 				if (suggestKey.getText().equals(Main.i18n("dashboard.keyword.suggest"))) {
 					suggestKey.setText("");
 				}
