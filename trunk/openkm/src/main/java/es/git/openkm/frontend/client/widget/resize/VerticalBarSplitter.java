@@ -27,10 +27,12 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
@@ -59,7 +61,8 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 	private Label label;
 	private VerticalPanel panel;
 	private Event event = null;
-	EventPreview eventPreview = null;	
+	private NativePreviewEvent nPEvent = null;
+	private HandlerRegistration handlerRegistration = null;	
 	
 	/**
 	 * VerticalBar splitter
@@ -68,13 +71,6 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 		// Establishes false to non auto-close when click outside
 		label = new Label("");
 		panel = new VerticalPanel();
-		
-		eventPreview = new EventPreview() {
-            public boolean onEventPreview(Event e) {
-                event = e;
-                return true;
-            }
-		};
 		
 		label.sinkEvents(Event.MOUSEEVENTS);
 		label.addStyleName("okm-Popup-VerticalBar-Point");
@@ -109,7 +105,9 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				DOM.releaseCapture(label.getElement());
-				DOM.removeEventPreview(eventPreview);
+				if (handlerRegistration!=null) {
+					handlerRegistration.removeHandler();
+				}
 				dragging = false;
 				int posX = event.getClientX() -5;
 				
@@ -164,7 +162,12 @@ public class VerticalBarSplitter extends Composite implements HasWidgets {
 		clientWidth = Window.getClientWidth();
 		panel.setVisible(true);
 		dragging = true;
-		DOM.addEventPreview(eventPreview);
+		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+			@Override
+			public void onPreviewNativeEvent(NativePreviewEvent event) {
+				nPEvent = event;
+			}
+		});
 		DOM.setCapture(label.getElement());
 	}
 	

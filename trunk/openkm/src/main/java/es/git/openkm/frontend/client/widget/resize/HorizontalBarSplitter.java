@@ -27,9 +27,11 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
@@ -58,8 +60,8 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 	private int maxDownY = 0;
 	private PopupPanel panel;
 	private Label label;
-	private Event event = null;
-	EventPreview eventPreview = null;
+	private NativePreviewEvent nPEvent = null;
+	private HandlerRegistration handlerRegistration = null;
 	
 	/**
 	 * Horizontal splitter
@@ -68,13 +70,6 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 		// Establishes false to non auto-close when click outside
 		panel = new PopupPanel(false); 
 		label = new Label("");
-		
-		eventPreview = new EventPreview() {
-            public boolean onEventPreview(Event e) {
-                event = e;
-                return true;
-            }
-		};
 		
 		label.sinkEvents(Event.MOUSEEVENTS);
 		label.setStyleName("okm-Popup-HorizontalBar-Point");
@@ -109,7 +104,9 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				DOM.releaseCapture(label.getElement());
-				DOM.removeEventPreview(eventPreview);
+				if (handlerRegistration!=null) {
+					handlerRegistration.removeHandler();
+				}
 				
 				dragging = false;
 				int posY = event.getClientY();
@@ -170,7 +167,12 @@ public class HorizontalBarSplitter extends Composite implements HasWidgets {
 		
 		panel.setVisible(true);
 		dragging = true;
-		DOM.addEventPreview(eventPreview);
+		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+			@Override
+			public void onPreviewNativeEvent(NativePreviewEvent event) {
+				nPEvent = event;
+			}
+		});
 		DOM.setCapture(label.getElement());
 	}
 	

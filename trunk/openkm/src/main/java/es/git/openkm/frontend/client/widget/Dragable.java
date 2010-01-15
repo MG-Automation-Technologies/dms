@@ -26,11 +26,13 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -66,7 +68,8 @@ public class Dragable extends Composite implements OriginPanel {
 	private boolean dropEnabled = false; // Used to eliminate user drag & drop too much faster ( timer to enable drop )
 	private HTML floater = new HTML();
 	private Event event = null;
-	EventPreview eventPreview = null;
+	private NativePreviewEvent nPEvent = null;
+	private HandlerRegistration handlerRegistration = null;
 	private int originPanel = NONE; 
 	private Timer timer;
 	private TreeItem selectedTreeItem;
@@ -85,13 +88,6 @@ public class Dragable extends Composite implements OriginPanel {
         floater.setVisible(false);
         floater.setWordWrap(false);
         floater.setStyleName("okm-Draggable");
-        
-        eventPreview = new EventPreview() {
-            public boolean onEventPreview(Event e) {
-                event = e;
-                return true;
-            }
-		};
 		
 		floater.addMouseUpHandler(new MouseUpHandler(){
 			@Override
@@ -104,7 +100,9 @@ public class Dragable extends Composite implements OriginPanel {
             	DOM.releaseCapture(floater.getElement());
                 floater.setHTML("");
         		floater.setVisible(false);
-        		DOM.removeEventPreview(eventPreview);
+        		if (handlerRegistration!=null) {
+					handlerRegistration.removeHandler();
+				}
         		
         		// Cancelling the timer
         		if (timer!=null) {
@@ -317,7 +315,12 @@ public class Dragable extends Composite implements OriginPanel {
 	 */
 	public void show(String html, int originPanel){
 		this.originPanel = originPanel;
-		DOM.addEventPreview(eventPreview);
+		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+			@Override
+			public void onPreviewNativeEvent(NativePreviewEvent event) {
+				nPEvent = event;
+			}
+		});
 		DOM.setCapture(floater.getElement());
 		floater.setHTML(html);
 		
