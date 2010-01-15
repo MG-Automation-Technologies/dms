@@ -21,7 +21,9 @@ package es.git.openkm.frontend.client.widget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -158,12 +160,13 @@ public class AboutPopup extends DialogBox implements ClickHandler {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.PopupPanel#onKeyPressPreview(char, int)
+	 * @see com.google.gwt.user.client.ui.DialogBox#onPreviewNativeEvent(com.google.gwt.user.client.Event.NativePreviewEvent)
 	 */
-	public boolean onKeyPressPreview(char key, int modifiers) {
-		futurama.evaluateKey(key);
-	    return true;
-	}
+	public void onPreviewNativeEvent(NativePreviewEvent event) {
+        if (event.getTypeInt()==Event.ONKEYPRESS){
+        	futurama.evaluateKey((char) event.getNativeEvent().getKeyCode());
+        }
+    }
 
 	/**
 	 * Reset values
