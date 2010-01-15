@@ -37,7 +37,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -166,12 +165,13 @@ public class KeyMapDashboard extends Composite {
 				}
 			}
 		});
-		suggestKey.addClickListener(new ClickListener(){
-			public void onClick(Widget sender) {
+		suggestKey.getTextBox().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
 				if (suggestKey.getText().equals(Main.i18n("dashboard.keyword.suggest"))) {
 					suggestKey.setText("");
 				}
-			}			
+			}
 		});
 		
 		vPanel.add(controlPanel);
