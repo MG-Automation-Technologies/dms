@@ -22,10 +22,12 @@ package es.git.openkm.frontend.client.panel;
 import java.util.HashMap;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -98,7 +100,8 @@ public class ExtendedDockPanel extends Composite {
 	private HashMap<String, Coordenates> dashboardMap  = new HashMap<String, Coordenates>();
 	private HashMap<String, Coordenates> administrationMap  = new HashMap<String, Coordenates>();
 	
-	private EventPreview keyBoardShorcuts;
+	private NativePreviewEvent keyBoardShorcuts = null;
+	private HandlerRegistration handlerRegistration = null;
 	private FolderSelectPopup folderSelectPopup;
 	
 	/**
@@ -491,12 +494,13 @@ public class ExtendedDockPanel extends Composite {
 	public void enableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel enableKeyShorcuts");
 		dockPanel.sinkEvents(Event.ONKEYDOWN);
-		keyBoardShorcuts = new EventPreview() {
-				public boolean onEventPreview(Event event) {
+		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+			@Override
+			public void onPreviewNativeEvent(NativePreviewEvent event) {
 					boolean propagate = true;
-					int type = DOM.eventGetType(event);
+					int type = event.getTypeInt(); 
 					if (type == Event.ONKEYDOWN )  {
-						int keyCode = DOM.eventGetKeyCode(event);
+						int keyCode = event.getNativeEvent().getKeyCode(); 
 						switch (keyCode) {
 							case Keyboard.KEY_F2:
 								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
@@ -540,7 +544,7 @@ public class ExtendedDockPanel extends Composite {
 							case Keyboard.KEY_C:
 							case Keyboard.KEY_X:
 								// Case CTRL + C
-								if (DOM.eventGetCtrlKey(event)) {
+								if (event.getNativeEvent().getCtrlKey()) {
 									if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
 											Main.get().mainPanel.topPanel.toolBar.getToolBarOption().copyOption &&
 											(Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
@@ -623,7 +627,7 @@ public class ExtendedDockPanel extends Composite {
 							
 							case Keyboard.KEY_V:
 								// Case CTRL + V
-								if (DOM.eventGetCtrlKey(event) && 
+								if (event.getNativeEvent().getCtrlKey() && 
 									(folderSelectPopup.getAction()== FolderSelectPopup.ACTION_COPY ||
 									 folderSelectPopup.getAction()== FolderSelectPopup.ACTION_MOVE )) {
 									
@@ -646,7 +650,7 @@ public class ExtendedDockPanel extends Composite {
 							
 							case Keyboard.KEY_D:
 								// Case CTRL + D
-								if (DOM.eventGetCtrlKey(event) && actualView == DESKTOP && 
+								if (event.getNativeEvent().getCtrlKey() && actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().downloadOption) {
 									Main.get().mainPanel.topPanel.toolBar.executeDownload();
 									propagate = false;
@@ -655,7 +659,7 @@ public class ExtendedDockPanel extends Composite {
 								
 							case Keyboard.KEY_Z:
 								// Case CTRL+Z
-								if (DOM.eventGetCtrlKey(event)) {
+								if (event.getNativeEvent().getCtrlKey()) {
 									
 									if (Log.getCurrentLogLevel()==Log.LOG_LEVEL_DEBUG) {
 										Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
@@ -670,7 +674,7 @@ public class ExtendedDockPanel extends Composite {
 							
 							case Keyboard.KEY_N:
 								// Case CTRL + N
-								if (DOM.eventGetCtrlKey(event) && actualView == DESKTOP && 
+								if (event.getNativeEvent().getCtrlKey() && actualView == DESKTOP && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().createDirectoryOption) {
 									Main.get().mainPanel.topPanel.toolBar.executeCreateDirectory();
 									propagate = false;
@@ -695,7 +699,7 @@ public class ExtendedDockPanel extends Composite {
 								
 							case Keyboard.KEY_B:
 								// Case ALT + B
-								if (DOM.eventGetAltKey(event) && Main.get().mainPanel.topPanel.mainMenu.getToolBarOption().homeOption) {
+								if (event.getNativeEvent().getAltKey() && Main.get().mainPanel.topPanel.mainMenu.getToolBarOption().homeOption) {
 									Main.get().mainPanel.topPanel.mainMenu.manageBookmarkPopup.showPopup();
 									propagate = false;
 								}
@@ -708,7 +712,7 @@ public class ExtendedDockPanel extends Composite {
 								
 							case Keyboard.KEY_Q: 
 								// Case CTRL + Q
-								if (DOM.eventGetCtrlKey(event)) {
+								if (event.getNativeEvent().getCtrlKey()) {
 									Main.get().logoutPopup.logout();
 								}
 								break;
@@ -717,13 +721,10 @@ public class ExtendedDockPanel extends Composite {
 					
 					// Not propagates event to the browser
 					if (!propagate) {
-						DOM.eventPreventDefault(event);
+						DOM.eventPreventDefault((Event) event.getNativeEvent());
 					}
-					return propagate;
 				}
-		};
-		
-		DOM.addEventPreview(keyBoardShorcuts);
+		});
 	}
 	
 	/**
@@ -732,6 +733,8 @@ public class ExtendedDockPanel extends Composite {
 	public void disableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel disableKeyShorcuts");
 		dockPanel.unsinkEvents(Event.ONKEYDOWN);
-		DOM.removeEventPreview(keyBoardShorcuts);
+		if (handlerRegistration!=null) {
+			handlerRegistration.removeHandler();
+		}
 	}
 }
