@@ -1,6 +1,6 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
-<%@ page import="es.git.openkm.bean.form.FormField"%>
+<%@ page import="es.git.openkm.bean.form.FormElement"%>
 <%@ page import="es.git.openkm.bean.form.Input"%>
 <%@ page import="es.git.openkm.bean.form.TextArea"%>
 <%@ page import="es.git.openkm.bean.form.Select"%>
@@ -99,7 +99,7 @@
 			
 			out.println("</table>");
 			
-			Map<String, Collection<FormField>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, Long.parseLong(id));
+			Map<String, Collection<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, Long.parseLong(id));
 			out.println("<h2>Forms</h2>");
 			out.println("<table class=\"results\">");
 			out.println("<tr><th>Task</th><th>Form</th></tr>");
@@ -115,31 +115,34 @@
 				out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 
 				int j = 0;
-				for (Iterator<FormField> it2 = forms.get(task).iterator(); it2.hasNext(); ) {
-					FormField ff = it2.next();
+				for (Iterator<FormElement> it2 = forms.get(task).iterator(); it2.hasNext(); ) {
+					FormElement fe = it2.next();
 					out.print("<tr class=\""+(j++%2==0?"odd":"even")+"\">");
-					out.print("<td>"+ff.getLabel()+"</td>");
-					out.print("<td>"+ff.getName()+"</td>");
-					out.print("<td>"+ff.getValue()+"</td>");
-					out.print("<td>"+ff.getWidth()+"</td>");
-					out.print("<td>"+ff.getHeight()+"</td>");
+					out.print("<td>"+fe.getLabel()+"</td>");
+					out.print("<td>"+fe.getValue()+"</td>");
+					out.print("<td>"+fe.getWidth()+"</td>");
+					out.print("<td>"+fe.getHeight()+"</td>");
 					
-					if (ff instanceof Input) {
-						Input input = (Input) ff;
+					if (fe instanceof Input) {
+						Input input = (Input) fe;
 						out.print("<td>Input</td>");
-						out.print("<td><i>Type:</i> "+input.getType());
-					} else if (ff instanceof TextArea) {
-						TextArea textArea = (TextArea) ff;
+						out.print("<td><i>Name:</i> "+input.getName()+", ");
+						out.print("<i>Type:</i> "+input.getType()+"</td>");
+					} else if (fe instanceof TextArea) {
+						TextArea textArea = (TextArea) fe;
 						out.print("<td>TextArea</td>");
-					} else if (ff instanceof Select) {
-						Select select = (Select) ff;
+						out.print("<td><i>Name:</i> "+textArea.getName()+"</td>");
+					} else if (fe instanceof Select) {
+						Select select = (Select) fe;
 						out.print("<td>Select</td>");
-						out.print("<td><i>Type:</i> "+select.getType()+", ");
+						out.print("<td><i>Name:</i> "+select.getName()+", ");
+						out.print("<i>Type:</i> "+select.getType()+", ");
 						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
-					} else if (ff instanceof Button) {
-						Button button = (Button) ff;
+					} else if (fe instanceof Button) {
+						Button button = (Button) fe;
 						out.print("<td>Button</td>");
-						out.print("<td><i>Type:</i> "+button.getType());
+						out.print("<td><i>Name:</i> "+button.getName()+", ");
+						out.print("<i>Type:</i> "+button.getType()+"</td>");
 					}
 					out.println("</tr>");
 				}
