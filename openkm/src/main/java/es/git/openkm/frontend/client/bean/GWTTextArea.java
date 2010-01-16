@@ -21,15 +21,25 @@ package es.git.openkm.frontend.client.bean;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTTextArea extends GWTFormField implements IsSerializable{
+public class GWTTextArea extends GWTFormElement implements IsSerializable{
+	private String name = "";
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
-		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", name="); sb.append(name);
 		sb.append("}");
 		return sb.toString();
 	}

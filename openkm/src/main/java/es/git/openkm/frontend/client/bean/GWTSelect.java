@@ -24,12 +24,21 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GWTSelect extends GWTFormField implements IsSerializable {
+public class GWTSelect extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<GWTOption> options = new ArrayList<GWTOption>();
+	private String name = "";
 	private String type = TYPE_SIMPLE;
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Collection<GWTOption> getOptions() {
 		return options;
 	}
@@ -49,13 +58,13 @@ public class GWTSelect extends GWTFormField implements IsSerializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("type="); sb.append(type);
-		sb.append(", options="); sb.append(options);
-		sb.append(", label="); sb.append(label);
-		sb.append(", name="); sb.append(name);
+		sb.append("label="); sb.append(label);
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);	
+		sb.append(", height="); sb.append(height);
+		sb.append(", name="); sb.append(name);
+		sb.append(", type="); sb.append(type);
+		sb.append(", options="); sb.append(options);
 		sb.append("}");
 		return sb.toString();
 	}
