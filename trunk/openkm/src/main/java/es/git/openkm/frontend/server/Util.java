@@ -45,7 +45,7 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Version;
 import es.git.openkm.bean.form.Button;
-import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.form.Input;
 import es.git.openkm.bean.form.Option;
 import es.git.openkm.bean.form.Select;
@@ -64,7 +64,7 @@ import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTInput;
 import es.git.openkm.frontend.client.bean.GWTLock;
 import es.git.openkm.frontend.client.bean.GWTMail;
@@ -556,53 +556,53 @@ public class Util {
 	}
 	
 	/**
-	 * Copy to FormField data to  GWTFormField
-	 * @param FormField the original data
-	 * @return The GWTFormField object with data values from original FormField
+	 * Copy to FormElement data to GWTFormElemen
+	 * @param FormElement the original data
+	 * @return The GWTFormElement object with data values from original FormElement
 	 */
-	public static GWTFormField copy(FormField formField) {
-		if (formField instanceof Button) {
+	public static GWTFormElement copy(FormElement formElement) {
+		if (formElement instanceof Button) {
 			GWTButton gWTButton = new GWTButton();
-			gWTButton.setLabel(formField.getLabel());
-			gWTButton.setName(formField.getName());
-			gWTButton.setValue(formField.getValue());
-			gWTButton.setWidth(formField.getWidth());
-			gWTButton.setHeight(formField.getHeight());
-			gWTButton.setType(((Button) formField).getType());
+			gWTButton.setLabel(formElement.getLabel());
+			gWTButton.setValue(formElement.getValue());
+			gWTButton.setWidth(formElement.getWidth());
+			gWTButton.setHeight(formElement.getHeight());
+			gWTButton.setName(((Button) formElement).getName());
+			gWTButton.setType(((Button) formElement).getType());
 			return gWTButton;
-		} else if (formField instanceof Input) {
+		} else if (formElement instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
-			gWTInput.setLabel(formField.getLabel());
-			gWTInput.setName(formField.getName());
-			gWTInput.setValue(formField.getValue());
-			gWTInput.setWidth(formField.getWidth());
-			gWTInput.setHeight(formField.getHeight());
-			gWTInput.setType(((Input) formField).getType());
+			gWTInput.setLabel(formElement.getLabel());
+			gWTInput.setValue(formElement.getValue());
+			gWTInput.setWidth(formElement.getWidth());
+			gWTInput.setHeight(formElement.getHeight());
+			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setType(((Input) formElement).getType());
 			return gWTInput;
-		} else if (formField instanceof Select) {
+		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
-			gWTselect.setLabel(formField.getLabel());
-			gWTselect.setName(formField.getName());
-			gWTselect.setValue(formField.getValue());
-			gWTselect.setWidth(formField.getWidth());
-			gWTselect.setHeight(formField.getHeight());
-			gWTselect.setType(((Select) formField).getType());
+			gWTselect.setLabel(formElement.getLabel());
+			gWTselect.setValue(formElement.getValue());
+			gWTselect.setWidth(formElement.getWidth());
+			gWTselect.setHeight(formElement.getHeight());
+			gWTselect.setName(((Select) formElement).getName());
+			gWTselect.setType(((Select) formElement).getType());
 			Collection<GWTOption> options = new ArrayList<GWTOption>();
-			for (Iterator<Option> it = ((Select) formField).getOptions().iterator(); it.hasNext();) {
+			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
 			}
 			gWTselect.setOptions(options);
 			return gWTselect;
-		} else if (formField instanceof TextArea) {
+		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
-			gWTTextArea.setLabel(formField.getLabel());
-			gWTTextArea.setName(formField.getName());
-			gWTTextArea.setValue(formField.getValue());
-			gWTTextArea.setWidth(formField.getWidth());
-			gWTTextArea.setHeight(formField.getHeight());
+			gWTTextArea.setLabel(formElement.getLabel());
+			gWTTextArea.setValue(formElement.getValue());
+			gWTTextArea.setWidth(formElement.getWidth());
+			gWTTextArea.setHeight(formElement.getHeight());
+			gWTTextArea.setName(((TextArea) formElement).getName());
 			return gWTTextArea;
 		} else {
-			return new GWTFormField();
+			return new GWTFormElement();
 		}
 	}
 	
