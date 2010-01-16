@@ -26,7 +26,7 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 import es.git.openkm.frontend.client.OKMException;
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 
@@ -38,6 +38,6 @@ public interface OKMWorkflowService extends RemoteService {
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException;
 	public void runProcessDefinition(String docPath, double id) throws OKMException;
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException;
-	public Map<String, Collection<GWTFormField>> getProcessDefinitionForms(double id) throws OKMException;
+	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException;
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException;
 }
