@@ -46,7 +46,7 @@ import org.jbpm.taskmgmt.exe.TaskMgmtInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
@@ -193,12 +193,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinitionForms(java.lang.String, long)
 	 */
 	@Override
-	public Map<String, Collection<FormField>> getProcessDefinitionForms(String token, long processDefinitionId)
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
 			throws RepositoryException {
 		log.debug("getProcessDefinitionForms("+token+", "+processDefinitionId+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		Map<String, Collection<FormField>> forms = new HashMap<String, Collection<FormField>>();
+		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
