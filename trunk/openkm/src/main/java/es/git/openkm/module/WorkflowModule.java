@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
-import es.git.openkm.bean.form.FormField;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
@@ -73,7 +73,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Map<String, Collection<FormField>> getProcessDefinitionForms(String token, long processDefinitionId) throws RepositoryException;
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId) throws RepositoryException;
 
 	/**
 	 * @param token
