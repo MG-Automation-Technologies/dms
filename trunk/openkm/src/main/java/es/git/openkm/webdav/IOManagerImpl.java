@@ -42,7 +42,7 @@ public class IOManagerImpl implements IOManager {
 
     private static Logger log = LoggerFactory.getLogger(IOManagerImpl.class);
 
-    private final List ioHandlers = new ArrayList();
+    private final List<IOHandler> ioHandlers = new ArrayList<IOHandler>();
 
     /**
      * Create a new <code>IOManager</code>.
