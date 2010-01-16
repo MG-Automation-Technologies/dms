@@ -26,8 +26,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.form.Button;
-import es.git.openkm.bean.form.FormField;
 import es.git.openkm.bean.form.Input;
 import es.git.openkm.bean.form.Option;
 import es.git.openkm.bean.form.Select;
@@ -418,10 +418,10 @@ public class WorkflowUtils {
 	 * @param is
 	 * @return
 	 */
-	public static Map<String, Collection<FormField>> parseFormFields(InputStream is) {
+	public static Map<String, Collection<FormElement>> parseFormFields(InputStream is) {
 		log.debug("parseFormFields("+is+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
-		Map<String, Collection<FormField>> forms = new HashMap<String, Collection<FormField>>();
+		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
 				
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -440,7 +440,7 @@ public class WorkflowUtils {
 					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
 						String taskName = nForm.getAttributes().getNamedItem("task").getNodeValue();
 						NodeList nlField = nForm.getChildNodes();
-						ArrayList<FormField> fFields = new ArrayList<FormField>();
+						ArrayList<FormElement> fe = new ArrayList<FormElement>();
 						
 						for (int j = 0; j < nlField.getLength(); j++) {
 							Node nField = nlField.item(j);
@@ -462,7 +462,7 @@ public class WorkflowUtils {
 									if (item != null) input.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("height");
 									if (item != null) input.setHeight(item.getNodeValue());
-									fFields.add(input);
+									fe.add(input);
 								} else if (fieldComponent.equals("textarea")) {
 									TextArea textArea = new TextArea();
 									Node item = nField.getAttributes().getNamedItem("label");
@@ -479,7 +479,7 @@ public class WorkflowUtils {
 									if (item != null) textArea.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("height");
 									if (item != null) textArea.setHeight(item.getNodeValue());
-									fFields.add(textArea);
+									fe.add(textArea);
 								} else if (fieldComponent.equals("button")) {
 									Button button = new Button();
 									Node item = nField.getAttributes().getNamedItem("label");
@@ -494,7 +494,7 @@ public class WorkflowUtils {
 									if (item != null) button.setWidth(item.getNodeValue());
 									item = nField.getAttributes().getNamedItem("height");
 									if (item != null) button.setHeight(item.getNodeValue());
-									fFields.add(button);
+									fe.add(button);
 								} else if (fieldComponent.equals("select")) {
 									Select select = new Select();
 									ArrayList<Option> options = new ArrayList<Option>();
@@ -528,12 +528,12 @@ public class WorkflowUtils {
 									}
 									
 									select.setOptions(options);
-									fFields.add(select);
+									fe.add(select);
 								}
 							}
 						}
 
-						forms.put(taskName, fFields);
+						forms.put(taskName, fe);
 					}
 				}
 				
