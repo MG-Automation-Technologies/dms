@@ -51,7 +51,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTButton;
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTInput;
 import es.git.openkm.frontend.client.bean.GWTOption;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
@@ -78,7 +78,7 @@ public class WorkflowFormPanel extends Composite {
 	private GWTTaskInstance taskInstance;
 	private FlexTable table;
 	private FlexTable formTable;
-	private Collection<GWTFormField> formFieldList = new ArrayList<GWTFormField>();
+	private Collection<GWTFormElement> formFieldList = new ArrayList<GWTFormElement>();
 	private Button submitForm;
 	private List<FormWidget> formWidgetList = new ArrayList<FormWidget>();
 	private TitleWidget taskTittle;
@@ -291,16 +291,16 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(14, 1, "");
 		table.setHTML(15, 1, "");
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
-		formFieldList = new ArrayList<GWTFormField>();
+		formFieldList = new ArrayList<GWTFormElement>();
 		drawForm();
 	}
 	
 	/**
 	 * Get subscribed documents callback
 	 */
-	final AsyncCallback<Map<String, Collection<GWTFormField>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, Collection<GWTFormField>>>() {
-		public void onSuccess(Map<String, Collection<GWTFormField>> result) {
-			formFieldList = new ArrayList<GWTFormField>();
+	final AsyncCallback<Map<String, Collection<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, Collection<GWTFormElement>>>() {
+		public void onSuccess(Map<String, Collection<GWTFormElement>> result) {
+			formFieldList = new ArrayList<GWTFormElement>();
 			if (result.containsKey(taskInstance.getName())) {
 				formFieldList = result.get(taskInstance.getName());
 				drawForm();
@@ -352,8 +352,8 @@ public class WorkflowFormPanel extends Composite {
 		}
 		
 		// Sets form fields
-		for (Iterator<GWTFormField> it = formFieldList.iterator(); it.hasNext(); ) {
-			final GWTFormField formField = it.next();
+		for (Iterator<GWTFormElement> it = formFieldList.iterator(); it.hasNext(); ) {
+			final GWTFormElement formField = it.next();
 			int row = formTable.getRowCount();
 			
 			// Prepares to save widget list values
