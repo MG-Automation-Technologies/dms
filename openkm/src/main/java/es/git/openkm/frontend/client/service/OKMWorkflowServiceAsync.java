@@ -25,7 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 
@@ -38,6 +38,6 @@ public interface OKMWorkflowServiceAsync {
 	public void findLatestProcessDefinitions(AsyncCallback<List<GWTProcessDefinition>> callback);
 	public void runProcessDefinition(String docPath, double id, AsyncCallback<?> callback);
 	public void findUserTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
-	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormField>>> callback);
+	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormElement>>> callback);
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );
 }
