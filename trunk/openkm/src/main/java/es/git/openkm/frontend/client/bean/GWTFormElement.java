@@ -22,14 +22,13 @@ package es.git.openkm.frontend.client.bean;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * GWTFormField
+ * GWTFormElement
  * 
  * @author jllort
  *
  */
-public class GWTFormField implements IsSerializable {
+public class GWTFormElement implements IsSerializable {
 		protected String label = "";
-		protected String name = "";
 		protected String value = "";
 		protected String width = "100px";
 		protected String height = "25px";
@@ -56,14 +55,6 @@ public class GWTFormField implements IsSerializable {
 		
 		public void setLabel(String label) {
 			this.label = label;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public void setName(String name) {
-			this.name = name;
 		}
 		
 		public String getValue() {
