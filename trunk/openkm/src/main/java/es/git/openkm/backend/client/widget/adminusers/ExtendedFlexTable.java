@@ -20,16 +20,16 @@
 
 package es.git.openkm.backend.client.widget.adminusers;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 
 import es.git.openkm.backend.client.Main;
 
-public class ExtendedFlexTable extends FlexTable implements TableListener {
+public class ExtendedFlexTable extends FlexTable {
 	
 	private int mouseX = 0;
 	private int mouseY = 0;
@@ -43,14 +43,20 @@ public class ExtendedFlexTable extends FlexTable implements TableListener {
 		
 		// Adds double click event control to table ( on default only has CLICK )
 		sinkEvents(Event.ONDBLCLICK | Event.MOUSEEVENTS);
-		addTableListener(this);
+		addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// Mark selected row or orders rows if header row (0) is clicked 
+				// And row must be other than the selected one
+				markSelectedRow(getCellForEvent(event).getRowIndex());
+			}
+		});
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
 	public void onBrowserEvent(Event event) {
-        int selectedColumn = 0;
 		int selectedRow = 0;
 		
 		if (DOM.eventGetType(event) == Event.ONDBLCLICK || DOM.eventGetType(event) == Event.ONMOUSEDOWN 
@@ -60,7 +66,6 @@ public class ExtendedFlexTable extends FlexTable implements TableListener {
             Element tr = DOM.getParent(td);
             Element body = DOM.getParent(tr);
             selectedRow = DOM.getChildIndex(body, tr); 
-            selectedColumn = DOM.getChildIndex(tr, td);
 		}
 		
 		// Only if selectedRow > 0, indicates a document row value and must apear menu or double click action
@@ -76,13 +81,13 @@ public class ExtendedFlexTable extends FlexTable implements TableListener {
 				// Two time entry onCellClicked before entry on onBrowserEvent and disbles the
 				// Tree onCellClicked that produces inconsistence error refreshing
 				DOM.eventCancelBubble(event, true);
-				onCellClicked(this, selectedRow, selectedColumn); // Fires oncellclicked on right buttom
+				markSelectedRow(selectedRow);
 				Main.get().centerPanel.adminUsersPanel.users.editUser();
 				
 			} else if (DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
 				switch (DOM.eventGetButton(event)) {
 				case Event.BUTTON_RIGHT:
-		            
+		            markSelectedRow(selectedRow);
 		        	Main.get().centerPanel.adminUsersPanel.users.showMenu();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 					break;
@@ -118,11 +123,13 @@ public class ExtendedFlexTable extends FlexTable implements TableListener {
         //Didn't find appropriate cell
         return null;
     } 
-    
-    /* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TableListener#onCellClicked(com.google.gwt.user.client.ui.SourcesTableEvents, int, int)
+	
+	/**
+	 * markSelectedRow
+	 * 
+	 * @param row
 	 */
-	public void onCellClicked(SourcesTableEvents sender, int row, int col) {		
+	private void markSelectedRow(int row) {
 		// Mark selected row or orders rows if header row (0) is clicked 
 		// And row must be other than the selected one
 		if (row != 0 && row != selectedRow) {
@@ -195,10 +202,6 @@ public class ExtendedFlexTable extends FlexTable implements TableListener {
 	 * @param row The row
 	 */
 	public void setSelectedRow(int row) {
-		if (row != 0 && row != selectedRow) {
-			styleRow(selectedRow, false);
-			styleRow(row, true);
-			selectedRow = row;
-		}
+		markSelectedRow(row);
 	}
 }

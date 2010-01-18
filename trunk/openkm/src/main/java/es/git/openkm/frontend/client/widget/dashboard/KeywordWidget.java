@@ -34,8 +34,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.git.openkm.frontend.client.Main;
@@ -68,9 +66,10 @@ public class KeywordWidget extends Composite {
 		header = new Header(true, text);
 		table = new FlexTable();
 		
-		table.addTableListener(new TableListener(){
-
-			public void onCellClicked(SourcesTableEvents sender, int row, int scol) {
+		table.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				int row = table.getCellForEvent(event).getRowIndex();
 				String keyword = table.getHTML(row, 0);
 				if (selectedMap.keySet().contains(keyword)) {
 					styleRow(row, false);
