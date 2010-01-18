@@ -293,6 +293,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(15, 1, "");
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
 		formFieldList = new ArrayList<GWTFormElement>();
+		documentLink = null;
 		drawForm();
 	}
 	
