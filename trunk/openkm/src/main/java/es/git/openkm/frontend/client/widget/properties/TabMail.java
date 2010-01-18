@@ -19,21 +19,16 @@
 
 package es.git.openkm.frontend.client.widget.properties;
 
-import java.util.Iterator;
-
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTMail;
 import es.git.openkm.frontend.client.bean.GWTPermission;
-import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
-import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
 /**
  * The tab mail
@@ -41,18 +36,14 @@ import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class TabMail extends Composite implements TabListener {
-	
-	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
+public class TabMail extends Composite {
 
 	public TabPanel tabPanel;
 	public Mail mail;
 	public SecurityScrollTable security;
 	private VerticalPanel panel;
-	private GWTMail gWTMail;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
-	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	
 	/**
 	 * The Document tab
@@ -67,7 +58,12 @@ public class TabMail extends Composite implements TabListener {
 		tabPanel.add(security, Main.i18n("tab.document.security"));
 		
 		tabPanel.selectTab(0);
-		tabPanel.addTabListener(this);
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(event.getSelectedItem().intValue()));
+			}
+		});
 		
 		panel.add(tabPanel);
 		tabPanel.setWidth("100%");
@@ -98,7 +94,6 @@ public class TabMail extends Composite implements TabListener {
 	 * @param doc The document object
 	 */
 	public void setProperties(GWTMail gWTMail) {	
-		this.gWTMail = gWTMail;
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
 		
 		security.setPath(gWTMail.getPath());
@@ -148,7 +143,6 @@ public class TabMail extends Composite implements TabListener {
 	 * @param visible The visible value
 	 */
 	public void setVisibleButtons(boolean visible){
-		this.visibleButton = visible;  // Save to be used by property group
 		security.setVisibleButtons(visible);
 	}
 	
@@ -168,19 +162,5 @@ public class TabMail extends Composite implements TabListener {
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
 	}
 }

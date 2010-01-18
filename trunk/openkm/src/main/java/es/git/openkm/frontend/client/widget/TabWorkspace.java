@@ -19,10 +19,10 @@
 
 package es.git.openkm.frontend.client.widget;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.panel.ExtendedDockPanel;
@@ -33,7 +33,7 @@ import es.git.openkm.frontend.client.panel.ExtendedDockPanel;
  * @author jllort
  *
  */
-public class TabWorkspace extends Composite implements TabListener {
+public class TabWorkspace extends Composite {
 	
 	public TabBar tabBar;
 	private boolean enableAdminitration = false;
@@ -47,7 +47,29 @@ public class TabWorkspace extends Composite implements TabListener {
 		tabBar.addTab(Main.i18n("tab.workspace.search"));
 		tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
 		tabBar.selectTab(0);
-		tabBar.addTabListener(this);
+		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				switch (event.getSelectedItem().intValue() ) {
+					case ExtendedDockPanel.DESKTOP :
+						Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
+						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
+						break;
+						
+					case ExtendedDockPanel.SEARCH :
+						Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
+						break;
+						
+					case ExtendedDockPanel.DASHBOARD :
+						Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
+						break;
+					
+					case ExtendedDockPanel.ADMINISTRATION :
+						Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
+						break;
+				}
+			}
+		});
 		
 		initWidget(tabBar);
 	}
@@ -75,37 +97,6 @@ public class TabWorkspace extends Composite implements TabListener {
 	public void enableAdministration() {
 		enableAdminitration = true;
 		langRefresh();
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-		switch (tabIndex ) {
-			case ExtendedDockPanel.DESKTOP :
-				Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
-				Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
-				break;
-				
-			case ExtendedDockPanel.SEARCH :
-				Main.get().mainPanel.setView(ExtendedDockPanel.SEARCH);
-				break;
-				
-			case ExtendedDockPanel.DASHBOARD :
-				Main.get().mainPanel.setView(ExtendedDockPanel.DASHBOARD);
-				break;
-			
-			case ExtendedDockPanel.ADMINISTRATION :
-				Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
-				break;
-		}
 	}
 	
 	/**

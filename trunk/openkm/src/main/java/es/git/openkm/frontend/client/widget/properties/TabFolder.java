@@ -21,12 +21,12 @@ package es.git.openkm.frontend.client.widget.properties;
 
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -43,7 +43,7 @@ import es.git.openkm.frontend.client.service.OKMRepositoryServiceAsync;
  * @author jllort
  *
  */
-public class TabFolder extends Composite implements TabListener {
+public class TabFolder extends Composite {
 	
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	
@@ -62,7 +62,14 @@ public class TabFolder extends Composite implements TabListener {
 		tabPanel.add(security, Main.i18n("tab.folder.security"));
 
 		tabPanel.selectTab(0);
-		tabPanel.addTabListener(this);
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				if (event.getSelectedItem().intValue()==1) {
+					security.fillWidth(); // Always when shows fires fill width
+				}
+			}
+		});
 		panel.add(tabPanel);
 		
 		tabPanel.setWidth("100%");
@@ -181,21 +188,5 @@ public class TabFolder extends Composite implements TabListener {
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-		if (tabIndex==1) {
-			security.fillWidth(); // Always when shows fires fill width
-		}
 	}
 }

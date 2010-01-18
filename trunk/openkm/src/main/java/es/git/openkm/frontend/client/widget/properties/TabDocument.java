@@ -24,12 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -47,7 +47,7 @@ import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class TabDocument extends Composite implements TabListener {
+public class TabDocument extends Composite {
 	
 	public static final int TAB_PREVIEW = 4;
 	
@@ -86,7 +86,17 @@ public class TabDocument extends Composite implements TabListener {
 		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		
 		tabPanel.selectTab(0);
-		tabPanel.addTabListener(this);
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				int tabIndex = event.getSelectedItem().intValue();
+				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
+				selectedTab = tabIndex;
+				if (tabIndex == TAB_PREVIEW) {
+					preview.showEmbedSWF(doc.getPath());
+				}
+			}
+		});
 		
 		panel.add(tabPanel);
 		tabPanel.setWidth("100%");
@@ -305,23 +315,5 @@ public class TabDocument extends Composite implements TabListener {
 		}	
 		version.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
-		selectedTab = tabIndex;
-		if (tabIndex == TAB_PREVIEW) {
-			preview.showEmbedSWF(doc.getPath());
-		}
 	}
 }
