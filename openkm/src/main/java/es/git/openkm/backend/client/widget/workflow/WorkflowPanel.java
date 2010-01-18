@@ -34,14 +34,6 @@ import es.git.openkm.backend.client.config.Config;
  */
 public class WorkflowPanel extends Composite {
 	
-	//private VerticalSplitPanel verticalSplitPanel;
-	public Workflow workflow;
-	public WorkflowInstancesData workflowInstancesData;
-	//private HorizontalPanel hPanel;
-	//private VerticalPanel leftPanel;
-	//private VerticalBorderPanel centerSeparatorPanel;
-	public WorkflowVersionData workflowVersionData;
-	
 	// Added to include external jsp
 	private ScrollPanel scrollPanel;
 	private Frame iframe;
@@ -50,38 +42,6 @@ public class WorkflowPanel extends Composite {
 	 * GeneralUtilsPanel
 	 */
 	public WorkflowPanel() {
-		//verticalSplitPanel = new VerticalSplitPanel();
-		//workflow = new Workflow();
-		//workflowInstancesData = new WorkflowInstancesData();
-		//hPanel = new HorizontalPanel();
-		//leftPanel = new VerticalPanel();
-		//workflowVersionData = new WorkflowVersionData();
-		//centerSeparatorPanel = new VerticalBorderPanel();
-		
-		//leftPanel.add(workflowVersionData);
-		
-		//hPanel.add(workflow);
-		//hPanel.add(centerSeparatorPanel);
-		//hPanel.add(leftPanel);
-		
-//		verticalSplitPanel.setTopWidget(hPanel);
-//		verticalSplitPanel.setBottomWidget(workflowInstancesData);
-//		verticalSplitPanel.setSplitPosition("230");
-//		
-//		workflow.setStyleName("okm-Input");
-//		workflowInstancesData.setStyleName("okm-Input");
-//		leftPanel.setStyleName("okm-Input");
-//		
-//		hPanel.setCellWidth(leftPanel, "250");
-//		hPanel.setCellWidth(centerSeparatorPanel,"10");
-//		
-//		hPanel.setSize("100%", "100%");
-//		leftPanel.setSize("100%","100%");
-//		workflow.setSize("100%","100%");
-//		workflowInstancesData.setSize("100%","100%");
-//		centerSeparatorPanel.setSize("10","100%");
-//		workflowVersionData.setSize("100%","100%");
-		
 		
 		// Added to include external jsp
 		iframe = new Frame("about:blank");
@@ -108,7 +68,6 @@ public class WorkflowPanel extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		//workflow.langRefresh();
 	}
 	
 	/**

@@ -40,7 +40,6 @@ public class ConfirmPopup extends DialogBox {
 	
 	public static final int NO_ACTION 							= 0;
 	public static final int CONFIRM_DELETE_USER 				= 1;
-	public static final int CONFIRM_DELETE_WORKFLOW_VERSION		= 2;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -109,10 +108,6 @@ public class ConfirmPopup extends DialogBox {
 			case CONFIRM_DELETE_USER:
 				Main.get().centerPanel.adminUsersPanel.users.deleteUser();
 				break;
-				
-			case CONFIRM_DELETE_WORKFLOW_VERSION:
-				Main.get().centerPanel.workflowPanel.workflowVersionData.deleteProcessDefinition();
-				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -130,11 +125,6 @@ public class ConfirmPopup extends DialogBox {
 			case CONFIRM_DELETE_USER :
 				text.setHTML(Main.i18n("confirm.delete.user"));
 				break;
-				
-			case CONFIRM_DELETE_WORKFLOW_VERSION:
-				text.setHTML(Main.i18n("confirm.delete.workflow.version"));
-				break;
-				
 		}
 	}
 	

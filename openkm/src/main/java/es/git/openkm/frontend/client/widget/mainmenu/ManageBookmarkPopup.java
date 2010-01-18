@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -38,8 +39,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -148,28 +147,31 @@ public class ManageBookmarkPopup extends DialogBox {
 		table.setWidth("100%");
 		table.addStyleName("okm-DisableSelect");
 		
-		table.addTableListener(new TableListener() {
-				public void onCellClicked(SourcesTableEvents sender, int row, int col) {
-					if (row != selectedRow) {
-						styleRow(selectedRow, false);
-						styleRow(row, true);
-						selectedRow = row;
-						if (bookmarkMap.containsKey(table.getText(row,1))) {
-							GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(row,1));
-							tableBookmark.setHTML(0,1,bookmark.getName());
-							tableBookmark.setHTML(1,1,bookmark.getPath());
-							if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
-								tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
-							} else if (bookmark.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
-								tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.folder"));
-							} 
-						}
-						deleteButton.setEnabled(true);
-						updateButton.setEnabled(true);
+		table.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// Mark selected row or orders rows if header row (0) is clicked 
+				// And row must be other than the selected one
+				int row = table.getCellForEvent(event).getRowIndex();
+				if (row != selectedRow) {
+					styleRow(selectedRow, false);
+					styleRow(row, true);
+					selectedRow = row;
+					if (bookmarkMap.containsKey(table.getText(row,1))) {
+						GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(row,1));
+						tableBookmark.setHTML(0,1,bookmark.getName());
+						tableBookmark.setHTML(1,1,bookmark.getPath());
+						if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+							tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
+						} else if (bookmark.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
+							tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.folder"));
+						} 
 					}
+					deleteButton.setEnabled(true);
+					updateButton.setEnabled(true);
 				}
 			}
-		);
+		});
 		
 		scrollPanel = new ScrollPanel(table);
 		scrollPanel.setSize("380","150");
