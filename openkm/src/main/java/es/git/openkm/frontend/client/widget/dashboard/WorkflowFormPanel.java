@@ -296,7 +296,7 @@ public class WorkflowFormPanel extends Composite {
 	}
 	
 	/**
-	 * Get subscribed documents callback
+	 * Get process definitions callback
 	 */
 	final AsyncCallback<Map<String, Collection<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, Collection<GWTFormElement>>>() {
 		public void onSuccess(Map<String, Collection<GWTFormElement>> result) {
