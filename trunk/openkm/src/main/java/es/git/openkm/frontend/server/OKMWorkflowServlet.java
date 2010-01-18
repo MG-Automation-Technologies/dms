@@ -81,9 +81,8 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#runProcessDefinition(java.lang.String, double)
 	 */
-	public void runProcessDefinition(String docPath, double id) throws OKMException  {
+	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		Map<String,Object> variables = new HashMap<String,Object>();
 		variables.put("path", docPath);
 		String token = getToken();
 		
