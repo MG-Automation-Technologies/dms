@@ -355,6 +355,7 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
+				widget = listBox;
 			} else if (formField instanceof GWTTextArea) {
 				GWTTextArea gWTTextArea = (GWTTextArea) formField;
 				TextArea textArea = new TextArea();
@@ -365,6 +366,7 @@ public class WorkflowPopup extends DialogBox {
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textArea);
 				formTable.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_TOP);
+				widget = textArea;
 			} 
 			
 			// Saves widget
