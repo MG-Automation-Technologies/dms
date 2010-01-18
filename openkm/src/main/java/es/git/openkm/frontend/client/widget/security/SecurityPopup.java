@@ -26,12 +26,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 
@@ -41,7 +38,7 @@ import es.git.openkm.frontend.client.Main;
  * @author jllort
  *
  */
-public class SecurityPopup extends DialogBox implements ClickHandler, TabListener {
+public class SecurityPopup extends DialogBox implements ClickHandler {
 	
 	private VerticalPanel vPanel;
 	private TabPanel tabPanel;
@@ -74,7 +71,6 @@ public class SecurityPopup extends DialogBox implements ClickHandler, TabListene
 		tabPanel.add(securityRole, Main.i18n("security.groups"));
 		tabPanel.selectTab(0);
 		tabPanel.setWidth("100%");
-		tabPanel.addTabListener(this);
 		
 		vPanel.add(sp);
 		vPanel.add(tabPanel);
@@ -148,18 +144,5 @@ public class SecurityPopup extends DialogBox implements ClickHandler, TabListene
 		// Fill width must be done on visible widgets
 		securityUser.fillWidth();
 		securityRole.fillWidth();
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onBeforeTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TabListener#onTabSelected(com.google.gwt.user.client.ui.SourcesTabEvents, int)
-	 */
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
 	}
 }
