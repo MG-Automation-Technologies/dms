@@ -283,6 +283,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(3, 1, "");
 		table.setHTML(4, 1, "");
 		table.setHTML(5, 1, "");
+		table.setHTML(6, 1, "");
 		table.setHTML(8, 1, "");
 		table.setHTML(9, 1, "");
 		table.setHTML(10, 1, "");
@@ -408,6 +409,7 @@ public class WorkflowFormPanel extends Composite {
 				listBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
+				widget = listBox;
 			} else if (formField instanceof GWTTextArea) {
 				GWTTextArea gWTTextArea = (GWTTextArea) formField;
 				TextArea textArea = new TextArea();
@@ -418,6 +420,7 @@ public class WorkflowFormPanel extends Composite {
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textArea);
 				formTable.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_TOP);
+				widget = textArea;
 			} 
 			
 			// Saves widget
