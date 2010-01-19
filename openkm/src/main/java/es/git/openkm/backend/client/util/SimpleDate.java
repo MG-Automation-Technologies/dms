@@ -24,7 +24,7 @@ import java.util.Date;
 public class SimpleDate {
 	
 	Date date;
-
+	
 	public SimpleDate() {
 		date = new Date();
 	}

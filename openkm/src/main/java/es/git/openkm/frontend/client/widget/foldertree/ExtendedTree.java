@@ -124,7 +124,7 @@ public class ExtendedTree extends Tree {
 	 * @return
 	 */
 	public TreeItem elementClicked(Element element) {
-        Vector chain = new Vector();
+        Vector<Element> chain = new Vector<Element>();
         collectElementChain(chain, this.getElement(), element);
         TreeItem item = findItemByChain(chain, 0, null);
         return item;
@@ -137,7 +137,7 @@ public class ExtendedTree extends Tree {
 	 * @param elementRoot 
 	 * @param element 
 	 */
-	private void collectElementChain(Vector chain, Element elementRoot, Element element) {
+	private void collectElementChain(Vector<Element> chain, Element elementRoot, Element element) {
         if ((element == null) || element== elementRoot)
                 return;
 
@@ -153,7 +153,7 @@ public class ExtendedTree extends Tree {
 	 * @param root
 	 * @return
 	 */
-	private TreeItem findItemByChain(Vector chain, int idx, TreeItem root) {
+	private TreeItem findItemByChain(Vector<Element> chain, int idx, TreeItem root) {
         if (idx == chain.size())
                 return root;
 

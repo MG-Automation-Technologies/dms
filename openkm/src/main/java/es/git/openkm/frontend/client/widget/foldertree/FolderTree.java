@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
@@ -31,7 +33,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.TreeListener;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTFolder;
@@ -58,7 +59,7 @@ import es.git.openkm.frontend.client.widget.startup.StartUp;
  * @author jllort
  *
  */
-public class FolderTree extends Composite implements TreeListener, OriginPanel {
+public class FolderTree extends Composite implements OriginPanel {
 	
 	// Definitions of folder actions
 	public static final int ACTION_NONE   			= -1;
@@ -109,7 +110,12 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 		tree.setStyleName("okm-Tree");
 		tree.addStyleName("okm-PanelSelected");
 		tree.addItem(rootItem);
-		tree.addTreeListener(this);
+		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+			@Override
+			public void onSelection(SelectionEvent<TreeItem> event) {
+				onTreeItemSelected(event.getSelectedItem());
+			}
+		});
 		actualItem = tree.getItem(0);
 		initWidget(tree);
 	}
@@ -773,10 +779,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TreeListener#onTreeItemSelected(com.google.gwt.user.client.ui.TreeItem)
-	 */
-	public void onTreeItemSelected(TreeItem item) {
+	private void onTreeItemSelected(TreeItem item) {
 		boolean refresh = true;
 		boolean refreshType = true;
 		
@@ -861,7 +864,7 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 			menuPopup.evaluateMenuOptions();
 			menuPopup.setPopupPosition(tree.mouseX,tree.mouseY);
 			// In thesaurus view must not be showed the menu popup
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
 				menuPopup.show();
 			}
 		}
@@ -898,12 +901,6 @@ public class FolderTree extends Composite implements TreeListener, OriginPanel {
 		}
 		
 		Main.get().mainPanel.browser.fileBrowser.refresh(path);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TreeListener#onTreeItemStateChanged(com.google.gwt.user.client.ui.TreeItem)
-	 */
-	public void onTreeItemStateChanged(TreeItem item) {	
 	}
 	
 	/**
