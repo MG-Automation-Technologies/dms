@@ -28,6 +28,7 @@ import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.bean.workflow.Token;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 
 public interface WorkflowModule {
@@ -39,7 +40,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public void registerProcessDefinition(String token, ZipInputStream is) throws RepositoryException;
+	public void registerProcessDefinition(String token, ZipInputStream is) throws ParseException, RepositoryException;
 	
 	/**
 	 * Delete a previously registered process definition
@@ -73,7 +74,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId) throws RepositoryException;
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId) throws ParseException, RepositoryException;
 
 	/**
 	 * @param token
