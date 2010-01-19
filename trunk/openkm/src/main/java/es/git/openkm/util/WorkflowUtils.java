@@ -25,9 +25,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
-import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.form.Input;
 import es.git.openkm.bean.form.Option;
 import es.git.openkm.bean.form.Select;
@@ -38,6 +40,7 @@ import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.bean.workflow.Token;
 import es.git.openkm.bean.workflow.Transition;
+import es.git.openkm.core.ParseException;
 
 public class WorkflowUtils {
 	private static Logger log = LoggerFactory.getLogger(WorkflowUtils.class);
@@ -418,16 +421,20 @@ public class WorkflowUtils {
 	 * @param is
 	 * @return
 	 */
-	public static Map<String, Collection<FormElement>> parseFormFields(InputStream is) {
+	public static Map<String, Collection<FormElement>> parseFormFields(InputStream is) throws ParseException {
 		log.debug("parseFormFields("+is+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
 				
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setFeature("http://xml.org/sax/features/validation", false);
-			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			dbf.setNamespaceAware(true);
+			dbf.setValidating(true);
+			dbf.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage", "http://www.w3.org/2001/XMLSchema");
+			dbf.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource", "http://www.openkm.com/xsd/forms-1.0.xsd");
+			ErrorHandler handler = new ErrorHandler();
 			DocumentBuilder db = dbf.newDocumentBuilder();
+			db.setErrorHandler(handler);
 			
 			if (is != null) {
 				Document doc = db.parse(is);
@@ -540,15 +547,33 @@ public class WorkflowUtils {
 				is.close();
 			}
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			throw new ParseException(e.getMessage());
 		} catch (SAXException e) {
-			e.printStackTrace();
+			throw new ParseException(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new ParseException(e.getCause());
 		}
 				
 		log.debug("parseFormFields: "+forms);
 		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
+	}
+	
+	/**
+	 * 
+	 */
+	private static final class ErrorHandler extends DefaultHandler {
+		public void error(SAXParseException exception) throws SAXException {
+			log.error(exception.getMessage());
+			throw exception;
+		}
+		public void fatalError(SAXParseException exception) throws SAXException {
+			log.error(exception.getMessage());
+			throw exception;
+		}
+		public void warning(SAXParseException exception) throws SAXException {
+			log.warn(exception.getMessage());
+			throw exception;
+		}
 	}
 }
