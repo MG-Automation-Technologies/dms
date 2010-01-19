@@ -19,7 +19,6 @@
 
 package es.git.openkm.frontend.client.widget.startup;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;

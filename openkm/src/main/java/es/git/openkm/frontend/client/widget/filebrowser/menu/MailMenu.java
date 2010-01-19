@@ -153,8 +153,6 @@ public class MailMenu extends MenuBase {
 	 * @param doc The document
 	 */
 	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {	
-		String user = Main.get().workspaceUserProperties.getUser();
-		
 		copyOption 				= true;
 		
 		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
@@ -179,9 +177,7 @@ public class MailMenu extends MenuBase {
 	 * 
 	 * @param mail The document
 	 */
-	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {	
-		String user = Main.get().workspaceUserProperties.getUser();
-		
+	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {			
 		copyOption 				= true;
 		renameOption 			= false;
 		

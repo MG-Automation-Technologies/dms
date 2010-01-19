@@ -3,19 +3,13 @@ package es.git.openkm.test;
 import java.io.File;
 import java.net.URLEncoder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import es.git.openkm.api.OKMAuth;
 import es.git.openkm.api.OKMFolder;
 import es.git.openkm.bean.ContentInfo;
 import es.git.openkm.module.direct.DirectRepositoryModule;
 import es.git.openkm.util.JCRUtils;
-import es.git.openkm.util.SecureStore;
 
-public class Test {
-	private static Logger log = LoggerFactory.getLogger(Test.class);
-	
+public class Test {	
 	/**
 	 * @param args
 	 */

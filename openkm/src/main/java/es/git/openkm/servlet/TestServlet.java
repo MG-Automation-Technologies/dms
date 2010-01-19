@@ -21,10 +21,8 @@ package es.git.openkm.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.kea.Term;
 import es.git.openkm.kea.RDFREpository;
-import es.git.openkm.kea.tree.KEATree;
 
 /**
  * Servlet Class

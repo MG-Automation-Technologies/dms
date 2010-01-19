@@ -44,8 +44,6 @@ import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.VersionException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTDocument;
-import es.git.openkm.frontend.client.bean.GWTQueryParams;
-import es.git.openkm.frontend.client.bean.GWTQueryResult;
 import es.git.openkm.frontend.client.bean.GWTVersion;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMDocumentService;

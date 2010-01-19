@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.gen2.table.client.SortableGrid;
 import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorter;
 import com.google.gwt.gen2.table.client.SortableGrid.ColumnSorterCallback;
@@ -169,7 +168,6 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		
 		// Data map
 		Map data = new HashMap(Main.get().mainPanel.search.searchResult.table.data);
-		int selectedRow = Main.get().mainPanel.search.searchResult.table.getSelectedRow();
 		Main.get().mainPanel.search.searchResult.table.reset();
 		
 		int column = 0;
@@ -189,10 +187,10 @@ public class ExtendedColumnSorter extends ColumnSorter {
     	}
 	}
 	
-    private void visualizar(List<String[]> elementToOrder) {
-    	for (Iterator<String[]> it =  elementToOrder.iterator(); it.hasNext();) {
-    		String[] value = it.next();
-    		Window.alert("name:"+value[0]);
-    	}
-    }
+//    private void visualizar(List<String[]> elementToOrder) {
+//    	for (Iterator<String[]> it =  elementToOrder.iterator(); it.hasNext();) {
+//    		String[] value = it.next();
+//    		Window.alert("name:"+value[0]);
+//    	}
+//    }
 }

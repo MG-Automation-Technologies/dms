@@ -195,10 +195,13 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		return groupList;
 	}
 	
-	public HashMap<String, String> getTranslations(String lang) throws OKMException {
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMPropertyGroupService#getTranslations(java.lang.String)
+	 */
+	public Map<String, String> getTranslations(String lang) throws OKMException {
 		log.debug("getTranslations(" + lang +")");
 		String token = getToken();
-		HashMap<String, String> translations = new HashMap<String, String>();
+		Map<String, String> translations = new HashMap<String, String>();
 		
 		try {
 			translations = OKMPropertyGroup.getInstance().getTranslations(token, lang);
@@ -283,12 +286,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMPropertyGroupService#setProperties(java.lang.String, java.util.HashMap)
 	 */
-	public void setProperties(String docPath, String grpName, HashMap<String, String[]> properties) throws OKMException {
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException {
 		log.debug("setProperties(" + docPath +")");
 		String token = getToken();
 		
 		try {
-			OKMPropertyGroup.getInstance().setProperties(token, docPath, grpName, properties);
+			OKMPropertyGroup.getInstance().setProperties(token, docPath, grpName, (HashMap) properties);
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());

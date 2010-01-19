@@ -28,9 +28,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import es.git.openkm.core.Config;
 import es.git.openkm.kea.tree.KEATree;
 
@@ -47,7 +44,6 @@ import es.git.openkm.kea.tree.KEATree;
 public class OKMThesaurusServletAdmin extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(OKMThesaurusServletAdmin.class);
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 			

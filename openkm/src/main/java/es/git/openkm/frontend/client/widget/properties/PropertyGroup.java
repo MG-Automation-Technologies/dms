@@ -633,7 +633,7 @@ public class PropertyGroup extends Composite {
 	 * Sets the properties values
 	 */
 	private void setProperties() {
-		HashMap<String, String[]> hSaveProperties = new HashMap<String, String[]>();
+		Map<String, String[]> hSaveProperties = new HashMap<String, String[]>();
 		int rows = 1;
 		
 		for (int x=0; x<orderedKey.length; x++) {
