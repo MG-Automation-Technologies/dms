@@ -33,6 +33,7 @@ import es.git.openkm.api.OKMWorkflow;
 import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.TaskInstance;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
@@ -139,7 +140,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 				}
 				formElementList.put(key, gwtCol);
 			}
-			
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
