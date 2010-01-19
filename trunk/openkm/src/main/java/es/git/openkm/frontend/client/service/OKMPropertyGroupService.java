@@ -44,12 +44,12 @@ public interface OKMPropertyGroupService extends RemoteService {
 	
 	public List<String> getGroups(String docPath) throws OKMException;
 
-	public HashMap<String, String> getTranslations(String lang) throws OKMException;
+	public Map<String, String> getTranslations(String lang) throws OKMException;
 	
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException;
 	
 	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException;
 	
-	public void setProperties(String docPath, String grpName, HashMap<String, String[]> properties) throws OKMException;
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException;
 	public void removeGroup( String docPath, String grpName) throws OKMException;
 }

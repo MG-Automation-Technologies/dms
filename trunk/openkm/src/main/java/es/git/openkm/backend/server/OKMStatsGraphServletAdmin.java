@@ -31,8 +31,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.StatsInfo;
 import es.git.openkm.core.RepositoryInfo;
@@ -41,7 +39,6 @@ import es.git.openkm.core.RepositoryInfo;
  * Stats graphical servlet
  */
 public class OKMStatsGraphServletAdmin extends HttpServlet {
-	private static Logger log = LoggerFactory.getLogger(OKMStatsGraphServletAdmin.class);
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "Number of documents";
 	

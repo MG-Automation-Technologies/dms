@@ -19,18 +19,12 @@
 
 package es.git.openkm.frontend.client.widget.thesaurus;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 
-import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.bean.GWTMail;
-import es.git.openkm.frontend.client.bean.GWTPermission;
-import es.git.openkm.frontend.client.util.Util;
 import es.git.openkm.frontend.client.widget.MenuBase;
-import es.git.openkm.frontend.client.widget.upload.FancyFileUpload;
 
 /**
  * ThesaurusMenu menu

@@ -84,8 +84,7 @@ public class FolderSelectPopup extends DialogBox  {
 			@Override
 			public void onClick(ClickEvent event) {
 				setRepositoryPath(folderSelectTree.getActualPath(), false);
-			}	public static final int NAVIGATOR_TAXONOMY 	= 0;
-			public static final int NAVIGATOR_TEMPLATES = 1;
+			}	
 		});
 		
 		vPanel.add(new HTML("<br>"));

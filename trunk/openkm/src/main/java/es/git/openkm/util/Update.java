@@ -34,7 +34,6 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.Repository;
 import es.git.openkm.core.Config;
 
 public class Update {

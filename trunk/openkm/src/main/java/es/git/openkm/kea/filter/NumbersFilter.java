@@ -19,16 +19,17 @@
 
 package es.git.openkm.kea.filter;
 
-import weka.core.*;
-import weka.core.Capabilities.Capability;
-import weka.filters.*;
-
-import java.util.*;
+import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.module.direct.DirectDocumentModule;
+import weka.core.Capabilities;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Utils;
+import weka.core.Capabilities.Capability;
+import weka.filters.Filter;
 
 /**
  * Removes all numbers from all the string attributes in the given

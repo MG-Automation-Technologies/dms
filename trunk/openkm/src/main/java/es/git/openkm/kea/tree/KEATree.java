@@ -39,8 +39,6 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-
 import es.git.openkm.api.OKMFolder;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.kea.Term;
@@ -63,6 +61,7 @@ public class KEATree {
 	 * Generate tree
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unchecked")
 	public static void recursiveGenerateTree(String termID, int level, int levelToDraw, String token, String parentPath, 
 											 Vector<String> parentUIDS, ServletOutputStream out) throws IOException {        
 		

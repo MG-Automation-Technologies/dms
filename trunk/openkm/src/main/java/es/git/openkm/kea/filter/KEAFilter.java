@@ -91,8 +91,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 	/** The minimum length of phrases */
 	private int m_MinPhraseLength = 1;
 	
-	private double m_max_recall = 0.0;
-	
 	/** The number of phrases to extract. */
 	private int m_numPhrases = 10;
 	
@@ -100,8 +98,6 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * Number of human indexers (times a keyphrase appears in the keyphrase set) */
 	// adjust manually for >1 indexer
 	private int m_Indexers = 1; 
-	
-	private int doc = 0;
 	
 	/** Should non-descriptors be replaced by corresponding descriptors? */
 	private boolean m_DESCRreplace = true;
@@ -1147,7 +1143,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 		// Is node degree attribute being used?   
 		if (m_NODEfeature) {	
 			
-			Vector idsRT = (Vector)m_Vocabulary.getRelated(id);
+			Vector<String> idsRT = m_Vocabulary.getRelated(id);
 			
 			int intern = 0;			
 			if (idsRT != null) {

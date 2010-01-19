@@ -61,12 +61,12 @@ public class ResultsSearch extends Composite {
 	 * 
 	 * @param vector
 	 */
-	public void addRow(Vector vector, boolean title){
+	public void addRow(Vector<String> vector, boolean title){
 		int cols = vector.size();
 		int rows = table.getRowCount(); 
 			
 		for (int i=0; i<cols; i++) {
-			table.setHTML(rows, i, (String) vector.get(i));
+			table.setHTML(rows, i, vector.get(i));
 			if (title) {
 				table.getCellFormatter().setStyleName(rows, i,"okm-Table-Title");
 				if (i>0)
