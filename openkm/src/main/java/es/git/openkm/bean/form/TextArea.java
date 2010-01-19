@@ -4,8 +4,8 @@ public class TextArea extends FormElement {
 	private String name = "";
 	
 	public TextArea() {
-		width = "400px";
-		height = "300px";
+		width = "300px";
+		height = "100px";
 	}
 
 	public String getName() {
