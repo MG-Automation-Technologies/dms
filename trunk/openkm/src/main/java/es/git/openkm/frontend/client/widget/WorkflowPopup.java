@@ -279,8 +279,8 @@ public class WorkflowPopup extends DialogBox {
 		public void onSuccess(Map<String, Collection<GWTFormElement>> result) {
 			formFieldList = new ArrayList<GWTFormElement>();
 			// Initial task is always called start
-			if (result.containsKey("start")) {
-				formFieldList = result.get("start");
+			formFieldList = result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm());
+			if (result!=null) {
 				drawForm();
 			} else {
 				runProcessDefinitionWithValues();
