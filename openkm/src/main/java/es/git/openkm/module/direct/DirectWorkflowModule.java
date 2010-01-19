@@ -37,6 +37,7 @@ import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 import javax.jcr.Session;
 
+import org.apache.commons.io.IOUtils;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.db.GraphSession;
@@ -69,23 +70,28 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throws ParseException, RepositoryException {
 		log.debug("registerProcessDefinition("+token+", "+zis+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		InputStream is = null;
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
-			jbpmContext.deployProcessDefinition(processDefinition);
-						
+									
 			// Check xml form definition  
 			FileDefinition fileDef = processDefinition.getFileDefinition();
-			InputStream is = fileDef.getInputStream("forms.xml");
+			is = fileDef.getInputStream("forms.xml");
 			WorkflowUtils.parseFormFields(is);
-			is.close();
+						
+			// If it is ok, deploy it
+			jbpmContext.deployProcessDefinition(processDefinition);
 			
 			// Activity log
 			UserActivity.log(session, "REGISTER_PROCESS_DEFINITION", null, null);
+		} catch (ParseException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
 		
@@ -206,13 +212,14 @@ public class DirectWorkflowModule implements WorkflowModule {
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
+		InputStream is = null;
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
-			InputStream is = fileDef.getInputStream("forms.xml");
+			is = fileDef.getInputStream("forms.xml");
 			forms = WorkflowUtils.parseFormFields(is);
 			is.close();
 			
@@ -223,6 +230,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
 		
