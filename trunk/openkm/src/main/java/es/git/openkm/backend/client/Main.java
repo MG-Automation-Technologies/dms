@@ -24,7 +24,6 @@ import java.util.HashMap;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -39,9 +38,9 @@ import es.git.openkm.backend.client.panel.VerticalBorderPanel;
 import es.git.openkm.backend.client.service.OKMUserService;
 import es.git.openkm.backend.client.service.OKMUserServiceAsync;
 import es.git.openkm.backend.client.util.Util;
+import es.git.openkm.backend.client.widget.ConfirmPopup;
 import es.git.openkm.backend.client.widget.ErrorPopup;
 import es.git.openkm.backend.client.widget.VerticalToolBar;
-import es.git.openkm.backend.client.widget.ConfirmPopup;
 
 /**
  * Main entry point application
@@ -49,7 +48,7 @@ import es.git.openkm.backend.client.widget.ConfirmPopup;
  * @author jllort
  *
  */
-public final class Main implements EntryPoint, WindowCloseListener {
+public final class Main implements EntryPoint {
 	
 	private final OKMUserServiceAsync userService = (OKMUserServiceAsync) GWT.create(OKMUserService.class);
 	
@@ -198,13 +197,6 @@ public final class Main implements EntryPoint, WindowCloseListener {
 			OKMException okme = (OKMException) caught;
 			errorPopup.show(okme.getCode()+"("+callback+"): "+i18n(okme.getCode()) + "<br><br>" + okme.getMessage());
 		}
-	}
-	
-	public String onWindowClosing() {
-		return null;
-	}
-
-	public void onWindowClosed() {		
 	}
 	
 	/**

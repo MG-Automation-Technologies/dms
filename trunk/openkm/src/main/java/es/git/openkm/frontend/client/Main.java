@@ -24,7 +24,8 @@ import java.util.HashMap;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowCloseListener;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -66,7 +67,7 @@ import es.git.openkm.frontend.client.widget.upload.FileUpload;
  * @author jllort
  *
  */
-public final class Main implements EntryPoint, WindowCloseListener {
+public final class Main implements EntryPoint{
 	
 	private static Main singleton;
 	
@@ -265,8 +266,14 @@ public final class Main implements EntryPoint, WindowCloseListener {
 	    RootPanel.get().add(dragable);
 	    RootPanel.get().add(verticalBarSplitter);
 	    RootPanel.get().add(horizontalBarSplitter);
-
-	    Window.addWindowCloseListener(this);
+	    
+	    Window.addWindowClosingHandler(new ClosingHandler() {
+			@Override
+			public void onWindowClosing(ClosingEvent event) {
+				startUp.keepAlive.cancel();
+			}
+		});
+	    
 	    initJavaScriptApi();
 		
 		// Sets the active folder tree, it'll be used to store the active folder 
@@ -410,19 +417,5 @@ public final class Main implements EntryPoint, WindowCloseListener {
 	public static String refresh(String s) {
 		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		return "";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.WindowCloseListener#onWindowClosing()
-	 */
-	public String onWindowClosing() {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.WindowCloseListener#onWindowClosed()
-	 */
-	public void onWindowClosed() {
-		startUp.keepAlive.cancel();
 	}
 }

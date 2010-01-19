@@ -23,12 +23,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.TreeListener;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTFolder;
@@ -46,7 +47,7 @@ import es.git.openkm.frontend.client.util.Util;
  * @author jllort
  *
  */
-public class FolderSelectTree extends Composite implements TreeListener {
+public class FolderSelectTree extends Composite {
 	
 	private Tree tree;
 	private TreeItem actualItem;
@@ -65,7 +66,31 @@ public class FolderSelectTree extends Composite implements TreeListener {
 		rootItem.setState(true);
 		tree.setStyleName("okm-Tree");
 		tree.addItem(rootItem);
-		tree.addTreeListener(this);
+		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+			@Override
+			public void onSelection(SelectionEvent<TreeItem> event) {
+				boolean refresh = true;
+				TreeItem item = event.getSelectedItem();
+				
+				// Case that not refreshing tree and file browser ( right click )
+				if (actualItem.equals(item)) {
+					refresh = false;
+				} else {
+					// Disables actual item because on changing active node by
+					// application this it's not changed automatically
+					if (!actualItem.equals(item)) {
+						actualItem.setSelected(false);
+						actualItem = item;
+					} else {
+						refresh = false;
+					}
+				}
+				
+				if (refresh) {
+					refresh(true);
+				}
+			}
+		});
 		actualItem = tree.getItem(0);
 		initWidget(tree);
 	}
@@ -325,44 +350,12 @@ public class FolderSelectTree extends Composite implements TreeListener {
 		repositoryService.getTrash(callbackGetTrash);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TreeListener#onTreeItemSelected(com.google.gwt.user.client.ui.TreeItem)
-	 */
-	public void onTreeItemSelected(TreeItem item) {
-		boolean refresh = true;
-		
-		// Case that not refreshing tree and file browser ( right click )
-		if (actualItem.equals(item)) {
-			refresh = false;
-		} else {
-			// Disables actual item because on changing active node by
-			// application this it's not changed automatically
-			if (!actualItem.equals(item)) {
-				actualItem.setSelected(false);
-				actualItem = item;
-			} else {
-				refresh = false;
-			}
-		}
-		
-		if (refresh) {
-			refresh(true);
-		}
-				
-	}
-	
 	/**
 	 * Refresh the tree node
 	 */
 	public void refresh(boolean reset) {
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		getChilds(path);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.TreeListener#onTreeItemStateChanged(com.google.gwt.user.client.ui.TreeItem)
-	 */
-	public void onTreeItemStateChanged(TreeItem item) {	
 	}
 	
 	/**
