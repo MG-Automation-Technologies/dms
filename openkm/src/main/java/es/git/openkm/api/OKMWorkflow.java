@@ -31,6 +31,7 @@ import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.bean.workflow.Token;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.ModuleManager;
 import es.git.openkm.module.WorkflowModule;
@@ -54,7 +55,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream is)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("registerProcessDefinition(" + token + ", " + is + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.registerProcessDefinition(token, is);
@@ -104,7 +105,7 @@ public class OKMWorkflow implements WorkflowModule {
 	 */
 	@Override
 	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("getProcessDefinitionForms(" + token + ", " + processDefinitionId + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		Map<String, Collection<FormElement>> result = wm.getProcessDefinitionForms(token, processDefinitionId);
