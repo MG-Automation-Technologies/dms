@@ -51,6 +51,7 @@ import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.bean.workflow.Token;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.WorkflowModule;
@@ -65,7 +66,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 */
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream zis)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("registerProcessDefinition("+token+", "+zis+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		
@@ -73,6 +74,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 			Session session = SessionManager.getInstance().get(token);
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
 			jbpmContext.deployProcessDefinition(processDefinition);
+						
+			// Check xml form definition  
+			FileDefinition fileDef = processDefinition.getFileDefinition();
+			InputStream is = fileDef.getInputStream("forms.xml");
+			WorkflowUtils.parseFormFields(is);
+			is.close();
 			
 			// Activity log
 			UserActivity.log(session, "REGISTER_PROCESS_DEFINITION", null, null);
@@ -194,7 +201,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	 */
 	@Override
 	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("getProcessDefinitionForms("+token+", "+processDefinitionId+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -207,9 +214,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 			FileDefinition fileDef = pd.getFileDefinition();
 			InputStream is = fileDef.getInputStream("forms.xml");
 			forms = WorkflowUtils.parseFormFields(is);
+			is.close();
 			
 			// Activity log
 			UserActivity.log(session, "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
+		} catch (ParseException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
