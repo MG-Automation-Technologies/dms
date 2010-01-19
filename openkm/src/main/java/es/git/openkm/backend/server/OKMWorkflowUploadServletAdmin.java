@@ -22,8 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMWorkflow;
+import es.git.openkm.backend.client.OKMException;
 import es.git.openkm.backend.client.config.ErrorCode;
 import es.git.openkm.core.Config;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 
 /**
@@ -79,18 +81,36 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 				
 				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/wf_processes.jsp");
 			}
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_ParseException);
+			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_Repository));
+			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_Repository);
+			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_IOException));
+			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_IOException);
+			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			out.print("Exception: "+e.toString());
+			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_General);
+			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
 		} finally {
 			out.flush();
 			out.close();
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	protected void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response, OKMException e)
+			throws ServletException, IOException {
+		log.error("sendErrorRedirect: "+e.toString());
+		String errorJSP = "/admin/error.jsp";
+		request.setAttribute("javax.servlet.jsp.jspException", e);
+		request.getRequestDispatcher(errorJSP).forward(request, response);
 	}
 }
