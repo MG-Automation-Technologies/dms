@@ -20,6 +20,7 @@
 package es.git.openkm.backend.client;
 
 
+
 /**
  * Propagates server exception
  * 
@@ -48,5 +49,14 @@ public class OKMException extends Exception {
 	
 	public String getMessage() {
 		return msg;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("code="); sb.append(code);
+		sb.append(", msg="); sb.append(msg);
+		sb.append("}");
+		return sb.toString();
 	}
 }
