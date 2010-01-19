@@ -35,7 +35,7 @@ public class ResourceClassLoader extends ClassLoader {
 		
 		try {
 			File d = new File(Config.JBOSS_HOME+"/"+name);
-			ret = d.toURL();
+			ret = d.toURI().toURL();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
