@@ -436,7 +436,7 @@ public class UserData extends Composite {
 	/**
 	 * Call back create a user
 	 */
-	final AsyncCallback callbackCreateUser = new AsyncCallback() {
+	final AsyncCallback<Object> callbackCreateUser = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Main.get().centerPanel.adminUsersPanel.users.addUser(user);
 			Main.get().centerPanel.adminUsersPanel.users.selectLastRow();
@@ -452,7 +452,7 @@ public class UserData extends Composite {
 	/**
 	 * Call back update user
 	 */
-	final AsyncCallback callbackUpdateUser = new AsyncCallback() {
+	final AsyncCallback<Object> callbackUpdateUser = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Main.get().centerPanel.adminUsersPanel.users.updateUser(user);
 			viewUser(user);
@@ -467,15 +467,14 @@ public class UserData extends Composite {
 	/**
 	 * Call back find all roles
 	 */
-	final AsyncCallback callbackFindAllRoles = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List roles = (List) result;
+	final AsyncCallback<List<String>> callbackFindAllRoles = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result) {
 			completeRoleList = new ArrayList<String>();
 			
 			rolesList.addItem(" - ");
 			addRole.setEnabled(false); // Always start with addRole button disabled
-			for (Iterator it = roles.iterator(); it.hasNext();) {
-				String role = (String) it.next();
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
+				String role = it.next();
 				completeRoleList.add(role);
 				
 				if (user.getRoles()!=null && !user.getRoles().contains(role)) {
@@ -588,9 +587,9 @@ public class UserData extends Composite {
 	 * 
 	 * @param roles The roles list
 	 */
-	private void setUserRoles(List roles) {
-		for (Iterator it = roles.iterator(); it.hasNext(); ){
-			String role = (String) it.next();
+	private void setUserRoles(List<String> roles) {
+		for (Iterator<String> it = roles.iterator(); it.hasNext(); ){
+			String role = it.next();
 			rolesTable.setWidget(rolesTable.getRowCount(), 0, new RolePanel(role));
 			staticRolesTable.setHTML(staticRolesTable.getRowCount(), 0, role);
 		}

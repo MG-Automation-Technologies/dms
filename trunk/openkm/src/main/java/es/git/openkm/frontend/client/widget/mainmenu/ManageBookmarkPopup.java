@@ -30,7 +30,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -70,7 +69,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	private ScrollPanel scrollPanel;
 	private ScrollPanel scrollPanelBookmark;
 	private TextBox textBox;
-	private Map bookmarkMap = new HashMap();
+	private Map<String,GWTBookmark> bookmarkMap = new HashMap<String,GWTBookmark>();
 	private int selectedRow = -1;
 	private int columns = 3;
 	
@@ -238,13 +237,12 @@ public class ManageBookmarkPopup extends DialogBox {
 	/**
 	 * Callback get all
 	 */
-	final AsyncCallback callbackGetAll = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List bookmarkList = (List) result;
+	final AsyncCallback<List<GWTBookmark>> callbackGetAll = new AsyncCallback<List<GWTBookmark>>() {
+		public void onSuccess(List<GWTBookmark> result) {
 			int row = table.getRowCount();
-			bookmarkMap = new HashMap();
+			bookmarkMap = new HashMap<String,GWTBookmark>();
 			
-			for (Iterator it = bookmarkList.iterator(); it.hasNext();) {
+			for (Iterator<GWTBookmark> it = result.iterator(); it.hasNext();) {
 				GWTBookmark bookmark = (GWTBookmark) it.next();	
 				bookmarkMap.put(bookmark.getName(),bookmark);
 				
@@ -288,7 +286,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	/**
 	 * Callback remove
 	 */
-	final AsyncCallback callbackRemove = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRemove = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			if (selectedRow>=0) {
 				bookmarkMap.remove(table.getText(selectedRow,1));
@@ -316,17 +314,16 @@ public class ManageBookmarkPopup extends DialogBox {
 	/**
 	 * Callback rename
 	 */
-	final AsyncCallback callbackRename = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			GWTBookmark bookmark = (GWTBookmark) result;
+	final AsyncCallback<GWTBookmark> callbackRename = new AsyncCallback<GWTBookmark>() {
+		public void onSuccess(GWTBookmark result) {
 			if (selectedRow>=0) {
 				//String newName = textBox.getText();
 				//GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(selectedRow,1));
 				bookmarkMap.remove(table.getText(selectedRow,1));
-				bookmark.setName(bookmark.getName());
-				bookmarkMap.put(bookmark.getName(),bookmark);
-				tableBookmark.setHTML(0,1,bookmark.getName());
-				table.setHTML(selectedRow,1,bookmark.getName());
+				result.setName(result.getName());
+				bookmarkMap.put(result.getName(),result);
+				tableBookmark.setHTML(0,1,result.getName());
+				table.setHTML(selectedRow,1,result.getName());
 			}
 			deleteButton.setEnabled(true);
 			updateButton.setEnabled(true);
@@ -373,7 +370,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	 * Removes all rows
 	 */
 	private void removeAll(){
-		bookmarkMap = new HashMap();
+		bookmarkMap = new HashMap<String,GWTBookmark>();
 		while (table.getRowCount()>0){
 			table.removeRow(0);
 		}

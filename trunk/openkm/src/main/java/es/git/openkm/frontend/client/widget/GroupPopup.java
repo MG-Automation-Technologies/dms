@@ -136,12 +136,11 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result){
 			listBox.clear();
 			listBox.addItem("",""); // Adds empty value
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
 				String groupKey = (String) it.next();
 				String groupTranslation = Main.propertyGroupI18n(groupKey);
 				listBox.addItem(groupTranslation,groupKey);
@@ -156,7 +155,7 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to add a group
 	 */
-	final AsyncCallback callbackAddGroup = new AsyncCallback() {
+	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 		}
 

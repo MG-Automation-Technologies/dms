@@ -48,7 +48,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 	private FlexTable table;
 	public Button button;
 	public int actual = -1;
-	private List msgList = new ArrayList();
+	private List<HTML> msgList = new ArrayList<HTML>();
 	
 	public StartUpPopup() {
 		// Establishes auto-close when click outside

@@ -19,7 +19,6 @@
 
 package es.git.openkm.frontend.client.widget.dashboard;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 

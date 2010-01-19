@@ -20,6 +20,7 @@
 package es.git.openkm.frontend.client.widget.startup;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
@@ -194,7 +195,7 @@ public class StartUp {
 	/**
 	 * Call back add new granted user
 	 */
-	final AsyncCallback callbackKeepAlive = new AsyncCallback() {
+	final AsyncCallback<Object> callbackKeepAlive = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 		}
 			
@@ -206,9 +207,9 @@ public class StartUp {
 	/**
 	 * Gets asyncronous to add a group
 	 */
-	final AsyncCallback callbackGetPropertyGroupTranslations = new AsyncCallback() {
-		public void onSuccess(Object result){
-			Main.get().hPropertyGroupI18n = (HashMap) result;
+	final AsyncCallback<Map<String,String>> callbackGetPropertyGroupTranslations = new AsyncCallback<Map<String,String>>() {
+		public void onSuccess(Map<String,String> result){
+			Main.get().hPropertyGroupI18n = result;
 			nextStatus(StartUp.STARTUP_LOADING_TAXONOMY); // Sets the next status to loading
 		}
 

@@ -362,7 +362,7 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Move document or folder
 	 */
-	final AsyncCallback callbackMove = new AsyncCallback() {
+	final AsyncCallback<Object> callbackMove = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			hide();
 			action = ACTION_NONE; // Always resets initial value to ACTION_NONE
@@ -437,7 +437,7 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Copy document or folder
 	 */
-	final AsyncCallback callbackCopy = new AsyncCallback() {
+	final AsyncCallback<Object> callbackCopy = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			action = ACTION_NONE; // Always resets initial value to ACTION_NONE
 			hide();
@@ -464,7 +464,7 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Create document from template
 	 */
-	final AsyncCallback callbackCopyFromTemplate = new AsyncCallback() {
+	final AsyncCallback<Object> callbackCopyFromTemplate = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			action = ACTION_NONE; // Always resets initial value to ACTION_NONE
 			hide();
@@ -503,7 +503,7 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Restore documento or folder
 	 */
-	final AsyncCallback callbackRestore = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRestore = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			action = ACTION_NONE; // Always resets initial value to ACTION_NONE
 			hide();

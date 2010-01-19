@@ -306,7 +306,7 @@ public class UserScrollTable extends Composite {
 	/**
 	 * Call back add new user grant
 	 */
-	final AsyncCallback callbackGrantUser = new AsyncCallback() {
+	final AsyncCallback<Object> callbackGrantUser = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 		}
 
@@ -327,7 +327,7 @@ public class UserScrollTable extends Composite {
 	/**
 	 * Call back revoke user grant
 	 */
-	final AsyncCallback callbackRevokeUser = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRevokeUser = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			if (!dataTable.getSelectedRows().isEmpty()) {
 				int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();

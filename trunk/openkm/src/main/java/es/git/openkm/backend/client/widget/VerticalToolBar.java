@@ -363,17 +363,6 @@ public class VerticalToolBar extends Composite {
 			setWidth("100%");
 		}
 		
-		/**
-		 * setLabelText
-		 * 
-		 * @param text
-		 */
-		public void setLabelText(String text) {
-			html.setText(text);
-			html.setTitle(text);
-			image.setTitle(text);
-		}
-		
 		/* (non-Javadoc)
 		 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
 		 */

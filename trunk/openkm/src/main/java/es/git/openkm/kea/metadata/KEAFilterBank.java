@@ -76,7 +76,7 @@ public class KEAFilterBank {
         Stopwords stopwords = null;
 		if (className != null) {
 			try {
-				Class clazz = Class.forName(className);
+				Class<?> clazz = Class.forName(className);
 				stopwords = (Stopwords) clazz.newInstance();
 			} catch (Exception e) {
 				log.error("Error creating class instance", e);

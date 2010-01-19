@@ -151,11 +151,11 @@ public class TabFolder extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback callbackGetRoot = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
 			//Only executes on initalization and the actualItem is root element on initialization
 			//We put the id on root
-			setProperties((GWTFolder) result);
+			setProperties(result);
 		}
 
 		public void onFailure(Throwable caught) {

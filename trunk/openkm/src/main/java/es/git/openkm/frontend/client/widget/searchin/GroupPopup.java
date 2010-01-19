@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -63,7 +64,7 @@ public class GroupPopup extends DialogBox {
 	private Button addButton;
 	private ListBox groupListBox;
 	private ListBox propertyListBox;
-	private HashMap hMetaData = new HashMap();
+	private Map<String, GWTMetaData> hMetaData = new HashMap<String,GWTMetaData>();
 	private FlexTable table;
 	private Label groupLabel;
 	private Label propertyLabel;
@@ -168,13 +169,12 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result){
 			groupListBox.clear();
 			groupListBox.addItem("",""); // Adds empty value
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
+				String groupKey = it.next();
 				String groupTranslation = Main.propertyGroupI18n(groupKey);
 				groupListBox.addItem(groupTranslation,groupKey);
 			}
@@ -190,17 +190,16 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties
 	 */
-	final AsyncCallback callbackGetMetaData = new AsyncCallback() {
-		public void onSuccess(Object result){
-			hMetaData = (HashMap) result;
+	final AsyncCallback<Map<String, GWTMetaData>> callbackGetMetaData = new AsyncCallback<Map<String, GWTMetaData>>() {
+		public void onSuccess(Map<String, GWTMetaData> result){
 			propertyListBox.clear();
 			propertyListBox.setVisible(true);
 			propertyLabel.setVisible(true);
 			propertyListBox.addItem("",""); // First item is always blank
 			
-			Collection actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 
-			for (Iterator it = hMetaData.keySet().iterator(); it.hasNext();) {
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
 				String propertyName = (String) it.next();
 				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
 					propertyListBox.addItem(Main.propertyGroupI18n(propertyName),propertyName);
@@ -216,15 +215,14 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties and validate is there's one not assigned
 	 */
-	final AsyncCallback callbackGetMetaDataToValidate = new AsyncCallback() {
-		public void onSuccess(Object result){
-			hMetaData = (HashMap) result;
-			
-			Collection actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+	final AsyncCallback<Map<String, GWTMetaData>> callbackGetMetaDataToValidate = new AsyncCallback<Map<String, GWTMetaData>>() {
+		public void onSuccess(Map<String, GWTMetaData> result){
+
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 			boolean found = false;
 			
-			for (Iterator it = hMetaData.keySet().iterator(); it.hasNext();) {
-				String propertyName = (String) it.next();
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
+				String propertyName = it.next();
 				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
 					found = true;
 				}

@@ -60,7 +60,7 @@ public class ReportUtil {
 	 * @throws JRException
 	 */
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
-			Map<String, String> parameters, int outputType,	Collection colleccion) throws Exception {
+			Map<String, String> parameters, int outputType,	Collection<Object> colleccion) throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			try {

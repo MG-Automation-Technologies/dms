@@ -131,14 +131,14 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 		log.debug("createUser()");
 		try {
 			List<String> roleList = new ArrayList<String>();
-			for (Iterator it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
-				Role role = (Role) it.next();
+			for (Iterator<Role> it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
+				Role role = it.next();
 				roleList.add(role.getId());
 			}
 			
 			AuthDAO.getInstance().createUser(Util.copy(gWTUser));
-			for (Iterator it = gWTUser.getRoles().iterator(); it.hasNext();) {
-				String role = (String) it.next();
+			for (Iterator<String> it = gWTUser.getRoles().iterator(); it.hasNext();) {
+				String role = it.next();
 				
 				// If role not exist must create
 				if (!roleList.contains(role)) {
@@ -163,16 +163,16 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 		log.debug("updateUser()");
 		List<String> roleList = new ArrayList<String>();
 		try {
-			for (Iterator it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
-				Role role = (Role) it.next();
+			for (Iterator<Role> it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
+				Role role = it.next();
 				roleList.add(role.getId());
 			}
 			
 			AuthDAO.getInstance().deleteUserRoles(Util.copy(gWTUser));
 			AuthDAO.getInstance().updateUser(Util.copy(gWTUser));
 			AuthDAO.getInstance().updateUserPassword(gWTUser.getId(), gWTUser.getPass());
-			for (Iterator it = gWTUser.getRoles().iterator(); it.hasNext();) {
-				String role = (String) it.next();
+			for (Iterator<String> it = gWTUser.getRoles().iterator(); it.hasNext();) {
+				String role = it.next();
 				
 				// If role not exist must create
 				if (!roleList.contains(role)) {
@@ -213,8 +213,8 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 		List<String> al = new ArrayList<String>();
 		
 		try {
-			for (Iterator it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
-				Role role = (Role) it.next();
+			for (Iterator<Role> it = AuthDAO.getInstance().findAllRoles().iterator(); it.hasNext();) {
+				Role role = it.next();
 				al.add(role.getId());
 			}
 		} catch (SQLException e) {
@@ -244,10 +244,10 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 			filter.setActDateEnd(end);
 			filter.setActUser(user);
 			filter.setActAction(action);
-			Collection activityCol = dao.findByFilter(filter);
+			Collection<Activity> activityCol = dao.findByFilter(filter);
 			
-			for (Iterator it = activityCol.iterator(); it.hasNext();) {
-				Activity vo = (Activity) it.next();
+			for (Iterator<Activity> it = activityCol.iterator(); it.hasNext();) {
+				Activity vo = it.next();
 				al.add(Util.copy(vo));
 			}
 			

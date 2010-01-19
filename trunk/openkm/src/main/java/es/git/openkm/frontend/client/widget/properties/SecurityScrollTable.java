@@ -269,20 +269,19 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Call back get granted users
 	 */
-	final AsyncCallback callbackGetGrantedUsers = new AsyncCallback() {
-		public void onSuccess(Object result){
-			HashMap users = (HashMap) result;
-			List usersList = new ArrayList();
+	final AsyncCallback<HashMap<String,Byte>> callbackGetGrantedUsers = new AsyncCallback<HashMap<String,Byte>>() {
+		public void onSuccess(HashMap<String,Byte> result){
+			List<String> usersList = new ArrayList<String>();
 			
 			// Ordering grant roles to list
-			for (Iterator<String> it = users.keySet().iterator(); it.hasNext(); ) {
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext(); ) {
 				usersList.add(it.next());
 			}
 			Collections.sort(usersList, UserComparator.getInstance());
 			
 			for (Iterator<String> it = usersList.iterator(); it.hasNext(); ) {
 				String userName = it.next();
-				Byte permission = (Byte) users.get(userName);
+				Byte permission = (Byte) result.get(userName);
 				addUserRow(userName, permission);
 			}
 			
@@ -298,20 +297,19 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Call back get granted roles
 	 */
-	final AsyncCallback callbackGetGrantedRoles = new AsyncCallback() {
-		public void onSuccess(Object result){
-			HashMap roles = (HashMap) result;
-			List rolesList = new ArrayList();
+	final AsyncCallback<HashMap<String,Byte>> callbackGetGrantedRoles = new AsyncCallback<HashMap<String,Byte>>() {
+		public void onSuccess(HashMap<String,Byte> result){
+			List<String> rolesList = new ArrayList<String>();
 			
 			// Ordering grant roles to list
-			for (Iterator<String> it = roles.keySet().iterator(); it.hasNext(); ) {
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext(); ) {
 				rolesList.add(it.next());
 			}
 			Collections.sort(rolesList, RoleComparator.getInstance());
 			
 			for (Iterator<String> it = rolesList.iterator(); it.hasNext(); ) {
 				String groupName = it.next();
-				Byte permission = (Byte) roles.get(groupName);
+				Byte permission = (Byte) result.get(groupName);
 				addRolRow(groupName, permission);
 			}
 			

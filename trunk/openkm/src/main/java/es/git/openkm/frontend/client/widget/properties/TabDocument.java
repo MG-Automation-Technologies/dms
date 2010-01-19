@@ -58,7 +58,7 @@ public class TabDocument extends Composite {
 	public VersionScrollTable version;
 	public SecurityScrollTable security;
 	private VerticalPanel panel;
-	private List propertyGroup;
+	private List<PropertyGroup> propertyGroup;
 	private GWTDocument doc;
 	public Notes notes;
 	private Preview preview;
@@ -77,7 +77,7 @@ public class TabDocument extends Composite {
 		security = new SecurityScrollTable();
 		preview = new Preview();
 		panel = new VerticalPanel();
-		propertyGroup = new ArrayList();
+		propertyGroup = new ArrayList<PropertyGroup>();
 
 		tabPanel.add(document, Main.i18n("tab.document.properties"));
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
@@ -159,9 +159,8 @@ public class TabDocument extends Composite {
 		}
 		
 		if (!propertyGroup.isEmpty()) {
-			for (Iterator<Composite> it = propertyGroup.iterator(); it.hasNext();){
-				Composite widget = it.next();
-				tabPanel.remove(widget);
+			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
+				tabPanel.remove(it.next());
 			}
 			propertyGroup.clear();
 		}
@@ -230,13 +229,12 @@ public class TabDocument extends Composite {
 	/**
 	 * Gets asyncronous to get all groups assigned to a document
 	 */
-	final AsyncCallback callbackGetGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<String>> callbackGetGroups = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result){
 			GWTFolder gwtFolder = Main.get().activeFolderTree.getFolder();
 			
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
+				String groupKey = it.next();
 				String groupTranslation = Main.propertyGroupI18n(groupKey);
 				PropertyGroup group = new PropertyGroup(groupKey, doc, gwtFolder, visibleButton);
 				tabPanel.add(group, groupTranslation);

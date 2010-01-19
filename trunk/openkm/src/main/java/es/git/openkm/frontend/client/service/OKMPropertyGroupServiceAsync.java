@@ -19,7 +19,6 @@
 
 package es.git.openkm.frontend.client.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +33,11 @@ import es.git.openkm.frontend.client.bean.GWTMetaData;
 public interface OKMPropertyGroupServiceAsync {
 	public void getAllGroups(AsyncCallback<List<String>> callback);
 	public void getAllGroups(String docPath, AsyncCallback<List<String>> callback);
-	public void addGroup(String docPath, String grpName, AsyncCallback callback);
+	public void addGroup(String docPath, String grpName, AsyncCallback<?> callback);
 	public void getGroups(String docPath, AsyncCallback<List<String>> callback);
-	public void getTranslations(String lang, AsyncCallback<HashMap<String, String>> callback); 
+	public void getTranslations(String lang, AsyncCallback<Map<String, String>> callback); 
 	public void getProperties(String docPath, String grpName, AsyncCallback<Map<String, String[]>> callback);
 	public void getMetaData(String grpName, AsyncCallback<Map<String, GWTMetaData>> callback);
-	public void setProperties(String docPath, String grpName, HashMap<String, String[]> properties, AsyncCallback callback);
-	public void removeGroup( String docPath, String grpName, AsyncCallback callback);
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties, AsyncCallback<?> callback);
+	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
 }

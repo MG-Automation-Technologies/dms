@@ -228,11 +228,9 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Call back get granted users
 	 */
-	final AsyncCallback callbackAllUsers = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List users = (List) result;
-			
-			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
+	final AsyncCallback<List<String>> callbackAllUsers = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result) {			
+			for (Iterator<String> it = result.iterator(); it.hasNext(); ) {
 				String userName = it.next();
 				userTable.addRow(userName);
 			}
@@ -246,7 +244,7 @@ public class NotifyPopup extends DialogBox  {
 	/**
 	 * Call back send link notification
 	 */
-	final AsyncCallback callbackSendLinkNotification = new AsyncCallback() {
+	final AsyncCallback<Object> callbackSendLinkNotification = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 		}
 

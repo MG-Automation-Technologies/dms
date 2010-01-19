@@ -137,11 +137,11 @@ public class StatsPanel extends Composite {
 	/**
 	 * Get asyncronous uuid
 	 */
-	final AsyncCallback callbackGetUuid = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			uuid.setHTML((String) result + "&nbsp;&nbsp;");
+	final AsyncCallback<String> callbackGetUuid = new AsyncCallback<String>() {
+		public void onSuccess(String result) {
+			uuid.setHTML(result + "&nbsp;&nbsp;");
 			support.setHTML("<a href=\"mailto:support@openkm.com?subject=OpenKM Support - UUID(" + 
-							   (String) result + ")\">support@openkm.com</a>");
+							   result + ")\">support@openkm.com</a>");
 		}
 
 		public void onFailure(Throwable caught) {
@@ -161,8 +161,8 @@ public class StatsPanel extends Composite {
 	/**
 	 * Get asyncronous version
 	 */
-	final AsyncCallback callbackGetAppVersion = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<String> callbackGetAppVersion = new AsyncCallback<String>() {
+		public void onSuccess(String result) {
 			version.setHTML("Version: " + result);
 		}
 

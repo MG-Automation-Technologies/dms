@@ -28,7 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMGeneralUtilsServiceAsync {
-	public void repositoryImport(String repoPath, String fsPath, AsyncCallback callback);
-	public void repositoryExport(String repoPath, String fsPath, AsyncCallback callback);
-	public void registerCustomNodeTypes(String pgPath, AsyncCallback callback);
+	public void repositoryImport(String repoPath, String fsPath, AsyncCallback<String> callback);
+	public void repositoryExport(String repoPath, String fsPath, AsyncCallback<String> callback);
+	public void registerCustomNodeTypes(String pgPath, AsyncCallback<?> callback);
 }

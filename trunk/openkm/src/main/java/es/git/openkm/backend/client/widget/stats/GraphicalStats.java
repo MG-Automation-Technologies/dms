@@ -88,12 +88,10 @@ public class GraphicalStats extends Composite {
 	/**
 	 * Call back get folders by context
 	 */
-	final AsyncCallback callbackGetFoldersByContext = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			//getOtherStats();
-			GWTStatsInfo statsInfo = (GWTStatsInfo) result;
-			foldersByContext = new GraphCircleByContext(statsInfo.getPercents(), 
-														statsInfo.getSizes(), 
+	final AsyncCallback<GWTStatsInfo> callbackGetFoldersByContext = new AsyncCallback<GWTStatsInfo>() {
+		public void onSuccess(GWTStatsInfo result) {
+			foldersByContext = new GraphCircleByContext(result.getPercents(), 
+														result.getSizes(), 
 														pieTypes, Main.i18n("stats.context.folder.number"), 
 														"stats.context.folders",
 														GraphCircleByContext.VALUE_NUMERIC);
@@ -111,12 +109,11 @@ public class GraphicalStats extends Composite {
 	/**
 	 * Call back get documents by context
 	 */
-	final AsyncCallback callbackGetDocumentsByContext = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<GWTStatsInfo> callbackGetDocumentsByContext = new AsyncCallback<GWTStatsInfo>() {
+		public void onSuccess(GWTStatsInfo result) {
 			getFoldersByContext();
-			GWTStatsInfo statsInfo = (GWTStatsInfo) result;
-			documentsByContext = new GraphCircleByContext(statsInfo.getPercents(), 
-														  statsInfo.getSizes(),
+			documentsByContext = new GraphCircleByContext(result.getPercents(), 
+					result.getSizes(),
 														  pieTypes, 
 														  Main.i18n("stats.context.document.number"), 
 														  "stats.context.documents",
@@ -134,24 +131,23 @@ public class GraphicalStats extends Composite {
 	/**
 	 * Call back get size by context
 	 */
-	final AsyncCallback callbackGetDocumentsSizeByContext = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<GWTStatsInfo> callbackGetDocumentsSizeByContext = new AsyncCallback<GWTStatsInfo>() {
+		public void onSuccess(GWTStatsInfo result) {
 			getDocumentsByContext();
-			GWTStatsInfo statsInfo = (GWTStatsInfo) result;
 			
 			// Makes somes variation to statistics minor values always must be 1%
-			for (int i=0; i<statsInfo.getPercents().length; i++) {
-				if (!statsInfo.getSizes()[i].equals("0") && statsInfo.getPercents()[i]<0.01) {
-					statsInfo.getPercents()[i]=0.01;
+			for (int i=0; i<result.getPercents().length; i++) {
+				if (!result.getSizes()[i].equals("0") && result.getPercents()[i]<0.01) {
+					result.getPercents()[i]=0.01;
 					// Prevent negative values for some strange possible cases
-					if (statsInfo.getPercents()[0]>0.01) {
-						statsInfo.getPercents()[0] = statsInfo.getPercents()[0] - 0.01;
+					if (result.getPercents()[0]>0.01) {
+						result.getPercents()[0] = result.getPercents()[0] - 0.01;
 					}
 				}
 			}
 			
-			sizeByContext = new GraphCircleByContext(statsInfo.getPercents(), 
-					 								 statsInfo.getSizes(), 
+			sizeByContext = new GraphCircleByContext(result.getPercents(), 
+													 result.getSizes(), 
 													 pieTypes, 
 													 Main.i18n("stats.context.size"), 
 													 "",

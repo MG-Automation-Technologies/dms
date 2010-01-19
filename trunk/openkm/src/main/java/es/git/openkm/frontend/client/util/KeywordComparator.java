@@ -4,16 +4,14 @@ import java.util.Comparator;
 
 import es.git.openkm.frontend.client.bean.GWTKeyword;
 
-public class KeywordComparator implements Comparator {
-	private static final Comparator INSTANCE  = new KeywordComparator();
+public class KeywordComparator implements Comparator<GWTKeyword> {
+	private static final Comparator<GWTKeyword> INSTANCE  = new KeywordComparator();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTKeyword> getInstance() {
 		return INSTANCE;
 	}
 	
-	public int compare(Object arg0, Object arg1) {
-		GWTKeyword first = ((GWTKeyword) arg0);
-		GWTKeyword second = ((GWTKeyword) arg1);
-		return first.getKeyword().compareTo(second.getKeyword());
+	public int compare(GWTKeyword arg0, GWTKeyword arg1) {
+		return arg0.getKeyword().compareTo(arg1.getKeyword());
 	}
 }

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Session;
 
@@ -157,19 +158,19 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("getUngrantedUsers("+ nodePath +")");
 		List<String> userList = new ArrayList<String>(); 
 		String token = getToken();
-		HashMap hm = new HashMap();
+		Map<String,Byte> hm = new HashMap<String,Byte> ();
 		
 		try {
-			Collection col = OKMAuth.getInstance().getUsers(token);
+			Collection<String> col = OKMAuth.getInstance().getUsers(token);
 			hm = OKMAuth.getInstance().getGrantedUsers(token, nodePath);
 			
-			for (Iterator it = col.iterator(); it.hasNext();){
-				String user = (String) it.next();
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String user = it.next();
 				boolean found = false;
 				
 				// Not add users that are granted
-				for (Iterator ith = hm.keySet().iterator(); ith.hasNext(); ) {
-					if (((String) ith.next()).equals(user)){
+				for (Iterator<String> ith = hm.keySet().iterator(); ith.hasNext(); ) {
+					if ((ith.next()).equals(user)){
 						found = true;
 					}
 				}
@@ -205,19 +206,19 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("getUngrantedRoles("+ nodePath +")");
 		List<String> roleList = new ArrayList<String>(); 
 		String token = getToken();
-		HashMap hm = new HashMap();
+		HashMap<String,Byte>  hm = new HashMap<String,Byte> ();
 		
 		try {
-			Collection col = OKMAuth.getInstance().getRoles(token);
+			Collection<String> col = OKMAuth.getInstance().getRoles(token);
 			hm = OKMAuth.getInstance().getGrantedRoles(token, nodePath);
 			
 			//Not add rols that are granted
-			for (Iterator it = col.iterator(); it.hasNext();){
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				boolean found = false;
-				String rol = (String) it.next();
+				String rol = it.next();
 				
-				for (Iterator ith = hm.keySet().iterator(); ith.hasNext();){
-					if (((String) ith.next()).equals(rol)){
+				for (Iterator<String> ith = hm.keySet().iterator(); ith.hasNext();){
+					if ((ith.next()).equals(rol)){
 						found = true;
 					}
 				}
@@ -432,9 +433,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		List<String> userList = new ArrayList<String>();
 		
 		try {
-			Collection col = OKMAuth.getInstance().getUsers(token);
-			for (Iterator it = col.iterator(); it.hasNext();){
-				String user = (String) it.next();
+			Collection<String> col = OKMAuth.getInstance().getUsers(token);
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String user = it.next();
 				userList.add(user);
 			}
 			

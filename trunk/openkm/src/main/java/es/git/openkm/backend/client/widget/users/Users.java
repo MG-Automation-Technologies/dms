@@ -161,13 +161,11 @@ public class Users extends Composite {
 	/**
 	 * Call back get ungranted users
 	 */
-	final AsyncCallback callbackGetLogedUsers = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List userList = (List) result;
-			
+	final AsyncCallback<List<GWTSessionInfo>> callbackGetLogedUsers = new AsyncCallback<List<GWTSessionInfo>>() {
+		public void onSuccess(List<GWTSessionInfo> result) {
 			Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.reset(); // Prepares for refreshing
-			for (Iterator it = userList.iterator(); it.hasNext(); ) {
-				Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.addRow((GWTSessionInfo) it.next());
+			for (Iterator<GWTSessionInfo> it = result.iterator(); it.hasNext(); ) {
+				Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.addRow(it.next());
 			}
 			Main.get().centerPanel.statsPanel.usersPanel.usersMonitor.refreshingActiveUsersIcons();
 			

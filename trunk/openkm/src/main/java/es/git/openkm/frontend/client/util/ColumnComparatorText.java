@@ -23,16 +23,14 @@ import java.util.Comparator;
 
 import es.git.openkm.frontend.client.bean.GWTObjectToOrder;
 
-public class ColumnComparatorText implements Comparator {
-	private static final Comparator INSTANCE  = new ColumnComparatorText();
+public class ColumnComparatorText implements Comparator<GWTObjectToOrder> {
+	private static final Comparator<GWTObjectToOrder> INSTANCE  = new ColumnComparatorText();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTObjectToOrder> getInstance() {
 		return INSTANCE;
 	}
 
-	public int compare(Object arg0, Object arg1) {
-		GWTObjectToOrder first = (GWTObjectToOrder) arg0;
-		GWTObjectToOrder second = (GWTObjectToOrder) arg1;
-		return ((String)first.getObject()).compareTo((String)second.getObject());
+	public int compare(GWTObjectToOrder arg0, GWTObjectToOrder arg1) {
+		return ((String)arg0.getObject()).compareTo((String)arg1.getObject());
 	}
 }

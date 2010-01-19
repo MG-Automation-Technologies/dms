@@ -19,17 +19,21 @@
 
 package es.git.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import es.git.openkm.frontend.client.bean.GWTMail;
 
 /**
  * @author jllort
  *
  */
 public interface OKMMailServiceAsync {
-	public void getChilds(String fldPath, AsyncCallback<?> callback);
+	public void getChilds(String fldPath, AsyncCallback<List<GWTMail>> callback);
 	public void delete(String mailPath, AsyncCallback<?> callback);
 	public void move(String docPath, String destPath, AsyncCallback<?> callback);
 	public void purge(String mailPath, AsyncCallback<?> callback);
 	public void copy(String mailPath, String fldPath, AsyncCallback<?> callback);
-	public void getProperties(String mailPath, AsyncCallback<?> callback);
+	public void getProperties(String mailPath, AsyncCallback<GWTMail> callback);
 }

@@ -4,16 +4,18 @@ import java.util.Comparator;
 
 import es.git.openkm.frontend.client.bean.GWTDocument;
 
-public class DocumentComparator implements Comparator {
-	private static final Comparator INSTANCE  = new DocumentComparator();
+/**
+ * @author jllort
+ *
+ */
+public class DocumentComparator implements Comparator<GWTDocument> {
+	private static final Comparator<GWTDocument> INSTANCE  = new DocumentComparator();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTDocument> getInstance() {
 		return INSTANCE;
 	}
 	
-	public int compare(Object arg0, Object arg1) {
-		GWTDocument first = ((GWTDocument) arg0);
-		GWTDocument second = ((GWTDocument) arg1);
-		return first.getName().compareTo(second.getName());
+	public int compare(GWTDocument arg0, GWTDocument arg1) {
+		return arg0.getName().compareTo(arg1.getName());
 	}
 }

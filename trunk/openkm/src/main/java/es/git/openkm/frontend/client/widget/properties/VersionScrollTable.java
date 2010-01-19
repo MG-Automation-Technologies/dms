@@ -297,10 +297,8 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Refresh the version history
 	 */
-	final AsyncCallback callbackGetVersionHistory = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List<GWTVersion> versionList = (List<GWTVersion>) result;
-			boolean autofit = false;
+	final AsyncCallback<List<GWTVersion>> callbackGetVersionHistory = new AsyncCallback<List<GWTVersion>>() {
+		public void onSuccess(List<GWTVersion> result) {
 			removeAllRows();
 			
 			// Initializes buttons lists ( to make language translations )
@@ -308,18 +306,14 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			buttonRestore = new ArrayList<Button>();
 			
 			// When there's more than one version document can purge it
-			if (versionList.size()>1) {
+			if (result.size()>1) {
 				purge.setEnabled(true);
 			} else {
 				purge.setEnabled(false);
 			}
 			
-			for (Iterator<GWTVersion> it = versionList.iterator(); it.hasNext();) {
+			for (Iterator<GWTVersion> it = result.iterator(); it.hasNext();) {
 				GWTVersion version = it.next();
-				// Sets the autofit columns only is there¡s some content there
-				if (version.getComment()!=null && !version.getComment().equals("")) {
-					autofit = true;
-				}
 				addRow(version);
 			}
 			
@@ -335,7 +329,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Refresh the version history after restoring version
 	 */
-	final AsyncCallback callbackRestoreVersion = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRestoreVersion = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Main.get().mainPanel.browser.tabMultiple.status.unsetRestoreVersion();
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();
@@ -350,7 +344,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	/**
 	 * Refresh the version history after purge version
 	 */
-	final AsyncCallback callbackPurgeVersionHistory = new AsyncCallback() {
+	final AsyncCallback<Object> callbackPurgeVersionHistory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			Main.get().mainPanel.browser.tabMultiple.status.unsetPurgeVersionHistory();
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();

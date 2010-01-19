@@ -62,10 +62,10 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		String token = getToken();
 		
 		try {
-			Collection col = OKMBookmark.getInstance().getAll(token);
+			Collection<Bookmark> col = OKMBookmark.getInstance().getAll(token);
 			
-			for (Iterator it = col.iterator(); it.hasNext();) {		
-				Bookmark bookmark = (Bookmark) it.next();
+			for (Iterator<Bookmark> it = col.iterator(); it.hasNext();) {		
+				Bookmark bookmark = it.next();
 				log.debug("Bookmark: "+bookmark);
 				GWTBookmark bookmarkClient = Util.copy(bookmark);
 

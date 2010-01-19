@@ -130,7 +130,7 @@ public class SearchSaved extends Composite {
 	/**
 	 * Call Back delete search 
 	 */
-	final AsyncCallback callbackDeleteSearch = new AsyncCallback() {
+	final AsyncCallback<Object> callbackDeleteSearch = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			table.removeRow(getSelectedRow());
 			table.selectPrevRow();

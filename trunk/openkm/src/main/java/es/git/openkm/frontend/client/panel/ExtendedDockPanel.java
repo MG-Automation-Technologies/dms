@@ -100,7 +100,6 @@ public class ExtendedDockPanel extends Composite {
 	private HashMap<String, Coordenates> dashboardMap  = new HashMap<String, Coordenates>();
 	private HashMap<String, Coordenates> administrationMap  = new HashMap<String, Coordenates>();
 	
-	private NativePreviewEvent keyBoardShorcuts = null;
 	private HandlerRegistration handlerRegistration = null;
 	private FolderSelectPopup folderSelectPopup;
 	

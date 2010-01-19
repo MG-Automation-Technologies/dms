@@ -66,10 +66,10 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		String token = getToken();
 
 		try {
-			Collection col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<String> col = OKMPropertyGroup.getInstance().getAllGroups(token);
 			
-			for (Iterator it = col.iterator(); it.hasNext();) {	
-				String group = (String) it.next();
+			for (Iterator<String> it = col.iterator(); it.hasNext();) {	
+				String group = it.next();
 				log.debug("Group: "+group);
 				
 				groupList.add(group);
@@ -96,11 +96,11 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		String token = getToken();
 
 		try {
-			Collection col = OKMPropertyGroup.getInstance().getAllGroups(token);
-			List actualGroupsList = getGroups(docPath);
+			Collection<String> col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			List<String> actualGroupsList = getGroups(docPath);
 			
-			for (Iterator it = col.iterator(); it.hasNext();) {	
-				String group = (String) it.next();
+			for (Iterator<String> it = col.iterator(); it.hasNext();) {	
+				String group = it.next();
 				log.debug("Group: "+group);
 				
 				groupList.add(group);
@@ -108,8 +108,8 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			// Purge from list values that are assigned to document
 			if (!actualGroupsList.isEmpty()) {
-				for (Iterator it = actualGroupsList.iterator(); it.hasNext();) {	
-					String group = (String) it.next();
+				for (Iterator<String> it = actualGroupsList.iterator(); it.hasNext();) {	
+					String group = it.next();
 					log.debug("Removing Group: "+group);
 					
 					groupList.remove(group);
@@ -172,10 +172,10 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		String token = getToken();
 
 		try {
-			Collection col = OKMPropertyGroup.getInstance().getGroups(token, docPath);
+			Collection<String> col = OKMPropertyGroup.getInstance().getGroups(token, docPath);
 			
-			for (Iterator it = col.iterator(); it.hasNext();) {	
-				String group = (String) it.next();
+			for (Iterator<String> it = col.iterator(); it.hasNext();) {	
+				String group = it.next();
 				log.debug("Group: "+group);
 
 				groupList.add(group);
@@ -253,15 +253,15 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException {
 		log.debug("getMetaData(" + grpName +")");
 		String token = getToken();
-		Map properties = new HashMap();
+		Map<String, MetaData> properties = new HashMap<String, MetaData>();
 		Map<String, GWTMetaData> gwtProperties = new HashMap<String, GWTMetaData>();
 
 		try {
 			properties = OKMPropertyGroup.getInstance().getMetaData(token, grpName);
-			Collection col = properties.keySet();
+			Collection<String> col = properties.keySet();
 			
-			for (Iterator it = col.iterator(); it.hasNext(); ) {
-				String key = (String) it.next();
+			for (Iterator<String> it = col.iterator(); it.hasNext(); ) {
+				String key = it.next();
 				gwtProperties.put(key, Util.copy((MetaData) properties.get(key)));
 			}
 			

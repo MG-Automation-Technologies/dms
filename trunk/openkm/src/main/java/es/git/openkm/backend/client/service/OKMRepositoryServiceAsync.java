@@ -21,13 +21,15 @@ package es.git.openkm.backend.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import es.git.openkm.backend.client.bean.GWTFolder;
+
 /**
  * @author jllort
  *
  */
 public interface OKMRepositoryServiceAsync {
-	public void getRoot(AsyncCallback callback);
-	public void getTemplate(AsyncCallback callback); 
-	public void getUuid(AsyncCallback callback);
-	public void getAppVersion(AsyncCallback callback);
+	public void getRoot(AsyncCallback<GWTFolder> callback);
+	public void getTemplate(AsyncCallback<GWTFolder> callback); 
+	public void getUuid(AsyncCallback<String> callback);
+	public void getAppVersion(AsyncCallback<String> callback);
 }

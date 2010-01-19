@@ -462,7 +462,7 @@ public class DashboardWidget extends Composite {
 	/**
 	 * Callback handler
 	 */
-	final AsyncCallback callbackVisiteNode = new AsyncCallback() {
+	final AsyncCallback<Object> callbackVisiteNode = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			// This method should call markPathAsViewed
 		}

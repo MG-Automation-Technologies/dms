@@ -313,9 +313,9 @@ public class GeneralUtils extends Composite {
 	/**
 	 * Call back repository import
 	 */
-	final AsyncCallback<Object> callBackRepositoryImport = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Main.get().centerPanel.generalUtilsPanel.setMsg((String) result);
+	final AsyncCallback<String> callBackRepositoryImport = new AsyncCallback<String>() {
+		public void onSuccess(String result) {
+			Main.get().centerPanel.generalUtilsPanel.setMsg(result);
 			setEnabledButtons(true);
 			status.unsetFlag_import();
 		}
@@ -330,9 +330,9 @@ public class GeneralUtils extends Composite {
 	/**
 	 * Call back repository export
 	 */
-	final AsyncCallback<Object> callBackRepositoryExport = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-			Main.get().centerPanel.generalUtilsPanel.setMsg((String) result);
+	final AsyncCallback<String> callBackRepositoryExport = new AsyncCallback<String>() {
+		public void onSuccess(String result) {
+			Main.get().centerPanel.generalUtilsPanel.setMsg(result);
 			setEnabledButtons(true);
 			status.unsetFlag_export();
 		}

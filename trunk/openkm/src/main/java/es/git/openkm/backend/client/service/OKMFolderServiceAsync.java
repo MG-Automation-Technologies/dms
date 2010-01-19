@@ -19,7 +19,11 @@
 
 package es.git.openkm.backend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import es.git.openkm.backend.client.bean.GWTFolder;
 
 /**
  * OKMFolderServiceAsync
@@ -28,5 +32,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMFolderServiceAsync {
-	public void getChilds(String fldId, AsyncCallback callback);
+	public void getChilds(String fldId, AsyncCallback<List<GWTFolder>> callback);
 }

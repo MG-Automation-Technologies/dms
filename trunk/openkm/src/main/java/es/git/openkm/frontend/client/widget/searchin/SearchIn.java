@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -81,7 +82,7 @@ public class SearchIn extends Composite {
 	private static final int SELECT_NAVIGATOR_PERSONAL 		= 2;
 	private static final int SELECT_NAVIGATOR_MAIL 			= 3;
 	private static final int SELECT_NAVIGATOR_TRASH 		= 4;
-	private static final int SELECT_NAVIGATOR_ALL_CONTEXT 	= 5;
+	//private static final int SELECT_NAVIGATOR_ALL_CONTEXT 	= 5;
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
@@ -985,7 +986,7 @@ public class SearchIn extends Composite {
 	 * 
 	 * @return The actual properties values
 	 */
-	public Collection getActualProperties(){
+	public Collection<String> getActualProperties(){
 		return hWidgetProperties.keySet();
 	}
 	
@@ -1142,7 +1143,7 @@ public class SearchIn extends Composite {
 	 * 
 	 * @param hproperties The table properties map
 	 */
-	private void setTableProperties(HashMap hproperties) {
+	private void setTableProperties(Map<String, GWTPropertyParams> hproperties) {
 		GWTPropertyParams gWTPropertyParams;
 		Collection<String> properties = hproperties.keySet();
 		

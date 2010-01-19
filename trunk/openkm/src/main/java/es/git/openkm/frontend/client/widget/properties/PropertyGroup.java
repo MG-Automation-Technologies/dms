@@ -540,7 +540,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to set roperties
 	 */
-	final AsyncCallback callbackSetProperties = new AsyncCallback() {
+	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
 		}
@@ -554,7 +554,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to remove document group properties
 	 */
-	final AsyncCallback callbackRemoveGroup = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRemoveGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 		}
 
