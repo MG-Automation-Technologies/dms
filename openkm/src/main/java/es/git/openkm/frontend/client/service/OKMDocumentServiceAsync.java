@@ -19,31 +19,34 @@
 
 package es.git.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import es.git.openkm.frontend.client.bean.GWTDocument;
+import es.git.openkm.frontend.client.bean.GWTVersion;
 
 /**
  * @author jllort
  *
  */
 public interface OKMDocumentServiceAsync {
-	public void getChilds(String fldPath, AsyncCallback<?> callback);
-	public void getVersionHistory(String docPath, AsyncCallback<?> callback);
+	public void getChilds(String fldPath, AsyncCallback<List<GWTDocument>> callback);
+	public void getVersionHistory(String docPath, AsyncCallback<List<GWTVersion>> callback);
 	public void delete(String docPath, AsyncCallback<?> callback);
 	public void checkout(String docPath, AsyncCallback<?> callback);
 	public void cancelCheckout (String docPath, AsyncCallback<?> callback);
 	public void lock(String docPath, AsyncCallback<?> callback);
 	public void unlock(String docPath, AsyncCallback<?> callback);
-	public void rename(String docPath, String newName, AsyncCallback<?> callback);
+	public void rename(String docPath, String newName, AsyncCallback<GWTDocument> callback);
 	public void move(String docPath, String destPath, AsyncCallback<?> callback);
 	public void purge(String docPath, AsyncCallback<?> callback);
 	public void setProperties(GWTDocument doc, AsyncCallback<?> callback);
 	public void restoreVersion(String docPath, String versionId, AsyncCallback<?> callback);
-	public void get(String docPath, AsyncCallback<?> callback);
+	public void get(String docPath, AsyncCallback<GWTDocument> callback);
 	public void copy(String docPath, String fldPath, AsyncCallback<?> callback);
-	public void isValid(String docPath, AsyncCallback<?> callback);
-	public void getVersionHistorySize(String docPath, AsyncCallback<?> callback);
+	public void isValid(String docPath, AsyncCallback<Boolean> callback);
+	public void getVersionHistorySize(String docPath, AsyncCallback<Long> callback);
 	public void purgeVersionHistory(String docPath, AsyncCallback<?> callback);
 	public void addNote(String docPath, String text, AsyncCallback<?> callback);
 }

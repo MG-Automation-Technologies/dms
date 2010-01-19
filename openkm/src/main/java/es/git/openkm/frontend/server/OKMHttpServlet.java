@@ -45,6 +45,7 @@ public class OKMHttpServlet extends HttpServlet {
 	/**
 	 * @return The server token
 	 */
+	@SuppressWarnings("unchecked")
 	public String getToken(HttpServletRequest req) throws OKMException {
 		log.debug("getToken("+req+")");
 		String token = "";
@@ -67,13 +68,13 @@ public class OKMHttpServlet extends HttpServlet {
 				log.warn("** COOKIE Name = "+cookies[i].getName()+", Value="+cookies[i].getValue()+", Path="+cookies[i].getPath()+", Domain="+cookies[i].getDomain()+" **");
 			}
 			
-			for (Enumeration enu = req.getParameterNames(); enu.hasMoreElements(); ) {
-				String param = (String) enu.nextElement();
+			for (Enumeration<String> enu = req.getParameterNames(); enu.hasMoreElements(); ) {
+				String param = enu.nextElement();
 				log.warn("** PARAMETER "+param+" = "+req.getParameter(param)+" **");
 			}
 
-			for (Enumeration enu = req.getHeaderNames(); enu.hasMoreElements(); ) {
-				String header = (String) enu.nextElement();
+			for (Enumeration<String> enu = req.getHeaderNames(); enu.hasMoreElements(); ) {
+				String header = enu.nextElement();
 				log.warn("** HEADER "+header+" = "+req.getHeader(header)+" **");
 			}
 			

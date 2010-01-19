@@ -145,10 +145,9 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Refresh asyncronous subtree branch
 	 */
-	final AsyncCallback callbackGetChilds = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<List<GWTFolder>> callbackGetChilds = new AsyncCallback<List<GWTFolder>>() {
+		public void onSuccess(List<GWTFolder> result) {
 			boolean directAdd = true;
-			List folderList = (List) result;
 			
 			// If has no childs directly add values is permited
 			if (actualItem.getChildCount() > 0) {
@@ -160,15 +159,15 @@ public class FolderSelectTree extends Composite {
 			
 			// On refreshing not refreshed the actual item values but must 
 			// ensure that has childs value is consistent
-			if (folderList.isEmpty()) {
+			if (result.isEmpty()) {
 				((GWTFolder) actualItem.getUserObject()).setHasChilds(false);
 			} else {
 				((GWTFolder) actualItem.getUserObject()).setHasChilds(true);
 			}
 			
 			// Ads folders childs if exists
-			for (Iterator it = folderList.iterator(); it.hasNext();) {
-				GWTFolder folder = (GWTFolder) it.next();
+			for (Iterator<GWTFolder> it = result.iterator(); it.hasNext();) {
+				GWTFolder folder = it.next();
 				TreeItem folderItem = new TreeItem(folder.getName());
 				folderItem.setUserObject(folder);
 				folderItem.setStyleName("okm-TreeItem");

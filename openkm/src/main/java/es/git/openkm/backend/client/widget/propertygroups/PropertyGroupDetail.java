@@ -19,7 +19,6 @@
 
 package es.git.openkm.backend.client.widget.propertygroups;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -129,15 +128,14 @@ public class PropertyGroupDetail extends Composite {
 	/**
 	 * Gets asyncronous to get metada group properties
 	 */
-	final AsyncCallback callbackGetMetaData = new AsyncCallback() {
-		public void onSuccess(Object result){
-			Map hMetaData = (HashMap) result;
+	final AsyncCallback<Map<String,GWTMetaData>> callbackGetMetaData = new AsyncCallback<Map<String,GWTMetaData>>() {
+		public void onSuccess(Map<String,GWTMetaData> result){
 			int rows = table.getRowCount();
 			FlexCellFormatter cellFormatter = table.getFlexCellFormatter();
 
-			for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
 				final String propertyName = it.next();
-				GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
+				GWTMetaData gwtMetadata = result.get(propertyName);
 				
 				table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
 				

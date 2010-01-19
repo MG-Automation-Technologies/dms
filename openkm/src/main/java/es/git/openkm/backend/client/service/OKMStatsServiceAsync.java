@@ -21,6 +21,8 @@ package es.git.openkm.backend.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import es.git.openkm.backend.client.bean.GWTStatsInfo;
+
 /**
  * OKMStatsServiceAsync
  * 
@@ -28,7 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMStatsServiceAsync {
-	public void getFoldersByContext(AsyncCallback callback);
-	public void getDocumentsByContext(AsyncCallback callback);
-	public void getDocumentsSizeByContext(AsyncCallback callback);
+	public void getFoldersByContext(AsyncCallback<GWTStatsInfo> callback);
+	public void getDocumentsByContext(AsyncCallback<GWTStatsInfo> callback);
+	public void getDocumentsSizeByContext(AsyncCallback<GWTStatsInfo> callback);
 }

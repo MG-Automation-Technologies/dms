@@ -24,16 +24,20 @@ import java.util.Date;
 
 import es.git.openkm.frontend.client.bean.GWTObjectToOrder;
 
-public class ColumnComparatorDate implements Comparator {
-	private static final Comparator INSTANCE  = new ColumnComparatorDate();
+/**
+ * ColumnComparatorDate
+ * 
+ * @author jllort
+ *
+ */
+public class ColumnComparatorDate implements Comparator<GWTObjectToOrder> {
+	private static final Comparator<GWTObjectToOrder> INSTANCE  = new ColumnComparatorDate();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTObjectToOrder> getInstance() {
 		return INSTANCE;
 	}
 
-	public int compare(Object arg0, Object arg1) {
-		GWTObjectToOrder first = (GWTObjectToOrder) arg0;
-		GWTObjectToOrder second = (GWTObjectToOrder) arg1;
-		return ((Date)first.getObject()).compareTo((Date)second.getObject());
+	public int compare(GWTObjectToOrder arg0, GWTObjectToOrder arg1) {
+		return ((Date)arg0.getObject()).compareTo((Date)arg1.getObject());
 	}
 }

@@ -174,7 +174,7 @@ public class Bookmark {
 	/**
 	 * Callback set user home
 	 */
-	final AsyncCallback callbackSetUserHome = new AsyncCallback() {
+	final AsyncCallback<Object> callbackSetUserHome = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			if (document) {
 				Main.get().mainPanel.topPanel.toolBar.setUserHome("",nodePath,BOOKMARK_DOCUMENT);

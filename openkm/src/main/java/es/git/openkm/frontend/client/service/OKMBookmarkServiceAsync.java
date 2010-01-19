@@ -19,17 +19,21 @@
 
 package es.git.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import es.git.openkm.frontend.client.bean.GWTBookmark;
 
 /**
  * @author jllort
  *
  */
 public interface OKMBookmarkServiceAsync {
-	public void getAll(AsyncCallback callback);
-	public void add(String nodePath, String name, AsyncCallback callback);
-	public void remove(String name, AsyncCallback callback);
-	public void setUserHome(String name, AsyncCallback callback);
-	public void getUserHome(AsyncCallback callback);
-	public void rename(String name, String newName, AsyncCallback callback); 
+	public void getAll(AsyncCallback<List<GWTBookmark>> callback);
+	public void add(String nodePath, String name, AsyncCallback<GWTBookmark> callback);
+	public void remove(String name, AsyncCallback<?> callback);
+	public void setUserHome(String name, AsyncCallback<?> callback);
+	public void getUserHome(AsyncCallback<GWTBookmark> callback);
+	public void rename(String name, String newName, AsyncCallback<GWTBookmark> callback); 
 }

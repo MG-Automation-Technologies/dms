@@ -67,7 +67,7 @@ public class Dragable extends Composite implements OriginPanel {
 	private boolean dragged = false;
 	private boolean dropEnabled = false; // Used to eliminate user drag & drop too much faster ( timer to enable drop )
 	private HTML floater = new HTML();
-	private Event event = null;
+
 	private NativePreviewEvent nPEvent = null;
 	private HandlerRegistration handlerRegistration = null;
 	private int originPanel = NONE; 
@@ -341,7 +341,7 @@ public class Dragable extends Composite implements OriginPanel {
 	/**
 	 * Move document or folder
 	 */
-	final AsyncCallback callbackMove = new AsyncCallback() {
+	final AsyncCallback<Object> callbackMove = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {				
 		}
 

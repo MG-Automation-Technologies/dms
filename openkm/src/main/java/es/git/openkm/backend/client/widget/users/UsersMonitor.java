@@ -171,7 +171,7 @@ public class UsersMonitor extends Composite {
 	/**
 	 * Call back get ungranted users
 	 */
-	final AsyncCallback callbackLogout = new AsyncCallback() {
+	final AsyncCallback<Object> callbackLogout = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 		}
 

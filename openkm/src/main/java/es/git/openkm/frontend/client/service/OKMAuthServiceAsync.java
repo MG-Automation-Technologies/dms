@@ -19,6 +19,9 @@
 
 package es.git.openkm.frontend.client.service;
 
+import java.util.HashMap;
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -26,18 +29,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMAuthServiceAsync {
-	public void logout(AsyncCallback callback);
-	public void getGrantedUsers(String nodePath, AsyncCallback callback);
-	public void getGrantedRoles(String nodePath, AsyncCallback callback);
-	public void getRemoteUser(AsyncCallback callback);
-	public void getUngrantedUsers(String nodePath, AsyncCallback callback);
-	public void getUngrantedRoles(String nodePath, AsyncCallback callback);
-	public void grantUser(String path, String user, int permissions, boolean recursive, AsyncCallback callback);
-	public void revokeUser(String path, String user, boolean recursive, AsyncCallback callback);
-	public void revokeUser(String path, String user, int permissions, boolean recursive, AsyncCallback callback);
-	public void grantRole(String path, String role, int permissions, boolean recursive, AsyncCallback callback);
-	public void revokeRole(String path, String role, boolean recursive, AsyncCallback callback);
-	public void revokeRole(String path, String role, int permissions, boolean recursive, AsyncCallback callback);
-	public void keepAlive(AsyncCallback callback);
-	public void getAllUsers(AsyncCallback callback);
+	public void logout(AsyncCallback<?> callback);
+	public void getGrantedUsers(String nodePath, AsyncCallback<HashMap<String, Byte>> callback);
+	public void getGrantedRoles(String nodePath, AsyncCallback<HashMap<String, Byte>> callback);
+	public void getRemoteUser(AsyncCallback<String> callback);
+	public void getUngrantedUsers(String nodePath, AsyncCallback<List<String>> callback);
+	public void getUngrantedRoles(String nodePath, AsyncCallback<List<String>> callback);
+	public void grantUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
+	public void revokeUser(String path, String user, boolean recursive, AsyncCallback<?> callback);
+	public void revokeUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
+	public void grantRole(String path, String role, int permissions, boolean recursive, AsyncCallback<?> callback);
+	public void revokeRole(String path, String role, boolean recursive, AsyncCallback<?> callback);
+	public void revokeRole(String path, String role, int permissions, boolean recursive, AsyncCallback<?> callback);
+	public void keepAlive(AsyncCallback<?> callback);
+	public void getAllUsers(AsyncCallback<List<String>> callback);
 }

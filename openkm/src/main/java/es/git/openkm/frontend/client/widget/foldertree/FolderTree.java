@@ -278,7 +278,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	/**
 	 * Refresh asyncronous subtree branch after an item menu is deleted
 	 */
-	final AsyncCallback callbackDelete = new AsyncCallback() {
+	final AsyncCallback<Object> callbackDelete = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			TreeItem tmpItem = actualItem;
 			actualItem = actualItem.getParentItem();
@@ -389,7 +389,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	/**
 	 * Callback add subscription
 	 */
-	final AsyncCallback callbackAddSubscription = new AsyncCallback() {
+	final AsyncCallback<Object> callbackAddSubscription = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			((GWTFolder) actualItem.getUserObject()).setSubscribed(true);
 			((GWTFolder) actualItem.getUserObject()).getSubscriptors().add(Main.get().workspaceUserProperties.getUser()); // Adds user on subscribed list
@@ -418,7 +418,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	/**
 	 * Callback remove subscription
 	 */
-	final AsyncCallback callbackRemoveSubscription = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRemoveSubscription = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			((GWTFolder) actualItem.getUserObject()).setSubscribed(false);
 			((GWTFolder) actualItem.getUserObject()).getSubscriptors().remove(Main.get().workspaceUserProperties.getUser()); // Remove user from subscription list
@@ -1339,7 +1339,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	/**
 	 * Refresh asyncronous subtree branch after an item menu is purged
 	 */
-	final AsyncCallback callbackPurge = new AsyncCallback() {
+	final AsyncCallback<Object> callbackPurge = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			TreeItem tmpItem = actualItem;
 			actualItem = actualItem.getParentItem();

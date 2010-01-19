@@ -51,7 +51,6 @@ public class ExtendedScrollTable extends ScrollTable {
 	
 	// Holds the data rows of the table this is a list of RowData Object
 	public Map data = new HashMap();
-	private int selectedRow = -1;
 	private int mouseX = 0;
 	private int mouseY = 0;
 	private int dataIndexValue = 0;
@@ -192,7 +191,6 @@ public class ExtendedScrollTable extends ScrollTable {
 	 * Resets the values
 	 */
 	public void reset() {
-		selectedRow = -1;
 		mouseX = 0;
 		mouseY = 0;
 		dataIndexValue = 0;
@@ -390,7 +388,6 @@ public class ExtendedScrollTable extends ScrollTable {
 	public void setSelectedRow(int row) {
 		Log.debug("ExtendedScrollPanel setSelectedRow:"+row);
 		dataTable.selectRow(row,true);
-		selectedRow = row;
 	}
 	
 	/**

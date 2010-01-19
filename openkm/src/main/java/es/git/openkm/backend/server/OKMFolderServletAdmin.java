@@ -62,9 +62,9 @@ public class OKMFolderServletAdmin extends OKMRemoteServiceServletAdmin implemen
 		
 		try {
 			log.debug("ParentFolder: "+fldPath);
-			Collection col = OKMFolder.getInstance().getChilds(token, fldPath);
-			for (Iterator it = col.iterator(); it.hasNext();){				
-				Folder folder = (Folder) it.next();
+			Collection<Folder> col = OKMFolder.getInstance().getChilds(token, fldPath);
+			for (Iterator<Folder> it = col.iterator(); it.hasNext();){				
+				Folder folder = it.next();
 				GWTFolder gWTFolder = Util.copy(folder);
 
 				log.debug("Folder: "+folder+"  ->  gWTFolder: "+gWTFolder);

@@ -212,13 +212,12 @@ public class UserActivityLogFilter extends Composite {
 	/**
 	 * Call back find activity by filter
 	 */
-	final AsyncCallback callbackFindActivityByFilter = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<List<GWTActivity>> callbackFindActivityByFilter = new AsyncCallback<List<GWTActivity>>() {
+		public void onSuccess(List<GWTActivity> result) {
 			Main.get().centerPanel.adminUsersPanel.userActivityLog.removeAllRows();
-			List activityList = (List) result;
 			
-			for (Iterator it = activityList.iterator(); it.hasNext(); ) {
-				Main.get().centerPanel.adminUsersPanel.userActivityLog.addRow((GWTActivity) it.next());
+			for (Iterator<GWTActivity> it = result.iterator(); it.hasNext(); ) {
+				Main.get().centerPanel.adminUsersPanel.userActivityLog.addRow(it.next());
 			}
 			filter.setEnabled(true);
 			Main.get().centerPanel.adminUsersPanel.userActivityLog.status.unsetFlag_search();

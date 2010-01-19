@@ -444,10 +444,9 @@ public class Document extends Composite {
 	/**
 	 * Callback GetVersionHistorySize document
 	 */
-	final AsyncCallback<Object> callbackGetVersionHistorySize = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {	
-			Long size = (Long) result;
-			tableProperties.setHTML(10, 1, Util.formatSize(size.longValue()));
+	final AsyncCallback<Long> callbackGetVersionHistorySize = new AsyncCallback<Long>() {
+		public void onSuccess(Long result) {	
+			tableProperties.setHTML(10, 1, Util.formatSize(result.longValue()));
 			Main.get().mainPanel.browser.tabMultiple.status.unsetGetVersionHistorySize();
 		}
 

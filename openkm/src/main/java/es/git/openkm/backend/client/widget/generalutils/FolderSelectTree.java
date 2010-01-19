@@ -132,11 +132,10 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Refresh asyncronous subtree branch
 	 */
-	final AsyncCallback callbackGetChilds = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<List<GWTFolder>> callbackGetChilds = new AsyncCallback<List<GWTFolder>>() {
+		public void onSuccess(List<GWTFolder> result) {
 			boolean directAdd = true;
-			List folderList = (List) result;
-			
+
 			// If has no childs directly add values is permited
 			if (actualItem.getChildCount() > 0) {
 				directAdd = false;
@@ -147,15 +146,15 @@ public class FolderSelectTree extends Composite {
 			
 			// On refreshing not refreshed the actual item values but must 
 			// ensure that has childs value is consistent
-			if (folderList.isEmpty()) {
+			if (result.isEmpty()) {
 				((GWTFolder) actualItem.getUserObject()).setHasChilds(false);
 			} else {
 				((GWTFolder) actualItem.getUserObject()).setHasChilds(true);
 			}
 			
 			// Ads folders childs if exists
-			for (Iterator it = folderList.iterator(); it.hasNext();) {
-				GWTFolder folder = (GWTFolder) it.next();
+			for (Iterator<GWTFolder> it = result.iterator(); it.hasNext();) {
+				GWTFolder folder = it.next();
 				TreeItem folderItem = new TreeItem(folder.getName());
 				folderItem.setUserObject(folder);
 				folderItem.setStyleName("okm-TreeItem");
@@ -183,14 +182,12 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback callbackGetRoot = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
 			//We put the id on root
-			GWTFolder folderItem = (GWTFolder) result;
-			
-			actualItem.setUserObject(folderItem);
+			actualItem.setUserObject(result);
 			evaluesFolderIcon(actualItem);			
 			actualItem.setState(true);
 			actualItem.setSelected(true);
@@ -227,19 +224,17 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback callbackGetTemplate = new AsyncCallback() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<GWTFolder> callbackGetTemplate = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
-			//We put the id on root
-			GWTFolder folderItem = (GWTFolder) result;
-			
-			actualItem.setUserObject(folderItem);
+			//We put the id on root			
+			actualItem.setUserObject(result);
 			evaluesFolderIcon(actualItem);			
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			getChilds(((GWTFolder) result).getPath());
+			getChilds(result.getPath());
 		}
 
 		public void onFailure(Throwable caught) {

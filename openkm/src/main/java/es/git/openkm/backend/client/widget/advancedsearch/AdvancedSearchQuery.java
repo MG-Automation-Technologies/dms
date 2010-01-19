@@ -199,13 +199,12 @@ public class AdvancedSearchQuery extends Composite {
 	/**
 	 * Call back get search results
 	 */
-	final AsyncCallback callBackGetSearch = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List results = (List) result;
+	final AsyncCallback<List<Vector<String>>> callBackGetSearch = new AsyncCallback<List<Vector<String>>>() {
+		public void onSuccess(List<Vector<String>> result) {
 			boolean title = true;
 			Main.get().centerPanel.advancedSearchPanel.resultsSearch.removeAllRows();
-			for (Iterator it = results.iterator(); it.hasNext();) {
-				Main.get().centerPanel.advancedSearchPanel.resultsSearch.addRow((Vector) it.next(), title);
+			for (Iterator<Vector<String>> it = result.iterator(); it.hasNext();) {
+				Main.get().centerPanel.advancedSearchPanel.resultsSearch.addRow((Vector<String>) it.next(), title);
 				title = false;
 			}
 			Main.get().centerPanel.advancedSearchPanel.resultsSearch.status.unsetFlag_search();

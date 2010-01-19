@@ -20,6 +20,7 @@
 package es.git.openkm.frontend.client;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
@@ -112,7 +113,7 @@ public final class Main implements EntryPoint{
 	// Language declarations
 	private String lang;
 	private HashMap<String, String> hI18n;
-	public HashMap hPropertyGroupI18n;
+	public Map<String,String> hPropertyGroupI18n;
 	
 	// The nodePath parameter
 	public String fldPath = "";  // Used for folderTree because docPath is set to null by filebroeser on this case the refreshing

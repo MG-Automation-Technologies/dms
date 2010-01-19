@@ -19,7 +19,11 @@
 
 package es.git.openkm.frontend.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import es.git.openkm.frontend.client.bean.GWTFolder;
 
 /**
  * OKMFolderServiceAsync
@@ -28,13 +32,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMFolderServiceAsync {
-	public void getChilds(String fldId, AsyncCallback callback);
-	public void delete(String fldPath, AsyncCallback callback);
-	public void create(String fldId, String fldIdParent,AsyncCallback callback);
-	public void rename(String fldId, String newName,AsyncCallback callback);
-	public void move(String fldPath, String dstPath, AsyncCallback callback);
-	public void purge(String fldPath, AsyncCallback callback);
-	public void getProperties(String fldPath, AsyncCallback callback);
-	public void copy(String fldPath, String dstPath, AsyncCallback callback);
-	public void isValid(String fldPath, AsyncCallback callback);
+	public void getChilds(String fldId, AsyncCallback<List<GWTFolder>> callback);
+	public void delete(String fldPath, AsyncCallback<?> callback);
+	public void create(String fldId, String fldIdParent,AsyncCallback<GWTFolder> callback);
+	public void rename(String fldId, String newName,AsyncCallback<GWTFolder> callback);
+	public void move(String fldPath, String dstPath, AsyncCallback<?> callback);
+	public void purge(String fldPath, AsyncCallback<?> callback);
+	public void getProperties(String fldPath, AsyncCallback<GWTFolder> callback);
+	public void copy(String fldPath, String dstPath, AsyncCallback<?> callback);
+	public void isValid(String fldPath, AsyncCallback<Boolean> callback);
 }

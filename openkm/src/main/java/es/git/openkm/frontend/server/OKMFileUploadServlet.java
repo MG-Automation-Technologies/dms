@@ -61,6 +61,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	private final String returnOKMessage = "OKM_OK";
 	public static final String FILE_UPLOAD_STATUS = "file_upload_status";
 	
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String fileName = null;
 		InputStream is = null;

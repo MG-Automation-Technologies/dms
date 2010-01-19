@@ -306,7 +306,7 @@ public class RoleScrollTable extends Composite {
 	/**
 	 * Call back add new role grant
 	 */
-	final AsyncCallback callbackGrantRole = new AsyncCallback() {
+	final AsyncCallback<Object> callbackGrantRole = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 		}
 
@@ -327,7 +327,7 @@ public class RoleScrollTable extends Composite {
 	/**
 	 * Call back revoke role grant
 	 */
-	final AsyncCallback callbackRevokeRole = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRevokeRole = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			// If user has no grants must be deleted
 			if (!dataTable.getSelectedRows().isEmpty()) {

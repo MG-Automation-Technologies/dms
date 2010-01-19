@@ -25,8 +25,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
 
-import org.jfree.util.Log;
-
 import es.git.openkm.kea.metadata.WorkspaceHelper;
 
 /**

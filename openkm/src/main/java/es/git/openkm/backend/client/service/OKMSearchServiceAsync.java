@@ -19,6 +19,9 @@
 
 package es.git.openkm.backend.client.service;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -27,5 +30,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface OKMSearchServiceAsync {
 	
-	public void getSearch(String statement, String type, AsyncCallback callback);
+	public void getSearch(String statement, String type, AsyncCallback<List<Vector<String>>> callback);
 }

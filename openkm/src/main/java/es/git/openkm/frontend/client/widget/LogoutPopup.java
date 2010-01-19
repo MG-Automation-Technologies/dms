@@ -82,7 +82,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	/**
 	 * OKM logout
 	 */
-	final AsyncCallback callbackLogout = new AsyncCallback() {
+	final AsyncCallback<Object> callbackLogout = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			text.setText(Main.i18n("logout.closed"));
 			button.setEnabled(true);

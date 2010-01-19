@@ -82,10 +82,9 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List<String> groupList = (List) result;
-			for (Iterator<String> it = groupList.iterator(); it.hasNext();) {
+	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result){
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
 				final String group = it.next();
 				int rows = table.getRowCount();
 				table.setHTML(rows, 0, group);

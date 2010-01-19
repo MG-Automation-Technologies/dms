@@ -21,16 +21,20 @@ package es.git.openkm.frontend.client.util;
 
 import java.util.Comparator;
 
-public class UserComparator implements Comparator {
-	private static final Comparator INSTANCE  = new UserComparator();
+/**
+ * UserComparator
+ * 
+ * @author jllort
+ *
+ */
+public class UserComparator implements Comparator<String> {
+	private static final Comparator<String> INSTANCE  = new UserComparator();
 	
-	public static Comparator getInstance() {
+	public static Comparator<String> getInstance() {
 		return INSTANCE;
 	}
 
-	public int compare(Object arg0, Object arg1) {
-		String first = ((String) arg0);
-		String second = ((String) arg1);
-		return first.compareTo(second);
+	public int compare(String arg0, String arg1) {
+		return arg0.compareTo(arg1);
 	}
 }

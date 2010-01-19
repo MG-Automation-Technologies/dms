@@ -159,20 +159,19 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Call back get granted roles
 	 */
-	final AsyncCallback callbackGetGrantedRoles = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			HashMap roles = (HashMap) result;
-			List rolesList = new ArrayList();
+	final AsyncCallback<HashMap<String, Byte>> callbackGetGrantedRoles = new AsyncCallback<HashMap<String, Byte>>() {
+		public void onSuccess(HashMap<String, Byte> result) {
+			List<String> rolesList = new ArrayList<String>();
 			
 			// Ordering grant roles to list
-			for (Iterator<String> it = roles.keySet().iterator(); it.hasNext(); ) {
+			for (Iterator<String> it = result.keySet().iterator(); it.hasNext(); ) {
 				rolesList.add(it.next());
 			}
 			Collections.sort(rolesList, RoleComparator.getInstance());
 			
 			for (Iterator<String> it = rolesList.iterator(); it.hasNext(); ) {
 				String groupName = it.next();
-				Byte permission = (Byte) roles.get(groupName);
+				Byte permission = (Byte) result.get(groupName);
 				assignedRole.addRow(groupName, permission);
 			}
 		}
@@ -185,11 +184,9 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Call back get ungranted roles
 	 */
-	final AsyncCallback callbackGetUngrantedRoles = new AsyncCallback() {
-		public void onSuccess(Object result) {
-			List roles = (List) result;
-			
-			for (Iterator it = roles.iterator(); it.hasNext(); ) {
+	final AsyncCallback<List<String>> callbackGetUngrantedRoles = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result) {
+			for (Iterator<String> it = result.iterator(); it.hasNext(); ) {
 				String groupName = (String) it.next();
 				unassignedRole.addRow(groupName);
 			}
@@ -203,7 +200,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Call back add new granted role
 	 */
-	final AsyncCallback callbackAddRole = new AsyncCallback() {
+	final AsyncCallback<Object> callbackAddRole = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			assignedRole.addRow(tmpRole, new Byte(GWTPermission.READ));
 			unassignedRole.removeSelectedRow();
@@ -218,7 +215,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Call back revoke granted role
 	 */
-	final AsyncCallback callbackRevokeRole = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRevokeRole = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			unassignedRole.addRow(tmpRole);
 			unassignedRole.selectLastRow();

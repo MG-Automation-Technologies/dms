@@ -135,7 +135,8 @@ public class MetadataExtractor {
     /**
      * loadRDF
      */
-    public void loadRDF() {
+    @SuppressWarnings("unchecked")
+	public void loadRDF() {
         MimeTypeIdentifier identifier = new MagicMimeTypeIdentifier();
         ExtractorRegistry extractorRegistry = new DefaultExtractorRegistry();
         String mimeType;
@@ -191,7 +192,8 @@ public class MetadataExtractor {
     /**
      * extractMetadataFromRDF
      */
-    public void extractMetadataFromRDF() {
+    @SuppressWarnings("unchecked")
+	public void extractMetadataFromRDF() {
 
         // set up secondary RDF container for creator
         String creator = "";

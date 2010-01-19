@@ -108,7 +108,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		String token = getToken();
 		
 		try {
-			Collection col = Arrays.asList(users.split(","));
+			Collection<String> col = Arrays.asList(users.split(","));
 			OKMNotification.getInstance().notify(token, docPath, col, message);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);

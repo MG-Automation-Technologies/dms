@@ -4,22 +4,25 @@ import java.util.Comparator;
 
 import es.git.openkm.frontend.client.bean.GWTBookmark;
 
-public class BookmarkComparator implements Comparator {
-	private static final Comparator INSTANCE  = new BookmarkComparator();
+/**
+ * BookmarkComparator
+ * 
+ * @author jllort
+ *
+ */
+public class BookmarkComparator implements Comparator<GWTBookmark> {
+	private static final Comparator<GWTBookmark> INSTANCE  = new BookmarkComparator();
 	
-	public static Comparator getInstance() {
+	public static Comparator<GWTBookmark> getInstance() {
 		return INSTANCE;
 	}
 
-	public int compare(Object arg0, Object arg1) {
-		GWTBookmark first = ((GWTBookmark) arg0);
-		GWTBookmark second = ((GWTBookmark) arg1);
-		
+	public int compare(GWTBookmark arg0, GWTBookmark arg1) {		
 		// Compare first with type, and second for name
-		if (!first.getType().equals(second.getType())) {
-			return second.getType().compareTo(first.getType()); // inverse comparation
+		if (!arg0.getType().equals(arg0.getType())) {
+			return arg1.getType().compareTo(arg0.getType()); // inverse comparation
 		} else {
-			return first.getName().toUpperCase().compareTo(second.getName().toUpperCase());
+			return arg0.getName().toUpperCase().compareTo(arg1.getName().toUpperCase());
 		}
 	}
 }
