@@ -39,29 +39,29 @@
 	</logger>
 
 	<!-- Ignore activity warning due to no database found -->	
-	<logger name="es.git.openkm.core.dao">
+	<logger name="com.openkm.core.dao">
 		<level value="error"/>
 	</logger>
 	
 	<!-- Ignore OpenKM internals -->
-	<logger name="es.git.openkm.module">
+	<logger name="com.openkm.module">
 		<level value="info"/>
 	</logger>
 
-	<logger name="es.git.openkm.core">
+	<logger name="com.openkm.core">
 		<level value="info"/>
 	</logger>
 
     <!-- Show Config -->
-    <logger name="es.git.openkm.core.Config">
+    <logger name="com.openkm.core.Config">
 		<level value="info"/>
 	</logger>
 	
-    <logger name="es.git.openkm.extractor">
+    <logger name="com.openkm.extractor">
 		<level value="info"/>
 	</logger>
     
-	<logger name="es.git.openkm.util.RepositoryUpgrade" additivity="false">
+	<logger name="com.openkm.util.RepositoryUpgrade" additivity="false">
 		<level value="debug"/>
 		<appender-ref ref="command" />
 		<appender-ref ref="utility" />
