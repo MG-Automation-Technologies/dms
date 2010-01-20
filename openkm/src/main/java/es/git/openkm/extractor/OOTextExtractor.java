@@ -126,6 +126,7 @@ public class OOTextExtractor extends AbstractTextExtractor {
             return new StringReader(ret);
 		} finally {
 			stream.close();
+			closeConnection();
         }
     }
 	
