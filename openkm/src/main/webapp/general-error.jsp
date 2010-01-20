@@ -1,9 +1,9 @@
 <%@ page import="java.util.Calendar" %>
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.core.SessionManager" %>
-<%@ page import="es.git.openkm.core.UserAlreadyLoggerException" %>
-<%@ page import="es.git.openkm.bean.SessionInfo" %>
-<%@ page import="es.git.openkm.util.FormatUtil"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.core.UserAlreadyLoggerException" %>
+<%@ page import="com.openkm.bean.SessionInfo" %>
+<%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page isErrorPage="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>

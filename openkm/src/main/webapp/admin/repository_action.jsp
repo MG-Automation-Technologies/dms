@@ -1,9 +1,9 @@
-<%@ page import="es.git.openkm.bean.Folder"%>
-<%@ page import="es.git.openkm.bean.Document"%>
-<%@ page import="es.git.openkm.util.UserActivity"%>
-<%@ page import="es.git.openkm.api.OKMScripting"%>
-<%@ page import="es.git.openkm.core.SessionManager" %>
-<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="com.openkm.bean.Folder"%>
+<%@ page import="com.openkm.bean.Document"%>
+<%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="com.openkm.api.OKMScripting"%>
+<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="javax.jcr.NodeIterator"%>
 <%@ page import="javax.jcr.Session" %>

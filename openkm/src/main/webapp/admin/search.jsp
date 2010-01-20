@@ -1,5 +1,5 @@
-<%@ page import="es.git.openkm.module.direct.DirectRepositoryModule" %>
-<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="org.apache.jackrabbit.JcrConstants"%>
 <%@ page import="javax.jcr.Workspace" %>

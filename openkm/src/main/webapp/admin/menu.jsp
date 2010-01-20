@@ -1,5 +1,5 @@
-<%@page import="es.git.openkm.principal.DatabasePrincipalAdapter"%>
-<%@page import="es.git.openkm.core.Config"%>
+<%@page import="com.openkm.principal.DatabasePrincipalAdapter"%>
+<%@page import="com.openkm.core.Config"%>
 <table width="100%" border="0">
   <tr><td align="center">
   <a target="frame" href="home.jsp"><img src="img/toolbar/home.png" title="Home"></a>

@@ -4,12 +4,12 @@
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="javax.jcr.Session" %>
-<%@ page import="es.git.openkm.util.UserActivity"%>
-<%@ page import="es.git.openkm.api.OKMPropertyGroup"%>
-<%@ page import="es.git.openkm.bean.MetaData"%>
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.core.SessionManager"%>
-<%@ page import="es.git.openkm.module.direct.DirectRepositoryModule" %>
+<%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="com.openkm.api.OKMPropertyGroup"%>
+<%@ page import="com.openkm.bean.MetaData"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.core.SessionManager"%>
+<%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

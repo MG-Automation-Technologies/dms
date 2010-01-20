@@ -1,8 +1,8 @@
-<%@ page import="es.git.openkm.core.SessionManager"%>
-<%@ page import="es.git.openkm.util.UserActivity"%>
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.dao.AuthDAO"%>
-<%@ page import="es.git.openkm.dao.bean.Role"%>
+<%@ page import="com.openkm.core.SessionManager"%>
+<%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.dao.AuthDAO"%>
+<%@ page import="com.openkm.dao.bean.Role"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="javax.jcr.Session"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>

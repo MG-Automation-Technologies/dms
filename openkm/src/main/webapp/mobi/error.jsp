@@ -1,10 +1,10 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page isErrorPage="true"%>
 <%@page import="java.util.Calendar"%>
-<%@page import="es.git.openkm.core.Config"%>
-<%@page import="es.git.openkm.core.SessionManager"%>
-<%@page import="es.git.openkm.core.UserAlreadyLoggerException"%>
-<%@page import="es.git.openkm.bean.SessionInfo"%>
+<%@page import="com.openkm.core.Config"%>
+<%@page import="com.openkm.core.SessionManager"%>
+<%@page import="com.openkm.core.UserAlreadyLoggerException"%>
+<%@page import="com.openkm.bean.SessionInfo"%>
 <%
   String msg = "Unknown error";
   String logged = null;
