@@ -73,14 +73,14 @@ public class OKMAccessManager implements AccessManager {
 		log.debug("##### {}", subject.getPrincipals());
 		
 		log.debug("##### ##### ##### ##### ##### ##### ##### ");
-		for (Iterator it = subject.getPrincipals().iterator(); it.hasNext();) {
+		for (Iterator<java.security.Principal> it = subject.getPrincipals().iterator(); it.hasNext();) {
 			Object obj = it.next();
 			log.debug("##### {}", obj.getClass());
 			  
 			if (obj instanceof java.security.acl.Group) {
 				java.security.acl.Group group = (java.security.acl.Group) obj;
 				log.debug("Group: {}", group.getName());
-				for (Enumeration groups = group.members(); groups.hasMoreElements(); ) {
+				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups.hasMoreElements(); ) {
 					java.security.Principal rol = (java.security.Principal) groups.nextElement(); 
 					log.debug("Rol: {}", rol.getName());
 					principalRoles.add(rol.getName());
