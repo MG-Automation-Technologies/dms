@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.monkiki.openkm</groupId>
+  <groupId>com.openkm</groupId>
   <artifactId>openkm</artifactId>
   <packaging>war</packaging>
   <version>4.1-SNAPSHOT</version>
@@ -27,7 +27,7 @@
       <id>monkiki</id>
       <name>Paco Avila</name>
       <email>monkiki@gmail.com</email>
-      <url>http://monkiki.wordpress.com</url>
+      <url>http://monkiki.org</url>
       <timezone>+1</timezone>
       <roles>
         <role>manager</role>
@@ -374,7 +374,7 @@
         <artifactId>gwt-maven-plugin</artifactId>
         <version>1.1</version>
         <configuration>
-            <runTarget>es.git.openkm.frontend.Main/index.html</runTarget>
+            <runTarget>com.openkm.frontend.Main/index.html</runTarget>
             <extraJvmArgs>-Xmx512m -Xss1024k</extraJvmArgs>
         </configuration>
         <executions>
