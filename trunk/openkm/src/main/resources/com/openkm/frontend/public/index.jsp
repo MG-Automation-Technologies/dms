@@ -1,4 +1,4 @@
-<%@ page import="es.git.openkm.api.OKMAuth" %>
+<%@ page import="com.openkm.api.OKMAuth" %>
 <%@ page errorPage="/general-error.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%

@@ -1,4 +1,4 @@
-<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="com.openkm.core.Config" %>
 <%@ page import="bsh.Interpreter"%>
 <%@ page import="java.io.ByteArrayOutputStream"%>
 <%@ page import="java.io.PrintStream"%>

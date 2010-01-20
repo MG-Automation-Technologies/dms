@@ -4,12 +4,12 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="javax.jcr.Session"%>
-<%@page import="es.git.openkm.core.SessionManager"%>
-<%@page import="es.git.openkm.api.OKMSearch"%>
-<%@page import="es.git.openkm.bean.Document"%>
-<%@page import="es.git.openkm.bean.QueryResult"%>
-<%@page import="es.git.openkm.util.FileUtils"%>
-<%@page import="es.git.openkm.util.FormatUtil"%>
+<%@page import="com.openkm.core.SessionManager"%>
+<%@page import="com.openkm.api.OKMSearch"%>
+<%@page import="com.openkm.bean.Document"%>
+<%@page import="com.openkm.bean.QueryResult"%>
+<%@page import="com.openkm.util.FileUtils"%>
+<%@page import="com.openkm.util.FormatUtil"%>
 <%@include file="session.jsp"%>
 <%
   request.setCharacterEncoding("UTF-8");
@@ -28,7 +28,7 @@
       sb.append("<tr class=\"");
       sb.append(i++%2==0?"odd":"even");
       sb.append("\"><td width=\"18px\">");
-      sb.append("<img src=\""+request.getContextPath()+"/es.git.openkm.frontend.Main/img/icon/mime/"+doc.getMimeType()+".gif\">");
+      sb.append("<img src=\""+request.getContextPath()+"/com.openkm.frontend.Main/img/icon/mime/"+doc.getMimeType()+".gif\">");
       sb.append("</td><td width=\"100%\" onclick=\"document.location='");
       sb.append(request.getContextPath());
       sb.append("/OKMDownloadServlet?toPdf&id=");

@@ -1,6 +1,6 @@
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.dao.AuthDAO"%>
-<%@ page import="es.git.openkm.dao.bean.Role"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.dao.AuthDAO"%>
+<%@ page import="com.openkm.dao.bean.Role"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>

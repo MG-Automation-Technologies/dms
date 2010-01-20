@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Iterator" %>
-<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="com.openkm.core.Config" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -82,7 +82,7 @@
 		int i = 0;
 		for (Iterator<String> it = Config.mimeAccept.iterator(); it.hasNext(); ) {
 			String mime = it.next();
-			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../es.git.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
+			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../com.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
 		}
 		out.println("</table>");
 	} else {

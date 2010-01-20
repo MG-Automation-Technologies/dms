@@ -1,6 +1,6 @@
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.core.SessionManager" %>
-<%@ page import="es.git.openkm.bean.SessionInfo" %>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.bean.SessionInfo" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>

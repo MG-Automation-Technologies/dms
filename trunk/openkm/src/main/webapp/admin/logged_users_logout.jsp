@@ -1,5 +1,5 @@
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.module.direct.DirectAuthModule" %>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.module.direct.DirectAuthModule" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {

@@ -1,7 +1,7 @@
 <%@ page import="java.io.File" %>
-<%@ page import="es.git.openkm.core.SessionManager" %>
-<%@ page import="es.git.openkm.backend.client.config.Config"%>
-<%@ page import="es.git.openkm.util.impexp.RepositoryExporter" %>
+<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.backend.client.config.Config"%>
+<%@ page import="com.openkm.util.impexp.RepositoryExporter" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -14,7 +14,7 @@
 </head>
 <body>
 <%
-	if (request.isUserInRole(es.git.openkm.core.Config.DEFAULT_ADMIN_ROLE)) {
+	if (request.isUserInRole(com.openkm.core.Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
 		
 		out.println("<h1>Reports</h1>");

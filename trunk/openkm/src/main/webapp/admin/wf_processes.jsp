@@ -1,7 +1,7 @@
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.api.OKMWorkflow"%>
-<%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
-<%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.api.OKMWorkflow"%>
+<%@ page import="com.openkm.bean.workflow.ProcessDefinition"%>
+<%@ page import="com.openkm.bean.workflow.ProcessInstance"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="java.util.HashMap"%>

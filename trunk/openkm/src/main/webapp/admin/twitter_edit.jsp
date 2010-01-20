@@ -1,7 +1,7 @@
-<%@ page import="es.git.openkm.core.Config" %>
-<%@ page import="es.git.openkm.util.WebUtil"%>
-<%@ page import="es.git.openkm.dao.AuthDAO"%>
-<%@ page import="es.git.openkm.dao.bean.TwitterAccount"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ page import="com.openkm.util.WebUtil"%>
+<%@ page import="com.openkm.dao.AuthDAO"%>
+<%@ page import="com.openkm.dao.bean.TwitterAccount"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
