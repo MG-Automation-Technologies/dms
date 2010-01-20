@@ -9,8 +9,7 @@ import com.google.gwt.http.client.URL;
  * @author jllort
  *
  */
-public class Location
-{
+public class Location {
     private String hash;
     private String host;
     private String hostName;
@@ -19,88 +18,72 @@ public class Location
     private String port;
     private String protocol;
     private String queryString;
-    private HashMap paramMap;
+    private HashMap<String, String> paramMap;
 
 
-    public String getHash ()
-    {
+    public String getHash() {
         return hash;
     }
 
-    public String getHost ()
-    {
+    public String getHost() {
         return host;
     }
 
-    public String getHostName ()
-    {
+    public String getHostName() {
         return hostName;
     }
 
-    public String getHref ()
-    {
+    public String getHref() {
         return href;
     }
 
-    public String getPath ()
-    {
+    public String getPath() {
         return path;
     }
 
-    public String getPort ()
-    {
+    public String getPort() {
         return port;
     }
 
-    public String getProtocol ()
-    {
+    public String getProtocol() {
         return protocol;
     }
 
-    public String getQueryString ()
-    {
+    public String getQueryString() {
         return queryString;
     }
 
-    protected void setHash (String hash)
-    {
+    protected void setHash(String hash) {
         this.hash = hash;
     }
 
-    protected void setHost (String host)
-    {
+    protected void setHost(String host) {
         this.host = host;
     }
 
-    protected void setHostName (String hostName)
-    {
+    protected void setHostName(String hostName) {
         this.hostName = hostName;
     }
 
-    protected void setHref (String href)
-    {
+    protected void setHref(String href) {
         this.href = href;
     }
 
-    protected void setPath (String path)
-    {
+    protected void setPath(String path) {
         this.path = path;
     }
 
-    protected void setPort (String port)
-    {
+    protected void setPort(String port) {
         this.port = port;
     }
 
-    protected void setProtocol (String protocol)
-    {
+    protected void setProtocol(String protocol) {
         this.protocol = protocol;
     }
 
-    protected void setQueryString (String queryString)
-    {
+    protected void setQueryString (String queryString) {
         this.queryString = queryString;
-        paramMap = new HashMap();
+        paramMap = new HashMap<String, String>();
         
         if (queryString != null && queryString.length() > 1) {
             String qs = queryString.substring(1);
@@ -117,14 +100,11 @@ public class Location
         }
     }
     
-    public String getParameter (String name)
-    {
+    public String getParameter (String name) {
         return (String) paramMap.get(name);
     }
 
-    public Map getParameterMap ()
-    {
+    public Map<String, String> getParameterMap() {
         return paramMap;
     }
-
 }
