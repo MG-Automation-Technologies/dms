@@ -22,6 +22,7 @@ package es.git.openkm.core;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -62,13 +63,13 @@ public class OKMLoginModule implements LoginModule {
 	private Properties roles;
     private Subject subject;
     private CallbackHandler callbackHandler;
-    private final Set principals = new HashSet();
+    private final Set<Principal> principals = new HashSet<Principal>();
     private String defaultUserId = null;
 	
 	/* (non-Javadoc)
 	 * @see javax.security.auth.spi.LoginModule#initialize(javax.security.auth.Subject, javax.security.auth.callback.CallbackHandler, java.util.Map, java.util.Map)
 	 */
-	public void initialize(Subject subject, CallbackHandler callbackHandler, Map sharedState, Map options) {
+	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
 		log.debug("initialize("+subject+", "+callbackHandler+", "+sharedState+", "+options+")");
 
 		this.subject = subject;
