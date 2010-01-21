@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
