@@ -317,6 +317,20 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmThesaurus.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmThesaurus.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				
+				// Create categories base node
+				log.info("Create categories base node");
+				Node okmCategories = root.addNode(Repository.CATEGORIES, Folder.TYPE);
+
+				// Add basic properties
+				okmCategories.setProperty(Folder.AUTHOR, session.getUserID());
+				okmCategories.setProperty(Folder.NAME, Repository.HOME);
+
+				// Auth info
+				okmCategories.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+				okmCategories.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+				okmCategories.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
+				okmCategories.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
+				
 				// Create config base node
 				log.info("Create config node");
 				Node okmConfig = root.addNode(Repository.SYS_CONFIG, Repository.SYS_CONFIG_TYPE);
@@ -547,6 +561,32 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		log.debug("getThesaurusFolder: "+thesaurusFolder);
 		return thesaurusFolder;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
+	 */
+	@Override
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
+		log.debug("getCategoriesFolder(" + token + ")");
+		Folder categoriesFolder = new Folder();
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			categoriesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.CATEGORIES);
+			
+			// Activity log
+			UserActivity.log(session, "GET_CATEGORIES_FOLDER", null, categoriesFolder.getPath());
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.debug("getCategoriesFolder: "+categoriesFolder);
+		return categoriesFolder;
 	}
 	
 	/**
