@@ -57,10 +57,14 @@ public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public String getUpdateMessage(String token) throws RepositoryException {
