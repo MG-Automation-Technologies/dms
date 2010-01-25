@@ -89,6 +89,16 @@ public interface RepositoryModule {
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException;
 
 	/**
+	 * Obtain the categories folder of the repository.
+	 * 
+	 * @param token The session authorization token.
+	 * @return A folder object with the categories folder node properties.
+	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException;
+	
+	/**
 	 * Remove all the items in the user trash folder for ever. You can't 
 	 * recover this items anymore.
 	 * 
