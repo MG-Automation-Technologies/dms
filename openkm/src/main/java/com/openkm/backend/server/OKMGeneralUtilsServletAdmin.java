@@ -73,7 +73,7 @@ public class OKMGeneralUtilsServletAdmin extends OKMRemoteServiceServletAdmin im
 		
 		if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 			SessionManager sm = SessionManager.getInstance();
-			String token = sm.getTokenByUserId(Config.SYSTEM_USER);
+			String token = sm.getSystemToken();
 
 			try {
 				StringWriter out = new StringWriter();
@@ -123,7 +123,7 @@ public class OKMGeneralUtilsServletAdmin extends OKMRemoteServiceServletAdmin im
 		
 		if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 			SessionManager sm = SessionManager.getInstance();
-			String token = sm.getTokenByUserId(Config.SYSTEM_USER);
+			String token = sm.getSystemToken();
 			
 			try {
 				StringWriter out = new StringWriter();
