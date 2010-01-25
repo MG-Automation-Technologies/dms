@@ -37,6 +37,7 @@ public class Repository implements Serializable {
 	public static final String TRASH = "okm:trash";
 	public static final String TEMPLATES = "okm:templates";
 	public static final String THESAURUS = "okm:thesaurus";
+	public static final String CATEGORIES = "okm:categories";
 	public static final String SYS_CONFIG = "okm:config";
 	public static final String SYS_CONFIG_TYPE = "okm:sysConfig";
 	public static final String SYS_CONFIG_UUID = "okm:uuid";
