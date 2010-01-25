@@ -114,6 +114,18 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
+	 */
+	@Override
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
+		log.debug("getCategoriesFolder("+token+")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder categoriesFolder = rm.getCategoriesFolder(token);
+		log.debug("getCategoriesFolder: "+categoriesFolder);
+		return categoriesFolder;
+	}
+	
+	/* (non-Javadoc)
 	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
 	 */
 	@Override
