@@ -48,6 +48,7 @@ import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.WorkflowDAO;
+import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.WarUtils;
@@ -163,6 +164,9 @@ public class RepositoryStartupServlet extends HttpServlet {
         	now.set(Calendar.MILLISECOND, 0);
         	timer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
+        
+        log.info("*** Activating thesaurus repository ***");
+        RDFREpository.getInstance();
     }
 
     /* (non-Javadoc)
