@@ -94,6 +94,16 @@ public class ExtendedStackPanel extends StackPanel {
 				Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(false);
 				break;
 				
+			case PanelDefinition.NAVIGATOR_CATEGORIES:
+				Main.get().activeFolderTree = Main.get().mainPanel.navigator.categoriesTree;
+				Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
+				Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_CATEGORIES,ExtendedDockPanel.DESKTOP);
+				if (refresh) {
+					Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
+				}
+				Main.get().mainPanel.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
+				break;
+				
 			case PanelDefinition.NAVIGATOR_THESAURUS:
 				Main.get().activeFolderTree = Main.get().mainPanel.navigator.thesaurusTree;
 				Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_THESAURUS);

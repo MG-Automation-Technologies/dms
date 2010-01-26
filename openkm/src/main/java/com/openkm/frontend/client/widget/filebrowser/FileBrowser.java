@@ -57,6 +57,7 @@ import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.OriginPanel;
+import com.openkm.frontend.client.widget.filebrowser.menu.CategoriesMenu;
 import com.openkm.frontend.client.widget.filebrowser.menu.MailMenu;
 import com.openkm.frontend.client.widget.filebrowser.menu.PersonalMenu;
 import com.openkm.frontend.client.widget.filebrowser.menu.TaxonomyMenu;
@@ -97,6 +98,7 @@ public class FileBrowser extends Composite implements OriginPanel {
     private FixedWidthGrid dataTable;
 	private FilePath filePath;
 	public MenuPopup taxonomyMenuPopup;
+	public MenuPopup categoriesMenuPopup;
 	public MenuPopup thesaurusMenuPopup;
 	public MenuPopup trashMenuPopup;
 	public MenuPopup templatesMenuPopup;
@@ -200,6 +202,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 		
 		taxonomyMenuPopup = new MenuPopup(new TaxonomyMenu());
 		taxonomyMenuPopup.setStyleName("okm-FileBrowser-MenuPopup");
+		categoriesMenuPopup = new MenuPopup(new CategoriesMenu());
+		categoriesMenuPopup.setStyleName("okm-Tree-MenuPopup");
 		thesaurusMenuPopup = new MenuPopup(new ThesaurusMenu());
 		thesaurusMenuPopup.setStyleName("okm-Tree-MenuPopup");
 		trashMenuPopup = new MenuPopup(new TrashMenu());
@@ -376,7 +380,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
-			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				getMailChilds(fldId);
 			} else {
 				selectSelectedRowInTable();
@@ -410,7 +415,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
-			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_THESAURUS);
+			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_CATEGORIES);
 		}
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
@@ -825,8 +830,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 * @param fldId The path id
 	 */
 	public void getFolderChilds(String fldId) {
-		// In thesaurus view must not be showed folders only documents
-		if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+		// In thesaurus and categories view must not be showed folders only documents
+		if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(Config.OKMFolderService);	
 			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderChilds();		
@@ -901,6 +907,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 		switch(actualView){
 			case PanelDefinition.NAVIGATOR_TAXONOMY:
 				menuPopup = taxonomyMenuPopup;
+				break;
+				
+			case PanelDefinition.NAVIGATOR_CATEGORIES:
+				menuPopup = categoriesMenuPopup;
 				break;
 				
 			case PanelDefinition.NAVIGATOR_THESAURUS:

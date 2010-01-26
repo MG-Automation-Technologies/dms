@@ -461,6 +461,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
 				switch (actualView){
 					case PanelDefinition.NAVIGATOR_TAXONOMY:
+					case PanelDefinition.NAVIGATOR_CATEGORIES:
 					case PanelDefinition.NAVIGATOR_THESAURUS:
 					case PanelDefinition.NAVIGATOR_TEMPLATES:
 					case PanelDefinition.NAVIGATOR_PERSONAL:
@@ -792,11 +793,14 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 			
 			// Disables add document, delete and create directory from thesaurus view
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
+				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_CATEGORIES ) {
 				disableAddDocument();
 				disableDelete();
-				disableCreateDirectory();
 				disableAddSubscription();
+				if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+					disableCreateDirectory();
+				}
 			}
 			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
@@ -848,9 +852,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					disableUnlock();
 					enableAddNote();
 					
-					// In thesaurus view must not evaluate write folder permissions
+					// In thesaurus and categories view must not evaluate write folder permissions
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
-						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
+						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 						enableDelete();
 						enableRename();
 						enableCopy();
@@ -858,6 +863,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
 						if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
+							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES &&
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
@@ -916,15 +922,16 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableWorkflow();
 			} 
 			
-			// Only on taxonomy and thesaurus enables to send document link by mail 
+			// Only on taxonomy, categories, and thesaurus enables to send document link by mail 
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				enableSendDocumentLink();
 			} else {
 				disableSendDocumentLink();
 			}
 			
-			// Excepts on taxonomy and thesaurus panel always disabling 
+			// Excepts on taxonomy, categories and thesaurus panel always disabling 
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
@@ -1464,6 +1471,39 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
+	 * Gets the defatul Tool Bar object values for categories
+	 * 
+	 * @return The default toolBarOption for templates
+	 */
+	public ToolBarOption getDefaultCategoriesToolBar() {
+		ToolBarOption tmpToolBarOption = new ToolBarOption();
+		tmpToolBarOption.createDirectoryOption			= true;
+		tmpToolBarOption.addDocumentOption 				= false;
+		tmpToolBarOption.checkoutOption 				= false;
+		tmpToolBarOption.checkinOption 					= false;
+		tmpToolBarOption.cancelCheckoutOption 			= false;
+		tmpToolBarOption.lockOption						= false;
+		tmpToolBarOption.unLockOption 					= false;
+		tmpToolBarOption.downloadOption					= false;
+		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.deleteOption					= false;
+		tmpToolBarOption.addPropertyGroupOption 		= false;
+		tmpToolBarOption.removePropertyGroupOption  	= false;
+		tmpToolBarOption.addSubscription  				= false;
+		tmpToolBarOption.removeSubscription 		 	= false;
+		tmpToolBarOption.firedRemovePropertyGroupOption = false;
+		tmpToolBarOption.homeOption						= false;
+		tmpToolBarOption.refreshOption					= true;
+		tmpToolBarOption.renameOption 					= false;
+		tmpToolBarOption.copyOption 					= false;
+		tmpToolBarOption.moveOption 					= false;
+		tmpToolBarOption.exportOption					= false;
+		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
+		return tmpToolBarOption;
+	}
+	
+	/**
 	 * Gets the defatul Tool Bar object values for thesaurus
 	 * 
 	 * @return The default toolBarOption for templates
@@ -1770,6 +1810,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 						viewValues.put("view_root:option", toolBarOption);
 						break;
 						
+					case PanelDefinition.NAVIGATOR_CATEGORIES:
+						viewValues.put("view_categories:option", toolBarOption);
+						break;
+						
 					case PanelDefinition.NAVIGATOR_THESAURUS:
 						viewValues.put("view_thesaurus:option", toolBarOption);
 						break;
@@ -1812,6 +1856,15 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					case PanelDefinition.NAVIGATOR_TAXONOMY:
 						if (viewValues.containsKey("view_root:option")){
 							toolBarOption = (ToolBarOption) viewValues.get("view_root:option");
+						}
+						toolBarEnabled = true;
+						break;
+						
+					case PanelDefinition.NAVIGATOR_CATEGORIES:
+						if (viewValues.containsKey("view_categories:option")){
+							toolBarOption = (ToolBarOption) viewValues.get("view_categories:option");
+						} else {
+							toolBarOption = getDefaultCategoriesToolBar();
 						}
 						toolBarEnabled = true;
 						break;

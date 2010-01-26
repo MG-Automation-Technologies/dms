@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.openkm.frontend.client.bean.GWTFolder;
 
 /**
@@ -39,4 +38,5 @@ public interface OKMRepositoryServiceAsync {
 	public void getPersonal(AsyncCallback<GWTFolder> callback);
 	public void getMail(AsyncCallback<GWTFolder> callback);
 	public void getThesaurus(AsyncCallback<GWTFolder> callback);
+	public void getCategories(AsyncCallback<GWTFolder> callback);
 }

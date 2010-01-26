@@ -45,6 +45,7 @@ public class Lang_fr_FR {
 	    lang.put("startup.openkm", "Chargement de OpenKM");
 	    lang.put("startup.starting.loading", "Démarrage du chargement de OpenKM");
 	    lang.put("startup.taxonomy", "Récupération du noeud racine taxinomie");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Récupération du noeud racine thésaurus");
 	    lang.put("startup.template", "Récupération du noeud racine modèle");
 	    lang.put("startup.personal", "Récupération du noeud racine personnel");
@@ -61,6 +62,7 @@ public class Lang_fr_FR {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Chargement taxonomie - récupération courriels");
 	    lang.put("startup.loading.personal", "Chargement personnel");
 	    lang.put("startup.loading.mail", "Chargement courriels");
+	    lang.put("startup.loading.categories", "Chargement categories");
 	    lang.put("startup.loading.thesaurus", "Chargement thésaurus");
 	    lang.put("startup.loading.templates", "Chargement modèles");
 	    lang.put("startup.loading.trash", "Chargement corbeille");
@@ -77,6 +79,7 @@ public class Lang_fr_FR {
 	    lang.put("leftpanel.label.trash", "Corbeille");
 	    lang.put("leftpanel.label.mail", "Courriel");
 	    lang.put("leftpanel.label.stored.search", "Recherches sauvegardées");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thésaurus");
 	    lang.put("leftpanel.label.templates", "Modèles");
 	    lang.put("leftpanel.label.my.documents", "Mes documents");
@@ -298,6 +301,7 @@ public class Lang_fr_FR {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Ajouter note");
 	    lang.put("document.keywords.cloud", "Mots-clés");
+	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

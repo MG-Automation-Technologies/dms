@@ -28,6 +28,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.categories.CategoriesTree;
 import com.openkm.frontend.client.widget.foldertree.Status;
 import com.openkm.frontend.client.widget.mail.MailTree;
 import com.openkm.frontend.client.widget.personal.PersonalTree;
@@ -46,18 +47,21 @@ public class Navigator extends ExtendedSizeComposite {
 
 	public ExtendedStackPanel stackPanel;
 	public ExtendedScrollPanel scrollTaxonomyPanel;
+	public ScrollPanel scrollCategoriesPanel;
 	public ScrollPanel scrollThesaurusPanel;
 	private ScrollPanel scrollTrashPanel;
 	private ExtendedScrollPanel scrollTemplatePanel;
 	private ExtendedScrollPanel scrollMyDocumentsPanel;
 	private ExtendedScrollPanel scrollMailPanel;
 	public VerticalPanel verticalTaxonomyPanel;
+	public VerticalPanel verticalCategoriesPanel;
 	public VerticalPanel verticalThesaurusPanel;
 	public VerticalPanel verticalTrashPanel;
 	public VerticalPanel verticalTemplatePanel;
 	public VerticalPanel verticalMyDocumentsPanel;
 	public VerticalPanel verticalMailPanel;
 	public TaxonomyTree taxonomyTree;
+	public CategoriesTree categoriesTree;
 	public ThesaurusTree thesaurusTree;
 	public TemplateTree templateTree;
 	public PersonalTree personalTree;
@@ -69,6 +73,8 @@ public class Navigator extends ExtendedSizeComposite {
 		stackPanel = new ExtendedStackPanel();
 		scrollTaxonomyPanel = new ExtendedScrollPanel();
 		scrollTaxonomyPanel.setSize("100%", "100%");
+		scrollCategoriesPanel = new ScrollPanel();
+		scrollCategoriesPanel.setSize("100%", "100%");
 		scrollThesaurusPanel = new ScrollPanel();
 		scrollThesaurusPanel.setSize("100%", "100%");
 		scrollTrashPanel = new ScrollPanel();
@@ -81,6 +87,8 @@ public class Navigator extends ExtendedSizeComposite {
 		scrollMailPanel.setSize("100%", "100%");
 		verticalTaxonomyPanel = new VerticalPanel();
 		verticalTaxonomyPanel.setSize("100%", "100%");
+		verticalCategoriesPanel = new VerticalPanel();
+		verticalCategoriesPanel.setSize("100%", "100%");
 		verticalThesaurusPanel = new VerticalPanel();
 		verticalThesaurusPanel.setSize("100%", "100%");
 		verticalTrashPanel = new VerticalPanel();
@@ -104,11 +112,15 @@ public class Navigator extends ExtendedSizeComposite {
 		personalTree.setSize("100%", "100%");
 		thesaurusTree = new ThesaurusTree();
 		thesaurusTree.setSize("100%", "100%");
+		categoriesTree = new CategoriesTree();
+		categoriesTree.setSize("100%", "100%");
 		taxonomyTree = new TaxonomyTree();
 		taxonomyTree.setSize("100%", "100%");
 		
 		verticalTaxonomyPanel.add(taxonomyTree);
 		scrollTaxonomyPanel.add(verticalTaxonomyPanel);
+		verticalCategoriesPanel.add(categoriesTree);
+		scrollCategoriesPanel.add(verticalCategoriesPanel);
 		verticalThesaurusPanel.add(thesaurusTree);
 		scrollThesaurusPanel.add(verticalThesaurusPanel);
 		verticalTrashPanel.add(trashTree);
@@ -122,6 +134,7 @@ public class Navigator extends ExtendedSizeComposite {
 		scrollMailPanel.add(verticalMailPanel);
 		
 		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
 		stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
 		stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
@@ -141,12 +154,14 @@ public class Navigator extends ExtendedSizeComposite {
 	 */
 	public void langRefresh() {	
 		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
-		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
-		stackPanel.setStackText(2, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
-		stackPanel.setStackText(3, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
-		stackPanel.setStackText(4, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
-		stackPanel.setStackText(5, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+		stackPanel.setStackText(2, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+		stackPanel.setStackText(3, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		stackPanel.setStackText(4, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+		stackPanel.setStackText(5, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		stackPanel.setStackText(6, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		taxonomyTree.langRefresh();
+		categoriesTree.langRefresh();
 		thesaurusTree.langRefresh();
 		personalTree.langRefresh();
 		templateTree.langRefresh();
@@ -164,6 +179,7 @@ public class Navigator extends ExtendedSizeComposite {
 		stackPanel.setSize(""+width, ""+height);
 		// Substract 2 pixels for borders on stackPanel
 		scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
+		scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
 		scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
 		scrollMyDocumentsPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
 		scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
