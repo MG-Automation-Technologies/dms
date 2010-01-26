@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.foldertree;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -87,7 +88,7 @@ public class Status extends PopupPanel {
 	public void refresh() {
 		if (flag_getChilds || flag_delete || flag_rename || flag_create || flag_purge || flag_purgeTrash || flag_get
 			|| flag_addSubscription || flag_removeSubscription || flag_root || flag_userHome) {
-			int left = ((Main.get().mainPanel.left.getWidth()-200)/2);
+			int left = ((Main.get().mainPanel.left.getWidth()-200)/2) + Main.get().mainPanel.left.getX();
 			int top = ((Main.get().mainPanel.left.getHeight()-40)/2) + Main.get().mainPanel.left.getY() ;
 			int stackIndex = Main.get().mainPanel.navigator.getStackIndex();
 			setPopupPosition(left,top);

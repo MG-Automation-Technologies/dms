@@ -158,9 +158,11 @@ public class FolderSelectTree extends Composite {
 			
 			actualItem.setState(true);
 			evaluesFolderIcon(actualItem);
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
 			Main.get().showError("GetChilds", caught);
 		}
 	};
@@ -178,11 +180,12 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			getChilds(result.getPath());
-			
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
+			getChilds(result.getPath());			
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
 			Main.get().showError("GetThesaurus", caught);
 		}
 	};
@@ -195,6 +198,7 @@ public class FolderSelectTree extends Composite {
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+		Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -204,6 +208,7 @@ public class FolderSelectTree extends Composite {
 	public void getThesaurus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagRoot();
 		repositoryService.getThesaurus(callbackGetThesaurus);
 	}
 	
