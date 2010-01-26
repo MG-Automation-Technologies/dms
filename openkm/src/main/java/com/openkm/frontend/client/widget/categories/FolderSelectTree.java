@@ -158,9 +158,11 @@ public class FolderSelectTree extends Composite {
 			
 			actualItem.setState(true);
 			evaluesFolderIcon(actualItem);
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
 			Main.get().showError("GetChilds", caught);
 		}
 	};
@@ -178,11 +180,12 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
 			getChilds(result.getPath());
-			
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
 			Main.get().showError("GetTCategories", caught);
 		}
 	};
@@ -195,6 +198,7 @@ public class FolderSelectTree extends Composite {
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
+		Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -204,6 +208,7 @@ public class FolderSelectTree extends Composite {
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
+		Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
 		repositoryService.getCategories(callbackGetCategories);
 	}
 	

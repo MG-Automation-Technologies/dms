@@ -43,10 +43,14 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;
 	private Button actionButton;
+	public Status status;
 	
 	public ThesaurusSelectPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
+		
+		status = new Status();
+		status.setStyleName("okm-StatusPopup");
 		
 		vPanel = new VerticalPanel();		
 		vPanel.setWidth("300");
