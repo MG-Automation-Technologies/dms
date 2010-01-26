@@ -45,6 +45,7 @@ public class Lang_lv_LV {
 	    lang.put("startup.openkm", "Ielādē OpenKM");
 	    lang.put("startup.starting.loading", "Sākam OpenKM ielādi");
 	    lang.put("startup.taxonomy", "Saņem sistemātikas sākuma posmu");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Saņem šablona sākuma posmu");
 	    lang.put("startup.personal", "Saņem personīgo sākuma posmu");
@@ -61,6 +62,7 @@ public class Lang_lv_LV {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Ielādē personālu");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.categories", "Loading categories");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Ielādē  šablonus");
 	    lang.put("startup.loading.trash", "Ielādē  miskasti");
@@ -77,6 +79,7 @@ public class Lang_lv_LV {
 	    lang.put("leftpanel.label.trash", "Miskaste");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Saglabātie meklēšanas pieprasījumi");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Šabloni");
 	    lang.put("leftpanel.label.my.documents", "Mani dokumenti");
@@ -298,6 +301,7 @@ public class Lang_lv_LV {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Pievienot piezīme");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

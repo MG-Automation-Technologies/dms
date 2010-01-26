@@ -866,7 +866,8 @@ public class FolderTree extends Composite implements OriginPanel {
 			menuPopup.evaluateMenuOptions();
 			menuPopup.setPopupPosition(tree.mouseX,tree.mouseY);
 			// In thesaurus view must not be showed the menu popup
-			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				menuPopup.show();
 			}
 		}

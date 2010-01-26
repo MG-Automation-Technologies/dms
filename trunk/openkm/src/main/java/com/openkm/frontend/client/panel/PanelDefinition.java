@@ -31,15 +31,16 @@ public class PanelDefinition {
 	
 	// Navigator stack panel definition
 	public static final int NAVIGATOR_TAXONOMY 		= 0; // Number indicates ordering
-	public static final int NAVIGATOR_THESAURUS		= 1;
-	public static final int NAVIGATOR_TEMPLATES 	= 2;
-	public static final int NAVIGATOR_PERSONAL  	= 3;
-	public static final int NAVIGATOR_MAIL  		= 4;
-	public static final int NAVIGATOR_TRASH  		= 5;
-	public static final int NAVIGATOR_ALL_CONTEXT 	= 6; // Used to indicate operation to all context ( search ) really it's not a panel
+	public static final int NAVIGATOR_CATEGORIES	= 1;
+	public static final int NAVIGATOR_THESAURUS		= 2;
+	public static final int NAVIGATOR_TEMPLATES 	= 3;
+	public static final int NAVIGATOR_PERSONAL  	= 4;
+	public static final int NAVIGATOR_MAIL  		= 5;
+	public static final int NAVIGATOR_TRASH  		= 6;
+	public static final int NAVIGATOR_ALL_CONTEXT 	= 7; // Used to indicate operation to all context ( search ) really it's not a panel
 	public static final int SEARCH_SAVED 			= 0;
 	public static final int SEARCH_USER_NEWS		= 1;
-	public static final int NUMBER_OF_STACKS 		= 6;
+	public static final int NUMBER_OF_STACKS 		= 7;
 	public static final int STACK_HEIGHT     		= 22;
 	
 }

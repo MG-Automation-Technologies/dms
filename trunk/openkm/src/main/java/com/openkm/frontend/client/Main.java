@@ -125,6 +125,7 @@ public final class Main implements EntryPoint{
 	
 	// Main root folders and user home general values for all app
 	public GWTFolder taxonomyRootFolder;
+	public GWTFolder categoriesRootFolder;
 	public GWTFolder thesaurusRootFolder;
 	public GWTFolder personalRootFolder;
 	public GWTFolder templatesRootFolder;

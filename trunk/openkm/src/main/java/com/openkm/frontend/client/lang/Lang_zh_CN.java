@@ -45,6 +45,7 @@ public class Lang_zh_CN {
 	    lang.put("startup.openkm", "加载OpenKM");
 	    lang.put("startup.starting.loading", "开始加载OpenKM");
 	    lang.put("startup.taxonomy", "正在获得分类根节点");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.template", "正在获得模板根节点");
 	    lang.put("startup.personal", "正在获得个人根节点");
 	    lang.put("startup.mail", "获取 e-mail根节点");
@@ -62,6 +63,7 @@ public class Lang_zh_CN {
 	    lang.put("startup.loading.mail", "正在加载邮件信息");
 	    lang.put("startup.loading.templates", "正在加载模板");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.categories", "Loading categories");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.trash", "正在加载回收站");
 	    lang.put("startup.loading.history.search", "加载历史检索");
@@ -77,6 +79,7 @@ public class Lang_zh_CN {
 	    lang.put("leftpanel.label.trash", "回收站");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "已保存的检索");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "模板");
 	    lang.put("leftpanel.label.my.documents", "我的文档");
@@ -298,6 +301,7 @@ public class Lang_zh_CN {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "新增备注");
 	    lang.put("document.keywords.cloud", "关键字云");
+	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

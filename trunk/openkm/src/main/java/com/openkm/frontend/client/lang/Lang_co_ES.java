@@ -45,6 +45,7 @@ public class Lang_co_ES {
 	    lang.put("startup.openkm", "Cargando OpenKM");
 	    lang.put("startup.starting.loading", "Comenzando la carga de OpenKM");
 	    lang.put("startup.taxonomy", "Obteniendo el nodo principal de la taxonomía");
+	    lang.put("startup.categories", "Obteniendo el nodo principald de las categorías");
 	    lang.put("startup.thesaurus", "Obteniendo el nodo principal del thesaurus");
 	    lang.put("startup.template", "Obteniendo el nodo principal de las plantillas");
 	    lang.put("startup.personal", "Obteniendo el nodo principal de personal");
@@ -61,6 +62,7 @@ public class Lang_co_ES {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Cargando taxonomía - obteniendo correos electrónicos");
 	    lang.put("startup.loading.personal", "Cargando personales");
 	    lang.put("startup.loading.mail", "Cargando correos");
+	    lang.put("startup.loading.categories", "Cargando categorías");
 	    lang.put("startup.loading.thesaurus", "Cargando thesaurus");
 	    lang.put("startup.loading.templates", "Cargando plantillas");
 	    lang.put("startup.loading.trash", "Cargando papelera");
@@ -77,6 +79,7 @@ public class Lang_co_ES {
 	    lang.put("leftpanel.label.trash", "Papelera");
 	    lang.put("leftpanel.label.mail", "Correo electrónico");
 	    lang.put("leftpanel.label.stored.search", "Búsquedas almacenadas");
+	    lang.put("leftpanel.label.categories", "Categorías");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Plantillas");
 	    lang.put("leftpanel.label.my.documents", "Documentos personales");
@@ -298,6 +301,7 @@ public class Lang_co_ES {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Añadir nota");
 	    lang.put("document.keywords.cloud", "Nube de palabras clave");
+	    lang.put("document.categories", "Categorías");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

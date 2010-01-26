@@ -45,6 +45,7 @@ public class Lang_sv_SE {
 	    lang.put("startup.openkm", "Laddar OpenKM");
 	    lang.put("startup.starting.loading", "Startar laddning av OpenKM");
 	    lang.put("startup.taxonomy", "Organiserar root noden");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Hämtar template från root noden");
 	    lang.put("startup.personal", "Hämtar personlig root nod");
@@ -61,6 +62,7 @@ public class Lang_sv_SE {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Laddar användare");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.categories", "Loading categories");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Laddar mallar");
 	    lang.put("startup.loading.trash", "Laddar papperskorg");
@@ -77,6 +79,7 @@ public class Lang_sv_SE {
 	    lang.put("leftpanel.label.trash", "Papperskorg");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Sparade sökningar");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Mallar");
 	    lang.put("leftpanel.label.my.documents", "Mina dokument");
@@ -298,6 +301,7 @@ public class Lang_sv_SE {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

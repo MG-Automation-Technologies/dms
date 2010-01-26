@@ -94,7 +94,9 @@ public class Document extends Composite {
 	private boolean visible = true;
 	private HTML subcribedUsersText;
 	private HTML keywordsCloudText;
+	private Image categoriesImage;
 	private Image thesaurusImage;
+	private HTML categoriesText;
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
@@ -220,10 +222,26 @@ public class Document extends Composite {
 		VerticalPanel vPanel2 = new VerticalPanel();
 		subcribedUsersText = new HTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
 		keywordsCloudText = new HTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
+		HorizontalPanel hPanelCategories = new HorizontalPanel();
+		categoriesText = new HTML("<b>"+Main.i18n("document.categories")+"</b>");
+	
+		categoriesImage = new Image("img/icon/stackpanel/table_key.gif");
+		categoriesImage.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.show();
+			}
+		});
+		
+		hPanelCategories.add(categoriesText);
+		hPanelCategories.add(new HTML("&nbsp;"));
+		hPanelCategories.add(categoriesImage);
+		
 		vPanel2.add(subcribedUsersText);
 		vPanel2.add(tableSubscribedUsers);
 		vPanel2.add(keywordsCloudText);
 		vPanel2.add(keywordsCloud);
+		vPanel2.add(hPanelCategories);
 		
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0, 1, "");
@@ -248,6 +266,7 @@ public class Document extends Composite {
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
+		categoriesImage.addStyleName("okm-Hyperlink");
 		thesaurusImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(scrollPanel);
@@ -353,7 +372,7 @@ public class Document extends Composite {
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.navigator.getStackIndex();
 		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ||
-			actualView==PanelDefinition.NAVIGATOR_THESAURUS){
+			actualView==PanelDefinition.NAVIGATOR_THESAURUS || actualView==PanelDefinition.NAVIGATOR_CATEGORIES){
 			tableProperties.getCellFormatter().setVisible(7,0,true);
 			tableProperties.getCellFormatter().setVisible(7,1,true);
 			tableProperties.getCellFormatter().setVisible(9,0,true);
@@ -399,6 +418,7 @@ public class Document extends Composite {
 		tableProperties.setHTML(12, 0, "<b>"+Main.i18n("document.webdav")+"</b>");
 		keywordsCloudText.setHTML("<b>"+Main.i18n("document.keywords.cloud")+"</b>");
 		subcribedUsersText.setHTML("<b>"+Main.i18n("document.subscribed.users")+"<b>");
+		categoriesText.setHTML("<b>"+Main.i18n("document.categories")+"</b>");
 		
 		if (document != null) {
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));

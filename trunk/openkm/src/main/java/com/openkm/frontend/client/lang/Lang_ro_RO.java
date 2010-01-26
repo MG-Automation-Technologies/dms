@@ -46,6 +46,7 @@ public class Lang_ro_RO {
 	    lang.put("startup.openkm", "OpenKM se incarca");
 	    lang.put("startup.starting.loading", "Incepe incarcarea OpenKM");
 	    lang.put("startup.taxonomy", "Se preia nodul principal pentru taxonomii");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Se preia nodul principal pentru sabloane");
 	    lang.put("startup.personal", "Se preia nodul principal pentru documente personale");
@@ -62,6 +63,7 @@ public class Lang_ro_RO {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Se incarca zona documentelor personale");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.categories", "Loading categories");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Se incarca zona sabloanelor");
 	    lang.put("startup.loading.trash", "Se incarca zona cosului de gunoi");
@@ -78,6 +80,7 @@ public class Lang_ro_RO {
 	    lang.put("leftpanel.label.trash", "Cos de gunoi");
 	    lang.put("leftpanel.label.mail", "E-mail");
 	    lang.put("leftpanel.label.stored.search", "Cautari salvate");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Sabloane");
 	    lang.put("leftpanel.label.my.documents", "Documentele mele");
@@ -299,6 +302,7 @@ public class Lang_ro_RO {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Add note");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.categories", "Categories");
 
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

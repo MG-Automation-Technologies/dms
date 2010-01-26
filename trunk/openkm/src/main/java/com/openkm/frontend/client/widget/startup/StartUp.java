@@ -49,29 +49,31 @@ public class StartUp {
 	
 	public static final int STARTUP_STARTING								= 0;
 	public static final int STARTUP_GET_TAXONOMY_ROOT						= 1;
-	public static final int STARTUP_GET_THESAURUS_ROOT 						= 2;
-	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 3;
-	public static final int STARTUP_GET_PERSONAL 	  						= 4;
-	public static final int STARTUP_GET_MAIL 	  							= 5;
-	public static final int STARTUP_GET_TRASH 	 	  						= 6;
-	public static final int STARTUP_GET_USER_HOME 	  						= 7;
-	public static final int STARTUP_GET_BOOKMARKS							= 8;
-	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 9;
-	public static final int STARTUP_LOADING_TAXONOMY						= 10;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 11;
-	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 12;
-	public static final int STARTUP_LOADING_OPEN_PATH						= 13;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 15;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 16;
-	public static final int STARTUP_LOADING_THESAURUS						= 17;
-	public static final int STARTUP_LOADING_TEMPLATES						= 18;
-	public static final int STARTUP_LOADING_PERSONAL						= 19;
-	public static final int STARTUP_LOADING_MAIL							= 20;	
-	public static final int STARTUP_LOADING_TRASH							= 21;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 22;
-	public static final int STARTUP_GET_USER_VALUES							= 23;
-	public static final int STARTUP_KEEP_ALIVE								= 24;
+	public static final int STARTUP_GET_CATEGORIES_ROOT 					= 2;
+	public static final int STARTUP_GET_THESAURUS_ROOT 						= 3;
+	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 4;
+	public static final int STARTUP_GET_PERSONAL 	  						= 5;
+	public static final int STARTUP_GET_MAIL 	  							= 6;
+	public static final int STARTUP_GET_TRASH 	 	  						= 7;
+	public static final int STARTUP_GET_USER_HOME 	  						= 8;
+	public static final int STARTUP_GET_BOOKMARKS							= 9;
+	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 10;
+	public static final int STARTUP_LOADING_TAXONOMY						= 11;
+	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 12;
+	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 13;
+	public static final int STARTUP_LOADING_OPEN_PATH						= 14;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 15;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 16;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 17;
+	public static final int STARTUP_LOADING_CATEGORIES						= 18;
+	public static final int STARTUP_LOADING_THESAURUS						= 19;
+	public static final int STARTUP_LOADING_TEMPLATES						= 20;
+	public static final int STARTUP_LOADING_PERSONAL						= 21;
+	public static final int STARTUP_LOADING_MAIL							= 22;	
+	public static final int STARTUP_LOADING_TRASH							= 23;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 24;
+	public static final int STARTUP_GET_USER_VALUES							= 25;
+	public static final int STARTUP_KEEP_ALIVE								= 26;
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -98,7 +100,7 @@ public class StartUp {
 			//Only executes on initalization and evalues root Node permissions
 			Main.get().taxonomyRootFolder = result;
 			Main.get().mainPanel.browser.fileBrowser.table.fillWidth(); // Sets de columns size
-			nextStatus(STARTUP_GET_THESAURUS_ROOT);
+			nextStatus(STARTUP_GET_CATEGORIES_ROOT);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -144,6 +146,21 @@ public class StartUp {
 			// Only executes on initalization
 			Main.get().thesaurusRootFolder = result;
 			nextStatus(STARTUP_GET_TEMPLATE_ROOT);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("getThesaurus", caught);
+		}
+	};
+	
+	/**
+	 * Gets asyncronous categories root node
+	 */
+	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
+			// Only executes on initalization
+			Main.get().categoriesRootFolder = result;
+			nextStatus(STARTUP_GET_THESAURUS_ROOT);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -274,6 +291,13 @@ public class StartUp {
 		repositoryService.getThesaurus(callbackGetThesaurus);
 	}
 	
+	public void getCategories() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		repositoryService.getCategories(callbackGetCategories);
+	}	
+	
+	
 	/**
 	 * Gets the taxonomy
 	 */
@@ -328,6 +352,11 @@ public class StartUp {
 					case STARTUP_GET_TAXONOMY_ROOT:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.taxonomy"), STARTUP_GET_TAXONOMY_ROOT);
 						getRoot();
+						break;
+						
+					case STARTUP_GET_CATEGORIES_ROOT:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.categories"), STARTUP_GET_CATEGORIES_ROOT);
+						getCategories();
 						break;
 						
 					case STARTUP_GET_THESAURUS_ROOT:
@@ -403,6 +432,11 @@ public class StartUp {
 														  STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
 						break;
 						
+					case STARTUP_LOADING_CATEGORIES:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.categories"), STARTUP_LOADING_CATEGORIES);
+						Main.get().mainPanel.navigator.categoriesTree.init();	  	// Initialize thesaurus
+						break;
+						
 					case STARTUP_LOADING_THESAURUS:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.thesaurus"), STARTUP_LOADING_THESAURUS);
 						Main.get().mainPanel.navigator.thesaurusTree.init();	  	// Initialize thesaurus
@@ -474,8 +508,8 @@ public class StartUp {
 				nextStatus(status+1); // Tries to execute next initializing
 			
 			// This range must start with loading personal ( sequential in this range is break )
-			} else if (status<STARTUP_LOADING_THESAURUS) {
-				nextStatus(STARTUP_LOADING_THESAURUS); // Tries to execute next initializing
+			} else if (status<STARTUP_LOADING_CATEGORIES) {
+				nextStatus(STARTUP_LOADING_CATEGORIES); // Tries to execute next initializing
 			
             // This range are sequential calls
 			} else {
@@ -496,6 +530,10 @@ public class StartUp {
 				
 			case STARTUP_GET_TAXONOMY_ROOT:
 				msg = Main.i18n("startup.taxonomy");
+				break;
+				
+			case STARTUP_GET_CATEGORIES_ROOT:
+				msg = Main.i18n("startup.categories");
 				break;
 				
 			case STARTUP_GET_THESAURUS_ROOT:
@@ -557,6 +595,10 @@ public class StartUp {
 			
 			case STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS:
 				msg = Main.i18n("startup.loading.taxonomy.getting.filebrowser.mails");
+				break;
+				
+			case STARTUP_LOADING_CATEGORIES:
+				msg = Main.i18n("startup.loading.categories");
 				break;
 				
 			case STARTUP_LOADING_THESAURUS:

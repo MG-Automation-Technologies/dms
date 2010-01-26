@@ -45,6 +45,7 @@ public class Lang_mk_MK {
 	    lang.put("startup.openkm", "Вчитувам OpenKM");
 	    lang.put("startup.starting.loading", "Почнувам со вчитување на OpenKM");
 	    lang.put("startup.taxonomy", "Примам коренов јазол за јавни документи");
+	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Getting thesaurus root node");
 	    lang.put("startup.template", "Примам коренов јазол за мостри");
 	    lang.put("startup.personal", "Примам коренов јазол за лични поставки");
@@ -61,6 +62,7 @@ public class Lang_mk_MK {
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
 	    lang.put("startup.loading.personal", "Вчитувам лични");
 	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.categories", "Loading categories");
 	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
 	    lang.put("startup.loading.templates", "Вчитувам мостри");
 	    lang.put("startup.loading.trash", "Вчитувам ѓубре");
@@ -77,6 +79,7 @@ public class Lang_mk_MK {
 	    lang.put("leftpanel.label.trash", "Ѓубре");
 	    lang.put("leftpanel.label.mail", "E-пошта");
 	    lang.put("leftpanel.label.stored.search", "Зачувани пребарувања");
+	    lang.put("leftpanel.label.categories", "Categories");
 	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "Мостри");
 	    lang.put("leftpanel.label.my.documents", "Мои документи");
@@ -298,6 +301,7 @@ public class Lang_mk_MK {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Додај белешка");
 	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");

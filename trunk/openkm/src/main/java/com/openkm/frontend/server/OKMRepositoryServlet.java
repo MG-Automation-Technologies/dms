@@ -277,4 +277,31 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getThesaurus: "+gWTFolder);
 		return gWTFolder;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getCategories()
+	 */
+	public GWTFolder getCategories() throws OKMException {
+		log.debug("getCategories()");
+		String token = getToken();
+		Folder folder;
+		GWTFolder gWTFolder = new GWTFolder();
+		
+		try {
+			folder =  OKMRepository.getInstance().getCategoriesFolder(token);
+			gWTFolder = Util.copy(folder);
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getCategories: "+gWTFolder);
+		return gWTFolder;
+	}
 }
