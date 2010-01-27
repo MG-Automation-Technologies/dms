@@ -23,6 +23,7 @@ package com.openkm.frontend.client.bean;
 
 public class ToolBarOption {
 	public boolean createDirectoryOption;
+	public boolean findFolderOption;
 	public boolean downloadOption;
 	public boolean downloadPdfOption;
 	public boolean lockOption;

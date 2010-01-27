@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.thesaurus;
+package com.openkm.frontend.client.widget.findfolder;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -40,9 +40,7 @@ public class Status extends PopupPanel {
 	private HTML msg;
 	private HTML space;
 	private Image image;
-	private boolean flag_getChilds 			= false;
-	private boolean flag_root				= false;
-	private boolean flag_keywords			= false;
+	private boolean flag_getChilds = false;
 	
 	/**
 	 * Status
@@ -76,19 +74,17 @@ public class Status extends PopupPanel {
 	 * Refreshing satus
 	 */
 	public void refresh() {
-		if (flag_getChilds || flag_root || flag_keywords ) {
-			int left = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-300)/2) +
-						 Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteLeft();
-			int top = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-240)/2) + 
-			            Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteTop();
+		if (flag_getChilds ) {
+			int left = ((Main.get().findFolderSelectPopup.getOffsetWidth()-400)/2) +
+						 Main.get().findFolderSelectPopup.getAbsoluteLeft();
+			int top = ((Main.get().findFolderSelectPopup.getOffsetHeight()-240)/2) + 
+			            Main.get().findFolderSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.addStyleName("okm-PanelRefreshing");
+			Main.get().findFolderSelectPopup.scrollFolderPanel.addStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.removeStyleName("okm-PanelRefreshing");
+			Main.get().findFolderSelectPopup.scrollFolderPanel.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	
@@ -106,40 +102,6 @@ public class Status extends PopupPanel {
 	 */
 	public void unsetFlagChilds() {
 		flag_getChilds = false;
-		refresh();
-	}
-	
-	/**
-	 * Set remove root flag
-	 */
-	public void setFlagRoot() {
-		msg.setHTML(Main.i18n("tree.status.refresh.get.root"));
-		flag_root= true;
-		refresh();
-	}
-	
-	/**
-	 * Unset remove root flag
-	 */
-	public void unsetFlagRoot() {
-		flag_root = false;
-		refresh();
-	}
-	
-	/**
-	 * Set remove keywords flag
-	 */
-	public void setFlagKeywords() {
-		msg.setHTML(Main.i18n("tree.status.refresh.get.keywords"));
-		flag_keywords= true;
-		refresh();
-	}
-	
-	/**
-	 * Unset remove keywords flag
-	 */
-	public void unsetFlagKeywords() {
-		flag_keywords = false;
 		refresh();
 	}
 }

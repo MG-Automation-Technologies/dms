@@ -56,6 +56,7 @@ import com.openkm.frontend.client.widget.MsgPopup;
 import com.openkm.frontend.client.widget.NotifyPopup;
 import com.openkm.frontend.client.widget.UserPopup;
 import com.openkm.frontend.client.widget.WorkflowPopup;
+import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.resize.HorizontalBarSplitter;
 import com.openkm.frontend.client.widget.resize.VerticalBarSplitter;
@@ -103,6 +104,7 @@ public final class Main implements EntryPoint{
 	public MediaPlayerPopup mediaPlayerPopup;
 	public ImageViewerPopup imageViewerPopup;
 	public DebugConsolePopup debugConsolePopup;
+	public FindFolderSelectPopup findFolderSelectPopup;
 	public VerticalBarSplitter verticalBarSplitter;
 	public HorizontalBarSplitter horizontalBarSplitter;
 	
@@ -258,6 +260,12 @@ public final class Main implements EntryPoint{
 		debugConsolePopup.setHeight("100px");
 		debugConsolePopup.setStyleName("okm-Popup");
 		debugConsolePopup.addStyleName("okm-DisableSelect");
+		findFolderSelectPopup = new FindFolderSelectPopup();
+		findFolderSelectPopup.setWidth("400px");
+		findFolderSelectPopup.setHeight("240px");
+		findFolderSelectPopup.setStyleName("okm-Popup");
+		findFolderSelectPopup.addStyleName("okm-DisableSelect");
+		
 		verticalBarSplitter = new VerticalBarSplitter();
 		horizontalBarSplitter = new HorizontalBarSplitter();
 
