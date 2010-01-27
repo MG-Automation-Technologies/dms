@@ -51,8 +51,8 @@
 		<tr class="odd"><td><b><%=Config.PROPERTY_RESTRICT_FILE_MIME %></b></td><td><%=Config.RESTRICT_FILE_MIME %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_RESTRICT_FILE_EXTENSION %></b></td><td><%=Config.RESTRICT_FILE_EXTENSION %></td></tr>
 		
-		<tr class="odd"><td><b><%=Config.PROPERTY_NOTIFY_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.NOTIFY_MESSAGE_SUBJECT) %></td></tr>
-		<tr class="even"><td><b><%=Config.PROPERTY_NOTIFY_MESSAGE_BODY %></b></td><td><%=escape(Config.NOTIFY_MESSAGE_BODY) %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_SUBJECT) %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_BODY %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_BODY) %></td></tr>
 
 		<tr class="odd"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_SUBJECT) %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_BODY %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_BODY) %></td></tr>
