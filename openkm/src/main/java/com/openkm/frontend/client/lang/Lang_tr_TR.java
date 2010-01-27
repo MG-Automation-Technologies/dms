@@ -109,6 +109,7 @@ public class Lang_tr_TR {
 	    lang.put("tree.status.refresh.add.subscription", "Adding subscription");
 	    lang.put("tree.status.refresh.remove.subscription", "Üye Siliniyor");
 	    lang.put("tree.status.refresh.get.root", "Kaynak Klasör Yenileniyor");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Kullanýcý Açýlýyor");
 	    lang.put("tree.status.refresh.purge.trash", "Geri Dönüþüm Kutusu Temizleniyor");
 	    
@@ -572,6 +573,8 @@ public class Lang_tr_TR {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Dokümana Ýþlemi engellendi");

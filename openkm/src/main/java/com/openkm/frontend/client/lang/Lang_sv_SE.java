@@ -108,6 +108,7 @@ public class Lang_sv_SE {
 	    lang.put("tree.status.refresh.add.subscription", "Lägger till prenumerationer");
 	    lang.put("tree.status.refresh.remove.subscription", "Tar bort prenumerationer");
 	    lang.put("tree.status.refresh.get.root", "Uppdaterar root mappen");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Hämtar användarnas hemkataloger");
 	    lang.put("tree.status.refresh.purge.trash", "Rensar papperskorgen");
 	    
@@ -572,6 +573,8 @@ public class Lang_sv_SE {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Åtkomst vägrad till dokument");

@@ -108,6 +108,7 @@ public class Lang_lv_LV {
 	    lang.put("tree.status.refresh.add.subscription", "Pievienot abonementu");
 	    lang.put("tree.status.refresh.remove.subscription", "Dzēst abonementu");
 	    lang.put("tree.status.refresh.get.root", "Atjaunot root mapi");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Saņem leitotāja mājas");
 	    lang.put("tree.status.refresh.purge.trash", "iztīra miskasti");
 	    
@@ -572,6 +573,8 @@ public class Lang_lv_LV {
 	    
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Pieeja dokumentam liegta");

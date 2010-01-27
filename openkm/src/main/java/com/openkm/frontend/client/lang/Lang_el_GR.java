@@ -108,6 +108,7 @@ public class Lang_el_GR {
 	    lang.put("tree.status.refresh.add.subscription", "Προσθήκη συνδρομής");
 	    lang.put("tree.status.refresh.remove.subscription", "Διαγραφή συνδρομής");
 	    lang.put("tree.status.refresh.get.root", "Ανανέωση ριζικού φακέλου");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Λήψη κόμβο χρήστη");
 	    lang.put("tree.status.refresh.purge.trash", "Άδειασμα απορριμάτων");
 	    
@@ -572,6 +573,8 @@ public class Lang_el_GR {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Άρνηση πρόσβασης εγγράφου");

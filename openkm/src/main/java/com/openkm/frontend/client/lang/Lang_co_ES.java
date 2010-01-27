@@ -108,6 +108,7 @@ public class Lang_co_ES {
 	    lang.put("tree.status.refresh.add.subscription", "Estableciendo suscripción");
 	    lang.put("tree.status.refresh.remove.subscription", "Eliminando suscripción");
 	    lang.put("tree.status.refresh.get.root", "Refrescando carpeta inicial");
+	    lang.put("tree.status.refresh.get.keywords", "Refrescando palabras clave");
 	    lang.put("tree.status.refresh.get.user.home", "Obteniendo inicio del usuario");
 	    lang.put("tree.status.refresh.purge.trash", "Vaciando papelera");
 	    
@@ -572,6 +573,8 @@ public class Lang_co_ES {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Añadir una palabra clave del thesaurus");
+	    lang.put("thesaurus.tab.tree", "Arbol");
+	    lang.put("thesaurus.tab.keywords", "Palabras clave");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

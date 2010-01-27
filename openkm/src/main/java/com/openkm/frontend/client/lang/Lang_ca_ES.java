@@ -108,6 +108,7 @@ public class Lang_ca_ES {
 	    lang.put("tree.status.refresh.add.subscription", "S'està afegint la subscripció");
 	    lang.put("tree.status.refresh.remove.subscription", "S'està eliminant la subscripció");
 	    lang.put("tree.status.refresh.get.root", "S'està refrescant la carpeta inicial");
+	    lang.put("tree.status.refresh.get.keywords", "S'estan refrescant les paraules clau");
 	    lang.put("tree.status.refresh.get.user.home", "S'està obtenint l'inici de l'usuari");
 	    lang.put("tree.status.refresh.purge.trash", "S'està buidant la paperera");
 	    
@@ -573,6 +574,8 @@ public class Lang_ca_ES {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Afegir una paraula clau del thesaurus");
+	    lang.put("thesaurus.tab.tree", "Arbre");
+	    lang.put("thesaurus.tab.keywords", "Paraules clau");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");

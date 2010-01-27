@@ -108,6 +108,7 @@ public class Lang_sr_BA {
 	    lang.put("tree.status.refresh.add.subscription","Potpisivanje");
 	    lang.put("tree.status.refresh.remove.subscription", "Brisanje potpisa");
 	    lang.put("tree.status.refresh.get.root", "Osvježi glavni folder");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Pokretanje početnog foldera");
 	    lang.put("tree.status.refresh.purge.trash", "Očisti kantu");
 	    
@@ -572,6 +573,8 @@ public class Lang_sr_BA {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Pristup dokumentu odbijen");

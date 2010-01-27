@@ -42,6 +42,7 @@ public class Status extends PopupPanel {
 	private Image image;
 	private boolean flag_getChilds 			= false;
 	private boolean flag_root				= false;
+	private boolean flag_keywords			= false;
 	
 	/**
 	 * Status
@@ -75,17 +76,19 @@ public class Status extends PopupPanel {
 	 * Refreshing satus
 	 */
 	public void refresh() {
-		if (flag_getChilds || flag_root ) {
+		if (flag_getChilds || flag_root || flag_keywords ) {
 			int left = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-200)/2) +
 						 Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteLeft();
 			int top = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-40)/2) + 
 			            Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.addStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	
@@ -120,6 +123,23 @@ public class Status extends PopupPanel {
 	 */
 	public void unsetFlagRoot() {
 		flag_root = false;
+		refresh();
+	}
+	
+	/**
+	 * Set remove keywords flag
+	 */
+	public void setFlagKeywords() {
+		msg.setHTML(Main.i18n("tree.status.refresh.get.keywords"));
+		flag_keywords= true;
+		refresh();
+	}
+	
+	/**
+	 * Unset remove keywords flag
+	 */
+	public void unsetFlagKeywords() {
+		flag_keywords = false;
 		refresh();
 	}
 }

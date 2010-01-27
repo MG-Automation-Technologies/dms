@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.openrdf.query.BindingSet;
@@ -45,7 +46,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.kea.Term;
 import com.openkm.core.Config;
+import com.openkm.frontend.client.util.StringIgnoreCaseComparator;
 import com.openkm.kea.metadata.WorkspaceHelper;
+import com.openkm.kea.tree.TermComparator;
 
 /**
  * @author jllort
@@ -58,6 +61,8 @@ public class RDFREpository {
     private static Repository SKOSRepository = null;
     private static Repository OWLRepository = null;
     private static RDFREpository instance;
+    private static List<Term> terms = null;
+    private static List<String> keywords = null;
     
     /**
      * getConnection
@@ -89,6 +94,7 @@ public class RDFREpository {
     private RDFREpository() {
     	if (!Config.KEA_THESAURUS_SKOS_FILE.equals("")) {
     		SKOSRepository = getSKOSMemStoreRepository();
+    		loadTerms();
     	}
         if (!Config.KEA_THESAURUS_OWL_FILE.equals("")) {
         	OWLRepository = getOWLMemStoreRepository();
@@ -106,18 +112,44 @@ public class RDFREpository {
         }
         return instance;
     }
-
+    
+    
     /**
      * getTerms
      * 
      * @return
      */
     public List<Term> getTerms() {
+    	if (terms==null || keywords==null) {
+    		loadTerms();
+    	} 
+    	return terms;
+    }
+    
+    /**
+     * getTerms
+     * 
+     * @return
+     */
+    public List<String> getKeywords() {
+    	if (terms==null || keywords==null) {
+    		loadTerms();
+    	} 
+    	return keywords;
+    }
 
-        List<Term> terms = new ArrayList<Term>();
+    /**
+     * loadTerms
+     * 
+     * @return
+     */
+    private void loadTerms() {
+        terms = new ArrayList<Term>();
+        keywords = new ArrayList<String>();
         RepositoryConnection con = null;
         TupleQuery query;
         
+        log.info("Loading skos terms in memory");
         if (SKOSRepository!=null) {
 	        try {
 	            con = SKOSRepository.getConnection();
@@ -127,7 +159,9 @@ public class RDFREpository {
 				result = query.evaluate();
 	            while (result.hasNext()) {
 	                BindingSet bindingSet = result.next();
-	                terms.add(new Term(bindingSet.getValue("lab").stringValue(),""));
+	                Term term = new Term(bindingSet.getValue("UID").stringValue(),"");
+	                terms.add(term);
+	                keywords.add(term.getUid());
 	            }
 	        } catch (RepositoryException e) {
 	            log.error("could not obtain connection to respository",e);
@@ -143,7 +177,10 @@ public class RDFREpository {
 	            }
 	        }
         }
-        return terms;
+        // Sorting collections
+        Collections.sort(terms, new TermComparator());
+        Collections.sort(keywords, new StringIgnoreCaseComparator());
+        log.info("Finished loading skos terms in memory");
     }
 
     /**
@@ -177,6 +214,7 @@ public class RDFREpository {
         } catch (Throwable t) {
             log.error("Unexpected exception loading repository",t);
         } 
+        log.info("Finished loading skos file in memory");
         return repository;
     }
     
@@ -211,6 +249,7 @@ public class RDFREpository {
         } catch (Throwable t) {
             log.error("Unexpected exception loading repository",t);
         } 
+        log.info("Finished loading owl file in memory");
         return repository;
     }
 }

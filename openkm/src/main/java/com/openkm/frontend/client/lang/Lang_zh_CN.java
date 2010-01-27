@@ -108,6 +108,7 @@ public class Lang_zh_CN {
 	    lang.put("tree.status.refresh.add.subscription", "正在新增订阅");
 	    lang.put("tree.status.refresh.remove.subscription", "正在删除订阅");
 	    lang.put("tree.status.refresh.get.root", "正在刷新根文件夹");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "正在获得用户根目录");
 	    lang.put("tree.status.refresh.purge.trash", "正在清空回收站");
 	    
@@ -571,6 +572,8 @@ public class Lang_zh_CN {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");

@@ -32,7 +32,6 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.config.Config;
@@ -73,13 +72,6 @@ public class FolderSelectTree extends Composite {
 				boolean refresh = true;
 				TreeItem item = event.getSelectedItem();
 				
-				// Enables or disables move buttom ( evalues security to move to folder with permissions )
-				if (rootItem.equals(item)) {
-					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(false);
-				} else {
-					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(true);
-				}
-				
 				// Case that not refreshing tree and file browser ( right click )
 				if (actualItem.equals(item)) {
 					refresh = false;
@@ -94,6 +86,13 @@ public class FolderSelectTree extends Composite {
 					}
 				}
 				
+				// Enables or disables move buttom ( evalues security to move to folder with permissions )
+				if (rootItem.equals(actualItem)) {
+					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(false);
+				} else {
+					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(true);
+				}
+				
 				if (refresh) {
 					refresh(true);
 				}
@@ -104,7 +103,14 @@ public class FolderSelectTree extends Composite {
 	}
 	
 	/**
-	 * Resets all tree values
+	 * enableActionButton
+	 */
+	public boolean evaluateEnableActionButton() {
+		return !rootItem.equals(actualItem);
+	}
+	
+	/**
+	 * Resets all tree values		
 	 */
 	public void reset() {
 		actualItem = rootItem;
