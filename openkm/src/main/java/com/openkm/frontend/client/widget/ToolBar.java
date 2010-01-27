@@ -41,14 +41,12 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -825,6 +823,13 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				}
 			}
 			
+			// Enables find folder in Desktop view 
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==ExtendedDockPanel.DESKTOP){
+				enableFindFolder();
+			} else {
+				disableFindFolder();
+			}
+			
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
 			evaluateRemoveGroupProperty(false);
 			
@@ -965,6 +970,13 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableRemoveSubscription();
 			}
 			
+			// Enables find folder in Desktop view 
+			if (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()==ExtendedDockPanel.DESKTOP){
+				enableFindFolder();
+			} else {
+				disableFindFolder();
+			}
+			
 			// Sets the permission to main menu
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
 			
@@ -1092,7 +1104,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableFindFolder() {
 		toolBarOption.findFolderOption = false;
 		findFolder.setStyleName("okm-ToolBar-button-disabled");
-		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find__disabled.gif",Main.i18n("tree.menu.directory.find.folder")));
+		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find_disabled.gif",Main.i18n("tree.menu.directory.find.folder")));
 	}
 	
 	/**
@@ -1519,7 +1531,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultCategoriesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
-		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1553,7 +1565,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultThesaurusToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
-		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1587,7 +1599,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultTrashToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
-		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1621,7 +1633,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultTemplatesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
-		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1655,7 +1667,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultMyDocumentsToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
-		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
