@@ -40,7 +40,9 @@ public class CommonUI {
 	public static void openAllFolderPath(String path, String docPath) {
 		boolean found = false;
 		
-		if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath()) || 
+		if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath()) ||
+			path.startsWith(Main.get().mainPanel.navigator.categoriesTree.folderRoot.getPath()) ||
+			path.startsWith(Main.get().mainPanel.navigator.thesaurusTree.folderRoot.getPath()) ||
 			path.startsWith(Main.get().mainPanel.navigator.personalTree.folderRoot.getPath()) ||
 			path.startsWith(Main.get().mainPanel.navigator.templateTree.folderRoot.getPath()) || 
 			path.startsWith(Main.get().mainPanel.navigator.trashTree.folderRoot.getPath()) || 

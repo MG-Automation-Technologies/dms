@@ -37,6 +37,8 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -51,6 +53,7 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 
 public class FindFolderSelectPopup extends DialogBox  {	
@@ -90,10 +93,11 @@ public class FindFolderSelectPopup extends DialogBox  {
 			}
 		});
 		
-		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
+		actionButton = new Button(Main.i18n("search.result.menu.go.folder"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				executeAction(folderTable.getText(selectedRow, 0));
+				CommonUI.openAllFolderPath(folderTable.getText(selectedRow, 1), "");
+				hide();
 			}
 		});
 		
@@ -109,6 +113,24 @@ public class FindFolderSelectPopup extends DialogBox  {
 					switch (actualView){
 						case PanelDefinition.NAVIGATOR_TAXONOMY:
 							gwtParams.setPath(Main.get().taxonomyRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_CATEGORIES:
+							gwtParams.setPath(Main.get().categoriesRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_THESAURUS:
+							gwtParams.setPath(Main.get().thesaurusRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_TEMPLATES:
+							gwtParams.setPath(Main.get().templatesRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_PERSONAL:
+							gwtParams.setPath(Main.get().personalRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_MAIL:
+							gwtParams.setPath(Main.get().mailRootFolder.getPath());
+							break;
+						case PanelDefinition.NAVIGATOR_TRASH:
+							gwtParams.setPath(Main.get().trashRootFolder.getPath());
 							break;
 					}
 					gwtParams.setMimeType("");
@@ -174,21 +196,12 @@ public class FindFolderSelectPopup extends DialogBox  {
 	}
 	
 	/**
-	 * Executes the action
-	 */
-	public void executeAction(String actualPath) {
-		String keyword = actualPath.substring(actualPath.lastIndexOf("/")+1).replace(" ", "_");
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKey(keyword, true);
-		
-	}
-	
-	/**
 	 * Language refresh
 	 */
 	public void langRefresh() {		
-		setText(Main.i18n("thesaurus.directory.select.label"));
+		setText(Main.i18n("search.folder.filter"));
 		cancelButton.setText(Main.i18n("button.close"));
-		actionButton.setText(Main.i18n("button.add"));		
+		actionButton.setText(Main.i18n("search.result.menu.go.folder"));		
 	}
 	
 	/**
@@ -199,7 +212,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
-		setText(Main.i18n("thesaurus.directory.select.label"));
+		setText(Main.i18n("search.folder.filter"));
 		
 		// Resets to initial tree value
 		removeAllRows();
@@ -305,6 +318,8 @@ public class FindFolderSelectPopup extends DialogBox  {
 					}
 					
 					folderTable.setHTML(rows, 1, folder.getPath());
+					folderTable.getCellFormatter().setWidth(rows, 0, "30");
+					folderTable.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_CENTER);
 				}
 				size++;
 			}
