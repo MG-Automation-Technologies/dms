@@ -94,8 +94,8 @@ public class Config {
 	public static String PROPERTY_RESTRICT_FILE_MIME = "restrict.file.mime";
 	public static String PROPERTY_RESTRICT_FILE_EXTENSION = "restrict.file.extension";
 	
-	public static String PROPERTY_NOTIFY_MESSAGE_SUBJECT = "notify.message.subject";
-	public static String PROPERTY_NOTIFY_MESSAGE_BODY = "notify.message.body";
+	public static String PROPERTY_NOTIFICATION_MESSAGE_SUBJECT = "notification.message.subject";
+	public static String PROPERTY_NOTIFICATION_MESSAGE_BODY = "notification.message.body";
 	
 	public static String PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT = "subscription.message.subject";
 	public static String PROPERTY_SUBSCRIPTION_MESSAGE_BODY = "subscription.message.body";
@@ -173,12 +173,12 @@ public class Config {
 	public static String RESTRICT_FILE_MIME = "off";
 	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
 
-	public static String NOTIFY_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Message: </b>$notificationMessage<br/>";
-	public static String NOTIFY_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - $documentName";
+	public static String NOTIFICATION_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - $documentName";
+	public static String NOTIFICATION_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Message: </b>$notificationMessage<br/>";
 
-	public static String SUBSCRIPTION_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Event: </b>$eventType<br/><b>Comment: </b>$subscriptionComment<br/>";
 	public static String SUBSCRIPTION_MESSAGE_SUBJECT = "OpenKM - $eventType - $documentPath";
-	
+	public static String SUBSCRIPTION_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Event: </b>$eventType<br/><b>Comment: </b>$subscriptionComment<br/>";
+		
 	public static String SUBSCRIPTION_TWITTER_USER = "";
 	public static String SUBSCRIPTION_TWITTER_PASSWORD = "";
 	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - $documentUrl - $documentPath - $userId - $eventType";
@@ -260,8 +260,8 @@ public class Config {
 			RESTRICT_FILE_MIME = config.getProperty(PROPERTY_RESTRICT_FILE_MIME, RESTRICT_FILE_MIME);
 			RESTRICT_FILE_EXTENSION = config.getProperty(PROPERTY_RESTRICT_FILE_EXTENSION, RESTRICT_FILE_EXTENSION);
 			
-			NOTIFY_MESSAGE_SUBJECT = config.getProperty(PROPERTY_NOTIFY_MESSAGE_SUBJECT, NOTIFY_MESSAGE_SUBJECT);
-			NOTIFY_MESSAGE_BODY = config.getProperty(PROPERTY_NOTIFY_MESSAGE_BODY, NOTIFY_MESSAGE_BODY);
+			NOTIFICATION_MESSAGE_SUBJECT = config.getProperty(PROPERTY_NOTIFICATION_MESSAGE_SUBJECT, NOTIFICATION_MESSAGE_SUBJECT);
+			NOTIFICATION_MESSAGE_BODY = config.getProperty(PROPERTY_NOTIFICATION_MESSAGE_BODY, NOTIFICATION_MESSAGE_BODY);
 			
 			SUBSCRIPTION_MESSAGE_SUBJECT = config.getProperty(PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT, SUBSCRIPTION_MESSAGE_SUBJECT);
 			SUBSCRIPTION_MESSAGE_BODY = config.getProperty(PROPERTY_SUBSCRIPTION_MESSAGE_BODY, SUBSCRIPTION_MESSAGE_BODY);
@@ -335,8 +335,8 @@ public class Config {
 					PROPERTY_RESTRICT_FILE_MIME+"="+RESTRICT_FILE_MIME+", "+
 					PROPERTY_RESTRICT_FILE_EXTENSION+"="+RESTRICT_FILE_EXTENSION+", "+
 					
-					PROPERTY_NOTIFY_MESSAGE_SUBJECT+"="+NOTIFY_MESSAGE_SUBJECT+", "+
-					PROPERTY_NOTIFY_MESSAGE_BODY+"="+NOTIFY_MESSAGE_BODY+", "+
+					PROPERTY_NOTIFICATION_MESSAGE_SUBJECT+"="+NOTIFICATION_MESSAGE_SUBJECT+", "+
+					PROPERTY_NOTIFICATION_MESSAGE_BODY+"="+NOTIFICATION_MESSAGE_BODY+", "+
 					
 					PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT+"="+SUBSCRIPTION_MESSAGE_SUBJECT+", "+
 					PROPERTY_SUBSCRIPTION_MESSAGE_BODY+"="+SUBSCRIPTION_MESSAGE_BODY+", "+
