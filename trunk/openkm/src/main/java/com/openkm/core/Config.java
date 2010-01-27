@@ -173,15 +173,15 @@ public class Config {
 	public static String RESTRICT_FILE_MIME = "off";
 	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
 
-	public static String NOTIFY_MESSAGE_BODY = "<b>Document: </b><a href=\"{0}\">{1}</a><br/><b>User: </b>{3}<br/><b>Message: </b>{4}<br/>";
-	public static String NOTIFY_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - {0}";
+	public static String NOTIFY_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Message: </b>$notificationMessage<br/>";
+	public static String NOTIFY_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - $documentName";
 
-	public static String SUBSCRIPTION_MESSAGE_BODY = "<b>Document: </b><a href=\"{0}\">{1}</a><br/><b>User: </b>{3}<br/><b>Event: </b>{4}<br/><b>Comment: </b>{5}<br/>";
-	public static String SUBSCRIPTION_MESSAGE_SUBJECT = "OpenKM - {0} - {1}";
+	public static String SUBSCRIPTION_MESSAGE_BODY = "<b>Document: </b><a href=\"$documentUrl\">$documentPath</a><br/><b>User: </b>$userId<br/><b>Event: </b>$eventType<br/><b>Comment: </b>$subscriptionComment<br/>";
+	public static String SUBSCRIPTION_MESSAGE_SUBJECT = "OpenKM - $eventType - $documentPath";
 	
 	public static String SUBSCRIPTION_TWITTER_USER = "";
 	public static String SUBSCRIPTION_TWITTER_PASSWORD = "";
-	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - {0} - {1} - {3} - {4}";
+	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - $documentUrl - $documentPath - $userId - $eventType";
 	
 	public static String SYSTEM_DEMO = "off";
 	public static String SYSTEM_READONLY = "off";
