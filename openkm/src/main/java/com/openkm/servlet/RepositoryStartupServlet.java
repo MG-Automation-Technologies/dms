@@ -24,6 +24,7 @@ package com.openkm.servlet;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Timer;
 
 import javax.servlet.ServletException;
@@ -31,6 +32,8 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.jbpm.JbpmConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +100,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Initialize folder preview cache
         File previewCacheFolder = new File(Config.SWF_CACHE);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
+        
+        // Initialize Velocity engine
+	    try {
+	        Properties p = new Properties();
+		    p.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Config.JBOSS_HOME);
+			Velocity.init(p);
+		} catch (Exception e) {
+			throw new ServletException(e.getMessage());
+		}
         
         try {
         	log.info("*** Repository initializing... ***");
