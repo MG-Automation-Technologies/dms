@@ -19,18 +19,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.thesaurus;
+package com.openkm.frontend.client.widget.findfolder;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -41,72 +39,49 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.bean.GWTQueryResult;
+import com.openkm.frontend.client.bean.GWTResultSet;
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.service.OKMThesaurusService;
-import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
+import com.openkm.frontend.client.panel.PanelDefinition;
+import com.openkm.frontend.client.service.OKMSearchService;
+import com.openkm.frontend.client.service.OKMSearchServiceAsync;
+import com.openkm.frontend.client.util.Util;
 
-public class ThesaurusSelectPopup extends DialogBox  {	
+public class FindFolderSelectPopup extends DialogBox  {	
 	
-	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
-	private final int TAB_TREE 		= 0;
-	private final int TAB_KEYWORDS 	= 1;
+	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
-	public ScrollPanel scrollDirectoryPanel;
-	public ScrollPanel scrollKeywordPanel;
-	private VerticalPanel verticalDirectoryPanel;
-	private FolderSelectTree folderSelectTree;
+	public ScrollPanel scrollFolderPanel;
 	private Button cancelButton;
 	private Button actionButton;
 	public Status status;
 	private TextBox keyword;
-	private VerticalPanel vPanelKeyword;
-	private FlexTable keywordTable;
-	public TabPanel tabPanel;
+	private VerticalPanel vPanelFolder;
+	private FlexTable folderTable;
 	private int selectedRow = -1;
-	private int selectedTab = TAB_TREE;
 	
-	
-	public ThesaurusSelectPopup() {
+	public FindFolderSelectPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
 		
-		tabPanel = new TabPanel();
-		tabPanel.setSize("290", "150");
-		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
-			@Override
-			public void onSelection(SelectionEvent<Integer> event) {
-				selectedTab = event.getSelectedItem().intValue();
-				evaluateEnableAction();
-			}
-		});
-		
-		
 		vPanel = new VerticalPanel();		
-		vPanel.setWidth("300");
+		vPanel.setWidth("400");
 		vPanel.setHeight("200");
 		hPanel = new HorizontalPanel();
 		
-		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("100%", "100%");
-		scrollDirectoryPanel.setStyleName("okm-Popup-text");
-		scrollKeywordPanel = new ScrollPanel();
-		scrollKeywordPanel.setStyleName("okm-Popup-text");
-		verticalDirectoryPanel = new VerticalPanel();
-		folderSelectTree = new FolderSelectTree();
-		folderSelectTree.setSize("100%", "100%");
-				
-		verticalDirectoryPanel.add(folderSelectTree);
-		scrollDirectoryPanel.add(verticalDirectoryPanel);
+		scrollFolderPanel = new ScrollPanel();
+		scrollFolderPanel.setStyleName("okm-Popup-text");
 		
 		cancelButton = new Button(Main.i18n("button.close"), new ClickHandler() { 
 			@Override
@@ -118,50 +93,63 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (selectedTab==TAB_TREE) {
-					executeAction(folderSelectTree.getActualPath());
-				} else {
-					executeAction(keywordTable.getText(selectedRow, 0));
-				}
+				executeAction(folderTable.getText(selectedRow, 0));
 			}
 		});
 		
 		keyword = new TextBox();
-		keyword.setWidth("290");
+		keyword.setWidth("390");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (keyword.getText().length()>=3) {
 					keyword.setEnabled(false);
-					getKeywords(keyword.getText().toLowerCase());
+					GWTQueryParams gwtParams = new GWTQueryParams();
+					int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
+					switch (actualView){
+						case PanelDefinition.NAVIGATOR_TAXONOMY:
+							gwtParams.setPath(Main.get().taxonomyRootFolder.getPath());
+							break;
+					}
+					gwtParams.setMimeType("");
+					gwtParams.setKeywords("");
+					gwtParams.setMimeType("");
+					gwtParams.setName(keyword.getText()+"*"); // add wildcard at ends
+					gwtParams.setAuthor("");
+					gwtParams.setFrom("");
+					gwtParams.setTo("");
+					gwtParams.setSubject("");
+					gwtParams.setOperator(GWTQueryParams.OPERATOR_AND);
+					gwtParams.setLastModifiedFrom(null);
+					gwtParams.setLastModifiedTo(null);
+					gwtParams.setDomain(GWTQueryParams.FOLDER);
+					gwtParams.setSearchProperties(new HashMap<String, String>());
+					find(gwtParams);
 				} else {
 					removeAllRows();
 				}
 			}
 		});
-		keywordTable = new FlexTable();
-		keywordTable.setWidth("100%");
-		keywordTable.addClickHandler(new ClickHandler() {
+		folderTable = new FlexTable();
+		folderTable.setWidth("100%");
+		folderTable.setCellPadding(2);
+		folderTable.setCellSpacing(0);
+		folderTable.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				markSelectedRow(keywordTable.getCellForEvent(event).getRowIndex());
+				markSelectedRow(folderTable.getCellForEvent(event).getRowIndex());
 				evaluateEnableAction();
 			}
 		});
 		
-		vPanelKeyword = new VerticalPanel();
-		vPanelKeyword.add(keyword);
-		vPanelKeyword.add(keywordTable);
-		scrollKeywordPanel.add(vPanelKeyword);
+		vPanelFolder = new VerticalPanel();
+		vPanelFolder.add(keyword);
+		vPanelFolder.add(folderTable);
+		scrollFolderPanel.add(vPanelFolder);
 		
-		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
-		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
-		tabPanel.selectTab(TAB_TREE);
+		scrollFolderPanel.setPixelSize(390,150);
 		
-		scrollDirectoryPanel.setPixelSize(290,150);
-		scrollKeywordPanel.setPixelSize(290,150);
-		
-		vPanel.add(tabPanel);
+		vPanel.add(scrollFolderPanel);
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
@@ -171,15 +159,15 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
 		
-		vPanel.setCellHorizontalAlignment(tabPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(scrollFolderPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(tabPanel, "150");
+		vPanel.setCellHeight(scrollFolderPanel, "150");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
 		keyword.setStyleName("okm-Input");
-		keywordTable.setStyleName("okm-NoWrap");
-		keywordTable.addStyleName("okm-Table-Row");
+		folderTable.setStyleName("okm-NoWrap");
+		folderTable.addStyleName("okm-Table-Row");
 
 		super.hide();
 		setWidget(vPanel);
@@ -197,19 +185,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	/**
 	 * Language refresh
 	 */
-	public void langRefresh() {
-		TabBar tabBar = tabPanel.getTabBar();
-		selectedTab = tabBar.getSelectedTab();
-		
-		while (tabPanel.getWidgetCount() > 0) {
-			tabPanel.remove(0);
-		}
-		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
-		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
-		tabPanel.selectTab(selectedTab);
-		scrollDirectoryPanel.setPixelSize(290,150);
-		scrollKeywordPanel.setPixelSize(290,150);
-		
+	public void langRefresh() {		
 		setText(Main.i18n("thesaurus.directory.select.label"));
 		cancelButton.setText(Main.i18n("button.close"));
 		actionButton.setText(Main.i18n("button.add"));		
@@ -226,7 +202,6 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		setText(Main.i18n("thesaurus.directory.select.label"));
 		
 		// Resets to initial tree value
-		folderSelectTree.reset();
 		removeAllRows();
 		keyword.setText("");
 		keyword.setEnabled(true);
@@ -252,42 +227,13 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	}
 	
 	/**
-	 * Gets asyncronous root node
-	 */
-	final AsyncCallback<List<String>> callbackGetKeywords = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result) {
-			removeAllRows();
-			for (Iterator<String> it = result.iterator(); it.hasNext();) {
-				keywordTable.setHTML(keywordTable.getRowCount(), 0, it.next());
-			}
-			keyword.setEnabled(true);
-			status.unsetFlagKeywords();
-		}
-
-		public void onFailure(Throwable caught) {
-			status.unsetFlagKeywords();
-			Main.get().showError("getKeywords", caught);
-		}
-	};
-	
-	/**
-	 * Gets the root
-	 */
-	public void getKeywords(String filter) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) thesaurusService;
-		endPoint.setServiceEntryPoint(Config.OKMThesaurusService);	
-		status.setFlagKeywords();
-		thesaurusService.getKeywords(filter, callbackGetKeywords);
-	}
-	
-	/**
 	 * removeAllRows
 	 */
 	private void removeAllRows() {
 		selectedRow = -1;
 		evaluateEnableAction();
-		while (keywordTable.getRowCount()>0) {
-			keywordTable.removeRow(0);
+		while (folderTable.getRowCount()>0) {
+			folderTable.removeRow(0);
 		}
 	}
 	
@@ -314,9 +260,9 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private void styleRow(int row, boolean selected) {
 		if (row>=0) {
 			if (selected) {
-				keywordTable.getRowFormatter().addStyleName(row, "okm-Table-SelectedRow");
+				folderTable.getRowFormatter().addStyleName(row, "okm-Table-SelectedRow");
 		    } else {
-		    	keywordTable.getRowFormatter().removeStyleName(row, "okm-Table-SelectedRow");
+		    	folderTable.getRowFormatter().removeStyleName(row, "okm-Table-SelectedRow");
 		    }
 		}
 	 }
@@ -325,14 +271,63 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 * evaluateEnableAction
 	 */
 	private void evaluateEnableAction() {
-		switch (selectedTab) {
-			case TAB_TREE:
-				enable(folderSelectTree.evaluateEnableActionButton());
-				break;
-				
-			case TAB_KEYWORDS:
-				enable(selectedRow>=0);
-				break;
+		enable(selectedRow>=0);
+	}
+	
+	/**
+	 * Call Back find
+	 */
+	final AsyncCallback<GWTResultSet> callbackFind = new AsyncCallback<GWTResultSet>() {
+		public void onSuccess(GWTResultSet result){
+			GWTResultSet resultSet = result;	
+			removeAllRows();
+			int size = 0;
+			
+			for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext();){
+				GWTQueryResult gwtQueryResult = it.next();
+				if (gwtQueryResult.getFolder()!=null) {
+					GWTFolder folder = gwtQueryResult.getFolder();
+					int rows = folderTable.getRowCount();
+					
+					// Looks if must change icon on parent if now has no childs and properties with user security atention
+					if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+						if (folder.getHasChilds()) {
+							folderTable.setHTML(rows, 0, Util.imageItemHTML("img/menuitem_childs.gif"));
+						} else {
+							folderTable.setHTML(rows, 0, Util.imageItemHTML("img/menuitem_empty.gif"));
+						}
+					} else {
+						if (folder.getHasChilds()) {
+							folderTable.setHTML(rows, 0, Util.imageItemHTML("img/menuitem_childs_ro.gif"));
+						} else {
+							folderTable.setHTML(rows, 0, Util.imageItemHTML("img/menuitem_empty_ro.gif"));
+						}
+					}
+					
+					folderTable.setHTML(rows, 1, folder.getPath());
+				}
+				size++;
+			}
+			
+			keyword.setEnabled(true);
+			status.unsetFlagChilds();
 		}
+		
+		public void onFailure(Throwable caught) {
+			status.unsetFlagChilds();
+			Main.get().showError("Find", caught);
+		}
+	};
+	
+	/**
+	 * Find
+	 * 
+	 * @param params
+	 */
+	private void find(GWTQueryParams params) {
+		status.setFlagChilds();
+		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
+		endPoint.setServiceEntryPoint(Config.OKMSearchService);
+		searchService.find(params, callbackFind);
 	}
 }

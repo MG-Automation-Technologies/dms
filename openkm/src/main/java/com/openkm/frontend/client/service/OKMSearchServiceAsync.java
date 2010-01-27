@@ -41,4 +41,5 @@ public interface OKMSearchServiceAsync {
 	public void deleteSearch(String name, AsyncCallback<?> callback);
 	public void findPaginated(GWTQueryParams params, int offset, int limit, AsyncCallback<GWTResultSet> callback); 
 	public void getKeywordMap(Collection<String> filter, AsyncCallback<List<GWTKeyword>> callback);
+	public void find(GWTQueryParams params, AsyncCallback<GWTResultSet> callback); 
 }

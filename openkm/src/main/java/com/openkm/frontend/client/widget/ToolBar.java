@@ -41,6 +41,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -81,6 +82,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		
 	private HorizontalPanel panel;
 	private HTML createDirectory;
+	private HTML findFolder;
 	private HTML lock;
 	private HTML unLock;
 	private HTML addDocument;
@@ -108,7 +110,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Directory listener
 	 */
-	ClickHandler createDirectoryListener = new ClickHandler() { 
+	ClickHandler createDirectoryHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.createDirectoryOption) {
@@ -125,9 +127,21 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Lock listener
+	 * Find folder Handler
 	 */
-	ClickHandler lockListener = new ClickHandler() { 
+	ClickHandler findFolderHandler = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
+			if (toolBarOption.findFolderOption) {
+				Main.get().findFolderSelectPopup.show();
+			}
+		}
+	};
+	
+	/**
+	 * Lock Handler
+	 */
+	ClickHandler lockHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.lockOption) {
@@ -144,9 +158,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Unlock listener
+	 * Unlock Handler
 	 */
-	ClickHandler unLockListener = new ClickHandler() { 
+	ClickHandler unLockHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.unLockOption) {
@@ -163,9 +177,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Add document listener
+	 * Add document Handler
 	 */
-	ClickHandler addDocumentListener = new ClickHandler() { 
+	ClickHandler addDocumentHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.addDocumentOption) {
@@ -184,9 +198,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Delete listener
+	 * Delete Handler
 	 */
-	ClickHandler deleteListener = new ClickHandler() { 
+	ClickHandler deleteHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.deleteOption) {
@@ -240,9 +254,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Edit listener
+	 * Edit Handler
 	 */
-	ClickHandler checkoutListener = new ClickHandler() { 
+	ClickHandler checkoutHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.checkoutOption){
@@ -259,9 +273,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Checkin listener
+	 * Checkin Handler
 	 */
-	ClickHandler checkinListener = new ClickHandler() { 
+	ClickHandler checkinHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.checkinOption) {
@@ -280,9 +294,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Checkout cancel listener
+	 * Checkout cancel Handler
 	 */
-	ClickHandler cancelCheckoutListener = new ClickHandler() { 
+	ClickHandler cancelCheckoutHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
@@ -299,9 +313,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Download listener
+	 * Download Handler
 	 */
-	ClickHandler downloadListener = new ClickHandler() { 
+	ClickHandler downloadHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.downloadOption) {
@@ -311,9 +325,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	};
 
 	/**
-	 * Download as PDF listener
+	 * Download as PDF Handler
 	 */
-	ClickHandler downloadPdfListener = new ClickHandler() { 
+	ClickHandler downloadPdfHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.downloadPdfOption) {
@@ -337,9 +351,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 
 	/**
-	 * Add property group listener
+	 * Add property group Handler
 	 */
-	ClickHandler addPropertyGroupListener = new ClickHandler() { 
+	ClickHandler addPropertyGroupHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.addPropertyGroupOption) {
@@ -363,9 +377,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Remove property group listener
+	 * Remove property group Handler
 	 */
-	ClickHandler removePropertyGroupListener = new ClickHandler() { 
+	ClickHandler removePropertyGroupHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.removePropertyGroupOption && toolBarOption.firedRemovePropertyGroupOption) {
@@ -375,9 +389,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	};
 	
 	/**
-	 * Add workflow listener
+	 * Add workflow Handler
 	 */
-	ClickHandler addWorkflowListener = new ClickHandler() { 
+	ClickHandler addWorkflowHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.workflowOption) {
@@ -397,7 +411,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Add subscription
 	 */
-	ClickHandler addSubscriptionListener = new ClickHandler() { 
+	ClickHandler addSubscriptionHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.addSubscription) {
@@ -420,7 +434,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Remove subscription
 	 */
-	ClickHandler removeSubscriptionListener = new ClickHandler() { 
+	ClickHandler removeSubscriptionHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.removeSubscription) {
@@ -441,9 +455,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Arrow rotate clock wise listener
+	 * Arrow rotate clock wise Handler
 	 */
-	ClickHandler arrowRefreshListener = new ClickHandler() { 
+	ClickHandler arrowRefreshHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.refreshOption) {
@@ -485,9 +499,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Arrow rotate clock wise listener
+	 * Arrow rotate clock wise Handler
 	 */
-	ClickHandler arrowHomeListener = new ClickHandler() { 
+	ClickHandler arrowHomeHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.homeOption) {
@@ -555,6 +569,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		toolBarOption = getDefaultRootToolBar();
 		
 		createDirectory = new HTML(Util.imageHTML("img/icon/actions/add_folder.gif",Main.i18n("tree.menu.directory.create")));
+		findFolder = new HTML(Util.imageHTML("img/icon/actions/folder_find.gif",Main.i18n("tree.menu.directory.find.folder")));
 		lock = new HTML(Util.imageHTML("img/icon/actions/lock_disabled.gif",Main.i18n("general.menu.file.lock")));
 		unLock = new HTML(Util.imageHTML("img/icon/actions/unlock_disabled.gif",Main.i18n("general.menu.file.unlock")));
 		addDocument = new HTML(Util.imageHTML("img/icon/actions/add_document.gif",Main.i18n("general.menu.file.add.document")));
@@ -573,23 +588,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		refresh  = new HTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
 		applet = new HTML("");
 		
-		createDirectory.addClickHandler(createDirectoryListener);
-		lock.addClickHandler(lockListener);
-		unLock.addClickHandler(unLockListener);
-		addDocument.addClickHandler(addDocumentListener);
-		delete.addClickHandler(deleteListener);
-		edit.addClickHandler(checkoutListener);
-		checkin.addClickHandler(checkinListener);
-		cancelCheckout.addClickHandler(cancelCheckoutListener);
-		download.addClickHandler(downloadListener);
-		downloadPdf.addClickHandler(downloadPdfListener);
-		addPropertyGroup.addClickHandler(addPropertyGroupListener);
-		removePropertyGroup.addClickHandler(removePropertyGroupListener);
-		startWorkflow.addClickHandler(addWorkflowListener);
-		addSubscription.addClickHandler(addSubscriptionListener);
-		removeSubscription.addClickHandler(removeSubscriptionListener);
-		home.addClickHandler(arrowHomeListener);
-		refresh.addClickHandler(arrowRefreshListener);
+		createDirectory.addClickHandler(createDirectoryHandler);
+		findFolder.addClickHandler(findFolderHandler);
+		lock.addClickHandler(lockHandler);
+		unLock.addClickHandler(unLockHandler);
+		addDocument.addClickHandler(addDocumentHandler);
+		delete.addClickHandler(deleteHandler);
+		edit.addClickHandler(checkoutHandler);
+		checkin.addClickHandler(checkinHandler);
+		cancelCheckout.addClickHandler(cancelCheckoutHandler);
+		download.addClickHandler(downloadHandler);
+		downloadPdf.addClickHandler(downloadPdfHandler);
+		addPropertyGroup.addClickHandler(addPropertyGroupHandler);
+		removePropertyGroup.addClickHandler(removePropertyGroupHandler);
+		startWorkflow.addClickHandler(addWorkflowHandler);
+		addSubscription.addClickHandler(addSubscriptionHandler);
+		removeSubscription.addClickHandler(removeSubscriptionHandler);
+		home.addClickHandler(arrowHomeHandler);
+		refresh.addClickHandler(arrowRefreshHandler);
 		
 		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
@@ -609,6 +625,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		
 		createDirectory.addMouseOverHandler(mouseOverHandler);
 		createDirectory.addMouseOutHandler(mouseOutHandler);
+		findFolder.addMouseOverHandler(mouseOverHandler);
+		findFolder.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
 		lock.addMouseOutHandler(mouseOutHandler);
 		unLock.addMouseOverHandler(mouseOverHandler);
@@ -643,6 +661,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		refresh.addMouseOutHandler(mouseOutHandler);
 		
 		createDirectory.setStyleName("okm-ToolBar-button");
+		findFolder.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
 		unLock.setStyleName("okm-ToolBar-button");
 		addDocument.setStyleName("okm-ToolBar-button");
@@ -667,7 +686,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		panel.add(space());
 		panel.add(createDirectory);
 		panel.add(space());
+		panel.add(findFolder);
+		panel.add(space());
 		panel.add(download);
+		panel.add(space());
 		panel.add(downloadPdf);
 		panel.add(space());
 		panel.add(separator());
@@ -1053,6 +1075,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		toolBarOption.createDirectoryOption = false;
 		createDirectory.setStyleName("okm-ToolBar-button-disabled");
 		createDirectory.setHTML(Util.imageHTML("img/icon/actions/add_folder_disabled.gif",Main.i18n("tree.menu.directory.create")));
+	}
+	
+	/**
+	 * Enables find folder
+	 */
+	public void enableFindFolder() {
+		toolBarOption.findFolderOption = true;
+		findFolder.setStyleName("okm-ToolBar-button");
+		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find.gif",Main.i18n("tree.menu.directory.find.folder")));
+	}
+	
+	/**
+	 * Disables create directory
+	 */
+	public void disableFindFolder() {
+		toolBarOption.findFolderOption = false;
+		findFolder.setStyleName("okm-ToolBar-button-disabled");
+		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find__disabled.gif",Main.i18n("tree.menu.directory.find.folder")));
 	}
 	
 	/**
@@ -1445,6 +1485,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultRootToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
+		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1478,6 +1519,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultCategoriesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1511,6 +1553,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultThesaurusToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1544,6 +1587,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultTrashToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1577,6 +1621,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultTemplatesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1610,6 +1655,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultMyDocumentsToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= true;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1643,6 +1689,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultSearchToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1676,6 +1723,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultDashboardToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1709,6 +1757,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public ToolBarOption getDefaultAdministrationToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
 		tmpToolBarOption.createDirectoryOption			= false;
+		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
 		tmpToolBarOption.checkinOption 					= false;
@@ -1740,6 +1789,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public void evaluateShowIcons() {
 		if (toolBarOption.createDirectoryOption) {enableCreateDirectory(); } else {disableCreateDirectory(); }
+		if (toolBarOption.findFolderOption) {enableFindFolder(); } else {disableFindFolder(); }
 		if (toolBarOption.addDocumentOption) {enableAddDocument(); } else {disableAddDocument(); }
 		if (toolBarOption.checkoutOption) { enableCheckout(); } else { disableCheckout(); }
 		if (toolBarOption.checkinOption) { enableCheckin(); } else { disableCheckin(); }
