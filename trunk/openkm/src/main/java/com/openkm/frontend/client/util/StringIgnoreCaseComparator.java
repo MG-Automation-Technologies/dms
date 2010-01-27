@@ -19,23 +19,26 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.kea.tree;
+package com.openkm.frontend.client.util;
 
 import java.util.Comparator;
 
-import com.openkm.bean.kea.Term;
-
 /**
- * TermComparator
+ * StringIgnoreCaseComparator
  * 
  * @author jllort
  *
  */
-public class TermComparator implements Comparator<Term>  {
+public class StringIgnoreCaseComparator implements Comparator<String>  {
 
-    public int compare(Term term1, Term term2) {
-        String first = term1.getText().toUpperCase();
-        String second = term2.getText().toUpperCase();
-        return first.compareTo(second);
+    public int compare(String arg0, String arg1) {
+    	// Only compares initial terms
+    	int length = 0;
+    	if (arg0.length()>arg1.length()) {
+    		length = arg1.length();
+    	} else {
+    		length = arg0.length();
+    	}
+        return arg0.substring(0,length).toLowerCase().compareTo(arg1.substring(0,length).toLowerCase());
     }
 }

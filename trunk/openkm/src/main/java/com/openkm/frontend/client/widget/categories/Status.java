@@ -81,11 +81,11 @@ public class Status extends PopupPanel {
 			int top = ((Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getOffsetHeight()-40)/2) + 
 			            Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	

@@ -108,6 +108,7 @@ public class Lang_de_DE {
 	    lang.put("tree.status.refresh.add.subscription", "Füge Abonnement hinzu");
 	    lang.put("tree.status.refresh.remove.subscription", "Lösche Abonnement");
 	    lang.put("tree.status.refresh.get.root", "Frische Wurzelordner auf");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Hole Benutzer Home");
 	    lang.put("tree.status.refresh.purge.trash", "Leere Papierkorb");
 	    
@@ -573,6 +574,8 @@ public class Lang_de_DE {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Zugriff auf Dokument verweigert");

@@ -108,6 +108,7 @@ public class Lang_hu_HU {
 	    lang.put("tree.status.refresh.add.subscription", "Feliratkozás értesítésre...");
 	    lang.put("tree.status.refresh.remove.subscription", "Értesítés lemondása...");
 	    lang.put("tree.status.refresh.get.root", "Gyökér mappa frissítése...");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Saját mappa frissítése...");
 	    lang.put("tree.status.refresh.purge.trash", "Kuka ürítése...");
 	    
@@ -572,6 +573,8 @@ public class Lang_hu_HU {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "A dokumentum nem hozzáférhető");

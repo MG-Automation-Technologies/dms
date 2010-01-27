@@ -107,6 +107,10 @@
     <servlet-name>OKMMailServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMMailServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>OKMThesaurusServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.OKMThesaurusServlet</servlet-class>
+  </servlet>
 
   <!-- Backend Servlets -->
   <servlet>
@@ -276,6 +280,10 @@
   <servlet-mapping>
     <servlet-name>OKMBookmarkServlet</servlet-name>
     <url-pattern>/OKMBookmarkServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMThesaurusServlet</servlet-name>
+    <url-pattern>/OKMThesaurusServlet</url-pattern>
   </servlet-mapping>
 
   <!-- Backend Servlet Mappings -->

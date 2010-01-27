@@ -19,23 +19,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.kea.tree;
+package com.openkm.frontend.client.service;
 
-import java.util.Comparator;
+import java.util.List;
 
-import com.openkm.bean.kea.Term;
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.openkm.frontend.client.OKMException;
 
 /**
- * TermComparator
+ * OKMThesaurusService
  * 
  * @author jllort
  *
  */
-public class TermComparator implements Comparator<Term>  {
+public interface OKMThesaurusService extends RemoteService {
 
-    public int compare(Term term1, Term term2) {
-        String first = term1.getText().toUpperCase();
-        String second = term2.getText().toUpperCase();
-        return first.compareTo(second);
-    }
+	public List<String> getKeywords(String filter) throws OKMException;
 }

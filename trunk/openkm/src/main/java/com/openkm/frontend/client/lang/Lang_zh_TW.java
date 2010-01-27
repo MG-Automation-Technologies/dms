@@ -108,6 +108,7 @@ public class Lang_zh_TW {
 	    lang.put("tree.status.refresh.add.subscription", "新增訂閱");
 	    lang.put("tree.status.refresh.remove.subscription", "移除訂閱");
 		lang.put("tree.status.refresh.get.root", "正在重新整理資料夾根目錄結構");
+		lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 		lang.put("tree.status.refresh.get.user.home", "正在取得使用者首頁書籤");
 	    lang.put("tree.status.refresh.purge.trash", "正在清除回收筒");
 	    
@@ -570,6 +571,8 @@ public class Lang_zh_TW {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");

@@ -108,6 +108,7 @@ public class Lang_mk_MK {
 	    lang.put("tree.status.refresh.add.subscription", "Додавање претплата");
 	    lang.put("tree.status.refresh.remove.subscription", "Бришење претплата");
 	    lang.put("tree.status.refresh.get.root", "Освежување на кореновата папка");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Примам корисничка домашна папка");
 	    lang.put("tree.status.refresh.purge.trash", "Чистење на ѓубрето");
 	    
@@ -572,6 +573,8 @@ public class Lang_mk_MK {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Пристапот до документот е одбиен");

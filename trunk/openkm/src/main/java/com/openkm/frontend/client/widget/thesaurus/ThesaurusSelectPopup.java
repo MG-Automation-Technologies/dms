@@ -21,29 +21,57 @@
 
 package com.openkm.frontend.client.widget.thesaurus;
 
+import java.util.Iterator;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.service.OKMThesaurusService;
+import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 
 public class ThesaurusSelectPopup extends DialogBox  {	
 	
+	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
+	private final int TAB_TREE 		= 0;
+	private final int TAB_KEYWORDS 	= 1;
+	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
-	private ScrollPanel scrollDirectoryPanel;
+	public ScrollPanel scrollDirectoryPanel;
+	public ScrollPanel scrollKeywordPanel;
 	private VerticalPanel verticalDirectoryPanel;
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;
 	private Button actionButton;
 	public Status status;
+	private TextBox keyword;
+	private VerticalPanel vPanelKeyword;
+	private FlexTable keywordTable;
+	public TabPanel tabPanel;
+	private int selectedRow = -1;
+	private int selectedTab = TAB_TREE;
+	
 	
 	public ThesaurusSelectPopup() {
 		// Establishes auto-close when click outside
@@ -52,16 +80,28 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
 		
+		tabPanel = new TabPanel();
+		tabPanel.setSize("290", "150");
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				selectedTab = event.getSelectedItem().intValue();
+				evaluateEnableAction();
+			}
+		});
+		
+		
 		vPanel = new VerticalPanel();		
 		vPanel.setWidth("300");
 		vPanel.setHeight("200");
 		hPanel = new HorizontalPanel();
 		
 		scrollDirectoryPanel = new ScrollPanel();
-		scrollDirectoryPanel.setSize("290", "150");
+		scrollDirectoryPanel.setSize("100%", "100%");
 		scrollDirectoryPanel.setStyleName("okm-Popup-text");
+		scrollKeywordPanel = new ScrollPanel();
+		scrollKeywordPanel.setStyleName("okm-Popup-text");
 		verticalDirectoryPanel = new VerticalPanel();
-		verticalDirectoryPanel.setSize("100%", "100%");
 		folderSelectTree = new FolderSelectTree();
 		folderSelectTree.setSize("100%", "100%");
 				
@@ -78,12 +118,50 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				executeAction(folderSelectTree.getActualPath());
+				if (selectedTab==TAB_TREE) {
+					executeAction(folderSelectTree.getActualPath());
+				} else {
+					executeAction(keywordTable.getText(selectedRow, 0));
+				}
 			}
 		});
 		
-		vPanel.add(new HTML("<br>"));
-		vPanel.add(scrollDirectoryPanel);
+		keyword = new TextBox();
+		keyword.setWidth("290");
+		keyword.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (keyword.getText().length()>=3) {
+					keyword.setEnabled(false);
+					getKeywords(keyword.getText().toLowerCase());
+				} else {
+					removeAllRows();
+				}
+			}
+		});
+		keywordTable = new FlexTable();
+		keywordTable.setWidth("100%");
+		keywordTable.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				markSelectedRow(keywordTable.getCellForEvent(event).getRowIndex());
+				evaluateEnableAction();
+			}
+		});
+		
+		vPanelKeyword = new VerticalPanel();
+		vPanelKeyword.add(keyword);
+		vPanelKeyword.add(keywordTable);
+		scrollKeywordPanel.add(vPanelKeyword);
+		
+		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
+		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
+		tabPanel.selectTab(TAB_TREE);
+		
+		scrollDirectoryPanel.setPixelSize(290,150);
+		scrollKeywordPanel.setPixelSize(290,150);
+		
+		vPanel.add(tabPanel);
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
 		HTML space = new HTML();
@@ -93,12 +171,15 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
 		
-		vPanel.setCellHorizontalAlignment(scrollDirectoryPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(tabPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellHeight(scrollDirectoryPanel, "150");
+		vPanel.setCellHeight(tabPanel, "150");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
+		keyword.setStyleName("okm-Input");
+		keywordTable.setStyleName("okm-NoWrap");
+		keywordTable.addStyleName("okm-Table-Row");
 
 		super.hide();
 		setWidget(vPanel);
@@ -117,6 +198,18 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 * Language refresh
 	 */
 	public void langRefresh() {
+		TabBar tabBar = tabPanel.getTabBar();
+		selectedTab = tabBar.getSelectedTab();
+		
+		while (tabPanel.getWidgetCount() > 0) {
+			tabPanel.remove(0);
+		}
+		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
+		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
+		tabPanel.selectTab(selectedTab);
+		scrollDirectoryPanel.setPixelSize(290,150);
+		scrollKeywordPanel.setPixelSize(290,150);
+		
 		setText(Main.i18n("thesaurus.directory.select.label"));
 		cancelButton.setText(Main.i18n("button.close"));
 		actionButton.setText(Main.i18n("button.add"));		
@@ -134,6 +227,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		
 		// Resets to initial tree value
 		folderSelectTree.reset();
+		removeAllRows();
+		evaluateEnableAction();
 		super.show();
 	}
 	
@@ -152,5 +247,90 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private void initButtons() {
 		cancelButton.setEnabled(true);
 		actionButton.setEnabled(false);
+	}
+	
+	/**
+	 * Gets asyncronous root node
+	 */
+	final AsyncCallback<List<String>> callbackGetKeywords = new AsyncCallback<List<String>>() {
+		public void onSuccess(List<String> result) {
+			removeAllRows();
+			for (Iterator<String> it = result.iterator(); it.hasNext();) {
+				keywordTable.setHTML(keywordTable.getRowCount(), 0, it.next());
+			}
+			keyword.setEnabled(true);
+			status.unsetFlagKeywords();
+		}
+
+		public void onFailure(Throwable caught) {
+			status.unsetFlagKeywords();
+			Main.get().showError("getKeywords", caught);
+		}
+	};
+	
+	/**
+	 * Gets the root
+	 */
+	public void getKeywords(String filter) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) thesaurusService;
+		endPoint.setServiceEntryPoint(Config.OKMThesaurusService);	
+		status.setFlagKeywords();
+		thesaurusService.getKeywords(filter, callbackGetKeywords);
+	}
+	
+	/**
+	 * removeAllRows
+	 */
+	private void removeAllRows() {
+		selectedRow = -1;
+		evaluateEnableAction();
+		while (keywordTable.getRowCount()>0) {
+			keywordTable.removeRow(0);
+		}
+	}
+	
+	/**
+	 * markSelectedRow
+	 * 
+	 * @param row
+	 */
+	private void markSelectedRow(int row) {
+		// And row must be other than the selected one
+		if (row != selectedRow) {
+			styleRow(selectedRow, false);
+			styleRow(row, true);
+			selectedRow = row;
+		}
+	}
+	
+	/**
+	 * Change the style row selected or unselected
+	 * 
+	 * @param row The row afected
+	 * @param selected Indicates selected unselected row
+	 */
+	private void styleRow(int row, boolean selected) {
+		if (row>=0) {
+			if (selected) {
+				keywordTable.getRowFormatter().addStyleName(row, "okm-Table-SelectedRow");
+		    } else {
+		    	keywordTable.getRowFormatter().removeStyleName(row, "okm-Table-SelectedRow");
+		    }
+		}
+	 }
+	
+	/**
+	 * evaluateEnableAction
+	 */
+	private void evaluateEnableAction() {
+		switch (selectedTab) {
+			case TAB_TREE:
+				enable(folderSelectTree.evaluateEnableActionButton());
+				break;
+				
+			case TAB_KEYWORDS:
+				enable(selectedRow>=0);
+				break;
+		}
 	}
 }

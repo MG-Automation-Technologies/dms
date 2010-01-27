@@ -108,6 +108,7 @@ public class Lang_pt_BR {
 	    lang.put("tree.status.refresh.add.subscription", "Adding subscription");
 	    lang.put("tree.status.refresh.remove.subscription", "Deleting subscription");
 	    lang.put("tree.status.refresh.get.root", "Refresing root folder");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Getting user home");
 	    lang.put("tree.status.refresh.purge.trash", "Cleaning trash");
 	    
@@ -572,6 +573,8 @@ public class Lang_pt_BR {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Sem permissão para acessar o documento");

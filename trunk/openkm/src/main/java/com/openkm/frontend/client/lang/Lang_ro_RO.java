@@ -109,6 +109,7 @@ public class Lang_ro_RO {
 	    lang.put("tree.status.refresh.add.subscription", "Se adauga o subscriere");
 	    lang.put("tree.status.refresh.remove.subscription", "Se sterge o subscriere");
 	    lang.put("tree.status.refresh.get.root", "Se reincarca dosarul parinte");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Se incarca pagina de pornire");
 	    lang.put("tree.status.refresh.purge.trash", "Se curata cosul de gunoi");
 
@@ -573,6 +574,8 @@ public class Lang_ro_RO {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Accesul la document nu este permis");

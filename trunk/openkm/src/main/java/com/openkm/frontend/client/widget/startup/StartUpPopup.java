@@ -62,10 +62,10 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		button = new Button(Main.i18n("button.close"), this);
 		scrollPanel = new ScrollPanel(status);
 		scrollPanel.setAlwaysShowScrollBars(false);
-		scrollPanel.setSize("390","160");
+		scrollPanel.setSize("490","160");
 		scrollPanel.setStyleName("okm-Input");
 		
-		status.setWidth("390");
+		status.setWidth("490");
 		
 		vPanel.add(new HTML("&nbsp;"));
 		vPanel.add(scrollPanel);

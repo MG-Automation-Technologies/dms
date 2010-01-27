@@ -76,6 +76,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
+import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
 import com.openkm.kea.metadata.WorkspaceHelper;
@@ -336,7 +337,13 @@ public class DirectDocumentModule implements DocumentModule {
 		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 		        	Term term =  it.next();
 		        	log.info("Term:" + term.getText());
-		        	keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION.equals("on")) {
+		        		if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
+		        			keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        		}
+		        	} else {
+		        		keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        	}
 		        }        
 	        }
 	        // Ends KEA

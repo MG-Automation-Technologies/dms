@@ -108,6 +108,7 @@ public class Lang_gl_ES {
 	    lang.put("tree.status.refresh.add.subscription", "Establecendo suscrición");
 	    lang.put("tree.status.refresh.remove.subscription", "Eliminando suscrición");
 	    lang.put("tree.status.refresh.get.root", "Refrescando cartafol inicial");
+	    lang.put("tree.status.refresh.get.keywords", "Refrescando palabras clave");
 	    lang.put("tree.status.refresh.get.user.home", "Obtendo inicio do usuario");
 	    lang.put("tree.status.refresh.purge.trash", "Vaciando lixo");
 	    
@@ -572,6 +573,8 @@ public class Lang_gl_ES {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Añadir una palabra clave del thesaurus");
+	    lang.put("thesaurus.tab.tree", "Arbol");
+	    lang.put("thesaurus.tab.keywords", "Palabras clave");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Non ten permisos para acceder ao documento");

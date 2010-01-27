@@ -31,14 +31,13 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 
 public class CategoriesSelectPopup extends DialogBox  {	
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
-	private ScrollPanel scrollDirectoryPanel;
+	public ScrollPanel scrollDirectoryPanel;
 	private VerticalPanel verticalDirectoryPanel;
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;

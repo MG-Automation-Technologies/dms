@@ -108,6 +108,7 @@ public class Lang_ja_JP {
 		lang.put("tree.status.refresh.add.subscription", "署名の追加中...");
 		lang.put("tree.status.refresh.remove.subscription", "署名の削除中...");
 		lang.put("tree.status.refresh.get.root", "ルートフォルダの更新中...");
+		lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 		lang.put("tree.status.refresh.get.user.home", "ユーザホームの取得中...");
 		lang.put("tree.status.refresh.purge.trash", "ごみ箱の消去中...");
 		
@@ -572,6 +573,8 @@ public class Lang_ja_JP {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 		// Errors
 		lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "文書へのアクセスが拒否されました");

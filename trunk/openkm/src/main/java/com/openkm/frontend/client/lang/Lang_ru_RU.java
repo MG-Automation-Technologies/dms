@@ -113,6 +113,7 @@ public class Lang_ru_RU {
 	    lang.put("tree.status.refresh.add.subscription", "Добавляю подписку");
 	    lang.put("tree.status.refresh.remove.subscription", "Удаляю подписку");
 	    lang.put("tree.status.refresh.get.root", "Обновляю корневую папку");
+	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Получаю начальный элемент");
 	    lang.put("tree.status.refresh.purge.trash", "Очищаю корзину");
 	    
@@ -577,6 +578,8 @@ public class Lang_ru_RU {
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
+	    lang.put("thesaurus.tab.tree", "Tree");
+	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Доступ к документ запрещен");
