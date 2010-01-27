@@ -296,16 +296,16 @@ public class DirectNotificationModule implements NotificationModule {
 					context.put("userId", session.getUserID());
 					context.put("notificationMessage", message);
 					
-					if (Velocity.resourceExists(Config.NOTIFY_MESSAGE_SUBJECT)) {
-						Velocity.mergeTemplate(Config.NOTIFY_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
 					} else {
-						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFY_MESSAGE_SUBJECT);	
+						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFICATION_MESSAGE_SUBJECT);	
 					}
 					
-					if (Velocity.resourceExists(Config.NOTIFY_MESSAGE_BODY)) {
-						Velocity.mergeTemplate(Config.NOTIFY_MESSAGE_BODY, "UTF-8", context, swSubject);
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swSubject);
 					} else {
-						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFY_MESSAGE_BODY);	
+						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
 					}
 
 					MailUtils.send((String) from.get(0), emails, swSubject.toString(), swBody.toString());
