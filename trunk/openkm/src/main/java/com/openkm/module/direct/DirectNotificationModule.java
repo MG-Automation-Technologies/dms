@@ -279,7 +279,6 @@ public class DirectNotificationModule implements NotificationModule {
 				Session session = SessionManager.getInstance().get(token);
 				log.debug("Nodo: "+nodePath+", Message: "+message);
 				Collection<String> emails = new DirectAuthModule().getMails(null, users);
-				Velocity.init();
 				
 				// Get session user email address
 				ArrayList<String> dummy = new ArrayList<String>();
@@ -296,9 +295,18 @@ public class DirectNotificationModule implements NotificationModule {
 					context.put("documentName", FileUtils.getName(nodePath));
 					context.put("userId", session.getUserID());
 					context.put("notificationMessage", message);
-										
-					Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFY_MESSAGE_SUBJECT);
-					Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFY_MESSAGE_BODY);
+					
+					if (Velocity.resourceExists(Config.NOTIFY_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.NOTIFY_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFY_MESSAGE_SUBJECT);	
+					}
+					
+					if (Velocity.resourceExists(Config.NOTIFY_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.NOTIFY_MESSAGE_BODY, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFY_MESSAGE_BODY);	
+					}
 
 					MailUtils.send((String) from.get(0), emails, swSubject.toString(), swBody.toString());
 				}
@@ -337,7 +345,6 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			if (users != null && !users.isEmpty()) {
 				Collection<String> emails = new DirectAuthModule().getMails(null, users);
-				Velocity.init();
 					
 				if (!emails.isEmpty()) {
 					if (comment == null) { comment = ""; }
@@ -352,8 +359,17 @@ public class DirectNotificationModule implements NotificationModule {
 					context.put("eventType", eventType);
 					context.put("subscriptionComment", comment);
 					
-					Velocity.evaluate(context, swSubject, "SubscriptionMessageSubject", Config.SUBSCRIPTION_MESSAGE_SUBJECT);
-					Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swSubject, "SubscriptionMessageSubject", Config.SUBSCRIPTION_MESSAGE_SUBJECT);	
+					}
+					
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_BODY, "UTF-8", context, swBody);
+					} else {
+						Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
+					}
 					
 					MailUtils.send(emails, swSubject.toString(), swBody.toString());
 				}
@@ -380,7 +396,6 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
 				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
-				Velocity.init();
 				StringWriter swStatus = new StringWriter();
 				
 				VelocityContext context = new VelocityContext();
@@ -391,7 +406,11 @@ public class DirectNotificationModule implements NotificationModule {
 				context.put("eventType", eventType);
 				context.put("subscriptionComment", comment);
 
-				Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);
+				if (Velocity.resourceExists(Config.SUBSCRIPTION_TWITTER_STATUS)) {
+					Velocity.mergeTemplate(Config.SUBSCRIPTION_TWITTER_STATUS, "UTF-8", context, swStatus);
+				} else {
+					Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);	
+				}
 				
 				AuthDAO auth = AuthDAO.getInstance();
 				
