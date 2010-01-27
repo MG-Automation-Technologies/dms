@@ -82,9 +82,9 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		vPanel.setCellHorizontalAlignment(button, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(scrollPanel, HasAlignment.ALIGN_MIDDLE);
 		
-		int left = (Window.getClientWidth()-380)/2;
+		int left = (Window.getClientWidth()-510)/2;
 		int top = (Window.getClientHeight()-220)/2;
-		vPanel.setWidth("420px");
+		vPanel.setWidth("510px");
 		vPanel.setHeight("220px");
 		
 		for (int i=0; i<StartUp.STARTUP_KEEP_ALIVE; i++) {
