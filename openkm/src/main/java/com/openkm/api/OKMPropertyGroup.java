@@ -24,6 +24,7 @@ package com.openkm.api;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +121,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	@Override
-	public void setProperties(String token, String docPath, String grpName, HashMap<String, String[]> properties)
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
 		log.debug("setProperties(" + token + ", " + docPath + ", " + properties + ")");
