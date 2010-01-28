@@ -64,7 +64,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    int rows = Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getRowCount();
 	    int columns = Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getColumnCount();
 	    int selectedRow = Main.get().mainPanel.browser.fileBrowser.table.getSelectedRow();
-	    Map data = new HashMap(Main.get().mainPanel.browser.fileBrowser.table.data);
+	    Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.browser.fileBrowser.table.data);
 	    
 	    List<String[]> elementList = new ArrayList<String[]>(); 					// List with all data
 	    List<GWTObjectToOrder> elementToOrder = new ArrayList<GWTObjectToOrder>(); 	// List with column data, and actual position
@@ -157,11 +157,9 @@ public class ExtendedColumnSorter extends ColumnSorter {
 			Collections.reverse(elementToOrder);
 		}
 	    
-	    //visualizar(elementToOrder);
-	    
 	    applySort(elementList, elementToOrder);
 	    
-	    
+	    callback.onSortingComplete();
 	}
     
 	/**
@@ -175,7 +173,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		}
 		
 		// Data map
-		Map data = new HashMap(Main.get().mainPanel.browser.fileBrowser.table.data);
+		Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.browser.fileBrowser.table.data);
 		Main.get().mainPanel.browser.fileBrowser.table.reset();
 		
 		int column = 0;
@@ -200,11 +198,4 @@ public class ExtendedColumnSorter extends ColumnSorter {
     		column++;
     	}
 	}
-	
-//    private void visualizar(List<String[]> elementToOrder) {
-//    	for (Iterator<String[]> it =  elementToOrder.iterator(); it.hasNext();) {
-//    		String[] value = it.next();
-//    		Window.alert("name:"+value[0]);
-//    	}
-//    }
 }

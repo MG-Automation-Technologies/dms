@@ -77,7 +77,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	private static final int EVENT_ONMOUSEDOWN_RIGHT = -2;
 	
 	// Holds the data rows of the table this is a list of RowData Object
-	public Map data = new HashMap();
+	public Map<Integer, Object> data = new HashMap<Integer, Object>();
 	private FixedWidthGrid dataTable;
 	private FixedWidthFlexTable headerTable;
 	
@@ -139,7 +139,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		rowAction = ACTION_NONE;
 		
 		// Only resets rows table the header is never reset
-		data = new HashMap();
+		data = new HashMap<Integer, Object>();
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		dataTable.insertRow(row);
 		
 		// Sets folder object
-		data.put(dataIndexValue,folder);
+		data.put(new Integer(dataIndexValue),folder);
 
 		// Subscribed is a special case, must add icon with others
 		if (folder.isSubscribed()) {
@@ -230,7 +230,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		dataTable.insertRow(row);
 		
 		// Sets document object
-		data.put(dataIndexValue,doc);
+		data.put(new Integer(dataIndexValue),doc);
 		
 		if (doc.isCheckedOut()) {
 			dataTable.setHTML(row, 0, Util.imageItemHTML("img/icon/edit.gif"));
@@ -287,7 +287,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		dataTable.insertRow(row);
 		
 		// Sets document object
-		data.put(dataIndexValue,mail);
+		data.put(new Integer(dataIndexValue),mail);
 		
 		// Mail is never checkout or subscribed ( because can not be changed )
 		dataTable.setHTML(row, 0, "&nbsp;");
@@ -623,7 +623,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	public void setDocument(GWTDocument doc) {
 		if (isDocumentSelected()) {
 			int row = getSelectedRow();
-			data.put(Integer.parseInt(dataTable.getText(getSelectedRow(),7)),doc);
+			data.put(new Integer(dataTable.getText(getSelectedRow(),7)),doc);
 			
 			if (doc.isCheckedOut()) {
 				dataTable.setHTML(row, 0, Util.imageItemHTML("img/icon/edit.gif"));
@@ -716,7 +716,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	public void setMail(GWTMail mail) {
 		if (isMailSelected()) {
 			int row = getSelectedRow();
-			data.put(Integer.parseInt(dataTable.getText(getSelectedRow(),7)),mail);
+			data.put(new Integer(dataTable.getText(getSelectedRow(),7)),mail);
 			
 			if (mail.getAttachments().size()>0) {
 				dataTable.setHTML(row, 1, Util.imageItemHTML("img/email_attach.gif"));
@@ -742,7 +742,7 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 		// Row selected must be on table folder
 		if (isFolderSelected()) {
 			int row = getSelectedRow();
-			data.put(Integer.parseInt(dataTable.getText(row,7)),folder);
+			data.put(new Integer(dataTable.getText(row,7)),folder);
 			
 			// Subscribed is a special case, must add icon with others
 			if (folder.isSubscribed()) {

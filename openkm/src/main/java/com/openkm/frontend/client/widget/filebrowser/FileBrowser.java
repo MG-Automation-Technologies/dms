@@ -197,6 +197,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 		table.setPreferredColumnWidth(1, 25);
 		table.setPreferredColumnWidth(4, 150);
 		
+		table.setColumnSortable(0, false);
+		
 		headerTable.addStyleName("okm-DisableSelect");
 		table.addStyleName("okm-Input");
 		
