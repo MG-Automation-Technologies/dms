@@ -576,6 +576,9 @@ public class Lang_hu_HU {
 	    lang.put("thesaurus.tab.tree", "Tree");
 	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
+	    // Categories
+	    lang.put("categories.directory.select.label", "Add category");
+	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "A dokumentum nem hozzáférhető");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "A dokumentum nem található");

@@ -576,6 +576,9 @@ public class Lang_en_GB {
 	    lang.put("thesaurus.tab.tree", "Tree");
 	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
+	    // Categories
+	    lang.put("categories.directory.select.label", "Add category");
+	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Document access denied");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "Document not found");

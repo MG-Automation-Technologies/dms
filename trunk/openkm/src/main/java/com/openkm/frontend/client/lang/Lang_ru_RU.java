@@ -581,6 +581,9 @@ public class Lang_ru_RU {
 	    lang.put("thesaurus.tab.tree", "Tree");
 	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
+	    // Categories
+	    lang.put("categories.directory.select.label", "Add category");
+	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Доступ к документ запрещен");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "Документ не найден");

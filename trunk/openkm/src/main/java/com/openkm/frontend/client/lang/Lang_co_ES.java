@@ -576,6 +576,9 @@ public class Lang_co_ES {
 	    lang.put("thesaurus.tab.tree", "Arbol");
 	    lang.put("thesaurus.tab.keywords", "Palabras clave");
 	    
+	    // Categories
+	    lang.put("categories.directory.select.label", "Añadir una categoría");
+	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "No existe un documento con ese nombre");
