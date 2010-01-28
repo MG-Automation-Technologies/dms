@@ -38,7 +38,6 @@ import com.openkm.backend.client.OKMException;
 import com.openkm.backend.client.config.ErrorCode;
 import com.openkm.backend.client.service.OKMGeneralUtilsService;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
