@@ -25,20 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
@@ -50,7 +36,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -67,7 +52,7 @@ import com.openkm.frontend.client.widget.OriginPanel;
  * @author jllort
  *
  */
-public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandlers, OriginPanel {
+public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	
 	// Actions on rows
 	public static final int ACTION_NONE	= 0;
@@ -106,20 +91,6 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	    setScrollPolicy(ScrollPolicy.BOTH);
 	    	    
 	    dataTable.setColumnSorter(new ExtendedColumnSorter());
-	    
-	    addMouseDownHandler(new MouseDownHandler(){
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				dragged = true;
-			}
-		});
-	    
-	    addMouseUpHandler(new MouseUpHandler() {
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-				unsetDraged();
-			}
-		});
 		
 		// Sets some events
 		DOM.sinkEvents(getDataWrapper(), Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEDOWN |
@@ -470,6 +441,14 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 			
 			case Event.ONMOUSEOUT:
 				unsetDraged(); 
+				break;
+				
+			case Event.ONMOUSEDOWN:
+				dragged = true;
+				break;
+				
+			case Event.ONMOUSEUP:
+				unsetDraged();
 				break;
 		}
 		
@@ -939,30 +918,6 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	public void resetAction() {
 		rowAction = ACTION_NONE;
 	}
-	
-	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-	    return addDomHandler(handler, MouseDownEvent.getType());
-	}
-	  
-	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-	    return addDomHandler(handler, MouseMoveEvent.getType());
-	}
-
-	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-	    return addDomHandler(handler, MouseOutEvent.getType());
-	}
-
-	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-	    return addDomHandler(handler, MouseOverEvent.getType());
-	}
-
-	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-	    return addDomHandler(handler, MouseUpEvent.getType());
-	}
-
-	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
-		return addDomHandler(handler, MouseWheelEvent.getType());
-	}
     
     /**
 	 * isDragged Returns true or false if is dragged
@@ -981,17 +936,4 @@ public class ExtendedScrollTable extends ScrollTable implements HasAllMouseHandl
 	public void unsetDraged() {
 		this.dragged = false;
 	}
-	
-	/**
-	 * Decrement index values from a initial value -1
-	 * 
-	 * @param fromValue The from value to initiate decrement
-	 */
-//	public void decrementHiddenIndexValues(int fromValue) {
-//		for (int i=0; i<dataTable.getRowCount(); i++) {
-//			if (Integer.parseInt(dataTable.getText(i,7))>fromValue) {
-//				dataTable.setText(i, 7, ""+ (Integer.parseInt(dataTable.getText(i,7))-1) );
-//			}
-//		}
-//	}
 }

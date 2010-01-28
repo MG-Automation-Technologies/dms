@@ -21,12 +21,10 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTMetaData;
 
