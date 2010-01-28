@@ -574,6 +574,9 @@ public class Lang_zh_TW {
 	    lang.put("thesaurus.tab.tree", "Tree");
 	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
+	    // Categories
+	    lang.put("categories.directory.select.label", "Add category");
+	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "找不到文件");

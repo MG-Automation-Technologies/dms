@@ -116,7 +116,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		setText(Main.i18n("thesaurus.directory.select.label"));
+		setText(Main.i18n("categories.directory.select.label"));
 		cancelButton.setText(Main.i18n("button.close"));
 		actionButton.setText(Main.i18n("button.add"));		
 	}
@@ -129,7 +129,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
-		setText(Main.i18n("thesaurus.directory.select.label"));
+		setText(Main.i18n("categories.directory.select.label"));
 		
 		// Resets to initial tree value
 		folderSelectTree.reset();
