@@ -21,13 +21,11 @@
 
 package com.openkm.frontend.client.widget.foldertree;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
-
 import com.openkm.frontend.client.Main;
 
 /**

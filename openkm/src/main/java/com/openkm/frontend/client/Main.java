@@ -344,7 +344,8 @@ public final class Main implements EntryPoint{
 		mediaPlayerPopup.langRefresh();
 		imageViewerPopup.langRefresh();
 		debugConsolePopup.langRefresh();
-//		// Refreshing all menus on tabs not only the active
+		findFolderSelectPopup.langRefresh();
+		// Refreshing all menus on tabs not only the active
 		mainPanel.navigator.taxonomyTree.langRefresh();
 		mainPanel.navigator.thesaurusTree.langRefresh();
 		mainPanel.navigator.personalTree.langRefresh();
