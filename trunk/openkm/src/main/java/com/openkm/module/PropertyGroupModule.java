@@ -24,13 +24,14 @@ package com.openkm.module;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.openkm.bean.MetaData;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 
 public interface PropertyGroupModule {
@@ -118,7 +119,7 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String token, String docPath, String grpName, HashMap<String, String[]> properties) throws 
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
 		NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 		AccessDeniedException, RepositoryException;
 
