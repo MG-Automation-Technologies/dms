@@ -177,13 +177,23 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 		};
 		headerTable = new FixedWidthFlexTable();
-	    dataTable = new FixedWidthGrid(10,8);
-
+	    dataTable = new FixedWidthGrid();
 		table = new ExtendedScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setSize("540","140");
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
 		
+		// Level 1 headers
+		headerTable.setHTML(0,0,"&nbsp;");
+		headerTable.setHTML(0,1,"&nbsp;");
+		headerTable.setHTML(0,2,Main.i18n("filebrowser.name"));
+		headerTable.setHTML(0,3,Main.i18n("filebrowser.size"));
+		headerTable.setHTML(0,4,Main.i18n("filebrowser.date.update"));
+		headerTable.setHTML(0,5,Main.i18n("filebrowser.author"));
+		headerTable.setHTML(0,6,Main.i18n("filebrowser.version"));
+		headerTable.setHTML(0,7,"");
+		
+		// Format    
 		table.setColumnWidth(0,60);
 		table.setColumnWidth(1,25);
 		table.setColumnWidth(2,150);
@@ -223,15 +233,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 		
 		separator.setSize("100%", "4px");
 		separator.setStyleName("okm-FileBrowser-Separator");
-		
-		headerTable.setHTML(0,0,"&nbsp;");
-		headerTable.setHTML(0,1,"&nbsp;");
-		headerTable.setHTML(0,2,Main.i18n("filebrowser.name"));
-		headerTable.setHTML(0,3,Main.i18n("filebrowser.size"));
-		headerTable.setHTML(0,4,Main.i18n("filebrowser.date.update"));
-		headerTable.setHTML(0,5,Main.i18n("filebrowser.author"));
-		headerTable.setHTML(0,6,Main.i18n("filebrowser.version"));
-		headerTable.setHTML(0,7,"");
 		
 		panel.add(filePath);
 		panel.add(separator);
@@ -1037,24 +1038,18 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public void deleteMovedOrMoved() {
 		if (table.isDocumentSelected()) {
 			if (table.getDocument() != null) {
-				//int row = table.getSelectedRow();
 				table.delete();
-				//table.decrementHiddenIndexValues(row);
 				mantainSelectedRow();
 				refresh(fldId);
 			}
 		} else if (table.isFolderSelected()) {
 				Main.get().activeFolderTree.removeDeleted(((GWTFolder)table.getFolder()).getPath());
-				//int row = table.getSelectedRow();
 				table.delete();
-				//table.decrementHiddenIndexValues(row);
 				mantainSelectedRow();
 				refresh(fldId);
 			
 		} else if (table.isMailSelected()) {
-			//int row = table.getSelectedRow();
 			table.delete();
-			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
 			refresh(fldId);
 		}
