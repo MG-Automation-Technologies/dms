@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Map.Entry;
@@ -262,7 +263,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	@Override
-	public void setProperties(String token, String docPath, String grpName, HashMap<String, String[]> properties) throws 
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
 		log.debug("setProperties("+token+", "+docPath+", "+properties+")");

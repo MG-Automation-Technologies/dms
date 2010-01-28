@@ -293,7 +293,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		String token = getToken();
 		
 		try {
-			OKMPropertyGroup.getInstance().setProperties(token, docPath, grpName, (HashMap) properties);
+			OKMPropertyGroup.getInstance().setProperties(token, docPath, grpName, properties);
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
