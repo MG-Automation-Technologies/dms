@@ -75,9 +75,9 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_getChilds ) {
-			int left = ((Main.get().findFolderSelectPopup.getOffsetWidth()-400)/2) +
+			int left = ((Main.get().findFolderSelectPopup.getOffsetWidth()-200)/2) +
 						 Main.get().findFolderSelectPopup.getAbsoluteLeft();
-			int top = ((Main.get().findFolderSelectPopup.getOffsetHeight()-240)/2) + 
+			int top = ((Main.get().findFolderSelectPopup.getOffsetHeight()-40)/2) + 
 			            Main.get().findFolderSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
 			Main.get().findFolderSelectPopup.scrollFolderPanel.addStyleName("okm-PanelRefreshing");

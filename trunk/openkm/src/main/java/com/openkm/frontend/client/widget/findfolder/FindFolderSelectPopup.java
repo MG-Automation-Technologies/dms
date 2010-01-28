@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -67,7 +66,6 @@ public class FindFolderSelectPopup extends DialogBox  {
 	private Button actionButton;
 	public Status status;
 	private TextBox keyword;
-	private VerticalPanel vPanelFolder;
 	private FlexTable folderTable;
 	private int selectedRow = -1;
 	
@@ -102,12 +100,11 @@ public class FindFolderSelectPopup extends DialogBox  {
 		});
 		
 		keyword = new TextBox();
-		keyword.setWidth("390");
+		keyword.setWidth("392");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (keyword.getText().length()>=3) {
-					keyword.setEnabled(false);
 					GWTQueryParams gwtParams = new GWTQueryParams();
 					int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
 					switch (actualView){
@@ -164,13 +161,10 @@ public class FindFolderSelectPopup extends DialogBox  {
 			}
 		});
 		
-		vPanelFolder = new VerticalPanel();
-		vPanelFolder.add(keyword);
-		vPanelFolder.add(folderTable);
-		scrollFolderPanel.add(vPanelFolder);
-		
+		scrollFolderPanel.add(folderTable);
 		scrollFolderPanel.setPixelSize(390,150);
 		
+		vPanel.add(keyword);
 		vPanel.add(scrollFolderPanel);
 		vPanel.add(new HTML("<br>"));
 		hPanel.add(cancelButton);
@@ -181,15 +175,18 @@ public class FindFolderSelectPopup extends DialogBox  {
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
 		
+		vPanel.setCellHorizontalAlignment(keyword, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellVerticalAlignment(keyword, HasAlignment.ALIGN_MIDDLE);
 		vPanel.setCellHorizontalAlignment(scrollFolderPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHeight(keyword, "25");
 		vPanel.setCellHeight(scrollFolderPanel, "150");
 
 		cancelButton.setStyleName("okm-Button");
 		actionButton.setStyleName("okm-Button");
-		keyword.setStyleName("okm-Input");
 		folderTable.setStyleName("okm-NoWrap");
 		folderTable.addStyleName("okm-Table-Row");
+		keyword.setStyleName("okm-Input");
 
 		super.hide();
 		setWidget(vPanel);
@@ -217,7 +214,6 @@ public class FindFolderSelectPopup extends DialogBox  {
 		// Resets to initial tree value
 		removeAllRows();
 		keyword.setText("");
-		keyword.setEnabled(true);
 		evaluateEnableAction();
 		super.show();
 	}
@@ -324,7 +320,6 @@ public class FindFolderSelectPopup extends DialogBox  {
 				size++;
 			}
 			
-			keyword.setEnabled(true);
 			status.unsetFlagChilds();
 		}
 		

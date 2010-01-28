@@ -81,7 +81,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		status.setStyleName("okm-StatusPopup");
 		
 		tabPanel = new TabPanel();
-		tabPanel.setSize("290", "150");
+		tabPanel.setSize("290", "175");
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
@@ -93,7 +93,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		
 		vPanel = new VerticalPanel();		
 		vPanel.setWidth("300");
-		vPanel.setHeight("200");
+		vPanel.setHeight("225");
 		hPanel = new HorizontalPanel();
 		
 		scrollDirectoryPanel = new ScrollPanel();
@@ -127,12 +127,11 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		});
 		
 		keyword = new TextBox();
-		keyword.setWidth("290");
+		keyword.setWidth("292");
 		keyword.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (keyword.getText().length()>=3) {
-					keyword.setEnabled(false);
 					getKeywords(keyword.getText().toLowerCase());
 				} else {
 					removeAllRows();
@@ -149,16 +148,19 @@ public class ThesaurusSelectPopup extends DialogBox  {
 			}
 		});
 		
+		scrollKeywordPanel.add(keywordTable);
 		vPanelKeyword = new VerticalPanel();
 		vPanelKeyword.add(keyword);
-		vPanelKeyword.add(keywordTable);
-		scrollKeywordPanel.add(vPanelKeyword);
+		vPanelKeyword.add(scrollKeywordPanel);
+		
+		vPanelKeyword.setCellHeight(keyword, "25");
+		vPanelKeyword.setCellVerticalAlignment(keyword, HasAlignment.ALIGN_MIDDLE);
 		
 		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
-		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
+		tabPanel.add(vPanelKeyword, Main.i18n("thesaurus.tab.keywords"));
 		tabPanel.selectTab(TAB_TREE);
 		
-		scrollDirectoryPanel.setPixelSize(290,150);
+		scrollDirectoryPanel.setPixelSize(290,175);
 		scrollKeywordPanel.setPixelSize(290,150);
 		
 		vPanel.add(tabPanel);
@@ -207,7 +209,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		tabPanel.add(scrollDirectoryPanel, Main.i18n("thesaurus.tab.tree"));
 		tabPanel.add(scrollKeywordPanel, Main.i18n("thesaurus.tab.keywords"));
 		tabPanel.selectTab(selectedTab);
-		scrollDirectoryPanel.setPixelSize(290,150);
+		scrollDirectoryPanel.setPixelSize(290,175);
 		scrollKeywordPanel.setPixelSize(290,150);
 		
 		setText(Main.i18n("thesaurus.directory.select.label"));
@@ -221,7 +223,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	public void show(){
 		initButtons();
 		int left = (Window.getClientWidth()-300) / 2;
-		int top = (Window.getClientHeight()-200) / 2;
+		int top = (Window.getClientHeight()-225) / 2;
 		setPopupPosition(left, top);
 		setText(Main.i18n("thesaurus.directory.select.label"));
 		
@@ -229,7 +231,6 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		folderSelectTree.reset();
 		removeAllRows();
 		keyword.setText("");
-		keyword.setEnabled(true);
 		evaluateEnableAction();
 		super.show();
 	}
@@ -260,7 +261,6 @@ public class ThesaurusSelectPopup extends DialogBox  {
 			for (Iterator<String> it = result.iterator(); it.hasNext();) {
 				keywordTable.setHTML(keywordTable.getRowCount(), 0, it.next());
 			}
-			keyword.setEnabled(true);
 			status.unsetFlagKeywords();
 		}
 

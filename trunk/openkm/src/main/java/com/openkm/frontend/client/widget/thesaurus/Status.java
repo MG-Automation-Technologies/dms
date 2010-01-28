@@ -77,9 +77,9 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_getChilds || flag_root || flag_keywords ) {
-			int left = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-300)/2) +
+			int left = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-200)/2) +
 						 Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteLeft();
-			int top = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-240)/2) + 
+			int top = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-40)/2) + 
 			            Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
 			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
