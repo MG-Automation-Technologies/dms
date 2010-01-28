@@ -62,7 +62,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    int rows = Main.get().mainPanel.search.searchResult.table.getDataTable().getRowCount();
 	    int columns = Main.get().mainPanel.search.searchResult.table.getDataTable().getColumnCount();
 	    int selectedRow = Main.get().mainPanel.search.searchResult.table.getSelectedRow();
-	    Map data = new HashMap(Main.get().mainPanel.search.searchResult.table.data);
+	    Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchResult.table.data);
 	    
 	    List<String[]> elementList = new ArrayList<String[]>(); 					// List with all data
 	    List<GWTObjectToOrder> elementToOrder = new ArrayList<GWTObjectToOrder>(); 	// List with column data, and actual position
@@ -151,11 +151,9 @@ public class ExtendedColumnSorter extends ColumnSorter {
 			Collections.reverse(elementToOrder);
 		}
 	    
-	    //visualizar(elementToOrder);
-	    
 	    applySort(elementList, elementToOrder);
 	    
-	    
+	    callback.onSortingComplete();
 	}
     
 	/**
@@ -169,7 +167,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		}
 		
 		// Data map
-		Map data = new HashMap(Main.get().mainPanel.search.searchResult.table.data);
+		Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchResult.table.data);
 		Main.get().mainPanel.search.searchResult.table.reset();
 		
 		int column = 0;
@@ -188,11 +186,4 @@ public class ExtendedColumnSorter extends ColumnSorter {
     		column++;
     	}
 	}
-	
-//    private void visualizar(List<String[]> elementToOrder) {
-//    	for (Iterator<String[]> it =  elementToOrder.iterator(); it.hasNext();) {
-//    		String[] value = it.next();
-//    		Window.alert("name:"+value[0]);
-//    	}
-//    }
 }

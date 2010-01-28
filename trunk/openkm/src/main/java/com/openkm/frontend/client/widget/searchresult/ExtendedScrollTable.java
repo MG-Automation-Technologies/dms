@@ -52,7 +52,7 @@ import com.openkm.frontend.client.util.Util;
 public class ExtendedScrollTable extends ScrollTable {
 	
 	// Holds the data rows of the table this is a list of RowData Object
-	public Map data = new HashMap();
+	public Map<Integer, GWTQueryResult> data = new HashMap<Integer, GWTQueryResult>();
 	private int mouseX = 0;
 	private int mouseY = 0;
 	private int dataIndexValue = 0;
@@ -198,7 +198,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		dataIndexValue = 0;
 		
 		// Only resets rows table the header is never reset
-		data = new HashMap();
+		data = new HashMap<Integer, GWTQueryResult>();
 	}
 	
 	/**
@@ -234,7 +234,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		}
 		
 		// Sets folder object
-		data.put(dataIndexValue, gwtQueryResult);
+		data.put(new Integer(dataIndexValue), gwtQueryResult);
 		
 		dataTable.setHTML(rows, 0, score.getHTML());
 		
@@ -289,7 +289,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		GWTFolder folder = gwtQueryResult.getFolder();
 		
 		// Sets folder object
-		data.put(dataIndexValue, gwtQueryResult);
+		data.put(new Integer(dataIndexValue), gwtQueryResult);
 		
 		dataTable.setHTML(rows, 0, score.getHTML());
 		
@@ -346,7 +346,7 @@ public class ExtendedScrollTable extends ScrollTable {
 		GWTMail mail = gwtQueryResult.getMail();
 		
 		// Sets folder object
-		data.put(dataIndexValue, gwtQueryResult);
+		data.put(new Integer(dataIndexValue), gwtQueryResult);
 		
 		dataTable.setHTML(rows, 0, score.getHTML());
 		
