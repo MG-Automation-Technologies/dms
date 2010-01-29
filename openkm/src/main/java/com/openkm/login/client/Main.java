@@ -25,6 +25,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -52,6 +54,15 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
  *
  */
 public class Main implements EntryPoint {
+	
+	private static Main singleton;
+	
+	/**
+	 * @return singleton Main instance 
+	 */
+	public static Main get() {
+		return singleton;
+	}
 	
 	// Languages
 	public static final String LANG_es_ES = "es-ES"; 
@@ -106,12 +117,18 @@ public class Main implements EntryPoint {
 	public static final int LANG_SWEDISH				= 23;
 	public static final int LANG_TURKISH				= 24;
 	
+	public static final String LOGIN_PAGE_TEXT	= "<title>OpenKM Login</title>";
+	
+	public VerticalPanel vPanel = new VerticalPanel();
+	public HTML msgError = new HTML("Authentication");
+	public HTML msgError1 = new HTML("error");
+	public Status status = new Status();
+	
 	public void onModuleLoad() {
 		final FormPanel formPanel = new FormPanel();
-		VerticalPanel vPanel = new VerticalPanel();
 		VerticalPanel vPanelData = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
-		TextBox userName = new TextBox();
+		final TextBox userName = new TextBox();
 		PasswordTextBox password = new PasswordTextBox();
 		Button loginButton = new Button("Login");
 		Image lock = new Image("img/lock.png");
@@ -123,6 +140,9 @@ public class Main implements EntryPoint {
 		loginButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				msgError.setVisible(false);
+				msgError1.setVisible(false);
+				status.setFlagTryAutentication();
 				formPanel.submit();
 			}
 		});
@@ -130,7 +150,29 @@ public class Main implements EntryPoint {
 		formPanel.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
-				jumpToSecureUrl(url, langList.getValue(langList.getSelectedIndex()));
+				RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
+				rb.setCallback(new RequestCallback() {
+					public void onResponseReceived(Request request, Response response) {
+						if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
+							Window.Location.assign(url+"?lang="+langList.getValue(langList.getSelectedIndex()));
+						} else  {
+							msgError.setVisible(true);
+							msgError1.setVisible(true);
+						}
+						status.unsetFlagTryAutentication();
+					}
+		
+					public void onError(Request request, Throwable caught) {
+						Window.alert("Error on response receibed :" + caught.getMessage());
+						throw new UnsupportedOperationException("Not supported yet.");
+					}
+				});
+		
+				try {
+					rb.send();
+				} catch (RequestException ex) {
+					Window.alert("Error on request :" + ex.getMessage());
+				}
 			}
 		});
 		
@@ -199,12 +241,20 @@ public class Main implements EntryPoint {
 		leftPanel.add(msg1);
 		leftPanel.add(msg2);
 		leftPanel.add(msg3);
+		leftPanel.add(new HTML("&nbsp;"));
+		leftPanel.add(msgError);
+		leftPanel.add(msgError1);
+		
+		msgError.setVisible(false);
+		msgError1.setVisible(false);
 		
 		leftPanel.setCellHorizontalAlignment(lock, HasAlignment.ALIGN_CENTER);
 		leftPanel.setCellHorizontalAlignment(msg, HasAlignment.ALIGN_CENTER);
 		leftPanel.setCellHorizontalAlignment(msg1, HasAlignment.ALIGN_CENTER);
 		leftPanel.setCellHorizontalAlignment(msg2, HasAlignment.ALIGN_CENTER);
 		leftPanel.setCellHorizontalAlignment(msg3, HasAlignment.ALIGN_CENTER);
+		leftPanel.setCellHorizontalAlignment(msgError, HasAlignment.ALIGN_CENTER);
+		leftPanel.setCellHorizontalAlignment(msgError1, HasAlignment.ALIGN_CENTER);
 		
 		hPanel.add(leftPanel);
 		hPanel.add(formPanel);
@@ -226,30 +276,26 @@ public class Main implements EntryPoint {
 		loginButton.setStyleName("okm-Button");
 		vPanel.setStyleName("okm-Login-Box");
 		spTable.setStyleName("okm-Form-Box");
+		msgError.setStylePrimaryName("okm-Error");
+		msgError1.setStylePrimaryName("okm-Error");
+		status.setStyleName("okm-StatusPopup");
 		
 		int posLeft = (Window.getClientWidth()-400)/2;
-		int posRight = (Window.getClientHeight()-310)/2;
+		int posRight = (Window.getClientHeight()-315)/2;
 		
 		RootPanel.get().add(vPanel);
 		RootPanel.get().setWidgetPosition(vPanel, posLeft, posRight);
 		
-		vPanel.setSize("400px", "310px");
+		vPanel.setSize("400px", "315px");
 		langList.setSelectedIndex(evaluateLang(getBrowserLanguage()));
-	}
-	
-	/**
-	 * jumpToSecureUrl
-	 * 
-	 * @param url
-	 */
-	private void jumpToSecureUrl(final String url, final String lang){
+		
+		// If user is authenticated must jump to page
 		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
-	       
 		rb.setCallback(new RequestCallback() {
 			public void onResponseReceived(Request request, Response response) {
-				if (response.getText().contains("<title>OpenKM</title>")) {
-					Window.Location.assign(url+"?lang="+lang);
-				}
+				if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
+					Window.Location.assign(url+"?lang="+langList.getValue(langList.getSelectedIndex()));
+				} 			
 			}
 
 			public void onError(Request request, Throwable caught) {
@@ -262,6 +308,16 @@ public class Main implements EntryPoint {
 			rb.send();
 		} catch (RequestException ex) {
 			Window.alert("Error on request :" + ex.getMessage());
+		}
+		
+		Window.alert(isDemo());
+		if (isLowercase().equals("on")) {
+			userName.addKeyUpHandler(new KeyUpHandler() {
+				@Override
+				public void onKeyUp(KeyUpEvent event) {
+					userName.setText(userName.getText().toLowerCase());
+				}
+			});
 		}
 	}
 	
@@ -342,4 +398,13 @@ public class Main implements EntryPoint {
 		
 		return code;
 	}
+	
+
+	public static native String isDemo() /*-{
+		return $wnd.demo;
+	}-*/;
+	
+	public static native String isLowercase() /*-{
+		return $wnd.lowercase;
+	}-*/;
 }
