@@ -44,13 +44,29 @@ a:active {
 	font-family: verdana, arial, sans-serif;
 }
 
+/* Status Popup */
+.okm-StatusPopup {
+	font-size: 12px;
+	background-color: #C7E9FD;
+	border: 1px solid #110011;
+}
+
+/* Login box */
 .okm-Login-Box {
 	background-color:#F1F3F5;
 	border:1px solid #CCCCCC;
 }
 
+/* Form box */
 .okm-Form-Box {
 	background-color:#E9ECEF;
 	border:1px solid #CCCCCC;
 	padding:10px;
+}
+
+/* Error */
+.okm-Error {
+	color:#FF0000;
+	font-size:14px;
+	font-weight:bold;
 }

@@ -1,5 +1,4 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -44,9 +43,9 @@ public class MainMenu extends Composite {
 	
 	// URI CONSTANTS
 	public static final String URI_HELP = "http://www.openkm.com";
-	public static final String URI_BUG_REPORT = "http://www.openkm.com/component/option,com_mantis/Itemid,36/";
+	public static final String URI_BUG_REPORT = "http://issues.openkm.com";
 	public static final String URI_SUPPORT_REQUEST = "http://www.openkm.com/Contact/";
-	public static final String URI_PUBLIC_FORUM = "http://www.openkm.com/Forum/";
+	public static final String URI_PUBLIC_FORUM = "http://forum.openkm.com";
 	public static final String URI_PROJECT_WEB = "http://www.openkm.com";
 	public static final String URI_VIEW_REPOSITORY = "/OpenKM/repository_view.jsp";
 	public static final String URI_VIEW_LOGED_USERS = "/OpenKM/repository_users.jsp";
@@ -55,8 +54,8 @@ public class MainMenu extends Composite {
 	public static final String URI_EXPORT = "/OpenKM/repository_export.jsp";
 	public static final String URI_IMPORT = "/OpenKM/repository_import.jsp";
 	public static final String URI_PROPERTY_GROUP = "/OpenKM/property_group.jsp";
-	public static final String URI_DOCUMENTATION = "http://www.openkm.com/component/option,com_openwiki/Itemid,31/";
-	public static final String URI_VERSION_CHANGES = "http://www.openkm.com/Changelog.html";
+	public static final String URI_DOCUMENTATION = "http://wiki.openkm.com";
+	public static final String URI_VERSION_CHANGES = "http://wiki.openkm.com/index.php/Changelog";
 
 	private ToolBarOption mainMenuOption;
 	public Bookmark bookmark;
