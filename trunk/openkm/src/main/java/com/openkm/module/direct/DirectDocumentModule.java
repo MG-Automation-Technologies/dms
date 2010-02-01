@@ -809,7 +809,6 @@ public class DirectDocumentModule implements DocumentModule {
 
 			// Set document node properties
 			documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
-			documentNode.setProperty(Document.CATEGORIES, (String[]) doc.getCategories().toArray(), PropertyType.REFERENCE);
 			documentNode.save();
 			
 			// Update document keyword cache
