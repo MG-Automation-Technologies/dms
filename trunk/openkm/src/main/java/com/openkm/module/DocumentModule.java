@@ -125,7 +125,7 @@ public interface DocumentModule {
 	 */
 	public void setProperties(String token, Document doc) throws VersionException, 
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException;
-
+	
 	/**
 	 * Obtain document content from the repository.
 	 * 
@@ -309,7 +309,8 @@ public interface DocumentModule {
 	 * 
 	 * @param token String with user autorization info.
 	 * @param docPath The path that identifies an unique document.
-	 * @throws AccessDeniedException If there is any security problem: you can't access this document because of lack of permissions.
+	 * @throws AccessDeniedException If there is any security problem: you can't access this document
+	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any repository problem.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @return True if the document is locked, and False otherwise.
@@ -321,7 +322,8 @@ public interface DocumentModule {
 	 * 
 	 * @param token String with user autorization info.
 	 * @param docPath The path that identifies an unique document.
-	 * @throws AccessDeniedException If there is any security problem: you can't access this document because of lack of permissions.
+	 * @throws AccessDeniedException If there is any security problem: you can't access this document
+	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any repository problem.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws LockException If the node is not locked.
@@ -333,13 +335,11 @@ public interface DocumentModule {
 	 * Deletes definitively a document from the repository. It is a phisical delete, so
 	 * the document can't be restored.
 	 * 
-	 * @param token
-	 *            String with user autorization info.
+	 * @param token String with user autorization info.
 	 * @param docPath The path that identifies an unique document.
-	 * @throws AccessDeniedException
-	 *             If there is any security problem: you can't access this document because of lack of permissions.
-	 * @throws RepositoryException
-	 *             If there is any general repository problem.
+	 * @throws AccessDeniedException If there is any security problem: you can't access this document 
+	 * because of lack of permissions.
+	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 */
 	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException;
@@ -419,7 +419,7 @@ public interface DocumentModule {
 	 */
 	public long getVersionHistorySize(String token, String docPath) throws 
 		RepositoryException, PathNotFoundException;
-
+	
 	/**
 	 * Test if a document path is valid.
 	 * 
