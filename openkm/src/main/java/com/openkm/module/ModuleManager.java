@@ -35,6 +35,7 @@ public class ModuleManager {
 	private static ScriptingModule scriptingModule = null;
 	private static StatsModule statsModule = null;
 	private static MailModule mailModule = null;
+	private static PropertyModule propertyModule = null;
 	
 	/**
 	 * 
@@ -190,5 +191,17 @@ public class ModuleManager {
 		}
 		
 		return mailModule;
+	}
+	
+	/**
+	 * 
+	 */
+	public static synchronized PropertyModule getPropertyModule() {
+		if (propertyModule == null) {
+			propertyModule = new com.openkm.module.direct.DirectPropertyModule();
+			//propertyModule = new com.openkm.module.ejb.EJBPropertyModule();
+		}
+		
+		return propertyModule;
 	}
 }
