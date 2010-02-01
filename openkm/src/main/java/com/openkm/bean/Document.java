@@ -39,6 +39,7 @@ public class Document implements Serializable {
 	public static final String LANGUAGE = "okm:language";
 	public static final String AUTHOR = "okm:author";
 	public static final String KEYWORDS = "okm:keywords";
+	public static final String CATEGORIES = "okm:categories";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
 	
@@ -59,6 +60,7 @@ public class Document implements Serializable {
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
 	private Collection<String> subscriptors;
+	private Collection<String> categories;
 	private Collection<Note> notes;
 
 	public Lock getLockInfo() {
@@ -173,6 +175,14 @@ public class Document implements Serializable {
 		this.subscriptors = subscriptors;
 	}
 	
+	public Collection<String> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Collection<String> categories) {
+		this.categories = categories;
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -215,6 +225,7 @@ public class Document implements Serializable {
 		sb.append(", created="); sb.append(created==null?null:created.getTime());
 		sb.append(", lastModified="); sb.append(lastModified==null?null:lastModified.getTime());
 		sb.append(", keywords="); sb.append(keywords);
+		sb.append(", categories="); sb.append(categories);
 		sb.append(", locked="); sb.append(locked);
 		sb.append(", lockInfo="); sb.append(lockInfo);
 		sb.append(", actualVersion="); sb.append(actualVersion);
