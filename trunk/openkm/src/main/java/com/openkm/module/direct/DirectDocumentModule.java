@@ -37,6 +37,7 @@ import java.util.Map.Entry;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
@@ -111,7 +112,7 @@ public class DirectDocumentModule implements DocumentModule {
 		doc.setPath(documentNode.getPath());
 		doc.setLocked(documentNode.isLocked());
 		doc.setUuid(documentNode.getUUID());
-
+		
 		if (doc.isLocked()) {
 			doc.setLockInfo(getLock(session, docPath));
 		} else {
@@ -175,6 +176,17 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		doc.setSubscriptors(subscriptorList);
+		
+		// Get document categories
+		ArrayList<String> categoriesList = new ArrayList<String>();
+		Value[] categories = documentNode.getProperty(Document.CATEGORIES).getValues();
+
+		for (int i=0; i<categories.length; i++) {
+			categoriesList.add(categories[i].getString());
+		}
+
+		doc.setCategories(categoriesList);
+		
 		doc.setConvertibleToPdf(new DocConverter().isValid(doc.getMimeType()));
 		if (Config.SYSTEM_PDF2SWF.equals("")) {
 			doc.setConvertibleToSwf(false);
@@ -213,6 +225,7 @@ public class DirectDocumentModule implements DocumentModule {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
 		documentNode.setProperty(Document.KEYWORDS, keywords);
+		documentNode.setProperty(Document.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
 		long size = is.available();
@@ -796,6 +809,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 			// Set document node properties
 			documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
+			documentNode.setProperty(Document.CATEGORIES, (String[]) doc.getCategories().toArray(), PropertyType.REFERENCE);
 			documentNode.save();
 			
 			// Update document keyword cache
