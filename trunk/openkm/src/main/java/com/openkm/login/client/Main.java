@@ -208,7 +208,6 @@ public class Main implements EntryPoint {
 		languages.put(LANG_sv_SE,"Swedish");
 		languages.put(LANG_tr_TR,"Turkish");
 		
-		
 		for (Iterator<String> it = languages.keySet().iterator(); it.hasNext();) {
 			String key = it.next();
 			langList.addItem(languages.get(key), key );
