@@ -376,7 +376,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         		parentNode = documentNode.getParent();
         		
         		// Basic document properties
-        		documentNode.setProperty(Document.KEYWORDS, "");
+        		documentNode.setProperty(com.openkm.bean.Property.KEYWORDS, "");
         		documentNode.setProperty(Document.AUTHOR, session.getUserID());
         		documentNode.setProperty(Document.NAME, documentNode.getName());
         		
