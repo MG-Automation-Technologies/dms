@@ -842,7 +842,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			folderService.getChilds(fldId, callbackGetFolderChilds);
 		} else {
 			removeAllRows();
-			getDocumentChilds(fldId);	
+			getDocumentChilds(fldId);
 		}
 	}
 	

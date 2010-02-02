@@ -1441,6 +1441,4 @@ public class FolderTree extends Composite implements OriginPanel {
 		Window.open(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getFolder().getPath()) + "&export", "_self", "");
 		Main.get().redirect = false;
 	}
-	
-	
 }
