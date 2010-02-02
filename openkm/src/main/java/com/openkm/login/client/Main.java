@@ -97,6 +97,7 @@ public class Main implements EntryPoint {
 	public static final String LANG_co_ES = "co-ES";
 	public static final String LANG_ru_RU = "ru-RU";
 	public static final String LANG_bs_BA = "bs-BA";
+	public static final String LANG_cs_CZ = "cs-CZ";
 	
 	public static final String LOGIN_PAGE_TEXT	= "<title>OpenKM Login</title>";
 	
@@ -184,6 +185,7 @@ public class Main implements EntryPoint {
 		languages.put(LANG_ca_ES,"Català");
 		languages.put(LANG_zh_CN,"Chinese simple");
 		languages.put(LANG_zh_TW,"Chinese traditional");
+		languages.put(LANG_cs_CZ,"Czech");
 		languages.put(LANG_de_DE,"Deutsch");
 		languages.put(LANG_en_GB,"English");
 		languages.put(LANG_es_ES,"Español");
@@ -447,7 +449,7 @@ public class Main implements EntryPoint {
 			code++;
 		}
 		
-		return 5; // By default english
+		return 6; // By default english
 	}
 	
 

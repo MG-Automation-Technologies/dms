@@ -108,7 +108,6 @@ public class CategoriesSelectPopup extends DialogBox  {
 	 */
 	public void executeAction(String Uuid) {
 		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(Uuid);
-		
 	}
 	
 	/**
