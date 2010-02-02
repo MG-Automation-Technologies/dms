@@ -21,10 +21,15 @@
 
 package com.openkm.login.client;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.Request;
@@ -38,6 +43,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
@@ -46,6 +52,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 
@@ -91,41 +98,16 @@ public class Main implements EntryPoint {
 	public static final String LANG_ru_RU = "ru-RU";
 	public static final String LANG_bs_BA = "bs-BA";
 	
-	public static final int LANG_BOSNIAN 				= 0;
-	public static final int LANG_CATALAN				= 1;
-	public static final int LANG_CHINESE_SIMPLE 		= 2;
-	public static final int LANG_CHINESE_TRADITIONAL	= 3;
-	public static final int LANG_DEUTSCH				= 4;
-	public static final int LANG_ENGLISH				= 5;		
-	public static final int LANG_ESPANOL				= 6;
-	public static final int LANG_ESPANOL_COLOMBIA		= 7;
-	public static final int LANG_FARSI					= 8;
-	public static final int LANG_FRANCAIS				= 9;
-	public static final int LANG_GALLEGO				= 10;
-	public static final int LANG_GREECE					= 11;
-	public static final int LANG_HUNGARIAN				= 12;
-	public static final int LANG_ITALIAN				= 13;
-	public static final int LANG_JAPANESE				= 14;
-	public static final int LANG_LATVIAN				= 15;
-	public static final int LANG_MACEDONIAN				= 16;
-	public static final int LANG_NEDERALANDS			= 17;
-	public static final int LANG_POLISH					= 18;
-	public static final int LANG_PORTUGUES_BRASIL		= 19;
-	public static final int LANG_ROMANIAN				= 20;
-	public static final int LANG_RUSSIAN				= 21;
-	public static final int LANG_SERBIAN				= 22;
-	public static final int LANG_SWEDISH				= 23;
-	public static final int LANG_TURKISH				= 24;
-	
 	public static final String LOGIN_PAGE_TEXT	= "<title>OpenKM Login</title>";
 	
 	public VerticalPanel vPanel = new VerticalPanel();
 	public HTML msgError = new HTML("Authentication");
 	public HTML msgError1 = new HTML("error");
 	public Status status = new Status();
+	public final FormPanel formPanel = new FormPanel();
+	public final static Map<String,String> languages = new LinkedHashMap<String,String>();
 	
 	public void onModuleLoad() {
-		final FormPanel formPanel = new FormPanel();
 		VerticalPanel vPanelData = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
 		final TextBox userName = new TextBox();
@@ -135,26 +117,43 @@ public class Main implements EntryPoint {
 		Image logo = new Image("img/logo_big.gif");
 		FlexTable table = new FlexTable();
 		final ListBox langList = new ListBox();
-		final String url = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.jsp";
+		final String urlJump = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.html";
+		final String urlJumpMobi = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "/mobi/index.jsp";
+		final String urlTest = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.jsp";
+		final boolean isMobile = getIsMobil().equals("on");
 
 		loginButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				msgError.setVisible(false);
-				msgError1.setVisible(false);
-				status.setFlagTryAutentication();
-				formPanel.submit();
+				submit();
 			}
 		});
 		
 		formPanel.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
-				RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
+				RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, urlTest);
 				rb.setCallback(new RequestCallback() {
 					public void onResponseReceived(Request request, Response response) {
 						if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
-							Window.Location.assign(url+"?lang="+langList.getValue(langList.getSelectedIndex()));
+							String urlToJump = "";
+							// Setting jump base url
+							if (isMobile) {
+								urlToJump = urlJumpMobi;
+							} else {
+								urlToJump = urlJump;
+							}
+							// Setting language
+							urlToJump += "?lang="+langList.getValue(langList.getSelectedIndex());
+							
+							// Setting docpath or folderpath
+							if (!getDocPath().equals("")) {
+								urlToJump += "&docPath=" + getDocPath();
+							}
+							if (!getFldPath().equals("")) {
+								urlToJump += "&fldPath=" + getFldPath();
+							}
+							Window.Location.assign(urlToJump);
 						} else  {
 							msgError.setVisible(true);
 							msgError1.setVisible(true);
@@ -181,31 +180,37 @@ public class Main implements EntryPoint {
 		formPanel.setAction("j_security_check");
 		formPanel.setMethod(FormPanel.METHOD_POST);
 		
-		langList.addItem("Bosnian", LANG_bs_BA);
-		langList.addItem("Català", LANG_ca_ES);
-		langList.addItem("Chinese simple", LANG_zh_CN);
-		langList.addItem("Chinese traditional", LANG_zh_TW);
-		langList.addItem("Deutsch", LANG_de_DE);
-		langList.addItem("English", LANG_en_GB);		
-		langList.addItem("Español", LANG_es_ES);
-		langList.addItem("Español Colombia", LANG_co_ES);
-		langList.addItem("Farsi", LANG_fa_FA);
-		langList.addItem("Français", LANG_fr_FR);
-		langList.addItem("Gallego", LANG_gl_ES);
-		langList.addItem("Greece", LANG_el_GR);
-		langList.addItem("Hungarian", LANG_hu_HU);
-		langList.addItem("Italian", LANG_it_IT);
-		langList.addItem("Japanese", LANG_ja_JP);
-		langList.addItem("Latvian", LANG_lv_LV);
-		langList.addItem("Macedonian", LANG_mk_MK);
-		langList.addItem("Nederlands", LANG_nl_NL);
-		langList.addItem("Polish", LANG_pl_PL);
-		langList.addItem("Português do Brasil", LANG_pt_BR);
-		langList.addItem("Romanian", LANG_ro_RO);
-		langList.addItem("Russian", LANG_ru_RU);
-		langList.addItem("Serbian", LANG_sr_BA);
-		langList.addItem("Swedish ", LANG_sv_SE);
-		langList.addItem("Turkish ", LANG_tr_TR);
+		languages.put(LANG_bs_BA,"Bosnian");
+		languages.put(LANG_ca_ES,"Català");
+		languages.put(LANG_zh_CN,"Chinese simple");
+		languages.put(LANG_zh_TW,"Chinese traditional");
+		languages.put(LANG_de_DE,"Deutsch");
+		languages.put(LANG_en_GB,"English");
+		languages.put(LANG_es_ES,"Español");
+		languages.put(LANG_co_ES,"Español Colombia");
+		languages.put(LANG_fa_FA,"Farsi");
+		languages.put(LANG_fr_FR,"Français");
+		languages.put(LANG_gl_ES,"Gallego");
+		languages.put(LANG_el_GR,"Greece");
+		languages.put(LANG_hu_HU,"Hungarian");
+		languages.put(LANG_it_IT,"Italian");
+		languages.put(LANG_ja_JP,"Japanese");
+		languages.put(LANG_lv_LV,"Latvian");
+		languages.put(LANG_mk_MK,"Macedonian");
+		languages.put(LANG_nl_NL,"Nederlands");
+		languages.put(LANG_pl_PL,"Polish");
+		languages.put(LANG_pt_BR,"Português do Brasil");
+		languages.put(LANG_ro_RO,"Romanian");
+		languages.put(LANG_ru_RU,"Russian");
+		languages.put(LANG_sr_BA,"Serbian");
+		languages.put(LANG_sv_SE,"Swedish");
+		languages.put(LANG_tr_TR,"Turkish");
+		
+		
+		for (Iterator<String> it = languages.keySet().iterator(); it.hasNext();) {
+			String key = it.next();
+			langList.addItem(languages.get(key), key );
+		}
 		
 		table.setCellPadding(0);
 		table.setCellSpacing(0);
@@ -280,21 +285,78 @@ public class Main implements EntryPoint {
 		msgError1.setStylePrimaryName("okm-Error");
 		status.setStyleName("okm-StatusPopup");
 		
-		int posLeft = (Window.getClientWidth()-400)/2;
-		int posRight = (Window.getClientHeight()-315)/2;
+		// Setting widget panel values
+		int panelWidth = 400;
+		int panelHeight = 315;
+		
+		// Changes in demo UI
+		if (isDemo().equals("on")) {
+			Widget users = RootPanel.get("users");
+			vPanel.add(users);
+			panelHeight = panelHeight*2;
+		} else {
+			Widget users = RootPanel.get("users");
+			users.setVisible(false);
+		}
+		
+		// Case user is using mobile
+		if (isMobile) {
+			logo.setUrl("img/logo_small.gif");
+			
+			leftPanel.setVisible(false);
+			hPanel.remove(leftPanel);
+			
+			vPanel.add(msgError);
+			vPanel.add(msgError1);
+			
+			vPanel.setCellHorizontalAlignment(vPanelData, HasHorizontalAlignment.ALIGN_CENTER);
+			vPanel.setCellHorizontalAlignment(msgError, HasHorizontalAlignment.ALIGN_CENTER);
+			vPanel.setCellHorizontalAlignment(msgError1, HasHorizontalAlignment.ALIGN_CENTER);
+			
+			table.setWidth("155px");
+			vPanel.setCellHeight(logo, "55");
+			panelWidth = 200;
+			panelHeight = 250;
+		}
+		
+		// Calculating position
+		int posLeft = (Window.getClientWidth()-panelWidth)/2;
+		int posRight = (Window.getClientHeight()-panelHeight)/2;
+		
+		// Correcting position negative desviation
+		if (posLeft<0) { posLeft=0; }
+		if (posRight<0) { posRight=0; }
 		
 		RootPanel.get().add(vPanel);
 		RootPanel.get().setWidgetPosition(vPanel, posLeft, posRight);
 		
-		vPanel.setSize("400px", "315px");
+		vPanel.setSize(panelWidth+"px", panelHeight+"px");
 		langList.setSelectedIndex(evaluateLang(getBrowserLanguage()));
 		
 		// If user is authenticated must jump to page
-		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, url);
+		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, urlTest);
 		rb.setCallback(new RequestCallback() {
 			public void onResponseReceived(Request request, Response response) {
 				if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
-					Window.Location.assign(url+"?lang="+langList.getValue(langList.getSelectedIndex()));
+					String urlToJump = "";
+					// Setting jump base url
+					if (isMobile) {
+						urlToJump = urlJumpMobi;
+					} else {
+						urlToJump = urlJump;
+					}
+					// Setting language
+					urlToJump += "?lang="+langList.getValue(langList.getSelectedIndex());
+					
+					// Setting docpath or folderpath
+					if (!getDocPath().equals("")) {
+						urlToJump += "&docPath=" + getDocPath();
+					}
+					if (!getFldPath().equals("")) {
+						urlToJump += "&fldPath=" + getFldPath();
+					}
+					Window.Location.assign(urlToJump);
+					Window.Location.assign(urlToJump);
 				} 			
 			}
 
@@ -310,7 +372,6 @@ public class Main implements EntryPoint {
 			Window.alert("Error on request :" + ex.getMessage());
 		}
 		
-		Window.alert(isDemo());
 		if (isLowercase().equals("on")) {
 			userName.addKeyUpHandler(new KeyUpHandler() {
 				@Override
@@ -319,6 +380,36 @@ public class Main implements EntryPoint {
 				}
 			});
 		}
+		
+		userName.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode()==(char)KeyCodes.KEY_ENTER) {
+					submit();
+				}
+			}
+		});
+		
+		password.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode()==(char)KeyCodes.KEY_ENTER) {
+					submit();
+				}
+			}
+		});
+		
+		userName.setFocus(true);
+	}
+	
+	/**
+	 * submit
+	 */
+	private void submit() {
+		msgError.setVisible(false);
+		msgError1.setVisible(false);
+		status.setFlagTryAutentication();
+		formPanel.submit();
 	}
 	
 	/**
@@ -342,61 +433,21 @@ public class Main implements EntryPoint {
 	 * @return The code lang detected
 	 */
 	public static int evaluateLang(String lang) {
-		int code = LANG_ENGLISH; 
+		int code = 0; 
 		
-		if (LANG_es_ES.equalsIgnoreCase(lang) || LANG_es_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2)))  {
-			code = LANG_ESPANOL;
-		} else if (LANG_ca_ES.equalsIgnoreCase(lang) || LANG_ca_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_CATALAN;
-		} else if (LANG_gl_ES.equalsIgnoreCase(lang) || LANG_gl_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_GALLEGO;
-		} else if (LANG_en_GB.equalsIgnoreCase(lang) || LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_ENGLISH;
-		} else if (LANG_fr_FR.equalsIgnoreCase(lang) || LANG_fr_FR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_FRANCAIS;
-		} else if (LANG_pt_BR.equalsIgnoreCase(lang) || LANG_pt_BR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_PORTUGUES_BRASIL;
-		} else if (LANG_nl_NL.equalsIgnoreCase(lang) || LANG_nl_NL.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_NEDERALANDS;
-		} else if (LANG_fa_FA.equalsIgnoreCase(lang) || LANG_fa_FA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_FARSI;
-		} else if (LANG_de_DE.equalsIgnoreCase(lang) || LANG_de_DE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_DEUTSCH;
-		} else if (LANG_it_IT.equalsIgnoreCase(lang) || LANG_it_IT.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_ITALIAN;
-		} else if (LANG_zh_CN.equalsIgnoreCase(lang) || (LANG_zh_CN.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2)) && !LANG_zh_TW.equalsIgnoreCase(lang) )) {
-			code = LANG_CHINESE_SIMPLE;
-		} else if (LANG_sv_SE.equalsIgnoreCase(lang) || LANG_sv_SE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_SWEDISH;
-		} else if (LANG_sr_BA.equalsIgnoreCase(lang) || LANG_sr_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_SERBIAN;
-		} else if (LANG_tr_TR.equalsIgnoreCase(lang) || LANG_tr_TR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_TURKISH;
-		} else if (LANG_ja_JP.equalsIgnoreCase(lang) || LANG_ja_JP.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_JAPANESE;
-		} else if (LANG_ro_RO.equalsIgnoreCase(lang) || LANG_ro_RO.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_ROMANIAN;
-		} else if (LANG_pl_PL.equalsIgnoreCase(lang) || LANG_pl_PL.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_POLISH;
-		} else if (LANG_hu_HU.equalsIgnoreCase(lang) || LANG_hu_HU.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_HUNGARIAN;
-		} else if (LANG_el_GR.equalsIgnoreCase(lang) || LANG_el_GR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_GREECE;
-		} else if (LANG_zh_TW.equalsIgnoreCase(lang) || LANG_zh_TW.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_CHINESE_TRADITIONAL;
-		} else if (LANG_lv_LV.equalsIgnoreCase(lang) || LANG_lv_LV.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_LATVIAN;
-		} else if (LANG_mk_MK.equalsIgnoreCase(lang) || LANG_mk_MK.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_MACEDONIAN;
-		} else if (LANG_co_ES.equalsIgnoreCase(lang) || LANG_co_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_ESPANOL_COLOMBIA;
-		} else if (LANG_ru_RU.equalsIgnoreCase(lang) || LANG_ru_RU.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_RUSSIAN;
-		} else if (LANG_bs_BA.equalsIgnoreCase(lang) || LANG_bs_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			code = LANG_BOSNIAN;
-		} 
+		for (Iterator<String> it = languages.keySet().iterator(); it.hasNext();) {
+			String key = it.next();
+			
+			if (key.equalsIgnoreCase(lang) || key.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+				// Chinese special case
+				if (!(key.equals(LANG_zh_CN) && !LANG_zh_TW.equalsIgnoreCase(lang))) {
+					return code;
+				} 
+			}
+			code++;
+		}
 		
-		return code;
+		return 5; // By default english
 	}
 	
 
@@ -406,5 +457,17 @@ public class Main implements EntryPoint {
 	
 	public static native String isLowercase() /*-{
 		return $wnd.lowercase;
+	}-*/;
+	
+	public static native String getDocPath() /*-{
+		return $wnd.docPath;
+	}-*/;
+	
+	public static native String getFldPath() /*-{
+		return $wnd.fldPath;
+	}-*/;
+	
+	public static native String getIsMobil() /*-{
+		return $wnd.isMobil;
 	}-*/;
 }
