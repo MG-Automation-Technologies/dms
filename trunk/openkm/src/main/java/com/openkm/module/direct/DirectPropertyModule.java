@@ -24,6 +24,7 @@ package com.openkm.module.direct;
 import java.util.ArrayList;
 
 import javax.jcr.Node;
+import javax.jcr.PropertyType;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
@@ -63,15 +64,17 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			for (int i=0; i<property.length; i++) {
 				newProperty[i] = property[i];
+				log.info("New: "+newProperty[i].getString()+" --> "+newProperty[i].getType());
 				
-				if (property[i].equals(category)) {
+				if (property[i].getString().equals(category)) {
 					alreadyAdded = true;
 				}
 			}
 			
 			if (!alreadyAdded) {
-				newProperty[newProperty.length-1] = session.getValueFactory().createValue(category);
-				documentNode.setProperty(Property.CATEGORIES, newProperty);
+				Node reference = session.getNodeByUUID(category);
+				newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
+				documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
 				documentNode.save();
 			}
 			
