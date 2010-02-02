@@ -58,6 +58,7 @@ import com.openkm.bean.Lock;
 import com.openkm.bean.Note;
 import com.openkm.bean.Notification;
 import com.openkm.bean.Permission;
+import com.openkm.bean.Property;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
 import com.openkm.bean.cache.UserItems;
@@ -108,7 +109,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		// Properties
 		doc.setAuthor(documentNode.getProperty(Document.AUTHOR).getString());
-		doc.setKeywords(documentNode.getProperty(Document.KEYWORDS).getString());
+		doc.setKeywords(documentNode.getProperty(Property.KEYWORDS).getString());
 		doc.setPath(documentNode.getPath());
 		doc.setLocked(documentNode.isLocked());
 		doc.setUuid(documentNode.getUUID());
@@ -179,7 +180,7 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		// Get document categories
 		ArrayList<String> categoriesList = new ArrayList<String>();
-		Value[] categories = documentNode.getProperty(Document.CATEGORIES).getValues();
+		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
 
 		for (int i=0; i<categories.length; i++) {
 			categoriesList.add(categories[i].getString());
@@ -224,8 +225,8 @@ public class DirectDocumentModule implements DocumentModule {
 			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
-		documentNode.setProperty(Document.KEYWORDS, keywords);
-		documentNode.setProperty(Document.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
+		documentNode.setProperty(Property.KEYWORDS, keywords);
+		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
 		long size = is.available();
@@ -808,7 +809,7 @@ public class DirectDocumentModule implements DocumentModule {
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 
 			// Set document node properties
-			documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
+			documentNode.setProperty(Property.KEYWORDS, doc.getKeywords());
 			documentNode.save();
 			
 			// Update document keyword cache
@@ -1459,7 +1460,7 @@ public class DirectDocumentModule implements DocumentModule {
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
 		log.debug("copy(" + srcDocumentNode + ", " + dstFolderNode + ")");
 		
-		String keywords = srcDocumentNode.getProperty(Document.KEYWORDS).getString();
+		String keywords = srcDocumentNode.getProperty(Property.KEYWORDS).getString();
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
