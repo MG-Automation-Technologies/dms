@@ -266,12 +266,12 @@ public class FolderSelectTree extends Composite {
 	}
 	
 	/**
-	 * Gets the actual path of the selected directory tree
+	 * Gets the actual Uuid of the selected directory tree
 	 * 
 	 * @return The actual path of selected directory
 	 */
-	public String getActualPath() {
-		return ((GWTFolder) actualItem.getUserObject()).getPath();
+	public String getUuid() {
+		return ((GWTFolder) actualItem.getUserObject()).getUuid();
 	}
 	
 	/**

@@ -77,7 +77,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				executeAction(folderSelectTree.getActualPath());
+				executeAction(folderSelectTree.getUuid());
 			}
 		});
 		
@@ -106,9 +106,8 @@ public class CategoriesSelectPopup extends DialogBox  {
 	/**
 	 * Executes the action
 	 */
-	public void executeAction(String actualPath) {
-		String keyword = actualPath.substring(actualPath.lastIndexOf("/")+1).replace(" ", "_");
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKey(keyword, true);
+	public void executeAction(String Uuid) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(Uuid);
 		
 	}
 	

@@ -43,7 +43,6 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.VersionException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTVersion;
@@ -385,38 +384,6 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		}
 		
 		log.debug("purge: void");
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#setProperties(com.openkm.frontend.client.bean.GWTDocument)
-	 */
-	public void setProperties(GWTDocument doc) throws OKMException {
-		log.debug("setProperties("+doc+")");
-		String token = getToken();
-		
-		try {
-			OKMDocument.getInstance().setProperties(token,Util.copy(doc));
-		} catch (LockException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
-		} catch (VersionException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Version), e.getMessage());
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
-		}
-		
-		log.debug("setProperties: void");
 	}
 
 	/* (non-Javadoc)
