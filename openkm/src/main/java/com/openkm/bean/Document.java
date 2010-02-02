@@ -38,8 +38,6 @@ public class Document implements Serializable {
 	public static final String SIZE = "okm:size";
 	public static final String LANGUAGE = "okm:language";
 	public static final String AUTHOR = "okm:author";
-	public static final String KEYWORDS = "okm:keywords";
-	public static final String CATEGORIES = "okm:categories";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
 	
