@@ -25,7 +25,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.config.Config;
@@ -115,6 +114,7 @@ public class MainMenu extends Composite {
 					private MenuItem colombian;
 					private MenuItem russian;
 					private MenuItem bosnian;
+					private MenuItem czech;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -251,6 +251,7 @@ public class MainMenu extends Composite {
 						catalan = new MenuItem(Util.menuHTML("img/icon/menu/ca.gif", "Català"), true, setLangCatalan);
 						chineseSimple = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese simple"), true, setLangChinese);
 						chineseTraditional = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese traditional"), true, setLangChineseTraditional);
+						czech = new MenuItem(Util.menuHTML("img/icon/menu/cs.gif", "Czech"), true, setLangCzech);
 						german = new MenuItem(Util.menuHTML("img/icon/menu/de.gif", "Deutsch"), true, setLangDeutsch);
 						english = new MenuItem(Util.menuHTML("img/icon/menu/en.gif", "English"), true, setLangEnglish);
 						spanish = new MenuItem(Util.menuHTML("img/icon/menu/es.gif", "Español"), true, setLangSpanish);
@@ -276,6 +277,7 @@ public class MainMenu extends Composite {
 						catalan.addStyleName("okm-MainMenuItem");
 						chineseSimple.addStyleName("okm-MainMenuItem");
 						chineseTraditional.addStyleName("okm-MainMenuItem");
+						czech.addStyleName("okm-MainMenuItem");
 						german.addStyleName("okm-MainMenuItem");
 						english.addStyleName("okm-MainMenuItem");
 						spanish.addStyleName("okm-MainMenuItem");
@@ -301,6 +303,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(catalan);
 					subMenuLanguage.addItem(chineseSimple);
 					subMenuLanguage.addItem(chineseTraditional);
+					subMenuLanguage.addItem(czech);
 					subMenuLanguage.addItem(german);
 					subMenuLanguage.addItem(english);
 					subMenuLanguage.addItem(spanish);
@@ -591,6 +594,13 @@ public class MainMenu extends Composite {
 	Command setLangChineseTraditional = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_zh_TW);
+		}
+	};
+	
+	// Command menu to set Czech traditional lang
+	Command setLangCzech = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_cs_CZ);
 		}
 	};
 	
