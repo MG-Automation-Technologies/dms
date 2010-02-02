@@ -64,7 +64,6 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			for (int i=0; i<property.length; i++) {
 				newProperty[i] = property[i];
-				log.info("New: "+newProperty[i].getString()+" --> "+newProperty[i].getType());
 				
 				if (property[i].getString().equals(category)) {
 					alreadyAdded = true;
@@ -133,7 +132,7 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 			}
 			
-			documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]));
+			documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]), PropertyType.REFERENCE);
 			documentNode.save();
 			
 			// Check subscriptions
