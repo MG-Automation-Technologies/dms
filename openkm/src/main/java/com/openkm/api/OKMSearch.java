@@ -28,6 +28,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
@@ -197,5 +198,18 @@ public class OKMSearch implements SearchModule {
 		Map<String, Integer> kmap = sm.getKeywordMap(token, filter);
 		log.debug("getKeywordMap: " + kmap);
 		return kmap;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Collection<Document> getCategorizedDocuments(String token, String categoryId)
+			throws RepositoryException {
+		log.debug("getCategorizedDocuments(" + token + ")");
+		SearchModule sm = ModuleManager.getSearchModule();
+		Collection<Document> col = sm.getCategorizedDocuments(token, categoryId);
+		log.debug("getCategorizedDocuments: " + col);
+		return col;
 	}
 }

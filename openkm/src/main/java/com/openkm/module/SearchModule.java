@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import com.openkm.bean.Document;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
@@ -162,4 +163,14 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException;
+	
+	/**
+	 * Get the document within a category
+	 * 
+	 * @param token The session authorization token
+	 * @param categoryId The category id (UUID)
+	 * @return A Collection of documents in the category
+	 * @throws RepositoryException
+	 */
+	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException;
 }
