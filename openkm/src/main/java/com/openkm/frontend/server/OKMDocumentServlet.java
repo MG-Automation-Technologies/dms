@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
+import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
 import com.openkm.api.OKMSearch;
 import com.openkm.bean.Document;
@@ -89,8 +90,14 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 						docList.add(docClient);
 					}
 				}
+			} else if (fldPath.startsWith("/okm:categories")){
+				String Uuid = OKMFolder.getInstance().getProperties(token, fldPath).getUuid();
+				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(token, Uuid);
+				for (Iterator<Document> it = results.iterator(); it.hasNext();) {		
+					GWTDocument docClient = Util.copy(it.next());
+					docList.add(docClient);
+				}
 			} else {
-			
 				log.debug("ParentFolder: "+fldPath);
 				Collection<Document> col = OKMDocument.getInstance().getChilds(token, fldPath);
 				
