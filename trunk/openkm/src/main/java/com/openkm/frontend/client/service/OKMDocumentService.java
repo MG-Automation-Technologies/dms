@@ -47,7 +47,6 @@ public interface OKMDocumentService extends RemoteService {
 	public GWTDocument rename(String docPath, String newName) throws OKMException;
 	public void move(String docPath, String destPath) throws OKMException;
 	public void purge(String docPath) throws OKMException;
-	public void setProperties(GWTDocument doc) throws OKMException;
 	public void restoreVersion(String docPath, String versionId) throws OKMException;
 	public GWTDocument get(String docPath) throws OKMException;
 	public void copy(String docPath, String fldPath) throws OKMException;

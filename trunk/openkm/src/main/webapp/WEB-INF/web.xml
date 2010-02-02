@@ -111,6 +111,10 @@
     <servlet-name>OKMThesaurusServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMThesaurusServlet</servlet-class>
   </servlet>
+   <servlet>
+    <servlet-name>OKMPropertyServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.OKMPropertyServlet</servlet-class>
+  </servlet>
 
   <!-- Backend Servlets -->
   <servlet>
@@ -284,6 +288,10 @@
   <servlet-mapping>
     <servlet-name>OKMThesaurusServlet</servlet-name>
     <url-pattern>/OKMThesaurusServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMPropertyServlet</servlet-name>
+    <url-pattern>/OKMPropertyServlet</url-pattern>
   </servlet-mapping>
 
   <!-- Backend Servlet Mappings -->

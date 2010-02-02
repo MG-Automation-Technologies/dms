@@ -43,7 +43,6 @@ public interface OKMDocumentServiceAsync {
 	public void rename(String docPath, String newName, AsyncCallback<GWTDocument> callback);
 	public void move(String docPath, String destPath, AsyncCallback<?> callback);
 	public void purge(String docPath, AsyncCallback<?> callback);
-	public void setProperties(GWTDocument doc, AsyncCallback<?> callback);
 	public void restoreVersion(String docPath, String versionId, AsyncCallback<?> callback);
 	public void get(String docPath, AsyncCallback<GWTDocument> callback);
 	public void copy(String docPath, String fldPath, AsyncCallback<?> callback);

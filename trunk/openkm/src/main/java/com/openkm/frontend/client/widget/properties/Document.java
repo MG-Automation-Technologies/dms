@@ -64,6 +64,8 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.service.OKMPropertyService;
+import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
@@ -76,6 +78,7 @@ import com.openkm.frontend.client.widget.dashboard.TagCloud;
  */
 public class Document extends Composite {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
@@ -450,20 +453,6 @@ public class Document extends Composite {
 	}	
 	
 	/**
-	 * Callback SetProperties document
-	 */
-	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
-			Main.get().showError("SetProperties", caught);
-		}
-	};
-	
-	/**
 	 * Callback GetVersionHistorySize document
 	 */
 	final AsyncCallback<Long> callbackGetVersionHistorySize = new AsyncCallback<Long>() {
@@ -479,14 +468,60 @@ public class Document extends Composite {
 	};
 	
 	/**
-	 * SetProperties document
+	 * Callback addKeyword document
 	 */
-	public void setProperties() {
-		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
-		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-		documentService.setProperties(document, callbackSetProperties);
-	}
+	final AsyncCallback<Object> callbackAddKeywords = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().showError("AddKeyword", caught);
+		}
+	};
+	
+	/**
+	 * Callback removeKeyword document
+	 */
+	final AsyncCallback<Object> callbackRemoveKeywords = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().showError("RemoveKeyword", caught);
+		}
+	};
+	
+	/**
+	 * Callback addCategory document
+	 */
+	final AsyncCallback<Object> callbackAddCategory = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().showError("AddCategory", caught);
+		}
+	};
+	
+	/**
+	 * Callback removeCategory document
+	 */
+	final AsyncCallback<Object> callbackRemoveCategory = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().showError("RemoveCategory", caught);
+		}
+	};
 	
 	/**
 	 * getVersionHistorySize document
@@ -496,6 +531,46 @@ public class Document extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
+	}
+	
+	/**
+	 * addKeyword document
+	 */
+	public void addKeyword(String keyword) {
+		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
+	}
+	
+	/**
+	 * removeKeyword document
+	 */
+	public void removeKeyword(String keyword) {
+		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
+	}
+	
+	/**
+	 * addCategory document
+	 */
+	public void addCategory(String UUID) {
+		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		propertyService.addCategory(document.getPath(), UUID, callbackAddCategory);
+	}
+	
+	/**
+	 * removeCategory document
+	 */
+	public void removeCategory(String UUID) {
+		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
 	}
 	
 	/**
@@ -525,7 +600,7 @@ public class Document extends Composite {
 				keywordsArray[count++] = key;
 			}
 			document.setKeywords(keywords);
-			setProperties();
+			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
 			drawTagCloud(keywordsArray);
 			if (Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
@@ -563,7 +638,7 @@ public class Document extends Composite {
 			keywordMap.put(keyword, keywordButton);
 			hKeyPanel.add(keywordButton);
 			document.setKeywords(keywords);
-			setProperties();
+			addKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
 			drawTagCloud(keywordsArray);
 		}
