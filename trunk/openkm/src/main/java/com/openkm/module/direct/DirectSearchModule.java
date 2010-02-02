@@ -750,7 +750,7 @@ public class DirectSearchModule implements SearchModule {
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node doc = nit.nextNode();
-				String keywordsString = doc.getProperty(Document.KEYWORDS).getString();
+				String keywordsString = doc.getProperty(com.openkm.bean.Property.KEYWORDS).getString();
 				ArrayList<String> keywordCollection = new ArrayList<String>();
 				
 				for (StringTokenizer st = new StringTokenizer(keywordsString); st.hasMoreTokens(); ) {

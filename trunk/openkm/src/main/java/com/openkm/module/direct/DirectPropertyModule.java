@@ -30,7 +30,7 @@ import javax.jcr.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
+import com.openkm.bean.Property;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -57,7 +57,7 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Document.CATEGORIES).getValues();
+			Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
 			Value[] newProperty = new Value[property.length+1];
 			boolean alreadyAdded = false;
 			
@@ -71,7 +71,7 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			if (!alreadyAdded) {
 				newProperty[newProperty.length-1] = session.getValueFactory().createValue(category);
-				documentNode.setProperty(Document.CATEGORIES, newProperty);
+				documentNode.setProperty(Property.CATEGORIES, newProperty);
 				documentNode.save();
 			}
 			
@@ -121,7 +121,7 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Document.CATEGORIES).getValues();
+			Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
 			ArrayList<Value> newProperty = new ArrayList<Value>();
 						
 			for (int i=0; i<property.length; i++) {
@@ -130,7 +130,7 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 			}
 			
-			documentNode.setProperty(Document.CATEGORIES, (Value[])newProperty.toArray(new Value[0]));
+			documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]));
 			documentNode.save();
 			
 			// Check subscriptions
@@ -179,7 +179,7 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Document.KEYWORDS).getValues();
+			Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
 			Value[] newProperty = new Value[property.length+1];
 			boolean alreadyAdded = false;
 			
@@ -193,7 +193,7 @@ public class DirectPropertyModule implements PropertyModule {
 			
 			if (!alreadyAdded) {
 				newProperty[newProperty.length-1] = session.getValueFactory().createValue(keyword);
-				documentNode.setProperty(Document.KEYWORDS, newProperty);
+				documentNode.setProperty(Property.KEYWORDS, newProperty);
 				documentNode.save();
 			}
 			
@@ -243,7 +243,7 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Document.KEYWORDS).getValues();
+			Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
 			ArrayList<Value> newProperty = new ArrayList<Value>();
 						
 			for (int i=0; i<property.length; i++) {
@@ -252,7 +252,7 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 			}
 			
-			documentNode.setProperty(Document.KEYWORDS, (Value[])newProperty.toArray(new Value[0]));
+			documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[0]));
 			documentNode.save();
 			
 			// Check subscriptions
