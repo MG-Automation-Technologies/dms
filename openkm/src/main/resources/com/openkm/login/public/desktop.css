@@ -70,3 +70,36 @@ a:active {
 	font-size:14px;
 	font-weight:bold;
 }
+
+/* DEMO */
+table.demo {
+  background-color: #F1F3F5;
+  border: 1px solid #CCCCCC;
+}
+
+table.demo td {
+  text-align: center;
+  padding: 7px;
+}
+
+td.demo_alert {
+  background-color: #DA3737;
+  font-weight: bold;
+}
+
+td.demo_title {
+  background-color: #002B4C;
+  color: #fff;
+  font-weight: bold;
+}
+
+table.demo_list {
+}
+
+table.demo_list th {
+  font-weight: bold;
+}
+
+table.demo_list td {
+  padding: 1px;
+}
