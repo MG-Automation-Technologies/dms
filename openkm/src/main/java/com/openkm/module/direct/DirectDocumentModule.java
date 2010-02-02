@@ -230,7 +230,7 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
 		long size = is.available();
-			
+		
 		// Get parent node auth info
 		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
 		String[] usersRead = JCRUtils.usrValue2String(usersReadParent, session.getUserID());
