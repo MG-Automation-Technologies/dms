@@ -36,7 +36,7 @@ import javax.jcr.query.QueryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
+import com.openkm.bean.Property;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.util.Serializer;
@@ -103,7 +103,7 @@ public class UserKeywordsManager {
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node docNode = nit.nextNode();
-				String keywords = docNode.getProperty(Document.KEYWORDS).getString();
+				String keywords = docNode.getProperty(Property.KEYWORDS).getString();
 				userDocKeywords.put(docNode.getUUID(), splitKeywords(keywords));
 			}
 			
