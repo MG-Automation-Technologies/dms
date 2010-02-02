@@ -806,4 +806,31 @@ public class DirectSearchModule implements SearchModule {
 		log.info("getKeywordMapCached: "+keywordMap);
 		return keywordMap;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException {
+		log.info("getCategorizedDocuments("+token+", "+categoryId+")");
+		Session session = SessionManager.getInstance().get(token);
+		ArrayList<Document> documents = new ArrayList<Document>();
+		
+		try {
+			Node category = session.getNodeByUUID(categoryId);
+			
+			for (PropertyIterator it = category.getReferences(); it.hasNext(); ) {
+				Property refProp = it.nextProperty();
+				Node refNode = refProp.getNode(); 
+				Document doc = new Document();
+				doc.setPath(refNode.getPath());
+			}
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.info("getCategorizedDocuments: "+documents);
+		return documents;
+	}
 }
