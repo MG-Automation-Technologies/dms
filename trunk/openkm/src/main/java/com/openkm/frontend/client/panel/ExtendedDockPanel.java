@@ -676,8 +676,8 @@ public class ExtendedDockPanel extends Composite {
 							case Keyboard.KEY_N:
 								// Case CTRL + N
 								if (event.getNativeEvent().getCtrlKey() && actualView == DESKTOP && 
-									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().createDirectoryOption) {
-									Main.get().mainPanel.topPanel.toolBar.executeCreateDirectory();
+									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().createFolderOption) {
+									Main.get().mainPanel.topPanel.toolBar.executeFolderDirectory();
 									propagate = false;
 								}
 								break;

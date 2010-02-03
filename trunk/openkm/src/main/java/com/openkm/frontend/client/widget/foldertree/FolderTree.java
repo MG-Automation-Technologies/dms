@@ -943,22 +943,24 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Add temporary folder on creation
 	 */
 	public void addTmpFolderCreate() {
-		folderAction = ACTION_CREATE;
-		FolderTextBox newFolder = new FolderTextBox();
-		tmpFolder = new TreeItem();
-		tmpFolder.setWidget(newFolder);
-		tmpFolder.setStyleName("okm-TreeItem");
-		newFolder.reset();
-		newFolder.setText(Main.i18n("tree.folder.new"));
-		actualItem.addItem(tmpFolder);
-		actualItem.setState(true);
-		actualItem.setSelected(false);
-		tmpFolder.setSelected(true);
-		actualItem = tmpFolder;
-		// When we create a new folder we enables selection ( after it, we'll return to disable) for a normal
-		// use of the input (if not, cursor and selections not runs propertly )
-		rootItem.removeStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection)
-		newFolder.setFocus();
+		if (folderAction == ACTION_NONE) {
+			folderAction = ACTION_CREATE;
+			FolderTextBox newFolder = new FolderTextBox();
+			tmpFolder = new TreeItem();
+			tmpFolder.setWidget(newFolder);
+			tmpFolder.setStyleName("okm-TreeItem");
+			newFolder.reset();
+			newFolder.setText(Main.i18n("tree.folder.new"));
+			actualItem.addItem(tmpFolder);
+			actualItem.setState(true);
+			actualItem.setSelected(false);
+			tmpFolder.setSelected(true);
+			actualItem = tmpFolder;
+			// When we create a new folder we enables selection ( after it, we'll return to disable) for a normal
+			// use of the input (if not, cursor and selections not runs propertly )
+			rootItem.removeStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection)
+			newFolder.setFocus();
+		}
 	}
 	
 	/**
@@ -1047,17 +1049,19 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Shows input text to rename selected folder
 	 */
 	public void rename() {	
-		Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while renaming
-		folderAction = ACTION_RENAME;
-		renFolder = new FolderTextBox();
-		renFolder.reset();
-		renFolder.setText(actualItem.getText());
-		tmpRenameHtmlFolder = actualItem.getHTML();
-		actualItem.setWidget(renFolder);
-		// When we create a new folder we enables selection ( after it, we'll return to disable) for a normal
-		// use of the input (if not, cursor and selections not runs propertly )
-		rootItem.removeStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection)
-		renFolder.setFocus();
+		if (folderAction == ACTION_NONE) {
+			Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while renaming
+			folderAction = ACTION_RENAME;
+			renFolder = new FolderTextBox();
+			renFolder.reset();
+			renFolder.setText(actualItem.getText());
+			tmpRenameHtmlFolder = actualItem.getHTML();
+			actualItem.setWidget(renFolder);
+			// When we create a new folder we enables selection ( after it, we'll return to disable) for a normal
+			// use of the input (if not, cursor and selections not runs propertly )
+			rootItem.removeStyleName("okm-DisableSelect"); // Disables drag and drop browser text selection)
+			renFolder.setFocus();
+		}
 	}
 	
 	/**
