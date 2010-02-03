@@ -58,7 +58,7 @@ public class Document implements Serializable {
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
 	private Collection<String> subscriptors;
-	private Collection<String> categories;
+	private Collection<Folder> categories;
 	private Collection<Note> notes;
 
 	public Lock getLockInfo() {
@@ -173,11 +173,11 @@ public class Document implements Serializable {
 		this.subscriptors = subscriptors;
 	}
 	
-	public Collection<String> getCategories() {
+	public Collection<Folder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Collection<String> categories) {
+	public void setCategories(Collection<Folder> categories) {
 		this.categories = categories;
 	}
 	
