@@ -54,6 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
 import com.openkm.bean.Note;
 import com.openkm.bean.Notification;
@@ -179,16 +180,19 @@ public class DirectDocumentModule implements DocumentModule {
 		doc.setSubscriptors(subscriptorList);
 		
 		// Get document categories
-		ArrayList<String> categoriesList = new ArrayList<String>();
+		ArrayList<Folder> categoriesList = new ArrayList<Folder>();
 		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
 
 		for (int i=0; i<categories.length; i++) {
-			categoriesList.add(categories[i].getString());
+			Folder category = new Folder();
+			Node node = session.getNodeByUUID(categories[i].getString());
+			new DirectFolderModule().getProperties(session, node.getPath());
+			categoriesList.add(category);
 		}
 
 		doc.setCategories(categoriesList);
 		
-		doc.setConvertibleToPdf(new DocConverter().isValid(doc.getMimeType()));
+		doc.setConvertibleToPdf(DocConverter.getInstance().isValid(doc.getMimeType()));
 		if (Config.SYSTEM_PDF2SWF.equals("")) {
 			doc.setConvertibleToSwf(false);
 		} else {
