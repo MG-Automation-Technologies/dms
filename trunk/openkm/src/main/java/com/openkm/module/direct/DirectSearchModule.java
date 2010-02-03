@@ -38,7 +38,6 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 import javax.jcr.lock.LockException;
@@ -824,14 +823,9 @@ public class DirectSearchModule implements SearchModule {
 				Property refProp = it.nextProperty();
 				
 				if (com.openkm.bean.Property.CATEGORIES.equals(refProp.getName())) {
-					Value[] refNodes = refProp.getValues();
-									
-					for (int i=0; i<refNodes.length; i++) {
-						Document doc = new Document();
-						Node node = session.getNodeByUUID(refNodes[i].getString());
-						doc.setPath(node.getPath());
-						documents.add(doc);
-					}
+					Node node = refProp.getParent();
+					Document doc = new DirectDocumentModule().getProperties(session, node.getPath());
+					documents.add(doc);
 				}
 			}
 		} catch (javax.jcr.RepositoryException e) {
