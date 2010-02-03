@@ -35,17 +35,14 @@ import com.artofsolving.jodconverter.DocumentFormat;
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
-
 import com.openkm.core.Config;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
-	ArrayList<String> validMimes = new ArrayList<String>();
-	
-	/**
-	 * Initialize valid documents MIME types
-	 */
-	public DocConverter() {
+	private static ArrayList<String> validMimes = new ArrayList<String>();
+	private static DocConverter instance = new DocConverter();
+
+	private DocConverter() {
 		if (Config.SYSTEM_OPENOFFICE.equals("on")) {
 			// Basic
 			validMimes.add("text/plain");
@@ -66,7 +63,14 @@ public class DocConverter {
 			validMimes.add("application/vnd.ms-powerpoint");
 		}
 	}
-
+	
+	/**
+	 * Retrieve class instance
+	 */
+	public static DocConverter getInstance() {
+		return instance;
+	}
+	
 	/**
 	 * Convert a document format to another one.
 	 * 
