@@ -526,7 +526,7 @@ public class MainMenu extends Composite {
 	 * Enables or disables menu option on privileges
 	 */
 	public void evaluateMenuOptions() {
-		if (mainMenuOption.createDirectoryOption) {	enable(createDirectory); } else { disable(createDirectory);	}
+		if (mainMenuOption.createFolderOption) {	enable(createDirectory); } else { disable(createDirectory);	}
 		if (mainMenuOption.downloadOption) { enable(download); } else { disable(download); }
 		if (mainMenuOption.downloadPdfOption) { enable(downloadPdf); } else { disable(downloadPdf); }
 		if (mainMenuOption.sendDocumentLinkOption) { enable(sendDocumentLink); } else { disable(sendDocumentLink); }
@@ -755,8 +755,8 @@ public class MainMenu extends Composite {
 	// Command menu to create directory 
 	Command createDirectoryOKM = new Command() {
 		public void execute() {
-			if (mainMenuOption.createDirectoryOption) {
-				Main.get().mainPanel.topPanel.toolBar.executeCreateDirectory();
+			if (mainMenuOption.createFolderOption) {
+				Main.get().mainPanel.topPanel.toolBar.executeFolderDirectory();
 			}
 		}
 	};
