@@ -81,7 +81,7 @@ public class OKMProperty implements PropertyModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("addKeyword("+token+", "+nodePath+")");
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addCategory(token, nodePath, keyword);
+		pm.addKeyword(token, nodePath, keyword);
 		log.debug("addKeyword: void");
 	}
 
@@ -92,9 +92,9 @@ public class OKMProperty implements PropertyModule {
 	public void removeKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("removeCategory("+token+", "+nodePath+")");
+		log.debug("removeKeyword("+token+", "+nodePath+")");
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeCategory(token, nodePath, keyword);
-		log.debug("removeCategory: void");
+		pm.removeKeyword(token, nodePath, keyword);
+		log.debug("removeKeyword: void");
 	}
 }
