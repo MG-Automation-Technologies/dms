@@ -21,11 +21,14 @@
 
 package com.openkm.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,29 +42,36 @@ import com.openkm.core.Config;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
-	private static ArrayList<String> validMimes = new ArrayList<String>();
+	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
+	private static ArrayList<String> validImageMagick = new ArrayList<String>();
 	private static DocConverter instance = new DocConverter();
+	public static final String PDF = "application/pdf";
+	public static final String SWF = "application/x-shockwave-flash";
 
 	private DocConverter() {
-		if (Config.SYSTEM_OPENOFFICE.equals("on")) {
-			// Basic
-			validMimes.add("text/plain");
-			validMimes.add("text/html");
-			validMimes.add("text/csv");
-			validMimes.add("application/rtf");
-			
-			// OpenOffice.org OpenDocument
-			validMimes.add("application/vnd.oasis.opendocument.text");
-			validMimes.add("application/vnd.oasis.opendocument.presentation");
-			validMimes.add("application/vnd.oasis.opendocument.spreadsheet");
-			validMimes.add("application/vnd.oasis.opendocument.graphics");
-			validMimes.add("application/vnd.oasis.opendocument.database");
-			
-			// Microsoft Office
-			validMimes.add("application/msword");
-			validMimes.add("application/vnd.ms-excel");
-			validMimes.add("application/vnd.ms-powerpoint");
-		}
+		// Basic
+		validOpenOffice.add("text/plain");
+		validOpenOffice.add("text/html");
+		validOpenOffice.add("text/csv");
+		validOpenOffice.add("application/rtf");
+		
+		// OpenOffice.org OpenDocument
+		validOpenOffice.add("application/vnd.oasis.opendocument.text");
+		validOpenOffice.add("application/vnd.oasis.opendocument.presentation");
+		validOpenOffice.add("application/vnd.oasis.opendocument.spreadsheet");
+		validOpenOffice.add("application/vnd.oasis.opendocument.graphics");
+		validOpenOffice.add("application/vnd.oasis.opendocument.database");
+		
+		// Microsoft Office
+		validOpenOffice.add("application/msword");
+		validOpenOffice.add("application/vnd.ms-excel");
+		validOpenOffice.add("application/vnd.ms-powerpoint");
+		
+		// Images
+		validImageMagick.add("image/jpeg");
+		validImageMagick.add("image/png");
+		validImageMagick.add("image/gif");
+		validImageMagick.add("image/tiff");
 	}
 	
 	/**
@@ -71,6 +81,30 @@ public class DocConverter {
 		return instance;
 	}
 	
+	/**
+	 * Test if a MIME document can be converted to PDF
+	 */
+	public boolean convertibleToPdf(String from) {
+		if (Config.SYSTEM_OPENOFFICE.equals("on") && validOpenOffice.contains(from)) {
+			return true;
+		} else if (!Config.SYSTEM_CONVERT.equals("") && validImageMagick.contains(from)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Test if a MIME document can be converted to SWF
+	 */
+	public boolean convertibleToSwf(String from) {
+		if (!Config.SYSTEM_PDF2SWF.equals("") && (convertibleToPdf(from) || PDF.equals(from))) {
+			return true;
+		}
+	
+		return false;
+	}
+
 	/**
 	 * Convert a document format to another one.
 	 * 
@@ -83,7 +117,7 @@ public class DocConverter {
 	public void convert(InputStream is, String mimeFrom, OutputStream os, String mimeTo) throws IOException {
 		log.debug("convert("+is+", "+mimeFrom+", "+os+", "+mimeTo+")");
 				
-		if (validMimes.contains(mimeFrom)) {
+		if (validOpenOffice.contains(mimeFrom)) {
 			OpenOfficeConnection connection = null;
 
 			try {
@@ -109,13 +143,77 @@ public class DocConverter {
 		}
 	}
 	
+	/**
+	 * Convert document to PDF.
+	 */
+	public void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
+		log.info("** Convert from "+mimeType+" to PDF **");
+		try {
+			FileOutputStream os = new FileOutputStream(output);
+			instance.convert(is, mimeType, os, PDF);
+			os.flush();
+			os.close();
+			is.close();
+		} catch (Exception e) {
+			log.error("Error in "+mimeType+" to PDF conversion", e);
+			output.delete();
+			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
+		}
+	}
 	
 	/**
-	 * Test if a MIME document can be converted to PDF
-	 * 
-	 * @param mime MIME to test
+	 * Convert IMG to PDF (for document preview feature).
 	 */
-	public boolean isValid(String mime) {
-		return validMimes.contains(mime);
+	public void img2pdf(InputStream is, String mimeType, File output) throws IOException {
+		log.info("** Convert from "+mimeType+" to PDF **");
+		File tmp = File.createTempFile("okm", ".img");
+		FileOutputStream fos = null;
+		
+		try {
+			fos = new FileOutputStream(tmp);
+			IOUtils.copyLarge(is, fos);
+			fos.flush();
+			fos.close();
+			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_CONVERT, tmp.getPath(), output.getPath());
+			Process process = pb.start();
+			process.waitFor();
+			String info = IOUtils.toString(process.getInputStream());
+			process.destroy();
+		
+			// Check return code
+			if (process.exitValue() == 1) {
+				log.warn(info);
+			}
+		} catch (Exception e) {
+			log.error("Error in IMG to PDF conversion", e);
+			output.delete();
+			throw new IOException("Error in IMG to PDF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+			tmp.delete();
+		}
+	}
+	
+	/**
+	 * Convert PDF to SWF (for document preview feature).
+	 */
+	public void pdf2swf(File input, File output) throws IOException {
+		log.info("** Convert from PDF to SWF **");
+		try {
+			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath());
+			Process process = pb.start();
+			process.waitFor();
+			String info = IOUtils.toString(process.getInputStream());
+			process.destroy();
+		
+			// Check return code
+			if (process.exitValue() == 1) {
+				log.warn(info);
+			}
+		} catch (Exception e) {
+			log.error("Error in PDF to SWF conversion", e);
+			output.delete();
+			throw new IOException("Error in PDF to SWF conversion", e);
+		}
 	}
 }
