@@ -91,6 +91,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 					}
 				}
 			} else if (fldPath.startsWith("/okm:categories")){
+				//TODO: Possible optimization getting folder really could not be needed we've got UUID in GWT UI
 				String Uuid = OKMFolder.getInstance().getProperties(token, fldPath).getUuid();
 				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(token, Uuid);
 				for (Iterator<Document> it = results.iterator(); it.hasNext();) {		
