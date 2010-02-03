@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.jcr.Node;
@@ -99,7 +100,7 @@ public class JCRUtils {
 					FileInputStream fis = new FileInputStream(files[i].getAbsolutePath());
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(files[i].lastModified());
-					doc.setKeywords("Automatically imported");
+					doc.setKeywords(Arrays.asList(new String[]{"Automatically imported"}));
 					doc.setPath(newFolder.getPath()+"/"+files[i].getName());
 					OKMDocument.getInstance().create(token, doc, fis);
 					fis.close();
