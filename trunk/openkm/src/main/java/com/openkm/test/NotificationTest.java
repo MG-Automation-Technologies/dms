@@ -2,6 +2,7 @@ package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class NotificationTest {
 		notifyUsers = OKMNotification.getInstance().getSubscriptors(token, newDocument.getPath());
 		log.info("Notify Users: "+notifyUsers);
 
-		doc.setKeywords("Hola, mundo!");
+		doc.setKeywords(Arrays.asList("Hola, mundo!".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 				
 		// Notify an other user (again the same user)
@@ -84,7 +85,7 @@ public class NotificationTest {
 		
 		// Modify document property
 		log.info("### MODIFY DOCUMENT PROPERTY ###");
-		doc.setKeywords("Hola, mundo!");
+		doc.setKeywords(Arrays.asList("Hola, mundo!".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 
 		// Modify document content
@@ -135,7 +136,7 @@ public class NotificationTest {
 		
 		// Modify document property
 		log.info("### MODIFY DOCUMENT PROPERTY ###");
-		doc.setKeywords("Hola, mundo!");
+		doc.setKeywords(Arrays.asList("Hola, mundo!".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 
 		OKMAuth.getInstance().logout(token);
@@ -177,7 +178,7 @@ public class NotificationTest {
 		
 		// Modify document property
 		log.info("### MODIFY DOCUMENT PROPERTY ###");
-		doc.setKeywords("Hola, mundo!");
+		doc.setKeywords(Arrays.asList("Hola, mundo!".split(" ")));
 		OKMDocument.getInstance().setProperties(tokenPaco, doc);
 
 		OKMAuth.getInstance().logout(tokenJuan);

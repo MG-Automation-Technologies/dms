@@ -1,6 +1,7 @@
 package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class RemoveTest {
 		String token = OKMAuth.getInstance().login("paco", "pepe");
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
@@ -63,7 +64,7 @@ public class RemoveTest {
 		String token = OKMAuth.getInstance().login("paco", "pepe");
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
@@ -98,7 +99,7 @@ public class RemoveTest {
 		Folder newFolder = OKMFolder.getInstance().create(token, fld); 
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(newFolder.getPath()+"/prueba num 2.txt");
 		OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
@@ -126,7 +127,7 @@ public class RemoveTest {
 		Folder newFolder1 = OKMFolder.getInstance().create(token, fld); 
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(newFolder1.getPath()+"/prueba2.txt");
 		OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		listFlds(token);
@@ -163,7 +164,7 @@ public class RemoveTest {
 		String token = OKMAuth.getInstance().login("paco", "pepe");
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
@@ -187,7 +188,7 @@ public class RemoveTest {
 		String token = OKMAuth.getInstance().login("paco", "pepe");
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 

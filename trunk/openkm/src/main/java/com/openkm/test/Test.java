@@ -1,11 +1,17 @@
 package com.openkm.test;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.net.URLEncoder;
+import java.util.Properties;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.ContentInfo;
+import com.openkm.core.Config;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.JCRUtils;
 
@@ -80,9 +86,16 @@ public class Test {
 		
 		//System.out.println(com.openkm.util.Mail.getTinyUrl("http://www.kde.org"));
 		
-		String path = "/uno/dos/tres";
-		//System.out.println(getPath(path));
-		System.out.println(getPath("/ee/we"));
+		Properties p = new Properties();
+	    //p.setProperty("file.resource.loader.path", "/home/pavila/Desarrollo/Kirofano/jboss-4.2.3.GA");
+	    Velocity.init( p );
+		//Velocity.init();
+		VelocityContext context = new VelocityContext();
+		context.put("userId", "value");
+		StringWriter sw = new StringWriter();
+		//Velocity.mergeTemplate("Prueba.vm", "UTF-8", context, sw);
+		System.out.println("-> "+Velocity.resourceExists("Prueba.vm"));
+		System.out.println(sw.toString());
 	}
 	
 	public static String getPath(String path) throws Exception {

@@ -1,6 +1,7 @@
 package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class LockingTest {
 
 		// Create document
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(tokenUno, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -51,7 +52,7 @@ public class LockingTest {
 			log.error(e.getMessage());
 		}
 		
-		doc.setKeywords("versión nueva");
+		doc.setKeywords(Arrays.asList("versión nueva".split(" ")));
 		
 		try {
 			OKMDocument.getInstance().setProperties(tokenUno, doc);
@@ -80,7 +81,7 @@ public class LockingTest {
 
 		// Create document
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(tokenUno, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -115,7 +116,7 @@ public class LockingTest {
 		log.info("Token: "+token);
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		

@@ -2,6 +2,7 @@ package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -361,7 +362,7 @@ public class BasicTest {
 		// Add document
 		Document doc = new Document();
 		doc.setPath(okmRoot+"/lo básico.txt");
-		doc.setKeywords("un cosa básica");
+		doc.setKeywords(Arrays.asList("un cosa básica".split(" ")));
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Lo más básico que se pude".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
@@ -373,14 +374,14 @@ public class BasicTest {
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/prueba de fe.txt");
-		doc.setKeywords("perico de los palotes");
+		doc.setKeywords(Arrays.asList("perico de los palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/otra prueba de fe.txt");
-		doc.setKeywords("el chico palotes");
+		doc.setKeywords(Arrays.asList("el chico palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Y esta es otra".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
@@ -470,7 +471,7 @@ public class BasicTest {
 		// Add document
 		Document doc = new Document();
 		doc.setPath(okmRoot+"/lo básico.txt");
-		doc.setKeywords("un cosa básica");
+		doc.setKeywords(Arrays.asList("un cosa básica".split(" ")));
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Lo más básico que se pude".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
@@ -482,14 +483,14 @@ public class BasicTest {
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/prueba de fe.txt");
-		doc.setKeywords("perico de los palotes");
+		doc.setKeywords(Arrays.asList("perico de los palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/otra prueba de fe.txt");
-		doc.setKeywords("el chico palotes");
+		doc.setKeywords(Arrays.asList("el chico palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Y esta es otra".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
@@ -618,7 +619,7 @@ public class BasicTest {
 		// Add document
 		Document doc = new Document();
 		doc.setPath(okmRoot+"/lo básico.txt");
-		doc.setKeywords("un cosa básica");
+		doc.setKeywords(Arrays.asList("un cosa básica".split(" ")));
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Lo más básico que se pude".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
@@ -630,14 +631,14 @@ public class BasicTest {
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/prueba de fe.txt");
-		doc.setKeywords("perico de los palotes");
+		doc.setKeywords(Arrays.asList("perico de los palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
 		// Add document
 		doc = new Document();
 		doc.setPath(newFolder1.getPath()+"/otra prueba de fe.txt");
-		doc.setKeywords("el chico palotes");
+		doc.setKeywords(Arrays.asList("el chico palotes".split(" ")));
 		newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Y esta es otra".getBytes()));
 		log.info("Document Path: "+newDocument.getPath());
 
