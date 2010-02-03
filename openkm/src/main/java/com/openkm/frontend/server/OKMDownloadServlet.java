@@ -50,7 +50,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
-import com.openkm.util.DocConverter;
+import com.openkm.util.Conversion;
 import com.openkm.util.FileUtils;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.RepositoryExporter;
@@ -127,7 +127,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 						if (pdfCache.exists()) {
 							is = new FileInputStream(pdfCache);
 						} else {
-							doc2pdf(is, doc.getMimeType(), pdfCache);
+							Conversion.doc2pdf(is, doc.getMimeType(), pdfCache);
 							is = new FileInputStream(pdfCache);
 						}
 						
@@ -145,11 +145,11 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 									IOUtils.copy(is, fos);
 									fos.flush();
 									fos.close();
-									pdf2swf(prvTmp, swfCache);
+									Conversion.pdf2swf(prvTmp, swfCache);
 									is = new FileInputStream(swfCache);
 								} else {
-									doc2pdf(is, doc.getMimeType(), prvTmp);
-									pdf2swf(prvTmp, swfCache);
+									Conversion.doc2pdf(is, doc.getMimeType(), prvTmp);
+									Conversion.pdf2swf(prvTmp, swfCache);
 									is = new FileInputStream(swfCache);
 								}
 							} catch (Exception e) {
@@ -323,47 +323,5 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		}
 		
 		log.debug("exportZipHelper: void");
-	}
-	
-	/**
-	 * Convert document to PDF.
-	 */
-	private void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.info("** Convert from "+mimeType+" to PDF **");
-		try {
-			DocConverter dc = new DocConverter();
-			FileOutputStream os = new FileOutputStream(output);
-			dc.convert(is, mimeType, os, "application/pdf");
-			os.flush();
-			os.close();
-			is.close();
-		} catch (Exception e) {
-			log.error("Error in "+mimeType+" to PDF conversion", e);
-			output.delete();
-			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
-		}
-	}
-	
-	/**
-	 * Convert PDF to SWF (for document preview feature).
-	 */
-	private void pdf2swf(File input, File output) throws IOException {
-		log.info("** Convert from PDF to SWF **");
-		try {
-			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath());
-			Process process = pb.start();
-			process.waitFor();
-			String info = IOUtils.toString(process.getInputStream());
-			process.destroy();
-		
-			// Check return code
-			if (process.exitValue() == 1) {
-				log.warn(info);
-			}
-		} catch (Exception e) {
-			log.error("Error in PDF to SWF conversion", e);
-			output.delete();
-			throw new IOException("Error in PDF to SWF conversion", e);
-		}
 	}
 }
