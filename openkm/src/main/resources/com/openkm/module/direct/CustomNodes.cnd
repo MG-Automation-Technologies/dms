@@ -32,7 +32,7 @@
 - okm:author (string) mandatory
 - okm:name (string) mandatory
 - okm:language (string)
-- okm:keywords (string) mandatory
+- okm:keywords (string) multiple mandatory
 - okm:categories (reference) multiple mandatory
 + okm:content (okm:resource) primary mandatory
 + okm:notes (okm:notes) = okm:notes autocreated mandatory
