@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -56,6 +57,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTCategory;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
@@ -81,6 +83,7 @@ public class Document extends Composite {
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
+	private FlexTable tableSubscribedCategories;
 	private FlexTable table;
 	private GWTDocument document;
 	private Button copyUrlToClipBoard;
@@ -107,6 +110,7 @@ public class Document extends Composite {
 		table = new FlexTable();
 		tableProperties = new FlexTable();
 		tableSubscribedUsers = new FlexTable();
+		tableSubscribedCategories = new FlexTable();
 		keywordsCloud = new TagCloud();
 		scrollPanel = new ScrollPanel(table);
 		keywordPanel = new HorizontalPanel();
@@ -245,6 +249,7 @@ public class Document extends Composite {
 		vPanel2.add(keywordsCloudText);
 		vPanel2.add(keywordsCloud);
 		vPanel2.add(hPanelCategories);
+		vPanel2.add(tableSubscribedCategories);
 		
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0, 1, "");
@@ -262,9 +267,11 @@ public class Document extends Composite {
 		}
 
 		setRowWordWarp(0, 0, true, tableSubscribedUsers);
+		setRowWordWarp(0, 0,true, tableSubscribedCategories);
 		
 		tableProperties.setStyleName("okm-DisableSelect");
 		tableSubscribedUsers.setStyleName("okm-DisableSelect");
+		tableSubscribedCategories.setStyleName("okm-DisableSelect");
 		suggestKey.setStyleName("okm-KeyMap-Suggest");
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
@@ -363,11 +370,31 @@ public class Document extends Composite {
 		while (tableSubscribedUsers.getRowCount()>0) {
 			tableSubscribedUsers.removeRow(0);
 		}
+		while(tableSubscribedCategories.getRowCount()>0) {
+			tableSubscribedCategories.removeRow(0);
+		}
 		
-		// Sets the folder subscribers
+		
+		// Sets the document subscribers
 		for (Iterator<String> it= doc.getSubscriptors().iterator(); it.hasNext(); ) {
 			tableSubscribedUsers.setHTML(tableSubscribedUsers.getRowCount(), 0, it.next());
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
+		}
+		
+		// Sets the document categories
+		for (Iterator<GWTCategory> it = doc.getCategories().iterator(); it.hasNext();) {
+			GWTCategory category = it.next();
+			Hyperlink hlink = new Hyperlink();
+			hlink.setHTML("here goes path"+category.getPath());
+			hlink.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			tableSubscribedCategories.setHTML(tableSubscribedCategories.getRowCount(), 0, category.getUuid());
+			setRowWordWarp(tableSubscribedCategories.getRowCount()-1, 0, true, tableSubscribedCategories);
 		}
 		
 		drawTagCloud(keywords);
@@ -395,11 +422,12 @@ public class Document extends Composite {
 		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
 			subcribedUsersText.setVisible(false);
 			tableSubscribedUsers.setVisible(false);
+			tableSubscribedCategories.setVisible(false);
 		} else {
 			subcribedUsersText.setVisible(true);
 			tableSubscribedUsers.setVisible(true);
+			tableSubscribedCategories.setVisible(true);
 		}
-
 	}
 	
 	/**
@@ -557,10 +585,12 @@ public class Document extends Composite {
 	 * addCategory document
 	 */
 	public void addCategory(String UUID) {
-		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
-		propertyService.addCategory(document.getPath(), UUID, callbackAddCategory);
+		if (!existCategory(UUID)) {
+			Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
+			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
+			propertyService.addCategory(document.getPath(), UUID, callbackAddCategory);
+		}
 	}
 	
 	/**
@@ -702,5 +732,22 @@ public class Document extends Composite {
 			} 
 			keywordsCloud.add(tagKey);
 		}
+	}
+	
+	/**
+	 * existCategory
+	 * 
+	 * @param Uuid
+	 * @return
+	 */
+	private boolean existCategory(String Uuid) {
+		boolean found = false;
+		for (Iterator<GWTCategory> it = document.getCategories().iterator(); it.hasNext();) {
+			if (it.next().equals(Uuid)) {
+				found = true;
+				break;
+			}
+		}
+		return found;
 	}
 }

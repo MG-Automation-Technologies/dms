@@ -58,7 +58,8 @@ public class GWTDocument implements IsSerializable {
 
 	private Collection<String> subscriptors;
 	private Collection<GWTNote> notes;
-	
+	private Collection<GWTCategory> categories;
+
 	/**
 	 * @return Returns the subscribed.
 	 */
@@ -253,5 +254,13 @@ public class GWTDocument implements IsSerializable {
 
 	public void setHasNotes(boolean hasNotes) {
 		this.hasNotes = hasNotes;
+	}
+	
+	public Collection<GWTCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Collection<GWTCategory> categories) {
+		this.categories = categories;
 	}
 }

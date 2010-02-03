@@ -60,6 +60,7 @@ import com.openkm.core.Config;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
+import com.openkm.frontend.client.bean.GWTCategory;
 import com.openkm.frontend.client.bean.GWTComment;
 import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
@@ -125,6 +126,14 @@ public class Util {
 			}
 		}
 		
+		Collection<GWTCategory> categories = new ArrayList<GWTCategory>();
+		for (Iterator<String> it = doc.getCategories().iterator(); it.hasNext();) {
+			GWTCategory category = new GWTCategory();
+			category.setUuid(it.next());
+			categories.add(category);
+		}
+		gWTDoc.setCategories(categories);
+		
 		log.debug("copy: "+gWTDoc);
 		return gWTDoc;
 	}
@@ -182,7 +191,7 @@ public class Util {
 		gWTFolder.setAuthor(fld.getAuthor());
 		gWTFolder.setSubscribed(fld.isSubscribed());
 		gWTFolder.setSubscriptors(fld.getSubscriptors());
-
+		
 		log.debug("copy: "+gWTFolder);
 		return gWTFolder;
 	}	
