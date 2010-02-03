@@ -2,6 +2,7 @@ package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -32,7 +33,7 @@ public class VersioningTest {
 		String token = OKMAuth.getInstance().login("paco","pepe");
 
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -48,7 +49,7 @@ public class VersioningTest {
 		
 		// Cambiamos el valor de las keywords
 		Thread.sleep(1000);
-		doc.setKeywords("versión nueva");
+		doc.setKeywords(Arrays.asList("versión nueva".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 		OKMDocument.getInstance().setContent(token, newDocument.getPath(), new ByteArrayInputStream("Esto es una prueba de versión 1".getBytes()));
 				
@@ -59,7 +60,7 @@ public class VersioningTest {
 		// Otra versión
 		Thread.sleep(1000);
 		OKMDocument.getInstance().checkout(token, newDocument.getPath());
-		doc.setKeywords("Otra versión aún más nueva");
+		doc.setKeywords(Arrays.asList("Otra versión aún más nueva".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 		OKMDocument.getInstance().setContent(token, newDocument.getPath(), new ByteArrayInputStream("Esto es una prueba de versión 2 y última".getBytes()));
 		ver = OKMDocument.getInstance().checkin(token, newDocument.getPath(), "beta");
@@ -97,7 +98,7 @@ public class VersioningTest {
 		
 		// Create Document
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(newFolder.getPath()+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -105,7 +106,7 @@ public class VersioningTest {
 		for (int i=1; i<5; i++) {
 			Thread.sleep(1000);
 			OKMDocument.getInstance().checkout(token, newDocument.getPath());
-			doc.setKeywords("versión nueva "+i);
+			doc.setKeywords(Arrays.asList(("versión nueva "+i).split(" ")));
 			OKMDocument.getInstance().setProperties(token, doc);
 			OKMDocument.getInstance().setContent(token, newDocument.getPath(), new ByteArrayInputStream(("Esto es una prueba de versión "+i).getBytes()));
 			Version ver = OKMDocument.getInstance().checkin(token, newDocument.getPath(), "gamma");
@@ -151,7 +152,7 @@ public class VersioningTest {
 		System.out.println("[DOS] token: "+tokenDos);
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(tokenUno, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -166,14 +167,14 @@ public class VersioningTest {
 		// Cambiamos el valor de las keywords
 		try {
 			Thread.sleep(1000);
-			doc.setKeywords("versión nueva");
+			doc.setKeywords(Arrays.asList("versión nueva".split(" ")));
 			OKMDocument.getInstance().setProperties(tokenDos, doc);
 			OKMDocument.getInstance().setContent(tokenDos, newDocument.getPath(), new ByteArrayInputStream("Esto es una prueba de versión de DOS".getBytes()));
 		} catch (LockException e) {
 			System.err.println(e.getMessage());
 		}
 		
-		doc.setKeywords("versión nueva de UNO");
+		doc.setKeywords(Arrays.asList("versión nueva de UNO".split(" ")));
 		OKMDocument.getInstance().setProperties(tokenUno, doc);
 		OKMDocument.getInstance().setContent(tokenUno, newDocument.getPath(), new ByteArrayInputStream("Esto es una prueba de versión de UNO".getBytes()));
 		
@@ -231,7 +232,7 @@ public class VersioningTest {
 		log.info("[DOS] token: "+tokenDos);
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(tokenUno, doc, new ByteArrayInputStream("[UNO] Esto es una prueba".getBytes()));
 
@@ -239,7 +240,7 @@ public class VersioningTest {
 		log.info("[DOS] CheckedOut...");
 		OKMDocument.getInstance().checkout(tokenDos, newDocument.getPath());
 		Thread.sleep(1000);
-		doc.setKeywords("versión nueva");
+		doc.setKeywords(Arrays.asList("versión nueva".split(" ")));
 		OKMDocument.getInstance().setProperties(tokenDos, doc);
 		OKMDocument.getInstance().setContent(tokenDos, newDocument.getPath(), new ByteArrayInputStream("[DOS] Esto es una prueba de versión de DOS".getBytes()));
 		log.info("[DOS] CheckinIn...");
@@ -250,7 +251,7 @@ public class VersioningTest {
 		log.info("[UNO] CheckedOut...");
 		OKMDocument.getInstance().checkout(tokenUno, newDocument.getPath());
 		Thread.sleep(1000);
-		doc.setKeywords("versión nueva");
+		doc.setKeywords(Arrays.asList("versión nueva".split(" ")));
 		OKMDocument.getInstance().setProperties(tokenUno, doc);
 		OKMDocument.getInstance().setContent(tokenUno, newDocument.getPath(), new ByteArrayInputStream("[UNO] Esto es una prueba de versión de UNO".getBytes()));
 		log.info("[UNO] CheckinIn...");
@@ -287,7 +288,7 @@ public class VersioningTest {
 		
 		// Create Document
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(newFolder.getPath()+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -295,7 +296,7 @@ public class VersioningTest {
 		for (int i=1; i<5; i++) {
 			Thread.sleep(1000);
 			OKMDocument.getInstance().checkout(token,  newDocument.getPath());
-			doc.setKeywords("versión nueva "+i);
+			doc.setKeywords(Arrays.asList(("versión nueva "+i).split(" ")));
 			OKMDocument.getInstance().setProperties(token, doc);
 			OKMDocument.getInstance().setContent(token,  newDocument.getPath(), new ByteArrayInputStream(("Esto es una prueba de versión "+i).getBytes()));
 			Version ver = OKMDocument.getInstance().checkin(token,  newDocument.getPath(), "delta");
@@ -380,7 +381,7 @@ public class VersioningTest {
 		
 		// Create Document
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(newFolder.getPath()+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 		
@@ -388,7 +389,7 @@ public class VersioningTest {
 		for (int i=1; i<5; i++) {
 			Thread.sleep(1000);
 			OKMDocument.getInstance().checkout(token,  newDocument.getPath());
-			doc.setKeywords("versión nueva "+i);
+			doc.setKeywords(Arrays.asList(("versión nueva "+i).split(" ")));
 			OKMDocument.getInstance().setProperties(token, doc);
 			OKMDocument.getInstance().setContent(token,  newDocument.getPath(), new ByteArrayInputStream(("Esto es una prueba de versión "+i).getBytes()));
 			Version ver = OKMDocument.getInstance().checkin(token,  newDocument.getPath(), "sigma");
@@ -429,7 +430,7 @@ public class VersioningTest {
 		// Add a new version
 		log.info("**** ADD NEW VERSION ****");
 		OKMDocument.getInstance().checkout(token,  newDocument.getPath());
-		doc.setKeywords("versión nueva ULTIMA");
+		doc.setKeywords(Arrays.asList("versión nueva ULTIMA".split(" ")));
 		OKMDocument.getInstance().setProperties(token, doc);
 		OKMDocument.getInstance().setContent(token,  newDocument.getPath(), new ByteArrayInputStream(("Esto es una prueba de versión ULTIMA").getBytes()));
 		Version ver = OKMDocument.getInstance().checkin(token,  newDocument.getPath(), "pelo");
@@ -466,7 +467,7 @@ public class VersioningTest {
 		log.info("Token: "+token);
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
@@ -511,7 +512,7 @@ public class VersioningTest {
 		log.info("Token: "+token);
 		
 		Document doc = new Document();
-		doc.setKeywords("texto prístino");
+		doc.setKeywords(Arrays.asList("texto prístino".split(" ")));
 		doc.setPath(okmRoot+"/prueba2.txt");
 		Document newDocument = OKMDocument.getInstance().create(token, doc, new ByteArrayInputStream("Esto es una prueba".getBytes()));
 
