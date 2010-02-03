@@ -494,7 +494,7 @@ public class ExtendedDockPanel extends Composite {
 	
 	public void enableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel enableKeyShorcuts");
-		dockPanel.sinkEvents(Event.ONKEYDOWN);
+		dockPanel.sinkEvents(Event.KEYEVENTS);
 		handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
 			@Override
 			public void onPreviewNativeEvent(NativePreviewEvent event) {
@@ -733,7 +733,7 @@ public class ExtendedDockPanel extends Composite {
 	 */
 	public void disableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel disableKeyShorcuts");
-		dockPanel.unsinkEvents(Event.ONKEYDOWN);
+		dockPanel.unsinkEvents(Event.KEYEVENTS);
 		if (handlerRegistration!=null) {
 			handlerRegistration.removeHandler();
 		}
