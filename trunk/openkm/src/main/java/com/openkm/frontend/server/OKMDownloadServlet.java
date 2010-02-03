@@ -50,7 +50,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
-import com.openkm.util.Conversion;
+import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
 import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.RepositoryExporter;
@@ -77,10 +77,10 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		String path = new String(req.getParameter("id").getBytes("ISO-8859-1"), "UTF-8");
 		String checkout = req.getParameter("checkout");
 		String ver = req.getParameter("ver");
-		String export = req.getParameter("export");
-		String toPdf = req.getParameter("toPdf");
-		String toSwf = req.getParameter("toSwf");
-		String inline = req.getParameter("inline");
+		boolean export = req.getParameter("export") != null;
+		boolean toPdf = req.getParameter("toPdf") != null;
+		boolean toSwf = req.getParameter("toSwf") != null;
+		boolean inline = req.getParameter("inline") != null;
 		File tmp = File.createTempFile("okm", ".mkk");
 		Document doc = null;
 		InputStream is = null;
@@ -91,7 +91,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			File swfCache = null;
 						
 			// Get document
-			if (export != null) {
+			if (export) {
 				FileOutputStream os = new FileOutputStream(tmp);
 				exportZip(token, path, os);
 				os.flush();
@@ -100,11 +100,10 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			} else {
 				OKMDocument okmDoc = OKMDocument.getInstance();
 				doc = okmDoc.getProperties(token, path);
-				pdfCache = new File(Config.PDF_CACHE+File.separator+doc.getUuid());
-				swfCache = new File(Config.SWF_CACHE+File.separator+doc.getUuid());
+				pdfCache = new File(Config.PDF_CACHE+File.separator+doc.getUuid()+".pdf");
+				swfCache = new File(Config.SWF_CACHE+File.separator+doc.getUuid()+".swf");
 				
-				if (toSwf == null || toSwf != null && !Config.SYSTEM_PDF2SWF.equals("") && !swfCache.exists() ||
-						toPdf == null || toPdf != null && !pdfCache.exists()) {
+				if (!toSwf || toSwf && !Config.SYSTEM_PDF2SWF.equals("") && !swfCache.exists() || !toPdf || toPdf && !pdfCache.exists()) {
 					if (ver != null && !ver.equals("")) {
 						is = okmDoc.getContentByVersion(token, path, ver);
 					} else {
@@ -114,58 +113,52 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			}
 			
 			// Send document
-			if (export != null) {
+			if (export) {
 				String fileName = FileUtils.getName(path)+".zip";
-				sendFile(req, resp, fileName, "application/zip", inline != null, is);
+				sendFile(req, resp, fileName, "application/zip", inline, is);
 				is.close();
 				tmp.delete();
 			} else if (doc != null) {
 				String fileName = FileUtils.getName(doc.getPath());
+				DocConverter converter = DocConverter.getInstance();
 				
-				if (Config.SYSTEM_OPENOFFICE.equals("on")) {
-					if (toPdf != null) {
-						if (pdfCache.exists()) {
-							is = new FileInputStream(pdfCache);
+				// Convert to PDF
+				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("") && !doc.getMimeType().equals(DocConverter.PDF)) {
+					if (pdfCache.exists()) {
+						is = new FileInputStream(pdfCache);
+					} else {
+						if (doc.getMimeType().startsWith("image/")) {
+							converter.img2pdf(is, doc.getMimeType(), pdfCache);
 						} else {
-							Conversion.doc2pdf(is, doc.getMimeType(), pdfCache);
-							is = new FileInputStream(pdfCache);
+							converter.doc2pdf(is, doc.getMimeType(), pdfCache);
 						}
 						
-						doc.setMimeType("application/pdf");
-						fileName = FileUtils.getFileName(fileName)+".pdf";
-					} else if (toSwf != null && !Config.SYSTEM_PDF2SWF.equals("")) {
-						if (swfCache.exists()) {
-							is = new FileInputStream(swfCache);
-						} else {
-							File prvTmp = File.createTempFile("okm", ".prv");
-							
-							try {
-								if (doc.getMimeType().equals("application/pdf")) {
-									FileOutputStream fos = new FileOutputStream(prvTmp);
-									IOUtils.copy(is, fos);
-									fos.flush();
-									fos.close();
-									Conversion.pdf2swf(prvTmp, swfCache);
-									is = new FileInputStream(swfCache);
-								} else {
-									Conversion.doc2pdf(is, doc.getMimeType(), prvTmp);
-									Conversion.pdf2swf(prvTmp, swfCache);
-									is = new FileInputStream(swfCache);
-								}
-							} catch (Exception e) {
-								log.error(e.getMessage(), e);
-								is = OKMDownloadServlet.class.getResourceAsStream("preview_problem.swf");
-							} finally {
-								prvTmp.delete();
-							}
-						}
-						
-						doc.setMimeType("application/x-shockwave-flash");
-						fileName = FileUtils.getFileName(fileName)+".swf";
+						is = new FileInputStream(pdfCache);
 					}
+					
+					doc.setMimeType(DocConverter.PDF);
+					fileName = FileUtils.getFileName(fileName)+".pdf";
+				} 
+
+				// Convert to SWF
+				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
+					if (swfCache.exists()) {
+						is = new FileInputStream(swfCache);
+					} else {
+						try {
+							converter.pdf2swf(pdfCache, swfCache);
+							is = new FileInputStream(swfCache);
+						} catch (Exception e) {
+							log.error(e.getMessage(), e);
+							is = OKMDownloadServlet.class.getResourceAsStream("preview_problem.swf");
+						}
+					}
+					
+					doc.setMimeType(DocConverter.SWF);
+					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				sendFile(req, resp, fileName, doc.getMimeType(), inline != null, is);
+				sendFile(req, resp, fileName, doc.getMimeType(), inline, is);
 				is.close();
 				tmp.delete();
 			}
