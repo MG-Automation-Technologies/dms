@@ -66,7 +66,6 @@ import com.openkm.bean.cache.UserItems;
 import com.openkm.bean.kea.MetadataDTO;
 import com.openkm.bean.kea.Term;
 import com.openkm.cache.UserItemsManager;
-import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.FileSizeExceededException;
@@ -110,7 +109,6 @@ public class DirectDocumentModule implements DocumentModule {
 
 		// Properties
 		doc.setAuthor(documentNode.getProperty(Document.AUTHOR).getString());
-		doc.setKeywords(documentNode.getProperty(Property.KEYWORDS).getString());
 		doc.setPath(documentNode.getPath());
 		doc.setLocked(documentNode.isLocked());
 		doc.setUuid(documentNode.getUUID());
@@ -179,6 +177,16 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setSubscriptors(subscriptorList);
 		
+		// Get document keywords
+		ArrayList<String> keywordsList = new ArrayList<String>();
+		Value[] keywords = documentNode.getProperty(Property.KEYWORDS).getValues();
+
+		for (int i=0; i<keywords.length; i++) {
+			keywordsList.add(keywords[i].getString());
+		}
+
+		doc.setKeywords(keywordsList);
+		
 		// Get document categories
 		ArrayList<Folder> categoriesList = new ArrayList<Folder>();
 		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
@@ -192,12 +200,9 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setCategories(categoriesList);
 		
-		doc.setConvertibleToPdf(DocConverter.getInstance().isValid(doc.getMimeType()));
-		if (Config.SYSTEM_PDF2SWF.equals("")) {
-			doc.setConvertibleToSwf(false);
-		} else {
-			doc.setConvertibleToSwf(doc.isConvertibleToPdf() || doc.getMimeType().equals("application/pdf"));
-		}
+		DocConverter convert = DocConverter.getInstance();
+		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
+		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
 		
 		// Get comments
 		ArrayList<Note> notes = new ArrayList<Note>();
@@ -223,13 +228,12 @@ public class DirectDocumentModule implements DocumentModule {
 	 * TODO El parámetro session no hace falta porque la sesión viene implícita
 	 * en el segundo parámetro parentNode.
 	 */
-	public Node create(Session session, Node parentNode, String name, String keywords,
-			String mimeType, InputStream is) throws
+	public Node create(Session session, Node parentNode, String name, String mimeType, InputStream is) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException,
 			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
-		documentNode.setProperty(Property.KEYWORDS, keywords);
+		documentNode.setProperty(Property.KEYWORDS, new String[]{});
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
@@ -341,7 +345,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Start KEA        
-			String keywords = doc.getKeywords() + (doc.getKeywords().length()>0?" ":""); // Adding automatic keywords
+			//String keywords = doc.getKeywords() + (doc.getKeywords().size()>0?" ":""); // Adding automatic keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Integer.parseInt(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER));
 		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
@@ -357,10 +361,10 @@ public class DirectDocumentModule implements DocumentModule {
 		        	log.info("Term:" + term.getText());
 		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION.equals("on")) {
 		        		if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
-		        			keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        			//keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
 		        		}
 		        	} else {
-		        		keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        		//keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
 		        	}
 		        }        
 	        }
@@ -368,7 +372,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 			Session session = SessionManager.getInstance().get(token);
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, keywords, mimeType, is);
+			Node documentNode = create(session, parentNode, name, mimeType, is);
 
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
@@ -483,7 +487,7 @@ public class DirectDocumentModule implements DocumentModule {
 			doc = getProperties(session, docPath);
 
 			// Activity log
-			UserActivity.log(session, "GET_DOCUMENT_PROPERTIES", docPath, doc.getKeywords());
+			UserActivity.log(session, "GET_DOCUMENT_PROPERTIES", docPath, doc.getKeywords().toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -813,11 +817,10 @@ public class DirectDocumentModule implements DocumentModule {
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 
 			// Set document node properties
-			documentNode.setProperty(Property.KEYWORDS, doc.getKeywords());
-			documentNode.save();
+			//documentNode.save();
 			
 			// Update document keyword cache
-			UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
+			//UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
@@ -826,7 +829,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
-			UserActivity.log(session, "SET_DOCUMENT_PROPERTIES", doc.getPath(), doc.getKeywords());
+			UserActivity.log(session, "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -1464,11 +1467,10 @@ public class DirectDocumentModule implements DocumentModule {
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
 		log.debug("copy(" + srcDocumentNode + ", " + dstFolderNode + ")");
 		
-		String keywords = srcDocumentNode.getProperty(Property.KEYWORDS).getString();
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		create(session, dstFolderNode, srcDocumentNode.getName(), keywords, mimeType, is);
+		create(session, dstFolderNode, srcDocumentNode.getName(), mimeType, is);
 		is.close();
 		
 		log.debug("copy: void");
