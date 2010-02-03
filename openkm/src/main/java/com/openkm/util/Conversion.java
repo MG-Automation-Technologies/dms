@@ -13,6 +13,21 @@ import com.openkm.core.Config;
 
 public class Conversion {
 	private static Logger log = LoggerFactory.getLogger(Conversion.class);
+	private static final String PDF = "application/pdf";
+	/**
+	 * 
+	 */
+	public boolean isConvertible(String from, String to) {
+		if (from.equals(PDF)) {
+			if (Config.SYSTEM_PDF2SWF.equals("")) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	/**
 	 * Convert document to PDF.
@@ -20,7 +35,7 @@ public class Conversion {
 	public static void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
 		log.info("** Convert from "+mimeType+" to PDF **");
 		try {
-			DocConverter dc = new DocConverter();
+			DocConverter dc = DocConverter.getInstance();
 			FileOutputStream os = new FileOutputStream(output);
 			dc.convert(is, mimeType, os, "application/pdf");
 			os.flush();
