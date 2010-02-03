@@ -222,8 +222,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
 			is = fileDef.getInputStream("forms.xml");
-			forms = WorkflowUtils.parseFormFields(is);
-			is.close();
+			
+			if (is != null) {
+				forms = WorkflowUtils.parseFormFields(is);
+				is.close();
+			}
 			
 			// Activity log
 			UserActivity.log(session, "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
