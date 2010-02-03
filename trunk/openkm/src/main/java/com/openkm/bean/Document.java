@@ -45,7 +45,6 @@ public class Document implements Serializable {
 	private String language = "";
 	private String author;
 	private Calendar created;
-	private String keywords = "";
 	private Calendar lastModified;
 	private String mimeType;
 	private boolean locked;
@@ -58,6 +57,7 @@ public class Document implements Serializable {
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
 	private Collection<String> subscriptors;
+	private Collection<String> keywords;
 	private Collection<Folder> categories;
 	private Collection<Note> notes;
 
@@ -101,11 +101,11 @@ public class Document implements Serializable {
 		this.created = created;
 	}
 
-	public String getKeywords() {
+	public Collection<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(String keywords) {
+	public void setKeywords(Collection<String> keywords) {
 		this.keywords = keywords;
 	}
 
