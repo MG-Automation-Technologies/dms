@@ -138,7 +138,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 					
 					doc.setMimeType(DocConverter.PDF);
 					fileName = FileUtils.getFileName(fileName)+".pdf";
-				} 
+				}
 
 				// Convert to SWF
 				if (toSwf && !Config.SYSTEM_PDF2SWF.equals("")) {
