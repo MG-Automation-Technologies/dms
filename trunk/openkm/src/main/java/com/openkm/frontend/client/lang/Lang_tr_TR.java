@@ -265,6 +265,7 @@ public class Lang_tr_TR {
 	    lang.put("tab.status.security.user", "Güvenlik Kullanýcýlarýnýn Güncellenmesi");
 	    lang.put("tab.document.status.group.properties", "Grup Özelliklerinin Güncellenmesi");
 	    lang.put("tab.document.status.set.keywords", "Anahtar Kelimelerin Düzenlenmesi");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Doküman Boyutunun Güncellenmesi");
 	    lang.put("tab.document.status.purge.version.history", "Doküman Geçmiþi Düzenleniyor");
 	    lang.put("tab.document.status.restore.version", "Doküman Sürümü Yenileniyor");

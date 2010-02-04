@@ -1256,7 +1256,8 @@ public class SearchIn extends Composite {
 				Main.get().mainPanel.historySearch.searchSaved.addRow(searchSavedName.getText());
 				Main.get().mainPanel.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
 			}
-
+			
+			searchSavedName.setText(""); // Clean name atfer saved
 			status.unsetFlag_saveSearch();
 		}
 		

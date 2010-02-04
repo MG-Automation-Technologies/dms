@@ -265,6 +265,7 @@ public class Lang_gl_ES {
 	    lang.put("tab.status.security.user", "Actualizando seguridade usuarios");
 	    lang.put("tab.document.status.group.properties", "Actualizando grupo de propiedades");
 	    lang.put("tab.document.status.set.keywords", "Establecendo palabras chave");
+	    lang.put("tab.document.status.set.categories", "UActualizando categorías");
 	    lang.put("tab.document.status.get.version.history.size", "Refrescando o tamaño do histórico do documento");
 	    lang.put("tab.document.status.purge.version.history", "Compactando o histórico de documentos");
 	    lang.put("tab.document.status.restore.version", "Restaurando a versión do documento");

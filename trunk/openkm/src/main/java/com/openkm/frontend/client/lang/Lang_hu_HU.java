@@ -265,6 +265,7 @@ public class Lang_hu_HU {
 	    lang.put("tab.status.security.user", "Biztonság - felhasználók frissítése...");
 	    lang.put("tab.document.status.group.properties", "Kategóriák frissítése...");
 	    lang.put("tab.document.status.set.keywords", "Kulcsszavak beállítása...");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Verziók méretének frissítése...");
 	    lang.put("tab.document.status.purge.version.history", "Verziók eltávolítása...");
 	    lang.put("tab.document.status.restore.version", "Verzió visszaállítása...");

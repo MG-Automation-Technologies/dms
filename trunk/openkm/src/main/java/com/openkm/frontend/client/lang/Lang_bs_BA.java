@@ -265,6 +265,7 @@ public class Lang_bs_BA {
 	    lang.put("tab.status.security.user", "Ažuriranje korisnika sigurnosti");
 	    lang.put("tab.document.status.group.properties", "Ažuriranje grupe osobina");
 	    lang.put("tab.document.status.set.keywords", "Postavljanje ključnih riječi");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Osvježavanje veličine historije dokumenta");
 	    lang.put("tab.document.status.purge.version.history", "Zbijanje historije dokumenta");
 	    lang.put("tab.document.status.restore.version", "Vraćanje verzije dokumenta");

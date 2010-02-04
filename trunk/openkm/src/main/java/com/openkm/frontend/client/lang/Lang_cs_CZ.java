@@ -265,6 +265,7 @@ public class Lang_cs_CZ {
 	    lang.put("tab.status.security.user", "Aktualizují se oprávnení uživatelů");
 	    lang.put("tab.document.status.group.properties", "Aktualizují se skupina vlastností");
 	    lang.put("tab.document.status.set.keywords", "Nastavují se klíčová slova");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Aktualizuje se velikost historie dokumentu");
 	    lang.put("tab.document.status.purge.version.history", "Zkompaktnit historii dokumentu");
 	    lang.put("tab.document.status.restore.version", "Obnovuje se verze dokumentu");

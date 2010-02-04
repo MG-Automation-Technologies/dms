@@ -270,8 +270,8 @@ public class FolderSelectTree extends Composite {
 	 * 
 	 * @return The actual path of selected directory
 	 */
-	public String getUuid() {
-		return ((GWTFolder) actualItem.getUserObject()).getUuid();
+	public GWTFolder getCategory() {
+		return ((GWTFolder) actualItem.getUserObject());
 	}
 	
 	/**

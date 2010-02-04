@@ -1,5 +1,5 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
+*  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,6 +80,7 @@ import com.openkm.frontend.client.widget.dashboard.TagCloud;
 public class Document extends Composite {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
+	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
 	private FlexTable tableSubscribedCategories;
@@ -167,7 +167,7 @@ public class Document extends Composite {
 			}
 		});
 		
-		thesaurusImage = new Image("img/icon/stackpanel/book_open.gif");
+		thesaurusImage = proImageBundle.bookOpenIcon().createImage();
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -232,7 +232,7 @@ public class Document extends Composite {
 		HorizontalPanel hPanelCategories = new HorizontalPanel();
 		categoriesText = new HTML("<b>"+Main.i18n("document.categories")+"</b>");
 	
-		categoriesImage = new Image("img/icon/stackpanel/table_key.gif");
+		categoriesImage = proImageBundle.tableKeyIcon().createImage();
 		categoriesImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -381,26 +381,7 @@ public class Document extends Composite {
 		
 		// Sets the document categories
 		for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
-			int row = tableSubscribedCategories.getRowCount();
-			final GWTFolder category = it.next();
-			Hyperlink hlink = new Hyperlink();
-			hlink.setHTML(category.getPath());
-			hlink.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					CommonUI.openAllFolderPath(category.getPath(), null);
-				}
-			});
-
-			// Looks if must change icon on parent if now has no childs and properties with user security atention
-			if (category.getHasChilds()) {
-				tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_childs.gif", category.getName(), "top"));
-			} else {
-				tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_empty.gif", category.getName(), "top"));
-			}
-			
-			tableSubscribedCategories.setWidget(row, 1,hlink);
-			setRowWordWarp(row-1, 1, true, tableSubscribedCategories);
+			drawCategory(it.next());
 		}
 		
 		drawTagCloud(doc.getKeywords());
@@ -506,11 +487,11 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackAddKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
 			Main.get().showError("AddKeyword", caught);
 		}
 	};
@@ -520,11 +501,11 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRemoveKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
 			Main.get().showError("RemoveKeyword", caught);
 		}
 	};
@@ -534,11 +515,11 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackAddCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
 			Main.get().showError("AddCategory", caught);
 		}
 	};
@@ -548,11 +529,11 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRemoveCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetSetProperties();
+			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
 			Main.get().showError("RemoveCategory", caught);
 		}
 	};
@@ -571,7 +552,7 @@ public class Document extends Composite {
 	 * addKeyword document
 	 */
 	public void addKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
@@ -581,7 +562,7 @@ public class Document extends Composite {
 	 * removeKeyword document
 	 */
 	public void removeKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
@@ -590,12 +571,14 @@ public class Document extends Composite {
 	/**
 	 * addCategory document
 	 */
-	public void addCategory(String UUID) {
-		if (!existCategory(UUID)) {
-			Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+	public void addCategory(GWTFolder category) {
+		if (!existCategory(category.getUuid())) {
+			document.getCategories().add(category);
+			drawCategory(category);
+			Main.get().mainPanel.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
-			propertyService.addCategory(document.getPath(), UUID, callbackAddCategory);
+			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
 		}
 	}
 	
@@ -603,7 +586,7 @@ public class Document extends Composite {
 	 * removeCategory document
 	 */
 	public void removeCategory(String UUID) {
-		Main.get().mainPanel.browser.tabMultiple.status.setSetProperties();
+		Main.get().mainPanel.browser.tabMultiple.status.setCategories();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
@@ -735,11 +718,49 @@ public class Document extends Composite {
 	private boolean existCategory(String Uuid) {
 		boolean found = false;
 		for (Iterator<GWTFolder> it = document.getCategories().iterator(); it.hasNext();) {
-			if (it.next().equals(Uuid)) {
+			if (it.next().getUuid().equals(Uuid)) {
 				found = true;
 				break;
 			}
 		}
 		return found;
+	}
+	
+	/**
+	 * drawCategory
+	 * 
+	 * @param category
+	 */
+	private void drawCategory(final GWTFolder category) {
+		int row = tableSubscribedCategories.getRowCount();
+		Hyperlink hlink = new Hyperlink();
+		hlink.setHTML(category.getPath());
+		hlink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				CommonUI.openAllFolderPath(category.getPath(), null);
+			}
+		});
+		Image delete = proImageBundle.deleteIcon().createImage();
+		delete.setStyleName("okm-KeyMap-ImageHover");
+		delete.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				removeCategory(category.getUuid());
+				tableSubscribedCategories.removeRow(tableSubscribedCategories.getCellForEvent(event).getRowIndex());
+			}
+		});
+
+		// Looks if must change icon on parent if now has no childs and properties with user security atention
+		if (category.getHasChilds()) {
+			tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_childs.gif", category.getPath(), "top"));
+		} else {
+			tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_empty.gif", category.getPath(), "top"));
+		}
+		
+		
+		
+		tableSubscribedCategories.setWidget(row, 1, delete);
+		setRowWordWarp(row-1, 1, true, tableSubscribedCategories);
 	}
 }

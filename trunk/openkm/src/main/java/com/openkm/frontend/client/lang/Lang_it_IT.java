@@ -265,6 +265,7 @@ public class Lang_it_IT {
 	    lang.put("tab.status.security.user", "Aggiornamento permessi utenti");
 	    lang.put("tab.document.status.group.properties", "Aggiornamento gruppo proprietà");
 	    lang.put("tab.document.status.set.keywords", "Parole chiave in definizione");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Aggiorna dimensione storia documento");
 	    lang.put("tab.document.status.purge.version.history", "Compattazione storia documento");
 	    lang.put("tab.document.status.restore.version", "Ripristino versione documento");

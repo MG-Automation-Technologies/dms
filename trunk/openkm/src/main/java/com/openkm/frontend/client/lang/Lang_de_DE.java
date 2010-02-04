@@ -265,6 +265,7 @@ public class Lang_de_DE {
 	    lang.put("tab.status.security.user", "Aktualisiere Sicherheit Benutzer");
 	    lang.put("tab.document.status.group.properties", "Aktualisiere Eigenschaften Gruppe");
 	    lang.put("tab.document.status.set.keywords", "Setze Schlagwörter");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Frische Größe der Dokumenthistorie auf");
 	    lang.put("tab.document.status.purge.version.history", "Bereinige Dokumenthistorie");
 	    lang.put("tab.document.status.restore.version", "Stelle Dokument Version wieder her");

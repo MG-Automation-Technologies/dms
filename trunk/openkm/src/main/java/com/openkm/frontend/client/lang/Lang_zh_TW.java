@@ -264,6 +264,7 @@ public class Lang_zh_TW {
 		lang.put("tab.status.security.user", "正在更新權限使用者");
 	    lang.put("tab.document.status.group.properties", "正在更新屬性群組");
 	    lang.put("tab.document.status.set.keywords", "正在設定關鍵字");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 		lang.put("tab.document.status.get.version.history.size", "正在重新整理文件歷史大小");
 		lang.put("tab.document.status.purge.version.history", "正在壓縮文件歷史");
 	    lang.put("tab.document.status.restore.version", "正在重新載入文件版本");

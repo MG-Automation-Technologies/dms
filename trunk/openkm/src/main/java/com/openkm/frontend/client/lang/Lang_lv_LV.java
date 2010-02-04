@@ -265,6 +265,7 @@ public class Lang_lv_LV {
 	    lang.put("tab.status.security.user", "Atjauno drošības lietotājus");
 	    lang.put("tab.document.status.group.properties", "Atjauno īpašibu grupu");
 	    lang.put("tab.document.status.set.keywords", "Uzstāda atslēgvārdus");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Atsvaidzina dokumenta vēstures izmēru");
 	    lang.put("tab.document.status.purge.version.history", "Saspiež dokumenta vēsturi");
 	    lang.put("tab.document.status.restore.version", "Atjauno dokumenta versiju");

@@ -265,6 +265,7 @@ public class Lang_el_GR {
 	    lang.put("tab.status.security.user", "Ενημέρωση ασφάλεια χρηστών");
 	    lang.put("tab.document.status.group.properties", "Ενημέρωση ομάδα ιδιοτήτων");
 	    lang.put("tab.document.status.set.keywords", "Ορισμός λέξεων-κλειδιών");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Ανανέωση μεγέθους ιστορικού");
 	    lang.put("tab.document.status.purge.version.history", "Συμπύκνωση μεγέθους ιστορικού");
 	    lang.put("tab.document.status.restore.version", "Επαναφορά έκδοσης εγγράφου");
