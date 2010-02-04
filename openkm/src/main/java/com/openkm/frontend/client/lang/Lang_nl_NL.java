@@ -268,6 +268,7 @@ public class Lang_nl_NL {
 	    lang.put("tab.status.security.user", "Beveiliging: gebruikers bijwerken");
 	    lang.put("tab.document.status.group.properties", "Property group bijwerken");
 	    lang.put("tab.document.status.set.keywords", "Keywords opslaan");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Verversen document history grootte");
 	    lang.put("tab.document.status.purge.version.history", "Comprimeren document historie");
 	    lang.put("tab.document.status.restore.version", "Terughalen document versie");

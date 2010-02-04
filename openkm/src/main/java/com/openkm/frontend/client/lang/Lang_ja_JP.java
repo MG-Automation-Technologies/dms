@@ -265,6 +265,7 @@ public class Lang_ja_JP {
 		lang.put("tab.status.security.user", "ユーザ権限の更新中...");
 		lang.put("tab.document.status.group.properties", "グループ設定の更新中...");
 		lang.put("tab.document.status.set.keywords", "キーワード設定の更新中...");
+		lang.put("tab.document.status.set.categories", "Updating categories");
 		lang.put("tab.document.status.get.version.history.size", "文書履歴の更新中...");
 		lang.put("tab.document.status.purge.version.history", "文書の履歴を削除中...");
 		lang.put("tab.document.status.restore.version", "文書のバージョンを復元中...");

@@ -270,6 +270,7 @@ public class Lang_ru_RU {
 	    lang.put("tab.status.security.user", "Обновляю пользователей (безопасность)");
 	    lang.put("tab.document.status.group.properties", "Обновляю группу свойств");
 	    lang.put("tab.document.status.set.keywords", "Устанавливаю ключевые слова");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Обновляю размер истории документа");
 	    lang.put("tab.document.status.purge.version.history", "Удаляю историю документа");
 	    lang.put("tab.document.status.restore.version", "Восстанавливаю версию документа");

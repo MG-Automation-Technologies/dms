@@ -265,6 +265,7 @@ public class Lang_zh_CN {
 	    lang.put("tab.status.security.user", "正在更新安全用户");
 	    lang.put("tab.document.status.group.properties", "正在更新属性组");
 	    lang.put("tab.document.status.set.keywords", "正在设置关键字");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "刷新文档历史大小");
 	    lang.put("tab.document.status.purge.version.history", "文档历史压缩");
 	    lang.put("tab.document.status.restore.version", "正在恢复文档版本");

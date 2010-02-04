@@ -267,6 +267,7 @@ public class Lang_pl_PL {
 	    lang.put("tab.status.security.user", "Aktualizacja uprawnień użytkowników");
 	    lang.put("tab.document.status.group.properties", "Aktualizacja grup właściwości");
 	    lang.put("tab.document.status.set.keywords", "Tworzenie słów kluczowych");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Odświeżanie historii dokumentu");
 	    lang.put("tab.document.status.purge.version.history", "Kompresja historii dokumentu");
 	    lang.put("tab.document.status.restore.version", "Przywracanie historii dokumentu");

@@ -266,6 +266,7 @@ public class Lang_ro_RO {
 	    lang.put("tab.status.security.user", "Se actualizeaza utilizatorii");
 	    lang.put("tab.document.status.group.properties", "Se actualizeaza grupul de proprietati");
 	    lang.put("tab.document.status.set.keywords", "Se stabilesc cuvintele cheie");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Se reincarca dimensiunea istoricului documentului");
 	    lang.put("tab.document.status.purge.version.history", "Se restrange istoricul documentului");
 	    lang.put("tab.document.status.restore.version", "Se restaureaza versiunea documentului");

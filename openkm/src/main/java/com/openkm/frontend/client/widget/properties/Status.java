@@ -46,10 +46,11 @@ public class Status extends PopupPanel {
 	private boolean flag_groupProperties 		= false;
 	private boolean flag_UserSecurity 			= false;
 	private boolean flag_RoleSecurity 			= false;
-	private boolean flag_setProperties		 	= false;
+	private boolean flag_keywords		 		= false;
 	private boolean flag_getVersionHistorySize  = false;
 	private boolean flag_purgeVersionHistory  	= false;
 	private boolean flag_restoreVersion  		= false;
+	private boolean flag_Categories		  		= false;
 	
 	/**
 	 * The status
@@ -84,7 +85,8 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_versionHistory || flag_UserSecurity || flag_RoleSecurity || flag_groupProperties 
-			|| flag_getVersionHistorySize || flag_setProperties || flag_purgeVersionHistory || flag_restoreVersion) {
+			|| flag_getVersionHistorySize || flag_keywords || flag_purgeVersionHistory || flag_restoreVersion 
+			|| flag_Categories) {
 			int left = ((Main.get().mainPanel.center.getWidth()-220)/2) + Main.get().mainPanel.left.getWidth() + 10;
 			int top =  ((Main.get().mainPanel.browser.bottomHeight-40)/2) + Main.get().mainPanel.center.getY() + 
 						 Main.get().mainPanel.browser.topHeight + 10;
@@ -166,19 +168,36 @@ public class Status extends PopupPanel {
 	}
 	
 	/**
-	 * Sets the properties flag
+	 * Sets the keywords flag
 	 */
-	public void setSetProperties() {
+	public void setKeywords() {
 		msg.setHTML(Main.i18n("tab.document.status.set.keywords"));
-		flag_setProperties = true;
+		flag_keywords = true;
 		refresh();
 	}
 	
 	/**
-	 * Unset the properties flag
+	 * Unset the keywords flag
 	 */
-	public void unsetSetProperties() {
-		flag_setProperties = false;
+	public void unsetKeywords() {
+		flag_keywords = false;
+		refresh();
+	}
+	
+	/**
+	 * Sets the categories flag
+	 */
+	public void setCategories() {
+		msg.setHTML(Main.i18n("tab.document.status.set.categories"));
+		flag_Categories = true;
+		refresh();
+	}
+	
+	/**
+	 * Unset the categories flag
+	 */
+	public void unsetCategories() {
+		flag_Categories = false;
 		refresh();
 	}
 	

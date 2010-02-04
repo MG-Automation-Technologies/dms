@@ -265,6 +265,7 @@ public class Lang_ca_ES {
 	    lang.put("tab.status.security.user", "S'està refrescant la seguretat dels usuaris");
 	    lang.put("tab.document.status.group.properties", "S'està refrescant el grup de propietats");
 	    lang.put("tab.document.status.set.keywords", "S'estan establint les paraules clau");
+	    lang.put("tab.document.status.set.categories", "S'estan actualizant les categories");
 	    lang.put("tab.document.status.get.version.history.size", "S'està refrescant el tamany de l'històric del document");
 	    lang.put("tab.document.status.purge.version.history", "S'està compactant l'històric del document");
 	    lang.put("tab.document.status.restore.version", "S'està restaurant la versió del document");

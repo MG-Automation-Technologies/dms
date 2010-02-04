@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
 
 public class CategoriesSelectPopup extends DialogBox  {	
 	
@@ -77,7 +78,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.add"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				executeAction(folderSelectTree.getUuid());
+				executeAction(folderSelectTree.getCategory());
 			}
 		});
 		
@@ -106,8 +107,8 @@ public class CategoriesSelectPopup extends DialogBox  {
 	/**
 	 * Executes the action
 	 */
-	public void executeAction(String Uuid) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(Uuid);
+	public void executeAction(GWTFolder category) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(category);
 	}
 	
 	/**

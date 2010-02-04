@@ -265,6 +265,7 @@ public class Lang_fa_FA {
 	    lang.put("tab.status.security.user", "به روز رسانی وضعیت امنیتی کاربر");
 	    lang.put("tab.document.status.group.properties", "به روز رسانی خواص گروه");
 	    lang.put("tab.document.status.set.keywords", "Setting keywords");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Refreshing document history size");
 	    lang.put("tab.document.status.purge.version.history", "Compacting document history");
 	    lang.put("tab.document.status.restore.version", "Restoring document versión");

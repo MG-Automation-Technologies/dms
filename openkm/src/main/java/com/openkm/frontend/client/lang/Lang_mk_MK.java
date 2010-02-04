@@ -265,6 +265,7 @@ public class Lang_mk_MK {
 	    lang.put("tab.status.security.user", "Ажурирам сигурносни правила за корисници");
 	    lang.put("tab.document.status.group.properties", "Ажурирам група на својства");
 	    lang.put("tab.document.status.set.keywords", "Поставувам клучни зборови");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Освежувам големина на историјата на документот");
 	    lang.put("tab.document.status.purge.version.history", "Компресирам историја на документот");
 	    lang.put("tab.document.status.restore.version", "Враќам верзија на документот");

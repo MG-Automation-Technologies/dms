@@ -265,6 +265,7 @@ public class Lang_sv_SE {
 	    lang.put("tab.status.security.user", "Uppdatera säkerhetsanvändare");
 	    lang.put("tab.document.status.group.properties", "Uppdatera egenskapsgrupp");
 	    lang.put("tab.document.status.set.keywords", "Sätt in nyckelord");
+	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Uppdatera dokumentethistorikens storlek");
 	    lang.put("tab.document.status.purge.version.history", "Sammanpressa dokumenthistoriken");
 	    lang.put("tab.document.status.restore.version", "Återskapa dokumentversion");
