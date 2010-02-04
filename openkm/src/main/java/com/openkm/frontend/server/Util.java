@@ -127,8 +127,7 @@ public class Util {
 		
 		Collection<GWTFolder> categories = new ArrayList<GWTFolder>();
 		for (Iterator<Folder> it = doc.getCategories().iterator(); it.hasNext();) {
-			it.next();
-			//categories.add(copy(it.next()));
+			categories.add(copy(it.next()));
 		}
 		gWTDoc.setCategories(categories);
 		
