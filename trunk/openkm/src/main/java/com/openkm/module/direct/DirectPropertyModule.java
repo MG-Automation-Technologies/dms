@@ -58,23 +58,26 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
-			Value[] newProperty = new Value[property.length+1];
-			boolean alreadyAdded = false;
 			
-			for (int i=0; i<property.length; i++) {
-				newProperty[i] = property[i];
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
+				Value[] newProperty = new Value[property.length+1];
+				boolean alreadyAdded = false;
 				
-				if (property[i].getString().equals(category)) {
-					alreadyAdded = true;
+				for (int i=0; i<property.length; i++) {
+					newProperty[i] = property[i];
+					
+					if (property[i].getString().equals(category)) {
+						alreadyAdded = true;
+					}
 				}
-			}
-			
-			if (!alreadyAdded) {
-				Node reference = session.getNodeByUUID(category);
-				newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
-				documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
-				documentNode.save();
+				
+				if (!alreadyAdded) {
+					Node reference = session.getNodeByUUID(category);
+					newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
+					documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
+					documentNode.save();
+				}
 			}
 			
 			// Check subscriptions
@@ -123,17 +126,25 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
-			ArrayList<Value> newProperty = new ArrayList<Value>();
-						
-			for (int i=0; i<property.length; i++) {
-				if (!property[i].getString().equals(category)) {
-					newProperty.add(property[i]);
+			boolean removed = false;
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.CATEGORIES).getValues();
+				ArrayList<Value> newProperty = new ArrayList<Value>();
+				
+				for (int i=0; i<property.length; i++) {
+					if (!property[i].getString().equals(category)) {
+						newProperty.add(property[i]);
+					} else {
+						removed = true;
+					}
+				}
+				
+				if (removed) {
+					documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]), PropertyType.REFERENCE);
+					documentNode.save();
 				}
 			}
-			
-			documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]), PropertyType.REFERENCE);
-			documentNode.save();
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
@@ -181,22 +192,25 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
-			Value[] newProperty = new Value[property.length+1];
-			boolean alreadyAdded = false;
 			
-			for (int i=0; i<property.length; i++) {
-				newProperty[i] = property[i];
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
+				Value[] newProperty = new Value[property.length+1];
+				boolean alreadyAdded = false;
 				
-				if (property[i].equals(keyword)) {
-					alreadyAdded = true;
+				for (int i=0; i<property.length; i++) {
+					newProperty[i] = property[i];
+					
+					if (property[i].equals(keyword)) {
+						alreadyAdded = true;
+					}
 				}
-			}
-			
-			if (!alreadyAdded) {
-				newProperty[newProperty.length-1] = session.getValueFactory().createValue(keyword);
-				documentNode.setProperty(Property.KEYWORDS, newProperty);
-				documentNode.save();
+				
+				if (!alreadyAdded) {
+					newProperty[newProperty.length-1] = session.getValueFactory().createValue(keyword);
+					documentNode.setProperty(Property.KEYWORDS, newProperty);
+					documentNode.save();
+				}
 			}
 			
 			// Check subscriptions
@@ -245,17 +259,25 @@ public class DirectPropertyModule implements PropertyModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
-			ArrayList<Value> newProperty = new ArrayList<Value>();
-						
-			for (int i=0; i<property.length; i++) {
-				if (!property[i].getString().equals(keyword)) {
-					newProperty.add(property[i]);
+			boolean removed = false;
+			
+			synchronized (documentNode) {
+				Value[] property = documentNode.getProperty(Property.KEYWORDS).getValues();
+				ArrayList<Value> newProperty = new ArrayList<Value>();
+				
+				for (int i=0; i<property.length; i++) {
+					if (!property[i].getString().equals(keyword)) {
+						newProperty.add(property[i]);
+					} else {
+						removed = true;
+					}
+				}
+				
+				if (removed) {
+					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[0]));
+					documentNode.save();
 				}
 			}
-			
-			documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[0]));
-			documentNode.save();
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_KEYWORD", null);
