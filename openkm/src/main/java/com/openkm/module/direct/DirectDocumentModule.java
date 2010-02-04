@@ -192,10 +192,8 @@ public class DirectDocumentModule implements DocumentModule {
 		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
 
 		for (int i=0; i<categories.length; i++) {
-			Folder category = new Folder();
 			Node node = session.getNodeByUUID(categories[i].getString());
-			new DirectFolderModule().getProperties(session, node.getPath());
-			categoriesList.add(category);
+			categoriesList.add(new DirectFolderModule().getProperties(session, node.getPath()));
 		}
 
 		doc.setCategories(categoriesList);
@@ -219,7 +217,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setNotes(notes);
 		
-		log.debug("getProperties[session]: "+doc);
+		log.info("getProperties[session]: "+doc);
 		return doc;
 	}
 
