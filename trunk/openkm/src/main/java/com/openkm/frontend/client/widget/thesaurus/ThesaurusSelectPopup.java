@@ -192,8 +192,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 */
 	public void executeAction(String actualPath) {
 		String keyword = actualPath.substring(actualPath.lastIndexOf("/")+1).replace(" ", "_");
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKey(keyword, true);
-		
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeywordToPendinList(keyword);
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addPendingKeyWordsList();
 	}
 	
 	/**

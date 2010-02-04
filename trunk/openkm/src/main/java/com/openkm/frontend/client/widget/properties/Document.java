@@ -37,6 +37,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -103,9 +104,12 @@ public class Document extends Composite {
 	private Image categoriesImage;
 	private Image thesaurusImage;
 	private HTML categoriesText;
+	private boolean remove = true;
+	private List<String> keyWordsListPending; // Keyword list pending to be added ( each one is added sequentially )
 	
 	public Document() {
 		keywordMap = new HashMap<String,Widget>();
+		keyWordsListPending = new ArrayList<String>();
 		document = new GWTDocument();
 		table = new FlexTable();
 		tableProperties = new FlexTable();
@@ -144,15 +148,14 @@ public class Document extends Composite {
 		suggestKey.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
-					boolean remove = ((document.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE 
-							          && !document.isCheckedOut() && !document.isLocked());
+				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && keyWordsListPending.isEmpty()) {
 					Main.get().mainPanel.enableKeyShorcuts(); 			// Enables general keys applications
 					String keys[] = suggestKey.getText().split(" "); 	// Separates keywords by space
 					for (int i=0;i<keys.length;i++) {
-						addKey(keys[i], remove); 						// Add each keyword
+						//keyWordsListPending.add(keys[i]);
+						addKeyword(keys[i]);
 					}
-					
+					//addPendingKeyWordsList();
 					suggestKey.setText("");
 				}
 			}
@@ -304,7 +307,9 @@ public class Document extends Composite {
 	 */
 	public void set(GWTDocument doc) {
 		keywordMap = new HashMap<String,Widget>();
+		keyWordsListPending = new ArrayList<String>();
 		this.document = doc;
+		
 		tableProperties.setHTML(0, 1, doc.getUuid());
 		tableProperties.setHTML(1, 1, doc.getName());
 		tableProperties.setHTML(2, 1, doc.getParentId());
@@ -316,8 +321,8 @@ public class Document extends Composite {
 		tableProperties.setWidget(7, 1, keywordPanel);
 		hKeyPanel.clear();
 		
-		boolean remove = ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked())
-		                 && visible;
+		remove = ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked())
+		           && visible;
 		
 		for (Iterator<String> it = doc.getKeywords().iterator(); it.hasNext();) {
 			// First adds only new keywords
@@ -487,11 +492,21 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackAddKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+			if (keyWordsListPending.isEmpty()) {
+				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				drawTagCloud(document.getKeywords());
+			} else {
+				addPendingKeyWordsList();
+			}
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+			if (keyWordsListPending.isEmpty()) {
+				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				drawTagCloud(document.getKeywords());
+			} else {
+				addPendingKeyWordsList();
+			}
 			Main.get().showError("AddKeyword", caught);
 		}
 	};
@@ -552,7 +567,6 @@ public class Document extends Composite {
 	 * addKeyword document
 	 */
 	public void addKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.addKeyword(document.getPath(), keyword, callbackAddKeywords);
@@ -625,29 +639,42 @@ public class Document extends Composite {
 	}
 	
 	/**
-	 * Adds a key
+	 * addKeywordToPendinList
 	 * 
-	 * @param keyword The keyword to be added
+	 * @param key
 	 */
-	public void addKey(String keyword, boolean remove) {
-		if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
-			for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
-				String key = it.next();
-				if (!keywordList.contains(key)) {
-					multiWordkSuggestKey.add(key);
-					keywordList.add(key);
-				}
-			}
-			Widget keywordButton = getKeyWidget(keyword, remove);
-			keywordMap.put(keyword, keywordButton);
-			hKeyPanel.add(keywordButton);
-			document.getKeywords().add(keyword);
-			addKeyword(keyword);
-			Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
-			drawTagCloud(document.getKeywords());
-		}
+	public void addKeywordToPendinList(String key) {
+		keyWordsListPending.add(key);
 	}
 	
+	/**
+	 * Adds keywords sequentially
+	 * 
+	 */
+	public void addPendingKeyWordsList() {
+		if (!keyWordsListPending.isEmpty()) {
+			Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
+			String keyword = keyWordsListPending.remove(0);
+			if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
+				for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
+					String key = it.next();
+					if (!keywordList.contains(key)) {
+						multiWordkSuggestKey.add(key);
+						keywordList.add(key);
+					}
+				}
+				Widget keywordButton = getKeyWidget(keyword, remove);
+				keywordMap.put(keyword, keywordButton);
+				hKeyPanel.add(keywordButton);
+				document.getKeywords().add(keyword);
+				addKeyword(keyword);
+				Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
+			} else if (keyWordsListPending.isEmpty()) {
+				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				drawTagCloud(document.getKeywords());
+			}	
+		}
+	}
 	
 	
 	/**
@@ -734,13 +761,22 @@ public class Document extends Composite {
 	private void drawCategory(final GWTFolder category) {
 		int row = tableSubscribedCategories.getRowCount();
 		Hyperlink hlink = new Hyperlink();
-		hlink.setHTML(category.getPath());
+		// Looks if must change icon on parent if now has no childs and properties with user security atention
+		String path = category.getPath().substring(category.getPath().indexOf("/okm:categories/"));
+		if (category.getHasChilds()) {
+			hlink.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
+		} else {
+			hlink.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
+		}
+		
 		hlink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				CommonUI.openAllFolderPath(category.getPath(), null);
 			}
 		});
+		hlink.setStyleName("okm-KeyMap-ImageHover");
+		
 		Image delete = proImageBundle.deleteIcon().createImage();
 		delete.setStyleName("okm-KeyMap-ImageHover");
 		delete.addClickHandler(new ClickHandler() {
@@ -750,16 +786,8 @@ public class Document extends Composite {
 				tableSubscribedCategories.removeRow(tableSubscribedCategories.getCellForEvent(event).getRowIndex());
 			}
 		});
-
-		// Looks if must change icon on parent if now has no childs and properties with user security atention
-		if (category.getHasChilds()) {
-			tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_childs.gif", category.getPath(), "top"));
-		} else {
-			tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_empty.gif", category.getPath(), "top"));
-		}
 		
-		
-		
+		tableSubscribedCategories.setWidget(row,0, hlink);
 		tableSubscribedCategories.setWidget(row, 1, delete);
 		setRowWordWarp(row-1, 1, true, tableSubscribedCategories);
 	}

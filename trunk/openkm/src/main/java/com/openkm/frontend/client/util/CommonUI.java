@@ -55,6 +55,10 @@ public class CommonUI {
 			
 			if (path.startsWith(Main.get().mainPanel.navigator.taxonomyTree.folderRoot.getPath())) {
 				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.categoriesTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_CATEGORIES, false);
+			} else if (path.startsWith(Main.get().mainPanel.navigator.thesaurusTree.folderRoot.getPath())) {
+				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_THESAURUS, false);
 			} else if (path.startsWith(Main.get().mainPanel.navigator.personalTree.folderRoot.getPath())) {
 				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
 			} else if (path.startsWith(Main.get().mainPanel.navigator.templateTree.folderRoot.getPath())) {
