@@ -107,6 +107,7 @@ public class Main implements EntryPoint {
 	public Status status = new Status();
 	public final FormPanel formPanel = new FormPanel();
 	public final static Map<String,String> languages = new LinkedHashMap<String,String>();
+	private LoginImageBundle loginImageBundle = (LoginImageBundle) GWT.create(LoginImageBundle.class);
 	
 	public void onModuleLoad() {
 		VerticalPanel vPanelData = new VerticalPanel();
@@ -114,8 +115,8 @@ public class Main implements EntryPoint {
 		final TextBox userName = new TextBox();
 		PasswordTextBox password = new PasswordTextBox();
 		Button loginButton = new Button("Login");
-		Image lock = new Image("img/lock.png");
-		Image logo = new Image("img/logo_big.gif");
+		Image lock = loginImageBundle.lockIcon().createImage();
+		Image logo = loginImageBundle.logoBigIcon().createImage();
 		FlexTable table = new FlexTable();
 		final ListBox langList = new ListBox();
 		final String urlJump = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.html";
@@ -302,7 +303,7 @@ public class Main implements EntryPoint {
 		
 		// Case user is using mobile
 		if (isMobile) {
-			logo.setUrl("img/logo_small.gif");
+			logo = loginImageBundle.logoSmallIcon().createImage();
 			
 			leftPanel.setVisible(false);
 			hPanel.remove(leftPanel);
