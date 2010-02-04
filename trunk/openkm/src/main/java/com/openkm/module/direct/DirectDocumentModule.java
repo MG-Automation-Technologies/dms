@@ -217,7 +217,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setNotes(notes);
 		
-		log.info("getProperties[session]: "+doc);
+		log.debug("getProperties[session]: "+doc);
 		return doc;
 	}
 
