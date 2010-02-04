@@ -151,10 +151,9 @@ public class Document extends Composite {
 					Main.get().mainPanel.enableKeyShorcuts(); 			// Enables general keys applications
 					String keys[] = suggestKey.getText().split(" "); 	// Separates keywords by space
 					for (int i=0;i<keys.length;i++) {
-						//keyWordsListPending.add(keys[i]);
-						addKeyword(keys[i]);
+						keyWordsListPending.add(keys[i]);
 					}
-					//addPendingKeyWordsList();
+					addPendingKeyWordsList();
 					suggestKey.setText("");
 				}
 			}
