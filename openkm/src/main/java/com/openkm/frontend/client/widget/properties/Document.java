@@ -23,6 +23,7 @@ package com.openkm.frontend.client.widget.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,9 +56,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTCategory;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
@@ -68,6 +67,7 @@ import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
@@ -316,14 +316,12 @@ public class Document extends Composite {
 		tableProperties.setWidget(7, 1, keywordPanel);
 		hKeyPanel.clear();
 		
-		String keywords[] = doc.getKeywords().split(" ");
-		Arrays.sort(keywords);
 		boolean remove = ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked())
 		                 && visible;
 		
-		for (int i=0; i<keywords.length; i++) {
+		for (Iterator<String> it = doc.getKeywords().iterator(); it.hasNext();) {
 			// First adds only new keywords
-			final String keyword = keywords[i];
+			final String keyword = it.next();
 			Widget keywordButton = getKeyWidget(keyword, remove);
 			keywordMap.put(keyword, keywordButton);
 			hKeyPanel.add(keywordButton);
@@ -382,22 +380,30 @@ public class Document extends Composite {
 		}
 		
 		// Sets the document categories
-		for (Iterator<GWTCategory> it = doc.getCategories().iterator(); it.hasNext();) {
-			GWTCategory category = it.next();
+		for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
+			int row = tableSubscribedCategories.getRowCount();
+			final GWTFolder category = it.next();
 			Hyperlink hlink = new Hyperlink();
-			hlink.setHTML("here goes path"+category.getPath());
+			hlink.setHTML(category.getPath());
 			hlink.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					
+					CommonUI.openAllFolderPath(category.getPath(), null);
 				}
 			});
-			tableSubscribedCategories.setHTML(tableSubscribedCategories.getRowCount(), 0, category.getUuid());
-			setRowWordWarp(tableSubscribedCategories.getRowCount()-1, 0, true, tableSubscribedCategories);
+
+			// Looks if must change icon on parent if now has no childs and properties with user security atention
+			if (category.getHasChilds()) {
+				tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_childs.gif", category.getName(), "top"));
+			} else {
+				tableSubscribedCategories.setHTML(row,0,Util.imageItemHTML("img/menuitem_empty.gif", category.getName(), "top"));
+			}
+			
+			tableSubscribedCategories.setWidget(row, 1,hlink);
+			setRowWordWarp(row-1, 1, true, tableSubscribedCategories);
 		}
 		
-		drawTagCloud(keywords);
+		drawTagCloud(doc.getKeywords());
 		
 		// Some preoperties only must be visible on taxonomy or trash view
 		int actualView = Main.get().mainPanel.navigator.getStackIndex();
@@ -621,18 +627,10 @@ public class Document extends Composite {
 	public void removeKey(String keyword) {
 		if (keywordMap.containsKey(keyword)) {
 			keywordMap.remove(keyword);
-			String keywords = "";
-			String[] keywordsArray = new String[keywordMap.keySet().size()];
-			int count = 0;
-			for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
-				String key = it.next();
-				keywords += key +" ";
-				keywordsArray[count++] = key;
-			}
-			document.setKeywords(keywords);
+			document.getKeywords().remove(keyword);
 			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
-			drawTagCloud(keywordsArray);
+			drawTagCloud(document.getKeywords());
 			if (Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
 				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
 				// When remove the keyword for which are browsing must refreshing filebrowser view
@@ -650,27 +648,20 @@ public class Document extends Composite {
 	 */
 	public void addKey(String keyword, boolean remove) {
 		if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
-			String keywords = "";
-			String[] keywordsArray = new String[keywordMap.keySet().size()+1];
-			int count = 0;
 			for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
-				keywords += key +" ";
-				keywordsArray[count++] = key; 
 				if (!keywordList.contains(key)) {
 					multiWordkSuggestKey.add(key);
 					keywordList.add(key);
 				}
 			}
-			keywords += keyword +" ";
-			keywordsArray[count++] = keyword; 
 			Widget keywordButton = getKeyWidget(keyword, remove);
 			keywordMap.put(keyword, keywordButton);
 			hKeyPanel.add(keywordButton);
-			document.setKeywords(keywords);
+			document.getKeywords().add(keyword);
 			addKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
-			drawTagCloud(keywordsArray);
+			drawTagCloud(document.getKeywords());
 		}
 	}
 	
@@ -687,19 +678,19 @@ public class Document extends Composite {
 		final HorizontalPanel externalPanel = new HorizontalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
 		HTML space = new HTML();
-		ImageHover add = new ImageHover("img/icon/actions/delete_disabled.gif","img/icon/actions/delete.gif");
-		add.addClickHandler(new ClickHandler() { 
+		ImageHover delete = new ImageHover("img/icon/actions/delete_disabled.gif","img/icon/actions/delete.gif");
+		delete.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
 				hKeyPanel.remove(externalPanel);
 			}
 		});
-		add.setStyleName("okm-KeyMap-ImageHover");
+		delete.setStyleName("okm-KeyMap-ImageHover");
 		hPanel.add(new HTML(keyword));
 		hPanel.add(space);
 		if (remove) {
-			hPanel.add(add);
+			hPanel.add(delete);
 		}
 		hPanel.setCellWidth(space, "6");
 		hPanel.setStyleName("okm-KeyMap-Gray");
@@ -714,17 +705,18 @@ public class Document extends Composite {
 	/**
 	 * Draws a tag cloud
 	 */
-	private void drawTagCloud(String keywords[]) {
+	private void drawTagCloud(Collection<String> keywords) {
 		// Deletes all tag clouds keys
 		keywordsCloud.clear();
 		keywordsCloud.setMinFrequency(Main.get().mainPanel.dashboard.keyMapDashboard.getTotalMinFrequency());
 		keywordsCloud.setMaxFrequency(Main.get().mainPanel.dashboard.keyMapDashboard.getTotalMaxFrequency());
 		
-		for (int i=0; i<keywords.length; i++) {
-			HTML tagKey = new HTML(keywords[i]);
+		for (Iterator<String> it = keywords.iterator(); it.hasNext();) {
+			String keyword = it.next();
+			HTML tagKey = new HTML(keyword);
 			tagKey.setStyleName("okm-cloudTags");
 			Style linkStyle = tagKey.getElement().getStyle();
-			int fontSize = keywordsCloud.getLabelSize(Main.get().mainPanel.dashboard.keyMapDashboard.getKeywordRate(keywords[i]));
+			int fontSize = keywordsCloud.getLabelSize(Main.get().mainPanel.dashboard.keyMapDashboard.getKeywordRate(keyword));
 			linkStyle.setProperty("fontSize", fontSize+"pt");
 			linkStyle.setProperty("color", keywordsCloud.getColor(fontSize));
 			if (fontSize>0) {
@@ -742,7 +734,7 @@ public class Document extends Composite {
 	 */
 	private boolean existCategory(String Uuid) {
 		boolean found = false;
-		for (Iterator<GWTCategory> it = document.getCategories().iterator(); it.hasNext();) {
+		for (Iterator<GWTFolder> it = document.getCategories().iterator(); it.hasNext();) {
 			if (it.next().equals(Uuid)) {
 				found = true;
 				break;
