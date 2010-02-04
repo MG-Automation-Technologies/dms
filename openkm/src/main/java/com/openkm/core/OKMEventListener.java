@@ -115,7 +115,7 @@ public class OKMEventListener implements EventListener {
 							"User: " + evn.getUserID() + "\n" +
 							"Action: " + eventType;
 						
-						MailUtils.send("pavila@git.es", emails, "OpenKM notification", body);
+						MailUtils.send("knowledge@entopia.es", emails, "OpenKM notification", body);
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
