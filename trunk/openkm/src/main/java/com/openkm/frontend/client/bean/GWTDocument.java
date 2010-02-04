@@ -41,7 +41,6 @@ public class GWTDocument implements IsSerializable {
 	private String author;
 	private byte[] content;
 	private Date created;
-	private String keywords = "";
 	private Date lastModified;
 	private String mimeType;
 	private boolean locked;
@@ -58,7 +57,8 @@ public class GWTDocument implements IsSerializable {
 
 	private Collection<String> subscriptors;
 	private Collection<GWTNote> notes;
-	private Collection<GWTCategory> categories;
+	private Collection<GWTFolder> categories;
+	private Collection<String> keywords;
 
 	/**
 	 * @return Returns the subscribed.
@@ -122,11 +122,11 @@ public class GWTDocument implements IsSerializable {
 		this.created = created;
 	}
 
-	public String getKeywords() {
+	public Collection<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(String keywords) {
+	public void setKeywords(Collection<String> keywords) {
 		this.keywords = keywords;
 	}
 
@@ -256,11 +256,11 @@ public class GWTDocument implements IsSerializable {
 		this.hasNotes = hasNotes;
 	}
 	
-	public Collection<GWTCategory> getCategories() {
+	public Collection<GWTFolder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Collection<GWTCategory> categories) {
+	public void setCategories(Collection<GWTFolder> categories) {
 		this.categories = categories;
 	}
 }

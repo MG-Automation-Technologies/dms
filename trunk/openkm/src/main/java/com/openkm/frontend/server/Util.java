@@ -60,7 +60,6 @@ import com.openkm.core.Config;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
-import com.openkm.frontend.client.bean.GWTCategory;
 import com.openkm.frontend.client.bean.GWTComment;
 import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
@@ -126,11 +125,9 @@ public class Util {
 			}
 		}
 		
-		Collection<GWTCategory> categories = new ArrayList<GWTCategory>();
-		for (Iterator<String> it = doc.getCategories().iterator(); it.hasNext();) {
-			GWTCategory category = new GWTCategory();
-			category.setUuid(it.next());
-			categories.add(category);
+		Collection<GWTFolder> categories = new ArrayList<GWTFolder>();
+		for (Iterator<Folder> it = doc.getCategories().iterator(); it.hasNext();) {
+			categories.add(copy(it.next()));
 		}
 		gWTDoc.setCategories(categories);
 		
@@ -164,6 +161,12 @@ public class Util {
 		doc.setSubscribed(gWTDoc.isSubscribed());
 		doc.setSubscriptors(gWTDoc.getSubscriptors());
 		
+		Collection <Folder> categories = new ArrayList<Folder>();
+		for (Iterator<GWTFolder> it = gWTDoc.getCategories().iterator(); it.hasNext();){
+			categories.add(copy(it.next()));
+		}
+		doc.setCategories(categories);
+		
 		gWTDoc.setActualVersion(copy(doc.getActualVersion()));
 		
 		log.debug("copy: "+gWTDoc);
@@ -195,6 +198,32 @@ public class Util {
 		log.debug("copy: "+gWTFolder);
 		return gWTFolder;
 	}	
+	
+	/**
+	 * Copy the GWTFolder data to Folder data.
+	 * 
+	 * @param doc The original GWTFolder object.
+	 * @return A Folder object with the data from 
+	 * the original Document.
+	 */
+	public static Folder copy(GWTFolder fld) {
+		log.debug("copy("+fld+")");
+		Folder folder = new Folder();
+		
+		folder.setUuid(fld.getUuid());
+		folder.setPath(fld.getPath());
+		folder.setHasChilds(fld.getHasChilds());
+		Calendar created = Calendar.getInstance();
+		created.setTimeInMillis(fld.getCreated().getTime());
+		folder.setCreated(created);
+		folder.setPermissions(fld.getPermissions());
+		folder.setAuthor(fld.getAuthor());
+		folder.setSubscribed(fld.isSubscribed());
+		folder.setSubscriptors(fld.getSubscriptors());
+		
+		log.debug("copy: "+folder);
+		return folder;
+	}
 	
 	/**
 	 * Copy the Version data to GWTVersion data.

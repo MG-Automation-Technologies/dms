@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +39,6 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTQueryResult;
@@ -56,8 +54,8 @@ import com.openkm.frontend.client.util.Util;
 public class KeyMapTable extends Composite {
 	
 	public static final int VISIBLE_SMALL 		= 0;
-	public static final  int VISIBLE_MEDIUM 	= 1;
-	public static final  int VISIBLE_BIG 		= 2;
+	public static final int VISIBLE_MEDIUM 		= 1;
+	public static final int VISIBLE_BIG 		= 2;
 	
 	private FlexTable table;
 	private List<FlexTable> tableDocumentList;
@@ -245,12 +243,10 @@ public class KeyMapTable extends Composite {
 		table.getCellFormatter().setHorizontalAlignment(rows, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		table.getCellFormatter().addStyleName(rows, 0, "okm-Table-BottomBorder");
 		
-		String keywords[] = doc.getKeywords().split(" ");
-		Arrays.sort(keywords);
-		for (int i=0; i<keywords.length; i++) {
+		for (Iterator<String> it = doc.getKeywords().iterator(); it.hasNext();){
 			// First adds only new keywords
-			if (!selectedKeyList.contains(keywords[i])) {
-				final String keyword = keywords[i];
+			final String keyword = it.next();
+			if (!selectedKeyList.contains(keyword)) {
 				HorizontalPanel externalPanel = new HorizontalPanel();
 				HorizontalPanel hPanel = new HorizontalPanel();
 				HTML space = new HTML();
