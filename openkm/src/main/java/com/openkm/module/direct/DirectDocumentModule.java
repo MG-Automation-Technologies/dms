@@ -228,12 +228,13 @@ public class DirectDocumentModule implements DocumentModule {
 	 * TODO El parámetro session no hace falta porque la sesión viene implícita
 	 * en el segundo parámetro parentNode.
 	 */
-	public Node create(Session session, Node parentNode, String name, String mimeType, InputStream is) throws
+	public Node create(Session session, Node parentNode, String name, String mimeType, 
+			String[] keywords, InputStream is) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException,
 			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
-		documentNode.setProperty(Property.KEYWORDS, new String[]{});
+		documentNode.setProperty(Property.KEYWORDS, keywords);
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
@@ -344,8 +345,8 @@ public class DirectDocumentModule implements DocumentModule {
 				VirusDetection.detect(tmpAvr);
 			}
 			
-			// Start KEA        
-			//String keywords = doc.getKeywords() + (doc.getKeywords().size()>0?" ":""); // Adding automatic keywords
+			// Start KEA
+			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>(); // Adding submitted keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
 		        MetadataExtractor mdExtractor = new MetadataExtractor(Integer.parseInt(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER));
 		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
@@ -361,10 +362,10 @@ public class DirectDocumentModule implements DocumentModule {
 		        	log.info("Term:" + term.getText());
 		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION.equals("on")) {
 		        		if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
-		        			//keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        			keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
 		        		}
 		        	} else {
-		        		//keywords += term.getText().replace(" ", "_") + " "; // Replacing spaces to "_" and adding at ends space for other word
+		        		keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
 		        	}
 		        }        
 	        }
@@ -372,8 +373,8 @@ public class DirectDocumentModule implements DocumentModule {
 
 			Session session = SessionManager.getInstance().get(token);
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, mimeType, is);
-
+			Node documentNode = create(session, parentNode, name, mimeType, keywords.toArray(new String[0]), is);
+			
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
 
@@ -1470,7 +1471,7 @@ public class DirectDocumentModule implements DocumentModule {
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		create(session, dstFolderNode, srcDocumentNode.getName(), mimeType, is);
+		create(session, dstFolderNode, srcDocumentNode.getName(), mimeType, new String[]{}, is);
 		is.close();
 		
 		log.debug("copy: void");
