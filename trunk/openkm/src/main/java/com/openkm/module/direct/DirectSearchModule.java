@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
 
 import javax.jcr.InvalidItemStateException;
@@ -38,6 +37,7 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 import javax.jcr.lock.LockException;
@@ -750,12 +750,11 @@ public class DirectSearchModule implements SearchModule {
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node doc = nit.nextNode();
-				String keywordsString = doc.getProperty(com.openkm.bean.Property.KEYWORDS).getString();
+				Value[] keywordsValue = doc.getProperty(com.openkm.bean.Property.KEYWORDS).getValues();
 				ArrayList<String> keywordCollection = new ArrayList<String>();
 				
-				for (StringTokenizer st = new StringTokenizer(keywordsString); st.hasMoreTokens(); ) {
-					String keyword = st.nextToken();
-					keywordCollection.add(keyword);
+				for (int i = 0; i < keywordsValue.length; i++) {
+					keywordCollection.add(keywordsValue[i].getString());
 				}
 				
 				if (filter != null && keywordCollection.containsAll(filter)) {
