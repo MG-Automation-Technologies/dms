@@ -819,10 +819,12 @@ public class DirectDocumentModule implements DocumentModule {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 			
-			// Set document node properties
-			documentNode.setProperty(Document.COMPACTABLE, doc.isCompactable());
-			documentNode.setProperty(Document.TRAINING, doc.isTraining());
-			documentNode.save();
+			synchronized (documentNode) {
+				// Set document node properties
+				documentNode.setProperty(Document.COMPACTABLE, doc.isCompactable());
+				documentNode.setProperty(Document.TRAINING, doc.isTraining());
+				documentNode.save();
+			}
 			
 			// Update document keyword cache
 			//UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
