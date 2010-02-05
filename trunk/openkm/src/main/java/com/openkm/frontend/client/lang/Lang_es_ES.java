@@ -578,7 +578,8 @@ public class Lang_es_ES {
 	    lang.put("thesaurus.tab.keywords", "Palabras clave");
 	    
 	    // Categories
-	    lang.put("categories.directory.select.label", "Añadir categoría");
+	    lang.put("categories.folder.select.label", "Añadir categoría");
+	    lang.put("categories.folder.error.delete", "No se puede eliminar una categoría con documentos");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

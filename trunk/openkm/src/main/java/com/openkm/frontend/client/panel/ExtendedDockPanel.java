@@ -526,6 +526,7 @@ public class ExtendedDockPanel extends Composite {
 								if (actualView == DESKTOP && Main.get().activeFolderTree.isPanelSelected() && 
 									Main.get().mainPanel.topPanel.toolBar.getToolBarOption().deleteOption &&
 									(Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
+									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES || 	
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {

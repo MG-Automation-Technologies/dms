@@ -816,10 +816,10 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
 				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_CATEGORIES ) {
 				disableAddDocument();
-				disableDelete();
 				disableAddSubscription();
 				if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
 					disableCreateDirectory();
+					disableDelete();
 				}
 			}
 			

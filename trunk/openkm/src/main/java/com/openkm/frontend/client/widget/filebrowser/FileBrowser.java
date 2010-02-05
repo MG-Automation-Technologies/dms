@@ -1562,4 +1562,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public void addNoteIconToSelectedRow() {
 		table.addNoteIconToSelectedRow();
 	}
+	
+	/**
+	 * hasRows
+	 * 
+	 * @return has rows
+	 */
+	public boolean hasRows() {
+		return table.hasRows();
+	}
 }

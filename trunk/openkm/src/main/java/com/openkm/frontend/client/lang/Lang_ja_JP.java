@@ -578,7 +578,8 @@ public class Lang_ja_JP {
 	    lang.put("thesaurus.tab.keywords", "Keywords");
 	    
 	    // Categories
-	    lang.put("categories.directory.select.label", "Add category");
+	    lang.put("categories.folder.select.label", "Add category");
+	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
 	    
 		// Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文書へのアクセスが拒否されました");
