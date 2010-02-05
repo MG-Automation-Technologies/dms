@@ -379,10 +379,12 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_WRITE;
 			}
 
-			if (recursive) {
-				grantUserInDepth(node, user, property);
-			} else {
-				grantUser(node, user, property);
+			synchronized (node) {
+				if (recursive) {
+					grantUserInDepth(node, user, property);
+				} else {
+					grantUser(node, user, property);
+				}
 			}
 
 			// Activity log
@@ -479,12 +481,14 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_WRITE;
 			}
 
-			if (recursive) {
-				revokeUserInDepth(node, user, property);
-			} else {
-				revokeUser(node, user, property);
+			synchronized (node) {
+				if (recursive) {
+					revokeUserInDepth(node, user, property);
+				} else {
+					revokeUser(node, user, property);
+				}
 			}
-
+			
 			// Activity log
 			UserActivity.log(session, "REVOKE_USER", nodePath, user+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
@@ -576,10 +580,12 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_WRITE;
 			}
 
-			if (recursive) {
-				grantRoleInDepth(node, role, property);
-			} else {
-				grantRole(node, role, property);
+			synchronized (node) {
+				if (recursive) {
+					grantRoleInDepth(node, role, property);
+				} else {
+					grantRole(node, role, property);
+				}
 			}
 
 			// Activity log
@@ -675,12 +681,14 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_WRITE;
 			}
 
-			if (recursive) {
-				revokeRoleInDepth(node, role, property);
-			} else {
-				revokeRole(node, role, property);
+			synchronized (node) {
+				if (recursive) {
+					revokeRoleInDepth(node, role, property);
+				} else {
+					revokeRole(node, role, property);
+				}
 			}
-
+			
 			// Activity log
 			UserActivity.log(session, "REVOKE_ROLE", nodePath, role+", "+permissions);
 		} catch (javax.jcr.AccessDeniedException e) {
