@@ -370,9 +370,13 @@ public class DirectFolderModule implements FolderModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
-			parentNode = folderNode.getParent();
-			HashMap<String, UserItems> userItemsHash = purgeHelper(session, folderNode);
-			parentNode.save();
+			HashMap<String, UserItems> userItemsHash = null; 
+			
+			synchronized (folderNode) {
+				parentNode = folderNode.getParent();
+				userItemsHash = purgeHelper(session, folderNode);
+				parentNode.save();
+			}
 			
 			// Update user items
 			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
