@@ -77,8 +77,11 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
-			documentNode.addMixin(grpName);
-			documentNode.save();
+			
+			synchronized (documentNode) {
+				documentNode.addMixin(grpName);
+				documentNode.save();
+			}
 			
 			// Activity log
 			UserActivity.log(session, "ADD_PROPERTY_GROUP", docPath, grpName);
@@ -120,8 +123,11 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
-			documentNode.removeMixin(grpName);
-			documentNode.save();
+			
+			synchronized (documentNode) {
+				documentNode.removeMixin(grpName);
+				documentNode.save();				
+			}
 			
 			// Activity log
 			UserActivity.log(session, "REMOVE_PROPERTY_GROUP", docPath, grpName);
@@ -276,11 +282,13 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
-			for (int i=0; i<pd.length; i++) {
-				if (pd[i].isMultiple()) {
-					documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName()));
-				} else {
-					documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName())[0]);	
+			synchronized (documentNode) {
+				for (int i=0; i<pd.length; i++) {
+					if (pd[i].isMultiple()) {
+						documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName()));
+					} else {
+						documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName())[0]);	
+					}
 				}
 			}
 			
