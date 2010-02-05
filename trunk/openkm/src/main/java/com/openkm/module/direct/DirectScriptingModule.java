@@ -24,13 +24,13 @@ package com.openkm.module.direct;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.Lock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Scripting;
@@ -62,41 +62,14 @@ public class DirectScriptingModule implements ScriptingModule {
 			
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
-				Session lockSession = null;
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
-				boolean nodeLocked = false;
-				boolean sessionCreated = false;
-			
-				// Get lock token
-				if (node.isLocked()) {
-					nodeLocked = true;
-					Lock lck = sNode.getLock();
-					SessionManager sessions = SessionManager.getInstance();
-					String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-					String lockToken = JCRUtils.getLockToken(node.getUUID());
-					
-					if (lockUserToken != null) {
-						lockSession = sessions.get(lockUserToken);
-					} else {
-						sessionCreated = true;
-						lockSession = systemSession;
-						lockSession.addLockToken(lockToken);
-					}
-					
-					sNode = lockSession.getNodeByUUID(node.getUUID());
-				}
 				
 				// Perform scripting
 				sNode.addMixin(Scripting.TYPE);
 				sNode.setProperty(Scripting.SCRIPT_CODE, code);
 				sNode.save();
-			
-				// Remove lock token
-				if (nodeLocked && sessionCreated) {
-					lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-				}
-			
+				
 				// Activity log
 				UserActivity.log(session, "SET_SCRIPT", nodePath, null);
 			} else {
@@ -135,40 +108,13 @@ public class DirectScriptingModule implements ScriptingModule {
 			
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
-				Session lockSession = null;
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
-				boolean nodeLocked = false;
-				boolean sessionCreated = false;
-				
-				// Get lock token
-				if (node.isLocked()) {
-					nodeLocked = true;
-					Lock lck = sNode.getLock();
-					SessionManager sessions = SessionManager.getInstance();
-					String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-					String lockToken = JCRUtils.getLockToken(node.getUUID());
-					
-					if (lockUserToken != null) {
-						lockSession = sessions.get(lockUserToken);
-					} else {
-						sessionCreated = true;
-						lockSession = systemSession;
-						lockSession.addLockToken(lockToken);
-					}
-					
-					sNode = lockSession.getNodeByUUID(node.getUUID());
-				}
 				
 				// Perform scripting
 				if (sNode.isNodeType(Scripting.TYPE)) {
 					sNode.removeMixin(Scripting.TYPE);
 					sNode.save();
-				}
-				
-				// Remove lock token
-				if (nodeLocked && sessionCreated) {
-					lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
 				}
 				
 				// Activity log
