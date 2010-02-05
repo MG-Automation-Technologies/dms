@@ -112,6 +112,8 @@ public class DirectDocumentModule implements DocumentModule {
 		doc.setPath(documentNode.getPath());
 		doc.setLocked(documentNode.isLocked());
 		doc.setUuid(documentNode.getUUID());
+		doc.setCompactable(documentNode.getProperty(Document.COMPACTABLE).getBoolean());
+		doc.setTraining(documentNode.getProperty(Document.TRAINING).getBoolean());
 		
 		if (doc.isLocked()) {
 			doc.setLockInfo(getLock(session, docPath));
@@ -236,6 +238,8 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
+		documentNode.setProperty(Document.COMPACTABLE, false);
+		documentNode.setProperty(Document.TRAINING, false);
 		long size = is.available();
 		
 		// Get parent node auth info
@@ -814,9 +818,11 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
-
+			
 			// Set document node properties
-			//documentNode.save();
+			documentNode.setProperty(Document.COMPACTABLE, doc.isCompactable());
+			documentNode.setProperty(Document.TRAINING, doc.isTraining());
+			documentNode.save();
 			
 			// Update document keyword cache
 			//UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
