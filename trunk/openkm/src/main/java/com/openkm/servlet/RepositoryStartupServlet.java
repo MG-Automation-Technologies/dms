@@ -151,7 +151,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         wd = new Watchdog();
         timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
         
-        if (Config.TRIAL || Config.UPDATE_INFO.equalsIgnoreCase("on")) {
+        if (Config.UPDATE_INFO.equalsIgnoreCase("on")) {
         	 log.info("*** Activating update info ***");
         	 ui = new UpdateInfo();
         	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
