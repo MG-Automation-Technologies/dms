@@ -1006,22 +1006,25 @@ public class DirectDocumentModule implements DocumentModule {
 			t.start();
 
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
-			contentNode = documentNode.getNode(Document.CONTENT);
+			
+			synchronized (documentNode) {
+				contentNode = documentNode.getNode(Document.CONTENT);
 
-			// Set version author
-			contentNode.setProperty(Document.AUTHOR, session.getUserID());
-			contentNode.setProperty(Document.VERSION_COMMENT, comment);
-			contentNode.save();
+				// Set version author
+				contentNode.setProperty(Document.AUTHOR, session.getUserID());
+				contentNode.setProperty(Document.VERSION_COMMENT, comment);
+				contentNode.save();
 
-			// Performs checkin & unlock
-			javax.jcr.version.Version ver = contentNode.checkin();
-			version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
-			version.setSize(contentNode.getProperty(Document.SIZE).getLong());
-			version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
-			version.setName(ver.getName());
-			version.setCreated(ver.getCreated());
-			version.setActual(true);
-			documentNode.unlock();
+				// Performs checkin & unlock
+				javax.jcr.version.Version ver = contentNode.checkin();
+				version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
+				version.setSize(contentNode.getProperty(Document.SIZE).getLong());
+				version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
+				version.setName(ver.getName());
+				version.setCreated(ver.getCreated());
+				version.setActual(true);
+				documentNode.unlock();				
+			}
 			
 			t.end();
 			t.commit();
@@ -1291,9 +1294,13 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			parentNode = documentNode.getParent();
-			HashMap<String, UserItems> userItemsHash = purgeHelper(session, documentNode);
-			parentNode.save();
+			HashMap<String, UserItems> userItemsHash = null;
+			
+			synchronized (documentNode) {
+				parentNode = documentNode.getParent();
+				userItemsHash = purgeHelper(session, documentNode);
+				parentNode.save();
+			}
 			
 			// Update user items
 			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
@@ -1494,9 +1501,12 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			contentNode = documentNode.getNode(Document.CONTENT);
-			contentNode.restore(versionId, true);
-			contentNode.save();
+
+			synchronized (documentNode) {
+				contentNode = documentNode.getNode(Document.CONTENT);
+				contentNode.restore(versionId, true);
+				contentNode.save();
+			}
 
 			// Activity log
 			UserActivity.log(session, "RESTORE_VERSION", docPath, versionId);
@@ -1527,18 +1537,21 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			Node contentNode = documentNode.getNode(Document.CONTENT);
-			VersionHistory vh = contentNode.getVersionHistory();
-			String baseVersion = contentNode.getBaseVersion().getName();
+			
+			synchronized (documentNode) {
+				Node contentNode = documentNode.getNode(Document.CONTENT);
+				VersionHistory vh = contentNode.getVersionHistory();
+				String baseVersion = contentNode.getBaseVersion().getName();
 
-			for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
-				javax.jcr.version.Version ver = vi.nextVersion();
-				String versionName = ver.getName();
+				for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
+					javax.jcr.version.Version ver = vi.nextVersion();
+					String versionName = ver.getName();
 
-				// The rootVersion is not a "real" version node.
-				if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
-					vh.removeVersion(versionName);
-				}
+					// The rootVersion is not a "real" version node.
+					if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
+						vh.removeVersion(versionName);
+					}
+				}				
 			}
 
 			// Activity log
