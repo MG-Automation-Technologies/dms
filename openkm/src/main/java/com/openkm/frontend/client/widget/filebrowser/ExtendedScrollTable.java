@@ -936,4 +936,13 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	public void unsetDraged() {
 		this.dragged = false;
 	}
+	
+	/**
+	 * hasRows
+	 * 
+	 * @return has rows
+	 */
+	public boolean hasRows() {
+		return dataTable.getRowCount()>0;
+	}
 }
