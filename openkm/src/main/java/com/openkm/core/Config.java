@@ -49,9 +49,6 @@ public class Config {
 	
 	// Multihost
 	public static String INSTALL = "";
-	
-	// Trial
-	public static boolean TRIAL = false;
 
 	// Maximum allowed users
 	public static int MAX_USERS = 10;
@@ -373,11 +370,6 @@ public class Config {
 					PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+"="+KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER+", "+
 					PROPERTY_KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION+"="+KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION+", "+
 					PROPERTY_KEA_STOPWORDS_FILE+"="+KEA_STOPWORDS_FILE+"}");
-			if (TRIAL) {
-				log.info("*** *** *** *** *** *** *** ***");
-				log.info("*** OPENKM ENTERPRISE TRIAL ***");
-				log.info("*** *** *** *** *** *** *** ***");
-			}
 		}
 		
 		// Read MIME info
