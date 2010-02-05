@@ -34,7 +34,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.Lock;
 import javax.mail.MessagingException;
 
 import org.apache.commons.httpclient.HttpException;
@@ -78,30 +77,8 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Session systemSession = DirectRepositoryModule.getSystemSession();
-			Session lockSession = null;
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
-			boolean nodeLocked = false;
-			boolean sessionCreated = false;
-			
-			// Get lock token
-			if (node.isLocked()) {
-				nodeLocked = true;
-				Lock lck = sNode.getLock();
-				SessionManager sessions = SessionManager.getInstance();
-				String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-				String lockToken = JCRUtils.getLockToken(node.getUUID());
-				
-				if (lockUserToken != null) {
-					lockSession = sessions.get(lockUserToken);
-				} else {
-					sessionCreated = true;
-					lockSession = systemSession;
-					lockSession.addLockToken(lockToken);
-				}
-				
-				sNode = lockSession.getNodeByUUID(node.getUUID());
-			}
 			
 			// Perform subscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -128,11 +105,6 @@ public class DirectNotificationModule implements NotificationModule {
 			}
 			
 			sNode.save();
-			
-			// Remove lock token
-			if (nodeLocked && sessionCreated) {
-				lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-			}
 			
 			// Activity log
 			UserActivity.log(session, "SUBSCRIBE_USER", nodePath, null);
@@ -166,30 +138,8 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Session systemSession = DirectRepositoryModule.getSystemSession();
-			Session lockSession = null;
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
-			boolean nodeLocked = false;
-			boolean sessionCreated = false;
-			
-			// Get lock token
-			if (node.isLocked()) {
-				nodeLocked = true;
-				Lock lck = sNode.getLock();
-				SessionManager sessions = SessionManager.getInstance();
-				String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-				String lockToken = JCRUtils.getLockToken(node.getUUID());
-				
-				if (lockUserToken != null) {
-					lockSession = sessions.get(lockUserToken);
-				} else {
-					sessionCreated = true;
-					lockSession = systemSession;
-					lockSession.addLockToken(lockToken);
-				}
-				
-				sNode = lockSession.getNodeByUUID(node.getUUID());
-			}
 
 			// Perform unsubscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -210,11 +160,6 @@ public class DirectNotificationModule implements NotificationModule {
 			}
 
 			sNode.save();
-
-			// Remove lock token
-			if (nodeLocked && sessionCreated) {
-				lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-			}
 
 			// Activity log
 			UserActivity.log(session, "UNSUBSCRIBE_USER", nodePath, null);
