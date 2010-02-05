@@ -40,6 +40,8 @@ public class Document implements Serializable {
 	public static final String AUTHOR = "okm:author";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
+	public static final String COMPACTABLE = "okm:compactable";
+	public static final String TRAINING = "okm:training"; 
 	
 	private String path;
 	private String language = "";
@@ -53,6 +55,8 @@ public class Document implements Serializable {
 	private byte permissions;
 	private Lock lockInfo;
 	private String uuid;
+	private boolean compactable;
+	private boolean training;
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
@@ -139,6 +143,22 @@ public class Document implements Serializable {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	public boolean isCompactable() {
+		return compactable;
+	}
+
+	public void setCompactable(boolean compactable) {
+		this.compactable = compactable;
+	}
+
+	public boolean isTraining() {
+		return training;
+	}
+
+	public void setTraining(boolean training) {
+		this.training = training;
 	}
 	
 	public Version getActualVersion() {
@@ -229,6 +249,8 @@ public class Document implements Serializable {
 		sb.append(", actualVersion="); sb.append(actualVersion);
 		sb.append(", subscribed="); sb.append(subscribed);
 		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", compactable="); sb.append(compactable);
+		sb.append(", training="); sb.append(training);
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
 		sb.append(", notes="); sb.append(notes);
