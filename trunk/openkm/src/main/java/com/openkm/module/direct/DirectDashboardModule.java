@@ -657,41 +657,44 @@ public class DirectDashboardModule implements DashboardModule {
 			Session session = SessionManager.getInstance().get(token);
 			DirectSearchModule directSearch = new DirectSearchModule();
 			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			Node savedQuery = userQuery.getNode(name);
 			
-			// Get the saved query params
-			QueryParams params = directSearch.getSearch(savedQuery);
-			log.info("PARAMS: "+params.toString());
-			
-			// Set query date (first time)
-			if (params.getLastModifiedTo() == null) {
-				Calendar firstExecution = Calendar.getInstance();
-				firstExecution.add(Calendar.MONTH, -1);
-				params.setLastModifiedTo(firstExecution);
+			synchronized (userQuery) {
+				Node savedQuery = userQuery.getNode(name);
+				
+				// Get the saved query params
+				QueryParams params = directSearch.getSearch(savedQuery);
+				log.info("PARAMS: "+params.toString());
+				
+				// Set query date (first time)
+				if (params.getLastModifiedTo() == null) {
+					Calendar firstExecution = Calendar.getInstance();
+					firstExecution.add(Calendar.MONTH, -1);
+					params.setLastModifiedTo(firstExecution);
+				}
+				
+				Calendar lastExecution = resetHours(params.getLastModifiedTo());
+				Calendar actualDate = resetHours(Calendar.getInstance());
+				log.info("lastExecution -> "+lastExecution.getTime());
+				log.info("actualDate -> "+actualDate.getTime());
+				
+				if (lastExecution.before(actualDate)) {
+					params.setLastModifiedFrom(params.getLastModifiedTo());
+				}
+				
+				params.setLastModifiedTo(Calendar.getInstance());
+				
+				// Prepare statement
+				log.info("PARAMS "+params);
+				String statement = directSearch.prepareStatement(params);
+				log.info("STATEMENT "+statement);
+				
+				// Execute query
+				al = executeQueryDocument(session, statement, null, MAX_RESULTS);
+				
+				// Update query params
+				directSearch.saveSearch(savedQuery, params);
+				userQuery.save();
 			}
-			
-			Calendar lastExecution = resetHours(params.getLastModifiedTo());
-			Calendar actualDate = resetHours(Calendar.getInstance());
-			log.info("lastExecution -> "+lastExecution.getTime());
-			log.info("actualDate -> "+actualDate.getTime());
-						
-			if (lastExecution.before(actualDate)) {
-				params.setLastModifiedFrom(params.getLastModifiedTo());
-			}
-			
-			params.setLastModifiedTo(Calendar.getInstance());
-			
-			// Prepare statement
-			log.info("PARAMS "+params);
-			String statement = directSearch.prepareStatement(params);
-			log.info("STATEMENT "+statement);
-			
-			// Execute query
-			al = executeQueryDocument(session, statement, null, MAX_RESULTS);
-			
-			// Update query params
-			directSearch.saveSearch(savedQuery, params);
-			userQuery.save();
 			
 			// Check for already visited results
 			checkVisitedDocuments(session.getUserID(), name, al);
