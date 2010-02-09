@@ -216,14 +216,15 @@ public class Main implements EntryPoint {
 		
 		table.setCellPadding(0);
 		table.setCellSpacing(0);
-		table.setWidget(0, 0, new HTML("<b>Language</b>"));
-		table.setWidget(1, 0, langList);
+		
+		table.setWidget(0, 0, new HTML("<b>User name</b>"));
+		table.setWidget(1, 0, userName);
 		table.setWidget(2, 0, new HTML("&nbsp;"));
-		table.setWidget(3, 0, new HTML("<b>User name</b>"));
-		table.setWidget(4, 0, userName);
+		table.setWidget(3, 0, new HTML("<b>Password</b>"));
+		table.setWidget(4, 0, password);
 		table.setWidget(5, 0, new HTML("&nbsp;"));
-		table.setWidget(6, 0, new HTML("<b>Password</b>"));
-		table.setWidget(7, 0, password);
+		table.setWidget(6, 0, new HTML("<b>Language</b>"));
+		table.setWidget(7, 0, langList);
 		table.setWidget(8, 0, new HTML("&nbsp;"));
 		table.setWidget(9, 0, loginButton);
 		
