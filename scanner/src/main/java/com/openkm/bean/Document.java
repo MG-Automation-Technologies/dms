@@ -7,7 +7,7 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 
 public class Document implements KvmSerializable {
-	protected static final String NAMESPACE = "http://endpoint.ws.openkm.git.es/";
+	protected static final String NAMESPACE = "http://endpoint.ws.openkm.com/";
 	public String path;
 	
 	/* (non-Javadoc)
