@@ -13,13 +13,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="<%=basePath %>" />
+		<base href="<%=basePath %>"/>
   		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Cache-Control" content="no-cache" />
     	<meta http-equiv="Pragma" content="no-cache" />
-    	<meta http-equiv="Expires" content="0" />
+    	<meta http-equiv="Expires" content="0" />   
 		<link rel="Shortcut icon" href="../favicon.ico" />
-		<meta name='gwt:module' content='com.openkm.login.Main' />
 		<% if (FormatUtil.isMobile(request)) { %>
   			<link rel="stylesheet" href="mobile.css" type="text/css" />
   		<% } else { %>
@@ -31,7 +30,7 @@
 			var lowercase = "<%=Config.SYSTEM_LOGIN_LOWERCASE %>";
 			var docPath = "<%=request.getParameter("docPath")!=null?request.getParameter("docPath"):"" %>";
 			var fldPath = "<%=request.getParameter("fldPath")!=null?request.getParameter("fldPath"):"" %>";
-			var isMobil = "<%=FormatUtil.isMobile(request)?"on":"off" %>";
+			var isMobil = "<%=FormatUtil.isMobile(request)?"on":"off" %>"
 		</script>
 	</head>
 	<body>
