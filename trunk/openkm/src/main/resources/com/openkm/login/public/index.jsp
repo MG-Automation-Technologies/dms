@@ -17,7 +17,7 @@
   		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Cache-Control" content="no-cache" />
     	<meta http-equiv="Pragma" content="no-cache" />
-    	<meta http-equiv="Expires" content="0" />   
+    	<meta http-equiv="Expires" content="0" />
 		<link rel="Shortcut icon" href="../favicon.ico" />
 		<meta name='gwt:module' content='com.openkm.login.Main' />
 		<% if (FormatUtil.isMobile(request)) { %>
