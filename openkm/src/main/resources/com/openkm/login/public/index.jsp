@@ -31,7 +31,7 @@
 			var lowercase = "<%=Config.SYSTEM_LOGIN_LOWERCASE %>";
 			var docPath = "<%=request.getParameter("docPath")!=null?request.getParameter("docPath"):"" %>";
 			var fldPath = "<%=request.getParameter("fldPath")!=null?request.getParameter("fldPath"):"" %>";
-			var isMobil = "<%=FormatUtil.isMobile(request)?"on":"off" %>"
+			var isMobil = "<%=FormatUtil.isMobile(request)?"on":"off" %>";
 		</script>
 	</head>
 	<body>
