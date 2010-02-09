@@ -785,8 +785,8 @@ public class Document extends Composite {
 			}
 		});
 		
-		tableSubscribedCategories.setWidget(row,0, hlink);
+		tableSubscribedCategories.setWidget(row, 0, hlink);
 		tableSubscribedCategories.setWidget(row, 1, delete);
-		setRowWordWarp(row-1, 1, true, tableSubscribedCategories);
+		setRowWordWarp(row, 1, true, tableSubscribedCategories);
 	}
 }
