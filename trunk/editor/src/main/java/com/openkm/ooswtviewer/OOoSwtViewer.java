@@ -4,7 +4,7 @@ import java.awt.Panel;
 import java.io.IOException;
 import java.net.MalformedURLException;
  
-import com.sun.star.comp.beans.LocalOfficeConnection;
+import com.sun.star.comp.beans.LocalOfficeConnection2;
 import com.sun.star.comp.beans.NoConnectionException;
 import com.sun.star.comp.beans.OOoBean;
 import com.sun.star.comp.beans.OfficeConnection;
@@ -25,7 +25,7 @@ public class OOoSwtViewer extends Panel {
  public OOoSwtViewer() {
   super();
 
-  OfficeConnection officeConnection = new LocalOfficeConnection();
+  OfficeConnection officeConnection = new LocalOfficeConnection2();
   try {
 	  officeConnection.setUnoUrl(URI);
 	  aBean = new OOoBean( officeConnection );
