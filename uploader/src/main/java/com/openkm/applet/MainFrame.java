@@ -168,7 +168,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				String data = (String) tr.getTransferData(linux);
 				List<File> files = textURIListToFileList(data);
 				for (File f : files) {
-					System.out.println("File: "+f);
+					log.info("File: "+f);
 				}
 				
 				dtde.dropComplete(true);
@@ -180,7 +180,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				@SuppressWarnings("unchecked")
 				List<File> files = (List<File>) tr.getTransferData(windows);
 				for (File f : files) {
-					System.out.println("File: "+f);
+					log.info("File: "+f);
 				}
 				
 				dtde.dropComplete(true);
@@ -200,13 +200,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	 */
 	private static List<File> textURIListToFileList(String data) {
 		List<File> list = new ArrayList<File>(1);
-		for (StringTokenizer st = new StringTokenizer(data, "\r\n"); st
-				.hasMoreTokens();) {
+		
+		for (StringTokenizer st = new StringTokenizer(data, "\r\n"); st.hasMoreTokens();) {
 			String s = st.nextToken();
+			
 			if (s.startsWith("#")) {
 				// the line is a comment (as per the RFC 2483)
 				continue;
 			}
+			
 			try {
 				URI uri = new URI(s);
 				File file = new File(uri);
@@ -217,6 +219,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				e.printStackTrace();
 			}
 		}
+		
 		return list;
 	}
 }
