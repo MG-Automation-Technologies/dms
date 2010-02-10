@@ -1197,8 +1197,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     {
 		try
 		{
-			bStandardBarVisible = setToolVisible( "StandardBarVisible", 
-                    "private:resource/toolbar/standardbar", bStandardBarVisible, bVisible );         
+			bStandardBarVisible = setToolVisible( "StandardBarVisible","private:resource/toolbar/standardbar", bStandardBarVisible, bVisible );         
 		}
 		catch ( java.lang.InterruptedException aExc )
 		{ 
@@ -1245,8 +1244,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     {
 		try 
 		{
-			bToolBarVisible = setToolVisible( "ToolBarVisible", 
-                    "private:resource/toolbar/toolbar", bToolBarVisible, bVisible );            
+			bToolBarVisible = setToolVisible( "ToolBarVisible", "private:resource/toolbar/toolbar", bToolBarVisible, bVisible );            
 		}
 		catch ( java.lang.InterruptedException aExc )
 		{ 
@@ -1293,8 +1291,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
     {
 		try 
 		{
-			bStatusBarVisible = setToolVisible( "StatusBarVisible", 
-                    "private:resource/statusbar/statusbar", bStatusBarVisible, bVisible );            
+			bStatusBarVisible = setToolVisible( "StatusBarVisible","private:resource/statusbar/statusbar", bStatusBarVisible, bVisible );            
 		}
 		catch ( java.lang.InterruptedException aExc )
 		{ 
@@ -1511,7 +1508,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 			}
 		}
 	}
-
 }
 
 

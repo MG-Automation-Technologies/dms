@@ -280,8 +280,7 @@ public class OOoBeanViewer extends java.applet.Applet
            documentURLTextField.setText(desc);
            //Get the office process to load the URL
            aBean.loadFromURL( url, null );
-
-	   		aBean.aquireSystemWindow(); 
+	   	   aBean.aquireSystemWindow(); 
 		}
 		catch ( com.sun.star.comp.beans.SystemWindowException aExc )
      	{
@@ -297,7 +296,6 @@ public class OOoBeanViewer extends java.applet.Applet
 		{
 			System.err.println( "OOoBeanViewer.3:" );
 			aExc.printStackTrace();
-			//return;
 		}
    }
 

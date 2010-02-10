@@ -2,12 +2,15 @@ package com.openkm.editor;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import com.sun.star.comp.beans.LocalOfficeConnection2;
@@ -27,8 +30,7 @@ import com.sun.star.util.CloseVetoException;
 public class Editor extends Applet {
 
 	// README before executing
-	// Now needs to run the command in OS console -> soffice
-	// "-accept=socket,host=0,port=2002;urp;"
+	// Now needs to run the command in OS console -> soffice -bean "-accept=socket,host=0,port=2002;urp;"
 	// Not closing the open office window after running
 
 	// PROBLEMS applet class loader !!!
@@ -52,9 +54,6 @@ public class Editor extends Applet {
 	private java.awt.Panel rightPanel;
 	private java.awt.Panel bottomPanel;
 	private javax.swing.JButton closeButton;
-	private javax.swing.JButton terminateButton;
-	private javax.swing.JButton newDocumentButton;
-	private javax.swing.JPopupMenu documentTypePopUp;
 	private javax.swing.JCheckBox menuBarButton;
 	private javax.swing.JCheckBox mainBarButton;
 	private javax.swing.JCheckBox toolBarButton;
@@ -63,9 +62,10 @@ public class Editor extends Applet {
 	private javax.swing.JButton loadDocumentButton;
 	private javax.swing.JButton syswinButton;
 	private JTextField documentURLTextField;
-	private JMenuItem item;
-	private JFileChooser fileChooser;
 	private byte buffer[];
+	
+	Timer timer;
+	TimerTask task;
 
 	/*
 	 * (non-Javadoc)
@@ -77,9 +77,6 @@ public class Editor extends Applet {
 		rightPanel = new java.awt.Panel();
 		bottomPanel = new java.awt.Panel();
 		closeButton = new javax.swing.JButton("close");
-		terminateButton = new javax.swing.JButton("terminate");
-		newDocumentButton = new javax.swing.JButton("new document...");
-		documentTypePopUp = new javax.swing.JPopupMenu();
 		storeDocumentButton = new javax.swing.JButton("store to buffer");
 		loadDocumentButton = new javax.swing.JButton("load from buffer");
 		syswinButton = new javax.swing.JButton("release/aquire");
@@ -88,46 +85,6 @@ public class Editor extends Applet {
 		toolBarButton = new javax.swing.JCheckBox("ToolBar");
 		statusBarButton = new javax.swing.JCheckBox("StatusBar");
 		documentURLTextField = new javax.swing.JTextField();
-
-		// Set up the Popup Menu to create a blank document
-		documentTypePopUp.setToolTipText("Create an empty document");
-
-		item = documentTypePopUp.add("Text Document");
-		item.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createBlankDoc("private:factory/swriter", "New text document");
-			}
-		});
-
-		item = documentTypePopUp.add("Presentation Document");
-		item.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createBlankDoc("private:factory/simpress",
-						"New presentation document");
-			}
-		});
-
-		item = documentTypePopUp.add("Drawing Document");
-		item.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createBlankDoc("private:factory/sdraw", "New drawing document");
-			}
-		});
-
-		item = documentTypePopUp.add("Formula Document");
-		item.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createBlankDoc("private:factory/smath", "New formula document");
-			}
-		});
-
-		item = documentTypePopUp.add("Spreadsheet Document");
-		item.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				createBlankDoc("private:factory/scalc",
-						"New spreadsheet document");
-			}
-		});
 
 		syswinButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,8 +115,7 @@ public class Editor extends Applet {
 				try {
 					aBean.loadFromByteArray(buffer, null);
 				} catch (Throwable aExc) {
-					System.err
-							.println("loadFromBuffer failed: " + aExc);
+					System.err.println("loadFromBuffer failed: " + aExc);
 					aExc.printStackTrace(System.err);
 				}
 			}
@@ -168,18 +124,6 @@ public class Editor extends Applet {
 		closeButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				close();
-			}
-		});
-
-		terminateButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				terminate();
-			}
-		});
-
-		newDocumentButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				documentTypePopUp.show((java.awt.Component) evt.getSource(), 0, 0);
 			}
 		});
 
@@ -212,8 +156,6 @@ public class Editor extends Applet {
 
 		rightPanel.setLayout(new java.awt.GridLayout(10, 1));
 		rightPanel.add(closeButton);
-		rightPanel.add(terminateButton);
-		rightPanel.add(newDocumentButton);
 		rightPanel.add(storeDocumentButton);
 		rightPanel.add(loadDocumentButton);
 		rightPanel.add(syswinButton);
@@ -223,14 +165,15 @@ public class Editor extends Applet {
 		rightPanel.add(statusBarButton);
 
 		System.out.println("alegria 12");
+		
+		// Trying to solve keyboard problem or in jvm parameters -Dsun.awt.xembedserver=true
+		System.setProperty("sun.awt.xembedserver", "true");
 
 		// /usr/lib/openoffice/basis3.1/program here's libofficebean.so
 		// /usr/lib/ure/lib/ here's libjpipe.so
-		System.setProperty("java.library.path",
-				"/usr/lib/openoffice/basis3.1/program:/usr/lib/ure/lib/");
+		System.setProperty("java.library.path","/usr/lib/openoffice/basis3.1/program:/usr/lib/ure/lib/");
 
-		System.out.println("java.library.path:"
-				+ System.getProperty("java.library.path"));
+		System.out.println("java.library.path:"+ System.getProperty("java.library.path"));
 
 		System.out.println("alegria 22");
 
@@ -240,8 +183,12 @@ public class Editor extends Applet {
 		try {
 			officeConnection.setUnoUrl(URI);
 			aBean = new OOoBean2(officeConnection);
-
+			
 			System.out.println("connection test: " + aBean.isOOoConnected());
+			
+			// setting some UI preferences
+		    //aBean.setEnabled(true);
+			//aBean.setFocusable(true);
 
 			// Initializing buttons
 			menuBarButton.setSelected(aBean.isMenuBarVisible());
@@ -250,10 +197,8 @@ public class Editor extends Applet {
 			statusBarButton.setSelected(aBean.isStatusBarVisible());
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoConnectionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -264,7 +209,6 @@ public class Editor extends Applet {
 		add(aBean, BorderLayout.CENTER);
 		add(rightPanel, BorderLayout.EAST);
 	    add(bottomPanel, BorderLayout.SOUTH);
-		// createBlankDoc(OFFICE_DOCUMENT, "desc"); //here has problems !!
 	}
 
 	/**
@@ -340,13 +284,25 @@ public class Editor extends Applet {
 	public void stop() {
 		// no actions needed here now.
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.applet.Applet#start()
+	 */
+	public void start() {
+		// Timer to not losing OpenKM session if browser is closed by user, must call http keepalive servlet methow
+		timer = new Timer();
+		task= new TimerTask() { 
+			public void run() { 
+				/* do stuff in here*/ 
+			} 
+		};
+		timer.schedule(task , 0, 50000);
+	}
 
-	// The standard method that you have to use to paint things on screen
-	// This overrides the empty Applet method, you can't called it "display" for
-	// example.
+	/* (non-Javadoc)
+	 * @see java.awt.Container#paint(java.awt.Graphics)
+	 */
 	public void paint(Graphics g) {
-		g.drawString("Testing 3", 20, 20);
-		g.drawString("Hellow World", 20, 40);
 		createBlankDoc(OFFICE_DOCUMENT, "document description text !!!");
 	}
 }
