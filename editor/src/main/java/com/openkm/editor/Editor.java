@@ -1,16 +1,20 @@
 package com.openkm.editor;
 
-import java.applet.Applet;
 import java.awt.BorderLayout;
-import java.awt.Frame;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.sun.star.comp.beans.LocalOfficeConnection2;
@@ -27,7 +31,7 @@ import com.sun.star.util.CloseVetoException;
  * 
  */
 @SuppressWarnings("deprecation")
-public class Editor extends Applet {
+public class Editor extends JApplet {
 
 	// README before executing
 	// Now needs to run the command in OS console -> soffice -bean "-accept=socket,host=0,port=2002;urp;"
@@ -44,23 +48,23 @@ public class Editor extends Applet {
 	// environment has no effects in java.library.path
 
 	private static final long serialVersionUID = -7163587104950744341L;
-	private static final String OFFICE_DOCUMENT = "file:///home/jllort/Escritorio/lucene.odt";
+	private static final String OFFICE_DOCUMENT = "file:///home/pavila/lucene.odt";
 	public static final String URI = "uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager";
 	private OOoBean2 aBean;
 
 	/**
 	 * Private variables declaration - GUI components
 	 */
-	private java.awt.Panel rightPanel;
-	private java.awt.Panel bottomPanel;
-	private javax.swing.JButton closeButton;
-	private javax.swing.JCheckBox menuBarButton;
-	private javax.swing.JCheckBox mainBarButton;
-	private javax.swing.JCheckBox toolBarButton;
-	private javax.swing.JCheckBox statusBarButton;
-	private javax.swing.JButton storeDocumentButton;
-	private javax.swing.JButton loadDocumentButton;
-	private javax.swing.JButton syswinButton;
+	private JPanel rightPanel;
+	private JPanel bottomPanel;
+	private JButton closeButton;
+	private JCheckBox menuBarButton;
+	private JCheckBox mainBarButton;
+	private JCheckBox toolBarButton;
+	private JCheckBox statusBarButton;
+	private JButton storeDocumentButton;
+	private JButton loadDocumentButton;
+	private JButton syswinButton;
 	private JTextField documentURLTextField;
 	private byte buffer[];
 	
@@ -74,20 +78,20 @@ public class Editor extends Applet {
 	 */
 	public void init() {
 		// Initialize GUI components
-		rightPanel = new java.awt.Panel();
-		bottomPanel = new java.awt.Panel();
-		closeButton = new javax.swing.JButton("close");
-		storeDocumentButton = new javax.swing.JButton("store to buffer");
-		loadDocumentButton = new javax.swing.JButton("load from buffer");
-		syswinButton = new javax.swing.JButton("release/aquire");
-		menuBarButton = new javax.swing.JCheckBox("MenuBar");
-		mainBarButton = new javax.swing.JCheckBox("MainBar");
-		toolBarButton = new javax.swing.JCheckBox("ToolBar");
-		statusBarButton = new javax.swing.JCheckBox("StatusBar");
-		documentURLTextField = new javax.swing.JTextField();
+		rightPanel = new JPanel();
+		bottomPanel = new JPanel();
+		closeButton = new JButton("close");
+		storeDocumentButton = new JButton("store to buffer");
+		loadDocumentButton = new JButton("load from buffer");
+		syswinButton = new JButton("release/aquire");
+		menuBarButton = new JCheckBox("MenuBar");
+		mainBarButton = new JCheckBox("MainBar");
+		toolBarButton = new JCheckBox("ToolBar");
+		statusBarButton = new JCheckBox("StatusBar");
+		documentURLTextField = new JTextField();
 
-		syswinButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		syswinButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				try {
 					aBean.releaseSystemWindow();
 					aBean.aquireSystemWindow();
@@ -99,8 +103,8 @@ public class Editor extends Applet {
 			}
 		});
 
-		storeDocumentButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		storeDocumentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				try {
 					buffer = aBean.storeToByteArray(null, null);
 				} catch (Throwable aExc) {
@@ -110,8 +114,8 @@ public class Editor extends Applet {
 			}
 		});
 
-		loadDocumentButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		loadDocumentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				try {
 					aBean.loadFromByteArray(buffer, null);
 				} catch (Throwable aExc) {
@@ -121,40 +125,40 @@ public class Editor extends Applet {
 			}
 		});
 
-		closeButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				close();
 			}
 		});
 
-		menuBarButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		menuBarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				aBean.setMenuBarVisible(!aBean.isMenuBarVisible());
 			}
 		});
 
-		mainBarButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		mainBarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				aBean.setStandardBarVisible(!aBean.isStandardBarVisible());
 			}
 		});
 
-		toolBarButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		toolBarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				aBean.setToolBarVisible(!aBean.isToolBarVisible());
 			}
 		});
 
-		statusBarButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		statusBarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				aBean.setStatusBarVisible(!aBean.isStatusBarVisible());
 			}
 		});
 
 		documentURLTextField.setEditable(false);
-		documentURLTextField.setPreferredSize(new java.awt.Dimension(200, 30));
+		documentURLTextField.setPreferredSize(new Dimension(200, 30));
 
-		rightPanel.setLayout(new java.awt.GridLayout(10, 1));
+		rightPanel.setLayout(new GridLayout(10, 1));
 		rightPanel.add(closeButton);
 		rightPanel.add(storeDocumentButton);
 		rightPanel.add(loadDocumentButton);
