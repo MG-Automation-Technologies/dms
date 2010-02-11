@@ -57,8 +57,9 @@ public class Uploader extends JApplet {
 	 */
 	private void createGUI() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		JFrame main = new MainFrame(token, path, url);
+		JFrame main = new MainFrame(token, path, url, win);
 		main.setVisible(true);
 		main.setResizable(false);
+		main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 }

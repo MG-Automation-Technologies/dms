@@ -55,8 +55,8 @@ public class Util {
 				baos.write(buffer, 0, n);
 			}
 
-			BindingProvider bp = ((BindingProvider) okmDocument);
-			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+			BindingProvider bp = (BindingProvider) okmDocument;
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
 			doc.setPath(path + "/" + file.getName());
 			okmDocument.create(token, doc, baos.toByteArray());
 		} finally {
@@ -81,7 +81,8 @@ public class Util {
 		OKMFolder okmFolder = okmFolderService.getOKMFolderPort();
 		Folder fld = new Folder();
 
-		((BindingProvider) okmFolder).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+		BindingProvider bp = (BindingProvider) okmFolder;
+		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMFolder");
 		fld.setPath(path + "" + file.getName());
 		okmFolder.create(token, fld);
 	}
