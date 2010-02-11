@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.xml.ws.BindingProvider;
 
 import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.Document;
@@ -43,6 +44,8 @@ public class Util {
 			ImageIO.write(image, "fileType", baos);
 			baos.flush();
 
+			BindingProvider bp = (BindingProvider)okmDocument; 
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
 			doc.setPath(path + "/" + fileName + "." + fileType);
 			okmDocument.create(token, doc, baos.toByteArray());
 		} finally {

@@ -49,7 +49,7 @@ public class ScannerManager implements ScannerListener {
 	 * @param win
 	 */
 	public ScannerManager(String token, String path, String url, JSObject win) {
-		log.fine("########## ScannerManager ##########");
+		log.info("########## ScannerManager ##########");
 		this.token = token;
 		this.path = path;
 		this.url = url;
