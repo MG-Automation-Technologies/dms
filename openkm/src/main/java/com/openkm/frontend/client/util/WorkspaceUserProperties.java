@@ -87,7 +87,6 @@ public class WorkspaceUserProperties {
 			user = result.getUser();
 			applicationURL = result.getApplicationURL();
 			Main.get().mainPanel.bottomPanel.userInfo.setUser(user, result.isAdmin());
-			Main.get().mainPanel.topPanel.toolBar.setApplet(result.getToken(), "/okm:home/"+user+"/okm:personal");
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize();
 			
