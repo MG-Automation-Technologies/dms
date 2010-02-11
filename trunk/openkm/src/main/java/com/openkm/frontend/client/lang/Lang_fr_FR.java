@@ -39,7 +39,7 @@ public class Lang_fr_FR {
 	    // General configuration
 	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
 	    lang.put("general.day.pattern", "dd/MM/yyyy");
-	    lang.put("general.hour.pattern", "hh:mm:ss");
+	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "Chargement de OpenKM");

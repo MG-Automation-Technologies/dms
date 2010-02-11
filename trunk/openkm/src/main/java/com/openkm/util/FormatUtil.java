@@ -70,7 +70,7 @@ public class FormatUtil {
 	 * Format time for human readers
 	 */
 	public static String formatTime(long time) {
-		DateFormat df = new SimpleDateFormat("hh:mm:ss.SSS"); 
+		DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS"); 
 		String str = df.format(time);
 		return str;
 	}
