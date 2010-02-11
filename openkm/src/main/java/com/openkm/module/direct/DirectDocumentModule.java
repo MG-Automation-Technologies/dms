@@ -238,8 +238,6 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
-		documentNode.setProperty(Document.COMPACTABLE, false);
-		documentNode.setProperty(Document.TRAINING, false);
 		long size = is.available();
 		
 		// Get parent node auth info
