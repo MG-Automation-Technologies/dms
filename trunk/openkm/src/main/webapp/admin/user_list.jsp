@@ -56,11 +56,9 @@
 				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+usr.getId()+"</td><td>"+usr.getName()+"</td><td>"+usr.getEmail()+
 						"</td><td>"+usr.getRoles()+"</td><td>"+usr.isActive()+"</td>"+
 						"<td><a href=\"user_edit.jsp?action=u&id="+usr.getId()+"\""+">Edit</a>"+
-								(!Config.ADMIN_USER.equals(usr.getId())?
-										" - <a href=\"user_edit.jsp?action=d&id="+usr.getId()+"\""+">Delete</a>"+
-												" - <a href=\"mail_list.jsp?user="+usr.getId()+"\">Mail Accounts</a>"+
-												" - <a href=\"twitter_list.jsp?user="+usr.getId()+"\">Twitter Accounts</a>":
-											"")+
+						" - <a href=\"user_edit.jsp?action=d&id="+usr.getId()+"\""+">Delete</a>"+
+						" - <a href=\"mail_list.jsp?user="+usr.getId()+"\">Mail Accounts</a>"+
+						" - <a href=\"twitter_list.jsp?user="+usr.getId()+"\">Twitter Accounts</a>"+
 						"</td></tr>");
 			}
 				
