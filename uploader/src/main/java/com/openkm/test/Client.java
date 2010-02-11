@@ -37,23 +37,23 @@ public class Client {
 			okmDocument.create(token, doc, "Esto es un mensaje".getBytes());
 			
 			okmAuth.logout(token);
-		} catch (AccessDeniedException_Exception e) {
-			log.severe("Error: "+e.getMessage());
-		} catch (RepositoryException_Exception e) {
-			log.severe("Error: "+e.getMessage());
 		} catch (UserAlreadyLoggerException_Exception e) {
+			log.severe("Error: "+e.getMessage());
+		} catch (VirusDetectedException_Exception e) {
 			log.severe("Error: "+e.getMessage());
 		} catch (FileSizeExceededException_Exception e) {
 			log.severe("Error: "+e.getMessage());
-		} catch (IOException_Exception e) {
+		} catch (UnsupportedMimeTypeException_Exception e) {
 			log.severe("Error: "+e.getMessage());
 		} catch (ItemExistsException_Exception e) {
 			log.severe("Error: "+e.getMessage());
 		} catch (PathNotFoundException_Exception e) {
 			log.severe("Error: "+e.getMessage());
-		} catch (UnsupportedMimeTypeException_Exception e) {
+		} catch (AccessDeniedException_Exception e) {
 			log.severe("Error: "+e.getMessage());
-		} catch (VirusDetectedException_Exception e) {
+		} catch (RepositoryException_Exception e) {
+			log.severe("Error: "+e.getMessage());
+		} catch (IOException_Exception e) {
 			log.severe("Error: "+e.getMessage());
 		}
 	}
