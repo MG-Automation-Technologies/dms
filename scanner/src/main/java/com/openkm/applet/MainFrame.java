@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -21,13 +20,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
 public class MainFrame extends JFrame implements ActionListener, WindowListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
 	private JLabel jLabel1;
@@ -37,7 +34,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 	private JTextField tfFileName;
 	private JCheckBox cbUI;
 	private ScannerManager scanner;
-	private JApplet applet;
+	private JSObject win;
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -48,15 +45,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 				MainFrame inst = new MainFrame(null, null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
+				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 	}
 
 	/**
-	 * @param scanner
-	 * @param applet
+	 *
 	 */
-	public MainFrame(ScannerManager scanner, JApplet applet) {
+	public MainFrame(ScannerManager scanner, JSObject win) {
 		super("Scan & Upload");
 		initGUI();
 		// JComponent jc = scanner.getDevice().getScanGUI();
@@ -66,7 +63,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
 		// Set instances
 		this.scanner = scanner;
-		this.applet = applet;
+		this.win = win;
 
 		// Get the size of the screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -86,46 +83,39 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 	 */
 	private void initGUI() {
 		try {
-			{
-				getContentPane().setLayout(null);
-				{
-					jLabel1 = new JLabel();
-					getContentPane().add(jLabel1);
-					jLabel1.setText("File Name");
-					jLabel1.setBounds(19, 19, 68, 15);
-				}
-				{
-					jLabel2 = new JLabel();
-					getContentPane().add(jLabel2);
-					jLabel2.setText("File Type");
-					jLabel2.setBounds(19, 45, 68, 15);
-				}
-				{
-					tfFileName = new JTextField();
-					getContentPane().add(tfFileName);
-					tfFileName.setBounds(85, 15, 170, 22);
-				}
-				{
-					ComboBoxModel cbFileTypeModel = new DefaultComboBoxModel(
-							new String[] { "PDF", "TIF", "JPG", "PNG", "GIF", "BMP" });
-					cbFileType = new JComboBox();
-					getContentPane().add(cbFileType);
-					cbFileType.setModel(cbFileTypeModel);
-					cbFileType.setBounds(85, 43, 55, 22);
-				}
-				{
-					cbUI = new JCheckBox("User Interface", true);
-					getContentPane().add(cbUI);
-					cbUI.setBounds(145, 43, 120, 22);
-				}
-				{
-					bScan = new JButton();
-					getContentPane().add(bScan);
-					bScan.setText("Scan & Upload");
-					bScan.setBounds(19, 84, 235, 22);
-					bScan.addActionListener(this);
-				}
-			}
+			getContentPane().setLayout(null);
+
+			jLabel1 = new JLabel();
+			getContentPane().add(jLabel1);
+			jLabel1.setText("File Name");
+			jLabel1.setBounds(19, 19, 68, 15);
+			
+			jLabel2 = new JLabel();
+			getContentPane().add(jLabel2);
+			jLabel2.setText("File Type");
+			jLabel2.setBounds(19, 45, 68, 15);
+			
+			tfFileName = new JTextField();
+			getContentPane().add(tfFileName);
+			tfFileName.setBounds(85, 15, 170, 22);
+			
+			ComboBoxModel cbFileTypeModel = new DefaultComboBoxModel(
+			new String[] { "PDF", "TIF", "JPG", "PNG", "GIF", "BMP" });
+			cbFileType = new JComboBox();
+			getContentPane().add(cbFileType);
+			cbFileType.setModel(cbFileTypeModel);
+			cbFileType.setBounds(85, 43, 55, 22);
+			
+			cbUI = new JCheckBox("User Interface", true);
+			getContentPane().add(cbUI);
+			cbUI.setBounds(145, 43, 120, 22);
+			
+			bScan = new JButton();
+			getContentPane().add(bScan);
+			bScan.setText("Scan & Upload");
+			bScan.setBounds(19, 84, 235, 22);
+			bScan.addActionListener(this);
+			
 			pack();
 			this.setSize(283, 159);
 		} catch (Exception e) {
@@ -134,11 +124,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
 			String fileName = tfFileName.getText().trim();
@@ -155,61 +141,32 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowActivated(WindowEvent arg0) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowClosed(WindowEvent arg0) {
+		win.call("destroyScannerApplet", new Object[] {});
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowClosing(WindowEvent arg0) {
-		applet.setEnabled(true);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowDeactivated(WindowEvent arg0) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowDeiconified(WindowEvent arg0) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowIconified(WindowEvent arg0) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
-	 */
+	@Override
 	public void windowOpened(WindowEvent arg0) {
-		applet.setEnabled(false);
 	}
 }
