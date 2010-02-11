@@ -39,7 +39,7 @@ public class Lang_zh_TW {
 	    // General configuration
 	    lang.put("general.date.pattern", "yyyy-MM-dd hh:mm:ss");
 	    lang.put("general.day.pattern", "yyyy-MM-dd");
-	    lang.put("general.hour.pattern", "hh:mm:ss");
+	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "載入OpenKM");

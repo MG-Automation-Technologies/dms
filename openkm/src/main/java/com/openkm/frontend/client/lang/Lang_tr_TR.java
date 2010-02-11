@@ -40,7 +40,7 @@ public class Lang_tr_TR {
 	    // General configuration
 	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
 	    lang.put("general.day.pattern", "dd/MM/yyyy");
-	    lang.put("general.hour.pattern", "hh:mm:ss");
+	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "OpenKM Yükleniyor..");
