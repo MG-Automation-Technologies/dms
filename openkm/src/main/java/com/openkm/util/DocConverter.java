@@ -171,7 +171,7 @@ public class DocConverter {
 		
 		try {
 			fos = new FileOutputStream(tmp);
-			IOUtils.copyLarge(is, fos);
+			IOUtils.copy(is, fos);
 			fos.flush();
 			fos.close();
 			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_CONVERT, tmp.getPath(), output.getPath());
