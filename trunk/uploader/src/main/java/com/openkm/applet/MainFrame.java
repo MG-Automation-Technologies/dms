@@ -174,7 +174,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				String data = (String) tr.getTransferData(linux);
 				List<File> files = Util.textURIListToFileList(data);
 				for (File file : files) {
-					callUploadDocument(token, path, url, file);
+					callCreateDocument(token, path, url, file);
 				}
 
 				dtde.dropComplete(true);
@@ -186,7 +186,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				@SuppressWarnings("unchecked")
 				List<File> files = (List<File>) tr.getTransferData(windows);
 				for (File file : files) {
-					callUploadDocument(token, path, url, file);
+					callCreateDocument(token, path, url, file);
 				}
 
 				dtde.dropComplete(true);
@@ -204,9 +204,13 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	/**
 	 * 
 	 */
-	private void callUploadDocument(String toke, String path, String utl, File file) {
+	private void callCreateDocument(String toke, String path, String url, File file) {
 		try {
-			Util.uploadDocument(token, path, url, file);
+			if (file.isFile()) {
+				Util.createDocument(token, path, url, file);
+			} else if (file.isDirectory()) {
+				createDocumentHelper(token, path, url, file);
+			}
 		} catch (VirusDetectedException_Exception e) {
 			log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -235,5 +239,40 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	/** 
+	 * 
+	 */
+	private static void createDocumentHelper(String token, String path, String url, File fs)
+			throws IOException, AccessDeniedException_Exception, PathNotFoundException_Exception,
+			RepositoryException_Exception, IOException_Exception {
+		log.info("uploadDocumentHelper(" + token + ", " + fs + ", " + path + ")");
+		File[] files = fs.listFiles();
+
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isDirectory()) {
+				try {
+					Util.createFolder(token, path, url, files[i]);
+					createDocumentHelper(token, path+"/"+files[i], url, files[i]);
+				} catch (ItemExistsException_Exception e) {
+					log.warning("ItemExistsException: " + e.getMessage());
+				}
+			} else {
+				try {
+					Util.createDocument(token, path, url, files[i]);
+				} catch (UnsupportedMimeTypeException_Exception e) {
+					log.warning("UnsupportedMimeTypeException: " + e.getMessage());
+				} catch (FileSizeExceededException_Exception e) {
+					log.warning("FileSizeExceededException: " + e.getMessage());
+				} catch (VirusDetectedException_Exception e) {
+					log.warning("VirusWarningException: " + e.getMessage());
+				} catch (ItemExistsException_Exception e) {
+					log.warning("ItemExistsException: " + e.getMessage());
+				}
+			}
+		}
+
+		log.info("importDocumentsHelper: void");
 	}
 }

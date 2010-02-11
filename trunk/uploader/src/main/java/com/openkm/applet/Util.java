@@ -14,10 +14,13 @@ import java.util.logging.Logger;
 import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.Document;
 import com.openkm.ws.client.FileSizeExceededException_Exception;
+import com.openkm.ws.client.Folder;
 import com.openkm.ws.client.IOException_Exception;
 import com.openkm.ws.client.ItemExistsException_Exception;
 import com.openkm.ws.client.OKMDocument;
 import com.openkm.ws.client.OKMDocumentService;
+import com.openkm.ws.client.OKMFolder;
+import com.openkm.ws.client.OKMFolderService;
 import com.openkm.ws.client.PathNotFoundException_Exception;
 import com.openkm.ws.client.RepositoryException_Exception;
 import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
@@ -30,7 +33,7 @@ public class Util {
 	/**
 	 * 
 	 */
-	public static void uploadDocument(String token, String path, String url, File file) throws IOException,
+	public static void createDocument(String token, String path, String url, File file) throws IOException,
 			AccessDeniedException_Exception, FileSizeExceededException_Exception, IOException_Exception,
 			ItemExistsException_Exception, PathNotFoundException_Exception, RepositoryException_Exception,
 			UnsupportedMimeTypeException_Exception, VirusDetectedException_Exception {
@@ -60,6 +63,22 @@ public class Util {
 				baos.close();
 			}
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public static void createFolder(String token, String path, String url, File file) throws IOException,
+			AccessDeniedException_Exception, ItemExistsException_Exception, PathNotFoundException_Exception,
+			RepositoryException_Exception {
+		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file);
+
+		OKMFolderService okmFolderService = new OKMFolderService();
+		OKMFolder okmFolder = okmFolderService.getOKMFolderPort();
+		Folder fld = new Folder();
+
+		fld.setPath(path + "" + file.getName());
+		okmFolder.create(token, fld);
 	}
 
 	/**
