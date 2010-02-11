@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import netscape.javascript.JSObject;
+
 import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.FileSizeExceededException_Exception;
 import com.openkm.ws.client.IOException_Exception;
@@ -44,6 +46,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private String token;
 	private String path;
 	private String url;
+	private JSObject win;
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -51,7 +54,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				MainFrame inst = new MainFrame(null, null, null);
+				MainFrame inst = new MainFrame(null, null, null, null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
 				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,7 +65,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	/**
 	 * 
 	 */
-	public MainFrame(String token, String path, String url) {
+	public MainFrame(String token, String path, String url, JSObject win) {
 		super("Uploader");
 		initGUI();
 		addWindowListener(this);
@@ -71,6 +74,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		this.token = token;
 		this.path = path;
 		this.url = url;
+		this.win = win;
 
 		// Get the size of the screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -118,6 +122,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 	@Override
 	public void windowClosed(WindowEvent we) {
+		log.info("windowClosed: calling 'destroyScannerApplet'");
+		win.call("destroyScannerApplet", new Object[] {});
 	}
 
 	@Override
