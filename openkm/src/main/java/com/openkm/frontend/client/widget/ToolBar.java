@@ -474,7 +474,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.scannerOption ) {
 				Window.alert("aqui");
-				runScannerApplet("1.6",Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
+				//runScannerApplet("1.6",Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
 				Window.alert("disparat");
 			}
 		}
@@ -2174,18 +2174,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 //		javaScript += "deployJava.runApplet(attributes, parameters, version);\n";
 //		scannerApplet.getElement().setInnerHTML(javaScript);
 	}
-	
-
-	/**
-	 * runScannerApplet
-	 * 
-	 * @param version
-	 * @param okmPath
-	 * @param okmToken
-	 */
-	public static native void runScannerApplet(String version, String okmPath, String okmToken) /*-{
-		new $wnd.runScannerApplet(version, okmPath, okmToken);
-	}-*/;
 
 	/**
 	 * Set current repository path

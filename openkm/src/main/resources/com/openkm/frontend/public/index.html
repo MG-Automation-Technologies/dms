@@ -39,10 +39,8 @@
 				}
 			}
 
-			function runScannerApplet(version, okmPath, okmToken) {
-				var attributes = { code:'com.openkm.applet.Scanner.class', archive:'../scanner.jar', width:20, height:20 };
-				var parameters = { codebase_lookup:'true', path:okmPath, token:okmToken };
-				deployJava.runApplet(attributes, parameters, version);
+			function finishApplet() {
+				alert('applet finished);
 			}
 		
 			function copyToClipboard(text) {
