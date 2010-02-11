@@ -19,37 +19,42 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import com.openkm.ws.client.AccessDeniedException_Exception;
+import com.openkm.ws.client.FileSizeExceededException_Exception;
+import com.openkm.ws.client.IOException_Exception;
+import com.openkm.ws.client.ItemExistsException_Exception;
+import com.openkm.ws.client.PathNotFoundException_Exception;
+import com.openkm.ws.client.RepositoryException_Exception;
+import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
+import com.openkm.ws.client.VirusDetectedException_Exception;
+
 public class MainFrame extends JFrame implements ActionListener, WindowListener, DropTargetListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
-	
+	private String token;
+	private String path;
+	private String url;
+
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				MainFrame inst = new MainFrame(null);
+				MainFrame inst = new MainFrame(null, null, null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
+				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 		});
 	}
@@ -57,10 +62,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	/**
 	 * 
 	 */
-	public MainFrame(JApplet applet) {
-		super("Scan & Upload");
+	public MainFrame(String token, String path, String url) {
+		super("Uploader");
 		initGUI();
 		addWindowListener(this);
+
+		// Set instances
+		this.token = token;
+		this.path = path;
+		this.url = url;
 
 		// Get the size of the screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -92,11 +102,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
 			JOptionPane.showMessageDialog(this, "Empty file name", "Error", JOptionPane.ERROR_MESSAGE);
@@ -151,38 +157,38 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {
 	}
-	
+
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
 		try {
 			Transferable tr = dtde.getTransferable();
-			
+
 			// Flavors to check
 			DataFlavor linux = new DataFlavor("text/uri-list;class=java.lang.String");
 			DataFlavor windows = DataFlavor.javaFileListFlavor;
-			
+
 			if (tr.isDataFlavorSupported(linux)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 				getContentPane().setBackground(Color.RED);
-				
+
 				String data = (String) tr.getTransferData(linux);
-				List<File> files = textURIListToFileList(data);
-				for (File f : files) {
-					log.info("File: "+f);
+				List<File> files = Util.textURIListToFileList(data);
+				for (File file : files) {
+					callUploadDocument(token, path, url, file);
 				}
-				
+
 				dtde.dropComplete(true);
 				getContentPane().setBackground(Color.LIGHT_GRAY);
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 				getContentPane().setBackground(Color.RED);
-				
+
 				@SuppressWarnings("unchecked")
 				List<File> files = (List<File>) tr.getTransferData(windows);
-				for (File f : files) {
-					log.info("File: "+f);
+				for (File file : files) {
+					callUploadDocument(token, path, url, file);
 				}
-				
+
 				dtde.dropComplete(true);
 				getContentPane().setBackground(Color.LIGHT_GRAY);
 			}
@@ -194,32 +200,40 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
-	private static List<File> textURIListToFileList(String data) {
-		List<File> list = new ArrayList<File>(1);
-		
-		for (StringTokenizer st = new StringTokenizer(data, "\r\n"); st.hasMoreTokens();) {
-			String s = st.nextToken();
-			
-			if (s.startsWith("#")) {
-				// the line is a comment (as per the RFC 2483)
-				continue;
-			}
-			
-			try {
-				URI uri = new URI(s);
-				File file = new File(uri);
-				list.add(file);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
+	private void callUploadDocument(String toke, String path, String utl, File file) {
+		try {
+			Util.uploadDocument(token, path, url, file);
+		} catch (VirusDetectedException_Exception e) {
+			log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (FileSizeExceededException_Exception e) {
+			log.log(Level.SEVERE, "FileSizeExceededException: - > " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (UnsupportedMimeTypeException_Exception e) {
+			log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (ItemExistsException_Exception e) {
+			log.log(Level.SEVERE, "ItemExistsException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (PathNotFoundException_Exception e) {
+			log.log(Level.SEVERE, "PathNotFoundException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (AccessDeniedException_Exception e) {
+			log.log(Level.SEVERE, "AccessDeniedException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (RepositoryException_Exception e) {
+			log.log(Level.SEVERE, "RepositoryException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IOException_Exception e) {
+			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IOException e) {
+			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		return list;
 	}
 }
