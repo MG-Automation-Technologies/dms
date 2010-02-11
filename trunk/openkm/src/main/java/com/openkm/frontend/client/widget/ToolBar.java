@@ -474,7 +474,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.scannerOption ) {
 				Window.alert("aqui 1");
-				setApplet(Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
+				setApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
+						Main.get().activeFolderTree.getActualPath());
 				Window.alert("disparat 2");
 			}
 		}
