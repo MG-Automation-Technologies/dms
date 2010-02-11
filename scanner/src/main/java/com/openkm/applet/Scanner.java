@@ -66,5 +66,6 @@ public class Scanner extends JApplet {
 		JFrame main = new MainFrame(app, win);
 		main.setVisible(true);
 		main.setResizable(false);
+		main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 }
