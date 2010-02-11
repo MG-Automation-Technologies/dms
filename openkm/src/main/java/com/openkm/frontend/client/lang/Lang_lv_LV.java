@@ -135,6 +135,7 @@ public class Lang_lv_LV {
 			lang.put("general.menu.file.cancel.checkout", "Atcelt izreģistrēšanu");
 			lang.put("general.menu.file.delete", "Dzēst");
 			lang.put("general.menu.file.refresh", "Atzsvaidzināt");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Rīki");
 	    	lang.put("general.menu.tools.languages", "Valodas");
 	    	lang.put("general.menu.tools.skin", "Ādas");

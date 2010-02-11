@@ -135,6 +135,7 @@ public class Lang_hu_HU {
 			lang.put("general.menu.file.cancel.checkout", "Módosítás elvetése");
 			lang.put("general.menu.file.delete", "Törlés");
 			lang.put("general.menu.file.refresh", "Frissítés");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Eszközök");
 	    	lang.put("general.menu.tools.languages", "Nyelvek");
 	    	lang.put("general.menu.tools.skin", "Kinézet");

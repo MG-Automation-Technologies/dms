@@ -135,6 +135,7 @@ public class Lang_fr_FR {
 			lang.put("general.menu.file.cancel.checkout", "Annuler emprunt");
 			lang.put("general.menu.file.delete", "Effacer");
 			lang.put("general.menu.file.refresh", "Actualiser");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Outils");
 	    	lang.put("general.menu.tools.languages", "Langages");
 	    	lang.put("general.menu.tools.skin", "Thème");

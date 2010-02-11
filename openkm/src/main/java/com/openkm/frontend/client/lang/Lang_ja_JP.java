@@ -135,6 +135,7 @@ public class Lang_ja_JP {
 		lang.put("general.menu.file.cancel.checkout", "チェックアウトのキャンセル");
 		lang.put("general.menu.file.delete", "削除");
 		lang.put("general.menu.file.refresh", "更新");
+		lang.put("general.menu.file.scanner", "Scanner");
 		lang.put("general.menu.tools", "ツール");
 		lang.put("general.menu.tools.languages", "言語設定");
 		lang.put("general.menu.tools.skin", "スキン");

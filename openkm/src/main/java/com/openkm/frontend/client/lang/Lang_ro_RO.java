@@ -136,6 +136,7 @@ public class Lang_ro_RO {
 			lang.put("general.menu.file.cancel.checkout", "Anulare marcare in editare");
 			lang.put("general.menu.file.delete", "Stergere");
 			lang.put("general.menu.file.refresh", "Reincarcare");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Unelte");
 	    	lang.put("general.menu.tools.languages", "Alte limbi");
 	    	lang.put("general.menu.tools.skin", "Teme aspect");
