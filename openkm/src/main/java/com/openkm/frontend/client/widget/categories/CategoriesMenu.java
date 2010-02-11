@@ -21,11 +21,16 @@
 
 package com.openkm.frontend.client.widget.categories;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
+import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.MenuBase;
 
 /**
@@ -36,32 +41,82 @@ import com.openkm.frontend.client.widget.MenuBase;
  */
 public class CategoriesMenu extends MenuBase {
 	
+	private boolean renameOption 		= false;
+	
+	private boolean rootNode 			= true;  // Indicates root node selected ( option menu are specific on this case ).
+	
 	private MenuBar dirMenu;
+	
+	private MenuItem rename;
 	
 	public CategoriesMenu() {
 		// The item selected must be called on style.css : .okm-MenuBar .gwt-MenuItem-selected
 		
 		// First initialize language values
 		dirMenu = new MenuBar(true);
+		rename = new MenuItem(Util.menuHTML("img/icon/actions/rename.gif", Main.i18n("tree.menu.directory.rename")), true, renFolder);
+		rename.addStyleName("okm-MenuItem-strike");
+		dirMenu.addItem(rename);
+		dirMenu.setStyleName("okm-MenuBar");
 		initWidget(dirMenu);
 	}
 	
+	// Command menu to rename a new Directory
+	Command renFolder = new Command() {
+		public void execute() {
+			if (renameOption) {
+				Main.get().activeFolderTree.rename();
+				Main.get().activeFolderTree.hideMenuPopup();
+			}
+		}
+	};
+	
 	@Override
-	public void langRefresh() {}
+	public void langRefresh() {
+		rename.setHTML(Util.menuHTML("img/icon/actions/delete.gif", Main.i18n("tree.menu.directory.remove")));
+	}
+	
 	@Override
-	public void evaluateMenuOptions() {}
+	public void evaluateMenuOptions() {
+		if (renameOption) {enable(rename);} else {disable(rename);}
+	}
+	
 	@Override
-	public void enableRootMenuOptions() {}
+	public void enableRootMenuOptions() {
+		rootNode	 = true;
+		renameOption = false;
+	}
+	
 	@Override
-	public void enableAllMenuOptions() {}
+	public void enableAllMenuOptions() {
+		rootNode		= false;
+		renameOption 	= true;
+	}
+	
 	@Override
-	public void disableAllMenuOption() {}
+	public void disableAllMenuOption() {
+		renameOption 	= false;
+	}
+	
+	@Override
+	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
+		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {			
+			// Evaluates root node case
+			if (rootNode) {
+				renameOption = false;
+			} else if ((folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE){
+				renameOption = true;
+			} else {
+				renameOption = false;
+			}
+		} else {
+			renameOption = false;
+		}
+	}
+	
 	@Override
 	public void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder) {}
+	
 	@Override
 	public void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder) {}
-	@Override
-	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {}
-	public void hide() {}
-	public void show() {}
 }

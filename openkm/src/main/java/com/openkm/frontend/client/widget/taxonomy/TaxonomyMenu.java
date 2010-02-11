@@ -46,7 +46,7 @@ public class TaxonomyMenu extends MenuBase {
 	private boolean removeOption 		= false;
 	private boolean renameOption 		= false;
 	private boolean moveOption 			= false;
-	private boolean copyOption 		= false;
+	private boolean copyOption 			= false;
 	private boolean addDocumentOption 	= true;
 	private boolean addBookmarkOption	= false;
 	private boolean setHomeOption		= false;

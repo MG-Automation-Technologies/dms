@@ -509,6 +509,7 @@ public class ExtendedDockPanel extends Composite {
 									(Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY ||
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL || 		
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES ||
+									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES ||
 									 Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL)) {
 									
 									Main.get().activeFolderTree.rename();
