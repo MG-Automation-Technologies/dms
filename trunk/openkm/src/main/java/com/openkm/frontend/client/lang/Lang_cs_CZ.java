@@ -135,6 +135,7 @@ public class Lang_cs_CZ {
 			lang.put("general.menu.file.cancel.checkout", "Zrušit check out");
 			lang.put("general.menu.file.delete", "Odstranit");
 			lang.put("general.menu.file.refresh", "Obnovit");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Nástroje");
 	    	lang.put("general.menu.tools.languages", "Jazyky");
 	    	lang.put("general.menu.tools.skin", "Šablona vzhledu");
