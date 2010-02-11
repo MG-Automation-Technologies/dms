@@ -298,21 +298,6 @@ public final class Main implements EntryPoint{
 		startUp.init();
 	}
 	
-	native void initJavaScriptApi() /*-{
-    	// define a static JS function with a friendly name
-    	$wnd.i18n = function(s) {
-    	 	return @com.openkm.frontend.client.Main::i18n(Ljava/lang/String;)(s);
-    	};
-    	
-    	$wnd.propertyGroupI18n = function(s) {
-    	 	return @com.openkm.frontend.client.Main::propertyGroupI18n(Ljava/lang/String;)(s);
-    	};
-    	
-    	$wnd.refresh = function(s) {
-    		return @com.openkm.frontend.client.Main::refresh(Ljava/lang/String;)(s);
-    	}
-    }-*/;
-	
 	/**
 	 * Refresh language
 	 * 
@@ -431,4 +416,22 @@ public final class Main implements EntryPoint{
 		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		return "";
 	}
+	
+	/**
+	 * initJavaScriptApi
+	 */
+	native void initJavaScriptApi() /*-{
+	// define a static JS function with a friendly name
+	$wnd.i18n = function(s) {
+	 	return @com.openkm.frontend.client.Main::i18n(Ljava/lang/String;)(s);
+	};
+	
+	$wnd.propertyGroupI18n = function(s) {
+	 	return @com.openkm.frontend.client.Main::propertyGroupI18n(Ljava/lang/String;)(s);
+	};
+	
+	$wnd.refresh = function(s) {
+		return @com.openkm.frontend.client.Main::refresh(Ljava/lang/String;)(s);
+	}
+}-*/;
 }
