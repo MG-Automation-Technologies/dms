@@ -41,11 +41,13 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -97,7 +99,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	private HTML removeSubscription;
 	private HTML home;
 	private HTML refresh;
-	private HTML applet;
+	private HTML scanner;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
@@ -465,6 +467,20 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	};
 	
 	/**
+	 * Scanner Handler
+	 */
+	ClickHandler scannerHandler = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
+			if (toolBarOption.scannerOption ) {
+				Window.alert("aqui");
+				runScannerApplet("1.6",Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
+				Window.alert("disparat");
+			}
+		}
+	};
+	
+	/**
 	 * Refreshing workspace
 	 */
 	public void executeRefresh() {
@@ -584,7 +600,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		removeSubscription = new HTML(Util.imageHTML("img/icon/actions/remove_subscription_disabled.gif",Main.i18n("filebrowser.menu.remove.subscription")));
 		home  = new HTML(Util.imageHTML("img/icon/actions/bookmark_go.gif",Main.i18n("general.menu.bookmark.home"))); 
 		refresh  = new HTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
-		applet = new HTML("");
+		scanner  = new HTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
 		
 		createFolder.addClickHandler(createFolderHandler);
 		findFolder.addClickHandler(findFolderHandler);
@@ -604,6 +620,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		removeSubscription.addClickHandler(removeSubscriptionHandler);
 		home.addClickHandler(arrowHomeHandler);
 		refresh.addClickHandler(arrowRefreshHandler);
+		scanner.addClickHandler(scannerHandler);
 		
 		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
@@ -657,6 +674,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		home.addMouseOutHandler(mouseOutHandler);
 		refresh.addMouseOverHandler(mouseOverHandler);
 		refresh.addMouseOutHandler(mouseOutHandler);
+		scanner.addMouseOverHandler(mouseOverHandler);
+		scanner.addMouseOutHandler(mouseOutHandler);
 		
 		createFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
@@ -676,6 +695,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		removeSubscription.setStyleName("okm-ToolBar-button-disabled");
 		home.setStyleName("okm-ToolBar-button-disabled");
 		refresh.setStyleName("okm-ToolBar-button-disabled");
+		scanner.setStyleName("okm-ToolBar-button-disabled");
 		
 		panel = new HorizontalPanel();
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
@@ -718,7 +738,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		panel.add(refresh);
 		panel.add(home);
 		panel.add(separator());
-		panel.add(applet);
+		panel.add(scanner);
 		
 		initWidget(panel);
 	}
@@ -749,6 +769,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableCopy();
 			disableMove();
 			disableAddNote();
+			disableScanner();
 			
 			// On folder parent don't enables subscription
 			if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
@@ -792,6 +813,15 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				} else {
 					disableDelete();
 				}
+				
+				// Enable scanner button
+				if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
+					enableScanner();
+				}
+				
 			} else {
 				if (originPanel != FILE_BROWSER) {
 					disableCreateDirectory();
@@ -855,6 +885,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableMove();
 			disableExport();
 			disableAddNote();
+			disableScanner();
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
@@ -896,6 +927,13 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
 							getAllGroups(); // Evaluates enable or disable property group buttons
+						}
+						// Enable scanner button
+						if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
+							enableScanner();
 						}
 					} else {
 						disableDelete();
@@ -1014,6 +1052,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableWorkflow();
 			disableAddDocument();
 			disableAddNote();
+			disableScanner();
 			
 			if ((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 
@@ -1406,6 +1445,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
+	 * Disables scanner
+	 */
+	public void disableScanner() {
+		toolBarOption.scannerOption = false;
+		scanner.setStyleName("okm-ToolBar-button-disabled");
+		scanner.setHTML(Util.imageHTML("img/icon/actions/scanner_disabled.gif",Main.i18n("general.menu.file.scanner")));
+	}
+	
+	/**
+	 * Enables scanner 
+	 */
+	public void enableScanner() {
+		toolBarOption.scannerOption = true;
+		scanner.setStyleName("okm-ToolBar-button");
+		scanner.setHTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
+	}
+	
+	/**
 	 * Disables fired property group 
 	 */
 	public void disableFiredRemovePropertyGroup() {
@@ -1496,7 +1553,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultRootToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= true;
+		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1520,6 +1577,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1530,7 +1588,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultCategoriesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= true;
+		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1554,6 +1612,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1564,7 +1623,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultThesaurusToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1588,6 +1647,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1598,7 +1658,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultTrashToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1622,6 +1682,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1632,7 +1693,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultTemplatesToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= true;
+		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1656,6 +1717,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1666,7 +1728,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultMyDocumentsToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= true;
+		tmpToolBarOption.createFolderOption				= true;
 		tmpToolBarOption.findFolderOption				= true;
 		tmpToolBarOption.addDocumentOption 				= true;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1690,6 +1752,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1724,6 +1787,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1734,7 +1798,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultDashboardToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1758,6 +1822,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1768,7 +1833,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public ToolBarOption getDefaultAdministrationToolBar() {
 		ToolBarOption tmpToolBarOption = new ToolBarOption();
-		tmpToolBarOption.createFolderOption			= false;
+		tmpToolBarOption.createFolderOption				= false;
 		tmpToolBarOption.findFolderOption				= false;
 		tmpToolBarOption.addDocumentOption 				= false;
 		tmpToolBarOption.checkoutOption 				= false;
@@ -1792,6 +1857,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.exportOption					= false;
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1824,6 +1890,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		if (toolBarOption.removeSubscription){ enableRemoveSubscription(); } else { disableRemoveSubscription(); }
 		if (toolBarOption.homeOption){ enableHome(); } else { disableHome(); }
 		if (toolBarOption.refreshOption){ enableRefresh(); } else { disableRefresh(); }
+		if (toolBarOption.scannerOption){ enableScanner(); } else { disableScanner(); }
 	}
 	
 	/**
@@ -2092,12 +2159,33 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 * Create html applet code 
 	 */
 	public void setApplet(String token, String path) {
-		applet.setHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
-				"<param name=\"token\" value=\""+token+"\">"+
-				"<param name=\"path\" value=\""+path+"\">"+
-				//"<param name=\"separate_jvm\" value=\"true\">"+
-				"</applet>");
+//		Widget scannerApplet = RootPanel.get("appletScanner");
+//		scannerApplet.setVisible(false);
+//		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
+//				"<param name=\"token\" value=\""+token+"\">"+
+//				"<param name=\"path\" value=\""+path+"\">"+
+//				//"<param name=\"separate_jvm\" value=\"true\">"+
+//				"</applet>");
+//		String javaScript = "<script>\n";
+//		javaScript += "var attributes = { code:'com.openkm.applet.Scanner.class', archive:'../scanner.jar', width:15, height:15};\n";
+//		javaScript += "var parameters = { codebase_lookup:'true' };\n";
+//		javaScript += "var version = '1.6';\n";
+//		javaScript += "</script>\n";
+//		javaScript += "deployJava.runApplet(attributes, parameters, version);\n";
+//		scannerApplet.getElement().setInnerHTML(javaScript);
 	}
+	
+
+	/**
+	 * runScannerApplet
+	 * 
+	 * @param version
+	 * @param okmPath
+	 * @param okmToken
+	 */
+	public static native void runScannerApplet(String version, String okmPath, String okmToken) /*-{
+		new $wnd.runScannerApplet(version, okmPath, okmToken);
+	}-*/;
 
 	/**
 	 * Set current repository path
