@@ -41,13 +41,16 @@ public class Util {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
-			ImageIO.write(image, "fileType", baos);
-			baos.flush();
+			if (ImageIO.write(image, "fileType", baos)) {
+				baos.flush();
 
-			BindingProvider bp = (BindingProvider)okmDocument; 
-			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
-			doc.setPath(path + "/" + fileName + "." + fileType);
-			okmDocument.create(token, doc, baos.toByteArray());
+				BindingProvider bp = (BindingProvider)okmDocument; 
+				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
+				doc.setPath(path + "/" + fileName + "." + fileType);
+				okmDocument.create(token, doc, baos.toByteArray());
+			} else {
+				log.warning("Not appropiated writer found!");
+			}
 		} finally {
 			if (baos != null) {
 				baos.close();
