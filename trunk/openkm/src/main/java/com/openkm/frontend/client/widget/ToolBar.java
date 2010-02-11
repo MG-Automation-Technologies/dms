@@ -473,9 +473,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.scannerOption ) {
-				Window.alert("aqui");
-				//runScannerApplet("1.6",Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
-				Window.alert("disparat");
+				Window.alert("aqui 1");
+				setApplet(Main.get().activeFolderTree.getActualPath(),Main.get().workspaceUserProperties.getWorkspace().getToken());
+				Window.alert("disparat 2");
 			}
 		}
 	};
@@ -2159,20 +2159,15 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 * Create html applet code 
 	 */
 	public void setApplet(String token, String path) {
-//		Widget scannerApplet = RootPanel.get("appletScanner");
-//		scannerApplet.setVisible(false);
-//		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
-//				"<param name=\"token\" value=\""+token+"\">"+
-//				"<param name=\"path\" value=\""+path+"\">"+
-//				//"<param name=\"separate_jvm\" value=\"true\">"+
-//				"</applet>");
-//		String javaScript = "<script>\n";
-//		javaScript += "var attributes = { code:'com.openkm.applet.Scanner.class', archive:'../scanner.jar', width:15, height:15};\n";
-//		javaScript += "var parameters = { codebase_lookup:'true' };\n";
-//		javaScript += "var version = '1.6';\n";
-//		javaScript += "</script>\n";
-//		javaScript += "deployJava.runApplet(attributes, parameters, version);\n";
-//		scannerApplet.getElement().setInnerHTML(javaScript);
+		Widget scannerApplet = RootPanel.get("scannerApplet");
+		//scannerApplet.setVisible(true);
+		scannerApplet.setSize("20", "20");
+		panel.add(scannerApplet);
+		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
+				"<param name=\"token\" value=\""+token+"\">"+
+				"<param name=\"path\" value=\""+path+"\">"+
+				"</applet>");
+		//scannerApplet.setVisible(false);
 	}
 
 	/**
