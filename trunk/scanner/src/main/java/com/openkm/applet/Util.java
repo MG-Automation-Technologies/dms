@@ -41,7 +41,7 @@ public class Util {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
-			if (ImageIO.write(image, "fileType", baos)) {
+			if (ImageIO.write(image, fileType, baos)) {
 				baos.flush();
 
 				BindingProvider bp = (BindingProvider)okmDocument; 
