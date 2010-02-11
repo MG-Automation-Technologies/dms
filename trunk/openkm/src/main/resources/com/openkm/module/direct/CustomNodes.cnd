@@ -18,6 +18,7 @@
 [okm:resource] > nt:resource, mix:versionable
 - okm:size (long) mandatory
 - okm:author (string) mandatory
+- okm:text (string) = '' autocreated mandatory
 - okm:versionComment (string) copy
 
 [okm:note]
@@ -32,8 +33,8 @@
 - okm:author (string) mandatory
 - okm:name (string) mandatory
 - okm:language (string)
-- okm:compactable (boolean) mandatory
-- okm:training (boolean) mandatory
+- okm:compactable (boolean) = false autocreated mandatory
+- okm:training (boolean) = false autocreated mandatory
 - okm:keywords (string) multiple mandatory
 - okm:categories (reference) multiple mandatory
 + okm:content (okm:resource) primary mandatory
