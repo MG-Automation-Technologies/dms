@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import javax.xml.ws.BindingProvider;
+
 import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.Document;
 import com.openkm.ws.client.FileSizeExceededException_Exception;
@@ -37,7 +39,7 @@ public class Util {
 			AccessDeniedException_Exception, FileSizeExceededException_Exception, IOException_Exception,
 			ItemExistsException_Exception, PathNotFoundException_Exception, RepositoryException_Exception,
 			UnsupportedMimeTypeException_Exception, VirusDetectedException_Exception {
-		log.info("uploadDocument(" + token + ", " + path + ", " + url + ", " + file);
+		log.info("uploadDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
 
 		OKMDocumentService okmDocumentService = new OKMDocumentService();
 		OKMDocument okmDocument = okmDocumentService.getOKMDocumentPort();
@@ -53,6 +55,8 @@ public class Util {
 				baos.write(buffer, 0, n);
 			}
 
+			BindingProvider bp = ((BindingProvider) okmDocument);
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 			doc.setPath(path + "/" + file.getName());
 			okmDocument.create(token, doc, baos.toByteArray());
 		} finally {
@@ -71,12 +75,13 @@ public class Util {
 	public static void createFolder(String token, String path, String url, File file) throws IOException,
 			AccessDeniedException_Exception, ItemExistsException_Exception, PathNotFoundException_Exception,
 			RepositoryException_Exception {
-		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file);
+		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
 
 		OKMFolderService okmFolderService = new OKMFolderService();
 		OKMFolder okmFolder = okmFolderService.getOKMFolderPort();
 		Folder fld = new Folder();
 
+		((BindingProvider) okmFolder).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 		fld.setPath(path + "" + file.getName());
 		okmFolder.create(token, fld);
 	}

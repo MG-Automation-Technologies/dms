@@ -209,7 +209,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			if (file.isFile()) {
 				Util.createDocument(token, path, url, file);
 			} else if (file.isDirectory()) {
-				createDocumentHelper(token, path, url, file);
+				Util.createFolder(token, path, url, file);
+				createDocumentHelper(token, path+"/"+file.getName(), url, file);
 			}
 		} catch (VirusDetectedException_Exception e) {
 			log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
@@ -247,14 +248,14 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private static void createDocumentHelper(String token, String path, String url, File fs)
 			throws IOException, AccessDeniedException_Exception, PathNotFoundException_Exception,
 			RepositoryException_Exception, IOException_Exception {
-		log.info("uploadDocumentHelper(" + token + ", " + fs + ", " + path + ")");
+		log.info("uploadDocumentHelper(" + token + ", " + path + ", " + url + ", " + fs + ")");
 		File[] files = fs.listFiles();
 
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isDirectory()) {
 				try {
 					Util.createFolder(token, path, url, files[i]);
-					createDocumentHelper(token, path+"/"+files[i], url, files[i]);
+					createDocumentHelper(token, path+"/"+files[i].getName(), url, files[i]);
 				} catch (ItemExistsException_Exception e) {
 					log.warning("ItemExistsException: " + e.getMessage());
 				}
