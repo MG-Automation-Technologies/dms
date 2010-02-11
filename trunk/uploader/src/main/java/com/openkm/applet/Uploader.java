@@ -57,15 +57,8 @@ public class Uploader extends JApplet {
 	 */
 	private void createGUI() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		JFrame main = new MainFrame(this);
+		JFrame main = new MainFrame(token, path, url);
 		main.setVisible(true);
 		main.setResizable(false);
-	}
-
-	/**
-	 * Set current repository path
-	 */
-	public void setPath(String path) {
-		log.info("setPath -> " + path);
 	}
 }
