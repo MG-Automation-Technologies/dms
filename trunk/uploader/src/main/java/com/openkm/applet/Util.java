@@ -83,7 +83,7 @@ public class Util {
 
 		BindingProvider bp = (BindingProvider) okmFolder;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMFolder");
-		fld.setPath(path + "" + file.getName());
+		fld.setPath(path + "/" + file.getName());
 		okmFolder.create(token, fld);
 	}
 
