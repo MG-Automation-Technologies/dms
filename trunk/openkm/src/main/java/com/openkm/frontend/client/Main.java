@@ -412,7 +412,8 @@ public final class Main implements EntryPoint{
 	/**
 	 * Called from scanner applet
 	 */
-	public static String refresh(String s) {
+	public static String refresh() {
+		Window.alert("Refreshing...");
 		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		return "";
 	}
@@ -431,7 +432,7 @@ public final class Main implements EntryPoint{
 		};
 		
 		$wnd.refresh = function(s) {
-			return @com.openkm.frontend.client.Main::refresh(Ljava/lang/String;)(s);
+			return @com.openkm.frontend.client.Main::refresh()(s);
 		}
 	}-*/;
 }
