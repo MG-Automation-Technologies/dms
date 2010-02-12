@@ -12,7 +12,7 @@
 		<link type="text/css" rel="alternate stylesheet" href="mediumfont.css" title="mediumfont">
 		<script type="text/javascript" src="/OpenKM/js/mediaplayer/swfobject.js"></script>
 		<script type="text/javascript" src="/OpenKM/js/deploy/deployJava.js"></script>
-		<script language="JavaScript">
+		<script language="JavaScript"><!--
 			// Disable contextual menus in NS 4.
 			function right(e) {
 				if (navigator.appName == 'Netscape' && (e.which == 3 || e.which ==2)) {
@@ -39,9 +39,9 @@
 				}
 			}
 
-			function destroyScannerApplet() {
-				alert('destroyScannerApplet');
-			}
+			//function destroyScannerApplet() {
+				//alert('destroyScannerApplet');
+			//}
 
 			function destroyUploaderApplet() {
 				alert('destroyUploaderApplet');
@@ -70,7 +70,7 @@
 	
 			document.onmousedown=right;
 			document.oncontextmenu=context;
-		</script>
+		--></script>
 	</head>
 	<body>
 		<script language="javascript" src="com.openkm.frontend.Main.nocache.js"></script>
