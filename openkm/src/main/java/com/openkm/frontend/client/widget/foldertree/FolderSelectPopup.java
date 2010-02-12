@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -65,6 +64,7 @@ public class FolderSelectPopup extends DialogBox  {
 	public static final int ENTRYPOINT_TRASH		= 5;
 	public static final int ENTRYPOINT_MAIL			= 6;
 	public static final int ENTRYPOINT_MAIL_ATTACH	= 7;
+	public static final int ENTRYPOINT_CATEGORIES	= 8;
 	
 	public static final int ACTION_NONE					= -1;
 	public static final int ACTION_MOVE 				= 0;
@@ -116,10 +116,7 @@ public class FolderSelectPopup extends DialogBox  {
 		contextTxt = new HTML(Main.i18n("search.context"));
 		contextListBox = new ListBox();
 		contextListBox.setStyleName("okm-Select");
-		contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
-		contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
-		contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
-		contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+		
 		contextListBox.addChangeHandler(new ChangeHandler(){
 			@Override
 			public void onChange(ChangeEvent event) {
@@ -340,10 +337,14 @@ public class FolderSelectPopup extends DialogBox  {
 			actionButton.setText(Main.i18n("button.move"));
 		}
 		
-		contextListBox.setItemText(0,Main.i18n("leftpanel.label.taxonomy"));
-		contextListBox.setItemText(1,Main.i18n("leftpanel.label.templates"));
-		contextListBox.setItemText(2,Main.i18n("leftpanel.label.my.documents"));
-		contextListBox.setItemText(3,Main.i18n("leftpanel.label.mail"));
+		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
+			contextListBox.setItemText(0,Main.i18n("leftpanel.label.taxonomy"));
+			contextListBox.setItemText(1,Main.i18n("leftpanel.label.templates"));
+			contextListBox.setItemText(2,Main.i18n("leftpanel.label.my.documents"));
+			contextListBox.setItemText(3,Main.i18n("leftpanel.label.mail"));
+		} else {
+			contextListBox.setItemText(0,Main.i18n("leftpanel.label.categories"));
+		}
 	}
 	
 	/**
@@ -375,6 +376,7 @@ public class FolderSelectPopup extends DialogBox  {
 				case ENTRYPOINT_TRASH :
 				case ENTRYPOINT_MAIL :
 				case ENTRYPOINT_MY_DOCUMENTS :
+				case ENTRYPOINT_CATEGORIES :
 					Main.get().activeFolderTree.deleteMovedOrRestored();
 					break;
 					
@@ -409,7 +411,15 @@ public class FolderSelectPopup extends DialogBox  {
 								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
+								break;
 							case PanelDefinition.NAVIGATOR_MAIL:
+								Main.get().mainPanel.navigator.mailTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								 																	 // has been moved and on restore
+								 																	 // view ( refreshing ) needs new path
+							
+								break;
+							case PanelDefinition.NAVIGATOR_CATEGORIES:
 								Main.get().mainPanel.navigator.mailTree.evaluesFolderIcon(parentItem);
 								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
@@ -673,7 +683,15 @@ public class FolderSelectPopup extends DialogBox  {
 	 * 
 	 * @param entryPoint The entryPoint value
 	 */
-	public void setEntryPoint(int entryPoint){
+	public void setEntryPoint(int entryPoint) {
+		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
+			contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
+			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
+			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
+			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+		} else {
+			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+PanelDefinition.NAVIGATOR_CATEGORIES);
+		}
 		this.entryPoint = entryPoint;
 	}
 	
@@ -713,6 +731,13 @@ public class FolderSelectPopup extends DialogBox  {
 	 */
 	public void enableMails() {
 		contextListBox.setItemSelected(3,true);
+	}
+	
+	/**
+	 * Enable categories
+	 */
+	public void enableCategories() {
+		contextListBox.setItemSelected(0,true);
 	}
 	
 	/**
@@ -779,5 +804,14 @@ public class FolderSelectPopup extends DialogBox  {
 		status.setStyleName("fancyfileupload-failed");
 		status.setVisible(true);
 		initButtons();
+	}
+	
+	/**
+	 * removeAllContextListItems
+	 */
+	private void removeAllContextListItems() {
+		while (contextListBox.getItemCount()>0) {
+			contextListBox.removeItem(0);
+		}
 	}
 }
