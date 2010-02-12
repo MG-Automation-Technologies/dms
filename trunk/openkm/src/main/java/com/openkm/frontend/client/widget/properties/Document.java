@@ -760,7 +760,7 @@ public class Document extends Composite {
 		int row = tableSubscribedCategories.getRowCount();
 		Hyperlink hlink = new Hyperlink();
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
-		String path = category.getPath().substring(category.getPath().indexOf("/okm:categories/"));
+		String path = category.getPath().substring(16); // Removes /okm:categories
 		if (category.getHasChilds()) {
 			hlink.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
 		} else {
