@@ -27,7 +27,7 @@ public class Client {
 		try {
 			OKMAuthService okmAuthService = new OKMAuthService();
 			OKMAuth okmAuth = okmAuthService.getOKMAuthPort();
-			String token = okmAuth.login("user", "pass");
+			String token = okmAuth.login("okmAdmin", "admin");
 			log.info("Es: "+token);
 						
 			OKMDocumentService okmDocumentService = new OKMDocumentService();
