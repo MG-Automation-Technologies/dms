@@ -120,6 +120,11 @@ public class FolderSelectTree extends Composite {
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
 				getRoot();
 				break;
+			
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
+				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
+				getCategories();
+				break;
 				
 			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				switch (Main.get().activeFolderTree.folderSelectPopup.getAction()) {
@@ -164,6 +169,11 @@ public class FolderSelectTree extends Composite {
 				Main.get().activeFolderTree.folderSelectPopup.enableTaxonomy();
 			case PanelDefinition.NAVIGATOR_TRASH :
 				getRoot();
+				break;
+				
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
+				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
+				getTemplate();
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TEMPLATES :
@@ -314,6 +324,7 @@ public class FolderSelectTree extends Composite {
 			//We put the id on root
 			GWTFolder folderItem = result;
 			
+			
 			actualItem.setUserObject(folderItem);
 			evaluesFolderIcon(actualItem);			
 			actualItem.setState(true);
@@ -357,6 +368,32 @@ public class FolderSelectTree extends Composite {
 	};
 	
 	/**
+	 * Gets asyncronous gategories documents node
+	 */
+	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
+			// Only executes on initalization and the actualItem is root 
+			// element on initialization
+			//We put the id on root
+			GWTFolder folderItem = result;
+			
+			actualItem.setUserObject(folderItem);
+			evaluesFolderIcon(actualItem);			
+			actualItem.setState(true);
+			actualItem.setSelected(true);
+			
+			// Enables or disables move buttom ( evalues security to move to folder with permissions )
+			evaluateSecurityToAction(actualItem);
+			
+			getChilds(((GWTFolder) result).getPath());
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("GetCategories", caught);
+		}
+	};
+	
+	/**
 	 * Gets the personal documents
 	 */
 	public void getPersonal() {
@@ -364,6 +401,16 @@ public class FolderSelectTree extends Composite {
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getPersonal(callbackGetPersonal);
 	}
+	
+	/**
+	 * Gets the categories documents
+	 */
+	public void getCategories() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		repositoryService.getCategories(callbackGetCategories);
+	}				
+	
 	
 	/**
 	 * Gets the template

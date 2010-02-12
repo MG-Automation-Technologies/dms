@@ -22,7 +22,9 @@
 package com.openkm.frontend.client.widget.categories;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.widget.MenuPopup;
+import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.startup.StartUp;
 
@@ -68,6 +70,11 @@ public class CategoriesTree extends FolderTree {
 	 * Move folder on file browser ( only trash mode )
 	 */
 	public void move() {
+		GWTFolder folderToRestore = (GWTFolder) actualItem.getUserObject();
+		folderSelectPopup.setEntryPoint(FolderSelectPopup.ENTRYPOINT_CATEGORIES);
+		folderSelectPopup.setToMove(folderToRestore);
+		showDirectorySelectPopup();
+		hideMenuPopup();
 	}
 	
 	/**
