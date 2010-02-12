@@ -15,9 +15,7 @@ public class Applet extends JApplet implements ActionListener {
 	
 	public Applet() {}
 
-	/* (non-Javadoc)
-	 * @see java.applet.Applet#init()
-	 */
+	@Override
 	public void init() {
 		try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -30,9 +28,7 @@ public class Applet extends JApplet implements ActionListener {
         }
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.applet.Applet#destroy()
-	 */
+	@Override
 	public void destroy() {
 		System.out.println("Bye!");
 	}
@@ -46,9 +42,7 @@ public class Applet extends JApplet implements ActionListener {
 		add(hi);
 	}
 
-	/**
-	 * @param ae
-	 */
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
 			//Scanner device = Scanner.getDevice();
