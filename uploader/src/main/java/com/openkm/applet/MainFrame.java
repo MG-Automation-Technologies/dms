@@ -185,6 +185,11 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 				dtde.dropComplete(true);
 				getContentPane().setBackground(Color.LIGHT_GRAY);
+				
+				// Refresh file list
+				log.fine("--- refresh - begin ---");
+				win.call("refresh", new Object[] {});
+				log.fine("--- refresh - end ---");
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 				getContentPane().setBackground(Color.RED);
@@ -197,6 +202,11 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 				dtde.dropComplete(true);
 				getContentPane().setBackground(Color.LIGHT_GRAY);
+				
+				// Refresh file list
+				log.fine("--- refresh - begin ---");
+				win.call("refresh", new Object[] {});
+				log.fine("--- refresh - end ---");
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
