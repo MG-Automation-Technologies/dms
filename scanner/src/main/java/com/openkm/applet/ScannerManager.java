@@ -100,7 +100,7 @@ public class ScannerManager implements ScannerListener {
 
 				// Refresh file list
 				log.fine("--- refresh - begin ---");
-				win.call("refresh", new Object[] { "xxx" });
+				win.call("refresh", new Object[] {});
 				log.fine("--- refresh - end ---");
 			} catch (VirusDetectedException_Exception e) {
 				log.log(Level.SEVERE, "VirusDetectedException: " + e.getMessage(), e);
