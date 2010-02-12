@@ -286,7 +286,7 @@ public final class Main implements EntryPoint{
 			}
 		});
 	    
-	    initJavaScriptApi();
+	    
 		
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel
@@ -296,6 +296,10 @@ public final class Main implements EntryPoint{
 		startUpPopup.show();
 		startUp = new StartUp();
 		startUp.init();
+		
+		// Auto-publish the method into JS when the GWT module loads.
+		initJavaScriptApi();
+		mainPanel.topPanel.toolBar.initJavaScriptApi(mainPanel.topPanel.toolBar);
 	}
 	
 	/**
@@ -413,7 +417,6 @@ public final class Main implements EntryPoint{
 	 * Called from scanner applet
 	 */
 	public static String refresh() {
-		Window.alert("Refreshing...");
 		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		return "";
 	}

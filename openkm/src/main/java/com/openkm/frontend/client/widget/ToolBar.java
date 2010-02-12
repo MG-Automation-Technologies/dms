@@ -1,5 +1,4 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -473,7 +472,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.scannerOption ) {
 				setApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
-						Main.get().activeFolderTree.getActualPath());
+						  Main.get().activeFolderTree.getActualPath());
 			}
 		}
 	};
@@ -2158,16 +2157,23 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public void setApplet(String token, String path) {
 		Widget scannerApplet = RootPanel.get("scannerApplet");
-		//scannerApplet.setVisible(true);
-		scannerApplet.setSize("20", "20");
+		scannerApplet.setSize("1", "1");
 		panel.add(scannerApplet);
-		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"20\" height=\"20\" mayscript archive=\"../scanner.jar\">"+
+		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"+
 				"<param name=\"token\" value=\""+token+"\">"+
 				"<param name=\"path\" value=\""+path+"\">"+
 				"</applet>");
-		//scannerApplet.setVisible(false);
 	}
 
+	/**
+	 * destroyScannerApplet
+	 */
+	public void destroyScannerApplet() {
+		Widget scannerApplet = RootPanel.get("scannerApplet");
+		panel.remove(scannerApplet);
+		scannerApplet.getElement().setInnerHTML("");
+	}
+	
 	/**
 	 * Set current repository path
 	 */
@@ -2233,4 +2239,14 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
 	    return addDomHandler(handler, MouseWheelEvent.getType());
 	}
+	
+	/**
+	 * initJavaScriptApi
+	 * 
+	 * @param toolBar
+	 */
+	public native void initJavaScriptApi(ToolBar toolBar) /*-{
+	    $wnd.destroyScannerApplet = 
+	      toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyScannerApplet();
+	}-*/;
 }
