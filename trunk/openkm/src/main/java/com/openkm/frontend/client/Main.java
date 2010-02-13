@@ -433,9 +433,5 @@ public final class Main implements EntryPoint{
 		$wnd.propertyGroupI18n = function(s) {
 		 	return @com.openkm.frontend.client.Main::propertyGroupI18n(Ljava/lang/String;)(s);
 		};
-		
-		$wnd.refresh = function(s) {
-			return @com.openkm.frontend.client.Main::refresh()(s);
-		}
 	}-*/;
 }
