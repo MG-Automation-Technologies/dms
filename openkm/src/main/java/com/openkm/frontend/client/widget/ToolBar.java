@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+*  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
  *
@@ -40,6 +40,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -98,6 +99,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	private HTML home;
 	private HTML refresh;
 	private HTML scanner;
+	private HTML uploader;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
@@ -471,7 +473,20 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.scannerOption ) {
-				setApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
+				setScannerApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
+						  Main.get().activeFolderTree.getActualPath());
+			}
+		}
+	};
+	
+	/**
+	 * Upload Handler
+	 */
+	ClickHandler uploaderHandler = new ClickHandler() { 
+		@Override
+		public void onClick(ClickEvent event) {
+			if (toolBarOption.uploaderOption ) {
+				setUploaderApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
 						  Main.get().activeFolderTree.getActualPath());
 			}
 		}
@@ -598,6 +613,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		home  = new HTML(Util.imageHTML("img/icon/actions/bookmark_go.gif",Main.i18n("general.menu.bookmark.home"))); 
 		refresh  = new HTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
 		scanner  = new HTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
+		uploader  = new HTML(Util.imageHTML("img/icon/actions/upload.gif",Main.i18n("general.menu.file.uploader")));
 		
 		createFolder.addClickHandler(createFolderHandler);
 		findFolder.addClickHandler(findFolderHandler);
@@ -618,6 +634,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		home.addClickHandler(arrowHomeHandler);
 		refresh.addClickHandler(arrowRefreshHandler);
 		scanner.addClickHandler(scannerHandler);
+		uploader.addClickHandler(uploaderHandler);
 		
 		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
@@ -673,6 +690,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		refresh.addMouseOutHandler(mouseOutHandler);
 		scanner.addMouseOverHandler(mouseOverHandler);
 		scanner.addMouseOutHandler(mouseOutHandler);
+		uploader.addMouseOverHandler(mouseOverHandler);
+		uploader.addMouseOutHandler(mouseOutHandler);
 		
 		createFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
@@ -693,6 +712,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		home.setStyleName("okm-ToolBar-button-disabled");
 		refresh.setStyleName("okm-ToolBar-button-disabled");
 		scanner.setStyleName("okm-ToolBar-button-disabled");
+		uploader.setStyleName("okm-ToolBar-button-disabled");
 		
 		panel = new HorizontalPanel();
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
@@ -736,6 +756,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		panel.add(home);
 		panel.add(separator());
 		panel.add(scanner);
+		panel.add(uploader);
 		
 		initWidget(panel);
 	}
@@ -767,6 +788,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableMove();
 			disableAddNote();
 			disableScanner();
+			disableUploader();
 			
 			// On folder parent don't enables subscription
 			if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
@@ -817,6 +839,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
 					enableScanner();
+					enableUploader();
 				}
 				
 			} else {
@@ -883,6 +906,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableExport();
 			disableAddNote();
 			disableScanner();
+			disableUploader();
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
@@ -931,6 +955,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
 							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
 							enableScanner();
+							enableUploader();
 						}
 					} else {
 						disableDelete();
@@ -1050,6 +1075,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableAddDocument();
 			disableAddNote();
 			disableScanner();
+			disableUploader();
 			
 			if ((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 
@@ -1460,6 +1486,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
+	 * Disables uploader
+	 */
+	public void disableUploader() {
+		toolBarOption.uploaderOption = false;
+		uploader.setStyleName("okm-ToolBar-button-disabled");
+		uploader.setHTML(Util.imageHTML("img/icon/actions/upload_disabled.gif",Main.i18n("general.menu.file.uploader")));
+	}
+	
+	/**
+	 * Enables uploader 
+	 */
+	public void enableUploader() {
+		toolBarOption.uploaderOption = true;
+		uploader.setStyleName("okm-ToolBar-button");
+		uploader.setHTML(Util.imageHTML("img/icon/actions/upload.gif",Main.i18n("general.menu.file.uploader")));
+	}
+	
+	/**
 	 * Disables fired property group 
 	 */
 	public void disableFiredRemovePropertyGroup() {
@@ -1575,6 +1619,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
+		tmpToolBarOption.uploaderOption					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1610,6 +1655,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1645,6 +1691,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1680,6 +1727,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1715,6 +1763,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1750,6 +1799,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= true;
+		tmpToolBarOption.uploaderOption					= true;
 		return tmpToolBarOption;
 	}
 	
@@ -1785,6 +1835,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1820,6 +1871,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1855,6 +1907,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		tmpToolBarOption.workflowOption					= false;
 		tmpToolBarOption.addNoteOption					= false;
 		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
 		return tmpToolBarOption;
 	}
 	
@@ -1888,6 +1941,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		if (toolBarOption.homeOption){ enableHome(); } else { disableHome(); }
 		if (toolBarOption.refreshOption){ enableRefresh(); } else { disableRefresh(); }
 		if (toolBarOption.scannerOption){ enableScanner(); } else { disableScanner(); }
+		if (toolBarOption.uploaderOption){ enableUploader(); } else { disableUploader(); }
 	}
 	
 	/**
@@ -2153,15 +2207,30 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 
 	/**
-	 * Create html applet code 
+	 * Create html scanner applet code 
 	 */
-	public void setApplet(String token, String path) {
+	public void setScannerApplet(String token, String path) {
 		Widget scannerApplet = RootPanel.get("scannerApplet");
 		scannerApplet.setSize("1", "1");
 		panel.add(scannerApplet);
 		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"+
 				"<param name=\"token\" value=\""+token+"\">"+
 				"<param name=\"path\" value=\""+path+"\">"+
+				"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
+				"</applet>");
+	}
+	
+	/**
+	 * Create html uploader applet code 
+	 */
+	public void setUploaderApplet(String token, String path) {
+		Widget uploaderApplet = RootPanel.get("uploaderApplet");
+		uploaderApplet.setSize("1", "1");
+		panel.add(uploaderApplet);
+		uploaderApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"+
+				"<param name=\"token\" value=\""+token+"\">"+
+				"<param name=\"path\" value=\""+path+"\">"+
+				"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
 				"</applet>");
 	}
 
@@ -2172,6 +2241,16 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		Widget scannerApplet = RootPanel.get("scannerApplet");
 		panel.remove(scannerApplet);
 		scannerApplet.getElement().setInnerHTML("");
+	}
+	
+	/**
+	 * destroyUploaderApplet
+	 */
+	public void destroyUploaderApplet() {
+		Window.alert("destroying uploader");
+		Widget uploadApplet = RootPanel.get("uploaderApplet");
+		panel.remove(uploadApplet);
+		uploadApplet.getElement().setInnerHTML("");
 	}
 	
 	/**
@@ -2246,7 +2325,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 * @param toolBar
 	 */
 	public native void initJavaScriptApi(ToolBar toolBar) /*-{
-	    $wnd.destroyScannerApplet = 
-	      toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyScannerApplet();
+	    $wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyScannerApplet();
+	    $wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyUploaderApplet();
 	}-*/;
 }

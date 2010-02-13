@@ -136,6 +136,7 @@ public class Lang_el_GR {
 			lang.put("general.menu.file.delete", "Διαγραφή");
 			lang.put("general.menu.file.refresh", "Ανανέωση");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Εργαλεία");
 	    	lang.put("general.menu.tools.languages", "Γλώσσες");
 	    	lang.put("general.menu.tools.skin", "Εμφάνιση");

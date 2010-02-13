@@ -136,6 +136,7 @@ public class Lang_bs_BA {
 			lang.put("general.menu.file.delete", "Izbriši");
 			lang.put("general.menu.file.refresh", "Osvježi");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Alati");
 	    	lang.put("general.menu.tools.languages", "Jezici");
 	    	lang.put("general.menu.tools.skin", "Skin");

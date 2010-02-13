@@ -136,6 +136,7 @@ public class Lang_zh_CN {
 			lang.put("general.menu.file.delete", "删除");
 			lang.put("general.menu.file.refresh", "刷新");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "工具");
 	    	lang.put("general.menu.tools.languages", "语言");
 	    	lang.put("general.menu.tools.skin", "皮肤");

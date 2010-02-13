@@ -136,6 +136,7 @@ public class Lang_zh_TW {
 			lang.put("general.menu.file.delete", "刪除");
 			lang.put("general.menu.file.refresh", "重新整理");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "工具");
 	    	lang.put("general.menu.tools.languages", "語系");
 	    	lang.put("general.menu.tools.skin", "外觀");

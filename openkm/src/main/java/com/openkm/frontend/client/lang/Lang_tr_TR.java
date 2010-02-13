@@ -136,6 +136,7 @@ public class Lang_tr_TR {
 			lang.put("general.menu.file.delete", "Sil");
 			lang.put("general.menu.file.refresh", "Yenile");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Araçlar");
 	    	lang.put("general.menu.tools.languages", "Diller");
 	    	lang.put("general.menu.tools.skin", "Arayüz");

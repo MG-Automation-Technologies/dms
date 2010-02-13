@@ -136,6 +136,7 @@ public class Lang_mk_MK {
 			lang.put("general.menu.file.delete", "Избриши");
 			lang.put("general.menu.file.refresh", "Освежи");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Алатки");
 	    	lang.put("general.menu.tools.languages", "Јазици");
 	    	lang.put("general.menu.tools.skin", "Тема");

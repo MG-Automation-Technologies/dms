@@ -136,6 +136,7 @@ public class Lang_it_IT {
 			lang.put("general.menu.file.delete", "Cancella");
 			lang.put("general.menu.file.refresh", "Aggiorna");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Strumenti");
 	    	lang.put("general.menu.tools.languages", "Lingue");
 	    	lang.put("general.menu.tools.skin", "Aspetto");

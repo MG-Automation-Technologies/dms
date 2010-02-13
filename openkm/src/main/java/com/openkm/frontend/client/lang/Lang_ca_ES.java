@@ -136,6 +136,7 @@ public class Lang_ca_ES {
 	    	lang.put("general.menu.file.delete", "Elimina");
 	    	lang.put("general.menu.file.refresh", "Refresca");
 	    	lang.put("general.menu.file.scanner", "Scanner");
+	    	lang.put("general.menu.file.uploader", "Inserció de documents");
 	    lang.put("general.menu.tools", "Eines");
 	    	lang.put("general.menu.tools.languages", "Idiomes");
 	    	lang.put("general.menu.tools.skin", "Aparença");
