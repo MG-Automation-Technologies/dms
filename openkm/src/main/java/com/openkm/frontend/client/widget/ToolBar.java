@@ -49,12 +49,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
@@ -2210,28 +2212,36 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 * Create html scanner applet code 
 	 */
 	public void setScannerApplet(String token, String path) {
-		Widget scannerApplet = RootPanel.get("scannerApplet");
-		scannerApplet.setSize("1", "1");
-		panel.add(scannerApplet);
-		scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"+
-				"<param name=\"token\" value=\""+token+"\">"+
-				"<param name=\"path\" value=\""+path+"\">"+
-				"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
-				"</applet>");
+		if (Util.isJREInstalled()) {
+			Widget scannerApplet = RootPanel.get("scannerApplet");
+			scannerApplet.setSize("1", "1");
+			panel.add(scannerApplet);
+			scannerApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Scanner\" name=\"Scanner\" width=\"1\" height=\"1\" mayscript archive=\"../scanner.jar\">"+
+					"<param name=\"token\" value=\""+token+"\">"+
+					"<param name=\"path\" value=\""+path+"\">"+
+					"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
+					"</applet>");
+		} else {
+			Main.get().showError("setScannerApplet", new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBrowser, ErrorCode.CAUSE_Configuration), "JRE support not detected in your browser"));
+		}
 	}
 	
 	/**
 	 * Create html uploader applet code 
 	 */
 	public void setUploaderApplet(String token, String path) {
-		Widget uploaderApplet = RootPanel.get("uploaderApplet");
-		uploaderApplet.setSize("1", "1");
-		panel.add(uploaderApplet);
-		uploaderApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"+
-				"<param name=\"token\" value=\""+token+"\">"+
-				"<param name=\"path\" value=\""+path+"\">"+
-				"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
-				"</applet>");
+		if (Util.isJREInstalled()) {
+			Widget uploaderApplet = RootPanel.get("uploaderApplet");
+			uploaderApplet.setSize("1", "1");
+			panel.add(uploaderApplet);
+			uploaderApplet.getElement().setInnerHTML("<applet code=\"com.openkm.applet.Uploader\" name=\"Uploader\" width=\"1\" height=\"1\" mayscript archive=\"../uploader.jar\">"+
+					"<param name=\"token\" value=\""+token+"\">"+
+					"<param name=\"path\" value=\""+path+"\">"+
+					"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
+					"</applet>");
+		} else {
+			Main.get().showError("setScannerApplet", new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBrowser, ErrorCode.CAUSE_Configuration), "JRE support not detected in your browser"));
+		}
 	}
 
 	/**

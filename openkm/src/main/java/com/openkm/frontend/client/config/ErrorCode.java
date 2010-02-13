@@ -42,13 +42,13 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMPropertyGroupService		= "009";
 	public static final String ORIGIN_OKMNotifyService 				= "010";
 	public static final String ORIGIN_OKMBookmarkService 			= "011";
-	public static final String ORIGIN_RepositoryServlet				= "012";
+	public static final String ORIGIN_OKMRepositoryServlet			= "012";
 	public static final String ORIGIN_OKMGeneralUtilsServletAdmin	= "013";
 	public static final String ORIGIN_OKMAuthServletAdmin			= "014";
 	public static final String ORIGIN_OKMSearchServiceAdmin			= "015";
 	public static final String ORIGIN_OKMRemoteServiceAdmin			= "016";
 	public static final String ORIGIN_OKMPropertyGroupServiceAdmin	= "017";
-	public static final String ORIGIN_RepositoryServletAdmin		= "018";
+	public static final String ORIGIN_OKMRepositoryServletAdmin		= "018";
 	public static final String ORIGIN_OKMFolderServiceAdmin			= "019";
 	public static final String ORIGIN_OKMDashboardService 			= "020";
 	public static final String ORIGIN_OKMWorkspaceService 			= "021";
@@ -56,6 +56,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMWorkflowUploadServiceAdmin	= "023";
 	public static final String ORIGIN_OKMMailService	 			= "024";
 	public static final String ORIGIN_OKMPropertyService	 		= "025";
+	public static final String ORIGIN_OKMBrowser 					= "026";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -79,6 +80,7 @@ public class ErrorCode {
 	public static final String CAUSE_ParseException				= "019";
 	public static final String CAUSE_InvalidNodeTypeDefException= "020";
 	public static final String CAUSE_SQLException 				= "021";
+	public static final String CAUSE_Configuration 				= "022";
 
 	/**
 	 * Gets the error
