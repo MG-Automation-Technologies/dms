@@ -2327,5 +2327,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public native void initJavaScriptApi(ToolBar toolBar) /*-{
 	    $wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyScannerApplet();
 	    $wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.ToolBar::destroyUploaderApplet();
+	    $wnd.refresh = toolBar.@com.openkm.frontend.client.widget.ToolBar::executeRefresh();
 	}-*/;
 }
