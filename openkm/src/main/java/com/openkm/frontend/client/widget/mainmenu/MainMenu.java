@@ -115,6 +115,7 @@ public class MainMenu extends Composite {
 					private MenuItem russian;
 					private MenuItem bosnian;
 					private MenuItem czech;
+					private MenuItem usa;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -254,6 +255,7 @@ public class MainMenu extends Composite {
 						czech = new MenuItem(Util.menuHTML("img/icon/menu/cs.gif", "Czech"), true, setLangCzech);
 						german = new MenuItem(Util.menuHTML("img/icon/menu/de.gif", "Deutsch"), true, setLangDeutsch);
 						english = new MenuItem(Util.menuHTML("img/icon/menu/en.gif", "English"), true, setLangEnglish);
+						usa = new MenuItem(Util.menuHTML("img/icon/menu/us.gif", "English - Usa"), true, setLangEnglishUSA);
 						spanish = new MenuItem(Util.menuHTML("img/icon/menu/es.gif", "Español"), true, setLangSpanish);
 						colombian = new MenuItem(Util.menuHTML("img/icon/menu/co.gif", "Español Colombia"), true, setLangColombian);
 						farsi = new MenuItem(Util.menuHTML("img/icon/menu/ir.gif", "Farsi"), true, setLangFarsi);
@@ -280,6 +282,7 @@ public class MainMenu extends Composite {
 						czech.addStyleName("okm-MainMenuItem");
 						german.addStyleName("okm-MainMenuItem");
 						english.addStyleName("okm-MainMenuItem");
+						usa.addStyleName("okm-MainMenuItem");
 						spanish.addStyleName("okm-MainMenuItem");
 						colombian.addStyleName("okm-MainMenuItem");
 						farsi.addStyleName("okm-MainMenuItem");
@@ -306,6 +309,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(czech);
 					subMenuLanguage.addItem(german);
 					subMenuLanguage.addItem(english);
+					subMenuLanguage.addItem(usa);
 					subMenuLanguage.addItem(spanish);
 					subMenuLanguage.addItem(colombian);
 					subMenuLanguage.addItem(farsi);
@@ -625,7 +629,14 @@ public class MainMenu extends Composite {
 		}
 	};
 	
-//	 Command menu to set Farsi lang
+	// Command menu to set English USA lang
+	Command setLangEnglishUSA = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_en_US);
+		}
+	};
+	
+	// Command menu to set Farsi lang
 	Command setLangFarsi = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_fa_FA);

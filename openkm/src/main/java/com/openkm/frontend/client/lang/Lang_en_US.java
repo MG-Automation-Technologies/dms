@@ -26,19 +26,19 @@ import java.util.HashMap;
 import com.openkm.frontend.client.config.ErrorCode;
 
 /**
- * English (United Kingdom)
+ * English (USA)
  * 
- * @author Paco Avila
+ * @author Michael bugaev
  */
-public class Lang_en_GB {
+public class Lang_en_US {
 	
 	public final static HashMap<String, String> lang;
 	  static {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "dd-MM-yyyy hh:mm:ss");
-	    lang.put("general.day.pattern", "dd-MM-yyyy");
+	    lang.put("general.date.pattern", "MM-dd-yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "MM-dd-yyyy");
 	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
@@ -107,7 +107,7 @@ public class Lang_en_GB {
 	    lang.put("tree.folder.new", "New folder");
 	    lang.put("tree.status.refresh.add.subscription", "Adding subscription");
 	    lang.put("tree.status.refresh.remove.subscription", "Deleting subscription");
-	    lang.put("tree.status.refresh.get.root", "Refresing root folder");
+	    lang.put("tree.status.refresh.get.root", "Refreshing root folder");
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Getting user home");
 	    lang.put("tree.status.refresh.purge.trash", "Cleaning trash");
@@ -146,7 +146,7 @@ public class Lang_en_GB {
     			lang.put("general.menu.tools.skin.bigfont", "Big font");
     		lang.put("general.menu.debug.console", "Debug console");
     		lang.put("general.menu.administration", "Show administration");
-    		lang.put("general.menu.tools.preferences", "Prefererences");
+    		lang.put("general.menu.tools.preferences", "Preferences");
     			lang.put("general.menu.tools.user.preferences", "User configuration");
     	lang.put("general.menu.bookmark", "Bookmarks");
 	    	lang.put("general.menu.bookmark.home", "Home");
@@ -173,7 +173,7 @@ public class Lang_en_GB {
 	    lang.put("filebrowser.menu.checkin", "Check in");
 	    lang.put("filebrowser.menu.delete", "Delete");
 	    lang.put("filebrowser.menu.rename", "Rename");
-	    lang.put("filebrowser.menu.checkout.cancel", "Check out cancel");
+	    lang.put("filebrowser.menu.checkout.cancel", "Cancel check out");
 	    lang.put("filebrowser.menu.lock", "Lock");
 	    lang.put("filebrowser.menu.unlock", "Unlock");
 	    lang.put("filebrowser.menu.download", "Download");
@@ -184,7 +184,7 @@ public class Lang_en_GB {
 	    lang.put("filebrowser.menu.remove.property.group", "Remove property group");
 	    lang.put("filebrowser.menu.start.workflow", "Start workflow");
 	    lang.put("filebrowser.menu.add.subscription", "Add subscription");
-	    lang.put("filebrowser.menu.remove.subscription", "Remove subscrition");
+	    lang.put("filebrowser.menu.remove.subscription", "Remove subscription");
 	    lang.put("filebrowser.menu.add.bookmark", "Add bookmark");
 	    lang.put("filebrowser.menu.set.home", "Set default home");
 	    lang.put("filebrowser.menu.refresh", "Refresh");
@@ -225,20 +225,20 @@ public class Lang_en_GB {
 	    lang.put("fileupload.button.add.other.file", "Add another file");
 	    lang.put("fileupload.status.move.file", "Moving file...");
 	    lang.put("fileupload.status.move.mail", "Moving mail...");
-	    lang.put("fileupload.status.copy.file", "Coping file...");
-	    lang.put("fileupload.status.copy.mail", "Coping mail...");
+	    lang.put("fileupload.status.copy.file", "Copying file...");
+	    lang.put("fileupload.status.copy.mail", "Copying mail...");
 	    lang.put("fileupload.status.restore.file", "Restoring file...");
 	    lang.put("fileupload.status.restore.mail", "Restoring mail...");
 	    lang.put("fileupload.status.move.folder", "Moving folder...");
-	    lang.put("fileupload.status.copy.folder", "Coping folder...");
+	    lang.put("fileupload.status.copy.folder", "Copying folder...");
 	    lang.put("fileupload.status.restore.folder", "Restoring folder...");
 	    lang.put("fileupload.status.create.from.template", "Creating file from template...");
 	    lang.put("fileupload.status.of", "of");
 	    lang.put("fileupload.label.insert", "Add new documents");
 	    lang.put("fileupload.label.update", "Update documents");
-	    lang.put("fileupload.label.users.notify", "Notify to users");
+	    lang.put("fileupload.label.users.notify", "Notify users");
 	    lang.put("fileupload.label.comment", "Comment");
-	    lang.put("fileupload.label.users.to.notify",  "Users be notified");
+	    lang.put("fileupload.label.users.to.notify",  "Users to be notified");
 	    lang.put("fileupload.label.users",  "Users");
 	    lang.put("fileupload.label.must.select.users",  "You must select some user to notify");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
@@ -246,17 +246,17 @@ public class Lang_en_GB {
 	    lang.put("fileupload.label.error.importing.zip", "Error importing file");
 	    lang.put("fileupload.label.error.move.file", "Error moving file");
 	    lang.put("fileupload.label.error.move.mail", "Error moving mail");
-	    lang.put("fileupload.label.error.copy.file", "Error coping file");
-	    lang.put("fileupload.label.error.copy.mail", "Error coping mail");
+	    lang.put("fileupload.label.error.copy.file", "Error copying file");
+	    lang.put("fileupload.label.error.copy.mail", "Error copying mail");
 	    lang.put("fileupload.label.error.restore.file", "Error restoring file");
 	    lang.put("fileupload.label.error.restore.mail", "Error restoring mail");
 	    lang.put("fileupload.label.error.move.folder", "Error moving folder");
-	    lang.put("fileupload.label.error.copy.folder", "Error coping folder");
+	    lang.put("fileupload.label.error.copy.folder", "Error copying folder");
 	    lang.put("fileupload.label.error.restore.folder", "Error restoring folder");
 	    lang.put("fileupload.label.error.create.from.template", "Error creating file from template");
-	    lang.put("fileupload.label.error.not.allowed.move.folder.child", "Not allowed to move on origin or child folder");
-	    lang.put("fileupload.label.error.not.allowed.copy.same.folder", "Not allowed to move on origin folder");
-	    lang.put("fileupload.label.error.not.allowed.create.from.template.same.folder", "Not allowed to create a file on origin folder");
+	    lang.put("fileupload.label.error.not.allowed.move.folder.child", "Not allowed to move to origin or child folder");
+	    lang.put("fileupload.label.error.not.allowed.copy.same.folder", "Not allowed to move to origin folder");
+	    lang.put("fileupload.label.error.not.allowed.create.from.template.same.folder", "Not allowed to create a file in origin folder");
 	    
 	    // Tab properties
 	    lang.put("tab.document.properties", "Properties");
@@ -270,7 +270,7 @@ public class Lang_en_GB {
 	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Refreshing document history size");
 	    lang.put("tab.document.status.purge.version.history", "Compacting document history");
-	    lang.put("tab.document.status.restore.version", "Restoring document versión");
+	    lang.put("tab.document.status.restore.version", "Restoring document version");
 	    lang.put("tab.document.security", "Security");
 	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Properties");
@@ -279,7 +279,7 @@ public class Lang_en_GB {
 	    // Workspace tabs
 	    lang.put("tab.workspace.desktop", "Desktop");
 	    lang.put("tab.workspace.search", "Search");
-	    lang.put("tab.workspace.dashboard", "DashBoard");
+	    lang.put("tab.workspace.dashboard", "Dashboard");
 	    lang.put("tab.workspace.administration", "Administration");
 	    
 	    //  Document
@@ -364,18 +364,18 @@ public class Lang_en_GB {
 	    
 	    // Confirm
 	    lang.put("confirm.label", "Confirmation");
-	    lang.put("confirm.delete.folder", "¿ Do you really want to delete folder ?");
-	    lang.put("confirm.delete.document", "¿ Do you really want to delete document ?");
-	    lang.put("confirm.delete.trash", "¿ Do you really want to empty trash ?");
-	    lang.put("confirm.purge.folder", "¿ Do you really want to delete folder ?");
-	    lang.put("confirm.purge.document", "¿ Do you really want to delete document ?");
-	    lang.put("confirm.delete.propety.group", "¿ Do you really want to delete property group ?");
-	    lang.put("confirm.purge.version.history.document", "¿ Do you really want to delete document history ?");
-	    lang.put("confirm.purge.restore.document", "¿ Do you really want to restore to this document version ?");
-	    lang.put("confirm.set.default.home", "¿ Do you really want to set default home ?");
-	    lang.put("confirm.delete.saved.search", "¿ Do you really want to delete saved search ?");
-	    lang.put("confirm.delete.user.news", "¿ Do you really want to delete user news ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.delete.folder", "Do you really want to delete folder ?");
+	    lang.put("confirm.delete.document", "Do you really want to delete document ?");
+	    lang.put("confirm.delete.trash", "Do you really want to empty trash ?");
+	    lang.put("confirm.purge.folder", "Do you really want to delete folder ?");
+	    lang.put("confirm.purge.document", "Do you really want to delete document ?");
+	    lang.put("confirm.delete.propety.group", "Do you really want to delete property group ?");
+	    lang.put("confirm.purge.version.history.document", "Do you really want to delete document history ?");
+	    lang.put("confirm.purge.restore.document", "Do you really want to restore to this document version ?");
+	    lang.put("confirm.set.default.home", "Do you really want to set default home ?");
+	    lang.put("confirm.delete.saved.search", "Do you really want to delete saved search ?");
+	    lang.put("confirm.delete.user.news", "Do you really want to delete user news ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");
@@ -387,7 +387,7 @@ public class Lang_en_GB {
 	    lang.put("search.to", "to");
 	    lang.put("search.page.results", "Page results");
 	    lang.put("search.add.property.group", "Add property group");
-	    lang.put("search.mimetype", "Mime type");
+	    lang.put("search.mimetype", "MIME type");
 	    lang.put("search.type", "Type");
 	    lang.put("search.type.document", "Document");
 	    lang.put("search.type.folder", "Folder");
@@ -418,8 +418,8 @@ public class Lang_en_GB {
 	    // Search saved
 	    lang.put("search.saved.run", "Run");
 	    lang.put("search.saved.delete", "Delete");
-	    lang.put("search.saved.status.getsearchs", "Refresing saved searchs");
-	    lang.put("search.saved.status.savesearch", "Updating save search");
+	    lang.put("search.saved.status.getsearchs", "Refreshing saved searches");
+	    lang.put("search.saved.status.savesearch", "Updating saved search");
 	    lang.put("search.saved.status.deletesearch", "Deleting saved search");
 	    lang.put("search.saved.status.getusernews", "Refreshing user news");
 	    
@@ -449,7 +449,7 @@ public class Lang_en_GB {
 	    // Group
 	    lang.put("group.label", "Add property group");
 	    lang.put("group.group", "Group");
-	    lang.put("group.property.group", "Property");lang.put("general.menu.file.scanner", "Scanner");
+	    lang.put("group.property.group", "Property");
 	    
 	    // Bookmark
 	    lang.put("bookmark.label", "Add bookmark");
@@ -465,9 +465,9 @@ public class Lang_en_GB {
 	    
 	    // Status
 	    lang.put("status.document.copied", "Document marked to copy");
-	    lang.put("status.document.cut", "Document market to cut");
+	    lang.put("status.document.cut", "Document marked to cut");
 	    lang.put("status.folder.copied", "Folder marked to copy");
-	    lang.put("status.folder.cut", "Folder market to cut");
+	    lang.put("status.folder.cut", "Folder marked to cut");
 	    lang.put("status.keep.alive.error", "Detected lost connection to server (keep alive)");
 	    lang.put("status.debug.enabled", "Debug enabled");
 	    lang.put("status.debug.disabled", "Debug disabled");
@@ -551,7 +551,7 @@ public class Lang_en_GB {
 	    lang.put("dashboard.keyword.all", "All keywords");
 	    lang.put("dashboard.keyword.top", "Top keywords");
 	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Goto document");
+	    lang.put("dashboard.keyword.goto.document", "Go to document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
 	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
 	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
@@ -568,7 +568,7 @@ public class Lang_en_GB {
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.password.error", "Error: passwords are different");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");

@@ -58,7 +58,8 @@ public class Lang {
 	public static final String LANG_ru_RU = "ru-RU";
 	public static final String LANG_bs_BA = "bs-BA";
 	public static final String LANG_cs_CZ = "cs-CZ";
-
+	public static final String LANG_en_US = "en-US";
+	
 	public static HashMap<String, String> getLang(String lang) {
 		HashMap<String, String> hLang = new HashMap<String, String>();
 		
@@ -68,8 +69,14 @@ public class Lang {
 			hLang = Lang_ca_ES.lang;
 		} else if (LANG_gl_ES.equalsIgnoreCase(lang) || LANG_gl_ES.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_gl_ES.lang;
-		} else if (LANG_en_GB.equalsIgnoreCase(lang) || LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_en_GB.lang;
+		} else if (LANG_en_GB.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			if (LANG_en_GB.equalsIgnoreCase(lang)) {
+				hLang = Lang_en_GB.lang;
+			} else if (LANG_en_US.equalsIgnoreCase(lang)) {
+				hLang = Lang_en_US.lang;
+			} else {
+				hLang = Lang_en_GB.lang;
+			}
 		} else if (LANG_fr_FR.equalsIgnoreCase(lang) || LANG_fr_FR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_fr_FR.lang;
 		} else if (LANG_pt_BR.equalsIgnoreCase(lang) || LANG_pt_BR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
@@ -82,8 +89,14 @@ public class Lang {
 			hLang = Lang_de_DE.lang;
 		} else if (LANG_it_IT.equalsIgnoreCase(lang) || LANG_it_IT.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_it_IT.lang;
-		} else if (LANG_zh_CN.equalsIgnoreCase(lang) || (LANG_zh_CN.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2)) && !LANG_zh_TW.equalsIgnoreCase(lang) )) {
-			hLang = Lang_zh_CN.lang;
+		} else if (LANG_zh_CN.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			if (LANG_zh_CN.equalsIgnoreCase(lang)) {
+				hLang = Lang_zh_CN.lang;
+			} else if (LANG_zh_TW.equalsIgnoreCase(lang)) {
+				hLang = Lang_zh_TW.lang;
+			} else {
+				hLang = Lang_zh_CN.lang;
+			}
 		} else if (LANG_sv_SE.equalsIgnoreCase(lang) || LANG_sv_SE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_sv_SE.lang;
 		} else if (LANG_sr_BA.equalsIgnoreCase(lang) || LANG_sr_BA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
@@ -100,8 +113,6 @@ public class Lang {
 			hLang = Lang_hu_HU.lang;
 		} else if (LANG_el_GR.equalsIgnoreCase(lang) || LANG_el_GR.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_el_GR.lang;
-		} else if (LANG_zh_TW.equalsIgnoreCase(lang) || LANG_zh_TW.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_zh_TW.lang;
 		} else if (LANG_lv_LV.equalsIgnoreCase(lang) || LANG_lv_LV.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_lv_LV.lang;
 		} else if (LANG_mk_MK.equalsIgnoreCase(lang) || LANG_mk_MK.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {

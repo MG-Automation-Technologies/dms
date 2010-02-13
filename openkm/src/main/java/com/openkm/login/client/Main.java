@@ -98,6 +98,7 @@ public class Main implements EntryPoint {
 	public static final String LANG_ru_RU = "ru-RU";
 	public static final String LANG_bs_BA = "bs-BA";
 	public static final String LANG_cs_CZ = "cs-CZ";
+	public static final String LANG_en_US = "en-US";
 	
 	public static final String LOGIN_PAGE_TEXT	= "<title>OpenKM Login</title>";
 	
@@ -189,6 +190,7 @@ public class Main implements EntryPoint {
 		languages.put(LANG_cs_CZ,"Czech");
 		languages.put(LANG_de_DE,"Deutsch");
 		languages.put(LANG_en_GB,"English");
+		languages.put(LANG_en_US,"English USA");
 		languages.put(LANG_es_ES,"Español");
 		languages.put(LANG_co_ES,"Español Colombia");
 		languages.put(LANG_fa_FA,"Farsi");
@@ -443,9 +445,10 @@ public class Main implements EntryPoint {
 			
 			if (key.equalsIgnoreCase(lang) || key.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 				// Chinese special case
-				if (!(key.equals(LANG_zh_CN) && !LANG_zh_TW.equalsIgnoreCase(lang))) {
+				if (!(key.equalsIgnoreCase(LANG_zh_CN) && !LANG_zh_TW.equalsIgnoreCase(lang)) &&
+					!(key.equalsIgnoreCase(LANG_en_GB) && !LANG_en_US.equalsIgnoreCase(lang))) {
 					return code;
-				} 
+				}
 			}
 			code++;
 		}
