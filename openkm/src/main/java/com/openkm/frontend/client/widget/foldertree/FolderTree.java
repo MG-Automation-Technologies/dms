@@ -379,6 +379,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			folderAction = ACTION_NONE;
 			Main.get().mainPanel.navigator.status.unsetFlagCreate();
 			Main.get().showError("Create", caught);
+			removeTmpFolderCreate(); // remove on error
 		}
 	};
 
@@ -407,6 +408,7 @@ public class FolderTree extends Composite implements OriginPanel {
 			folderAction = ACTION_NONE;
 			Main.get().mainPanel.navigator.status.unsetFlagRename();
 			Main.get().showError("Rename", caught);
+			cancelRename(); // Cancel renaming on error
 		}
 	};
 
