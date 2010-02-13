@@ -93,7 +93,7 @@ public class FolderSelectPopup extends DialogBox  {
 	private HTML contextTxt;
 	private int type;  // Determines the type DOCUMENT OR FOLDER to restore
 	private Object node; // Document or folder to be restored, copyed etc...
-	private int entryPoint; // Entry point fired on tree or browser trash
+	private int entryPoint = ENTRYPOINT_NONE; // Entry point fired on tree or browser trash
 	private int action = ACTION_NONE; // Sets the action ( move / copy )
 	private int originPanel = ENTRYPOINT_NONE;
 	private boolean refresh = false;
@@ -337,13 +337,20 @@ public class FolderSelectPopup extends DialogBox  {
 			actionButton.setText(Main.i18n("button.move"));
 		}
 		
-		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
-			contextListBox.setItemText(0,Main.i18n("leftpanel.label.taxonomy"));
-			contextListBox.setItemText(1,Main.i18n("leftpanel.label.templates"));
-			contextListBox.setItemText(2,Main.i18n("leftpanel.label.my.documents"));
-			contextListBox.setItemText(3,Main.i18n("leftpanel.label.mail"));
-		} else {
-			contextListBox.setItemText(0,Main.i18n("leftpanel.label.categories"));
+		switch(entryPoint) {
+			case ENTRYPOINT_NONE:
+				break;
+				
+			case ENTRYPOINT_CATEGORIES:
+				contextListBox.setItemText(0,Main.i18n("leftpanel.label.categories"));
+				break;
+				
+			default:
+				contextListBox.setItemText(0,Main.i18n("leftpanel.label.taxonomy"));
+				contextListBox.setItemText(1,Main.i18n("leftpanel.label.templates"));
+				contextListBox.setItemText(2,Main.i18n("leftpanel.label.my.documents"));
+				contextListBox.setItemText(3,Main.i18n("leftpanel.label.mail"));
+				break;
 		}
 	}
 	
