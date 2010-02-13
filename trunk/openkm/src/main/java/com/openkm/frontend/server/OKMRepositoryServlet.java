@@ -61,10 +61,10 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 	}
 	
@@ -82,13 +82,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getPersonal: "+gWTFolder);
@@ -109,13 +109,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getTemplate: "+gWTFolder);
@@ -133,13 +133,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			OKMRepository.getInstance().purgeTrash(token);
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_AccessDenied), e.getMessage());
 		} catch (RepositoryException e ) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("purgeTrash: void");
@@ -159,13 +159,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getTrash: "+gWTFolder);
@@ -186,13 +186,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getRoot: "+gWTFolder);
@@ -211,13 +211,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			fldPath = OKMRepository.getInstance().getRootFolder(token).getPath();
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet,ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet,ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getRootPath: "+fldPath);
@@ -238,13 +238,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getMail: "+gWTFolder);
@@ -265,13 +265,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getThesaurus: "+gWTFolder);
@@ -292,13 +292,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getCategories: "+gWTFolder);

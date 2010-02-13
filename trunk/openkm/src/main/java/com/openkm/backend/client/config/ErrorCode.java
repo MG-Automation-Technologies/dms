@@ -54,6 +54,9 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMWorkspaceService 			= "021";
 	public static final String ORIGIN_OKMWorkflowService 			= "022";
 	public static final String ORIGIN_OKMWorkflowUploadServiceAdmin	= "023";
+	public static final String ORIGIN_OKMMailService	 			= "024";
+	public static final String ORIGIN_OKMPropertyService	 		= "025";
+	public static final String ORIGIN_OKMBrowser 					= "026";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -77,6 +80,7 @@ public class ErrorCode {
 	public static final String CAUSE_ParseException				= "019";
 	public static final String CAUSE_InvalidNodeTypeDefException= "020";
 	public static final String CAUSE_SQLException 				= "021";
+	public static final String CAUSE_Configuration 				= "022";
 
 	/**
 	 * Gets the error
