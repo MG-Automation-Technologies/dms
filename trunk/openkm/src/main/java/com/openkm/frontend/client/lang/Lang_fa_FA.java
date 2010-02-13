@@ -136,6 +136,7 @@ public class Lang_fa_FA {
 			lang.put("general.menu.file.delete", "حذف");
 			lang.put("general.menu.file.refresh", "به روز رسانی");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "ابزار");
 	    	lang.put("general.menu.tools.languages", "زبانها");
 	    	lang.put("general.menu.tools.skin", "پوسته");

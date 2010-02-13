@@ -137,6 +137,7 @@ public class Lang_nl_NL {
 		lang.put("general.menu.file.delete", "Wis");
 		lang.put("general.menu.file.refresh", "Ververs");
 		lang.put("general.menu.file.scanner", "Scanner");
+		lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Gereedschappen");
 	    lang.put("general.menu.tools.languages", "Talen");
 	    lang.put("general.menu.tools.skin", "Huid");

@@ -136,6 +136,7 @@ public class Lang_pt_BR {
 			lang.put("general.menu.file.delete", "Eliminar");
 			lang.put("general.menu.file.refresh", "Atualizar");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Ferramentas");
 	    	lang.put("general.menu.tools.languages", "Idiomas");
 	    	lang.put("general.menu.tools.skin", "Pele (Skin)");

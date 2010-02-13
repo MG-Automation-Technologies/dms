@@ -141,6 +141,7 @@ public class Lang_ru_RU {
 			lang.put("general.menu.file.delete", "Удалить");
 			lang.put("general.menu.file.refresh", "Обновить");
 			lang.put("general.menu.file.scanner", "Scanner");
+			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Инструменты");
 	    	lang.put("general.menu.tools.languages", "Языки");
 	    	lang.put("general.menu.tools.skin", "Оболочки");
