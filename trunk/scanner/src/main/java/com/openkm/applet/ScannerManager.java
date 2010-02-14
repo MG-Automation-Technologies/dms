@@ -10,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.xml.ws.WebServiceException;
 
 import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.Scanner;
@@ -137,6 +138,10 @@ public class ScannerManager implements ScannerListener {
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} catch (WebServiceException e) {
+				log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", 
 						JOptionPane.ERROR_MESSAGE);
 			} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
 				log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
