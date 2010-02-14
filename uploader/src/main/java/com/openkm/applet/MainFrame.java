@@ -34,6 +34,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.xml.ws.WebServiceException;
 
 import netscape.javascript.JSObject;
 
@@ -116,7 +117,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private void initGUI() {
 		try {
 			new DropTarget(getContentPane(), this);
-			setSize(157, 43);
+			setSize(logo.getWidth(), logo.getHeight());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -193,14 +194,14 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	public void windowOpened(WindowEvent we) {
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
+	@SuppressWarnings("restriction")
 	public void dragEnter(DropTargetDragEvent dtde) {
 		com.sun.awt.AWTUtilities.setWindowOpacity(this, 1.00f);
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
+	@SuppressWarnings("restriction")
 	public void dragExit(DropTargetEvent dtde) {
 		com.sun.awt.AWTUtilities.setWindowOpacity(this, 0.50f);
 	}
@@ -224,7 +225,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 			if (tr.isDataFlavorSupported(linux)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-				getContentPane().setBackground(Color.RED);
+				//getContentPane().setBackground(Color.RED);
 
 				String data = (String) tr.getTransferData(linux);
 				List<File> files = Util.textURIListToFileList(data);
@@ -233,7 +234,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				}
 
 				dtde.dropComplete(true);
-				getContentPane().setBackground(Color.LIGHT_GRAY);
+				//getContentPane().setBackground(Color.LIGHT_GRAY);
 				
 				// Refresh file list
 				log.fine("--- refresh - begin ---");
@@ -241,7 +242,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				log.fine("--- refresh - end ---");
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-				getContentPane().setBackground(Color.RED);
+				//getContentPane().setBackground(Color.RED);
 
 				@SuppressWarnings("unchecked")
 				List<File> files = (List<File>) tr.getTransferData(windows);
@@ -250,7 +251,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				}
 
 				dtde.dropComplete(true);
-				getContentPane().setBackground(Color.LIGHT_GRAY);
+				//getContentPane().setBackground(Color.LIGHT_GRAY);
 				
 				// Refresh file list
 				log.fine("--- refresh - begin ---");
@@ -303,6 +304,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (WebServiceException e) {
+			log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Throwable e) { // Catch anything else
+			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
