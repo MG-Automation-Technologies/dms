@@ -1,9 +1,14 @@
 package com.openkm.applet;
 
-import java.awt.BorderLayout;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -17,14 +22,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -47,17 +54,25 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private String path;
 	private String url;
 	private JSObject win;
-
+	private BufferedImage logo;
+	
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@SuppressWarnings("restriction")
 			public void run() {
+				//JFrame.setDefaultLookAndFeelDecorated(true);
 				MainFrame inst = new MainFrame(null, null, null, null);
-				inst.setLocationRelativeTo(null);
+				inst.setUndecorated(true);
+				inst.setResizable(false);
 				inst.setVisible(true);
 				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				com.sun.awt.AWTUtilities.setWindowOpacity(inst, 0.50f);
+				com.sun.awt.AWTUtilities.setWindowOpaque(inst, true);
+				com.sun.awt.AWTUtilities.setWindowShape(inst,
+						new RoundRectangle2D.Double(0, 0, inst.getWidth(), inst.getHeight(), 25, 25));
 			}
 		});
 	}
@@ -67,6 +82,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	 */
 	public MainFrame(String token, String path, String url, JSObject win) {
 		super("Uploader");
+		try {
+			logo = ImageIO.read(MainFrame.class.getResource("openkm.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		initGUI();
 		addWindowListener(this);
 
@@ -80,32 +101,58 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 		// Determine the new location of the window
-		int w = this.getSize().width;
-		int h = this.getSize().height;
+		int w = getSize().width;
+		int h = getSize().height;
 		int x = (dim.width - w) / 2;
 		int y = (dim.height - h) / 2;
 
 		// Move the window
-		this.setLocation(x, y);
+		setLocation(x, y);
 	}
-
+	
 	/**
 	 * 
 	 */
 	private void initGUI() {
 		try {
-			JLabel jLabel = new JLabel("Drop a list from your file chooser here:");
-			getContentPane().add(jLabel, BorderLayout.NORTH);
 			new DropTarget(getContentPane(), this);
-
-			pack();
-			this.setSize(283, 159);
+			setSize(157, 43);
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	@Override
+	public void paint(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		
+		// code from
+		// http://weblogs.java.net/blog/campbell/archive/2006/07/java_2d_tricker.html
+		int width = logo.getWidth();
+		int height = logo.getHeight();
+		GraphicsConfiguration gc = g2d.getDeviceConfiguration();
+		BufferedImage img = gc.createCompatibleImage(width,	height,	Transparency.TRANSLUCENT);
+		Graphics2D g2 = img.createGraphics();
 
+		g2.setComposite(AlphaComposite.Clear);
+		g2.fillRect(0, 0, width, height);
+
+		g2.setComposite(AlphaComposite.Src);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setColor(Color.WHITE);
+		g2.fillRoundRect(0, 0, width, height + 10, 10, 10);
+
+		g2.setComposite(AlphaComposite.SrcAtop);
+		g2.drawImage(logo, 0, 0, null);
+		g2.dispose();
+
+		// at this point the 'img' contains a soft
+		// clipped round rectangle with the avatar
+		g2d.drawImage(img, 0, 0, this);
+		g2d.dispose();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
@@ -146,14 +193,16 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	public void windowOpened(WindowEvent we) {
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
-		getContentPane().setBackground(Color.GREEN);
+		com.sun.awt.AWTUtilities.setWindowOpacity(this, 1.00f);
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
 	public void dragExit(DropTargetEvent dtde) {
-		getContentPane().setBackground(Color.LIGHT_GRAY);
+		com.sun.awt.AWTUtilities.setWindowOpacity(this, 0.50f);
 	}
 
 	@Override
