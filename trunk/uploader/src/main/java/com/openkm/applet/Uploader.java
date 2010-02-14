@@ -1,5 +1,6 @@
 package com.openkm.applet;
 
+import java.awt.geom.RoundRectangle2D;
 import java.util.logging.Logger;
 
 import javax.swing.JApplet;
@@ -55,11 +56,17 @@ public class Uploader extends JApplet {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("restriction")
 	private void createGUI() {
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		JFrame main = new MainFrame(token, path, url, win);
-		main.setVisible(true);
-		main.setResizable(false);
-		main.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		//JFrame.setDefaultLookAndFeelDecorated(true);
+		JFrame inst = new MainFrame(token, path, url, win);
+		inst.setUndecorated(true);
+		inst.setResizable(false);
+		inst.setVisible(true);
+		inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		com.sun.awt.AWTUtilities.setWindowOpacity(inst, 0.50f);
+		com.sun.awt.AWTUtilities.setWindowOpaque(inst, true);
+		com.sun.awt.AWTUtilities.setWindowShape(inst,
+				new RoundRectangle2D.Double(0, 0, inst.getWidth(), inst.getHeight(), 25, 25));
 	}
 }
