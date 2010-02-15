@@ -108,7 +108,7 @@ public class Util {
 		
 		gWTUser.setEmail(user.getEmail());
 		gWTUser.setId(user.getId());
-		gWTUser.setPass(user.getPass());
+		gWTUser.setPass(""); // We must not copy password
 		gWTUser.setRoles(user.getRoles());
 		gWTUser.setActive(user.isActive());
 
