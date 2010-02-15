@@ -40,7 +40,6 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -2263,7 +2262,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 * destroyUploaderApplet
 	 */
 	public void destroyUploaderApplet() {
-		Window.alert("destroying uploader");
 		Widget uploadApplet = RootPanel.get("uploaderApplet");
 		panel.remove(uploadApplet);
 		uploadApplet.getElement().setInnerHTML("");
