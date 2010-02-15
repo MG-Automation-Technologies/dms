@@ -356,12 +356,10 @@ public class Document extends Composite {
 		// Enables or disables change keywords with user permissions and document is not check-out or locked
 		if (remove)  {
 			suggestKey.setVisible(true);
-			categoriesText.setVisible(true);
 			categoriesImage.setVisible(true);
 			thesaurusImage.setVisible(true);
 		} else {
 			suggestKey.setVisible(false);
-			categoriesText.setVisible(false);
 			categoriesImage.setVisible(false);
 			thesaurusImage.setVisible(false);
 		}
@@ -618,7 +616,6 @@ public class Document extends Composite {
 	public void setVisibleButtons(boolean visible) {
 		this.visible = visible;
 		suggestKey.setVisible(visible);
-		categoriesText.setVisible(visible);
 		categoriesImage.setVisible(visible);
 		thesaurusImage.setVisible(visible);
 	}
