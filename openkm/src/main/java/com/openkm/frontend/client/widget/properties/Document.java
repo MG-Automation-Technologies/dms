@@ -319,8 +319,8 @@ public class Document extends Composite {
 		tableProperties.setWidget(7, 1, keywordPanel);
 		hKeyPanel.clear();
 		
-		remove = ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked())
-		           && visible;
+		remove = ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && 
+				  !(doc.isLocked() && !doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser()))) && visible;
 		
 		for (Iterator<String> it = doc.getKeywords().iterator(); it.hasNext();) {
 			// First adds only new keywords
@@ -356,8 +356,14 @@ public class Document extends Composite {
 		// Enables or disables change keywords with user permissions and document is not check-out or locked
 		if (remove)  {
 			suggestKey.setVisible(true);
+			categoriesText.setVisible(true);
+			categoriesImage.setVisible(true);
+			thesaurusImage.setVisible(true);
 		} else {
 			suggestKey.setVisible(false);
+			categoriesText.setVisible(false);
+			categoriesImage.setVisible(false);
+			thesaurusImage.setVisible(false);
 		}
 		
 		getVersionHistorySize();
@@ -384,7 +390,7 @@ public class Document extends Composite {
 		
 		// Sets the document categories
 		for (Iterator<GWTFolder> it = doc.getCategories().iterator(); it.hasNext();) {
-			drawCategory(it.next());
+			drawCategory(it.next(),remove);
 		}
 		
 		drawTagCloud(doc.getKeywords());
@@ -586,7 +592,7 @@ public class Document extends Composite {
 	public void addCategory(GWTFolder category) {
 		if (!existCategory(category.getUuid())) {
 			document.getCategories().add(category);
-			drawCategory(category);
+			drawCategory(category,remove);
 			Main.get().mainPanel.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
@@ -612,6 +618,9 @@ public class Document extends Composite {
 	public void setVisibleButtons(boolean visible) {
 		this.visible = visible;
 		suggestKey.setVisible(visible);
+		categoriesText.setVisible(visible);
+		categoriesImage.setVisible(visible);
+		thesaurusImage.setVisible(visible);
 	}
 	
 	/**
@@ -756,7 +765,7 @@ public class Document extends Composite {
 	 * 
 	 * @param category
 	 */
-	private void drawCategory(final GWTFolder category) {
+	private void drawCategory(final GWTFolder category, boolean remove) {
 		int row = tableSubscribedCategories.getRowCount();
 		Hyperlink hlink = new Hyperlink();
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
@@ -786,7 +795,11 @@ public class Document extends Composite {
 		});
 		
 		tableSubscribedCategories.setWidget(row, 0, hlink);
-		tableSubscribedCategories.setWidget(row, 1, delete);
+		if (remove) {
+			tableSubscribedCategories.setWidget(row, 1, delete);
+		} else {
+			tableSubscribedCategories.setWidget(row, 1, new HTML(""));
+		}
 		setRowWordWarp(row, 1, true, tableSubscribedCategories);
 	}
 }
