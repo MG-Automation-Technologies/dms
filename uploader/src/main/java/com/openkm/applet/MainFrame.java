@@ -9,6 +9,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
+import java.awt.Window;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -56,7 +57,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private String url;
 	private JSObject win;
 	private BufferedImage logo;
-	
+
 	/**
 	 * Auto-generated main method to display this JFrame
 	 */
@@ -64,7 +65,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		SwingUtilities.invokeLater(new Runnable() {
 			@SuppressWarnings("restriction")
 			public void run() {
-				//JFrame.setDefaultLookAndFeelDecorated(true);
+				// JFrame.setDefaultLookAndFeelDecorated(true);
 				MainFrame inst = new MainFrame(null, null, null, null);
 				inst.setUndecorated(true);
 				inst.setResizable(false);
@@ -72,8 +73,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				inst.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				com.sun.awt.AWTUtilities.setWindowOpacity(inst, 0.50f);
 				com.sun.awt.AWTUtilities.setWindowOpaque(inst, true);
-				com.sun.awt.AWTUtilities.setWindowShape(inst,
-						new RoundRectangle2D.Double(0, 0, inst.getWidth(), inst.getHeight(), 25, 25));
+				com.sun.awt.AWTUtilities.setWindowShape(inst, new RoundRectangle2D.Double(0, 0, inst
+						.getWidth(), inst.getHeight(), 25, 25));
 			}
 		});
 	}
@@ -88,7 +89,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		initGUI();
 		addWindowListener(this);
 
@@ -110,7 +111,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		// Move the window
 		setLocation(x, y);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -123,17 +124,17 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
-		
+
 		// code from
 		// http://weblogs.java.net/blog/campbell/archive/2006/07/java_2d_tricker.html
 		int width = logo.getWidth();
 		int height = logo.getHeight();
 		GraphicsConfiguration gc = g2d.getDeviceConfiguration();
-		BufferedImage img = gc.createCompatibleImage(width,	height,	Transparency.TRANSLUCENT);
+		BufferedImage img = gc.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
 		Graphics2D g2 = img.createGraphics();
 
 		g2.setComposite(AlphaComposite.Clear);
@@ -153,7 +154,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		g2d.drawImage(img, 0, 0, this);
 		g2d.dispose();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		try {
@@ -195,15 +196,13 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	}
 
 	@Override
-	@SuppressWarnings("restriction")
 	public void dragEnter(DropTargetDragEvent dtde) {
-		com.sun.awt.AWTUtilities.setWindowOpacity(this, 1.00f);
+		targetEnable(this);
 	}
 
 	@Override
-	@SuppressWarnings("restriction")
 	public void dragExit(DropTargetEvent dtde) {
-		com.sun.awt.AWTUtilities.setWindowOpacity(this, 0.50f);
+		targetDisable(this);
 	}
 
 	@Override
@@ -225,127 +224,105 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 			if (tr.isDataFlavorSupported(linux)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-				//getContentPane().setBackground(Color.RED);
-
+				
 				String data = (String) tr.getTransferData(linux);
 				List<File> files = Util.textURIListToFileList(data);
 				for (File file : files) {
-					callCreateDocument(token, path, url, file);
+					createDocumentHelper(token, path, url, file);
 				}
 
 				dtde.dropComplete(true);
-				//getContentPane().setBackground(Color.LIGHT_GRAY);
-				
+
 				// Refresh file list
 				log.fine("--- refresh - begin ---");
 				win.call("refresh", new Object[] {});
 				log.fine("--- refresh - end ---");
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-				//getContentPane().setBackground(Color.RED);
 
 				@SuppressWarnings("unchecked")
 				List<File> files = (List<File>) tr.getTransferData(windows);
 				for (File file : files) {
-					callCreateDocument(token, path, url, file);
+					createDocumentHelper(token, path, url, file);
 				}
 
 				dtde.dropComplete(true);
-				//getContentPane().setBackground(Color.LIGHT_GRAY);
-				
+
 				// Refresh file list
 				log.fine("--- refresh - begin ---");
 				win.call("refresh", new Object[] {});
 				log.fine("--- refresh - end ---");
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, "ClassNotFoundException: " + e.getMessage(), e);
 		} catch (UnsupportedFlavorException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, "UnsupportedFlavorException: " + e.getMessage(), e);
+		} catch (WebServiceException e) {
+			log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Throwable e) { // Catch anything else
+			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		} finally {
+			targetDisable(this);
 		}
 	}
 
 	/**
 	 * 
 	 */
-	private void callCreateDocument(String toke, String path, String url, File file) {
-		try {
-			if (file.isFile()) {
-				Util.createDocument(token, path, url, file);
-			} else if (file.isDirectory()) {
-				Util.createFolder(token, path, url, file);
-				createDocumentHelper(token, path+"/"+file.getName(), url, file);
-			}
-		} catch (VirusDetectedException_Exception e) {
-			log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (FileSizeExceededException_Exception e) {
-			log.log(Level.SEVERE, "FileSizeExceededException: - > " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (UnsupportedMimeTypeException_Exception e) {
-			log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (ItemExistsException_Exception e) {
-			log.log(Level.SEVERE, "ItemExistsException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (PathNotFoundException_Exception e) {
-			log.log(Level.SEVERE, "PathNotFoundException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (AccessDeniedException_Exception e) {
-			log.log(Level.SEVERE, "AccessDeniedException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (RepositoryException_Exception e) {
-			log.log(Level.SEVERE, "RepositoryException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (IOException_Exception e) {
-			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (IOException e) {
-			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (WebServiceException e) {
-			log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (Throwable e) { // Catch anything else
-			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	/** 
-	 * 
-	 */
 	private static void createDocumentHelper(String token, String path, String url, File fs)
 			throws IOException, AccessDeniedException_Exception, PathNotFoundException_Exception,
 			RepositoryException_Exception, IOException_Exception {
 		log.info("uploadDocumentHelper(" + token + ", " + path + ", " + url + ", " + fs + ")");
-		File[] files = fs.listFiles();
 
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				try {
-					Util.createFolder(token, path, url, files[i]);
-					createDocumentHelper(token, path+"/"+files[i].getName(), url, files[i]);
-				} catch (ItemExistsException_Exception e) {
-					log.warning("ItemExistsException: " + e.getMessage());
-				}
-			} else {
-				try {
-					Util.createDocument(token, path, url, files[i]);
-				} catch (UnsupportedMimeTypeException_Exception e) {
-					log.warning("UnsupportedMimeTypeException: " + e.getMessage());
-				} catch (FileSizeExceededException_Exception e) {
-					log.warning("FileSizeExceededException: " + e.getMessage());
-				} catch (VirusDetectedException_Exception e) {
-					log.warning("VirusWarningException: " + e.getMessage());
-				} catch (ItemExistsException_Exception e) {
-					log.warning("ItemExistsException: " + e.getMessage());
+		if (fs.isFile()) {
+			try {
+				Util.createDocument(token, path, url, fs);
+			} catch (VirusDetectedException_Exception e) {
+				log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (FileSizeExceededException_Exception e) {
+				log.log(Level.SEVERE, "FileSizeExceededException: - > " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (UnsupportedMimeTypeException_Exception e) {
+				log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (ItemExistsException_Exception e) {
+				log.log(Level.WARNING, "ItemExistsException: " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+			}
+		} else if (fs.isDirectory()) {
+			File[] files = fs.listFiles();
+
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					try {
+						Util.createFolder(token, path, url, files[i]);
+						createDocumentHelper(token, path + "/" + files[i].getName(), url, files[i]);
+					} catch (ItemExistsException_Exception e) {
+						log.warning("ItemExistsException: " + e.getMessage());
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Warning",
+								JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			}
+		} else {
+			log.log(Level.WARNING, "Unknown file type");
+			JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type",
+					JOptionPane.WARNING_MESSAGE);
 		}
 
 		log.info("importDocumentsHelper: void");
+	}
+	
+	@SuppressWarnings("restriction")
+	private static void targetEnable(Window win) {
+		com.sun.awt.AWTUtilities.setWindowOpacity(win, 1.00f);
+	}
+	
+	@SuppressWarnings("restriction")
+	private static void targetDisable(Window win) {
+		com.sun.awt.AWTUtilities.setWindowOpacity(win, 0.50f);
 	}
 }
