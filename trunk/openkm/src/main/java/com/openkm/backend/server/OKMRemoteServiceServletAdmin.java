@@ -57,10 +57,6 @@ public class OKMRemoteServiceServletAdmin extends RemoteServiceServlet {
 		
 		try {
 			token = (String)getThreadLocalRequest().getSession().getAttribute("token");
-			if (token==null) {
-				token = OKMAuth.getInstance().login();
-				getThreadLocalRequest().getSession().setAttribute("token", token);
-			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRemoteService, ErrorCode.CAUSE_General), e.getMessage());
