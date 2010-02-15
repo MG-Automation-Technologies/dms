@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.bean.Permission;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
@@ -61,6 +62,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	private static Logger log = LoggerFactory.getLogger(OKMAuthServlet.class);
 	private static final long serialVersionUID = 2638205115826644606L;
 	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMAuthService#logout()
+	 */
 	public void logout() throws OKMException {
 		log.debug("logout()");
 		
@@ -94,6 +98,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		HashMap<String, Byte> hm = new HashMap<String, Byte>();
 		try {
 			hm = OKMAuth.getInstance().getGrantedRoles(token, nodePath);
+			//Always removing userRole ( must be only used as connection grant not assigned to repository )
+			if (hm.keySet().contains(Config.DEFAULT_USER_ROLE)) {
+				hm.remove(Config.DEFAULT_USER_ROLE);
+			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -228,6 +236,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 				if (!found) {
 					roleList.add(rol);
 				}
+			}
+			
+			//Always removing userRole ( must be only used as connection grant not assigned to repository )
+			if (hm.keySet().contains(Config.DEFAULT_USER_ROLE)) {
+				hm.remove(Config.DEFAULT_USER_ROLE);
 			}
 			
 			Collections.sort(roleList, RoleComparator.getInstance());
