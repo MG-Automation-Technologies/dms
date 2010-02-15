@@ -230,9 +230,14 @@ public class Main implements EntryPoint {
 		table.setWidget(8, 0, new HTML("&nbsp;"));
 		table.setWidget(9, 0, loginButton);
 		
+		userName.setWidth("200px");
+		password.setWidth("200px");
+		langList.setWidth("200px");
+		
 		table.getCellFormatter().setHeight(2, 0, "10");
 		table.getCellFormatter().setHeight(5, 0, "10");
 		table.getCellFormatter().setHeight(7, 0, "10");
+		table.getCellFormatter().setHorizontalAlignment(9, 0, HasAlignment.ALIGN_RIGHT);
 		table.setWidth("200px");
 		
 		SimplePanel spTable = new SimplePanel();
@@ -326,14 +331,14 @@ public class Main implements EntryPoint {
 		
 		// Calculating position
 		int posLeft = (Window.getClientWidth()-panelWidth)/2;
-		int posRight = (Window.getClientHeight()-panelHeight)/2;
+		int posTop = (Window.getClientHeight()-panelHeight)/3;
 		
 		// Correcting position negative desviation
 		if (posLeft<0) { posLeft=0; }
-		if (posRight<0) { posRight=0; }
+		if (posTop<0) { posTop=0; }
 		
 		RootPanel.get().add(vPanel);
-		RootPanel.get().setWidgetPosition(vPanel, posLeft, posRight);
+		RootPanel.get().setWidgetPosition(vPanel, posLeft, posTop);
 		
 		vPanel.setSize(panelWidth+"px", panelHeight+"px");
 		langList.setSelectedIndex(evaluateLang(getBrowserLanguage()));
