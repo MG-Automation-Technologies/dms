@@ -4,11 +4,23 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>Applet</title>
+  <script language="JavaScript">
+    function refresh() {
+      alert('Refresh incoked');
+    }
+
+    function destroyUploaderApplet() {
+      alert('destroyUploaderApplet invoked');
+      document.getElementById('applet').innerHTML = "";
+    }
+  </script>
 </head>
 <body>
-  <applet code="com.openkm.applet.Uploader" width="20" height="20" mayscript archive="../../target/signed/uploader.jar">
-    <param name="token" value="0000">
-    <param name="path" value="/okm:root">
-  </applet>
+  <div id="applet">
+    <applet code="com.openkm.applet.Uploader" width="20" height="20" mayscript archive="../../target/signed/uploader.jar">
+      <param name="token" value="0000" />
+      <param name="path" value="/okm:root" />
+    </applet>
+  </div>
 </body>
 </html>
