@@ -21,8 +21,10 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,7 +35,9 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.xml.ws.WebServiceException;
 
@@ -48,7 +52,7 @@ import com.openkm.ws.client.RepositoryException_Exception;
 import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
 import com.openkm.ws.client.VirusDetectedException_Exception;
 
-public class MainFrame extends JFrame implements ActionListener, WindowListener, DropTargetListener {
+public class MainFrame extends JFrame implements DropTargetListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
@@ -57,6 +61,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private String url;
 	private JSObject win;
 	private BufferedImage logo;
+	private JPopupMenu popupMenu;
+	private JMenuItem menuItem;
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -66,7 +72,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			@SuppressWarnings("restriction")
 			public void run() {
 				// JFrame.setDefaultLookAndFeelDecorated(true);
-				MainFrame inst = new MainFrame(null, null, null, null);
+				MainFrame inst = new MainFrame("000", "/okm:root", null, null);
 				inst.setUndecorated(true);
 				inst.setResizable(false);
 				inst.setVisible(true);
@@ -91,8 +97,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		}
 
 		initGUI();
-		addWindowListener(this);
-
+		PopupListener pl = new PopupListener();
+		addMouseListener(pl);
+		WindowListener wl = new WindowListener();
+		addWindowListener(wl);
+		menuItem.addActionListener(this);
+		
 		// Set instances
 		this.token = token;
 		this.path = path;
@@ -118,13 +128,16 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 	private void initGUI() {
 		try {
 			new DropTarget(getContentPane(), this);
+			popupMenu = new JPopupMenu();
+			menuItem = new JMenuItem("Exit");
+			popupMenu.add(menuItem);
 			setSize(logo.getWidth(), logo.getHeight());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -150,49 +163,15 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 		g2.dispose();
 
 		// at this point the 'img' contains a soft
-		// clipped round rectangle with the avatar
+		// clipped round rectangle with the logo
 		g2d.drawImage(img, 0, 0, this);
 		g2d.dispose();
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent ae) {
-		try {
-			JOptionPane.showMessageDialog(this, "Empty file name", "Error", JOptionPane.ERROR_MESSAGE);
-		} catch (Exception e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	@Override
-	public void windowActivated(WindowEvent we) {
-	}
-
-	@Override
-	public void windowClosed(WindowEvent we) {
-		log.info("windowClosed: calling 'destroyUploaderApplet'");
-		win.call("destroyUploaderApplet", new Object[] {});
-	}
-
-	@Override
-	public void windowClosing(WindowEvent we) {
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent we) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent we) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent we) {
-	}
-
-	@Override
-	public void windowOpened(WindowEvent we) {
+	public void actionPerformed(ActionEvent e) {
+		log.info("actionPerformed("+e+")");
+		dispose();
 	}
 
 	@Override
@@ -224,7 +203,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 			if (tr.isDataFlavorSupported(linux)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-				
+
 				String data = (String) tr.getTransferData(linux);
 				List<File> files = Util.textURIListToFileList(data);
 				for (File file : files) {
@@ -259,10 +238,11 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 			log.log(Level.SEVERE, "UnsupportedFlavorException: " + e.getMessage(), e);
 		} catch (WebServiceException e) {
 			log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Webservices failure",
+					JOptionPane.ERROR_MESSAGE);
 		} catch (Throwable e) { // Catch anything else
 			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "General failure", JOptionPane.ERROR_MESSAGE);
 		} finally {
 			targetDisable(this);
 		}
@@ -281,31 +261,33 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 				Util.createDocument(token, path, url, fs);
 			} catch (VirusDetectedException_Exception e) {
 				log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Virus detected",
+						JOptionPane.ERROR_MESSAGE);
 			} catch (FileSizeExceededException_Exception e) {
 				log.log(Level.SEVERE, "FileSizeExceededException: - > " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "FileSize exceeded",
+						JOptionPane.ERROR_MESSAGE);
 			} catch (UnsupportedMimeTypeException_Exception e) {
 				log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Unsupported mime type",
+						JOptionPane.ERROR_MESSAGE);
 			} catch (ItemExistsException_Exception e) {
 				log.log(Level.WARNING, "ItemExistsException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Item exists",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		} else if (fs.isDirectory()) {
-			File[] files = fs.listFiles();
+			try {
+				Util.createFolder(token, path, url, fs);
+			} catch (ItemExistsException_Exception e) {
+				log.warning("ItemExistsException: " + e.getMessage());
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Item exists",
+						JOptionPane.WARNING_MESSAGE);
+			}
 
+			File[] files = fs.listFiles();
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					try {
-						Util.createFolder(token, path, url, files[i]);
-						createDocumentHelper(token, path + "/" + files[i].getName(), url, files[i]);
-					} catch (ItemExistsException_Exception e) {
-						log.warning("ItemExistsException: " + e.getMessage());
-						JOptionPane.showMessageDialog(null, e.getMessage(), "Warning",
-								JOptionPane.WARNING_MESSAGE);
-					}
-				}
+				createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
 			}
 		} else {
 			log.log(Level.WARNING, "Unknown file type");
@@ -315,14 +297,46 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener,
 
 		log.info("importDocumentsHelper: void");
 	}
-	
+
 	@SuppressWarnings("restriction")
 	private static void targetEnable(Window win) {
 		com.sun.awt.AWTUtilities.setWindowOpacity(win, 1.00f);
 	}
-	
+
 	@SuppressWarnings("restriction")
 	private static void targetDisable(Window win) {
 		com.sun.awt.AWTUtilities.setWindowOpacity(win, 0.50f);
+	}
+
+	/**
+	 * 
+	 */
+	class PopupListener extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+			log.fine("mousePressed("+e+")");
+			if (e.isPopupTrigger()) {
+				popupMenu.show(((JFrame) e.getComponent()).getContentPane(), e.getX(), e.getY());
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			log.fine("mouseReleased("+e+")");
+			if (e.isPopupTrigger()) {
+				popupMenu.show(((JFrame) e.getComponent()).getContentPane(), e.getX(), e.getY());
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	class WindowListener extends WindowAdapter {
+		@Override
+		public void windowClosed(WindowEvent we) {
+			log.info("windowClosed: calling 'destroyUploaderApplet'");
+			win.call("destroyUploaderApplet", new Object[] {});
+		}
 	}
 }
