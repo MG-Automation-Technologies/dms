@@ -171,6 +171,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		log.info("actionPerformed("+e+")");
+		setVisible(false);
 		dispose();
 	}
 
