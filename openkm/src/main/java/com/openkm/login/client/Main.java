@@ -122,7 +122,7 @@ public class Main implements EntryPoint {
 		final ListBox langList = new ListBox();
 		final String urlJump = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.html";
 		final String urlJumpMobi = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "/mobi/index.jsp";
-		final String urlTest = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/test.html";
+		final String urlTest = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/test.jsp";
 		final boolean isMobile = getIsMobil().equals("on");
 
 		loginButton.addClickHandler(new ClickHandler() {
