@@ -49,10 +49,6 @@ public class Uploader extends JApplet {
 		}
 	}
 
-	@Override
-	public void destroy() {
-	}
-
 	/**
 	 * 
 	 */
