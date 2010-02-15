@@ -909,20 +909,14 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableAddNote();
 			disableScanner();
 			disableUploader();
+			disableAddSubscription();
+			disableRemoveSubscription();
 
 			if (doc.isConvertibleToPdf()) {
 				enableDownloadPdf();
 			} else {
 				disableDownloadPdf();
 			}
-			
-			if (doc.isSubscribed()) {
-				disableAddSubscription();
-				enableRemoveSubscription();
-			} else {
-				enableAddSubscription();
-				disableRemoveSubscription();
-			} 
 			
 			if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (!doc.isCheckedOut() && !doc.isLocked()) {
@@ -932,6 +926,12 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					disableCancelCheckout();
 					disableUnlock();
 					enableAddNote();
+					
+					if (doc.isSubscribed()) {
+						enableRemoveSubscription();
+					} else {
+						enableAddSubscription();
+					} 
 					
 					// In thesaurus and categories view must not evaluate write folder permissions
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
@@ -990,6 +990,12 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							enableAddPropertyGroup();
 							enableRemovePropertyGroup();
 							enableAddNote();
+							
+							if (doc.isSubscribed()) {
+								enableRemoveSubscription();
+							} else {
+								enableAddSubscription();
+							} 
 						} else {
 							disable = true;
 						}
