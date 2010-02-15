@@ -958,7 +958,7 @@ public class MainMenu extends Composite {
 	// Command menu to show administration
 	Command showAdministration = new Command() {
 		public void execute() {
-			Window.open("/OpenKM"+Config.INSTALL+"/com.openkm.backend.Main/index.jsp","Administration","");
+			Window.open("/OpenKM"+Config.INSTALL+"/admin/index.jsp","Administration","");
 		}
 	};
 	
