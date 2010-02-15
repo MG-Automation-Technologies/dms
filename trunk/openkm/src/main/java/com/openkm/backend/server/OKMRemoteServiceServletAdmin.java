@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.backend.client.OKMException;
 import com.openkm.backend.client.config.ErrorCode;
 
@@ -56,6 +57,10 @@ public class OKMRemoteServiceServletAdmin extends RemoteServiceServlet {
 		
 		try {
 			token = (String)getThreadLocalRequest().getSession().getAttribute("token");
+			if (token==null) {
+				token = OKMAuth.getInstance().login();
+				getThreadLocalRequest().getSession().setAttribute("token", token);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRemoteService, ErrorCode.CAUSE_General), e.getMessage());
