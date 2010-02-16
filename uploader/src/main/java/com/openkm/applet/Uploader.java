@@ -49,7 +49,8 @@ public class Uploader extends JApplet {
 			url = url.substring(0, url.lastIndexOf('/'));
 			token = getParameter("token");
 			path = getParameter("path");
-			locale = Util.parseLocaleString(getParameter("lang"));
+			lang = getParameter("lang");
+			locale = Util.parseLocaleString(lang);
 			Messages.init(locale);
 			win = (JSObject) JSObject.getWindow(this);
 		} catch (Exception e) {
