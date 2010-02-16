@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.applet;
 
 import java.awt.AlphaComposite;
@@ -32,6 +53,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,9 +76,8 @@ import com.openkm.ws.client.RepositoryException_Exception;
 import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
 import com.openkm.ws.client.VirusDetectedException_Exception;
 
+@SuppressWarnings("serial")
 public class MainFrame extends JFrame implements DropTargetListener, ActionListener {
-
-	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
 	private String token;
 	private String path;
@@ -65,7 +86,6 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	private BufferedImage logo;
 	private JPopupMenu popupMenu;
 	private JMenuItem menuItem;
-	private String message; 
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -75,6 +95,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			@SuppressWarnings("restriction")
 			public void run() {
 				// JFrame.setDefaultLookAndFeelDecorated(true);
+				Messages.init(new Locale("en", "EN"));
 				MainFrame inst = new MainFrame("000", "/okm:root", null, null);
 				inst.setUndecorated(true);
 				inst.setResizable(false);
@@ -93,6 +114,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	 */
 	public MainFrame(String token, String path, String url, JSObject win) {
 		super("Uploader");
+		
 		try {
 			logo = ImageIO.read(MainFrame.class.getResource("openkm.png"));
 		} catch (IOException e) {
@@ -105,8 +127,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		WindowListener wl = new WindowListener();
 		addWindowListener(wl);
 		menuItem.addActionListener(this);
-		message = "Drag files here";
-		
+
 		// Set instances
 		this.token = token;
 		this.path = path;
@@ -133,7 +154,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		try {
 			new DropTarget(getContentPane(), this);
 			popupMenu = new JPopupMenu();
-			menuItem = new JMenuItem("Exit");
+			menuItem = new JMenuItem(Messages.get("exit"));
 			popupMenu.add(menuItem);
 			setSize(logo.getWidth(), logo.getHeight());
 		} catch (Exception e) {
@@ -141,7 +162,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -164,12 +185,13 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 
 		g2.setComposite(AlphaComposite.SrcAtop);
 		g2.drawImage(logo, 0, 0, null);
-		
+
 		Font f = new Font("Helvetica", Font.BOLD, 16);
 		FontMetrics fm = getFontMetrics(f);
 		g2.setColor(Color.RED);
 		g2.setFont(f);
-		g2.drawString(message, width/2 - fm.stringWidth(message)/2, height/2 + fm.getHeight()/2);
+		g2.drawString(Messages.get("drag.here"), width / 2 - fm.stringWidth(Messages.get("drag.here")) / 2,
+				height / 2 + fm.getHeight() / 2);
 		g2.dispose();
 
 		// at this point the 'img' contains a soft
@@ -177,10 +199,10 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		g2d.drawImage(img, 0, 0, this);
 		g2d.dispose();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		log.info("actionPerformed("+e+")");
+		log.info("actionPerformed(" + e + ")");
 		setVisible(false);
 		dispose();
 	}
@@ -224,9 +246,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				dtde.dropComplete(true);
 
 				// Refresh file list
-				log.fine("--- refresh - begin ---");
 				win.call("refresh", new Object[] {});
-				log.fine("--- refresh - end ---");
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 
@@ -239,9 +259,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				dtde.dropComplete(true);
 
 				// Refresh file list
-				log.fine("--- refresh - begin ---");
 				win.call("refresh", new Object[] {});
-				log.fine("--- refresh - end ---");
 			}
 		} catch (ClassNotFoundException e) {
 			log.log(Level.SEVERE, "ClassNotFoundException: " + e.getMessage(), e);
@@ -325,7 +343,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	class PopupListener extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			log.fine("mousePressed("+e+")");
+			log.fine("mousePressed(" + e + ")");
 			if (e.isPopupTrigger()) {
 				popupMenu.show(((JFrame) e.getComponent()).getContentPane(), e.getX(), e.getY());
 			}
@@ -333,7 +351,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			log.fine("mouseReleased("+e+")");
+			log.fine("mouseReleased(" + e + ")");
 			if (e.isPopupTrigger()) {
 				popupMenu.show(((JFrame) e.getComponent()).getContentPane(), e.getX(), e.getY());
 			}
