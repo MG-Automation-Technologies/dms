@@ -22,6 +22,7 @@
 package com.openkm.kea.tree;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,8 +30,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
-
-import javax.servlet.ServletOutputStream;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryEvaluationException;
@@ -53,76 +52,88 @@ import com.openkm.kea.RDFREpository;
  * KEA Tree
  * 
  * @author jllort
- *
+ * 
  */
 public class KEATree {
-	
+
 	private static Logger log = LoggerFactory.getLogger(KEATree.class);
-	
+
 	/**
 	 * Generate tree
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
+	 * @throws IOException
 	 */
+	public static void generateTree(String token, int levelToDraw, String parentPath,
+			Vector<String> parentUIDs, Writer out) throws IOException {
+		gnerateTreeHelper(null, 0, token, levelToDraw, parentPath, parentUIDs, out);
+	}
+
 	@SuppressWarnings("unchecked")
-	public static void recursiveGenerateTree(String termID, int level, int levelToDraw, String token, String parentPath, 
-											 Vector<String> parentUIDS, ServletOutputStream out) throws IOException {        
-		
+	private static void gnerateTreeHelper(String termID, int level, String token, int levelToDraw,
+			String parentPath, Vector<String> parentUIDs, Writer out) throws IOException {
 		List<Term> lisTerms = getParentTerms(termID);
-		if (level<=levelToDraw) {
-			out.println("Founded " + lisTerms.size() + " terms in level " + (level+1) + "<br>");
+		if (level <= levelToDraw) {
+			out.write("Founded " + lisTerms.size() + " terms in level " + level + "<br>");
 			out.flush();
 		}
-        for (ListIterator<Term> it = lisTerms.listIterator(); it.hasNext();) {
-        	try {
-        		Vector<String> newParentUIDS = (Vector<String>) parentUIDS.clone();
-	        	String path = parentPath;
-	        	Term term = it.next();
-	        	if (level<=levelToDraw) {
-	        		drawTerm(term, level, out);
-	        	}
-	        	path += "/" + term.getText();
-	        	Folder folder = new Folder();
-	    		folder.setPath(path);
+		for (ListIterator<Term> it = lisTerms.listIterator(); it.hasNext();) {
+			try {
+				Vector<String> newParentUIDs = (Vector<String>) parentUIDs.clone();
+				String path = parentPath;
+				Term term = it.next();
+				if (level <= levelToDraw) {
+					drawTerm(term, level, out);
+				}
+				path += "/" + term.getText();
+				Folder folder = new Folder();
+				folder.setPath(path);
 				OKMFolder.getInstance().create(token, folder);
-				// To solve infinite loop ( nodes must not be in a infinite cycle )
-				if (!newParentUIDS.contains(term.getUid())) {
-					newParentUIDS.add(term.getUid());
-					recursiveGenerateTree(term.getUid(), level+1, levelToDraw, token, path, newParentUIDS, out); // recursive generation
-				} 
+				// To solve infinite loop (nodes must not be in a infinite
+				// cycle)
+				if (!newParentUIDs.contains(term.getUid())) {
+					newParentUIDs.add(term.getUid());
+					// Recursive generation
+					gnerateTreeHelper(term.getUid(), level + 1, token, levelToDraw, path, newParentUIDs, out);
+				}
 			} catch (PathNotFoundException e) {
-				log.error("path not found",e);
+				log.error("path not found", e);
 			} catch (ItemExistsException e) {
 				// Silent error ( not creating twice the folder )
 			} catch (AccessDeniedException e) {
-				log.error("access denied",e);
+				log.error("access denied", e);
 			} catch (com.openkm.core.RepositoryException e) {
-				log.error("openkm repository exception",e);
+				log.error("openkm repository exception", e);
 			}
-        }
+		}
 	}
-	
+
 	/**
 	 * drawTerm
 	 * 
-	 * @param term The term
-	 * @param level The level
-	 * @throws IOException 
+	 * @param term
+	 *            The term
+	 * @param level
+	 *            The level
+	 * @throws IOException
 	 */
-	private static void drawTerm(Term term, int level, ServletOutputStream out) throws IOException {
+	private static void drawTerm(Term term, int level, Writer out) throws IOException {
 		String levelSeparator = "";
-		for (int i=0; i<level; i++) {
+		for (int i = 0; i < level; i++) {
 			levelSeparator += "-";
 		}
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-		out.println(dtf.format(cal.getTime()) + " Creating term " + levelSeparator +"> [" + term.getText() + "] - with uid:" + term.getUid() + "<br>");
+		out.write(dtf.format(cal.getTime()) + " Creating term " + levelSeparator + "> [" + term.getText()
+				+ "] - with uid:" + term.getUid() + "<br>");
 		out.flush();
 	}
-	
+
 	/**
 	 * getParentTerms
 	 * 
-	 * @param termID The term id
+	 * @param termID
+	 *            The term id
 	 * 
 	 * @return List of child terms
 	 */
@@ -132,34 +143,35 @@ public class KEATree {
 		TupleQuery query;
 
 		try {
-			
+
 			con = RDFREpository.getInstance().getOWLConnection();
-			
-			if (termID==null) {
+
+			if (termID == null) {
 				query = QueryBank.getInstance().getTreeTopQuery(con);
 			} else {
 				query = QueryBank.getInstance().getTreeNextLayerQuery(termID, con);
 			}
-	        
-	        TupleQueryResult result = query.evaluate();
-	        
-	        while (result.hasNext()) {
-	
-	            BindingSet bindingSet = result.next();
-	            Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT").stringValue());
-	            // need to ignore duplicates casued by grandchild problem
-	            if (!childTerms.contains(term)) {
-	                childTerms.add(term);
-	            }
-	        }
-        
+
+			TupleQueryResult result = query.evaluate();
+
+			while (result.hasNext()) {
+
+				BindingSet bindingSet = result.next();
+				Term term = new Term(bindingSet.getValue("UID").stringValue(), bindingSet.getValue("TEXT")
+						.stringValue());
+				// need to ignore duplicates casued by grandchild problem
+				if (!childTerms.contains(term)) {
+					childTerms.add(term);
+				}
+			}
+
 		} catch (QueryEvaluationException e) {
-			log.error("Query evaluation exception",e);
+			log.error("Query evaluation exception", e);
 		} catch (RepositoryException e) {
-			log.error("RDFVocabulary repository exception",e);
+			log.error("RDFVocabulary repository exception", e);
 		}
-        Collections.sort(childTerms, new TermComparator());
-		
+		Collections.sort(childTerms, new TermComparator());
+
 		return childTerms;
 	}
 }
