@@ -81,7 +81,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		boolean toPdf = req.getParameter("toPdf") != null;
 		boolean toSwf = req.getParameter("toSwf") != null;
 		boolean inline = req.getParameter("inline") != null;
-		File tmp = File.createTempFile("okm", ".mkk");
+		File tmp = File.createTempFile("okm", ".tmp");
 		Document doc = null;
 		InputStream is = null;
 		
