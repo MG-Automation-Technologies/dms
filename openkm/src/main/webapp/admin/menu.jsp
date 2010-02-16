@@ -28,6 +28,8 @@
   &nbsp;
   <a target="frame" href="wf_processes.jsp"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
+  <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
+  &nbsp;
   <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
   &nbsp;
   <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
