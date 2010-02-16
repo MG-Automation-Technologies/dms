@@ -95,7 +95,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			@SuppressWarnings("restriction")
 			public void run() {
 				// JFrame.setDefaultLookAndFeelDecorated(true);
-				Messages.init(new Locale("en", "EN"));
+				Messages.init(Locale.getDefault());
 				MainFrame inst = new MainFrame("000", "/okm:root", null, null);
 				inst.setUndecorated(true);
 				inst.setResizable(false);
