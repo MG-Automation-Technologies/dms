@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.applet;
 
 import java.awt.Dimension;
@@ -6,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +64,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				Messages.init(Locale.getDefault());
 				MainFrame inst = new MainFrame(null, null);
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
@@ -87,37 +110,37 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 
 			jLabel1 = new JLabel();
 			getContentPane().add(jLabel1);
-			jLabel1.setText("File Name");
-			jLabel1.setBounds(19, 19, 68, 15);
+			jLabel1.setText(Messages.get("file.name"));
+			jLabel1.setBounds(19, 19, 105, 15);
 			
 			jLabel2 = new JLabel();
 			getContentPane().add(jLabel2);
-			jLabel2.setText("File Type");
-			jLabel2.setBounds(19, 45, 68, 15);
+			jLabel2.setText(Messages.get("file.type"));
+			jLabel2.setBounds(19, 45, 105, 15);
 			
 			tfFileName = new JTextField();
 			getContentPane().add(tfFileName);
-			tfFileName.setBounds(85, 15, 170, 22);
+			tfFileName.setBounds(125, 15, 190, 22);
 			
 			ComboBoxModel cbFileTypeModel = new DefaultComboBoxModel(
 			new String[] { "PDF", "TIF", "JPG", "PNG", "GIF", "BMP" });
 			cbFileType = new JComboBox();
 			getContentPane().add(cbFileType);
 			cbFileType.setModel(cbFileTypeModel);
-			cbFileType.setBounds(85, 43, 55, 22);
+			cbFileType.setBounds(125, 43, 55, 22);
 			
-			cbUI = new JCheckBox("User Interface", true);
+			cbUI = new JCheckBox(Messages.get("user.interface"), true);
 			getContentPane().add(cbUI);
-			cbUI.setBounds(145, 43, 120, 22);
+			cbUI.setBounds(185, 43, 140, 22);
 			
 			bScan = new JButton();
 			getContentPane().add(bScan);
-			bScan.setText("Scan & Upload");
-			bScan.setBounds(19, 84, 235, 22);
+			bScan.setText(Messages.get("scan.upload"));
+			bScan.setBounds(50, 84, 235, 22);
 			bScan.addActionListener(this);
 			
 			pack();
-			this.setSize(283, 159);
+			this.setSize(340, 159);
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
