@@ -3,6 +3,8 @@ package com.openkm.applet;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -63,6 +65,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	private BufferedImage logo;
 	private JPopupMenu popupMenu;
 	private JMenuItem menuItem;
+	private String message; 
 
 	/**
 	 * Auto-generated main method to display this JFrame
@@ -102,6 +105,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		WindowListener wl = new WindowListener();
 		addWindowListener(wl);
 		menuItem.addActionListener(this);
+		message = "Drag files here";
 		
 		// Set instances
 		this.token = token;
@@ -160,6 +164,12 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 
 		g2.setComposite(AlphaComposite.SrcAtop);
 		g2.drawImage(logo, 0, 0, null);
+		
+		Font f = new Font("Helvetica", Font.BOLD, 16);
+		FontMetrics fm = getFontMetrics(f);
+		g2.setColor(Color.RED);
+		g2.setFont(f);
+		g2.drawString(message, width/2 - fm.stringWidth(message)/2, height/2 + fm.getHeight()/2);
 		g2.dispose();
 
 		// at this point the 'img' contains a soft
