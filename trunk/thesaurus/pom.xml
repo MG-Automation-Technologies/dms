@@ -59,6 +59,7 @@
       <groupId>com.openkm</groupId>
       <artifactId>openkm-jar</artifactId>
       <version>5.0-SNAPSHOT</version>
+      <classifier>classes</classifier>
     </dependency>
     <!-- KEA -->
     <dependency>
