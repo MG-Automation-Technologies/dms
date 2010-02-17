@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -281,7 +280,7 @@ public class Dragable extends Composite implements OriginPanel {
                     // Sets the style of actual tree item
                     if (selectedTreeItem!=null) {
                     	
-                    	selectedElement = DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(selectedTreeItem.getElement(),0),0),0),1),0);
+                    	selectedElement = getSelectedElement(selectedTreeItem.getElement());
                     	DOM.setElementProperty(selectedElement,"className","gwt-TreeItem gwt-TreeItem-selected");
                     	
                     	if (lastSelectedTreeItem!=null && !selectedTreeItem.equals(lastSelectedTreeItem) && 
@@ -337,6 +336,22 @@ public class Dragable extends Composite implements OriginPanel {
 			Main.get().showError("Move", caught);
 		}
 	};
+	
+	/**
+	 * getSelectedElement
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public Element getSelectedElement(Element element){
+		if (DOM.getFirstChild(element).getClassName().equals("gwt-TreeItem")) {
+			// Case node without childs
+			return DOM.getFirstChild(element);
+		} else {
+			// Case node with childs
+			return DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(selectedTreeItem.getElement(),0),0),0),1),0);
+		}
+	}
 	
 	/**
 	 * Prevents folder incosistences changing moved path on childs recursivelly
