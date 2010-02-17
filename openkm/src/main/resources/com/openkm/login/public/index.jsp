@@ -18,7 +18,7 @@
 		<meta http-equiv="Cache-Control" content="no-cache" />
     	<meta http-equiv="Pragma" content="no-cache" />
     	<meta http-equiv="Expires" content="0" />
-    	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+    	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 		<link rel="Shortcut icon" href="../favicon.ico" />
 		<% if (FormatUtil.isMobile(request)) { %>
   			<link rel="stylesheet" href="mobile.css" type="text/css" />
