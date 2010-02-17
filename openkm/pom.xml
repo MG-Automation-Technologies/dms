@@ -67,26 +67,26 @@
       <name>JBoss Maven Repository</name>
       <url>http://repository.jboss.com/maven2</url>
     </repository>
-    
+
     <!-- Needed for KEA - openrdf -->
     <repository>
       <id>openrdf.org</id>
       <name>Aduna's maven repository</name>
       <url>http://repo.aduna-software.org/maven2/releases</url>
     </repository>
-  
-  	<!-- Needed for KEA - aperture -->
- 	<repository>
+
+    <!-- Needed for KEA - aperture -->
+  <repository>
       <id>aperture-repo</id>
       <name>Aperture Maven Repository</name>
       <url>http://aperture.sourceforge.net/maven</url>
-  	</repository>
-  	
-  	<!-- Needed for GWT incubator -->
-  	<repository>
-    	<id>mule-deps</id>
-    	<name>Mule Dependencies</name>
-    	<url>http://dist.codehaus.org/mule/dependencies/maven2</url>
+    </repository>
+
+    <!-- Needed for GWT incubator -->
+    <repository>
+      <id>mule-deps</id>
+      <name>Mule Dependencies</name>
+      <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
     </repository>
   </repositories>
 
@@ -186,7 +186,7 @@
       <artifactId>twitter4j</artifactId>
       <version>[2.0,)</version>
     </dependency>
-    
+
     <!-- Velocity -->
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -315,49 +315,49 @@
       <artifactId>gwt-incubator</artifactId>
       <version>july-14-2009</version>
     </dependency>
-    
+
     <!-- KEA -->
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
       <artifactId>sesame-runtime</artifactId>
       <version>2.2.4</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.semanticdesktop.aperture</groupId>
       <artifactId>aperture-runtime-default</artifactId>
       <version>1.3.0</version>
     </dependency>
-    
-  	<dependency>
+
+    <dependency>
       <groupId>org.semanticdesktop.aperture</groupId>
       <artifactId>aperture-runtime-optional</artifactId>
       <version>1.3.0</version>
       <exclusions>
-      	<exclusion>
+        <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-jdk14</artifactId>
         </exclusion>
       </exclusions>
       <type>pom</type>
-  	</dependency>
-  	
-  	<dependency>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-snowball</artifactId>
       <version>2.9.1</version>
     </dependency>
-    
+
     <dependency>
       <groupId>weka</groupId>
       <artifactId>weka</artifactId>
       <version>3.7</version>
     </dependency>
-    
+
     <dependency>
-	  <groupId>com.hp.hpl.jena</groupId>
-	  <artifactId>jena</artifactId>
-	  <version>2.6.2</version>
+      <groupId>com.hp.hpl.jena</groupId>
+      <artifactId>jena</artifactId>
+      <version>2.6.2</version>
       <exclusions>
         <!-- JBoss already have its own log4j.jar -->
         <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
@@ -366,7 +366,7 @@
           <artifactId>log4j</artifactId>
         </exclusion>
       </exclusions>
-	</dependency>
+    </dependency>
   </dependencies>
 
   <build>
@@ -384,7 +384,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>compile</goal>
+              <!-- <goal>compile</goal> -->
               <!-- <goal>generateAsync</goal>  -->
               <goal>test</goal>
             </goals>
