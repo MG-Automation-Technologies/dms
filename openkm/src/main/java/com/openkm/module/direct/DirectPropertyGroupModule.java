@@ -382,7 +382,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	public static HashMap<String, MetaData> parseMetadata() throws IOException {
 		HashMap<String, MetaData> ret = new HashMap<String, MetaData>();
 		Properties prop = new Properties();
-		prop.load(new FileInputStream(Config.JBOSS_HOME+"/"+"PropertyGroupValues"+Config.INSTALL+".properties"));
+		prop.load(new FileInputStream(Config.HOME_DIR+"/"+"PropertyGroupValues"+Config.INSTALL+".properties"));
 
 		for (Iterator<Entry<Object, Object>> it = prop.entrySet().iterator(); it.hasNext(); ) {
 			Entry<Object, Object> entry = it.next();
