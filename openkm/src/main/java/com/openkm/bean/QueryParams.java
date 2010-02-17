@@ -34,6 +34,7 @@ public class QueryParams implements Serializable {
 	public static final String CONTENT = "okm:content";
 	public static final String NAME = "okm:name";
 	public static final String KEYWORDS = "okm:keywords";
+	public static final String CATEGORIES = "okm:categories";
 	public static final String MIME_TYPE = "okm:mimeType";
 	public static final String AUTHOR = "okm:author";
 	public static final String PATH = "okm:path";
@@ -52,6 +53,7 @@ public class QueryParams implements Serializable {
 	
 	private String name;
 	private String keywords;
+	private String categories;
 	private String content;
 	private String mimeType;
 	private String author;
@@ -81,7 +83,15 @@ public class QueryParams implements Serializable {
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
+	
+	public String getCategories() {
+		return categories;
+	}
 
+	public void setCategories(String categories) {
+		this.categories = categories;
+	}
+	
 	public String getMimeType() {
 		return mimeType;
 	}
@@ -190,6 +200,7 @@ public class QueryParams implements Serializable {
 		sb.append("[");
 		sb.append("name="); sb.append(name);
 		sb.append(", keywords="); sb.append(keywords);
+		sb.append(", categories="); sb.append(categories);
 		sb.append(", content="); sb.append(content);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);

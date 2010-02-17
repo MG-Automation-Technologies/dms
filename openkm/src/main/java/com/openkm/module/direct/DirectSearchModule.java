@@ -207,6 +207,7 @@ public class DirectSearchModule implements SearchModule {
 		params.setName(params.getName() != null?params.getName().trim():""); 
 		params.setContent(params.getContent() != null?params.getContent().trim():"");
 		params.setKeywords(params.getKeywords() != null?params.getKeywords().trim():"");
+		params.setCategories(params.getCategories() != null?params.getCategories().trim():"");
 		params.setMimeType(params.getMimeType() != null?params.getMimeType().trim():"");
 		params.setAuthor(params.getAuthor() != null?params.getAuthor().trim():"");
 		params.setPath(params.getPath() != null?params.getPath().trim():"");
@@ -256,30 +257,41 @@ public class DirectSearchModule implements SearchModule {
 
 				if (!params.getName().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("jcr:contains(@okm:name,'"+ params.getName()+ "')");
+					sb.append("jcr:contains(@okm:name,'" + params.getName() + "')");
 				}
-
+				
 				if (!params.getKeywords().equals("")) {
-					sb.append(" "+params.getOperator()+" ");
-					sb.append("jcr:contains(@okm:keywords,'"+ params.getKeywords()+ "')");
+					String keywords[] = params.getKeywords().split("\\s+");
+					for (int i=0; i<keywords.length; i++) {
+						sb.append(" "+params.getOperator()+" ");
+						sb.append("@okm:keywords = '" + keywords[i] + "'");
+					}
+				}
+				
+				if (!params.getCategories().equals("")) {
+					String categories[] = params.getCategories().split("\\s+");
+					for (int i=0; i<categories.length; i++) {
+						sb.append(" "+params.getOperator()+" ");
+						sb.append("@okm:categories = '" + categories[i] + "'");
+					}
 				}
 
 				if (!params.getMimeType().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("@okm:content/jcr:mimeType='"+ params.getMimeType()+ "'");
+					sb.append("@okm:content/jcr:mimeType='" + params.getMimeType() + "'");
 				}
 
 				if (!params.getAuthor().equals("")) {
 					sb.append(" "+params.getOperator()+" ");
-					sb.append("@okm:content/okm:author='"+ params.getAuthor()+ "'");
+					sb.append("@okm:content/okm:author='" + params.getAuthor() + "'");
 				}
 
 				if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
 					sb.append(" "+params.getOperator()+" ");
 					sb.append("(");
-					sb.append("@okm:content/jcr:lastModified >= xs:dateTime('" + ISO8601.format(params.getLastModifiedFrom()) +"')");				
+					sb.append("@okm:content/jcr:lastModified >= xs:dateTime('" + ISO8601.format(params.getLastModifiedFrom()) + "')");				
 					sb.append(" and ");
-					sb.append("@okm:content/jcr:lastModified <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) +"')");
+					sb.append("@okm:content/jcr:lastModified <= xs:dateTime('" + ISO8601.format(params.getLastModifiedTo()) + "')");
 					sb.append(")");
 				}
 
@@ -542,6 +554,7 @@ public class DirectSearchModule implements SearchModule {
 		savedSearch.setProperty(QueryParams.CONTENT, params.getContent());
 		savedSearch.setProperty(QueryParams.NAME, params.getName());
 		savedSearch.setProperty(QueryParams.KEYWORDS, params.getKeywords());
+		savedSearch.setProperty(QueryParams.CATEGORIES, params.getCategories());
 		savedSearch.setProperty(QueryParams.MIME_TYPE, params.getMimeType());
 		savedSearch.setProperty(QueryParams.AUTHOR, params.getAuthor());
 		savedSearch.setProperty(QueryParams.PATH, params.getPath());
@@ -615,6 +628,8 @@ public class DirectSearchModule implements SearchModule {
 				qp.setName(p.getString());
 			} else if (p.getName().equals(QueryParams.KEYWORDS)) {
 				qp.setKeywords(p.getString());
+			} else if (p.getName().equals(QueryParams.CATEGORIES)) {
+				qp.setCategories(p.getString());
 			} else if (p.getName().equals(QueryParams.MIME_TYPE)) {
 				qp.setMimeType(p.getString());
 			} else if (p.getName().equals(QueryParams.AUTHOR)) {

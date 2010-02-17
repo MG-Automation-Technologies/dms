@@ -67,6 +67,7 @@
 - okm:content (string)
 - okm:name (string)
 - okm:keywords (string)
+- okm:categories (string)
 - okm:mimeType (string)
 - okm:author (string)
 - okm:lastModifiedFrom (date)
