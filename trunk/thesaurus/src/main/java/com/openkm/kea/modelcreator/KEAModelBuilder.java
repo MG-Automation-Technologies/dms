@@ -40,8 +40,8 @@ import weka.core.Instances;
 import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.Utils;
+
 import com.openkm.kea.filter.KEAFilter;
-import com.openkm.kea.metadata.WorkspaceHelper;
 import com.openkm.kea.stemmers.SremovalStemmer;
 import com.openkm.kea.stemmers.Stemmer;
 import com.openkm.kea.stopwords.Stopwords;
