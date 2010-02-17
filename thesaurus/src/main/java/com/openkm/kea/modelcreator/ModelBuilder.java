@@ -24,6 +24,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.kea.metadata.WorkspaceHelper;
 import com.openkm.kea.stemmers.Stemmer;
 import com.openkm.kea.stopwords.Stopwords;
@@ -186,6 +187,7 @@ public class ModelBuilder {
 	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
 		String sourceFolder = "";
@@ -200,12 +202,13 @@ public class ModelBuilder {
 		String stopwordsClassName = "";
 		String stopwordsFile = "";
 		String testingFoder = "";
-		
+
 		// Testing minor number of arguments
 		if (args.length < 10) {
 			log.info("Incorrect syntax, some arguments missings");
-			log.info("java -Xmx512m -jar thesaurus-50.jar sourceFolder trainingFolder vocabularyFile vocabularyType " + 
-					 "stopwordFile modelFileName porterStemmerClass stopwordClass language documentEncoding ");
+			log
+					.info("java -Xmx512m -jar thesaurus-50.jar sourceFolder trainingFolder vocabularyFile vocabularyType "
+							+ "stopwordFile modelFileName porterStemmerClass stopwordClass language documentEncoding ");
 			System.exit(0);
 		} else {
 			sourceFolder = args[0];
@@ -218,27 +221,26 @@ public class ModelBuilder {
 			stopwordsClassName = args[7];
 			lang = args[8];
 			documentEncoding = args[9];
-			if (args.length==11) {
+			if (args.length == 11) {
 				testingFoder = sourceFolder + File.separator + args[10];
 			}
-			vocabularyFilePath = WorkspaceHelper.getWorkingDir() + File.separator + sourceFolder +
-					             File.separator + vocabularyFile;
+			vocabularyFilePath = Config.HOME_DIR + File.separator + sourceFolder + File.separator
+					+ vocabularyFile;
 			// Must change stopwords path used by stopwords class
-			WorkspaceHelper.KEA_STOPWORDS_PATH = WorkspaceHelper.getWorkingDir() + File.separator +
-					                  			 sourceFolder + File.separator + stopwordsFile;
+			WorkspaceHelper.KEA_STOPWORDS_PATH = Config.HOME_DIR + File.separator + sourceFolder
+					+ File.separator + stopwordsFile;
 
-			log.info("source folder:" + WorkspaceHelper.getWorkingDir() + File.separator + sourceFolder);
-			log.info("training folder:" + WorkspaceHelper.getWorkingDir() + File.separator +
-										  trainingFilesPath);
+			log.info("source folder:" + Config.HOME_DIR + File.separator + sourceFolder);
+			log.info("training folder:" + Config.HOME_DIR + File.separator + trainingFilesPath);
 			log.info("vocabulary file:" + vocabularyFilePath);
 			log.info("vocabulary type:" + vocabularyType);
 			log.info("stopwords file:" + stopwordsFile);
-			log.info("model file:" + WorkspaceHelper.getWorkingDir() + File.separator + modelFilePath);
+			log.info("model file:" + Config.HOME_DIR + File.separator + modelFilePath);
 			log.info("stemmer class:" + stemerClassName);
 			log.info("stopword class:" + stopwordsClassName);
 			log.info("language:" + lang);
 			log.info("document encoding:" + documentEncoding);
-			log.info("testing folder:" + WorkspaceHelper.getWorkingDir() + File.separator + testingFoder);
+			log.info("testing folder:" + Config.HOME_DIR + File.separator + testingFoder);
 		}
 
 		ModelBuilder modelBuilder = new ModelBuilder();
@@ -266,16 +268,16 @@ public class ModelBuilder {
 		// to create a model from manually indexed documents,
 		log.info("Creating the model... ");
 		modelBuilder.setOptionsTraining(trainingFilesPath, modelFilePath, vocabularyFilePath, vocabularyType,
-										documentEncoding, lang, stemmer, stopwords);
+				documentEncoding, lang, stemmer, stopwords);
 		modelBuilder.createModel(stopwords);
-		
+
 		// Testing folder is optional
 		if (!testingFoder.equals("")) {
 			// to extract keyphrases from new documents,
 			log.info("Extracting keyphrases from test documents... ");
-	
-			modelBuilder.setOptionsTesting(testingFoder, trainingFilesPath, modelFilePath, vocabularyFilePath,
-										   vocabularyType, documentEncoding, lang, stemmer, stopwords);
+
+			modelBuilder.setOptionsTesting(testingFoder, trainingFilesPath, modelFilePath,
+					vocabularyFilePath, vocabularyType, documentEncoding, lang, stemmer, stopwords);
 			modelBuilder.extractKeyphrases();
 			log.info("Look into " + testingFoder + " to see the results");
 			log.info("and compare them to " + testingFoder + "/manual_keyphrases/.");
