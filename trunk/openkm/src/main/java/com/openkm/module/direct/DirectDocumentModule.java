@@ -81,7 +81,6 @@ import com.openkm.core.VirusDetection;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
-import com.openkm.kea.metadata.WorkspaceHelper;
 import com.openkm.module.DocumentModule;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
@@ -299,7 +298,7 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		// Added to kea
 		String fileExtention = doc.getPath().substring(doc.getPath().indexOf('.')); // Must have the same extension
-		File tmpKea = File.createTempFile("kea", fileExtention, new File(WorkspaceHelper.getTempDir()));
+		File tmpKea = File.createTempFile("kea", fileExtention, new File(Config.TMP_DIR));
 
 		try {
 			String parent = FileUtils.getParent(doc.getPath());
