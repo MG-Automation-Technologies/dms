@@ -9,23 +9,23 @@
   <description>With OpenKM Thesaurus can create traing module for automatic keyword extraction. It uses sesame, jena, and kea frameworks and needs owl or rdf, skos and some training files.</description>
   
   <repositories>
-  	<!-- Needed for KEA - openrdf -->
+    <!-- Needed for KEA - openrdf -->
     <repository>
       <id>openrdf.org</id>
       <name>Aduna's maven repository</name>
       <url>http://repo.aduna-software.org/maven2/releases</url>
     </repository>
   
-  	<!-- Needed for KEA - aperture -->
- 	<repository>
+    <!-- Needed for KEA - aperture -->
+    <repository>
       <id>aperture-repo</id>
       <name>Aperture Maven Repository</name>
       <url>http://aperture.sourceforge.net/maven</url>
-  	</repository>
+    </repository>
   </repositories>
   
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.5.3</version>
@@ -35,55 +35,49 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.5.3</version>
     </dependency>
-  	<dependency>
-  		<groupId>com.openkm</groupId>
-  		<artifactId>openkm-jar</artifactId>
-  		<version>5.0-SNAPSHOT</version>
-  	</dependency>
-  	<!-- KEA -->
+    <dependency>
+      <groupId>com.openkm</groupId>
+      <artifactId>openkm-jar</artifactId>
+      <version>5.0-SNAPSHOT</version>
+    </dependency>
+    <!-- KEA -->
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
       <artifactId>sesame-runtime</artifactId>
       <version>2.2.4</version>
     </dependency>
-    
     <dependency>
       <groupId>org.semanticdesktop.aperture</groupId>
       <artifactId>aperture-runtime-default</artifactId>
       <version>1.3.0</version>
     </dependency>
-    
-  	<dependency>
+    <dependency>
       <groupId>org.semanticdesktop.aperture</groupId>
       <artifactId>aperture-runtime-optional</artifactId>
       <version>1.3.0</version>
       <exclusions>
-      	<exclusion>
+        <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-jdk14</artifactId>
         </exclusion>
       </exclusions>
       <type>pom</type>
-  	</dependency>
-  	
-  	<dependency>
+    </dependency>
+    <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-snowball</artifactId>
       <version>2.9.1</version>
     </dependency>
-    
     <dependency>
       <groupId>weka</groupId>
       <artifactId>weka</artifactId>
       <version>3.7</version>
     </dependency>
-    
     <dependency>
-	  <groupId>com.hp.hpl.jena</groupId>
-	  <artifactId>jena</artifactId>
-	  <version>2.6.2</version>
-	</dependency>
-    
+      <groupId>com.hp.hpl.jena</groupId>
+      <artifactId>jena</artifactId>
+      <version>2.6.2</version>
+    </dependency>
   </dependencies>
   
   <properties>
@@ -92,57 +86,57 @@
   </properties>
   
   <build>
-  	<finalName>thesaurus-5.0</finalName>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-jar-plugin</artifactId>
-  			<version>2.3</version>
-  			<configuration>
-          		<archive>
-            		<manifest>
-              			<addClasspath>true</addClasspath>
-            		</manifest>
-          		  	<addMavenDescriptor>false</addMavenDescriptor>
-          		</archive>
-        	</configuration>
-  		</plugin>
+    <finalName>thesaurus-5.0</finalName>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+              </manifest>
+              <addMavenDescriptor>false</addMavenDescriptor>
+            </archive>
+        </configuration>
+      </plugin>
   		
-  		<plugin>
-        	<!-- I get duplicate files in my "jar-with-dependencies.jar" -->
-        	<!-- http://jira.codehaus.org/browse/MASSEMBLY-355 -->
-        	<groupId>org.apache.maven.plugins</groupId>
-        	<artifactId>maven-assembly-plugin</artifactId>
-        	<version>2.1</version>
-        	<!-- http://maven.apache.org/plugins/maven-assembly-plugin/assembly-mojo.html -->
-        	<configuration>
-          	<!-- assembly fails on unix if 'appendAssemblyId' is set to false, and 'classifier' is missing. on windows it works -->
-          	<!-- http://jira.codehaus.org/browse/MASSEMBLY-344 -->
-          		<appendAssemblyId>true</appendAssemblyId>
-          		<descriptorRefs>
-            		<descriptorRef>jar-with-dependencies</descriptorRef>
-          		</descriptorRefs>
-        	</configuration>
-        	<executions>
-          		<execution>
-            		<id>make-assembly</id>
-            		<phase>package</phase>
-            		<goals>
-              			<goal>attached</goal>
-            		</goals>
-          		</execution>
-        	</executions>
-      	</plugin>
-  		
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<version>2.0.2</version>
-  			<configuration>
-          		<source>${java.compiler}</source>
-          		<target>${java.compiler}</target>
-        	</configuration>
-  		</plugin>
-  	</plugins>
+      <plugin>
+        <!-- I get duplicate files in my "jar-with-dependencies.jar" -->
+        <!-- http://jira.codehaus.org/browse/MASSEMBLY-355 -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.1</version>
+       	<!-- http://maven.apache.org/plugins/maven-assembly-plugin/assembly-mojo.html -->
+       	<configuration>
+       	  <!-- assembly fails on unix if 'appendAssemblyId' is set to false, and 'classifier' is missing. on windows it works -->
+          <!-- http://jira.codehaus.org/browse/MASSEMBLY-344 -->
+          <appendAssemblyId>true</appendAssemblyId>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+ 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.0.2</version>
+        <configuration>
+          <source>${java.compiler}</source>
+          <target>${java.compiler}</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
