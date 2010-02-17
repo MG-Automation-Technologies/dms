@@ -40,12 +40,13 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	
-	// JBoss home
-	public static String JBOSS_HOME = System.getProperty("jboss.home.dir");
+	// Default directories
+	public static String HOME_DIR = getHomeDir();
+	public static String TMP_DIR = getTempDir();
 	
 	// Preview cache
-	public static String PDF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"pdf";
-	public static String SWF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"swf";
+	public static String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
+	public static String SWF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"swf";
 	
 	// Multihost
 	public static String INSTALL = "";
@@ -215,9 +216,46 @@ public class Config {
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = null;
 	
+	/**
+	 * Guess the application server home directory
+	 */
+	private static String getHomeDir() {
+		// try JBoss
+		String dir = System.getProperty("jboss.home.dir");
+		if (dir != null) {
+			log.info("Using JBoss: " + dir);
+			return dir;
+		}
+		
+		// try Tomcat
+		dir = System.getProperty("catalina.home");
+		if (dir != null) {
+			log.info("Using Tomcat: " + dir);
+			return dir;
+		}
+		
+		// otherwise GWT hosted mode default
+		dir = System.getProperty("user.dir");
+		log.info("Using default dir: " + dir);
+		return dir;
+	}
+	
+	/**
+	 * Guess the system wide temporary directory
+	 * @return
+	 */
+	private static String getTempDir() {
+		String dir = System.getProperty("java.io.tmpdir");
+		if (dir != null) {
+			return dir;
+		} else {
+			return "";
+		}
+	}
+	
 	public static void load() {
 		Properties config = new Properties();
-		String configFile = JBOSS_HOME+"/"+CONFIG_FILE;
+		String configFile = HOME_DIR+"/"+CONFIG_FILE;
 			
 		// Read config
 		try {
