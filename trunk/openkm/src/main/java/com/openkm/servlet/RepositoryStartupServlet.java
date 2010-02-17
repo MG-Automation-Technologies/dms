@@ -104,7 +104,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Initialize Velocity engine
 	    try {
 	        Properties p = new Properties();
-		    p.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Config.JBOSS_HOME);
+		    p.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Config.HOME_DIR);
 			Velocity.init(p);
 		} catch (Exception e) {
 			throw new ServletException(e.getMessage());
