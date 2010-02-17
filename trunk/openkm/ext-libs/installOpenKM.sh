@@ -1,1 +1,0 @@
-mvn install:install-file -DgroupId=com.openkm -DartifactId=openkm-jar -Dversion=5.0-SNAPSHOT -Dpackaging=jar -Dfile=../target/OpenKM-classes.jar
