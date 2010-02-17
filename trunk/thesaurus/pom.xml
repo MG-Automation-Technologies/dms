@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.monkiki.openkm</groupId>
+  <groupId>com.openkm</groupId>
   <artifactId>thesaurus</artifactId>
   <packaging>jar</packaging>
   <name>OpenKM Thesaurus</name>
   <version>1.0</version>
   <url>http://www.openkm.com</url>
   <description>With OpenKM Thesaurus can create traing module for automatic keyword extraction. It uses sesame, jena, and kea frameworks and needs owl or rdf, skos and some training files.</description>
-  
+
   <repositories>
     <!-- Needed for KEA - openrdf -->
     <repository>
@@ -15,7 +15,7 @@
       <name>Aduna's maven repository</name>
       <url>http://repo.aduna-software.org/maven2/releases</url>
     </repository>
-  
+
     <!-- Needed for KEA - aperture -->
     <repository>
       <id>aperture-repo</id>
@@ -23,7 +23,7 @@
       <url>http://aperture.sourceforge.net/maven</url>
     </repository>
   </repositories>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -79,12 +79,12 @@
       <version>2.6.2</version>
     </dependency>
   </dependencies>
-  
+
   <properties>
     <!--  tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
   </properties>
-  
+
   <build>
     <finalName>thesaurus-5.0</finalName>
       <plugins>
@@ -101,16 +101,16 @@
             </archive>
         </configuration>
       </plugin>
-  		
+
       <plugin>
         <!-- I get duplicate files in my "jar-with-dependencies.jar" -->
         <!-- http://jira.codehaus.org/browse/MASSEMBLY-355 -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.1</version>
-       	<!-- http://maven.apache.org/plugins/maven-assembly-plugin/assembly-mojo.html -->
-       	<configuration>
-       	  <!-- assembly fails on unix if 'appendAssemblyId' is set to false, and 'classifier' is missing. on windows it works -->
+        <!-- http://maven.apache.org/plugins/maven-assembly-plugin/assembly-mojo.html -->
+        <configuration>
+          <!-- assembly fails on unix if 'appendAssemblyId' is set to false, and 'classifier' is missing. on windows it works -->
           <!-- http://jira.codehaus.org/browse/MASSEMBLY-344 -->
           <appendAssemblyId>true</appendAssemblyId>
           <descriptorRefs>
@@ -127,7 +127,7 @@
           </execution>
         </executions>
       </plugin>
- 
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
