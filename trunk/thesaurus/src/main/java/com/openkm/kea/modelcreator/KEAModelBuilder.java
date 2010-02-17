@@ -40,12 +40,12 @@ import weka.core.Instances;
 import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.Utils;
-import es.git.openkm.kea.filter.KEAFilter;
-import es.git.openkm.kea.metadata.WorkspaceHelper;
-import es.git.openkm.kea.stemmers.SremovalStemmer;
-import es.git.openkm.kea.stemmers.Stemmer;
-import es.git.openkm.kea.stopwords.Stopwords;
-import es.git.openkm.kea.stopwords.StopwordsEnglish;
+import com.openkm.kea.filter.KEAFilter;
+import com.openkm.kea.metadata.WorkspaceHelper;
+import com.openkm.kea.stemmers.SremovalStemmer;
+import com.openkm.kea.stemmers.Stemmer;
+import com.openkm.kea.stopwords.Stopwords;
+import com.openkm.kea.stopwords.StopwordsEnglish;
 
 /**
  * Builds a keyphrase extraction model from the documents in a given
@@ -586,13 +586,13 @@ public class KEAModelBuilder implements OptionHandler {
 		
 		String stopwordsString = Utils.getOption('s', options);
 		if (stopwordsString.length() > 0) {
-			stopwordsString = " es.git.openkm.kea.stopwords.".concat(stopwordsString);
+			stopwordsString = " com.openkm.kea.stopwords.".concat(stopwordsString);
 			setStopwords((Stopwords)Class.forName(stopwordsString).newInstance());
 		}
 		
 		String stemmerString = Utils.getOption('t', options);
 		if (stemmerString.length() > 0) {
-			stemmerString = " es.git.openkm.kea.stemmers.".concat(stemmerString);
+			stemmerString = " com.openkm.kea.stemmers.".concat(stemmerString);
 			setStemmer((Stemmer)Class.forName(stemmerString).newInstance());
 		}
 		setDebug(Utils.getFlag('d', options));

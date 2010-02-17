@@ -62,14 +62,14 @@ import weka.core.Instances;
 import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.Utils;
-import es.git.openkm.kea.filter.KEAFilter;
-import es.git.openkm.kea.filter.KEAPhraseFilter;
-import es.git.openkm.kea.metadata.WorkspaceHelper;
-import es.git.openkm.kea.stemmers.SremovalStemmer;
-import es.git.openkm.kea.stemmers.Stemmer;
-import es.git.openkm.kea.stopwords.Stopwords;
-import es.git.openkm.kea.stopwords.StopwordsEnglish;
-import es.git.openkm.kea.util.Counter;
+import com.openkm.kea.filter.KEAFilter;
+import com.openkm.kea.filter.KEAPhraseFilter;
+import com.openkm.kea.metadata.WorkspaceHelper;
+import com.openkm.kea.stemmers.SremovalStemmer;
+import com.openkm.kea.stemmers.Stemmer;
+import com.openkm.kea.stopwords.Stopwords;
+import com.openkm.kea.stopwords.StopwordsEnglish;
+import com.openkm.kea.util.Counter;
 
 /**
  * Extracts keyphrases from the documents in a given directory.
@@ -549,13 +549,13 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
         String stemmerString = Utils.getOption('t', options);
         if (stemmerString.length() > 0) {
-            stemmerString = "es.git.openkm.kea.stemmers.".concat(stemmerString);
+            stemmerString = "com.openkm.kea.stemmers.".concat(stemmerString);
             setStemmer((Stemmer) Class.forName(stemmerString).newInstance());
         }
 
         String stopwordsString = Utils.getOption('s', options);
         if (stopwordsString.length() > 0) {
-            stopwordsString = "es.git.openkm.kea.stopwords.".concat(stopwordsString);
+            stopwordsString = "com.openkm.kea.stopwords.".concat(stopwordsString);
             setStopwords((Stopwords) Class.forName(stopwordsString).newInstance());
         }
 
