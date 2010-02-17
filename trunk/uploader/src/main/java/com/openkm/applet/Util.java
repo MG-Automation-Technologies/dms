@@ -141,7 +141,7 @@ public class Util {
 	 * 
 	 */
 	 public static Locale parseLocaleString(String localeString) {
-		 String[] parts = localeString.split("_");
+		 String[] parts = localeString.split("-");
 		 String language = (parts.length > 0 ? parts[0] : "");
 		 String country = (parts.length > 1 ? parts[1] : "");
 		 

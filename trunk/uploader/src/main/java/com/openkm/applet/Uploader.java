@@ -29,6 +29,7 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
 @SuppressWarnings("serial")
@@ -53,7 +54,7 @@ public class Uploader extends JApplet {
 			locale = Util.parseLocaleString(lang);
 			Messages.init(locale);
 			win = (JSObject) JSObject.getWindow(this);
-		} catch (Exception e) {
+		} catch (JSException e) {
 			log.warning("Can't access JSObject object");
 		}
 
