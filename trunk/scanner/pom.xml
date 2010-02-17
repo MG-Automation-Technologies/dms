@@ -8,14 +8,14 @@
   <version>1.2</version>
   <url>http://www.openkm.com</url>
   <description>Java applet used to scan document directly from OpenKM web interface.</description>
-  
+
   <licenses>
     <license>
       <name>GPLv2</name>
       <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</url>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <id>monkiki</id>
@@ -43,9 +43,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.ksoap2</groupId>
-      <artifactId>ksoap2-j2se-full</artifactId>
-      <version>2.1.2</version>
+      <groupId>com.openkm</groupId>
+      <artifactId>ws-client</artifactId>
+      <version>2.1</version>
     </dependency>
   </dependencies>
 
@@ -102,4 +102,28 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <targetJdk>${java.compiler}</targetJdk>
+          <sourceEncoding>utf-8</sourceEncoding>
+          <minimumTokens>100</minimumTokens>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
