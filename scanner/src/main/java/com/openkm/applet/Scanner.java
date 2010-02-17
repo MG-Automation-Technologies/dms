@@ -29,6 +29,7 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
 public class Scanner extends JApplet {
@@ -62,7 +63,7 @@ public class Scanner extends JApplet {
        		locale = Util.parseLocaleString(lang);
        		Messages.init(locale);
         	win = JSObject.getWindow(this);        	
-        } catch (Exception e) {
+        } catch (JSException e) {
         	log.warning("Can't access JSObject object");
         }
         
