@@ -128,9 +128,6 @@
         </propertyhandler>
         -->
         <propertyhandler>
-            <class name="org.apache.jackrabbit.server.io.DirListingExportHandler" />
-        </propertyhandler>
-        <propertyhandler>
             <!-- <class name="org.apache.jackrabbit.server.io.DefaultHandler" /> -->
             <class name="com.openkm.webdav.OKMHandler" />
         </propertyhandler>
