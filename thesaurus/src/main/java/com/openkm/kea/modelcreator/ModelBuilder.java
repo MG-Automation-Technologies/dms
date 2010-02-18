@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ * 
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -206,9 +208,8 @@ public class ModelBuilder {
 		// Testing minor number of arguments
 		if (args.length < 10) {
 			log.info("Incorrect syntax, some arguments missings");
-			log
-					.info("java -Xmx512m -jar thesaurus-50.jar sourceFolder trainingFolder vocabularyFile vocabularyType "
-							+ "stopwordFile modelFileName porterStemmerClass stopwordClass language documentEncoding ");
+			log.info("java -Xmx512m -jar thesaurus.jar sourceFolder trainingFolder vocabularyFile vocabularyType "
+				+ "stopwordFile modelFileName porterStemmerClass stopwordClass language documentEncoding ");
 			System.exit(0);
 		} else {
 			sourceFolder = args[0];
