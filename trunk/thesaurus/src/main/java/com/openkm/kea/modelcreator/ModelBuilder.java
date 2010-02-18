@@ -231,17 +231,17 @@ public class ModelBuilder {
 			WorkspaceHelper.KEA_STOPWORDS_PATH = Config.HOME_DIR + File.separator + sourceFolder
 					+ File.separator + stopwordsFile;
 
-			log.info("source folder:" + Config.HOME_DIR + File.separator + sourceFolder);
-			log.info("training folder:" + Config.HOME_DIR + File.separator + trainingFilesPath);
-			log.info("vocabulary file:" + vocabularyFilePath);
-			log.info("vocabulary type:" + vocabularyType);
-			log.info("stopwords file:" + stopwordsFile);
-			log.info("model file:" + Config.HOME_DIR + File.separator + modelFilePath);
-			log.info("stemmer class:" + stemerClassName);
-			log.info("stopword class:" + stopwordsClassName);
-			log.info("language:" + lang);
-			log.info("document encoding:" + documentEncoding);
-			log.info("testing folder:" + Config.HOME_DIR + File.separator + testingFoder);
+			log.info("* Source folder: " + Config.HOME_DIR + File.separator + sourceFolder);
+			log.info("* Training folder: " + Config.HOME_DIR + File.separator + trainingFilesPath);
+			log.info("* Vocabulary file: " + vocabularyFilePath);
+			log.info("* Vocabulary type: " + vocabularyType);
+			log.info("* Stopwords file: " + stopwordsFile);
+			log.info("* Model file: " + Config.HOME_DIR + File.separator + modelFilePath);
+			log.info("* Stemmer class: " + stemerClassName);
+			log.info("* Stopword class: " + stopwordsClassName);
+			log.info("* Language: " + lang);
+			log.info("* Document encoding: " + documentEncoding);
+			log.info("* Testing folder: " + Config.HOME_DIR + File.separator + testingFoder);
 		}
 
 		ModelBuilder modelBuilder = new ModelBuilder();
