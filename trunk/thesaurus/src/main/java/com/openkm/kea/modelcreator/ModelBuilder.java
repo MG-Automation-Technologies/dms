@@ -41,14 +41,12 @@ import com.openkm.kea.stopwords.Stopwords;
 public class ModelBuilder {
 
 	private static Logger log = LoggerFactory.getLogger(ModelBuilder.class);
-
 	private KEAModelBuilder km;
 	private KEAKeyphraseExtractor ke;
 
 	private void setOptionsTraining(String trainingFilesPath, String modelFilePath,
 			String vocabularyFilePath, String vocabularyType, String documentEncoding, String lang,
 			Stemmer stemmer, Stopwords stopwords) {
-
 		km = new KEAModelBuilder();
 
 		// A. required arguments (no defaults):
@@ -108,7 +106,6 @@ public class ModelBuilder {
 	private void setOptionsTesting(String m_testdir, String trainingFilesPath, String modelFilePath,
 			String vocabularyFilePath, String vocabularyType, String documentEncoding, String lang,
 			Stemmer stemmer, Stopwords stopwords) {
-
 		ke = new KEAKeyphraseExtractor(stopwords);
 
 		// A. required arguments (no defaults):
@@ -191,7 +188,6 @@ public class ModelBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-
 		String sourceFolder = "";
 		String trainingFilesPath = "";
 		String vocabularyFile = "";
