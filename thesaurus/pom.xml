@@ -144,6 +144,13 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>com.openkm.kea.modelcreator.Main</mainClass>
+            </manifest>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
         </configuration>
         <executions>
           <execution>
