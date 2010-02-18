@@ -183,7 +183,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return the M_Stopwords value.
 	 */
 	public Stopwords getStopwords() {
-		
 		return m_Stopwords;
 	}
 	
@@ -192,17 +191,14 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newM_Stopwords The new M_Stopwords value.
 	 */
 	public void setStopwords(Stopwords newM_Stopwords) {
-		
 		this.m_Stopwords = newM_Stopwords;
 	}
-	
 	
 	/**
 	 * Get the Stemmer value.
 	 * @return the Stemmer value.
 	 */
 	public Stemmer getStemmer() {
-		
 		return m_Stemmer;
 	}
 	
@@ -211,7 +207,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newStemmer The new Stemmer value.
 	 */
 	public void setStemmer(Stemmer newStemmer) {
-		
 		this.m_Stemmer = newStemmer;
 	}
 	
@@ -221,7 +216,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of MinNumOccur.
 	 */
 	public int getMinNumOccur() {
-		
 		return m_MinNumOccur;
 	}
 	
@@ -231,7 +225,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newMinNumOccur Value to assign to MinNumOccur.
 	 */
 	public void setMinNumOccur(int newMinNumOccur) {
-		
 		m_MinNumOccur = newMinNumOccur;
 	}
 	
@@ -241,7 +234,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of MaxPhraseLength.
 	 */
 	public int getMaxPhraseLength() {
-		
 		return m_MaxPhraseLength;
 	}
 	
@@ -251,7 +243,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newMaxPhraseLength Value to assign to MaxPhraseLength.
 	 */
 	public void setMaxPhraseLength(int newMaxPhraseLength) {
-		
 		m_MaxPhraseLength = newMaxPhraseLength;
 	}
 	
@@ -261,7 +252,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of MinPhraseLength.
 	 */
 	public int getMinPhraseLength() {
-		
 		return m_MinPhraseLength;
 	}
 	
@@ -271,7 +261,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newMinPhraseLength Value to assign to MinPhraseLength.
 	 */
 	public void setMinPhraseLength(int newMinPhraseLength) {
-		
 		m_MinPhraseLength = newMinPhraseLength;
 	}
 	
@@ -281,7 +270,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of disallowIPeriods.
 	 */
 	public boolean getDisallowIPeriods() {
-		
 		return m_disallowIPeriods;
 	}
 	
@@ -291,7 +279,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newdisallowIPeriods Value to assign to disallowIPeriods.
 	 */
 	public void setDisallowIPeriods(boolean newdisallowIPeriods) {
-		
 		m_disallowIPeriods = newdisallowIPeriods;
 	}
 	
@@ -301,10 +288,8 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of useKFrequency.
 	 */
 	public boolean getUseKFrequency() {
-		
 		return m_useKFrequency;
 	}
-	
 	
 	/**
 	 * Set the value of useKFrequency.
@@ -312,10 +297,8 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newuseKFrequency Value to assign to useKFrequency.
 	 */
 	public void setUseKFrequency(boolean newuseKFrequency) {
-		
 		m_useKFrequency = newuseKFrequency;
 	}
-	
 	
 	/**
 	 * Get the value of debug.
@@ -323,7 +306,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of debug.
 	 */
 	public boolean getDebug() {
-		
 		return m_debug;
 	}
 	
@@ -333,7 +315,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newdebug Value to assign to debug.
 	 */
 	public void setDebug(boolean newdebug) {
-		
 		m_debug = newdebug;
 	}
 	
@@ -343,7 +324,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of encoding.
 	 */
 	public String getEncoding() {
-		
 		return m_encoding;
 	}
 	
@@ -353,7 +333,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newencoding Value to assign to encoding.
 	 */
 	public void setEncoding(String newencoding) {
-		
 		m_encoding = newencoding;
 	}
 	
@@ -363,7 +342,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of vocabulary name.
 	 */
 	public String getVocabulary() {
-		
 		return m_vocabulary;
 	}
 	
@@ -373,7 +351,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newvocabulary Value to assign to vocabulary name.
 	 */
 	public void setVocabulary(String newvocabulary) {
-		
 		m_vocabulary = newvocabulary;
 	}
 	
@@ -383,7 +360,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of document language.
 	 */
 	public String getDocumentLanguage() {
-		
 		return m_documentLanguage;
 	}
 	
@@ -393,7 +369,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newdocumentLanguage Value to assign to document language.
 	 */
 	public void setDocumentLanguage(String newdocumentLanguage) {
-		
 		m_documentLanguage = newdocumentLanguage;
 	}
 	
@@ -403,7 +378,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of vocabulary format.
 	 */
 	public String getVocabularyFormat() {
-		
 		return m_vocabularyFormat;
 	}
 	
@@ -413,10 +387,8 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newvocabularyFormat Value to assign to vocabulary format.
 	 */
 	public void setVocabularyFormat(String newvocabularyFormat) {
-		
 		m_vocabularyFormat = newvocabularyFormat;
 	}
-	
 	
 	/**
 	 * Get the value of modelName.
@@ -424,7 +396,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of modelName.
 	 */
 	public String getModelName() {
-		
 		return m_modelName;
 	}
 	
@@ -434,7 +405,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newmodelName Value to assign to modelName.
 	 */
 	public void setModelName(String newmodelName) {
-		
 		m_modelName = newmodelName;
 	}
 	
@@ -444,7 +414,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return Value of dirName.
 	 */
 	public String getDirName() {
-		
 		return m_dirName;
 	}
 	
@@ -454,7 +423,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @param newdirName Value to assign to dirName.
 	 */
 	public void setDirName(String newdirName) {
-		
 		m_dirName = newdirName;
 	}
 	
@@ -511,7 +479,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @exception Exception if an option is not supported
 	 */
 	public void setOptions(String[] options) throws Exception {
-		
 		String dirName = Utils.getOption('l', options);
 		if (dirName.length() > 0) {
 			setDirName(dirName);
@@ -610,7 +577,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return an array of strings suitable for passing to setOptions
 	 */
 	public String [] getOptions() {
-		
 		String [] options = new String [26];
 		int current = 0;
 		
@@ -662,7 +628,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * @return an enumeration of all the available options
 	 */
 	public Enumeration<Option> listOptions() {
-		
 		Vector<Option> newVector = new Vector<Option>(14);
 		
 		newVector.addElement(new Option(
@@ -718,7 +683,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * Collects the stems of the file names.
 	 */
 	public Hashtable<String, Double> collectStems() throws Exception {
-		
 		Hashtable<String, Double> stems = new Hashtable<String, Double>();
 		
 		try {
@@ -736,6 +700,7 @@ public class KEAModelBuilder implements OptionHandler {
 		} catch (Exception e) {
 			throw new Exception("Problem opening directory " + m_dirName);
 		}
+		
 		return stems;
 	}
 	
@@ -743,7 +708,6 @@ public class KEAModelBuilder implements OptionHandler {
 	 * Builds the model from the files
 	 */
 	public void buildModel(Hashtable<String, Double> stems, Stopwords stopwords) throws Exception {
-		
 		// Check whether there is actually any data
 		if (stems.size() == 0) {
 			throw new Exception("Couldn't find any data!");
@@ -802,9 +766,7 @@ public class KEAModelBuilder implements OptionHandler {
 				is.close();
 				newInst[0] = (double)data.attribute(0).addStringValue(txtStr.toString());
 			} catch (Exception e) {
-				if (m_debug) {
-					log.error("Can't find document for stem " + str + ".");
-				}
+				log.error("Can't find document for stem " + str + ".");
 				newInst[0] = Instance.missingValue();
 			}
 			try {
@@ -822,9 +784,7 @@ public class KEAModelBuilder implements OptionHandler {
 				}      
 				newInst[1] = (double)data.attribute(1).addStringValue(keyStr.toString());
 			} catch (Exception e) {
-				if (m_debug) {
-					log.error("Can't find keyphrases for stem " + str + ".");
-				}
+				log.error("Can't find keyphrases for stem " + str + ".");
 				newInst[1] = Instance.missingValue();
 			}
 			data.add(new Instance(1.0, newInst));
@@ -863,14 +823,14 @@ public class KEAModelBuilder implements OptionHandler {
 	 * The main method.  
 	 */
 	public static void main(String[] ops) {
-		
 		KEAModelBuilder kmb = new KEAModelBuilder();
+		
 		try {
 			kmb.setOptions(ops);
-			log.error("Building model with options: ");
+			log.info("Building model with options: ");
 			String[] optionSettings = kmb.getOptions();
 			for (int i = 0; i < optionSettings.length; i++) {
-				log.error(optionSettings[i] + " ");
+				log.info(optionSettings[i] + " ");
 			}
 			kmb.buildModel(kmb.collectStems(), new StopwordsEnglish());
 			kmb.saveModel();
@@ -887,4 +847,3 @@ public class KEAModelBuilder implements OptionHandler {
 		}
 	}
 }
-

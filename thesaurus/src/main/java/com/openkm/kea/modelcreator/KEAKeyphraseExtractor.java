@@ -213,7 +213,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of AdditionalInfo.
 	 */
 	public boolean getAdditionalInfo() {
-
 		return m_AdditionalInfo;
 	}
 
@@ -224,7 +223,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to AdditionalInfo.
 	 */
 	public void setAdditionalInfo(boolean newAdditionalInfo) {
-
 		m_AdditionalInfo = newAdditionalInfo;
 	}
 
@@ -234,7 +232,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of BuildGlobal.
 	 */
 	public boolean getBuildGlobal() {
-
 		return m_buildGlobal;
 	}
 
@@ -245,7 +242,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to BuildGlobal.
 	 */
 	public void setBuildGlobal(boolean newBuildGlobal) {
-
 		m_buildGlobal = newBuildGlobal;
 	}
 
@@ -255,7 +251,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of numPhrases.
 	 */
 	public int getNumPhrases() {
-
 		return m_numPhrases;
 	}
 
@@ -265,7 +260,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return the Stemmer value.
 	 */
 	public Stemmer getStemmer() {
-
 		return m_Stemmer;
 	}
 
@@ -276,7 +270,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            The new Stemmer value.
 	 */
 	public void setStemmer(Stemmer newStemmer) {
-
 		this.m_Stemmer = newStemmer;
 	}
 
@@ -286,7 +279,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return the Stopwords value.
 	 */
 	public Stopwords getStopwords() {
-
 		return m_Stopwords;
 	}
 
@@ -297,7 +289,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            The new Stopwords value.
 	 */
 	public void setStopwords(Stopwords newStopwords) {
-
 		this.m_Stopwords = newStopwords;
 	}
 
@@ -308,7 +299,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to numPhrases.
 	 */
 	public void setNumPhrases(int newnumPhrases) {
-
 		m_numPhrases = newnumPhrases;
 	}
 
@@ -318,7 +308,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of debug.
 	 */
 	public boolean getDebug() {
-
 		return m_debug;
 	}
 
@@ -329,7 +318,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to debug.
 	 */
 	public void setDebug(boolean newdebug) {
-
 		m_debug = newdebug;
 	}
 
@@ -339,7 +327,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of encoding.
 	 */
 	public String getEncoding() {
-
 		return m_encoding;
 	}
 
@@ -350,7 +337,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to encoding.
 	 */
 	public void setEncoding(String newencoding) {
-
 		m_encoding = newencoding;
 	}
 
@@ -360,7 +346,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of vocabulary name.
 	 */
 	public String getVocabulary() {
-
 		return m_vocabulary;
 	}
 
@@ -371,7 +356,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to vocabulary name.
 	 */
 	public void setVocabulary(String newvocabulary) {
-
 		m_vocabulary = newvocabulary;
 	}
 
@@ -381,7 +365,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of vocabulary format.
 	 */
 	public String getVocabularyFormat() {
-
 		return m_vocabularyFormat;
 	}
 
@@ -392,7 +375,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to vocabularyFormat .
 	 */
 	public void setVocabularyFormat(String newvocabularyFormat) {
-
 		m_vocabularyFormat = newvocabularyFormat;
 	}
 
@@ -402,7 +384,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of document language.
 	 */
 	public String getDocumentLanguage() {
-
 		return m_documentLanguage;
 	}
 
@@ -413,7 +394,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to document language.
 	 */
 	public void setDocumentLanguage(String newdocumentLanguage) {
-
 		m_documentLanguage = newdocumentLanguage;
 	}
 
@@ -423,7 +403,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of modelName.
 	 */
 	public String getModelName() {
-
 		return m_modelName;
 	}
 
@@ -434,7 +413,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to modelName.
 	 */
 	public void setModelName(String newmodelName) {
-
 		m_modelName = newmodelName;
 	}
 
@@ -444,7 +422,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return Value of dirName.
 	 */
 	public String getDirName() {
-
 		return m_dirName;
 	}
 
@@ -455,7 +432,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *            Value to assign to dirName.
 	 */
 	public void setDirName(String newdirName) {
-
 		m_dirName = newdirName;
 	}
 
@@ -510,7 +486,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 *             if an option is not supported
 	 */
 	public void setOptions(String[] options) throws Exception {
-
 		String dirName = Utils.getOption('l', options);
 		if (dirName.length() > 0) {
 			setDirName(dirName);
@@ -518,6 +493,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 			setDirName(null);
 			throw new Exception("Name of directory required argument.");
 		}
+		
 		String modelName = Utils.getOption('m', options);
 		if (modelName.length() > 0) {
 			setModelName(modelName);
@@ -598,7 +574,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return an array of strings suitable for passing to setOptions
 	 */
 	public String[] getOptions() {
-
 		String[] options = new String[21];
 		int current = 0;
 
@@ -636,6 +611,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 		while (current < options.length) {
 			options[current++] = "";
 		}
+		
 		return options;
 	}
 
@@ -645,7 +621,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * @return an enumeration of all the available options
 	 */
 	public Enumeration<Option> listOptions() {
-
 		Vector<Option> newVector = new Vector<Option>(13);
 
 		newVector.addElement(new Option("\tSpecifies name of directory.", "l", 1, "-l <directory name>"));
@@ -674,7 +649,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * Collects the stems of the file names.
 	 */
 	public Hashtable<String, Double> collectStems() throws Exception {
-
 		Hashtable<String, Double> stems = new Hashtable<String, Double>();
 
 		try {
@@ -691,6 +665,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 		} catch (Exception e) {
 			throw new Exception("Problem opening directory " + m_dirName);
 		}
+		
 		return stems;
 	}
 
@@ -698,7 +673,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * Builds the model from the files
 	 */
 	public void extractKeyphrases(Hashtable<String, Double> stems) throws Exception {
-
 		Vector<Double> stats = new Vector<Double>();
 
 		// Check whether there is actually any data
@@ -755,7 +729,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
 			} catch (Exception e) {
 				if (m_debug) {
-					log.error("Can't read document " + str + ".txt");
+					log.debug("Can't read document " + str + ".txt");
 				}
 				newInst[0] = Instance.missingValue();
 			}
@@ -782,7 +756,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 				newInst[1] = (double) data.attribute(1).addStringValue(keyStr.toString());
 			} catch (Exception e) {
 				if (m_debug) {
-					log.error("No existing keyphrases for stem " + str + ".");
+					log.debug("No existing keyphrases for stem " + str + ".");
 				}
 				newInst[1] = Instance.missingValue();
 			}
@@ -793,7 +767,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
 			data = data.stringFreeStructure();
 			if (m_debug) {
-				log.error("-- Document: " + str);
+				log.debug("-- Document: " + str);
 			}
 			Instance[] topRankedInstances = new Instance[m_numPhrases];
 			Instance inst;
@@ -810,8 +784,9 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 			}
 
 			if (m_debug) {
-				log.error("-- Keyphrases and feature values:");
+				log.debug("-- Keyphrases and feature values:");
 			}
+			
 			FileOutputStream out = null;
 			PrintWriter printer = null;
 			File key = new File(m_dirName + "/" + str + ".key");
@@ -824,6 +799,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 					printer = new PrintWriter(out);
 				}
 			}
+			
 			double numExtracted = 0, numCorrect = 0;
 
 			for (int i = 0; i < m_numPhrases; i++) {
@@ -853,23 +829,26 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 							printer.println();
 						}
 						if (m_debug) {
-							log.error("" + topRankedInstances[i]);
+							log.debug("" + topRankedInstances[i]);
 						}
 					}
 				}
 			}
+			
 			if (numExtracted > 0) {
 				if (m_debug) {
-					log.error("-- " + numCorrect + " correct");
+					log.debug("-- " + numCorrect + " correct");
 				}
 				stats.addElement(new Double(numCorrect));
 			}
+			
 			if (printer != null) {
 				printer.flush();
 				printer.close();
 				out.close();
 			}
 		}
+		
 		double[] st = new double[stats.size()];
 		for (int i = 0; i < stats.size(); i++) {
 			st[i] = ((Double) stats.elementAt(i)).doubleValue();
@@ -877,14 +856,13 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 		double avg = Utils.mean(st);
 		double stdDev = Math.sqrt(Utils.variance(st));
 
-		log.error("Avg. number of matching keyphrases compared to existing ones : "
+		log.info("Avg. number of matching keyphrases compared to existing ones : "
 				+ Utils.doubleToString(avg, 2) + " +/- " + Utils.doubleToString(stdDev, 2));
-		log.error("Based on " + stats.size() + " documents");
+		log.info("Based on " + stats.size() + " documents");
 		// m_KEAFilter.batchFinished();
 	}
 
 	private void buildGlobalDictionaries(Hashtable<String, Double> stems) throws Exception {
-
 		log.error("--- Building global dictionaries from the test collection.. ");
 
 		// Build dictionary of n-grams with associated
@@ -899,11 +877,13 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 
 			File txt = new File(m_dirName + "/" + str + ".txt");
 			InputStreamReader is;
+			
 			if (!m_encoding.equals("default")) {
 				is = new InputStreamReader(new FileInputStream(txt), m_encoding);
 			} else {
 				is = new InputStreamReader(new FileInputStream(txt));
 			}
+			
 			StringBuffer txtStr = new StringBuffer();
 			int c;
 			while ((c = is.read()) != -1) {
@@ -915,6 +895,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 			HashMap<String, Counter> hash = m_KEAFilter.getPhrasesForDictionary(kpf.tokenize(txtStr
 					.toString()));
 			Iterator<String> it = hash.keySet().iterator();
+			
 			while (it.hasNext()) {
 				String phrase = it.next();
 				Counter counter = (Counter) m_KEAFilter.m_Dictionary.get(phrase);
@@ -931,7 +912,6 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 * Loads the extraction model from the file.
 	 */
 	public void loadModel() throws Exception {
-
 		BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(m_modelName));
 		ObjectInputStream in = new ObjectInputStream(inStream);
 		m_KEAFilter = (KEAFilter) in.readObject();
@@ -939,7 +919,7 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 		// If TFxIDF values are to be computed from the test corpus
 		if (m_buildGlobal == true) {
 			if (m_debug) {
-				log.error("-- The global dictionaries will be built from this test collection..");
+				log.debug("-- The global dictionaries will be built from this test collection..");
 			}
 			m_KEAFilter.m_Dictionary = null;
 		}
@@ -951,25 +931,25 @@ public class KEAKeyphraseExtractor implements OptionHandler {
 	 */
 	public static void main(String[] ops) {
 		KEAKeyphraseExtractor kmb = new KEAKeyphraseExtractor(new StopwordsEnglish());
+		
 		try {
 			// Checking and Setting Options selected by the user:
 			kmb.setOptions(ops);
-			log.error("Extracting keyphrases with options: ");
+			log.info("Extracting keyphrases with options: ");
 
 			// Reading Options, which were set above and output them:
 			String[] optionSettings = kmb.getOptions();
 			for (int i = 0; i < optionSettings.length; i++) {
-				log.error(optionSettings[i] + " ");
+				log.info(optionSettings[i] + " ");
 			}
 
 			// Loading selected Model:
-			log.error("-- Loading the Model... ");
+			log.info("-- Loading the Model... ");
 			kmb.loadModel();
 			// Extracting Keyphrases from all files in the selected directory
 			// stem == the name of the file without ".txt"
 
 			kmb.extractKeyphrases(kmb.collectStems());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
