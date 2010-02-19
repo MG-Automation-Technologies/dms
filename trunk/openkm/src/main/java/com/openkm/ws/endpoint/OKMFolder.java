@@ -21,6 +21,8 @@
 
 package com.openkm.ws.endpoint;
 
+import java.util.Collection;
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -115,7 +117,8 @@ public class OKMFolder {
 		log.debug("getChilds(" + token + ", " + fldPath + ")");
 		FolderModule fm = ModuleManager.getFolderModule();
 		FolderArray fa = new FolderArray();
-		fa.setValue((Folder []) fm.getChilds(token, fldPath).toArray(new Folder[0]));
+		Collection<Folder> col = fm.getChilds(token, fldPath);
+		fa.setValue((Folder []) col.toArray(new Folder[col.size()]));
 		log.debug("getChilds: " + fa);
 		return fa;
 	}

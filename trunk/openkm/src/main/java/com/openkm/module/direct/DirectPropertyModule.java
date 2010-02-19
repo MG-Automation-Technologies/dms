@@ -141,7 +141,7 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 				
 				if (removed) {
-					documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[0]), PropertyType.REFERENCE);
+					documentNode.setProperty(Property.CATEGORIES, (Value[])newProperty.toArray(new Value[newProperty.size()]), PropertyType.REFERENCE);
 					documentNode.save();
 				}
 			}
@@ -274,7 +274,7 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 				
 				if (removed) {
-					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[0]));
+					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
 					documentNode.save();
 				}
 			}
