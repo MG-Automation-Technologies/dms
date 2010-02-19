@@ -21,6 +21,8 @@
 
 package com.openkm.ws.endpoint;
 
+import java.util.Collection;
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -52,7 +54,8 @@ public class OKMSearch {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		qra.setValue((QueryResult[]) sm.findByContent(token, words).toArray(new QueryResult[0]));
+		Collection<QueryResult> col = sm.findByContent(token, words);
+		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByContent: " + qra);
 		return qra;
 	}
@@ -64,7 +67,8 @@ public class OKMSearch {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		qra.setValue((QueryResult[]) sm.findByName(token, words).toArray(new QueryResult[0]));
+		Collection<QueryResult> col = sm.findByName(token, words);
+		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByName: " + qra);
 		return qra;
 	}
@@ -76,7 +80,8 @@ public class OKMSearch {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		qra.setValue((QueryResult[]) sm.findByKeywords(token, words).toArray(new QueryResult[0]));
+		Collection<QueryResult> col = sm.findByKeywords(token, words);
+		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByKeywords: " + qra);
 		return qra;
 	}
@@ -89,7 +94,8 @@ public class OKMSearch {
 		log.debug("findByStatement(" + token + ", " + statement + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		qra.setValue((QueryResult[]) sm.findByStatement(token, statement, type).toArray(new QueryResult[0]));
+		Collection<QueryResult> col = sm.findByStatement(token, statement, type);
+		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByStatement: " + qra);
 		return qra;
 	}

@@ -22,6 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -78,7 +79,8 @@ public class OKMNotification {
 		log.debug("getSubscriptors("+token+", "+nodePath+")");
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		StringArray sa = new StringArray();
-		sa.setValue(nm.getSubscriptors(token, nodePath).toArray(new String[0]));
+		Collection<String> col = nm.getSubscriptors(token, nodePath);
+		sa.setValue(col.toArray(new String[col.size()]));
 		log.debug("getSubscriptors: "+sa);
 		return sa;
 	}

@@ -372,7 +372,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 			Session session = SessionManager.getInstance().get(token);
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, mimeType, keywords.toArray(new String[0]), is);
+			Node documentNode = create(session, parentNode, name, mimeType, keywords.toArray(new String[keywords.size()]), is);
 			
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());

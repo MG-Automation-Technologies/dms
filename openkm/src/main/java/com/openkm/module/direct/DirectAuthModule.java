@@ -428,7 +428,7 @@ public class DirectAuthModule implements AuthModule {
 		}
 
 		try {
-			node.setProperty(property, (String[])newUsers.toArray(new String[0]));
+			node.setProperty(property, (String[])newUsers.toArray(new String[newUsers.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
 			log.warn("grantUser -> LockException : "+node.getPath());
@@ -527,7 +527,7 @@ public class DirectAuthModule implements AuthModule {
 		}
 
 		try {
-			node.setProperty(property, (String[])newUsers.toArray(new String[0]));
+			node.setProperty(property, (String[])newUsers.toArray(new String[newUsers.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
 			log.warn("revokeUser -> LockException : "+node.getPath());
@@ -629,7 +629,7 @@ public class DirectAuthModule implements AuthModule {
 		}
 
 		try {
-			node.setProperty(property, (String[])newRoles.toArray(new String[0]));
+			node.setProperty(property, (String[])newRoles.toArray(new String[newRoles.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
 			log.warn("grantRole -> LockException : "+node.getPath());
@@ -727,7 +727,7 @@ public class DirectAuthModule implements AuthModule {
 		}
 
 		try {
-			node.setProperty(property, (String[])newRoles.toArray(new String[0]));
+			node.setProperty(property, (String[])newRoles.toArray(new String[newRoles.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
 			log.warn("revokeRole -> LockException : "+node.getPath());

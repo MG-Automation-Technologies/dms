@@ -133,7 +133,7 @@ public class JCRUtils {
 			list.add(val);
 		}
 		
-		return (String[]) list.toArray(new String[0]);
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public class JCRUtils {
 			}
 		}
 		
-		return (String[]) list.toArray(new String[0]);
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class JCRUtils {
 			list.add(values[i].getString()); 
 		}
 		
-		return (String[]) list.toArray(new String[0]);
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 
 	/**

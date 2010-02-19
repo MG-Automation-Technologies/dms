@@ -21,6 +21,7 @@
 
 package com.openkm.ws.endpoint;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -87,7 +88,8 @@ public class OKMPropertyGroup {
 		log.debug("getGroups(" + token + ", " + docPath + ")");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		StringArray sa = new StringArray();
-		sa.setValue((String[]) cm.getGroups(token, docPath).toArray(new String[0]));
+		Collection<String> col = cm.getGroups(token, docPath);
+		sa.setValue((String[]) col.toArray(new String[col.size()]));
 		log.debug("getGroups: "+sa);
 		return sa;
 	}
@@ -99,7 +101,8 @@ public class OKMPropertyGroup {
 		log.debug("getAllGroups(" + token + ")");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		StringArray sa = new StringArray();
-		sa.setValue((String[]) cm.getAllGroups(token).toArray(new String[0]));
+		Collection<String> col = cm.getAllGroups(token);
+		sa.setValue((String[]) col.toArray(new String[col.size()]));
 		log.debug("getAllGroups: "+sa);
 		return sa;
 	}
