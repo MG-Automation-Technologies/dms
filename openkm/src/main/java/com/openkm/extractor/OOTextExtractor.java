@@ -63,13 +63,13 @@ public class OOTextExtractor extends AbstractTextExtractor {
     public OOTextExtractor() {
         super(new String[]{
         		// MsExcel
-        		"application/vnd.ms-excel", "application/msexcel",
+        		"application/vnd.ms-excel", "application/msexcel", "application/excel",
         		
         		// MsPowerPoint
-        		"application/vnd.ms-powerpoint", "application/mspowerpoint",
+        		"application/vnd.ms-powerpoint", "application/mspowerpoint", "application/powerpoint",
         		
         		// MsWord
-        		"application/vnd.ms-word", "application/msword",
+        		"application/vnd.ms-word", "application/msword", "application/word",
         		
         		// MsOffice2007
         		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
