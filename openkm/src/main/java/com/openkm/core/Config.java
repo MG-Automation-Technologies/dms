@@ -41,12 +41,13 @@ public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	
 	// Default directories
-	public static String HOME_DIR = getHomeDir();
-	public static String TMP_DIR = getTempDir();
+	public static final String HOME_DIR = getHomeDir();
+	public static final String TMP_DIR = getTempDir();
+	public static final boolean IN_SERVER = inServer(); 
 	
 	// Preview cache
-	public static String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
-	public static String SWF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"swf";
+	public static final String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
+	public static final String SWF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"swf";
 	
 	// Multihost
 	public static String INSTALL = "";
@@ -114,8 +115,8 @@ public class Config {
 	public static String PROPERTY_UPDATE_INFO = "update.info";
 	public static String PROPERTY_APPLICATION_URL = "application.url";
 	public static String PROPERTY_DEFAULT_LANG = "default.lang";
-	public static String PROPERTY_KEYWORD_MAP_LIVE = "keyword.map.live";
-	public static String PROPERTY_USER_DOCUMENTS_SIZE_LIVE = "user.documents.size.live";
+	public static String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
+	public static String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
 	
 	// KEA
 	public static String PROPERTY_KEA_THESAURUS_SKOS_FILE = "kea.thesaurus.skos.file";
@@ -194,8 +195,8 @@ public class Config {
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
-	public static String KEYWORD_MAP_LIVE = "on";
-	public static String USER_DOCUMENTS_SIZE_LIVE = "off";
+	public static String USER_KEYWORDS_CACHE = "off";
+	public static String USER_SIZE_CACHE = "off";
 
 	// KEA
 	public static String KEA_THESAURUS_SKOS_FILE = "";
@@ -242,7 +243,6 @@ public class Config {
 	
 	/**
 	 * Guess the system wide temporary directory
-	 * @return
 	 */
 	private static String getTempDir() {
 		String dir = System.getProperty("java.io.tmpdir");
@@ -250,6 +250,17 @@ public class Config {
 			return dir;
 		} else {
 			return "";
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private static boolean inServer() {
+		if (System.getProperty("jboss.home.dir") != null || System.getProperty("catalina.home") != null) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -319,8 +330,8 @@ public class Config {
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
-			KEYWORD_MAP_LIVE = config.getProperty(PROPERTY_KEYWORD_MAP_LIVE, KEYWORD_MAP_LIVE);
-			USER_DOCUMENTS_SIZE_LIVE = config.getProperty(PROPERTY_USER_DOCUMENTS_SIZE_LIVE, USER_DOCUMENTS_SIZE_LIVE);
+			USER_KEYWORDS_CACHE = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE);
+			USER_SIZE_CACHE = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE);
 			
 			// KEA
 			KEA_THESAURUS_SKOS_FILE = config.getProperty(PROPERTY_KEA_THESAURUS_SKOS_FILE, KEA_THESAURUS_SKOS_FILE);
@@ -394,8 +405,8 @@ public class Config {
 					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
 					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+", "+
-					PROPERTY_KEYWORD_MAP_LIVE+"="+KEYWORD_MAP_LIVE+
-					PROPERTY_USER_DOCUMENTS_SIZE_LIVE+"="+USER_DOCUMENTS_SIZE_LIVE+", "+
+					PROPERTY_USER_KEYWORDS_CACHE+"="+USER_KEYWORDS_CACHE+
+					PROPERTY_USER_SIZE_CACHE+"="+USER_SIZE_CACHE+", "+
 			
 					// KEA
 					PROPERTY_KEA_THESAURUS_SKOS_FILE+"="+KEA_THESAURUS_SKOS_FILE+", "+
