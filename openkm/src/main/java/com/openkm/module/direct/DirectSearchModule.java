@@ -735,10 +735,10 @@ public class DirectSearchModule implements SearchModule {
 		log.info("getKeywordMap("+token+", "+filter+")");
 		Map<String, Integer> cloud = null;
 		
-		if (Config.KEYWORD_MAP_LIVE.equals("on")) {
-			cloud = getKeywordMapLive(token, filter);
-		} else {
+		if (Config.USER_KEYWORDS_CACHE.equals("on")) {
 			cloud = getKeywordMapCached(token, filter);
+		} else {
+			cloud = getKeywordMapLive(token, filter);
 		}
 		
 		log.info("getKeywordMap: "+cloud);
