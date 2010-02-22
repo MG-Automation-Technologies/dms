@@ -275,9 +275,11 @@ public class DirectDocumentModule implements DocumentModule {
 		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
 		contentNode.checkin();
 		
-		// Update user items
-		UserItemsManager.incSize(session.getUserID(), size);
-		UserItemsManager.incDocuments(session.getUserID(), 1);
+		// Update user items size
+		if (Config.USER_SIZE_CACHE.equals("on")) {
+			UserItemsManager.incSize(session.getUserID(), size);
+			UserItemsManager.incDocuments(session.getUserID(), 1);
+		}
 		
 		return documentNode; 
 	}
