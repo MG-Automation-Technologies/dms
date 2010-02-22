@@ -39,6 +39,8 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
+
 public abstract class AbstractDAO {
 	private static Logger log = LoggerFactory.getLogger(AbstractDAO.class);
 	private DataSource ds = null;
@@ -64,14 +66,16 @@ public abstract class AbstractDAO {
 		Connection con = null;
 
 		try {
-			if (ds == null) {
-				log.info("Looking for "+getDataSourceName()+" DataSource...");
-				Context ctx = new InitialContext();
-				ds = (DataSource) ctx.lookup(getDataSourceName());
-				ctx.close();
-			}
+			if (Config.IN_SERVER) {
+				if (ds == null) {
+					log.info("Looking for "+getDataSourceName()+" DataSource...");
+					Context ctx = new InitialContext();
+					ds = (DataSource) ctx.lookup(getDataSourceName());
+					ctx.close();
+				}
 			
-			con = ds.getConnection();
+				con = ds.getConnection();
+			}
 		} catch (NamingException ne) {
 			log.warn("DataSource not found: "+ne.getMessage());
 		} catch (SQLException se) {
