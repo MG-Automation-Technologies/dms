@@ -559,10 +559,10 @@ public class DirectDashboardModule implements DashboardModule {
 		log.info("getUserDocumentsSize(" + token + ")");
 		long size = 0;
 		
-		if (Config.USER_DOCUMENTS_SIZE_LIVE.equals("on")) {
-			size = getUserDocumentsSizeLive(token);
-		} else {
+		if (Config.USER_SIZE_CACHE.equals("on")) {
 			size = getUserDocumentsSizeCached(token);
+		} else {
+			size = getUserDocumentsSizeLive(token);
 		}
 
 		log.info("getUserDocumentsSize: " + size);
