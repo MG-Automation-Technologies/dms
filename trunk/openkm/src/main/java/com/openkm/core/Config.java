@@ -41,7 +41,7 @@ public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	
 	// Default directories
-	public static String HOME_DIR = getHomeDir();
+	public static final String HOME_DIR = getHomeDir();
 	public static final String TMP_DIR = getTempDir();
 	public static final boolean IN_SERVER = inServer(); 
 	
@@ -221,22 +221,22 @@ public class Config {
 	 * Guess the application server home directory
 	 */
 	private static String getHomeDir() {
-		// try JBoss
+		// Try JBoss
 		String dir = System.getProperty("jboss.home.dir");
 		if (dir != null) {
 			log.info("Using JBoss: " + dir);
 			return dir;
 		}
 		
-		// try Tomcat
+		// Try Tomcat
 		dir = System.getProperty("catalina.home");
 		if (dir != null) {
 			log.info("Using Tomcat: " + dir);
 			return dir;
 		}
 		
-		// otherwise GWT hosted mode default
-		dir = System.getProperty("user.dir");
+		// Otherwise GWT hosted mode
+		dir = System.getProperty("user.dir") + "/src/test/resources";
 		log.info("Using default dir: " + dir);
 		return dir;
 	}
