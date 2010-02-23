@@ -180,9 +180,8 @@ public class MyAccessManagerLockAccessDenied implements AccessManager {
 		return false;
 	}
 
-	@Override
+	// @Override
+	// TODO Enable when using jackrabbit 1.6
 	public void checkPermission(Path arg0, int arg1) throws AccessDeniedException, RepositoryException {
-		// TODO Auto-generated method stub
-		
 	}
 }
