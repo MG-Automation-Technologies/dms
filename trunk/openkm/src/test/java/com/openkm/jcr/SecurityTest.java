@@ -46,13 +46,13 @@ public class SecurityTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.info("setUp()");
+		log.info("Delete repository: " + Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
-		log.info("Delete repository: " + Config.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class SecurityTest extends TestCase {
 		printPrivileges(log, privileges);
 
 		// Also possible to set a map of restrictions
-		jacl.addEntry(anonymous.getPrincipal(), privileges, false);
+		jacl.addEntry(anonymous.getPrincipal(), privileges, true);
 		acm.setPolicy(revokedNode.getPath(), jacl);
 		
 		// Apply the policy
