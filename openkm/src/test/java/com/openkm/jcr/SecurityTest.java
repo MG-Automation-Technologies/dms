@@ -40,15 +40,18 @@ public class SecurityTest extends TestCase {
 	
 	@Override
 	protected void setUp() {
+		log.info("setUp()");
 	}
 
 	@Override
 	protected void tearDown() {
+		log.info("tearDown()");
 		log.info("Delete repository: " + Config.REPOSITORY_HOME);
 		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testSimple() throws IOException, LoginException, RepositoryException {
+		log.info("testSimple()");
 		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = session.getRootNode();
@@ -65,6 +68,10 @@ public class SecurityTest extends TestCase {
 			test = userManager.createUser("test", "test");
 			log.info("Created user: "+test.getID());
 		}
+		
+		// Test user login
+		Session sessionTest = repository.login(new SimpleCredentials("test", "test".toCharArray()));
+		log.info("sessionTest: "+sessionTest);
 
 		// Right management
 		AccessControlManager accessControlManager = ((SessionImpl) session).getAccessControlManager();
@@ -83,6 +90,7 @@ public class SecurityTest extends TestCase {
 
 		// apply the policy
 		session.save();
+		sessionTest.logout();
 		session.logout();
 	}
 }
