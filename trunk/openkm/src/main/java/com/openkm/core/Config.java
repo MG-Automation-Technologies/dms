@@ -41,7 +41,7 @@ public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	
 	// Default directories
-	public static final String HOME_DIR = getHomeDir();
+	public static String HOME_DIR = getHomeDir();
 	public static final String TMP_DIR = getTempDir();
 	public static final boolean IN_SERVER = inServer(); 
 	
