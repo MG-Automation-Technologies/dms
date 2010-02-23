@@ -37,13 +37,13 @@ public class SimpleTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.info("setUp()");
+		log.info("Delete repository: " + Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
-		log.info("Delete repository: " + Config.REPOSITORY_HOME);
-		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testBasic() throws IOException, LoginException, RepositoryException {
