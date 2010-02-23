@@ -42,6 +42,10 @@ import org.apache.jackrabbit.core.PropertyId;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.core.security.authorization.AccessControlProvider;
+import org.apache.jackrabbit.core.security.authorization.WorkspaceAccessManager;
+import org.apache.jackrabbit.spi.Name;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,30 +68,24 @@ public class OKMAccessManager implements AccessManager {
 	private String principalUser = null;
 	private Set<String> principalRoles = null;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.jackrabbit.core.security.AccessManager#init(org.apache.jackrabbit
-	 * .core.security.AMContext)
-	 */
+	@Override
 	public void init(AMContext context) throws AccessDeniedException {
-		log.debug("init(" + context + ")");
+		log.info("init(" + context + ")");
 		subject = context.getSubject();
 		principalRoles = new HashSet<String>();
-		log.debug("##### " + subject.getPrincipals());
+		log.info("##### " + subject.getPrincipals());
 
-		log.debug("##### ##### ##### ##### ##### ##### ##### ");
+		log.info("##### ##### ##### ##### ##### ##### ##### ");
 		for (Iterator<java.security.Principal> it = subject.getPrincipals().iterator(); it.hasNext();) {
 			Object obj = it.next();
-			log.debug("##### " + obj.getClass());
+			log.info("##### " + obj.getClass());
 
 			if (obj instanceof java.security.acl.Group) {
 				java.security.acl.Group group = (java.security.acl.Group) obj;
-				log.debug("Group: " + group.getName());
+				log.info("Group: " + group.getName());
 				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups.hasMoreElements();) {
 					java.security.Principal rol = (java.security.Principal) groups.nextElement();
-					log.debug("Rol: " + rol.getName());
+					log.info("Rol: " + rol.getName());
 					principalRoles.add(rol.getName());
 				}
 			} else if (obj instanceof java.security.Principal) {
@@ -113,23 +111,12 @@ public class OKMAccessManager implements AccessManager {
 		log.debug("init: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#close()
-	 */
+	@Override
 	public void close() throws Exception {
 		if (DEBUG) log.debug("close()");
-		if (DEBUG) log.debug("close: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.jackrabbit.core.security.AccessManager#checkPermission(org
-	 * .apache.jackrabbit.core.ItemId, int)
-	 */
+	@Override
 	public void checkPermission(ItemId id, int permissions)
 			throws AccessDeniedException, ItemNotFoundException,
 			RepositoryException {
@@ -138,13 +125,7 @@ public class OKMAccessManager implements AccessManager {
 		if (DEBUG) log.debug("checkPermission: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.jackrabbit.core.security.AccessManager#isGranted(org.apache
-	 * .jackrabbit.core.ItemId, int)
-	 */
+	@Override
 	public boolean isGranted(ItemId id, int permissions)
 			throws ItemNotFoundException, RepositoryException {
 		if (DEBUG) log.debug("isGranted("+ subject.getPrincipals()+ ", "+ id+ ", "
@@ -296,13 +277,7 @@ public class OKMAccessManager implements AccessManager {
 		return access;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.jackrabbit.core.security.AccessManager#canAccess(java.lang
-	 * .String)
-	 */
+	@Override
 	public boolean canAccess(String workspaceName)
 			throws NoSuchWorkspaceException, RepositoryException {
 		boolean access = true;
@@ -353,5 +328,31 @@ public class OKMAccessManager implements AccessManager {
 
 		if (DEBUG) log.debug("checkWrite: " + access);
 		return access;
+	}
+
+	@Override
+	public boolean canRead(Path arg0) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public void init(AMContext arg0, AccessControlProvider arg1, WorkspaceAccessManager arg2)
+			throws AccessDeniedException, Exception {
+	}
+
+	@Override
+	public boolean isGranted(Path arg0, int arg1) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public boolean isGranted(Path arg0, Name arg1, int arg2) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public void checkPermission(Path arg0, int arg1) throws AccessDeniedException, RepositoryException {
+		// TODO Auto-generated method stub
+		
 	}
 }
