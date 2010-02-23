@@ -36,35 +36,38 @@ public class SimpleTest extends TestCase {
 
 	@Override
 	protected void setUp() {
-		log.info("setUp -> none");
+		log.info("setUp()");
 	}
 
 	@Override
 	protected void tearDown() {
-		log.info("tearDown -> Delete repository: " + Config.REPOSITORY_HOME);
+		log.info("tearDown()");
+		log.info("Delete repository: " + Config.REPOSITORY_HOME);
 		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testBasic() throws IOException, LoginException, RepositoryException {
+		log.info("testBasic()");
 		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = session.getRootNode();
 		Node newNode = rootNode.addNode("new node");
-		log.info("testBasic -> Restricted node: " + newNode.getPath());
+		log.info("Restricted node: " + newNode.getPath());
 		assertEquals(newNode.getPath(), "/new node");
 		rootNode.save();
 		session.logout();
 	}
 	
 	public void testSimple() throws IOException, LoginException, RepositoryException {
+		log.info("testSimple()");
 		RepositoryConfig config = RepositoryConfig.create(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
 		Repository repository = RepositoryImpl.create(config);
 		Session session = repository.login(new SimpleCredentials("admin", "admin".toCharArray())); 
 		Node rootNode = session.getRootNode();
 		Node newNode = rootNode.addNode("new node");
-		log.info("testSimple -> Restricted node: " + newNode.getPath());
+		log.info("Restricted node: " + newNode.getPath());
 		assertEquals(newNode.getPath(), "/new node");
 		rootNode.save();
 		session.logout();		
-	}
+	}	
 }
