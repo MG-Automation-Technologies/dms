@@ -146,7 +146,8 @@ public class OKMAccessManager implements AccessManager {
 		throw new AccessDeniedException("Permission denied!");
 	}
 	
-	@Override
+	// @Override
+	// TODO Enable @Override when use jackrabbit 1.6
 	public void checkPermission(Path absPath, int permissions) throws AccessDeniedException,
 			RepositoryException {
 		log.info("checkPermission({}, {})", absPath, permissions);
