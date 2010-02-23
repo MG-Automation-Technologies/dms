@@ -21,6 +21,10 @@ import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
 import org.apache.jackrabbit.core.security.UserPrincipal;
+import org.apache.jackrabbit.core.security.authorization.AccessControlProvider;
+import org.apache.jackrabbit.core.security.authorization.WorkspaceAccessManager;
+import org.apache.jackrabbit.spi.Name;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,18 +36,12 @@ public class MyAccessManagerLockAccessDenied implements AccessManager {
 	private static Logger log = LoggerFactory.getLogger(MyAccessManagerLockAccessDenied.class);
 	private Subject subject = null;
 	private HierarchyManager hierMgr = null;
-	
 	private static final int READ = 1;
 	private static final int WRITE = 2;
 	private static final int REMOVE = 4;
-	
 	public static boolean CAN_WRITE = true;
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#init(org.apache.jackrabbit.core.security.AMContext)
-	 */
+	@Override
 	public void init(AMContext context) throws AccessDeniedException, Exception {
 		log.debug("init(" + context + ")");
 		subject = context.getSubject();
@@ -52,35 +50,19 @@ public class MyAccessManagerLockAccessDenied implements AccessManager {
 		log.debug("init: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#close()
-	 */
+	@Override
 	public void close() throws Exception {
 		log.debug("close()");
-		log.debug("close: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#checkPermission(org.apache.jackrabbit.core.ItemId,
-	 *      int)
-	 */
+	@Override
 	public void checkPermission(ItemId id, int permissions)
 			throws AccessDeniedException, ItemNotFoundException,
 			RepositoryException {
 		log.debug("checkPermission()");
-		log.debug("checkPermission: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#isGranted(org.apache.jackrabbit.core.ItemId,
-	 *      int)
-	 */
+	@Override
 	public boolean isGranted(ItemId id, int permissions)
 			throws ItemNotFoundException, RepositoryException {
 		log.debug("isGranted(" + subject.getPrincipals() + ", " + id + ", "
@@ -169,16 +151,38 @@ public class MyAccessManagerLockAccessDenied implements AccessManager {
 		return access;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#canAccess(java.lang.String)
-	 */
+	@Override
 	public boolean canAccess(String workspaceName)
 			throws NoSuchWorkspaceException, RepositoryException {
 		boolean access = true;
 		log.debug("canAccess(" + workspaceName + ")");
 		log.debug("canAccess: " + access);
 		return access;
+	}
+
+	@Override
+	public boolean canRead(Path arg0) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public void init(AMContext arg0, AccessControlProvider arg1, WorkspaceAccessManager arg2)
+			throws AccessDeniedException, Exception {	
+	}
+
+	@Override
+	public boolean isGranted(Path arg0, int arg1) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public boolean isGranted(Path arg0, Name arg1, int arg2) throws RepositoryException {
+		return false;
+	}
+
+	@Override
+	public void checkPermission(Path arg0, int arg1) throws AccessDeniedException, RepositoryException {
+		// TODO Auto-generated method stub
+		
 	}
 }
