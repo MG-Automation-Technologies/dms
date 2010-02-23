@@ -6,21 +6,20 @@ package com.openkm.test;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.NoSuchWorkspaceException;
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.security.auth.Subject;
 
 import org.apache.jackrabbit.core.HierarchyManager;
 import org.apache.jackrabbit.core.ItemId;
-import org.apache.jackrabbit.core.NodeId;
-import org.apache.jackrabbit.core.PropertyId;
-import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
-import org.apache.jackrabbit.core.security.UserPrincipal;
+import org.apache.jackrabbit.core.security.authorization.AccessControlProvider;
+import org.apache.jackrabbit.core.security.authorization.Permission;
+import org.apache.jackrabbit.core.security.authorization.WorkspaceAccessManager;
+import org.apache.jackrabbit.core.security.user.UserManagerImpl;
+import org.apache.jackrabbit.spi.Name;
+import org.apache.jackrabbit.spi.Path;
+import org.apache.jackrabbit.spi.commons.name.PathFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,130 +29,146 @@ import org.slf4j.LoggerFactory;
  */
 public class MyAccessManager implements AccessManager {
 	private static Logger log = LoggerFactory.getLogger(MyAccessManager.class);
-	private Subject subject = null;
-	private HierarchyManager hierMgr = null;
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#init(org.apache.jackrabbit.core.security.AMContext)
-	 */
+	private AMContext context;
+	ThreadLocal<Boolean> alreadyInsideAccessManager = new ThreadLocal<Boolean>() {
+		@Override
+		protected Boolean initialValue() {
+			return Boolean.FALSE;
+		}
+	};
+
+	@Override
 	public void init(AMContext context) throws AccessDeniedException, Exception {
 		log.debug("init(" + context + ")");
-		subject = context.getSubject();
-		log.debug("##### "+subject.getPrincipals());
-		hierMgr = context.getHierarchyManager();
-		log.debug("init: void");
+		this.context = context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#close()
-	 */
+	@Override
+	public void init(AMContext context, AccessControlProvider acProvider, WorkspaceAccessManager wspAccessMgr)
+			throws AccessDeniedException, Exception {
+		log.debug("init(" + context + ", " + acProvider + ", " + wspAccessMgr + ")");
+		init(context);
+	}
+
+	@Override
 	public void close() throws Exception {
 		log.debug("close()");
-		log.debug("close: void");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#checkPermission(org.apache.jackrabbit.core.ItemId,
-	 *      int)
-	 */
-	public void checkPermission(ItemId id, int permissions)
-			throws AccessDeniedException, ItemNotFoundException,
-			RepositoryException {
-		log.debug("checkPermission()");
-		log.debug("checkPermission: void");
+	@Override
+	public boolean canAccess(String workspaceName) throws NoSuchWorkspaceException, RepositoryException {
+		log.info("canAccess(" + workspaceName + ")");
+		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#isGranted(org.apache.jackrabbit.core.ItemId,
-	 *      int)
-	 */
-	public boolean isGranted(ItemId id, int permissions)
-			throws ItemNotFoundException, RepositoryException {
-		log.debug("isGranted(" + subject.getPrincipals() + ", " + id + ", "
-				+ (permissions == AccessManager.READ ? "READ"
-						: (permissions == AccessManager.WRITE ? "WRITE"
-								: (permissions == AccessManager.REMOVE ? "REMOVE"
-										: "NONE"))) + ")");
-		boolean access = false;
-		Session systemSession = Dummy.getSystemSession();
-		NodeId nodeId = null;
-		
-		log.debug(subject.getPrincipals()+" Item Id: "+id);
+	@Override
+	public boolean canRead(Path itemPath) throws RepositoryException {
+		log.info("canRead(" + itemPath + ")");
+		return isGranted(itemPath, Permission.READ);
+	}
 
-		// Sometimes I have this error in the next line: 
-		// java.jcr.ItemNotFoundException: failed to build path of ....
-		log.debug(subject.getPrincipals()+" Item Path: "+hierMgr.getPath(id));
+	@Override
+	// This method is deprecated in Jackrabbit 1.5.0
+	public void checkPermission(ItemId id, int permissions) throws AccessDeniedException,
+			ItemNotFoundException, RepositoryException {
+		log.debug("checkPermission(" + id + ", " + permissions + ")");
+		if (isGranted(id, permissions)) {
+			return;
+		}
+		throw new AccessDeniedException("JCR permission denied!");
+	}
+
+	@Override
+	// This method is deprecated in Jackrabbit 1.5.0
+	public boolean isGranted(ItemId id, int permissions) throws ItemNotFoundException, RepositoryException {
+		log.info("isGranted(" + id + ", " + permissions + ")");
+		Path path = context.getHierarchyManager().getPath(id);
+		return isGranted(path, deprecatedActionsToNewApi(permissions));
+	}
+
+	@Override
+	public boolean isGranted(Path absPath, int permissions) throws RepositoryException {
+		log.info("isGranted(" + absPath + ", " + permissions + ")");
 		
-		if (subject.getPrincipals().contains(new UserPrincipal(systemSession.getUserID()))) {
-			// If user is System access is always TRUE to avoid infinite access check loop
-			access = true;
-		} else {
-			if (id instanceof NodeId) {
-				nodeId = (NodeId) id;
-				log.debug(subject.getPrincipals()+" This is a NODE");
-			} else {
-				PropertyId propertyId = (PropertyId) id;
-				nodeId = propertyId.getParentId();
-				log.debug(subject.getPrincipals()+" This is a PROPERTY");
+		if (alreadyInsideAccessManager.get()) {
+			log.debug("[YES inside]");
+			return true;
+		}
+
+		log.debug("[NOT inside]");
+		alreadyInsideAccessManager.set(Boolean.TRUE);
+		
+		alreadyInsideAccessManager.remove();
+		
+		return true;
+	}
+
+	@Override
+	public boolean isGranted(Path parentPath, Name childName, int permissions) throws RepositoryException {
+		log.info("isGranted(" + parentPath + ", " + childName + ", " + permissions + ")");
+		Path p = PathFactoryImpl.getInstance().create(parentPath, childName, true);
+		return isGranted(p, permissions);
+	}
+
+	/**
+	 * 
+	 */
+	private int deprecatedActionsToNewApi(int actions) {
+		boolean read = (actions & READ) != 0;
+		boolean write = (actions & WRITE) != 0;
+		boolean remove = (actions & REMOVE) != 0;
+		int result = 0;
+
+		if (read) {
+			result = result | Permission.READ;
+		}
+
+		if (write) {
+			result = result | Permission.ADD_NODE;
+			result = result | Permission.SET_PROPERTY;
+		}
+
+		if (remove) {
+			result = result | Permission.REMOVE_NODE;
+			result = result | Permission.REMOVE_PROPERTY;
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 */
+	private String actionsToString(int actions) {
+		StringBuilder sb = new StringBuilder();
+
+		if (!(actions == Permission.NONE)) {
+			//if ((actions & Permission.ALL) != 0) {
+				//sb.append("all ");
+			//}
+			if ((actions & Permission.ADD_NODE) != 0) {
+				sb.append("add_node ");
 			}
-		
-			Node node = ((SessionImpl) systemSession).getNodeById(nodeId);
-			log.debug(subject.getPrincipals()+" Node Name: " + node.getPath());
-			log.debug(subject.getPrincipals()+" Node Type: " + node.getPrimaryNodeType().getName());
-		
-			if (hierMgr.getPath(nodeId).denotesRoot()) {
-				// Root node has full access
-				access = true;
-			} else {
-				// Check for user node access
-				if (permissions == AccessManager.READ) {
-					for (PropertyIterator pi = node.getProperties(); pi.hasNext(); ) {
-						Property property = (Property) pi.nextProperty();
-						log.debug("Property: " + property.getName());
-						//try { Thread.sleep(250); } catch (Exception e) { e.printStackTrace(); }
-					}
-					access = true;
-				} else if (permissions == AccessManager.WRITE) {
-					for (PropertyIterator pi = node.getProperties(); pi.hasNext(); ) {
-						Property property = (Property) pi.nextProperty();
-						log.debug("Property: " + property.getName());
-						//try { Thread.sleep(250); } catch (Exception e) { e.printStackTrace(); }
-					}
-					access = true;
-				} else if (permissions == AccessManager.REMOVE) {
-					for (PropertyIterator pi = node.getProperties(); pi.hasNext(); ) {
-						Property property = (Property) pi.nextProperty();
-						log.debug("Property: " + property.getName());
-						//try { Thread.sleep(250); } catch (Exception e) { e.printStackTrace(); }
-					}
-				}
+			if ((actions & Permission.READ) != 0) {
+				sb.append("read ");
+			}
+			if ((actions & Permission.REMOVE_NODE) != 0) {
+				sb.append("remove_node ");
+			}
+			if ((actions & Permission.REMOVE_PROPERTY) != 0) {
+				sb.append("remove_property ");
+			}
+			if ((actions & Permission.SET_PROPERTY) != 0) {
+				sb.append("set_property ");
 			}
 		}
-		
-		log.debug(subject.getPrincipals()+" Path: " + hierMgr.getPath(id));
-		log.debug(subject.getPrincipals()+" isGranted: " + access);
-		log.debug("--------------------------");
-		return access;
+
+		return sb.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jackrabbit.core.security.AccessManager#canAccess(java.lang.String)
-	 */
-	public boolean canAccess(String workspaceName)
-			throws NoSuchWorkspaceException, RepositoryException {
-		boolean access = true;
-		log.debug("canAccess(" + workspaceName + ")");
-		log.debug("canAccess: " + access);
-		return access;
+	@Override
+	public void checkPermission(Path arg0, int arg1) throws AccessDeniedException, RepositoryException {
+		// TODO Auto-generated method stub
+		
 	}
 }
