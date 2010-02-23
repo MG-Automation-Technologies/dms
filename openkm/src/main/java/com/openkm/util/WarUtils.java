@@ -29,7 +29,7 @@ public class WarUtils {
 	/**
 	 * 
 	 */
-	public static void setAppVersion(AppVersion newAppVersion) {
+	public static synchronized void setAppVersion(AppVersion newAppVersion) {
 		appVersion = newAppVersion;
 	}
 	
