@@ -10,10 +10,12 @@ import org.apache.velocity.app.Velocity;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMFolder;
+import com.openkm.bean.AppVersion;
 import com.openkm.bean.ContentInfo;
 import com.openkm.core.Config;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.WarUtils;
 
 public class Test {	
 	/**
@@ -21,7 +23,8 @@ public class Test {
 	 */
 	public static void main(String[] args) throws Exception {
 		//RepositoryUpgrade.main(new String[] {"null/repository.xml", "null/repository"});
-		//Config.load();
+		Config.load();
+		WarUtils.setAppVersion(new AppVersion());
 		//Dummy.main(null);
 		//DummyVersion.main(null);
 		//DummyLockToken.main(null);
@@ -56,7 +59,7 @@ public class Test {
 		//new VersioningTest().restoreAndCommit();
 		//new VersioningTest().intersession();
 		//new VersioningTest().cancelCheckout();
-		//new AuthTest().basic();
+		new AuthTest().basic();
 		//new AuthTest().simple();
 		//new PropertyGroupTest().simple();
 		//new NotificationTest().basic();
@@ -69,7 +72,7 @@ public class Test {
 		//new DashboardTest().basic();
 		//new DashboardTest().simple();
 		//misc();
-		//DirectRepositoryModule.shutdownRepository();
+		DirectRepositoryModule.shutdown();
 		//System.out.println(System.getProperty("file.encoding"));
 		//-Dfile.encoding=ISO-8859-1
 		//String name = "pepe.txt";
