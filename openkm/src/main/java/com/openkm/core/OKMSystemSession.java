@@ -39,6 +39,10 @@ import org.apache.jackrabbit.core.config.WorkspaceConfig;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
 import org.apache.jackrabbit.core.security.SystemPrincipal;
+import org.apache.jackrabbit.core.security.authorization.AccessControlProvider;
+import org.apache.jackrabbit.core.security.authorization.WorkspaceAccessManager;
+import org.apache.jackrabbit.spi.Name;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,17 +94,8 @@ public class OKMSystemSession extends XASessionImpl {
     	if (DEBUG) log.warn("logout: void");
     }
 
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * Overridden in order to create custom access manager
-     *
-     * @return access manager for system session
-     * @throws AccessDeniedException is never thrown
-     * @throws RepositoryException   is never thrown
-     */
-    protected AccessManager createAccessManager(Subject subject,
-                                                HierarchyManager hierMgr)
+    @Override
+    protected AccessManager createAccessManager(Subject subject, HierarchyManager hierMgr)
             throws AccessDeniedException, RepositoryException {
         /**
          * use own AccessManager implementation rather than relying on
@@ -118,58 +113,63 @@ public class OKMSystemSession extends XASessionImpl {
         }
 
         //----------------------------------------------------< AccessManager >
-        /**
-         * {@inheritDoc}
-         *
-         * @throws AccessDeniedException is never thrown
-         * @throws Exception             is never thrown
-         */
+        @Override
         public void init(AMContext context) throws AccessDeniedException, Exception {
-            // nop
+            // none
         }
+        
+		@Override
+		public void init(AMContext arg0, AccessControlProvider arg1, WorkspaceAccessManager arg2)
+				throws AccessDeniedException, Exception {
+			// none
+		}
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void close() throws Exception {
-            // nop
+        	// none
         }
 
-        /**
-         * {@inheritDoc}
-         *
-         * @throws AccessDeniedException is never thrown
-         * @throws ItemNotFoundException is never thrown
-         * @throws RepositoryException   is never thrown
-         */
+        @Override
         public void checkPermission(ItemId id, int permissions)
                 throws AccessDeniedException, ItemNotFoundException, RepositoryException {
             // allow everything
         }
 
-        /**
-         * {@inheritDoc}
-         *
-         * @return always <code>true</code>
-         * @throws ItemNotFoundException is never thrown
-         * @throws RepositoryException   is never thrown
-         */
+        @Override
         public boolean isGranted(ItemId id, int permissions)
                 throws ItemNotFoundException, RepositoryException {
             // allow everything
             return true;
         }
 
-        /**
-         * {@inheritDoc}
-         *
-         * @return always <code>true</code>
-         * @throws NoSuchWorkspaceException is never thrown
-         * @throws RepositoryException      is never thrown
-         */
+        @Override
         public boolean canAccess(String workspaceName)
                 throws NoSuchWorkspaceException, RepositoryException {
+        	// allow everything
             return true;
         }
+
+		@Override
+		public boolean canRead(Path itemPath) throws RepositoryException {
+			// allow everything
+			return true;
+		}
+
+		@Override
+		public boolean isGranted(Path absPath, int permissions) throws RepositoryException {
+			// allow everything
+			return true;
+		}
+
+		@Override
+		public boolean isGranted(Path parentPath, Name childName, int permissions) throws RepositoryException {
+			// allow everything
+			return true;
+		}
+
+		@Override
+		public void checkPermission(Path absPath, int permissions) throws AccessDeniedException, RepositoryException {
+			// TODO Auto-generated method stub
+		}
     }
 }
