@@ -38,7 +38,8 @@ public class SecurityTest extends TestCase {
 	public static void main(String[] args) throws Exception {
 		SecurityTest test = new SecurityTest("main");
 		test.setUp();
-		test.testGrant();
+		//test.testGrant();
+		test.testRevoke();
 		test.tearDown();
 	}
 
@@ -97,7 +98,6 @@ public class SecurityTest extends TestCase {
 
 		// Test user login
 		Session sessionTest = repository.login(new SimpleCredentials("test", "test".toCharArray()));
-		log.info("sessionTest: " + sessionTest);
 		Node testRootNode = sessionTest.getRootNode();
 		testRootNode.getNode(grantedNode.getPath().substring(1)).addNode("my node");
 		testRootNode.save();
@@ -138,10 +138,9 @@ public class SecurityTest extends TestCase {
 		
 		// Test user login
 		Session sAnonymous = repository.login(new SimpleCredentials("anonymous", "anonymous".toCharArray()));
-		log.info("sessionAnonymous: " + sAnonymous);
-		Node testRootNode = sAnonymous.getRootNode();
-		testRootNode.addNode("my node");
-		testRootNode.save();
+		Node anonRootNode = sAnonymous.getRootNode();
+		anonRootNode.getNode(revokedNode.getPath().substring(1)).addNode("my node");
+		anonRootNode.save();
 		sAnonymous.logout();
 		
 		// Admin logout
