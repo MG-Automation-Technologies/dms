@@ -62,6 +62,7 @@
     </dependency>
 
      <!-- OpenKM core -->
+     <!-- http://ykyuen.wordpress.com/2009/10/30/maven-dependency-on-jarwar-package -->
     <dependency>
       <groupId>com.openkm</groupId>
       <artifactId>openkm</artifactId>
