@@ -13,6 +13,7 @@ import javax.jcr.SimpleCredentials;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.jackrabbit.api.jsr283.security.AccessControlEntry;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlList;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlManager;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicy;
@@ -76,12 +77,18 @@ public class SecurityTest extends TestCase {
 		AccessControlPolicyIterator acpi = acm.getApplicablePolicies(grantedNode.getPath());
 		while (acpi.hasNext()) {
 			AccessControlPolicy acp = acpi.nextAccessControlPolicy();
-			log.info("AccessControlPolicy: " + acp);
 			Privilege[] privileges = new Privilege[] { acm.privilegeFromName(Privilege.JCR_WRITE) };
-			for (int i=0; i<privileges.length; i++) {
-				log.info("Privilege: "+privileges[i]);
-			}
+			printPrivileges(log, privileges);
+			
 			((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl("test"), privileges);
+			AccessControlEntry[] ace = ((AccessControlList) acp).getAccessControlEntries();
+			
+			for (int i=0; i<ace.length; i++) {
+				log.info("AccessControlEntry: "+i);
+				log.info("Principal: "+ace[i].getPrincipal().getName());
+				printPrivileges(log, ace[i].getPrivileges());
+			}
+			
 			acm.setPolicy(grantedNode.getPath(), acp);
 		}
 
@@ -120,9 +127,7 @@ public class SecurityTest extends TestCase {
 		AccessControlPolicyIterator acpi = acm.getApplicablePolicies(revokedNode.getPath());
 		JackrabbitAccessControlList jacl = (JackrabbitAccessControlList) acpi.nextAccessControlPolicy();
 		Privilege[] privileges = acm.getSupportedPrivileges(revokedNode.getPath());
-		for (int i=0; i<privileges.length; i++) {
-			log.info("Privilege: "+privileges[i]);
-		}
+		printPrivileges(log, privileges);
 
 		// Also possible to set a map of restrictions
 		jacl.addEntry(anonymous.getPrincipal(), privileges, false);
@@ -141,5 +146,18 @@ public class SecurityTest extends TestCase {
 		
 		// Admin logout
 		sAdmin.logout();
+	}
+	
+	/**
+	 * 
+	 */
+	private void printPrivileges(Logger log, Privilege[] privileges) {
+		for (int i=0; i<privileges.length; i++) {
+			log.info("Privilege: "+privileges[i].getName()+", aggregated: "+privileges[i].isAggregate());
+			Privilege[] aggregates = privileges[i].getAggregatePrivileges();
+			for (int j=0; j<aggregates.length; j++) {
+				log.info("Aggregate privilege: "+aggregates[j].getName()+", aggregated: "+aggregates[j].isAggregate());
+			}
+		}
 	}
 }
