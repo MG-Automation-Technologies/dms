@@ -167,9 +167,10 @@ public class OKMSystemSession extends XASessionImpl {
 			return true;
 		}
 
-		@Override
+		// @Override
+		// TODO Enable @Override when use jackrabbit 1.6
 		public void checkPermission(Path absPath, int permissions) throws AccessDeniedException, RepositoryException {
-			// TODO Auto-generated method stub
+			// allow everything
 		}
     }
 }
