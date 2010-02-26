@@ -70,9 +70,6 @@ public class DirectAuthModule implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(DirectAuthModule.class);
 	private static PrincipalAdapter principalAdapter = null;
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public synchronized String login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
@@ -87,7 +84,7 @@ public class DirectAuthModule implements AuthModule {
 			// If user and pass are null, there is an external authentication system
 			// using JAAS.
 			if (user != null && pass != null) {
-				session = r.login(new SimpleCredentials(user, pass.toCharArray()), null);
+				session = r.login(new SimpleCredentials(user, pass.toCharArray()));
 			} else {
 				InitialContext ctx = new InitialContext();
 				Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
