@@ -151,7 +151,7 @@ public class TabDocument extends Composite {
 		version.set(doc);
 		security.setPath(doc.getPath());
 		version.getVersionHistory();
-		security.GetGrands();
+		security.GetGrants();
 		preview.setPreviewAvailable(doc.isConvertibleToSwf());
 		
 		if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked()) {

@@ -99,7 +99,7 @@ public class TabMail extends Composite {
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
 		
 		security.setPath(gWTMail.getPath());
-		security.GetGrands();
+		security.GetGrants();
 		
 		if ((gWTMail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 			security.setChangePermision(true);

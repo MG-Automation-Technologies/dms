@@ -375,9 +375,9 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	}
 	
 	/**
-	 * Get grands
+	 * Get grants
 	 */
-	public void GetGrands(){
+	public void GetGrants(){
 		removeAllRows();
 		getGrantedUsers();
 		getGrantedRoles();

@@ -107,7 +107,7 @@ public class TabFolder extends Composite {
 	public void setProperties(GWTFolder folder) {
 		this.folder.set(folder);
 		security.setPath(folder.getPath());
-		security.GetGrands();
+		security.GetGrants();
 		if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 			security.setChangePermision(true);
 		} else {
