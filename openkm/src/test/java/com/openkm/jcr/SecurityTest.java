@@ -108,7 +108,7 @@ public class SecurityTest extends TestCase {
 	}
 
 	/**
-	 * 
+	 * http://n4.nabble.com/Jackrabbit-1-5-Security-td519943.html
 	 */
 	public void testRevoke() throws IOException, LoginException, RepositoryException {
 		log.info("testRevoke()");
