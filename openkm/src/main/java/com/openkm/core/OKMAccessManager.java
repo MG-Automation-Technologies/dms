@@ -255,7 +255,10 @@ public class OKMAccessManager implements AccessManager {
 										node.getPrimaryNodeType().getName() });
 								access = true;
 							}
-						} else if ((permissions & Permission.ADD_NODE) != 0 || (permissions & Permission.SET_PROPERTY) != 0) {
+						} else if ((permissions & Permission.ADD_NODE) != 0 || 
+								(permissions & Permission.SET_PROPERTY) != 0 ||
+								(permissions & Permission.REMOVE_NODE) != 0 ||
+								(permissions & Permission.REMOVE_PROPERTY) != 0) {
 							// Comprueba los usuarios de escritura
 							try {
 								access = checkWrite(node);
