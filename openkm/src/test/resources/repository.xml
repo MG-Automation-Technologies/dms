@@ -10,17 +10,14 @@
 
     <!-- Security configuration -->
     <Security appName="Jackrabbit">
-        <!-- Security manager:
-             class: FQN of class implementing the JackrabbitSecurityManager interface -->
+        <!-- Security manager: FQN of class implementing the JackrabbitSecurityManager interface -->
         <SecurityManager class="org.apache.jackrabbit.core.DefaultSecurityManager" workspaceName="security">
-            <!-- workspace access:
-                 class: FQN of class implementing the WorkspaceAccessManager interface -->
+            <!-- workspace access: FQN of class implementing the WorkspaceAccessManager interface -->
             <!-- <WorkspaceAccessManager class="..."/> -->
             <!-- <param name="config" value="${rep.home}/security.xml"/> -->
         </SecurityManager>
 
-        <!-- Access manager:
-            class: FQN of class implementing the AccessManager interface -->
+        <!-- Access manager: FQN of class implementing the AccessManager interface -->
         <AccessManager class="org.apache.jackrabbit.core.security.DefaultAccessManager">
             <!-- <param name="config" value="${rep.home}/access.xml"/> -->
         </AccessManager>
@@ -85,7 +82,18 @@
          (/jcr:system tree, contains mainly versions) -->
     <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
         <param name="path" value="${rep.home}/repository/index"/>
-        <param name="textFilterClasses" value="org.apache.jackrabbit.extractor.PlainTextExtractor,org.apache.jackrabbit.extractor.MsWordTextExtractor,org.apache.jackrabbit.extractor.MsExcelTextExtractor,org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,org.apache.jackrabbit.extractor.PdfTextExtractor,org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,org.apache.jackrabbit.extractor.RTFTextExtractor,org.apache.jackrabbit.extractor.HTMLTextExtractor,org.apache.jackrabbit.extractor.XMLTextExtractor"/>
+        <param name="textFilterClasses" value="
+        org.apache.jackrabbit.extractor.PlainTextExtractor,
+        org.apache.jackrabbit.extractor.MsWordTextExtractor,
+        org.apache.jackrabbit.extractor.MsExcelTextExtractor,
+        org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,
+        org.apache.jackrabbit.extractor.PdfTextExtractor,
+        org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,
+        org.apache.jackrabbit.extractor.RTFTextExtractor,
+        org.apache.jackrabbit.extractor.HTMLTextExtractor,
+        org.apache.jackrabbit.extractor.XMLTextExtractor,
+        org.apache.jackrabbit.extractor.PngTextExtractor,
+        org.apache.jackrabbit.extractor.MsOutlookTextExtractor"/>
         <param name="extractorPoolSize" value="2"/>
         <param name="supportHighlighting" value="true"/>
     </SearchIndex>
