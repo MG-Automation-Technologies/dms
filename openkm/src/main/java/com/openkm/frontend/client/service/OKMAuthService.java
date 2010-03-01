@@ -34,17 +34,11 @@ import com.openkm.frontend.client.OKMException;
  */
 public interface OKMAuthService extends RemoteService {
 	public void logout() throws OKMException;
-	
 	public HashMap<String, Byte> getGrantedUsers(String nodePath) throws OKMException;
-	
 	public HashMap<String, Byte> getGrantedRoles(String nodePath) throws OKMException;
-	
 	public String getRemoteUser();
-	
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException;
-	
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException;
-	
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException;
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException;
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException;
@@ -52,6 +46,5 @@ public interface OKMAuthService extends RemoteService {
 	public void revokeRole(String path, String role, boolean recursive) throws OKMException;
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException;
 	public void keepAlive() throws OKMException;
-
 	public List<String> getAllUsers() throws OKMException;
 }
