@@ -98,10 +98,6 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		HashMap<String, Byte> hm = new HashMap<String, Byte>();
 		try {
 			hm = OKMAuth.getInstance().getGrantedRoles(token, nodePath);
-			//Always removing userRole ( must be only used as connection grant not assigned to repository )
-			if (hm.keySet().contains(Config.DEFAULT_USER_ROLE)) {
-				hm.remove(Config.DEFAULT_USER_ROLE);
-			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
