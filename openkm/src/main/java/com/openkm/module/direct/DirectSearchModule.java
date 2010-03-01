@@ -53,6 +53,7 @@ import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.query.QueryImpl;
 import org.apache.jackrabbit.util.ISO8601;
 import org.apache.jackrabbit.util.ISO9075;
+import org.apache.jackrabbit.util.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,15 +171,14 @@ public class DirectSearchModule implements SearchModule {
 	 * @return The escaped String.
 	 */
 	private String escapeContains(String str) {
-		log.debug("escapeContains("+str+")");
 		String ret = str.replace("\\", "\\\\");
 		ret = ret.replace("'", "\\'");
 		ret = ret.replace("-", "\\-");
 		ret = ret.replace("\"", "\\\"");
 		ret = ret.replace("[", "\\[");
 		ret = ret.replace("]", "\\]");
+		ret = Text.escapeIllegalXpathSearchChars(ret);
 		ret = escapeXPath(ret);
-		log.debug("escapeContains: "+ret);
 		return ret;
 	}
 
@@ -189,9 +189,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @return The escaped String.
 	 */
 	private String escapeXPath(String str) {
-		log.debug("escapeXPath("+str+")");
 		String ret = str.replace("'", "''");
-		log.debug("escapeXPath: "+ret);
 		return ret;
 	}
 
