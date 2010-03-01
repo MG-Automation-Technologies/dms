@@ -50,6 +50,7 @@ import javax.jcr.query.RowIterator;
 import javax.jcr.version.VersionException;
 
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.jackrabbit.core.query.QueryImpl;
 import org.apache.jackrabbit.util.ISO8601;
 import org.apache.jackrabbit.util.ISO9075;
 import org.slf4j.Logger;
@@ -447,16 +448,15 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("executeQuery(" + session + ", " + query + ", " + offset + ", " + limit + ")");
 		ResultSet rs = new ResultSet();
 		ArrayList<QueryResult> al = new ArrayList<QueryResult>();
-		int i = 0;
 		
 		try {
+			((QueryImpl) query).setLimit(limit);
+			((QueryImpl) query).setOffset(offset);
 			javax.jcr.query.QueryResult result = query.execute();
 			RowIterator it = result.getRows();
-			
 			rs.setTotal(it.getSize());
-			it.skip(offset);
-						
-			while (it.hasNext() && i++ < limit) {
+			
+			while (it.hasNext()) {
 				Row row = it.nextRow();
 				
 				try {
