@@ -33,6 +33,13 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 
+import org.apache.jackrabbit.api.jsr283.security.AccessControlList;
+import org.apache.jackrabbit.api.jsr283.security.AccessControlManager;
+import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicy;
+import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicyIterator;
+import org.apache.jackrabbit.api.jsr283.security.Privilege;
+import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.jackrabbit.core.security.principal.PrincipalImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,15 +62,6 @@ public class JCRUtils {
 	
 	/**
 	 * 
-	 * @param token
-	 * @param root
-	 * @param directory
-	 * @param extensions
-	 * @param recursive
-	 * @throws RepositoryException
-	 * @throws IOException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws AccessDeniedException
 	 */
 	public static void importFolder(String token, String root, File directory,
 			String[] extensions) throws RepositoryException, AccessDeniedException, 
@@ -110,12 +108,7 @@ public class JCRUtils {
 	}
 
 	/**
-	 * @param values
-	 * @param val
-	 * @return
-	 * @throws ValueFormatException
-	 * @throws IllegalStateException
-	 * @throws javax.jcr.RepositoryException
+	 * 
 	 */
 	public static String[] usrValue2String(Value[] values, String val) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
 		ArrayList<String> list = new ArrayList<String>();
@@ -137,11 +130,7 @@ public class JCRUtils {
 	}
 	
 	/**
-	 * @param values
-	 * @return
-	 * @throws ValueFormatException
-	 * @throws IllegalStateException
-	 * @throws javax.jcr.RepositoryException
+	 * 
 	 */
 	public static String[] rolValue2String(Value[] values) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
 		ArrayList<String> list = new ArrayList<String>();
@@ -157,11 +146,7 @@ public class JCRUtils {
 	}
 
 	/**
-	 * @param values
-	 * @return
-	 * @throws ValueFormatException
-	 * @throws IllegalStateException
-	 * @throws javax.jcr.RepositoryException
+	 * 
 	 */
 	public static String[] value2String(Value[] values) throws ValueFormatException, IllegalStateException, javax.jcr.RepositoryException {
 		ArrayList<String> list = new ArrayList<String>();
@@ -261,4 +246,16 @@ public class JCRUtils {
             return '+';
         }
     }
+	
+	/**
+	 * 
+	 */
+	public static void grant(Session session, String path, String principal, String privilege) throws javax.jcr.RepositoryException {
+		AccessControlManager acm = ((SessionImpl) session).getAccessControlManager();
+		AccessControlPolicyIterator acpi = acm.getApplicablePolicies(path);
+		AccessControlPolicy acp = acpi.nextAccessControlPolicy();
+		Privilege[] privileges = new Privilege[] { acm.privilegeFromName(Privilege.JCR_ALL) };
+		((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl(principal), privileges);
+		session.save();
+	}
 }
