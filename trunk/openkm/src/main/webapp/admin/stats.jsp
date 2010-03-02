@@ -9,25 +9,29 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
-  <title>Main</title>
+  <title>Statistics</title>
 </head>
 <body>
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		String token = (String) session.getAttribute("token");
 %>
-	<h1>OpenKM Administration</h1>
-	<table width="200px" class="form" align="center" style="margin-top: 25px">
-		<tr><td><b>OpenKM Enterprise Edition</b></td></tr>
-		<tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td>&copy; 2006-2010  Entopia</td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td><b>Support</b></td></tr>
-		<tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td><b>Installation ID</b></td></tr>
-		<tr><td><%=OKMRepository.getInstance().getUuid(token) %></td></tr>
+	<h1>Statistics</h1>
+	<h2>Repository</h2>
+	<table align="center">
+	  <tr>
+	    <td><img src="../OKMStatsGraphServletAdmin?t=0"/></td>
+	    <td><img src="../OKMStatsGraphServletAdmin?t=1"/></td>
+	    <td><img src="../OKMStatsGraphServletAdmin?t=2"/></td>
+	  </tr>
+	</table>
+	
+	<h2>System</h2>
+	<table align="center">
+	  <tr>
+	    <td><img src="../OKMStatsGraphServletAdmin?t=3"/></td>
+	    <td><img src="../OKMStatsGraphServletAdmin?t=4"/></td>
+	  </tr>
 	</table>
 <%
 	} else {
