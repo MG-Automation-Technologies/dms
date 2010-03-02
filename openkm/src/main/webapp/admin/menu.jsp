@@ -6,6 +6,8 @@
   &nbsp;
   <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
   &nbsp;
+  <a target="frame" href="stats.jsp"><img src="img/toolbar/stats.png" title="Statistics"></a>
+  &nbsp;
   <a target="frame" href="scripting.jsp"><img src="img/toolbar/scripting.png" title="Scripting"></a>
   &nbsp;
   <a target="frame" href="search.jsp"><img src="img/toolbar/search.png" title="Repository Search"></a>
