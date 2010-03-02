@@ -171,9 +171,10 @@ public class DirectSearchModule implements SearchModule {
 	 * @return The escaped String.
 	 */
 	private String escapeContains(String str) {
-		String ret = str.replace("\\", "\\\\");
-		ret = ret.replace("'", "\\'");
-		ret = ret.replace("-", "\\-");
+		String ret = str;
+		//ret = ret.replace("\\", "\\\\");
+		//ret = ret.replace("'", "\\'");
+		//ret = ret.replace("-", "\\-");
 		ret = ret.replace("\"", "\\\"");
 		ret = ret.replace("[", "\\[");
 		ret = ret.replace("]", "\\]");
@@ -448,6 +449,7 @@ public class DirectSearchModule implements SearchModule {
 		ArrayList<QueryResult> al = new ArrayList<QueryResult>();
 		
 		try {
+			// http://n4.nabble.com/Query-performance-for-large-query-results-td531360.html
 			((QueryImpl) query).setLimit(limit);
 			((QueryImpl) query).setOffset(offset);
 			javax.jcr.query.QueryResult result = query.execute();
