@@ -130,9 +130,9 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 		long usable = df.getUsableSpace();
 		long used = total - usable;
 		
-		log.info("Total space: {}", FormatUtil.formatSize(total));
-		log.info("Usable space: {}", FormatUtil.formatSize(usable));
-		log.info("Used space: {}", FormatUtil.formatSize(used));
+		log.debug("Total space: {}", FormatUtil.formatSize(total));
+		log.debug("Usable space: {}", FormatUtil.formatSize(usable));
+		log.debug("Used space: {}", FormatUtil.formatSize(used));
 		
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Available (" + FormatUtil.formatSize(usable) + ")", usable * 100 / total);
