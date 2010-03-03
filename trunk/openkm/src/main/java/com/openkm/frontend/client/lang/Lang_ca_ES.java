@@ -384,6 +384,7 @@ public class Lang_ca_ES {
 	    lang.put("search.name", "Nom");
 	    lang.put("search.keywords", "Paraules clau");
 	    lang.put("search.folder", "Carpeta");
+	    lang.put("search.category", "Categoria");
 	    lang.put("search.results", "Resultats");
 	    lang.put("search.to", "al");
 	    lang.put("search.page.results", "Resultats per pàgina");
@@ -401,6 +402,7 @@ public class Lang_ca_ES {
 	    
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filtrat per carpeta");
+	    lang.put("search.category.filter", "Filtrat per categories");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Nom");

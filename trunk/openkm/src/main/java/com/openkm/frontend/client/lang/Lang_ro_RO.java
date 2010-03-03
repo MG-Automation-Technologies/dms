@@ -384,6 +384,7 @@ public class Lang_ro_RO {
 	    lang.put("search.name", "Nume");
 	    lang.put("search.keywords", "Cuvinte cheie");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Rezultate");
 	    lang.put("search.to", "la");
 	    lang.put("search.page.results", "Rezultate pe pagina");
@@ -401,6 +402,7 @@ public class Lang_ro_RO {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 
 	    // Search results
 	    lang.put("search.result.name", "Nume");

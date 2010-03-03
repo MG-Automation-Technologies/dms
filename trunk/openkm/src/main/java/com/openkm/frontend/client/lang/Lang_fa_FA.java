@@ -383,6 +383,7 @@ public class Lang_fa_FA {
 	    lang.put("search.name", "نام");
 	    lang.put("search.keywords", "کلمات کلیدی");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "نتایج");
 	    lang.put("search.to", "به");
 	    lang.put("search.page.results", "صفحات نتیجه");
@@ -400,6 +401,7 @@ public class Lang_fa_FA {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "نام");

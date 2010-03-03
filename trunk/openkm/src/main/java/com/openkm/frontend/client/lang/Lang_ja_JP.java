@@ -383,6 +383,7 @@ public class Lang_ja_JP {
 		lang.put("search.name", "名前");
 		lang.put("search.keywords", "キーワード");
 		lang.put("search.folder", "Folder");
+		lang.put("search.category", "Category");
 		lang.put("search.results", "結果");
 		lang.put("search.to", "to");
 		lang.put("search.page.results", "ページ当り表示数");
@@ -400,6 +401,7 @@ public class Lang_ja_JP {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 		
 		// Search results
 		lang.put("search.result.name", "名前");

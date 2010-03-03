@@ -383,6 +383,7 @@ public class Lang_sv_SE {
 	    lang.put("search.name", "Namn");
 	    lang.put("search.keywords", "Nyckelord");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Resultat");
 	    lang.put("search.to", "till");
 	    lang.put("search.page.results", "Sökresultat");
@@ -400,6 +401,7 @@ public class Lang_sv_SE {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Namn");

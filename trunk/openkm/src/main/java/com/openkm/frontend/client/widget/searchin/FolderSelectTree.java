@@ -100,14 +100,18 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Resets all tree values
 	 */
-	public void reset() {
+	public void reset(boolean categories) {
 		actualItem = rootItem;
 		actualItem.setSelected(true);
 		while (actualItem.getChildCount()>0) {
 			actualItem.getChild(0).remove();
 		}
 		
-		changeView(Main.get().mainPanel.search.searchIn.context.getSelectedIndex());
+		if (categories) {
+			changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
+		} else {
+			changeView(Main.get().mainPanel.search.searchIn.context.getSelectedIndex());
+		}
 	}
 	
 	/**
@@ -124,6 +128,10 @@ public class FolderSelectTree extends Composite {
 		switch (view){
 			case PanelDefinition.NAVIGATOR_TAXONOMY :
 				getRoot();
+				break;
+				
+			case PanelDefinition.NAVIGATOR_CATEGORIES :
+				getCategories();
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TEMPLATES :
@@ -262,6 +270,35 @@ public class FolderSelectTree extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
 		repositoryService.getTemplate(callbackGetTemplate);
+	}
+	
+	/**
+	 * Gets asyncronous categories node
+	 */
+	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
+			GWTFolder folderItem = result;
+			
+			actualItem.setUserObject(folderItem);
+			evaluesFolderIcon(actualItem);			
+			actualItem.setState(true);
+			actualItem.setSelected(true);
+			
+			getChilds(result.getPath());
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("GetCategories", caught);
+		}
+	};
+	
+	/**
+	 * Gets the categories
+	 */
+	public void getCategories() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
+		repositoryService.getCategories(callbackGetCategories);
 	}
 	
 	/**
@@ -411,6 +448,15 @@ public class FolderSelectTree extends Composite {
 	 */
 	public String getActualPath() {
 		return ((GWTFolder) actualItem.getUserObject()).getPath();
+	}
+	
+	/**
+	 * Gets the actual UUID of the selected directory tree
+	 * 
+	 * @return The actual path of selected directory
+	 */
+	public String getActualUuuid() {
+		return ((GWTFolder) actualItem.getUserObject()).getUuid();
 	}
 	
 	/**

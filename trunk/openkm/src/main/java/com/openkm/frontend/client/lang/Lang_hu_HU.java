@@ -383,6 +383,7 @@ public class Lang_hu_HU {
 	    lang.put("search.name", "Név");
 	    lang.put("search.keywords", "Kulcsszavak");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Találatok");
 	    lang.put("search.to", "-");
 	    lang.put("search.page.results", "Találat / oldal");
@@ -400,6 +401,7 @@ public class Lang_hu_HU {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Név");
