@@ -38,8 +38,8 @@ public class SecurityTest extends TestCase {
 	public static void main(String[] args) throws Exception {
 		SecurityTest test = new SecurityTest("main");
 		test.setUp();
-		//test.testGrant();
-		test.testRevoke();
+		test.testGrant();
+		//test.testRevoke();
 		test.tearDown();
 	}
 
@@ -61,7 +61,7 @@ public class SecurityTest extends TestCase {
 	public void testGrant() throws IOException, LoginException, RepositoryException {
 		log.info("testGrant()");
 		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
-		Session sAdmin = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
+		Session sAdmin = repository.login(new SimpleCredentials("system", "".toCharArray()));
 		Node rootNode = sAdmin.getRootNode();
 		Node grantedNode = rootNode.addNode("granted");
 		rootNode.save();
@@ -81,7 +81,7 @@ public class SecurityTest extends TestCase {
 			Privilege[] privileges = new Privilege[] { acm.privilegeFromName(Privilege.JCR_WRITE) };
 			printPrivileges(log, privileges);
 			
-			((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl("test"), privileges);
+			((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl("pruebas"), privileges);
 			AccessControlEntry[] ace = ((AccessControlList) acp).getAccessControlEntries();
 			
 			for (int i=0; i<ace.length; i++) {
@@ -146,6 +146,31 @@ public class SecurityTest extends TestCase {
 		// Admin logout
 		sAdmin.logout();
 	}
+	
+	/**
+	 * Modify privileges
+	 * 
+	 * modifyPrivileges(VERSION_STORAGE_PATH, Privilege.JCR_READ, false);
+	 */
+    //private void modifyPrivileges(String path, String privilege, boolean isAllow) throws NotExecutableException, RepositoryException {
+    //    JackrabbitAccessControlList tmpl = getPolicy(acMgr, path, testUser.getPrincipal());
+    //    tmpl.addEntry(testUser.getPrincipal(), privilegesFromName(privilege), isAllow, getRestrictions(path));
+    //    acMgr.setPolicy(tmpl.getPath(), tmpl);
+    //    superuser.save();
+    //}
+	
+	/**
+	 * Get restrictions
+	 */
+	//private Map getRestrictions(String path) throws RepositoryException, NotExecutableException {
+    //    if (superuser instanceof SessionImpl) {
+    //        Map restr = new HashMap();
+    //        restr.put(((SessionImpl) superuser).getJCRName(org.apache.jackrabbit.core.security.authorization.principalbased.ACLTemplate.P_NODE_PATH), path);
+    //        return restr;
+    //    } else {
+    //        throw new NotExecutableException();
+    //    }
+    //}
 	
 	/**
 	 * 
