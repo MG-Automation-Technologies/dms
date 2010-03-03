@@ -405,10 +405,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 		log.debug("create: void");
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getRootFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getRootFolder(" + token + ")");
@@ -432,9 +429,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		return rootFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTrashFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTrash(" + token + ")");
@@ -457,10 +451,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getTrashFolder: "+trashFolder);
 		return trashFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTemplate(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTemplatesFolder(" + token + ")");
@@ -483,10 +474,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getTemplatesFolder: "+templatesFolder);
 		return templatesFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getPersonalFolder(" + token + ")");
@@ -509,10 +497,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getPersonalFolder: "+personalFolder);
 		return personalFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getMailFolder(" + token + ")");
@@ -536,10 +521,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getMailFolder: "+mailFolder);
 		return mailFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getThesaurusFolder(" + token + ")");
@@ -563,9 +545,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		return thesaurusFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getCategoriesFolder(" + token + ")");
@@ -643,9 +622,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("registerCustomNodeTypes: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
-	 */
 	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("purgeTrash("+token+")");
@@ -706,25 +682,16 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("purgeTrash: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getUpdateMessage(java.lang.String)
-	 */
 	@Override
 	public String getUpdateMessage(String token) throws RepositoryException {
 		return Repository.getUpdateMsg();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getUUID(java.lang.String)
-	 */
 	@Override
 	public String getUuid(String token) throws RepositoryException {
 		return Repository.getUuid();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
 		log.debug("hasNode(" + token + ", " + path + ")");
@@ -739,6 +706,26 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 
 		log.debug("hasNode: "+ret);
+		return ret;
+	}
+
+	@Override
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getNodePath(" + token + ", " + uuid + ")");
+		String ret;
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			ret = session.getNodeByUUID(uuid).getPath();
+		} catch (javax.jcr.ItemNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+
+		log.debug("getNodePath: "+ret);
 		return ret;
 	}
 }
