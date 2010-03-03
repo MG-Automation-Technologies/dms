@@ -41,6 +41,7 @@ import org.apache.jackrabbit.api.XASession;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,14 +103,18 @@ public class DirectFolderModule implements FolderModule {
 			fld.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
-			
-			if (am.isGranted(((NodeImpl)folderNode).getId(), Permission.READ)) {
+			//log.info("DirectFolder [BEGIN] - READ");
+			Path path = ((NodeImpl)folderNode).getPrimaryPath();
+			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
 				fld.setPermissions(Permission.READ);
 			}
-			
-			if (am.isGranted(((NodeImpl)folderNode).getId(), Permission.WRITE)) {
+			//log.info("DirectFolder [END] - READ");
+			//log.info("DirectFolder [BEGIN] - WRITE");
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
 				fld.setPermissions((byte) (fld.getPermissions() | Permission.WRITE));
 			}
+			//log.info("DirectFolder [END] - WRITE");
 		}
 		
 		// Get user subscription
@@ -331,25 +336,27 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Check if a node has removable childs
+	 * TODO: Is this neccessary? The access manager should prevent this an
+	 * make the core thown an exception. 
 	 */
 	private boolean hasWriteAccess(Node node) throws javax.jcr.RepositoryException {
 		log.debug("hasWriteAccess("+node.getPath()+")");
+		final int REMOVE_NODE = org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE;
 		boolean canWrite = true;
 		AccessManager am = ((SessionImpl) node.getSession()).getAccessManager();
 		
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
 			Node child = ni.nextNode();
+			Path path = ((NodeImpl)node).getPrimaryPath();
 			
 			if (child.isNodeType(Document.TYPE)) {
-				canWrite &= am.isGranted(((NodeImpl)node).getId(), Permission.WRITE);
+				canWrite &= am.isGranted(path, REMOVE_NODE);
 			} else if (child.isNodeType(Folder.TYPE)) {
-				canWrite &= am.isGranted(((NodeImpl)node).getId(), Permission.WRITE);
+				canWrite &= am.isGranted(path, REMOVE_NODE);
 				canWrite &= hasWriteAccess(child);
 			} else if (child.isNodeType(Mail.TYPE)) {
-				canWrite &= am.isGranted(((NodeImpl)node).getId(), Permission.WRITE);
+				canWrite &= am.isGranted(path, REMOVE_NODE);
 			} else {
 				throw new javax.jcr.RepositoryException("Unknown node type");
 			}
