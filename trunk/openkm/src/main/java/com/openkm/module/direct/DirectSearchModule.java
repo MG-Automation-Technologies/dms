@@ -224,7 +224,7 @@ public class DirectSearchModule implements SearchModule {
 		log.info("doc="+document+", fld="+folder+", mail="+mail);
 
 		// Escape
-		if (!params.getName().equals("")) { 
+		if (!params.getName().equals("")) {
 			params.setName(escapeContains(params.getName()));
 		}
 		if (!params.getContent().equals("")) {
