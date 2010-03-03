@@ -177,7 +177,8 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 		String title = null;
 		String[] sizes = null;
 		double[] percents = null;
-
+		DefaultPieDataset dataset = new DefaultPieDataset();
+		
 		if (DOCUMENTS.equals(type)) {
 			StatsInfo si = RepositoryInfo.getDocumentsByContext();
 			percents = si.getPercents();
@@ -199,17 +200,14 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 			sizes = si.getSizes();
 			title = "Folders by context";
 		}
-
+		
 		if (title != null && sizes.length > 0 && percents.length > 0) {
-			DefaultPieDataset dataset = new DefaultPieDataset();
 			dataset.setValue("Taxonomy (" + sizes[0] + ")", percents[0]);
 			dataset.setValue("Personal (" + sizes[1] + ")", percents[1]);
 			dataset.setValue("Template (" + sizes[2] + ")", percents[2]);
 			dataset.setValue("Trash (" + sizes[3] + ")", percents[3]);
-
-			return ChartFactory.createPieChart(title, dataset, true, false, false);
-		} else {
-			return null;
 		}
+		
+		return ChartFactory.createPieChart(title, dataset, true, false, false);
 	}
 }
