@@ -87,7 +87,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @throws NamingException
 	 * @throws javax.jcr.RepositoryException
 	 */
-	public synchronized static javax.jcr.Repository getRepository() throws RepositoryException {
+	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
 		String repConfig = Config.HOME_DIR + File.separator + Config.REPOSITORY_CONFIG;
 		String repHome = null;
@@ -108,10 +108,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 				repository = RepositoryImpl.create(config);
 			} catch (ConfigurationException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (javax.jcr.RepositoryException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			}
 		}
 		
@@ -122,13 +122,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 				systemSession = OKMSystemSession.create((RepositoryImpl)repository, wc);
 			} catch (LoginException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (NoSuchWorkspaceException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (javax.jcr.RepositoryException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			}
 		}
 
@@ -196,7 +196,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @throws AccessDeniedException If there is any security problem: you can't access the parent document folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public synchronized static String initialize() throws RepositoryException {
+	public synchronized static String initialize() throws javax.jcr.RepositoryException, FileNotFoundException, InvalidNodeTypeDefException, ParseException {
 		log.debug("initialize()");
 				
 		// Initializes Repository and SystemSession
@@ -205,14 +205,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 		String okmRootPath = create(systemSession);
 		
 		// Store system session token 
-		try {
-			DirectAuthModule.loadUserData(systemSession);
-			SessionManager.getInstance().putSystem(systemSession);
-			log.debug("*** System user created "+systemSession.getUserID());				
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e);
-		}
-		
+		DirectAuthModule.loadUserData(systemSession);
+		SessionManager.getInstance().putSystem(systemSession);
+		log.debug("*** System user created "+systemSession.getUserID());				
+				
 		log.debug("initialize: "+okmRootPath);
 		return okmRootPath;
 	}
@@ -221,8 +217,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @param session
 	 * @return
 	 * @throws RepositoryException
+	 * @throws FileNotFoundException 
+	 * @throws InvalidNodeTypeDefException 
+	 * @throws ParseException 
 	 */
-	public synchronized static String create(Session session) throws RepositoryException {
+	public synchronized static String create(Session session) throws javax.jcr.RepositoryException,
+			FileNotFoundException, InvalidNodeTypeDefException, ParseException {
 		String okmRootPath = null;
 		Node rootNode = null;
 		
@@ -255,7 +255,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				} else {
 					String msg = "Configuration error: "+Config.NODE_DEFINITIONS+" not found";
 					log.debug(msg);
-					throw new RepositoryException(msg);
+					throw new javax.jcr.RepositoryException(msg);
 				}
 								
 				// Create root base node
@@ -363,19 +363,19 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		} catch (NamespaceException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (FileNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (InvalidNodeTypeDefException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		}
 		
 		return okmRootPath;
