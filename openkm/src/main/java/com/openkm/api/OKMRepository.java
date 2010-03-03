@@ -41,9 +41,6 @@ public class OKMRepository implements RepositoryModule {
 		return instance;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getRootFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getRootFolder("+token+")");
@@ -53,9 +50,6 @@ public class OKMRepository implements RepositoryModule {
 		return rootFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTrashFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTrashFolder("+token+")");
@@ -65,9 +59,6 @@ public class OKMRepository implements RepositoryModule {
 		return trashFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTemplate(java.lang.String)
-	 */
 	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTemplatesFolder("+token+")");
@@ -77,9 +68,6 @@ public class OKMRepository implements RepositoryModule {
 		return templatesFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getPersonalFolder("+token+")");
@@ -89,9 +77,6 @@ public class OKMRepository implements RepositoryModule {
 		return personalFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getMailFolder("+token+")");
@@ -101,9 +86,6 @@ public class OKMRepository implements RepositoryModule {
 		return mailFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getThesaurusFolder("+token+")");
@@ -113,9 +95,6 @@ public class OKMRepository implements RepositoryModule {
 		return thesaurusFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getCategoriesFolder("+token+")");
@@ -125,9 +104,6 @@ public class OKMRepository implements RepositoryModule {
 		return categoriesFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
-	 */
 	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("purgeTrash("+token+")");
@@ -136,9 +112,6 @@ public class OKMRepository implements RepositoryModule {
 		log.debug("purgeTrash: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getUpdateMessage(java.lang.String)
-	 */
 	@Override
 	public String getUpdateMessage(String token) throws RepositoryException {
 		log.debug("getUpdateMessage("+token+")");
@@ -148,9 +121,6 @@ public class OKMRepository implements RepositoryModule {
 		return updateMessage;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getUuid(java.lang.String)
-	 */
 	@Override
 	public String getUuid(String token) throws RepositoryException {
 		log.debug("getUuid("+token+")");
@@ -160,15 +130,21 @@ public class OKMRepository implements RepositoryModule {
 		return uuid;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
 		log.debug("hasNode("+token+" , "+path+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		boolean ret = rm.hasNode(token, path);
 		log.debug("hasNode: "+ret);
+		return ret;
+	}
+
+	@Override
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getNodePath("+token+" , "+uuid+")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		String ret = rm.getNodePath(token, uuid);
+		log.debug("getNodePath: "+ret);
 		return ret;
 	}
 }
