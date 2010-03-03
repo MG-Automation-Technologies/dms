@@ -21,6 +21,7 @@
 
 package com.openkm.backend.server;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,6 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,11 +81,14 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 			if (chart != null) {
 				// Customize title font
 				chart.getTitle().setFont(new Font("Tahoma", Font.BOLD, 16));
-
+				
+				// Match body {	background-color:#F6F6EE; }
+				chart.setBackgroundPaint(new Color(246, 246, 238));
+				
 				// Customize no data
 				PiePlot plot = (PiePlot) chart.getPlot();
 				plot.setNoDataMessage("No data to display");
-
+				
 				// Customize labels
 				plot.setLabelGenerator(null);
 
@@ -143,6 +146,7 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 
 	/**
 	 * Generate memory statistics
+	 * http://blog.codebeach.com/2008/02/determine-available-memory-in-java.html
 	 */
 	public JFreeChart memStats() throws IOException, ServletException {
 		String title = "Memory usage";
@@ -153,11 +157,11 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 		long used = max - available;
 		long total = free + used;
 		
-		log.info("Maximun memory: {}", FormatUtil.formatSize(max));
-		log.info("Available memory: {}", FormatUtil.formatSize(available));
-		log.info("Free memory: {}", FormatUtil.formatSize(free));
-		log.info("Used memory: {}", FormatUtil.formatSize(used));
-		log.info("Total memory: {}", FormatUtil.formatSize(total));
+		log.debug("Maximun memory: {}", FormatUtil.formatSize(max));
+		log.debug("Available memory: {}", FormatUtil.formatSize(available));
+		log.debug("Free memory: {}", FormatUtil.formatSize(free));
+		log.debug("Used memory: {}", FormatUtil.formatSize(used));
+		log.debug("Total memory: {}", FormatUtil.formatSize(total));
 		
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Available (" + FormatUtil.formatSize(free) + ")", free * 100 / total);
