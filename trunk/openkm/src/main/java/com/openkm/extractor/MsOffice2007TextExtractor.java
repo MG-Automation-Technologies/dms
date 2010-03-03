@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * Text extractor for MS Ooffice 2007 documents.
+ * Text extractor for MS Office 2007 documents.
  */
 public class MsOffice2007TextExtractor extends AbstractTextExtractor {
 
