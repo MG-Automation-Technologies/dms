@@ -53,6 +53,9 @@ public class GWTQueryParams implements IsSerializable {
 	private String from = "";
 	private String to = "";
 	private String subject = "";
+	private String categoryUuid = "";
+	private String categoryPath = "";
+
 	private String operator = OPERATOR_AND;
 	
 	private HashMap<String, GWTPropertyParams> properties;
@@ -211,5 +214,21 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setOperator(String operator) {
 		this.operator = operator;
+	}
+	
+	public String getCategoryUuid() {
+		return categoryUuid;
+	}
+
+	public void setCategoyUuid(String uuid) {
+		this.categoryUuid = uuid;
+	}
+	
+	public String getCategoryPath() {
+		return categoryPath;
+	}
+
+	public void setCategoryPath(String categoryPath) {
+		this.categoryPath = categoryPath;
 	}
 }

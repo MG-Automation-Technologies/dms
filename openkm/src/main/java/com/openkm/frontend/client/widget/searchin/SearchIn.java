@@ -136,8 +136,12 @@ public class SearchIn extends Composite {
 	private Status status;
 	private boolean userNews = false;
 	private Image pathExplorer;
+	private Image categoryExplorer;
 	private HorizontalPanel pathExplorerPanel;
+	private HorizontalPanel categoryExplorerPanel;
 	public TextBox path;
+	public TextBox categoryPath;
+	public String categoryUuid = "";
 	private FolderSelectPopup folderSelectPopup;
 	private HorizontalPanel typePanel;
 	private CheckBox typeDocument;
@@ -266,6 +270,8 @@ public class SearchIn extends Composite {
 				context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
 				content.setText("");
 				path.setText("");
+				categoryPath.setText("");
+				categoryUuid = "";
 				name.setText("");
 				keywords.setText("");
 				searchSavedName.setText("");
@@ -300,6 +306,12 @@ public class SearchIn extends Composite {
 				} else {
 					params.setPath(context.getValue(context.getSelectedIndex()));
 				}
+				
+				if (!categoryUuid.equals("")) {
+					params.setCategoyUuid(categoryUuid);
+					params.setCategoryPath(categoryPath.getText());
+				}
+				
 				params.setContent(content.getText());
 				params.setName(name.getText());
 				params.setKeywords(keywords.getText());
@@ -414,11 +426,31 @@ public class SearchIn extends Composite {
 		pathExplorer.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				folderSelectPopup.show();
+				folderSelectPopup.show(false);
 			}
 		});
 		
 		pathExplorerPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
+		
+		// Sets the category explorer
+		categoryExplorerPanel = new HorizontalPanel();
+		categoryPath = new TextBox();
+		categoryUuid = "";
+		categoryPath.setReadOnly(true);
+		categoryExplorer =  new Image("img/icon/search/folder_explore.gif");
+		
+		categoryExplorerPanel.add(categoryPath);
+		categoryExplorerPanel.add(new HTML("&nbsp;"));
+		categoryExplorerPanel.add(categoryExplorer);
+		
+		categoryExplorer.addClickHandler(new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				folderSelectPopup.show(true);
+			}
+		});
+		
+		categoryExplorerPanel.setCellVerticalAlignment(categoryExplorer, HasAlignment.ALIGN_MIDDLE);
 		
 		// Sets type document
 		typePanel = new HorizontalPanel();
@@ -565,8 +597,10 @@ public class SearchIn extends Composite {
 		table.setWidget(3, 1, keywords);
 		table.setHTML(4, 0, Main.i18n("search.folder"));
 		table.setWidget(4, 1, pathExplorerPanel);
-		table.setHTML(5, 0, Main.i18n("search.type"));
-		table.setWidget(5, 1, typePanel);
+		table.setHTML(5, 0, Main.i18n("search.category"));
+		table.setWidget(5, 1, categoryExplorerPanel);
+		table.setHTML(6, 0, Main.i18n("search.type"));
+		table.setWidget(6, 1, typePanel);
 		// table.setHTML(6, 0, Main.i18n("search.type"));	// On OpenKM 4.0 has hidden AND / OR option list
 		//table.setWidget(6, 1, searchTypePanel);			// On OpenKM 4.0 has hidden AND / OR option list
 		table.setHTML(7, 0, Main.i18n("search.mimetype"));
@@ -678,6 +712,7 @@ public class SearchIn extends Composite {
 		startDate.setStyleName("okm-Input");
 		endDate.setStyleName("okm-Input");
 		path.setStyleName("okm-Input");
+		categoryPath.setStyleName("okm-Input");
 		folderSelectPopup.setStyleName("okm-Popup");
 		folderSelectPopup.addStyleName("okm-DisableSelect");
 		from.setStyleName("okm-Input");
@@ -761,7 +796,8 @@ public class SearchIn extends Composite {
 		table.setHTML(2, 0, Main.i18n("search.name"));
 		table.setHTML(3, 0, Main.i18n("search.keywords"));
 		table.setHTML(4, 0, Main.i18n("search.folder"));
-		table.setHTML(5, 0, Main.i18n("search.type"));
+		table.setHTML(5, 0, Main.i18n("search.category"));
+		table.setHTML(6, 0, Main.i18n("search.type"));
 		// table.setHTML(6, 0, Main.i18n("search.type"));	// On OpenKM 4.0 has hidden AND / OR option list
 		table.setHTML(7, 0, Main.i18n("search.mimetype"));
 		table.setHTML(8, 0, Main.i18n("search.user"));
@@ -822,6 +858,9 @@ public class SearchIn extends Composite {
 			gwtParams.setPath(path.getText());
 		} else {
 			gwtParams.setPath(context.getValue(context.getSelectedIndex()));
+		}
+		if (!categoryUuid.equals("")) {
+			gwtParams.setCategoyUuid(categoryUuid);
 		}
 		gwtParams.setKeywords(keywords.getText());
 		gwtParams.setMimeType("");
@@ -1030,6 +1069,11 @@ public class SearchIn extends Composite {
 		} else {
 			//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
 			context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
+		}
+		
+		if (!gWTParams.getCategoryUuid().equals("")) {
+			categoryUuid = gWTParams.getCategoryUuid();
+			categoryPath.setText(gWTParams.getCategoryPath());
 		}
 		
 		// Detecting if user has setting some folder path filter or there's only a context one

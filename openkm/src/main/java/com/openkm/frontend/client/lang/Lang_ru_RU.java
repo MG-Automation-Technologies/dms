@@ -388,6 +388,7 @@ public class Lang_ru_RU {
 	    lang.put("search.name", "Название");
 	    lang.put("search.keywords", "Ключевые слова");
 	    lang.put("search.folder", "Папка");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Результаты");
 	    lang.put("search.to", "из");
 	    lang.put("search.page.results", "Результатов на страницу");
@@ -405,6 +406,7 @@ public class Lang_ru_RU {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Фильтровать по папкам");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Название");

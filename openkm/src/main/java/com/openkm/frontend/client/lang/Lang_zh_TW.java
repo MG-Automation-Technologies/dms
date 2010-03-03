@@ -381,6 +381,7 @@ public class Lang_zh_TW {
 	    lang.put("search.name", "名稱");
 	    lang.put("search.keywords", "關鍵字");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "結果");
 	    lang.put("search.to", "至");
 	    lang.put("search.page.results", "每頁顯示結果");
@@ -398,6 +399,7 @@ public class Lang_zh_TW {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "名稱");

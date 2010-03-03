@@ -383,6 +383,7 @@ public class Lang_lv_LV {
 	    lang.put("search.name", "Nosaukums");
 	    lang.put("search.keywords", "Atslēgvārdi");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Rezultāti");
 	    lang.put("search.to", "līdz");
 	    lang.put("search.page.results", "Lapas rezultāti");
@@ -400,6 +401,7 @@ public class Lang_lv_LV {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Nosaukumes");

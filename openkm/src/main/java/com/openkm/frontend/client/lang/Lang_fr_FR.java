@@ -383,6 +383,7 @@ public class Lang_fr_FR {
 	    lang.put("search.name", "Nom");
 	    lang.put("search.keywords", "Mots-clés");
 	    lang.put("search.folder", "Dossier");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Résultats");
 	    lang.put("search.to", "à");
 	    lang.put("search.page.results", "Résultats par page");
@@ -400,6 +401,7 @@ public class Lang_fr_FR {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filtre par dossier");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Nom");

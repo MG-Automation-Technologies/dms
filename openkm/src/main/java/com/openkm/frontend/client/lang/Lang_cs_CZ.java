@@ -383,6 +383,7 @@ public class Lang_cs_CZ {
 	    lang.put("search.name", "Jméno");
 	    lang.put("search.keywords", "Klíčová slova");
 	    lang.put("search.folder", "Složka");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Výsledky");
 	    lang.put("search.to", "do");
 	    lang.put("search.page.results", "Počet výsledků na stránce");
@@ -400,6 +401,7 @@ public class Lang_cs_CZ {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filtrovat podle složky");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Jméno");

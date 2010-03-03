@@ -50,6 +50,7 @@ public class FolderSelectPopup extends DialogBox  {
 	private FolderSelectTree folderSelectTree;
 	private Button cancelButton;
 	private Button actionButton;
+	private boolean categories = false;
 	
 	/**
 	 * FolderSelectPopup
@@ -86,7 +87,11 @@ public class FolderSelectPopup extends DialogBox  {
 		actionButton = new Button(Main.i18n("button.select"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				setRepositoryPath(folderSelectTree.getActualPath(), false);
+				if (categories) {
+					setRepositoryPath(folderSelectTree.getActualPath(), folderSelectTree.getActualUuuid(), false);
+				} else {
+					setRepositoryPath(folderSelectTree.getActualPath(), false);
+				}
 			}	
 		});
 		
@@ -118,6 +123,15 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Sets the repository path
 	 */
+	public void setRepositoryPath(String actualPath, String Uuid, boolean refresh) {
+		Main.get().mainPanel.search.searchIn.categoryUuid = Uuid;
+		Main.get().mainPanel.search.searchIn.categoryPath.setText(actualPath);
+		hide();
+	}
+	
+	/**
+	 * Sets the repository path
+	 */
 	public void setRepositoryPath(String actualPath, boolean refresh) {
 		Main.get().mainPanel.search.searchIn.path.setText(actualPath);
 		hide();
@@ -127,7 +141,11 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Language refresh
 	 */
 	public void langRefresh() {
-		setText(Main.i18n("search.folder.filter"));
+		if (categories) {
+			setText(Main.i18n("search.category.filter"));
+		} else {
+			setText(Main.i18n("search.folder.filter"));
+		}
 		cancelButton.setText(Main.i18n("button.cancel"));
 		actionButton.setText(Main.i18n("button.select"));
 	}
@@ -135,14 +153,20 @@ public class FolderSelectPopup extends DialogBox  {
 	/**
 	 * Shows the popup 
 	 */
-	public void show() {
+	public void show(boolean categories) {
+		this.categories = categories;
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-200) / 2;
 		setPopupPosition(left, top);
-		setText(Main.i18n("search.folder.filter"));
+		
+		if (categories) {
+			setText(Main.i18n("search.category.filter"));
+		} else {
+			setText(Main.i18n("search.folder.filter"));
+		}
 		
 		// Resets to initial tree value
-		folderSelectTree.reset();
+		folderSelectTree.reset(categories);
 		super.show();
 	}
 

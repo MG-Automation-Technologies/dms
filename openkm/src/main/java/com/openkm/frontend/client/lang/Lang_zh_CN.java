@@ -382,6 +382,7 @@ public class Lang_zh_CN {
 	    lang.put("search.name", "名称");
 	    lang.put("search.keywords", "关键字");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "结果");
 	    lang.put("search.to", "至");
 	    lang.put("search.page.results", "每页显示结果数");
@@ -399,6 +400,7 @@ public class Lang_zh_CN {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "按文件夹过滤");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "名称");

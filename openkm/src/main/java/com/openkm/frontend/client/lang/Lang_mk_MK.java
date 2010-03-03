@@ -383,6 +383,7 @@ public class Lang_mk_MK {
 	    lang.put("search.name", "Име");
 	    lang.put("search.keywords", "Клучни зборови");
 	    lang.put("search.folder", "Папка");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Резултати");
 	    lang.put("search.to", "во");
 	    lang.put("search.page.results", "Резултати за страница");
@@ -400,6 +401,7 @@ public class Lang_mk_MK {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Филтрирај по папка");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Име");

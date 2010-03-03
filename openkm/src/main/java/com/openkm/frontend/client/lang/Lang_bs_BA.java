@@ -384,6 +384,7 @@ public class Lang_bs_BA {
 	    lang.put("search.name", "Ime");
 	    lang.put("search.keywords", "Ključne riječi");
 	    lang.put("search.folder", "Datoteka");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Rezultati");
 	    lang.put("search.to", "prema");
 	    lang.put("search.page.results", "Rezultati stranice");
@@ -401,6 +402,7 @@ public class Lang_bs_BA {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter po datotekama");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Ime");

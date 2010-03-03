@@ -383,6 +383,7 @@ public class Lang_tr_TR {
 	    lang.put("search.name", "Ýsim");
 	    lang.put("search.keywords", "Anahtar Kelimeler");
 	    lang.put("search.folder", "Folder");
+	    lang.put("search.category", "Category");
 	    lang.put("search.results", "Sonuçlar");
 	    lang.put("search.to", "-e/-a");
 	    lang.put("search.page.results", "Sayfadaki Arama Sonuçlarý");
@@ -400,6 +401,7 @@ public class Lang_tr_TR {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter by folder");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Ýsim");

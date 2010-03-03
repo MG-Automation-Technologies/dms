@@ -384,6 +384,7 @@ public class Lang_nl_NL {
 	    lang.put("search.name", "Naam");
 	    lang.put("search.keywords", "Sleutelwoorden");
 		lang.put("search.folder", "Map");
+		lang.put("search.category", "Category");
 	    lang.put("search.results", "Resultaten");
 	    lang.put("search.to", "aan");
 	    lang.put("search.page.results", "Page results");
@@ -401,6 +402,7 @@ public class Lang_nl_NL {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "Filter op map");
+	    lang.put("search.category.filter", "Filter by category");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Naam");

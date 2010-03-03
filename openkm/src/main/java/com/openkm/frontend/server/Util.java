@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMPropertyGroup;
+import com.openkm.api.OKMRepository;
 import com.openkm.bean.Bookmark;
 import com.openkm.bean.DashboardStatsDocumentResult;
 import com.openkm.bean.DashboardStatsFolderResult;
@@ -57,6 +58,7 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.core.Config;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
@@ -354,6 +356,7 @@ public class Util {
 		params.setName(gWTParams.getName());
 		params.setProperties(gWTParams.getSearchProperties());
 		params.setPath(gWTParams.getPath());
+		params.setCategories(gWTParams.getCategoryUuid());
 		params.setAuthor(gWTParams.getAuthor());
 		Calendar lastModifiedFrom = Calendar.getInstance();
 		Calendar lastModifiedTo = Calendar.getInstance();
@@ -424,8 +427,9 @@ public class Util {
 	 * @return The GWTQueryParams object with the data from de original QueryParams 
 	 * @throws RepositoryException 
 	 * @throws IOException 
+	 * @throws PathNotFoundException 
 	 */
-	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException {
+	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException, PathNotFoundException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
 		gWTParams.setContent(params.getContent());
@@ -440,6 +444,9 @@ public class Util {
 		gWTParams.setFrom(params.getFrom());
 		gWTParams.setTo(params.getTo());
 		gWTParams.setOperator(params.getOperator());
+		gWTParams.setCategoyUuid(params.getCategories());
+		
+		gWTParams.setCategoryPath(OKMRepository.getInstance().getNodePath(token, params.getCategories()));
 		
 		if (params.getLastModifiedFrom()!=null && params.getLastModifiedTo()!=null) {
 			gWTParams.setLastModifiedFrom(params.getLastModifiedFrom().getTime());
