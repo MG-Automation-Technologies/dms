@@ -51,9 +51,6 @@ public class OKMFolder implements FolderModule {
 		return instance;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#create(java.lang.String, com.openkm.bean.Folder)
-	 */
 	@Override
 	public Folder create(String token, Folder fldPath) throws PathNotFoundException, 
 			ItemExistsException, AccessDeniedException, RepositoryException {
@@ -64,9 +61,6 @@ public class OKMFolder implements FolderModule {
 		return newFld;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#getProperties(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException {
@@ -77,9 +71,6 @@ public class OKMFolder implements FolderModule {
 		return fld;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void delete(String token, String fldPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
@@ -89,9 +80,6 @@ public class OKMFolder implements FolderModule {
 		log.debug("delete: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#purge(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purge(String token, String fldPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
@@ -101,9 +89,6 @@ public class OKMFolder implements FolderModule {
 		log.debug("purge: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
@@ -114,9 +99,6 @@ public class OKMFolder implements FolderModule {
 		return renamedFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
@@ -126,9 +108,6 @@ public class OKMFolder implements FolderModule {
 		log.debug("move: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#copy(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
@@ -138,9 +117,6 @@ public class OKMFolder implements FolderModule {
 		log.debug("copy: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
@@ -151,9 +127,6 @@ public class OKMFolder implements FolderModule {
 		return childs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#getContentInfo(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
@@ -164,9 +137,6 @@ public class OKMFolder implements FolderModule {
 		return contentInfo;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
