@@ -66,22 +66,22 @@ public class OKMAccessManager implements AccessManager {
 
 	@Override
 	public void init(AMContext context) throws AccessDeniedException, Exception {
-		log.info("init({})", context);
+		log.debug("init({})", context);
 		this.context = context;
 		subject = context.getSubject();
 		principalRoles = new HashSet<String>();
 
 		for (Iterator<java.security.Principal> it = subject.getPrincipals().iterator(); it.hasNext();) {
 			Object obj = it.next();
-			log.info("##### {}", obj.getClass());
+			log.debug("##### {}", obj.getClass());
 
 			if (obj instanceof org.apache.jackrabbit.core.security.principal.EveryonePrincipal) {
 				// Needed for test.
-				log.info("o.a.j.c.s.p.EveryonePrincipal: {}", obj);
+				log.debug("o.a.j.c.s.p.EveryonePrincipal: {}", obj);
 				org.apache.jackrabbit.core.security.principal.EveryonePrincipal everyonePrincipal = (org.apache.jackrabbit.core.security.principal.EveryonePrincipal) obj;
 			} else if (obj instanceof org.apache.jackrabbit.core.security.UserPrincipal) {
 				// Needed for test.
-				log.info("o.a.j.c.s.UserPrincipal: {}", obj);
+				log.debug("o.a.j.c.s.UserPrincipal: {}", obj);
 				org.apache.jackrabbit.core.security.UserPrincipal userPrincipal = (org.apache.jackrabbit.core.security.UserPrincipal) obj;
 				principalUser = userPrincipal.getName();
 				principalRoles.add(Config.DEFAULT_USER_ROLE);
@@ -91,18 +91,18 @@ public class OKMAccessManager implements AccessManager {
 				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups
 						.hasMoreElements();) {
 					java.security.Principal rol = (java.security.Principal) groups.nextElement();
-					log.info("Rol: {}", rol.getName());
+					log.debug("Rol: {}", rol.getName());
 					principalRoles.add(rol.getName());
 				}
 			} else if (obj instanceof java.security.Principal) {
-				log.info("j.s.Principal: {}", obj);
+				log.debug("j.s.Principal: {}", obj);
 				java.security.Principal principal = (java.security.Principal) obj;
 				principalUser = principal.getName();
 			}
 		}
 
-		log.info("PrincipalRoles: " + principalRoles);
-		log.info("init: void");
+		log.debug("PrincipalRoles: " + principalRoles);
+		log.debug("init: void");
 	}
 
 	@Override
@@ -155,11 +155,11 @@ public class OKMAccessManager implements AccessManager {
 	@Override
 	// This method is deprecated in Jackrabbit 1.5.0
 	public boolean isGranted(ItemId id, int permissions) throws ItemNotFoundException, RepositoryException {
-		log.info("deprecated - isGranted({}, {} => {})", new Object[] { id, permissions,
+		log.debug("deprecated - isGranted({}, {} => {})", new Object[] { id, permissions,
 				permissionsToString(deprecatedPermissionsToNewApi(permissions)) });
 		Path path = context.getHierarchyManager().getPath(id);
 		boolean access = isGranted(path, deprecatedPermissionsToNewApi(permissions));
-		log.info("deprecated - isGranted: {}", access);
+		log.debug("deprecated - isGranted: {}", access);
 		return access;
 	}
 
@@ -175,9 +175,9 @@ public class OKMAccessManager implements AccessManager {
 
 	@Override
 	public boolean isGranted(Path absPath, int permissions) throws RepositoryException {
-		log.info("isGranted({}, {} => {})", new Object[] { absPath, permissions, permissionsToString(permissions) });
+		log.debug("isGranted({}, {} => {})", new Object[] { absPath, permissions, permissionsToString(permissions) });
 		boolean access = checkAccess(absPath, permissions);
-		log.info("isGranted: {}", access);
+		log.debug("isGranted: {}", access);
 		return access;
 	}
 
@@ -185,7 +185,7 @@ public class OKMAccessManager implements AccessManager {
 	 * 
 	 */
 	private boolean checkAccess(Path absPath, int permissions) throws RepositoryException {
-		log.info("checkAccess({}, {} => {})", new Object[] { absPath, permissions, permissionsToString(permissions) });
+		log.debug("checkAccess({}, {} => {})", new Object[] { absPath, permissions, permissionsToString(permissions) });
 		Session systemSession = DirectRepositoryModule.getSystemSession();
 		boolean access = false;
 
@@ -193,15 +193,15 @@ public class OKMAccessManager implements AccessManager {
 			// An user with AdminRole has total access
 			access = true;
 		} else {
-			log.info("{} Path: {}", subject.getPrincipals(), absPath);
+			log.debug("{} Path: {}", subject.getPrincipals(), absPath);
 			NodeId nodeId = context.getHierarchyManager().resolveNodePath(absPath);
 
 			if (nodeId != null) {
-				log.info("{} This is a NODE", subject.getPrincipals());
+				log.debug("{} This is a NODE", subject.getPrincipals());
 			} else {
 				PropertyId propertyId = context.getHierarchyManager().resolvePropertyPath(absPath);
 				nodeId = propertyId.getParentId();
-				log.info("{} This is a PROPERTY", subject.getPrincipals());
+				log.debug("{} This is a PROPERTY", subject.getPrincipals());
 			}
 
 			if (access || absPath.denotesRoot()) {
@@ -214,8 +214,8 @@ public class OKMAccessManager implements AccessManager {
 					if (node == null) {
 						access = true;
 					} else {
-						log.info("{} Node Name: {}", subject.getPrincipals(), node.getPath());
-						log.info("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType()
+						log.debug("{} Node Name: {}", subject.getPrincipals(), node.getPath());
+						log.debug("{} Node Type: {}", subject.getPrincipals(), node.getPrimaryNodeType()
 								.getName());
 
 						if (node.isNodeType(Document.CONTENT_TYPE)) {
@@ -278,7 +278,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 
-		log.info("checkAccess: "+access);
+		log.debug("checkAccess: "+access);
 		return access;
 	}
 
@@ -287,17 +287,18 @@ public class OKMAccessManager implements AccessManager {
 	 */
 	private boolean checkRead(Node node) throws ValueFormatException, RepositoryException,
 			PathNotFoundException {
-		log.info("checkRead({})", node);
+		log.debug("checkRead({})", node);
 		// Propiedad no definida en nt:versionHistory, nt:version,
 		// nt:frozenNode y okm:resource
 		Value[] users = node.getProperty(com.openkm.bean.Permission.USERS_READ).getValues();
 		boolean access = false;
 
 		for (int i = 0; i < users.length; i++) {
-			log.info("{} User: {}", com.openkm.bean.Permission.USERS_READ, users[i].getString());
+			log.debug("{} User: {}", com.openkm.bean.Permission.USERS_READ, users[i].getString());
 
 			if (principalUser.equals(users[i].getString())) {
 				access = true;
+				break;
 			}
 		}
 
@@ -308,10 +309,11 @@ public class OKMAccessManager implements AccessManager {
 			Value[] roles = node.getProperty(com.openkm.bean.Permission.ROLES_READ).getValues();
 
 			for (int i = 0; i < roles.length; i++) {
-				log.info("{} Rol: {}", com.openkm.bean.Permission.ROLES_READ, roles[i].getString());
+				log.debug("{} Rol: {}", com.openkm.bean.Permission.ROLES_READ, roles[i].getString());
 
 				if (principalRoles.contains(roles[i].getString())) {
 					access = true;
+					break;
 				}
 			}
 		}
@@ -325,16 +327,17 @@ public class OKMAccessManager implements AccessManager {
 	 */
 	private boolean checkWrite(Node node) throws ValueFormatException, RepositoryException,
 			PathNotFoundException {
-		log.info("checkWrite({})", node);
+		log.debug("checkWrite({})", node);
 		// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
 		Value[] users = node.getProperty(com.openkm.bean.Permission.USERS_WRITE).getValues();
 		boolean access = false;
 
 		for (int i = 0; i < users.length; i++) {
-			log.info("{} User: {}", com.openkm.bean.Permission.USERS_WRITE, users[i].getString());
+			log.debug("{} User: {}", com.openkm.bean.Permission.USERS_WRITE, users[i].getString());
 
 			if (principalUser.equals(users[i].getString())) {
 				access = true;
+				break;
 			}
 		}
 
@@ -345,15 +348,16 @@ public class OKMAccessManager implements AccessManager {
 			Value[] roles = node.getProperty(com.openkm.bean.Permission.ROLES_WRITE).getValues();
 
 			for (int i = 0; i < roles.length; i++) {
-				log.info("{} Rol: {}", com.openkm.bean.Permission.ROLES_WRITE, roles[i].getString());
+				log.debug("{} Rol: {}", com.openkm.bean.Permission.ROLES_WRITE, roles[i].getString());
 
 				if (principalRoles.contains(roles[i].getString())) {
 					access = true;
+					break;
 				}
 			}
 		}
 
-		log.info("checkWrite: {}", access);
+		log.debug("checkWrite: {}", access);
 		return access;
 	}
 
