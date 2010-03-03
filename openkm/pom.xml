@@ -47,7 +47,7 @@
 
   <properties>
     <!-- convenience to define GWT version in one place -->
-    <gwt.version>1.7.1</gwt.version>
+    <gwt.version>2.0.0</gwt.version>
 
     <!--  tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -76,18 +76,19 @@
     </repository>
 
     <!-- Needed for KEA - aperture -->
-  <repository>
+    <repository>
       <id>aperture-repo</id>
       <name>Aperture Maven Repository</name>
       <url>http://aperture.sourceforge.net/maven</url>
     </repository>
 
     <!-- Needed for GWT incubator -->
-    <repository>
+    <!-- not founded new incubator version in a repository -->
+    <!-- <repository>
       <id>mule-deps</id>
       <name>Mule Dependencies</name>
       <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
-    </repository>
+    </repository> -->
   </repositories>
 
   <dependencies>
@@ -301,14 +302,14 @@
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>gwt-maven-plugin</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
     </dependency>
 
     <!-- GWT plugins -->
     <dependency>
       <groupId>com.googlecode.gchart</groupId>
       <artifactId>gchart</artifactId>
-      <version>2.5</version>
+      <version>2.6</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
@@ -318,7 +319,7 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>july-14-2009</version>
+      <version>20091216-r1739</version>
     </dependency>
 
     <!-- KEA -->
@@ -372,6 +373,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+    	<groupId>com.google.code.gwt-log</groupId>
+    	<artifactId>gwt-log</artifactId>
+    	<version>2.6.2</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -381,20 +389,19 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>1.1</version>
-        <configuration>
-            <runTarget>com.openkm.frontend.Main/index.html</runTarget>
-            <extraJvmArgs>-Xmx512m -Xss1024k</extraJvmArgs>
-        </configuration>
+        <version>1.2</version>
         <executions>
           <execution>
             <goals>
-              <!-- <goal>compile</goal> -->
-              <!-- <goal>generateAsync</goal>  -->
-              <goal>test</goal>
+              <goal>compile</goal>
+              <!-- <goal>generateAsync</goal> -->
+              <!-- <goal>test</goal> -->
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <runTarget>com.openkm.frontend.Main/index.html</runTarget>
+        </configuration>
       </plugin>
 
       <plugin>
