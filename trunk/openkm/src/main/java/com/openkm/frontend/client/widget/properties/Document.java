@@ -39,6 +39,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -46,7 +47,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -764,22 +764,22 @@ public class Document extends Composite {
 	 */
 	private void drawCategory(final GWTFolder category, boolean remove) {
 		int row = tableSubscribedCategories.getRowCount();
-		Hyperlink hlink = new Hyperlink();
+		Anchor anchor = new Anchor();
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
 		String path = category.getPath().substring(16); // Removes /okm:categories
 		if (category.getHasChilds()) {
-			hlink.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
+			anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
 		} else {
-			hlink.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
+			anchor.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
 		}
 		
-		hlink.addClickHandler(new ClickHandler() {
+		anchor.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(ClickEvent arg0) {
 				CommonUI.openAllFolderPath(category.getPath(), null);
 			}
 		});
-		hlink.setStyleName("okm-KeyMap-ImageHover");
+		anchor.setStyleName("okm-KeyMap-ImageHover");
 		
 		Image delete = proImageBundle.deleteIcon().createImage();
 		delete.setStyleName("okm-KeyMap-ImageHover");
@@ -791,7 +791,7 @@ public class Document extends Composite {
 			}
 		});
 		
-		tableSubscribedCategories.setWidget(row, 0, hlink);
+		tableSubscribedCategories.setWidget(row, 0, anchor);
 		if (remove) {
 			tableSubscribedCategories.setWidget(row, 1, delete);
 		} else {
