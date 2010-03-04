@@ -309,7 +309,7 @@ public class SearchIn extends Composite {
 				
 				if (!categoryUuid.equals("")) {
 					params.setCategoyUuid(categoryUuid);
-					params.setCategoryPath(categoryPath.getText());
+					params.setCategoryPath(categoryPath.getText().substring(16)); // removes /okm:category 
 				}
 				
 				params.setContent(content.getText());

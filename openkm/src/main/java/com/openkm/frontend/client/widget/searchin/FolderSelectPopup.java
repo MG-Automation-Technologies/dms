@@ -125,7 +125,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 */
 	public void setRepositoryPath(String actualPath, String Uuid, boolean refresh) {
 		Main.get().mainPanel.search.searchIn.categoryUuid = Uuid;
-		Main.get().mainPanel.search.searchIn.categoryPath.setText(actualPath);
+		Main.get().mainPanel.search.searchIn.categoryPath.setText(actualPath.substring(16)); // Removes /okm:categories;
 		hide();
 	}
 	
