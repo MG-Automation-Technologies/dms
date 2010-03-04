@@ -46,10 +46,13 @@
   </developers>
 
   <properties>
-    <!-- convenience to define GWT version in one place -->
+    <!-- Using this GWT version -->
     <gwt.version>2.0.0</gwt.version>
 
-    <!--  tell the compiler we can use 1.6 -->
+    <!-- Using this Jackrabbit version -->
+    <jcr.version>2.0.0</jcr.version>
+
+    <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
   </properties>
 
@@ -105,7 +108,7 @@
       <version>1.2.14</version>
       <scope>test</scope>
     </dependency>
-    
+
     <!--  Provided libraries -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -119,7 +122,7 @@
       <version>1.4.1</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -166,7 +169,7 @@
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-core</artifactId>
-      <version>1.5.7</version>
+      <version>${jcr.version}</version>
       <exclusions>
         <!-- We want to use the last POI version -->
         <exclusion>
@@ -178,12 +181,12 @@
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-webdav</artifactId>
-      <version>1.5.5</version>
+      <version>${jcr.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-jcr-server</artifactId>
-      <version>1.5.6</version>
+      <version>${jcr.version}</version>
     </dependency>
 
     <!-- Twitter4j -->
@@ -381,7 +384,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>compile</goal>
+              <!-- <goal>compile</goal> -->
               <!-- <goal>generateAsync</goal> -->
               <!-- <goal>test</goal> -->
             </goals>
