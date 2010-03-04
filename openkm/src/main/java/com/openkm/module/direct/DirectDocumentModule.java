@@ -92,11 +92,7 @@ public class DirectDocumentModule implements DocumentModule {
 	private static Logger log = LoggerFactory.getLogger(DirectDocumentModule.class);
 
 	/**
-	 * @param session
-	 * @param docPath
-	 * @return
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Get document properties using a given Session.
 	 */
 	public Document getProperties(Session session, String docPath) throws
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
@@ -284,9 +280,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return documentNode; 
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#create(java.lang.String, com.openkm.bean.Document, byte[])
-	 */
 	@Override
 	public Document create(String token, Document doc, InputStream is) throws
 			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException, 
@@ -387,7 +380,6 @@ public class DirectDocumentModule implements DocumentModule {
 
 			// Activity log
 			UserActivity.log(session, "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
-			
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -422,9 +414,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return newDocument;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#delete(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void delete(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + docPath + ")");
@@ -476,9 +465,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("delete: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getProperties(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Document getProperties(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("getProperties(" + token + ", " + docPath + ")");
@@ -503,12 +489,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	/**
-	 * @param session
-	 * @param docNode
-	 * @return
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
+	 * Retrieve the content InputStream from a given Node. 
 	 */
 	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException, IOException {
@@ -521,9 +502,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return is;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getContent(java.lang.String, java.lang.String, boolean)
-	 */
 	@Override
 	public InputStream getContent(String token, String docPath, boolean checkout) throws
 			PathNotFoundException, RepositoryException, IOException {
@@ -552,9 +530,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return is;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getContentByVersion(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public InputStream getContentByVersion(String token, String docPath, String versionId)
 			throws RepositoryException, PathNotFoundException, IOException {
@@ -583,10 +558,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("getContentByVersion: "+is);
 		return is;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#setContent(java.lang.String, java.lang.String, byte[])
-	 */
+
 	@Override
 	public void setContent(String token, String docPath, InputStream is) throws
 			FileSizeExceededException, VirusDetectedException, VersionException, 
@@ -669,9 +641,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setContent: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#addComment(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addNote(String token, String docPath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -712,9 +681,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("addNote: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getChilds(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("getChilds(" + token + ", " + fldPath + ")");
@@ -747,9 +713,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return childs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Document rename(String token, String docPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + docPath + ", " + newName + ")");
@@ -806,9 +769,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return renamedDocument;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#setProperties(java.lang.String, com.openkm.bean.Document)
-	 */
 	@Override
 	public void setProperties(String token, Document doc) throws VersionException, LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("setProperties(" + token + ", " + doc + ")");
@@ -861,9 +821,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setProperties: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#checkout(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void checkout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("checkout(" + token + ", " + docPath + ")");
@@ -910,9 +867,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("checkout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#cancelCheckout(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
@@ -962,9 +916,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("cancelCheckout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#isCheckedOut(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isCheckedOut(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("isCheckedOut(" + token + ", " + docPath + ")");
@@ -987,9 +938,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return checkedOut;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#checkin(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, VersionException {
 		log.debug("checkin(" + token + ", " + docPath + ", " + comment + ")");
@@ -1074,9 +1022,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return version;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getVersionHistory(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Version> getVersionHistory(String token, String docPath) throws
 			PathNotFoundException, RepositoryException {
@@ -1131,9 +1076,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return history;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#lock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("lock(" + token + ", " + docPath + ")");
@@ -1168,9 +1110,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("lock: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#unlock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void unlock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("unlock(" + token + ", " + docPath + ")");
@@ -1205,9 +1144,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("unlock: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#isLocked(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("isLocked(" + token + ", " + docPath + ")");
@@ -1229,9 +1165,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return locked;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getLock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException, LockException {
 		log.debug("getLock(" + token + ", " + docPath + ")");
@@ -1256,19 +1189,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	/**
-	 *
-	 * @param session
-	 * @param docPath
-	 * @return
-	 * @throws javax.jcr.RepositoryException
-	 * @throws javax.jcr.AccessDeniedException
-	 * @throws javax.jcr.lock.LockException
-	 * @throws UnsupportedRepositoryOperationException
-	 * @throws RepositoryException
-	 * @throws PathNotFoundException
-	 * @throws LockException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws PathNotFoundException
+	 * Retrieve lock info from a document path
 	 */
 	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException, javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
 		log.debug("getLock(" + session + ", " + docPath + ")");
@@ -1282,9 +1203,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return lock;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#purge(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + docPath + ")");
@@ -1329,7 +1247,7 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		log.debug("purge: void");
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -1382,9 +1300,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return userItemsHash;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#move(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void move(String token, String docPath, String dstPath) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("move(" + token + ", " + docPath + ", " + dstPath + ")");
@@ -1419,9 +1334,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("move: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#copy(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void copy(String token, String docPath, String dstPath) throws
 			ItemExistsException, PathNotFoundException, AccessDeniedException,
@@ -1466,15 +1378,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	/**
-	 * Is invoked from DirectDocumentNode and DirectFolderNode. 
-	 * 
-	 * @param session
-	 * @param srcDocumentNode
-	 * @param dstFolderNode
-	 * @throws ValueFormatException
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
+	 * Is invoked from DirectDocumentNode and DirectFolderNode.
 	 */
 	public void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws ValueFormatException, 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
@@ -1489,9 +1393,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("copy: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#restoreVersion(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void restoreVersion(String token, String docPath, String versionId) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
@@ -1526,9 +1427,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("restoreVersion: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#purgeVersionHistory(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purgeVersionHistory("+token+", "+docPath+")");
@@ -1566,9 +1464,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("purgeVersionHistory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getVersionHistorySize(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public long getVersionHistorySize(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("getVersionHistorySize(" + token + ", " + docPath + ")");
@@ -1602,9 +1497,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#isValid(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("isValid(" + token + ", " + docPath + ")");
@@ -1632,9 +1524,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return valid;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DocumentModule#getPath(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
 		log.debug("getPath(" + token + ", " + uuid + ")");
