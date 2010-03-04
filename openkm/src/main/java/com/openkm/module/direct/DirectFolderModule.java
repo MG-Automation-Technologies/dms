@@ -416,7 +416,7 @@ public class DirectFolderModule implements FolderModule {
 			Node node = nit.nextNode();
 			
 			if (node.isNodeType(Document.TYPE)) {
-				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node);
+				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node.getParent(), node);
 			} else if (node.isNodeType(Folder.TYPE)) {
 				userItemsHashRet = purgeHelper(session, node);
 				//String author = node.getProperty(Folder.AUTHOR).getString();
