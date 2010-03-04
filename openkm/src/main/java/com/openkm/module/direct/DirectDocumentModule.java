@@ -1258,7 +1258,7 @@ public class DirectDocumentModule implements DocumentModule {
 		String author = contentNode.getProperty(Document.AUTHOR).getString();
 		VersionHistory vh = contentNode.getVersionHistory();
 		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
-		log.info("VersionHistory UUID: "+vh.getUUID());
+		log.debug("VersionHistory UUID: "+vh.getUUID());
 
 		// Remove pdf & preview from cache
 		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()).delete();
@@ -1272,18 +1272,17 @@ public class DirectDocumentModule implements DocumentModule {
 		// https://issues.apache.org/jira/browse/JCR-134
 		// http://markmail.org/message/7aildokt74yeoar5
 		// http://markmail.org/message/nhbwe7o3c7pd4sga
-		// TODO Re-evaluate this issue when switch to Jackrabbit 1.6
 		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
 			javax.jcr.version.Version ver = vi.nextVersion();
 			String versionName = ver.getName();
-			log.info("Version: {}", versionName);
+			log.debug("Version: {}", versionName);
 			
 			// The rootVersion is not a "real" version node.
 			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION)) {
 				Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
 				size = frozenNode.getProperty(Document.SIZE).getLong();
 				author = frozenNode.getProperty(Document.AUTHOR).getString();
-				log.info("vh.removeVersion({})", versionName);
+				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
 				
 				// Update local user items for versions
