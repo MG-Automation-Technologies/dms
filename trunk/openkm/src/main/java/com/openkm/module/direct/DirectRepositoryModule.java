@@ -637,7 +637,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Node child = it.nextNode();
 				
 				if (child.isNodeType(Document.TYPE)) {
-					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child);
+					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child.getParent(), child);
 				} else if (child.isNodeType(Folder.TYPE)) {
 					userItemsHashRet = new DirectFolderModule().purgeHelper(session, child);
 				}
