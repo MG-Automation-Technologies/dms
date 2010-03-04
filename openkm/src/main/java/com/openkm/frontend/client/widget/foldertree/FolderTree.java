@@ -379,7 +379,6 @@ public class FolderTree extends Composite implements OriginPanel {
 			folderAction = ACTION_NONE;
 			Main.get().mainPanel.navigator.status.unsetFlagCreate();
 			Main.get().showError("Create", caught);
-			removeTmpFolderCreate(); // remove on error
 		}
 	};
 
@@ -1183,8 +1182,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 * Cancels the renaming folder
 	 */
 	public void cancelRename() {
-		actualItem.setHTML(tmpRenameHtmlFolder); // Restores initial icon and
-		// name values
+		actualItem.setHTML(tmpRenameHtmlFolder); // Restores initial icon and name values
 		folderAction = ACTION_NONE;
 	}
 
@@ -1193,8 +1191,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void showTabFolderProperties() {
 		Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
-		Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties((GWTFolder) actualItem
-				.getUserObject());
+		Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties((GWTFolder) actualItem.getUserObject());
 	}
 
 	/**
