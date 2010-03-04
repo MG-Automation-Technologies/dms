@@ -1074,6 +1074,7 @@ public class SearchIn extends Composite {
 		if (!gWTParams.getCategoryUuid().equals("")) {
 			categoryUuid = gWTParams.getCategoryUuid();
 			categoryPath.setText(gWTParams.getCategoryPath());
+			advancedSearchFlag = true;
 		}
 		
 		// Detecting if user has setting some folder path filter or there's only a context one
