@@ -45,10 +45,7 @@ import com.openkm.util.UserActivity;
 
 public class DirectScriptingModule implements ScriptingModule {
 	private static Logger log = LoggerFactory.getLogger(DirectScriptingModule.class);
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.ScriptingModule#setScript(java.lang.String, java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	public void setScript(String token, String nodePath, String code)
 			throws PathNotFoundException, AccessDeniedException,
@@ -91,10 +88,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		
 		log.debug("setScript: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.ScriptingModule#removeScript(java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	public void removeScript(String token, String nodePath)
 			throws PathNotFoundException, AccessDeniedException,
@@ -139,9 +133,6 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("removeScript: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.ScriptingModule#getScript(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String getScript(String token, String nodePath)
 			throws PathNotFoundException, AccessDeniedException,
@@ -172,7 +163,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("getScript: "+code);
 		return code;
 	}
-		
+
 	/**
 	 * Check for scripts and evaluate
 	 * 
@@ -195,11 +186,9 @@ public class DirectScriptingModule implements ScriptingModule {
 		
 		log.debug("checkScripts: void");
 	}
-	
+
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Check script helper method for recursion.
 	 */
 	private static void checkScriptsHelper(Node scriptNode, String nodePath, String user, String eventType) throws javax.jcr.RepositoryException {
 		log.debug("checkScriptsHelper("+scriptNode.getPath()+", "+nodePath+", "+user+", "+eventType+")");
