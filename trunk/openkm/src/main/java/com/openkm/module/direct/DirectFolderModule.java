@@ -200,7 +200,7 @@ public class DirectFolderModule implements FolderModule {
 			newFolder = getProperties(session, fld.getPath());
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, folderNode.getPath(), session.getUserID(), "CREATE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_FOLDER", fld.getPath(), null);
@@ -280,7 +280,7 @@ public class DirectFolderModule implements FolderModule {
 			session.getRootNode().save();
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "DELETE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_FOLDER");
 			
 			// Activity log
 			UserActivity.log(session, "DELETE_FOLDER", fldPath, null);
@@ -384,7 +384,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "PURGE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
 
 			// Activity log
 			UserActivity.log(session, "PURGE_FOLDER", fldPath, null);
