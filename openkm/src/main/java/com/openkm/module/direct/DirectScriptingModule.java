@@ -208,7 +208,7 @@ public class DirectScriptingModule implements ScriptingModule {
 					i.set("scriptNode", scriptNode);
 					i.eval(code);
 				} catch (EvalError e) {
-					e.printStackTrace();
+					log.warn(e.getMessage(), e);
 				}
 			}
 
