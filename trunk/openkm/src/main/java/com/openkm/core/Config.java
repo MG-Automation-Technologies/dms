@@ -60,6 +60,12 @@ public class Config {
 	public static String MIME_FILE = "mime.types";
 	public static String NODE_DEFINITIONS = "CustomNodes.cnd";
 	
+	// Default script
+	public static String DEFAULT_SCRIPT = "print(\"UserId: \"+session.getUserID());\n" +
+		"print(\"EventType: \"+eventType);\n" +
+		"print(\"EventNode: \"+eventNode.getPath());\n" +
+		"print(\"ScriptNode: \"+scriptNode.getPath());\n";
+	
 	// Configuration properties
 	public static String PROPERTY_REPOSITORY_CONFIG = "repository.config";
 	public static String PROPERTY_REPOSITORY_HOME = "repository.home";
