@@ -218,7 +218,7 @@ public class DirectMailModule implements MailModule {
 			DirectNotificationModule.checkSubscriptions(mailNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailNode.getPath(), session.getUserID(), "CREATE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_MAIL", mail.getPath(), null);
@@ -300,7 +300,7 @@ public class DirectMailModule implements MailModule {
 			session.getRootNode().save();
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailPath, session.getUserID(), "DELETE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_MAIL");
 			
 			// Activity log
 			UserActivity.log(session, "DELETE_MAIL", mailPath, null);
@@ -337,7 +337,7 @@ public class DirectMailModule implements MailModule {
 			parentNode.save();
 						
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailPath, session.getUserID(), "PURGE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_MAIL");
 
 			// Activity log
 			UserActivity.log(session, "PURGE_MAIL", mailPath, null);
