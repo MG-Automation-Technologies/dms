@@ -376,7 +376,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, documentNode.getPath(), session.getUserID(), "CREATE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
@@ -444,7 +444,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session.getRootNode().save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, docPath, session.getUserID(), "DELETE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "DELETE_DOCUMENT", docPath, null);
@@ -605,7 +605,7 @@ public class DirectDocumentModule implements DocumentModule {
 			contentNode.save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "SET_DOCUMENT_CONTENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
 			UserActivity.log(session, "SET_DOCUMENT_CONTENT", docPath, ""+size);
@@ -792,7 +792,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "SET_DOCUMENT_PROPERTIES");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
 			UserActivity.log(session, "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
@@ -842,7 +842,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CHECKOUT_DOCUMENT", docPath, lck.getLockToken());
@@ -891,7 +891,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CANCEL_CHECKOUT_DOCUMENT", docPath, null);
@@ -992,7 +992,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CHECKIN_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CHECKIN_DOCUMENT", docPath, comment);
@@ -1089,7 +1089,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "LOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "LOCK_DOCUMENT", docPath, lck.getLockToken());
@@ -1123,7 +1123,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "UNLOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "UNLOCK_DOCUMENT", docPath, null);
@@ -1227,6 +1227,9 @@ public class DirectDocumentModule implements DocumentModule {
 				UserItemsManager.decDocuments(uid, userItems.getDocuments());
 				UserItemsManager.decFolders(uid, userItems.getDocuments());
 			}
+			
+			// Check scripting
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
 			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);
