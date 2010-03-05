@@ -17,7 +17,7 @@
 		String token = (String) session.getAttribute("token");
 %>
 	<h1>Statistics</h1>
-	<h2>Repository</h2>
+	<%-- <h2>Repository</h2> --%>
 	<table align="center">
 	  <tr>
 	    <td><img src="../OKMStatsGraphServletAdmin?t=0"/></td>
@@ -26,7 +26,7 @@
 	  </tr>
 	</table>
 	
-	<h2>System</h2>
+	<%-- <h2>System</h2> --%>
 	<table align="center">
 	  <tr>
 	    <td><img src="../OKMStatsGraphServletAdmin?t=3"/></td>
