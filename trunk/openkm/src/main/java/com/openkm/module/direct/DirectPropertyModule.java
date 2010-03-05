@@ -45,9 +45,6 @@ import com.openkm.util.UserActivity;
 public class DirectPropertyModule implements PropertyModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyModule.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#addCategory(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
@@ -84,7 +81,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_CATEGORY", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "ADD_CATEGORY");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
 			UserActivity.log(session, "ADD_CATEGORY", nodePath, category);
@@ -113,9 +110,6 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("addCategory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#removeCategory(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void removeCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
@@ -150,7 +144,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_CATEGORY", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "REMOVE_CATEGORY");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
 			UserActivity.log(session, "REMOVE_CATEGORY", nodePath, category);
@@ -179,9 +173,6 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("removeCategory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#addKeyword(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
@@ -217,7 +208,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "ADD_KEYWORD");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
 
 			// Activity log
 			UserActivity.log(session, "ADD_KEYWORD", nodePath, keyword);
@@ -246,9 +237,6 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("addKeyword: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#removeKeyword(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void removeKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
@@ -283,7 +271,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "REMOVE_KEYWORD", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "REMOVE_KEYWORD");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
 
 			// Activity log
 			UserActivity.log(session, "REMOVE_KEYWORD", nodePath, keyword);
