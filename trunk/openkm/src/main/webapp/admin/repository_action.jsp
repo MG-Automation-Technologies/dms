@@ -65,7 +65,7 @@
 					parent.save();
 					path = parent.getPath();
 				} else if (action.equals("setScript")) {
-					OKMScripting.getInstance().setScript(token, path, "print(\"UserId: \"+userId+\", EventType: \"+eventType+\", nodePath: \"+nodePath+\", scriptPath: \"+scriptPath)");
+					OKMScripting.getInstance().setScript(token, path, Config.DEFAULT_SCRIPT);
 				} else if (action.equals("removeScript")) {
 					OKMScripting.getInstance().removeScript(token, path);
 				}
