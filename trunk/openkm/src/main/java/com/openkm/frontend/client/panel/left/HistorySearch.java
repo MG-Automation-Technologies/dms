@@ -34,22 +34,21 @@ import com.openkm.frontend.client.widget.searchuser.UserNews;
  * History search panel
  * 
  * @author jllort
- *
+ * 
  */
 public class HistorySearch extends ExtendedSizeComposite {
-	
+
 	// Constants defining the current view
 	public static final int NUMBER_OF_STACKS = 2;
-	public static final int STACK_HEIGHT     = 22;
-	
-	// Sta
-	
+	public static final int STACK_HEIGHT = 22;
+
+	// Stack
 	public StackPanel stackPanel;
-	public ScrollPanel scrollSearchSavedPanel;	
+	public ScrollPanel scrollSearchSavedPanel;
 	public ScrollPanel scrollUserNewsSavedPanel;
 	public SearchSaved searchSaved;
 	public UserNews userNews;
-	
+
 	/**
 	 * HistorySearch
 	 */
@@ -62,41 +61,48 @@ public class HistorySearch extends ExtendedSizeComposite {
 
 		scrollSearchSavedPanel.addStyleName("okm-PanelSelected");
 		scrollUserNewsSavedPanel.addStyleName("okm-PanelSelected");
-		
+
 		scrollSearchSavedPanel.add(searchSaved);
 		scrollSearchSavedPanel.setSize("100%", "100%");
-		
+
 		scrollUserNewsSavedPanel.add(userNews);
 		scrollUserNewsSavedPanel.setSize("100%", "100%");
-		
-		stackPanel.add(scrollSearchSavedPanel, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main.i18n("leftpanel.label.stored.search")), true);
-		stackPanel.add(scrollUserNewsSavedPanel, Util.createHeaderHTML("img/icon/news.gif", Main.i18n("leftpanel.label.user.search")), true);
-		
+
+		stackPanel.add(scrollSearchSavedPanel, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main
+				.i18n("leftpanel.label.stored.search")), true);
+		stackPanel.add(scrollUserNewsSavedPanel, Util.createHeaderHTML("img/icon/news.gif", Main
+				.i18n("leftpanel.label.user.search")), true);
+
 		stackPanel.showStack(0);
 		stackPanel.setStyleName("okm-StackPanel");
 		stackPanel.addStyleName("okm-DisableSelect");
 		initWidget(stackPanel);
 	}
-	
+
 	// Public methods to access between objects
 	/**
 	 * Refresh language descriptions
 	 */
-	public void langRefresh() {	
-		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/find.gif", (String)Main.i18n("leftpanel.label.stored.search")), true);
-		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/news.gif", Main.i18n("leftpanel.label.user.search")), true);
+	public void langRefresh() {
+		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/find.gif", Main
+				.i18n("leftpanel.label.stored.search")), true);
+		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/news.gif", Main
+				.i18n("leftpanel.label.user.search")), true);
 		searchSaved.langRefresh();
 	}
-	
+
 	/**
 	 * Resizes all objects on the widget the panel and the tree
 	 * 
-	 * @param width The widget width
-	 * @param height The widget height
+	 * @param width
+	 *            The widget width
+	 * @param height
+	 *            The widget height
 	 */
-	public void setSize(int width, int height){
-		stackPanel.setSize(""+width, ""+height);
+	public void setSize(int width, int height) {
+		stackPanel.setSize("" + width, "" + height);
 		// Substract 2 pixels for borders on stackPanel
-		scrollSearchSavedPanel.setSize(""+(width-2), ""+(height-2-(NUMBER_OF_STACKS*STACK_HEIGHT)));
+		scrollSearchSavedPanel.setSize("" + (width - 2), ""
+				+ (height - 2 - (NUMBER_OF_STACKS * STACK_HEIGHT)));
 	}
 }
