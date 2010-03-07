@@ -68,7 +68,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	// Number of columns
-	public static final int NUMBER_OF_COLUMNS	= 7;
+	public static final int NUMBER_OF_COLUMNS = 7;
 	
 	private GWTDocument doc;
 	private ScrollTable table;
@@ -139,16 +139,16 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		headerTable = new FixedWidthFlexTable();
 		dataTable = new FixedWidthGrid();
 		
-		table = new ScrollTable(dataTable,headerTable,scrollTableImages);
+		table = new ScrollTable(dataTable, headerTable, scrollTableImages);
 		table.setCellSpacing(0);
 		table.setCellPadding(2);
-		table.setSize("540","140");
-		table.setColumnWidth(0,70);
-	    table.setColumnWidth(1,150);
-	    table.setColumnWidth(2,150);
-	    table.setColumnWidth(3,100);
-	    table.setColumnWidth(4,100);
-    	table.setColumnWidth(5,150);
+		table.setSize("540", "140");
+		table.setColumnWidth(0, 70);
+	    table.setColumnWidth(1, 150);
+	    table.setColumnWidth(2, 150);
+	    table.setColumnWidth(3, 100);
+	    table.setColumnWidth(4, 100);
+    	table.setColumnWidth(5, 150);
     	
     	table.setPreferredColumnWidth(0, 70);
 		table.setPreferredColumnWidth(1, 150);
@@ -245,23 +245,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 		// Special case when visibleButtons are false, widget are on trash, must disable all buttons,
 		// but must enable the actual version to view ( on default is not enabled because is active one )
 		if (version.isActual() && visibleButtons) {
-			dataTable.selectRow(rows,true);
+			dataTable.selectRow(rows, true);
 		} else {
 			
 			// Only on trash widget it'll occurs
 			if (version.isActual()) {
-				dataTable.selectRow(rows,true);
+				dataTable.selectRow(rows, true);
 			}
-			
-			Button viewButton = new Button(Main.i18n("button.view"), new ClickHandler() { 
-				@Override
-				public void onClick(ClickEvent event) {
-					String path = doc.getPath();
-					List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
-					String ver = (String) versions.get(rows);
-					Window.open(Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path) + "&ver=" + ver, "_self", "");
-				}
-			});
 			
 			Button restoreButton = new Button(Main.i18n("button.restore"), new ClickHandler() { 
 				@Override
@@ -281,19 +271,27 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			} else {
 				restoreButton.setEnabled(false);
 			}
-
-			dataTable.setWidget(rows, 4, viewButton);
+			
 			dataTable.setWidget(rows, 5, restoreButton);
-			dataTable.getCellFormatter().setHorizontalAlignment(rows,4, HorizontalPanel.ALIGN_CENTER);
-			dataTable.getCellFormatter().setHorizontalAlignment(rows,5, HorizontalPanel.ALIGN_CENTER);
-			
-			// Saves buttoms to languages refreshing
-			buttonView.add(viewButton);
+			dataTable.getCellFormatter().setHorizontalAlignment(rows, 5, HorizontalPanel.ALIGN_CENTER);
 			buttonRestore.add(restoreButton);
-			
-			viewButton.setStyleName("okm-Button");
 			restoreButton.setStyleName("okm-Button");
 		}
+		
+		Button viewButton = new Button(Main.i18n("button.view"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				String path = doc.getPath();
+				List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
+				String ver = (String) versions.get(rows);
+				Window.open(Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path) + "&ver=" + ver, "_self", "");
+			}
+		});
+		
+		dataTable.setWidget(rows, 4, viewButton);
+		dataTable.getCellFormatter().setHorizontalAlignment(rows, 4, HorizontalPanel.ALIGN_CENTER);
+		buttonView.add(viewButton);
+		viewButton.setStyleName("okm-Button");
 	}
 	
 	/**
@@ -308,7 +306,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			buttonRestore = new ArrayList<Button>();
 			
 			// When there's more than one version document can purge it
-			if (result.size()>1) {
+			if (result.size() > 1) {
 				purge.setEnabled(true);
 			} else {
 				purge.setEnabled(false);
@@ -400,7 +398,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 * 
 	 * @param visible The visible value
 	 */
-	public void setVisibleButtons(boolean visible){
+	public void setVisibleButtons(boolean visible) {
 		visibleButtons = visible;
 	}
 	
