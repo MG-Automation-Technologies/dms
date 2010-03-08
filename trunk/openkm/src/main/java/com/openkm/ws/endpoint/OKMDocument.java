@@ -80,11 +80,11 @@ public class OKMDocument {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.DocumentModule#delete(java.lang.String, java.lang.String)
 	 */
-	public void delete(String token, String docId) throws AccessDeniedException, 
+	public void delete(String token, String docPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("delete(" + token + ", " + docId + ")");
+		log.debug("delete(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.delete(token, docId);
+		dm.delete(token, docPath);
 		log.debug("delete: void");
 	}
 	
@@ -186,7 +186,7 @@ public class OKMDocument {
 		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.cancelCheckout(token, docPath);
-		log.debug("cancelCheckout: void");		
+		log.debug("cancelCheckout: void");
 	}
 	
 	/* (non-Javadoc)
@@ -239,7 +239,7 @@ public class OKMDocument {
 		log.debug("lock(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
-		log.debug("lock: void");		
+		log.debug("lock: void");
 	}
 
 	/* (non-Javadoc)
@@ -250,7 +250,7 @@ public class OKMDocument {
 		log.debug("unlock(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.unlock(token, docPath);
-		log.debug("unlock: void");		
+		log.debug("unlock: void");
 	}
 
 	/* (non-Javadoc)
@@ -261,19 +261,19 @@ public class OKMDocument {
 		log.debug("purge(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purge(token, docPath);
-		log.debug("purge: void");	
+		log.debug("purge: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.DocumentModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void move(String token, String docPath, String destPath) throws LockException, 
+	public void move(String token, String docPath, String fldPath) throws LockException, 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException {
-		log.debug("move(" + token + ", " + docPath + ", " + destPath + ")");
+		log.debug("move(" + token + ", " + docPath + ", " + fldPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.move(token, docPath, destPath);
-		log.debug("move: void");	
+		dm.move(token, docPath, fldPath);
+		log.debug("move: void");
 	}
 	
 	/* (non-Javadoc)
@@ -284,7 +284,7 @@ public class OKMDocument {
 		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.restoreVersion(token, docPath, versionId);
-		log.debug("restoreVersion: void");	
+		log.debug("restoreVersion: void");
 	}
 	
 	/* (non-Javadoc)
@@ -295,7 +295,7 @@ public class OKMDocument {
 		log.debug("purgeVersionHistory(" + token + ", " + docPath + ")");
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purgeVersionHistory(token, docPath);
-		log.debug("purgeVersionHistory: void");	
+		log.debug("purgeVersionHistory: void");
 	}
 	
 	/* (non-Javadoc)
@@ -308,6 +308,18 @@ public class OKMDocument {
 		long size = dm.getVersionHistorySize(token, docPath);
 		log.debug("getVersionHistorySize: "+size);
 		return size;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.DocumentModule#isValid(java.lang.String, java.lang.String)
+	 */
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException {
+		log.debug("isValid({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		boolean valid = dm.isValid(token, docPath);
+		log.debug("isValid: {}", valid);
+		return valid;
 	}
 	
 	/* (non-Javadoc)
