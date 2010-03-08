@@ -100,7 +100,7 @@ public interface RepositoryModule {
 	
 	/**
 	 * Remove all the items in the user trash folder for ever. You can't 
-	 * recover this items anymore.
+	 * recover this items any more.
 	 * 
 	 * @param token The session authorization token.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -144,6 +144,7 @@ public interface RepositoryModule {
 	 * @param token The session authorization token
 	 * @param uuid An unique node identifier
 	 * @return The path of the node with the given uuid
+	 * @throws PathNotFoundException If there is no user node in the repository with this uuid.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException;
