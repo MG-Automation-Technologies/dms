@@ -66,12 +66,13 @@ public interface SearchModule {
 	public Collection<QueryResult> findByKeywords(String token, String expression) throws RepositoryException;
 
 	/**
-	 * Performs a complex search by content, name and keywords.
+	 * Performs a complex search by content, name and keywords (between others).
 	 * 
 	 * @param token The session authorization token
 	 * @param params The complex search elements. 
 	 * @return A collection of documents.
 	 * @throws RepositoryException If there is any general repository problem.
+	 * @throws IOException If something fails when parsing metadata.
 	 */
 	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException;
 
@@ -165,12 +166,12 @@ public interface SearchModule {
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException;
 	
 	/**
-	 * Get the document within a category
+	 * Get the documents within a category
 	 * 
 	 * @param token The session authorization token
 	 * @param categoryId The category id (UUID)
 	 * @return A Collection of documents in the category
-	 * @throws RepositoryException
+	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException;
 }
