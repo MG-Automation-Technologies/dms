@@ -21,7 +21,12 @@
 
 package com.openkm.ws.endpoint;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -29,11 +34,17 @@ import javax.jws.soap.SOAPBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
+import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
+import com.openkm.ws.util.DocumentArray;
+import com.openkm.ws.util.IntegerPair;
+import com.openkm.ws.util.IntegerPairArray;
 import com.openkm.ws.util.QueryResultArray;
+import com.openkm.ws.util.StringArray;
 
 /**
  * Servlet Class
@@ -98,5 +109,65 @@ public class OKMSearch {
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByStatement: " + qra);
 		return qra;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
+	 */
+	public QueryResultArray find(String token, QueryParams params) throws IOException, RepositoryException {
+		log.debug("find({}, {})", token, params);
+		SearchModule sm = ModuleManager.getSearchModule();
+		QueryResultArray qra = new QueryResultArray();
+		Collection<QueryResult> col = sm.find(token, params);
+		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
+		log.debug("find: {}", qra);
+		return qra;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.SearchModule#getKeywordMap(java.lang.String, java.util.Collection)
+	 */
+	public IntegerPairArray getKeywordMap(String token, StringArray filter) 
+			throws RepositoryException {
+		log.debug("getKeywordMap({})", token);
+		SearchModule sm = ModuleManager.getSearchModule();
+		ArrayList<String> alFilter = new ArrayList<String>();
+		String[] values = filter.getValue();
+		
+		for (int i=0; i<values.length; i++) {
+			alFilter.add(values[i]);
+		}
+		
+		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
+		Set<String> keys = map.keySet();
+		IntegerPair[] tmp = new IntegerPair[keys.size()];
+		int i=0;
+		
+		for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
+			String key = it.next();
+			IntegerPair p = new IntegerPair();
+			p.setKey(key);
+			p.setValue((Integer) map.get(key));
+			tmp[i++] = p;
+		}
+		
+		IntegerPairArray uh = new IntegerPairArray();
+		uh.setValue(tmp);
+		log.debug("getKeywordMap: {}", uh);
+		return uh;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
+	 */
+	public DocumentArray getCategorizedDocuments(String token, String categoryId)
+			throws RepositoryException {
+		log.debug("getCategorizedDocuments({})", token);
+		SearchModule sm = ModuleManager.getSearchModule();
+		Collection<Document> col = sm.getCategorizedDocuments(token, categoryId);
+		DocumentArray da = new DocumentArray();
+		da.setValue((Document[]) col.toArray(new Document[col.size()]));
+		log.debug("getCategorizedDocuments: {}", da);
+		return da;
 	}
 }
