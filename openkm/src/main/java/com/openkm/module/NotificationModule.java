@@ -41,7 +41,7 @@ public interface NotificationModule {
 			throws PathNotFoundException, AccessDeniedException, RepositoryException;
 	
 	/**
-	 * Remove unser subscriptions from a node.
+	 * Remove an user subscription from a node.
 	 * 
 	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
@@ -57,7 +57,7 @@ public interface NotificationModule {
 	 * 
 	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
-	 * @return A hashmap with pairs of user / permissions.
+	 * @return A Collection of subscribed users.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
