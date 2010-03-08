@@ -175,8 +175,9 @@ public interface FolderModule {
 	/**
 	 * Test if a folder path is valid.
 	 * 
-	 * @param token String with user autorization info.
+	 * @param token String with user authorization info.
 	 * @param fldPath The path that identifies an unique folder.
+	 * @return True if is a valid folder path, otherwise false.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
