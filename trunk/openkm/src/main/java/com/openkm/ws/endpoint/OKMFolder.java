@@ -122,4 +122,16 @@ public class OKMFolder {
 		log.debug("getChilds: " + fa);
 		return fa;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
+	 */
+	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException {
+		log.debug("isValid("+token+", "+fldPath+")");
+		FolderModule fm = ModuleManager.getFolderModule();
+		boolean valid = fm.isValid(token, fldPath);
+		log.debug("isValid: "+valid);
+		return valid;
+	}
 }
