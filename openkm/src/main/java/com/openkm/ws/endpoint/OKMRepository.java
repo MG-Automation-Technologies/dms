@@ -93,6 +93,42 @@ public class OKMRepository {
 		log.debug("getPersonalFolder: " + personalFolder);
 		return personalFolder;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
+	 */
+	public Folder getMailFolder(String token) throws PathNotFoundException, 
+			RepositoryException {
+		log.debug("getMailFolder(" + token + ")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder mailFolder = rm.getMailFolder(token);
+		log.debug("getMailFolder: " + mailFolder);
+		return mailFolder;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
+	 */
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, 
+			RepositoryException {
+		log.debug("getThesaurusFolder(" + token + ")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder thesaurusFolder = rm.getThesaurusFolder(token);
+		log.debug("getThesaurusFolder: " + thesaurusFolder);
+		return thesaurusFolder;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
+	 */
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, 
+			RepositoryException {
+		log.debug("getCategoriesFolder(" + token + ")");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder categoriesFolder = rm.getCategoriesFolder(token);
+		log.debug("getCategoriesFolder: " + categoriesFolder);
+		return categoriesFolder;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
@@ -113,5 +149,16 @@ public class OKMRepository {
 		boolean ret = rm.hasNode(token, path);
 		log.debug("hasNode: "+ret);
 		return ret;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.module.RepositoryModule#getNodePath(java.lang.String, java.lang.String)
+	 */
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getNodePath({}, {})", token, uuid);
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		String path = rm.getNodePath(token, uuid);
+		log.debug("getNodePath: {}", path);
+		return path;
 	}
 }
