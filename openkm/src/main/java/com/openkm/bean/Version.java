@@ -90,7 +90,7 @@ public class Version implements Serializable {
 		sb.append(", author="); sb.append(author);
 		sb.append(", actual="); sb.append(actual);
 		sb.append(", comment="); sb.append(comment);
-		sb.append(", created="); sb.append(created.getTime());
+		sb.append(", created="); sb.append(created==null?null:created.getTime());
 		sb.append("]");
 		return sb.toString();
 	}
