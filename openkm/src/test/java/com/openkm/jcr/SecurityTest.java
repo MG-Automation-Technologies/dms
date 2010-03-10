@@ -39,20 +39,22 @@ public class SecurityTest extends TestCase {
 		SecurityTest test = new SecurityTest("main");
 		test.setUp();
 		test.testGrant();
-		//test.testRevoke();
+		test.testRevoke();
 		test.tearDown();
 	}
 
 	@Override
 	protected void setUp() {
-		log.info("setUp()");
-		log.info("Delete repository: " + Config.REPOSITORY_HOME);
+		log.debug("setUp()");
+		log.debug("Delete repository: {}", Config.REPOSITORY_HOME);
 		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
-		log.info("tearDown()");
+		log.debug("tearDown()");
+		log.debug("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class SecurityTest extends TestCase {
 	public void testGrant() throws IOException, LoginException, RepositoryException {
 		log.info("testGrant()");
 		Repository repository = new TransientRepository(Config.REPOSITORY_CONFIG, Config.REPOSITORY_HOME);
-		Session sAdmin = repository.login(new SimpleCredentials("system", "".toCharArray()));
+		Session sAdmin = repository.login(new SimpleCredentials("admin", "admin".toCharArray()));
 		Node rootNode = sAdmin.getRootNode();
 		Node grantedNode = rootNode.addNode("granted");
 		rootNode.save();
@@ -81,7 +83,7 @@ public class SecurityTest extends TestCase {
 			Privilege[] privileges = new Privilege[] { acm.privilegeFromName(Privilege.JCR_WRITE) };
 			printPrivileges(log, privileges);
 			
-			((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl("pruebas"), privileges);
+			((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl("test"), privileges);
 			AccessControlEntry[] ace = ((AccessControlList) acp).getAccessControlEntries();
 			
 			for (int i=0; i<ace.length; i++) {

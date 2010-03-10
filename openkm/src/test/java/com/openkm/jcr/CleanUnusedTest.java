@@ -36,15 +36,11 @@ public class CleanUnusedTest extends TestCase {
 		super(name);
 	}
 
-	public static void main(String[] args) {
-		try {
-			CleanUnusedTest test = new CleanUnusedTest("main");
-			test.setUp();
-			test.testVersionHistory();
-			test.tearDown();
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
+	public static void main(String[] args) throws Exception {
+		CleanUnusedTest test = new CleanUnusedTest("main");
+		test.setUp();
+		test.testVersionHistory();
+		test.tearDown();
 	}
 
 	@Override
@@ -57,6 +53,8 @@ public class CleanUnusedTest extends TestCase {
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
+		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testVersionHistory() throws IOException, LoginException, RepositoryException {

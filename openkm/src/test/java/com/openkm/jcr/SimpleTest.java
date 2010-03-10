@@ -37,13 +37,15 @@ public class SimpleTest extends TestCase {
 	@Override
 	protected void setUp() {
 		log.info("setUp()");
-		log.info("Delete repository: " + Config.REPOSITORY_HOME);
+		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
 		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	@Override
 	protected void tearDown() {
 		log.info("tearDown()");
+		log.info("Delete repository: {}", Config.REPOSITORY_HOME);
+		FileUtils.deleteQuietly(new File(Config.REPOSITORY_HOME));
 	}
 
 	public void testBasic() throws IOException, LoginException, RepositoryException {
@@ -68,6 +70,7 @@ public class SimpleTest extends TestCase {
 		log.info("Restricted node: " + newNode.getPath());
 		assertEquals(newNode.getPath(), "/new node");
 		rootNode.save();
-		session.logout();		
+		session.logout();
+		((RepositoryImpl)repository).shutdown();
 	}	
 }
