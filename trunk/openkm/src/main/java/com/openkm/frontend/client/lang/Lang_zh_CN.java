@@ -26,7 +26,7 @@ import java.util.HashMap;
 import com.openkm.frontend.client.config.ErrorCode;
 
 /**
- * Chinese (China) 
+ * Chinese (China)  (2010-03-08 09:24)
  * email: mingjie.mj@gmail.com 
  * @author wmj2003 
  */
@@ -45,7 +45,7 @@ public class Lang_zh_CN {
 	    lang.put("startup.openkm", "加载OpenKM");
 	    lang.put("startup.starting.loading", "开始加载OpenKM");
 	    lang.put("startup.taxonomy", "正在获得分类根节点");
-	    lang.put("startup.categories", "Getting categories root node");
+	    lang.put("startup.categories", "正在获取自定义分类根节点");//Getting categories root node
 	    lang.put("startup.template", "正在获得模板根节点");
 	    lang.put("startup.personal", "正在获得个人根节点");
 	    lang.put("startup.mail", "获取 e-mail根节点");
@@ -63,8 +63,8 @@ public class Lang_zh_CN {
 	    lang.put("startup.loading.mail", "正在加载邮件信息");
 	    lang.put("startup.loading.templates", "正在加载模板");
 	    lang.put("startup.loading.mail", "Loading e-mails");
-	    lang.put("startup.loading.categories", "Loading categories");
-	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
+	    lang.put("startup.loading.categories", "正在加载自定义分类");//Loading categories
+	    lang.put("startup.loading.thesaurus", "正在加载知识库");//Loading thesaurus
 	    lang.put("startup.loading.trash", "正在加载回收站");
 	    lang.put("startup.loading.history.search", "加载历史检索");
 	    lang.put("startup.loading.user.values", "加载用户值");
@@ -77,10 +77,10 @@ public class Lang_zh_CN {
 	    // Left Panel
 	    lang.put("leftpanel.label.taxonomy", "分类");
 	    lang.put("leftpanel.label.trash", "回收站");
-	    lang.put("leftpanel.label.mail", "E-mail");
+	    lang.put("leftpanel.label.mail", "电子邮件");//E-mail
 	    lang.put("leftpanel.label.stored.search", "已保存的检索");
-	    lang.put("leftpanel.label.categories", "Categories");
-	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
+	    lang.put("leftpanel.label.categories", "自定义分类");//Categories
+	    lang.put("leftpanel.label.thesaurus", "知识库");//Thesaurus
 	    lang.put("leftpanel.label.templates", "模板");
 	    lang.put("leftpanel.label.my.documents", "我的文档");
 	    lang.put("leftpanel.label.user.search", "用户消息");//User news
@@ -108,7 +108,7 @@ public class Lang_zh_CN {
 	    lang.put("tree.status.refresh.add.subscription", "正在新增订阅");
 	    lang.put("tree.status.refresh.remove.subscription", "正在删除订阅");
 	    lang.put("tree.status.refresh.get.root", "正在刷新根文件夹");
-	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
+	    lang.put("tree.status.refresh.get.keywords", "正在刷新关键字");//Refreshing keywords
 	    lang.put("tree.status.refresh.get.user.home", "正在获得用户根目录");
 	    lang.put("tree.status.refresh.purge.trash", "正在清空回收站");
 	    
@@ -135,8 +135,8 @@ public class Lang_zh_CN {
 			lang.put("general.menu.file.cancel.checkout", "取消签入");
 			lang.put("general.menu.file.delete", "删除");
 			lang.put("general.menu.file.refresh", "刷新");
-			lang.put("general.menu.file.scanner", "Scanner");
-			lang.put("general.menu.file.uploader", "File uploader");
+			lang.put("general.menu.file.scanner", "扫描器");//Scanner
+			lang.put("general.menu.file.uploader", "文件上传工具");//File uploader
 	    lang.put("general.menu.tools", "工具");
 	    	lang.put("general.menu.tools.languages", "语言");
 	    	lang.put("general.menu.tools.skin", "皮肤");
@@ -260,19 +260,19 @@ public class Lang_zh_CN {
 	    
 	    // Tab properties
 	    lang.put("tab.document.properties", "属性");
-	    lang.put("tab.document.notes", "Notes");
+	    lang.put("tab.document.notes", "备注");//Notes
 	    lang.put("tab.document.history", "历史");
 	    lang.put("tab.document.status.history", "正在更新历史");
 	    lang.put("tab.status.security.role", "正在更新安全角色");
 	    lang.put("tab.status.security.user", "正在更新安全用户");
 	    lang.put("tab.document.status.group.properties", "正在更新属性组");
 	    lang.put("tab.document.status.set.keywords", "正在设置关键字");
-	    lang.put("tab.document.status.set.categories", "Updating categories");
+	    lang.put("tab.document.status.set.categories", "正在更新自定义分类");//Updating categories
 	    lang.put("tab.document.status.get.version.history.size", "刷新文档历史大小");
 	    lang.put("tab.document.status.purge.version.history", "文档历史压缩");
 	    lang.put("tab.document.status.restore.version", "正在恢复文档版本");
 	    lang.put("tab.document.security", "安全");
-	    lang.put("tab.document.preview", "Preview");
+	    lang.put("tab.document.preview", "预览");//Preview
 	    lang.put("tab.folder.properties", "属性");
 	    lang.put("tab.folder.security", "安全");
 	    
@@ -305,7 +305,7 @@ public class Lang_zh_CN {
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "新增备注");
 	    lang.put("document.keywords.cloud", "关键字云");
-	    lang.put("document.categories", "Categories");
+	    lang.put("document.categories", "自定义分类");//Categories
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");
@@ -329,7 +329,7 @@ public class Lang_zh_CN {
 	    
 	    // Security
 	    lang.put("security.label", "安全");
-	    lang.put("security.group.name", "组");
+	    lang.put("security.group.name", "组名");
 	    lang.put("security.group.permission.read", "读");
 	    lang.put("security.group.permission.write", "写");
 	    lang.put("security.user.name", "用户");
@@ -381,8 +381,8 @@ public class Lang_zh_CN {
 	    lang.put("search.content", "内容");
 	    lang.put("search.name", "名称");
 	    lang.put("search.keywords", "关键字");
-	    lang.put("search.folder", "Folder");
-	    lang.put("search.category", "Category");
+	    lang.put("search.folder", "文件夹");//Folder
+	    lang.put("search.category", "自定义分类");//Category
 	    lang.put("search.results", "结果");
 	    lang.put("search.to", "至");
 	    lang.put("search.page.results", "每页显示结果数");
@@ -400,7 +400,7 @@ public class Lang_zh_CN {
 
 	    // search folder filter popup
 	    lang.put("search.folder.filter", "按文件夹过滤");
-	    lang.put("search.category.filter", "Filter by category");
+	    lang.put("search.category.filter", "按照自定义分类过滤");//Filter by category
 	    
 	    // Search results
 	    lang.put("search.result.name", "名称");
@@ -565,31 +565,31 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.user", "用户名"); //User
 	    lang.put("user.preferences.password", "密码");//Password
 	    lang.put("user.preferences.mail", "E-mail");//E-mail
-	    lang.put("user.preferences.imap.host", "IMAP server");
-	    lang.put("user.preferences.imap.user", "IMAP user name");
-	    lang.put("user.preferences.imap.user.password", "IMAP user password");
-	    lang.put("user.preferences.imap.folder", "IMAP folder");
+	    lang.put("user.preferences.imap.host", "IMAP服务器");//IMAP server
+	    lang.put("user.preferences.imap.user", "IMAP用户名");//IMAP user name
+	    lang.put("user.preferences.imap.user.password", "IMAP用户密码");//IMAP user password
+	    lang.put("user.preferences.imap.folder", "IMAP文件夹");//IMAP folder
 	    lang.put("user.preferences.password.error", "错误：两次输入的密码不相同。");//Error: passwords are diferents
 	    lang.put("user.preferences.user.data", "用户账号");//User account
 	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
-	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
-	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+	    lang.put("user.preferences.imap.error", "所有的想都必须在邮件配置中设置");//All fields are obligatory to set the mail configurations
+	    lang.put("user.preferences.imap.password.error.void", "在配置IMAP邮箱的时候，密码不能为空");//Password must not be empty on IMAP mail creation
 
 	    // Thesaurus
-	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
-	    lang.put("thesaurus.tab.tree", "Tree");
-	    lang.put("thesaurus.tab.keywords", "Keywords");
+	    lang.put("thesaurus.directory.select.label", "增加知识库关键字");//Add thesaurus keyword
+	    lang.put("thesaurus.tab.tree", "知识树");//Tree
+	    lang.put("thesaurus.tab.keywords", "关键字");//Keywords
 	    
 	    // Categories
-	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
+	    lang.put("categories.folder.select.label", "增加自定义分类");//Add category
+	    lang.put("categories.folder.error.delete", "无法删除自定义分类，此分类下面还包含文档");//Can not delete category with documents
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Lock, "文档拒绝上锁");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Repository, "存储器内部错误");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_PathNotFound, "找不到文档路径");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Version, "Version error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Version, "版本错误");//Version error
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "找不到文档");
