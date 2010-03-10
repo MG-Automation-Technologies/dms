@@ -3,7 +3,9 @@
 <%@page import="com.openkm.core.UserAlreadyLoggerException" %>
 <%
 	try {
-		session.setAttribute("token", OKMAuth.getInstance().login());
+		if (session.getAttribute("token")==null) {
+			session.setAttribute("token", OKMAuth.getInstance().login());
+		}
 	} catch (UserAlreadyLoggerException e) {
 		%>User already logged<%
 	}
