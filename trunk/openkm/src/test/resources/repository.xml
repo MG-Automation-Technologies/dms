@@ -97,4 +97,10 @@
         <param name="extractorPoolSize" value="2"/>
         <param name="supportHighlighting" value="true"/>
     </SearchIndex>
+    
+    <!-- DataStore improve file handling performance -->
+    <DataStore class="org.apache.jackrabbit.core.data.FileDataStore">
+        <param name="path" value="${rep.home}/repository/datastore"/>
+        <param name="minRecordLength" value="100"/>
+    </DataStore>
 </Repository>
