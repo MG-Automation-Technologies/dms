@@ -271,21 +271,19 @@ public class Dragable extends Composite implements OriginPanel {
                     selectedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
                     TreeItem actualItem = Main.get().activeFolderTree.getActualItem();
                     
-                    // Removes always style of las selected treeItem
-                    if (lastSelectedTreeItem!=null && !actualItem.equals(lastSelectedTreeItem)){
+                    // Removes always style of last selected treeItem
+                    if (lastSelectedTreeItem!=null && !actualItem.equals(lastSelectedTreeItem) && lastSelectElement!=null){
                     	DOM.setElementProperty(lastSelectElement,"className","gwt-TreeItem");
                 		lastSelectedTreeItem = null;
                 	}
                     
                     // Sets the style of actual tree item
                     if (selectedTreeItem!=null) {
-                    	
                     	selectedElement = getSelectedElement(selectedTreeItem.getElement());
                     	DOM.setElementProperty(selectedElement,"className","gwt-TreeItem gwt-TreeItem-selected");
                     	
                     	if (lastSelectedTreeItem!=null && !selectedTreeItem.equals(lastSelectedTreeItem) && 
-                    		!actualItem.equals(lastSelectedTreeItem)){
-                    		
+                    		!actualItem.equals(lastSelectedTreeItem) && lastSelectElement!=null) {
                     		DOM.setElementProperty(lastSelectElement,"className","gwt-TreeItem");
                     	}
                     	
