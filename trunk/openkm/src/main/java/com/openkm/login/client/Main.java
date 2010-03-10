@@ -100,7 +100,8 @@ public class Main implements EntryPoint {
 	public static final String LANG_cs_CZ = "cs-CZ";
 	public static final String LANG_en_US = "en-US";
 	
-	public static final String LOGIN_PAGE_TEXT	= "<title>OpenKM Login</title>";
+	public static final String LOGIN_PAGE_TEXT			= "<title>OpenKM Login</title>";
+	public static final String LOGIN_LOGGED_USER_TEXT	= "User already logged";
 	
 	public VerticalPanel vPanel = new VerticalPanel();
 	public HTML msgError = new HTML("Authentication");
@@ -138,7 +139,8 @@ public class Main implements EntryPoint {
 				RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, urlTest);
 				rb.setCallback(new RequestCallback() {
 					public void onResponseReceived(Request request, Response response) {
-						if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
+						if (!response.getText().contains(LOGIN_PAGE_TEXT) && 
+							!response.getText().contains(LOGIN_LOGGED_USER_TEXT)) {
 							String urlToJump = "";
 							// Setting jump base url
 							if (isMobile) {
@@ -157,7 +159,14 @@ public class Main implements EntryPoint {
 								urlToJump += "&fldPath=" + getFldPath();
 							}
 							Window.Location.assign(urlToJump);
-						} else  {
+						} else {
+							if (response.getText().contains(LOGIN_LOGGED_USER_TEXT)) {
+								msgError.setHTML("User already");
+								msgError1.setHTML("logged");
+							} else {
+								msgError.setHTML("Authentication");
+								msgError1.setHTML("error");
+							}
 							msgError.setVisible(true);
 							msgError1.setVisible(true);
 						}
@@ -347,7 +356,8 @@ public class Main implements EntryPoint {
 		RequestBuilder rb = new RequestBuilder(RequestBuilder.GET, urlTest);
 		rb.setCallback(new RequestCallback() {
 			public void onResponseReceived(Request request, Response response) {
-				if (!response.getText().contains(LOGIN_PAGE_TEXT)) {
+				if (!response.getText().contains(LOGIN_PAGE_TEXT) && 
+					!response.getText().contains(LOGIN_LOGGED_USER_TEXT)) {
 					String urlToJump = "";
 					// Setting jump base url
 					if (isMobile) {
