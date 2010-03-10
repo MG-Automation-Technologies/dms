@@ -103,6 +103,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <!-- JBoss already have its own log4j.jar -->
+      <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.14</version>
@@ -142,14 +144,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.5.3</version>
-      <exclusions>
-        <!-- JBoss already have its own log4j.jar -->
-        <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <!-- Base64 encoding / decoding -->
@@ -259,27 +253,11 @@
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
       <version>3.6</version>
-      <exclusions>
-        <!-- JBoss already have its own log4j.jar -->
-        <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-scratchpad</artifactId>
       <version>3.6</version>
-      <exclusions>
-        <!-- JBoss already have its own log4j.jar -->
-        <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>pdfbox</groupId>
@@ -362,14 +340,6 @@
       <groupId>com.hp.hpl.jena</groupId>
       <artifactId>jena</artifactId>
       <version>2.6.2</version>
-      <exclusions>
-        <!-- JBoss already have its own log4j.jar -->
-        <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 
