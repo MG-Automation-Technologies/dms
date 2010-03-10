@@ -384,7 +384,7 @@
         <executions>
           <execution>
             <goals>
-              <!-- <goal>compile</goal> -->
+              <goal>compile</goal>
               <!-- <goal>generateAsync</goal> -->
               <!-- <goal>test</goal> -->
             </goals>
@@ -392,6 +392,10 @@
         </executions>
         <configuration>
           <runTarget>com.openkm.frontend.Main/index.html</runTarget>
+          <modules>
+            <module>com.openkm.login.Main</module>
+            <module>com.openkm.frontend.Main</module>
+          </modules>
         </configuration>
       </plugin>
 
