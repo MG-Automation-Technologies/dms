@@ -35,6 +35,7 @@
 - okm:language (string)
 - okm:compactable (boolean) = false autocreated mandatory
 - okm:training (boolean) = false autocreated mandatory
+- okm:encrypted (boolean) = false autocreated mandatory
 - okm:keywords (string) multiple mandatory
 - okm:categories (reference) multiple mandatory
 + okm:content (okm:resource) primary mandatory
