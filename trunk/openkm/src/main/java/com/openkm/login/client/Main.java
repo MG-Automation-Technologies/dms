@@ -112,19 +112,25 @@ public class Main implements EntryPoint {
 	private LoginImageBundle loginImageBundle = (LoginImageBundle) GWT.create(LoginImageBundle.class);
 	
 	public void onModuleLoad() {
+		final boolean isMobile = getIsMobil().equals("on");
 		VerticalPanel vPanelData = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
 		final TextBox userName = new TextBox();
 		PasswordTextBox password = new PasswordTextBox();
 		Button loginButton = new Button("Login");
+		Image logo;
 		Image lock = loginImageBundle.lockIcon().createImage();
-		Image logo = loginImageBundle.logoBigIcon().createImage();
+		if (isMobile) {
+			logo = loginImageBundle.logoSmallIcon().createImage();
+		} else {
+			logo = loginImageBundle.logoBigIcon().createImage();
+		}
+		 
 		FlexTable table = new FlexTable();
 		final ListBox langList = new ListBox();
 		final String urlJump = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/index.html";
 		final String urlJumpMobi = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "/mobi/index.jsp";
 		final String urlTest = GWT.getHostPageBaseURL().substring(0, GWT.getHostPageBaseURL().indexOf("/OpenKM/")+8) + "com.openkm.frontend.Main/test.jsp";
-		final boolean isMobile = getIsMobil().equals("on");
 
 		loginButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -320,7 +326,6 @@ public class Main implements EntryPoint {
 		
 		// Case user is using mobile
 		if (isMobile) {
-			logo = loginImageBundle.logoSmallIcon().createImage();
 			
 			leftPanel.setVisible(false);
 			hPanel.remove(leftPanel);
@@ -332,10 +337,14 @@ public class Main implements EntryPoint {
 			vPanel.setCellHorizontalAlignment(msgError, HasHorizontalAlignment.ALIGN_CENTER);
 			vPanel.setCellHorizontalAlignment(msgError1, HasHorizontalAlignment.ALIGN_CENTER);
 			
-			table.setWidth("155px");
-			vPanel.setCellHeight(logo, "55");
-			panelWidth = 200;
-			panelHeight = 250;
+			hPanel.setCellWidth(leftPanel, "5px");
+			userName.setWidth("200px");
+			password.setWidth("200px");
+			langList.setWidth("200px");
+			table.setWidth("200px");
+			vPanel.setCellHeight(logo, "90");
+			panelWidth = 270;
+			panelHeight = 270;
 		}
 		
 		// Calculating position
