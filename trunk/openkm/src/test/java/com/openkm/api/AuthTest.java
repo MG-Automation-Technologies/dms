@@ -44,6 +44,9 @@ public class AuthTest extends TestCase {
 		FileUtils.deleteQuietly(new File(Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME));
 	}
 
+	public void testNone() {
+	}
+	
 	//public void testLogin() throws UserAlreadyLoggerException, AccessDeniedException, RepositoryException {
 		//OKMAuth okmAuth = OKMAuth.getInstance();
 		//String token = okmAuth.login("okmAdmin", "admin");
