@@ -27,7 +27,7 @@
 
 		out.println("<h1>Database query</h1>");
 		out.println("<form action=\"database_query.jsp\">");
-		out.println("<table class=\"form\" align=\"center\">");
+		out.println("<table class=\"form\">");
 		out.println("<tr><td><textarea cols=\"75\" rows=\"5\" name=\"statement\">"+(statement==null?"":statement)+"</textarea></td></tr>");
 		out.println("<tr><td align=\"right\">Datasource <select name=\"ds\">"+
 				"<option "+(ds.equals("OKMActivityDS")?"selected":"")+" value=\"OKMActivityDS\">User Activity</option>"+
@@ -63,7 +63,7 @@
 					ResultSetMetaData meta = rs.getMetaData();
 					
 					
-					out.println("<table class=\"results\">");
+					out.println("<table class=\"results\" width=\"100%\">");
 					out.print("<tr>");
 					for (int i=1; i<meta.getColumnCount()+1; i++) {
 						out.print("<th>"+meta.getColumnName(i)+"</th>");

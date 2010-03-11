@@ -86,7 +86,7 @@
 		
 		if (date_begin != null && !date_begin.equals("") && date_end != null && !date_end.equals("")) {
 			try {
-				out.println("<table class=\"results\" align=\"center\">");
+				out.println("<table class=\"results\" width=\"100%\">");
 				out.println("<tr><th>Date</th><th>User</th><th>Token</th><th>Action</th><th>Item</th><th>Params</th></tr>");
 			
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

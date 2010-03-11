@@ -24,8 +24,9 @@
 		out.println("<h1>Twitter accounts <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
 				
 		try {
-			out.println("<table class=\"results\" align=\"center\">");
-			out.println("<tr><th>OKM user</th><th>Twitter user</th><th>Active</th><th><a href=\"twitter_edit.jsp?action=c&user="+user+"\">New account</a></th></tr>");
+			out.println("<table class=\"results\" width=\"80%\">");
+			out.println("<tr><th>OKM user</th><th>Twitter user</th><th>Active</th>");
+			out.println("<th width=\"25px\"><a href=\"twitter_edit.jsp?action=c&user="+user+"\"><img src=\"img/action/new.png\" alt=\"New account\" title=\"New account\"/></a></th></tr>");
 			Collection<TwitterAccount> twitterAccounts = null;
 			
 			if (user != null && !user.equals("")) {
@@ -38,8 +39,8 @@
 			for (Iterator<TwitterAccount> it = twitterAccounts.iterator(); it.hasNext(); ) {
 				TwitterAccount ta = it.next();
 				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+ta.getUser()+"</td><td>"+ta.getTwitterUser()+"</td><td>"+ta.isActive()+"</td>"+
-						"<td><a href=\"twitter_edit.jsp?action=u&id="+ta.getId()+"\""+">Edit</a>"+
-						" - <a href=\"twitter_edit.jsp?action=d&id="+ta.getId()+"\""+">Delete</a></td></tr>");
+						"<td><a href=\"twitter_edit.jsp?action=u&id="+ta.getId()+"\""+"><img src=\"img/action/edit.png\" alt=\"Edit\" title=\"Edit\"/></a>"+
+						" &nbsp; <a href=\"twitter_edit.jsp?action=d&id="+ta.getId()+"\""+"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a></td></tr>");
 			}
 				
 			out.println("</table>");

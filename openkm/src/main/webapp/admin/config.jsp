@@ -21,7 +21,7 @@
 %>
 	<h1>Configuration</h1>
 	<h2><%=Config.CONFIG_FILE %></h2>
-	<table class="results" align="center">
+	<table class="results" width="100%">
 		<tr><th>Parameter</th><th>Value</th></tr>
 		<tr class="odd"><td><b><%=Config.PROPERTY_REPOSITORY_CONFIG %></b></td><td><%=Config.REPOSITORY_CONFIG %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_REPOSITORY_HOME %></b></td><td><%=Config.REPOSITORY_HOME %></td></tr>
@@ -77,7 +77,7 @@
 	
 	<h2>MIME types</h2>
 <%
-		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<table class=\"results\" width=\"100%\">");
 		out.println("<tr><th>Icon</th><th>MIME</th></tr>");
 		int i = 0;
 		for (Iterator<String> it = Config.mimeAccept.iterator(); it.hasNext(); ) {

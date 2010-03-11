@@ -15,7 +15,13 @@
   </style>
   <title>OpenKM Administration</title>
   <script type="text/javascript">
-    window.addEventListener("load", function() { setTimeout(loaded, 100) }, true);
+    if (window.attachEvent) {
+      trick = '4';
+      window.attachEvent("onload", function() { setTimeout(loaded, 100); }, true);
+    } else {
+      trick = '0';
+      window.addEventListener("load", function() { setTimeout(loaded, 100); }, true);
+    }
     function loaded() {
       var frame = document.getElementById('frame');
       var menu = document.getElementById('menu');
@@ -24,7 +30,7 @@
               Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
               Math.max(document.body.clientHeight, document.documentElement.clientHeight)
           );
-      frame.style.height=(height-menu.offsetHeight)+'px';
+      frame.style.height=(height-menu.offsetHeight-trick)+'px';
       frame.style.visibility='visible';
     }
   </script>
@@ -34,7 +40,7 @@
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 %>
 	<div id="menu"><%@include file="menu.jsp" %></div>
-	<div><iframe id="frame" name="frame" src="home.jsp"></iframe></div>
+	<div><iframe id="frame" name="frame" src="home.jsp" frameborder="0"></iframe></div>
 <%
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
