@@ -76,10 +76,14 @@
 			ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(token, Long.parseLong(id));
 			out.println("<table>");
 			out.println("<tr>");
-			out.println("<td><h1>Process Instance</h1></td><td><a href=\"\">Reload</a> - <a href=\"javascript:history.back(1)\">Back</a></td>");
+			out.println("<td><h1>Process Instance</h1></td><td>");
+			out.println(" &nbsp; ");
+			out.println("<a href=\""+request.getRequestURL()+"?"+request.getQueryString()+"\"><img src=\"img/action/reload.png\" alt=\"Reload\" title=\"Reload\"/></a>");
+			out.println(" &nbsp; ");
+			out.println("<a href=\"javascript:history.back(1)\"><img src=\"img/action/back.png\" alt=\"Back\" title=\"Back\"/></a></td>");
 			out.println("</tr>");
 			out.println("</table>");
-			out.println("<table class=\"results\">");
+			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>Instance ID</th><th>Key</th><th>Process</th><th>Status</th><th>Start Date</th><th>End Date</th></tr>");
 			out.print("<tr class=\"odd\"><td>"+pi.getId()+"</td><td>"+(pi.getKey()!=null?pi.getKey():"")+"</td>");
 			ProcessDefinition pd = pi.getProcessDefinition();
@@ -97,8 +101,8 @@
 
 			Collection<TaskInstance> colTi = OKMWorkflow.getInstance().findTaskInstances(token, Long.parseLong(id));
 			out.println("<h2>Tasks Instances</h2>");
-			out.println("<table class=\"results\">");
-			out.println("<tr><th>ID</th><th>Name</th><th>Pooled Actors</th><th>Assigned To</th><th>Status</th><th>Start Date</th><th>End Date</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<tr><th>ID</th><th>Name</th><th>Pooled Actors</th><th>Assigned To</th><th>Status</th><th>Start Date</th><th>End Date</th><th width=\"75px\">Actions</th></tr>");
 
 			int i = 0;
 			for (Iterator<TaskInstance> it = colTi.iterator(); it.hasNext(); ) {
@@ -147,26 +151,26 @@
 				out.print("<td>"+(ti.getStart()!=null?ti.getStart().getTime():"")+"</td>");
 				out.print("<td>"+(ti.getEnd()!=null?ti.getEnd().getTime():"")+"</td>");
 				out.print("<td>");
-				out.print("<a href=\"wf_task.jsp?id="+ti.getId()+"\">Examine</a>");
+				out.print("<a href=\"wf_task.jsp?id="+ti.getId()+"\"><img src=\"img/action/examine.png\" alt=\"Examine\" title=\"Examine\"/></a>");
 								
 				if (!ti.isSuspended() && ti.getEnd() == null) {
-					out.print(" - ");
-					out.print("<a href=\"wf_procins.jsp?action=suspendTask&id="+pi.getId()+"&tid="+ti.getId()+"\">Suspend</a>");
+					out.print("  &nbsp; ");
+					out.print("<a href=\"wf_procins.jsp?action=suspendTask&id="+pi.getId()+"&tid="+ti.getId()+"\"><img src=\"img/action/suspend.png\" alt=\"Suspend\" title=\"Suspend\"/></a>");
 				}
 
 				if (ti.isSuspended() && ti.getEnd() == null) {
-					out.print(" - ");
-					out.print("<a href=\"wf_procins.jsp?action=resumeTask&id="+pi.getId()+"&tid="+ti.getId()+"\">Resume</a>");
+					out.print("  &nbsp; ");
+					out.print("<a href=\"wf_procins.jsp?action=resumeTask&id="+pi.getId()+"&tid="+ti.getId()+"\"><img src=\"img/action/resume.png\" alt=\"Resume\" title=\"Resume\"/></a>");
 				}
 				
 				if (ti.getStart() == null && ti.getEnd() == null) {
-					out.print(" - ");
-					out.print("<a href=\"wf_procins.jsp?action=start&id="+pi.getId()+"&tid="+ti.getId()+"\">Start</a>");
+					out.print("  &nbsp; ");
+					out.print("<a href=\"wf_procins.jsp?action=start&id="+pi.getId()+"&tid="+ti.getId()+"\"><img src=\"img/action/start.png\" alt=\"Start\" title=\"Start\"/></a>");
 				}
 				
 				if (ti.getStart() != null && ti.getEnd() == null && !ti.isSuspended()) {
-					out.print(" - ");
-					out.print("<a href=\"wf_procins.jsp?action=end&id="+pi.getId()+"&tid="+ti.getId()+"\">End</a>");
+					out.print(" &nbsp; ");
+					out.print("<a href=\"wf_procins.jsp?action=end&id="+pi.getId()+"&tid="+ti.getId()+"\"><img src=\"img/action/end.png\" alt=\"End\" title=\"End\"/></a>");
 				}
 				
 				out.print("</td>");
@@ -177,7 +181,7 @@
 			
 			Collection<Comment> colC = pi.getRootToken().getComments();
 			out.println("<h2>Comments</h2>");
-			out.println("<table class=\"results\">");
+			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>Actor ID</th><th>Time</th><th>Comment</th></tr>");
 			
 			i = 0;
@@ -191,23 +195,26 @@
 			}
 			
 			out.println("</table>");
+			out.println("<br>");
 			
-			out.println("<table align=\"center\">");
-			out.println("<tr><td>");
 			out.println("<form action=\"wf_procins.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\"addComment\">");
 			out.println("<input type=\"hidden\" name=\"id\" value=\""+id+"\">");
 			out.println("<input type=\"hidden\" name=\"tid\" value=\""+pi.getRootToken().getId()+"\">");
-			out.println("<textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea><br>");
+			out.println("<table class=\"form\">");
+			out.println("<tr><td>");
+			out.println("<textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea>");
+			out.println("</td></tr>");
+			out.println("<tr><td align=\"right\">");
 			out.println("<input type=\"submit\" value=\"Add comment\">");
-			out.println("</form>");
 			out.println("</td></tr>");
 			out.println("</table>");
+			out.println("</form>");
 			
 			Collection<Token> colT = pi.getAllTokens();
 			out.println("<h2>Tokens</h2>");
-			out.println("<table class=\"results\">");
-			out.println("<tr><th>Token ID</th><th>Parent</th><th>Node</th><th>Status</th><th>Start Date</th><th>End Date</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<tr><th>Token ID</th><th>Parent</th><th>Node</th><th>Status</th><th>Start Date</th><th>End Date</th><th width=\"75px\">Actions</th></tr>");
 			
 			i = 0;
 			for (Iterator<Token> it = colT.iterator(); it.hasNext(); ) {
@@ -227,19 +234,19 @@
 				out.print("<td>"+(t.getStart()!=null?t.getStart().getTime():"")+"</td>");
 				out.print("<td>"+(t.getEnd()!=null?t.getEnd().getTime():"")+"</td>");
 				out.print("<td>");
-				out.print("<a href=\"wf_token.jsp?id="+t.getId()+"\">Examine</a>");
+				out.print("<a href=\"wf_token.jsp?id="+t.getId()+"\"><img src=\"img/action/examine.png\" alt=\"Examine\" title=\"Examine\"/></a>");
 				
 				if (t.getEnd() == null) {
-					out.print(" - ");
-					out.print("<a href=\"wf_procdef.jsp?action=end&id="+pd.getId()+"&iid="+pi.getId()+"\">End</a>");
+					out.print(" &nbsp; ");
+					out.print("<a href=\"wf_procdef.jsp?action=end&id="+pd.getId()+"&iid="+pi.getId()+"\"><img src=\"img/action/end.png\" alt=\"End\" title=\"End\"/></a>");
 				}
 				
-				out.print(" - ");
+				out.print(" &nbsp; ");
 
 				if (t.isSuspended()) {
-					out.print("<a href=\"wf_procins.jsp?action=resumeToken&id="+pi.getId()+"&tid="+t.getId()+"\">Resume</a>");
+					out.print("<a href=\"wf_procins.jsp?action=resumeToken&id="+pi.getId()+"&tid="+t.getId()+"\"><img src=\"img/action/resume.png\" alt=\"Resume\" title=\"Resume\"/></a>");
 				} else {
-					out.print("<a href=\"wf_procins.jsp?action=suspendToken&id="+pi.getId()+"&tid="+t.getId()+"\">Suspend</a>");
+					out.print("<a href=\"wf_procins.jsp?action=suspendToken&id="+pi.getId()+"&tid="+t.getId()+"\"><img src=\"img/action/suspend.png\" alt=\"Suspend\" title=\"Suspend\"/></a>");
 				}
 
 				out.print("</td>");
@@ -250,8 +257,8 @@
 			
 			Map<String, Object> vars = pi.getVariables();
 			out.println("<h2>Process Variables</h2>");
-			out.println("<table class=\"results\">");
-			out.println("<tr><th>Name</th><th>Value</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<tr><th>Name</th><th>Value</th><th width=\"25px\">Actions</th></tr>");
 			
 			i = 0;
 			for (Iterator<String> it = vars.keySet().iterator(); it.hasNext(); ) {
@@ -260,27 +267,32 @@
 				out.print("<td>"+key+"</td>");
 				out.print("<td>"+FormatUtil.formatObject(vars.get(key))+"</td>");
 				out.print("<td>");
-				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\">Remove</a>");
+				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\"><img src=\"img/action/delete.png\" alt=\"Remove\" title=\"Remove\"/></a>");
 				out.print("</td>");
 				out.println("</tr>");
 			}
 						
 			out.println("</table>");
+			out.println("<br>");
 			
-			out.println("<table align=\"center\">");
-			out.println("<tr><td>");
 			out.println("<form action=\"wf_procins.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\"addVar\">");
 			out.println("<input type=\"hidden\" name=\"id\" value=\""+id+"\">");
-			out.println("Name <input type=\"text\" name=\"name\">");
-			out.println("Value <input type=\"text\" name=\"value\">");
+			out.println("<table class=\"form\">");
+			out.println("<tr>");
+			out.println("<td>Name <input type=\"text\" name=\"name\"></td>");
+			out.println("<td>Value <input type=\"text\" name=\"value\"></td>");
+			out.println("</tr>");
+			out.println("<tr><td colspan=\"2\" align=\"right\">");
 			out.println("<input type=\"submit\" value=\"Add variable\">");
-			out.println("</form>");
 			out.println("</td></tr>");
 			out.println("</table>");
+			out.println("</form>");
 			
 			out.println("<h2>Process Image</h2>");
+			out.println("<center>");
 			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+pi.getRootToken().getNode()+"\" />");
+			out.println("</center>");
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");

@@ -26,7 +26,7 @@
 				
 		out.println("<h1>Generate thesaurus</h1>");
 		out.println("<form action=\"generate_thesaurus.jsp\">");
-		out.println("<table class=\"form\" align=\"center\">");
+		out.println("<table class=\"form\">");
 		out.println("<tr><td>");
 		out.println("Show level <select name=\"level\">");
 		
@@ -42,7 +42,7 @@
 		out.println("</table>");
 		out.println("</form>");
 		out.println("<br/>");
-		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<table class=\"results\" width=\"100%\">");
 		out.println("<tr><th>Parameter</th><th>Value</th></tr>");
 		out.println("<tr class=\"odd\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_SKOS_FILE+"</b></td><td>"+Config.KEA_THESAURUS_SKOS_FILE+"</td></tr>");
 		out.println("<tr class=\"even\"><td><b>"+Config.PROPERTY_KEA_THESAURUS_OWL_FILE+"</b></td><td>"+Config.KEA_THESAURUS_OWL_FILE+"</td></tr>");

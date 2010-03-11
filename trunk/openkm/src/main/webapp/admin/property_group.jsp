@@ -33,7 +33,7 @@
 		}
 		
 		out.println("<h1>Property groups</h1>");
-		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<table class=\"results\" width=\"70%\">");
 		out.println("<tr><th colspan=\"2\">Property group name</th></tr>");
 		out.println("<tr><th>Property name</th><th>Property metadata</th></tr>");
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
