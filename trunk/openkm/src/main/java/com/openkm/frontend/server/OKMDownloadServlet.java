@@ -29,8 +29,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
@@ -38,6 +36,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +73,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		log.debug("service("+req+", "+resp+")");
+		log.debug("service({}, {})", req, resp);
 		req.setCharacterEncoding("UTF-8");
 		String token;
 		String path = new String(req.getParameter("id").getBytes("ISO-8859-1"), "UTF-8");
@@ -188,7 +190,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	 */
 	private void sendFile(HttpServletRequest req, HttpServletResponse resp, 
 			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
-		log.info("sendFile("+req+", "+resp+", "+fileName+", "+mimeType+", "+inline+", "+is+")");
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {req, resp, fileName, mimeType, inline, is});
 		String agent = req.getHeader("USER-AGENT");
 		
 		// Disable browser cache
@@ -218,7 +220,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 
 		// Set length
 		resp.setContentLength(is.available());
-		log.debug("File: "+fileName+", Length: "+is.available());
+		log.debug("File: {}, Length: {}", fileName, is.available());
 		
 		ServletOutputStream sos = resp.getOutputStream();
 		IOUtils.copy(is, sos);
@@ -227,20 +229,12 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	}
 	
 	/**
-	 * Generate a zip file from a repository folder path
-	 * 
-	 * @param token
-	 * @param path
-	 * @return
-	 * @throws IOException 
-	 * @throws PathNotFoundException 
-	 * @throws AccessDeniedException 
-	 * @throws RepositoryException 
+	 * Generate a zip file from a repository folder path  
 	 */
 	private void exportZip(String token, String path, OutputStream os) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException {
-		log.debug("exportZip("+token+", "+path+")");
-		ZipOutputStream zos = null;
+			AccessDeniedException, RepositoryException, ArchiveException, IOException  {
+		log.debug("exportZip({}, {}, {})", new Object[]{ token, path, os });
+		ArchiveOutputStream zos = null;
 		File tmp = null;
 		
 		try {
@@ -252,12 +246,12 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			out.close();
 			
 			// Zip files
-			zos = new ZipOutputStream(os);
+			zos =  new ArchiveStreamFactory().createArchiveOutputStream("zip", os);
 			
 			// Prevents java.util.zip.ZipException: ZIP file must have at least one entry
-			ZipEntry ze = new ZipEntry(FileUtils.getName(path)+"/");
-			zos.putNextEntry(ze);
-			zos.closeEntry();
+			ZipArchiveEntry ze = new ZipArchiveEntry(FileUtils.getName(path)+"/");
+			zos.putArchiveEntry(ze);
+			zos.closeArchiveEntry();
 			
 			exportZipHelper(tmp, zos, FileUtils.getName(path));
 		} catch (IOException e) {
@@ -287,30 +281,27 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	}
 	
 	/**
-	 * @param fs
-	 * @param zos
-	 * @param zePath
-	 * @throws IOException
+	 * Create a ZIP from a filesystem directory.
 	 */
-	private void exportZipHelper(File fs, ZipOutputStream zos, String zePath) throws IOException {
-		log.debug("exportZipHelper("+fs+", "+zos+", "+zePath+")");
+	private void exportZipHelper(File fs, ArchiveOutputStream zos, String zePath) throws IOException {
+		log.debug("exportZipHelper({}, {}, {})", new Object[]{ fs, zos, zePath });
 		File[] files = fs.listFiles();
 		
 		for (int i=0; i<files.length; i++) {
 			if (files[i].isDirectory()) {
-				log.info("DIRECTORY "+files[i]);
-				ZipEntry ze = new ZipEntry(zePath+"/"+files[i].getName()+"/");
-				zos.putNextEntry(ze);
-				zos.closeEntry();
+				log.debug("DIRECTORY {}", files[i]);
+				ZipArchiveEntry ze = new ZipArchiveEntry(zePath + "/" + files[i].getName() + "/");
+				zos.putArchiveEntry(ze);
+				zos.closeArchiveEntry();
 				
-				exportZipHelper(files[i], zos, zePath+"/"+files[i].getName());
+				exportZipHelper(files[i], zos, zePath + "/" + files[i].getName());
 			} else {
-				log.info("FILE "+files[i]);
+				log.debug("FILE {}", files[i]);
 				FileInputStream fis = new FileInputStream(files[i]);
-				ZipEntry ze = new ZipEntry(zePath+"/"+files[i].getName());
-				zos.putNextEntry(ze);
+				ZipArchiveEntry ze = new ZipArchiveEntry(zePath + "/" + files[i].getName());
+				zos.putArchiveEntry(ze);
 				IOUtils.copy(fis, zos);
-				zos.closeEntry();
+				zos.closeArchiveEntry();
 				fis.close();
 			}
 		}
