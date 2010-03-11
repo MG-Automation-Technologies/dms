@@ -46,13 +46,6 @@ public class MainMenu extends Composite {
 	public static final String URI_SUPPORT_REQUEST = "http://www.openkm.com/Contact/";
 	public static final String URI_PUBLIC_FORUM = "http://forum.openkm.com";
 	public static final String URI_PROJECT_WEB = "http://www.openkm.com";
-	public static final String URI_VIEW_REPOSITORY = "/OpenKM/repository_view.jsp";
-	public static final String URI_VIEW_LOGED_USERS = "/OpenKM/repository_users.jsp";
-	public static final String URI_SEARCH = "/OpenKM/repository_search.jsp";
-	public static final String URI_ACTION_LOG = "/OpenKM/repository_log.jsp";
-	public static final String URI_EXPORT = "/OpenKM/repository_export.jsp";
-	public static final String URI_IMPORT = "/OpenKM/repository_import.jsp";
-	public static final String URI_PROPERTY_GROUP = "/OpenKM/property_group.jsp";
 	public static final String URI_DOCUMENTATION = "http://wiki.openkm.com";
 	public static final String URI_VERSION_CHANGES = "http://wiki.openkm.com/index.php/Changelog";
 
@@ -400,7 +393,7 @@ public class MainMenu extends Composite {
 				horizontalLineBookmark1.setHeight("2");
 				
 			// Submenu tools
-				subMenuBookmark = new MenuBar(true);
+			subMenuBookmark = new MenuBar(true);
 			subMenuBookmark.setStyleName("okm-SubMenuBar");
 			subMenuBookmark.setAutoOpen(true);
 			subMenuBookmark.addItem(home);
@@ -958,56 +951,7 @@ public class MainMenu extends Composite {
 	// Command menu to show administration
 	Command showAdministration = new Command() {
 		public void execute() {
-			Window.open("/OpenKM"+Config.INSTALL+"/admin/index.jsp","Administration","");
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewRepositoryExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.repository", URI_VIEW_REPOSITORY, 700, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewLogedUsersExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.loged.users", URI_VIEW_LOGED_USERS, 825, 400);
-		}
-	};
-	
-	// Command menu to show advanced search
-	Command advancedSearchExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.search", URI_SEARCH, 775, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewActivityLogExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.action.log", URI_ACTION_LOG, 800, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command exportExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.export", URI_EXPORT, 600, 250);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command importExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.import", URI_IMPORT, 675, 250);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command registerGroupsExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.register.groups", URI_PROPERTY_GROUP, 600, 250);
+			Window.open("/OpenKM"+Config.INSTALL+"/admin/index.jsp", "Administration", "");
 		}
 	};
 	
