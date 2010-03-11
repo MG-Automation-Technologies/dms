@@ -2,6 +2,7 @@ package com.openkm.bean.form;
 
 public class FormElement {
 	protected String label = "";
+	protected String name = "";
 	protected String value = "";
 	protected String width = "100px";
 	protected String height = "25px";
@@ -12,6 +13,14 @@ public class FormElement {
 	
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getValue() {
