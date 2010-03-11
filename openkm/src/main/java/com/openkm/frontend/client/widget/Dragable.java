@@ -32,6 +32,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -113,12 +114,12 @@ public class Dragable extends Composite implements OriginPanel {
 	        				TreeItem clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
 	        				if (clickedTreeItem!=null && 
 	        					(((GWTFolder)clickedTreeItem.getUserObject()).getPermissions()& GWTPermission.WRITE) == GWTPermission.WRITE ){
-	        					TreeItem draggedTreeItem = Main.get().activeFolderTree.getActualItem();
+	        					final TreeItem draggedTreeItem = Main.get().activeFolderTree.getActualItem();
 	        					boolean isChild = DOM.isOrHasChild(draggedTreeItem.getElement(), clickedTreeItem.getElement());
 	        					
 	                            if (draggedTreeItem != clickedTreeItem && !isChild) {
 	                            	String fldPath = ((GWTFolder) draggedTreeItem.getUserObject()).getPath(); 	// Folder actual path
-	                            	String dstPath = ((GWTFolder) clickedTreeItem.getUserObject()).getPath(); 	// Destination path
+	                            	final String dstPath = ((GWTFolder) clickedTreeItem.getUserObject()).getPath(); 	// Destination path
 	                            	TreeItem parentItem = draggedTreeItem.getParentItem(); 						// The parent of actual item selected
 	                            	
 	                            	// Remove the folders and evaluates parent child status
@@ -139,16 +140,24 @@ public class Dragable extends Composite implements OriginPanel {
 	                                // Move the folder
 	                                ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 									endPoint.setServiceEntryPoint(Config.OKMFolderService);
-	                                folderService.move( fldPath, dstPath, callbackMove);
-	                                
-	                                // Sets the folder new path itself and childs
-	                                GWTFolder draggedFolder = (GWTFolder) draggedTreeItem.getUserObject();
-	                                String oldPath = draggedFolder.getPath();
-	                                String newPath = dstPath + "/" + draggedFolder.getName();
-	                                preventFolderInconsitences(draggedTreeItem, oldPath, newPath, dstPath);
-	                                draggedTreeItem.setState(false);
-	                                
-	                                Main.get().activeFolderTree.openAllPathFolder(newPath,null);
+	                                folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
+		                            		public void onSuccess(Object result) {		
+		                            			// Sets the folder new path itself and childs
+		                                        GWTFolder draggedFolder = (GWTFolder) draggedTreeItem.getUserObject();
+		                                        String oldPath = draggedFolder.getPath();
+		                                        String newPath = dstPath + "/" + draggedFolder.getName();
+		                                        preventFolderInconsitences(draggedTreeItem, oldPath, newPath, dstPath);
+		                                        draggedTreeItem.setState(false);
+		                                        
+		                                        Main.get().activeFolderTree.openAllPathFolder(newPath,null);
+		                            		}
+	
+		                            		public void onFailure(Throwable caught) {
+		                            			draggedTreeItem.setState(false);
+		                            			Main.get().showError("Move", caught);
+		                            		}
+		                            	}	
+	                                );
 	                            }
 	        				}
 	        				break;
@@ -160,7 +169,7 @@ public class Dragable extends Composite implements OriginPanel {
 	        				if (clickedTreeItem!=null && Main.get().mainPanel.browser.fileBrowser.isSelectedRow() &&
 	        					(((GWTFolder)clickedTreeItem.getUserObject()).getPermissions()& GWTPermission.WRITE) == GWTPermission.WRITE ){
 	        					
-	        					String dstPath = ((GWTFolder) clickedTreeItem.getUserObject()).getPath(); // Destination path
+	        					final String dstPath = ((GWTFolder) clickedTreeItem.getUserObject()).getPath(); // Destination path
 	        					
 	        					// if selected path = actual path must not move
 	        					if (!dstPath.equals(((GWTFolder) actualTreeItem.getUserObject()).getPath())) {
@@ -172,14 +181,14 @@ public class Dragable extends Composite implements OriginPanel {
 	        						
 		        					if (Main.get().mainPanel.browser.fileBrowser.isFolderSelected()) {
 		        						
-		        						GWTFolder gwtFolder= Main.get().mainPanel.browser.fileBrowser.getFolder();  // The dragged folder
+		        						final GWTFolder gwtFolder= Main.get().mainPanel.browser.fileBrowser.getFolder();  // The dragged folder
 		            					String fldPath = gwtFolder.getPath(); // Folder actual path
 		                            	
 		                            	// Destination path must not containt actual folder path, because folder can't be moved to his subfolders
 		                            	if (!dstPath.startsWith(fldPath)){
 		                            		
 		                            		// Gets the moved tree Item
-		                            		TreeItem movedTreeItem = Main.get().activeFolderTree.getChildFolder(fldPath);
+		                            		final TreeItem movedTreeItem = Main.get().activeFolderTree.getChildFolder(fldPath);
 		                            		
 		                            		// Remove the folders and evaluates parent child status
 		                            		movedTreeItem.remove();
@@ -198,17 +207,27 @@ public class Dragable extends Composite implements OriginPanel {
 		                            		// Move the folder
 		                                    ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		    								endPoint.setServiceEntryPoint(Config.OKMFolderService);
-		                                    folderService.move( fldPath, dstPath, callbackMove);
+		                                    folderService.move( fldPath, dstPath, new AsyncCallback<Object>() {
+				                            		public void onSuccess(Object result) {		
+				                            			// Sets the folder new path ( parent and itself ) recursive for itself and childs
+					                                    movedTreeItem.setUserObject(gwtFolder);
+					                                    String oldPath = gwtFolder.getPath();
+						                                String newPath = dstPath + "/" + gwtFolder.getName();
+						                                preventFolderInconsitences(movedTreeItem, oldPath, newPath, dstPath);
+						                                movedTreeItem.setState(false);
+					                                    
+					                                    // Refresh file browser
+					        							Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+				                            		}
+			
+				                            		public void onFailure(Throwable caught) {
+				                            			movedTreeItem.setState(false);
+				                            			Main.get().showError("Move", caught);
+				                            		}
+				                            	}	
+			                                );
 		                                    
-		                                    // Sets the folder new path ( parent and itself ) recursive for itself and childs
-		                                    movedTreeItem.setUserObject(gwtFolder);
-		                                    String oldPath = gwtFolder.getPath();
-			                                String newPath = dstPath + "/" + gwtFolder.getName();
-			                                preventFolderInconsitences(movedTreeItem, oldPath, newPath, dstPath);
-			                                movedTreeItem.setState(false);
 		                                    
-		                                    // Refresh file browser
-		        							Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
 		        							
 		                            	} 
 		        					} else if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()){
@@ -280,6 +299,10 @@ public class Dragable extends Composite implements OriginPanel {
                     // Sets the style of actual tree item
                     if (selectedTreeItem!=null) {
                     	selectedElement = getSelectedElement(selectedTreeItem.getElement());
+                    	if (selectedElement==null) {
+                    		Window.alert("problema");
+                    		Window.alert(selectedTreeItem.getElement().getInnerHTML());
+                    	}
                     	DOM.setElementProperty(selectedElement,"className","gwt-TreeItem gwt-TreeItem-selected");
                     	
                     	if (lastSelectedTreeItem!=null && !selectedTreeItem.equals(lastSelectedTreeItem) && 
@@ -327,7 +350,8 @@ public class Dragable extends Composite implements OriginPanel {
 	 * Move document or folder
 	 */
 	final AsyncCallback<Object> callbackMove = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {				
+		public void onSuccess(Object result) {		
+			
 		}
 
 		public void onFailure(Throwable caught) {
@@ -342,12 +366,11 @@ public class Dragable extends Composite implements OriginPanel {
 	 * @return
 	 */
 	public Element getSelectedElement(Element element){
-		if (DOM.getFirstChild(element).getClassName().equals("gwt-TreeItem")) {
+		if (DOM.getFirstChild(element).getClassName().contains("gwt-TreeItem")) {
 			// Case node without childs
 			return DOM.getFirstChild(element);
 		} else {
-			// Case node with childs
-			return DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(selectedTreeItem.getElement(),0),0),0),1),0);
+			return DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(DOM.getChild(element,0),0),0),1),0);
 		}
 	}
 	
