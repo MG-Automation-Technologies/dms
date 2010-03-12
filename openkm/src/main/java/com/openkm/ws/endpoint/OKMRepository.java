@@ -152,13 +152,13 @@ public class OKMRepository {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getNodePath(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.RepositoryModule#getPath(java.lang.String, java.lang.String)
 	 */
-	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
-		log.debug("getNodePath({}, {})", token, uuid);
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getPath({}, {})", token, uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String path = rm.getNodePath(token, uuid);
-		log.debug("getNodePath: {}", path);
+		String path = rm.getPath(token, uuid);
+		log.debug("getPath: {}", path);
 		return path;
 	}
 }

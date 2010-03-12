@@ -83,7 +83,7 @@ public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 	}
 
 	@Override
-	public String getNodePath(String token, String uuid) throws RepositoryException {
+	public String getPath(String token, String uuid) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}

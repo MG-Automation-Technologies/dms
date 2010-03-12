@@ -140,11 +140,11 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
-		log.debug("getNodePath("+token+" , "+uuid+")");
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getPath("+token+" , "+uuid+")");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String ret = rm.getNodePath(token, uuid);
-		log.debug("getNodePath: "+ret);
+		String ret = rm.getPath(token, uuid);
+		log.debug("getPath: "+ret);
 		return ret;
 	}
 }
