@@ -147,5 +147,5 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user node in the repository with this uuid.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException;
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException;
 }

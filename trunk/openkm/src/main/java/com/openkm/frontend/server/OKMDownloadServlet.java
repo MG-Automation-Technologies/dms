@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
+import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -77,6 +78,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String token;
 		String path = new String(req.getParameter("id").getBytes("ISO-8859-1"), "UTF-8");
+		String uuid = req.getParameter("uuid");
 		String checkout = req.getParameter("checkout");
 		String ver = req.getParameter("ver");
 		boolean export = req.getParameter("export") != null;
@@ -91,6 +93,12 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			token = getToken(req);
 			File pdfCache = null;
 			File swfCache = null;
+			
+			// Now an document can be located by UUID
+			if (uuid != null && !uuid.equals("")) {
+				OKMRepository okmRepo = OKMRepository.getInstance();
+				path = okmRepo.getPath(token, uuid);
+			}
 						
 			// Get document
 			if (export) {

@@ -710,8 +710,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException {
-		log.debug("getNodePath(" + token + ", " + uuid + ")");
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getPath(" + token + ", " + uuid + ")");
 		String ret;
 		
 		try {
@@ -725,7 +725,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getNodePath: "+ret);
+		log.debug("getPath: "+ret);
 		return ret;
 	}
 }
