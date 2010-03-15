@@ -29,15 +29,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.MetaData;
+import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
+import com.openkm.core.ParseException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.module.PropertyGroupModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.module.PropertyGroupModule;
 
 /**
  * @author pavila
@@ -53,9 +54,6 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		return instance;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#addGroup(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException,
@@ -66,9 +64,6 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("addGroup: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#removeGroup(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void removeGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException, 
@@ -79,9 +74,6 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("removeGroup: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getGroups(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<String> getGroups(String token, String docPath)
 			throws PathNotFoundException, RepositoryException {
@@ -92,9 +84,6 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getAllGroups(java.lang.String)
-	 */
 	@Override
 	public Collection<String> getAllGroups(String token) throws RepositoryException {
 		log.debug("getAllGroups(" + token + ")");
@@ -104,9 +93,6 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getProperties(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
@@ -116,10 +102,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("getProperties: "+ret);
 		return ret;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
-	 */
+
 	@Override
 	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
@@ -130,27 +113,13 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("setProperties: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getValues(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public HashMap<String, MetaData> getMetaData(String token, String grpName) throws IOException, RepositoryException {
-		log.debug("getMetaData(" + token + ", " + grpName + ")");
+	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+			IOException, RepositoryException {
+		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		HashMap<String, MetaData> ret = cm.getMetaData(token, grpName);
-		log.debug("getMetaData: "+ret);
-		return ret;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getTranslations(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public HashMap<String, String> getTranslations(String token, String lang) throws IOException, RepositoryException {
-		log.debug("getTranslations(" + token + ", " + lang + ")");
-		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		HashMap<String, String> ret = cm.getTranslations(token, lang);
-		log.debug("getTranslations: "+ret);
+		Collection<FormElement> ret = cm.getPropertyGroupForm(token, grpName);
+		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
 }
