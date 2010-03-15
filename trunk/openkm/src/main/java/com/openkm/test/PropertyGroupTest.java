@@ -99,8 +99,7 @@ public class PropertyGroupTest {
 		log.info(OKMPropertyGroup.getInstance().getGroups(token, doc.getPath()).toString());
 		
 		log.info("***** GET METADATA *****");
-		log.info("MetaData: "+OKMPropertyGroup.getInstance().getMetaData(token, "okg:tecnologia"));
-		log.info(OKMPropertyGroup.getInstance().getTranslations(token, "es").toString());
+		log.info("MetaData: "+OKMPropertyGroup.getInstance().getPropertyGroupForm(token, "okg:tecnologia"));
 		
 		OKMAuth.getInstance().logout(token);
 	}
