@@ -16,6 +16,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.QueryResult;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.direct.DirectRepositoryModule;
@@ -211,8 +212,9 @@ public class RemoveTest {
 
 	/**
 	 * Lista los documentos que hay borrados y sin borrar 
+	 * @throws ParseException 
 	 */
-	private void listDocs(String token) throws AccessDeniedException, RepositoryException {
+	private void listDocs(String token) throws AccessDeniedException, ParseException, RepositoryException {
 		System.out.println("\nDocumentos buenos...");
 		for (Iterator<QueryResult> it = OKMSearch.getInstance().findByContent(token, "*").iterator(); it.hasNext(); ) {
 			Document doc = it.next().getDocument();
