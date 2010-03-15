@@ -21,13 +21,12 @@
 
 package com.openkm.backend.client.service;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import com.openkm.backend.client.OKMException;
-import com.openkm.backend.client.bean.GWTMetaData;
+import com.openkm.backend.client.bean.GWTFormElement;
 
 /**
  * OKMPropertyGroupService
@@ -36,8 +35,6 @@ import com.openkm.backend.client.bean.GWTMetaData;
  *
  */
 public interface OKMPropertyGroupService extends RemoteService {
-
 	public List<String> getAllGroups() throws OKMException;
-	
-	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException;
+	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException;
 }
