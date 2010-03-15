@@ -38,6 +38,7 @@ import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -191,9 +192,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			
 			gwtResultSet.setTotal(results.getTotal());
 			gwtResultSet.setResults(resultList);
-		} catch (IOException e) {
+		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -231,9 +232,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			
 			gwtResultSet.setTotal(results.size());
 			gwtResultSet.setResults(resultList);
-		} catch (IOException e) {
+		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
