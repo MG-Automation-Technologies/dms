@@ -27,43 +27,52 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * GWTFormElement
  * 
  * @author jllort
- *
+ * 
  */
 public class GWTFormElement implements IsSerializable {
-		protected String label = "";
-		protected String value = "";
-		protected String width = "100px";
-		protected String height = "25px";
-		
-		public String getWidth() {
-			return width;
-		}
+	protected String label = "";
+	protected String name = "";
+	protected String value = "";
+	protected String width = "100px";
+	protected String height = "25px";
 
-		public void setWidth(String width) {
-			this.width = width;
-		}
+	public String getWidth() {
+		return width;
+	}
 
-		public String getHeight() {
-			return height;
-		}
+	public void setWidth(String width) {
+		this.width = width;
+	}
 
-		public void setHeight(String height) {
-			this.height = height;
-		}
+	public String getHeight() {
+		return height;
+	}
 
-		public String getLabel() {
-			return label;
-		}
-		
-		public void setLabel(String label) {
-			this.label = label;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public void setValue(String value) {
-			this.value = value;
-		}
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 }
