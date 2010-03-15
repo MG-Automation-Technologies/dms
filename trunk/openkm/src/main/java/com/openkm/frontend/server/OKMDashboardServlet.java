@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.server;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -36,6 +35,7 @@ import com.openkm.api.OKMDashboard;
 import com.openkm.bean.DashboardStatsDocumentResult;
 import com.openkm.bean.DashboardStatsFolderResult;
 import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
@@ -250,9 +250,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
-		} catch (IOException e) {
+		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
