@@ -28,6 +28,7 @@ import java.util.Collection;
 import com.openkm.bean.DashboardStatsDocumentResult;
 import com.openkm.bean.DashboardStatsFolderResult;
 import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 
 public interface DashboardModule {
@@ -39,7 +40,8 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * Get list of cheked-out documents by user
@@ -48,56 +50,64 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token) throws RepositoryException;
+	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
+		throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token) throws RepositoryException;
+	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token)
+		throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -120,49 +130,56 @@ public interface DashboardModule {
 	 * @throws IOException
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> find(String token, String name) throws IOException, RepositoryException;
+	public Collection<DashboardStatsDocumentResult> find(String token, String name)
+			throws ParseException, RepositoryException;
 		
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token)
+			throws RepositoryException;
 
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token)
+			throws RepositoryException;
 
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token)
+			throws RepositoryException;
 
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
+			throws RepositoryException;
 	
 	/**
 	 * @param token
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token) throws RepositoryException;
+	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token)
+			throws RepositoryException;
 
 	/**
 	 * @param token
@@ -170,5 +187,6 @@ public interface DashboardModule {
 	 * @param source
 	 * @throws RepositoryException
 	 */
-	public void visiteNode(String token, String source, String node, Calendar date) throws RepositoryException;
+	public void visiteNode(String token, String source, String node, Calendar date)
+			throws RepositoryException;
 }
