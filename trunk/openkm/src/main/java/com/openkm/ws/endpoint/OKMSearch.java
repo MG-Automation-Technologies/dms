@@ -21,7 +21,6 @@
 
 package com.openkm.ws.endpoint;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
@@ -61,7 +61,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByContent(String token, String words) throws RepositoryException {
+	public QueryResultArray findByContent(String token, String words) throws ParseException, 
+			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -74,7 +75,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByName(String token, String words) throws RepositoryException {
+	public QueryResultArray findByName(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -87,7 +89,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(String token, String words)	throws RepositoryException {
+	public QueryResultArray findByKeywords(String token, String words)throws ParseException,
+			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -114,7 +117,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
 	 */
-	public QueryResultArray find(String token, QueryParams params) throws IOException, RepositoryException {
+	public QueryResultArray find(String token, QueryParams params) throws ParseException,
+			RepositoryException {
 		log.debug("find({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
