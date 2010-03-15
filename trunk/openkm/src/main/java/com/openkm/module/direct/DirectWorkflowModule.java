@@ -58,15 +58,13 @@ import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.WorkflowModule;
+import com.openkm.util.FormUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WorkflowUtils;
 
 public class DirectWorkflowModule implements WorkflowModule {
 	private static Logger log = LoggerFactory.getLogger(DirectWorkflowModule.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#registerProcessDefinition(java.lang.String, java.util.zip.ZipInputStream)
-	 */
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream zis)
 			throws ParseException, RepositoryException {
@@ -81,7 +79,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			// Check xml form definition  
 			FileDefinition fileDef = processDefinition.getFileDefinition();
 			is = fileDef.getInputStream("forms.xml");
-			WorkflowUtils.parseFormFields(is);
+			FormUtils.parseWorkflowForms(is);
 						
 			// If it is ok, deploy it
 			jbpmContext.deployProcessDefinition(processDefinition);
@@ -100,9 +98,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("registerProcessDefinition: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#deleteProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public void deleteProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -126,9 +121,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("deleteProcessDefinition: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -153,10 +145,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("getProcessDefinition: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getProcessDefinitionImage(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node)
 			throws RepositoryException {
@@ -204,9 +193,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return image;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getProcessDefinitionForms(java.lang.String, long)
-	 */
 	@Override
 	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
 			throws ParseException, RepositoryException {
@@ -224,7 +210,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			is = fileDef.getInputStream("forms.xml");
 			
 			if (is != null) {
-				forms = WorkflowUtils.parseFormFields(is);
+				forms = FormUtils.parseWorkflowForms(is);
 				is.close();
 			}
 			
@@ -243,10 +229,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#runProcessDefinition(java.lang.String, long, java.util.Map)
-	 */
+
 	@Override
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables)
 			throws RepositoryException {
@@ -285,10 +268,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("runProcessDefinition: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#sendProcessInstanceSignal(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, String transitionName)
 			throws RepositoryException {
@@ -322,10 +302,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("sendProcessInstanceSignal: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#deleteProcessInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void deleteProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -349,9 +326,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("deleteProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findProcessInstances(java.lang.String, long)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
@@ -380,9 +354,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findAllProcessDefinitions(java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findAllProcessDefinitions(String token)
@@ -410,10 +381,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("findAllProcessDefinitions: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findLatestProcessDefinitions(java.lang.String)
-	 */
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)
@@ -442,9 +410,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findAllProcessDefinitionVersions(java.lang.String, java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name)
@@ -473,9 +438,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public ProcessInstance getProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -501,9 +463,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#suspendProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public void suspendProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -526,10 +485,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("suspendProcessInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#resumeProcessInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void resumeProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -553,9 +509,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
-	 */
 	@Override
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
 			Object value) throws RepositoryException {
@@ -579,9 +532,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addProcessInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#removeProcessInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeProcessInstanceVariable(String token, long processInstanceId, String name)
 			throws RepositoryException {
@@ -604,10 +554,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("removeProcessInstanceVariable: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findUserTaskInstances(java.lang.String)
-	 */
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<TaskInstance> findUserTaskInstances(String token)
@@ -640,9 +587,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#findTaskInstances(java.lang.String, long)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId)
@@ -677,9 +621,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#setTaskInstanceValues(java.lang.String, long, java.lang.String, java.util.Map)
-	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
 			Map<String, Object> values) throws RepositoryException {
@@ -708,10 +649,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("setTaskInstanceValues: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#addTaskInstanceComment(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void addTaskInstanceComment(String token, long taskInstanceId, String message)
 			throws RepositoryException {
@@ -736,9 +674,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTaskInstanceComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public TaskInstance getTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -764,9 +699,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#setTaskInstanceActorId(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void setTaskInstanceActorId(String token, long taskInstanceId,
 			String actorId) throws RepositoryException {
@@ -789,10 +721,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("setTaskInstanceActorId: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.Object)
-	 */
+
 	@Override
 	// TODO Esto creo que sobra pq no se puede hacer
 	public void addTaskInstanceVariable(String token, long taskInstanceId,
@@ -817,9 +746,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#removeTaskInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeTaskInstanceVariable(String token, long taskInstanceId,
 			String name) throws RepositoryException {
@@ -843,9 +769,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("removeTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#startTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public void startTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -869,10 +792,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("startTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#endTaskInstance(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void endTaskInstance(String token, long taskInstanceId,
 			String transitionName) throws RepositoryException {
@@ -902,10 +822,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("endTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#suspendTaskInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void suspendTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -929,10 +846,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("suspendTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#resumeTaskInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void resumeTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -957,9 +871,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeTaskInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#getToken(java.lang.String, long)
-	 */
 	@Override
 	public Token getToken(String token, long tokenId)
 			throws RepositoryException {
@@ -985,9 +896,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#addTokenComment(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void addTokenComment(String token, long tokenId, String message)
 			throws RepositoryException {
@@ -1011,9 +919,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTokenComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#suspendToken(java.lang.String, long)
-	 */
 	@Override
 	public void suspendToken(String token, long tokenId) throws RepositoryException {
 		log.info("suspendToken("+token+", "+tokenId+")");
@@ -1036,9 +941,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("suspendToken: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#resumeToken(java.lang.String, long)
-	 */
 	@Override
 	public void resumeToken(String token, long tokenId) throws RepositoryException {
 		log.info("resumeToken("+token+", "+tokenId+")");
@@ -1061,9 +963,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeToken: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#sendTokenSignal(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public Token sendTokenSignal(String token, long tokenId,
 			String transitionName) throws RepositoryException {
@@ -1096,10 +995,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("sendTokenSignal: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.WorkflowModule#setTokenNode(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void setTokenNode(String token, long tokenId, String nodeName)
 			throws RepositoryException {

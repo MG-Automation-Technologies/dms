@@ -60,19 +60,22 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
-import com.openkm.bean.MetaData;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Repository;
 import com.openkm.bean.ResultSet;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Select;
 import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.Config;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.SearchModule;
+import com.openkm.util.FormUtils;
 import com.openkm.util.UserActivity;
 
 public class DirectSearchModule implements SearchModule {
@@ -82,18 +85,13 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
 		params.setContent(words);
-		Collection<QueryResult> ret = null;
-		
-		try {
-			ret = find(token, params);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Collection<QueryResult> ret = find(token, params);
 
 		log.debug("findByContent: " + ret);
 		return ret;
@@ -103,18 +101,13 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByName(String token, String words) throws ParseException, 
+			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
 		params.setName(words);
-		Collection<QueryResult> ret = null;
-		
-		try {
-			ret = find(token, params);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Collection<QueryResult> ret = find(token, params);
 		
 		log.debug("findByName: " + ret);
 		return ret;
@@ -124,19 +117,14 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByKeywords(String token, String words) throws ParseException, 
+			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
 		params.setKeywords(words);
-		Collection<QueryResult> ret = null;
+		Collection<QueryResult> ret = find(token, params);
 		
-		try {
-			ret = find(token, params);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		log.debug("findByKeywords: " + ret);
 		return ret;
 	}
@@ -145,7 +133,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QuestionParams)
 	 */
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException {
+	public Collection<QueryResult> find(String token, QueryParams params) throws ParseException, 
+			RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: " + ret);
@@ -156,7 +145,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findPaginated(java.lang.String, com.openkm.bean.QueryParams, int, int)
 	 */
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException {
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
+			throws ParseException, RepositoryException {
 		log.debug("findPaginated(" + token + ", " + params + ")");
 		String query = prepareStatement(params);
 		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
@@ -199,7 +189,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String prepareStatement(QueryParams params) throws IOException {
+	public String prepareStatement(QueryParams params) throws ParseException {
 		log.info("prepareStatement("+params+")");
 		StringBuffer sb = new StringBuffer();
 		
@@ -296,16 +286,16 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					HashMap<String, MetaData> metaMap = DirectPropertyGroupModule.parseMetadata();
+					Map<String, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
-						MetaData meta = (MetaData) metaMap.get(ent.getKey());
+						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (meta != null) {
+						if (fe != null) {
 							sb.append(" "+params.getOperator()+" ");
 							
-							if (meta.getType() == MetaData.SELECT) {
+							if (fe instanceof Select) {
 								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
 							} else {
 								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
@@ -371,16 +361,16 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					HashMap<String, MetaData> metaMap = DirectPropertyGroupModule.parseMetadata();
+					Map<String, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
-						MetaData meta = (MetaData) metaMap.get(ent.getKey());
+						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (meta != null) {
+						if (fe != null) {
 							sb.append(" "+params.getOperator()+" ");
 							
-							if (meta.getType() == MetaData.SELECT) {
+							if (fe instanceof Select) {
 								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
 							} else {
 								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
