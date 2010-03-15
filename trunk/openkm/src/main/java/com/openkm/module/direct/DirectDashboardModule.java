@@ -21,7 +21,6 @@
 
 package com.openkm.module.direct;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -58,6 +57,7 @@ import com.openkm.bean.Repository;
 import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
@@ -71,10 +71,7 @@ public class DirectDashboardModule implements DashboardModule {
 	private static ActivityDAO actDao = ActivityDAO.getInstance();
 	private static DashboardStatsDAO dsDao = DashboardStatsDAO.getInstance();
 	private static final int MAX_RESULTS = 20;
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLockedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLockedDocuments(" + token + ")");
@@ -98,10 +95,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLockedDocuments: " + al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserCheckedOutDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException {
 		log.debug("getUserCheckedOutDocuments(" + token + ")");
@@ -124,10 +118,7 @@ public class DirectDashboardModule implements DashboardModule {
 
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSubscribedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
 		log.debug("getUserSubscribedDocuments(" + token + ")");
@@ -152,9 +143,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSubscribedFolders(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
 		log.debug("getUserSubscribedFolders(" + token + ")");
@@ -307,9 +295,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return cal;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastUploadedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastUploadedDocuments(" + token + ")");
@@ -335,10 +320,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastUploadedDocuments: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastModifiedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastModifiedDocuments(" + token + ")");
@@ -364,10 +346,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastModifiedDocuments: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastDownloadedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
 			throws RepositoryException {
@@ -395,9 +374,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastImportedMails(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token) 
 			throws RepositoryException {
@@ -424,10 +400,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastImportedMails: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastImportedMailAttachments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token) 
 			throws RepositoryException {
@@ -551,9 +524,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserDocumentsSize(java.lang.String)
-	 */
 	@Override
 	public long getUserDocumentsSize(String token) throws RepositoryException {
 		log.info("getUserDocumentsSize(" + token + ")");
@@ -613,10 +583,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.info("getUserDocumentsSizeCached: " + usrItems.getSize());
 		return usrItems.getSize();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSearchs(java.lang.String)
-	 */
+
 	@Override
 	public Collection<String> getUserSearchs(String token) throws RepositoryException {
 		log.debug("getUserSearchs("+token+")");
@@ -644,12 +611,9 @@ public class DirectDashboardModule implements DashboardModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#find(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> find(String token, String name) 
-			throws IOException, RepositoryException {
+			throws ParseException, RepositoryException {
 		log.info("find("+token+", "+name+")");
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		
