@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget;
 
+import com.allen_sauer.gwt.log.client.DivLogger;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -57,7 +58,7 @@ public class DebugConsolePopup extends DialogBox implements ClickHandler {
 		
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(text);
-		vPanel.add(Log.getDivLogger().getWidget());
+		vPanel.add(Log.getLogger(DivLogger.class).getWidget());
 		vPanel.add(new HTML("<br>"));
 		vPanel.add(button);
 		vPanel.add(new HTML("<br>"));
@@ -84,5 +85,4 @@ public class DebugConsolePopup extends DialogBox implements ClickHandler {
 		setText(Main.i18n("debug.console.label"));
 		text.setHTML(Main.i18n("debug.enable.disable"));
 	}
-	
 }
