@@ -42,6 +42,7 @@ public class OKMWorkflowUploadServletAdmin extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(OKMWorkflowUploadServletAdmin.class);
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String token = (String) request.getSession().getAttribute("token");
 		String fileName = null;

@@ -21,23 +21,37 @@
 
 package com.openkm.backend.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.openkm.backend.client.bean.GWTActivity;
+import com.openkm.backend.client.bean.GWTButton;
+import com.openkm.backend.client.bean.GWTFolder;
+import com.openkm.backend.client.bean.GWTFormElement;
+import com.openkm.backend.client.bean.GWTInput;
+import com.openkm.backend.client.bean.GWTOption;
+import com.openkm.backend.client.bean.GWTProcessDefinition;
+import com.openkm.backend.client.bean.GWTProcessInstance;
+import com.openkm.backend.client.bean.GWTSelect;
 import com.openkm.backend.client.bean.GWTSessionInfo;
+import com.openkm.backend.client.bean.GWTStatsInfo;
+import com.openkm.backend.client.bean.GWTTextArea;
+import com.openkm.backend.client.bean.GWTUser;
 import com.openkm.bean.Folder;
-import com.openkm.bean.MetaData;
 import com.openkm.bean.SessionInfo;
 import com.openkm.bean.StatsInfo;
+import com.openkm.bean.form.Button;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.TextArea;
 import com.openkm.bean.report.admin.ReportUser;
 import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
-import com.openkm.backend.client.bean.GWTActivity;
-import com.openkm.backend.client.bean.GWTMetaData;
-import com.openkm.backend.client.bean.GWTFolder;
-import com.openkm.backend.client.bean.GWTProcessInstance;
-import com.openkm.backend.client.bean.GWTStatsInfo;
-import com.openkm.backend.client.bean.GWTUser;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.User;
-import com.openkm.backend.client.bean.GWTProcessDefinition;
 
 public class Util {
 	
@@ -59,18 +73,67 @@ public class Util {
 	}
 	
 	/**
-	 * Copy the MetaData data to GWTMetaData
+	 * Copy the FormElement data to GWTFormElement
 	 * 
-	 * @param metaData The original MetaData
-	 * @return The gwtMetaData object with data values form the original MetaData
+	 * @param formElement The original FormElement
+	 * @return The gwtFormElement object with data values form the original MetaData
 	 */
-	public static GWTMetaData copy(MetaData metaData) {
-		GWTMetaData gwtMetaData = new GWTMetaData();
-		
-		gwtMetaData.setType(metaData.getType());
-		gwtMetaData.setValues(metaData.getValues());
-		
-		return gwtMetaData;
+	public static GWTFormElement copy(FormElement formElement) {
+		if (formElement instanceof Button) {
+			GWTButton gWTButton = new GWTButton();
+			gWTButton.setLabel(formElement.getLabel());
+			gWTButton.setValue(formElement.getValue());
+			gWTButton.setWidth(formElement.getWidth());
+			gWTButton.setHeight(formElement.getHeight());
+			gWTButton.setName(((Button) formElement).getName());
+			gWTButton.setType(((Button) formElement).getType());
+			return gWTButton;
+		} else if (formElement instanceof Input) {
+			GWTInput gWTInput = new GWTInput();
+			gWTInput.setLabel(formElement.getLabel());
+			gWTInput.setValue(formElement.getValue());
+			gWTInput.setWidth(formElement.getWidth());
+			gWTInput.setHeight(formElement.getHeight());
+			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setType(((Input) formElement).getType());
+			return gWTInput;
+		} else if (formElement instanceof Select) {
+			GWTSelect gWTselect = new GWTSelect();
+			gWTselect.setLabel(formElement.getLabel());
+			gWTselect.setValue(formElement.getValue());
+			gWTselect.setWidth(formElement.getWidth());
+			gWTselect.setHeight(formElement.getHeight());
+			gWTselect.setName(((Select) formElement).getName());
+			gWTselect.setType(((Select) formElement).getType());
+			Collection<GWTOption> options = new ArrayList<GWTOption>();
+			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
+				options.add(copy(it.next()));
+			}
+			gWTselect.setOptions(options);
+			return gWTselect;
+		} else if (formElement instanceof TextArea) {
+			GWTTextArea gWTTextArea= new GWTTextArea();
+			gWTTextArea.setLabel(formElement.getLabel());
+			gWTTextArea.setValue(formElement.getValue());
+			gWTTextArea.setWidth(formElement.getWidth());
+			gWTTextArea.setHeight(formElement.getHeight());
+			gWTTextArea.setName(((TextArea) formElement).getName());
+			return gWTTextArea;
+		} else {
+			return new GWTFormElement();
+		}
+	}
+	
+	/**
+	 * Copy to Option data to  GWTOption
+	 * @param Option the original data
+	 * @return The GWTOption object with data values from original Option
+	 */
+	public static GWTOption copy(Option option) {
+		GWTOption gWTOption = new GWTOption();
+		gWTOption.setName(option.getName());
+		gWTOption.setValue(option.getValue());
+		return gWTOption;
 	}
 	
 	/**

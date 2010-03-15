@@ -24,20 +24,18 @@ package com.openkm.backend.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.backend.client.OKMException;
-import com.openkm.backend.client.bean.GWTMetaData;
+import com.openkm.backend.client.bean.GWTFormElement;
 import com.openkm.backend.client.config.ErrorCode;
 import com.openkm.backend.client.service.OKMPropertyGroupService;
-import com.openkm.bean.MetaData;
+import com.openkm.bean.form.FormElement;
 import com.openkm.core.RepositoryException;
 
 /**
@@ -53,10 +51,8 @@ import com.openkm.core.RepositoryException;
 public class OKMPropertyGroupServletAdmin extends OKMRemoteServiceServletAdmin implements OKMPropertyGroupService {
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroupServletAdmin.class);
 	private static final long serialVersionUID = 2638205115826644606L;
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.backend.client.service.OKMPropertyGroupService#getAllGroups()
-	 */
+
+	@Override
 	public List<String> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
 		List<String> groupList = new ArrayList<String>(); 
@@ -83,23 +79,20 @@ public class OKMPropertyGroupServletAdmin extends OKMRemoteServiceServletAdmin i
 		log.debug("getAllGroups: "+groupList);
 		return groupList;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.backend.client.service.OKMPropertyGroupService#getMetaData(java.lang.String)
-	 */
-	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException {
+
+	@Override
+	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException {
 		log.debug("getMetaData(" + grpName +")");
 		String token = getToken();
-		HashMap<String,MetaData> properties = new HashMap<String,MetaData>();
-		Map<String, GWTMetaData> gwtProperties = new HashMap<String, GWTMetaData>();
+		Collection<FormElement> properties = new ArrayList<FormElement>();
+		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
 
 		try {
-			properties = OKMPropertyGroup.getInstance().getMetaData(token, grpName);
-			Collection<String> col = properties.keySet();
+			properties = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, grpName);
 			
-			for (Iterator<String> it = col.iterator(); it.hasNext(); ) {
-				String key = it.next();
-				gwtProperties.put(key, Util.copy((MetaData) properties.get(key)));
+			for (Iterator<FormElement> it = properties.iterator(); it.hasNext(); ) {
+				FormElement fe = it.next();
+				gwtProperties.add(Util.copy(fe));
 			}
 			
 		} catch (IOException e) {
