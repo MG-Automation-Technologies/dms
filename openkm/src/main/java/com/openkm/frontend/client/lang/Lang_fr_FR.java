@@ -35,40 +35,40 @@ public class Lang_fr_FR {
 	public final static HashMap<String, String> lang;
 	  static {
 	    lang = new HashMap<String, String>();
-	    
+
 	    // General configuration
-	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
-	    lang.put("general.day.pattern", "dd/MM/yyyy");
-	    lang.put("general.hour.pattern", "HH:mm:ss");
+	    lang.put("general.date.pattern", "dd.MM.yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "dd.MM.yyyy");
+	    lang.put("general.hour.pattern", "hh:mm:ss");
 	    
 	    // Startup
-	    lang.put("startup.openkm", "Chargement de OpenKM");
+	    lang.put("startup.openkm", "Chargement d'OpenKM");
 	    lang.put("startup.starting.loading", "Démarrage du chargement de OpenKM");
-	    lang.put("startup.taxonomy", "Récupération du noeud racine taxinomie");
+	    lang.put("startup.taxonomy", "Récupération du nœud racine taxinomie");
+	    lang.put("startup.template", "Récupération du nœud racine modèle");
 	    lang.put("startup.categories", "Getting categories root node");
 	    lang.put("startup.thesaurus", "Récupération du noeud racine thésaurus");
-	    lang.put("startup.template", "Récupération du noeud racine modèle");
-	    lang.put("startup.personal", "Récupération du noeud racine personnel");
-	    lang.put("startup.mail", "Récupération du noeud racine courriel");
-	    lang.put("startup.trash", "Récupération du noeud racine corbeille");
-	    lang.put("startup.user.home", "Récupération du noeud accueil utilisateur");
-	    lang.put("startup.bookmarks", "Récupération signets");
-	    lang.put("startup.loading.taxonomy", "Chargement taxonomie");
-	    lang.put("startup.loading.taxonomy.getting.folders", "Chargement taxonomie - récupération dossiers");
-	    lang.put("startup.loading.taxonomy.eval.params", "Chargement taxonomie - paramètres navigateur");
-	    lang.put("startup.loading.taxonomy.open.path", "Chargement taxonomie - ouverture chemin");
-	    lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "Chargement taxonomie - récupération dossiers");
-	    lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "Chargement taxonomie - récupération documents");
-	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Chargement taxonomie - récupération courriels");
+	    lang.put("startup.personal", "Récupération du nœud racine personnel");
+	    lang.put("startup.mail", "Récupération du nœud racine courriel");
+	    lang.put("startup.trash", "Récupération du nœud racine corbeille");
+	    lang.put("startup.user.home", "Récupération du nœud accueil utilisateur");
+	    lang.put("startup.bookmarks", "Récupération des signets");
+	    lang.put("startup.loading.taxonomy", "Chargement taxinomie");
+	    lang.put("startup.loading.taxonomy.getting.folders", "Chargement taxinomie - récupération des dossiers");
+	    lang.put("startup.loading.taxonomy.eval.params", "Chargement taxinomie - paramètres du navigateur");
+	    lang.put("startup.loading.taxonomy.open.path", "Chargement taxinomie - ouverture du chemin");
+	    lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "Chargement de la taxinomie - récupération des dossiers");
+	    lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "Chargement de la taxinomie - récupération des documents");
+	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Chargement de la taxinomie - récupération des courriels");
 	    lang.put("startup.loading.personal", "Chargement personnel");
-	    lang.put("startup.loading.mail", "Chargement courriels");
+	    lang.put("startup.loading.mail", "Chargement des courriels");
 	    lang.put("startup.loading.categories", "Chargement categories");
 	    lang.put("startup.loading.thesaurus", "Chargement thésaurus");
-	    lang.put("startup.loading.templates", "Chargement modèles");
-	    lang.put("startup.loading.trash", "Chargement corbeille");
-	    lang.put("startup.loading.history.search", "Chargement historique recherche");
-	    lang.put("startup.loading.user.values", "Chargement valeurs utilisateur");
-	    lang.put("startup.loading.property.group.translations", "Chargement propriétés de groupe");
+	    lang.put("startup.loading.templates", "Chargement des modèles");
+	    lang.put("startup.loading.trash", "Chargement de la corbeille");
+	    lang.put("startup.loading.history.search", "Chargement historique de recherche");
+	    lang.put("startup.loading.user.values", "Chargement des valeurs utilisateur");
+	    lang.put("startup.loading.property.group.translations", "Chargement des propriétés de groupe");
 	    lang.put("startup.keep.alive", "Chargement surveillance");
 	    
 	    // Update notification
@@ -87,26 +87,26 @@ public class Lang_fr_FR {
 	    lang.put("leftpanel.label.all.repository", "Tous les dépôts");
 	    
 	    // Tree
-	    lang.put("tree.menu.directory.create", "Créer dossier");
+	    lang.put("tree.menu.directory.create", "Créer un dossier");
 	    lang.put("tree.menu.directory.remove", "Supprimer");
 	    lang.put("tree.menu.directory.rename", "Renommer");
 	    lang.put("tree.menu.directory.refresh", "Actualiser");
 	    lang.put("tree.menu.directory.move", "Déplacer");
 	    lang.put("tree.menu.directory.copy", "Copier");
-	    lang.put("tree.menu.directory.add.document", "Ajouter document");
-	    lang.put("tree.menu.add.bookmark", "Ajouter signet");
+	    lang.put("tree.menu.directory.add.document", "Ajouter un document");
+	    lang.put("tree.menu.add.bookmark", "Ajouter un signet");
 	    lang.put("tree.menu.set.home", "Mettre en accueil par défaut");
 	    lang.put("tree.menu.export", "Export du fichier");
-	    lang.put("tree.status.refresh.folder", "Actualiser dossier");
-	    lang.put("tree.status.refresh.create", "Créer dossier");
-	    lang.put("tree.status.refresh.delete", "Effacer dossier");
-	    lang.put("tree.status.refresh.rename", "Renommer dossier");
-	    lang.put("tree.status.refresh.restore", "Restaurer dossier");
-	    lang.put("tree.status.refresh.purge", "Vider dossier");
-	    lang.put("tree.status.refresh.get", "Actualiser dossier");
+	    lang.put("tree.status.refresh.folder", "Actualiser le dossier");
+	    lang.put("tree.status.refresh.create", "Créer un dossier");
+	    lang.put("tree.status.refresh.delete", "Supprimer le dossier");
+	    lang.put("tree.status.refresh.rename", "Renommer le dossier");
+	    lang.put("tree.status.refresh.restore", "Restaurer le dossier");
+	    lang.put("tree.status.refresh.purge", "Vider le dossier");
+	    lang.put("tree.status.refresh.get", "Actualiser le dossier");
 	    lang.put("tree.folder.new", "Nouveau dossier");
-	    lang.put("tree.status.refresh.add.subscription", "En établissant souscription");
-	    lang.put("tree.status.refresh.remove.subscription", "En éliminant souscription");
+	    lang.put("tree.status.refresh.add.subscription", "Ajouter un abonnement");
+	    lang.put("tree.status.refresh.remove.subscription", "Supprimer un abonnement");
 	    lang.put("tree.status.refresh.get.root", "Actualiser le dossier racine");
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Actualiser l'accueil utilisateur");
@@ -121,24 +121,24 @@ public class Lang_fr_FR {
 	    // General menu
 	    lang.put("general.menu.file", "Fichier");
 	    	lang.put("general.menu.file.exit", "Quitter");
-	    	lang.put("general.menu.file.purge.trash", "Vider corbeille");
+	    	lang.put("general.menu.file.purge.trash", "Vider la corbeille");
 	    lang.put("general.menu.edit", "Edition");
-			lang.put("general.menu.file.create.directory", "Créer dossier");
+			lang.put("general.menu.file.create.directory", "Créer un dossier");
 			lang.put("general.menu.file.download.document", "Télécharger le document");
 			lang.put("general.menu.file.download.document.pdf", "Télécharger le document en PDF");
 			lang.put("general.menu.file.send.link", "Envoi du document en tant que lien");
 			lang.put("general.menu.file.lock", "Verrouiller");
 			lang.put("general.menu.file.unlock", "Déverrouiller");
-			lang.put("general.menu.file.add.document", "Ajouter document");
+			lang.put("general.menu.file.add.document", "Ajouter un document");
 			lang.put("general.menu.file.checkout", "Emprunter");
 			lang.put("general.menu.file.checkin", "Restituer");
-			lang.put("general.menu.file.cancel.checkout", "Annuler emprunt");
-			lang.put("general.menu.file.delete", "Effacer");
+			lang.put("general.menu.file.cancel.checkout", "Annuler l'emprunt");
+			lang.put("general.menu.file.delete", "Supprimer");
 			lang.put("general.menu.file.refresh", "Actualiser");
 			lang.put("general.menu.file.scanner", "Scanner");
 			lang.put("general.menu.file.uploader", "File uploader");
 	    lang.put("general.menu.tools", "Outils");
-	    	lang.put("general.menu.tools.languages", "Langages");
+	    	lang.put("general.menu.tools.languages", "Langues");
 	    	lang.put("general.menu.tools.skin", "Thème");
     			lang.put("general.menu.tools.skin.default", "Normal");
     			lang.put("general.menu.tools.skin.default2", "Normal 2");
@@ -146,12 +146,12 @@ public class Lang_fr_FR {
     			lang.put("general.menu.tools.skin.bigfont", "Grande police");
     		lang.put("general.menu.debug.console", "Console d'erreur");
     		lang.put("general.menu.administration", "Montrer l'administration");
-    		lang.put("general.menu.tools.preferences", "Préférerences");
+    		lang.put("general.menu.tools.preferences", "Préférences");
     			lang.put("general.menu.tools.user.preferences", "Configuration personnelle");
     	lang.put("general.menu.bookmark", "Signets");
 	    	lang.put("general.menu.bookmark.home", "Accueil");
 	    	lang.put("general.menu.bookmark.default.home", "Mettre en accueil par défaut");
-	    	lang.put("general.menu.bookmark.edit", "Editer les signets");
+	    	lang.put("general.menu.bookmark.edit", "Éditer les signets");
 	    lang.put("general.menu.help", "Aide");
 		    lang.put("general.menu.bug.report", "Signaler un problème");
 		    lang.put("general.menu.support.request", "Demande de support");
@@ -159,12 +159,12 @@ public class Lang_fr_FR {
 		    lang.put("general.menu.project.web", "Site du projet");
 		    lang.put("general.menu.version.changes", "Notes de version");
 		    lang.put("general.menu.documentation", "Documentation");
-		    lang.put("general.menu.about", "A propos de OpenKM");
+		    lang.put("general.menu.about", "À propos d'OpenKM");
 	    lang.put("general.connected", "Utilisateur : ");
 	    
 	    // File Browser
 	    lang.put("filebrowser.name", "Nom");
-	    lang.put("filebrowser.date.update", "Date modification");
+	    lang.put("filebrowser.date.update", "Date de modification");
 	    lang.put("filebrowser.size", "Taille");
 	    lang.put("filebrowser.path", "Chemin");
 	    lang.put("filebrowser.author", "Auteur");
@@ -173,7 +173,7 @@ public class Lang_fr_FR {
 	    lang.put("filebrowser.menu.checkin", "Restituer");
 	    lang.put("filebrowser.menu.delete", "Supprimer");
 	    lang.put("filebrowser.menu.rename", "Renommer");
-	    lang.put("filebrowser.menu.checkout.cancel", "Annuler emprunt");
+	    lang.put("filebrowser.menu.checkout.cancel", "Annuler l'emprunt");
 	    lang.put("filebrowser.menu.lock", "Verrouiller");
 	    lang.put("filebrowser.menu.unlock", "Déverrouiller");
 	    lang.put("filebrowser.menu.download", "Télécharger");
@@ -181,57 +181,57 @@ public class Lang_fr_FR {
 	    lang.put("filebrowser.menu.copy", "Copier");
 	    lang.put("filebrowser.menu.create.from.template", "Créer depuis le modèle");
 	    lang.put("filebrowser.menu.add.property.group", "Ajouter une propriété de groupe");
-	    lang.put("filebrowser.menu.remove.property.group", "Enlver une propriété de groupe");
+	    lang.put("filebrowser.menu.remove.property.group", "Enlever une propriété de groupe");
 	    lang.put("filebrowser.menu.start.workflow", "Démarrer le workflow");
-	    lang.put("filebrowser.menu.add.subscription", "Ajouter une souscription");
-	    lang.put("filebrowser.menu.remove.subscription", "Éliminer une souscription");
+	    lang.put("filebrowser.menu.add.subscription", "Ajouter un abonnement");
+	    lang.put("filebrowser.menu.remove.subscription", "Éliminer un abonnement");
 	    lang.put("filebrowser.menu.add.bookmark", "Ajouter un signet");
 	    lang.put("filebrowser.menu.set.home", "Mettre en accueil par défaut");
 	    lang.put("filebrowser.menu.refresh", "Actualiser");
 	    lang.put("filebrowser.menu.export", "Export en ZIP");
 	    lang.put("filebrowser.menu.play", "Jouer");
-	    lang.put("filebrowser.menu.image.viewer", "Aperçu image");
-	    lang.put("filebrowser.status.refresh.folder", "Actualiser liste dossiers");
-	    lang.put("filebrowser.status.refresh.document", "Actualiser liste documents");
-	    lang.put("filebrowser.status.refresh.mail", "Actualiser liste courriels");
-	    lang.put("filebrowser.status.refresh.delete.folder", "Effacement dossier en cours");
-	    lang.put("filebrowser.status.refresh.delete.document", "Effacement document en cours");
-	    lang.put("filebrowser.status.refresh.checkout", "Emprunt document en cours");
-	    lang.put("filebrowser.status.refresh.lock", "Verrouillage document en cours");
-	    lang.put("filebrowser.status.refresh.unlock", "Déverrouillage document en cours");
+	    lang.put("filebrowser.menu.image.viewer", "Aperçu de l'image");
+	    lang.put("filebrowser.status.refresh.folder", "Actualiser la liste des dossiers");
+	    lang.put("filebrowser.status.refresh.document", "Actualiser la liste des documents");
+	    lang.put("filebrowser.status.refresh.mail", "Actualiser la liste des courriels");
+	    lang.put("filebrowser.status.refresh.delete.folder", "Suppression du dossier en cours");
+	    lang.put("filebrowser.status.refresh.delete.document", "Suppression du document en cours");
+	    lang.put("filebrowser.status.refresh.checkout", "Emprunt du document en cours");
+	    lang.put("filebrowser.status.refresh.lock", "Verrouillage du document en cours");
+	    lang.put("filebrowser.status.refresh.unlock", "Déverrouillage du document en cours");
 	    lang.put("filebrowser.status.refresh.document.rename", "Renommage du document");
 	    lang.put("filebrowser.status.refresh.folder.rename", "Renommage du dossier");
-	    lang.put("filebrowser.status.refresh.document.purge", "Effacement du document");
-	    lang.put("filebrowser.status.refresh.folder.purge", "Effacement du dossier");
-	    lang.put("filebrowser.status.refresh.folder.get", "Actualiser dossier");
-	    lang.put("filebrowser.status.refresh.document.get", "Actualiser du document");
-	    lang.put("filebrowser.status.refresh.add.subscription", "En établissant souscription");
-	    lang.put("filebrowser.status.refresh.remove.subscription", "En éliminant souscription");
+	    lang.put("filebrowser.status.refresh.document.purge", "Suppression du document");
+	    lang.put("filebrowser.status.refresh.folder.purge", "Suppression du dossier");
+	    lang.put("filebrowser.status.refresh.folder.get", "Actualiser le dossier");
+	    lang.put("filebrowser.status.refresh.document.get", "Actualiser le document");
+	    lang.put("filebrowser.status.refresh.add.subscription", "Ajouter un abonnement");
+	    lang.put("filebrowser.status.refresh.remove.subscription", "Supprimer un abonnement");
 	    lang.put("filebrowser.status.refresh.get.user.home", "Obtenir le dossier utilisateur");
-	    lang.put("filebrowser.status.refresh.delete.mail", "Effacer le courriel");
+	    lang.put("filebrowser.status.refresh.delete.mail", "Supprimer le courriel");
 	    lang.put("filebrowser.status.refresh.mail.purge", "Purger le courriel");
 	    
 	    // File Upload
 	    lang.put("fileupload.send", "Envoi");
 	    lang.put("fileupload.status.sending", "Téléchargement du fichier en cours...");
-	    lang.put("fileupload.status.indexing", "Indexation fichier...");
-	    lang.put("fileupload.status.ok", "Téléchargement fichier effectué");
-	    lang.put("fileupload.upload.status", "Statut téléchargement");
+	    lang.put("fileupload.status.indexing", "Indexation en cours...");
+	    lang.put("fileupload.status.ok", "Téléchargement du fichier effectué");
+	    lang.put("fileupload.upload.status", "Statut du téléchargement");
 	    lang.put("fileupload.upload.uploaded", "Téléchargé");
 	    lang.put("fileupload.upload.completed", "Téléchargement effectué");
 	    lang.put("fileupload.upload.runtime", "Temps");
 	    lang.put("fileupload.upload.remaining", "Restant");
 	    lang.put("fileupload.button.close", "Fermer");
 	    lang.put("fileupload.button.add.other.file", "Ajouter un autre document");
-	    lang.put("fileupload.status.move.file", "Déplacement fichier...");
-	    lang.put("fileupload.status.move.mail", "Déplacement courriel...");
-	    lang.put("fileupload.status.copy.file", "Copie fichier...");
-	    lang.put("fileupload.status.copy.mail", "Copie courriel...");
-	    lang.put("fileupload.status.restore.file", "Restauration fichier...");
-	    lang.put("fileupload.status.restore.mail", "Restauration courriel...");
-	    lang.put("fileupload.status.move.folder", "Déplacement dossier...");
-	    lang.put("fileupload.status.copy.folder", "Copie dossier...");
-	    lang.put("fileupload.status.restore.folder", "Restauration dossier...");
+	    lang.put("fileupload.status.move.file", "Déplacement du fichier...");
+	    lang.put("fileupload.status.move.mail", "Déplacement du courriel...");
+	    lang.put("fileupload.status.copy.file", "Copie du fichier...");
+	    lang.put("fileupload.status.copy.mail", "Copie du courriel...");
+	    lang.put("fileupload.status.restore.file", "Restauration du fichier...");
+	    lang.put("fileupload.status.restore.mail", "Restauration du courriel...");
+	    lang.put("fileupload.status.move.folder", "Déplacement du dossier...");
+	    lang.put("fileupload.status.copy.folder", "Copie du dossier...");
+	    lang.put("fileupload.status.restore.folder", "Restauration du dossier...");
 	    lang.put("fileupload.status.create.from.template", "Création du fichier depuis le modèle...");
 	    lang.put("fileupload.status.of", "de");
 	    lang.put("fileupload.label.insert", "Ajout de documents");
@@ -240,20 +240,20 @@ public class Lang_fr_FR {
 	    lang.put("fileupload.label.comment", "Commentaire");
 	    lang.put("fileupload.label.users.to.notify",  "Utilisateurs notifiés");
 	    lang.put("fileupload.label.users",  "Utilisateurs");
-	    lang.put("fileupload.label.must.select.users",  "Il doit choisir un utilisateur à notifier");
-	    lang.put("fileupload.label.importZip", "Import documents en ZIP");
+	    lang.put("fileupload.label.must.select.users",  "Il faut choisir un utilisateur à notifier");
+	    lang.put("fileupload.label.importZip", "Import de documents en ZIP");
 	    lang.put("fileupload.label.notify.comment", "Notification message");
 	    lang.put("fileupload.label.error.importing.zip", "Erreur d'importation du fichier");
-	    lang.put("fileupload.label.error.move.file", "Erreur déplacement fichier");
-	    lang.put("fileupload.label.error.move.mail", "Erreur déplacement courriel");
-	    lang.put("fileupload.label.error.copy.file", "Erreur copie fichier");
-	    lang.put("fileupload.label.error.copy.mail", "Erreur copie courriel");
-	    lang.put("fileupload.label.error.restore.file", "Erreur restauration fichier");
-	    lang.put("fileupload.label.error.restore.mail", "Erreur restauration courriel");
-	    lang.put("fileupload.label.error.move.folder", "Erreur déplacement dossier");
-	    lang.put("fileupload.label.error.copy.folder", "Erreur copie dossier");
-	    lang.put("fileupload.label.error.restore.folder", "Erreur restauration dossier");
-	    lang.put("fileupload.label.error.create.from.template", "Erreur création du fichier depuis le modèle");
+	    lang.put("fileupload.label.error.move.file", "Erreur de déplacement du fichier");
+	    lang.put("fileupload.label.error.move.mail", "Erreur de déplacement du courriel");
+	    lang.put("fileupload.label.error.copy.file", "Erreur de copie du fichier");
+	    lang.put("fileupload.label.error.copy.mail", "Erreur de copie du courriel");
+	    lang.put("fileupload.label.error.restore.file", "Erreur de restauration du fichier");
+	    lang.put("fileupload.label.error.restore.mail", "Erreur de restauration du courriel");
+	    lang.put("fileupload.label.error.move.folder", "Erreur de déplacement du dossier");
+	    lang.put("fileupload.label.error.copy.folder", "Erreur de copie du dossier");
+	    lang.put("fileupload.label.error.restore.folder", "Erreur de restauration du dossier");
+	    lang.put("fileupload.label.error.create.from.template", "Erreur de création du fichier depuis le modèle");
 	    lang.put("fileupload.label.error.not.allowed.move.folder.child", "Déplacement depuis l'origine ou dossier enfant : refusé");
 	    lang.put("fileupload.label.error.not.allowed.copy.same.folder", "Déplacement dans le dossier d'origine : refusé");
 	    lang.put("fileupload.label.error.not.allowed.create.from.template.same.folder", "Création du fichier dans le dossier d'origine : refusé");
@@ -262,7 +262,7 @@ public class Lang_fr_FR {
 	    lang.put("tab.document.properties", "Propriétés");
 	    lang.put("tab.document.notes", "Notes");
 	    lang.put("tab.document.history", "Historique");
-	    lang.put("tab.document.status.history", "Actualiser historique");
+	    lang.put("tab.document.status.history", "Actualiser l'historique");
 	    lang.put("tab.status.security.role", "Mise à jour sécurité rôles en cours");
 	    lang.put("tab.status.security.user", "Mise à jour sécurité utilisateurs en cours");
 	    lang.put("tab.document.status.group.properties", "Mise à jour propriétés de groupe");
@@ -272,7 +272,7 @@ public class Lang_fr_FR {
 	    lang.put("tab.document.status.purge.version.history", "Compacter l'historique du document");
 	    lang.put("tab.document.status.restore.version", "Restaurer la version du document");
 	    lang.put("tab.document.security", "Securité");
-	    lang.put("tab.document.preview", "Aperçu");
+	    lang.put("tab.document.preview", "Prévisualisation");
 	    lang.put("tab.folder.properties", "Propriétés");
 	    lang.put("tab.folder.security", "Securité");
 	    
@@ -296,14 +296,14 @@ public class Lang_fr_FR {
 	    lang.put("document.status.checkout", "Emprunté par");
 	    lang.put("document.status.locked", "Verrouillé par");
 	    lang.put("document.status.normal", "Disponible");
-	    lang.put("document.subscribed", "Souscrit");
+	    lang.put("document.subscribed", "Abonné");
 	    lang.put("document.subscribed.yes", "Oui");
 	    lang.put("document.subscribed.no", "Non");
 	    lang.put("document.history.size", "Taille historique");
-	    lang.put("document.subscribed.users", "Souscripteurs");
+	    lang.put("document.subscribed.users", "Abonnés");
 	    lang.put("document.url", "URL");
 	    lang.put("document.webdav", "WebDAV");
-	    lang.put("document.add.note", "Ajouter note");
+	    lang.put("document.add.note", "Ajouter une note");
 	    lang.put("document.keywords.cloud", "Mots-clés");
 	    lang.put("document.categories", "Categories");
 	    
@@ -313,10 +313,10 @@ public class Lang_fr_FR {
 	    lang.put("folder.parent", "Parent");
 	    lang.put("folder.created", "Créé");
 	    lang.put("folder.by", "par");
-	    lang.put("folder.subscribed", "Souscrit");
+	    lang.put("folder.subscribed", "Abonné");
 	    lang.put("folder.subscribed.yes", "Oui");
 	    lang.put("folder.subscribed.no", "Non");
-	    lang.put("folder.subscribed.users", "Souscripteurs");
+	    lang.put("folder.subscribed.users", "Abonnés");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -324,7 +324,7 @@ public class Lang_fr_FR {
 	    lang.put("version.created", "Date");
 	    lang.put("version.author", "Auteur");
 	    lang.put("version.size", "Taille");
-	    lang.put("version.purge.document", "Fusion historique");
+	    lang.put("version.purge.document", "Purger l'historique");
 	    lang.put("version.comment", "Commentaire");
 	    
 	    // Security
@@ -340,7 +340,7 @@ public class Lang_fr_FR {
 	    lang.put("security.recursive", "Appliquer les changements de façon recursive");
 	    
 	    // Preview
-	    lang.put("preview.unavailable", "Aperçu indisponible");
+	    lang.put("preview.unavailable", "Prévisualisation non disponible");
 
 	    // Mail
 	    lang.put("mail.from", "De");
@@ -364,18 +364,18 @@ public class Lang_fr_FR {
 	    
 	    // Confirm
 	    lang.put("confirm.label", "Confirmation");
-	    lang.put("confirm.delete.folder", "Voulez-vous vraiment effacer ce dossier ?");
-	    lang.put("confirm.delete.document", "Voulez-vous vraiment effacer ce document ?");
+	    lang.put("confirm.delete.folder", "Voulez-vous vraiment supprimer ce dossier ?");
+	    lang.put("confirm.delete.document", "Voulez-vous vraiment supprimer ce document ?");
 	    lang.put("confirm.delete.trash", "Voulez-vous vraiment vider la corbeille ?");
 	    lang.put("confirm.purge.folder", "Voulez-vous vraiment purger ce dossier ?");
 	    lang.put("confirm.purge.document", "Voulez-vous vraiment purger ce document ?");
-	    lang.put("confirm.delete.propety.group", "Voulez-vous vraiment effacer les propriétés de ce groupe ?");
-	    lang.put("confirm.purge.version.history.document", "Voulez-vous vraiment effacer l'historique ?");
+	    lang.put("confirm.delete.propety.group", "Voulez-vous vraiment supprimer les propriétés de ce groupe ?");
+	    lang.put("confirm.purge.version.history.document", "Voulez-vous vraiment supprimer l'historique ?");
 	    lang.put("confirm.purge.restore.document", "Voulez-vous vraiment restaurer la version du document ?");
 	    lang.put("confirm.set.default.home", "Voulez-vous vraiment mettre cet accueil par défaut ?");
-	    lang.put("confirm.delete.saved.search", "Voulez-vous vraiment effacer les recherches sauvegardées ?");
-	    lang.put("confirm.delete.user.news", "Voulez-vous vraiment effacer les brèves ?");
-	    lang.put("confirm.delete.mail", "Voulez-vous vraiment effacer ce courriel ?");
+	    lang.put("confirm.delete.saved.search", "Voulez-vous vraiment supprimer les recherches sauvegardées ?");
+	    lang.put("confirm.delete.user.news", "Voulez-vous vraiment supprimer les brèves ?");
+	    lang.put("confirm.delete.mail", "Voulez-vous vraiment supprimer ce courriel ?");
 	    
 	    // Search
 	    lang.put("search.context", "Contexte");
@@ -405,9 +405,9 @@ public class Lang_fr_FR {
 	    
 	    // Search results
 	    lang.put("search.result.name", "Nom");
-	    lang.put("search.result.score", "Relevance");
+	    lang.put("search.result.score", "Pertinence");
 	    lang.put("search.result.size", "Taille");
-	    lang.put("search.result.date.update", "Date modification");
+	    lang.put("search.result.date.update", "Date de modification");
 	    lang.put("search.result.author", "Auteur");
 	    lang.put("search.result.version", "Version");
 	    lang.put("search.result.path", "Chemin");
@@ -419,7 +419,7 @@ public class Lang_fr_FR {
 	    
 	    // Search saved
 	    lang.put("search.saved.run", "Démarrer");
-	    lang.put("search.saved.delete", "Effacer");
+	    lang.put("search.saved.delete", "Supprimer");
 	    lang.put("search.saved.status.getsearchs", "Actualiser les recherches sauvegardées");
 	    lang.put("search.saved.status.savesearch", "Actualiser la recherche sauvegardée");
 	    lang.put("search.saved.status.deletesearch", "Actualiser les recherches effacées");
@@ -439,7 +439,7 @@ public class Lang_fr_FR {
 	    lang.put("button.view", "Visualiser");
 	    lang.put("button.clean", "Nettoyer");
 	    lang.put("button.add", "Ajouter");
-	    lang.put("button.delete", "Effacer");
+	    lang.put("button.delete", "Supprimer");
 	    lang.put("button.copy", "Copier");
 	    lang.put("button.create", "Créer");
 	    lang.put("button.show", "Afficher");
@@ -449,14 +449,14 @@ public class Lang_fr_FR {
 	    lang.put("button.select", "Sélectionner");
 	    
 	    // Group
-	    lang.put("group.label", "Ajout propriété de group");
+	    lang.put("group.label", "Ajout propriété de groupe");
 	    lang.put("group.group", "Groupe");
 	    lang.put("group.property.group", "Propriété");
 	    
 	    // Bookmark
-	    lang.put("bookmark.label", "Ajout signet");
-	    lang.put("bookmark.name", "Name");
-	    lang.put("bookmark.edit.label", "Edition signet");
+	    lang.put("bookmark.label", "Ajout de signet");
+	    lang.put("bookmark.name", "Nom");
+	    lang.put("bookmark.edit.label", "Édition des signets");
 	    lang.put("bookmark.path", "Chemin");
 	    lang.put("bookmark.type", "Type");
 	    lang.put("bookmark.type.document", "Document");
@@ -471,9 +471,9 @@ public class Lang_fr_FR {
 	    lang.put("status.folder.copied", "Copier le dossier marqué");
 	    lang.put("status.folder.cut", "Couper le dossier marqué");
 	    lang.put("status.keep.alive.error", "Connexion au serveur perdue (surveillance)");
-	    lang.put("status.debug.enabled", "Activation déboggage");
-	    lang.put("status.debug.disabled", "Désactivation déboggage");
-	    lang.put("status.network.error.detected", "Erreur réseau détectée");
+	    lang.put("status.debug.enabled", "Activation du déboggage");
+	    lang.put("status.debug.disabled", "Désactivation du déboggage");
+	    lang.put("status.network.error.detected", "Erreur réseau detectée");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Dimanche");
@@ -497,15 +497,15 @@ public class Lang_fr_FR {
 	    lang.put("calendar.month.december", "Décembre");
 	    
 	    // Media player
-	    lang.put("media.player.label", "Media player");
+	    lang.put("media.player.label", "Lecteur multimedia");
 	    
 	    // Image viewer
-	    lang.put("image.viewer.label", "Aperçu image");
+	    lang.put("image.viewer.label", "Aperçu de l'image");
 	    lang.put("image.viewer.zoom.in", "Zoom +");
 	    lang.put("image.viewer.zoom.out", "Zoom -");
 	    
 	    // Debug console
-	    lang.put("debug.console.label", "Console déboggage");
+	    lang.put("debug.console.label", "Console de déboggage");
 	    lang.put("debug.enable.disable", "CTRL+Z pour activer ou désactiver le mode déboggage");
 
 	    // Dashboard tab
@@ -522,13 +522,13 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.user.checkout.documents", "Documents sortis");
 	    lang.put("dashboard.user.last.modified.documents", "Derniers documents modifiés");
 	    lang.put("dashboard.user.last.downloaded.documents", "Derniers documents téléchargés");
-	    lang.put("dashboard.user.subscribed.documents", "Souscription documents");
-	    lang.put("dashboard.user.subscribed.folders", "Souscription dossiers");
+	    lang.put("dashboard.user.subscribed.documents", "Abonnement à des documents");
+	    lang.put("dashboard.user.subscribed.folders", "Abonnement à des dossiers");
 	    lang.put("dashboard.user.last.uploaded.documents", "Derniers documents chargés");
 	    lang.put("dashboard.general.last.week.top.downloaded.documents", "Documents les plus vus durant la semaine");
-	    lang.put("dashboard.general.last.month.top.downloaded.documents", "Documents les plus vus durant ce mois");
+	    lang.put("dashboard.general.last.month.top.downloaded.documents", "Documents les plus vus durant le mois");
 	    lang.put("dashboard.general.last.week.top.modified.documents", "Documents modifiés les plus vus durant la semaine");
-	    lang.put("dashboard.general.last.month.top.modified.documents", "Documents modifiés les plus vus durant ce mois");
+	    lang.put("dashboard.general.last.month.top.modified.documents", "Documents modifiés les plus vus durant le mois");
 	    lang.put("dashboard.general.last.uploaded.documents", "Derniers documents chargés");
 	    lang.put("dashboard.workflow.pending.tasks", "Tâches en attente");
 	    lang.put("dashboard.workflow.task", "Tâche");
@@ -536,7 +536,7 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.workflow.task.name", "Nom");
 	    lang.put("dashboard.workflow.task.created", "Date de création");
 	    lang.put("dashboard.workflow.task.start", "Date de début");
-	    lang.put("dashboard.workflow.task.duedate", "Date dû");
+	    lang.put("dashboard.workflow.task.duedate", "Date d'échéance");
 	    lang.put("dashboard.workflow.task.end", "Date de fin");
 	    lang.put("dashboard.workflow.task.description", "Description");
 	    lang.put("dashboard.workflow.task.process.instance", "Instance");
@@ -544,7 +544,7 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.workflow.task.process.version", "Version");
 	    lang.put("dashboard.workflow.task.process.name", "Nom");
 	    lang.put("dashboard.workflow.task.process.description", "Description");
-	    lang.put("dashboard.workflow.task.process.data", "Donnée");
+	    lang.put("dashboard.workflow.task.process.data", "Données");
 	    lang.put("dashboard.workflow.task.process.definition", "Définition du processus");
 	    lang.put("dashboard.workflow.task.process.path", "Chemin");
 	    lang.put("dashboard.refreshing", "Actualiser");
@@ -554,12 +554,12 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.keyword.top", "Top");
 	    lang.put("dashboard.keyword.related", "Mots-clés connexes");
 	    lang.put("dashboard.keyword.goto.document", "Aller au document");
-	    lang.put("dashboard.keyword.clean.keywords", "Effacer les mots-clés");
-	    lang.put("dashboard.mail.last.imported.mails", "Courriels");
-	    lang.put("dashboard.mail.last.imported.attached.documents", "Pièces-jointes");
+	    lang.put("dashboard.keyword.clean.keywords", "Supprimer les mots-clés");
+	    lang.put("dashboard.mail.last.imported.mails", "Courriels importés");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Pièces jointes importées");
 	    
 	    // Workflow
-	    lang.put("workflow.label", "Démarrage workflow");
+	    lang.put("workflow.label", "Démarrage du workflow");
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "Configuration");
@@ -570,12 +570,12 @@ public class Lang_fr_FR {
 	    lang.put("user.preferences.imap.user", "Identifiant IMAP");
 	    lang.put("user.preferences.imap.user.password", "Mot de passe IMAP");
 	    lang.put("user.preferences.imap.folder", "Dossier IMAP");
-	    lang.put("user.preferences.password.error", "Erreur : mots de passe différents");
+	    lang.put("user.preferences.password.error", "Erreur: mots de passe différents");
 	    lang.put("user.preferences.user.data", "Compte utilisateur");
-	    lang.put("user.preferences.mail.data", "Compte de courriel");
-	    lang.put("user.preferences.imap.error", "Tous les champs sont obligatoires pour valider la configuration courriel");
-	    lang.put("user.preferences.imap.password.error.void", "Le mot de passe ne peut être vide pour une connexion en IMAP");
-
+	    lang.put("user.preferences.mail.data", "Compte mail");
+	    lang.put("user.preferences.imap.error", "Tous les champs sont obligatoires pour la configuration du mail");
+	    lang.put("user.preferences.imap.password.error.void", "Le mot de passe IMAP ne doit pas être vide");
+	    
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
 	    lang.put("thesaurus.tab.tree", "Tree");
@@ -599,14 +599,14 @@ public class Lang_fr_FR {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_UnLock, "Impossible de déverrouiller ce document");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "Erreur interne du dépôt");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "Erreur interne de l'application");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "Chemin du document non trouvé");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "Chemin document non trouvé");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce dossier");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemNotFound, "Il n'existe pas de document portant ce nom");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemExists, "Il existe déjà un dossier portant ce nom");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_Repository, "Erreur interne du dépôt");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_General, "Erreur interne de l'application");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "Chemin du dossier non trouvé");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "Chemin dossier non trouvé");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthServlet+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à cette item");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthServlet+ErrorCode.CAUSE_ItemNotFound, "Il n'existe pas d'élément avec ce nom");
@@ -622,7 +622,7 @@ public class Lang_fr_FR {
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "La session a été fermée");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Erreur lors de l'exécution de la requête");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Erreur générique d'exécution d'une requête");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "Le nom de la recherche enregistrée doit être unique");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "Le nom du signet doit être unique");
