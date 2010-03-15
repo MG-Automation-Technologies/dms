@@ -30,6 +30,7 @@ import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 
@@ -43,7 +44,8 @@ public interface SearchModule {
 	 * @return A collection of document which content matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByContent(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByContent(String token, String expression) throws ParseException, 
+		RepositoryException;
 
 	/**
 	 * Search for documents by document name.
@@ -53,7 +55,8 @@ public interface SearchModule {
 	 * @return A collection of document which name matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByName(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByName(String token, String expression) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Search for documents using it associated keywords.
@@ -63,7 +66,8 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByKeywords(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByKeywords(String token, String expression) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords (between others).
@@ -74,7 +78,8 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException If something fails when parsing metadata.
 	 */
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException;
+	public Collection<QueryResult> find(String token, QueryParams params) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords. 
@@ -88,7 +93,8 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException;
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
+		throws ParseException, RepositoryException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -99,7 +105,8 @@ public interface SearchModule {
 	 * @return A collection of document from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<QueryResult> findByStatement(String token, String statement, String type) throws RepositoryException;
+	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
+			throws RepositoryException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -114,7 +121,8 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, int limit) throws RepositoryException;
+	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, 
+			int limit) throws RepositoryException;
 
 	/**
 	 * Save a search for future use.
@@ -124,7 +132,8 @@ public interface SearchModule {
 	 * @param name The name of the query to be saved.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public void saveSearch(String token, QueryParams params, String name) throws ItemExistsException, RepositoryException;
+	public void saveSearch(String token, QueryParams params, String name) throws ItemExistsException,
+			RepositoryException;
 	
 	/**
 	 * Get a saved search.
@@ -163,7 +172,8 @@ public interface SearchModule {
 	 * @return The keyword map.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException;
+	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) 
+			throws RepositoryException;
 	
 	/**
 	 * Get the documents within a category
@@ -173,5 +183,6 @@ public interface SearchModule {
 	 * @return A Collection of documents in the category
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException;
+	public Collection<Document> getCategorizedDocuments(String token, String categoryId) 
+			throws RepositoryException;
 }

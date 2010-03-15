@@ -26,11 +26,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.openkm.bean.MetaData;
+import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 
@@ -131,17 +132,6 @@ public interface PropertyGroupModule {
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public HashMap<String, MetaData> getMetaData(String token, String grpName) throws IOException, 
-		RepositoryException;
-	
-	/**
-	 * Get all group property translations.
-	 * 
-	 * @param token The session authorization token.
-	 * @param lang The language translations.
-	 * @throws IOException If there is any problem reading the translations.
-	 * @throws RepositoryException If there is any general repository problem.
-	 */
-	public HashMap<String, String> getTranslations(String token, String lang) throws IOException, 
-		RepositoryException;
+	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+		IOException, RepositoryException;
 }
