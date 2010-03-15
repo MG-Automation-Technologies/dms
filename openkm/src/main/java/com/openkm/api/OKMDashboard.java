@@ -21,7 +21,6 @@
 
 package com.openkm.api;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -31,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.DashboardStatsDocumentResult;
 import com.openkm.bean.DashboardStatsFolderResult;
 import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.DashboardModule;
 import com.openkm.module.ModuleManager;
@@ -48,10 +48,7 @@ public class OKMDashboard implements DashboardModule {
 	public static OKMDashboard getInstance() {
 		return instance;
 	}
-		
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserCheckedOutDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token)
 			throws RepositoryException {
@@ -62,9 +59,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastModifiedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token)
 			throws RepositoryException {
@@ -75,9 +69,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLockedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token)
 			throws RepositoryException {
@@ -88,9 +79,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSubscribedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token)
 			throws RepositoryException {
@@ -101,9 +89,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSubscribedFolders(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token)
 			throws RepositoryException {
@@ -113,10 +98,7 @@ public class OKMDashboard implements DashboardModule {
 		log.debug("getUserSubscribedFolders: "+result);
 		return result;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastUploadedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token)
 			throws RepositoryException {
@@ -127,9 +109,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastDownloadedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
 			throws RepositoryException {
@@ -140,9 +119,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastImportedMails(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token)
 			throws RepositoryException {
@@ -153,9 +129,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserLastImportedMailAttachments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token)
 			throws RepositoryException {
@@ -166,9 +139,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserDocumentsSize(java.lang.String)
-	 */
 	@Override
 	public long getUserDocumentsSize(String token) throws RepositoryException {
 		log.debug("getUserDocumentsSize(" + token + ")");
@@ -178,9 +148,6 @@ public class OKMDashboard implements DashboardModule {
 		return size;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getUserSearchs(java.lang.String)
-	 */
 	@Override
 	public Collection<String> getUserSearchs(String token)
 			throws RepositoryException {
@@ -190,13 +157,10 @@ public class OKMDashboard implements DashboardModule {
 		log.debug("getUserSearchs: "+searchs);
 		return searchs;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#find(java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> find(String token, String name)
-			throws IOException, RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("find(" + token + ")");
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		Collection<DashboardStatsDocumentResult> documents = dm.find(token, name);
@@ -204,9 +168,6 @@ public class OKMDashboard implements DashboardModule {
 		return documents;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastWeekTopDownloadedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token)
 			throws RepositoryException {
@@ -216,10 +177,7 @@ public class OKMDashboard implements DashboardModule {
 		log.debug("getLastWeekTopDownloadedDocuments: "+result);
 		return result;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastMonthTopDownloadedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token)
 			throws RepositoryException {
@@ -229,10 +187,7 @@ public class OKMDashboard implements DashboardModule {
 		log.debug("getLastMonthTopDownloadedDocuments: "+result);
 		return result;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastWeekTopModifiedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token)
 			throws RepositoryException {
@@ -243,9 +198,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastMonthTopModifiedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token)
 			throws RepositoryException {
@@ -256,9 +208,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastModifiedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
 			throws RepositoryException {
@@ -269,9 +218,6 @@ public class OKMDashboard implements DashboardModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#getLastUploadedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token)
 			throws RepositoryException {
@@ -281,10 +227,7 @@ public class OKMDashboard implements DashboardModule {
 		log.debug("getLastUploadedDocuments: "+result);
 		return result;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.DashboardModule#visiteNode(java.lang.String, java.lang.String, java.lang.String, java.util.Calendar)
-	 */
+
 	@Override
 	public void visiteNode(String token, String source, String node, Calendar date)
 			throws RepositoryException {
