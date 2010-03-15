@@ -77,6 +77,7 @@ public class OKMReportServletAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(OKMReportServletAdmin.class);
 	
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("doGet >>>");
         Collection col = null;
