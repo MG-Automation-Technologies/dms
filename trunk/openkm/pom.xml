@@ -46,13 +46,13 @@
   </developers>
 
   <properties>
-    <!-- convenience to define GWT version in one place -->
+    <!-- Using this GWT version -->
     <gwt.version>2.0.3</gwt.version>
-    
+
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.1</jcr.version>
 
-    <!--  tell the compiler we can use 1.6 -->
+    <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
   </properties>
 
@@ -110,7 +110,7 @@
       <version>1.2.14</version>
       <scope>test</scope>
     </dependency>
-    
+
     <!--  Provided libraries -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -124,7 +124,7 @@
       <version>1.4.1</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
