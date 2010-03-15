@@ -46,13 +46,13 @@
   </developers>
 
   <properties>
-    <!-- Using this GWT version -->
-    <gwt.version>2.0.0</gwt.version>
-
+    <!-- convenience to define GWT version in one place -->
+    <gwt.version>2.0.3</gwt.version>
+    
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.1</jcr.version>
 
-    <!-- Tell the compiler we can use 1.6 -->
+    <!--  tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
   </properties>
 
@@ -110,7 +110,7 @@
       <version>1.2.14</version>
       <scope>test</scope>
     </dependency>
-
+    
     <!--  Provided libraries -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -124,7 +124,7 @@
       <version>1.4.1</version>
       <scope>provided</scope>
     </dependency>
-
+    
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -283,6 +283,12 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- GWT Maven plugin -->
     <dependency>
@@ -300,12 +306,12 @@
     <dependency>
       <groupId>com.google.code.gwt-log</groupId>
       <artifactId>gwt-log</artifactId>
-      <version>2.6.2</version>
+      <version>3.0.1</version>
     </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>20091216-r1739</version>
+      <version>20100204-r1747</version>
     </dependency>
 
     <!-- KEA -->
