@@ -62,7 +62,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	public void addGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("addGroup("+token+", "+docPath+", "+grpName+")");
+		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		
 		try {
@@ -105,7 +105,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	public void removeGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException,
 			RepositoryException {
-		log.debug("removeGroup("+token+", "+docPath+", "+grpName+")");
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		
 		try {
@@ -139,7 +139,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public Collection<String> getGroups(String token, String docPath)
 			throws PathNotFoundException, RepositoryException {
-		log.debug("getGroups("+token+", "+docPath+")");
+		log.debug("getGroups({} ,{})", token, docPath);
 		ArrayList<String> ret = new ArrayList<String>();
 		
 		try {
@@ -166,7 +166,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public Collection<String> getAllGroups(String token) throws RepositoryException {
-		log.debug("getAllGroups("+token+")");
+		log.debug("getAllGroups({})", token);
 		ArrayList<String> ret = new ArrayList<String>();
 		
 		try {
@@ -192,7 +192,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
-		log.debug("getProperties("+token+", "+grpName+")");
+		log.debug("getProperties({}, {})", token, grpName);
 		HashMap<String, String[]> ret = new HashMap<String, String[]>();
 		
 		try {
@@ -240,7 +240,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 		
-		log.debug("getProperties: "+ret);
+		log.debug("getProperties: {}", ret);
 		return ret;
 	}
 
@@ -248,7 +248,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
-		log.debug("setProperties("+token+", "+docPath+", "+properties+")");
+		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
 		
 		try {
