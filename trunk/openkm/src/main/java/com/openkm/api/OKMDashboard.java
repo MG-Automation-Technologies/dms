@@ -21,6 +21,7 @@
 
 package com.openkm.api;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -160,7 +161,7 @@ public class OKMDashboard implements DashboardModule {
 
 	@Override
 	public Collection<DashboardStatsDocumentResult> find(String token, String name)
-			throws ParseException, RepositoryException {
+			throws IOException, ParseException, RepositoryException {
 		log.debug("find(" + token + ")");
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		Collection<DashboardStatsDocumentResult> documents = dm.find(token, name);
