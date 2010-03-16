@@ -2,12 +2,11 @@
 <okg = 'http://www.openkm.org/group/1.0'>
 <okp = 'http://www.openkm.org/group/property/1.0'>
 
-[okg:tecnologia] mixin
-- okp:tecnologia.tipo (string) = '' multiple autocreated
-- okp:tecnologia.lenguaje (string) = '' autocreated
-- okp:tecnologia.descripcion (string) = '' autocreated
-- okp:tecnologia.comentario (string) = '' autocreated
+[okg:consulting] mixin
+- okp:consulting.name (string) = '' autocreated
+- okp:consulting.comment (string) = '' autocreated
 
-[okg:consultoria] mixin
-- okp:consultoria.tipo (string) = '' autocreated
-- okp:consultoria.comentario (string) = '' autocreated
+[okg:technology] mixin
+- okp:technology.language (string) = '' autocreated
+- okp:technology.comment (string) = '' autocreated
+- okp:technology.description (string) = '' autocreated
