@@ -6,7 +6,7 @@
 <%@ page import="javax.jcr.Session" %>
 <%@ page import="com.openkm.util.UserActivity"%>
 <%@ page import="com.openkm.api.OKMPropertyGroup"%>
-<%@ page import="com.openkm.bean.MetaData"%>
+<%@ page import="com.openkm.bean.form.FormElement"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager"%>
 <%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
@@ -43,12 +43,11 @@
 			String pGroup = itGrp.next();
 			out.println("<tr class=\"fuzzy\"><td colspan=\"2\" align=\"center\"><b>"+pGroup+"</b></td></tr>");
 			
-			HashMap<String, MetaData> mData =  okmPG.getMetaData(token, pGroup);
+			Collection<FormElement> mData =  okmPG.getPropertyGroupForm(token, pGroup);
 			int i = 0;
-			for (Iterator<String> itMD = mData.keySet().iterator(); itMD.hasNext(); ) {
-				String key = itMD.next();
-				MetaData value = mData.get(key);
-				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+key+"</td><td>"+value+"</td></tr>");
+			for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
+				FormElement fe = itMD.next();
+				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+fe.getName()+"</td><td>"+fe.getValue()+"</td></tr>");
 			}
 		}
 		
