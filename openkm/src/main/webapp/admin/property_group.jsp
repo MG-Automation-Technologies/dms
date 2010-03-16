@@ -51,8 +51,10 @@
 			for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
 				PropertyGroup pg = it.next();
 				if (pg.getName().equals(pGroup)) {
-					out.println("<tr class=\"fuzzy\"><td colspan=\"3\"><b>"+pg.getLabel()+"</b></td>");
-					out.println("<td colspan=\"4\"><b>"+pg.getName()+"</b></td></tr>");
+					out.println("<tr class=\"fuzzy\">");
+					out.println("<td colspan=\"3\" align=\"center\"><b>"+pg.getLabel()+"</b></td>");
+					out.println("<td colspan=\"4\" align=\"center\"><b>"+pg.getName()+"</b></td>");
+					out.println("</tr>");
 				}
 			}
 			
