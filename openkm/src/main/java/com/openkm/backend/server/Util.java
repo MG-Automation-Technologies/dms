@@ -33,12 +33,14 @@ import com.openkm.backend.client.bean.GWTInput;
 import com.openkm.backend.client.bean.GWTOption;
 import com.openkm.backend.client.bean.GWTProcessDefinition;
 import com.openkm.backend.client.bean.GWTProcessInstance;
+import com.openkm.backend.client.bean.GWTPropertyGroup;
 import com.openkm.backend.client.bean.GWTSelect;
 import com.openkm.backend.client.bean.GWTSessionInfo;
 import com.openkm.backend.client.bean.GWTStatsInfo;
 import com.openkm.backend.client.bean.GWTTextArea;
 import com.openkm.backend.client.bean.GWTUser;
 import com.openkm.bean.Folder;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.SessionInfo;
 import com.openkm.bean.StatsInfo;
 import com.openkm.bean.form.Button;
@@ -70,6 +72,21 @@ public class Util {
 		gWTSessionInfo.setToken(token);
 		
 		return gWTSessionInfo;
+	}
+	
+	/**
+	 * Copy the PropertyGroup object to GWTPropertyGroup
+	 * 
+	 * @param pGroup The original PropertyGroup
+	 * @return The gwtPRopertyGroup object with data values from original PropertyGroup
+	 */
+	public static GWTPropertyGroup copy(PropertyGroup pGroup) {
+		GWTPropertyGroup gWTPropertyGroup = new GWTPropertyGroup();
+		
+		gWTPropertyGroup.setLabel(pGroup.getLabel());
+		gWTPropertyGroup.setName(pGroup.getName());
+		
+		return gWTPropertyGroup;
 	}
 	
 	/**
