@@ -286,7 +286,7 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					Map<String, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
+					Map<PropertyGroup, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
@@ -361,7 +361,7 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					Map<String, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
+					Map<PropertyGroup, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
