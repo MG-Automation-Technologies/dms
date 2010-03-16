@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT forms (form+)>
+<!ELEMENT property-groups (property-group+)>
 
-<!ELEMENT form (input|textarea|select)*>
-<!ATTLIST form
-	group CDATA #REQUIRED
+<!ELEMENT property-group (input|textarea|select)*>
+<!ATTLIST property-group
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
 >
 
 <!ELEMENT input EMPTY>
