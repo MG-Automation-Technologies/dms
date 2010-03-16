@@ -29,6 +29,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.LockException;
@@ -58,7 +59,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	public void addGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("addGroup(" + token + ", " + docPath + ", " + grpName + ")");
+		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.addGroup(token, docPath, grpName);
 		log.debug("addGroup: void");
@@ -68,27 +69,28 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	public void removeGroup(String token, String docPath, String grpName)
 			throws NoSuchGroupException, LockException, PathNotFoundException, 
 			RepositoryException {
-		log.debug("removeGroup(" + token + ", " + docPath + ", " + grpName + ")");
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.removeGroup(token, docPath, grpName);
 		log.debug("removeGroup: void");
 	}
 
 	@Override
-	public Collection<String> getGroups(String token, String docPath)
-			throws PathNotFoundException, RepositoryException {
-		log.debug("getGroups(" + token + ", " + docPath + ")");
+	public Collection<PropertyGroup> getGroups(String token, String docPath)
+			throws IOException, ParseException, PathNotFoundException, RepositoryException {
+		log.debug("getGroups({}, {})", token, docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Collection<String> ret = cm.getGroups(token, docPath);
-		log.debug("getGroups: "+ret);
+		Collection<PropertyGroup> ret = cm.getGroups(token, docPath);
+		log.debug("getGroups: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<String> getAllGroups(String token) throws RepositoryException {
-		log.debug("getAllGroups(" + token + ")");
+	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+			RepositoryException {
+		log.debug("getAllGroups({})", token);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Collection<String> ret = cm.getAllGroups(token);
+		Collection<PropertyGroup> ret = cm.getAllGroups(token);
 		log.debug("getAllGroups: "+ret);
 		return ret;
 	}
@@ -96,10 +98,10 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
-		log.debug("getProperties(" + token + ", " + docPath + ", " + grpName + ")");
+		log.debug("getProperties({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		HashMap<String, String[]> ret = cm.getProperties(token, docPath, grpName);
-		log.debug("getProperties: "+ret);
+		log.debug("getProperties: {}", ret);
 		return ret;
 	}
 
@@ -107,7 +109,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
-		log.debug("setProperties(" + token + ", " + docPath + ", " + properties + ")");
+		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.setProperties(token, docPath, grpName, properties);
 		log.debug("setProperties: void");
