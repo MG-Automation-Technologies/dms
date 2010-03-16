@@ -4,10 +4,10 @@
 <okm = 'http://www.openkm.org/1.0'>
 
 [mix:accessControlled] mixin
-- okm:authUsersRead (string) multiple mandatory 
-- okm:authUsersWrite (string) multiple mandatory 
-- okm:authRolesRead (string) multiple mandatory 
-- okm:authRolesWrite (string) multiple mandatory 
+- okm:authUsersRead (string) multiple mandatory
+- okm:authUsersWrite (string) multiple mandatory
+- okm:authRolesRead (string) multiple mandatory
+- okm:authRolesWrite (string) multiple mandatory
 
 [mix:notification] mixin
 - okm:subscriptors (string) = '' multiple autocreated
