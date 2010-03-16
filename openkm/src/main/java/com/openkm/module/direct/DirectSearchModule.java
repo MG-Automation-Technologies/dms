@@ -85,8 +85,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws ParseException,
-			RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
+			ParseException, RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
@@ -101,7 +101,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws ParseException, 
+	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
 			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 
@@ -117,8 +117,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws ParseException, 
-			RepositoryException {
+	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
+			ParseException,	RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
@@ -133,7 +133,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QuestionParams)
 	 */
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws ParseException, 
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException, 
 			RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
@@ -146,7 +146,7 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	@Override
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-			throws ParseException, RepositoryException {
+			throws IOException, ParseException, RepositoryException {
 		log.debug("findPaginated(" + token + ", " + params + ")");
 		String query = prepareStatement(params);
 		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
@@ -189,7 +189,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String prepareStatement(QueryParams params) throws ParseException {
+	public String prepareStatement(QueryParams params) throws IOException, ParseException {
 		log.info("prepareStatement("+params+")");
 		StringBuffer sb = new StringBuffer();
 		

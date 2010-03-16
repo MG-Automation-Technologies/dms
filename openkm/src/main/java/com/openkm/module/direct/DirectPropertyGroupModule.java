@@ -297,8 +297,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException, 
-			IOException, RepositoryException {
+	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
+			ParseException, RepositoryException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		Collection<FormElement> ret = new ArrayList<FormElement>();
 		
