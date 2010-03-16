@@ -20,6 +20,7 @@ import com.openkm.api.OKMRepository;
 import com.openkm.api.OKMSearch;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.core.SessionManager;
@@ -45,7 +46,7 @@ public class PropertyGroupTest {
 		Session session = SessionManager.getInstance().get(token);
 		FileInputStream fis = new FileInputStream("test_property_groups/my_groups.cnd");
 		DirectRepositoryModule.registerCustomNodeTypes(session, fis);
-		Collection<String> grps = OKMPropertyGroup.getInstance().getAllGroups(token);
+		Collection<PropertyGroup> grps = OKMPropertyGroup.getInstance().getAllGroups(token);
 		log.info("Registered groups: "+grps);
 		
 		log.info("Groups assigned to document: "+OKMPropertyGroup.getInstance().getGroups(token, doc.getPath()));
