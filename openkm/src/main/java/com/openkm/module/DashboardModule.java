@@ -131,7 +131,7 @@ public interface DashboardModule {
 	 * @throws RepositoryException
 	 */
 	public Collection<DashboardStatsDocumentResult> find(String token, String name)
-			throws ParseException, RepositoryException;
+			throws IOException, ParseException, RepositoryException;
 		
 	/**
 	 * @param token

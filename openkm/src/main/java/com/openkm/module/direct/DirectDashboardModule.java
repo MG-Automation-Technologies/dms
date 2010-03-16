@@ -21,6 +21,7 @@
 
 package com.openkm.module.direct;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -613,7 +614,7 @@ public class DirectDashboardModule implements DashboardModule {
 
 	@Override
 	public Collection<DashboardStatsDocumentResult> find(String token, String name) 
-			throws ParseException, RepositoryException {
+			throws IOException, ParseException, RepositoryException {
 		log.info("find("+token+", "+name+")");
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		
