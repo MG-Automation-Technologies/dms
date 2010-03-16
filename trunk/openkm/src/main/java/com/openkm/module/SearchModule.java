@@ -44,8 +44,8 @@ public interface SearchModule {
 	 * @return A collection of document which content matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByContent(String token, String expression) throws ParseException, 
-		RepositoryException;
+	public Collection<QueryResult> findByContent(String token, String expression) throws IOException,
+			ParseException,	RepositoryException;
 
 	/**
 	 * Search for documents by document name.
@@ -55,8 +55,8 @@ public interface SearchModule {
 	 * @return A collection of document which name matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByName(String token, String expression) throws ParseException,
-			RepositoryException;
+	public Collection<QueryResult> findByName(String token, String expression) throws IOException,
+			ParseException,	RepositoryException;
 
 	/**
 	 * Search for documents using it associated keywords.
@@ -66,8 +66,8 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByKeywords(String token, String expression) throws ParseException,
-			RepositoryException;
+	public Collection<QueryResult> findByKeywords(String token, String expression) throws IOException,
+			ParseException,	RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords (between others).
@@ -78,8 +78,8 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException If something fails when parsing metadata.
 	 */
-	public Collection<QueryResult> find(String token, QueryParams params) throws ParseException,
-			RepositoryException;
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException,
+			ParseException, RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords. 
@@ -94,7 +94,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-		throws ParseException, RepositoryException;
+		throws IOException, ParseException, RepositoryException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
