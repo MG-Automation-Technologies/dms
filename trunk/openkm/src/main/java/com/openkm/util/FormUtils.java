@@ -91,10 +91,12 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static Map<String, Collection<FormElement>> parsePropertyGroupsForms() throws ParseException {
-		log.debug("parseMetadataForms()");
+	public static Map<String, Collection<FormElement>> parsePropertyGroupsForms() throws IOException, 
+			ParseException {
+		log.info("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
+		log.info("PropertyGroupForms: {}", pgFile);
 		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
 		FileInputStream fis = null;
 		
@@ -128,12 +130,12 @@ public class FormUtils {
 		} catch (SAXException e) {
 			throw new ParseException(e.getMessage());
 		} catch (IOException e) {
-			throw new ParseException(e.getCause());
+			throw e;
 		} finally {
 			IOUtils.closeQuietly(fis);
 		}
 
-		log.debug("parseMetadataForms: {}", forms);
+		log.info("parseMetadataForms: {}", forms);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
 	}
