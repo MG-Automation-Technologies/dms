@@ -1,12 +1,14 @@
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.FileInputStream" %>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="javax.jcr.Session" %>
+<%@ page import="com.openkm.util.FormUtils"%>
 <%@ page import="com.openkm.util.UserActivity"%>
 <%@ page import="com.openkm.api.OKMPropertyGroup"%>
 <%@ page import="com.openkm.bean.form.FormElement"%>
+<%@ page import="com.openkm.bean.PropertyGroup"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager"%>
 <%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
@@ -33,17 +35,23 @@
 		}
 		
 		out.println("<h1>Property groups</h1>");
-		out.println("<table class=\"results\" width=\"70%\">");
-		out.println("<tr><th colspan=\"2\">Property group name</th></tr>");
+		out.println("<table class=\"results\" width=\"40%\">");
+		out.println("<tr><th>Property group label</th><th>Property group name</th></tr>");
 		out.println("<tr><th>Property name</th><th>Property metadata</th></tr>");
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
-	
+		Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+		
 		Collection<String> pGroups = okmPG.getAllGroups(token);
 		for (Iterator<String> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
 			String pGroup = itGrp.next();
-			out.println("<tr class=\"fuzzy\"><td colspan=\"2\" align=\"center\"><b>"+pGroup+"</b></td></tr>");
+			for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
+				PropertyGroup pg = it.next();
+				if (pg.getName().equals(pGroup)) {
+					out.println("<tr class=\"fuzzy\"><td><b>"+pg.getLabel()+"</b></td><td><b>"+pg.getName()+"</b></td></tr>");
+				}
+			}
 			
-			Collection<FormElement> mData =  okmPG.getPropertyGroupForm(token, pGroup);
+			Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup);
 			int i = 0;
 			for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
 				FormElement fe = itMD.next();
