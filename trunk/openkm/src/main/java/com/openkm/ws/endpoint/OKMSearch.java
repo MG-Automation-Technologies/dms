@@ -21,6 +21,7 @@
 
 package com.openkm.ws.endpoint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -61,7 +62,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByContent(String token, String words) throws ParseException, 
+	public QueryResultArray findByContent(String token, String words) throws IOException, ParseException, 
 			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
@@ -75,7 +76,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByName(String token, String words) throws ParseException,
+	public QueryResultArray findByName(String token, String words) throws IOException, ParseException,
 			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
@@ -89,7 +90,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(String token, String words)throws ParseException,
+	public QueryResultArray findByKeywords(String token, String words) throws IOException, ParseException,
 			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
@@ -117,7 +118,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
 	 */
-	public QueryResultArray find(String token, QueryParams params) throws ParseException,
+	public QueryResultArray find(String token, QueryParams params) throws IOException, ParseException,
 			RepositoryException {
 		log.debug("find({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();

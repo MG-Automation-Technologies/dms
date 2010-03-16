@@ -21,6 +21,7 @@
 
 package com.openkm.api;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -53,8 +54,8 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws ParseException,
-			RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
+			ParseException,	RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByContent(token, words);
@@ -63,7 +64,7 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws ParseException,
+	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException,
 			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
@@ -73,8 +74,8 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws ParseException,
-			RepositoryException {
+	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
+			ParseException, RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByKeywords(token, words);
@@ -83,7 +84,7 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws ParseException,
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
 			RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
@@ -94,7 +95,7 @@ public class OKMSearch implements SearchModule {
 
 	@Override
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-			throws ParseException, RepositoryException {
+			throws IOException, ParseException, RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		ResultSet rs = sm.findPaginated(token, params, offset, limit);

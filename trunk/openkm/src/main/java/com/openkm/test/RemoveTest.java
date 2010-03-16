@@ -1,6 +1,7 @@
 package com.openkm.test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -212,9 +213,8 @@ public class RemoveTest {
 
 	/**
 	 * Lista los documentos que hay borrados y sin borrar 
-	 * @throws ParseException 
 	 */
-	private void listDocs(String token) throws AccessDeniedException, ParseException, RepositoryException {
+	private void listDocs(String token) throws AccessDeniedException, IOException, ParseException, RepositoryException {
 		System.out.println("\nDocumentos buenos...");
 		for (Iterator<QueryResult> it = OKMSearch.getInstance().findByContent(token, "*").iterator(); it.hasNext(); ) {
 			Document doc = it.next().getDocument();
