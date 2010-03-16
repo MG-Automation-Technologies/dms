@@ -9,6 +9,10 @@
 <%@ page import="com.openkm.api.OKMPropertyGroup"%>
 <%@ page import="com.openkm.bean.form.FormElement"%>
 <%@ page import="com.openkm.bean.PropertyGroup"%>
+<%@ page import="com.openkm.bean.form.Input"%>
+<%@ page import="com.openkm.bean.form.Button"%>
+<%@ page import="com.openkm.bean.form.Select"%>
+<%@ page import="com.openkm.bean.form.TextArea"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager"%>
 <%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
@@ -35,9 +39,9 @@
 		}
 		
 		out.println("<h1>Property groups</h1>");
-		out.println("<table class=\"results\" width=\"40%\">");
-		out.println("<tr><th>Property group label</th><th>Property group name</th></tr>");
-		out.println("<tr><th>Property name</th><th>Property metadata</th></tr>");
+		out.println("<table class=\"results\" width=\"80%\">");
+		out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
+		out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
 		Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 		
@@ -47,7 +51,8 @@
 			for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
 				PropertyGroup pg = it.next();
 				if (pg.getName().equals(pGroup)) {
-					out.println("<tr class=\"fuzzy\"><td><b>"+pg.getLabel()+"</b></td><td><b>"+pg.getName()+"</b></td></tr>");
+					out.println("<tr class=\"fuzzy\"><td colspan=\"3\"><b>"+pg.getLabel()+"</b></td>");
+					out.println("<td colspan=\"4\"><b>"+pg.getName()+"</b></td></tr>");
 				}
 			}
 			
@@ -55,13 +60,38 @@
 			int i = 0;
 			for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
 				FormElement fe = itMD.next();
-				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+fe.getName()+"</td><td>"+fe.getValue()+"</td></tr>");
+				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
+				out.print("<td>"+fe.getLabel()+"</td>");
+				out.print("<td>"+fe.getName()+"</td>");
+				out.print("<td>"+fe.getValue()+"</td>");
+				out.print("<td>"+fe.getWidth()+"</td>");
+				out.print("<td>"+fe.getHeight()+"</td>");
+				
+				if (fe instanceof Input) {
+					Input input = (Input) fe;
+					out.print("<td>Input</td>");
+					out.print("<td><i>Type:</i> "+input.getType()+"</td>");
+				} else if (fe instanceof TextArea) {
+					TextArea textArea = (TextArea) fe;
+					out.print("<td>TextArea</td>");
+					out.print("<td></td>");
+				} else if (fe instanceof Select) {
+					Select select = (Select) fe;
+					out.print("<td>Select</td>");
+					out.print("<td><i>Type:</i> "+select.getType()+", ");
+					out.print("<i>Options:</i> "+select.getOptions()+"</td>");
+				} else if (fe instanceof Button) {
+					Button button = (Button) fe;
+					out.print("<td>Button</td>");
+					out.print("<td><i>Type:</i> "+button.getType()+"</td>");
+				}
+				out.println("</tr>");
 			}
 		}
 		
 		out.println("</table>");
 		out.println("<hr>");
-		out.println("<center><h2>Register property group</h2></center>");
+		out.println("<h2><center>Register property group</center></h2>");
 		out.println("<form action=\"property_group.jsp\">");
 		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr><td>");
