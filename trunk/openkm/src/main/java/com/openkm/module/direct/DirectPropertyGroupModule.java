@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -184,7 +185,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 		
-		log.debug("getAllGroups: "+ret);
+		log.debug("getAllGroups: {}", ret);
 		return ret;
 	}
 
@@ -307,14 +308,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			/*NodeType nt =*/ ntm.getNodeType(grpName);
 			//PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-			Map<String, Collection<FormElement>> md = FormUtils.parsePropertyGroupsForms();
-			ret = md.get(grpName);
+			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+			for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
+				PropertyGroup pg = it.next();
+				if (pg.getName().equals(grpName)) {
+					ret = pgf.get(pg);
+				}
+			}
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		}
 		
-		log.debug("getPropertyGroupForm: {}", ret);
+		log.info("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
 }
