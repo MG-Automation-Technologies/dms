@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD 1.0//EN"
+<!DOCTYPE property-groups PUBLIC "-//OpenKM//Property Groups DTD 1.0//EN"
                                  "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/property-groups-1.0.dtd">
 <property-groups>
-  <property-group label="Consultoría" name="okg:consultoria">
-    <input label="Name" type="text" name="name" value="Joel" />
-    <textarea label="Comment" name="okp:consultoria.comentario" value=""/>
+  <property-group label="Consulting" name="okg:consulting">
+    <input label="Name" type="text" name="okp:consulting.name" value="Joel" />
+    <textarea label="Comment" name="okp:consulting.comment" value=""/>
   </property-group>
-  <property-group label="Technology" name="okg:tecnologia">
-    <select label="Language" name="okp:tecnologia.lenguaje" type="simple">
+  <property-group label="Technology" name="okg:technology">
+    <select label="Language" name="okp:technology.language" type="simple">
       <option name="Java" value="java" selected="true" />
       <option name="Python" value="python" />
       <option name="PHP" value="php" />
     </select>
-    <input label="Description" name="okp:tecnologia.descripcion" value="10"/>
+    <input label="Comment" name="okp:consulting.comment" value="10"/>
+    <textarea label="Description" name="okp:technology.description" value=""/>
   </property-group>
 </property-groups>
