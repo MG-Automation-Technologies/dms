@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.LockException;
@@ -79,8 +80,8 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<String> getGroups(String token, String docPath) throws 
-		PathNotFoundException, RepositoryException;
+	public Collection<PropertyGroup> getGroups(String token, String docPath) throws 
+		IOException, ParseException, PathNotFoundException, RepositoryException;
 
 	/**
 	 * Get all groups defined in the system.
@@ -88,7 +89,8 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<String> getAllGroups(String token) throws RepositoryException;
+	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+		RepositoryException;
 
 	/**
 	 * Get all properties defined in a document by group.
