@@ -137,19 +137,26 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<String> getGroups(String token, String docPath)
-			throws PathNotFoundException, RepositoryException {
+	public Collection<PropertyGroup> getGroups(String token, String docPath)
+			throws IOException, ParseException, PathNotFoundException, RepositoryException {
 		log.debug("getGroups({} ,{})", token, docPath);
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
+			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			for (int i=0; i<nt.length; i++) {
 				if (nt[i].getName().startsWith(PropertyGroup.GROUP+":")) {
-					ret.add(nt[i].getName());
+					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
+						PropertyGroup pg = it.next();
+						
+						if (pg.getName().equals(nt[i].getName())) {
+							ret.add(pg);
+						}
+					}
 				}
 			}
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -160,24 +167,32 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 		
-		log.debug("getGroups: "+ret);
+		log.debug("getGroups: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<String> getAllGroups(String token) throws RepositoryException {
+	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+			RepositoryException {
 		log.debug("getAllGroups({})", token);
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
+			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
 				NodeType nt = nti.nextNodeType();
 				
 				if (nt.getName().startsWith(PropertyGroup.GROUP+":")) {
-					ret.add(nt.getName());
+					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
+						PropertyGroup pg = it.next();
+						
+						if (pg.getName().equals(nt.getName())) {
+							ret.add(pg);
+						}
+					}
 				}
 			}
 		} catch (javax.jcr.RepositoryException e) {
