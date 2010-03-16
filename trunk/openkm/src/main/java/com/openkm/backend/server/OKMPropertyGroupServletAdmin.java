@@ -33,8 +33,10 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.backend.client.OKMException;
 import com.openkm.backend.client.bean.GWTFormElement;
+import com.openkm.backend.client.bean.GWTPropertyGroup;
 import com.openkm.backend.client.config.ErrorCode;
 import com.openkm.backend.client.service.OKMPropertyGroupService;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.RepositoryException;
 
@@ -53,19 +55,19 @@ public class OKMPropertyGroupServletAdmin extends OKMRemoteServiceServletAdmin i
 	private static final long serialVersionUID = 2638205115826644606L;
 
 	@Override
-	public List<String> getAllGroups() throws OKMException {
+	public List<GWTPropertyGroup> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
-		List<String> groupList = new ArrayList<String>(); 
+		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
 		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(token);
 			
-			for (Iterator<String> it = col.iterator(); it.hasNext();) {	
-				String group = it.next();
+			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
+				PropertyGroup group = it.next();
 				log.debug("Group: "+group);
 				
-				groupList.add(group);
+				groupList.add(Util.copy(group));
 			}
 
 		} catch (RepositoryException e) {
