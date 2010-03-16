@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
@@ -91,13 +92,13 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static Map<String, Collection<FormElement>> parsePropertyGroupsForms() throws IOException, 
+	public static Map<PropertyGroup, Collection<FormElement>> parsePropertyGroupsForms() throws IOException, 
 			ParseException {
 		log.info("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
 		log.info("PropertyGroupForms: {}", pgFile);
-		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
+		Map<PropertyGroup, Collection<FormElement>> pGroups = new HashMap<PropertyGroup, Collection<FormElement>>();
 		FileInputStream fis = null;
 		
 		try {
@@ -112,16 +113,20 @@ public class FormUtils {
 			if (fis != null) {
 				Document doc = db.parse(fis);
 				doc.getDocumentElement().normalize();
-				NodeList nlForm = doc.getElementsByTagName("form");
+				NodeList nlForm = doc.getElementsByTagName("property-group");
 
 				for (int i = 0; i < nlForm.getLength(); i++) {
 					Node nForm = nlForm.item(i);
 
 					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
-						String taskName = nForm.getAttributes().getNamedItem("task").getNodeValue();
+						String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
+						String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
 						NodeList nlField = nForm.getChildNodes();
 						ArrayList<FormElement> fe = parseField(nlField);
-						forms.put(taskName, fe);
+						PropertyGroup pg = new PropertyGroup();
+						pg.setLabel(pgLabel);
+						pg.setName(pgName);
+						pGroups.put(pg, fe);
 					}
 				}
 			}
@@ -135,17 +140,17 @@ public class FormUtils {
 			IOUtils.closeQuietly(fis);
 		}
 
-		log.info("parseMetadataForms: {}", forms);
+		log.info("parseMetadataForms: {}", pGroups);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-		return forms;
+		return pGroups;
 	}
 	
 	/**
 	 * Retrieve the form element from a PropertyGroups definition. 
 	 */
-	public static FormElement getFormElement(Map<String, Collection<FormElement>> formsElements, String name) {
-		for (Iterator<Entry<String, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
-			Entry<String, Collection<FormElement>> entry = it1.next();
+	public static FormElement getFormElement(Map<PropertyGroup, Collection<FormElement>> formsElements, String name) {
+		for (Iterator<Entry<PropertyGroup, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
+			Entry<PropertyGroup, Collection<FormElement>> entry = it1.next();
 			for (Iterator<FormElement> it2 = entry.getValue().iterator(); it2.hasNext(); ) {
 				FormElement fe = it2.next();
 				if (fe.getName().equals(name)) {
