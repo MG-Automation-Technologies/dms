@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE forms PUBLIC "-//OpenKM//DTD 1.0//EN"
-                       "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/property-group-forms-1.0.dtd">
-<forms>
-  <form group="okg:consultoria">
+<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD 1.0//EN"
+                                 "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/property-groups-1.0.dtd">
+<property-groups>
+  <property-group label="Consultoría" name="okg:consultoria">
     <input label="Name" type="text" name="name" value="Joel" />
     <textarea label="Comment" name="okp:consultoria.comentario" value=""/>
-  </form>
-  <form group="okg:tecnologia">
+  </property-group>
+  <property-group label="Technology" name="okg:tecnologia">
     <select label="Language" name="okp:tecnologia.lenguaje" type="simple">
       <option name="Java" value="java" selected="true" />
       <option name="Python" value="python" />
       <option name="PHP" value="php" />
     </select>
     <input label="Description" name="okp:tecnologia.descripcion" value="10"/>
-  </form>
-</forms>
+  </property-group>
+</property-groups>
