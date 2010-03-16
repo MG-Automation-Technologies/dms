@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -141,8 +142,7 @@ public class OKMAccessManager implements AccessManager {
 		//throw new AccessDeniedException("Permission denied!");
 	}
 
-	// @Override
-	// TODO Enable @Override when use jackrabbit 1.6
+	@Override
 	public void checkPermission(Path absPath, int permissions) throws AccessDeniedException,
 			RepositoryException {
 		//log.info("used in jackrabbit 1.6 - checkPermission({}, {})", absPath, permissions);
@@ -239,10 +239,14 @@ public class OKMAccessManager implements AccessManager {
 							log.debug("{} Node is VERSION", subject.getPrincipals());
 							Node frozenNode = node.getNode("jcr:frozenNode");
 							log.debug("{} Frozen node -> {}", subject.getPrincipals(), frozenNode.getPath());
-							//String realNodeId = frozenNode.getProperty("jcr:frozenUuid").getString();
+							String realNodeId = frozenNode.getProperty("jcr:frozenUuid").getString();
+							node = systemSession.getNodeByUUID(realNodeId).getParent();
+							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
 						} else if (node.isNodeType("nt:versionHistory")) {
 							log.debug("{} Node is VERSION_HISTORY", subject.getPrincipals());
-							//String realNodeId = node.getProperty("jcr:versionableUuid").getString();
+							String realNodeId = node.getProperty("jcr:versionableUuid").getString();
+							node = systemSession.getNodeByUUID(realNodeId).getParent();
+							log.debug("{} Real -> {}", subject.getPrincipals(), node.getPath());
 						}
 
 						if ((permissions & Permission.READ) != 0) {
@@ -250,7 +254,7 @@ public class OKMAccessManager implements AccessManager {
 							try {
 								access = checkRead(node);
 							} catch (PathNotFoundException e) {
-								log.debug("{} PathNotFoundException({}) in {}", new Object[] {
+								log.warn("{} PathNotFoundException({}) in {}", new Object[] {
 										subject.getPrincipals(), e.getMessage(),
 										node.getPrimaryNodeType().getName() });
 								access = true;
@@ -318,7 +322,7 @@ public class OKMAccessManager implements AccessManager {
 			}
 		}
 
-		log.info("checkRead: {}", access);
+		log.debug("checkRead: {}", access);
 		return access;
 	}
 
