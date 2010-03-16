@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE forms PUBLIC "-//OpenKM//DTD 1.0//EN"
-                       "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/forms-1.0.dtd">
+                       "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/property-group-forms-1.0.dtd">
 <forms>
   <form group="okg:consultoria">
     <input label="Name" type="text" name="name" value="Joel" />
