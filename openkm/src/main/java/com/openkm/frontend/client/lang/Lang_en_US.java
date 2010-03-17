@@ -68,7 +68,6 @@ public class Lang_en_US {
 	    lang.put("startup.loading.trash", "Loading trash");
 	    lang.put("startup.loading.history.search", "Loading history search");
 	    lang.put("startup.loading.user.values", "Loading user values");
-	    lang.put("startup.loading.property.group.translations", "Loading property group translations");
 	    lang.put("startup.keep.alive", "Loading keep alive");
 	    
 	    // Update notification

@@ -68,7 +68,6 @@ public class Lang_fr_FR {
 	    lang.put("startup.loading.trash", "Chargement de la corbeille");
 	    lang.put("startup.loading.history.search", "Chargement historique de recherche");
 	    lang.put("startup.loading.user.values", "Chargement des valeurs utilisateur");
-	    lang.put("startup.loading.property.group.translations", "Chargement des propriétés de groupe");
 	    lang.put("startup.keep.alive", "Chargement surveillance");
 	    
 	    // Update notification

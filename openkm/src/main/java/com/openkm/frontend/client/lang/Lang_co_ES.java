@@ -68,7 +68,6 @@ public class Lang_co_ES {
 	    lang.put("startup.loading.trash", "Cargando papelera");
 	    lang.put("startup.loading.history.search", "Cargando histórico de búsquedas");
 	    lang.put("startup.loading.user.values", "Cargando datos del usuario");
-	    lang.put("startup.loading.property.group.translations", "Cargando traducciones de grupo de propiedades");
 	    lang.put("startup.keep.alive", "Cargando keep alive");
 	    
 	    // Update notification

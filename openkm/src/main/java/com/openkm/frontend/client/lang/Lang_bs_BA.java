@@ -68,7 +68,6 @@ public class Lang_bs_BA {
 	    lang.put("startup.loading.trash", "Učitavanje kante za smeće");
 	    lang.put("startup.loading.history.search", "Učitavanje historijskog pretraživanja");
 	    lang.put("startup.loading.user.values", "Učitavanje korisničkih vrijednosti");
-	    lang.put("startup.loading.property.group.translations", "Učitavanje prijevoda osobina grupe");
 	    lang.put("startup.keep.alive", "Učitavanje ostati u radnom");
 	    
 	    // Update notification

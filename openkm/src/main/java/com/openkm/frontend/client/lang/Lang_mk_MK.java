@@ -68,7 +68,6 @@ public class Lang_mk_MK {
 	    lang.put("startup.loading.trash", "Вчитувам ѓубре");
 	    lang.put("startup.loading.history.search", "Вчитувам пребарување на историјата");
 	    lang.put("startup.loading.user.values", "Вчитувам кориснички вредности");
-	    lang.put("startup.loading.property.group.translations", "Вчитувам својства за групата преводи");
 	    lang.put("startup.keep.alive", "Вчитувам одржување во живот");
 	    
 	    // Update notification

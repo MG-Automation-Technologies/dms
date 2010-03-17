@@ -68,7 +68,6 @@ public class Lang_sv_SE {
 	    lang.put("startup.loading.trash", "Laddar papperskorg");
 	    lang.put("startup.loading.history.search", "Laddar sökhistorik");
 	    lang.put("startup.loading.user.values", "Laddar användarvärden");
-	    lang.put("startup.loading.property.group.translations", "Laddar egenskaper för gruppöversättningar");
 	    lang.put("startup.keep.alive", "Laddar keep alive");
 	    
 	    // Update notification

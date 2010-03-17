@@ -69,7 +69,6 @@ public class Lang_ro_RO {
 	    lang.put("startup.loading.trash", "Se incarca zona cosului de gunoi");
 	    lang.put("startup.loading.history.search", "Se incarca zona istoricului cautarilor");
 	    lang.put("startup.loading.user.values", "Se incarca parametrii utilizatorului");
-	    lang.put("startup.loading.property.group.translations", "Se incarca grupul traducerilor referitoare la proprietate");
 	    lang.put("startup.keep.alive", "Incarcare conexiune permanenta");
 
 	    // Update notification

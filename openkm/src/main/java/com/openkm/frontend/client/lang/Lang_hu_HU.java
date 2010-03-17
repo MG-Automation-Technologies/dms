@@ -68,7 +68,6 @@ public class Lang_hu_HU {
 	    lang.put("startup.loading.trash", "Kuka töltődik");
 	    lang.put("startup.loading.history.search", "Elmentett keresések töltődnek");
 	    lang.put("startup.loading.user.values", "Felhasználói adatok töltődnek");
-	    lang.put("startup.loading.property.group.translations", "Kategóriák fordításai töltődnek");
 	    lang.put("startup.keep.alive", "Kapcsolatfenntartó töltődik");
 	    
 	    // Update notification
