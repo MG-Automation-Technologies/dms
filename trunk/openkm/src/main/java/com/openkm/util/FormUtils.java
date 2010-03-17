@@ -144,16 +144,30 @@ public class FormUtils {
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return pGroups;
 	}
+
+	/**
+	 * Retrieve the form elements from a PropertyGroup definition. 
+	 */
+	public static Collection<FormElement> getPropertyGroupForms(Map<PropertyGroup, Collection<FormElement>> formsElements, String groupName) {
+		for (Iterator<Entry<PropertyGroup, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
+			Entry<PropertyGroup, Collection<FormElement>> entry = it1.next();
+			if (entry.getKey().getName().equals(groupName)) {
+				return entry.getValue();
+			}
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * Retrieve the form element from a PropertyGroups definition. 
 	 */
-	public static FormElement getFormElement(Map<PropertyGroup, Collection<FormElement>> formsElements, String name) {
+	public static FormElement getFormElement(Map<PropertyGroup, Collection<FormElement>> formsElements, String propertyName) {
 		for (Iterator<Entry<PropertyGroup, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
 			Entry<PropertyGroup, Collection<FormElement>> entry = it1.next();
 			for (Iterator<FormElement> it2 = entry.getValue().iterator(); it2.hasNext(); ) {
 				FormElement fe = it2.next();
-				if (fe.getName().equals(name)) {
+				if (fe.getName().equals(propertyName)) {
 					return fe;
 				}
 			}
@@ -161,7 +175,6 @@ public class FormUtils {
 		
 		return null;
 	}
-	
 
 	/**
 	 * Parse individual form fields 
