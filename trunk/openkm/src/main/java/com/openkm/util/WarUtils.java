@@ -17,7 +17,7 @@ import com.openkm.bean.AppVersion;
 
 public class WarUtils {
 	private static Logger log = LoggerFactory.getLogger(WarUtils.class);
-	private static AppVersion appVersion = null;
+	private static AppVersion appVersion = new AppVersion();
 	
 	/**
 	 * 
@@ -40,7 +40,6 @@ public class WarUtils {
 		String appServerHome = sc.getRealPath("/");
 		File manifestFile = new File(appServerHome, "META-INF/MANIFEST.MF");
 		FileInputStream fis = null;
-		appVersion = new AppVersion();
 		
 		try {
 			fis = new FileInputStream(manifestFile);
