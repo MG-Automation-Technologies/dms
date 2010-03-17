@@ -148,6 +148,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeType[] nt = documentNode.getMixinNodeTypes();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
+			// Only return registered property definitions
 			for (int i=0; i<nt.length; i++) {
 				if (nt[i].getName().startsWith(PropertyGroup.GROUP+":")) {
 					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
@@ -182,6 +183,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
+			// Only return registered property definitions
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
 				NodeType nt = nti.nextNodeType();
 				
@@ -321,10 +323,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
-			/*NodeType nt =*/ ntm.getNodeType(grpName);
-			//PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
+			NodeType nt = ntm.getNodeType(grpName);
+			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
-			ret = FormUtils.getPropertyGroupForms(pgf, grpName);
+			Collection<FormElement> tmp = FormUtils.getPropertyGroupForms(pgf, grpName);
+			
+			// Only return registered property definitions
+			for (int i=0; i < pd.length; i++) {
+				for (FormElement formElement : tmp) {
+					if (formElement.getName().equals(pd[i].getName())) {
+						ret.add(formElement);
+					}
+				}	
+			}
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
