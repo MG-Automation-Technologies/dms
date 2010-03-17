@@ -53,6 +53,7 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.config.ErrorCode;
@@ -2172,8 +2173,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetAllGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			// List of groups to be added
 			if (!result.isEmpty()) {
 				enableAddPropertyGroup();
