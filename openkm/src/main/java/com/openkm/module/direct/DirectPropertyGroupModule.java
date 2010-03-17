@@ -324,12 +324,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			/*NodeType nt =*/ ntm.getNodeType(grpName);
 			//PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
-			for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
-				PropertyGroup pg = it.next();
-				if (pg.getName().equals(grpName)) {
-					ret = pgf.get(pg);
-				}
-			}
+			ret = FormUtils.getPropertyGroupForms(pgf, grpName);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
