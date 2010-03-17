@@ -341,7 +341,6 @@ public final class Main implements EntryPoint{
 		mainPanel.navigator.templateTree.langRefresh();
 		mainPanel.navigator.trashTree.langRefresh();
 		mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
-		startUp.getPropetyGroupTranslations(); // Gets all hashmap translations;
 	}
 	
 	/**
@@ -398,22 +397,6 @@ public final class Main implements EntryPoint{
 	}
 	
 	/**
-	 * Gets the i18n PropertyGroup param translation
-	 * 
-	 * @param properties The propetie code locator
-	 * @return The translated value
-	 */
-	public static String propertyGroupI18n(String property) {
-		String ret = (String) Main.get().hPropertyGroupI18n.get(property);
-		
-		if (ret == null) {
-			ret = property;
-		}
-		
-		return ret;
-	}
-	
-	/**
 	 * Called from scanner applet
 	 */
 	public static String refresh() {
@@ -428,10 +411,6 @@ public final class Main implements EntryPoint{
 		// define a static JS function with a friendly name
 		$wnd.i18n = function(s) {
 		 	return @com.openkm.frontend.client.Main::i18n(Ljava/lang/String;)(s);
-		};
-		
-		$wnd.propertyGroupI18n = function(s) {
-		 	return @com.openkm.frontend.client.Main::propertyGroupI18n(Ljava/lang/String;)(s);
 		};
 	}-*/;
 }
