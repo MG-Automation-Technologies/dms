@@ -139,7 +139,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public Collection<PropertyGroup> getGroups(String token, String docPath)
 			throws IOException, ParseException, PathNotFoundException, RepositoryException {
-		log.debug("getGroups({} ,{})", token, docPath);
+		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		
 		try {
@@ -231,7 +231,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 							sValues = new String[0];
 						} else {
 							sValues = new String[values.length];
-						
+							
 							for (int j=0; j<values.length; j++) {
 								sValues[j] = values[j].getString();
 							}
