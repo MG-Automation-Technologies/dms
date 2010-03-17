@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -138,14 +139,13 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetAllGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			listBox.clear();
 			listBox.addItem("",""); // Adds empty value
-			for (Iterator<String> it = result.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				listBox.addItem(groupTranslation,groupKey);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup group = it.next();
+				listBox.addItem(group.getLabel(), group.getName());
 			}
 		}
 

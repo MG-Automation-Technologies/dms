@@ -21,25 +21,25 @@
 
 package com.openkm.frontend.client.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.openkm.frontend.client.bean.GWTMetaData;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 
 /**
  * @author jllort
  *
  */
 public interface OKMPropertyGroupServiceAsync {
-	public void getAllGroups(AsyncCallback<List<String>> callback);
-	public void getAllGroups(String docPath, AsyncCallback<List<String>> callback);
+	public void getAllGroups(AsyncCallback<List<GWTPropertyGroup>> callback);
+	public void getAllGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
 	public void addGroup(String docPath, String grpName, AsyncCallback<?> callback);
-	public void getGroups(String docPath, AsyncCallback<List<String>> callback);
-	public void getTranslations(String lang, AsyncCallback<Map<String, String>> callback); 
+	public void getGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
 	public void getProperties(String docPath, String grpName, AsyncCallback<Map<String, String[]>> callback);
-	public void getMetaData(String grpName, AsyncCallback<Map<String, GWTMetaData>> callback);
+	public void getMetaData(String grpName, AsyncCallback<Collection<GWTFormElement>> callback);
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties, AsyncCallback<?> callback);
 	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
 }
