@@ -44,6 +44,7 @@ import com.openkm.bean.Lock;
 import com.openkm.bean.Mail;
 import com.openkm.bean.MetaData;
 import com.openkm.bean.Note;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
@@ -58,6 +59,7 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.core.Config;
+import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
@@ -77,6 +79,7 @@ import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
@@ -428,8 +431,9 @@ public class Util {
 	 * @throws RepositoryException 
 	 * @throws IOException 
 	 * @throws PathNotFoundException 
+	 * @throws ParseException 
 	 */
-	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException, PathNotFoundException {
+	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException, PathNotFoundException, ParseException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
 		gWTParams.setContent(params.getContent());
@@ -463,20 +467,24 @@ public class Util {
 			boolean found = false;
 			
 			// Obtain all group names
-			Collection<String> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
-			Iterator<String> itGroup = colGroups.iterator();
+			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Iterator<PropertyGroup> itGroup = colGroups.iterator();
 			while (itGroup.hasNext() && !found) {
-				String grpName = itGroup.next();
+				PropertyGroup grpName = itGroup.next();
 				
 				// Obtain all metadata values
-				HashMap<String, MetaData> metaData = OKMPropertyGroup.getInstance().getMetaData(token, grpName);
-				if (metaData.containsKey(key)){
-					found = true;
-					GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
-					gWTPropertyParams.setGrpName(grpName);
-					gWTPropertyParams.setMetaData(Util.copy((MetaData) metaData.get(key)));
-					gWTPropertyParams.setValue(properties.get(key));
-					finalProperties.put(key,gWTPropertyParams);
+				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, grpName.getName());
+				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
+					FormElement formElement = it.next();
+					if (formElement.equals(key)) {
+						found = true;
+						GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
+						gWTPropertyParams.setGrpName(grpName.getName());
+						gWTPropertyParams.setMetaData(Util.copy(formElement));
+						gWTPropertyParams.setValue(properties.get(key));
+						finalProperties.put(key,gWTPropertyParams);
+						break;
+					}
 				}
 			}
 		}
@@ -743,5 +751,21 @@ public class Util {
 		
 		log.debug("copy: "+gWTMail);
 		return gWTMail;
+	}
+	
+	/**
+	 * Copy the Document data to GWTPropertyGroup data.
+	 * 
+	 * @param doc The original PropertyGroup object.
+	 * @return A GWTPropertyGroup object with the data from 
+	 * the original PropertyGroup.
+	 */
+	public static GWTPropertyGroup copy(PropertyGroup property) {
+		GWTPropertyGroup gWTPropertyGroup = new GWTPropertyGroup();
+		
+		gWTPropertyGroup.setLabel(property.getLabel());
+		gWTPropertyGroup.setName(property.getName());
+		
+		return gWTPropertyGroup;
 	}
 }

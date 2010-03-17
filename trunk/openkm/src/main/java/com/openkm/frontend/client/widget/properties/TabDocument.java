@@ -39,6 +39,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -199,7 +200,7 @@ public class TabDocument extends Composite {
 		if (!propertyGroup.isEmpty()) {
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
 				PropertyGroup group = it.next();
-				tabPanel.add(group, Main.propertyGroupI18n(group.getGrpName()));
+				tabPanel.add(group, group.getGrpName());
 				group.langRefresh();
 			}
 		}		
@@ -231,14 +232,14 @@ public class TabDocument extends Composite {
 	/**
 	 * Gets asyncronous to get all groups assigned to a document
 	 */
-	final AsyncCallback<List<String>> callbackGetGroups = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			GWTFolder gwtFolder = Main.get().activeFolderTree.getFolder();
 			
-			for (Iterator<String> it = result.iterator(); it.hasNext();) {
-				String groupKey = it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				PropertyGroup group = new PropertyGroup(groupKey, doc, gwtFolder, visibleButton);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup gwtGroup = it.next();
+				String groupTranslation = gwtGroup.getLabel();
+				PropertyGroup group = new PropertyGroup(gwtGroup.getName(), doc, gwtFolder, visibleButton);
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 			}

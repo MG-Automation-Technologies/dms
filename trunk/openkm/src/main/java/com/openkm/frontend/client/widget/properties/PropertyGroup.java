@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.widget.properties;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -48,11 +49,16 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 
+import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTMetaData;
+import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -77,12 +83,12 @@ public class PropertyGroup extends Composite {
 	private Button removeButton;
 	private Button cancelButton;
 	private Map<String, String[]> hProperties = new HashMap<String, String[]>();
-	private Map<String, GWTMetaData> hMetaData = new HashMap<String, GWTMetaData>();
+	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
 	private HashMap<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private boolean editValues = false;
 	private CellFormatter cellFormatter;
 	private HorizontalPanel hPanel;
-	private String orderedKey[];
+//	private String orderedKey[];
 	
 	/**
 	 * PropertyGroup
@@ -93,7 +99,7 @@ public class PropertyGroup extends Composite {
 		hPanel = new HorizontalPanel();
 		this.grpName = grpName;
 		this.doc = doc;
-		this.orderedKey = new String[0];
+//		this.orderedKey = new String[0];
 		
 		changeButton = new Button(Main.i18n("button.change"), new ClickHandler() { 
 			@Override
@@ -222,69 +228,69 @@ public class PropertyGroup extends Composite {
 		changeButton.setHTML(Main.i18n("button.change"));
 		removeButton.setHTML(Main.i18n("button.delete"));
 		
-		int rows = 1;
-
-		for (int x=0; x<orderedKey.length; x++) {
-			String propertyName = orderedKey[x];
-			GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
-			
-			switch (gwtMetadata.getType()) {
-			
-				case GWTMetaData.INPUT:
-				case GWTMetaData.TEXT_AREA:
-					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
-					table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
-					rows++;
-					break;
-					
-				case GWTMetaData.SELECT:
-					String selectedValue = hProperties.get(propertyName)[0];
-	
-					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
-					if (selectedValue!=null && !selectedValue.equals("")) {
-						table.setHTML(rows, 1, Main.propertyGroupI18n(propertyName+"."+selectedValue));
-					} else {
-						table.setHTML(rows, 1, "");
-					}
-					rows++;
-					break;
-					
-				case GWTMetaData.SELECT_MULTI:		
-					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
-					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
-					ListBox listMulti = (ListBox) hPanel.getWidget(2);
-					Button addButton = (Button) hPanel.getWidget(4);
-					String[] values =  hProperties.get(propertyName + MAP_LIST_VALUES);
-					List<String> selectValues = new ArrayList<String>();
-					
-					for (int i=0; i<values.length; i++) {
-						selectValues.add(values[i]);
-					}
-					
-					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
-					addButton.setHTML(Main.i18n("button.add"));
-					
-					// Translate table values
-					for (int i=0; i<tableMulti.getRowCount(); i++) {
-						String value = tableMulti.getText(i,0);
-						tableMulti.setText(i,2,Main.propertyGroupI18n(propertyName+"."+value));
-					}
-					
-					// Translate list values
-					// Removes all list items except first ("the empty")
-					while (listMulti.getItemCount()>1) {
-						listMulti.removeItem(1);
-					}
-					
-					// Recreates the initial list before staring updating
-					for (Iterator<String> its = selectValues.iterator(); its.hasNext();) {
-						String value = its.next();
-						listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
-					}
-					rows++;
-					break;
-			}
-		}
+//		int rows = 1;
+//
+//		for (int x=0; x<orderedKey.length; x++) {
+//			String propertyName = orderedKey[x];
+//			GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
+//			
+//			switch (gwtMetadata.getType()) {
+//			
+//				case GWTMetaData.INPUT:
+//				case GWTMetaData.TEXT_AREA:
+//					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
+//					table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
+//					rows++;
+//					break;
+//					
+//				case GWTMetaData.SELECT:
+//					String selectedValue = hProperties.get(propertyName)[0];
+//	
+//					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
+//					if (selectedValue!=null && !selectedValue.equals("")) {
+//						table.setHTML(rows, 1, Main.propertyGroupI18n(propertyName+"."+selectedValue));
+//					} else {
+//						table.setHTML(rows, 1, "");
+//					}
+//					rows++;
+//					break;
+//					
+//				case GWTMetaData.SELECT_MULTI:		
+//					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+//					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
+//					ListBox listMulti = (ListBox) hPanel.getWidget(2);
+//					Button addButton = (Button) hPanel.getWidget(4);
+//					String[] values =  hProperties.get(propertyName + MAP_LIST_VALUES);
+//					List<String> selectValues = new ArrayList<String>();
+//					
+//					for (int i=0; i<values.length; i++) {
+//						selectValues.add(values[i]);
+//					}
+//					
+//					table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
+//					addButton.setHTML(Main.i18n("button.add"));
+//					
+//					// Translate table values
+//					for (int i=0; i<tableMulti.getRowCount(); i++) {
+//						String value = tableMulti.getText(i,0);
+//						tableMulti.setText(i,2,Main.propertyGroupI18n(propertyName+"."+value));
+//					}
+//					
+//					// Translate list values
+//					// Removes all list items except first ("the empty")
+//					while (listMulti.getItemCount()>1) {
+//						listMulti.removeItem(1);
+//					}
+//					
+//					// Recreates the initial list before staring updating
+//					for (Iterator<String> its = selectValues.iterator(); its.hasNext();) {
+//						String value = its.next();
+//						listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
+//					}
+//					rows++;
+//					break;
+//			}
+//		}
 		
 	}	
 	
@@ -305,80 +311,78 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to get metada group properties
 	 */
-	final AsyncCallback<Map<String, GWTMetaData>> callbackGetMetaData = new AsyncCallback<Map<String, GWTMetaData>>() {
-		public void onSuccess(Map<String, GWTMetaData> result){
+	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaData = new AsyncCallback<Collection<GWTFormElement>>() {
+		public void onSuccess(Collection<GWTFormElement> result){
 			hMetaData = result;
 			hWidgetProperties.clear();
 			int rows = 1;
-			orderedKey = new String[hMetaData.keySet().size()];
+//			orderedKey = new String[hMetaData.size()];
 			
 			// Ordering metadata keys
-			for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
-				String propertyName = it.next();
-				GWTMetaData gwtMetadata = hMetaData.get(propertyName);
-				orderedKey[gwtMetadata.getOrder()] = propertyName;
-			}
+//			for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
+//				String propertyName = it.next();
+//				GWTMetaData gwtMetadata = hMetaData.get(propertyName);
+//				orderedKey[gwtMetadata.getOrder()] = propertyName;
+//			}
 
-			for (int x=0; x<orderedKey.length; x++) {
-				final String propertyName = orderedKey[x];
-				GWTMetaData gwtMetadata = hMetaData.get(propertyName);
+			for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext(); ) {
+				GWTFormElement gwtMetadata = it.next();
+				final String propertyName = gwtMetadata.getName();
 				
-				switch (gwtMetadata.getType()) {
-					case GWTMetaData.TEXT_AREA:
-						TextArea textArea = new TextArea(); // Create a widget for this property
-						textArea.setText(hProperties.get(propertyName)[0]);
-						textArea.setStyleName("okm-Input");
-						textArea.setSize("400","60");
-						textArea.setReadOnly(true);
-						hWidgetProperties.put(propertyName,textArea);
-						table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
-						table.setWidget(rows, 1, textArea);
-						table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
-						table.getCellFormatter().setWidth(rows, 1, "100%");
-						setRowWordWarp(rows, 2, true);
-						rows++;
-						break;
-				
-					case GWTMetaData.INPUT:
-						TextBox textBox = new TextBox(); // Create a widget for this property
-						textBox.setText(hProperties.get(propertyName)[0]);
-						textBox.setStyleName("okm-Input");
-						hWidgetProperties.put(propertyName,textBox);
-						table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
-						table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
-						table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
-						table.getCellFormatter().setWidth(rows, 1, "100%");
-						rows++;
-						break;
+				if (gwtMetadata instanceof GWTTextArea) {
+					TextArea textArea = new TextArea(); // Create a widget for this property
+					textArea.setText(hProperties.get(propertyName)[0]);
+					textArea.setStyleName("okm-Input");
+					textArea.setSize("400","60");
+					textArea.setReadOnly(true);
+					hWidgetProperties.put(propertyName,textArea);
+					table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
+					table.setWidget(rows, 1, textArea);
+					table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
+					table.getCellFormatter().setWidth(rows, 1, "100%");
+					setRowWordWarp(rows, 2, true);
+					rows++;
+					
+				} else if (gwtMetadata instanceof GWTInput) {
+					TextBox textBox = new TextBox(); // Create a widget for this property
+					textBox.setText(hProperties.get(propertyName)[0]);
+					textBox.setStyleName("okm-Input");
+					hWidgetProperties.put(propertyName,textBox);
+					table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
+					table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
+					table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
+					table.getCellFormatter().setWidth(rows, 1, "100%");
+					rows++;
 						
-					case GWTMetaData.SELECT:
+				} else if (gwtMetadata instanceof GWTSelect) {
+					final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+					if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 						String selectedValue = hProperties.get(propertyName)[0];
 						ListBox listBox = new ListBox();
 						listBox.setStyleName("okm-Select");
 						listBox.addItem("",""); // Always we set and empty value
 						
-						for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-							String value = itData.next();
-							listBox.addItem(Main.propertyGroupI18n(propertyName+"."+value),value); // The translation is composed by propertyName + "." + value key
-							if (selectedValue!= null && selectedValue.equals(value)) {
+						for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ){
+							GWTOption option = itData.next();
+							listBox.addItem(option.getName(),option.getValue()); // The translation is composed by propertyName + "." + value key
+							if (selectedValue!= null && selectedValue.equals(option.getValue())) {
 								listBox.setItemSelected(listBox.getItemCount()-1,true);
 							}
 						}
 						
 						hWidgetProperties.put(propertyName,listBox);
 						
-						table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
+						table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
 						if (selectedValue!=null && !selectedValue.equals("")) {
-							table.setHTML(rows, 1, Main.propertyGroupI18n(propertyName+"."+selectedValue) );
+							table.setHTML(rows, 1, selectedValue );
 						} else {
 							table.setHTML(rows, 1, "");
 						}
 						table.getCellFormatter().setWidth(rows, 1, "100%");
 						setRowWordWarp(rows, 2, true);
 						rows++;
-						break;
 						
-					case GWTMetaData.SELECT_MULTI:
+					} else {
 						final HorizontalPanel hPanel = new HorizontalPanel();
 						String[] selectedValues = (String[]) hProperties.get(propertyName);
 						ListBox listMulti = new ListBox();
@@ -412,7 +416,16 @@ public class PropertyGroup extends Composite {
 											Button addButton = (Button) hPanel.getWidget(4);
 											String value = htmlValue.getText();
 											
-											listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
+											String optionName = "";
+											for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+												GWTOption option = itOptions.next();
+												if (option.getValue().equals(htmlValue.getText())) {
+													optionName = option.getName();
+													break;
+												} 
+											} 
+											
+											listMulti.addItem(optionName,value);
 											if (listMulti.getItemCount()>1){
 												listMulti.setVisible(true);
 												addButton.setVisible(true);
@@ -455,22 +468,22 @@ public class PropertyGroup extends Composite {
 						hPanel.setCellVerticalAlignment(addButton,VerticalPanel.ALIGN_TOP);
 						hPanel.setHeight("100%");
 
-						table.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(propertyName) + "</b>");
+						table.setHTML(rows, 0, "<b>" + propertyName + "</b>");
 						table.setWidget(rows, 1, hPanel);
 						table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
 						table.getCellFormatter().setVerticalAlignment(rows,1,VerticalPanel.ALIGN_TOP);
 						table.getCellFormatter().setWidth(rows, 1, "100%");
 						
-						for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-							final String value = itData.next();
+						for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ){
+							final GWTOption option = itData.next();
 							boolean found = false;
 							
 							// Looks if there's some selected value
 							if(selectedValues!=null) {
 								for (int i=0; i<selectedValues.length; i++ ) {
-									if (selectedValues[i].equals(value)) {
+									if (selectedValues[i].equals(option.getValue())) {
 										int rowTableMulti = tableMulti.getRowCount();
-										HTML htmlValue = new HTML(value);
+										HTML htmlValue = new HTML(option.getValue());
 										
 										Image removeImage = new Image("img/icon/actions/delete.gif");
 										removeImage.addClickHandler(new ClickHandler() { 
@@ -482,7 +495,7 @@ public class PropertyGroup extends Composite {
 												ListBox listMulti = (ListBox) hPanel.getWidget(2);
 												Button addButton = (Button) hPanel.getWidget(4);
 												
-												listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
+												listMulti.addItem(option.getName(),option.getValue());
 												if (listMulti.getItemCount()>1){
 													listMulti.setVisible(true);
 													addButton.setVisible(true);
@@ -498,7 +511,7 @@ public class PropertyGroup extends Composite {
 										
 										tableMulti.setWidget(rowTableMulti,0,htmlValue);
 										tableMulti.setWidget(rowTableMulti,1,removeImage);
-										tableMulti.setHTML(rowTableMulti,2,Main.propertyGroupI18n(propertyName+"."+value));
+										tableMulti.setHTML(rowTableMulti,2,option.getName());
 										setRowWordWarp(tableMulti,rowTableMulti, 2, true);
 										htmlValue.setVisible(false);
 										removeImage.setVisible(false);
@@ -509,12 +522,12 @@ public class PropertyGroup extends Composite {
 							
 							// Only values not selecteds must appear on list
 							if (!found) {
-								selectValues.add(value);
-								listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value); // The translation is composed by propertyName + "." + value key
+								selectValues.add(option.getValue());
+								listMulti.addItem(option.getName(),option.getValue()); // The translation is composed by propertyName + "." + value key
 							}
 						}
 						
-						hWidgetProperties.put(propertyName,hPanel); 					// Saves panel
+						hWidgetProperties.put(propertyName,hPanel); 							// Saves panel
 						
 						if (selectValues.size()>0){
 							String[] values = new String[selectValues.size()];
@@ -529,7 +542,7 @@ public class PropertyGroup extends Composite {
 						}
 
 						rows++;
-						break;
+					}
 				}
 			}
 		}
@@ -571,29 +584,26 @@ public class PropertyGroup extends Composite {
 	private void edit(){
 		int rows = 1;
 
-		for (int x=0; x<orderedKey.length; x++) {
-			String propertyName = orderedKey[x];
-
-			GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
+		for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+			GWTFormElement gwtMetadata = it.next();
+			String propertyName = gwtMetadata.getName();
 			
-			switch (gwtMetadata.getType()) {
-			
-				case GWTMetaData.TEXT_AREA:
-					TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
-					textArea.setText(hProperties.get(propertyName)[0]);
-					textArea.setReadOnly(false);
-					table.setWidget(rows, 1, (textArea));
-					rows++;
-					break;
-			
-				case GWTMetaData.INPUT:
-					TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
-					textBox.setText(hProperties.get(propertyName)[0]);
-					table.setWidget(rows, 1,textBox);
-					rows++;
-					break;
-					
-				case GWTMetaData.SELECT:
+			if (gwtMetadata instanceof GWTTextArea) {
+				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
+				textArea.setText(hProperties.get(propertyName)[0]);
+				textArea.setReadOnly(false);
+				table.setWidget(rows, 1, (textArea));
+				rows++;
+				
+			} else if (gwtMetadata instanceof GWTInput) {
+				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				textBox.setText(hProperties.get(propertyName)[0]);
+				table.setWidget(rows, 1,textBox);
+				rows++;
+				
+			} else if (gwtMetadata instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 					ListBox listBox = (ListBox) hWidgetProperties.get(propertyName);
 					String selectedValue = hProperties.get(propertyName)[0];
 					// Select the actual value on list
@@ -606,9 +616,8 @@ public class PropertyGroup extends Composite {
 					}
 					table.setWidget(rows, 1, listBox);
 					rows++;
-					break;
 					
-				case GWTMetaData.SELECT_MULTI:
+				} else {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 					ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -627,6 +636,7 @@ public class PropertyGroup extends Composite {
 					
 					rows++;
 					break;
+				}
 			}
 		}
 	}
@@ -638,48 +648,56 @@ public class PropertyGroup extends Composite {
 		Map<String, String[]> hSaveProperties = new HashMap<String, String[]>();
 		int rows = 1;
 		
-		for (int x=0; x<orderedKey.length; x++) {
-			String propertyName = orderedKey[x];
-
-			GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
+		for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+			GWTFormElement gwtMetadata = it.next();
+			String propertyName = gwtMetadata.getName();
 			
-			switch (gwtMetadata.getType()) {
-				case GWTMetaData.TEXT_AREA:
-					TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
-					hSaveProperties.put(propertyName, new String[] {textArea.getText()});
-					hProperties.put(propertyName, new String[] {textArea.getText()});
-					// Resets values
-					textArea.setReadOnly(true);
-					break;
+			if (gwtMetadata instanceof GWTTextArea) {
+				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
+				hSaveProperties.put(propertyName, new String[] {textArea.getText()});
+				hProperties.put(propertyName, new String[] {textArea.getText()});
+				// Resets values
+				textArea.setReadOnly(true);
 
-				case GWTMetaData.INPUT:
-					TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
-					hSaveProperties.put(propertyName, new String[] {textBox.getText()});
-					hProperties.put(propertyName, new String[] {textBox.getText()});
-					if (textBox.getText()!=null && !textBox.getText().equals("")) {
-						table.setHTML(rows, 1, textBox.getText());
-					} else {
-						table.setHTML(rows, 1, "");
-					}
-					// Resets values
-					textBox.setText("");
+			} else if (gwtMetadata instanceof GWTInput) {
+				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				hSaveProperties.put(propertyName, new String[] {textBox.getText()});
+				hProperties.put(propertyName, new String[] {textBox.getText()});
+				if (textBox.getText()!=null && !textBox.getText().equals("")) {
+					table.setHTML(rows, 1, textBox.getText());
+				} else {
+					table.setHTML(rows, 1, "");
+				}
+				// Resets values
+				textBox.setText("");
 					break;
 					
-				case GWTMetaData.SELECT:
+			} else if (gwtMetadata instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 					ListBox listBox = (ListBox) hWidgetProperties.get(propertyName);
 					if (listBox.getSelectedIndex()>0) {
 						String selectedValue = listBox.getValue(listBox.getSelectedIndex());
 						hSaveProperties.put(propertyName, new String[] {selectedValue});
 						hProperties.put(propertyName, new String[] {selectedValue});
-						table.setHTML(rows, 1, Main.propertyGroupI18n(propertyName+"."+selectedValue));
+						
+						String optionName = "";
+						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+							GWTOption option = itOptions.next();
+							if (option.getValue().equals(selectedValue)) {
+								optionName = option.getName();
+								break;
+							}
+						}
+						
+						table.setHTML(rows, 1, optionName);
 					} else {
 						hSaveProperties.put(propertyName, new String[] {""});
 						hProperties.put(propertyName, new String[] {""});
 						table.setHTML(rows, 1, "");
 					}
-					break;
 					
-				case GWTMetaData.SELECT_MULTI:
+				} else {
 					List<String> selectValues = new ArrayList<String>();
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
@@ -724,9 +742,9 @@ public class PropertyGroup extends Composite {
 					// Disables select and button
 					listMulti.setVisible(false);
 					addButton.setVisible(false);
-					break;
+				}
+				rows ++;
 			}
-			rows ++;
 		}
 		Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
@@ -742,38 +760,46 @@ public class PropertyGroup extends Composite {
 
 		int rows = 1;
 		
-		for (int x=0; x<orderedKey.length; x++) {
-			final String propertyName = orderedKey[x];
-			GWTMetaData gwtMetadata = (GWTMetaData) hMetaData.get(propertyName);
+		for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+			GWTFormElement gwtMetadata = it.next();
+			final String propertyName = gwtMetadata.getName();
 			
-			switch (gwtMetadata.getType()) {
-				case GWTMetaData.TEXT_AREA:
-					TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
-					textArea.setText(hProperties.get(propertyName)[0]);
-					textArea.setReadOnly(true);
-					table.setWidget(rows, 1, textArea);
-					rows++;
+			if (gwtMetadata instanceof GWTTextArea) {
+				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
+				textArea.setText(hProperties.get(propertyName)[0]);
+				textArea.setReadOnly(true);
+				table.setWidget(rows, 1, textArea);
+				rows++;
 					break;
 				
-				case GWTMetaData.INPUT:
-					TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
-					textBox.setText("");
-					table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
-					rows++;
-					break;
-					
-				case GWTMetaData.SELECT:
+			} else if (gwtMetadata instanceof GWTInput) {
+				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				textBox.setText("");
+				table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
+				rows++;
+
+			} else if (gwtMetadata instanceof GWTSelect) {
+				final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 					String selectedValue = hProperties.get(propertyName)[0];
 
 					if (selectedValue!=null && !selectedValue.equals("")) {
-						table.setHTML(rows, 1, Main.propertyGroupI18n(propertyName+"."+selectedValue));
+						
+						String optionName = "";
+						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+							GWTOption option = itOptions.next();
+							if (option.getValue().equals(selectedValue)) {
+								optionName = option.getName();
+								break;
+							}
+						}
+						
+						table.setHTML(rows, 1, optionName);
 					} else {
 						table.setHTML(rows, 1, "");
 					}
-					rows++;
-					break;
 					
-				case GWTMetaData.SELECT_MULTI:
+				} else {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 					ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -797,7 +823,7 @@ public class PropertyGroup extends Composite {
 							final String value = selectedValues[i];
 							int rowTableMulti = tableMulti.getRowCount();
 							HTML htmlValue = new HTML(value);
-							
+
 							Image removeImage = new Image("img/icon/actions/delete.gif");
 							removeImage.addClickHandler(new ClickHandler() { 
 								@Override
@@ -808,7 +834,16 @@ public class PropertyGroup extends Composite {
 									ListBox listMulti = (ListBox) hPanel.getWidget(2);
 									Button addButton = (Button) hPanel.getWidget(4);
 									
-									listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
+									String optionName = "";
+									for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+										GWTOption option = itOptions.next();
+										if (option.getValue().equals(value)) {
+											optionName = option.getName();
+											break;
+										} 
+									} 
+									
+									listMulti.addItem(optionName,value);
 									if (listMulti.getItemCount()>1){
 										listMulti.setVisible(true);
 										addButton.setVisible(true);
@@ -822,9 +857,18 @@ public class PropertyGroup extends Composite {
 								}
 							});
 							
+							String optionName = "";
+							for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+								GWTOption option = itOptions.next();
+								if (option.getValue().equals(value)) {
+									optionName = option.getName();
+									break;
+								} 
+							} 
+							
 							tableMulti.setWidget(rowTableMulti,0,htmlValue);
 							tableMulti.setWidget(rowTableMulti,1,removeImage);
-							tableMulti.setHTML(rowTableMulti,2,Main.propertyGroupI18n(propertyName+"."+value));
+							tableMulti.setHTML(rowTableMulti,2,optionName);
 							setRowWordWarp(tableMulti,rowTableMulti, 2, true);
 							htmlValue.setVisible(false);
 							removeImage.setVisible(false);
@@ -839,14 +883,21 @@ public class PropertyGroup extends Composite {
 					// Recreates the initial list before staring updating
 					for (Iterator<String> its = selectValues.iterator(); its.hasNext();) {
 						String value = its.next();
-						listMulti.addItem(Main.propertyGroupI18n(propertyName+"."+value),value);
+						String optionName = "";
+						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
+							GWTOption option = itOptions.next();
+							if (option.getValue().equals(value)) {
+								optionName = option.getName();
+								break;
+							}
+						}
+						listMulti.addItem(optionName,value);
 					}
 					
 					listMulti.setVisible(false);
 					addButton.setVisible(false);
-
-					rows++;
-					break;
+				}
+				rows++;
 			}
 		}
 	}
