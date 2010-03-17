@@ -59,9 +59,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTMetaData;
+import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.bean.GWTSelect;
+import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMAuthService;
@@ -940,84 +945,80 @@ public class SearchIn extends Composite {
 	 * @param gwtMetadata Property metada
 	 * @param propertyValue The selected value
 	 */
-	public void addProperty(String grpName, final String propertyName, GWTMetaData gwtMetadata, String propertyValue){
+	public void addProperty(String grpName, final String propertyName, GWTFormElement gwtMetadata, String propertyValue){
 		int rows = tableProperties.getRowCount();
 		Image removeImage;
 		
 		if (!hWidgetProperties.containsKey(propertyName)) {
 		
-			switch (gwtMetadata.getType()) {
-			
-				case GWTMetaData.INPUT:
-				case GWTMetaData.TEXT_AREA:
-					TextBox textBox = new TextBox(); // Create a widget for this property
-					textBox.setStyleName("okm-Input");
-					textBox.addKeyPressHandler(keyPressHandler);
-					textBox.addKeyUpHandler(keyUpHandler);
-					hWidgetProperties.put(propertyName,textBox);
-					tableProperties.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(grpName) + " :</b>");
-					tableProperties.setHTML(rows, 1, "&nbsp;" + Main.propertyGroupI18n(propertyName) + "&nbsp;");
-					tableProperties.setWidget(rows, 2, textBox);
-					
-					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickHandler(new ClickHandler() { 
-						@Override
-						public void onClick(ClickEvent event) {
-							Widget sender = (Widget) event.getSource();
-							Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
-							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
-						}
-					});
-					
-					tableProperties.setWidget(rows, 3, removeImage);
-					setRowWordWarp(tableProperties, rows, 2, false);
-					
-					if (propertyValue!=null && !propertyValue.equals("")) {
-						textBox.setText(propertyValue);
-					}
-					break;
+			if (gwtMetadata instanceof GWTInput || gwtMetadata instanceof GWTTextArea) {
+				TextBox textBox = new TextBox(); // Create a widget for this property
+				textBox.setStyleName("okm-Input");
+				textBox.addKeyPressHandler(keyPressHandler);
+				textBox.addKeyUpHandler(keyUpHandler);
+				hWidgetProperties.put(propertyName,textBox);
+				tableProperties.setHTML(rows, 0, "<b>" + grpName + " :</b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyName + "&nbsp;");
+				tableProperties.setWidget(rows, 2, textBox);
 				
-				case GWTMetaData.SELECT:
-				case GWTMetaData.SELECT_MULTI:
-					ListBox listBox = new ListBox();
-					listBox.setStyleName("okm-Select");
-					listBox.addItem("",""); // Always we set and empty value
-					listBox.addChangeHandler(new ChangeHandler(){
-						@Override
-						public void onChange(ChangeEvent event) {
-							evaluateSearchButtonVisible();							
-						}
-					});
-					
-					for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-						String value = itData.next();
-						listBox.addItem(Main.propertyGroupI18n(propertyName+"."+value),value); // The translation is composed by propertyName + "." + value key
-						
-						// Selects the selected value
-						if (propertyValue!=null && !propertyValue.equals("") && propertyValue.equals(value)) {
-							listBox.setSelectedIndex(listBox.getItemCount()-1);
-						}
+				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
+						Widget sender = (Widget) event.getSource();
+						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 					}
+				});
+				
+				tableProperties.setWidget(rows, 3, removeImage);
+				setRowWordWarp(tableProperties, rows, 2, false);
+				
+				if (propertyValue!=null && !propertyValue.equals("")) {
+					textBox.setText(propertyValue);
+				}
+				
+			} else if (gwtMetadata instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+				ListBox listBox = new ListBox();
+				listBox.setStyleName("okm-Select");
+				listBox.addItem("",""); // Always we set and empty value
+				listBox.addChangeHandler(new ChangeHandler(){
+					@Override
+					public void onChange(ChangeEvent event) {
+						evaluateSearchButtonVisible();							
+					}
+				});
+				
+				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ) {
+					GWTOption option = itData.next();
+					String value = option.getValue();
+					listBox.addItem(option.getName(),value); // The translation is composed by propertyName + "." + value key
 					
-					hWidgetProperties.put(propertyName,listBox);
-					
-					tableProperties.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(grpName) + " : </b>");
-					tableProperties.setHTML(rows, 1, "&nbsp;" + Main.propertyGroupI18n(propertyName) + "&nbsp;");
-					tableProperties.setWidget(rows, 2, listBox);
-					
-					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickHandler(new ClickHandler() { 
-						@Override
-						public void onClick(ClickEvent event) {
-							Widget sender = (Widget) event.getSource();
-							Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
-							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
-						}
-					});
-					
-					tableProperties.setWidget(rows, 3, removeImage);
-					setRowWordWarp(tableProperties, rows, 2, false);					
-					break;
+					// Selects the selected value
+					if (propertyValue!=null && !propertyValue.equals("") && propertyValue.equals(value)) {
+						listBox.setSelectedIndex(listBox.getItemCount()-1);
+					}
+				}
+				
+				hWidgetProperties.put(propertyName,listBox);
+				
+				tableProperties.setHTML(rows, 0, "<b>" + grpName + " : </b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyName + "&nbsp;");
+				tableProperties.setWidget(rows, 2, listBox);
+				
+				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
+						Widget sender = (Widget) event.getSource();
+						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
+					}
+				});
+				
+				tableProperties.setWidget(rows, 3, removeImage);
+				setRowWordWarp(tableProperties, rows, 2, false);					
 			}
 		}
 	}

@@ -27,7 +27,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -57,23 +56,22 @@ public class StartUp {
 	public static final int STARTUP_GET_TRASH 	 	  						= 7;
 	public static final int STARTUP_GET_USER_HOME 	  						= 8;
 	public static final int STARTUP_GET_BOOKMARKS							= 9;
-	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 10;
-	public static final int STARTUP_LOADING_TAXONOMY						= 11;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 12;
-	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 13;
-	public static final int STARTUP_LOADING_OPEN_PATH						= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 15;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 16;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 17;
-	public static final int STARTUP_LOADING_CATEGORIES						= 18;
-	public static final int STARTUP_LOADING_THESAURUS						= 19;
-	public static final int STARTUP_LOADING_TEMPLATES						= 20;
-	public static final int STARTUP_LOADING_PERSONAL						= 21;
-	public static final int STARTUP_LOADING_MAIL							= 22;	
-	public static final int STARTUP_LOADING_TRASH							= 23;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 24;
-	public static final int STARTUP_GET_USER_VALUES							= 25;
-	public static final int STARTUP_KEEP_ALIVE								= 26;
+	public static final int STARTUP_LOADING_TAXONOMY						= 10;
+	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 11;
+	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 12;
+	public static final int STARTUP_LOADING_OPEN_PATH						= 13;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 14;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 15;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 16;
+	public static final int STARTUP_LOADING_CATEGORIES						= 17;
+	public static final int STARTUP_LOADING_THESAURUS						= 18;
+	public static final int STARTUP_LOADING_TEMPLATES						= 19;
+	public static final int STARTUP_LOADING_PERSONAL						= 20;
+	public static final int STARTUP_LOADING_MAIL							= 21;	
+	public static final int STARTUP_LOADING_TRASH							= 22;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 23;
+	public static final int STARTUP_GET_USER_VALUES							= 24;
+	public static final int STARTUP_KEEP_ALIVE								= 25;
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -228,7 +226,7 @@ public class StartUp {
 	final AsyncCallback<Map<String,String>> callbackGetPropertyGroupTranslations = new AsyncCallback<Map<String,String>>() {
 		public void onSuccess(Map<String,String> result){
 			Main.get().hPropertyGroupI18n = result;
-			nextStatus(StartUp.STARTUP_LOADING_TAXONOMY); // Sets the next status to loading
+			
 		}
 
 		public void onFailure(Throwable caught) {
@@ -308,15 +306,6 @@ public class StartUp {
 	}
 	
 	/**
-	 * Get property translations
-	 */
-	public void getPropetyGroupTranslations() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.getTranslations(Main.get().getLang(), callbackGetPropertyGroupTranslations);
-	}
-	
-	/**
 	 * Sets the keep alive
 	 */
 	public void keepAlive() {
@@ -393,11 +382,6 @@ public class StartUp {
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.bookmarks"), STARTUP_GET_BOOKMARKS);
 						Main.get().mainPanel.topPanel.mainMenu.bookmark.getAll(); 	// Initialize bookmarks
 						Main.get().mainPanel.browser.tabMultiple.init();			// Initialize tab multiple
-						break;
-						
-					case STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.property.group.translations"), STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS);
-						getPropetyGroupTranslations();
 						break;
 					
 					case STARTUP_LOADING_TAXONOMY:
@@ -563,10 +547,6 @@ public class StartUp {
 			
 			case STARTUP_GET_BOOKMARKS:
 				msg = Main.i18n("startup.bookmarks");
-				break;
-				
-			case STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS:
-				msg = Main.i18n("startup.loading.property.group.translations");
 				break;
 			
 			case STARTUP_LOADING_TAXONOMY:

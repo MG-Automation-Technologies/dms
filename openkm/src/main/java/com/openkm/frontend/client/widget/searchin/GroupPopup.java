@@ -21,11 +21,10 @@
 
 package com.openkm.frontend.client.widget.searchin;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -43,9 +42,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTMetaData;
+import com.openkm.frontend.client.bean.GWTFormElement;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -66,7 +65,7 @@ public class GroupPopup extends DialogBox {
 	private Button addButton;
 	private ListBox groupListBox;
 	private ListBox propertyListBox;
-	private Map<String, GWTMetaData> hMetaData = new HashMap<String,GWTMetaData>();
+	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
 	private FlexTable table;
 	private Label groupLabel;
 	private Label propertyLabel;
@@ -98,7 +97,13 @@ public class GroupPopup extends DialogBox {
 				if (propertyListBox.getSelectedIndex()>0) {
 					String grpName = groupListBox.getValue(groupListBox.getSelectedIndex());
 					String propertyName = propertyListBox.getValue(propertyListBox.getSelectedIndex());
-					Main.get().mainPanel.search.searchIn.addProperty(grpName, propertyName,(GWTMetaData) hMetaData.get(propertyName), "");
+					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+						GWTFormElement formElement = it.next();
+						if (formElement.getName().endsWith(propertyName)) {
+							Main.get().mainPanel.search.searchIn.addProperty(grpName, propertyName, formElement, "");
+						}
+						break;
+					}
 				}
 				enableAddGroupButton(); // Enables or disables add group button ( if exist some property still to be added )
 				hide();
@@ -171,14 +176,13 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback<List<String>> callbackGetAllGroups = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetAllGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			groupListBox.clear();
 			groupListBox.addItem("",""); // Adds empty value
-			for (Iterator<String> it = result.iterator(); it.hasNext();) {
-				String groupKey = it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				groupListBox.addItem(groupTranslation,groupKey);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup group = it.next();
+				groupListBox.addItem(group.getLabel() ,group.getName());
 			}
 			validate = 1;
 			validateGroupsNoEmpty(); // Enables or disables add group button ( case exist some value to be added on list )
@@ -192,8 +196,9 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties
 	 */
-	final AsyncCallback<Map<String, GWTMetaData>> callbackGetMetaData = new AsyncCallback<Map<String, GWTMetaData>>() {
-		public void onSuccess(Map<String, GWTMetaData> result){
+	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaData = new AsyncCallback<Collection<GWTFormElement>>() {
+		public void onSuccess(Collection<GWTFormElement> result){
+			hMetaData = result;
 			propertyListBox.clear();
 			propertyListBox.setVisible(true);
 			propertyLabel.setVisible(true);
@@ -201,10 +206,10 @@ public class GroupPopup extends DialogBox {
 			
 			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 
-			for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
-				String propertyName = (String) it.next();
-				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
-					propertyListBox.addItem(Main.propertyGroupI18n(propertyName),propertyName);
+			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
+				GWTFormElement formElement = it.next();
+				if (!actualProperties.contains(formElement.getName())) { // Only appears properties not stil added
+					propertyListBox.addItem(formElement.getLabel(), formElement.getName());
 				}
 			}
 		}
@@ -217,14 +222,16 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties and validate is there's one not assigned
 	 */
-	final AsyncCallback<Map<String, GWTMetaData>> callbackGetMetaDataToValidate = new AsyncCallback<Map<String, GWTMetaData>>() {
-		public void onSuccess(Map<String, GWTMetaData> result){
-
+	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaDataToValidate = new AsyncCallback<Collection<GWTFormElement>>() {
+		public void onSuccess(Collection<GWTFormElement> result){
+			hMetaData = result;
+			
 			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 			boolean found = false;
 			
-			for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
-				String propertyName = it.next();
+			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
+				GWTFormElement formElement = it.next();
+				String propertyName = formElement.getName();
 				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
 					found = true;
 				}
