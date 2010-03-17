@@ -18,7 +18,7 @@
         </SecurityManager>
 
         <!-- Access manager: FQN of class implementing the AccessManager interface -->
-        <AccessManager class="com.openkm.core.OKMAccessManager">
+        <AccessManager class="org.apache.jackrabbit.core.security.DefaultAccessManager">
             <!-- <param name="config" value="${rep.home}/access.xml"/> -->
         </AccessManager>
 
