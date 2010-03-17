@@ -37,6 +37,7 @@ import com.openkm.core.ParseException;
 
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
+	private static Map<PropertyGroup, Collection<FormElement>> pGroups = null;
 
 	/**
 	 * Parse form.xml definitions
@@ -92,57 +93,66 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static Map<PropertyGroup, Collection<FormElement>> parsePropertyGroupsForms() throws IOException, 
-			ParseException {
+	public static synchronized Map<PropertyGroup, Collection<FormElement>> parsePropertyGroupsForms() 
+			throws IOException,	ParseException {
 		log.info("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
-		String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
-		log.info("PropertyGroupForms: {}", pgFile);
-		Map<PropertyGroup, Collection<FormElement>> pGroups = new HashMap<PropertyGroup, Collection<FormElement>>();
-		FileInputStream fis = null;
-		
-		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-			dbf.setValidating(true);
-			ErrorHandler handler = new ErrorHandler();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			db.setErrorHandler(handler);
-			fis = new FileInputStream(pgFile);
+		if (pGroups == null) {
+			String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
+			log.debug("PropertyGroupForms: {}", pgFile);
+			pGroups = new HashMap<PropertyGroup, Collection<FormElement>>();
+			FileInputStream fis = null;
 			
-			if (fis != null) {
-				Document doc = db.parse(fis);
-				doc.getDocumentElement().normalize();
-				NodeList nlForm = doc.getElementsByTagName("property-group");
-
-				for (int i = 0; i < nlForm.getLength(); i++) {
-					Node nForm = nlForm.item(i);
-
-					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
-						String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
-						String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
-						NodeList nlField = nForm.getChildNodes();
-						ArrayList<FormElement> fe = parseField(nlField);
-						PropertyGroup pg = new PropertyGroup();
-						pg.setLabel(pgLabel);
-						pg.setName(pgName);
-						pGroups.put(pg, fe);
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				dbf.setNamespaceAware(true);
+				dbf.setValidating(true);
+				ErrorHandler handler = new ErrorHandler();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				db.setErrorHandler(handler);
+				fis = new FileInputStream(pgFile);
+				
+				if (fis != null) {
+					Document doc = db.parse(fis);
+					doc.getDocumentElement().normalize();
+					NodeList nlForm = doc.getElementsByTagName("property-group");
+					
+					for (int i = 0; i < nlForm.getLength(); i++) {
+						Node nForm = nlForm.item(i);
+						
+						if (nForm.getNodeType() == Node.ELEMENT_NODE) {
+							String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
+							String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
+							NodeList nlField = nForm.getChildNodes();
+							ArrayList<FormElement> fe = parseField(nlField);
+							PropertyGroup pg = new PropertyGroup();
+							pg.setLabel(pgLabel);
+							pg.setName(pgName);
+							pGroups.put(pg, fe);
+						}
 					}
 				}
+			} catch (ParserConfigurationException e) {
+				throw new ParseException(e.getMessage());
+			} catch (SAXException e) {
+				throw new ParseException(e.getMessage());
+			} catch (IOException e) {
+				throw e;
+			} finally {
+				IOUtils.closeQuietly(fis);
 			}
-		} catch (ParserConfigurationException e) {
-			throw new ParseException(e.getMessage());
-		} catch (SAXException e) {
-			throw new ParseException(e.getMessage());
-		} catch (IOException e) {
-			throw e;
-		} finally {
-			IOUtils.closeQuietly(fis);
 		}
 
 		log.info("parseMetadataForms: {}", pGroups);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return pGroups;
+	}
+	
+	/**
+	 * Force PropertyGroups.xml re-read in the next petition.
+	 */
+	public static synchronized void resetPropertyGroupsForms() {
+		pGroups = null;
 	}
 
 	/**
