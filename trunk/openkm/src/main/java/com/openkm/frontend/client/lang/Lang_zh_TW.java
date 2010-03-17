@@ -68,7 +68,6 @@ public class Lang_zh_TW {
 		lang.put("startup.loading.trash", "正在取得回收筒");
 		lang.put("startup.loading.history.search", "正在取得歷史搜尋");
 		lang.put("startup.loading.user.values", "正在取得使用者資料");
-		lang.put("startup.loading.property.group.translations", "正在取得屬性群組轉換");
 		lang.put("startup.keep.alive", "Loading keep alive");
 	    
 	    // Update notification

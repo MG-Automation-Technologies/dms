@@ -68,7 +68,6 @@ public class Lang_zh_CN {
 	    lang.put("startup.loading.trash", "正在加载回收站");
 	    lang.put("startup.loading.history.search", "加载历史检索");
 	    lang.put("startup.loading.user.values", "加载用户值");
-	    lang.put("startup.loading.property.group.translations", "正在加载属性组翻译");
 	    lang.put("startup.keep.alive", "正在加载保持活动");
 	    
 	    // Update notification

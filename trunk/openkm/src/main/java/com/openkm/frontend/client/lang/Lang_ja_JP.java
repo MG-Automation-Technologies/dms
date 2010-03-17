@@ -68,7 +68,6 @@ public class Lang_ja_JP {
 		lang.put("startup.loading.trash", "ごみ箱の読込中");
 		lang.put("startup.loading.history.search", "検索履歴の読込中");
 		lang.put("startup.loading.user.values", "ユーザ設定の読込中");
-		lang.put("startup.loading.property.group.translations", "Loading property group translations");
 		lang.put("startup.keep.alive", "Loading keep alive");
 		
 		// Update notification

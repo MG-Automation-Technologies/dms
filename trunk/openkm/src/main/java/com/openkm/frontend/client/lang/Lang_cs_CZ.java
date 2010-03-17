@@ -68,7 +68,6 @@ public class Lang_cs_CZ {
 	    lang.put("startup.loading.trash", "Nahrává se koš");
 	    lang.put("startup.loading.history.search", "Nahrává se hledání v historii");
 	    lang.put("startup.loading.user.values", "Nahrává se uživatelské hodnoty");
-	    lang.put("startup.loading.property.group.translations", "Nahrává se skupina vlastností překlady");
 	    lang.put("startup.keep.alive", "Nahrává se obnova připojení");
 	    
 	    // Update notification

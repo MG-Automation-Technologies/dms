@@ -68,7 +68,6 @@ public class Lang_lv_LV {
 	    lang.put("startup.loading.trash", "Ielādē  miskasti");
 	    lang.put("startup.loading.history.search", "Ielādē meklēšanas vēsturi");
 	    lang.put("startup.loading.user.values", "Ielādē lietotāja parametrus");
-	    lang.put("startup.loading.property.group.translations", "Ielādē īpasību grupu tulkojumus");
 	    lang.put("startup.keep.alive", "Ielādē keep alive");
 	    
 	    // Update notification

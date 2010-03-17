@@ -68,7 +68,6 @@ public class Lang_gl_ES {
 	    lang.put("startup.loading.trash", "Carregando lixo");
 	    lang.put("startup.loading.history.search", "Carregantdo histórico de procuras");
 	    lang.put("startup.loading.user.values", "Carregando datos do usuario");
-	    lang.put("startup.loading.property.group.translations", "Cargando traducions de grupo de propiedades");
 	    lang.put("startup.keep.alive", "Cargando keep alive");
 	    
 	    // Update notification

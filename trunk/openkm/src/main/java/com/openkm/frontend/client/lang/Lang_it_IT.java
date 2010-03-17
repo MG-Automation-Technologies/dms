@@ -68,7 +68,6 @@ public class Lang_it_IT {
 	    lang.put("startup.loading.trash", "Caricamento cestino");
 	    lang.put("startup.loading.history.search", "Caricamento ricerca");
 	    lang.put("startup.loading.user.values", "Caricamento valori dell'utente");
-	    lang.put("startup.loading.property.group.translations", "Caricamento proprietà gruppo traduzione");
 	    lang.put("startup.keep.alive", "Tenere attivo");
 	    
 	    // Update notification

@@ -70,7 +70,6 @@ public class Lang_pl_PL {
 	    lang.put("startup.loading.trash", "Ładowanie śmietnika");
 	    lang.put("startup.loading.history.search", "Ładowanie historii wyszukiwania");
 	    lang.put("startup.loading.user.values", "Ładowanie danych użytkownika");
-	    lang.put("startup.loading.property.group.translations", "Ładowanie tłumaczeń grup właściwości");
 	    lang.put("startup.keep.alive", "Ładowanie systemu utrzymywana połączenia");
 	    
 	    // Update notification

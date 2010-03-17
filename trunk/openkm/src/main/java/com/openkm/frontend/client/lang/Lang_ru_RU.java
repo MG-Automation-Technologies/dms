@@ -72,7 +72,6 @@ public class Lang_ru_RU {
 	    lang.put("startup.loading.trash", "Загружаю корзину");
 	    lang.put("startup.loading.history.search", "Загружаю поиск по истории");
 	    lang.put("startup.loading.user.values", "Загружаю пользовательские значения");
-	    lang.put("startup.loading.property.group.translations", "Загружаю переводы групп свойств");
 		// keep alive = поддержка .... чего?!
 	    lang.put("startup.keep.alive", "Загружаю поддержку соединения");
 	    

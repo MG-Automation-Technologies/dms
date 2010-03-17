@@ -68,7 +68,6 @@ public class Lang_ca_ES {
 	    lang.put("startup.loading.trash", "Carregant paperera");
 	    lang.put("startup.loading.history.search", "Carregant històric de cerques");
 	    lang.put("startup.loading.user.values", "Carregant dades de l'usuari");
-	    lang.put("startup.loading.property.group.translations", "Carregant traduccions de grups de propietats");
 	    lang.put("startup.keep.alive", "Carregant keep alive");
 	    
 	    // Update notification

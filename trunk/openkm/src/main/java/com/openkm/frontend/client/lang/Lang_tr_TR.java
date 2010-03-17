@@ -69,7 +69,6 @@ public class Lang_tr_TR {
 	    lang.put("startup.loading.trash", "Geri Dönüþüm Kutusu Yükleniyor..");
 	    lang.put("startup.loading.history.search", "Arama Geçmiþi yükleniyor");
 	    lang.put("startup.loading.user.values", "Kullanýcý Deðerleri Yükleniyor..");
-	    lang.put("startup.loading.property.group.translations", "Özel Gruplar Yükleniyor");
 	    lang.put("startup.keep.alive", "Yükleme Sürüyor..");
 	    
 	    // Update notification

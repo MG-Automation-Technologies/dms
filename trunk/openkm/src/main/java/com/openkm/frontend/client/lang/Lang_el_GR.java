@@ -68,7 +68,6 @@ public class Lang_el_GR {
 	    lang.put("startup.loading.trash", "Φόρτωση διεγραμμένων");
 	    lang.put("startup.loading.history.search", "Φόρτωση ιστορικού αναζήτησης");
 	    lang.put("startup.loading.user.values", "Φόρτωση τιμές χρήστη");
-	    lang.put("startup.loading.property.group.translations", "Φόρτωση μεταφράσεων ομάδων ιδιοτήτων");
 	    lang.put("startup.keep.alive", "Φόρτωση keep alive");
 	    
 	    // Update notification

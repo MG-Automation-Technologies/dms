@@ -69,7 +69,6 @@ public class Lang_nl_NL {
 	    lang.put("startup.loading.trash", "Prullenbak laden");
 	    lang.put("startup.loading.history.search", "Historische zoekopdrachten laden");
 	    lang.put("startup.loading.user.values", "Gebruikers waarden laden");
-	    lang.put("startup.loading.property.group.translations", "Eigenschap groep vertalingen laden");
 	    lang.put("startup.keep.alive", "keep alive laden");
 	    
 	    // Update notification

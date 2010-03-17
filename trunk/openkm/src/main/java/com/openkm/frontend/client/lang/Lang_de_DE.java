@@ -68,7 +68,6 @@ public class Lang_de_DE {
 	    lang.put("startup.loading.trash", "Lade Papierkorb");
 	    lang.put("startup.loading.history.search", "Lade historische Suchen");
 	    lang.put("startup.loading.user.values", "Lade Benutzerwerte");
-	    lang.put("startup.loading.property.group.translations", "Lade Eigenschaftengruppenübersetzungen");
 	    lang.put("startup.keep.alive", "Lade Lebenszeichen");
 	    
 	    // Update notification
