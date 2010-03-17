@@ -570,13 +570,14 @@ public class DirectRepositoryModule implements RepositoryModule {
 	
 	/**
 	 * Register custom node definition from file.
+	 *
+	 * TODO For Jackrabbit 2.0 should be done as:
+	 *   InputStream is = getClass().getClassLoader().getResourceAsStream("test.cnd");
+	 *   Reader cnd = new InputStreamReader(is);
+	 *   NodeType[] nodeTypes = CndImporter.registerNodeTypes(cnd, session);
 	 * 
-	 * @param token
-	 * @param cndFileName
-	 * @throws FileNotFoundException
-	 * @throws ParseException
-	 * @throws RepositoryException
-	 * @throws InvalidNodeTypeDefException
+	 * The key method is:
+	 *   CndImporter.registerNodeTypes("cndfile", session);
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized static void registerCustomNodeTypes(Session session, InputStream cndFile)
