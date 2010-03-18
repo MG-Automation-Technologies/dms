@@ -26,6 +26,8 @@ import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * @author pavila
  *
@@ -66,7 +68,7 @@ public class FormatUtil {
 	 * Format time for human readers
 	 */
 	public static String formatTime(long time) {
-		DateFormat df = new SimpleDateFormat("hh:mm:ss.SSS"); 
+		DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS"); 
 		String str = df.format(time);
 		return str;
 	}
@@ -94,5 +96,35 @@ public class FormatUtil {
 	 */
 	public static String formatDate(Calendar cal) {
 		return cal.getTime().toString();
+	}
+	
+	/**
+	 * Format string array
+	 */
+	public static String formatArray(String[] values) {
+		if (values != null) {
+			if (values.length == 1) {
+				return values[0];
+			} else {
+				return ArrayUtils.toString(values);
+			}
+		} else {
+			return "NULL";
+		}
+	}
+	
+	/**
+	 * Format object
+	 */
+	public static String formatObject(Object value) {
+		if (value != null) {
+			if (value instanceof Object[]) {
+				return ArrayUtils.toString(value);
+			} else {
+				return value.toString();
+			}
+		} else {
+			return "NULL";
+		}
 	}
 }
