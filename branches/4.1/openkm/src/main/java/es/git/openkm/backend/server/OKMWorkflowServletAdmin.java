@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMWorkflow;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.ProcessInstance;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.backend.client.OKMException;
 import es.git.openkm.backend.client.bean.GWTProcessDefinition;
