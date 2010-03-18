@@ -15,6 +15,7 @@ import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.core.AccessDeniedException;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.direct.DirectRepositoryModule;
@@ -211,7 +212,7 @@ public class RemoveTest {
 	/**
 	 * Lista los documentos que hay borrados y sin borrar 
 	 */
-	private void listDocs(String token) throws AccessDeniedException, RepositoryException {
+	private void listDocs(String token) throws AccessDeniedException, ParseException, RepositoryException {
 		System.out.println("\nDocumentos buenos...");
 		for (Iterator<QueryResult> it = OKMSearch.getInstance().findByContent(token, "*").iterator(); it.hasNext(); ) {
 			Document doc = it.next().getDocument();
