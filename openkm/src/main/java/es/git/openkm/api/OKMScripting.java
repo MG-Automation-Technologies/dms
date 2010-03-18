@@ -36,49 +36,38 @@ public class OKMScripting implements ScriptingModule {
 	private static Logger log = LoggerFactory.getLogger(OKMScripting.class);
 	private static OKMScripting instance = new OKMScripting();
 
-	private OKMScripting() {}
-	
+	private OKMScripting() {
+	}
+
 	public static OKMScripting getInstance() {
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#setScript(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void setScript(String token, String nodePath, String code)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("setScript("+token+")");
+	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		sm.setScript(token, nodePath, code);
 		log.debug("setScript: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#removeScript(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void removeScript(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("removeScript("+token+", "+nodePath+")");
+	public void removeScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("removeScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		sm.removeScript(token, nodePath);
 		log.debug("removeScript: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#getScript(java.lang.String, java.lang.String)
-	 */
+
 	@Override
-	public String getScript(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("getScript("+token+")");
+	public String getScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("getScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		String code = sm.getScript(token, nodePath);
-		log.debug("getScript: "+code);
+		log.debug("getScript: " + code);
 		return code;
 	}
 }

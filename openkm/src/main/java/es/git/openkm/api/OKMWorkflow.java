@@ -26,11 +26,12 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.bean.FormField;
 import es.git.openkm.bean.ProcessDefinition;
 import es.git.openkm.bean.ProcessInstance;
 import es.git.openkm.bean.TaskInstance;
 import es.git.openkm.bean.Token;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.ModuleManager;
 import es.git.openkm.module.WorkflowModule;
@@ -49,21 +50,15 @@ public class OKMWorkflow implements WorkflowModule {
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#registerProcessDefinition(java.lang.String, java.util.zip.ZipInputStream)
-	 */
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream is)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("registerProcessDefinition(" + token + ", " + is + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.registerProcessDefinition(token, is);
 		log.debug("registerProcessDefinition: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#deleteProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public void deleteProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -73,9 +68,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("deleteProcessDefinition: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -86,9 +78,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinitionImage(java.lang.String, long)
-	 */
 	@Override
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node)
 			throws RepositoryException {
@@ -99,25 +88,19 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinitionForms(java.lang.String, long)
-	 */
 	@Override
-	public Map<String, Collection<FormField>> getProcessDefinitionForms(String token, long processDefinitionId)
-			throws RepositoryException {
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
+			throws ParseException, RepositoryException {
 		log.debug("getProcessDefinitionForms(" + token + ", " + processDefinitionId + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Map<String, Collection<FormField>> result = wm.getProcessDefinitionForms(token, processDefinitionId);
+		Map<String, Collection<FormElement>> result = wm.getProcessDefinitionForms(token, processDefinitionId);
 		log.debug("getProcessDefinitionForms: "+result);
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#runProcessDefinition(java.lang.String, long, java.util.Map)
-	 */
 	@Override
 	public ProcessInstance runProcessDefinition(String token,
-			long processDefinitionId, Map<String, String> variables) throws RepositoryException {
+			long processDefinitionId, Map<String, Object> variables) throws RepositoryException {
 		log.debug("runProcessDefinition(" + token + ", " + processDefinitionId + ", " + variables + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		ProcessInstance result = wm.runProcessDefinition(token, processDefinitionId, variables);
@@ -125,9 +108,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#sendProcessInstanceSignal(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, String transitionName)
 			throws RepositoryException {
@@ -138,9 +118,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#deleteProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public void deleteProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -150,9 +127,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("deleteProcessInstance: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findProcessInstances(java.lang.String, long)
-	 */
 	@Override
 	public Collection<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -163,9 +137,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findAllProcessDefinitions(java.lang.String)
-	 */
 	@Override
 	public Collection<ProcessDefinition> findAllProcessDefinitions(String token)
 			throws RepositoryException {
@@ -176,9 +147,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findLatestProcessDefinitions(java.lang.String)
-	 */
 	@Override
 	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)
 			throws RepositoryException {
@@ -189,9 +157,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findAllProcessDefinitionVersions(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name)
 			throws RepositoryException {
@@ -202,9 +167,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public ProcessInstance getProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -215,9 +177,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public void suspendProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -227,9 +186,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("suspendProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public void resumeProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -239,21 +195,15 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("resumeProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
-			String value) throws RepositoryException {
+			Object value) throws RepositoryException {
 		log.debug("addProcessInstanceVariable(" + token + ", " + processInstanceId + ", " + name + ", " + value + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.addProcessInstanceVariable(token, processInstanceId, name, value);
 		log.debug("addProcessInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#removeProcessInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeProcessInstanceVariable(String token, long processInstanceId, String name)
 			throws RepositoryException {
@@ -263,9 +213,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("removeProcessInstanceVariable: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findUserTaskInstances(java.lang.String)
-	 */
 	@Override
 	public Collection<TaskInstance> findUserTaskInstances(String token)
 			throws RepositoryException {
@@ -276,9 +223,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findTaskInstances(java.lang.String, long)
-	 */
 	@Override
 	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId)
 			throws RepositoryException {
@@ -289,12 +233,9 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTaskInstanceValues(java.lang.String, long, java.lang.String, java.util.Map)
-	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId,
-			String transitionName, Map<String, String> values)
+			String transitionName, Map<String, Object> values)
 			throws RepositoryException {
 		log.debug("setTaskInstanceValues(" + token + ", " + taskInstanceId + ", " + transitionName + ", " + values + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
@@ -302,9 +243,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("setTaskInstanceValues: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceComment(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void addTaskInstanceComment(String token, long taskInstanceId, String message)
 			throws RepositoryException {
@@ -314,9 +252,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("addTaskInstanceComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public TaskInstance getTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -327,9 +262,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTaskInstanceActorId(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void setTaskInstanceActorId(String token, long taskInstanceId,
 			String actorId) throws RepositoryException {
@@ -339,21 +271,15 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("setTaskInstanceActorId: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addTaskInstanceVariable(String token, long taskInstanceId,
-			String name, String value) throws RepositoryException {
+			String name, Object value) throws RepositoryException {
 		log.debug("addTaskInstanceVariable(" + token + ", " + taskInstanceId + ", " + name + ", " + value + ")");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.addTaskInstanceVariable(token, taskInstanceId, name, value);
 		log.debug("addTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#removeTaskInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeTaskInstanceVariable(String token, long taskInstanceId,
 			String name) throws RepositoryException {
@@ -363,9 +289,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("removeTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#startTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public void startTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -375,9 +298,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("startTaskInstance: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#endTaskInstance(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void endTaskInstance(String token, long taskInstanceId,
 			String transitionName) throws RepositoryException {
@@ -387,9 +307,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("endTaskInstance: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public void suspendTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -399,9 +316,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("suspendTaskInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public void resumeTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -411,9 +325,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("resumeTaskInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getToken(java.lang.String, long)
-	 */
 	@Override
 	public Token getToken(String token, long tokenId)
 			throws RepositoryException {
@@ -424,9 +335,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTokenComment(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void addTokenComment(String token, long tokenId, String message)
 			throws RepositoryException {
@@ -436,9 +344,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("addTokenComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendToken(java.lang.String, long)
-	 */
 	@Override
 	public void suspendToken(String token, long tokenId) throws RepositoryException {
 		log.debug("suspendToken(" + token + ", " + tokenId + ")");
@@ -447,9 +352,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("suspendToken: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeToken(java.lang.String, long)
-	 */
 	@Override
 	public void resumeToken(String token, long tokenId) throws RepositoryException {
 		log.debug("resumeToken(" + token + ", " + tokenId + ")");
@@ -458,9 +360,6 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("resumeToken: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#sendTokenSignal(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public Token sendTokenSignal(String token, long tokenId,
 			String transitionName) throws RepositoryException {
@@ -471,9 +370,6 @@ public class OKMWorkflow implements WorkflowModule {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTokenNode(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void setTokenNode(String token, long tokenId, String nodeName)
 			throws RepositoryException {
@@ -483,3 +379,4 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("setTokenNode: void");
 	}
 }
+
