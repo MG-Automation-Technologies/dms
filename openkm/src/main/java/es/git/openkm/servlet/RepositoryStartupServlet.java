@@ -22,6 +22,7 @@ package es.git.openkm.servlet;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Timer;
 
 import javax.servlet.ServletException;
@@ -29,6 +30,8 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.jbpm.JbpmConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +83,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Try a default OpenKM server location
         if (Config.APPLICATION_URL.equals("")) {
-        	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/es.git.openkm.frontend.Main/index.jsp";
+        	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/com.openkm.frontend.Main/index.jsp";
         }
         
         // Get OpenKM version
@@ -94,6 +97,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Initialize folder preview cache
         File previewCacheFolder = new File(Config.SWF_CACHE);
         if (!previewCacheFolder.exists()) previewCacheFolder.mkdirs();
+        
+        // Initialize Velocity engine
+	    try {
+	        Properties p = new Properties();
+		    p.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Config.HOME_DIR);
+			Velocity.init(p);
+		} catch (Exception e) {
+			throw new ServletException(e.getMessage());
+		}
         
         try {
         	log.info("*** Repository initializing... ***");
@@ -136,7 +148,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         wd = new Watchdog();
         timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
         
-        if (Config.TRIAL || Config.UPDATE_INFO.equalsIgnoreCase("on")) {
+        if (Config.UPDATE_INFO.equalsIgnoreCase("on")) {
         	 log.info("*** Activating update info ***");
         	 ui = new UpdateInfo();
         	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours

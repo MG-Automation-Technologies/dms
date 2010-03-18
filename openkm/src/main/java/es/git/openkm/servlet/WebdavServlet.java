@@ -26,7 +26,6 @@ import org.apache.jackrabbit.webdav.simple.SimpleWebdavServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.direct.DirectRepositoryModule;
 import es.git.openkm.webdav.LocatorFactoryImplEx;
 
@@ -59,7 +58,7 @@ public class WebdavServlet extends SimpleWebdavServlet {
 		
 		try {
 			repository = DirectRepositoryModule.getRepository();
-		} catch (RepositoryException e) {
+		} catch (javax.jcr.RepositoryException e) {
 			e.printStackTrace();
 		}
 		
