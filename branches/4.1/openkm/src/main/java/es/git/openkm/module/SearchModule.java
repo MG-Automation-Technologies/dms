@@ -27,6 +27,7 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.ResultSet;
 import es.git.openkm.core.ItemExistsException;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 
@@ -40,7 +41,8 @@ public interface SearchModule {
 	 * @return A collection of document which content matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByContent(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByContent(String token, String expression) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Search for documents by document name.
@@ -50,7 +52,8 @@ public interface SearchModule {
 	 * @return A collection of document which name matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByName(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByName(String token, String expression) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Search for documents using it associated keywords.
@@ -60,7 +63,8 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByKeywords(String token, String expression) throws RepositoryException;
+	public Collection<QueryResult> findByKeywords(String token, String expression) throws ParseException,
+			RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords.
@@ -70,7 +74,8 @@ public interface SearchModule {
 	 * @return A collection of documents.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException;
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
+			RepositoryException;
 
 	/**
 	 * Performs a complex search by content, name and keywords. 
@@ -84,7 +89,8 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException;
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
+			throws IOException, ParseException, RepositoryException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
