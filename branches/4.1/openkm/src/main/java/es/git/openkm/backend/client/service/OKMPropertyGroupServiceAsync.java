@@ -19,7 +19,12 @@
 
 package es.git.openkm.backend.client.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import es.git.openkm.backend.client.bean.GWTMetaData;
 
 /**
  * OKMPropertyGroupServiceAsync
@@ -28,6 +33,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface OKMPropertyGroupServiceAsync {
-	public void getAllGroups(AsyncCallback callback);
-	public void getMetaData(String grpName, AsyncCallback callback);
+	public void getAllGroups(AsyncCallback<List<String>> callback);
+	public void getMetaData(String grpName, AsyncCallback<Map<String, GWTMetaData>> callback);
 }
