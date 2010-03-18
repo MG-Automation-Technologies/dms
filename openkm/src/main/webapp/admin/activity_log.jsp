@@ -1,8 +1,8 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.ActivityDAO" %>
-<%@ page import="com.openkm.dao.bean.ActivityFilter" %>
-<%@ page import="com.openkm.dao.bean.Activity" %>
-<%@ page import="com.openkm.module.direct.DirectAuthModule" %>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.dao.ActivityDAO" %>
+<%@ page import="es.git.openkm.dao.bean.ActivityFilter" %>
+<%@ page import="es.git.openkm.dao.bean.Activity" %>
+<%@ page import="es.git.openkm.module.direct.DirectAuthModule" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Collection" %>
@@ -86,7 +86,7 @@
 		
 		if (date_begin != null && !date_begin.equals("") && date_end != null && !date_end.equals("")) {
 			try {
-				out.println("<table class=\"results\" width=\"100%\">");
+				out.println("<table class=\"results\" align=\"center\">");
 				out.println("<tr><th>Date</th><th>User</th><th>Token</th><th>Action</th><th>Item</th><th>Params</th></tr>");
 			
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

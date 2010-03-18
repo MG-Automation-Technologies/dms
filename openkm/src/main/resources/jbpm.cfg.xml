@@ -13,6 +13,6 @@
   <string name="jbpm.mail.smtp.host" value="mail.git.es" />
   <string name="jbpm.mail.from.address" value="noreply@git.es" />
   <string name="resource.mail.templates" value="jbpm.mail.templates.xml"/>
-  <bean name="jbpm.mail.address.resolver" class="com.openkm.workflow.OKMAddressResolver" singleton="true"/>
+  <bean name="jbpm.mail.address.resolver" class="es.git.openkm.workflow.OKMAddressResolver" singleton="true"/>
   
 </jbpm-configuration>

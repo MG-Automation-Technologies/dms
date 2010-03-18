@@ -1,7 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="com.openkm.dao.bean.User"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.dao.AuthDAO"%>
+<%@ page import="es.git.openkm.dao.bean.Role"%>
+<%@ page import="es.git.openkm.dao.bean.User"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
@@ -42,7 +42,7 @@
 			
 			out.println("<form action=\"user_action.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
-			out.println("<table class=\"form\" width=\"320px\">");
+			out.println("<table class=\"form\" width=\"320px\" align=\"center\">");
 			out.println("<tr><td>Id</td><td><input class=\":required\" name=\"usr_id\" value=\""+usr.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
 			out.println("<tr><td>Password</td><td><input type=\"password\" name=\"usr_pass\" value=\"\"></td></tr>");
 			out.println("<tr><td>Name</td><td><input class=\":required\" name=\"usr_name\" value=\""+usr.getName()+"\"></td></tr>");

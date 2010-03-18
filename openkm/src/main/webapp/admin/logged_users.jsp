@@ -1,6 +1,6 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager" %>
-<%@ page import="com.openkm.bean.SessionInfo" %>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.SessionManager" %>
+<%@ page import="es.git.openkm.bean.SessionInfo" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -17,7 +17,7 @@
 <% 
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		out.println("<h1>Logged users</h1>");
-		out.println("<table class=\"results\" width=\"80%\">");
+		out.println("<table class=\"results\" align=\"center\">");
 		out.println("<tr><th>UID</th><th>Token</th><th>Creation</th><th>Last access</th><th></th></tr>");
 		
 		SessionManager sm = SessionManager.getInstance();
@@ -30,8 +30,7 @@
 			out.print("<td>"+token+"</td>");
 			out.print("<td>"+si.getCreation().getTime()+"</td");
 			out.print("<td>"+si.getAccess().getTime()+"</td>");
-			out.print("<td><a href=\"logged_users_logout.jsp?token="+URLEncoder.encode(token, "UTF-8")+"\">");
-			out.print("<img src=\"img/action/logout.png\" alt=\"Logout\" title=\"Logout\"/></a></td>");
+			out.print("<td><a href=\"logged_users_logout.jsp?token="+URLEncoder.encode(token, "UTF-8")+"\">Logout</a></td>");
 			out.print("</tr>");
 		}
 		

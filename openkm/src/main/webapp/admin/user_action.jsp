@@ -1,8 +1,8 @@
-<%@ page import="com.openkm.core.SessionManager"%>
-<%@ page import="com.openkm.util.UserActivity"%>
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.User"%>
+<%@ page import="es.git.openkm.core.SessionManager"%>
+<%@ page import="es.git.openkm.util.UserActivity"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.dao.AuthDAO"%>
+<%@ page import="es.git.openkm.dao.bean.User"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Arrays"%>

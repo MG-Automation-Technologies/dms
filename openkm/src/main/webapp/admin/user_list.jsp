@@ -1,7 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="com.openkm.dao.bean.User"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.dao.AuthDAO"%>
+<%@ page import="es.git.openkm.dao.bean.Role"%>
+<%@ page import="es.git.openkm.dao.bean.User"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
@@ -24,7 +24,7 @@
 
 		out.println("<h1>Users <span style=\"font-size: 10px;\">(<a href=\"role_list.jsp\">Roles</a>)</font></h1>");
 		out.println("<form action=\"user_list.jsp\">");
-		out.println("<table class=\"form\">");
+		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr><td>Role</td><td><select name=\"roleFilter\">");
 		out.println("<option value=\"\" ></option>");
 		
@@ -40,28 +40,27 @@
 		out.println("<br/>");
 				
 		try {
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width=\"25px\">Active</th>");
-			out.println("<th width=\"100px\"><a href=\"user_edit.jsp?action=c\"><img src=\"img/action/new.png\" alt=\"New user\" title=\"New user\"/></a></th></tr>");
+			out.println("<table class=\"results\">");
+			out.println("<tr><th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th>Active</th><th><a href=\"user_edit.jsp?action=c\">New user</a></th></tr>");
 			Collection<User> users = null;
 			
 			if (roleFilter == null || roleFilter.equals("")) {
-				users = dao.findAllUsers(false);
+				users = dao.findAllUsers();
 			} else {
-				users = dao.findUsersByRole(false, roleFilter);
+				users = dao.findUsersByRole(roleFilter);
 			}
 			
 			int i = 0;
 			for (Iterator<User> it = users.iterator(); it.hasNext(); ) {
 				User usr = it.next();
 				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+usr.getId()+"</td><td>"+usr.getName()+"</td><td>"+usr.getEmail()+
-						"</td><td>"+usr.getRoles()+"</td><td>"+
-						(usr.isActive()?"<img src=\"img/true.png\" alt=\"Active\" title=\"Active\"/>":
-							"<img src=\"img/false.png\" alt=\"Inactive\" title=\"Inactive\"/>")+"</td>"+
-						"<td><a href=\"user_edit.jsp?action=u&id="+usr.getId()+"\""+"><img src=\"img/action/edit.png\" alt=\"Edit\" title=\"Edit\"/></a>"+
-						" &nbsp; <a href=\"user_edit.jsp?action=d&id="+usr.getId()+"\""+"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a>"+
-						" &nbsp; <a href=\"mail_list.jsp?user="+usr.getId()+"\"><img src=\"img/action/email.png\" alt=\"Mail accounts\" title=\"Mail accounts\"/></a>"+
-						" &nbsp; <a href=\"twitter_list.jsp?user="+usr.getId()+"\"><img src=\"img/action/twitter.png\" alt=\"Twitter accounts\" title=\"Twitter accounts\"/></a>"+
+						"</td><td>"+usr.getRoles()+"</td><td>"+usr.isActive()+"</td>"+
+						"<td><a href=\"user_edit.jsp?action=u&id="+usr.getId()+"\""+">Edit</a>"+
+								(!Config.ADMIN_USER.equals(usr.getId())?
+										" - <a href=\"user_edit.jsp?action=d&id="+usr.getId()+"\""+">Delete</a>"+
+												" - <a href=\"mail_list.jsp?user="+usr.getId()+"\">Mail Accounts</a>"+
+												" - <a href=\"twitter_list.jsp?user="+usr.getId()+"\">Twitter Accounts</a>":
+											"")+
 						"</td></tr>");
 			}
 				

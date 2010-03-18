@@ -1,7 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.util.WebUtil"%>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.TwitterAccount"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.util.WebUtil"%>
+<%@ page import="es.git.openkm.dao.AuthDAO"%>
+<%@ page import="es.git.openkm.dao.bean.TwitterAccount"%>
 <%@ page import="java.sql.SQLException" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -44,7 +44,7 @@
 			out.println("<form action=\"twitter_action.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
 			out.println("<input type=\"hidden\" name=\"ta_id\" value=\""+id+"\">");
-			out.println("<table class=\"form\" width=\"330px\">");
+			out.println("<table class=\"form\" width=\"330px\" align=\"center\">");
 			out.println("<tr><td>OKM user</td><td><input class=\":required\" name=\"ta_user\" value=\""+ta.getUser()+"\" readonly></td></tr>");
 			out.println("<tr><td>Twitter user</td><td><input class=\":required\" name=\"ta_tuser\" value=\""+ta.getTwitterUser()+"\"></td></tr>");
 			out.println("<tr><td>Active</td><td><input name=\"ta_active\" type=\"checkbox\" "+(ta.isActive()?"checked":"")+"></td></tr>");

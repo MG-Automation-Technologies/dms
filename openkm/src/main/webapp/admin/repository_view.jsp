@@ -1,12 +1,12 @@
-<%@ page import="com.openkm.module.direct.DirectFolderModule" %>
-<%@ page import="com.openkm.api.OKMFolder"%>
-<%@ page import="com.openkm.bean.ContentInfo" %>
-<%@ page import="com.openkm.bean.Document" %>
-<%@ page import="com.openkm.bean.Folder" %>
-<%@ page import="com.openkm.bean.Scripting"%>
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager"%>
-<%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="es.git.openkm.module.direct.DirectFolderModule" %>
+<%@ page import="es.git.openkm.api.OKMFolder"%>
+<%@ page import="es.git.openkm.bean.ContentInfo" %>
+<%@ page import="es.git.openkm.bean.Document" %>
+<%@ page import="es.git.openkm.bean.Folder" %>
+<%@ page import="es.git.openkm.bean.Scripting"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.SessionManager"%>
+<%@ page import="es.git.openkm.util.UserActivity"%>
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="javax.jcr.Session" %>
@@ -144,7 +144,7 @@
 		
 		out.println("<h2>Mixin");
 		
-		if (node.isNodeType(Document.TYPE) || node.isNodeType(Folder.TYPE)) {
+		if (node.isNodeType(Document.TYPE)) {
 			if (node.isNodeType(Scripting.TYPE)) {
 				out.println("<span style=\"font-size: 10px;\"> - <a href=\"repository_action.jsp?path="+URLEncoder.encode(path, "UTF-8")+"&action=removeScript\">Remove Script</a></span>");
 			} else {

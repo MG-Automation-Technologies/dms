@@ -2,11 +2,11 @@
 <%@page errorPage="error.jsp"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="javax.jcr.Session"%>
-<%@page import="com.openkm.core.SessionManager"%>
-<%@page import="com.openkm.api.OKMDocument"%>
-<%@page import="com.openkm.bean.Document"%>
-<%@page import="com.openkm.util.FileUtils"%>
-<%@page import="com.openkm.util.FormatUtil"%>
+<%@page import="es.git.openkm.core.SessionManager"%>
+<%@page import="es.git.openkm.api.OKMDocument"%>
+<%@page import="es.git.openkm.bean.Document"%>
+<%@page import="es.git.openkm.util.FileUtils"%>
+<%@page import="es.git.openkm.util.FormatUtil"%>
 <%@include file="session.jsp"%>
 <% 
   request.setCharacterEncoding("UTF-8");

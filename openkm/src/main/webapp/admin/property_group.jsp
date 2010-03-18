@@ -1,21 +1,15 @@
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.FileInputStream" %>
-<%@ page import="java.util.Map"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="javax.jcr.Session" %>
-<%@ page import="com.openkm.util.FormUtils"%>
-<%@ page import="com.openkm.util.UserActivity"%>
-<%@ page import="com.openkm.api.OKMPropertyGroup"%>
-<%@ page import="com.openkm.bean.form.FormElement"%>
-<%@ page import="com.openkm.bean.PropertyGroup"%>
-<%@ page import="com.openkm.bean.form.Input"%>
-<%@ page import="com.openkm.bean.form.Button"%>
-<%@ page import="com.openkm.bean.form.Select"%>
-<%@ page import="com.openkm.bean.form.TextArea"%>
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager"%>
-<%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
+<%@ page import="es.git.openkm.util.UserActivity"%>
+<%@ page import="es.git.openkm.api.OKMPropertyGroup"%>
+<%@ page import="es.git.openkm.bean.MetaData"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.SessionManager"%>
+<%@ page import="es.git.openkm.module.direct.DirectRepositoryModule" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -39,56 +33,28 @@
 		}
 		
 		out.println("<h1>Property groups</h1>");
-		out.println("<table class=\"results\" width=\"80%\">");
-		out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
-		out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
+		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<tr><th colspan=\"2\">Property group name</th></tr>");
+		out.println("<tr><th>Property name</th><th>Property metadata</th></tr>");
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
-		FormUtils.resetPropertyGroupsForms();
-		
-		Collection<PropertyGroup> pGroups = okmPG.getAllGroups(token);
-		for (Iterator<PropertyGroup> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
-			PropertyGroup pGroup = itGrp.next();
-			out.println("<tr class=\"fuzzy\">");
-			out.println("<td colspan=\"3\" align=\"center\"><b>"+pGroup.getLabel()+"</b></td>");
-			out.println("<td colspan=\"4\" align=\"center\"><b>"+pGroup.getName()+"</b></td>");
-			out.println("</tr>");
+	
+		Collection<String> pGroups = okmPG.getAllGroups(token);
+		for (Iterator<String> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
+			String pGroup = itGrp.next();
+			out.println("<tr class=\"fuzzy\"><td colspan=\"2\" align=\"center\"><b>"+pGroup+"</b></td></tr>");
 			
-			Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup.getName());
+			HashMap<String, MetaData> mData =  okmPG.getMetaData(token, pGroup);
 			int i = 0;
-			for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
-				FormElement fe = itMD.next();
-				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
-				out.print("<td>"+fe.getLabel()+"</td>");
-				out.print("<td>"+fe.getName()+"</td>");
-				out.print("<td>"+fe.getValue()+"</td>");
-				out.print("<td>"+fe.getWidth()+"</td>");
-				out.print("<td>"+fe.getHeight()+"</td>");
-				
-				if (fe instanceof Input) {
-					Input input = (Input) fe;
-					out.print("<td>Input</td>");
-					out.print("<td><i>Type:</i> "+input.getType()+"</td>");
-				} else if (fe instanceof TextArea) {
-					TextArea textArea = (TextArea) fe;
-					out.print("<td>TextArea</td>");
-					out.print("<td></td>");
-				} else if (fe instanceof Select) {
-					Select select = (Select) fe;
-					out.print("<td>Select</td>");
-					out.print("<td><i>Type:</i> "+select.getType()+", ");
-					out.print("<i>Options:</i> "+select.getOptions()+"</td>");
-				} else if (fe instanceof Button) {
-					Button button = (Button) fe;
-					out.print("<td>Button</td>");
-					out.print("<td><i>Type:</i> "+button.getType()+"</td>");
-				}
-				out.println("</tr>");
+			for (Iterator<String> itMD = mData.keySet().iterator(); itMD.hasNext(); ) {
+				String key = itMD.next();
+				MetaData value = mData.get(key);
+				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+key+"</td><td>"+value+"</td></tr>");
 			}
 		}
 		
 		out.println("</table>");
 		out.println("<hr>");
-		out.println("<h2><center>Register property group</center></h2>");
+		out.println("<center><h2>Register property group</h2></center>");
 		out.println("<form action=\"property_group.jsp\">");
 		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr><td>");

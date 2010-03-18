@@ -1,7 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager"%>
-<%@ page import="com.openkm.bean.Scripting"%>
-<%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.SessionManager"%>
+<%@ page import="es.git.openkm.bean.Scripting"%>
+<%@ page import="es.git.openkm.util.UserActivity"%>
 <%@ page import="javax.jcr.Session" %>
 <%@ page import="javax.jcr.Node" %>
 <%@ page import="javax.jcr.Property" %>

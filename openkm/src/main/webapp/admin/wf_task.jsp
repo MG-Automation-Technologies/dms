@@ -1,16 +1,11 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.api.OKMWorkflow"%>
-<%@ page import="com.openkm.util.FormatUtil"%>
-<%@ page import="com.openkm.bean.workflow.ProcessDefinition"%>
-<%@ page import="com.openkm.bean.workflow.ProcessInstance"%>
-<%@ page import="com.openkm.bean.workflow.TaskInstance"%>
-<%@ page import="com.openkm.bean.workflow.Transition"%>
-<%@ page import="com.openkm.bean.workflow.Comment"%>
-<%@ page import="com.openkm.bean.form.FormElement"%>
-<%@ page import="com.openkm.bean.form.Input"%>
-<%@ page import="com.openkm.bean.form.TextArea"%>
-<%@ page import="com.openkm.bean.form.Select"%>
-<%@ page import="com.openkm.bean.form.Button"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.api.OKMWorkflow"%>
+<%@ page import="es.git.openkm.bean.ProcessDefinition"%>
+<%@ page import="es.git.openkm.bean.ProcessInstance"%>
+<%@ page import="es.git.openkm.bean.TaskInstance"%>
+<%@ page import="es.git.openkm.bean.Transition"%>
+<%@ page import="es.git.openkm.bean.FormField"%>
+<%@ page import="es.git.openkm.bean.Comment"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
@@ -62,14 +57,10 @@
 			ProcessDefinition pd = pi.getProcessDefinition();
 			out.println("<table>");
 			out.println("<tr>");
-			out.println("<td><h1>Task</h1></td><td>");
-			out.println(" &nbsp; ");
-			out.println("<a href=\""+request.getRequestURL()+"?"+request.getQueryString()+"\"><img src=\"img/action/reload.png\" alt=\"Reload\" title=\"Reload\"/></a>");
-			out.println(" &nbsp; ");
-			out.println("<a href=\"javascript:history.back(1)\"><img src=\"img/action/back.png\" alt=\"Back\" title=\"Back\"/></a></td>");
+			out.println("<td><h1>Task</h1></td><td><a href=\"\">Reload</a> - <a href=\"javascript:history.back(1)\">Back</a></td>");
 			out.println("</tr>");
 			out.println("</table>");
-			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<table class=\"results\">");
 			out.println("<tr><th>Task ID</th><th>Name</th><th>Status</th><th>Assigned To</th><th>Token</th><th>Process Instance</th><th>Process</th><th>Created Date</th></tr>");
 			out.print("<tr class=\"odd\">");
 			out.print("<td>"+ti.getId()+"</td>");
@@ -91,41 +82,21 @@
 			out.print("<td>"+(ti.getCreate()!=null?ti.getCreate().getTime():"")+"</td>");
 			out.println("</table>");
 			
-			Map<String, Collection<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, ti.getProcessInstance().getProcessDefinition().getId());
-			Collection<FormElement> form = forms.get(ti.getName());
+			Map<String, Collection<FormField>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, ti.getProcessInstance().getProcessDefinition().getId());
+			Collection<FormField> form = forms.get(ti.getName());
 			out.println("<h2>Task Form</h2>");
-			out.println("<table class=\"results\" width=\"90%\">");
-			out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
+			out.println("<table class=\"results\">");
+			out.println("<tr><th>Label</th><th>Name</th><th>Type</th><th>Value</th></tr>");
 
 			if (form != null) {
 				int i = 0;
-				for (Iterator<FormElement> it = form.iterator(); it.hasNext(); ) {
-					FormElement fe = it.next();
+				for (Iterator<FormField> it = form.iterator(); it.hasNext(); ) {
+					FormField ff = it.next();
 					out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
-					out.print("<td>"+fe.getLabel()+"</td>");
-					out.print("<td>"+fe.getName()+"</td>");
-					out.print("<td>"+fe.getValue()+"</td>");
-					out.print("<td>"+fe.getWidth()+"</td>");
-					out.print("<td>"+fe.getHeight()+"</td>");
-					
-					if (fe instanceof Input) {
-						Input input = (Input) fe;
-						out.print("<td>Input</td>");
-						out.print("<td><i>Type:</i> "+input.getType()+"</td>");
-					} else if (fe instanceof TextArea) {
-						TextArea textArea = (TextArea) fe;
-						out.print("<td>TextArea</td>");
-						out.print("<td></td>");
-					} else if (fe instanceof Select) {
-						Select select = (Select) fe;
-						out.print("<td>Select</td>");
-						out.print("<td><i>Type:</i> "+select.getType()+", ");
-						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
-					} else if (fe instanceof Button) {
-						Button button = (Button) fe;
-						out.print("<td>Button</td>");
-						out.print("<td><i>Type:</i> "+button.getType()+"</td>");
-					}
+					out.print("<td>"+ff.getLabel()+"</td>");
+					out.print("<td>"+ff.getName()+"</td>");
+					out.print("<td>"+FormField.TYPE[ff.getType()]+"</td>");
+					out.print("<td>"+ff.getValue()+"</td>");
 					out.println("</tr>");
 				}
 			}
@@ -134,7 +105,7 @@
 			
 			Collection<Comment> colC = ti.getComments();
 			out.println("<h2>Comments</h2>");
-			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<table class=\"results\">");
 			out.println("<tr><th>Actor ID</th><th>Time</th><th>Comment</th></tr>");
 			
 			int i = 0;
@@ -148,59 +119,53 @@
 			}
 			
 			out.println("</table>");
-			out.println("<br>");
 			
+			out.println("<table align=\"center\">");
+			out.println("<tr><td>");
 			out.println("<form action=\"wf_task.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\"addComment\">");
 			out.println("<input type=\"hidden\" name=\"id\" value=\""+id+"\">");
-			out.println("<table class=\"form\">");
-			out.println("<tr><td>");
-			out.println("<textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea>");
-			out.println("</td></tr>");
-			out.println("<tr><td align=\"right\">");
+			out.println("<textarea name=\"message\" cols=\"50\" rows=\"5\"></textarea><br>");
 			out.println("<input type=\"submit\" value=\"Add comment\">");
+			out.println("</form>");
 			out.println("</td></tr>");
 			out.println("</table>");
-			out.println("</form>");
 			
-			Map<String, Object> vars = ti.getVariables();
+			Map<String, String> vars = ti.getVariables();
 			out.println("<h2>Process Variables</h2>");
-			out.println("<table class=\"results\" width=\"90%\">");
-			out.println("<tr><th>Name</th><th>Value</th><th width=\"25px\">Actions</th></tr>");
+			out.println("<table class=\"results\">");
+			out.println("<tr><th>Name</th><th>Value</th><th>Actions</th></tr>");
 			
 			i = 0;
 			for (Iterator<String> it = vars.keySet().iterator(); it.hasNext(); ) {
 				String key = it.next();
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+FormatUtil.formatObject(vars.get(key))+"</td>");
+				out.print("<td>"+vars.get(key)+"</td>");
 				out.print("<td>");
-				out.print("<a href=\"wf_task.jsp?action=removeVar&id="+ti.getId()+"&name="+key+"\"><img src=\"img/action/delete.png\" alt=\"Remove\" title=\"Remove\"/></a>");
+				out.print("<a href=\"wf_task.jsp?action=removeVar&id="+ti.getId()+"&name="+key+"\">Remove</a>");
 				out.print("</td>");
 				out.println("</tr>");
 			}
 						
 			out.println("</table>");
-			out.println("<br>");
 			
+			out.println("<table align=\"center\">");
+			out.println("<tr><td>");
 			out.println("<form action=\"wf_task.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\"addVar\">");
 			out.println("<input type=\"hidden\" name=\"id\" value=\""+id+"\">");
-			out.println("<table class=\"form\">");
-			out.println("<tr>");
-			out.println("<td>Name <input type=\"text\" name=\"name\"></td>");
-			out.println("<td>Value <input type=\"text\" name=\"value\"></td>");
-			out.println("</tr>");
-			out.println("<tr><td colspan=\"2\" align=\"right\">");
+			out.println("Name <input type=\"text\" name=\"name\">");
+			out.println("Value <input type=\"text\" name=\"value\">");
 			out.println("<input type=\"submit\" value=\"Add variable\">");
+			out.println("</form>");
 			out.println("</td></tr>");
 			out.println("</table>");
-			out.println("</form>");
 			
 			Collection<Transition> colT = ti.getAvailableTransitions();
 			out.println("<h2>Transitions</h2>");
-			out.println("<table class=\"results\" width=\"90%\">");
-			out.println("<tr><th>ID</th><th>Name</th><th>Target Node</th><th width=\"25px\">Actions</th></tr>");
+			out.println("<table class=\"results\">");
+			out.println("<tr><th>ID</th><th>Name</th><th>Target Node</th><th>Actions</th></tr>");
 			
 			i = 0;
 			for (Iterator<Transition> it = colT.iterator(); it.hasNext(); ) {
@@ -212,7 +177,7 @@
 				out.print("<td>");
 				
 				if (!ti.isSuspended()) {
-					out.print("<a href=\"wf_task.jsp?action=endTask&id="+ti.getId()+"&name="+trans.getName()+"\"><img src=\"img/action/end.png\" alt=\"End task\" title=\"End task\"/></a>");
+					out.print("<a href=\"wf_task.jsp?action=endTask&id="+ti.getId()+"&name="+trans.getName()+"\">End Task</a>");
 				}
 				
 				out.print("</td>");

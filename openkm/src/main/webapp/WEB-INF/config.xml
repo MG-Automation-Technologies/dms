@@ -65,7 +65,7 @@
              they appear in the configuration.
         -->
         <class name="org.apache.jackrabbit.server.io.IOManagerImpl" />
-        <!-- <class name="com.openkm.webdav.IOManagerImpl" /> -->
+        <!-- <class name="es.git.openkm.webdav.IOManagerImpl" /> -->
         <iohandler>
             <class name="org.apache.jackrabbit.server.io.VersionHandler" />
         </iohandler>
@@ -84,11 +84,11 @@
          -->
         <iohandler>
             <class name="org.apache.jackrabbit.server.io.DirListingExportHandler" />
-            <!-- <class name="com.openkm.webdav.DirListingExportHandler" /> -->
+            <!-- <class name="es.git.openkm.webdav.DirListingExportHandler" /> -->
         </iohandler>
         <iohandler>
             <!-- <class name="org.apache.jackrabbit.server.io.DefaultHandler" /> -->
-            <class name="com.openkm.webdav.OKMHandler" />
+            <class name="es.git.openkm.webdav.OKMHandler" />
         </iohandler>
     </iomanager>
     <!--
@@ -128,8 +128,11 @@
         </propertyhandler>
         -->
         <propertyhandler>
+            <class name="org.apache.jackrabbit.server.io.DirListingExportHandler" />
+        </propertyhandler>
+        <propertyhandler>
             <!-- <class name="org.apache.jackrabbit.server.io.DefaultHandler" /> -->
-            <class name="com.openkm.webdav.OKMHandler" />
+            <class name="es.git.openkm.webdav.OKMHandler" />
         </propertyhandler>
     </propertymanager>
     <!--

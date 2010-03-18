@@ -1,5 +1,5 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.api.OKMRepository"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.api.OKMRepository"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -15,13 +15,7 @@
   </style>
   <title>OpenKM Administration</title>
   <script type="text/javascript">
-    if (window.attachEvent) {
-      trick = '4';
-      window.attachEvent("onload", function() { setTimeout(loaded, 100); }, true);
-    } else {
-      trick = '0';
-      window.addEventListener("load", function() { setTimeout(loaded, 100); }, true);
-    }
+    window.addEventListener("load", function() { setTimeout(loaded, 100) }, true);
     function loaded() {
       var frame = document.getElementById('frame');
       var menu = document.getElementById('menu');
@@ -30,7 +24,7 @@
               Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
               Math.max(document.body.clientHeight, document.documentElement.clientHeight)
           );
-      frame.style.height=(height-menu.offsetHeight-trick)+'px';
+      frame.style.height=(height-menu.offsetHeight)+'px';
       frame.style.visibility='visible';
     }
   </script>
@@ -40,7 +34,7 @@
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 %>
 	<div id="menu"><%@include file="menu.jsp" %></div>
-	<div><iframe id="frame" name="frame" src="home.jsp" frameborder="0"></iframe></div>
+	<div><iframe id="frame" name="frame" src="home.jsp"></iframe></div>
 <%
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");

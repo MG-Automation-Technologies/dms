@@ -1,10 +1,10 @@
 <%@ page import="java.io.File" %>
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager" %>
-<%@ page import="com.openkm.util.FormatUtil"%>
-<%@ page import="com.openkm.util.impexp.RepositoryImporter" %>
-<%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
-<%@ page import="com.openkm.util.impexp.ImpExpStats"%>
+<%@ page import="es.git.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.SessionManager" %>
+<%@ page import="es.git.openkm.util.FormatUtil"%>
+<%@ page import="es.git.openkm.util.impexp.RepositoryImporter" %>
+<%@ page import="es.git.openkm.util.impexp.HTMLInfoDecorator" %>
+<%@ page import="es.git.openkm.util.impexp.ImpExpStats"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -33,16 +33,11 @@
 		out.println("<h1>Repository import</h1>");
 		out.println("<form action=\"repository_import.jsp\">");
 		out.println("<table class=\"form\" align=\"center\">");
-		out.println("<tr>");
-		out.println("<td>Filesystem path</td>");
-		out.println("<td><input type=\"text\" size=\"50\" name=\"fsPath\" value=\""+(fsPath==null?"":fsPath)+"\" ></td>");
-		out.println("</tr>");
-		out.println("<tr>");
-		out.println("<td>Repository path</td>");
-		out.println("<td><input type=\"text\" size=\"50\" name=\"repoPath\" value=\""+(repoPath==null?"/okm:root":repoPath)+"\" ></td>");
-		out.println("</td>");
-		out.println("</tr>");
-		out.println("<tr><td colspan=\"2\" align=\"right\">");
+		out.println("<tr><td>");
+		out.println("Filesystem path <input type=\"text\" name=\"fsPath\" value=\""+(fsPath==null?"":fsPath)+"\" >");
+		out.println("Repository path <input type=\"text\" name=\"repoPath\" value=\""+(repoPath==null?"/okm:root":repoPath)+"\" >");
+		out.println("</td></tr>");
+		out.println("<tr><td align=\"right\">");
 		out.println("<input type=\"submit\" value=\"Send\">");
 		out.println("</td></tr>");
 		out.println("</table>");

@@ -1,6 +1,6 @@
 <%@ page isErrorPage="true" %>
-<%@ page import="com.openkm.frontend.client.OKMException" %>
-<%@ page import="com.openkm.util.FormatUtil"%>
+<%@ page import="es.git.openkm.frontend.client.OKMException" %>
+<%@ page import="es.git.openkm.util.FormatUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,7 +23,6 @@
       	<h2>Application error</h2>
       </td>
     </tr>
-    <% if (exception instanceof OKMException) { %>
     <tr>
       <td><b>Code:</b></td>
       <td><%=((OKMException) exception).getCode() %></td>
@@ -32,11 +31,6 @@
       <td><b>Message:</b></td>
       <td><%=((OKMException) exception).getMessage() %></td>
     </tr>
-    <% } else { %>
-    <tr>
-      <td colspan="2"><%=exception.getMessage() %></td>
-    </tr>
-    <% } %>
     <tr>
       <td><b>Date:</b></td>
       <td><%= new java.util.Date() %></td>

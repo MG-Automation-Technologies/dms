@@ -1,5 +1,5 @@
-<%@ page import="com.openkm.module.direct.DirectRepositoryModule" %>
-<%@ page import="com.openkm.core.Config" %>
+<%@ page import="es.git.openkm.module.direct.DirectRepositoryModule" %>
+<%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="org.apache.jackrabbit.JcrConstants"%>
 <%@ page import="javax.jcr.Workspace" %>
@@ -31,7 +31,7 @@
 
 		out.println("<h1>Search</h1>");
 		out.println("<form action=\"search.jsp\">");
-		out.println("<table class=\"form\">");
+		out.println("<table class=\"form\" align=\"center\">");
 		out.println("<tr>");
 		out.println("<td><b>Predefined</b></td>");
 		out.println("<td>");
@@ -75,7 +75,7 @@
 				RowIterator it = result.getRows();
 			
 				out.println("<b>Count</b>: "+it.getSize());
-				out.println("<table class=\"results\" width=\"100%\">");
+				out.println("<table class=\"results\" align=\"center\">");
 				out.print("<tr>");
 				String[] columns = result.getColumnNames();
 			

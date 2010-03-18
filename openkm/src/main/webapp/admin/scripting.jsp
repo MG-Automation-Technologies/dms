@@ -1,4 +1,4 @@
-<%@ page import="com.openkm.core.Config" %>
+<%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="bsh.Interpreter"%>
 <%@ page import="java.io.ByteArrayOutputStream"%>
 <%@ page import="java.io.PrintStream"%>
@@ -45,7 +45,7 @@
 		
 		out.println("<h1>Scripting</h1>");
 		out.println("<h2>Results</h2>");
-		out.println("<table class=\"results\" width=\"95%\">");
+		out.println("<table class=\"results\" align=\"center\">");
 		out.println("<tr><th>Script error</th></tr><tr class=\"odd\"><td>"+(scriptError==null?"":scriptError)+"</td></tr>");
 		out.println("<tr><th>Script result</th></tr><tr class=\"odd\"><td>"+(scriptResult==null?"":scriptResult)+"</td></tr>");
 		out.println("<tr><th>Script output</th></tr><tr class=\"odd\"><td>"+scriptOutput+"</td></tr>");
