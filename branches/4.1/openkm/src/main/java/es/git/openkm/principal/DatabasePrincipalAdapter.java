@@ -36,21 +36,19 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(DatabasePrincipalAdapter.class);
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.principal.PrincipalAdapter#getUsers()
+	 * @see com.openkm.principal.PrincipalAdapter#getUsers()
 	 */
 	public Collection<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		ArrayList<String> list = new ArrayList<String>();
 
 		try {
-			Collection<User> col = AuthDAO.getInstance().findAllUsers();
+			boolean filterByActive = Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS.equals("on");
+			Collection<User> col = AuthDAO.getInstance().findAllUsers(filterByActive);
 			
 			for (Iterator<User> it = col.iterator(); it.hasNext(); ) {
 				User dbUser = it.next();
-				
-				if (!Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS.equals("on") || dbUser.isActive()) {
-					list.add(dbUser.getId());
-				}
+				list.add(dbUser.getId());
 			}
 		} catch (SQLException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
@@ -61,7 +59,7 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.principal.PrincipalAdapter#getRoles()
+	 * @see com.openkm.principal.PrincipalAdapter#getRoles()
 	 */
 	public Collection<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
@@ -83,7 +81,7 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.principal.PrincipalAdapter#getMails(java.util.Collection)
+	 * @see com.openkm.principal.PrincipalAdapter#getMails(java.util.Collection)
 	 */
 	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
