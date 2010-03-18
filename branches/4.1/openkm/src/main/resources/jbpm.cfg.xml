@@ -1,0 +1,18 @@
+<jbpm-configuration>
+
+  <!-- 
+    The default configurations can be found in org/jbpm/default.jbpm.cfg.xml 
+    Those configurations can be overwritten by putting this file called 
+    jbpm.cfg.xml on the root of the classpath and put in the customized values.
+  -->
+  <!--
+  <jbpm-context>
+    <service name='persistence' factory='org.jbpm.persistence.db.DbPersistenceServiceFactory' />
+  </jbpm-context>
+  -->
+  <string name="jbpm.mail.smtp.host" value="mail.git.es" />
+  <string name="jbpm.mail.from.address" value="noreply@git.es" />
+  <string name="resource.mail.templates" value="jbpm.mail.templates.xml"/>
+  <bean name="jbpm.mail.address.resolver" class="es.git.openkm.workflow.OKMAddressResolver" singleton="true"/>
+  
+</jbpm-configuration>

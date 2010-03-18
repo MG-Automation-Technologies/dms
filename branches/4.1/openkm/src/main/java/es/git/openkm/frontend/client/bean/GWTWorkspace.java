@@ -1,0 +1,155 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (C) 2006  GIT Consultors
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+package es.git.openkm.frontend.client.bean;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+/**
+ * GWTWorkspace
+ * 
+ * @author jllort
+ *
+ */
+public class GWTWorkspace implements IsSerializable {
+	
+	private String user = "";
+	private boolean isAdmin = false;
+	private String token = "";
+	private String applicationURL = "";
+	private String imapHost = "";
+	private String imapUser = "";
+	private String imapPassword = "";
+	private String imapFolder = "";
+	private int imapID = -1;
+	private String password = "";
+	private boolean changePassword = true;
+	private String email = "";
+	private String appVersion = "";
+
+	/**
+	 * GWTWorkspace
+	 */
+	public GWTWorkspace() {
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public String getToken() {
+		return token;
+	}
+	
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public String getApplicationURL() {
+		return applicationURL;
+	}
+	
+	public void setApplicationURL(String applicationURL) {
+		this.applicationURL = applicationURL;
+	}
+	
+	public String getImapHost() {
+		return imapHost;
+	}
+
+	public void setImapHost(String imapHost) {
+		this.imapHost = imapHost;
+	}
+
+	public String getImapUser() {
+		return imapUser;
+	}
+
+	public void setImapUser(String imapUser) {
+		this.imapUser = imapUser;
+	}
+
+	public String getImapPassword() {
+		return imapPassword;
+	}
+
+	public void setImapPassword(String imapPassword) {
+		this.imapPassword = imapPassword;
+	}
+	
+	public String getImapFolder() {
+		return imapFolder;
+	}
+
+	public void setImapFolder(String imapFolder) {
+		this.imapFolder = imapFolder;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public boolean isChangePassword() {
+		return changePassword;
+	}
+
+	public void setChangePassword(boolean changePassword) {
+		this.changePassword = changePassword;
+	}
+	
+	public int getImapID() {
+		return imapID;
+	}
+
+	public void setImapID(int imapID) {
+		this.imapID = imapID;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getAppVersion() {
+		return appVersion;
+	}
+	
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+}
