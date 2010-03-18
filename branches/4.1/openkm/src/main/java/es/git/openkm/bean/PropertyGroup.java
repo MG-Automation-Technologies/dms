@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,8 +35,31 @@ public class PropertyGroup implements Serializable {
 	public static final String GROUP_PROPERTY = "okp";
 	public static final String GROUP_PROPERTY_URI = "http://www.openkm.org/group/property/1.0";
 	
-	public static final int INPUT = 1;
-	public static final int TEXTAREA = 2;
-	public static final int SELECT = 3;
-	public static final int SELECT_MULTIPLE = 4;
+	private String label = "";
+	private String name = "";
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append("}");
+		return sb.toString();
+	}
 }
