@@ -20,6 +20,7 @@ import es.git.openkm.api.OKMRepository;
 import es.git.openkm.api.OKMSearch;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
+import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.core.SessionManager;
@@ -45,7 +46,7 @@ public class PropertyGroupTest {
 		Session session = SessionManager.getInstance().get(token);
 		FileInputStream fis = new FileInputStream("test_property_groups/my_groups.cnd");
 		DirectRepositoryModule.registerCustomNodeTypes(session, fis);
-		Collection<String> grps = OKMPropertyGroup.getInstance().getAllGroups(token);
+		Collection<PropertyGroup> grps = OKMPropertyGroup.getInstance().getAllGroups(token);
 		log.info("Registered groups: "+grps);
 		
 		log.info("Groups assigned to document: "+OKMPropertyGroup.getInstance().getGroups(token, doc.getPath()));
@@ -97,10 +98,6 @@ public class PropertyGroupTest {
 		OKMPropertyGroup.getInstance().removeGroup(token, doc.getPath(), "okg:tecnologia");		
 		session.exportDocumentView("/okm:root", System.out, false, false);
 		log.info(OKMPropertyGroup.getInstance().getGroups(token, doc.getPath()).toString());
-		
-		log.info("***** GET METADATA *****");
-		log.info("MetaData: "+OKMPropertyGroup.getInstance().getMetaData(token, "okg:tecnologia"));
-		log.info(OKMPropertyGroup.getInstance().getTranslations(token, "es").toString());
 		
 		OKMAuth.getInstance().logout(token);
 	}
