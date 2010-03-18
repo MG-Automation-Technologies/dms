@@ -79,33 +79,6 @@ public class Test {
 		//System.out.println("Es: "+Pattern.matches(wildcard2regexp("*d~"), "pepe.c~"));
 		//String x = Update.query("835545549206998028514158635110");
 		//System.out.println("'"+x+"'");
-		
-		//Config.JBOSS_HOME = "/home/pavila/Kirofano/jboss-4.2.2.GA";
-		//HashMap<String, MetaData> xx = DirectPropertyGroupModule.parseMetadata();
-		//System.out.println(xx);
-		
-		//System.out.println(es.git.openkm.util.Mail.getTinyUrl("http://www.kde.org"));
-		
-		String path = "/uno/dos/tres";
-		//System.out.println(getPath(path));
-		System.out.println(getPath("/ee/we"));
-	}
-	
-	public static String getPath(String path) throws Exception {
-		int idx = path.lastIndexOf('/');
-		
-		if (idx > 0) {
-			String name = path.substring(idx+1);
-			String parent = path.substring(0, idx);
-			System.out.println(parent+" - "+name);
-			return getPath(parent)+" / "+"<a href=\"repository_view.jsp?path="+URLEncoder.encode(path, "UTF-8")+"\">"+name+"</a>";
-		} else {
-			if (!path.substring(1).equals("")) {
-				return "/ <a href=\"repository_view.jsp?path="+URLEncoder.encode(path, "UTF-8")+"\">"+path.substring(1)+"</a>";
-			} else {
-				return "/";
-			}
-		}
 	}
 		
 	public static void misc() throws Exception {
