@@ -144,7 +144,7 @@
 		
 		out.println("<h2>Mixin");
 		
-		if (node.isNodeType(Document.TYPE)) {
+		if (node.isNodeType(Document.TYPE) || node.isNodeType(Folder.TYPE)) {
 			if (node.isNodeType(Scripting.TYPE)) {
 				out.println("<span style=\"font-size: 10px;\"> - <a href=\"repository_action.jsp?path="+URLEncoder.encode(path, "UTF-8")+"&action=removeScript\">Remove Script</a></span>");
 			} else {

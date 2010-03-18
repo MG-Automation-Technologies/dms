@@ -17,7 +17,7 @@
 <% 
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		out.println("<h1>Logged users</h1>");
-		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<table class=\"results\" width=\"80%\">");
 		out.println("<tr><th>UID</th><th>Token</th><th>Creation</th><th>Last access</th><th></th></tr>");
 		
 		SessionManager sm = SessionManager.getInstance();
@@ -30,7 +30,8 @@
 			out.print("<td>"+token+"</td>");
 			out.print("<td>"+si.getCreation().getTime()+"</td");
 			out.print("<td>"+si.getAccess().getTime()+"</td>");
-			out.print("<td><a href=\"logged_users_logout.jsp?token="+URLEncoder.encode(token, "UTF-8")+"\">Logout</a></td>");
+			out.print("<td><a href=\"logged_users_logout.jsp?token="+URLEncoder.encode(token, "UTF-8")+"\">");
+			out.print("<img src=\"img/action/logout.png\" alt=\"Logout\" title=\"Logout\"/></a></td>");
 			out.print("</tr>");
 		}
 		
