@@ -22,13 +22,16 @@ package es.git.openkm.module;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
-import es.git.openkm.bean.MetaData;
+import es.git.openkm.bean.PropertyGroup;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.core.AccessDeniedException;
-import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.LockException;
 import es.git.openkm.core.NoSuchGroupException;
 import es.git.openkm.core.NoSuchPropertyException;
+import es.git.openkm.core.ParseException;
+import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 
 public interface PropertyGroupModule {
@@ -75,8 +78,8 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<String> getGroups(String token, String docPath) throws 
-		PathNotFoundException, RepositoryException;
+	public Collection<PropertyGroup> getGroups(String token, String docPath) throws 
+		IOException, ParseException, PathNotFoundException, RepositoryException;
 
 	/**
 	 * Get all groups defined in the system.
@@ -84,7 +87,8 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<String> getAllGroups(String token) throws RepositoryException;
+	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+		RepositoryException;
 
 	/**
 	 * Get all properties defined in a document by group.
@@ -116,7 +120,7 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String token, String docPath, String grpName, HashMap<String, String[]> properties) throws 
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
 		NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 		AccessDeniedException, RepositoryException;
 
@@ -128,17 +132,6 @@ public interface PropertyGroupModule {
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public HashMap<String, MetaData> getMetaData(String token, String grpName) throws IOException, 
-		RepositoryException;
-	
-	/**
-	 * Get all group property translations.
-	 * 
-	 * @param token The session authorization token.
-	 * @param lang The language translations.
-	 * @throws IOException If there is any problem reading the translations.
-	 * @throws RepositoryException If there is any general repository problem.
-	 */
-	public HashMap<String, String> getTranslations(String token, String lang) throws IOException, 
-		RepositoryException;
+	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+		IOException, RepositoryException;
 }
