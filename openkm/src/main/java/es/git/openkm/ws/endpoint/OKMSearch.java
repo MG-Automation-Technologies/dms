@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.bean.QueryResult;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.ModuleManager;
 import es.git.openkm.module.SearchModule;
@@ -46,7 +47,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByContent(String token, String words) throws RepositoryException {
+	public QueryResultArray findByContent(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -58,7 +60,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByName(String token, String words) throws RepositoryException {
+	public QueryResultArray findByName(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -70,7 +73,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see es.git.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(String token, String words)	throws RepositoryException {
+	public QueryResultArray findByKeywords(String token, String words) throws ParseException, 
+			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();

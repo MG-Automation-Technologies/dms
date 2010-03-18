@@ -56,19 +56,22 @@ import org.slf4j.LoggerFactory;
 import es.git.openkm.bean.Document;
 import es.git.openkm.bean.Folder;
 import es.git.openkm.bean.Mail;
-import es.git.openkm.bean.MetaData;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.ResultSet;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.bean.form.Select;
 import es.git.openkm.cache.UserKeywordsManager;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ItemExistsException;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.SearchModule;
+import es.git.openkm.util.FormUtils;
 import es.git.openkm.util.UserActivity;
 
 public class DirectSearchModule implements SearchModule {
@@ -78,7 +81,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
@@ -99,7 +103,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByName(String token, String words) throws ParseException, 
+			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
@@ -120,7 +125,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByKeywords(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 
 		QueryParams params = new QueryParams();
@@ -141,7 +147,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#find(java.lang.String, es.git.openkm.bean.QuestionParams)
 	 */
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException {
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException, 
+			RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: " + ret);
@@ -152,7 +159,8 @@ public class DirectSearchModule implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findPaginated(java.lang.String, es.git.openkm.bean.QueryParams, int, int)
 	 */
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException {
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
+			throws IOException, ParseException, RepositoryException {
 		log.debug("findPaginated(" + token + ", " + params + ")");
 		String query = prepareStatement(params);
 		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
@@ -197,7 +205,7 @@ public class DirectSearchModule implements SearchModule {
 	 * @return
 	 * @throws IOException 
 	 */
-	public String prepareStatement(QueryParams params) throws IOException {
+	public String prepareStatement(QueryParams params) throws IOException, ParseException {
 		log.info("prepareStatement("+params+")");
 		StringBuffer sb = new StringBuffer();
 		
@@ -282,16 +290,16 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					HashMap<String, MetaData> metaMap = DirectPropertyGroupModule.parseMetadata();
+					Map<PropertyGroup, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
-						MetaData meta = (MetaData) metaMap.get(ent.getKey());
+						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (meta != null) {
+						if (fe != null) {
 							sb.append(" "+params.getOperator()+" ");
 							
-							if (meta.getType() == MetaData.SELECT) {
+							if (fe instanceof Select) {
 								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
 							} else {
 								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
@@ -357,16 +365,16 @@ public class DirectSearchModule implements SearchModule {
 				}
 
 				if (!params.getProperties().isEmpty()) {
-					HashMap<String, MetaData> metaMap = DirectPropertyGroupModule.parseMetadata();
+					Map<PropertyGroup, Collection<FormElement>> formsElements = FormUtils.parsePropertyGroupsForms();
 					
 					for (Iterator<Entry<String, String>> it = params.getProperties().entrySet().iterator(); it.hasNext() ; ) {
 						Entry<String, String> ent = it.next();
-						MetaData meta = (MetaData) metaMap.get(ent.getKey());
+						FormElement fe = FormUtils.getFormElement(formsElements, ent.getKey());
 						
-						if (meta != null) {
+						if (fe != null) {
 							sb.append(" "+params.getOperator()+" ");
 							
-							if (meta.getType() == MetaData.SELECT) {
+							if (fe instanceof Select) {
 								sb.append("@"+ent.getKey()+"='"+ escapeXPath(ent.getValue().toString())+ "'");
 							} else {
 								sb.append("jcr:contains(@"+ent.getKey()+",'"+ escapeContains(ent.getValue().toString())+ "')");
