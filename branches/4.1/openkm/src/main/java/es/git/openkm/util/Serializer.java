@@ -44,7 +44,7 @@ public class Serializer {
 		ObjectOutputStream oos = null;
 		
 		try {
-			fos = new FileOutputStream(Config.JBOSS_HOME+File.separator+filename+".mkk");
+			fos = new FileOutputStream(Config.HOME_DIR+File.separator+filename+".mkk");
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(obj);
 		} catch (FileNotFoundException e) {
@@ -66,7 +66,7 @@ public class Serializer {
 		Object obj = null;
 		
 		try {
-			fis = new FileInputStream(Config.JBOSS_HOME+File.separator+filename+".mkk");
+			fis = new FileInputStream(Config.HOME_DIR+File.separator+filename+".mkk");
 			ois = new ObjectInputStream(fis);
 			obj = ois.readObject();
 		} catch (FileNotFoundException e) {
