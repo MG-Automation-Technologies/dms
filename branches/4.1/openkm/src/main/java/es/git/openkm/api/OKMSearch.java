@@ -30,6 +30,7 @@ import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
 import es.git.openkm.bean.ResultSet;
 import es.git.openkm.core.ItemExistsException;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.module.ModuleManager;
@@ -53,7 +54,8 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words)	throws RepositoryException {
+	public Collection<QueryResult> findByContent(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByContent(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByContent(token, words);
@@ -65,7 +67,8 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByName(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByName(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByName(token, words);
@@ -77,7 +80,8 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws RepositoryException {
+	public Collection<QueryResult> findByKeywords(String token, String words) throws ParseException,
+			RepositoryException {
 		log.debug("findByKeywords(" + token + ", " + words + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.findByKeywords(token, words);
@@ -89,7 +93,8 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#find(java.lang.String, es.git.openkm.bean.QueryParams)
 	 */
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, RepositoryException {
+	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
+			RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<QueryResult> col = sm.find(token, params);
@@ -101,7 +106,8 @@ public class OKMSearch implements SearchModule {
 	 * @see es.git.openkm.module.SearchModule#findPaginated(java.lang.String, es.git.openkm.bean.QueryParams, int, int)
 	 */
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws IOException, RepositoryException {
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
+			throws IOException, ParseException, RepositoryException {
 		log.debug("find(" + token + ", " + params + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		ResultSet rs = sm.findPaginated(token, params, offset, limit);
