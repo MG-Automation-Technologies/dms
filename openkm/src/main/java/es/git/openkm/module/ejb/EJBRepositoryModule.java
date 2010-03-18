@@ -70,4 +70,10 @@ public class EJBRepositoryModule implements es.git.openkm.module.RepositoryModul
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
