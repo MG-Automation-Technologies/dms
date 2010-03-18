@@ -42,21 +42,21 @@ public class AuthDAO extends AbstractDAO {
 	private static AuthDAO instance = null;
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.dao.AbstractDAO#getDataSourceName()
+	 * @see com.openkm.dao.AbstractDAO#getDataSourceName()
 	 */
 	protected String getDataSourceName() {
 		return "java:/OKMAuth"+Config.INSTALL+"DS";
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.dao.AbstractDAO#getTableName()
+	 * @see com.openkm.dao.AbstractDAO#getTableName()
 	 */
 	protected String getTableName() {
 		return "users";
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.dao.AbstractDAO#getSchema()
+	 * @see com.openkm.dao.AbstractDAO#getSchema()
 	 */
 	protected String getSchema() {
 		return "auth";
@@ -268,14 +268,14 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<User> findAllUsers() throws SQLException {
-		log.debug("findAllUsers()");
+	public Collection<User> findAllUsers(boolean filterByActive) throws SQLException {
+		log.debug("findAllUsers("+filterByActive+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
 		ResultSet rsUser = null;
 		ResultSet rsUserRoles = null;
-		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users ORDER BY usr_id";
+		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users "+(filterByActive?"WHERE usr_active='true'":"")+" ORDER BY usr_id";
 		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
 		
@@ -328,14 +328,14 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<User> findUsersByRole(String role) throws SQLException {
+	public Collection<User> findUsersByRole(boolean filterByActive, String role) throws SQLException {
 		log.debug("findUsersByRole("+role+")");
 		Connection con = null;
 		PreparedStatement stmtUser = null;
 		PreparedStatement stmtUserRoles = null;
 		ResultSet rsUser = null;
 		ResultSet rsUserRoles = null;
-		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? ORDER BY usr_id";
+		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? "+(filterByActive?"AND usr_active='true'":"")+" ORDER BY usr_id";
 		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user = ? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
 		
@@ -734,12 +734,12 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<MailAccount> findAllMailAccounts() throws SQLException {
+	public Collection<MailAccount> findAllMailAccounts(boolean filterByActive) throws SQLException {
 		log.debug("findAllMailAccounts()");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts ORDER BY ma_id";
+		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts "+(filterByActive?"WHERE ma_active='true'":"")+" ORDER BY ma_id";
 		ArrayList<MailAccount> al = new ArrayList<MailAccount>();
 				
 		try {
@@ -991,12 +991,12 @@ public class AuthDAO extends AbstractDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Collection<TwitterAccount> findAllTwitterAccounts() throws SQLException {
+	public Collection<TwitterAccount> findAllTwitterAccounts(boolean filterByActive) throws SQLException {
 		log.debug("findAllTwitterAccounts()");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts ORDER BY ta_id";
+		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts "+(filterByActive?"AND ta_active='true'":"")+" ORDER BY ta_id";
 		ArrayList<TwitterAccount> al = new ArrayList<TwitterAccount>();
 				
 		try {
