@@ -179,7 +179,7 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#create(java.lang.String, es.git.openkm.bean.Mail)
+	 * @see com.openkm.module.MailModule#create(java.lang.String, com.openkm.bean.Mail)
 	 */
 	@Override
 	public Mail create(String token, Mail mail) throws AccessDeniedException, 
@@ -216,7 +216,7 @@ public class DirectMailModule implements MailModule {
 			DirectNotificationModule.checkSubscriptions(mailNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailNode.getPath(), session.getUserID(), "CREATE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_MAIL", mail.getPath(), null);
@@ -246,7 +246,7 @@ public class DirectMailModule implements MailModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#getProperties(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#getProperties(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, RepositoryException {
@@ -272,7 +272,7 @@ public class DirectMailModule implements MailModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#delete(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#delete(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void delete(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
@@ -298,7 +298,7 @@ public class DirectMailModule implements MailModule {
 			session.getRootNode().save();
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailPath, session.getUserID(), "DELETE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_MAIL");
 			
 			// Activity log
 			UserActivity.log(session, "DELETE_MAIL", mailPath, null);
@@ -320,7 +320,7 @@ public class DirectMailModule implements MailModule {
 	}	
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#purge(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#purge(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void purge(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
@@ -335,7 +335,7 @@ public class DirectMailModule implements MailModule {
 			parentNode.save();
 						
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, mailPath, session.getUserID(), "PURGE_MAIL");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_MAIL");
 
 			// Activity log
 			UserActivity.log(session, "PURGE_MAIL", mailPath, null);
@@ -356,7 +356,7 @@ public class DirectMailModule implements MailModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#rename(java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
@@ -415,7 +415,7 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#move(java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
@@ -496,7 +496,7 @@ public class DirectMailModule implements MailModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#copy(java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#copy(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException, 
@@ -548,7 +548,7 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
@@ -582,7 +582,7 @@ public class DirectMailModule implements MailModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.MailModule#isValid(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.MailModule#isValid(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean isValid(String token, String mailPath) throws 

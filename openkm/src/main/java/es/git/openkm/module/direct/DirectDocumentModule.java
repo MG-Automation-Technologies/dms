@@ -82,11 +82,7 @@ public class DirectDocumentModule implements DocumentModule {
 	private static Logger log = LoggerFactory.getLogger(DirectDocumentModule.class);
 
 	/**
-	 * @param session
-	 * @param docPath
-	 * @return
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Get document properties using a given Session.
 	 */
 	public Document getProperties(Session session, String docPath) throws
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
@@ -166,12 +162,10 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		doc.setSubscriptors(subscriptorList);
-		doc.setConvertibleToPdf(new DocConverter().isValid(doc.getMimeType()));
-		if (Config.SYSTEM_PDF2SWF.equals("")) {
-			doc.setConvertibleToSwf(false);
-		} else {
-			doc.setConvertibleToSwf(doc.isConvertibleToPdf() || doc.getMimeType().equals("application/pdf"));
-		}
+				
+		DocConverter convert = DocConverter.getInstance();
+		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
+		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
 		
 		// Get comments
 		ArrayList<Note> notes = new ArrayList<Note>();
@@ -207,7 +201,7 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
 		long size = is.available();
-			
+		
 		// Get parent node auth info
 		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
 		String[] usersRead = JCRUtils.usrValue2String(usersReadParent, session.getUserID());
@@ -244,16 +238,15 @@ public class DirectDocumentModule implements DocumentModule {
 		// Por lo visto un nuevo nodo se añade con el isCheckedOut a true :/
 		contentNode.checkin();
 		
-		// Update user items
-		UserItemsManager.incSize(session.getUserID(), size);
-		UserItemsManager.incDocuments(session.getUserID(), 1);
+		// Update user items size
+		if (Config.USER_SIZE_CACHE.equals("on")) {
+			UserItemsManager.incSize(session.getUserID(), size);
+			UserItemsManager.incDocuments(session.getUserID(), 1);
+		}
 		
 		return documentNode; 
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#create(java.lang.String, es.git.openkm.bean.Document, byte[])
-	 */
 	@Override
 	public Document create(String token, Document doc, InputStream is) throws
 			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException, 
@@ -316,7 +309,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CREATE", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, documentNode.getPath(), session.getUserID(), "CREATE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
@@ -349,9 +342,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return newDocument;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#delete(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void delete(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + docPath + ")");
@@ -382,7 +372,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session.getRootNode().save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, docPath, session.getUserID(), "DELETE_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "DELETE_DOCUMENT", docPath, null);
@@ -403,9 +393,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("delete: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getProperties(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Document getProperties(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("getProperties(" + token + ", " + docPath + ")");
@@ -430,12 +417,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	/**
-	 * @param session
-	 * @param docNode
-	 * @return
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
+	 * Retrieve the content InputStream from a given Node. 
 	 */
 	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException, IOException {
@@ -448,9 +430,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return is;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getContent(java.lang.String, java.lang.String, boolean)
-	 */
 	@Override
 	public InputStream getContent(String token, String docPath, boolean checkout) throws
 			PathNotFoundException, RepositoryException, IOException {
@@ -479,9 +458,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return is;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getContentByVersion(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public InputStream getContentByVersion(String token, String docPath, String versionId)
 			throws RepositoryException, PathNotFoundException, IOException {
@@ -510,10 +486,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("getContentByVersion: "+is);
 		return is;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#setContent(java.lang.String, java.lang.String, byte[])
-	 */
+
 	@Override
 	public void setContent(String token, String docPath, InputStream is) throws
 			FileSizeExceededException, VirusDetectedException, VersionException, 
@@ -560,7 +533,7 @@ public class DirectDocumentModule implements DocumentModule {
 			contentNode.save();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "SET_DOCUMENT_CONTENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
 			UserActivity.log(session, "SET_DOCUMENT_CONTENT", docPath, ""+size);
@@ -596,9 +569,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setContent: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#addComment(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addNote(String token, String docPath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -639,9 +609,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("addNote: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getChilds(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("getChilds(" + token + ", " + fldPath + ")");
@@ -674,9 +641,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return childs;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Document rename(String token, String docPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + docPath + ", " + newName + ")");
@@ -733,9 +697,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return renamedDocument;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#setProperties(java.lang.String, es.git.openkm.bean.Document)
-	 */
 	@Override
 	public void setProperties(String token, Document doc) throws VersionException, LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("setProperties(" + token + ", " + doc + ")");
@@ -745,9 +706,11 @@ public class DirectDocumentModule implements DocumentModule {
 			Session session = SessionManager.getInstance().get(token);
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 
-			// Set document node properties
-			documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
-			documentNode.save();
+			synchronized (documentNode) {
+				// Set document node properties
+				documentNode.setProperty(Document.KEYWORDS, doc.getKeywords());
+				documentNode.save();
+			}
 			
 			// Update document keyword cache
 			UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
@@ -756,7 +719,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "SET_DOCUMENT_PROPERTIES");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
 			UserActivity.log(session, "SET_DOCUMENT_PROPERTIES", doc.getPath(), doc.getKeywords());
@@ -785,9 +748,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setProperties: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#checkout(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void checkout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("checkout(" + token + ", " + docPath + ")");
@@ -809,7 +769,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.commit();
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CHECKOUT_DOCUMENT", docPath, lck.getLockToken());
@@ -834,9 +794,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("checkout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#cancelCheckout(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
@@ -861,7 +818,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CANCEL_CHECKOUT", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CANCEL_CHECKOUT_DOCUMENT", docPath, null);
@@ -886,9 +843,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("cancelCheckout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#isCheckedOut(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isCheckedOut(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("isCheckedOut(" + token + ", " + docPath + ")");
@@ -911,9 +865,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return checkedOut;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#checkin(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, VersionException {
 		log.debug("checkin(" + token + ", " + docPath + ", " + comment + ")");
@@ -929,22 +880,25 @@ public class DirectDocumentModule implements DocumentModule {
 			t.start();
 
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
-			contentNode = documentNode.getNode(Document.CONTENT);
+			
+			synchronized (documentNode) {
+				contentNode = documentNode.getNode(Document.CONTENT);
 
-			// Set version author
-			contentNode.setProperty(Document.AUTHOR, session.getUserID());
-			contentNode.setProperty(Document.VERSION_COMMENT, comment);
-			contentNode.save();
+				// Set version author
+				contentNode.setProperty(Document.AUTHOR, session.getUserID());
+				contentNode.setProperty(Document.VERSION_COMMENT, comment);
+				contentNode.save();
 
-			// Performs checkin & unlock
-			javax.jcr.version.Version ver = contentNode.checkin();
-			version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
-			version.setSize(contentNode.getProperty(Document.SIZE).getLong());
-			version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
-			version.setName(ver.getName());
-			version.setCreated(ver.getCreated());
-			version.setActual(true);
-			documentNode.unlock();
+				// Performs checkin & unlock
+				javax.jcr.version.Version ver = contentNode.checkin();
+				version.setAuthor(contentNode.getProperty(Document.AUTHOR).getString());
+				version.setSize(contentNode.getProperty(Document.SIZE).getLong());
+				version.setComment(contentNode.getProperty(Document.VERSION_COMMENT).getString());
+				version.setName(ver.getName());
+				version.setCreated(ver.getCreated());
+				version.setActual(true);
+				documentNode.unlock();
+			}
 			
 			t.end();
 			t.commit();
@@ -965,7 +919,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "CHECKIN_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "CHECKIN_DOCUMENT", docPath, comment);
@@ -995,9 +949,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return version;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getVersionHistory(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Version> getVersionHistory(String token, String docPath) throws
 			PathNotFoundException, RepositoryException {
@@ -1052,9 +1003,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return history;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#lock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("lock(" + token + ", " + docPath + ")");
@@ -1068,7 +1016,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
 
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "LOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "LOCK_DOCUMENT", docPath, lck.getLockToken());
@@ -1089,9 +1037,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("lock: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#unlock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void unlock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("unlock(" + token + ", " + docPath + ")");
@@ -1105,7 +1050,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(documentNode, documentNode.getPath(), session.getUserID(), "UNLOCK_DOCUMENT");
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
 			UserActivity.log(session, "UNLOCK_DOCUMENT", docPath, null);
@@ -1126,9 +1071,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("unlock: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#isLocked(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("isLocked(" + token + ", " + docPath + ")");
@@ -1150,9 +1092,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return locked;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getLock(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException, LockException {
 		log.debug("getLock(" + token + ", " + docPath + ")");
@@ -1177,19 +1116,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	/**
-	 *
-	 * @param session
-	 * @param docPath
-	 * @return
-	 * @throws javax.jcr.RepositoryException
-	 * @throws javax.jcr.AccessDeniedException
-	 * @throws javax.jcr.lock.LockException
-	 * @throws UnsupportedRepositoryOperationException
-	 * @throws RepositoryException
-	 * @throws PathNotFoundException
-	 * @throws LockException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws PathNotFoundException
+	 * Retrieve lock info from a document path
 	 */
 	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException, javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
 		log.debug("getLock(" + session + ", " + docPath + ")");
@@ -1203,9 +1130,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return lock;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#purge(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + docPath + ")");
@@ -1214,9 +1138,12 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			parentNode = documentNode.getParent();
-			HashMap<String, UserItems> userItemsHash = purgeHelper(session, documentNode);
-			parentNode.save();
+			HashMap<String, UserItems> userItemsHash = null;
+			
+			synchronized (documentNode) {
+				parentNode = documentNode.getParent();
+				userItemsHash = purgeHelper(session, parentNode, documentNode);
+			}
 			
 			// Update user items
 			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
@@ -1227,6 +1154,9 @@ public class DirectDocumentModule implements DocumentModule {
 				UserItemsManager.decDocuments(uid, userItems.getDocuments());
 				UserItemsManager.decFolders(uid, userItems.getDocuments());
 			}
+			
+			// Check scripting
+			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
 			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);
@@ -1246,33 +1176,43 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		log.debug("purge: void");
 	}
-	
+
 	/**
-	 * 
+	 * Remove version history, compute free space and remove obsolete files from
+	 * PDF and previsualization cache.
 	 */
-	public HashMap<String, UserItems> purgeHelper(Session session, Node docNode) 
+	public HashMap<String, UserItems> purgeHelper(Session session, Node parentNode, Node docNode) 
 			throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
 		Node contentNode = docNode.getNode(Document.CONTENT);
 		long size = contentNode.getProperty(Document.SIZE).getLong();
 		String author = contentNode.getProperty(Document.AUTHOR).getString();
 		VersionHistory vh = contentNode.getVersionHistory();
-		String baseVersion = contentNode.getBaseVersion().getName();
 		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
+		log.debug("VersionHistory UUID: "+vh.getUUID());
+
+		// Remove pdf & preview from cache
+		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()).delete();
+		new File(Config.SWF_CACHE + File.separator + docNode.getUUID()).delete();
 		
+		// Remove node itself
+		docNode.remove();
+		parentNode.save();
+
 		// Unreferenced VersionHistory should be deleted automatically
 		// https://issues.apache.org/jira/browse/JCR-134
 		// http://markmail.org/message/7aildokt74yeoar5
 		// http://markmail.org/message/nhbwe7o3c7pd4sga
-		// TODO Re-evaluate this issue when switch to Jackrabbit 1.6
 		for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
 			javax.jcr.version.Version ver = vi.nextVersion();
 			String versionName = ver.getName();
+			log.debug("Version: {}", versionName);
 			
 			// The rootVersion is not a "real" version node.
-			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
+			if (!versionName.equals(JcrConstants.JCR_ROOTVERSION)) {
 				Node frozenNode = ver.getNode(JcrConstants.JCR_FROZENNODE);
 				size = frozenNode.getProperty(Document.SIZE).getLong();
 				author = frozenNode.getProperty(Document.AUTHOR).getString();
+				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
 				
 				// Update local user items for versions
@@ -1283,10 +1223,6 @@ public class DirectDocumentModule implements DocumentModule {
 				userItemsHash.put(author, userItems);
 			}
 		}
-		
-		// Remove pdf & preview from cache
-		new File(Config.PDF_CACHE+File.separator+docNode.getUUID()).delete();
-		new File(Config.SWF_CACHE+File.separator+docNode.getUUID()).delete();
 
 		// Update local user items for working version
 		UserItems userItems = userItemsHash.get(author);
@@ -1295,13 +1231,9 @@ public class DirectDocumentModule implements DocumentModule {
 		userItems.setDocuments(userItems.getDocuments() + 1);
 		userItemsHash.put(author, userItems);
 		
-		docNode.remove();
 		return userItemsHash;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#move(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void move(String token, String docPath, String dstPath) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("move(" + token + ", " + docPath + ", " + dstPath + ")");
@@ -1336,9 +1268,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("move: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#copy(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void copy(String token, String docPath, String dstPath) throws
 			ItemExistsException, PathNotFoundException, AccessDeniedException,
@@ -1383,33 +1312,21 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	/**
-	 * Is invoked from DirectDocumentNode and DirectFolderNode. 
-	 * 
-	 * @param session
-	 * @param srcDocumentNode
-	 * @param dstFolderNode
-	 * @throws ValueFormatException
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
+	 * Is invoked from DirectDocumentNode and DirectFolderNode.
 	 */
 	public void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws ValueFormatException, 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
 		log.debug("copy(" + srcDocumentNode + ", " + dstFolderNode + ")");
 		
-		String keywords = srcDocumentNode.getProperty(Document.KEYWORDS).getString();
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		create(session, dstFolderNode, srcDocumentNode.getName(), keywords, mimeType, is);
+		create(session, dstFolderNode, srcDocumentNode.getName(), "", mimeType, is);
 		is.close();
 		
 		log.debug("copy: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#restoreVersion(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void restoreVersion(String token, String docPath, String versionId) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
@@ -1418,9 +1335,12 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			contentNode = documentNode.getNode(Document.CONTENT);
-			contentNode.restore(versionId, true);
-			contentNode.save();
+
+			synchronized (documentNode) {
+				contentNode = documentNode.getNode(Document.CONTENT);
+				contentNode.restore(versionId, true);
+				contentNode.save();
+			}
 
 			// Activity log
 			UserActivity.log(session, "RESTORE_VERSION", docPath, versionId);
@@ -1441,9 +1361,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("restoreVersion: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#purgeVersionHistory(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purgeVersionHistory("+token+", "+docPath+")");
@@ -1451,18 +1368,21 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			Node contentNode = documentNode.getNode(Document.CONTENT);
-			VersionHistory vh = contentNode.getVersionHistory();
-			String baseVersion = contentNode.getBaseVersion().getName();
+			
+			synchronized (documentNode) {
+				Node contentNode = documentNode.getNode(Document.CONTENT);
+				VersionHistory vh = contentNode.getVersionHistory();
+				String baseVersion = contentNode.getBaseVersion().getName();
 
-			for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
-				javax.jcr.version.Version ver = vi.nextVersion();
-				String versionName = ver.getName();
+				for (VersionIterator vi = vh.getAllVersions(); vi.hasNext(); ) {
+					javax.jcr.version.Version ver = vi.nextVersion();
+					String versionName = ver.getName();
 
-				// The rootVersion is not a "real" version node.
-				if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
-					vh.removeVersion(versionName);
-				}
+					// The rootVersion is not a "real" version node.
+					if (!versionName.equals(JcrConstants.JCR_ROOTVERSION) && !versionName.equals(baseVersion)) {
+						vh.removeVersion(versionName);
+					}
+				}				
 			}
 
 			// Activity log
@@ -1478,9 +1398,6 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("purgeVersionHistory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getVersionHistorySize(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public long getVersionHistorySize(String token, String docPath) throws RepositoryException, PathNotFoundException {
 		log.debug("getVersionHistorySize(" + token + ", " + docPath + ")");
@@ -1514,9 +1431,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#isValid(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("isValid(" + token + ", " + docPath + ")");
@@ -1544,9 +1458,6 @@ public class DirectDocumentModule implements DocumentModule {
 		return valid;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DocumentModule#getPath(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
 		log.debug("getPath(" + token + ", " + uuid + ")");
