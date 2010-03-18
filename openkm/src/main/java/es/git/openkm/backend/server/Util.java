@@ -38,8 +38,8 @@ import es.git.openkm.backend.client.bean.GWTStatsInfo;
 import es.git.openkm.backend.client.bean.GWTTextArea;
 import es.git.openkm.backend.client.bean.GWTUser;
 import es.git.openkm.bean.Folder;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.ProcessInstance;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.SessionInfo;
 import es.git.openkm.bean.StatsInfo;
@@ -296,7 +296,7 @@ public class Util {
 		gWTProcessInstance.setEnded(processInstance.isEnded());
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
-		gWTProcessInstance.setVariables(processInstance.getVariables());
+		//gWTProcessInstance.setVariables(processInstance.getVariables());
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		
 		return gWTProcessInstance;
