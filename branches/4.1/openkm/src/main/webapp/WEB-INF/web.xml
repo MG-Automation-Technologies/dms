@@ -130,6 +130,10 @@
     <servlet-class>es.git.openkm.backend.server.OKMStatsServletAdmin</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
+    <servlet-class>es.git.openkm.backend.server.OKMStatsGraphServletAdmin</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>OKMSearchServletAdmin</servlet-name>
     <servlet-class>es.git.openkm.backend.server.OKMSearchServletAdmin</servlet-class>
   </servlet>
@@ -187,15 +191,15 @@
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>es.git.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
-  
+
   <!-- Test Servlets -->
   <servlet>
     <servlet-name>Test</servlet-name>
     <servlet-class>es.git.openkm.servlet.TestServlet</servlet-class>
   </servlet>
-  
+
   <!-- Frontend Servlet Mappings -->
-  <!-- 
+  <!--
   <servlet-mapping>
     <servlet-name>RepositoryStartup</servlet-name>
     <url-pattern>/RepositoryStartupServlet</url-pattern>
@@ -292,6 +296,10 @@
     <url-pattern>/OKMStatsServletAdmin</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
+    <url-pattern>/OKMStatsGraphServletAdmin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>OKMSearchServletAdmin</servlet-name>
     <url-pattern>/OKMSearchServletAdmin</url-pattern>
   </servlet-mapping>
@@ -364,37 +372,37 @@
     <exception-type>es.git.openkm.frontend.client.OKMException</exception-type>
     <location>/error.jsp</location>
   </error-page>
-  
+
   <!-- Security configurarion -->
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>OpenKM Protected Area</web-resource-name>
-      
+
       <!-- GWT -->
       <url-pattern>/es.git.openkm.frontend.Main/*</url-pattern>
       <url-pattern>/es.git.openkm.backend.Main/*</url-pattern>
-      
+
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobi/*</url-pattern>
-      
+
       <!-- Servlets -->
-	  <url-pattern>/RepositoryStartupServlet</url-pattern>
-	  <url-pattern>/Test</url-pattern>
-	  <url-pattern>/OKM*</url-pattern>
+    <url-pattern>/RepositoryStartupServlet</url-pattern>
+    <url-pattern>/Test</url-pattern>
+    <url-pattern>/OKM*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
-	  <role-name>AdminRole</role-name>
-	  <role-name>UserRole</role-name>
-   	</auth-constraint>
-   	<user-data-constraint>
+    <role-name>AdminRole</role-name>
+    <role-name>UserRole</role-name>
+    </auth-constraint>
+    <user-data-constraint>
       <transport-guarantee>NONE</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
 
   <login-config>
     <auth-method>FORM</auth-method>
-    <realm-name>OpenKM</realm-name> 
+    <realm-name>OpenKM</realm-name>
     <form-login-config>
       <form-login-page>/login.jsp</form-login-page>
       <form-error-page>/login.jsp?error=1</form-error-page>
