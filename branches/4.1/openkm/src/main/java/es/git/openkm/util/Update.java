@@ -29,13 +29,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import es.git.openkm.bean.Repository;
-import es.git.openkm.core.Config;
 
 public class Update {
 	private static Logger log = LoggerFactory.getLogger(Update.class);
@@ -76,47 +72,17 @@ public class Update {
 	        }
 
 			input.close();
-						
-			// Trial management
-			log.debug(sb.toString());
-			int idx = sb.indexOf("·");
-						
-			if (idx > 0) {
-				long endTrial = Long.valueOf(sb.substring(0, idx));
-				sb.delete(0, idx+1);
-				
-				if (Config.TRIAL) {
-					if (Calendar.getInstance().getTimeInMillis() > endTrial) {
-						sb.append(expired());
-					}
-				}
-			}
 		} catch (UnsupportedEncodingException e) {
 			log.error("UnsupportedEncodingException: "+e.getMessage());
-			if (Config.TRIAL) sb.append(expired());
 		} catch (MalformedURLException e) {
 			log.error("MalformedURLException: "+e.getMessage());
-			if (Config.TRIAL) sb.append(expired());
 		} catch (UnknownHostException e) {
 			log.error("UnknownHostException: "+e.getMessage());
-			if (Config.TRIAL) sb.append(expired());
 		} catch (IOException e) {
 			log.error("IOException: "+e.getMessage());
-			if (Config.TRIAL) sb.append(expired());
 		}
 				
 		log.debug("query: "+sb.toString());
 		return sb.toString();
-	}
-
-	/**
-	 * 
-	 */
-	public static String expired() {
-		Config.MAX_FILE_SIZE = 0;
-		log.info("*** *** ***** *** ***");
-		log.info("*** TRIAL EXPIRED ***");
-		log.info("*** *** ***** *** ***");
-		return "*** TRIAL EXPIRED ***";
 	}
 }

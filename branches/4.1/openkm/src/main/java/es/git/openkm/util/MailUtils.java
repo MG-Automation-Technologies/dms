@@ -183,7 +183,7 @@ public class MailUtils {
 				store.connect(host, user, password);
 				
 				Folder folder = store.getFolder(imapFolder);
-				folder.open(Folder.READ_ONLY);
+				folder.open(Folder.READ_WRITE);
 				//Message messages[] = folder.getMessages();
 				Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 						
@@ -389,7 +389,7 @@ public class MailUtils {
 			}
 		}
 		
-		return (String[]) list.toArray(new String[0]);
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 	
 	/**
