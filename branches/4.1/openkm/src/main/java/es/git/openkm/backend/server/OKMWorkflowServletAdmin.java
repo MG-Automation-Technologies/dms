@@ -54,7 +54,7 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	private static final long serialVersionUID = 1L;
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMWorkflowService#findLatestProcessDefinitions()
+	 * @see com.openkm.backend.client.service.OKMWorkflowService#findLatestProcessDefinitions()
 	 */
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException {
 		log.debug("findLatestProcessDefinitions()");
@@ -76,11 +76,11 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMWorkflowService#runProcessDefinition(java.lang.String, double)
+	 * @see com.openkm.backend.client.service.OKMWorkflowService#runProcessDefinition(java.lang.String, double)
 	 */
 	public void runProcessDefinition(String docPath, double id) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		Map<String,String> variables = new HashMap<String,String>();
+		Map<String,Object> variables = new HashMap<String,Object>();
 		variables.put("path", docPath);
 		String token = getToken();
 		
@@ -96,7 +96,7 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMWorkflowService#findAllProcessDefinitionVersions(java.lang.String)
+	 * @see com.openkm.backend.client.service.OKMWorkflowService#findAllProcessDefinitionVersions(java.lang.String)
 	 */
 	public List<GWTProcessDefinition> findAllProcessDefinitionVersions(String name) throws OKMException {
 		log.debug("findAllProcessDefinitionVersions(name:"+name+")");
@@ -118,7 +118,7 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMWorkflowService#findProcessInstances(double)
+	 * @see com.openkm.backend.client.service.OKMWorkflowService#findProcessInstances(double)
 	 */
 	public List<GWTProcessInstance> findProcessInstances(double id) throws OKMException {
 		log.debug("findProcessInstances(id:"+id+")");
@@ -140,7 +140,7 @@ public class OKMWorkflowServletAdmin extends OKMRemoteServiceServletAdmin implem
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMWorkflowService#deleteProcessDefinition(double)
+	 * @see com.openkm.backend.client.service.OKMWorkflowService#deleteProcessDefinition(double)
 	 */
 	public void deleteProcessDefinition(double id) throws OKMException {
 		log.debug("deleteProcessDefinition(id:"+id+")");
