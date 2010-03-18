@@ -87,7 +87,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 */
 	public synchronized static javax.jcr.Repository getRepository() throws RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_CONFIG;
+		String repConfig = Config.HOME_DIR+File.separator+Config.REPOSITORY_CONFIG;
 		String repHome = null;
 		WorkspaceConfig wc = null;
 		
@@ -95,7 +95,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
 			repHome = Config.REPOSITORY_HOME;
 		} else {
-			repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
+			repHome = Config.HOME_DIR+File.separator+Config.REPOSITORY_HOME;
 		}
 		
 		if (repository == null) {
@@ -365,7 +365,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
 			repHome = Config.REPOSITORY_HOME;
 		} else {
-			repHome = Config.JBOSS_HOME+File.separator+Config.REPOSITORY_HOME;
+			repHome = Config.HOME_DIR+File.separator+Config.REPOSITORY_HOME;
 		}
 		
 		try {
