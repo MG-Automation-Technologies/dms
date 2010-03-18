@@ -160,7 +160,7 @@ public class OKMReportServletAdmin extends HttpServlet {
 		log.debug("reportUsers()");
 		List<ReportUser> al = new ArrayList<ReportUser>();
 		
-		for (Iterator<User> it = AuthDAO.getInstance().findAllUsers().iterator(); it.hasNext(); ) {
+		for (Iterator<User> it = AuthDAO.getInstance().findAllUsers(false).iterator(); it.hasNext(); ) {
 			al.add(Util.reportCopy(it.next()));
 		}
 		

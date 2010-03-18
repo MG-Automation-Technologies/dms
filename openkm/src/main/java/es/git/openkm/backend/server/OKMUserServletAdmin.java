@@ -112,7 +112,7 @@ public class OKMUserServletAdmin extends RemoteServiceServlet implements OKMUser
 		List<GWTUser> al = new ArrayList<GWTUser>();
 		
 		try {
-			for (Iterator<User> it = AuthDAO.getInstance().findAllUsers().iterator(); it.hasNext(); ) {
+			for (Iterator<User> it = AuthDAO.getInstance().findAllUsers(false).iterator(); it.hasNext(); ) {
 				al.add(Util.copy(it.next()));
 			}
 		} catch (SQLException e) {

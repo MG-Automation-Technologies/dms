@@ -30,12 +30,17 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import es.git.openkm.backend.client.bean.GWTFormElement;
+import es.git.openkm.backend.client.bean.GWTPropertyGroup;
+
 import es.git.openkm.api.OKMPropertyGroup;
 import es.git.openkm.backend.client.OKMException;
 import es.git.openkm.backend.client.bean.GWTMetaData;
 import es.git.openkm.backend.client.config.ErrorCode;
 import es.git.openkm.backend.client.service.OKMPropertyGroupService;
 import es.git.openkm.bean.MetaData;
+import es.git.openkm.bean.PropertyGroup;
+import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.core.RepositoryException;
 
 /**
@@ -51,23 +56,21 @@ import es.git.openkm.core.RepositoryException;
 public class OKMPropertyGroupServletAdmin extends OKMRemoteServiceServletAdmin implements OKMPropertyGroupService {
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroupServletAdmin.class);
 	private static final long serialVersionUID = 2638205115826644606L;
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMPropertyGroupService#getAllGroups()
-	 */
-	public List<String> getAllGroups() throws OKMException {
+
+	@Override
+	public List<GWTPropertyGroup> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
-		List<String> groupList = new ArrayList<String>(); 
+		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
 		String token = getToken();
 		
 		try {
-			Collection col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(token);
 			
-			for (Iterator it = col.iterator(); it.hasNext();) {	
-				String group = (String) it.next();
+			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
+				PropertyGroup group = it.next();
 				log.debug("Group: "+group);
 				
-				groupList.add(group);
+				groupList.add(Util.copy(group));
 			}
 
 		} catch (RepositoryException e) {
@@ -81,23 +84,20 @@ public class OKMPropertyGroupServletAdmin extends OKMRemoteServiceServletAdmin i
 		log.debug("getAllGroups: "+groupList);
 		return groupList;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.backend.client.service.OKMPropertyGroupService#getMetaData(java.lang.String)
-	 */
-	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException {
+
+	@Override
+	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException {
 		log.debug("getMetaData(" + grpName +")");
 		String token = getToken();
-		HashMap properties = new HashMap();
-		Map<String, GWTMetaData> gwtProperties = new HashMap<String, GWTMetaData>();
+		Collection<FormElement> properties = new ArrayList<FormElement>();
+		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
 
 		try {
-			properties = OKMPropertyGroup.getInstance().getMetaData(token, grpName);
-			Collection col = properties.keySet();
+			properties = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, grpName);
 			
-			for (Iterator it = col.iterator(); it.hasNext(); ) {
-				String key = (String) it.next();
-				gwtProperties.put(key, Util.copy((MetaData) properties.get(key)));
+			for (Iterator<FormElement> it = properties.iterator(); it.hasNext(); ) {
+				FormElement fe = it.next();
+				gwtProperties.add(Util.copy(fe));
 			}
 			
 		} catch (IOException e) {
