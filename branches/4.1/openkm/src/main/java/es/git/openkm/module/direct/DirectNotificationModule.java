@@ -20,10 +20,10 @@
 package es.git.openkm.module.direct;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,10 +32,11 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.Lock;
 import javax.mail.MessagingException;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public synchronized void subscribe(String token, String nodePath) throws 
@@ -73,30 +74,8 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Session systemSession = DirectRepositoryModule.getSystemSession();
-			Session lockSession = null;
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
-			boolean nodeLocked = false;
-			boolean sessionCreated = false;
-			
-			// Get lock token
-			if (node.isLocked()) {
-				nodeLocked = true;
-				Lock lck = sNode.getLock();
-				SessionManager sessions = SessionManager.getInstance();
-				String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-				String lockToken = JCRUtils.getLockToken(node.getUUID());
-				
-				if (lockUserToken != null) {
-					lockSession = sessions.get(lockUserToken);
-				} else {
-					sessionCreated = true;
-					lockSession = systemSession;
-					lockSession.addLockToken(lockToken);
-				}
-				
-				sNode = lockSession.getNodeByUUID(node.getUUID());
-			}
 			
 			// Perform subscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -124,11 +103,6 @@ public class DirectNotificationModule implements NotificationModule {
 			
 			sNode.save();
 			
-			// Remove lock token
-			if (nodeLocked && sessionCreated) {
-				lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-			}
-			
 			// Activity log
 			UserActivity.log(session, "SUBSCRIBE_USER", nodePath, null);
 		} catch (javax.jcr.AccessDeniedException e) {
@@ -149,7 +123,7 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public synchronized void unsubscribe(String token, String nodePath) throws 
@@ -161,30 +135,8 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Session systemSession = DirectRepositoryModule.getSystemSession();
-			Session lockSession = null;
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
-			boolean nodeLocked = false;
-			boolean sessionCreated = false;
-			
-			// Get lock token
-			if (node.isLocked()) {
-				nodeLocked = true;
-				Lock lck = sNode.getLock();
-				SessionManager sessions = SessionManager.getInstance();
-				String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-				String lockToken = JCRUtils.getLockToken(node.getUUID());
-				
-				if (lockUserToken != null) {
-					lockSession = sessions.get(lockUserToken);
-				} else {
-					sessionCreated = true;
-					lockSession = systemSession;
-					lockSession.addLockToken(lockToken);
-				}
-				
-				sNode = lockSession.getNodeByUUID(node.getUUID());
-			}
 
 			// Perform unsubscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -200,17 +152,11 @@ public class DirectNotificationModule implements NotificationModule {
 				if (newUsers.isEmpty()) {
 					sNode.removeMixin(Notification.TYPE);			
 				} else {
-					sNode.setProperty(Notification.SUBSCRIPTORS, 
-							(String[])newUsers.toArray(new String[0]));
+					sNode.setProperty(Notification.SUBSCRIPTORS, (String[])newUsers.toArray(new String[newUsers.size()]));
 				}			
 			}
 
 			sNode.save();
-
-			// Remove lock token
-			if (nodeLocked && sessionCreated) {
-				lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-			}
 
 			// Activity log
 			UserActivity.log(session, "UNSUBSCRIBE_USER", nodePath, null);
@@ -232,7 +178,7 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
+	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -263,13 +209,13 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
+	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
 	 */
 	@Override
 	public void notify(String token, String nodePath, Collection<String> users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify("+token+", "+nodePath+", "+users+", "+message+")");
 		
-		if (Config.APPLICATION_URL != null && !users.isEmpty()) {
+		if (!users.isEmpty()) {
 			try {
 				Session session = SessionManager.getInstance().get(token);
 				log.debug("Nodo: "+nodePath+", Message: "+message);
@@ -281,17 +227,35 @@ public class DirectNotificationModule implements NotificationModule {
 				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(null, dummy);
 				
 				if (!emails.isEmpty() && !from.isEmpty()) {
-					String[] bodyArgs = { Config.APPLICATION_URL+"?docPath=" + 
-							URLEncoder.encode(nodePath, "UTF-8"), nodePath,
-							FileUtils.getName(nodePath), session.getUserID(), message };
-					String[] subjectArgs = { nodePath, FileUtils.getName(nodePath) };
-					String body = MessageFormat.format(Config.NOTIFY_MESSAGE_BODY, bodyArgs);
-					String subject = MessageFormat.format(Config.NOTIFY_MESSAGE_SUBJECT, subjectArgs);
-					MailUtils.send((String) from.get(0), emails, subject, body);
+					StringWriter swSubject = new StringWriter();
+					StringWriter swBody = new StringWriter();
+					
+					VelocityContext context = new VelocityContext();
+					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(nodePath, "UTF-8"));
+					context.put("documentPath", nodePath);
+					context.put("documentName", FileUtils.getName(nodePath));
+					context.put("userId", session.getUserID());
+					context.put("notificationMessage", message);
+					
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swSubject, "NotificationMessageSubject", Config.NOTIFICATION_MESSAGE_SUBJECT);	
+					}
+					
+					if (Velocity.resourceExists(Config.NOTIFICATION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.NOTIFICATION_MESSAGE_BODY, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
+					}
+
+					MailUtils.send((String) from.get(0), emails, swSubject.toString(), swBody.toString());
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (MessagingException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -307,7 +271,7 @@ public class DirectNotificationModule implements NotificationModule {
 	 * @param eventType Type of modification event
 	 */
 	public static void checkSubscriptions(Node node, String user, String eventType, String comment) {
-		log.debug("checkSubscriptions("+node+", "+user+", "+eventType+")");
+		log.debug("checkSubscriptions("+node+", "+user+", "+eventType+", "+comment+")");
 		Collection<String> users = null;
 		
 		try {
@@ -324,17 +288,31 @@ public class DirectNotificationModule implements NotificationModule {
 				Collection<String> emails = new DirectAuthModule().getMails(null, users);
 					
 				if (!emails.isEmpty()) {
-					if (comment == null) {
-						comment = "";
+					if (comment == null) { comment = ""; }
+					StringWriter swSubject = new StringWriter();
+					StringWriter swBody = new StringWriter();
+					
+					VelocityContext context = new VelocityContext();
+					context.put("documentUrl", Config.APPLICATION_URL+"?docPath=" + URLEncoder.encode(node.getPath(), "UTF-8"));
+					context.put("documentPath", node.getPath());
+					context.put("documentName", node.getName());
+					context.put("userId", user);
+					context.put("eventType", eventType);
+					context.put("subscriptionComment", comment);
+					
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_SUBJECT)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_SUBJECT, "UTF-8", context, swSubject);
+					} else {
+						Velocity.evaluate(context, swSubject, "SubscriptionMessageSubject", Config.SUBSCRIPTION_MESSAGE_SUBJECT);	
 					}
 					
-					String[] bodyArgs = { Config.APPLICATION_URL+"?docPath=" + 
-						URLEncoder.encode(node.getPath(), "UTF-8"), node.getPath(),
-						node.getName(), user, eventType, comment };
-					String[] subjectArgs = { eventType, node.getPath(), node.getName() };
-					String body = MessageFormat.format(Config.SUBSCRIPTION_MESSAGE_BODY, bodyArgs);
-					String subject = MessageFormat.format(Config.SUBSCRIPTION_MESSAGE_SUBJECT, subjectArgs);
-					MailUtils.send(emails, subject, body);
+					if (Velocity.resourceExists(Config.SUBSCRIPTION_MESSAGE_BODY)) {
+						Velocity.mergeTemplate(Config.SUBSCRIPTION_MESSAGE_BODY, "UTF-8", context, swBody);
+					} else {
+						Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
+					}
+					
+					MailUtils.send(emails, swSubject.toString(), swBody.toString());
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -349,6 +327,8 @@ public class DirectNotificationModule implements NotificationModule {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		/**
@@ -357,10 +337,22 @@ public class DirectNotificationModule implements NotificationModule {
 		try {
 			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
 				Twitter twitter = new Twitter(Config.SUBSCRIPTION_TWITTER_USER, Config.SUBSCRIPTION_TWITTER_PASSWORD);
+				StringWriter swStatus = new StringWriter();
 				
-				String[] bodyArgs = { MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()),
-					node.getPath(),	node.getName(), user, eventType, comment };
-				String status = MessageFormat.format(Config.SUBSCRIPTION_TWITTER_STATUS, bodyArgs);
+				VelocityContext context = new VelocityContext();
+				context.put("documentUrl", MailUtils.getTinyUrl(Config.APPLICATION_URL+"?docPath="+node.getPath()));
+				context.put("documentPath", node.getPath());
+				context.put("documentName", node.getName());
+				context.put("userId", user);
+				context.put("eventType", eventType);
+				context.put("subscriptionComment", comment);
+
+				if (Velocity.resourceExists(Config.SUBSCRIPTION_TWITTER_STATUS)) {
+					Velocity.mergeTemplate(Config.SUBSCRIPTION_TWITTER_STATUS, "UTF-8", context, swStatus);
+				} else {
+					Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);	
+				}
+				
 				AuthDAO auth = AuthDAO.getInstance();
 				
 				for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
@@ -369,8 +361,8 @@ public class DirectNotificationModule implements NotificationModule {
 					
 					for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
 						TwitterAccount ta = itTwitter.next();
-						log.info("Twitter Notify from "+twitter.getUserId()+" to "+ta.getTwitterUser()+" ("+itUser+") - "+status);
-						twitter.sendDirectMessage(ta.getTwitterUser(), status);
+						log.info("Twitter Notify from "+twitter.getUserId()+" to "+ta.getTwitterUser()+" ("+itUser+") - "+swStatus.toString());
+						twitter.sendDirectMessage(ta.getTwitterUser(), swStatus.toString());
 					}
 				}
 			}
@@ -383,6 +375,8 @@ public class DirectNotificationModule implements NotificationModule {
 		} catch (javax.jcr.RepositoryException e) {
 			e.printStackTrace();
 		} catch (TwitterException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

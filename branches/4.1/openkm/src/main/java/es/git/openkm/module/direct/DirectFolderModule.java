@@ -169,9 +169,6 @@ public class DirectFolderModule implements FolderModule {
 		return folderNode;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#create(java.lang.String, es.git.openkm.bean.Folder)
-	 */
 	@Override
 	public Folder create(String token, Folder fld) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException {
@@ -196,7 +193,7 @@ public class DirectFolderModule implements FolderModule {
 			newFolder = getProperties(session, fld.getPath());
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, folderNode.getPath(), session.getUserID(), "CREATE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
 
 			// Activity log
 			UserActivity.log(session, "CREATE_FOLDER", fld.getPath(), null);
@@ -220,10 +217,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("create: " + newFolder);
 		return newFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#get(java.lang.String, java.lang.String)
-	 */
+	
 	@Override
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("get:(" + token + ", " + fldPath + ")");
@@ -247,9 +241,6 @@ public class DirectFolderModule implements FolderModule {
 		return fld;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void delete(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + fldPath + ")");
@@ -282,7 +273,7 @@ public class DirectFolderModule implements FolderModule {
 			session.getRootNode().save();
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "DELETE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_FOLDER");
 			
 			// Activity log
 			UserActivity.log(session, "DELETE_FOLDER", fldPath, null);
@@ -329,9 +320,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Check if a node has removable childs
+	 * TODO: Is this neccessary? The access manager should prevent this an
+	 * make the core thown an exception. 
 	 */
 	private boolean hasWriteAccess(Node node) throws javax.jcr.RepositoryException {
 		log.debug("hasWriteAccess("+node.getPath()+")");
@@ -357,9 +348,6 @@ public class DirectFolderModule implements FolderModule {
 		return canWrite;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#purge(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void purge(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + fldPath + ")");
@@ -368,9 +356,13 @@ public class DirectFolderModule implements FolderModule {
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
-			parentNode = folderNode.getParent();
-			HashMap<String, UserItems> userItemsHash = purgeHelper(session, folderNode);
-			parentNode.save();
+			HashMap<String, UserItems> userItemsHash = null; 
+			
+			synchronized (folderNode) {
+				parentNode = folderNode.getParent();
+				userItemsHash = purgeHelper(session, folderNode);
+				parentNode.save();
+			}
 			
 			// Update user items
 			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
@@ -383,7 +375,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			// Check scripting
-			DirectScriptingModule.checkScripts(parentNode, fldPath, session.getUserID(), "PURGE_FOLDER");
+			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
 
 			// Activity log
 			UserActivity.log(session, "PURGE_FOLDER", fldPath, null);
@@ -415,7 +407,7 @@ public class DirectFolderModule implements FolderModule {
 			Node node = nit.nextNode();
 			
 			if (node.isNodeType(Document.TYPE)) {
-				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node);
+				userItemsHashRet = new DirectDocumentModule().purgeHelper(session, node.getParent(), node);
 			} else if (node.isNodeType(Folder.TYPE)) {
 				userItemsHashRet = purgeHelper(session, node);
 				//String author = node.getProperty(Folder.AUTHOR).getString();
@@ -438,10 +430,7 @@ public class DirectFolderModule implements FolderModule {
 		fldNode.remove();
 		return userItemsHash;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	
 	@Override
 	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException {
@@ -499,9 +488,6 @@ public class DirectFolderModule implements FolderModule {
 		return renamedFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#move(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("move(" + token + ", " + fldPath + ", " + dstPath + ")");
@@ -535,10 +521,7 @@ public class DirectFolderModule implements FolderModule {
 		
 		log.debug("move: void");	
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#copy(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	
 	@Override
 	public void copy(String token, String fldPath, String dstPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
@@ -620,9 +603,6 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("copyHelper: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		log.debug("findChilds(" + token + ", " + fldPath + ")");
@@ -653,10 +633,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("findChilds: "+childs);
 		return childs;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#getContentInfo(java.lang.String, java.lang.String)
-	 */
+	
 	@Override
 	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("getContentInfo(" + token + ", " + fldPath + ")");
@@ -731,9 +708,6 @@ public class DirectFolderModule implements FolderModule {
 		return contentInfo;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean isValid(String token, String fldPath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {

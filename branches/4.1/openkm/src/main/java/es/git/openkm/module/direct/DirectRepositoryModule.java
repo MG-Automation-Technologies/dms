@@ -85,31 +85,31 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @throws NamingException
 	 * @throws javax.jcr.RepositoryException
 	 */
-	public synchronized static javax.jcr.Repository getRepository() throws RepositoryException {
+	public synchronized static javax.jcr.Repository getRepository() throws javax.jcr.RepositoryException {
 		log.debug("getRepository()");
-		String repConfig = Config.HOME_DIR+File.separator+Config.REPOSITORY_CONFIG;
+		String repConfig = Config.HOME_DIR + File.separator + Config.REPOSITORY_CONFIG;
 		String repHome = null;
 		WorkspaceConfig wc = null;
-		
-		// Allow absolute repository path
-		if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
-			repHome = Config.REPOSITORY_HOME;
-		} else {
-			repHome = Config.HOME_DIR+File.separator+Config.REPOSITORY_HOME;
-		}
-		
+				
 		if (repository == null) {
-			// Repository config
+			// Allow absolute repository path
+			if ((new File(Config.REPOSITORY_HOME)).isAbsolute()) {
+				repHome = Config.REPOSITORY_HOME;
+			} else {
+				repHome = Config.HOME_DIR + File.separator + Config.REPOSITORY_HOME;
+			}
+			
+			// Repository configuration
 			try {
 				RepositoryConfig config = RepositoryConfig.create(repConfig, repHome);
 				wc = config.getWorkspaceConfig(config.getDefaultWorkspaceName());
 				repository = RepositoryImpl.create(config);
 			} catch (ConfigurationException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (javax.jcr.RepositoryException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			}
 		}
 		
@@ -120,13 +120,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 				systemSession = OKMSystemSession.create((RepositoryImpl)repository, wc);
 			} catch (LoginException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (NoSuchWorkspaceException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			} catch (javax.jcr.RepositoryException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw e;
 			}
 		}
 
@@ -194,7 +194,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @throws AccessDeniedException If there is any security problem: you can't access the parent document folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public synchronized static String initialize() throws RepositoryException {
+	public synchronized static String initialize() throws javax.jcr.RepositoryException, FileNotFoundException, InvalidNodeTypeDefException, ParseException {
 		log.debug("initialize()");
 				
 		// Initializes Repository and SystemSession
@@ -203,14 +203,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 		String okmRootPath = create(systemSession);
 		
 		// Store system session token 
-		try {
-			DirectAuthModule.loadUserData(systemSession);
-			SessionManager.getInstance().putSystem(systemSession);
-			log.debug("*** System user created "+systemSession.getUserID());				
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e);
-		}
-		
+		DirectAuthModule.loadUserData(systemSession);
+		SessionManager.getInstance().putSystem(systemSession);
+		log.debug("*** System user created "+systemSession.getUserID());				
+				
 		log.debug("initialize: "+okmRootPath);
 		return okmRootPath;
 	}
@@ -219,8 +215,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @param session
 	 * @return
 	 * @throws RepositoryException
+	 * @throws FileNotFoundException 
+	 * @throws InvalidNodeTypeDefException 
+	 * @throws ParseException 
 	 */
-	public synchronized static String create(Session session) throws RepositoryException {
+	public synchronized static String create(Session session) throws javax.jcr.RepositoryException,
+			FileNotFoundException, InvalidNodeTypeDefException, ParseException {
 		String okmRootPath = null;
 		Node rootNode = null;
 		
@@ -253,7 +253,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				} else {
 					String msg = "Configuration error: "+Config.NODE_DEFINITIONS+" not found";
 					log.debug(msg);
-					throw new RepositoryException(msg);
+					throw new javax.jcr.RepositoryException(msg);
 				}
 								
 				// Create root base node
@@ -273,8 +273,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 
 				okmRootPath = okmRoot.getPath();
 				
-				// Create root base node
-				log.info("Create home node");
+				// Create user home base node
+				log.info("Create user home base node");
 				Node okmHome = root.addNode(Repository.HOME, Folder.TYPE);
 
 				// Add basic properties
@@ -288,7 +288,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmHome.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create template base node
-				log.info("Create template node");
+				log.info("Create template base node");
 				Node okmTemplate = root.addNode(Repository.TEMPLATES, Folder.TYPE);
 
 				// Add basic properties
@@ -300,6 +300,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmTemplate.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmTemplate.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmTemplate.setProperty(Permission.ROLES_WRITE, new String[] {});
+				
 				
 				// Create config base node
 				log.info("Create config node");
@@ -333,19 +334,19 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		} catch (NamespaceException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (FileNotFoundException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (InvalidNodeTypeDefException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		}
 		
 		return okmRootPath;
@@ -375,10 +376,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 		log.debug("create: void");
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getRootFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getRootFolder(" + token + ")");
@@ -402,9 +400,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		return rootFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getTrashFolder(java.lang.String)
-	 */
 	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTrash(" + token + ")");
@@ -427,10 +422,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getTrashFolder: "+trashFolder);
 		return trashFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getTemplate(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getTemplatesFolder(" + token + ")");
@@ -453,10 +445,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getTemplatesFolder: "+templatesFolder);
 		return templatesFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getPersonalFolder(" + token + ")");
@@ -479,10 +468,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getPersonalFolder: "+personalFolder);
 		return personalFolder;
 	}
-
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
-	 */
+	
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getMailFolder(" + token + ")");
@@ -506,16 +492,17 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("getMailFolder: "+mailFolder);
 		return mailFolder;
 	}
-
+	
 	/**
 	 * Register custom node definition from file.
+	 *
+	 * TODO For Jackrabbit 2.0 should be done as:
+	 *   InputStream is = getClass().getClassLoader().getResourceAsStream("test.cnd");
+	 *   Reader cnd = new InputStreamReader(is);
+	 *   NodeType[] nodeTypes = CndImporter.registerNodeTypes(cnd, session);
 	 * 
-	 * @param token
-	 * @param cndFileName
-	 * @throws FileNotFoundException
-	 * @throws ParseException
-	 * @throws RepositoryException
-	 * @throws InvalidNodeTypeDefException
+	 * The key method is:
+	 *   CndImporter.registerNodeTypes("cndfile", session);
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized static void registerCustomNodeTypes(Session session, InputStream cndFile)
@@ -561,9 +548,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("registerCustomNodeTypes: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
-	 */
 	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("purgeTrash("+token+")");
@@ -579,7 +563,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				Node child = it.nextNode();
 				
 				if (child.isNodeType(Document.TYPE)) {
-					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child);
+					userItemsHashRet = new DirectDocumentModule().purgeHelper(session, child.getParent(), child);
 				} else if (child.isNodeType(Folder.TYPE)) {
 					userItemsHashRet = new DirectFolderModule().purgeHelper(session, child);
 				}
@@ -624,25 +608,16 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("purgeTrash: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getUpdateMessage(java.lang.String)
-	 */
 	@Override
 	public String getUpdateMessage(String token) throws RepositoryException {
 		return Repository.getUpdateMsg();
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#getUUID(java.lang.String)
-	 */
 	@Override
 	public String getUuid(String token) throws RepositoryException {
 		return Repository.getUuid();
 	}
 	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
 		log.debug("hasNode(" + token + ", " + path + ")");
@@ -657,6 +632,26 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 
 		log.debug("hasNode: "+ret);
+		return ret;
+	}
+
+	@Override
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+		log.debug("getPath(" + token + ", " + uuid + ")");
+		String ret;
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			ret = session.getNodeByUUID(uuid).getPath();
+		} catch (javax.jcr.ItemNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+
+		log.debug("getPath: "+ret);
 		return ret;
 	}
 }

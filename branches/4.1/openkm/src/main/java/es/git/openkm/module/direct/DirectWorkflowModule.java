@@ -25,7 +25,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,10 +36,8 @@ import java.util.zip.ZipInputStream;
 
 import javax.imageio.ImageIO;
 import javax.jcr.Session;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.IOUtils;
 import org.jbpm.JbpmConfiguration;
 import org.jbpm.JbpmContext;
 import org.jbpm.db.GraphSession;
@@ -49,52 +46,55 @@ import org.jbpm.file.def.FileDefinition;
 import org.jbpm.taskmgmt.exe.TaskMgmtInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import es.git.openkm.bean.FormField;
 import es.git.openkm.bean.ProcessDefinition;
 import es.git.openkm.bean.ProcessInstance;
 import es.git.openkm.bean.TaskInstance;
 import es.git.openkm.bean.Token;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.module.WorkflowModule;
+import es.git.openkm.util.FormUtils;
 import es.git.openkm.util.UserActivity;
 
 public class DirectWorkflowModule implements WorkflowModule {
 	private static Logger log = LoggerFactory.getLogger(DirectWorkflowModule.class);
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#registerProcessDefinition(java.lang.String, java.util.zip.ZipInputStream)
-	 */
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream zis)
-			throws RepositoryException {
+			throws ParseException, RepositoryException {
 		log.debug("registerProcessDefinition("+token+", "+zis+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		InputStream is = null;
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
+									
+			// Check xml form definition  
+			FileDefinition fileDef = processDefinition.getFileDefinition();
+			is = fileDef.getInputStream("forms.xml");
+			FormUtils.parseWorkflowForms(is);
+						
+			// If it is ok, deploy it
 			jbpmContext.deployProcessDefinition(processDefinition);
 			
 			// Activity log
 			UserActivity.log(session, "REGISTER_PROCESS_DEFINITION", null, null);
+		} catch (ParseException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
 		
 		log.debug("registerProcessDefinition: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#deleteProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public void deleteProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -118,9 +118,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("deleteProcessDefinition: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinition(java.lang.String, long)
-	 */
 	@Override
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
@@ -145,10 +142,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("getProcessDefinition: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinitionImage(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node)
 			throws RepositoryException {
@@ -163,7 +157,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			FileDefinition fileDef = pd.getFileDefinition();
 			//image = fileDef.getBytes("processimage.jpg");
 			
-			WorkflowUtils.DiagramInfo dInfo = WorkflowUtils.get(fileDef.getInputStream("gpd.xml"));
+			WorkflowUtils.DiagramInfo dInfo = WorkflowUtils.getDiagramInfo(fileDef.getInputStream("gpd.xml"));
 			WorkflowUtils.DiagramNodeInfo dNodeInfo = dInfo.getNodeMap().get(node);
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 			
@@ -196,62 +190,35 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return image;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessDefinitionForms(java.lang.String, long)
-	 */
 	@Override
-	public Map<String, Collection<FormField>> getProcessDefinitionForms(String token, long processDefinitionId)
-			throws RepositoryException {
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
+			throws ParseException, RepositoryException {
 		log.debug("getProcessDefinitionForms("+token+", "+processDefinitionId+")");
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		Map<String, Collection<FormField>> forms = new HashMap<String, Collection<FormField>>();
+		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
+		InputStream is = null;
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
-						
-			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				dbf.setFeature("http://xml.org/sax/features/validation", false);
-				dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				InputStream is = fileDef.getInputStream("forms.xml");
-				
-				if (is != null) {
-					Document doc = db.parse(is);
-					doc.getDocumentElement().normalize();
-					NodeList nodeLst = doc.getElementsByTagName("form");
-					
-					for (int s = 0; s < nodeLst.getLength(); s++) {
-						Node fstNode = nodeLst.item(s);
-						if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-							String taskName = fstNode.getAttributes().getNamedItem("task").getNodeValue();
-							String formFile = fstNode.getAttributes().getNamedItem("form").getNodeValue();
-							InputStream is2 = fileDef.getInputStream(formFile);
-							Collection<FormField> formFields = parseFormFields(is2);
-							forms.put(taskName, formFields);
-							is2.close();
-						}
-					}
-					
-					is.close();
-				}
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			is = fileDef.getInputStream("forms.xml");
+			
+			if (is != null) {
+				forms = FormUtils.parseWorkflowForms(is);
+				is.close();
 			}
 			
 			// Activity log
 			UserActivity.log(session, "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
+		} catch (ParseException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
 		
@@ -259,106 +226,9 @@ public class DirectWorkflowModule implements WorkflowModule {
 		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
 	}
-	
-	/**
-	 * @param is
-	 * @return
-	 */
-	private Collection<FormField> parseFormFields(InputStream is) {
-		log.debug("parseFormFields("+is+")");
-		//long begin = Calendar.getInstance().getTimeInMillis();
-		Collection <FormField> form = new ArrayList<FormField>();
-				
-		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setFeature("http://xml.org/sax/features/validation", false);
-			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			//log.info("Dom-Init-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-			
-			if (is != null) {
-				Document doc = db.parse(is);
-				//log.info("Dom-Parse-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-				doc.getDocumentElement().normalize();
-				NodeList datacellNodeLst = doc.getElementsByTagName("jbpm:datacell");
-								
-				for (int i = 0; i < datacellNodeLst.getLength(); i++) {
-					Node datacellNode = datacellNodeLst.item(i);
-					//log.info("Dom-Nodes-Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-					
-					if (datacellNode.getNodeType() == Node.ELEMENT_NODE) {
-						//log.info(" - "+datacellNode.getNodeName());
-						NodeList nodeLst = datacellNode.getChildNodes();
-						String label = null;
-						
-						for (int j = 0; j < nodeLst.getLength(); j++) {
-							Node fstNode = nodeLst.item(j);
-							
-							if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
-								//log.info(" -- "+fstNode.getNodeName());
-								
-								if (fstNode.getNodeName().equals("f:facet")) {
-									NodeList facetChilds = fstNode.getChildNodes();
-									
-									for (int k = 0; k < facetChilds.getLength(); k++) {
-										Node facetChild = facetChilds.item(k);
-										
-										if (facetChild.getNodeType() == Node.ELEMENT_NODE) {
-											//log.info(" ---- facetChild: "+facetChild.getNodeName());
-											label = facetChild.getAttributes().getNamedItem("value").getNodeValue();
-										}
-									}
-								} else if (fstNode.getNodeName().equals("h:inputText")) {
-									String name = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									name = name.substring(name.indexOf('\'')+1, name.lastIndexOf('\''));
-									//sb.append("<input type=\"text\" name=\""+value+"\"><br>\n");
-									FormField ff = new FormField();
-									ff.setType(FormField.INPUT);
-									ff.setLabel(label);
-									ff.setName(name);
-									form.add(ff);
-								} else if (fstNode.getNodeName().equals("tf:saveButton")) {
-									//String value = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									//sb.append("<input type=\"submit\" value=\""+value+"\">");
-									//FormField ff = new FormField();
-									//ff.setType(FormField.SAVE);
-									//ff.setText(text);
-									//ff.setValue(value);
-									//form.add(ff);
-								} else if (fstNode.getNodeName().equals("tf:transitionButton")) {
-									String transition = fstNode.getAttributes().getNamedItem("transition").getNodeValue();
-									String value = fstNode.getAttributes().getNamedItem("value").getNodeValue();
-									//sb.append("<input type=\"submit\" value=\""+value+"\" action=\""+transition+"\">");
-									FormField ff = new FormField();
-									ff.setType(FormField.TRANSITION);
-									ff.setLabel(label);
-									ff.setName(transition);
-									ff.setValue(value);
-									form.add(ff);
-								}
-							}
-						}
-					}
-				}
-			}
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-				
-		log.debug("parseFormFields: "+form);
-		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-		return form;
-	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#runProcessDefinition(java.lang.String, long, java.util.Map)
-	 */
+
 	@Override
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String> variables)
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables)
 			throws RepositoryException {
 		log.debug("runProcessDefinition("+token+", "+processDefinitionId+", "+variables+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -376,7 +246,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
 				org.jbpm.taskmgmt.exe.TaskInstance ti = tmi.createStartTaskInstance();
 				ti.start();
-				ti.end();
+				//ti.end();
 			} else {
 				pi.getRootToken().signal();
 			}
@@ -395,10 +265,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("runProcessDefinition: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#sendProcessInstanceSignal(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, String transitionName)
 			throws RepositoryException {
@@ -432,10 +299,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("sendProcessInstanceSignal: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#deleteProcessInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void deleteProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -459,9 +323,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("deleteProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findProcessInstances(java.lang.String, long)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
@@ -490,9 +351,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findAllProcessDefinitions(java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findAllProcessDefinitions(String token)
@@ -520,10 +378,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("findAllProcessDefinitions: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findLatestProcessDefinitions(java.lang.String)
-	 */
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)
@@ -552,9 +407,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findAllProcessDefinitionVersions(java.lang.String, java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name)
@@ -583,9 +435,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public ProcessInstance getProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -611,9 +460,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendProcessInstance(java.lang.String, long)
-	 */
 	@Override
 	public void suspendProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -636,10 +482,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("suspendProcessInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeProcessInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void resumeProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
@@ -663,12 +506,9 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeProcessInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addProcessInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
-			String value) throws RepositoryException {
+			Object value) throws RepositoryException {
 		log.info("addProcessInstanceVariable("+token+", "+processInstanceId+", "+name+", "+value+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
@@ -689,9 +529,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addProcessInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#removeProcessInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeProcessInstanceVariable(String token, long processInstanceId, String name)
 			throws RepositoryException {
@@ -714,10 +551,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("removeProcessInstanceVariable: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findUserTaskInstances(java.lang.String)
-	 */
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<TaskInstance> findUserTaskInstances(String token)
@@ -750,9 +584,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#findTaskInstances(java.lang.String, long)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId)
@@ -787,12 +618,9 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTaskInstanceValues(java.lang.String, long, java.lang.String, java.util.Map)
-	 */
 	@Override
 	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
-			Map<String, String> values) throws RepositoryException {
+			Map<String, Object> values) throws RepositoryException {
 		log.info("setTaskInstanceValues("+token+", "+taskInstanceId+", "+transitionName+", "+values+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
@@ -818,10 +646,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("setTaskInstanceValues: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceComment(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void addTaskInstanceComment(String token, long taskInstanceId, String message)
 			throws RepositoryException {
@@ -846,9 +671,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTaskInstanceComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public TaskInstance getTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -874,9 +696,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTaskInstanceActorId(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void setTaskInstanceActorId(String token, long taskInstanceId,
 			String actorId) throws RepositoryException {
@@ -899,14 +718,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("setTaskInstanceActorId: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTaskInstanceVariable(java.lang.String, long, java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	// TODO Esto creo que sobra pq no se puede hacer
 	public void addTaskInstanceVariable(String token, long taskInstanceId,
-			String name, String value) throws RepositoryException {
+			String name, Object value) throws RepositoryException {
 		log.debug("addTaskInstanceVariable("+token+", "+taskInstanceId+", "+name+", "+value+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 				
@@ -927,9 +743,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#removeTaskInstanceVariable(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void removeTaskInstanceVariable(String token, long taskInstanceId,
 			String name) throws RepositoryException {
@@ -953,9 +766,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("removeTaskInstanceVariable: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#startTaskInstance(java.lang.String, long)
-	 */
 	@Override
 	public void startTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -979,10 +789,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("startTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#endTaskInstance(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void endTaskInstance(String token, long taskInstanceId,
 			String transitionName) throws RepositoryException {
@@ -1012,10 +819,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("endTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendTaskInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void suspendTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -1039,10 +843,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("suspendTaskInstance: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeTaskInstance(java.lang.String, long)
-	 */
+
 	@Override
 	public void resumeTaskInstance(String token, long taskInstanceId)
 			throws RepositoryException {
@@ -1067,9 +868,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeTaskInstance: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#getToken(java.lang.String, long)
-	 */
 	@Override
 	public Token getToken(String token, long tokenId)
 			throws RepositoryException {
@@ -1095,9 +893,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		return vo;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#addTokenComment(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public void addTokenComment(String token, long tokenId, String message)
 			throws RepositoryException {
@@ -1121,9 +916,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("addTokenComment: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#suspendToken(java.lang.String, long)
-	 */
 	@Override
 	public void suspendToken(String token, long tokenId) throws RepositoryException {
 		log.info("suspendToken("+token+", "+tokenId+")");
@@ -1146,9 +938,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("suspendToken: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#resumeToken(java.lang.String, long)
-	 */
 	@Override
 	public void resumeToken(String token, long tokenId) throws RepositoryException {
 		log.info("resumeToken("+token+", "+tokenId+")");
@@ -1171,9 +960,6 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("resumeToken: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#sendTokenSignal(java.lang.String, long, java.lang.String)
-	 */
 	@Override
 	public Token sendTokenSignal(String token, long tokenId,
 			String transitionName) throws RepositoryException {
@@ -1206,10 +992,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("sendTokenSignal: "+vo);
 		return vo;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.WorkflowModule#setTokenNode(java.lang.String, long, java.lang.String)
-	 */
+
 	@Override
 	public void setTokenNode(String token, long tokenId, String nodeName)
 			throws RepositoryException {

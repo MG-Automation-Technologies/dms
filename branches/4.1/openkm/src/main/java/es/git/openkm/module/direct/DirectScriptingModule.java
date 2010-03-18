@@ -43,58 +43,27 @@ import es.git.openkm.util.UserActivity;
 
 public class DirectScriptingModule implements ScriptingModule {
 	private static Logger log = LoggerFactory.getLogger(DirectScriptingModule.class);
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#setScript(java.lang.String, java.lang.String, java.lang.String)
-	 */
+
 	@Override
-	public void setScript(String token, String nodePath, String code)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("setScript(" + token + ", " + nodePath + ", " + code + ")");
+	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		Node node = null;
 		Node sNode = null;
-		
+
 		try {
 			Session session = SessionManager.getInstance().get(token);
-			
+
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
-				Session lockSession = null;
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
-				boolean nodeLocked = false;
-				boolean sessionCreated = false;
-			
-				// Get lock token
-				if (node.isLocked()) {
-					nodeLocked = true;
-					Lock lck = sNode.getLock();
-					SessionManager sessions = SessionManager.getInstance();
-					String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-					String lockToken = JCRUtils.getLockToken(node.getUUID());
-					
-					if (lockUserToken != null) {
-						lockSession = sessions.get(lockUserToken);
-					} else {
-						sessionCreated = true;
-						lockSession = systemSession;
-						lockSession.addLockToken(lockToken);
-					}
-					
-					sNode = lockSession.getNodeByUUID(node.getUUID());
-				}
-				
+
 				// Perform scripting
 				sNode.addMixin(Scripting.TYPE);
 				sNode.setProperty(Scripting.SCRIPT_CODE, code);
 				sNode.save();
-			
-				// Remove lock token
-				if (nodeLocked && sessionCreated) {
-					lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-				}
-			
+
 				// Activity log
 				UserActivity.log(session, "SET_SCRIPT", nodePath, null);
 			} else {
@@ -113,62 +82,31 @@ public class DirectScriptingModule implements ScriptingModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		}
-		
+
 		log.debug("setScript: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#removeScript(java.lang.String, java.lang.String)
-	 */
+
 	@Override
-	public void removeScript(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("removeScript(" + token + ", " + nodePath + ")");
+	public void removeScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("removeScript({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
-			
+
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
-				Session lockSession = null;
 				node = session.getRootNode().getNode(nodePath.substring(1));
 				sNode = systemSession.getNodeByUUID(node.getUUID());
-				boolean nodeLocked = false;
-				boolean sessionCreated = false;
-				
-				// Get lock token
-				if (node.isLocked()) {
-					nodeLocked = true;
-					Lock lck = sNode.getLock();
-					SessionManager sessions = SessionManager.getInstance();
-					String lockUserToken = sessions.getTokenByUserId(lck.getLockOwner());
-					String lockToken = JCRUtils.getLockToken(node.getUUID());
-					
-					if (lockUserToken != null) {
-						lockSession = sessions.get(lockUserToken);
-					} else {
-						sessionCreated = true;
-						lockSession = systemSession;
-						lockSession.addLockToken(lockToken);
-					}
-					
-					sNode = lockSession.getNodeByUUID(node.getUUID());
-				}
-				
+
 				// Perform scripting
 				if (sNode.isNodeType(Scripting.TYPE)) {
 					sNode.removeMixin(Scripting.TYPE);
 					sNode.save();
 				}
-				
-				// Remove lock token
-				if (nodeLocked && sessionCreated) {
-					lockSession.removeLockToken(JCRUtils.getLockToken(node.getUUID()));
-				}
-				
+
 				// Activity log
 				UserActivity.log(session, "REMOVE_SCRIPT", nodePath, null);
 			} else {
@@ -191,22 +129,18 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("removeScript: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.ScriptingModule#getScript(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public String getScript(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
-		log.debug("getScript(" + token + ", " + nodePath + ")");
+	public String getScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("getScript({}, {})", token, nodePath);
 		String code = null;
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
-			
+
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Node node = session.getRootNode().getNode(nodePath.substring(1));
-				
+
 				if (node.isNodeType(Scripting.TYPE)) {
 					code = node.getProperty(Scripting.SCRIPT_CODE).getString();
 				}
@@ -221,22 +155,25 @@ public class DirectScriptingModule implements ScriptingModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getScript: "+code);
+		log.debug("getScript: " + code);
 		return code;
 	}
-		
+
 	/**
 	 * Check for scripts and evaluate
 	 * 
-	 * @param node Node modified (Document or Folder)
-	 * @param user User who generated the modification event
-	 * @param eventType Type of modification event
+	 * @param node
+	 *            Node modified (Document or Folder)
+	 * @param user
+	 *            User who generated the modification event
+	 * @param eventType
+	 *            Type of modification event
 	 */
-	public static void checkScripts(Node scriptNode, String nodePath, String user, String eventType) {
-		log.debug("checkScripts("+scriptNode+", "+nodePath+", "+user+", "+eventType+")");
-		
+	public static void checkScripts(Session session, Node scriptNode, Node eventNode, String eventType) {
+		log.debug("checkScripts({}, {}, {}, {})", new Object[] { session, scriptNode, eventNode, eventType });
+
 		try {
-			checkScriptsHelper(scriptNode, nodePath, user, eventType);
+			checkScriptsHelper(session, scriptNode, eventNode, eventType);
 		} catch (ValueFormatException e) {
 			e.printStackTrace();
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -244,37 +181,37 @@ public class DirectScriptingModule implements ScriptingModule {
 		} catch (javax.jcr.RepositoryException e) {
 			e.printStackTrace();
 		}
-		
+
 		log.debug("checkScripts: void");
 	}
-	
+
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Check script helper method for recursion.
 	 */
-	private static void checkScriptsHelper(Node scriptNode, String nodePath, String user, String eventType) throws javax.jcr.RepositoryException {
-		log.debug("checkScriptsHelper("+scriptNode.getPath()+", "+nodePath+", "+user+", "+eventType+")");
-				
+	private static void checkScriptsHelper(Session session, Node scriptNode, Node eventNode, String eventType)
+			throws javax.jcr.RepositoryException {
+		log.debug("checkScriptsHelper({}, {}, {}, {})", new Object[] { session, scriptNode, eventNode,
+				eventType });
+
 		if (scriptNode.isNodeType(Folder.TYPE) || scriptNode.isNodeType(Document.TYPE)) {
 			if (scriptNode.isNodeType(Scripting.TYPE)) {
 				String code = scriptNode.getProperty(Scripting.SCRIPT_CODE).getString();
-				
+
 				// Evaluate script
 				Interpreter i = new Interpreter();
 				try {
-					i.set("userId", user);
 					i.set("eventType", eventType);
-					i.set("nodePath", nodePath);
-					i.set("scriptPath", scriptNode.getPath());
+					i.set("session", session);
+					i.set("eventNode", eventNode);
+					i.set("scriptNode", scriptNode);
 					i.eval(code);
 				} catch (EvalError e) {
-					e.printStackTrace();
+					log.warn(e.getMessage(), e);
 				}
 			}
-			
+
 			// Check for script in parent node
-			checkScriptsHelper(scriptNode.getParent(), nodePath, user, eventType);
+			checkScriptsHelper(session, scriptNode.getParent(), eventNode, eventType);
 		}
 		
 		log.debug("checkScriptsHelper: void");

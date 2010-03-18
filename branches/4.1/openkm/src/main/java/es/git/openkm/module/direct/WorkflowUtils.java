@@ -17,6 +17,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +33,8 @@ import es.git.openkm.bean.Token;
 import es.git.openkm.bean.Transition;
 
 public class WorkflowUtils {
+	private static Logger log = LoggerFactory.getLogger(WorkflowUtils.class);
+	
 	/**
 	 * @param pd
 	 * @return
@@ -267,7 +271,10 @@ public class WorkflowUtils {
 		return vo;
 	}
 	
-	public static WorkflowUtils.DiagramInfo get(InputStream is) {
+	/**
+	 * 
+	 */
+	public static WorkflowUtils.DiagramInfo getDiagramInfo(InputStream is) {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setFeature("http://xml.org/sax/features/validation", false);
@@ -302,6 +309,7 @@ public class WorkflowUtils {
 	                    diagramNodeInfoList.add(nodeInfo);
 	                }
 	            }
+	            
 	            final DiagramInfo diagramInfo = new DiagramInfo(
 	                Integer.parseInt(heightString),
 	                Integer.parseInt(widthString),
@@ -321,6 +329,9 @@ public class WorkflowUtils {
 		return null;
 	}
 	
+	/**
+	 * 
+	 */
 	public static final class DiagramInfo implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -355,6 +366,9 @@ public class WorkflowUtils {
         }
     }
 
+	/**
+	 * 
+	 */
 	public static final class DiagramNodeInfo implements Serializable {
         private static final long serialVersionUID = 1L;
 

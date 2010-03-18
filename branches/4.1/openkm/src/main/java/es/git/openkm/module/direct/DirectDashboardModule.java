@@ -56,6 +56,7 @@ import es.git.openkm.bean.Repository;
 import es.git.openkm.bean.cache.UserItems;
 import es.git.openkm.cache.UserItemsManager;
 import es.git.openkm.core.Config;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
 import es.git.openkm.dao.ActivityDAO;
@@ -69,10 +70,7 @@ public class DirectDashboardModule implements DashboardModule {
 	private static ActivityDAO actDao = ActivityDAO.getInstance();
 	private static DashboardStatsDAO dsDao = DashboardStatsDAO.getInstance();
 	private static final int MAX_RESULTS = 20;
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLockedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLockedDocuments(" + token + ")");
@@ -96,10 +94,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLockedDocuments: " + al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserCheckedOutDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException {
 		log.debug("getUserCheckedOutDocuments(" + token + ")");
@@ -122,10 +117,7 @@ public class DirectDashboardModule implements DashboardModule {
 
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserSubscribedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
 		log.debug("getUserSubscribedDocuments(" + token + ")");
@@ -150,9 +142,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserSubscribedFolders(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
 		log.debug("getUserSubscribedFolders(" + token + ")");
@@ -305,9 +294,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return cal;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastUploadedDocuments(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastUploadedDocuments(" + token + ")");
@@ -333,10 +319,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastUploadedDocuments: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastModifiedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastModifiedDocuments(" + token + ")");
@@ -362,10 +345,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastModifiedDocuments: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastDownloadedDocuments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
 			throws RepositoryException {
@@ -393,9 +373,6 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastImportedMails(java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token) 
 			throws RepositoryException {
@@ -422,10 +399,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.debug("getUserLastImportedMails: "+al);
 		return al;
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserLastImportedMailAttachments(java.lang.String)
-	 */
+
 	@Override
 	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token) 
 			throws RepositoryException {
@@ -549,18 +523,15 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserDocumentsSize(java.lang.String)
-	 */
 	@Override
 	public long getUserDocumentsSize(String token) throws RepositoryException {
 		log.info("getUserDocumentsSize(" + token + ")");
 		long size = 0;
 		
-		if (Config.USER_DOCUMENTS_SIZE_LIVE.equals("on")) {
-			size = getUserDocumentsSizeLive(token);
-		} else {
+		if (Config.USER_SIZE_CACHE.equals("on")) {
 			size = getUserDocumentsSizeCached(token);
+		} else {
+			size = getUserDocumentsSizeLive(token);
 		}
 
 		log.info("getUserDocumentsSize: " + size);
@@ -611,10 +582,7 @@ public class DirectDashboardModule implements DashboardModule {
 		log.info("getUserDocumentsSizeCached: " + usrItems.getSize());
 		return usrItems.getSize();
 	}
-	
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getUserSearchs(java.lang.String)
-	 */
+
 	@Override
 	public Collection<String> getUserSearchs(String token) throws RepositoryException {
 		log.debug("getUserSearchs("+token+")");
@@ -642,12 +610,9 @@ public class DirectDashboardModule implements DashboardModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#find(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> find(String token, String name) 
-			throws IOException, RepositoryException {
+			throws IOException, ParseException, RepositoryException {
 		log.info("find("+token+", "+name+")");
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		
@@ -655,41 +620,44 @@ public class DirectDashboardModule implements DashboardModule {
 			Session session = SessionManager.getInstance().get(token);
 			DirectSearchModule directSearch = new DirectSearchModule();
 			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			Node savedQuery = userQuery.getNode(name);
 			
-			// Get the saved query params
-			QueryParams params = directSearch.getSearch(savedQuery);
-			log.info("PARAMS: "+params.toString());
-			
-			// Set query date (first time)
-			if (params.getLastModifiedTo() == null) {
-				Calendar firstExecution = Calendar.getInstance();
-				firstExecution.add(Calendar.MONTH, -1);
-				params.setLastModifiedTo(firstExecution);
+			synchronized (userQuery) {
+				Node savedQuery = userQuery.getNode(name);
+				
+				// Get the saved query params
+				QueryParams params = directSearch.getSearch(savedQuery);
+				log.info("PARAMS: "+params.toString());
+				
+				// Set query date (first time)
+				if (params.getLastModifiedTo() == null) {
+					Calendar firstExecution = Calendar.getInstance();
+					firstExecution.add(Calendar.MONTH, -1);
+					params.setLastModifiedTo(firstExecution);
+				}
+				
+				Calendar lastExecution = resetHours(params.getLastModifiedTo());
+				Calendar actualDate = resetHours(Calendar.getInstance());
+				log.info("lastExecution -> "+lastExecution.getTime());
+				log.info("actualDate -> "+actualDate.getTime());
+				
+				if (lastExecution.before(actualDate)) {
+					params.setLastModifiedFrom(params.getLastModifiedTo());
+				}
+				
+				params.setLastModifiedTo(Calendar.getInstance());
+				
+				// Prepare statement
+				log.info("PARAMS "+params);
+				String statement = directSearch.prepareStatement(params);
+				log.info("STATEMENT "+statement);
+				
+				// Execute query
+				al = executeQueryDocument(session, statement, null, MAX_RESULTS);
+				
+				// Update query params
+				directSearch.saveSearch(savedQuery, params);
+				userQuery.save();
 			}
-			
-			Calendar lastExecution = resetHours(params.getLastModifiedTo());
-			Calendar actualDate = resetHours(Calendar.getInstance());
-			log.info("lastExecution -> "+lastExecution.getTime());
-			log.info("actualDate -> "+actualDate.getTime());
-						
-			if (lastExecution.before(actualDate)) {
-				params.setLastModifiedFrom(params.getLastModifiedTo());
-			}
-			
-			params.setLastModifiedTo(Calendar.getInstance());
-			
-			// Prepare statement
-			log.info("PARAMS "+params);
-			String statement = directSearch.prepareStatement(params);
-			log.info("STATEMENT "+statement);
-			
-			// Execute query
-			al = executeQueryDocument(session, statement, null, MAX_RESULTS);
-			
-			// Update query params
-			directSearch.saveSearch(savedQuery, params);
-			userQuery.save();
 			
 			// Check for already visited results
 			checkVisitedDocuments(session.getUserID(), name, al);
@@ -719,7 +687,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 		
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastWeekTopDownloadedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastWeekTopDownloadedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token) 
@@ -751,7 +719,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastMonthTopDownloadedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastMonthTopDownloadedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token) 
@@ -783,7 +751,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastWeekTopModifiedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastWeekTopModifiedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token) 
@@ -815,7 +783,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastMonthTopModifiedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastMonthTopModifiedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token) 
@@ -847,7 +815,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastModifiedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastModifiedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
@@ -877,7 +845,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#getLastUploadedDocuments(java.lang.String)
+	 * @see com.openkm.module.DashboardModule#getLastUploadedDocuments(java.lang.String)
 	 */
 	@Override
 	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token) 
@@ -960,7 +928,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	/* (non-Javadoc)
-	 * @see es.git.openkm.module.DashboardModule#visiteNode(java.lang.String, java.lang.String, java.lang.String, java.util.Calendar)
+	 * @see com.openkm.module.DashboardModule#visiteNode(java.lang.String, java.lang.String, java.lang.String, java.util.Calendar)
 	 */
 	@Override
 	public void visiteNode(String token, String source, String node, Calendar date)
