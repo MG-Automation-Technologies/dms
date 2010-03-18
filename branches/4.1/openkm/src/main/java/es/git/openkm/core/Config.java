@@ -38,12 +38,14 @@ import org.slf4j.LoggerFactory;
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
 	
-	// JBoss home
-	public static String JBOSS_HOME = System.getProperty("jboss.home.dir");
+	// Default directories
+	public static final String HOME_DIR = getHomeDir();
+	public static final String TMP_DIR = getTempDir();
+	public static final boolean IN_SERVER = inServer(); 
 	
 	// Preview cache
-	public static String PDF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"pdf";
-	public static String SWF_CACHE = JBOSS_HOME+File.separator+"cache"+File.separator+"swf";
+	public static String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
+	public static String SWF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"swf";
 	
 	// Multihost
 	public static String INSTALL = "";
@@ -182,9 +184,56 @@ public class Config {
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = null;
 	
+	/**
+	 * Guess the application server home directory
+	 */
+	private static String getHomeDir() {
+		// Try JBoss
+		String dir = System.getProperty("jboss.home.dir");
+		if (dir != null) {
+			log.info("Using JBoss: " + dir);
+			return dir;
+		}
+		
+		// Try Tomcat
+		dir = System.getProperty("catalina.home");
+		if (dir != null) {
+			log.info("Using Tomcat: " + dir);
+			return dir;
+		}
+		
+		// Otherwise GWT hosted mode
+		dir = System.getProperty("user.dir") + "/src/test/resources";
+		log.info("Using default dir: " + dir);
+		return dir;
+	}
+	
+	/**
+	 * Guess the system wide temporary directory
+	 */
+	private static String getTempDir() {
+		String dir = System.getProperty("java.io.tmpdir");
+		if (dir != null) {
+			return dir;
+		} else {
+			return "";
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private static boolean inServer() {
+		if (System.getProperty("jboss.home.dir") != null || System.getProperty("catalina.home") != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static void load() {
 		Properties config = new Properties();
-		String configFile = JBOSS_HOME+"/"+CONFIG_FILE;
+		String configFile = HOME_DIR+"/"+CONFIG_FILE;
 			
 		// Read config
 		try {
