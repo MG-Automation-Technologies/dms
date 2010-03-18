@@ -17,7 +17,7 @@ import es.git.openkm.bean.AppVersion;
 
 public class WarUtils {
 	private static Logger log = LoggerFactory.getLogger(WarUtils.class);
-	private static AppVersion appVersion = null;
+	private static AppVersion appVersion = new AppVersion();
 	
 	/**
 	 * 
@@ -29,7 +29,7 @@ public class WarUtils {
 	/**
 	 * 
 	 */
-	public static void setAppVersion(AppVersion newAppVersion) {
+	public static synchronized void setAppVersion(AppVersion newAppVersion) {
 		appVersion = newAppVersion;
 	}
 	
@@ -40,7 +40,6 @@ public class WarUtils {
 		String appServerHome = sc.getRealPath("/");
 		File manifestFile = new File(appServerHome, "META-INF/MANIFEST.MF");
 		FileInputStream fis = null;
-		appVersion = new AppVersion();
 		
 		try {
 			fis = new FileInputStream(manifestFile);
