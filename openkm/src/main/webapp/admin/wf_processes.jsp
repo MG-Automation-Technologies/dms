@@ -1,7 +1,7 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
-<%@ page import="es.git.openkm.bean.ProcessDefinition"%>
-<%@ page import="es.git.openkm.bean.ProcessInstance"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="java.util.HashMap"%>
@@ -25,7 +25,7 @@
 		
 		if (action != null && !action.equals("")) {
 			if (action.equals("start") && id != null && !id.equals("")) {
-				HashMap<String, String> variables = new HashMap<String, String>();
+				HashMap<String, Object> variables = new HashMap<String, Object>();
 				ProcessInstance pi = OKMWorkflow.getInstance().runProcessDefinition(token, Long.parseLong(id), variables);
 				response.sendRedirect("wf_procins.jsp?id="+pi.getId());
 			} else if (action.equals("delete") && id != null && !id.equals("")) {
@@ -36,11 +36,13 @@
 			Collection<ProcessDefinition> col = OKMWorkflow.getInstance().findAllProcessDefinitions(token);
 			out.println("<table>");
 			out.println("<tr>");
-			out.println("<td><h1>Process Definitions</h1></td><td><a href=\"\">Reload</a></td>");
+			out.println("<td><h1>Process Definitions</h1></td><td>");
+			out.println(" &nbsp; ");
+			out.println("<a href=\""+request.getRequestURL()+"\"><img src=\"img/action/reload.png\" alt=\"Reload\" title=\"Reload\"/></a></td>");
 			out.println("</tr>");
 			out.println("</table>");
-			out.println("<table class=\"results\">");
-			out.print("<tr><th>Process ID</th><th>Process Name</th><th>Version</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.print("<tr><th>Process ID</th><th>Process Name</th><th>Version</th><th width=\"75px\">Actions</th></tr>");
 
 			int i = 0;
 			for (Iterator<ProcessDefinition> it = col.iterator(); it.hasNext(); ) {
@@ -50,20 +52,20 @@
 				out.print("<td>"+pd.getName()+"</td>");
 				out.print("<td>"+pd.getVersion()+"</td>");
 				out.print("<td>");
-				out.print("<a href=\"wf_procdef.jsp?id="+pd.getId()+"\">Examine</a>");
-				out.print(" - ");
-				out.print("<a href=\"wf_processes.jsp?action=delete&id="+pd.getId()+"\">Delete</a>");
-				out.print(" - ");
-				out.print("<a href=\"wf_processes.jsp?action=start&id="+pd.getId()+"\">Start</a>");
+				out.print("<a href=\"wf_procdef.jsp?id="+pd.getId()+"\"><img src=\"img/action/examine.png\" alt=\"Examine\" title=\"Examine\"/></a>");
+				out.print(" &nbsp; ");
+				out.print("<a href=\"wf_processes.jsp?action=delete&id="+pd.getId()+"\"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a>");
+				out.print(" &nbsp; ");
+				out.print("<a href=\"wf_processes.jsp?action=start&id="+pd.getId()+"\"><img src=\"img/action/start.png\" alt=\"Start\" title=\"Start\"/></a>");
 				out.print("</td>");
 				out.println("</tr>");
 			}
 			
 			out.println("</table>");
 			out.println("<hr>");
-			out.println("<center><h2>Upload process definition</h2></center>");
+			out.println("<h2><center>Upload process definition</center></h2>");
 			out.println("<form action=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowUploadServletAdmin\" method=\"POST\" enctype='multipart/form-data'>");
-			out.println("<table class=\"form\" align=\"center\">");
+			out.println("<table class=\"form\">");
 			out.println("<tr><td>");
 			out.println("<input type=\"file\" name=\"definition\">");
 			out.println("</td></tr>");

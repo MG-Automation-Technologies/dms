@@ -23,15 +23,15 @@
 		out.println("<h1>Roles <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
 				
 		try {
-			out.println("<table class=\"results\" align=\"center\">");
-			out.println("<tr><th>Id</th><th><a href=\"role_edit.jsp?action=c\">New role</a></th></tr>");
+			out.println("<table class=\"results\" width=\"30%\">");
+			out.println("<tr><th>Id</th><th width=\"25px\"><a href=\"role_edit.jsp?action=c\"><img src=\"img/action/new.png\" alt=\"New role\" title=\"New role\"/></a></th></tr>");
 			Collection<Role> roles = dao.findAllRoles();
 			
 			int i = 0;
 			for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
 				Role rol = it.next();
 				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+rol.getId()+"</td>"+
-						"<td><a href=\"role_edit.jsp?action=d&id="+rol.getId()+"\""+">Delete</a>"+
+						"<td><a href=\"role_edit.jsp?action=d&id="+rol.getId()+"\""+"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a>"+
 						"</td></tr>");
 			}
 				

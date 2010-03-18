@@ -1,5 +1,5 @@
 <%@ page import="es.git.openkm.core.Config"%>
-<%@page import="es.git.openkm.util.WebUtil"%>
+<%@ page import="es.git.openkm.util.WebUtil"%>
 <%@ page import="es.git.openkm.dao.AuthDAO"%>
 <%@ page import="es.git.openkm.dao.bean.MailAccount"%>
 <%@ page import="java.sql.SQLException"%>
@@ -24,14 +24,16 @@
 		out.println("<h1>Mail accounts <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
 				
 		try {
-			out.println("<table class=\"results\" align=\"center\">");
-			out.println("<tr><th>OKM user</th><th>Mail host</th><th>Mail user</th><th>Mail password</th><th>Mail folder</th><th>Active</th><th><a href=\"mail_edit.jsp?action=c&user="+user+"\">New account</a></th></tr>");
+			out.println("<table class=\"results\" width=\"80%\">");
+			out.println("<tr><th>OKM user</th><th>Mail host</th><th>Mail user</th><th>Mail password</th>");
+			out.println("<th>Mail folder</th><th>Active</th>");
+			out.println("<th width=\"25px\"><a href=\"mail_edit.jsp?action=c&user="+user+"\"><img src=\"img/action/new.png\" alt=\"New account\" title=\"New account\"/></a></th></tr>");
 			Collection<MailAccount> mailAccounts = null;
 			
 			if (user != null && !user.equals("")) {
 				mailAccounts = dao.findMailAccountsByUser(user, false);
 			} else {
-				mailAccounts = dao.findAllMailAccounts();
+				mailAccounts = dao.findAllMailAccounts(false);
 			}
 			
 			int i = 0;
@@ -39,8 +41,8 @@
 				MailAccount ma = it.next();
 				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+ma.getUser()+"</td><td>"+ma.getMailHost()+"</td><td>"+ma.getMailUser()+"</td>"+
 						"<td>"+ma.getMailPassword()+"</td><td>"+ma.getMailFolder()+"</td><td>"+ma.isActive()+"</td>"+
-						"<td><a href=\"mail_edit.jsp?action=u&id="+ma.getId()+"\">Edit</a>"+
-						" - <a href=\"mail_edit.jsp?action=d&id="+ma.getId()+"\">Delete</a></td></tr>");
+						"<td><a href=\"mail_edit.jsp?action=u&id="+ma.getId()+"\"><img src=\"img/action/edit.png\" alt=\"Edit\" title=\"Edit\"/></a>"+
+						" &nbsp; <a href=\"mail_edit.jsp?action=d&id="+ma.getId()+"\"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a></td></tr>");
 			}
 				
 			out.println("</table>");

@@ -6,6 +6,8 @@
   &nbsp;
   <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
   &nbsp;
+  <a target="frame" href="stats.jsp"><img src="img/toolbar/stats.png" title="Statistics"></a>
+  &nbsp;
   <a target="frame" href="scripting.jsp"><img src="img/toolbar/scripting.png" title="Scripting"></a>
   &nbsp;
   <a target="frame" href="search.jsp"><img src="img/toolbar/search.png" title="Repository Search"></a>
@@ -27,6 +29,8 @@
   <a target="frame" href="activity_log.jsp"><img src="img/toolbar/activity.png" title="Activity log"></a>
   &nbsp;
   <a target="frame" href="wf_processes.jsp"><img src="img/toolbar/workflow.png" title="Workflow"></a>
+  &nbsp;
+  <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
   &nbsp;
   <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
   &nbsp;

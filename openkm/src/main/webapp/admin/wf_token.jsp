@@ -1,9 +1,9 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
-<%@ page import="es.git.openkm.bean.ProcessInstance"%>
-<%@ page import="es.git.openkm.bean.ProcessDefinition"%>
-<%@ page import="es.git.openkm.bean.Transition"%>
-<%@ page import="es.git.openkm.bean.Token"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
+<%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
+<%@ page import="es.git.openkm.bean.workflow.Transition"%>
+<%@ page import="es.git.openkm.bean.workflow.Token"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -48,10 +48,14 @@
 			ProcessDefinition pd = pi.getProcessDefinition();
 			out.println("<table>");
 			out.println("<tr>");
-			out.println("<td><h1>Token</h1></td><td><a href=\"\">Reload</a> - <a href=\"javascript:history.back(1)\">Back</a></td>");
+			out.println("<td><h1>Token</h1></td><td>");
+			out.println(" &nbsp; ");
+			out.println("<a href=\""+request.getRequestURL()+"?"+request.getQueryString()+"\"><img src=\"img/action/reload.png\" alt=\"Reload\" title=\"Reload\"/></a>");
+			out.println(" &nbsp; ");
+			out.println("<a href=\"javascript:history.back(1)\"><img src=\"img/action/back.png\" alt=\"Back\" title=\"Back\"/></a></td>");
 			out.println("</tr>");
 			out.println("</table>");
-			out.println("<table class=\"results\">");
+			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>Token ID</th><th>Current Node</th><th>Process Instance</th><th>Process</th><th>Status</th><th>Start Date</th></tr>");
 			out.print("<tr class=\"odd\">");
 			out.print("<td>"+t.getId()+"</td>");
@@ -72,8 +76,8 @@
 						
 			Collection<Transition> colT = t.getAvailableTransitions();
 			out.println("<h2>Transitions</h2>");
-			out.println("<table class=\"results\">");
-			out.println("<tr><th>ID</th><th>Name</th><th>Target Node</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<tr><th>ID</th><th>Name</th><th>Target Node</th><th width=\"25px\">Actions</th></tr>");
 
 			int i = 0;
 			for (Iterator<Transition> it = colT.iterator(); it.hasNext(); ) {
@@ -85,7 +89,7 @@
 				out.print("<td>");
 				
 				if (!t.isSuspended()) {
-					out.print("<a href=\"wf_token.jsp?action=signal&id="+t.getId()+"&transition="+(tr.getName()!=null?tr.getName():"")+"\">Signal</a>");
+					out.print("<a href=\"wf_token.jsp?action=signal&id="+t.getId()+"&transition="+(tr.getName()!=null?tr.getName():"")+"\"><img src=\"img/action/signal.png\" alt=\"Signal\" title=\"Signal\"/></a>");
 				}
 				
 				out.print("</td>");
@@ -96,8 +100,8 @@
 			
 			Collection<String> colN = t.getProcessInstance().getProcessDefinition().getNodes();
 			out.println("<h2>Nodes</h2>");
-			out.println("<table class=\"results\">");
-			out.println("<tr><th>Name</th><th>Actions</th></tr>");
+			out.println("<table class=\"results\" width=\"90%\">");
+			out.println("<tr><th>Name</th><th width=\"25px\">Actions</th></tr>");
 
 			i = 0;
 			for (Iterator<String> it = colN.iterator(); it.hasNext(); ) {
@@ -107,7 +111,7 @@
 				out.print("<td>");
 				
 				if (!t.isSuspended() && !t.getNode().equals(nodeName)) {
-					out.print("<a href=\"wf_token.jsp?action=move&id="+t.getId()+"&node="+nodeName+"\">Move to this node</a>");
+					out.print("<a href=\"wf_token.jsp?action=move&id="+t.getId()+"&node="+nodeName+"\"><img src=\"img/action/move.png\" alt=\"Move to this node\" title=\"Move to this node\"/></a>");
 				}
 				
 				out.print("</td>");

@@ -21,7 +21,7 @@
 %>
 	<h1>Configuration</h1>
 	<h2><%=Config.CONFIG_FILE %></h2>
-	<table class="results" align="center">
+	<table class="results" width="100%">
 		<tr><th>Parameter</th><th>Value</th></tr>
 		<tr class="odd"><td><b><%=Config.PROPERTY_REPOSITORY_CONFIG %></b></td><td><%=Config.REPOSITORY_CONFIG %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_REPOSITORY_HOME %></b></td><td><%=Config.REPOSITORY_HOME %></td></tr>
@@ -51,8 +51,8 @@
 		<tr class="odd"><td><b><%=Config.PROPERTY_RESTRICT_FILE_MIME %></b></td><td><%=Config.RESTRICT_FILE_MIME %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_RESTRICT_FILE_EXTENSION %></b></td><td><%=Config.RESTRICT_FILE_EXTENSION %></td></tr>
 		
-		<tr class="odd"><td><b><%=Config.PROPERTY_NOTIFY_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.NOTIFY_MESSAGE_SUBJECT) %></td></tr>
-		<tr class="even"><td><b><%=Config.PROPERTY_NOTIFY_MESSAGE_BODY %></b></td><td><%=escape(Config.NOTIFY_MESSAGE_BODY) %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_SUBJECT) %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_BODY %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_BODY) %></td></tr>
 
 		<tr class="odd"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_SUBJECT) %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_BODY %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_BODY) %></td></tr>
@@ -71,18 +71,18 @@
 		
 		<tr class="odd"><td><b><%=Config.PROPERTY_APPLICATION_URL %></b></td><td><%=Config.APPLICATION_URL %></td></tr>
 		<tr class="even"><td><b><%=Config.PROPERTY_DEFAULT_LANG %></b></td><td><%=Config.DEFAULT_LANG %></td></tr>
-		<tr class="odd"><td><b><%=Config.PROPERTY_KEYWORD_MAP_LIVE %></b></td><td><%=Config.KEYWORD_MAP_LIVE %></td></tr>
-		<tr class="even"><td><b><%=Config.PROPERTY_USER_DOCUMENTS_SIZE_LIVE %></b></td><td><%=Config.USER_DOCUMENTS_SIZE_LIVE %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_USER_KEYWORDS_CACHE %></b></td><td><%=Config.USER_KEYWORDS_CACHE %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_USER_SIZE_CACHE %></b></td><td><%=Config.USER_SIZE_CACHE %></td></tr>
 	</table>
 	
 	<h2>MIME types</h2>
 <%
-		out.println("<table class=\"results\" align=\"center\">");
+		out.println("<table class=\"results\" width=\"100%\">");
 		out.println("<tr><th>Icon</th><th>MIME</th></tr>");
 		int i = 0;
 		for (Iterator<String> it = Config.mimeAccept.iterator(); it.hasNext(); ) {
 			String mime = it.next();
-			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../es.git.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
+			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../com.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
 		}
 		out.println("</table>");
 	} else {
