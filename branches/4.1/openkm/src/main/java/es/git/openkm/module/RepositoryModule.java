@@ -64,8 +64,7 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, 
-			RepositoryException;
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the personal mails folder of the repository.
@@ -75,12 +74,11 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getMailFolder(String token) throws PathNotFoundException, 
-			RepositoryException;
-
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException;
+	
 	/**
 	 * Remove all the items in the user trash folder for ever. You can't 
-	 * recover this items anymore.
+	 * recover this items any more.
 	 * 
 	 * @param token The session authorization token.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -104,7 +102,7 @@ public interface RepositoryModule {
 	 * 
 	 * @param token The session authorization token
 	 * @return The repository UUID
-	 * @throws RepositoryException If there is any gegeran repository problem.
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public String getUuid(String token) throws RepositoryException;
 	
@@ -113,8 +111,19 @@ public interface RepositoryModule {
 	 * 
 	 * @param token The session authorization token
 	 * @param path The node path to test 
-	 * @return
-	 * @throws RepositoryException
+	 * @return true if the node exist or false if not
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public boolean hasNode(String token, String path) throws RepositoryException;
+	
+	/**
+	 * Obtain the node path with a given uuid.
+	 * 
+	 * @param token The session authorization token
+	 * @param uuid An unique node identifier
+	 * @return The path of the node with the given uuid
+	 * @throws PathNotFoundException If there is no user node in the repository with this uuid.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException;
 }

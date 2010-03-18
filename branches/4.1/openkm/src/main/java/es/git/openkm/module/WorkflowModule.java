@@ -23,11 +23,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
-import es.git.openkm.bean.FormField;
 import es.git.openkm.bean.ProcessDefinition;
 import es.git.openkm.bean.ProcessInstance;
 import es.git.openkm.bean.TaskInstance;
 import es.git.openkm.bean.Token;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 
 public interface WorkflowModule {
@@ -39,7 +40,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public void registerProcessDefinition(String token, ZipInputStream is) throws RepositoryException;
+	public void registerProcessDefinition(String token, ZipInputStream is) throws ParseException, RepositoryException;
 	
 	/**
 	 * Delete a previously registered process definition
@@ -73,7 +74,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Map<String, Collection<FormField>> getProcessDefinitionForms(String token, long processDefinitionId) throws RepositoryException;
+	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId) throws ParseException, RepositoryException;
 
 	/**
 	 * @param token
@@ -82,7 +83,7 @@ public interface WorkflowModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, String> variables) throws RepositoryException;
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -163,7 +164,7 @@ public interface WorkflowModule {
 	 * @param value
 	 * @throws RepositoryException
 	 */
-	public void addProcessInstanceVariable(String token, long processInstanceId, String name, String value) throws RepositoryException;
+	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -195,7 +196,7 @@ public interface WorkflowModule {
 	 * @param values
 	 * @throws RepositoryException
 	 */
-	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, String> values) throws RepositoryException;
+	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, Map<String, Object> values) throws RepositoryException;
 	
 	/**
 	 * @param token
@@ -228,7 +229,7 @@ public interface WorkflowModule {
 	 * @param value
 	 * @throws RepositoryException
 	 */
-	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, String value) throws RepositoryException;
+	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, Object value) throws RepositoryException;
 	
 	/**
 	 * @param token
