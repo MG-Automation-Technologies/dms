@@ -19,23 +19,39 @@
 
 package es.git.openkm.backend.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import es.git.openkm.backend.client.bean.GWTActivity;
+import es.git.openkm.backend.client.bean.GWTButton;
+import es.git.openkm.backend.client.bean.GWTFolder;
+import es.git.openkm.backend.client.bean.GWTFormElement;
+import es.git.openkm.backend.client.bean.GWTInput;
+import es.git.openkm.backend.client.bean.GWTOption;
+import es.git.openkm.backend.client.bean.GWTProcessDefinition;
+import es.git.openkm.backend.client.bean.GWTProcessInstance;
+import es.git.openkm.backend.client.bean.GWTPropertyGroup;
+import es.git.openkm.backend.client.bean.GWTSelect;
 import es.git.openkm.backend.client.bean.GWTSessionInfo;
+import es.git.openkm.backend.client.bean.GWTStatsInfo;
+import es.git.openkm.backend.client.bean.GWTTextArea;
+import es.git.openkm.backend.client.bean.GWTUser;
 import es.git.openkm.bean.Folder;
-import es.git.openkm.bean.MetaData;
 import es.git.openkm.bean.ProcessDefinition;
 import es.git.openkm.bean.ProcessInstance;
+import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.SessionInfo;
 import es.git.openkm.bean.StatsInfo;
+import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.bean.form.Input;
+import es.git.openkm.bean.form.Option;
+import es.git.openkm.bean.form.Select;
+import es.git.openkm.bean.form.TextArea;
 import es.git.openkm.bean.report.admin.ReportUser;
-import es.git.openkm.backend.client.bean.GWTActivity;
-import es.git.openkm.backend.client.bean.GWTMetaData;
-import es.git.openkm.backend.client.bean.GWTFolder;
-import es.git.openkm.backend.client.bean.GWTProcessInstance;
-import es.git.openkm.backend.client.bean.GWTStatsInfo;
-import es.git.openkm.backend.client.bean.GWTUser;
 import es.git.openkm.dao.bean.Activity;
 import es.git.openkm.dao.bean.User;
-import es.git.openkm.backend.client.bean.GWTProcessDefinition;
 
 public class Util {
 	
@@ -57,18 +73,82 @@ public class Util {
 	}
 	
 	/**
-	 * Copy the MetaData data to GWTMetaData
+	 * Copy the PropertyGroup object to GWTPropertyGroup
 	 * 
-	 * @param metaData The original MetaData
-	 * @return The gwtMetaData object with data values form the original MetaData
+	 * @param pGroup The original PropertyGroup
+	 * @return The gwtPRopertyGroup object with data values from original PropertyGroup
 	 */
-	public static GWTMetaData copy(MetaData metaData) {
-		GWTMetaData gwtMetaData = new GWTMetaData();
+	public static GWTPropertyGroup copy(PropertyGroup pGroup) {
+		GWTPropertyGroup gWTPropertyGroup = new GWTPropertyGroup();
 		
-		gwtMetaData.setType(metaData.getType());
-		gwtMetaData.setValues(metaData.getValues());
+		gWTPropertyGroup.setLabel(pGroup.getLabel());
+		gWTPropertyGroup.setName(pGroup.getName());
 		
-		return gwtMetaData;
+		return gWTPropertyGroup;
+	}
+	
+	/**
+	 * Copy the FormElement data to GWTFormElement
+	 * 
+	 * @param formElement The original FormElement
+	 * @return The gwtFormElement object with data values form the original MetaData
+	 */
+	public static GWTFormElement copy(FormElement formElement) {
+		if (formElement instanceof Button) {
+			GWTButton gWTButton = new GWTButton();
+			gWTButton.setLabel(formElement.getLabel());
+			gWTButton.setValue(formElement.getValue());
+			gWTButton.setWidth(formElement.getWidth());
+			gWTButton.setHeight(formElement.getHeight());
+			gWTButton.setName(((Button) formElement).getName());
+			gWTButton.setType(((Button) formElement).getType());
+			return gWTButton;
+		} else if (formElement instanceof Input) {
+			GWTInput gWTInput = new GWTInput();
+			gWTInput.setLabel(formElement.getLabel());
+			gWTInput.setValue(formElement.getValue());
+			gWTInput.setWidth(formElement.getWidth());
+			gWTInput.setHeight(formElement.getHeight());
+			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setType(((Input) formElement).getType());
+			return gWTInput;
+		} else if (formElement instanceof Select) {
+			GWTSelect gWTselect = new GWTSelect();
+			gWTselect.setLabel(formElement.getLabel());
+			gWTselect.setValue(formElement.getValue());
+			gWTselect.setWidth(formElement.getWidth());
+			gWTselect.setHeight(formElement.getHeight());
+			gWTselect.setName(((Select) formElement).getName());
+			gWTselect.setType(((Select) formElement).getType());
+			Collection<GWTOption> options = new ArrayList<GWTOption>();
+			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
+				options.add(copy(it.next()));
+			}
+			gWTselect.setOptions(options);
+			return gWTselect;
+		} else if (formElement instanceof TextArea) {
+			GWTTextArea gWTTextArea= new GWTTextArea();
+			gWTTextArea.setLabel(formElement.getLabel());
+			gWTTextArea.setValue(formElement.getValue());
+			gWTTextArea.setWidth(formElement.getWidth());
+			gWTTextArea.setHeight(formElement.getHeight());
+			gWTTextArea.setName(((TextArea) formElement).getName());
+			return gWTTextArea;
+		} else {
+			return new GWTFormElement();
+		}
+	}
+	
+	/**
+	 * Copy to Option data to  GWTOption
+	 * @param Option the original data
+	 * @return The GWTOption object with data values from original Option
+	 */
+	public static GWTOption copy(Option option) {
+		GWTOption gWTOption = new GWTOption();
+		gWTOption.setName(option.getName());
+		gWTOption.setValue(option.getValue());
+		return gWTOption;
 	}
 	
 	/**
@@ -106,7 +186,7 @@ public class Util {
 		
 		gWTUser.setEmail(user.getEmail());
 		gWTUser.setId(user.getId());
-		gWTUser.setPass(user.getPass());
+		gWTUser.setPass(""); // We must not copy password
 		gWTUser.setRoles(user.getRoles());
 		gWTUser.setActive(user.isActive());
 
@@ -213,7 +293,6 @@ public class Util {
 	public static GWTProcessInstance copy(ProcessInstance processInstance) {
 		GWTProcessInstance gWTProcessInstance = new GWTProcessInstance();
 		
-//		gWTProcessInstance.setCurrentNodes(processInstance.getCurrentNodes());
 		gWTProcessInstance.setEnded(processInstance.isEnded());
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
