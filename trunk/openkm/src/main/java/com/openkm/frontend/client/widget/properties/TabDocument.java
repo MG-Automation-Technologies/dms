@@ -200,7 +200,7 @@ public class TabDocument extends Composite {
 		if (!propertyGroup.isEmpty()) {
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
 				PropertyGroup group = it.next();
-				tabPanel.add(group, group.getGrpName());
+				tabPanel.add(group, group.getGrpLabel());
 				group.langRefresh();
 			}
 		}		
@@ -239,7 +239,7 @@ public class TabDocument extends Composite {
 			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
 				GWTPropertyGroup gwtGroup = it.next();
 				String groupTranslation = gwtGroup.getLabel();
-				PropertyGroup group = new PropertyGroup(gwtGroup.getName(), doc, gwtFolder, visibleButton);
+				PropertyGroup group = new PropertyGroup(gwtGroup.getName(), gwtGroup.getLabel(), doc, gwtFolder, visibleButton);
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 			}
