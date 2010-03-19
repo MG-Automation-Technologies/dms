@@ -470,16 +470,17 @@ public class Util {
 			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
 			Iterator<PropertyGroup> itGroup = colGroups.iterator();
 			while (itGroup.hasNext() && !found) {
-				PropertyGroup grpName = itGroup.next();
+				PropertyGroup group = itGroup.next();
 				
 				// Obtain all metadata values
-				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, grpName.getName());
+				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, group.getName());
 				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
 					FormElement formElement = it.next();
 					if (formElement.equals(key)) {
 						found = true;
 						GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
-						gWTPropertyParams.setGrpName(grpName.getName());
+						gWTPropertyParams.setGrpName(group.getName());
+						gWTPropertyParams.setGrpLabel(group.getLabel());
 						gWTPropertyParams.setMetaData(Util.copy(formElement));
 						gWTPropertyParams.setValue(properties.get(key));
 						finalProperties.put(key,gWTPropertyParams);

@@ -32,6 +32,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTPropertyParams implements IsSerializable {
 	
 	private String grpName;
+	private String grpLabel;
+	
 	private GWTFormElement metaData;
 	private String value;
 	
@@ -60,5 +62,13 @@ public class GWTPropertyParams implements IsSerializable {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public String getGrpLabel() {
+		return grpLabel;
+	}
+
+	public void setGrpLabel(String grpLabel) {
+		this.grpLabel = grpLabel;
 	}
 }
