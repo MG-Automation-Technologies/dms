@@ -57,11 +57,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
-import com.openkm.frontend.client.bean.GWTMetaData;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -945,7 +943,7 @@ public class SearchIn extends Composite {
 	 * @param gwtMetadata Property metada
 	 * @param propertyValue The selected value
 	 */
-	public void addProperty(String grpName, final String propertyName, GWTFormElement gwtMetadata, String propertyValue){
+	public void addProperty(String grpName, String grpLabel, final String propertyName, GWTFormElement gwtMetadata, String propertyValue){
 		int rows = tableProperties.getRowCount();
 		Image removeImage;
 		
@@ -957,8 +955,8 @@ public class SearchIn extends Composite {
 				textBox.addKeyPressHandler(keyPressHandler);
 				textBox.addKeyUpHandler(keyUpHandler);
 				hWidgetProperties.put(propertyName,textBox);
-				tableProperties.setHTML(rows, 0, "<b>" + grpName + " :</b>");
-				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyName + "&nbsp;");
+				tableProperties.setHTML(rows, 0, "<b>" + grpLabel + " :</b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + gwtMetadata.getLabel() + "&nbsp;");
 				tableProperties.setWidget(rows, 2, textBox);
 				
 				removeImage = new Image("img/icon/actions/delete.gif");
@@ -1003,8 +1001,8 @@ public class SearchIn extends Composite {
 				
 				hWidgetProperties.put(propertyName,listBox);
 				
-				tableProperties.setHTML(rows, 0, "<b>" + grpName + " : </b>");
-				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyName + "&nbsp;");
+				tableProperties.setHTML(rows, 0, "<b>" + grpLabel + " : </b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + gwtMetadata.getLabel() + "&nbsp;");
 				tableProperties.setWidget(rows, 2, listBox);
 				
 				removeImage = new Image("img/icon/actions/delete.gif");
@@ -1198,7 +1196,8 @@ public class SearchIn extends Composite {
 		for (Iterator<String> it = properties.iterator(); it.hasNext(); ) {
 			String key = it.next();
 			gWTPropertyParams = (GWTPropertyParams) hproperties.get(key);
-			addProperty(gWTPropertyParams.getGrpName(), key, gWTPropertyParams.getMetaData(), gWTPropertyParams.getValue());
+			addProperty(gWTPropertyParams.getGrpName(), gWTPropertyParams.getGrpLabel(), key, 
+					    gWTPropertyParams.getMetaData(), gWTPropertyParams.getValue());
 		}
 	}
 	
