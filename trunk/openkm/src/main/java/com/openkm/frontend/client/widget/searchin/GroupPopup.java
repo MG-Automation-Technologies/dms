@@ -96,11 +96,12 @@ public class GroupPopup extends DialogBox {
 			public void onClick(ClickEvent event) {
 				if (propertyListBox.getSelectedIndex()>0) {
 					String grpName = groupListBox.getValue(groupListBox.getSelectedIndex());
+					String grpLabel = groupListBox.getItemText(groupListBox.getSelectedIndex());
 					String propertyName = propertyListBox.getValue(propertyListBox.getSelectedIndex());
 					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
 						GWTFormElement formElement = it.next();
 						if (formElement.getName().endsWith(propertyName)) {
-							Main.get().mainPanel.search.searchIn.addProperty(grpName, propertyName, formElement, "");
+							Main.get().mainPanel.search.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
 						}
 						break;
 					}
