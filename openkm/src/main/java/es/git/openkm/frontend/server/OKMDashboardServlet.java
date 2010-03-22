@@ -34,6 +34,7 @@ import es.git.openkm.api.OKMDashboard;
 import es.git.openkm.bean.DashboardStatsDocumentResult;
 import es.git.openkm.bean.DashboardStatsFolderResult;
 import es.git.openkm.bean.DashboardStatsMailResult;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
@@ -254,6 +255,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		}
 		
 		log.debug("find:"+docList);

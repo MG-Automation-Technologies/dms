@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMPropertyGroup;
 import es.git.openkm.bean.Bookmark;
-import es.git.openkm.bean.Comment;
 import es.git.openkm.bean.DashboardStatsDocumentResult;
 import es.git.openkm.bean.DashboardStatsFolderResult;
 import es.git.openkm.bean.DashboardStatsMailResult;
@@ -43,32 +42,48 @@ import es.git.openkm.bean.Lock;
 import es.git.openkm.bean.Mail;
 import es.git.openkm.bean.MetaData;
 import es.git.openkm.bean.Note;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.ProcessInstance;
+import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.QueryParams;
 import es.git.openkm.bean.QueryResult;
-import es.git.openkm.bean.TaskInstance;
 import es.git.openkm.bean.Version;
+import es.git.openkm.bean.form.Button;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.bean.form.Input;
+import es.git.openkm.bean.form.Option;
+import es.git.openkm.bean.form.Select;
+import es.git.openkm.bean.form.TextArea;
+import es.git.openkm.bean.workflow.Comment;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.ProcessInstance;
+import es.git.openkm.bean.workflow.TaskInstance;
 import es.git.openkm.core.Config;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.bean.GWTBookmark;
+import es.git.openkm.frontend.client.bean.GWTButton;
 import es.git.openkm.frontend.client.bean.GWTComment;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
 import es.git.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTInput;
 import es.git.openkm.frontend.client.bean.GWTLock;
 import es.git.openkm.frontend.client.bean.GWTMail;
 import es.git.openkm.frontend.client.bean.GWTMetaData;
 import es.git.openkm.frontend.client.bean.GWTNote;
+import es.git.openkm.frontend.client.bean.GWTOption;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTProcessInstance;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 import es.git.openkm.frontend.client.bean.GWTPropertyParams;
 import es.git.openkm.frontend.client.bean.GWTQueryParams;
 import es.git.openkm.frontend.client.bean.GWTQueryResult;
+import es.git.openkm.frontend.client.bean.GWTSelect;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
+import es.git.openkm.frontend.client.bean.GWTTextArea;
 import es.git.openkm.frontend.client.bean.GWTVersion;
 
 public class Util {
@@ -374,8 +389,9 @@ public class Util {
 	 * @return The GWTQueryParams object with the data from de original QueryParams 
 	 * @throws RepositoryException 
 	 * @throws IOException 
+	 * @throws ParseException 
 	 */
-	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException {
+	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException, ParseException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
 		gWTParams.setContent(params.getContent());
@@ -406,20 +422,25 @@ public class Util {
 			boolean found = false;
 			
 			// Obtain all group names
-			Collection<String> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
-			Iterator<String> itGroup = colGroups.iterator();
+			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Iterator<PropertyGroup> itGroup = colGroups.iterator();
 			while (itGroup.hasNext() && !found) {
-				String grpName = itGroup.next();
+				PropertyGroup group = itGroup.next();
 				
 				// Obtain all metadata values
-				HashMap<String, MetaData> metaData = OKMPropertyGroup.getInstance().getMetaData(token, grpName);
-				if (metaData.containsKey(key)){
-					found = true;
-					GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
-					gWTPropertyParams.setGrpName(grpName);
-					gWTPropertyParams.setMetaData(Util.copy((MetaData) metaData.get(key)));
-					gWTPropertyParams.setValue(properties.get(key));
-					finalProperties.put(key,gWTPropertyParams);
+				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, group.getName());
+				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
+					FormElement formElement = it.next();
+					if (formElement.equals(key)) {
+						found = true;
+						GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
+						gWTPropertyParams.setGrpName(group.getName());
+						gWTPropertyParams.setGrpLabel(group.getLabel());
+						gWTPropertyParams.setMetaData(Util.copy(formElement));
+						gWTPropertyParams.setValue(properties.get(key));
+						finalProperties.put(key,gWTPropertyParams);
+						break;
+					}
 				}
 			}
 		}
@@ -546,6 +567,69 @@ public class Util {
 	}
 	
 	/**
+	 * Copy to FormElement data to GWTFormElemen
+	 * @param FormElement the original data
+	 * @return The GWTFormElement object with data values from original FormElement
+	 */
+	public static GWTFormElement copy(FormElement formElement) {
+		if (formElement instanceof Button) {
+			GWTButton gWTButton = new GWTButton();
+			gWTButton.setLabel(formElement.getLabel());
+			gWTButton.setValue(formElement.getValue());
+			gWTButton.setWidth(formElement.getWidth());
+			gWTButton.setHeight(formElement.getHeight());
+			gWTButton.setName(((Button) formElement).getName());
+			gWTButton.setType(((Button) formElement).getType());
+			return gWTButton;
+		} else if (formElement instanceof Input) {
+			GWTInput gWTInput = new GWTInput();
+			gWTInput.setLabel(formElement.getLabel());
+			gWTInput.setValue(formElement.getValue());
+			gWTInput.setWidth(formElement.getWidth());
+			gWTInput.setHeight(formElement.getHeight());
+			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setType(((Input) formElement).getType());
+			return gWTInput;
+		} else if (formElement instanceof Select) {
+			GWTSelect gWTselect = new GWTSelect();
+			gWTselect.setLabel(formElement.getLabel());
+			gWTselect.setValue(formElement.getValue());
+			gWTselect.setWidth(formElement.getWidth());
+			gWTselect.setHeight(formElement.getHeight());
+			gWTselect.setName(((Select) formElement).getName());
+			gWTselect.setType(((Select) formElement).getType());
+			Collection<GWTOption> options = new ArrayList<GWTOption>();
+			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
+				options.add(copy(it.next()));
+			}
+			gWTselect.setOptions(options);
+			return gWTselect;
+		} else if (formElement instanceof TextArea) {
+			GWTTextArea gWTTextArea= new GWTTextArea();
+			gWTTextArea.setLabel(formElement.getLabel());
+			gWTTextArea.setValue(formElement.getValue());
+			gWTTextArea.setWidth(formElement.getWidth());
+			gWTTextArea.setHeight(formElement.getHeight());
+			gWTTextArea.setName(((TextArea) formElement).getName());
+			return gWTTextArea;
+		} else {
+			return new GWTFormElement();
+		}
+	}
+	
+	/**
+	 * Copy to Option data to  GWTOption
+	 * @param Option the original data
+	 * @return The GWTOption object with data values from original Option
+	 */
+	public static GWTOption copy(Option option) {
+		GWTOption gWTOption = new GWTOption();
+		gWTOption.setName(option.getName());
+		gWTOption.setValue(option.getValue());
+		return gWTOption;
+	}
+	
+	/**
 	 * Copy to FormField data to  GWTFormField
 	 * @param FormField the original data
 	 * @return The GWTFormField object with data values from original FormField
@@ -639,5 +723,21 @@ public class Util {
 		
 		log.debug("copy: "+gWTMail);
 		return gWTMail;
+	}
+	
+	/**
+	 * Copy the Document data to GWTPropertyGroup data.
+	 * 
+	 * @param doc The original PropertyGroup object.
+	 * @return A GWTPropertyGroup object with the data from 
+	 * the original PropertyGroup.
+	 */
+	public static GWTPropertyGroup copy(PropertyGroup property) {
+		GWTPropertyGroup gWTPropertyGroup = new GWTPropertyGroup();
+		
+		gWTPropertyGroup.setLabel(property.getLabel());
+		gWTPropertyGroup.setName(property.getName());
+		
+		return gWTPropertyGroup;
 	}
 }

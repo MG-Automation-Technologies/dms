@@ -24,51 +24,42 @@ package es.git.openkm.frontend.client.bean;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Query params
- * 
  * @author jllort
  *
  */
-public class GWTPropertyParams implements IsSerializable {
+public class GWTPropertyGroup implements IsSerializable {
+	private static final long serialVersionUID = -1042616668984180283L;
 	
-	private String grpName;
-	private String grpLabel;
+	public static final String GROUP = "okg";
+	public static final String GROUP_URI = "http://www.openkm.org/group/1.0";
+	public static final String GROUP_PROPERTY = "okp";
+	public static final String GROUP_PROPERTY_URI = "http://www.openkm.org/group/property/1.0";
 	
-	private GWTFormElement metaData;
-	private String value;
+	private String label = "";
+	private String name = "";
 	
-	public GWTPropertyParams() {
-	}
-	
-	public String getGrpName() {
-		return grpName;
-	}
- 
-	public void setGrpName(String grpName) {
-		this.grpName = grpName;
-	}
- 
-	public GWTFormElement getMetaData() {
-		return metaData;
-	}
- 
-	public void setMetaData(GWTFormElement metaData) {
-		this.metaData = metaData;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public String getLabel() {
+		return label;
 	}
 	
-	public String getGrpLabel() {
-		return grpLabel;
+	public void setLabel(String label) {
+		this.label = label;
 	}
-
-	public void setGrpLabel(String grpLabel) {
-		this.grpLabel = grpLabel;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append("}");
+		return sb.toString();
 	}
 }

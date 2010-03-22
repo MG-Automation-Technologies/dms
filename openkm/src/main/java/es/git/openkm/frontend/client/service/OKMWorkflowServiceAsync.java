@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +27,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 
@@ -36,8 +38,8 @@ import es.git.openkm.frontend.client.bean.GWTTaskInstance;
  */
 public interface OKMWorkflowServiceAsync {
 	public void findLatestProcessDefinitions(AsyncCallback<List<GWTProcessDefinition>> callback);
-	public void runProcessDefinition(String docPath, double id, AsyncCallback<?> callback);
+	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables, AsyncCallback<?> callback);
 	public void findUserTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
-	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormField>>> callback);
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values, AsyncCallback<?> callback );
+	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormElement>>> callback);
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );
 }

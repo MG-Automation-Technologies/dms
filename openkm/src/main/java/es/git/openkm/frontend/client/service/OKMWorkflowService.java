@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +28,7 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 import es.git.openkm.frontend.client.OKMException;
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 
@@ -36,8 +38,8 @@ import es.git.openkm.frontend.client.bean.GWTTaskInstance;
  */
 public interface OKMWorkflowService extends RemoteService {
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException;
-	public void runProcessDefinition(String docPath, double id) throws OKMException;
+	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables) throws OKMException;
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException;
-	public Map<String, Collection<GWTFormField>> getProcessDefinitionForms(double id) throws OKMException;
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values ) throws OKMException;
+	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException;
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException;
 }

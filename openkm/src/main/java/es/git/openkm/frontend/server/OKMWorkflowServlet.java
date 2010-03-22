@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,12 +32,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMWorkflow;
-import es.git.openkm.bean.FormField;
-import es.git.openkm.bean.ProcessDefinition;
-import es.git.openkm.bean.TaskInstance;
+import es.git.openkm.bean.form.FormElement;
+import es.git.openkm.bean.workflow.ProcessDefinition;
+import es.git.openkm.bean.workflow.TaskInstance;
+import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
-import es.git.openkm.frontend.client.bean.GWTFormField;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 import es.git.openkm.frontend.client.config.ErrorCode;
@@ -81,9 +84,8 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#runProcessDefinition(java.lang.String, double)
 	 */
-	public void runProcessDefinition(String docPath, double id) throws OKMException  {
+	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		Map<String,String> variables = new HashMap<String,String>();
 		variables.put("path", docPath);
 		String token = getToken();
 		
@@ -123,24 +125,26 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#getProcessDefinitionForms(long)
 	 */
-	public Map<String, Collection<GWTFormField>> getProcessDefinitionForms(double id) throws OKMException {
+	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
 		log.debug("getProcessDefinitionForms()");
-		Map<String, Collection<GWTFormField>> formFieldList = new HashMap<String, Collection<GWTFormField>>();
+		Map<String, Collection<GWTFormElement>> formElementList = new HashMap<String, Collection<GWTFormElement>>();
 		String token = getToken();
 		
 		try {
-			Map<String, Collection<FormField>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(token, new Double(id).longValue());
+			Map<String, Collection<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(token, new Double(id).longValue());
 			
 			for (Iterator<String> it= list.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
-				Collection<FormField> col = list.get(key);
-				Collection<GWTFormField> gwtCol = new ArrayList<GWTFormField>();
-				for (Iterator<FormField> itf= col.iterator(); itf.hasNext();) {
+				Collection<FormElement> col = list.get(key);
+				Collection<GWTFormElement> gwtCol = new ArrayList<GWTFormElement>();
+				for (Iterator<FormElement> itf= col.iterator(); itf.hasNext();) {
 					gwtCol.add(Util.copy(itf.next()));
 				}
-				formFieldList.put(key, gwtCol);
+				formElementList.put(key, gwtCol);
 			}
-			
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_ParseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -148,16 +152,16 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 
 		
 		log.debug("getProcessDefinitionForms:");
-		return formFieldList;
+		return formElementList;
 	}
 	
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#setTaskInstanceValues(double, java.lang.String, java.util.Map)
 	 */
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, String> values ) throws OKMException {
+	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
 		String token = getToken();
-		
+	
 		try {
 			OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
 		} catch (RepositoryException e) {

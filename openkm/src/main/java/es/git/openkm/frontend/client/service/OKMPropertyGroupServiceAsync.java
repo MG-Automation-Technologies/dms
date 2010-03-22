@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,26 +21,25 @@
 
 package es.git.openkm.frontend.client.service;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import es.git.openkm.frontend.client.bean.GWTMetaData;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 
 /**
  * @author jllort
  *
  */
 public interface OKMPropertyGroupServiceAsync {
-	public void getAllGroups(AsyncCallback<List<String>> callback);
-	public void getAllGroups(String docPath, AsyncCallback<List<String>> callback);
-	public void addGroup(String docPath, String grpName, AsyncCallback callback);
-	public void getGroups(String docPath, AsyncCallback<List<String>> callback);
-	public void getTranslations(String lang, AsyncCallback<HashMap<String, String>> callback); 
+	public void getAllGroups(AsyncCallback<List<GWTPropertyGroup>> callback);
+	public void getAllGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
+	public void addGroup(String docPath, String grpName, AsyncCallback<?> callback);
+	public void getGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
 	public void getProperties(String docPath, String grpName, AsyncCallback<Map<String, String[]>> callback);
-	public void getMetaData(String grpName, AsyncCallback<Map<String, GWTMetaData>> callback);
-	public void setProperties(String docPath, String grpName, HashMap<String, String[]> properties, AsyncCallback callback);
-	public void removeGroup( String docPath, String grpName, AsyncCallback callback);
+	public void getMetaData(String grpName, AsyncCallback<Collection<GWTFormElement>> callback);
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties, AsyncCallback<?> callback);
+	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
 }

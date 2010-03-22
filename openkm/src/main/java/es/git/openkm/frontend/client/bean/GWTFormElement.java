@@ -24,51 +24,55 @@ package es.git.openkm.frontend.client.bean;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Query params
+ * GWTFormElement
  * 
  * @author jllort
- *
+ * 
  */
-public class GWTPropertyParams implements IsSerializable {
-	
-	private String grpName;
-	private String grpLabel;
-	
-	private GWTFormElement metaData;
-	private String value;
-	
-	public GWTPropertyParams() {
-	}
-	
-	public String getGrpName() {
-		return grpName;
-	}
- 
-	public void setGrpName(String grpName) {
-		this.grpName = grpName;
-	}
- 
-	public GWTFormElement getMetaData() {
-		return metaData;
-	}
- 
-	public void setMetaData(GWTFormElement metaData) {
-		this.metaData = metaData;
+public class GWTFormElement implements IsSerializable {
+	protected String label = "";
+	protected String name = "";
+	protected String value = "";
+	protected String width = "100px";
+	protected String height = "25px";
+
+	public String getWidth() {
+		return width;
 	}
 
+	public void setWidth(String width) {
+		this.width = width;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getValue() {
 		return value;
 	}
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-	
-	public String getGrpLabel() {
-		return grpLabel;
-	}
-
-	public void setGrpLabel(String grpLabel) {
-		this.grpLabel = grpLabel;
 	}
 }
