@@ -54,6 +54,9 @@
 
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
+    
+    <!-- Default source encoding ${default.encoding} -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
   </properties>
 
   <repositories>
@@ -446,7 +449,7 @@
         <version>2.3</version>
         <configuration>
           <targetJdk>${java.compiler}</targetJdk>
-          <sourceEncoding>utf-8</sourceEncoding>
+          <sourceEncoding>UTF-8</sourceEncoding>
           <minimumTokens>100</minimumTokens>
         </configuration>
       </plugin>
