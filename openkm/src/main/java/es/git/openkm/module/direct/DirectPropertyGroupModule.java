@@ -327,12 +327,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			Collection<FormElement> tmp = FormUtils.getPropertyGroupForms(pgf, grpName);
 			
 			// Only return registered property definitions
-			for (int i=0; i < pd.length; i++) {
-				for (FormElement formElement : tmp) {
-					if (formElement.getName().equals(pd[i].getName())) {
-						ret.add(formElement);
+			for (FormElement fe : tmp) {
+				for (int i=0; i < pd.length; i++) {
+					if (fe.getName().equals(pd[i].getName())) {
+						ret.add(fe);
 					}
-				}	
+				}
 			}
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
