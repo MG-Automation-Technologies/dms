@@ -42,7 +42,16 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean changePassword = true;
 	private String email = "";
 	private String appVersion = "";
+	private String workflowRunConfigForm = "";
+	
+	public String getWorkflowRunConfigForm() {
+		return workflowRunConfigForm;
+	}
 
+	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
+		this.workflowRunConfigForm = workflowRunConfigForm;
+	}
+	
 	/**
 	 * GWTWorkspace
 	 */

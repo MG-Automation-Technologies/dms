@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -50,9 +51,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import es.git.openkm.frontend.client.Main;
-import es.git.openkm.frontend.client.bean.GWTMetaData;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
+import es.git.openkm.frontend.client.bean.GWTInput;
+import es.git.openkm.frontend.client.bean.GWTOption;
 import es.git.openkm.frontend.client.bean.GWTPropertyParams;
 import es.git.openkm.frontend.client.bean.GWTQueryParams;
+import es.git.openkm.frontend.client.bean.GWTSelect;
+import es.git.openkm.frontend.client.bean.GWTTextArea;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.panel.PanelDefinition;
 import es.git.openkm.frontend.client.service.OKMAuthService;
@@ -657,11 +662,48 @@ public class SearchIn extends Composite {
 	 * Evalues Save Search button visibility
 	 */
 	public void evalueSaveSearchButtonVisible() {
-		if (searchSavedName.getText().length()>0 && searchButton.isEnabled()) {
-			saveSearchButton.setEnabled(true);
-		} else {
-			saveSearchButton.setEnabled(false);
-		}
+		if (content.getText().length() >= MIN_WORD_LENGTH || name.getText().length() >= MIN_WORD_LENGTH ||
+				keywords.getText().length() >= MIN_WORD_LENGTH || from.getText().length() >= MIN_WORD_LENGTH ||
+				to.getText().length() >= MIN_WORD_LENGTH || subject.getText().length() >= MIN_WORD_LENGTH) {
+				searchButton.setEnabled(true);
+			} else {
+				searchButton.setEnabled(false);
+			}
+			
+			// Evaluates Mime Types
+			if (mimeTypes.getSelectedIndex()>0) {
+				searchButton.setEnabled(true);
+			}
+			
+			// Evaluates user list
+			if (userListBox.getSelectedIndex()>0) {
+				searchButton.setEnabled(true);
+			}
+			
+			// Evaluates date range
+			if (modifyDateFrom!=null && modifyDateTo!=null) {
+				searchButton.setEnabled(true);
+			}
+			
+			// Evaluates properties to enable button
+			Collection<String> properties = hWidgetProperties.keySet();
+			
+			for (Iterator<String> it = properties.iterator(); it.hasNext();){
+				String key = it.next();
+				Object widget = hWidgetProperties.get(key);
+				if (widget instanceof TextBox) {
+					if (((TextBox) widget).getText().length() >= MIN_WORD_LENGTH) {
+						searchButton.setEnabled(true);
+					}
+				} else if (widget instanceof ListBox) {
+					if (((ListBox) widget).getSelectedIndex()>0) {
+						searchButton.setEnabled(true);
+					}
+				}
+			}
+			
+			// After evaluating search button, must evaluate save search too
+			evalueSaveSearchButtonVisible();
 	}
 	
 	/**
@@ -861,78 +903,93 @@ public class SearchIn extends Composite {
 	 * @param gwtMetadata Property metada
 	 * @param propertyValue The selected value
 	 */
-	public void addProperty(String grpName, final String propertyName, GWTMetaData gwtMetadata, String propertyValue){
+	public void addProperty(String grpName, String grpLabel, final String propertyName, GWTFormElement gwtMetadata, String propertyValue){
 		int rows = tableProperties.getRowCount();
 		Image removeImage;
 		
 		if (!hWidgetProperties.containsKey(propertyName)) {
 		
-			switch (gwtMetadata.getType()) {
-			
-				case GWTMetaData.INPUT:
-				case GWTMetaData.TEXT_AREA:
-					TextBox textBox = new TextBox(); // Create a widget for this property
-					textBox.setStyleName("okm-Input");
-					textBox.addKeyboardListener(keyboardListener);
-					hWidgetProperties.put(propertyName,textBox);
-					tableProperties.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(grpName) + " :</b>");
-					tableProperties.setHTML(rows, 1, "&nbsp;" + Main.propertyGroupI18n(propertyName) + "&nbsp;");
-					tableProperties.setWidget(rows, 2, textBox);
-					
-					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickListener(new ClickListener(){
-						public void onClick(Widget arg0) {
-							Main.get().mainPanel.search.searchIn.removeProperty(arg0,propertyName);
-							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
-						}
-					});
-					
-					tableProperties.setWidget(rows, 3, removeImage);
-					setRowWordWarp(tableProperties, rows, 2, false);
-					
-					if (propertyValue!=null && !propertyValue.equals("")) {
-						textBox.setText(propertyValue);
+			if (gwtMetadata instanceof GWTInput || gwtMetadata instanceof GWTTextArea) {
+				TextBox textBox = new TextBox(); // Create a widget for this property
+				textBox.setStyleName("okm-Input");
+				textBox.addKeyboardListener(new KeyboardListener() {
+					@Override
+					public void onKeyUp(Widget arg0, char arg1, int arg2) {
 					}
-					break;
+					
+					@Override
+					public void onKeyPress(Widget arg0, char arg1, int arg2) {
+						if ((char) KEY_ENTER == arg1 && searchButton.isEnabled()) {
+							executeSearch();
+						}
+					}
+					
+					@Override
+					public void onKeyDown(Widget arg0, char arg1, int arg2) {
+						evaluateSearchButtonVisible();
+					}
+				});
+				hWidgetProperties.put(propertyName,textBox);
+				tableProperties.setHTML(rows, 0, "<b>" + grpLabel + " :</b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + gwtMetadata.getLabel() + "&nbsp;");
+				tableProperties.setWidget(rows, 2, textBox);
 				
-				case GWTMetaData.SELECT:
-				case GWTMetaData.SELECT_MULTI:
-					ListBox listBox = new ListBox();
-					listBox.setStyleName("okm-Select");
-					listBox.addItem("",""); // Always we set and empty value
-					listBox.addChangeListener(new ChangeListener(){
-						public void onChange(Widget arg0) {
-							evaluateSearchButtonVisible();							
-						}
-					});
-					
-					for (Iterator<String> itData = gwtMetadata.getValues().iterator(); itData.hasNext(); ){
-						String value = itData.next();
-						listBox.addItem(Main.propertyGroupI18n(propertyName+"."+value),value); // The translation is composed by propertyName + "." + value key
-						
-						// Selects the selected value
-						if (propertyValue!=null && !propertyValue.equals("") && propertyValue.equals(value)) {
-							listBox.setSelectedIndex(listBox.getItemCount()-1);
-						}
+				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage.addClickListener(new ClickListener() {
+					@Override
+					public void onClick(Widget sender) {
+						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 					}
+				});
+				
+				tableProperties.setWidget(rows, 3, removeImage);
+				setRowWordWarp(tableProperties, rows, 2, false);
+				
+				if (propertyValue!=null && !propertyValue.equals("")) {
+					textBox.setText(propertyValue);
+				}
+				
+			} else if (gwtMetadata instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+				ListBox listBox = new ListBox();
+				listBox.setStyleName("okm-Select");
+				listBox.addItem("",""); // Always we set and empty value
+				listBox.addChangeListener(new ChangeListener() {
+					@Override
+					public void onChange(Widget arg0) {
+						evaluateSearchButtonVisible();							
+					}
+				});
+				
+				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ) {
+					GWTOption option = itData.next();
+					String value = option.getValue();
+					listBox.addItem(option.getName(),value); // The translation is composed by propertyName + "." + value key
 					
-					hWidgetProperties.put(propertyName,listBox);
-					
-					tableProperties.setHTML(rows, 0, "<b>" + Main.propertyGroupI18n(grpName) + " : </b>");
-					tableProperties.setHTML(rows, 1, "&nbsp;" + Main.propertyGroupI18n(propertyName) + "&nbsp;");
-					tableProperties.setWidget(rows, 2, listBox);
-					
-					removeImage = new Image("img/icon/actions/delete.gif");
-					removeImage.addClickListener(new ClickListener(){
-						public void onClick(Widget arg0) {
-							Main.get().mainPanel.search.searchIn.removeProperty(arg0,propertyName);
-							groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
-						}
-					});
-					
-					tableProperties.setWidget(rows, 3, removeImage);
-					setRowWordWarp(tableProperties, rows, 2, false);					
-					break;
+					// Selects the selected value
+					if (propertyValue!=null && !propertyValue.equals("") && propertyValue.equals(value)) {
+						listBox.setSelectedIndex(listBox.getItemCount()-1);
+					}
+				}
+				
+				hWidgetProperties.put(propertyName,listBox);
+				
+				tableProperties.setHTML(rows, 0, "<b>" + grpLabel + " : </b>");
+				tableProperties.setHTML(rows, 1, "&nbsp;" + gwtMetadata.getLabel() + "&nbsp;");
+				tableProperties.setWidget(rows, 2, listBox);
+				
+				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage.addClickListener(new ClickListener() {
+					@Override
+					public void onClick(Widget sender) {
+						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
+					}
+				});
+				
+				tableProperties.setWidget(rows, 3, removeImage);
+				setRowWordWarp(tableProperties, rows, 2, false);					
 			}
 		}
 	}
@@ -942,7 +999,7 @@ public class SearchIn extends Composite {
 	 * 
 	 * @return The actual properties values
 	 */
-	public Collection getActualProperties(){
+	public Collection<String> getActualProperties(){
 		return hWidgetProperties.keySet();
 	}
 	
@@ -1099,14 +1156,15 @@ public class SearchIn extends Composite {
 	 * 
 	 * @param hproperties The table properties map
 	 */
-	private void setTableProperties(HashMap hproperties) {
+	private void setTableProperties(Map<String, GWTPropertyParams> hproperties) {
 		GWTPropertyParams gWTPropertyParams;
 		Collection<String> properties = hproperties.keySet();
 		
 		for (Iterator<String> it = properties.iterator(); it.hasNext(); ) {
 			String key = it.next();
 			gWTPropertyParams = (GWTPropertyParams) hproperties.get(key);
-			addProperty(gWTPropertyParams.getGrpName(), key, gWTPropertyParams.getMetaData(), gWTPropertyParams.getValue());
+			addProperty(gWTPropertyParams.getGrpName(), gWTPropertyParams.getGrpLabel(), key, 
+					    gWTPropertyParams.getMetaData(), gWTPropertyParams.getValue());
 		}
 	}
 	

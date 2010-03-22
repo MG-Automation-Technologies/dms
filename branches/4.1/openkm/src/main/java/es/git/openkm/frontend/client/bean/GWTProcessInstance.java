@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +39,7 @@ public class GWTProcessInstance implements IsSerializable {
 	private Date start;
 	private boolean ended;
 	private boolean suspended;
-	private Map<String, String> variables;
+	private Map<String, Object> variables;
 	private GWTProcessDefinition processDefinition;
 	
 	/**
@@ -78,11 +80,11 @@ public class GWTProcessInstance implements IsSerializable {
 		this.suspended = suspended;
 	}
 
-	public Map<String, String> getVariables() {
+	public Map<String, Object> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Map<String, String> variables) {
+	public void setVariables(Map<String, Object> variables) {
 		this.variables = variables;
 	}
 

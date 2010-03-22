@@ -19,8 +19,6 @@
 
 package es.git.openkm.frontend.client.widget.startup;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -53,21 +51,20 @@ public class StartUp {
 	public static final int STARTUP_GET_TRASH 	 	  						= 5;
 	public static final int STARTUP_GET_USER_HOME 	  						= 6;
 	public static final int STARTUP_GET_BOOKMARKS							= 7;
-	public static final int STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS			= 8;
-	public static final int STARTUP_LOADING_TAXONOMY						= 9;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 10;
-	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 11;
-	public static final int STARTUP_LOADING_OPEN_PATH						= 12;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 13;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 15;
-	public static final int STARTUP_LOADING_TEMPLATES						= 16;
-	public static final int STARTUP_LOADING_PERSONAL						= 17;
-	public static final int STARTUP_LOADING_MAIL							= 18;	
-	public static final int STARTUP_LOADING_TRASH							= 19;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 20;
-	public static final int STARTUP_GET_USER_VALUES							= 21;
-	public static final int STARTUP_KEEP_ALIVE								= 22;
+	public static final int STARTUP_LOADING_TAXONOMY						= 8;
+	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 9;
+	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 10;
+	public static final int STARTUP_LOADING_OPEN_PATH						= 11;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 12;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 13;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 14;
+	public static final int STARTUP_LOADING_TEMPLATES						= 15;
+	public static final int STARTUP_LOADING_PERSONAL						= 16;
+	public static final int STARTUP_LOADING_MAIL							= 17;	
+	public static final int STARTUP_LOADING_TRASH							= 18;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 19;
+	public static final int STARTUP_GET_USER_VALUES							= 20;
+	public static final int STARTUP_KEEP_ALIVE								= 21;
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -187,20 +184,6 @@ public class StartUp {
 	};
 	
 	/**
-	 * Gets asyncronous to add a group
-	 */
-	final AsyncCallback callbackGetPropertyGroupTranslations = new AsyncCallback() {
-		public void onSuccess(Object result){
-			Main.get().hPropertyGroupI18n = (HashMap) result;
-			nextStatus(StartUp.STARTUP_LOADING_TAXONOMY); // Sets the next status to loading
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("getTranslations", caught);
-		}
-	};
-	
-	/**
 	 * Gets the trash
 	 */
 	public void getTrash() {
@@ -253,15 +236,6 @@ public class StartUp {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		repositoryService.getRoot(callbackGetRoot);
-	}
-	
-	/**
-	 * Get property translations
-	 */
-	public void getPropetyGroupTranslations() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.getTranslations(Main.get().getLang(), callbackGetPropertyGroupTranslations);
 	}
 	
 	/**
@@ -331,11 +305,6 @@ public class StartUp {
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.bookmarks"), STARTUP_GET_BOOKMARKS);
 						Main.get().mainPanel.topPanel.mainMenu.bookmark.getAll(); 	// Initialize bookmarks
 						Main.get().mainPanel.browser.tabMultiple.init();			// Initialize tab multiple
-						break;
-						
-					case STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.property.group.translations"), STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS);
-						getPropetyGroupTranslations();
 						break;
 					
 					case STARTUP_LOADING_TAXONOMY:
@@ -483,10 +452,6 @@ public class StartUp {
 			
 			case STARTUP_GET_BOOKMARKS:
 				msg = Main.i18n("startup.bookmarks");
-				break;
-				
-			case STARTUP_GET_PROPERTY_GROUP_TRANSLATIONS:
-				msg = Main.i18n("startup.loading.property.group.translations");
 				break;
 			
 			case STARTUP_LOADING_TAXONOMY:

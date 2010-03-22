@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,14 +21,14 @@
 
 package es.git.openkm.frontend.client.service;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import es.git.openkm.frontend.client.OKMException;
-import es.git.openkm.frontend.client.bean.GWTMetaData;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 
 /**
  * OKMPropertyGroupService
@@ -36,20 +38,19 @@ import es.git.openkm.frontend.client.bean.GWTMetaData;
  */
 public interface OKMPropertyGroupService extends RemoteService {
 
-	public List<String> getAllGroups() throws OKMException;
+	public List<GWTPropertyGroup> getAllGroups() throws OKMException;
 	
-	public List<String> getAllGroups(String docPath) throws OKMException;
+	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException;
 	
 	public void addGroup(String docPath, String grpName) throws OKMException;
 	
-	public List<String> getGroups(String docPath) throws OKMException;
-
-	public HashMap<String, String> getTranslations(String lang) throws OKMException;
+	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException;
 	
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException;
 	
-	public Map<String, GWTMetaData> getMetaData(String grpName) throws OKMException;
+	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException;
 	
-	public void setProperties(String docPath, String grpName, HashMap<String, String[]> properties) throws OKMException;
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException;
+	
 	public void removeGroup( String docPath, String grpName) throws OKMException;
 }

@@ -330,7 +330,6 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		mainPanel.navigator.personalTree.langRefresh();
 		mainPanel.navigator.templateTree.langRefresh();
 		mainPanel.navigator.trashTree.langRefresh();
-		startUp.getPropetyGroupTranslations(); // Gets all hashmap translations;
 	}
 	
 	/**

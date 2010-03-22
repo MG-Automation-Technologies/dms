@@ -19,6 +19,7 @@
 
 package es.git.openkm.frontend.client.widget.searchin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
-import es.git.openkm.frontend.client.bean.GWTMetaData;
+import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -62,7 +63,7 @@ public class GroupPopup extends DialogBox {
 	private Button addButton;
 	private ListBox groupListBox;
 	private ListBox propertyListBox;
-	private HashMap hMetaData = new HashMap();
+	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
 	private FlexTable table;
 	private Label groupLabel;
 	private Label propertyLabel;
@@ -91,8 +92,15 @@ public class GroupPopup extends DialogBox {
 			public void onClick(Widget sender) {
 				if (propertyListBox.getSelectedIndex()>0) {
 					String grpName = groupListBox.getValue(groupListBox.getSelectedIndex());
+					String grpLabel = groupListBox.getItemText(groupListBox.getSelectedIndex());
 					String propertyName = propertyListBox.getValue(propertyListBox.getSelectedIndex());
-					Main.get().mainPanel.search.searchIn.addProperty(grpName, propertyName,(GWTMetaData) hMetaData.get(propertyName), "");
+					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+						GWTFormElement formElement = it.next();
+						if (formElement.getName().endsWith(propertyName)) {
+							Main.get().mainPanel.search.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
+						}
+						break;
+					}
 				}
 				enableAddGroupButton(); // Enables or disables add group button ( if exist some property still to be added )
 				hide();
@@ -185,20 +193,20 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties
 	 */
-	final AsyncCallback callbackGetMetaData = new AsyncCallback() {
-		public void onSuccess(Object result){
-			hMetaData = (HashMap) result;
+	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaData = new AsyncCallback<Collection<GWTFormElement>>() {
+		public void onSuccess(Collection<GWTFormElement> result){
+			hMetaData = result;
 			propertyListBox.clear();
 			propertyListBox.setVisible(true);
 			propertyLabel.setVisible(true);
 			propertyListBox.addItem("",""); // First item is always blank
 			
-			Collection actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 
-			for (Iterator it = hMetaData.keySet().iterator(); it.hasNext();) {
-				String propertyName = (String) it.next();
-				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
-					propertyListBox.addItem(Main.propertyGroupI18n(propertyName),propertyName);
+			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
+				GWTFormElement formElement = it.next();
+				if (!actualProperties.contains(formElement.getName())) { // Only appears properties not stil added
+					propertyListBox.addItem(formElement.getLabel(), formElement.getName());
 				}
 			}
 		}
@@ -211,15 +219,16 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get metada group properties and validate is there's one not assigned
 	 */
-	final AsyncCallback callbackGetMetaDataToValidate = new AsyncCallback() {
-		public void onSuccess(Object result){
-			hMetaData = (HashMap) result;
+	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaDataToValidate = new AsyncCallback<Collection<GWTFormElement>>() {
+		public void onSuccess(Collection<GWTFormElement> result){
+			hMetaData = result;
 			
-			Collection actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
 			boolean found = false;
 			
-			for (Iterator it = hMetaData.keySet().iterator(); it.hasNext();) {
-				String propertyName = (String) it.next();
+			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
+				GWTFormElement formElement = it.next();
+				String propertyName = formElement.getName();
 				if (!actualProperties.contains(propertyName)) { // Only appears properties not stil added
 					found = true;
 				}

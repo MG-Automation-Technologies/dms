@@ -23,52 +23,17 @@ package es.git.openkm.frontend.client.bean;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
- * Query params
- * 
- * @author jllort
- *
- */
-public class GWTPropertyParams implements IsSerializable {
+public class GWTTextArea extends GWTFormElement implements IsSerializable {
 	
-	private String grpName;
-	private String grpLabel;
-	
-	private GWTFormElement metaData;
-	private String value;
-	
-	public GWTPropertyParams() {
-	}
-	
-	public String getGrpName() {
-		return grpName;
-	}
- 
-	public void setGrpName(String grpName) {
-		this.grpName = grpName;
-	}
- 
-	public GWTFormElement getMetaData() {
-		return metaData;
-	}
- 
-	public void setMetaData(GWTFormElement metaData) {
-		this.metaData = metaData;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-	public String getGrpLabel() {
-		return grpLabel;
-	}
-
-	public void setGrpLabel(String grpLabel) {
-		this.grpLabel = grpLabel;
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("label="); sb.append(label);
+		sb.append(", name="); sb.append(name);
+		sb.append(", value="); sb.append(value);
+		sb.append(", width="); sb.append(width);
+		sb.append(", height="); sb.append(height);
+		sb.append("}");
+		return sb.toString();
 	}
 }
