@@ -136,7 +136,7 @@ public class Config {
 	
 	public static String WORKFLOW_RUN_CONFIG_FORM = "run_config";
 	
-	public static String PRINCIPAL_ADAPTER = "com.openkm.principal.DatabasePrincipalAdapter";
+	public static String PRINCIPAL_ADAPTER = "es.git.openkm.principal.DatabasePrincipalAdapter";
 	public static String PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "on";
 	
 	// LDAP
