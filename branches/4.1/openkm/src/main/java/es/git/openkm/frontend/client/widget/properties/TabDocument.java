@@ -37,6 +37,7 @@ import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
 import es.git.openkm.frontend.client.bean.GWTPermission;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -220,15 +221,14 @@ public class TabDocument extends Composite implements TabListener {
 	/**
 	 * Gets asyncronous to get all groups assigned to a document
 	 */
-	final AsyncCallback callbackGetGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			GWTFolder gwtFolder = Main.get().activeFolderTree.getFolder();
 			
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				PropertyGroup group = new PropertyGroup(groupKey, doc, gwtFolder, visibleButton);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup gwtGroup = it.next();
+				String groupTranslation = gwtGroup.getLabel();
+				PropertyGroup group = new PropertyGroup(gwtGroup.getName(), gwtGroup.getLabel(), doc, gwtFolder, visibleButton);
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
 			}

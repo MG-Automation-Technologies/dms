@@ -21,7 +21,6 @@ package es.git.openkm.frontend.client.widget.searchin;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,6 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -171,15 +171,13 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetAllGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			groupListBox.clear();
 			groupListBox.addItem("",""); // Adds empty value
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				groupListBox.addItem(groupTranslation,groupKey);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup group = it.next();
+				groupListBox.addItem(group.getLabel() ,group.getName());
 			}
 			validate = 1;
 			validateGroupsNoEmpty(); // Enables or disables add group button ( case exist some value to be added on list )
