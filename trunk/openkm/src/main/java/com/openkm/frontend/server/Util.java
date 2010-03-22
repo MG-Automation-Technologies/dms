@@ -450,9 +450,11 @@ public class Util {
 		gWTParams.setOperator(params.getOperator());
 		gWTParams.setCategoyUuid(params.getCategories());
 		
-		gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(token, params.getCategories()));
+		if (params.getCategories() != null && !params.getCategories().equals("")) {
+			gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(token, params.getCategories()));
+		}
 		
-		if (params.getLastModifiedFrom()!=null && params.getLastModifiedTo()!=null) {
+		if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
 			gWTParams.setLastModifiedFrom(params.getLastModifiedFrom().getTime());
 			gWTParams.setLastModifiedTo(params.getLastModifiedTo().getTime());
 		} 
