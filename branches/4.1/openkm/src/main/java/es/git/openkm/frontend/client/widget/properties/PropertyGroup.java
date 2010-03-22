@@ -312,7 +312,6 @@ public class PropertyGroup extends Composite {
 						FlexTable tableMulti = new FlexTable();
 						
 						Button addButton = new Button(Main.i18n("button.add"),new ClickListener() {
-							@Override
 							public void onClick(Widget arg0) {
 								HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 								FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
@@ -325,7 +324,6 @@ public class PropertyGroup extends Composite {
 									
 									Image removeImage = new Image("img/icon/actions/delete.gif");
 									removeImage.addClickListener(new ClickListener() {
-										@Override
 										public void onClick(Widget sender) {
 											HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 											FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
@@ -404,7 +402,6 @@ public class PropertyGroup extends Composite {
 										
 										Image removeImage = new Image("img/icon/actions/delete.gif");
 										removeImage.addClickListener(new ClickListener() {
-											@Override
 											public void onClick(Widget sender) {
 												HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 												FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
@@ -740,7 +737,6 @@ public class PropertyGroup extends Composite {
 
 							Image removeImage = new Image("img/icon/actions/delete.gif");
 							removeImage.addClickListener(new ClickListener() {
-								@Override
 								public void onClick(Widget sender) {
 									HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
 									FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);

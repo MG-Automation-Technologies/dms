@@ -92,14 +92,12 @@ public class WorkflowPopup extends DialogBox {
 		formTable = new FlexTable();
 		
 		button = new Button(Main.i18n("button.close"), new ClickListener() {
-			@Override
 			public void onClick(Widget arg0) {
 				hide();
 			}
 		});
 		
 		addButton = new Button(Main.i18n("button.start"), new ClickListener() {
-			@Override
 			public void onClick(Widget arg0) {
 				runProcessDefinition();
 			}
@@ -107,7 +105,6 @@ public class WorkflowPopup extends DialogBox {
 
 		listBox = new ListBox();
 		listBox.addChangeListener(new ChangeListener() {
-			@Override
 			public void onChange(Widget arg0) {
 				if (listBox.getSelectedIndex()>0) {
 					addButton.setEnabled(true);
