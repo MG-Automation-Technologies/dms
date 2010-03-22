@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
+import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -84,15 +85,6 @@ public class GroupPopup extends DialogBox {
 			public void onClick(Widget sender) {
 				addGroup();
 				hide();
-				if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
-					GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
-					Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
-				}
-				// Case there's only two items (white and other) and this is added, then
-				// there's no item to be added and must disable addPropertyGroup
-				if (listBox.getItemCount()==2) {
-					Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
-				}
 			}
 		});
 
@@ -138,15 +130,13 @@ public class GroupPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get all groups
 	 */
-	final AsyncCallback callbackGetAllGroups = new AsyncCallback() {
-		public void onSuccess(Object result){
-			List groupList = (List) result;
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetAllGroups = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result){
 			listBox.clear();
 			listBox.addItem("",""); // Adds empty value
-			for (Iterator it = groupList.iterator(); it.hasNext();) {
-				String groupKey = (String) it.next();
-				String groupTranslation = Main.propertyGroupI18n(groupKey);
-				listBox.addItem(groupTranslation,groupKey);
+			for (Iterator<GWTPropertyGroup> it = result.iterator(); it.hasNext();) {
+				GWTPropertyGroup group = it.next();
+				listBox.addItem(group.getLabel(), group.getName());
 			}
 		}
 
@@ -159,7 +149,16 @@ public class GroupPopup extends DialogBox {
 	 * Gets asyncronous to add a group
 	 */
 	final AsyncCallback callbackAddGroup = new AsyncCallback() {
-		public void onSuccess(Object result){
+		public void onSuccess(Object result) {
+			if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
+				GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+			}
+			// Case there's only two items (white and other) and this is added, then
+			// there's no item to be added and must disable addPropertyGroup
+			if (listBox.getItemCount()==2) {
+				Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+			}
 		}
 
 		public void onFailure(Throwable caught) {

@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +47,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
-
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTDocument;
 import es.git.openkm.frontend.client.bean.GWTFolder;
@@ -74,6 +75,7 @@ public class PropertyGroup extends Composite {
 	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	private String grpName;
+	private String grpLabel;
 	private GWTDocument doc;
 	private Button changeButton;
 	private Button removeButton;
@@ -88,15 +90,16 @@ public class PropertyGroup extends Composite {
 	/**
 	 * PropertyGroup
 	 */
-	public PropertyGroup(String grpName, GWTDocument doc, GWTFolder folder, boolean visible) {	
+	public PropertyGroup(String grpName, String groupLavel, GWTDocument doc, GWTFolder folder, boolean visible) {	
 		table = new FlexTable();
 		scrollPanel = new ScrollPanel(table);
 		hPanel = new HorizontalPanel();
 		this.grpName = grpName;
+		this.grpLabel = groupLavel;
 		this.doc = doc;
 		
 		changeButton = new Button(Main.i18n("button.change"), new ClickListener() {
-			public void onClick(Widget sender) {
+			public void onClick(Widget arg0) {
 				if (!editValues) {
 					Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
 					changeButton.setHTML(Main.i18n("button.memory"));
@@ -116,7 +119,7 @@ public class PropertyGroup extends Composite {
 		});
 		
 		removeButton = new Button(Main.i18n("button.delete"), new ClickListener() {
-			public void onClick(Widget sender) {
+			public void onClick(Widget arg0) {
 				if (!editValues) {
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP);
 					Main.get().confirmPopup.show();
@@ -125,7 +128,7 @@ public class PropertyGroup extends Composite {
 		});
 		
 		cancelButton = new Button(Main.i18n("button.cancel"), new ClickListener() {
-			public void onClick(Widget sender) {
+			public void onClick(Widget arg0) {
 				if (editValues) {
 					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
 					changeButton.setHTML(Main.i18n("button.change"));
@@ -217,7 +220,7 @@ public class PropertyGroup extends Composite {
 	 */
 	public void langRefresh() {
 		changeButton.setHTML(Main.i18n("button.change"));
-		removeButton.setHTML(Main.i18n("button.delete"));
+		removeButton.setHTML(Main.i18n("button.delete"));		
 	}	
 	
 	/**
@@ -468,7 +471,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to set roperties
 	 */
-	final AsyncCallback callbackSetProperties = new AsyncCallback() {
+	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
 		}
@@ -482,7 +485,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets asyncronous to remove document group properties
 	 */
-	final AsyncCallback callbackRemoveGroup = new AsyncCallback() {
+	final AsyncCallback<Object> callbackRemoveGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
 		}
 
@@ -663,6 +666,7 @@ public class PropertyGroup extends Composite {
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.setProperties(doc.getPath(), grpName, hSaveProperties, callbackSetProperties);
 	}
+	
 	
 	/**
 	 * Cancel edition and restores values
@@ -846,6 +850,7 @@ public class PropertyGroup extends Composite {
 			propertyGroupService.removeGroup(doc.getPath(), grpName, callbackRemoveGroup);
 		}
 	}
+	
 	/**
 	 * Gets the group name
 	 * 
@@ -853,5 +858,14 @@ public class PropertyGroup extends Composite {
 	 */
 	public String getGrpName(){
 		return grpName;
+	}
+	
+	/**
+	 * Gets the group label
+	 * 
+	 * @return The group label
+	 */
+	public String getGrpLabel(){
+		return grpLabel;
 	}
 }
