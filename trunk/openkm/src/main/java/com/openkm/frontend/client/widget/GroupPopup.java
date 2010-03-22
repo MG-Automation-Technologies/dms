@@ -84,15 +84,6 @@ public class GroupPopup extends DialogBox {
 			public void onClick(ClickEvent event) {
 				addGroup();
 				hide();
-				if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
-					GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
-					Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
-				}
-				// Case there's only two items (white and other) and this is added, then
-				// there's no item to be added and must disable addPropertyGroup
-				if (listBox.getItemCount()==2) {
-					Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
-				}
 			}
 		});
 
@@ -158,7 +149,16 @@ public class GroupPopup extends DialogBox {
 	 * Gets asyncronous to add a group
 	 */
 	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
-		public void onSuccess(Object result){
+		public void onSuccess(Object result) {
+			if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
+				GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+			}
+			// Case there's only two items (white and other) and this is added, then
+			// there's no item to be added and must disable addPropertyGroup
+			if (listBox.getItemCount()==2) {
+				Main.get().mainPanel.topPanel.toolBar.disableAddPropertyGroup();
+			}
 		}
 
 		public void onFailure(Throwable caught) {
