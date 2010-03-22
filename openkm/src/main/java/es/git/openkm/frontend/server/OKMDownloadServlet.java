@@ -329,7 +329,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	private void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
 		log.info("** Convert from "+mimeType+" to PDF **");
 		try {
-			DocConverter dc = new DocConverter();
+			DocConverter dc = DocConverter.getInstance();
 			FileOutputStream os = new FileOutputStream(output);
 			dc.convert(is, mimeType, os, "application/pdf");
 			os.flush();
