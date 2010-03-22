@@ -12,7 +12,7 @@
       <option name="Python" value="python" />
       <option name="PHP" value="php" />
     </select>
-    <input label="Comment" name="okp:consulting.comment" value="10"/>
+    <input label="Comment" name="okp:technology.comment" value="10"/>
     <textarea label="Description" name="okp:technology.description" value=""/>
   </property-group>
 </property-groups>
