@@ -372,7 +372,6 @@ public class WorkflowFormPanel extends Composite {
 				
 				// Setting submit button
 				transButton.addClickListener(new ClickListener() {
-					@Override
 					public void onClick(Widget arg0) {
 						if (gWTButton.getType().equals(GWTButton.TYPE_TRANSITION)) {
 							setTaskInstanceValues(taskInstance.getId(), gWTButton.getValue());

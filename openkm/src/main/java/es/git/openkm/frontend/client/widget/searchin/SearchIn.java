@@ -912,23 +912,7 @@ public class SearchIn extends Composite {
 			if (gwtMetadata instanceof GWTInput || gwtMetadata instanceof GWTTextArea) {
 				TextBox textBox = new TextBox(); // Create a widget for this property
 				textBox.setStyleName("okm-Input");
-				textBox.addKeyboardListener(new KeyboardListener() {
-					@Override
-					public void onKeyUp(Widget arg0, char arg1, int arg2) {
-					}
-					
-					@Override
-					public void onKeyPress(Widget arg0, char arg1, int arg2) {
-						if ((char) KEY_ENTER == arg1 && searchButton.isEnabled()) {
-							executeSearch();
-						}
-					}
-					
-					@Override
-					public void onKeyDown(Widget arg0, char arg1, int arg2) {
-						evaluateSearchButtonVisible();
-					}
-				});
+				textBox.addKeyboardListener(keyboardListener);
 				hWidgetProperties.put(propertyName,textBox);
 				tableProperties.setHTML(rows, 0, "<b>" + grpLabel + " :</b>");
 				tableProperties.setHTML(rows, 1, "&nbsp;" + gwtMetadata.getLabel() + "&nbsp;");
@@ -936,7 +920,6 @@ public class SearchIn extends Composite {
 				
 				removeImage = new Image("img/icon/actions/delete.gif");
 				removeImage.addClickListener(new ClickListener() {
-					@Override
 					public void onClick(Widget sender) {
 						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
 						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
@@ -956,7 +939,6 @@ public class SearchIn extends Composite {
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("",""); // Always we set and empty value
 				listBox.addChangeListener(new ChangeListener() {
-					@Override
 					public void onChange(Widget arg0) {
 						evaluateSearchButtonVisible();							
 					}
@@ -981,7 +963,6 @@ public class SearchIn extends Composite {
 				
 				removeImage = new Image("img/icon/actions/delete.gif");
 				removeImage.addClickListener(new ClickListener() {
-					@Override
 					public void onClick(Widget sender) {
 						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
 						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
