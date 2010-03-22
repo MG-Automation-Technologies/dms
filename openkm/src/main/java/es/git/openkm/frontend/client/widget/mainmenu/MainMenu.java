@@ -41,19 +41,12 @@ public class MainMenu extends Composite {
 	
 	// URI CONSTANTS
 	public static final String URI_HELP = "http://www.openkm.com";
-	public static final String URI_BUG_REPORT = "http://www.openkm.com/component/option,com_mantis/Itemid,36/";
+	public static final String URI_BUG_REPORT = "http://issues.openkm.com";
 	public static final String URI_SUPPORT_REQUEST = "http://www.openkm.com/Contact/";
-	public static final String URI_PUBLIC_FORUM = "http://www.openkm.com/Forum/";
+	public static final String URI_PUBLIC_FORUM = "http://forum.openkm.com";
 	public static final String URI_PROJECT_WEB = "http://www.openkm.com";
-	public static final String URI_VIEW_REPOSITORY = "/OpenKM/repository_view.jsp";
-	public static final String URI_VIEW_LOGED_USERS = "/OpenKM/repository_users.jsp";
-	public static final String URI_SEARCH = "/OpenKM/repository_search.jsp";
-	public static final String URI_ACTION_LOG = "/OpenKM/repository_log.jsp";
-	public static final String URI_EXPORT = "/OpenKM/repository_export.jsp";
-	public static final String URI_IMPORT = "/OpenKM/repository_import.jsp";
-	public static final String URI_PROPERTY_GROUP = "/OpenKM/property_group.jsp";
-	public static final String URI_DOCUMENTATION = "http://www.openkm.com/component/option,com_openwiki/Itemid,31/";
-	public static final String URI_VERSION_CHANGES = "http://www.openkm.com/Changelog.html";
+	public static final String URI_DOCUMENTATION = "http://wiki.openkm.com";
+	public static final String URI_VERSION_CHANGES = "http://wiki.openkm.com/index.php/Changelog";
 
 	private ToolBarOption mainMenuOption;
 	public Bookmark bookmark;
@@ -935,56 +928,7 @@ public class MainMenu extends Composite {
 	// Command menu to show administration
 	Command showAdministration = new Command() {
 		public void execute() {
-			Window.open("/OpenKM"+Config.INSTALL+"/es.git.openkm.backend.Main/index.jsp","Administration","");
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewRepositoryExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.repository", URI_VIEW_REPOSITORY, 700, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewLogedUsersExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.loged.users", URI_VIEW_LOGED_USERS, 825, 400);
-		}
-	};
-	
-	// Command menu to show advanced search
-	Command advancedSearchExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.search", URI_SEARCH, 775, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command viewActivityLogExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.view.action.log", URI_ACTION_LOG, 800, 400);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command exportExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.export", URI_EXPORT, 600, 250);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command importExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.import", URI_IMPORT, 675, 250);
-		}
-	};
-	
-	// Command menu to show view repository
-	Command registerGroupsExecute = new Command() {
-		public void execute() {
-			Main.get().externalURLPopup.show("general.menu.register.groups", URI_PROPERTY_GROUP, 600, 250);
+			Window.open("/OpenKM"+Config.INSTALL+"/admin/index.jsp", "Administration", "");
 		}
 	};
 	

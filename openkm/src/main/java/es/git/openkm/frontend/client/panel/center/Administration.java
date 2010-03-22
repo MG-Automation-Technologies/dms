@@ -47,7 +47,7 @@ public class Administration extends ExtendedComposite {
 		//DOM.setElementProperty(iframe.getElement(), "allowtransparency", "true"); // Commented because on IE show clear if allowtransparency=true
 		DOM.setElementProperty(iframe.getElement(), "scrolling", "no");
 		
-		iframe.setUrl("/OpenKM"+Config.INSTALL+"/es.git.openkm.backend.Main/index.jsp");
+		iframe.setUrl("/OpenKM"+Config.INSTALL+"/admin/index.jsp");
 		iframe.setStyleName("okm-Input");
 		
 		initWidget(iframe);
