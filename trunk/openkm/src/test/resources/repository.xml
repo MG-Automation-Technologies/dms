@@ -11,24 +11,24 @@
     <!-- Security configuration -->
     <Security appName="Jackrabbit">
         <!-- Security manager: FQN of class implementing the JackrabbitSecurityManager interface -->
-        <SecurityManager class="org.apache.jackrabbit.core.DefaultSecurityManager" workspaceName="security">
+        <!-- <SecurityManager class="org.apache.jackrabbit.core.DefaultSecurityManager" workspaceName="security"> -->
             <!-- workspace access: FQN of class implementing the WorkspaceAccessManager interface -->
             <!-- <WorkspaceAccessManager class="..."/> -->
             <!-- <param name="config" value="${rep.home}/security.xml"/> -->
-        </SecurityManager>
+        <!-- </SecurityManager> -->
 
         <!-- Access manager: FQN of class implementing the AccessManager interface -->
         <AccessManager class="com.openkm.core.OKMAccessManager">
             <!-- <param name="config" value="${rep.home}/access.xml"/> -->
         </AccessManager>
 
-        <LoginModule class="org.apache.jackrabbit.core.security.authentication.DefaultLoginModule">
+        <!-- <LoginModule class="org.apache.jackrabbit.core.security.authentication.DefaultLoginModule"> -->
            <!-- Anonymous user name ('anonymous' is the default value) -->
-           <param name="anonymousId" value="anonymous"/>
+           <!-- <param name="anonymousId" value="anonymous"/> -->
            <!-- Administrator user id (default value if param is missing is 'admin') -->
-           <param name="adminId" value="admin"/>
+           <!-- <param name="adminId" value="admin"/> -->
            <!-- <param name="principalProvider" value="..."/> -->
-        </LoginModule>
+        <!-- </LoginModule> -->
     </Security>
 
     <!-- Location of workspaces root directory and name of default workspace -->
