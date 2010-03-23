@@ -60,7 +60,7 @@ public class FormUtils {
 			if (is != null) {
 				Document doc = db.parse(is);
 				doc.getDocumentElement().normalize();
-				NodeList nlForm = doc.getElementsByTagName("form");
+				NodeList nlForm = doc.getElementsByTagName("workflow-form");
 
 				for (int i = 0; i < nlForm.getLength(); i++) {
 					Node nForm = nlForm.item(i);
