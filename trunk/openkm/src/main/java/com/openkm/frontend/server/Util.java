@@ -478,7 +478,7 @@ public class Util {
 				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, group.getName());
 				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
 					FormElement formElement = it.next();
-					if (formElement.equals(key)) {
+					if (formElement.getName().equals(key)) {
 						found = true;
 						GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
 						gWTPropertyParams.setGrpName(group.getName());
