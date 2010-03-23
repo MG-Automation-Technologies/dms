@@ -103,7 +103,6 @@ public class GroupPopup extends DialogBox {
 						if (formElement.getName().endsWith(propertyName)) {
 							Main.get().mainPanel.search.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
 						}
-						break;
 					}
 				}
 				enableAddGroupButton(); // Enables or disables add group button ( if exist some property still to be added )

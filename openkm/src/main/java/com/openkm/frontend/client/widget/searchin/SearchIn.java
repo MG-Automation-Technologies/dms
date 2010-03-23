@@ -971,6 +971,7 @@ public class SearchIn extends Composite {
 				
 				tableProperties.setWidget(rows, 3, removeImage);
 				setRowWordWarp(tableProperties, rows, 2, false);
+				removeImage.addStyleName("okm-Hyperlink");
 				
 				if (propertyValue!=null && !propertyValue.equals("")) {
 					textBox.setText(propertyValue);
@@ -1006,6 +1007,7 @@ public class SearchIn extends Composite {
 				tableProperties.setWidget(rows, 2, listBox);
 				
 				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage.addStyleName("okm-Hyperlink");
 				removeImage.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
