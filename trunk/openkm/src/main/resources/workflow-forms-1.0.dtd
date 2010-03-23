@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT forms (form+)>
+<!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT form (input|textarea|select|button)*>
-<!ATTLIST form
+<!ELEMENT workflow-form (input|textarea|select|button)*>
+<!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
 
