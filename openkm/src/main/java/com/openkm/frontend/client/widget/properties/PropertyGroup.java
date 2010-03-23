@@ -560,7 +560,6 @@ public class PropertyGroup extends Composite {
 					}
 					
 					rows++;
-					break;
 				}
 			}
 		}
@@ -694,7 +693,6 @@ public class PropertyGroup extends Composite {
 				textArea.setReadOnly(true);
 				table.setWidget(rows, 1, textArea);
 				rows++;
-					break;
 				
 			} else if (gwtMetadata instanceof GWTInput) {
 				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
