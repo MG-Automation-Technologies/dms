@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE property-groups PUBLIC "-//OpenKM//Property Groups DTD 1.0//EN"
-                                 "https://openkm.svn.sourceforge.net/svnroot/openkm/trunk/openkm/src/main/resources/property-groups-1.0.dtd">
+                                 "http://www.openkm.com/dtd/property-groups-1.0.dtd">
 <property-groups>
   <property-group label="Consulting" name="okg:consulting">
     <input label="Name" type="text" name="okp:consulting.name" value="Joel" />
