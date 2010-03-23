@@ -46,14 +46,6 @@ public class GWTWorkspace implements IsSerializable {
 	private String appVersion = "";
 	private String workflowRunConfigForm = "";
 
-	public String getWorkflowRunConfigForm() {
-		return workflowRunConfigForm;
-	}
-
-	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
-		this.workflowRunConfigForm = workflowRunConfigForm;
-	}
-
 	/**
 	 * GWTWorkspace
 	 */
@@ -162,5 +154,13 @@ public class GWTWorkspace implements IsSerializable {
 	
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
+	}
+	
+	public String getWorkflowRunConfigForm() {
+		return workflowRunConfigForm;
+	}
+
+	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
+		this.workflowRunConfigForm = workflowRunConfigForm;
 	}
 }
