@@ -118,7 +118,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 					GWTPropertyGroup group = it.next();
 					log.debug("Removing Group: "+group);
 					
-					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); it.hasNext();) {
+					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); itGroupList.hasNext();) {
 						GWTPropertyGroup groupListElement = itGroupList.next();
 						if (groupListElement.getName().equals(group.getName())) {
 							groupList.remove(groupListElement);
