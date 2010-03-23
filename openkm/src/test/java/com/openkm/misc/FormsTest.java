@@ -1,0 +1,138 @@
+package com.openkm.misc;
+
+import java.io.FileInputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
+import junit.framework.TestCase;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.openkm.bean.PropertyGroup;
+import com.openkm.bean.form.Button;
+import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.TextArea;
+import com.openkm.util.FormUtils;
+
+public class FormsTest extends TestCase {
+	private static Logger log = LoggerFactory.getLogger(FormsTest.class);
+	private static final String BASE_DIR = "src/test/resources";
+
+	public FormsTest(String name) {
+		super(name);
+	}
+
+	public static void main(String[] args) throws Exception {
+		FormsTest test = new FormsTest("main");
+		test.setUp();
+		test.testWorkflow();
+		test.testPropertyGroups();
+		test.tearDown();
+	}
+
+	public void testWorkflow() throws Exception {
+		log.debug("testWorkflow()");
+		FileInputStream fis = new FileInputStream(BASE_DIR + "/forms.xml");
+		Map<String, Collection<FormElement>> forms = FormUtils.parseWorkflowForms(fis);
+		assertFalse(forms.isEmpty());
+		fis.close();
+
+		Collection<FormElement> formStart = forms.get("start");
+		assertNotNull(formStart);
+		Collection<FormElement> formUserInfo = forms.get("user_info");
+		assertNotNull(formUserInfo);
+		
+		Iterator<FormElement> formStartIt = formStart.iterator();
+		FormElement startFe = formStartIt.next();
+		assertTrue(startFe instanceof Input);
+		assertEquals(((Input) startFe).getLabel(), "Quantity");
+		
+		startFe = formStartIt.next();
+		assertTrue(startFe instanceof Button);
+		assertEquals(((Button) startFe).getLabel(), "Save");
+		
+		assertFalse(formStartIt.hasNext());
+		
+		Iterator<FormElement> formUserInfoIt = formUserInfo.iterator();
+		FormElement userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof Input);
+		assertEquals(((Input) userInputFe).getLabel(), "Name");
+		assertEquals(((Input) userInputFe).getName(), "name");
+		
+		userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof Input);
+		assertEquals(((Input) userInputFe).getLabel(), "Surname");
+		assertEquals(((Input) userInputFe).getName(), "surname");
+		
+		userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof TextArea);
+		assertEquals(((TextArea) userInputFe).getLabel(), "Info");
+		assertEquals(((TextArea) userInputFe).getName(), "info");
+		
+		userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof Select);
+		assertEquals(((Select) userInputFe).getLabel(), "Type");
+		assertEquals(((Select) userInputFe).getName(), "type");
+		assertEquals(((Select) userInputFe).getType(), "simple");
+		assertEquals(((Select) userInputFe).getOptions().size(), 3);
+		
+		userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof Button);
+		assertEquals(((Button) userInputFe).getLabel(), "Goto 1");
+		assertEquals(((Button) userInputFe).getValue(), "route 1");
+		assertEquals(((Button) userInputFe).getType(), "transition");
+				
+		userInputFe = formUserInfoIt.next();
+		assertTrue(userInputFe instanceof Button);
+		assertEquals(((Button) userInputFe).getLabel(), "Goto 2");
+		assertEquals(((Button) userInputFe).getValue(), "route 2");
+		assertEquals(((Button) userInputFe).getType(), "transition");
+		
+		assertFalse(formUserInfoIt.hasNext());
+	}
+	
+	public void testPropertyGroups() throws Exception {
+		Map<PropertyGroup, Collection<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms();
+		assertFalse(pgForms.isEmpty());
+		
+		Collection<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");
+		assertNotNull(consulting);
+		Collection<FormElement> technology = FormUtils.getPropertyGroupForms(pgForms, "okg:technology");
+		assertNotNull(technology);
+		
+		Iterator<FormElement> consultingIt = consulting.iterator();
+		FormElement consultingFe = consultingIt.next();
+		assertTrue(consultingFe instanceof Input);
+		assertEquals(((Input) consultingFe).getLabel(), "Name");
+		assertEquals(((Input) consultingFe).getName(), "okp:consulting.name");
+		
+		consultingFe = consultingIt.next();
+		assertTrue(consultingFe instanceof TextArea);
+		assertEquals(((TextArea) consultingFe).getLabel(), "Comment");
+		assertEquals(((TextArea) consultingFe).getName(), "okp:consulting.comment");
+		
+		assertFalse(consultingIt.hasNext());
+		
+		Iterator<FormElement> technologyIt = technology.iterator();
+		FormElement technologyFe = technologyIt.next();
+		assertTrue(technologyFe instanceof Select);
+		assertEquals(((Select) technologyFe).getLabel(), "Language");
+		assertEquals(((Select) technologyFe).getName(), "okp:technology.language");
+		
+		technologyFe = technologyIt.next();
+		assertTrue(technologyFe instanceof Input);
+		assertEquals(((Input) technologyFe).getLabel(), "Comment");
+		assertEquals(((Input) technologyFe).getName(), "okp:technology.comment");
+		
+		technologyFe = technologyIt.next();
+		assertTrue(technologyFe instanceof TextArea);
+		assertEquals(((TextArea) technologyFe).getLabel(), "Description");
+		assertEquals(((TextArea) technologyFe).getName(), "okp:technology.description");
+		
+		assertFalse(technologyIt.hasNext());
+	}
+}
