@@ -29,11 +29,16 @@ public class OKMWorkflowViewServletAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
 		String token = (String) req.getSession().getAttribute("token");
 		long id = Long.parseLong(req.getParameter("id"));
-		String node = req.getParameter("node"); 
+		String node = req.getParameter("node");
 		ServletOutputStream sos = resp.getOutputStream();
 
+		if (node != null && !node.equals("")) {
+			node = new String(node.getBytes("ISO-8859-1"), "UTF-8");
+		}
+		
 		try {
 			// Get image
 			byte[] data = OKMWorkflow.getInstance().getProcessDefinitionImage(token, id, node);
