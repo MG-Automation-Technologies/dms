@@ -151,6 +151,7 @@ public class Config {
 	
 	public static String WORKFLOW_RUN_CONFIG_FORM = "run_config";
 	public static String WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID = "uuid";
+	public static String WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH = "path";
 	
 	public static String PRINCIPAL_ADAPTER = "com.openkm.principal.DatabasePrincipalAdapter";
 	public static String PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "on";
