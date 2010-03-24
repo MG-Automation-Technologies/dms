@@ -279,7 +279,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			org.jbpm.graph.exe.Token t = pi.getRootToken();
 			
-			if (transitionName != null) {
+			if (transitionName != null && !transitionName.equals("")) {
 				t.signal(transitionName);
 			} else {
 				t.signal();
@@ -630,7 +630,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.setVariables(values);
 			
-			if (transitionName != null) {
+			if (transitionName != null && !transitionName.equals("")) {
 				ti.end(transitionName);
 			} else {
 				ti.end();
@@ -971,7 +971,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			Session session = SessionManager.getInstance().get(token);
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 
-			if (transitionName != null) {
+			if (transitionName != null && !transitionName.equals("")) {
 				t.signal(transitionName);
 			} else {
 				t.signal();
