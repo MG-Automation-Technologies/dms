@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.git.openkm.api.OKMPropertyGroup;
-import es.git.openkm.bean.MetaData;
 import es.git.openkm.bean.PropertyGroup;
 import es.git.openkm.bean.form.FormElement;
 import es.git.openkm.core.AccessDeniedException;
@@ -44,7 +43,6 @@ import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
-import es.git.openkm.frontend.client.bean.GWTMetaData;
 import es.git.openkm.frontend.client.bean.GWTPropertyGroup;
 import es.git.openkm.frontend.client.config.ErrorCode;
 import es.git.openkm.frontend.client.service.OKMPropertyGroupService;
@@ -118,7 +116,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 					GWTPropertyGroup group = it.next();
 					log.debug("Removing Group: "+group);
 					
-					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); it.hasNext();) {
+					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); itGroupList.hasNext();) {
 						GWTPropertyGroup groupListElement = itGroupList.next();
 						if (groupListElement.getName().equals(group.getName())) {
 							groupList.remove(groupListElement);

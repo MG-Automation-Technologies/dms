@@ -279,6 +279,7 @@ public class PropertyGroup extends Composite {
 					final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 					if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 						String selectedValue = hProperties.get(propertyName)[0];
+						String selectedName = "";
 						ListBox listBox = new ListBox();
 						listBox.setStyleName("okm-Select");
 						listBox.addItem("",""); // Always we set and empty value
@@ -288,6 +289,7 @@ public class PropertyGroup extends Composite {
 							listBox.addItem(option.getName(),option.getValue()); // The translation is composed by propertyName + "." + value key
 							if (selectedValue!= null && selectedValue.equals(option.getValue())) {
 								listBox.setItemSelected(listBox.getItemCount()-1,true);
+								selectedName = option.getName();
 							}
 						}
 						
@@ -295,7 +297,7 @@ public class PropertyGroup extends Composite {
 						
 						table.setHTML(rows, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 						if (selectedValue!=null && !selectedValue.equals("")) {
-							table.setHTML(rows, 1, selectedValue );
+							table.setHTML(rows, 1, selectedName );
 						} else {
 							table.setHTML(rows, 1, "");
 						}
@@ -551,7 +553,6 @@ public class PropertyGroup extends Composite {
 					}
 					
 					rows++;
-					break;
 				}
 			}
 		}
