@@ -662,48 +662,11 @@ public class SearchIn extends Composite {
 	 * Evalues Save Search button visibility
 	 */
 	public void evalueSaveSearchButtonVisible() {
-		if (content.getText().length() >= MIN_WORD_LENGTH || name.getText().length() >= MIN_WORD_LENGTH ||
-				keywords.getText().length() >= MIN_WORD_LENGTH || from.getText().length() >= MIN_WORD_LENGTH ||
-				to.getText().length() >= MIN_WORD_LENGTH || subject.getText().length() >= MIN_WORD_LENGTH) {
-				searchButton.setEnabled(true);
-			} else {
-				searchButton.setEnabled(false);
-			}
-			
-			// Evaluates Mime Types
-			if (mimeTypes.getSelectedIndex()>0) {
-				searchButton.setEnabled(true);
-			}
-			
-			// Evaluates user list
-			if (userListBox.getSelectedIndex()>0) {
-				searchButton.setEnabled(true);
-			}
-			
-			// Evaluates date range
-			if (modifyDateFrom!=null && modifyDateTo!=null) {
-				searchButton.setEnabled(true);
-			}
-			
-			// Evaluates properties to enable button
-			Collection<String> properties = hWidgetProperties.keySet();
-			
-			for (Iterator<String> it = properties.iterator(); it.hasNext();){
-				String key = it.next();
-				Object widget = hWidgetProperties.get(key);
-				if (widget instanceof TextBox) {
-					if (((TextBox) widget).getText().length() >= MIN_WORD_LENGTH) {
-						searchButton.setEnabled(true);
-					}
-				} else if (widget instanceof ListBox) {
-					if (((ListBox) widget).getSelectedIndex()>0) {
-						searchButton.setEnabled(true);
-					}
-				}
-			}
-			
-			// After evaluating search button, must evaluate save search too
-			evalueSaveSearchButtonVisible();
+		if (searchSavedName.getText().length()>0 && searchButton.isEnabled()) {
+			saveSearchButton.setEnabled(true);
+		} else {
+			saveSearchButton.setEnabled(false);
+		}
 	}
 	
 	/**
