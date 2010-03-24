@@ -7,6 +7,7 @@
 <%@ page import="com.openkm.bean.workflow.ProcessDefinition"%>
 <%@ page import="com.openkm.bean.workflow.Comment"%>
 <%@ page import="com.openkm.bean.workflow.Token"%>
+<%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
@@ -291,7 +292,7 @@
 			
 			out.println("<h2>Process Image</h2>");
 			out.println("<center>");
-			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+pi.getRootToken().getNode()+"\" />");
+			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+URLEncoder.encode(pi.getRootToken().getNode(), "UTF-8")+"\" />");
 			out.println("</center>");
 		}
 	} else {
