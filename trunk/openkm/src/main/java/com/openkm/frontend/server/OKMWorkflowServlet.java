@@ -35,6 +35,7 @@ import com.openkm.api.OKMWorkflow;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.TaskInstance;
+import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -84,9 +85,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	/* (non-Javadoc)
 	 * @see com.openkm.frontend.client.service.OKMWorkflowService#runProcessDefinition(java.lang.String, double)
 	 */
-	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables) throws OKMException  {
+	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		variables.put("path", docPath);
+		variables.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, UUID);
 		String token = getToken();
 		
 		try {
