@@ -544,6 +544,8 @@ public class Lang_el_GR {
 	    lang.put("dashboard.workflow.task.process.name", "Όνομα");
 	    lang.put("dashboard.workflow.task.process.description", "Περιγραφή");
 	    lang.put("dashboard.workflow.task.process.data", "Δεδομένα");
+	    lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
 	    lang.put("dashboard.workflow.task.process.definition", "Διαδικασία");
 	    lang.put("dashboard.workflow.task.process.path", "Θέση");
 	    lang.put("dashboard.refreshing", "Ανανέωση");

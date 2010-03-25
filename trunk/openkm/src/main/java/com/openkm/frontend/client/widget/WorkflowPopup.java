@@ -264,7 +264,7 @@ public class WorkflowPopup extends DialogBox {
 		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
-		workflowService.runProcessDefinition(gwtDocument.getPath(), new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
+		workflowService.runProcessDefinition(gwtDocument.getUuid(), new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
 				                             values, callbackRunProcessDefinition);
 		hide();
 		if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){

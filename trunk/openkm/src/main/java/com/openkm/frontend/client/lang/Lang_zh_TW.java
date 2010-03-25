@@ -542,6 +542,8 @@ public class Lang_zh_TW {
 	    lang.put("dashboard.workflow.task.process.name", "名稱");
 		lang.put("dashboard.workflow.task.process.description", "說明");
 		lang.put("dashboard.workflow.task.process.data", "日期");
+		lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
 	    lang.put("dashboard.workflow.task.process.definition", "流程定義");
 	    lang.put("dashboard.workflow.task.process.path", "路徑");
 	    lang.put("dashboard.refreshing", "重新整理");

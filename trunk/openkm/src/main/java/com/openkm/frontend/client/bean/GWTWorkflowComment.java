@@ -19,25 +19,49 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.frontend.client.bean;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.frontend.client.bean.GWTFolder;
+import java.util.Date;
 
-/**
- * @author jllort
- *
- */
-public interface OKMRepositoryServiceAsync {
-	public void getUpdateMessage(AsyncCallback<String> callback);
-	public void getRootPath(AsyncCallback<String> callback);
-	public void getRoot(AsyncCallback<GWTFolder> callback);
-	public void getTrash(AsyncCallback<GWTFolder> callback);
-	public void purgeTrash(AsyncCallback<?> callback);
-	public void getTemplate(AsyncCallback<GWTFolder> callback);
-	public void getPersonal(AsyncCallback<GWTFolder> callback);
-	public void getMail(AsyncCallback<GWTFolder> callback);
-	public void getThesaurus(AsyncCallback<GWTFolder> callback);
-	public void getCategories(AsyncCallback<GWTFolder> callback);
-	public void getPathByUUID(String uuid, AsyncCallback<String> callback);
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class GWTWorkflowComment implements IsSerializable {
+	
+	private Date time;
+	private String actorId;
+	private String message;
+
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public String getActorId() {
+		return actorId;
+	}
+
+	public void setActorId(String actorId) {
+		this.actorId = actorId;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		sb.append("time="); sb.append(time==null?null:time.getTime());
+		sb.append(", actorId="); sb.append(actorId);
+		sb.append(", message="); sb.append(message);
+		sb.append("]");
+		return sb.toString();
+	}
 }

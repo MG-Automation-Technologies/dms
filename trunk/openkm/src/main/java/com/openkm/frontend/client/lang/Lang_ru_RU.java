@@ -549,6 +549,8 @@ public class Lang_ru_RU {
 	    lang.put("dashboard.workflow.task.process.name", "Название");
 	    lang.put("dashboard.workflow.task.process.description", "Описание");
 	    lang.put("dashboard.workflow.task.process.data", "Данные");
+	    lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
 	    lang.put("dashboard.workflow.task.process.definition", "Определение процесса");
 	    lang.put("dashboard.workflow.task.process.path", "Путь");
 	    lang.put("dashboard.refreshing", "Обновляюсь");

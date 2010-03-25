@@ -19,25 +19,57 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.frontend.client.bean;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.frontend.client.bean.GWTFolder;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
- * @author jllort
- *
- */
-public interface OKMRepositoryServiceAsync {
-	public void getUpdateMessage(AsyncCallback<String> callback);
-	public void getRootPath(AsyncCallback<String> callback);
-	public void getRoot(AsyncCallback<GWTFolder> callback);
-	public void getTrash(AsyncCallback<GWTFolder> callback);
-	public void purgeTrash(AsyncCallback<?> callback);
-	public void getTemplate(AsyncCallback<GWTFolder> callback);
-	public void getPersonal(AsyncCallback<GWTFolder> callback);
-	public void getMail(AsyncCallback<GWTFolder> callback);
-	public void getThesaurus(AsyncCallback<GWTFolder> callback);
-	public void getCategories(AsyncCallback<GWTFolder> callback);
-	public void getPathByUUID(String uuid, AsyncCallback<String> callback);
+public class GWTTransition implements IsSerializable {
+	
+	private double id;
+	private String name;
+	private String from;
+	private String to;
+
+	public double getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		sb.append("id="); sb.append(id);
+		sb.append(", name="); sb.append(name);
+		sb.append(", from="); sb.append(from);
+		sb.append(", to="); sb.append(to);
+		sb.append("]");
+		return sb.toString();
+	}
 }
