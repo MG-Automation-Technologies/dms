@@ -1,5 +1,6 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.api.OKMWorkflow"%>
+<%@ page import="com.openkm.api.OKMDocument"%>
 <%@ page import="com.openkm.api.OKMAuth"%>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page import="com.openkm.bean.workflow.ProcessInstance"%>
@@ -264,9 +265,16 @@
 			i = 0;
 			for (Iterator<String> it = vars.keySet().iterator(); it.hasNext(); ) {
 				String key = it.next();
+				String key_value = FormatUtil.formatObject(vars.get(key));
+				
+				if (key.equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
+					key = Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH;
+					key_value = OKMDocument.getInstance().getPath(token, vars.get(key).toString());
+				}
+				
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+FormatUtil.formatObject(vars.get(key))+"</td>");
+				out.print("<td>"+key_value+"</td>");
 				out.print("<td>");
 				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\"><img src=\"img/action/delete.png\" alt=\"Remove\" title=\"Remove\"/></a>");
 				out.print("</td>");
