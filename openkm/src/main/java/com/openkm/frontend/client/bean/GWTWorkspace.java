@@ -45,6 +45,8 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String appVersion = "";
 	private String workflowRunConfigForm = "";
+	private String workflowProcessIntanceVariableUUID = "";
+	private String workflowProcessIntanceVariablePath = "";
 
 	/**
 	 * GWTWorkspace
@@ -162,5 +164,21 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
 		this.workflowRunConfigForm = workflowRunConfigForm;
+	}
+	
+	public String getWorkflowProcessIntanceVariableUUID() {
+		return workflowProcessIntanceVariableUUID;
+	}
+
+	public void setWorkflowProcessIntanceVariableUUID(String workflowProcessIntanceVariableUUID) {
+		this.workflowProcessIntanceVariableUUID = workflowProcessIntanceVariableUUID;
+	}
+
+	public String getWorkflowProcessIntanceVariablePath() {
+		return workflowProcessIntanceVariablePath;
+	}
+
+	public void setWorkflowProcessIntanceVariablePath(String workflowProcessIntanceVariablePath) {
+		this.workflowProcessIntanceVariablePath = workflowProcessIntanceVariablePath;
 	}
 }
