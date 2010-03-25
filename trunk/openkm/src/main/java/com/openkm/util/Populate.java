@@ -85,6 +85,7 @@ public class Populate {
 						final Writer fOut = out;
 						final String docPath = path; 
 						final Exception[] ex = new Exception[1];
+						final int nDoc = n;
 						
 						Thread t = new Thread(new Runnable() {
 							public void run() {
@@ -94,7 +95,9 @@ public class Populate {
 									InputStream in = con.getInputStream();
 									try {
 										synchronized (fOut) {
-											fOut.write("<tr><td>"+Text.encodeIllegalXMLCharacters(currentURL.toString())+"</td>");
+											fOut.write("<tr class=\""+(nDoc%2==0?"odd":"even")+"\">");
+											fOut.write("<td>"+nDoc+"</td>");
+											fOut.write("<td>"+Text.encodeIllegalXMLCharacters(currentURL.toString())+"</td>");
 											fOut.flush();
 										}
 										int length = con.getContentLength();
