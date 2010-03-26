@@ -531,6 +531,9 @@ public class Lang_ca_ES {
 	    lang.put("dashboard.workflow.task.process.name", "Nom");
 	    lang.put("dashboard.workflow.task.process.description", "Descripció");
 	    lang.put("dashboard.workflow.task.process.data", "Dades");
+	    lang.put("dashboard.workflow.comments", "Commentarios");
+	    lang.put("dashboard.workflow.task.process.forms", "Formulario");
+	    lang.put("dashboard.workflow.add.comment","Añadir comentario");
 	    lang.put("dashboard.workflow.task.process.definition", "Definició del process");
 	    lang.put("dashboard.workflow.task.process.path", "Ruta");
 	    lang.put("dashboard.refreshing", "Refrescant");

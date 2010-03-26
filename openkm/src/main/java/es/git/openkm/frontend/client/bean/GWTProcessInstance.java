@@ -39,9 +39,11 @@ public class GWTProcessInstance implements IsSerializable {
 	private Date start;
 	private boolean ended;
 	private boolean suspended;
+	String key = "";
 	private Map<String, Object> variables;
 	private GWTProcessDefinition processDefinition;
-	
+	private GWTToken rootToken;
+
 	/**
 	 * GWTProcessInstance
 	 */
@@ -102,5 +104,21 @@ public class GWTProcessInstance implements IsSerializable {
 
 	public void setStart(Date start) {
 		this.start = start;
+	}
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public GWTToken getRootToken() {
+		return rootToken;
+	}
+
+	public void setRootToken(GWTToken rootToken) {
+		this.rootToken = rootToken;
 	}
 }
