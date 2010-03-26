@@ -21,7 +21,7 @@
 		<tr><td><b>OpenKM Enterprise Edition</b></td></tr>
 		<tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
 		<tr><td>&nbsp;</td></tr>
-		<tr><td>&copy; 2006-2010  Entopia</td></tr>
+		<tr><td>&copy; 2006-2010  OpenKM</td></tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr><td><b>Support</b></td></tr>
 		<tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
