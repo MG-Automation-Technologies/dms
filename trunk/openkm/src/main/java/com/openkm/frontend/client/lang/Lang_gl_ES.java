@@ -546,6 +546,7 @@ public class Lang_gl_ES {
 	    lang.put("dashboard.workflow.task.process.data", "Datos");
 	    lang.put("dashboard.workflow.comments", "Commentarios");
 	    lang.put("dashboard.workflow.task.process.forms", "Formulario");
+	    lang.put("dashboard.workflow.add.comment","Añadir comentario");
 	    lang.put("dashboard.workflow.task.process.definition", "Definición de proceso");
 	    lang.put("dashboard.workflow.task.process.path", "Ruta");
 	    lang.put("dashboard.refreshing", "Refrescando");

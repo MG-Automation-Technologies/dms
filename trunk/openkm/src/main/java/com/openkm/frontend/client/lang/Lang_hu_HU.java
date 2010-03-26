@@ -546,6 +546,7 @@ public class Lang_hu_HU {
 	    lang.put("dashboard.workflow.task.process.data", "Adat");
 	    lang.put("dashboard.workflow.comments", "Comments");
 	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Művelet");
 	    lang.put("dashboard.workflow.task.process.path", "Útvonal");
 	    lang.put("dashboard.refreshing", "Frissítés");

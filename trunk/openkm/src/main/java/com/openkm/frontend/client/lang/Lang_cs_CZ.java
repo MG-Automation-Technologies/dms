@@ -546,6 +546,7 @@ public class Lang_cs_CZ {
 	    lang.put("dashboard.workflow.task.process.data", "Data");
 	    lang.put("dashboard.workflow.comments", "Comments");
 	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Definice procesu");
 	    lang.put("dashboard.workflow.task.process.path", "Cesta");
 	    lang.put("dashboard.refreshing", "Obnovuji");

@@ -41,7 +41,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
@@ -62,7 +61,6 @@ public class Notes extends Composite {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	private FlexTable tableNotes;
-	private FlexTable table;
 	private GWTDocument document;
 	private Button add;
 	private ScrollPanel scrollPanel;
@@ -76,9 +74,8 @@ public class Notes extends Composite {
 	
 	public Notes () {
 		document = new GWTDocument();
-		table = new FlexTable();
 		tableNotes = new FlexTable();
-		scrollPanel = new ScrollPanel(table);
+		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
 		addNote = new HTML("<b>" + Main.i18n("document.add.note") + "</b>");
 		richTextArea = new RichTextArea();
@@ -117,11 +114,7 @@ public class Notes extends Composite {
 		
 		add.setStyleName("okm-Button");
 
-		table.setWidget(0, 0, tableNotes);
-
-		tableNotes.setStyleName("okm-DisableSelect");
 		tableNotes.setWidth("100%");
-		table.setWidth("100%");
 		gridRichText.setStyleName("cw-RichText");
 		textArea.setStyleName("okm-Input");
 		
@@ -159,8 +152,8 @@ public class Notes extends Composite {
 		this.document = doc;
 		richTextArea.setText("");
 		
-		while (table.getRowCount()>0) {
-			table.removeRow(0);
+		while (tableNotes.getRowCount()>0) {
+			tableNotes.removeRow(0);
 		}
 		
 		for (Iterator<GWTNote> it = doc.getNotes().iterator(); it.hasNext();) {
@@ -168,21 +161,16 @@ public class Notes extends Composite {
 		}
 		
 		writeAddNote();
-		
-		// Sets wordWrap for all rows
-		for (int i=0; i<tableNotes.getRowCount(); i++) {
-			setRowWordWarp(i, 1, true, tableNotes);
-		}
 	}
 	
 	/**
 	 * writeAddNote
 	 */
 	private void writeAddNote() {
-		int row = table.getRowCount();
-		table.setWidget(row, 0, newNotePanel);
-		table.getFlexCellFormatter().setColSpan(row, 0, 2);
-		table.getCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
+		int row = tableNotes.getRowCount();
+		tableNotes.setWidget(row, 0, newNotePanel);
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
+		tableNotes.getCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
 	}
 	
 	/**
@@ -191,24 +179,23 @@ public class Notes extends Composite {
 	 * @param note
 	 */
 	private void writeNote(GWTNote note) {
-		int row = table.getRowCount();
-		row++;
-		table.setHTML(row, 0, "<b>" + note.getUser() + "</b>");
+		int row = tableNotes.getRowCount();
+		tableNotes.setHTML(row, 0, "<b>" + note.getUser() + "</b>");
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		table.setHTML(row, 1, dtf.format(note.getDate()));
-		table.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
-		table.getRowFormatter().setStyleName(row, "okm-Notes-Title");
-		table.getCellFormatter().setHeight(row, 1, "30");
-		table.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
-		table.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
+		tableNotes.setHTML(row, 1, dtf.format(note.getDate()));
+		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
+		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
+		tableNotes.getCellFormatter().setHeight(row, 1, "30");
+		tableNotes.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
+		tableNotes.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
 		row++;
-		table.setHTML(row, 0, "");
-		table.getCellFormatter().setHeight(row, 0, "6");
-		table.getRowFormatter().setStyleName(row, "okm-Notes-Line");
-		table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		tableNotes.setHTML(row, 0, "");
+		tableNotes.getCellFormatter().setHeight(row, 0, "6");
+		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Line");
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
 		row++;
-		table.setHTML(row, 0, note.getText());
-		table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		tableNotes.setHTML(row, 0, note.getText());
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
 	}
 	
 	/**
@@ -264,7 +251,7 @@ public class Notes extends Composite {
 			}
 			note.setDate(new Date());
 			note.setUser(Main.get().workspaceUserProperties.getUser());
-			table.removeRow(table.getRowCount()-1); // Deletes last row = addComment
+			tableNotes.removeRow(tableNotes.getRowCount()-1); // Deletes last row = addComment
 			writeNote(note);
 			writeAddNote();
 			richTextArea.setText("");

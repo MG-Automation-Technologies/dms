@@ -546,6 +546,7 @@ public class Lang_lv_LV {
 	    lang.put("dashboard.workflow.task.process.data", "Dati");
 	    lang.put("dashboard.workflow.comments", "Comments");
 	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Procesa definīcija");
 	    lang.put("dashboard.workflow.task.process.path", "Ceļš");
 	    lang.put("dashboard.refreshing", "Atsvaidzināt");
