@@ -36,4 +36,5 @@ public interface OKMRepositoryServiceAsync {
 	public void getTemplate(AsyncCallback<GWTFolder> callback);
 	public void getPersonal(AsyncCallback<GWTFolder> callback);
 	public void getMail(AsyncCallback<GWTFolder> callback);
+	public void getPathByUUID(String uuid, AsyncCallback<String> callback);
 }

@@ -38,7 +38,7 @@ import es.git.openkm.frontend.client.bean.GWTTaskInstance;
  */
 public interface OKMWorkflowServiceAsync {
 	public void findLatestProcessDefinitions(AsyncCallback<List<GWTProcessDefinition>> callback);
-	public void runProcessDefinition(String docPath, double id, Map<String,Object> variables, AsyncCallback<?> callback);
+	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables, AsyncCallback<?> callback);
 	public void findUserTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
 	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormElement>>> callback);
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );

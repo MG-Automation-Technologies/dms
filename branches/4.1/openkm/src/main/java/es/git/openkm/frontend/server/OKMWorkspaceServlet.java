@@ -65,6 +65,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
+		workspace.setWorkflowRunConfigForm(Config.WORKFLOW_RUN_CONFIG_FORM);
+		workspace.setWorkflowProcessIntanceVariableUUID(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
+		workspace.setWorkflowProcessIntanceVariablePath(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH);
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			

@@ -245,4 +245,23 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getMail: "+gWTFolder);
 		return gWTFolder;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getPathByUUID(java.lang.String)
+	 */
+	public String getPathByUUID(String uuid) throws OKMException {
+		log.debug("getPathByUUID()");
+		String token = getToken();
+		String path = "";
+		try {
+			path = OKMRepository.getInstance().getPath(token, uuid);
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_RepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		return path;
+	}
 }

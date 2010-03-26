@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,15 +45,9 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String appVersion = "";
 	private String workflowRunConfigForm = "";
-	
-	public String getWorkflowRunConfigForm() {
-		return workflowRunConfigForm;
-	}
+	private String workflowProcessIntanceVariableUUID = "";
+	private String workflowProcessIntanceVariablePath = "";
 
-	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
-		this.workflowRunConfigForm = workflowRunConfigForm;
-	}
-	
 	/**
 	 * GWTWorkspace
 	 */
@@ -160,5 +156,29 @@ public class GWTWorkspace implements IsSerializable {
 	
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
+	}
+	
+	public String getWorkflowRunConfigForm() {
+		return workflowRunConfigForm;
+	}
+
+	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
+		this.workflowRunConfigForm = workflowRunConfigForm;
+	}
+	
+	public String getWorkflowProcessIntanceVariableUUID() {
+		return workflowProcessIntanceVariableUUID;
+	}
+
+	public void setWorkflowProcessIntanceVariableUUID(String workflowProcessIntanceVariableUUID) {
+		this.workflowProcessIntanceVariableUUID = workflowProcessIntanceVariableUUID;
+	}
+
+	public String getWorkflowProcessIntanceVariablePath() {
+		return workflowProcessIntanceVariablePath;
+	}
+
+	public void setWorkflowProcessIntanceVariablePath(String workflowProcessIntanceVariablePath) {
+		this.workflowProcessIntanceVariablePath = workflowProcessIntanceVariablePath;
 	}
 }
