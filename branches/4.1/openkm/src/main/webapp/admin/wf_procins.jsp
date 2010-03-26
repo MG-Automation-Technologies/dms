@@ -1,5 +1,6 @@
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="es.git.openkm.api.OKMWorkflow"%>
+<%@ page import="es.git.openkm.api.OKMDocument"%>
 <%@ page import="es.git.openkm.api.OKMAuth"%>
 <%@ page import="es.git.openkm.util.FormatUtil"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
@@ -7,6 +8,7 @@
 <%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
 <%@ page import="es.git.openkm.bean.workflow.Comment"%>
 <%@ page import="es.git.openkm.bean.workflow.Token"%>
+<%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.util.Collection"%>
@@ -263,9 +265,16 @@
 			i = 0;
 			for (Iterator<String> it = vars.keySet().iterator(); it.hasNext(); ) {
 				String key = it.next();
+				String key_value = FormatUtil.formatObject(vars.get(key));
+				
+				if (key.equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
+					key_value = OKMDocument.getInstance().getPath(token, vars.get(key).toString());
+					key = Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH;
+				}
+				
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+key+"</td>");
-				out.print("<td>"+FormatUtil.formatObject(vars.get(key))+"</td>");
+				out.print("<td>"+key_value+"</td>");
 				out.print("<td>");
 				out.print("<a href=\"wf_procins.jsp?action=removeVar&id="+pi.getId()+"&name="+key+"\"><img src=\"img/action/delete.png\" alt=\"Remove\" title=\"Remove\"/></a>");
 				out.print("</td>");
@@ -291,7 +300,7 @@
 			
 			out.println("<h2>Process Image</h2>");
 			out.println("<center>");
-			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+pi.getRootToken().getNode()+"\" />");
+			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+URLEncoder.encode(pi.getRootToken().getNode(), "UTF-8")+"\" />");
 			out.println("</center>");
 		}
 	} else {
