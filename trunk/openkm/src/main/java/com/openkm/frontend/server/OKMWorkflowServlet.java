@@ -172,4 +172,20 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		log.debug("setTaskInstanceValues:");
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMWorkflowService#addComment(double, java.lang.String)
+	 */
+	public void addComment(double tokenId, String message) throws OKMException {
+		log.debug("addComment(tokenId:"+tokenId+",message:"+message+")");
+		String token = getToken();
+
+		try {
+			OKMWorkflow.getInstance().addTokenComment(token, new Double(tokenId).longValue(), message);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		log.debug("addComment:");
+	}
+	
 }

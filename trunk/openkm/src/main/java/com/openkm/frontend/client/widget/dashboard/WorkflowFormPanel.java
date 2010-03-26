@@ -23,6 +23,7 @@ package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,12 +41,14 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -54,18 +57,24 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTButton;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
+import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
 import com.openkm.frontend.client.bean.GWTProcessInstance;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
+import com.openkm.frontend.client.bean.GWTWorkflowComment;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.service.OKMDocumentService;
+import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
 /**
  * WorkflowFormPanel
@@ -77,6 +86,7 @@ public class WorkflowFormPanel extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	
 	private VerticalPanel vPanel;
 	private GWTTaskInstance taskInstance;
@@ -93,6 +103,10 @@ public class WorkflowFormPanel extends Composite {
 	private TitleWidget commentsTitle;
 	private TitleWidget formsTitle;
 	private Hyperlink documentLink;
+	private VerticalPanel newNotePanel;
+	private TextArea textArea;
+	private HTML addComment;
+	private Button add;
 	
 	/**
 	 * WorkflowFormPanel
@@ -102,14 +116,38 @@ public class WorkflowFormPanel extends Composite {
 		table = new FlexTable();
 		formTable = new FlexTable();
 		parameterTable = new FlexTable();
-		submitForm = new Button(Main.i18n("button.accept"));
-		
-		submitForm.addClickHandler(new ClickHandler() { 
+		newNotePanel = new VerticalPanel(); 
+		textArea = new TextArea();
+		addComment = new HTML("<b>" + Main.i18n("document.add.note") + "</b>");
+		textArea.setSize("500px", "200px");
+	    
+		add = new Button(Main.i18n("button.add"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				addComment();
+			}
+		});
+	    
+		submitForm = new Button(Main.i18n("button.accept"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
 				setTaskInstanceValues(taskInstance.getId(), null); 
 			}
 		});
+		
+		HTML space = new HTML("");
+		newNotePanel.add(space);
+		newNotePanel.add(addComment);
+		newNotePanel.add(textArea);
+		HTML space2 = new HTML("");
+		newNotePanel.add(space2);
+		newNotePanel.add(add);
+		
+		newNotePanel.setCellHeight(space, "40px");
+		newNotePanel.setCellHeight(space2, "10px");
+		newNotePanel.setCellHorizontalAlignment(addComment, HasAlignment.ALIGN_CENTER);
+		newNotePanel.setCellHorizontalAlignment(add, HasAlignment.ALIGN_CENTER);
+	    
 		
 		int[] taskRow = {1, 2, 3, 4, 5, 6 };
 		int[] processInstanceRow = {8, 9, 10};
@@ -150,7 +188,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setWidget(16, 0, parametersTittle);
 		table.setWidget(17, 0, parameterTable);
 		table.setWidget(18, 0, 	commentsTitle);
-		table.setHTML(19, 0, "");
+		table.setWidget(19, 0, newNotePanel);
 		table.setWidget(20, 0, 	formsTitle);
 		table.setWidget(21, 0, formTable);
 		table.setHTML(1, 2, "");
@@ -197,6 +235,8 @@ public class WorkflowFormPanel extends Composite {
 		table.setStyleName("okm-NoWrap");
 		vPanel.setStyleName("okm-WorkflowFormPanel");
 		submitForm.setStyleName("okm-Button");
+		add.setStyleName("okm-Button");
+		textArea.setStyleName("okm-Input");
 		
 		table.setWidth("100%");
 		vPanel.setHeight("100%");
@@ -310,9 +350,8 @@ public class WorkflowFormPanel extends Composite {
 					}
 					
 					@Override
-					public void onFailure(Throwable arg0) {
-						// TODO Auto-generated method stub
-						
+					public void onFailure(Throwable caught) {
+						Main.get().showError("getPathByUUID", caught);
 					}
 				});
 				
@@ -578,6 +617,72 @@ public class WorkflowFormPanel extends Composite {
 		while (parameterTable.getRowCount()>0) {
 			parameterTable.removeRow(0);
 		}
+	}
+	
+	/**
+	 * Writes the note 
+	 * 
+	 * @param comment
+	 */
+	private void writeNote(GWTWorkflowComment comment) {
+		int row = table.getRowCount();
+		row++;
+		table.setHTML(row, 0, "<b>" + comment.getActorId() + "</b>");
+		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+		table.setHTML(row, 1, dtf.format(comment.getTime()));
+		table.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
+		table.getRowFormatter().setStyleName(row, "okm-Notes-Title");
+		table.getCellFormatter().setHeight(row, 1, "30");
+		table.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
+		table.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
+		row++;
+		table.setHTML(row, 0, "");
+		table.getCellFormatter().setHeight(row, 0, "6");
+		table.getRowFormatter().setStyleName(row, "okm-Notes-Line");
+		table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		row++;
+		table.setHTML(row, 0, comment.getMessage());
+		table.getFlexCellFormatter().setColSpan(row, 0, 2);
+	}
+	
+	/**
+	 * writeAddNote
+	 */
+	private void writeAddNote() {
+		int row = table.getRowCount();
+		table.setWidget(row, 0, newNotePanel);
+		table.getFlexCellFormatter().setColSpan(row, 0, 2);
+		table.getCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
+	}
+	
+	/**
+	 * Callback addComment workflow
+	 */
+	final AsyncCallback<Object> callbackAddComment = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			GWTWorkflowComment comment = new GWTWorkflowComment();
+			comment.setMessage(textArea.getText());
+			comment.setTime(new Date());
+			comment.setActorId(Main.get().workspaceUserProperties.getUser());
+			table.removeRow(table.getRowCount()-1); // Deletes last row = addComment
+			writeNote(comment);
+			writeAddNote();
+			textArea.setText("");
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("addComment", caught);
+		}
+	};
+	
+	/**
+	 * addNote document
+	 */
+	private void addComment() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
+		
+		workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
 	}
 	
 	/**

@@ -67,7 +67,7 @@ public class Notes extends Composite {
 	private Button add;
 	private ScrollPanel scrollPanel;
 	private RichTextArea richTextArea;
-	private RichTextToolbar toolbar;
+	private RichTextToolbar richTextToolbar;
 	private TextArea textArea;
 	private VerticalPanel newNotePanel;
 	private HTML addNote;
@@ -85,12 +85,12 @@ public class Notes extends Composite {
 		textArea = new TextArea();
 		richTextArea.setSize("100%", "14em");
 		textArea.setSize("500px", "200px");
-		toolbar = new RichTextToolbar(richTextArea);
-	    toolbar.setWidth("100%");
+		richTextToolbar = new RichTextToolbar(richTextArea);
+	    richTextToolbar.setWidth("100%");
 	    
 	    gridRichText = new Grid(2, 1);
 	    gridRichText.setStyleName("cw-RichText");
-	    gridRichText.setWidget(0, 0, toolbar);
+	    gridRichText.setWidget(0, 0, richTextToolbar);
 	    gridRichText.setWidget(1, 0, richTextArea);
 	    
 		add = new Button(Main.i18n("button.add"), new ClickHandler() { 
