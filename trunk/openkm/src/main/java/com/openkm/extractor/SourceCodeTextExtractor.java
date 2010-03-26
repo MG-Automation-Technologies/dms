@@ -45,7 +45,8 @@ public class SourceCodeTextExtractor extends AbstractTextExtractor {
 	 * Creates a new <code>AudioTextExtractor</code> instance.
 	 */
 	public SourceCodeTextExtractor() {
-		super(new String[] { "text/x-java", "text/css", "text/x-csrc", "application/x-php" });
+		super(new String[] { "text/x-java", "text/css", "text/x-csrc", "application/x-php",
+				"application/javascript" });
 	}
 
 	// -------------------------------------------------------< TextExtractor >
