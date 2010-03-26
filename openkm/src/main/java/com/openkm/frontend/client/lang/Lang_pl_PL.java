@@ -548,6 +548,7 @@ public class Lang_pl_PL {
 	    lang.put("dashboard.workflow.task.process.data", "Dane");
 	    lang.put("dashboard.workflow.comments", "Comments");
 	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Definicja procesu");
 	    lang.put("dashboard.workflow.task.process.path", "Ścieżka");
 	    lang.put("dashboard.refreshing", "Odśwież");
