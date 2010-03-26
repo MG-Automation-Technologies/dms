@@ -804,7 +804,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			
-			if (transitionName != null) {
+			if (transitionName != null && !transitionName.equals("")) {
 				ti.end(transitionName);
 			} else {
 				ti.end();
@@ -1020,3 +1020,4 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("setTokenNode: void");
 	}
 }
+
