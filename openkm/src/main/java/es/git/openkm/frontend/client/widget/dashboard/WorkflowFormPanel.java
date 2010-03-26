@@ -1,6 +1,8 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +50,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTButton;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
@@ -60,6 +61,8 @@ import es.git.openkm.frontend.client.bean.GWTSelect;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 import es.git.openkm.frontend.client.bean.GWTTextArea;
 import es.git.openkm.frontend.client.config.Config;
+import es.git.openkm.frontend.client.service.OKMRepositoryService;
+import es.git.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import es.git.openkm.frontend.client.service.OKMWorkflowService;
 import es.git.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import es.git.openkm.frontend.client.util.CommonUI;
@@ -73,10 +76,12 @@ import es.git.openkm.frontend.client.util.CommonUI;
 public class WorkflowFormPanel extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
+	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	
 	private VerticalPanel vPanel;
 	private GWTTaskInstance taskInstance;
 	private FlexTable table;
+	private FlexTable parameterTable;
 	private FlexTable formTable;
 	private Collection<GWTFormElement> formFieldList = new ArrayList<GWTFormElement>();
 	private Button submitForm;
@@ -84,7 +89,9 @@ public class WorkflowFormPanel extends Composite {
 	private TitleWidget taskTittle;
 	private TitleWidget processInstanceTittle;
 	private TitleWidget processDefinitionTittle;
-	private TitleWidget dataTittle;
+	private TitleWidget parametersTittle;
+	private TitleWidget commentsTitle;
+	private TitleWidget formsTitle;
 	private Hyperlink documentLink;
 	
 	/**
@@ -94,10 +101,11 @@ public class WorkflowFormPanel extends Composite {
 		vPanel = new VerticalPanel();
 		table = new FlexTable();
 		formTable = new FlexTable();
+		parameterTable = new FlexTable();
 		submitForm = new Button(Main.i18n("button.accept"));
 		
 		submitForm.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+			public void onClick(Widget arg0) {
 				setTaskInstanceValues(taskInstance.getId(), null); 
 			}
 		});
@@ -106,14 +114,20 @@ public class WorkflowFormPanel extends Composite {
 		int[] processInstanceRow = {8, 9, 10};
 		int[] processDefinitionRow = {12, 13, 14, 15 };
 		int[] dataTitle = {17};
+		int[] commentTitle = {19};
+		int[] formTitle = {};
 		taskTittle = new TitleWidget(Main.i18n("dashboard.workflow.task"), taskRow);
 		processInstanceTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.instance"), processInstanceRow);
 		processDefinitionTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.definition"), processDefinitionRow);
-		dataTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.data"), dataTitle);
+		parametersTittle = new TitleWidget(Main.i18n("dashboard.workflow.task.process.data"), dataTitle);
+		commentsTitle = new TitleWidget(Main.i18n("dashboard.workflow.comments"), commentTitle);
+		formsTitle  = new TitleWidget(Main.i18n("dashboard.workflow.task.process.forms"), formTitle);
 		taskTittle.setWidth("100%");
 		processInstanceTittle.setWidth("100%");
 		processDefinitionTittle.setWidth("100%");
-		dataTittle.setWidth("100%");
+		parametersTittle.setWidth("100%");
+		commentsTitle.setWidth("100%");
+		formsTitle.setWidth("100%");
 		
 		table.setWidget(0, 0, taskTittle);
 		table.setHTML(1, 0, "<b>"+ Main.i18n("dashboard.workflow.task.id") + "</b>");
@@ -132,8 +146,12 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(13, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.name") + "</b>");
 		table.setHTML(14, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(15, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.description") + "</b>");
-		table.setWidget(16, 0, dataTittle);
-		table.setWidget(17, 0, formTable);
+		table.setWidget(16, 0, parametersTittle);
+		table.setWidget(17, 0, parameterTable);
+		table.setWidget(18, 0, 	commentsTitle);
+		table.setHTML(19, 0, "aqui van els comentaris pendent !!!");
+		table.setWidget(20, 0, 	formsTitle);
+		table.setWidget(21, 0, formTable);
 		table.setHTML(1, 2, "");
 		table.setHTML(2, 2, "");
 		table.setHTML(3, 2, "");
@@ -150,7 +168,9 @@ public class WorkflowFormPanel extends Composite {
 		taskTittle.setVisibleRows(false);
 		processInstanceTittle.setVisibleRows(false);
 		processDefinitionTittle.setVisibleRows(false);
-		dataTittle.setVisibleRows(true);
+		parametersTittle.setVisibleRows(true);
+		commentsTitle.setVisibleRows(false);
+		formsTitle.setVisibleRows(true);
 		
 		table.getCellFormatter().setWidth(1, 2, "100%");
 		table.getCellFormatter().setWidth(8, 2, "100%");
@@ -160,10 +180,16 @@ public class WorkflowFormPanel extends Composite {
 		table.getFlexCellFormatter().setColSpan(11, 0, 3);
 		table.getFlexCellFormatter().setColSpan(16, 0, 3);
 		table.getFlexCellFormatter().setColSpan(17, 0, 3);
+		table.getFlexCellFormatter().setColSpan(18, 0, 3);
+		table.getFlexCellFormatter().setColSpan(19, 0, 3);
+		table.getFlexCellFormatter().setColSpan(20, 0, 3);
+		table.getFlexCellFormatter().setColSpan(21, 0, 3);
 		table.getCellFormatter().setStyleName(0, 0, "okm-WorkflowFormPanel-Title");
 		table.getCellFormatter().setStyleName(7, 0, "okm-WorkflowFormPanel-Title");
 		table.getCellFormatter().setStyleName(11, 0, "okm-WorkflowFormPanel-Title");
 		table.getCellFormatter().setStyleName(16, 0, "okm-WorkflowFormPanel-Title");
+		table.getCellFormatter().setStyleName(18, 0, "okm-WorkflowFormPanel-Title");
+		table.getCellFormatter().setStyleName(20, 0, "okm-WorkflowFormPanel-Title");
 		
 		vPanel.add(table);
 		
@@ -197,7 +223,9 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(13, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.name") + "</b>");
 		table.setHTML(14, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.version") + "</b>");
 		table.setHTML(15, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.description") + "</b>");
-		dataTittle.setTitle(Main.i18n("dashboard.workflow.task.process.data"));
+		parametersTittle.setTitle(Main.i18n("dashboard.workflow.task.process.data"));
+		commentsTitle.setTitle(Main.i18n("dashboard.workflow.comments"));
+		formsTitle.setTitle(Main.i18n("dashboard.workflow.task.process.forms"));
 		submitForm.setHTML(Main.i18n("button.accept"));
 	}
 	
@@ -209,7 +237,7 @@ public class WorkflowFormPanel extends Composite {
 	public void setTaskInstance(GWTTaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
 		GWTProcessInstance processInstance = taskInstance.getProcessInstance();
-		GWTProcessDefinition processDefinition= processInstance.getProcessDefinition();
+		GWTProcessDefinition processDefinition = processInstance.getProcessDefinition(); 
 		
 		table.setHTML(1, 1, ""+taskInstance.getId());
 		table.setHTML(2, 1, ""+taskInstance.getName());
@@ -233,31 +261,61 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(8, 1, ""+processInstance.getId());
 		table.setHTML(9, 1, ""+processInstance.getVersion());
 		
-		if (processInstance.getVariables().keySet().contains("path")) {
-			Hyperlink link = new Hyperlink();
-			final String docPath = (String) processInstance.getVariables().get("path");
-			link.setText(docPath);
-			table.setWidget(10, 1, link);
-			link.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
-					String path = docPath.substring(0,docPath.lastIndexOf("/"));
-					CommonUI.openAllFolderPath(path, docPath);	
-				}
-			});
-			link.setStyleName("okm-Hyperlink");
+		// Deletes all table parameters rows
+		removeAllParametersTableRows();
+		
+		documentLink = null;
+		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
+			String key = it.next();
+			final String value = (String) processInstance.getVariables().get(key);
+			int row = parameterTable.getRowCount();
 			
-			// Clones link
-			documentLink = new Hyperlink();
-			documentLink.setText(docPath);
-			documentLink.addClickListener(new ClickListener(){
-				public void onClick(Widget sender) {
-					String path = docPath.substring(0,docPath.lastIndexOf("/"));
-					CommonUI.openAllFolderPath(path, docPath);	
-				}
-			});
-			documentLink.setStyleName("okm-Hyperlink");
-		} else {
-			documentLink = null;
+			// Special case path
+			if (key.equals(Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariableUUID())) {
+				final int documentRow = row;
+				parameterTable.setHTML(documentRow, 0, "<b>"+ 
+						               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
+						               "</b>");
+				
+				ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+				endPoint.setServiceEntryPoint(Config.OKMRepositoryService);		
+				repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
+					public void onSuccess(final String docPath) {
+						Hyperlink link = new Hyperlink();
+						link.setText(docPath);
+						table.setWidget(10, 1, link);
+						link.addClickListener(new ClickListener() {
+							public void onClick(Widget arg0) {
+								String path = docPath.substring(0,docPath.lastIndexOf("/"));
+								CommonUI.openAllFolderPath(path, docPath);	
+							}
+						});
+						link.setStyleName("okm-Hyperlink");
+						
+						// Clones link
+						documentLink = new Hyperlink();
+						documentLink.setText(docPath);
+						documentLink.addClickListener(new ClickListener() {
+							public void onClick(Widget arg0) {
+								String path = docPath.substring(0,docPath.lastIndexOf("/"));
+								CommonUI.openAllFolderPath(path, docPath);	
+							}
+						});
+						documentLink.setStyleName("okm-Hyperlink");
+						parameterTable.setWidget(documentRow, 1, documentLink);
+					}
+					
+					public void onFailure(Throwable caught) {
+						Main.get().showError("getPathByUUID", caught);
+					}
+				});
+				
+				
+			}  else {
+				
+				parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
+				parameterTable.setHTML(row, 1, value);
+			}
 		}
 		
 		table.setHTML(12, 1, ""+processDefinition.getId());
@@ -280,6 +338,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(3, 1, "");
 		table.setHTML(4, 1, "");
 		table.setHTML(5, 1, "");
+		table.setHTML(6, 1, "");
 		table.setHTML(8, 1, "");
 		table.setHTML(9, 1, "");
 		table.setHTML(10, 1, "");
@@ -290,7 +349,8 @@ public class WorkflowFormPanel extends Composite {
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
 		formFieldList = new ArrayList<GWTFormElement>();
 		documentLink = null;
-		drawForm();
+		removeAllParametersTableRows();
+		removeAllFormTableRows();
 	}
 	
 	/**
@@ -330,9 +390,7 @@ public class WorkflowFormPanel extends Composite {
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
 		
 		// Deletes all table rows
-		while (formTable.getRowCount()>0) {
-			formTable.removeRow(0);
-		}
+		removeAllFormTableRows();
 		
 		// Adds submit button
 		if (formFieldList.size()>0) {
@@ -340,13 +398,6 @@ public class WorkflowFormPanel extends Composite {
 			hPanel.add(submitForm);
 			hPanel.add(space);
 			hPanel.setCellWidth(space, "5px");
-		}
-		
-		// Adds document link
-		if (documentLink!=null) {
-			int row = formTable.getRowCount();
-			formTable.setHTML(row, 0, "<b>"+ Main.i18n("dashboard.workflow.task.process.path") + "</b>");
-			formTable.setWidget(row, 1, documentLink);
 		}
 		
 		// Sets form fields
@@ -486,7 +537,6 @@ public class WorkflowFormPanel extends Composite {
 	class FormWidget {
 		
 		private Widget widget;
-		private int type = 0;
 		
 		/**
 		 * FormWidget
@@ -501,13 +551,25 @@ public class WorkflowFormPanel extends Composite {
 		public void setWidget(Widget widget) {
 			this.widget = widget;
 		}
-
-		public int getType() {
-			return type;
+	}
+	
+	/**
+	 * removeAllFormTableRows
+	 */
+	private void removeAllFormTableRows() {
+		// Deletes all table rows
+		while (formTable.getRowCount()>0) {
+			formTable.removeRow(0);
 		}
-
-		public void setType(int type) {
-			this.type = type;
+	}
+	
+	/**
+	 * removeAllFormTableRows
+	 */
+	private void removeAllParametersTableRows() {
+		// Deletes all table rows
+		while (parameterTable.getRowCount()>0) {
+			parameterTable.removeRow(0);
 		}
 	}
 	

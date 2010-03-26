@@ -56,6 +56,8 @@ import es.git.openkm.bean.workflow.Comment;
 import es.git.openkm.bean.workflow.ProcessDefinition;
 import es.git.openkm.bean.workflow.ProcessInstance;
 import es.git.openkm.bean.workflow.TaskInstance;
+import es.git.openkm.bean.workflow.Token;
+import es.git.openkm.bean.workflow.Transition;
 import es.git.openkm.core.Config;
 import es.git.openkm.core.ParseException;
 import es.git.openkm.core.RepositoryException;
@@ -84,7 +86,10 @@ import es.git.openkm.frontend.client.bean.GWTQueryResult;
 import es.git.openkm.frontend.client.bean.GWTSelect;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 import es.git.openkm.frontend.client.bean.GWTTextArea;
+import es.git.openkm.frontend.client.bean.GWTToken;
+import es.git.openkm.frontend.client.bean.GWTTransition;
 import es.git.openkm.frontend.client.bean.GWTVersion;
+import es.git.openkm.frontend.client.bean.GWTWorkflowComment;
 
 public class Util {
 	private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -564,6 +569,66 @@ public class Util {
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
 		
 		return gWTProcessInstance;
+	}
+	
+	/**
+	 * Copy to Token data to GWTToken
+	 * @param FormElement the original data
+	 * @return The GWTToken object with data values from original Token
+	 */
+	public static GWTToken copy(Token token) {
+		GWTToken gWTToken = new GWTToken();
+		Collection<GWTTransition> availableTransitions = new ArrayList<GWTTransition>();
+		for (Iterator<Transition> it = token.getAvailableTransitions().iterator(); it.hasNext();) {
+			availableTransitions.add(copy(it.next()));
+		}
+		gWTToken.setAvailableTransitions(availableTransitions);
+		Collection<GWTWorkflowComment> comments = new ArrayList<GWTWorkflowComment>();
+		for (Iterator<Comment> it = token.getComments().iterator(); it.hasNext();) {
+			comments.add(copy(it.next()));
+		}
+		gWTToken.setComments(comments);
+		gWTToken.setEnd(token.getEnd().getTime());
+		gWTToken.setId(token.getId());
+		gWTToken.setName(token.getName());
+		gWTToken.setNode(token.getNode());
+		if (token.getParent()!=null) {
+			gWTToken.setParent(copy(token.getParent()));
+		} 
+		gWTToken.setProcessInstance(copy(token.getProcessInstance()));
+		gWTToken.setStart(token.getStart().getTime());
+		gWTToken.setSuspended(token.isSuspended());
+		
+		return gWTToken;
+	}
+	
+	/**
+	 * Copy to Token data to GWTTransition
+	 * @param Transition the original data
+	 * @return The GWTTransition object with data values from original Transition
+	 */
+	public static GWTTransition copy(Transition transition) {
+		GWTTransition gWTTransition = new GWTTransition();
+		gWTTransition.setFrom(transition.getFrom());
+		gWTTransition.setId(transition.getId());
+		gWTTransition.setName(transition.getName());
+		gWTTransition.setTo(transition.getTo());
+		
+		return gWTTransition;
+	}
+	
+	/**
+	 * Copy to Comment data to GWTWorkFlowComment
+	 * @param Transition the original data
+	 * @return The GWTWorkFlowComment object with data values from original Comment
+	 */
+	public static GWTWorkflowComment copy(Comment comment) {
+		GWTWorkflowComment gWTComment = new GWTWorkflowComment();
+		gWTComment.setActorId(comment.getActorId());
+		gWTComment.setMessage(comment.getMessage());
+		gWTComment.setTime(comment.getTime().getTime());
+		
+		return gWTComment;
 	}
 	
 	/**

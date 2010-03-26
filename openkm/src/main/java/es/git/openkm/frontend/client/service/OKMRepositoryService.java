@@ -37,4 +37,5 @@ public interface OKMRepositoryService extends RemoteService {
 	public GWTFolder getTemplate() throws OKMException;
 	public GWTFolder getPersonal() throws OKMException;
 	public GWTFolder getMail() throws OKMException;
+	public String getPathByUUID(String uuid) throws OKMException;
 }

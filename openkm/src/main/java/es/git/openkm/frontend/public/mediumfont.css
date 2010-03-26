@@ -713,6 +713,8 @@ iframe {
 	border: 1px solid #A5A596;
 	font-size: 9pt;
 	font-family: tahoma;
+	cursor:pointer; 
+  	cursor:hand;
 }
 
 /* Inputs */
