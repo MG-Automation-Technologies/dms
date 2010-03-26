@@ -567,6 +567,11 @@ public class Util {
 		gWTProcessInstance.setVariables(processInstance.getVariables());
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
+		gWTProcessInstance.setKey(processInstance.getKey());
+		gWTProcessInstance.setRootToken(copy(processInstance.getRootToken()));
+		processInstance.getRootToken();
+		
+
 		
 		return gWTProcessInstance;
 	}
@@ -588,14 +593,19 @@ public class Util {
 			comments.add(copy(it.next()));
 		}
 		gWTToken.setComments(comments);
-		gWTToken.setEnd(token.getEnd().getTime());
+		if (token.getEnd()!=null) {
+			gWTToken.setEnd(token.getEnd().getTime());
+		}
 		gWTToken.setId(token.getId());
 		gWTToken.setName(token.getName());
 		gWTToken.setNode(token.getNode());
 		if (token.getParent()!=null) {
 			gWTToken.setParent(copy(token.getParent()));
 		} 
-		gWTToken.setProcessInstance(copy(token.getProcessInstance()));
+		
+		if (token.getProcessInstance()!=null) {
+			gWTToken.setProcessInstance(copy(token.getProcessInstance()));
+		}
 		gWTToken.setStart(token.getStart().getTime());
 		gWTToken.setSuspended(token.isSuspended());
 		

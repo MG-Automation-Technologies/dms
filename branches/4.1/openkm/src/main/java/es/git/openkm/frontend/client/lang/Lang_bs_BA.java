@@ -531,6 +531,9 @@ public class Lang_bs_BA {
 	    lang.put("dashboard.workflow.task.process.name", "Ime");
 	    lang.put("dashboard.workflow.task.process.description", "Opis");
 	    lang.put("dashboard.workflow.task.process.data", "Podatak");
+	    lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Definicija procesa");
 	    lang.put("dashboard.workflow.task.process.path", "Putanja");
 	    lang.put("dashboard.refreshing", "Osvježavanje");

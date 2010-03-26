@@ -23,6 +23,7 @@ package es.git.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,12 +45,14 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SourcesClickEvents;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import es.git.openkm.frontend.client.Main;
 import es.git.openkm.frontend.client.bean.GWTButton;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
@@ -60,6 +63,7 @@ import es.git.openkm.frontend.client.bean.GWTProcessInstance;
 import es.git.openkm.frontend.client.bean.GWTSelect;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
 import es.git.openkm.frontend.client.bean.GWTTextArea;
+import es.git.openkm.frontend.client.bean.GWTWorkflowComment;
 import es.git.openkm.frontend.client.config.Config;
 import es.git.openkm.frontend.client.service.OKMRepositoryService;
 import es.git.openkm.frontend.client.service.OKMRepositoryServiceAsync;
@@ -93,6 +97,11 @@ public class WorkflowFormPanel extends Composite {
 	private TitleWidget commentsTitle;
 	private TitleWidget formsTitle;
 	private Hyperlink documentLink;
+	private VerticalPanel newNotePanel;
+	private TextArea textArea;
+	private HTML addComment;
+	private Button add;
+	private FlexTable tableNotes;
 	
 	/**
 	 * WorkflowFormPanel
@@ -102,13 +111,52 @@ public class WorkflowFormPanel extends Composite {
 		table = new FlexTable();
 		formTable = new FlexTable();
 		parameterTable = new FlexTable();
-		submitForm = new Button(Main.i18n("button.accept"));
+		newNotePanel = new VerticalPanel(); 
+		tableNotes = new FlexTable();
+		textArea = new TextArea();
+		addComment = new HTML("<b>" + Main.i18n("dashboard.workflow.add.comment") + "</b>");
+		textArea.setSize("500px", "100px");
 		
-		submitForm.addClickListener(new ClickListener() {
+		textArea.addKeyboardListener(new KeyboardListener() {
+			public void onKeyUp(Widget arg0, char arg1, int arg2) {
+				if (!textArea.getText().equals("")) {
+					add.setEnabled(true);
+				} else {
+					add.setEnabled(false);
+				}
+			}
+			public void onKeyPress(Widget arg0, char arg1, int arg2) {
+			}
+			public void onKeyDown(Widget arg0, char arg1, int arg2) {
+			}
+		});
+	    
+		add = new Button(Main.i18n("button.add"), new ClickListener() {
+			public void onClick(Widget arg0) {
+				addComment();
+			}
+		});
+		add.setEnabled(false);
+	    
+		submitForm = new Button(Main.i18n("button.accept"), new ClickListener() {
 			public void onClick(Widget arg0) {
 				setTaskInstanceValues(taskInstance.getId(), null); 
 			}
 		});
+		
+		HTML space = new HTML("");
+		newNotePanel.add(space);
+		newNotePanel.add(addComment);
+		newNotePanel.add(textArea);
+		HTML space2 = new HTML("");
+		newNotePanel.add(space2);
+		newNotePanel.add(add);
+		
+		newNotePanel.setCellHeight(space, "40px");
+		newNotePanel.setCellHeight(space2, "10px");
+		newNotePanel.setCellHorizontalAlignment(addComment, HasAlignment.ALIGN_CENTER);
+		newNotePanel.setCellHorizontalAlignment(add, HasAlignment.ALIGN_CENTER);
+	    
 		
 		int[] taskRow = {1, 2, 3, 4, 5, 6 };
 		int[] processInstanceRow = {8, 9, 10};
@@ -149,7 +197,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setWidget(16, 0, parametersTittle);
 		table.setWidget(17, 0, parameterTable);
 		table.setWidget(18, 0, 	commentsTitle);
-		table.setHTML(19, 0, "aqui van els comentaris pendent !!!");
+		table.setWidget(19, 0, tableNotes);
 		table.setWidget(20, 0, 	formsTitle);
 		table.setWidget(21, 0, formTable);
 		table.setHTML(1, 2, "");
@@ -196,7 +244,11 @@ public class WorkflowFormPanel extends Composite {
 		table.setStyleName("okm-NoWrap");
 		vPanel.setStyleName("okm-WorkflowFormPanel");
 		submitForm.setStyleName("okm-Button");
+		add.setStyleName("okm-Button");
+		textArea.setStyleName("okm-Input");
+		tableNotes.setStyleName("okm-DisableSelect");
 		
+		tableNotes.setWidth("100%");
 		table.setWidth("100%");
 		vPanel.setHeight("100%");
 		
@@ -227,6 +279,8 @@ public class WorkflowFormPanel extends Composite {
 		commentsTitle.setTitle(Main.i18n("dashboard.workflow.comments"));
 		formsTitle.setTitle(Main.i18n("dashboard.workflow.task.process.forms"));
 		submitForm.setHTML(Main.i18n("button.accept"));
+		addComment.setHTML("<b>" + Main.i18n("dashboard.workflow.add.comment") + "</b>");
+		add.setText(Main.i18n("button.add"));
 	}
 	
 	/**
@@ -237,7 +291,9 @@ public class WorkflowFormPanel extends Composite {
 	public void setTaskInstance(GWTTaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
 		GWTProcessInstance processInstance = taskInstance.getProcessInstance();
-		GWTProcessDefinition processDefinition = processInstance.getProcessDefinition(); 
+		GWTProcessDefinition processDefinition = processInstance.getProcessDefinition();
+		
+		clearPanel();
 		
 		table.setHTML(1, 1, ""+taskInstance.getId());
 		table.setHTML(2, 1, ""+taskInstance.getName());
@@ -261,10 +317,8 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(8, 1, ""+processInstance.getId());
 		table.setHTML(9, 1, ""+processInstance.getVersion());
 		
-		// Deletes all table parameters rows
-		removeAllParametersTableRows();
-		
 		documentLink = null;
+		// Print variables
 		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
 			final String value = (String) processInstance.getVariables().get(key);
@@ -318,6 +372,12 @@ public class WorkflowFormPanel extends Composite {
 			}
 		}
 		
+		// Print comments
+		for (Iterator<GWTWorkflowComment> it = processInstance.getRootToken().getComments().iterator(); it.hasNext();) {
+			writeComment(it.next());
+		}
+		writeAddComment();
+		
 		table.setHTML(12, 1, ""+processDefinition.getId());
 		table.setHTML(13, 1, ""+processDefinition.getName());
 		table.setHTML(14, 1, ""+processDefinition.getVersion());
@@ -349,8 +409,10 @@ public class WorkflowFormPanel extends Composite {
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
 		formFieldList = new ArrayList<GWTFormElement>();
 		documentLink = null;
+		textArea.setText("");
 		removeAllParametersTableRows();
 		removeAllFormTableRows();
+		removeAllCommentsTableRows();
 	}
 	
 	/**
@@ -570,6 +632,83 @@ public class WorkflowFormPanel extends Composite {
 		// Deletes all table rows
 		while (parameterTable.getRowCount()>0) {
 			parameterTable.removeRow(0);
+		}
+	}
+	
+	/**
+	 * removeAllCommentsTableRows
+	 */
+	private void removeAllCommentsTableRows() {
+		while (tableNotes.getRowCount()>0) {
+			tableNotes.removeRow(0);
+		}
+	}
+	
+	/**
+	 * Writes the note 
+	 * 
+	 * @param comment
+	 */
+	private void writeComment(GWTWorkflowComment comment) {
+		int row = tableNotes.getRowCount();
+		tableNotes.setHTML(row, 0, "<b>" + comment.getActorId() + "</b>");
+		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
+		tableNotes.setHTML(row, 1, dtf.format(comment.getTime()));
+		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
+		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
+		tableNotes.getCellFormatter().setHeight(row, 1, "30");
+		tableNotes.getCellFormatter().setVerticalAlignment(row, 0, HasAlignment.ALIGN_BOTTOM);
+		tableNotes.getCellFormatter().setVerticalAlignment(row, 1, HasAlignment.ALIGN_BOTTOM);
+		row++;
+		tableNotes.setHTML(row, 0, "");
+		tableNotes.getCellFormatter().setHeight(row, 0, "6");
+		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Line");
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
+		row++;
+		tableNotes.setHTML(row, 0, comment.getMessage());
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
+	}
+	
+	/**
+	 * writeAddNote
+	 */
+	private void writeAddComment() {
+		int row = tableNotes.getRowCount();
+		tableNotes.setWidget(row, 0, newNotePanel);
+		tableNotes.getFlexCellFormatter().setColSpan(row, 0, 2);
+		tableNotes.getCellFormatter().setHorizontalAlignment(row, 0, HasAlignment.ALIGN_CENTER);
+	}
+	
+	/**
+	 * Callback addComment workflow
+	 */
+	final AsyncCallback<Object> callbackAddComment = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			GWTWorkflowComment comment = new GWTWorkflowComment();
+			comment.setMessage(textArea.getText());
+			comment.setTime(new Date());
+			comment.setActorId(Main.get().workspaceUserProperties.getUser());
+			taskInstance.getProcessInstance().getRootToken().getComments().add(comment);
+			tableNotes.removeRow(tableNotes.getRowCount()-1); // Deletes last row = addComment
+			writeComment(comment);
+			writeAddComment();
+			textArea.setText("");
+			add.setEnabled(false);
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("addComment", caught);
+		}
+	};
+	
+	/**
+	 * addNote document
+	 */
+	private void addComment() {
+		if (!textArea.getText().equals("")) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+			endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
+			workflowService.addComment(taskInstance.getProcessInstance().getRootToken().getId(), textArea.getText(), callbackAddComment);
 		}
 	}
 	

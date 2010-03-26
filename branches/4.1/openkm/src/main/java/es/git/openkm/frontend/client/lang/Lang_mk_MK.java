@@ -530,6 +530,9 @@ public class Lang_mk_MK {
 	    lang.put("dashboard.workflow.task.process.name", "Име");
 	    lang.put("dashboard.workflow.task.process.description", "Опис");
 	    lang.put("dashboard.workflow.task.process.data", "Дата");
+	    lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Дефиниција на процесот");
 	    lang.put("dashboard.workflow.task.process.path", "Патека");
 	    lang.put("dashboard.refreshing", "Освежувам");

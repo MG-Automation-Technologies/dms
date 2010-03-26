@@ -531,6 +531,9 @@ public class Lang_nl_NL {
 	    lang.put("dashboard.workflow.task.process.name", "Naam");
 	    lang.put("dashboard.workflow.task.process.description", "Omschrijving");
 	    lang.put("dashboard.workflow.task.process.data", "Data");
+	    lang.put("dashboard.workflow.comments", "Comments");
+	    lang.put("dashboard.workflow.task.process.forms", "Form");
+	    lang.put("dashboard.workflow.add.comment","Add comment");
 	    lang.put("dashboard.workflow.task.process.definition", "Proces definitie");
 	    lang.put("dashboard.workflow.task.process.path", "Pad");
 	    lang.put("dashboard.refreshing", "Refreshing");
