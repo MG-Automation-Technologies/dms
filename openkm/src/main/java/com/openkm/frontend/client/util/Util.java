@@ -21,7 +21,11 @@
 
 package com.openkm.frontend.client.util;
 
+import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Window;
+import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.Coordenates;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 
 public class Util {
@@ -164,6 +168,21 @@ public class Util {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Download file
+	 * 
+	 * @param path
+	 * @param params
+	 */
+	public static void downloadFile(String path, String params) {
+		Main.get().redirect = true;
+		if (!params.equals("") && !params.endsWith("&")) {
+			params += "&";
+		}
+		Window.open(Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path), "_self", "");
+		Main.get().redirect = false;
 	}
 	
 	/**

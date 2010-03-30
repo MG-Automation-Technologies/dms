@@ -284,7 +284,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 				String path = doc.getPath();
 				List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
 				String ver = (String) versions.get(rows);
-				Window.open(Config.OKMDownloadServlet +"?id=" +URL.encodeComponent(path) + "&ver=" + ver, "_self", "");
+				Util.downloadFile(path, "ver=" + ver);
 			}
 		});
 		
