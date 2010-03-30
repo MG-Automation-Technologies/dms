@@ -33,7 +33,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.openkm.frontend.client.Main;
@@ -834,9 +833,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		Log.debug("downloadDocument()");
 		if (isDocumentSelected()) {
 			Log.debug("jump to download");
-			Main.get().redirect = true;
-			Window.open(Config.OKMDownloadServlet + (checkout?"?checkout&":"?") + "id=" + URL.encodeComponent(getDocument().getPath()), "_self", "");
-			Main.get().redirect = false;
+			Util.downloadFile(getDocument().getPath(), (checkout?"checkout":""));
 		}
 		Log.debug("downloadDocument: void");
 	}
@@ -848,9 +845,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		Log.debug("downloadDocumentPdf()");
 		if (isDocumentSelected()) {
 			Log.debug("jump to download");
-			Main.get().redirect = true;
-			Window.open(Config.OKMDownloadServlet +"?toPdf&id=" + URL.encodeComponent(getDocument().getPath()), "_self", "");
-			Main.get().redirect = false;
+			Util.downloadFile(getDocument().getPath(), "toPdf");
 		}
 		Log.debug("downloadDocumentPdf: void");
 	}

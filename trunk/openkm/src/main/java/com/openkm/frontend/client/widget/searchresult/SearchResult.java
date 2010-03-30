@@ -27,14 +27,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -46,6 +43,7 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * SearchResult
@@ -204,13 +202,11 @@ public class SearchResult extends Composite {
 	 */
 	public void downloadDocument() {
 		if (!dataTable.getSelectedRows().isEmpty()) {
-			Main.get().redirect = true;
 			if (table.isDocumentSelected()) {
-				Window.open(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getDocument().getPath()), "_self", "");
+				Util.downloadFile(getDocument().getPath(), "");
 			} else if (table.isAttachmentSelected()) {
-				Window.open(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getAttachment().getPath()), "_self", "");
+				Util.downloadFile(getAttachment().getPath(), "");
 			}
-			Main.get().redirect = false;
 		}
 	}
 	

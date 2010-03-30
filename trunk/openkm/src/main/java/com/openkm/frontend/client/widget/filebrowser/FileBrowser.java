@@ -30,8 +30,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -39,7 +37,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
@@ -54,6 +51,7 @@ import com.openkm.frontend.client.service.OKMMailService;
 import com.openkm.frontend.client.service.OKMMailServiceAsync;
 import com.openkm.frontend.client.service.OKMNotifyService;
 import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.MenuPopup;
 import com.openkm.frontend.client.widget.OriginPanel;
@@ -1550,9 +1548,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void exportFolderToFile() {
 		if (table.isFolderSelected()) {
-			Main.get().redirect = true;
-			Window.open(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getFolder().getPath()) + "&export", "_self", "");
-			Main.get().redirect = false;
+			Util.downloadFile(getFolder().getPath(), "export");
 		}
 	}
 	

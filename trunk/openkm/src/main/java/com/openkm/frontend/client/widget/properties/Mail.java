@@ -236,9 +236,7 @@ public class Mail extends Composite {
 			hLink.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					Main.get().redirect = true;
-					Window.open(Config.OKMDownloadServlet + "?id=" + URL.encodeComponent(attach.getPath()), "_self", "");
-					Main.get().redirect = false;
+					Util.downloadFile(attach.getPath(), "");
 				}
 			});
 			int row = attachmentsTable.getRowCount();
@@ -269,9 +267,7 @@ public class Mail extends Composite {
 		// Attachements are writem from second row
 		if (attachmentsTable.getSelectedRow()>0) {
 			if (getAttach(attachmentsTable.getSelectedRow())!=null) {
-				Main.get().redirect = true;
-				Window.open(Config.OKMDownloadServlet + "?id=" + URL.encodeComponent(getAttach(attachmentsTable.getSelectedRow()).getPath()), "_self", "");
-				Main.get().redirect = false;
+				Util.downloadFile(getAttach(attachmentsTable.getSelectedRow()).getPath(), "");
 			}
 		}
 	}
