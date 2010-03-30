@@ -231,11 +231,11 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	private void runProcessDefinition() {
 		if (listBox.getSelectedIndex()>0) {
-			formFieldList = new ArrayList<GWTFormElement>();
-			formWidgetList = new ArrayList<FormWidget>();
 			if (drawed) {
 				runProcessDefinitionWithValues();
 			} else {
+				formFieldList = new ArrayList<GWTFormElement>();
+				formWidgetList = new ArrayList<FormWidget>();
 				getProcessDefinitionForms(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue());
 			}
 		}
