@@ -96,7 +96,7 @@ public class TabDocument extends Composite {
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
 				selectedTab = tabIndex;
 				if (tabIndex == TAB_PREVIEW) {
-					preview.showEmbedSWF(doc.getPath());
+					preview.showEmbedSWF(doc.getUuid());
 				}
 			}
 		});
@@ -134,7 +134,7 @@ public class TabDocument extends Composite {
 			}
 		}
 		if (selectedTab == TAB_PREVIEW) {
-			preview.showEmbedSWF(doc.getPath());
+			preview.showEmbedSWF(doc.getUuid());
 		}
 	}
 	
