@@ -889,7 +889,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	public void mediaPlayerDocument() {
 		if (isDocumentSelected()) {
 			Main.get().mediaPlayerPopup.center();
-			Main.get().mediaPlayerPopup.setMediaFile(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getDocument().getPath()));
+			Main.get().mediaPlayerPopup.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 		}
 	}
 	
@@ -898,7 +898,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	 */
 	public void imageViewerDocument() {
 		if (isDocumentSelected()) {
-			Main.get().imageViewerPopup.setImageFile(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getDocument().getPath()));
+			Main.get().imageViewerPopup.setImageFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
 			Main.get().imageViewerPopup.center();
 		}
 	}

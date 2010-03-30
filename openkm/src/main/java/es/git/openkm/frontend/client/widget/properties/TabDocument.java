@@ -122,7 +122,7 @@ public class TabDocument extends Composite implements TabListener {
 			}
 		}
 		if (selectedTab == TAB_PREVIEW) {
-			preview.showEmbedSWF(doc.getPath());
+			preview.showEmbedSWF(doc.getUuid());
 		}
 	}
 	
@@ -321,7 +321,7 @@ public class TabDocument extends Composite implements TabListener {
 		Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(tabIndex));
 		selectedTab = tabIndex;
 		if (tabIndex == TAB_PREVIEW) {
-			preview.showEmbedSWF(doc.getPath());
+			preview.showEmbedSWF(doc.getUuid());
 		}
 	}
 }
