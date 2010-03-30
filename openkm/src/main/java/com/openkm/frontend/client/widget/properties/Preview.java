@@ -67,9 +67,9 @@ public class Preview extends Composite {
 		this.height = height;
 	}
 	
-	public void showEmbedSWF(String path) {
+	public void showEmbedSWF(String Uuid) {
 		if (previewAvailable) {
-			String url = Config.OKMDownloadServlet +"?toSwf&inline&id=" + URL.encodeComponent(path);
+			String url = Config.OKMDownloadServlet +"?toSwf&inline&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
 			Util.createPDFViewer(url, ""+width, ""+height);
 		} else {
