@@ -353,10 +353,9 @@ public class PropertyGroup extends Composite {
 											} 
 											
 											listMulti.addItem(optionName,value);
-											if (listMulti.getItemCount()>1){
-												listMulti.setVisible(true);
-												addButton.setVisible(true);
-											}
+											listMulti.setVisible(true);
+											addButton.setVisible(true);
+											
 											// Looking for row to delete 
 											for (int i=0; i<tableMulti.getRowCount(); i++){
 												if (tableMulti.getWidget(i,1).equals(sender)) {
@@ -423,10 +422,9 @@ public class PropertyGroup extends Composite {
 												Button addButton = (Button) hPanel.getWidget(4);
 												
 												listMulti.addItem(option.getName(),option.getValue());
-												if (listMulti.getItemCount()>1){
-													listMulti.setVisible(true);
-													addButton.setVisible(true);
-												}
+												listMulti.setVisible(true);
+												addButton.setVisible(true);
+												
 												// Looking for row to delete 
 												for (int i=0; i<tableMulti.getRowCount(); i++){
 													if (tableMulti.getWidget(i,1).equals(sender)) {
