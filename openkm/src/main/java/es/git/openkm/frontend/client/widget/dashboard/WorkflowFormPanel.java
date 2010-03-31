@@ -533,7 +533,7 @@ public class WorkflowFormPanel extends Composite {
 				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					GWTOption option = itx.next();
-					listBox.addItem(option.getName(), option.getValue());
+					listBox.addItem(option.getLabel(), option.getValue());
 					if (option.getValue().equals(selectedValue)) {
 						listBox.setSelectedIndex(listBox.getItemCount()-1);
 					}

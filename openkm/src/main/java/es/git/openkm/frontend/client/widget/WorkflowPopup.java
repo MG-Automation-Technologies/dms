@@ -345,7 +345,7 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setWidth(gWTSelect.getWidth());
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					GWTOption option = itx.next();
-					listBox.addItem(option.getName(), option.getValue());
+					listBox.addItem(option.getLabel(), option.getValue());
 				}
 				listBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");

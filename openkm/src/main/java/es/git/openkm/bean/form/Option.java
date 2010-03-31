@@ -1,16 +1,16 @@
 package es.git.openkm.bean.form;
 
 public class Option {
-	private String name = "";
+	private String label = "";
 	private String value = "";
 	private boolean selected = false;
 	
-	public String getName() {
-		return name;
+	public String getLabel() {
+		return label;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	public String getValue() {
@@ -32,7 +32,7 @@ public class Option {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("name="); sb.append(name);
+		sb.append("label="); sb.append(label);
 		sb.append(", value="); sb.append(value);
 		sb.append(", selected="); sb.append(selected);
 		sb.append("}");
