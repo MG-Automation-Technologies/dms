@@ -151,6 +151,20 @@ public class Util {
 	}
 	
 	/**
+	 * isJREInstalled
+	 * 
+	 * @return
+	 */
+	public static boolean isJREInstalled() {
+		String[] jreList = getJREs();
+		if (jreList!=null && jreList.length>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Format file size in Bytes, KBytes or MBytes. 
 	 * @param size The file size in bytes.
 	 * @return The formated file size.
@@ -216,5 +230,9 @@ public class Util {
        
     public static native void copyToClipboard(String text) /*-{
     	new $wnd.copyToClipboard(text);
+	}-*/;
+    
+    public static native String[] getJREs() /*-{
+		return $wnd.deployJava.getJREs();
 	}-*/;
 }
