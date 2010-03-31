@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -258,6 +259,14 @@ public class WorkflowPopup extends DialogBox {
 			} else if (fw.getWidget() instanceof ListBox) {
 				ListBox listBox = (ListBox) fw.getWidget();
 				values.put(listBox.getName(), listBox.getValue(listBox.getSelectedIndex()));
+			} else if (fw.getWidget() instanceof FlexTable ) {
+				FlexTable tableMulti = (FlexTable) fw.getWidget();
+				String name = ((HTML) tableMulti.getWidget(0,0)).getText();
+				Collection<String> tableValues = new ArrayList<String>();
+				for (int i=1; i<tableMulti.getRowCount(); i++) {
+					tableValues.add(((HTML) tableMulti.getWidget(i,0)).getText()); // Value is in first table column
+				}
+				values.put(name, tableValues.toArray());
 			}
 		}
 		
@@ -343,19 +352,94 @@ public class WorkflowPopup extends DialogBox {
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textBox);
 				widget = textBox;
+				
 			} else if (formField instanceof GWTSelect) {
-				GWTSelect gWTSelect = (GWTSelect) formField;
-				ListBox listBox = new ListBox();
+				final int rowButton = row;
+				final GWTSelect gWTSelect = (GWTSelect) formField;
+				final FlexTable tableMulti = new FlexTable();
+				final ListBox listBox = new ListBox();
+				final Button addButton = new Button(Main.i18n("button.add"),new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {							
+						if (listBox.getSelectedIndex()>0) {
+							// Case select multiple
+							int rowTableMulti = tableMulti.getRowCount();
+							HTML htmlValue = new HTML(listBox.getValue(listBox.getSelectedIndex()));
+							HTML htmlName = new HTML("");
+							final Button addButton = (Button) formTable.getWidget(rowButton, 2);
+							
+							for (Iterator<GWTOption> itOptions = gWTSelect.getOptions().iterator(); itOptions.hasNext();) {
+								GWTOption option = itOptions.next();
+								if (option.getValue().equals(htmlValue.getText())) {
+									htmlName.setHTML(option.getName());
+									htmlValue.setHTML(option.getValue());
+									break;
+								} 
+							} 
+							
+							final String name = htmlName.getText();
+							final String value = htmlValue.getText();
+							Image removeImage = new Image("img/icon/actions/delete.gif");
+							removeImage.addClickHandler(new ClickHandler() { 
+								@Override
+								public void onClick(ClickEvent event) {
+									Widget sender = (Widget) event.getSource();
+									
+									// Looking for row to delete 
+									for (int i=0; i<tableMulti.getRowCount(); i++){
+										if (tableMulti.getWidget(i,1).equals(sender)) {
+											tableMulti.removeRow(i);
+										}
+									}
+									
+									listBox.addItem(name, value);
+									listBox.setVisible(true);
+									addButton.setVisible(true);
+								}
+							});
+							
+							tableMulti.setWidget(rowTableMulti,0,htmlValue);
+							tableMulti.setWidget(rowTableMulti,1,htmlName);
+							tableMulti.setWidget(rowTableMulti,2,removeImage);
+							setRowWordWarp(tableMulti,rowTableMulti, 3, true);
+							htmlValue.setVisible(false);
+							
+							listBox.removeItem(listBox.getSelectedIndex());
+							if (listBox.getItemCount()<=1) {
+								listBox.setVisible(false);
+								addButton.setVisible(false);
+							}
+						}
+					}
+				});
+				
 				listBox.setName(gWTSelect.getName());
 				listBox.setWidth(gWTSelect.getWidth());
-				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
-					GWTOption option = itx.next();
-					listBox.addItem(option.getName(), option.getValue());
-				}
-				listBox.setStyleName("okm-Input");
+				listBox.setStyleName("okm-Select");
+				listBox.addItem("",""); // Always we set and empty value
+				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
-				widget = listBox;
+
+				if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
+					formTable.setWidget(row, 2, addButton);
+					row++; // Incrementing row
+					formTable.setHTML(row, 0, "");
+					formTable.setWidget(row, 1, tableMulti);
+					HTML name = new HTML(gWTSelect.getName()); // First table name it'll be the value name
+					tableMulti.setWidget(0,0,name);
+					name.setVisible(false);
+					widget = tableMulti;
+					
+				} else {
+					for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
+						GWTOption option = itx.next();
+						listBox.addItem(option.getName(), option.getValue());
+					}
+					
+					widget = listBox;
+				}
+				
 			} else if (formField instanceof GWTTextArea) {
 				GWTTextArea gWTTextArea = (GWTTextArea) formField;
 				TextArea textArea = new TextArea();
@@ -385,6 +469,20 @@ public class WorkflowPopup extends DialogBox {
 		}
 		drawed = true; 
 	}	
+	
+	/**
+	 * Set the WordWarp for all the row cells
+	 * 
+	 * @param table FlexTable The table to format
+	 * @param row The row cell
+	 * @param columns Number of row columns
+	 * @param warp
+	 */
+	private void setRowWordWarp(FlexTable table, int row, int columns, boolean warp) {
+		for (int i=0; i<columns; i++){
+			table.getCellFormatter().setWordWrap(row, i, false);
+		}
+	}
 	
 	/**
 	 * FormWidget
