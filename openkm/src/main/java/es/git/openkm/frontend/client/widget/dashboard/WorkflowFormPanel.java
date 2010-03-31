@@ -81,6 +81,7 @@ public class WorkflowFormPanel extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private final String VARIABLE_KEY_ID = "$";
 	
 	private VerticalPanel vPanel;
 	private GWTTaskInstance taskInstance;
@@ -447,6 +448,7 @@ public class WorkflowFormPanel extends Composite {
 	 * drawForm
 	 */
 	private void drawForm() {
+		Map<String, Object> variables = taskInstance.getProcessInstance().getVariables();
 		submitForm.setVisible(true); // always set form visible
 		HorizontalPanel hPanel = new HorizontalPanel();
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
@@ -497,34 +499,64 @@ public class WorkflowFormPanel extends Composite {
 				GWTInput gWTInput = (GWTInput) formField;
 				TextBox textBox = new TextBox();
 				textBox.setName(gWTInput.getName());
-				textBox.setText(gWTInput.getValue());
+				
+				// Initializing input value from variable
+				if (gWTInput.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTInput.getValue().substring(1))) {
+					textBox.setText((String) variables.get(gWTInput.getValue().substring(1)));
+				} else {
+					textBox.setText(gWTInput.getValue());
+				}
+				
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
 					textBox.setEnabled(false);
 				}
+				
 				textBox.setWidth(gWTInput.getWidth());
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textBox);
 				widget = textBox;
+				
 			} else if (formField instanceof GWTSelect) {
 				GWTSelect gWTSelect = (GWTSelect) formField;
 				ListBox listBox = new ListBox();
 				listBox.setName(gWTSelect.getName());
 				listBox.setWidth(gWTSelect.getWidth());
+				
+				String selectedValue = "";
+				// Initialize select value
+				if (gWTSelect.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTSelect.getValue().substring(1))) {
+					selectedValue = (String) variables.get(gWTSelect.getValue().substring(1));
+				} else {
+					selectedValue = gWTSelect.getValue();
+				}
+				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					GWTOption option = itx.next();
 					listBox.addItem(option.getName(), option.getValue());
+					if (option.getValue().equals(selectedValue)) {
+						listBox.setSelectedIndex(listBox.getItemCount()-1);
+					}
 				}
+				
 				listBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
 				widget = listBox;
+				
 			} else if (formField instanceof GWTTextArea) {
 				GWTTextArea gWTTextArea = (GWTTextArea) formField;
 				TextArea textArea = new TextArea();
 				textArea.setName(gWTTextArea.getName());
 				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
-				textArea.setText(gWTTextArea.getValue());
+				
+				// Initialize textarea value
+				if (gWTTextArea.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTTextArea.getValue().substring(1))) {
+					textArea.setText((String) variables.get(gWTTextArea.getValue().substring(1)));
+				} else {
+					textArea.setText(gWTTextArea.getValue());
+				}
+				
 				textArea.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textArea);
