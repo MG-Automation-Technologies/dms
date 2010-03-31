@@ -126,6 +126,7 @@ public class Lang_sv_SE {
 			lang.put("general.menu.file.cancel.checkout", "Avbryta utcheckning");
 			lang.put("general.menu.file.delete", "Ta bort");
 			lang.put("general.menu.file.refresh", "Uppdatera");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Verktyg");
 	    	lang.put("general.menu.tools.languages", "Språk");
 	    	lang.put("general.menu.tools.skin", "Teman");

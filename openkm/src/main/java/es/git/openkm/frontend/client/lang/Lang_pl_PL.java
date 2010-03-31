@@ -128,6 +128,7 @@ public class Lang_pl_PL {
 			lang.put("general.menu.file.cancel.checkout", "Anuluj wyciągnięcie");
 			lang.put("general.menu.file.delete", "Usuń");
 			lang.put("general.menu.file.refresh", "Odśwież");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Narzędzia");
 	    	lang.put("general.menu.tools.languages", "Języki");
 	    	lang.put("general.menu.tools.skin", "Skórka");
