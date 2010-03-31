@@ -266,7 +266,6 @@ public final class Main implements EntryPoint, WindowCloseListener {
 	    RootPanel.get().add(horizontalBarSplitter);
 
 	    Window.addWindowCloseListener(this);
-	    initJavaScriptApi();
 		
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel
@@ -277,6 +276,9 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		startUp = new StartUp();
 		startUp.init();
 		
+		// Auto-publish the method into JS when the GWT module loads.
+		initJavaScriptApi();
+		mainPanel.topPanel.toolBar.initJavaScriptApi(mainPanel.topPanel.toolBar);
 	}
 	
 	native void initJavaScriptApi() /*-{

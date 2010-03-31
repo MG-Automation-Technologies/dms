@@ -126,6 +126,7 @@ public class Lang_es_ES {
 			lang.put("general.menu.file.cancel.checkout", "Cancelar checkout");
 			lang.put("general.menu.file.delete", "Eliminar");
 			lang.put("general.menu.file.refresh", "Refrescar");
+			lang.put("general.menu.file.scanner", "Scanner");
 	    lang.put("general.menu.tools", "Herramientas");
 	    	lang.put("general.menu.tools.languages", "Idiomas");
 	    	lang.put("general.menu.tools.skin", "Apariencia");
