@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE property-groups PUBLIC "-//OpenKM//Property Groups DTD 1.0//EN"
+<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 1.0//EN"
                                  "http://www.openkm.com/dtd/property-groups-1.0.dtd">
 <property-groups>
   <property-group label="Consulting" name="okg:consulting">
@@ -8,9 +8,9 @@
   </property-group>
   <property-group label="Technology" name="okg:technology">
     <select label="Language" name="okp:technology.language" type="simple">
-      <option name="Java" value="java" selected="true" />
-      <option name="Python" value="python" />
-      <option name="PHP" value="php" />
+      <option label="Java" value="java" selected="true" />
+      <option label="Python" value="python" />
+      <option label="PHP" value="php" />
     </select>
     <input label="Comment" name="okp:technology.comment" value="10"/>
     <textarea label="Description" name="okp:technology.description" value=""/>
