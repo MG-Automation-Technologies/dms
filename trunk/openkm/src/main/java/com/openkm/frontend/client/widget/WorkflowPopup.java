@@ -365,19 +365,19 @@ public class WorkflowPopup extends DialogBox {
 							// Case select multiple
 							int rowTableMulti = tableMulti.getRowCount();
 							HTML htmlValue = new HTML(listBox.getValue(listBox.getSelectedIndex()));
-							HTML htmlName = new HTML("");
+							HTML htmlLabel = new HTML("");
 							final Button addButton = (Button) formTable.getWidget(rowButton, 2);
 							
 							for (Iterator<GWTOption> itOptions = gWTSelect.getOptions().iterator(); itOptions.hasNext();) {
 								GWTOption option = itOptions.next();
 								if (option.getValue().equals(htmlValue.getText())) {
-									htmlName.setHTML(option.getName());
+									htmlLabel.setHTML(option.getLabel());
 									htmlValue.setHTML(option.getValue());
 									break;
 								} 
 							} 
 							
-							final String name = htmlName.getText();
+							final String label = htmlLabel.getText();
 							final String value = htmlValue.getText();
 							Image removeImage = new Image("img/icon/actions/delete.gif");
 							removeImage.addClickHandler(new ClickHandler() { 
@@ -392,20 +392,20 @@ public class WorkflowPopup extends DialogBox {
 										}
 									}
 									
-									listBox.addItem(name, value);
+									listBox.addItem(label, value);
 									listBox.setVisible(true);
 									addButton.setVisible(true);
 								}
 							});
 							
-							tableMulti.setWidget(rowTableMulti,0,htmlValue);
-							tableMulti.setWidget(rowTableMulti,1,htmlName);
-							tableMulti.setWidget(rowTableMulti,2,removeImage);
-							setRowWordWarp(tableMulti,rowTableMulti, 3, true);
+							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+							tableMulti.setWidget(rowTableMulti, 1, htmlLabel);
+							tableMulti.setWidget(rowTableMulti, 2, removeImage);
+							setRowWordWarp(tableMulti, rowTableMulti, 3, true);
 							htmlValue.setVisible(false);
 							
 							listBox.removeItem(listBox.getSelectedIndex());
-							if (listBox.getItemCount()<=1) {
+							if (listBox.getItemCount() <=1 ) {
 								listBox.setVisible(false);
 								addButton.setVisible(false);
 							}
@@ -416,7 +416,7 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setName(gWTSelect.getName());
 				listBox.setWidth(gWTSelect.getWidth());
 				listBox.setStyleName("okm-Select");
-				listBox.addItem("",""); // Always we set and empty value
+				listBox.addItem("", ""); // Always we set and empty value
 				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
@@ -434,7 +434,7 @@ public class WorkflowPopup extends DialogBox {
 				} else {
 					for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 						GWTOption option = itx.next();
-						listBox.addItem(option.getName(), option.getValue());
+						listBox.addItem(option.getLabel(), option.getValue());
 					}
 					
 					widget = listBox;
