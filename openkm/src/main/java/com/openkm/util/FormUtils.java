@@ -266,8 +266,8 @@ public class FormUtils {
 						if (nOption.getNodeType() == Node.ELEMENT_NODE) {
 							if (nOption.getNodeName().equals("option")) {
 								Option option = new Option();
-								item = nOption.getAttributes().getNamedItem("name");
-								if (item != null) option.setName(item.getNodeValue());
+								item = nOption.getAttributes().getNamedItem("label");
+								if (item != null) option.setLabel(item.getNodeValue());
 								item = nOption.getAttributes().getNamedItem("value");
 								if (item != null) option.setValue(item.getNodeValue());
 								item = nOption.getAttributes().getNamedItem("selected");
