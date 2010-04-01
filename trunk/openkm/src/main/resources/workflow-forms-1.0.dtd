@@ -29,14 +29,14 @@
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	type CDATA #IMPLIED
+	type (simple) "simple"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
 
 <!ELEMENT option EMPTY>
 <!ATTLIST option
-	name CDATA #REQUIRED
+	label CDATA #REQUIRED
 	value CDATA #REQUIRED
 	selected (true|false) "false"
 >
