@@ -535,19 +535,19 @@ public class WorkflowFormPanel extends Composite {
 							// Case select multiple
 							int rowTableMulti = tableMulti.getRowCount();
 							HTML htmlValue = new HTML(listBox.getValue(listBox.getSelectedIndex()));
-							HTML htmlName = new HTML("");
+							HTML htmlLabel = new HTML("");
 							final Button addButton = (Button) formTable.getWidget(rowButton, 2);
 							
 							for (Iterator<GWTOption> itOptions = gWTSelect.getOptions().iterator(); itOptions.hasNext();) {
 								GWTOption option = itOptions.next();
 								if (option.getValue().equals(htmlValue.getText())) {
-									htmlName.setHTML(option.getName());
+									htmlLabel.setHTML(option.getLabel());
 									htmlValue.setHTML(option.getValue());
 									break;
 								} 
 							} 
 							
-							final String name = htmlName.getText();
+							final String label = htmlLabel.getText();
 							final String value = htmlValue.getText();
 							Image removeImage = new Image("img/icon/actions/delete.gif");
 							removeImage.addClickHandler(new ClickHandler() { 
@@ -562,14 +562,14 @@ public class WorkflowFormPanel extends Composite {
 										}
 									}
 									
-									listBox.addItem(name, value);
+									listBox.addItem(label, value);
 									listBox.setVisible(true);
 									addButton.setVisible(true);
 								}
 							});
 							
 							tableMulti.setWidget(rowTableMulti,0,htmlValue);
-							tableMulti.setWidget(rowTableMulti,1,htmlName);
+							tableMulti.setWidget(rowTableMulti,1,htmlLabel);
 							tableMulti.setWidget(rowTableMulti,2,removeImage);
 							setRowWordWarp(tableMulti,rowTableMulti, 3, true);
 							htmlValue.setVisible(false);
@@ -619,12 +619,12 @@ public class WorkflowFormPanel extends Composite {
 					
 					if (Arrays.binarySearch(selectedValues, value)>=0 ) {
 						if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-							listBox.addItem(option.getName(), value);
+							listBox.addItem(option.getLabel(), value);
 							listBox.setSelectedIndex(listBox.getItemCount()-1);
 						} else {
 							// Case select multiple
 							int rowTableMulti = tableMulti.getRowCount();
-							HTML htmlName = new HTML(option.getName());
+							HTML htmlLabel = new HTML(option.getLabel());
 							HTML htmlValue = new HTML(option.getValue());
 							
 							Image removeImage = new Image("img/icon/actions/delete.gif");
@@ -635,21 +635,21 @@ public class WorkflowFormPanel extends Composite {
 									
 									// Looking for row to delete 
 									for (int i=0; i<tableMulti.getRowCount(); i++){
-										if (tableMulti.getWidget(i,1).equals(sender)) {
+										if (tableMulti.getWidget(i, 1).equals(sender)) {
 											tableMulti.removeRow(i);
 										}
 									}
 									
-									listBox.addItem(option.getName(),option.getValue());
+									listBox.addItem(option.getLabel(), option.getValue());
 									listBox.setVisible(true);
 									addButton.setVisible(true);
 								}
 							});
 							
-							tableMulti.setWidget(rowTableMulti,0,htmlValue);
-							tableMulti.setWidget(rowTableMulti,1,htmlName);
-							tableMulti.setWidget(rowTableMulti,2,removeImage);
-							setRowWordWarp(tableMulti,rowTableMulti, 3, true);
+							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+							tableMulti.setWidget(rowTableMulti, 1, htmlLabel);
+							tableMulti.setWidget(rowTableMulti, 2, removeImage);
+							setRowWordWarp(tableMulti, rowTableMulti, 3, true);
 							htmlValue.setVisible(false);
 						}
 					}
