@@ -31,6 +31,7 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_SUBMIT = "submit";
 	public static final String TYPE_TRANSITION = "transition";
 	private String type = TYPE_SUBMIT;
+	private String value = "";
 	
 	public String getType() {
 		return type;
@@ -38,6 +39,14 @@ public class GWTButton extends GWTFormElement implements IsSerializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String toString() {

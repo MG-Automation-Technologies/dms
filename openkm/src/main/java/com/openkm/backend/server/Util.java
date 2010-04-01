@@ -99,25 +99,24 @@ public class Util {
 		if (formElement instanceof Button) {
 			GWTButton gWTButton = new GWTButton();
 			gWTButton.setLabel(formElement.getLabel());
-			gWTButton.setValue(formElement.getValue());
 			gWTButton.setWidth(formElement.getWidth());
 			gWTButton.setHeight(formElement.getHeight());
 			gWTButton.setName(((Button) formElement).getName());
+			gWTButton.setValue(((Button) formElement).getValue());
 			gWTButton.setType(((Button) formElement).getType());
 			return gWTButton;
 		} else if (formElement instanceof Input) {
 			GWTInput gWTInput = new GWTInput();
 			gWTInput.setLabel(formElement.getLabel());
-			gWTInput.setValue(formElement.getValue());
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
 			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setValue(((Input) formElement).getValue());
 			gWTInput.setType(((Input) formElement).getType());
 			return gWTInput;
 		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
 			gWTselect.setLabel(formElement.getLabel());
-			gWTselect.setValue(formElement.getValue());
 			gWTselect.setWidth(formElement.getWidth());
 			gWTselect.setHeight(formElement.getHeight());
 			gWTselect.setName(((Select) formElement).getName());
@@ -131,10 +130,10 @@ public class Util {
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
 			gWTTextArea.setLabel(formElement.getLabel());
-			gWTTextArea.setValue(formElement.getValue());
 			gWTTextArea.setWidth(formElement.getWidth());
 			gWTTextArea.setHeight(formElement.getHeight());
 			gWTTextArea.setName(((TextArea) formElement).getName());
+			gWTTextArea.setValue(((TextArea) formElement).getValue());
 			return gWTTextArea;
 		} else {
 			return new GWTFormElement();

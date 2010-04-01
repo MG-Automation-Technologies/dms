@@ -4,6 +4,7 @@ public class Input extends FormElement {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	private String type = TYPE_TEXT;
+	private String value = "";
 
 	public String getType() {
 		return type;
@@ -11,6 +12,14 @@ public class Input extends FormElement {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String toString() {
