@@ -14,6 +14,7 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.util.FormUtils;
@@ -80,6 +81,22 @@ public class FormsTest extends TestCase {
 		assertEquals(((Select) userInputFe).getType(), "simple");
 		assertEquals(((Select) userInputFe).getOptions().size(), 3);
 		
+		Iterator<Option> it = ((Select) userInputFe).getOptions().iterator();
+		Option opt = it.next();
+		assertEquals(opt.getLabel(), "Type 1");
+		assertEquals(opt.getValue(), "t1");
+		assertFalse(opt.isSelected());
+		
+		opt = it.next();
+		assertEquals(opt.getLabel(), "Type 2");
+		assertEquals(opt.getValue(), "t2");
+		assertTrue(opt.isSelected());
+		
+		opt = it.next();
+		assertEquals(opt.getLabel(), "Type 3");
+		assertEquals(opt.getValue(), "t3");
+		assertFalse(opt.isSelected());
+				
 		userInputFe = formUserInfoIt.next();
 		assertTrue(userInputFe instanceof Button);
 		assertEquals(((Button) userInputFe).getLabel(), "Goto 1");
