@@ -32,7 +32,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTFormElement implements IsSerializable {
 	protected String label = "";
 	protected String name = "";
-	protected String value = "";
 	protected String width = "100px";
 	protected String height = "25px";
 
@@ -66,13 +65,5 @@ public class GWTFormElement implements IsSerializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 }

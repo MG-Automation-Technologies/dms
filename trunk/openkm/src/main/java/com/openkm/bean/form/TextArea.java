@@ -1,10 +1,19 @@
 package com.openkm.bean.form;
 
 public class TextArea extends FormElement {
+	private String value = "";
 	
 	public TextArea() {
 		width = "300px";
 		height = "100px";
+	}
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String toString() {

@@ -24,6 +24,15 @@ package com.openkm.frontend.client.bean;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class GWTTextArea extends GWTFormElement implements IsSerializable {
+	private String value = "";
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
