@@ -268,9 +268,9 @@
       <version>3.6</version>
     </dependency>
     <dependency>
-      <groupId>pdfbox</groupId>
+      <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>0.7.3</version>
+      <version>1.0.0</version>
     </dependency>
 
     <!-- GWT -->
