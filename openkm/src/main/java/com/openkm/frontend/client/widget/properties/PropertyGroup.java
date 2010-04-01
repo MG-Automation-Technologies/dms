@@ -283,17 +283,17 @@ public class PropertyGroup extends Composite {
 					final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 					if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 						String selectedValue = hProperties.get(propertyName)[0];
-						String selectedName = "";
+						String selectedLabel = "";
 						ListBox listBox = new ListBox();
 						listBox.setStyleName("okm-Select");
-						listBox.addItem("",""); // Always we set and empty value
+						listBox.addItem("", ""); // Always we set and empty value
 						
 						for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ){
 							GWTOption option = itData.next();
-							listBox.addItem(option.getName(),option.getValue()); 
+							listBox.addItem(option.getLabel(), option.getValue()); 
 							if (selectedValue!= null && selectedValue.equals(option.getValue())) {
-								listBox.setItemSelected(listBox.getItemCount()-1,true);
-								selectedName = option.getName();
+								listBox.setItemSelected(listBox.getItemCount()-1, true);
+								selectedLabel = option.getLabel();
 							}
 						}
 						
@@ -301,7 +301,7 @@ public class PropertyGroup extends Composite {
 						
 						table.setHTML(rows, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 						if (selectedValue!=null && !selectedValue.equals("")) {
-							table.setHTML(rows, 1, selectedName );
+							table.setHTML(rows, 1, selectedLabel);
 						} else {
 							table.setHTML(rows, 1, "");
 						}
@@ -343,16 +343,16 @@ public class PropertyGroup extends Composite {
 											Button addButton = (Button) hPanel.getWidget(4);
 											String value = htmlValue.getText();
 											
-											String optionName = "";
+											String optionLabel = "";
 											for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 												GWTOption option = itOptions.next();
 												if (option.getValue().equals(htmlValue.getText())) {
-													optionName = option.getName();
+													optionLabel = option.getLabel();
 													break;
 												} 
 											} 
 											
-											listMulti.addItem(optionName,value);
+											listMulti.addItem(optionLabel, value);
 											listMulti.setVisible(true);
 											addButton.setVisible(true);
 											
@@ -421,7 +421,7 @@ public class PropertyGroup extends Composite {
 												ListBox listMulti = (ListBox) hPanel.getWidget(2);
 												Button addButton = (Button) hPanel.getWidget(4);
 												
-												listMulti.addItem(option.getName(),option.getValue());
+												listMulti.addItem(option.getLabel(), option.getValue());
 												listMulti.setVisible(true);
 												addButton.setVisible(true);
 												
@@ -434,10 +434,10 @@ public class PropertyGroup extends Composite {
 											}
 										});
 										
-										tableMulti.setWidget(rowTableMulti,0,htmlValue);
-										tableMulti.setWidget(rowTableMulti,1,removeImage);
-										tableMulti.setHTML(rowTableMulti,2,option.getName());
-										setRowWordWarp(tableMulti,rowTableMulti, 2, true);
+										tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+										tableMulti.setWidget(rowTableMulti, 1, removeImage);
+										tableMulti.setHTML(rowTableMulti, 2, option.getLabel());
+										setRowWordWarp(tableMulti, rowTableMulti, 2, true);
 										htmlValue.setVisible(false);
 										removeImage.setVisible(false);
 										found = true;
@@ -448,7 +448,7 @@ public class PropertyGroup extends Composite {
 							// Only values not selecteds must appear on list
 							if (!found) {
 								selectValues.add(option.getValue());
-								listMulti.addItem(option.getName(),option.getValue()); // The translation is composed by propertyName + "." + value key
+								listMulti.addItem(option.getLabel(), option.getValue()); // The translation is composed by propertyName + "." + value key
 							}
 						}
 						
@@ -604,16 +604,16 @@ public class PropertyGroup extends Composite {
 						hSaveProperties.put(propertyName, new String[] {selectedValue});
 						hProperties.put(propertyName, new String[] {selectedValue});
 						
-						String optionName = "";
+						String optionLabel = "";
 						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 							GWTOption option = itOptions.next();
 							if (option.getValue().equals(selectedValue)) {
-								optionName = option.getName();
+								optionLabel = option.getLabel();
 								break;
 							}
 						}
 						
-						table.setHTML(rows, 1, optionName);
+						table.setHTML(rows, 1, optionLabel);
 					} else {
 						hSaveProperties.put(propertyName, new String[] {""});
 						hProperties.put(propertyName, new String[] {""});
@@ -707,16 +707,16 @@ public class PropertyGroup extends Composite {
 
 					if (selectedValue!=null && !selectedValue.equals("")) {
 						
-						String optionName = "";
+						String optionLabel = "";
 						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 							GWTOption option = itOptions.next();
 							if (option.getValue().equals(selectedValue)) {
-								optionName = option.getName();
+								optionLabel = option.getLabel();
 								break;
 							}
 						}
 						
-						table.setHTML(rows, 1, optionName);
+						table.setHTML(rows, 1, optionLabel);
 					} else {
 						table.setHTML(rows, 1, "");
 					}
@@ -740,7 +740,7 @@ public class PropertyGroup extends Composite {
 					}
 
 					// Looks if there's some selected value and redraws all table
-					if(selectedValues!=null) {
+					if(selectedValues != null) {
 						for (int i=0; i<selectedValues.length; i++ ) {
 							final String value = selectedValues[i];
 							int rowTableMulti = tableMulti.getRowCount();
@@ -756,16 +756,16 @@ public class PropertyGroup extends Composite {
 									ListBox listMulti = (ListBox) hPanel.getWidget(2);
 									Button addButton = (Button) hPanel.getWidget(4);
 									
-									String optionName = "";
+									String optionLabel = "";
 									for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 										GWTOption option = itOptions.next();
 										if (option.getValue().equals(value)) {
-											optionName = option.getName();
+											optionLabel = option.getLabel();
 											break;
 										} 
 									} 
 									
-									listMulti.addItem(optionName,value);
+									listMulti.addItem(optionLabel, value);
 									if (listMulti.getItemCount()>1){
 										listMulti.setVisible(true);
 										addButton.setVisible(true);
@@ -779,19 +779,19 @@ public class PropertyGroup extends Composite {
 								}
 							});
 							
-							String optionName = "";
+							String optionLabel = "";
 							for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 								GWTOption option = itOptions.next();
 								if (option.getValue().equals(value)) {
-									optionName = option.getName();
+									optionLabel = option.getLabel();
 									break;
 								} 
 							} 
 							
-							tableMulti.setWidget(rowTableMulti,0,htmlValue);
-							tableMulti.setWidget(rowTableMulti,1,removeImage);
-							tableMulti.setHTML(rowTableMulti,2,optionName);
-							setRowWordWarp(tableMulti,rowTableMulti, 2, true);
+							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+							tableMulti.setWidget(rowTableMulti, 1, removeImage);
+							tableMulti.setHTML(rowTableMulti, 2, optionLabel);
+							setRowWordWarp(tableMulti, rowTableMulti, 2, true);
 							htmlValue.setVisible(false);
 							removeImage.setVisible(false);
 						}
@@ -805,15 +805,15 @@ public class PropertyGroup extends Composite {
 					// Recreates the initial list before staring updating
 					for (Iterator<String> its = selectValues.iterator(); its.hasNext();) {
 						String value = its.next();
-						String optionName = "";
+						String optionLabel = "";
 						for (Iterator<GWTOption> itOptions = gwtSelect.getOptions().iterator(); itOptions.hasNext();) {
 							GWTOption option = itOptions.next();
 							if (option.getValue().equals(value)) {
-								optionName = option.getName();
+								optionLabel = option.getLabel();
 								break;
 							}
 						}
-						listMulti.addItem(optionName,value);
+						listMulti.addItem(optionLabel, value);
 					}
 					
 					listMulti.setVisible(false);
