@@ -992,7 +992,7 @@ public class SearchIn extends Composite {
 				for (Iterator<GWTOption> itData = gwtSelect.getOptions().iterator(); itData.hasNext(); ) {
 					GWTOption option = itData.next();
 					String value = option.getValue();
-					listBox.addItem(option.getName(),value); // The translation is composed by propertyName + "." + value key
+					listBox.addItem(option.getLabel(), value); // The translation is composed by propertyName + "." + value key
 					
 					// Selects the selected value
 					if (propertyValue!=null && !propertyValue.equals("") && propertyValue.equals(value)) {
