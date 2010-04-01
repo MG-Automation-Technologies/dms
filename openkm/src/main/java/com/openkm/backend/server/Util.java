@@ -148,7 +148,7 @@ public class Util {
 	 */
 	public static GWTOption copy(Option option) {
 		GWTOption gWTOption = new GWTOption();
-		gWTOption.setName(option.getName());
+		gWTOption.setLabel(option.getLabel());
 		gWTOption.setValue(option.getValue());
 		return gWTOption;
 	}
