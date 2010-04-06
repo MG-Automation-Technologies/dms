@@ -61,13 +61,13 @@ public class TwitterAccount {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", user="); sb.append(user);
 		sb.append(", twitterUser="); sb.append(twitterUser);
 		sb.append(", active="); sb.append(active);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

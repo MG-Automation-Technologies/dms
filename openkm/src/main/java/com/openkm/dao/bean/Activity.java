@@ -80,15 +80,15 @@ public class Activity {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("actDate="); sb.append(actDate==null?null:actDate.getTime());
 		sb.append(", actUser="); sb.append(actUser);
 		sb.append(", actToken="); sb.append(actToken);
 		sb.append(", actAction="); sb.append(actAction);
 		sb.append(", actItem="); sb.append(actItem);
 		sb.append(", actParams="); sb.append(actParams);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }
