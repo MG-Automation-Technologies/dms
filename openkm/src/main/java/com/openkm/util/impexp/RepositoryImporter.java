@@ -47,21 +47,12 @@ public class RepositoryImporter {
 	private RepositoryImporter() {}
 
 	/**
-	 * Import documents in filesystem
-	 * 
-	 * @param fsPath
-	 * @param repoPath
-	 * @throws RepositoryException
-	 * @throws PathNotFoundException 
-	 * @throws ItemExistsException 
-	 * @throws AccessDeniedException 
-	 * @throws javax.jcr.RepositoryException 
-	 * @throws IOException 
+	 * Import documents from filesystem into document repository.
 	 */
 	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
 			throws PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("importDocuments(" + token + ", " + fs + ", " + fldPath + ", " + deco + ")");
+		log.debug("importDocuments({}, {}, {}, {})", new Object[] { token, fs, fldPath, deco });
 		ImpExpStats stats;
 		
 		try {
@@ -90,25 +81,12 @@ public class RepositoryImporter {
 			throw e;
 		}
 				
-		log.debug("importDocuments: "+stats);
+		log.debug("importDocuments: {}", stats);
 		return stats;
 	}
 	
 	/**
-	 * Import previously exported contents to the repository
-	 * 
-	 * @param dir
-	 * @param folderNode
-	 * @throws javax.jcr.RepositoryException
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws RepositoryException
-	 * @throws AccessDeniedException 
-	 * @throws PathNotFoundException 
-	 * @throws ItemExistsException 
-	 * @throws ItemExistsException 
-	 * @throws FileSizeExceededException 
-	 * @throws UnsupportedMimeTypeException 
+	 * Import documents from filesystem into document repository (recursive).
 	 */
 	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
 			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
