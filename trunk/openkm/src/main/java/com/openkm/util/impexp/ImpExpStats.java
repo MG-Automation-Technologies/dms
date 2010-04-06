@@ -37,4 +37,15 @@ public class ImpExpStats {
 	public void setSize(long size) {
 		this.size = size;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("documents="); sb.append(documents);
+		sb.append(", folders="); sb.append(folders);
+		sb.append(", size="); sb.append(size);
+		sb.append(", ok="); sb.append(ok);
+		sb.append("}");
+		return sb.toString();
+	}
 }
