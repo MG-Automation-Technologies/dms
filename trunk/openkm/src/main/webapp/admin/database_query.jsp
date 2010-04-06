@@ -11,7 +11,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<%@page import="com.openkm.dao.WorkflowDAO"%><html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
@@ -33,6 +34,7 @@
 				"<option "+(ds.equals("OKMActivityDS")?"selected":"")+" value=\"OKMActivityDS\">User Activity</option>"+
 				"<option "+(ds.equals("OKMAuthDS")?"selected":"")+" value=\"OKMAuthDS\">User Auth</option>"+
 				"<option "+(ds.equals("OKMDashboardStatsDS")?"selected":"")+" value=\"OKMDashboardStatsDS\">Dashboard Stats</option>"+
+				"<option "+(ds.equals("OKMWorkflowDS")?"selected":"")+" value=\"OKMWorkflowDS\">Workflow</option>"+
 				"</select>");
 		out.println("<input type=\"submit\" value=\"Send\"></td></tr>");
 		out.println("</table>");
@@ -51,6 +53,8 @@
 				dao = AuthDAO.getInstance();
 			} else if (ds.equals("OKMDashboardStatsDS")) {
 				dao = DashboardStatsDAO.getInstance();
+			} else if (ds.equals("OKMWorkflowDS")) {
+				dao = WorkflowDAO.getInstance();
 			}
 			
 			try {
