@@ -1,6 +1,7 @@
 <%@ page import="es.git.openkm.dao.AbstractDAO" %>
 <%@ page import="es.git.openkm.dao.ActivityDAO" %>
 <%@ page import="es.git.openkm.dao.AuthDAO" %>
+<%@ page import="es.git.openkm.dao.WorkflowDAO"%>
 <%@ page import="es.git.openkm.dao.DashboardStatsDAO" %>
 <%@ page import="es.git.openkm.core.Config" %>
 <%@ page import="java.sql.Connection" %>
@@ -33,6 +34,7 @@
 				"<option "+(ds.equals("OKMActivityDS")?"selected":"")+" value=\"OKMActivityDS\">User Activity</option>"+
 				"<option "+(ds.equals("OKMAuthDS")?"selected":"")+" value=\"OKMAuthDS\">User Auth</option>"+
 				"<option "+(ds.equals("OKMDashboardStatsDS")?"selected":"")+" value=\"OKMDashboardStatsDS\">Dashboard Stats</option>"+
+				"<option "+(ds.equals("OKMWorkflowDS")?"selected":"")+" value=\"OKMWorkflowDS\">Workflow</option>"+
 				"</select>");
 		out.println("<input type=\"submit\" value=\"Send\"></td></tr>");
 		out.println("</table>");
@@ -51,6 +53,8 @@
 				dao = AuthDAO.getInstance();
 			} else if (ds.equals("OKMDashboardStatsDS")) {
 				dao = DashboardStatsDAO.getInstance();
+			} else if (ds.equals("OKMWorkflowDS")) {
+				dao = WorkflowDAO.getInstance();
 			}
 			
 			try {
