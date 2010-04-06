@@ -200,6 +200,10 @@
     <servlet-class>com.openkm.ws.endpoint.OKMFolder</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>OKMMail</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMMail</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
@@ -360,6 +364,10 @@
   <servlet-mapping>
     <servlet-name>OKMFolder</servlet-name>
     <url-pattern>/OKMFolder</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMMail</servlet-name>
+    <url-pattern>/OKMMail</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMPropertyGroup</servlet-name>
