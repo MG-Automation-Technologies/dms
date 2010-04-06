@@ -62,13 +62,13 @@ public class DashboardStats {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("dsUser="); sb.append(dsUser);
 		sb.append(", actSource="); sb.append(dsSource);
 		sb.append(", dsNode="); sb.append(dsNode);
 		sb.append(", dsDate="); sb.append(dsDate==null?null:dsDate.getTime());
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

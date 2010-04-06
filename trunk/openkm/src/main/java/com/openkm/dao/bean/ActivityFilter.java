@@ -62,13 +62,13 @@ public class ActivityFilter {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("actDateBegin="); sb.append(actDateBegin==null?null:actDateBegin.getTime());
 		sb.append(", actDateEnd="); sb.append(actDateEnd==null?null:actDateEnd.getTime());
 		sb.append(", actUser="); sb.append(actUser);
 		sb.append(", actAction="); sb.append(actAction);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

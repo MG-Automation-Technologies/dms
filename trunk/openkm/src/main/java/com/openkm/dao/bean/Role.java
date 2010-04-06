@@ -33,10 +33,10 @@ public class Role {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("id="); sb.append(id);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

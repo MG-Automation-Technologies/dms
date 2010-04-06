@@ -85,15 +85,15 @@ public class User {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", pass="); sb.append(pass);
 		sb.append(", email="); sb.append(email);
 		sb.append(", active="); sb.append(active);
 		sb.append(", roles="); sb.append(roles);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }
