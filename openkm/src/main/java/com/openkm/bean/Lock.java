@@ -55,12 +55,12 @@ public class Lock implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("owner="); sb.append(owner);
 		sb.append(", nodePath="); sb.append(nodePath);
 		sb.append(", token="); sb.append(token);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -61,12 +61,12 @@ public class SessionInfo implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("session="); sb.append(session);
 		sb.append(", creation="); sb.append(creation==null?null:creation.getTime());
 		sb.append(", access="); sb.append(access==null?null:access.getTime());
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

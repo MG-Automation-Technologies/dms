@@ -48,11 +48,11 @@ public class ResultSet implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("total="); sb.append(total);
 		sb.append(", results="); sb.append(results);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

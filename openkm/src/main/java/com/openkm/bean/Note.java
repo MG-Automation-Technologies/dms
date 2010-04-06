@@ -63,12 +63,12 @@ public class Note implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("date="); sb.append(date==null?null:date.getTime());
 		sb.append(", user="); sb.append(user);
 		sb.append(", text="); sb.append(text);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -73,13 +73,13 @@ public class FormField implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("type="); sb.append(type);
 		sb.append(", label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

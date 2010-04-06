@@ -73,14 +73,14 @@ public class QueryResult implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("document="); sb.append(document);
 		sb.append(", folder="); sb.append(folder);
 		sb.append(", mail="); sb.append(mail);
 		sb.append(", attachment="); sb.append(attachment);
 		sb.append(", score="); sb.append(score);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

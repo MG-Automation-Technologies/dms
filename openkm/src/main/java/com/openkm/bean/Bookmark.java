@@ -63,12 +63,12 @@ public class Bookmark implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("name="); sb.append(name);
 		sb.append(", path="); sb.append(path);
 		sb.append(", type="); sb.append(type);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -50,11 +50,11 @@ public class StatsInfo implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("sizes=["); for (int i=0; i<sizes.length-1; i++) sb.append(sizes[i]+","); sb.append(sizes[sizes.length-1]+"]");
 		sb.append(", percents=["); for (int i=0; i<percents.length-1; i++) sb.append(percents[i]+","); sb.append(percents[percents.length-1]+"]");
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

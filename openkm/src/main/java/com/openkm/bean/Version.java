@@ -83,15 +83,15 @@ public class Version implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("name="); sb.append(name);
 		sb.append(", size="); sb.append(size);
 		sb.append(", author="); sb.append(author);
 		sb.append(", actual="); sb.append(actual);
 		sb.append(", comment="); sb.append(comment);
 		sb.append(", created="); sb.append(created==null?null:created.getTime());
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -110,15 +110,15 @@ public class Folder implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("path="); sb.append(path);
 		sb.append(", permissions="); sb.append(permissions);
 		sb.append(", created="); sb.append(created==null?null:created.getTime());
 		sb.append(", hasChilds="); sb.append(hasChilds);
 		sb.append(", subscribed="); sb.append(subscribed);
 		sb.append(", uuid="); sb.append(uuid);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

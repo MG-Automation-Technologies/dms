@@ -196,8 +196,8 @@ public class QueryParams implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("name="); sb.append(name);
 		sb.append(", keywords="); sb.append(keywords);
 		sb.append(", categories="); sb.append(categories);
@@ -214,7 +214,7 @@ public class QueryParams implements Serializable {
 		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
 		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append(", properties="); sb.append(properties);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }
