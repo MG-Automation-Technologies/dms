@@ -116,9 +116,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 				if (action == FancyFileUpload.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
-							log.debug("Import zip file '" + fileName + "' into '" + path + "'");
+							log.debug("Import zip file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(token, path, is);
-							log.warn("erroMsg: "+erroMsg);
+							log.warn("erroMsg: {}", erroMsg);
 							
 							if (erroMsg == null) {
 								out.print(returnOKMessage);
@@ -127,7 +127,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							}
 						} else {
 							fileName = FilenameUtils.getName(fileName);
-							log.debug("Upload file '" + fileName + "' into '" + path + "'");
+							log.debug("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
 							doc.setPath(path+"/"+fileName);
 							OKMDocument.getInstance().create(token, doc, is);
@@ -136,7 +136,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						}
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
-					log.debug("File updated: " + path);
+					log.debug("File updated: {}", path);
 					OKMDocument document = OKMDocument.getInstance();
 					document.setContent(token, path, is);
 					document.checkin(token, path, comment);
@@ -190,16 +190,11 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	 * @param token User session token.
 	 * @param path Where import into the repository.
 	 * @param zip The zip file to import.
-	 * @throws IOException 
-	 * @throws RepositoryException 
-	 * @throws AccessDeniedException 
-	 * @throws ItemExistsException 
-	 * @throws PathNotFoundException 
 	 */
 	private String importZip(String token, String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("importZip("+token+", "+path+", "+is+")");
+		log.debug("importZip({}, {}, {})", new Object[] { token, path, is });
 		ZipInputStream zis = null;
         File tmp = null;
         String errorMsg = null;
@@ -254,7 +249,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			}
 		}
 		
-		log.debug("importZip: "+errorMsg);
+		log.debug("importZip: {}", errorMsg);
 		return errorMsg;
 	}
 }
