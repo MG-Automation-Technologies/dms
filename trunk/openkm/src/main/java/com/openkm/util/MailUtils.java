@@ -342,16 +342,7 @@ public class MailUtils {
 	}
 	
 	/**
-	 * @param p
-	 * @throws MessagingException
-	 * @throws IOException
-	 * @throws RepositoryException 
-	 * @throws AccessDeniedException 
-	 * @throws PathNotFoundException 
-	 * @throws ItemExistsException 
-	 * @throws VirusDetectedException 
-	 * @throws FileSizeExceededException 
-	 * @throws UnsupportedMimeTypeException 
+	 * Add attachments to an imported mail.
 	 */
 	private static void addAttachments(String token, com.openkm.bean.Mail mail, Part p) throws 
 			MessagingException, IOException, UnsupportedMimeTypeException,
