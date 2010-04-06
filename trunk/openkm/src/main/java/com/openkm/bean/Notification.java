@@ -40,10 +40,10 @@ public class Notification implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("item="); sb.append(item);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -56,12 +56,12 @@ public class DashboardStatsDocumentResult implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("visited="); sb.append(visited);
 		sb.append(", date="); sb.append(date==null?null:date.getTime());
 		sb.append(", document="); sb.append(document);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

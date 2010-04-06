@@ -234,8 +234,8 @@ public class Document implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("path="); sb.append(path);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
@@ -254,7 +254,7 @@ public class Document implements Serializable {
 		sb.append(", convertibleToPdf="); sb.append(convertibleToPdf);
 		sb.append(", convertibleToSwf="); sb.append(convertibleToSwf);
 		sb.append(", notes="); sb.append(notes);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

@@ -55,12 +55,12 @@ public class User implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", email="); sb.append(email);
 		sb.append(", name="); sb.append(name);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

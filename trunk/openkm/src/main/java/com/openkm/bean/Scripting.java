@@ -30,9 +30,9 @@ public class Scripting implements Serializable {
 	public static final String SCRIPT_CODE = "okm:scriptCode";
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append("]");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("}");
 		return sb.toString();
 	}
 }

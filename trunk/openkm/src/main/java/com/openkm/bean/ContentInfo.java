@@ -68,13 +68,13 @@ public class ContentInfo implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("size="); sb.append(size);
 		sb.append(", folders="); sb.append(folders);
 		sb.append(", documents="); sb.append(documents);
 		sb.append(", mails="); sb.append(mails);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

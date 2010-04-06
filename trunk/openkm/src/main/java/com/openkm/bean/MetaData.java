@@ -61,12 +61,12 @@ public class MetaData implements Serializable {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("order="); sb.append(order);
 		sb.append(", type="); sb.append(type);
 		sb.append(", values="); sb.append(values);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }

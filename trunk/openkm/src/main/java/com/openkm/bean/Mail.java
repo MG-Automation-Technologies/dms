@@ -182,8 +182,8 @@ public class Mail implements Serializable {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
 		sb.append("path="); sb.append(path);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", permissions="); sb.append(permissions);
@@ -197,7 +197,7 @@ public class Mail implements Serializable {
 		sb.append(", content="); sb.append(content);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", attachments="); sb.append(attachments);
-		sb.append("]");
+		sb.append("}");
 		return sb.toString();
 	}
 }
