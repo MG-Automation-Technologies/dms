@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select ti.actorid_, ti.name_, ti.start_, ti.end_
+from jbpm_taskinstance as ti, jbpm_task as t, jbpm_processinstance as pi, jbpm_processdefinition as pd
+where ti.procinst_ = pi.id_
+and t.id_ = ti.task_
+order by ti.name_, ti.start_, ti.end_]]>
+	</queryString>
+	<field name="ACTORID_" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NAME_" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="START_" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="END_" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="Usuarios">
+		<groupExpression><![CDATA[$F{ACTORID_}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<staticText>
+					<reportElement x="156" y="30" width="128" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Inicio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="309" y="29" width="121" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fin]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="45" width="555" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="30" width="135" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tarea]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="242" y="0" width="100" height="17"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ACTORID_}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="182" y="0" width="60" height="17"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Usuario:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="453" y="29" width="102" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tiempo]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="52"/>
+				<textElement textAlignment="Center">
+					<font size="36" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Esquema de trabajo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="6" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="7" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="156" y="1" width="128" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{START_}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="309" y="0" width="121" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{END_}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="1" width="135" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAME_}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm.ss" isBlankWhenNull="true">
+				<reportElement x="453" y="1" width="102" height="19"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[new java.sql.Timestamp(($F{END_}.getTime()-$F{START_}.getTime())-1000*60*60)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="8" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
