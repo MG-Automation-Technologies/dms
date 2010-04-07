@@ -21,6 +21,7 @@ package es.git.openkm.backend.server;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +55,9 @@ import es.git.openkm.backend.client.config.Config;
 import es.git.openkm.bean.report.admin.ReportLockedDocument;
 import es.git.openkm.bean.report.admin.ReportSubscribedDocuments;
 import es.git.openkm.bean.report.admin.ReportUser;
+import es.git.openkm.dao.AbstractDAO;
 import es.git.openkm.dao.AuthDAO;
+import es.git.openkm.dao.WorkflowDAO;
 import es.git.openkm.dao.bean.User;
 import es.git.openkm.module.direct.DirectRepositoryModule;
 import es.git.openkm.util.ReportUtil;
@@ -75,9 +78,12 @@ public class OKMReportServletAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(OKMReportServletAdmin.class);
 	
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("doGet >>>");
         Collection col = null;
+        AbstractDAO dao = null;
+        Connection con = null;
         
         // Setting default report type
         int type = ReportUtil.REPORT_PDF_OUTPUT;
@@ -100,14 +106,16 @@ public class OKMReportServletAdmin extends HttpServlet {
 	        if (jasperFile.equals(Config.REPORT_REGISTERED_USERS)) {
 	        	col = reportUsers();
 	        	fileName = Config.REPORT_REGISTERED_USERS.substring(0, Config.REPORT_REGISTERED_USERS.indexOf(".")) + "." + reportType;
-	        	
 	        } else if (jasperFile.equals(Config.REPORT_LOCKED_DOCUMENTS)) {
 	        	col = reportLockedDocuments();
 	        	fileName = Config.REPORT_LOCKED_DOCUMENTS.substring(0, Config.REPORT_LOCKED_DOCUMENTS.indexOf(".")) + "." + reportType;
-
 	        } else if (jasperFile.equals(Config.REPORT_SUBSCRIBED_DOCUMENTS)) {
 	        	col = reportSubscribedDocuments();
 	        	fileName = Config.REPORT_SUBSCRIBED_DOCUMENTS.substring(0, Config.REPORT_SUBSCRIBED_DOCUMENTS.indexOf(".")) + "." + reportType;
+	        } else if (jasperFile.equals(Config.REPORT_WORKFLOW_WORKLOAD)) {
+	        	fileName = Config.REPORT_WORKFLOW_WORKLOAD.substring(0, Config.REPORT_WORKFLOW_WORKLOAD.indexOf(".")) + "." + reportType;
+	        	dao = WorkflowDAO.getInstance();
+	        	con = dao.getConnection();
 	        }
 	        
 	        if (downloading) {
@@ -141,11 +149,20 @@ public class OKMReportServletAdmin extends HttpServlet {
 	        Map<String, String> parameters = new HashMap<String, String>();
 	        String host = es.git.openkm.core.Config.APPLICATION_URL;
 	        parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
-			ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
+	        
+	        if (con != null) {
+	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, con);
+	        } else {
+	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
+	        }
         } catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (dao != null) {
+				dao.closeConnection(con);
+			}
 		}
     }
 	
