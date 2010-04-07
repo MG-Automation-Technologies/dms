@@ -20,6 +20,7 @@
 package es.git.openkm.util;
 
 import java.io.OutputStream;
+import java.sql.Connection;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,17 +49,9 @@ public class ReportUtil {
 	public static final int REPORT_PDF_OUTPUT = 2;
 
 	/**
-	 * Generates a report
-	 * 
-	 * @param out Response stream
-	 * @param fileReport Report filename
-	 * @param parameters Parameters map
-	 * @param outputType Report type
-	 * @param collection Collection values
-	 * @return OutputStream Jasper report bytes
-	 * @throws UnavailableException
-	 * @throws JRException
+	 * Generates a report based on a bean collection.
 	 */
+	@SuppressWarnings("unchecked")
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
 			Map<String, String> parameters, int outputType,	Collection colleccion) throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
@@ -74,26 +67,57 @@ public class ReportUtil {
 		try {
 			JasperReport jasperReport = (JasperReport) JasperCharged.get(fileReport);
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(colleccion));
-
-			switch (outputType) {
-			case REPORT_PDF_OUTPUT:
-				JasperExportManager.exportReportToPdfStream(print, out);
-				break;
-
-			case REPORT_HTML_OUTPUT:
-				JRHtmlExporter exporter = new JRHtmlExporter();
-				exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
-				exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	Boolean.FALSE);
-				exporter.exportReport();
-				break;
-			}
-
+			export(out, outputType, print);
 		} catch (JRException je) {
 			throw new JRException("Error generating report", je);
 		}
 
 		return out;
+	}
+
+	/**
+	 * Generates a report based on a jdbc connection.
+	 */
+	public static OutputStream generateReport(OutputStream out, String fileReport, 
+			Map<String, String> parameters, int outputType,	Connection con) throws Exception {
+		if (!JasperCharged.containsKey(fileReport)) {
+			ClassLoader cl = Thread.currentThread().getContextClassLoader();
+			try {
+				JasperReport jasperReport = JasperCompileManager.compileReport(cl.getResourceAsStream(fileReport));
+				JasperCharged.put(fileReport, jasperReport);
+			} catch (Exception e) {
+				throw new Exception("Compiling error: " + e.getMessage());
+			}
+		}
+
+		try {
+			JasperReport jasperReport = (JasperReport) JasperCharged.get(fileReport);
+			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, con);
+			export(out, outputType, print);
+		} catch (JRException je) {
+			throw new JRException("Error generating report", je);
+		}
+
+		return out;
+	}
+
+	/**
+	 * Export report 
+	 */
+	private static void export(OutputStream out, int outputType, JasperPrint print) throws JRException {
+		switch (outputType) {
+		case REPORT_PDF_OUTPUT:
+			JasperExportManager.exportReportToPdfStream(print, out);
+			break;
+
+		case REPORT_HTML_OUTPUT:
+			JRHtmlExporter exporter = new JRHtmlExporter();
+			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+			exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	Boolean.FALSE);
+			exporter.exportReport();
+			break;
+		}
 	}
 }
