@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (C) 2006-2010  Paco Avila & Josep Llort
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,7 +73,8 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		log.debug("service("+req+", "+resp+")");
 		req.setCharacterEncoding("UTF-8");
 		String token;
-		String path = new String(req.getParameter("id").getBytes("ISO-8859-1"), "UTF-8");
+		String id = req.getParameter("id");
+		String path = id != null?new String(id.getBytes("ISO-8859-1"), "UTF-8"):null;
 		String uuid = req.getParameter("uuid");
 		String checkout = req.getParameter("checkout");
 		String ver = req.getParameter("ver");
