@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (C) 2006-2010  Paco Avila & Josep Llort
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public class AboutPopup extends DialogBox implements ClickListener {
 	private HTML htmlAppVersion;
 	private Button button;
 	private String msg1 = "<b>Be Open, my friend!</b><br>";
-	private String copy = "&nbsp;&copy 2006 - 2009 GIT Consultors S.L. <br><br>";
+	private String copy = "&nbsp;&copy 2006 - 2010 OpenKM <br><br>";
 	private String team = "<b>OpenKM Team</b><br>" + 
 							"Francisco José Ávila Bermejo (<i>Monkiki</i>)<br>"+
 							"Josep Llort Tella (<i>Darkman97i</i>)<br><br>";
