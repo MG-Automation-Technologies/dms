@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (C) 2006-2010  Paco Avila & Josep Llort
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,13 +28,14 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRRtfExporter;
 
 /**
  * Utilidades para jasper reports
@@ -43,10 +44,10 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
  * 
  */
 public class ReportUtil {
-
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
 	public static final int REPORT_HTML_OUTPUT = 1;
 	public static final int REPORT_PDF_OUTPUT = 2;
+	public static final int REPORT_RTF_OUTPUT = 3;
 
 	/**
 	 * Generates a report based on a bean collection.
@@ -107,17 +108,26 @@ public class ReportUtil {
 	private static void export(OutputStream out, int outputType, JasperPrint print) throws JRException {
 		switch (outputType) {
 		case REPORT_PDF_OUTPUT:
-			JasperExportManager.exportReportToPdfStream(print, out);
+			JRPdfExporter pdfExp = new JRPdfExporter();
+			pdfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			pdfExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+			pdfExp.exportReport();
 			break;
 
 		case REPORT_HTML_OUTPUT:
-			JRHtmlExporter exporter = new JRHtmlExporter();
-			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
-			exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	Boolean.FALSE);
-			exporter.exportReport();
+			JRHtmlExporter htmlExp = new JRHtmlExporter();
+			htmlExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+			htmlExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			htmlExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+			htmlExp.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN,	Boolean.FALSE);
+			htmlExp.exportReport();
 			break;
+			
+		case REPORT_RTF_OUTPUT:
+			JRRtfExporter rtfExp = new JRRtfExporter();
+			rtfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			rtfExp.setParameter(JRExporterParameter.OUTPUT_WRITER, out);
+			rtfExp.exportReport();
 		}
 	}
 }
