@@ -35,35 +35,35 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 				<staticText>
 					<reportElement x="355" y="32" width="87" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[End]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="120" y="32" width="119" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Task]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="242" y="14" width="100" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{TI_ACTORID}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="182" y="14" width="60" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[User:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="453" y="32" width="102" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Elapse]]></text>
 				</staticText>
@@ -73,14 +73,14 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 				<staticText>
 					<reportElement x="249" y="31" width="93" height="15"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Start]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="32" width="100" height="14"/>
 					<textElement>
-						<font isBold="true"/>
+						<font fontName="SansSerif" isBold="true" isPdfEmbedded="false"/>
 					</textElement>
 					<text><![CDATA[Process]]></text>
 				</staticText>
@@ -96,9 +96,9 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 	<title>
 		<band height="44" splitType="Stretch">
 			<staticText>
-				<reportElement x="84" y="10" width="297" height="25"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="14" isBold="true"/>
+				<reportElement x="84" y="0" width="297" height="44"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="22" isBold="true" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Workflow Workload]]></text>
 			</staticText>
@@ -144,27 +144,37 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 		<band height="16" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="250" y="1" width="93" height="13"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TI_START}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="355" y="0" width="87" height="14"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TI_END}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="120" y="1" width="119" height="13"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{TI_NAME}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH.mm.ss" isBlankWhenNull="true">
 				<reportElement x="453" y="1" width="102" height="13"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[new java.sql.Timestamp(($F{TI_END}.getTime()-$F{TI_START}.getTime())-1000*60*60)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="100" height="14"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{PD_NAME}]]></textFieldExpression>
 			</textField>
 		</band>
