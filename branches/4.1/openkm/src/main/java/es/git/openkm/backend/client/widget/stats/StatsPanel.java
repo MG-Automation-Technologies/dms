@@ -1,6 +1,6 @@
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
- *  Copyright (C) 2006  GIT Consultors
+ *  Copyright (C) 2006-2010  Paco Avila & Josep Llort
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public class StatsPanel extends Composite {
 		table.setHTML(0, 0, "<b>OpenKM</b>");
 		table.setWidget(1, 0, version);
 		table.setHTML(2, 0, "<br>");
-		table.setHTML(3, 0, "&copy; GIT Consultors S.L.");
+		table.setHTML(3, 0, "&copy; 2006 - 2010 OpenKM");
 		table.setHTML(4, 0, "C/ Los Doscientos, 35 4º Izq");
 		table.setHTML(5, 0, "03007 Alicante");
 		table.setHTML(6, 0, "Spain");
