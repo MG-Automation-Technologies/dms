@@ -46,7 +46,7 @@ public class WorkflowDAO extends AbstractDAO {
 	 * @see es.git.openkm.dao.AbstractDAO#getSchema()
 	 */
 	protected String getSchema() {
-		return "jbpm_jpdl";
+		return "workflow_" + Config.SYSTEM_DATABASE;
 	}
 
 	private WorkflowDAO() {}

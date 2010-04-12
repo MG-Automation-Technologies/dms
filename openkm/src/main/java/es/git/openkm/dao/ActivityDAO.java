@@ -57,7 +57,7 @@ public class ActivityDAO extends AbstractDAO {
 	 * @see es.git.openkm.dao.AbstractDAO#getSchema()
 	 */
 	protected String getSchema() {
-		return "activity";
+		return "activity_" + Config.SYSTEM_DATABASE;
 	}
 
 	private ActivityDAO() {}

@@ -156,7 +156,7 @@ public abstract class AbstractDAO {
 				InputStream in = AbstractDAO.class.getResourceAsStream(schema + ".ddl");
 				if (in == null) {
 					String msg = "Configuration error: unknown schema '" + schema + "'";
-					log.debug(msg);
+					log.error(msg);
 					throw new Exception(msg);
 				}
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
