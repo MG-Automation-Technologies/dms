@@ -59,7 +59,7 @@ public class AuthDAO extends AbstractDAO {
 	 * @see com.openkm.dao.AbstractDAO#getSchema()
 	 */
 	protected String getSchema() {
-		return "auth";
+		return "auth_" + Config.SYSTEM_DATABASE;
 	}
 
 	private AuthDAO() {}

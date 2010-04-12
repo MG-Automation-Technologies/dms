@@ -56,7 +56,7 @@ public class DashboardStatsDAO extends AbstractDAO {
 	 * @see es.git.openkm.dao.AbstractDAO#getSchema()
 	 */
 	protected String getSchema() {
-		return "dashboard_stats";
+		return "dashboard_" + Config.SYSTEM_DATABASE;
 	}
 
 	private DashboardStatsDAO() {}
