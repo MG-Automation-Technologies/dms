@@ -115,6 +115,7 @@ public class Config {
 	public static String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
+	public static String PROPERTY_SYSTEM_DATABASE = "system.database";
 
 	public static String PROPERTY_UPDATE_INFO = "update.info";
 	public static String PROPERTY_APPLICATION_URL = "application.url";
@@ -184,6 +185,7 @@ public class Config {
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
 	public static String SYSTEM_LOGIN_LOWERCASE = "off";
+	public static String SYSTEM_DATABASE = "hsql";
 	
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
@@ -319,6 +321,7 @@ public class Config {
 			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 			SYSTEM_LOGIN_LOWERCASE = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE);
+			SYSTEM_DATABASE = config.getProperty(PROPERTY_SYSTEM_DATABASE, SYSTEM_DATABASE);
 			
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
@@ -382,6 +385,7 @@ public class Config {
 					PROPERTY_SYSTEM_CONVERT+"="+SYSTEM_CONVERT+", "+
 					PROPERTY_SYSTEM_PDF2SWF+"="+SYSTEM_PDF2SWF+", "+
 					PROPERTY_SYSTEM_ANTIVIR+"="+SYSTEM_ANTIVIR+", "+
+					PROPERTY_SYSTEM_DATABASE+"="+SYSTEM_DATABASE+", "+
 
 					PROPERTY_APPLICATION_URL+"="+APPLICATION_URL+", "+
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
