@@ -17,8 +17,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,7 +31,6 @@ import com.openkm.bean.workflow.Token;
 import com.openkm.bean.workflow.Transition;
 
 public class WorkflowUtils {
-	private static Logger log = LoggerFactory.getLogger(WorkflowUtils.class);
 	
 	/**
 	 * @param pd

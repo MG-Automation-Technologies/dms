@@ -31,7 +31,8 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<GWTOption> options = new ArrayList<GWTOption>();
 	private String type = TYPE_SIMPLE;
-	
+	private String value = "";
+
 	public Collection<GWTOption> getOptions() {
 		return options;
 	}
@@ -46,6 +47,14 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String toString() {
