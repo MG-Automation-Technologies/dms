@@ -1,5 +1,5 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
+*  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -23,14 +23,20 @@ package com.openkm.frontend.client.widget.foldertree;
 
 import java.util.Vector;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.EventTarget;
+import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-
 import com.openkm.frontend.client.Main;
 
 /**
@@ -39,7 +45,7 @@ import com.openkm.frontend.client.Main;
  * @author jllort
  * 
  */
-public class ExtendedTree extends Tree {
+public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem> {
 
 	private boolean flagPopup = false;
 	public int mouseX = 0;
@@ -86,6 +92,7 @@ public class ExtendedTree extends Tree {
 				case Event.BUTTON_RIGHT:
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 					flagPopup = true;
+					fireSelection(elementClicked(DOM.eventGetTarget(event)));
 					break;
 				default:
 					flagPopup = false;
@@ -98,6 +105,18 @@ public class ExtendedTree extends Tree {
 			super.onBrowserEvent(event);
 		}
 	} 
+	
+	/**
+	 * fire a change event
+	 */
+	private void fireSelection(TreeItem treeItem) {
+		 SelectElement nativeEvent = Document.get().createSelectElement();
+		 SelectionEvent.fire(this, treeItem);
+	}
+	
+	public HandlerRegistration addSelectionHandler(SelectionHandler<TreeItem> handler) {
+		return addHandler(handler, SelectionEvent.getType());
+	}
 	
 	/**
 	 * isDragged Returns true or false if is dragged

@@ -122,6 +122,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		tree.setStyleName("okm-Tree");
 		tree.addStyleName("okm-PanelSelected");
 		tree.addItem(rootItem);
+		
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
