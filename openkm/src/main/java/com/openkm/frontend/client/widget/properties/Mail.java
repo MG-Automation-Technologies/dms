@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -37,11 +36,9 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.foldertree.FolderSelectPopup;
 import com.openkm.frontend.client.widget.properties.attachment.ExtendedFlexTable;

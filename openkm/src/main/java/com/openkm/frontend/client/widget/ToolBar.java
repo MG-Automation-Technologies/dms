@@ -2269,13 +2269,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	}
 	
 	/**
-	 * Set current repository path
-	 */
-	public native void setPath(String path) /*-{
-		$doc.OKMApplet.setPath(path);
-	}-*/;
-	
-	/**
 	 * Lang refresh
 	 */
 	public void langRefresh() {

@@ -691,6 +691,7 @@ public class FolderSelectPopup extends DialogBox  {
 	 * @param entryPoint The entryPoint value
 	 */
 	public void setEntryPoint(int entryPoint) {
+		removeAllContextListItems();
 		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
 			contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
 			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
