@@ -306,6 +306,18 @@ public class OKMDocument {
 	}
 	
 	/* (non-Javadoc)
+	 * @see es.git.openkm.module.DocumentModule#isValid(java.lang.String, java.lang.String)
+	 */
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException {
+		log.debug("isValid({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		boolean valid = dm.isValid(token, docPath);
+		log.debug("isValid: {}", valid);
+		return valid;
+	}
+	
+	/* (non-Javadoc)
 	 * @see es.git.openkm.module.DocumentModule#getPath(java.lang.String, java.lang.String)
 	 */
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
