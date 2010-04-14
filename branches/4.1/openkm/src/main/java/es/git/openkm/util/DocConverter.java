@@ -124,6 +124,11 @@ public class DocConverter {
 				connection = new SocketOpenOfficeConnection(8100);
 				connection.connect();
 			
+				// Workaround for wrong Rich Tech Format MIME type in JODConverter
+				if (mimeFrom.equals("application/rtf")) {
+					mimeFrom = "text/rtf";
+				}
+				
 				// Convert
 				DocumentFormat dfFrom = new DefaultDocumentFormatRegistry().getFormatByMimeType(mimeFrom);
 				DocumentFormat dfTo = new DefaultDocumentFormatRegistry().getFormatByMimeType(mimeTo);
