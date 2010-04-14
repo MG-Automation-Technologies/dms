@@ -113,12 +113,12 @@ public class OKMMail {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
 	 */
-	public MailArray getChilds(String token, String mailPath) throws PathNotFoundException,
+	public MailArray getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
-		log.debug("getChilds({}, {})", token, mailPath);
+		log.debug("getChilds({}, {})", token, fldPath);
 		MailModule mm = ModuleManager.getMailModule();
 		MailArray ma = new MailArray();
-		Collection<Mail> col = mm.getChilds(token, mailPath);
+		Collection<Mail> col = mm.getChilds(token, fldPath);
 		ma.setValue((Mail []) col.toArray(new Mail[col.size()]));
 		log.debug("getChilds: {}", ma);
 		return ma;
