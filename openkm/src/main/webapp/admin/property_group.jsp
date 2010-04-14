@@ -60,7 +60,7 @@
 				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 				out.print("<td>"+fe.getLabel()+"</td>");
 				out.print("<td>"+fe.getName()+"</td>");
-				out.print("<td>"+fe.getValue()+"</td>");
+				//out.print("<td>"+fe.getValue()+"</td>");
 				out.print("<td>"+fe.getWidth()+"</td>");
 				out.print("<td>"+fe.getHeight()+"</td>");
 				
