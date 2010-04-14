@@ -45,7 +45,8 @@ public class Config {
 	public static final String OKMViewRepository = "/OpenKM"+INSTALL+"/admin/repository_view.jsp";
 	
 	// Report files
-	public static final String REPORT_REGISTERED_USERS 		= "ReportRegisteredUsers.jrxml";
-	public static final String REPORT_LOCKED_DOCUMENTS 		= "ReportLockedDocuments.jrxml";
-	public static final String REPORT_SUBSCRIBED_DOCUMENTS 	= "ReportSubscribedDocuments.jrxml";
+	public static final String REPORT_REGISTERED_USERS		= "ReportRegisteredUsers.jrxml";
+	public static final String REPORT_LOCKED_DOCUMENTS		= "ReportLockedDocuments.jrxml";
+	public static final String REPORT_SUBSCRIBED_DOCUMENTS	= "ReportSubscribedDocuments.jrxml";
+	public static final String REPORT_WORKFLOW_WORKLOAD		= "ReportWorkflowWorkload.jrxml";
 }
