@@ -25,6 +25,7 @@
 		out.println("<option value=\""+Config.REPORT_LOCKED_DOCUMENTS+"\">Locked documents</option>");
 		out.println("<option value=\""+Config.REPORT_SUBSCRIBED_DOCUMENTS+"\">Subscribed documents</option>");
 		out.println("<option value=\""+Config.REPORT_REGISTERED_USERS+"\">Registered users</option>");
+		out.println("<option value=\""+Config.REPORT_WORKFLOW_WORKLOAD+"\">Workflow workload</option>");
 		out.println("</select>");
 		out.println("</td></tr>");
 		out.println("<tr><td align=\"right\">");
