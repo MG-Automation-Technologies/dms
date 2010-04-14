@@ -23,6 +23,7 @@ package com.openkm.backend.server;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +57,9 @@ import com.openkm.backend.client.config.Config;
 import com.openkm.bean.report.admin.ReportLockedDocument;
 import com.openkm.bean.report.admin.ReportSubscribedDocuments;
 import com.openkm.bean.report.admin.ReportUser;
+import com.openkm.dao.AbstractDAO;
 import com.openkm.dao.AuthDAO;
+import com.openkm.dao.WorkflowDAO;
 import com.openkm.dao.bean.User;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.ReportUtil;
@@ -81,6 +84,8 @@ public class OKMReportServletAdmin extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("doGet >>>");
         Collection col = null;
+        AbstractDAO dao = null;
+        Connection con = null;
         
         // Setting default report type
         int type = ReportUtil.REPORT_PDF_OUTPUT;
@@ -103,14 +108,16 @@ public class OKMReportServletAdmin extends HttpServlet {
 	        if (jasperFile.equals(Config.REPORT_REGISTERED_USERS)) {
 	        	col = reportUsers();
 	        	fileName = Config.REPORT_REGISTERED_USERS.substring(0, Config.REPORT_REGISTERED_USERS.indexOf(".")) + "." + reportType;
-	        	
 	        } else if (jasperFile.equals(Config.REPORT_LOCKED_DOCUMENTS)) {
 	        	col = reportLockedDocuments();
 	        	fileName = Config.REPORT_LOCKED_DOCUMENTS.substring(0, Config.REPORT_LOCKED_DOCUMENTS.indexOf(".")) + "." + reportType;
-
 	        } else if (jasperFile.equals(Config.REPORT_SUBSCRIBED_DOCUMENTS)) {
 	        	col = reportSubscribedDocuments();
 	        	fileName = Config.REPORT_SUBSCRIBED_DOCUMENTS.substring(0, Config.REPORT_SUBSCRIBED_DOCUMENTS.indexOf(".")) + "." + reportType;
+	        } else if (jasperFile.equals(Config.REPORT_WORKFLOW_WORKLOAD)) {
+	        	fileName = Config.REPORT_WORKFLOW_WORKLOAD.substring(0, Config.REPORT_WORKFLOW_WORKLOAD.indexOf(".")) + "." + reportType;
+	        	dao = WorkflowDAO.getInstance();
+	        	con = dao.getConnection();
 	        }
 	        
 	        if (downloading) {
@@ -144,11 +151,20 @@ public class OKMReportServletAdmin extends HttpServlet {
 	        Map<String, String> parameters = new HashMap<String, String>();
 	        String host = com.openkm.core.Config.APPLICATION_URL;
 	        parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
-			ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
+	        
+	        if (con != null) {
+	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, con);
+	        } else {
+	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
+	        }
         } catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (dao != null) {
+				dao.closeConnection(con);
+			}
 		}
     }
 	
