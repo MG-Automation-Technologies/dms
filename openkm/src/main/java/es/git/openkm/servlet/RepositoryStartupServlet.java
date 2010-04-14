@@ -156,11 +156,11 @@ public class RepositoryStartupServlet extends HttpServlet {
 		
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
-        timer.schedule(ri, 60*1000, 24*60*60*1000); // First in 1 min, next each 24 hours
+        timer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
         
         log.info("*** Activating user mail importer ***");
         umi = new UserMailImporter();
-        timer.schedule(umi, 5*60*1000, 60*60*1000); // First in 5 mins, next each 1 hours
+        timer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
         
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
