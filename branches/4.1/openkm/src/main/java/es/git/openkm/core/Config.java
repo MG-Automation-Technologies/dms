@@ -122,7 +122,10 @@ public class Config {
 	public static String PROPERTY_DEFAULT_LANG = "default.lang";
 	public static String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
-		
+	
+	public static String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
+	public static String PROPERTY_SCHEDULE_MAIL_IMPORTER = "schedule.mail.importer";
+			
 	/**
 	 *  Default values
 	 */
@@ -192,7 +195,12 @@ public class Config {
 	public static String DEFAULT_LANG = "";
 	public static String USER_KEYWORDS_CACHE = "off";
 	public static String USER_SIZE_CACHE = "off";
-
+	
+	private static String SCHEDULE_REPOSITORY_INFO_STR = "86400"; // 24*60*60 = 24 hours
+	public static long SCHEDULE_REPOSITORY_INFO = Long.parseLong(SCHEDULE_REPOSITORY_INFO_STR) * 1000;
+	private static String SCHEDULE_MAIL_IMPORTER_STR = "3600"; // 60*60 = 1 hour
+	public static long SCHEDULE_MAIL_IMPORTER = Long.parseLong(SCHEDULE_MAIL_IMPORTER_STR) * 1000;
+		
 	// KEA
 	public static String KEA_THESAURUS_SKOS_FILE = "";
 	public static String KEA_THESAURUS_OWL_FILE = "";
@@ -328,6 +336,11 @@ public class Config {
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 			USER_KEYWORDS_CACHE = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE);
 			USER_SIZE_CACHE = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE);
+			
+			SCHEDULE_REPOSITORY_INFO_STR = config.getProperty(PROPERTY_SCHEDULE_REPOSITORY_INFO, SCHEDULE_REPOSITORY_INFO_STR);
+			SCHEDULE_REPOSITORY_INFO = Integer.parseInt(SCHEDULE_REPOSITORY_INFO_STR) * 1000;
+			SCHEDULE_MAIL_IMPORTER_STR = config.getProperty(PROPERTY_SCHEDULE_MAIL_IMPORTER, SCHEDULE_MAIL_IMPORTER_STR);
+			SCHEDULE_MAIL_IMPORTER = Integer.parseInt(SCHEDULE_MAIL_IMPORTER_STR) * 1000;
 						
 			fis.close();
 		} catch (FileNotFoundException e) {
@@ -362,7 +375,7 @@ public class Config {
 					PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER+"="+PRINCIPAL_LDAP_MAIL_SEARCH_FILTER+", "+
 					PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE+"="+PRINCIPAL_LDAP_MAIL_ATTRIBUTE+", "+
 
-					PROPERTY_MAX_FILE_SIZE+"="+(MAX_FILE_SIZE/ 1024 / 1024)+", "+
+					PROPERTY_MAX_FILE_SIZE+"="+(MAX_FILE_SIZE / 1024 / 1024)+", "+
 					PROPERTY_MAX_SEARCH_RESULTS+"="+MAX_SEARCH_RESULTS+", "+
 					
 					PROPERTY_RESTRICT_FILE_MIME+"="+RESTRICT_FILE_MIME+", "+
@@ -391,7 +404,10 @@ public class Config {
 					PROPERTY_UPDATE_INFO+"="+UPDATE_INFO+", "+
 					PROPERTY_DEFAULT_LANG+"="+DEFAULT_LANG+", "+
 					PROPERTY_USER_KEYWORDS_CACHE+"="+USER_KEYWORDS_CACHE+
-					PROPERTY_USER_SIZE_CACHE+"="+USER_SIZE_CACHE);
+					PROPERTY_USER_SIZE_CACHE+"="+USER_SIZE_CACHE+", "+
+					
+					PROPERTY_SCHEDULE_REPOSITORY_INFO+"="+(SCHEDULE_REPOSITORY_INFO / 1000)+", "+
+					PROPERTY_SCHEDULE_MAIL_IMPORTER+"="+(SCHEDULE_MAIL_IMPORTER / 1000));
 		}
 		
 		// Read MIME info
