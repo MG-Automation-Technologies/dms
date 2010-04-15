@@ -112,6 +112,7 @@ public class ExtendedTree extends Tree implements HasSelectionHandlers<TreeItem>
 	private void fireSelection(TreeItem treeItem) {
 		 SelectElement nativeEvent = Document.get().createSelectElement();
 		 SelectionEvent.fire(this, treeItem);
+		 setSelectedItem(treeItem);
 	}
 	
 	public HandlerRegistration addSelectionHandler(SelectionHandler<TreeItem> handler) {
