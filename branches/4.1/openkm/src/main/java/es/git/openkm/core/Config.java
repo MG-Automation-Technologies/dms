@@ -50,9 +50,6 @@ public class Config {
 	// Multihost
 	public static String INSTALL = "";
 
-	// Maximum allowed users
-	public static int MAX_USERS = 10;
-
 	// Configuration files
 	public static String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static String MIME_FILE = "mime.types";
