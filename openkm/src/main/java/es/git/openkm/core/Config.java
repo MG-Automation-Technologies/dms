@@ -105,6 +105,7 @@ public class Config {
 	public static String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
 	public static String PROPERTY_SYSTEM_DEMO = "system.demo";
+	public static String PROPERTY_SYSTEM_DEMO_USERS = "system.demo.users";
 	public static String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static String PROPERTY_SYSTEM_OCR = "system.ocr";
 	public static String PROPERTY_SYSTEM_OPENOFFICE = "system.openoffice";
@@ -178,6 +179,8 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - $documentUrl - $documentPath - $userId - $eventType";
 	
 	public static String SYSTEM_DEMO = "off";
+	private static String SYSTEM_DEMO_USERS_STR = "10";
+	public static int SYSTEM_DEMO_USERS = Integer.parseInt(SYSTEM_DEMO_USERS_STR);
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
 	public static String SYSTEM_OPENOFFICE = "off";
@@ -319,6 +322,8 @@ public class Config {
 			SUBSCRIPTION_TWITTER_STATUS = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
 			
 			SYSTEM_DEMO = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO);
+			SYSTEM_DEMO_USERS_STR = config.getProperty(PROPERTY_SYSTEM_DEMO_USERS, SYSTEM_DEMO_USERS_STR);
+			SYSTEM_DEMO_USERS = Integer.parseInt(SYSTEM_DEMO_USERS_STR);
 			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
@@ -389,6 +394,7 @@ public class Config {
 					PROPERTY_SUBSCRIPTION_TWITTER_STATUS+"="+SUBSCRIPTION_TWITTER_STATUS+", "+
 					
 					PROPERTY_SYSTEM_DEMO+"="+SYSTEM_DEMO+", "+
+					PROPERTY_SYSTEM_DEMO_USERS+"="+SYSTEM_DEMO_USERS+", "+
 					PROPERTY_SYSTEM_READONLY+"="+SYSTEM_READONLY+", "+
 					PROPERTY_SYSTEM_OCR+"="+SYSTEM_OCR+", "+
 					PROPERTY_SYSTEM_OPENOFFICE+"="+SYSTEM_OPENOFFICE+", "+
