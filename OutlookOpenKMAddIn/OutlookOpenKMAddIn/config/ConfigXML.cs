@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Microsoft.Win32;
+using OutlookOpenKMAddIn.util;
 
 namespace OutlookOpenKMAddIn.config
 {
@@ -13,6 +14,7 @@ namespace OutlookOpenKMAddIn.config
         // Configuration file params
         private const String OPENKM_CONFIGURATION_FILE_NAME = "openkm.xml";
         private const String OPENKM_FOLDER_NAME = "OpenKM";
+        private const String OPENKM_ENCRYPT_PASSWORD = "OpenKM secret";
 
         // Configuration xml tags
         private const String XML_TAG_OPENKM = "openkm";
@@ -78,7 +80,7 @@ namespace OutlookOpenKMAddIn.config
                         {
                             if (reader.Read())
                             {
-                                password = reader.Value;
+                                password = Crypt.DecryptString(reader.Value, OPENKM_ENCRYPT_PASSWORD);
                             }
                         }
                         break;
@@ -106,18 +108,18 @@ namespace OutlookOpenKMAddIn.config
 
             writer.Formatting = Formatting.Indented;
             writer.WriteStartDocument();
-            writer.WriteStartElement(XML_TAG_OPENKM, "");         // <openkm>
-            writer.WriteStartElement(XML_TAG_HOST, "");           // <host>
-            writer.WriteString(host);                             // host value
-            writer.WriteEndElement();                             // </host>
-            writer.WriteStartElement(XML_TAG_USER, "");           // <user>
-            writer.WriteString(user);                             // user value
-            writer.WriteEndElement();                             // </user>
-            writer.WriteStartElement(XML_TAG_PASSWORD, "");       // <password>
-            writer.WriteString(password);                             // password value
-            writer.WriteEndElement();                             // </password>
-            writer.WriteFullEndElement();                         // </openkm>
-            writer.WriteEndDocument();                            // EOF
+            writer.WriteStartElement(XML_TAG_OPENKM, "");                               // <openkm>
+            writer.WriteStartElement(XML_TAG_HOST, "");                                 // <host>
+            writer.WriteString(host);                                                   // host value
+            writer.WriteEndElement();                                                   // </host>
+            writer.WriteStartElement(XML_TAG_USER, "");                                 // <user>
+            writer.WriteString(user);                                                   // user value
+            writer.WriteEndElement();                                                   // </user>
+            writer.WriteStartElement(XML_TAG_PASSWORD, "");                             // <password>
+            writer.WriteString(Crypt.EncryptString(password, OPENKM_ENCRYPT_PASSWORD)); // password value
+            writer.WriteEndElement();                                                   // </password>
+            writer.WriteFullEndElement();                                               // </openkm>
+            writer.WriteEndDocument();                                                  // EOF
             writer.Close();
         }
 
