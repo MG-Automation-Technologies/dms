@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-using OutlookOpenKMAddIn.config;
+using MSOpenKMCore.config;
 
 namespace OutlookOpenKMAddIn.form
 {
