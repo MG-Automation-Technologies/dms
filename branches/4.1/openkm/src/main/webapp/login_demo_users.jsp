@@ -25,24 +25,22 @@
     for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
       String token = it.next();
       SessionInfo si = sm.getInfo(token);
-      if (!users.equals(Config.ADMIN_USER)) {
-        out.print("<tr><td>"+si.getSession().getUserID()+"</td><td>"+si.getCreation().getTime()+"</td><td>"+si.getAccess().getTime()+"</td</tr>");
-      }
+      out.print("<tr><td>"+si.getSession().getUserID()+"</td><td>"+si.getCreation().getTime()+"</td><td>"+si.getAccess().getTime()+"</td</tr>");
       users.add(si.getSession().getUserID());
     }
     out.println("</table>");
   }
 
   out.println("</td></tr>");
-  out.println("<tr><td class=\"demo_title\">- AVAILABLE USERS -</td></tr>");
+  out.println("<tr><td class=\"demo_title\">- AVAILABLE DEMO USERS -</td></tr>");
   out.println("<tr><td>");
 
   String availables = "<table class=\"demo_list\" align=\"center\">";
   availables += "<tr><th>User</th><th>Password</th></tr>";
-  for (int i=0; i<10; i++) {
-    String userID = "user" + i;
-    if (!users.contains(userID) && !users.equals("system")){
-      availables += "<tr><td>" + userID + "</td><td>pass" + i +"</td></tr>";
+  for (int i=0; i<Config.SYSTEM_DEMO_USERS; i++) {
+    String userID = "user" + String.format("%02d", i);
+    if (!users.contains(userID)) {
+      availables += "<tr><td>" + userID + "</td><td>pass" + String.format("%02d", i) +"</td></tr>";
       userAvailable = true;
     }
   }
