@@ -500,4 +500,8 @@ public class Main implements EntryPoint {
 	public static native String getIsMobil() /*-{
 		return $wnd.isMobil;
 	}-*/;
+	
+	public static native String getIsError() /*-{
+		return $wnd.error;
+	}-*/;
 }

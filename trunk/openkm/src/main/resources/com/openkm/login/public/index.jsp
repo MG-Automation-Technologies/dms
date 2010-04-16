@@ -32,6 +32,7 @@
 			var docPath = "<%=request.getParameter("docPath")!=null?request.getParameter("docPath"):"" %>";
 			var fldPath = "<%=request.getParameter("fldPath")!=null?request.getParameter("fldPath"):"" %>";
 			var isMobil = "<%=FormatUtil.isMobile(request)?"on":"off" %>";
+			var error = "<%=request.getParameter("error")!=null?request.getParameter("error"):"" %>";
 		</script>
 	</head>
 	<body>
