@@ -244,6 +244,7 @@
     <Compile Include="OpenKMAddIn.Designer.cs">
       <DependentUpon>OpenKMAddIn.Designer.xml</DependentUpon>
     </Compile>
+    <Compile Include="util\Crypt.cs" />
     <Compile Include="ws\OKMAuthService.cs" />
     <Compile Include="ws\OKMDocumentService.cs" />
     <Compile Include="ws\OKMFolderService.cs" />
