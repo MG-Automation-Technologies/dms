@@ -133,6 +133,10 @@
     <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MSOpenKMCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MSOpenKMCore\MSOpenKMCore\bin\Release\MSOpenKMCore.dll</HintPath>
+    </Reference>
     <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <Private>False</Private>
     </Reference>
@@ -158,7 +162,6 @@
     <Compile Include="form\ConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="config\ConfigXML.cs" />
     <Compile Include="ExplorerWindow.cs" />
     <Compile Include="OpenKMAddIn_Code.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -244,12 +247,6 @@
     <Compile Include="OpenKMAddIn.Designer.cs">
       <DependentUpon>OpenKMAddIn.Designer.xml</DependentUpon>
     </Compile>
-    <Compile Include="util\Crypt.cs" />
-    <Compile Include="ws\OKMAuthService.cs" />
-    <Compile Include="ws\OKMDocumentService.cs" />
-    <Compile Include="ws\OKMFolderService.cs" />
-    <Compile Include="ws\OKMMailService.cs" />
-    <Compile Include="ws\OKMRepositoryService.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->

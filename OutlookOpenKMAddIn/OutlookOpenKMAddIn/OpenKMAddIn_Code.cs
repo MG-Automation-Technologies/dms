@@ -10,9 +10,9 @@ using System.Windows.Forms;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 
-using OutlookOpenKMAddIn.config;
+using MSOpenKMCore.config;
 using OutlookOpenKMAddIn.form;
-using OutlookOpenKMAddIn.ws;
+using MSOpenKMCore.ws;
 
 namespace OutlookOpenKMAddIn
 {
