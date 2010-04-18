@@ -57,6 +57,8 @@ public class FormatUtil {
 			str = df.format(size / 1048576.0) + " MB";
 		} else if (size /  1099511627776L < 1) {
 			str = df.format(size / 1073741824.0) + " GB";
+		} else if (size /  1125899906842624L < 1) {
+			str = df.format(size / 1099511627776.0) + " TB";
 		} else {
 			str = "BIG";
 		}
