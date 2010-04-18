@@ -96,7 +96,7 @@ public class OKMStatsGraphServletAdmin extends HttpServlet {
 				LegendTitle legend = new LegendTitle(plot, new ColumnArrangement(), new ColumnArrangement());
 				legend.setPosition(RectangleEdge.BOTTOM);
 				legend.setFrame(BlockBorder.NONE);
-				legend.setItemFont(new Font("Tahoma", Font.BOLD, 12));
+				legend.setItemFont(new Font("Tahoma", Font.PLAIN, 12));
 				chart.removeLegend();
 				chart.addLegend(legend);
 
