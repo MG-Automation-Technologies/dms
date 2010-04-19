@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.InvocationException;
@@ -158,6 +159,8 @@ public final class Main implements EntryPoint, WindowCloseListener {
 		// Tries to capture lang parameter
 		if (loc.getParameter("lang")!=null && !loc.getParameter("lang").equals("")) {
 			lang = loc.getParameter("lang");
+		} else if (Cookies.getCookie("lang") != null && !Cookies.getCookie("lang").equals("")) {
+			lang = Cookies.getCookie("lang");
 		} else {
 			// First we initialize language values
 			lang = Util.getBrowserLanguage();
