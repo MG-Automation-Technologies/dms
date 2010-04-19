@@ -224,6 +224,16 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 	
 	@Override
+	public Collection<TaskInstance> findPooledTaskInstances(String token)
+			throws RepositoryException {
+		log.debug("findPooledTaskInstances(" + token + ")");
+		WorkflowModule wm = ModuleManager.getWorkflowModule();
+		Collection<TaskInstance> result = wm.findPooledTaskInstances(token);
+		log.debug("findPooledTaskInstances: "+result);
+		return result;
+	}
+	
+	@Override
 	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId)
 			throws RepositoryException {
 		log.debug("findTaskInstances(" + token + ", " + processInstanceId + ")");

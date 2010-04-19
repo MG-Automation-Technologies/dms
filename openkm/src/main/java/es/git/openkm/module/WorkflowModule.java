@@ -183,6 +183,13 @@ public interface WorkflowModule {
 
 	/**
 	 * @param token
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public Collection<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException;
+
+	/**
+	 * @param token
 	 * @param processInstanceId
 	 * @return
 	 * @throws RepositoryException
