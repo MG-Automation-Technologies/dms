@@ -36,7 +36,7 @@ div#logo {
   background-repeat: no-repeat;
   width: 160px;
   margin: 15px auto 15px auto;
-  height: 35px;
+  height: 38px;
 }
 
 div#text {
@@ -48,8 +48,8 @@ div#error {
   font-weight: bold;
   font-size: 14px;
   text-align: center;
-  height: 18px;
-  margin-bottom: 5px;
+  height: 16px;
+  margin-bottom: 3px;
 }
 
 div#form {
