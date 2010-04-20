@@ -193,8 +193,7 @@ public class Dashboard extends ExtendedComposite {
 		mailDashboard.refreshAll();
 		newsDashboard.refreshAllSearchs();
 		generalDashboard.refreshAll();
-		workflowDashboard.findUserTaskInstances();
-		workflowDashboard.findPooledTaskInstances();
+		workflowDashboard.refreshAll();
 		keyMapDashboard.refreshAll();
 	}
 }

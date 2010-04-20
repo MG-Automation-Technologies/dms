@@ -44,4 +44,5 @@ public interface OKMWorkflowServiceAsync {
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );
 	public void addComment(double tokenId, String message, AsyncCallback<?> callback );
 	public void findPooledTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
+	public void setTaskInstanceActorId(double id, AsyncCallback<?> callback );
 }
