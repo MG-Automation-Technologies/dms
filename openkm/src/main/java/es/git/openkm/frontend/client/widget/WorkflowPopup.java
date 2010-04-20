@@ -169,7 +169,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	final AsyncCallback<Object> callbackRunProcessDefinition = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
-			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
+			Main.get().mainPanel.dashboard.workflowDashboard.refreshAll();
 		}
 
 		public void onFailure(Throwable caught) {

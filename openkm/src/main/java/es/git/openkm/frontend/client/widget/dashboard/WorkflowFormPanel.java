@@ -585,7 +585,7 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	final AsyncCallback<Object> callbackSetTaskInstanceValues = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			Main.get().mainPanel.dashboard.workflowDashboard.findUserTaskInstances();
+			Main.get().mainPanel.dashboard.workflowDashboard.refreshAll();
 			clearPanel();
 		}
 

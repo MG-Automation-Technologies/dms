@@ -69,6 +69,8 @@ public class WorkflowDashboard extends Composite {
 		
 		pendingTasks = new WorkflowWidget("dashboard.workflow.pending.tasks", "img/icon/workflow.gif", true);
 		pendingPooledTasks = new WorkflowWidget("dashboard.workflow.pending.tasks.without.owner", "img/icon/workflow.gif", true);
+		pendingTasks.setIsWidgetPendingTask();
+		pendingPooledTasks.setIsWidgetPooledTask();
 		workflowFormPanel = new WorkflowFormPanel();
 		
 		vPanelLeft.add(pendingTasks);
@@ -116,7 +118,7 @@ public class WorkflowDashboard extends Composite {
 	/**
 	 * Get subscribed task instances callback
 	 */
-	final AsyncCallback<List<GWTTaskInstance>> callbackFindUserTaskInstancess = new AsyncCallback<List<GWTTaskInstance>>() {
+	final AsyncCallback<List<GWTTaskInstance>> callbackFindUserTaskInstances = new AsyncCallback<List<GWTTaskInstance>>() {
 		public void onSuccess(List<GWTTaskInstance> result){
 			pendingTasks.setTasks(result);
 			Main.get().mainPanel.bottomPanel.userInfo.setNewsWorkflows(result.size());
@@ -132,7 +134,7 @@ public class WorkflowDashboard extends Composite {
 	/**
 	 * Get subscribed pooled task instances callback
 	 */
-	final AsyncCallback<List<GWTTaskInstance>> callbackPooledTaskInstancess = new AsyncCallback<List<GWTTaskInstance>>() {
+	final AsyncCallback<List<GWTTaskInstance>> callbackPooledTaskInstances = new AsyncCallback<List<GWTTaskInstance>>() {
 		public void onSuccess(List<GWTTaskInstance> result){
 			pendingPooledTasks.setTasks(result);
 			pendingPooledTasks.unsetRefreshing();
@@ -144,21 +146,64 @@ public class WorkflowDashboard extends Composite {
 		}
 	};
 	
-	public void findUserTaskInstances() {
+	/**
+	 * Get task instance actor id callback
+	 */
+	final AsyncCallback<Object> callbackSetTaskInstanceActorId = new AsyncCallback<Object>() {
+		public void onSuccess(Object result){
+			pendingPooledTasks.resetPooledTaskInstance();
+			pendingPooledTasks.unsetRefreshing();
+			refreshAll();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("setTaskInstanceActorId", caught);
+			pendingPooledTasks.resetPooledTaskInstance();
+			pendingPooledTasks.unsetRefreshing();
+		}
+	};
+	
+	/**
+	 * refresh all
+	 */
+	public void refreshAll() {
+		findUserTaskInstances();
+		findPooledTaskInstances();
+	}
+	
+	/**
+	 * findUserTaskInstances
+	 */
+	private void findUserTaskInstances() {
 		if (!firstTime) {
 			pendingTasks.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
-		workflowService.findUserTaskInstances(callbackFindUserTaskInstancess);
+		workflowService.findUserTaskInstances(callbackFindUserTaskInstances);
 	}
 	
-	public void findPooledTaskInstances() {
+	/**
+	 * findPooledTaskInstances
+	 */
+	private void findPooledTaskInstances() {
 		if (!firstTime) {
 			pendingPooledTasks.setRefreshing();
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
-		workflowService.findPooledTaskInstances(callbackPooledTaskInstancess);
+		workflowService.findPooledTaskInstances(callbackPooledTaskInstances);
+	}
+	
+	/**
+	 * setTaskInstanceActorId
+	 */
+	public void setTaskInstanceActorId() {
+		if (pendingPooledTasks.getPooledTaskInstance() != null) {
+			GWTTaskInstance taskInstance = pendingPooledTasks.getPooledTaskInstance();
+			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+			endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+			workflowService.setTaskInstanceActorId(taskInstance.getId(), callbackSetTaskInstanceActorId);
+		}
 	}
 }
