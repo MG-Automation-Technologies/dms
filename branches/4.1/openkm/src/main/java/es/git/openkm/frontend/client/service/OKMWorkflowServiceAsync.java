@@ -27,7 +27,6 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import es.git.openkm.frontend.client.OKMException;
 import es.git.openkm.frontend.client.bean.GWTFormElement;
 import es.git.openkm.frontend.client.bean.GWTProcessDefinition;
 import es.git.openkm.frontend.client.bean.GWTTaskInstance;
@@ -44,4 +43,5 @@ public interface OKMWorkflowServiceAsync {
 	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormElement>>> callback);
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );
 	public void addComment(double tokenId, String message, AsyncCallback<?> callback );
+	public void findPooledTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
 }

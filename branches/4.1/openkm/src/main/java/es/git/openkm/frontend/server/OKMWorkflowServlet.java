@@ -123,6 +123,29 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		return taskInstances;
 	}
 	
+
+	/* (non-Javadoc)
+	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#findPooledTaskInstances()
+	 */
+	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException {
+		log.debug("findPooledTaskInstances()");
+		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
+		String token = getToken();
+		
+		try {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances(token).iterator(); it.hasNext();) {
+				taskInstances.add(Util.copy(it.next()));
+			}
+			
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		
+		log.debug("findPooledTaskInstances:");
+		return taskInstances;
+	}
+	
 	/* (non-Javadoc)
 	 * @see es.git.openkm.frontend.client.service.OKMWorkflowService#getProcessDefinitionForms(long)
 	 */
