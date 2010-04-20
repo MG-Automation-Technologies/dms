@@ -51,6 +51,7 @@ public class WorkflowDashboard extends Composite {
 	private VerticalPanel vPanelRight;
 	
 	private WorkflowWidget pendingTasks;
+	private WorkflowWidget pendingPooledTasks;
 	public WorkflowFormPanel workflowFormPanel;
 	
 	private boolean firstTime = true; 
@@ -67,9 +68,11 @@ public class WorkflowDashboard extends Composite {
 		hPanel.add(vPanelRight);
 		
 		pendingTasks = new WorkflowWidget("dashboard.workflow.pending.tasks", "img/icon/workflow.gif", true);
+		pendingPooledTasks = new WorkflowWidget("dashboard.workflow.pending.tasks.without.owner", "img/icon/workflow.gif", true);
 		workflowFormPanel = new WorkflowFormPanel();
 		
 		vPanelLeft.add(pendingTasks);
+		vPanelLeft.add(pendingPooledTasks);
 		vPanelRight.add(workflowFormPanel);
 		
 		hPanel.setHeight("100%");
@@ -80,6 +83,9 @@ public class WorkflowDashboard extends Composite {
 		// Getting user tasks
 		findUserTaskInstances();
 		
+		// Getting pooled task instances
+		findPooledTaskInstances();
+		
 		firstTime=false; // Must not show status first time loading OpenKM ( on startup )
 	}
 	
@@ -88,6 +94,7 @@ public class WorkflowDashboard extends Composite {
 	 */
 	public void langRefresh() {
 		pendingTasks.langRefresh();
+		pendingPooledTasks.langRefresh();
 		workflowFormPanel.langRefresh();
 	}
 	
@@ -101,12 +108,13 @@ public class WorkflowDashboard extends Composite {
 		
 		// Trying to distribute widgets on columns with max size
 		pendingTasks.setWidth(columnWidth);
+		pendingPooledTasks.setWidth(columnWidth);
 		workflowFormPanel.setWidth(""+columnWidth);
 		workflowFormPanel.setHeight("100%");
 	}
 	
 	/**
-	 * Get subscribed documents callback
+	 * Get subscribed task instances callback
 	 */
 	final AsyncCallback<List<GWTTaskInstance>> callbackFindUserTaskInstancess = new AsyncCallback<List<GWTTaskInstance>>() {
 		public void onSuccess(List<GWTTaskInstance> result){
@@ -121,6 +129,21 @@ public class WorkflowDashboard extends Composite {
 		}
 	};
 	
+	/**
+	 * Get subscribed pooled task instances callback
+	 */
+	final AsyncCallback<List<GWTTaskInstance>> callbackPooledTaskInstancess = new AsyncCallback<List<GWTTaskInstance>>() {
+		public void onSuccess(List<GWTTaskInstance> result){
+			pendingPooledTasks.setTasks(result);
+			pendingPooledTasks.unsetRefreshing();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("findPooledTaskInstances", caught);
+			pendingPooledTasks.unsetRefreshing();
+		}
+	};
+	
 	public void findUserTaskInstances() {
 		if (!firstTime) {
 			pendingTasks.setRefreshing();
@@ -128,5 +151,14 @@ public class WorkflowDashboard extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
 		workflowService.findUserTaskInstances(callbackFindUserTaskInstancess);
+	}
+	
+	public void findPooledTaskInstances() {
+		if (!firstTime) {
+			pendingPooledTasks.setRefreshing();
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		workflowService.findPooledTaskInstances(callbackPooledTaskInstancess);
 	}
 }
