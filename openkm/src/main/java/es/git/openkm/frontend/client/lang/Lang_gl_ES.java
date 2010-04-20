@@ -518,7 +518,7 @@ public class Lang_gl_ES {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Documentos más modificados el último mes");
 	    lang.put("dashboard.general.last.uploaded.documents", "Últimos documentos subidos");
 	    lang.put("dashboard.workflow.pending.tasks", "Tareas pendientes");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Tareas pendientes no asignadas a un usuario");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Tareas pendientes no asignadas");
 	    lang.put("dashboard.workflow.task", "Tarea");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nombre");

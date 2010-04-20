@@ -520,7 +520,7 @@ public class Lang_pl_PL {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Najczęściej modyfikowane w ostatnim miesiącu");
 	    lang.put("dashboard.general.last.uploaded.documents", "Ostatnio załadowane dokumenty");
 	    lang.put("dashboard.workflow.pending.tasks", "Zadania oczekujące");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Zadanie");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nazwa");

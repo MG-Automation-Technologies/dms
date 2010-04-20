@@ -518,7 +518,7 @@ public class Lang_el_GR {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Έγγραφα με τις περισσότερες εμφανίσεις τον περασμένο μήνα");
 	    lang.put("dashboard.general.last.uploaded.documents", "Τελευταία ανεβασμένα έγγραφα");
 	    lang.put("dashboard.workflow.pending.tasks", "Εν αναμονή εργασίες");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Εργασία");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Όνομα");
