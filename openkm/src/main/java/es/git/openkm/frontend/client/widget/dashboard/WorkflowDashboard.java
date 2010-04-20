@@ -68,7 +68,7 @@ public class WorkflowDashboard extends Composite {
 		hPanel.add(vPanelRight);
 		
 		pendingTasks = new WorkflowWidget("dashboard.workflow.pending.tasks", "img/icon/workflow.gif", true);
-		pendingPooledTasks = new WorkflowWidget("dashboard.workflow.pending.tasks.without.owner", "img/icon/workflow.gif", true);
+		pendingPooledTasks = new WorkflowWidget("dashboard.workflow.pending.tasks.unassigned", "img/icon/workflow.gif", true);
 		pendingTasks.setIsWidgetPendingTask();
 		pendingPooledTasks.setIsWidgetPooledTask();
 		workflowFormPanel = new WorkflowFormPanel();
