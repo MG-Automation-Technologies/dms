@@ -518,7 +518,7 @@ public class Lang_mk_MK {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Најпроменувани документи во минатаиот месец");
 	    lang.put("dashboard.general.last.uploaded.documents", "Последно испратени документи");
 	    lang.put("dashboard.workflow.pending.tasks", "Задачи на листа на чекање");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Задача");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Име");

@@ -519,7 +519,7 @@ public class Lang_ca_ES {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Documents més modificats el darrer mes");
 	    lang.put("dashboard.general.last.uploaded.documents", "Darrers documents pujats");
 	    lang.put("dashboard.workflow.pending.tasks", "Tasques pendents");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Tasques pendents no assignades a cap usuari");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Tasques pendents no assignades");
 	    lang.put("dashboard.workflow.task", "Tasca");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nom");

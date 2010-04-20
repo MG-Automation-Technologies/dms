@@ -518,7 +518,7 @@ public class Lang_hu_HU {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Előző héten legtöbbet nézett dokumentumok");
 	    lang.put("dashboard.general.last.uploaded.documents", "Legutóbb feltöltött dokumentumok");
 	    lang.put("dashboard.workflow.pending.tasks", "Függőben lévő feladatok");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Feladat");
 	    lang.put("dashboard.workflow.task.id", "Azonosító");
 	    lang.put("dashboard.workflow.task.name", "Név");

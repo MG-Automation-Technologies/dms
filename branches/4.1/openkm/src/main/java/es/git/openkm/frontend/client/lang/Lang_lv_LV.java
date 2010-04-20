@@ -518,7 +518,7 @@ public class Lang_lv_LV {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Iepriekšējā mēneša visvairāk labotie dokumenti");
 	    lang.put("dashboard.general.last.uploaded.documents", "Pēdējie augšupielādētie dokumenti");
 	    lang.put("dashboard.workflow.pending.tasks", "Nepabeigtie uzdevumi");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Uzdevums");
 	    lang.put("dashboard.workflow.task.id", "Identifikators");
 	    lang.put("dashboard.workflow.task.name", "Nosaukums");

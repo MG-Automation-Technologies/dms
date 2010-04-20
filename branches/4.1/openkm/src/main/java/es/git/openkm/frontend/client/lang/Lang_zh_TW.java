@@ -516,7 +516,7 @@ public class Lang_zh_TW {
 		lang.put("dashboard.general.last.month.top.modified.documents", "最近一個月被修改多次的文件");
 		lang.put("dashboard.general.last.uploaded.documents", "最新上傳文件");
 	    lang.put("dashboard.workflow.pending.tasks", "Pending作業");
-	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "作業");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "名稱");
