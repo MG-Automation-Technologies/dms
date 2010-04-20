@@ -38,9 +38,9 @@ public class Lang_ru_RU {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "dd-MM-yyyy hh:mm:ss");
+	    lang.put("general.date.pattern", "dd-MM-yyyy HH:mm:ss");
 	    lang.put("general.day.pattern", "dd-MM-yyyy");
-	    lang.put("general.hour.pattern", "hh:mm:ss");
+	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
 	    lang.put("startup.openkm", "Загружаю OpenKM");
