@@ -369,6 +369,7 @@ public class Lang_ru_RU {
 	    lang.put("confirm.delete.saved.search", "Вы действительно хотите удалить этот сохранённый поиск?");
 	    lang.put("confirm.delete.user.news", "Вы действительно хотите удалить новости пользователя?");
 	    lang.put("confirm.delete.mail", "Вы действительно хотите удалить почтовое сообщение?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Контекст");
@@ -522,6 +523,7 @@ public class Lang_ru_RU {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Наиболее модифицируемые за прошлый месяц документы"); // error in english source!!!!
 	    lang.put("dashboard.general.last.uploaded.documents", "Последние загруженные документы");
 	    lang.put("dashboard.workflow.pending.tasks", "Задачи в очереди");
+	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
 	    lang.put("dashboard.workflow.task", "Задача");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Название");

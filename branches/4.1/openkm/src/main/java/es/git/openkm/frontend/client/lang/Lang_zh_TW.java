@@ -362,6 +362,7 @@ public class Lang_zh_TW {
 	    lang.put("confirm.delete.saved.search", "確定要刪除已儲存的搜尋條件?");
 	    lang.put("confirm.delete.user.news", "確定要刪除使用者新進文件?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "範圍");
@@ -515,6 +516,7 @@ public class Lang_zh_TW {
 		lang.put("dashboard.general.last.month.top.modified.documents", "最近一個月被修改多次的文件");
 		lang.put("dashboard.general.last.uploaded.documents", "最新上傳文件");
 	    lang.put("dashboard.workflow.pending.tasks", "Pending作業");
+	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
 	    lang.put("dashboard.workflow.task", "作業");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "名稱");

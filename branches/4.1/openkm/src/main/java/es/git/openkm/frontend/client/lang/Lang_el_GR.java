@@ -364,6 +364,7 @@ public class Lang_el_GR {
 	    lang.put("confirm.delete.saved.search", "¿ Είστε σίγουροι ότι θέλετε να διαγράψετε τις αποθηκευμένες αναζητήσεις ?");
 	    lang.put("confirm.delete.user.news", "¿ Είστε σίγουροι ότι θέλετε να διαγράψετε τις ειδήσεις χρήστη ?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Συμφραζόμενα");
@@ -517,6 +518,7 @@ public class Lang_el_GR {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Έγγραφα με τις περισσότερες εμφανίσεις τον περασμένο μήνα");
 	    lang.put("dashboard.general.last.uploaded.documents", "Τελευταία ανεβασμένα έγγραφα");
 	    lang.put("dashboard.workflow.pending.tasks", "Εν αναμονή εργασίες");
+	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
 	    lang.put("dashboard.workflow.task", "Εργασία");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Όνομα");
