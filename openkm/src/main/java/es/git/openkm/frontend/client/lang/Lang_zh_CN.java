@@ -366,6 +366,7 @@ public class Lang_zh_CN {
 	    lang.put("confirm.delete.saved.search", "你真的想删除查询条件吗？");//¿ Do you really want to delete saved search ?
 	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？");//¿ Do you really want to delete user news ?
 	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？");//¿ Do you really want to delete mail ?
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "范围");
@@ -519,6 +520,7 @@ public class Lang_zh_CN {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "上个月被修改次数最多的文档");//Last month top modified documents
 	    lang.put("dashboard.general.last.uploaded.documents", "最近上传的文档");//Last uploaded documents
 	    lang.put("dashboard.workflow.pending.tasks", "挂起的任务");//Pending tasks
+	    lang.put("dashboard.workflow.pending.tasks.without.owner","Pending task not assigned to a user");
 	    lang.put("dashboard.workflow.task", "任务");//Task
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "名称");//Name
