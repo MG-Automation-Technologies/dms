@@ -963,10 +963,10 @@ public class DirectDashboardModule implements DashboardModule {
 		// Set already visited nodes
 		for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
 			DashboardStatsDocumentResult dsDocResult = itDocs.next();
-								
+			
 			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
 				DashboardStats visitedNode = itVisited.next();
-			
+				
 				// Same node path and same activity log date ? 
 				if (visitedNode.getDsNode().equals(dsDocResult.getDocument().getPath()) && 
 						visitedNode.getDsDate().equals(dsDocResult.getDate())) {
