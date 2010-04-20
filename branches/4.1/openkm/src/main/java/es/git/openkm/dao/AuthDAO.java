@@ -279,6 +279,10 @@ public class AuthDAO extends AbstractDAO {
 		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user=? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
 		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users "+(filterByActive?"WHERE usr_active=true":"")+" ORDER BY usr_id";
+		}
+		
 		try {
 			con = getConnection();
 			
@@ -338,6 +342,10 @@ public class AuthDAO extends AbstractDAO {
 		String sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? "+(filterByActive?"AND usr_active='true'":"")+" ORDER BY usr_id";
 		String sqlUserRoles = "SELECT ur_role FROM user_role WHERE ur_user = ? ORDER BY ur_role";
 		ArrayList<User> al = new ArrayList<User>();
+		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sqlUser = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? "+(filterByActive?"AND usr_active=true":"")+" ORDER BY usr_id";
+		}
 		
 		try {
 			con = getConnection();
@@ -697,7 +705,11 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rs = null;
 		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_user=? "+(filterByActive?"AND ma_active='true'":"")+" ORDER BY ma_id";
 		ArrayList<MailAccount> al = new ArrayList<MailAccount>();
-				
+		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts WHERE ma_user=? "+(filterByActive?"AND ma_active=true":"")+" ORDER BY ma_id";
+		}
+		
 		try {
 			con = getConnection();
 			
@@ -741,7 +753,11 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rs = null;
 		String sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts "+(filterByActive?"WHERE ma_active='true'":"")+" ORDER BY ma_id";
 		ArrayList<MailAccount> al = new ArrayList<MailAccount>();
-				
+		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sql = "SELECT ma_id, ma_user, ma_mhost, ma_mfolder, ma_muser, ma_mpass, ma_active FROM mail_accounts "+(filterByActive?"WHERE ma_active=true":"")+" ORDER BY ma_id";
+		}
+		
 		try {
 			con = getConnection();
 			
@@ -957,7 +973,11 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rs = null;
 		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_user=? "+(filterByActive?"AND ta_active='true'":"")+" ORDER BY ta_id";
 		ArrayList<TwitterAccount> al = new ArrayList<TwitterAccount>();
-				
+		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts WHERE ta_user=? "+(filterByActive?"AND ta_active=true":"")+" ORDER BY ta_id";
+		}
+		
 		try {
 			con = getConnection();
 			
@@ -998,7 +1018,11 @@ public class AuthDAO extends AbstractDAO {
 		ResultSet rs = null;
 		String sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts "+(filterByActive?"AND ta_active='true'":"")+" ORDER BY ta_id";
 		ArrayList<TwitterAccount> al = new ArrayList<TwitterAccount>();
-				
+		
+		if (Config.SYSTEM_DATABASE.equals("mysql")) {
+			sql = "SELECT ta_id, ta_user, ta_tuser, ta_active FROM twitter_accounts "+(filterByActive?"AND ta_active=true":"")+" ORDER BY ta_id";
+		}
+		
 		try {
 			con = getConnection();
 			
