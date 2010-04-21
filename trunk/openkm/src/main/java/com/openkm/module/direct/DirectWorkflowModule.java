@@ -589,6 +589,38 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
+	public Collection<TaskInstance> findPooledTaskInstances(String token)
+			throws RepositoryException {
+		log.debug("findPooledTaskInstances("+token+")");
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
+			
+			for (Iterator it = taskMgmtSession.findPooledTaskInstances(session.getUserID()).iterator(); it.hasNext(); ) {
+				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
+				al.add(WorkflowUtils.copy(ti));
+			}
+			
+			// Sort
+			Collections.sort(al);
+			
+			// Activity log
+			UserActivity.log(session, "FIND_POOLED_TASK_INSTANCES", null, null);
+		} catch (Exception e) {
+			throw new RepositoryException(e);
+		} finally {
+			jbpmContext.close();
+		}
+		
+		log.debug("findPooledTaskInstances: "+al);
+		return al;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId)
 			throws RepositoryException {
 		log.debug("findTaskInstances("+token+")");
