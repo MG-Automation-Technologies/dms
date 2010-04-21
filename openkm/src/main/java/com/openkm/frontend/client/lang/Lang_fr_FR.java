@@ -375,6 +375,7 @@ public class Lang_fr_FR {
 	    lang.put("confirm.delete.saved.search", "Voulez-vous vraiment supprimer les recherches sauvegardées ?");
 	    lang.put("confirm.delete.user.news", "Voulez-vous vraiment supprimer les brèves ?");
 	    lang.put("confirm.delete.mail", "Voulez-vous vraiment supprimer ce courriel ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search
 	    lang.put("search.context", "Contexte");
@@ -530,6 +531,7 @@ public class Lang_fr_FR {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Documents modifiés les plus vus durant le mois");
 	    lang.put("dashboard.general.last.uploaded.documents", "Derniers documents chargés");
 	    lang.put("dashboard.workflow.pending.tasks", "Tâches en attente");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Tâche");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nom");

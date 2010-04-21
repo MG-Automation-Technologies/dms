@@ -376,6 +376,7 @@ public class Lang_bs_BA {
 	    lang.put("confirm.delete.saved.search", "¿ Dali stvarno želite da izbrišete spašenu pretragu ?");
 	    lang.put("confirm.delete.user.news", "¿ Dali stvarno želite da izbrišete korisničke obavijesti ?");
 	    lang.put("confirm.delete.mail", "¿ Dali stvarno želite da izbrišete poštu ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Dodatak");
@@ -531,6 +532,7 @@ public class Lang_bs_BA {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Najviše mjenjani dokumenti prošlog mjeseca");
 	    lang.put("dashboard.general.last.uploaded.documents", "Zadnje učitani dokumenti");
 	    lang.put("dashboard.workflow.pending.tasks", "Nerješeni zadaci");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Zadatak");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Ime");

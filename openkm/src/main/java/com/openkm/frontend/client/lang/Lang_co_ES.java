@@ -375,6 +375,7 @@ public class Lang_co_ES {
 	    lang.put("confirm.delete.saved.search", "¿Seguro que desea eliminar la consulta almacenada?");
 	    lang.put("confirm.delete.user.news", "¿Seguro que desea eliminar la novedad de usuario?");
 	    lang.put("confirm.delete.mail", "¿Seguro que desea eliminar el correo electrónico?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Seguro que desea asignarse esta tarea ?");
 	    
 	    // Search
 	    lang.put("search.context", "Contexto");
@@ -530,6 +531,7 @@ public class Lang_co_ES {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Documentos más modificados el último mes");
 	    lang.put("dashboard.general.last.uploaded.documents", "Últimos documentos subidos");
 	    lang.put("dashboard.workflow.pending.tasks", "Tareas pendientes");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Tareas pendientes no asignadas");
 	    lang.put("dashboard.workflow.task", "Tarea");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nombre");

@@ -56,6 +56,7 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_DELETE_USER_NEWS				= 11;
 	public static final int CONFIRM_DELETE_MAIL		 				= 12;
 	public static final int CONFIRM_PURGE_MAIL  					= 13;
+	public static final int CONFIRM_GET_POOLED_WORKFLOW_TASK		= 14;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -203,6 +204,10 @@ public class ConfirmPopup extends DialogBox {
 					Main.get().mainPanel.browser.fileBrowser.purge();
 				}
 				break;
+				
+			case CONFIRM_GET_POOLED_WORKFLOW_TASK:
+				Main.get().mainPanel.dashboard.workflowDashboard.setTaskInstanceActorId();
+				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -263,6 +268,10 @@ public class ConfirmPopup extends DialogBox {
 			
 			case CONFIRM_DELETE_MAIL:
 				text.setHTML(Main.i18n("confirm.delete.mail"));
+				break;
+				
+			case CONFIRM_GET_POOLED_WORKFLOW_TASK:
+				text.setHTML(Main.i18n("confirm.get.pooled.workflow.task"));
 				break;
 		}
 	}

@@ -376,6 +376,7 @@ public class Lang_nl_NL {
 	    lang.put("confirm.delete.saved.search", "� Wilt u echt deze opgeslagen zoekopdracht verwijderen ?");
 	    lang.put("confirm.delete.user.news", "� Wilt u echt dit gebruikers nieuws verwijderen ?");
 	    lang.put("confirm.delete.mail", "� Wilt u echt deze mail verwijderen ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");
@@ -531,6 +532,7 @@ public class Lang_nl_NL {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Vorige maand top bekeken documenten");
 	    lang.put("dashboard.general.last.uploaded.documents", "Documenten laatst ge-upload");
 	    lang.put("dashboard.workflow.pending.tasks", "Wachtende opdrachten");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Opdracht");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Naam");

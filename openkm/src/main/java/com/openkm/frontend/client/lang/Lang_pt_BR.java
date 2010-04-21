@@ -375,6 +375,7 @@ public class Lang_pt_BR {
 	    lang.put("confirm.delete.saved.search", "¿ Do you really want to delete saved search ?");
 	    lang.put("confirm.delete.user.news", "¿ Do you really want to delete user news ?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");
@@ -530,6 +531,7 @@ public class Lang_pt_BR {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Last month top viewed documents");
 	    lang.put("dashboard.general.last.uploaded.documents", "Last uploaded documents");
 	    lang.put("dashboard.workflow.pending.tasks", "Pending tasks");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Task");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Name");

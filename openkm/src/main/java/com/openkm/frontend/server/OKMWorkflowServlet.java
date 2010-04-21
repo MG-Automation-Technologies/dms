@@ -124,6 +124,28 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	}
 	
 	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMWorkflowService#findPooledTaskInstances()
+	 */
+	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException {
+		log.debug("findPooledTaskInstances()");
+		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
+		String token = getToken();
+		
+		try {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances(token).iterator(); it.hasNext();) {
+				taskInstances.add(Util.copy(it.next()));
+			}
+			
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		
+		log.debug("findPooledTaskInstances:");
+		return taskInstances;
+	}
+	
+	/* (non-Javadoc)
 	 * @see com.openkm.frontend.client.service.OKMWorkflowService#getProcessDefinitionForms(long)
 	 */
 	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
@@ -186,6 +208,22 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		log.debug("addComment:");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMWorkflowService#setTaskInstanceActorId(double)
+	 */
+	public void setTaskInstanceActorId(double id) throws OKMException {
+		log.debug("setTaskInstanceActorId()");
+		String token = getToken();
+	
+		try {
+			OKMWorkflow.getInstance().setTaskInstanceActorId(token, new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		log.debug("setTaskInstanceActorId:");
 	}
 	
 }
