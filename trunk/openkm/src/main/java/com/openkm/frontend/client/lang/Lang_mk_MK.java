@@ -375,6 +375,7 @@ public class Lang_mk_MK {
 	    lang.put("confirm.delete.saved.search", "¿ Дали навистина сакате да ги избришете зачуваните пребарувања ?");
 	    lang.put("confirm.delete.user.news", "¿  Дали навистина сакате да ги избришете вестите за корисниците ?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Контекст");
@@ -530,6 +531,7 @@ public class Lang_mk_MK {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Најпроменувани документи во минатаиот месец");
 	    lang.put("dashboard.general.last.uploaded.documents", "Последно испратени документи");
 	    lang.put("dashboard.workflow.pending.tasks", "Задачи на листа на чекање");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Задача");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Име");

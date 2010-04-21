@@ -375,6 +375,7 @@ public class Lang_lv_LV {
 	    lang.put("confirm.delete.saved.search", "¿ Vai tiešām vēlaties izdzēst saglabātās meklēšanas ?");
 	    lang.put("confirm.delete.user.news", "¿ Vai tiešām vēlaties izdzēst lietotāja jaunumus ?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Konteksts");
@@ -530,6 +531,7 @@ public class Lang_lv_LV {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Iepriekšējā mēneša visvairāk labotie dokumenti");
 	    lang.put("dashboard.general.last.uploaded.documents", "Pēdējie augšupielādētie dokumenti");
 	    lang.put("dashboard.workflow.pending.tasks", "Nepabeigtie uzdevumi");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Uzdevums");
 	    lang.put("dashboard.workflow.task.id", "Identifikators");
 	    lang.put("dashboard.workflow.task.name", "Nosaukums");

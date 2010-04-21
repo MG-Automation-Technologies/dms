@@ -375,6 +375,7 @@ public class Lang_hu_HU {
 	    lang.put("confirm.delete.saved.search", "¿ Biztos, hogy törölni akarja a keresést ?");
 	    lang.put("confirm.delete.user.news", "¿ Biztos, hogy törölni akarja a hírt ?");
 	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Hely");
@@ -530,6 +531,7 @@ public class Lang_hu_HU {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Előző héten legtöbbet nézett dokumentumok");
 	    lang.put("dashboard.general.last.uploaded.documents", "Legutóbb feltöltött dokumentumok");
 	    lang.put("dashboard.workflow.pending.tasks", "Függőben lévő feladatok");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Feladat");
 	    lang.put("dashboard.workflow.task.id", "Azonosító");
 	    lang.put("dashboard.workflow.task.name", "Név");

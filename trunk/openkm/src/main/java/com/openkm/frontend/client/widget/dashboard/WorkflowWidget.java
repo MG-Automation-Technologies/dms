@@ -30,6 +30,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -39,9 +40,10 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
+import com.openkm.frontend.client.widget.ConfirmPopup;
 
 /**
  * WorkflowWidget
@@ -50,6 +52,9 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
  *
  */
 public class WorkflowWidget extends Composite {
+	
+	private static final int TYPE_PENDING_TASK 	= 1;
+	private static final int TYPE_POOLED_TASK 	= 2;
 
 	private static int HEADER_SQUARE = 24;
 	private static int SEPARATOR_HEIGHT = 20;
@@ -69,6 +74,8 @@ public class WorkflowWidget extends Composite {
 	private boolean flagZoom = true;
 	public Status status;
 	private String headerTextKey;
+	private int widgetType = TYPE_PENDING_TASK;
+	private GWTTaskInstance taskInstancePooled = null;
 	
 	/**
 	 * WorkflowWidget
@@ -175,12 +182,27 @@ public class WorkflowWidget extends Composite {
 			Hyperlink taskName = new Hyperlink();
 			taskName.setText(taskInstanceResult.getName());
 			taskName.setTitle(taskInstanceResult.getProcessInstance().getProcessDefinition().getName());
-			taskName.addClickHandler(new ClickHandler() { 
-				@Override
-				public void onClick(ClickEvent event) {
-					Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
-				}
-			});
+			switch (widgetType) {
+			
+				case TYPE_PENDING_TASK:
+					taskName.addClickListener(new ClickListener() {
+						public void onClick(Widget sender) {
+							Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
+						}
+					});
+					break;
+					
+				case TYPE_POOLED_TASK:
+					taskName.addClickListener(new ClickListener() {
+						public void onClick(Widget sender) {
+							Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_GET_POOLED_WORKFLOW_TASK);
+							Main.get().confirmPopup.show();
+							taskInstancePooled = taskInstanceResult;
+						}
+					});
+					break;
+			}
+			
 			taskName.setStyleName("okm-Hyperlink");
 						
 			table.setHTML(row, 0, "");
@@ -394,5 +416,33 @@ public class WorkflowWidget extends Composite {
 	 */
 	public void unsetRefreshing() {
 		status.unsetFlag_getDashboard();
+	}
+	
+	/**
+	 * Sets the widget as pending task 
+	 */
+	public void setIsWidgetPendingTask() {
+		widgetType = TYPE_PENDING_TASK;
+	}
+	
+	/**
+	 * Sets the widget as pooled task 
+	 */
+	public void setIsWidgetPooledTask() {
+		widgetType = TYPE_POOLED_TASK;
+	}
+	
+	/**
+	 * The users gets the pooled task instance
+	 */
+	public GWTTaskInstance getPooledTaskInstance() {
+		return taskInstancePooled;
+	}
+	
+	/**
+	 * resets the pooled task instance
+	 */
+	public void resetPooledTaskInstance() {
+		taskInstancePooled = null;
 	}
 }

@@ -53,6 +53,7 @@ public class WorkflowDashboard extends Composite {
 	private VerticalPanel vPanelRight;
 	
 	private WorkflowWidget pendingTasks;
+	private WorkflowWidget pendingPooledTasks;
 	public WorkflowFormPanel workflowFormPanel;
 	
 	private boolean firstTime = true; 
@@ -69,9 +70,13 @@ public class WorkflowDashboard extends Composite {
 		hPanel.add(vPanelRight);
 		
 		pendingTasks = new WorkflowWidget("dashboard.workflow.pending.tasks", "img/icon/workflow.gif", true);
+		pendingPooledTasks = new WorkflowWidget("dashboard.workflow.pending.tasks.unassigned", "img/icon/workflow.gif", true);
+		pendingTasks.setIsWidgetPendingTask();
+		pendingPooledTasks.setIsWidgetPooledTask();
 		workflowFormPanel = new WorkflowFormPanel();
 		
 		vPanelLeft.add(pendingTasks);
+		vPanelLeft.add(pendingPooledTasks);
 		vPanelRight.add(workflowFormPanel);
 		
 		hPanel.setHeight("100%");
@@ -82,6 +87,9 @@ public class WorkflowDashboard extends Composite {
 		// Getting user tasks
 		findUserTaskInstances();
 		
+		// Getting pooled task instances
+		findPooledTaskInstances();
+		
 		firstTime=false; // Must not show status first time loading OpenKM ( on startup )
 	}
 	
@@ -90,6 +98,7 @@ public class WorkflowDashboard extends Composite {
 	 */
 	public void langRefresh() {
 		pendingTasks.langRefresh();
+		pendingPooledTasks.langRefresh();
 		workflowFormPanel.langRefresh();
 	}
 	
@@ -103,6 +112,7 @@ public class WorkflowDashboard extends Composite {
 		
 		// Trying to distribute widgets on columns with max size
 		pendingTasks.setWidth(columnWidth);
+		pendingPooledTasks.setWidth(columnWidth);
 		workflowFormPanel.setWidth(""+columnWidth);
 		workflowFormPanel.setHeight("100%");
 	}
@@ -123,6 +133,49 @@ public class WorkflowDashboard extends Composite {
 		}
 	};
 	
+	/**
+	 * Get subscribed pooled task instances callback
+	 */
+	final AsyncCallback<List<GWTTaskInstance>> callbackPooledTaskInstances = new AsyncCallback<List<GWTTaskInstance>>() {
+		public void onSuccess(List<GWTTaskInstance> result){
+			pendingPooledTasks.setTasks(result);
+			pendingPooledTasks.unsetRefreshing();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("findPooledTaskInstances", caught);
+			pendingPooledTasks.unsetRefreshing();
+		}
+	};
+	
+	/**
+	 * Get task instance actor id callback
+	 */
+	final AsyncCallback<Object> callbackSetTaskInstanceActorId = new AsyncCallback<Object>() {
+		public void onSuccess(Object result){
+			pendingPooledTasks.resetPooledTaskInstance();
+			pendingPooledTasks.unsetRefreshing();
+			refreshAll();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("setTaskInstanceActorId", caught);
+			pendingPooledTasks.resetPooledTaskInstance();
+			pendingPooledTasks.unsetRefreshing();
+		}
+	};
+	
+	/**
+	 * refresh all
+	 */
+	public void refreshAll() {
+		findUserTaskInstances();
+		findPooledTaskInstances();
+	}
+	
+	/**
+	 * findUserTaskInstances
+	 */
 	public void findUserTaskInstances() {
 		if (!firstTime) {
 			pendingTasks.setRefreshing();
@@ -130,5 +183,29 @@ public class WorkflowDashboard extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
 		workflowService.findUserTaskInstances(callbackFindUserTaskInstancess);
+	}
+	
+	/**
+	 * findPooledTaskInstances
+	 */
+	private void findPooledTaskInstances() {
+		if (!firstTime) {
+			pendingPooledTasks.setRefreshing();
+		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+		workflowService.findPooledTaskInstances(callbackPooledTaskInstances);
+	}
+	
+	/**
+	 * setTaskInstanceActorId
+	 */
+	public void setTaskInstanceActorId() {
+		if (pendingPooledTasks.getPooledTaskInstance() != null) {
+			GWTTaskInstance taskInstance = pendingPooledTasks.getPooledTaskInstance();
+			ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
+			endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
+			workflowService.setTaskInstanceActorId(taskInstance.getId(), callbackSetTaskInstanceActorId);
+		}
 	}
 }

@@ -375,6 +375,7 @@ public class Lang_cs_CZ {
 	    lang.put("confirm.delete.saved.search", "¿ Opravdu chcete smazat uložené hledání ?");
 	    lang.put("confirm.delete.user.news", "¿ Opravdu chcete smazat uživatelské zprávy ?");
 	    lang.put("confirm.delete.mail", "¿ Opravdu chcete smazat mail ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Oblast");
@@ -530,6 +531,7 @@ public class Lang_cs_CZ {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Nejvíce upravované dokumenty posledního měsíce");
 	    lang.put("dashboard.general.last.uploaded.documents", "Naposledy nahrané dokumenty");
 	    lang.put("dashboard.workflow.pending.tasks", "Čekající úlohy");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
 	    lang.put("dashboard.workflow.task", "Úloha");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Jméno");
