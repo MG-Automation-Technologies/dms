@@ -69,6 +69,7 @@
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("setActor") && id != null && !id.equals("") && tid != null && !tid.equals("") && actor != null && !actor.equals("")) {
 				actor = new String(actor.getBytes("ISO-8859-1"), "UTF-8");
+				if (actor.equals("-")) actor = null;
 				OKMWorkflow.getInstance().setTaskInstanceActorId(token, Long.parseLong(tid), actor);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else {
@@ -122,7 +123,7 @@
 					out.print("<input type=\"hidden\" name=\"action\" value=\"setActor\">");
 					out.print("<input type=\"hidden\" name=\"id\" value=\""+pi.getId()+"\">");
 					out.print("<input type=\"hidden\" name=\"tid\" value=\""+ti.getId()+"\">");
-					out.print("<select name=\"actor\" onchange=\" document.getElementById('setActor').submit()\">");
+					out.print("<select name=\"actor\" onchange=\"document.getElementById('setActor').submit()\">");
 					out.print("<option>-</option>");
 					Collection<String> colU = OKMAuth.getInstance().getUsers(token);
 					
