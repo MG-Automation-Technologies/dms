@@ -23,16 +23,14 @@
   if (sm.getTokens().isEmpty()) {
     out.print("<b>No users logged, all users are available.</b>");
   } else {
-    out.println("<table class=\"demo_list\" align=\"center\">");
+    out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
     out.println("<tr><th>User</th><th>Creation</th><th>Last access</th></tr>");
     for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
       String token = it.next();
       SessionInfo si = sm.getInfo(token);
-      if (!si.getSession().getUserID().equals(Config.ADMIN_USER)) {
-          out.print("<tr><td>"+si.getSession().getUserID()+"</td><td>"+
-            FormatUtil.formatDate(si.getCreation())+"</td><td>"+
-            FormatUtil.formatDate(si.getAccess())+"</td</tr>");
-      }
+      out.print("<tr><td>"+si.getSession().getUserID()+"</td><td>"+
+        FormatUtil.formatDate(si.getCreation())+"</td><td>"+
+        FormatUtil.formatDate(si.getAccess())+"</td</tr>");
       users.add(si.getSession().getUserID());
     }
     out.println("</table>");
