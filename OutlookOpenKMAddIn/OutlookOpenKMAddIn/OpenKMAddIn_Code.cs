@@ -11,7 +11,7 @@ using Outlook = Microsoft.Office.Interop.Outlook;
 using Office = Microsoft.Office.Core;
 
 using MSOpenKMCore.config;
-using OutlookOpenKMAddIn.form;
+using MSOpenKMCore.form;
 using MSOpenKMCore.ws;
 
 namespace OutlookOpenKMAddIn
