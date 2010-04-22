@@ -97,7 +97,7 @@ public class FormatUtil {
 	 * Format calendar date
 	 */
 	public static String formatDate(Calendar cal) {
-		return cal.getTime().toString();
+		return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(cal.getTime());
 	}
 	
 	/**
