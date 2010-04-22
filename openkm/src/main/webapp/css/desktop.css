@@ -90,6 +90,7 @@ div#form-error {
 table.demo {
   background-color: #F1F3F5;
   border: 1px solid #CCCCCC;
+  width: 380px;
 }
 
 table.demo td {
