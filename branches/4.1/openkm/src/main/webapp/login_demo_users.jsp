@@ -24,7 +24,7 @@
     out.print("<b>No users logged, all users are available.</b>");
   } else {
     out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
-    out.println("<tr><th>User</th><th>Creation</th><th>Last access</th></tr>");
+    out.println("<tr><th>User</th><th>Login</th><th>Last action</th></tr>");
     for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
       String token = it.next();
       SessionInfo si = sm.getInfo(token);
