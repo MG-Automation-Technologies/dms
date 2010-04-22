@@ -159,9 +159,6 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="form\ConfigurationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ExplorerWindow.cs" />
     <Compile Include="OpenKMAddIn_Code.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -183,24 +180,6 @@
       <DependentUpon>ExplorerWindow.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExplorerWindow.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ConfigurationForm.ca-ES.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ConfigurationForm.en-GB.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ConfigurationForm.es-ES.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ConfigurationForm.resx">
-      <DependentUpon>ConfigurationForm.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ConfigurationForm.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenKMAddIn_Code.ca-ES.resx">
