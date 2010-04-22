@@ -21,7 +21,7 @@
   SessionManager sm = SessionManager.getInstance();
 
   if (sm.getTokens().isEmpty()) {
-    out.print("<b>No users logged, all users are available.</b>");
+    out.print("<b>No users logged, all demo users are available.</b>");
   } else {
     out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
     out.println("<tr><th>User</th><th>Login</th><th>Last action</th></tr>");
