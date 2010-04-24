@@ -30,7 +30,7 @@
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	type (simple) "simple"
+	type (simple|multiple) "simple"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
