@@ -47,7 +47,8 @@ public class MediaPlayerPopup extends DialogBox {
 	private HTML zoomIn;
 	private HTML zoomOut;
 	private HTML actualZoom;
-	private String mediaUrl="";
+	private String mediaUrl = "";
+	private String mediaProvider = "";
 	private int actualRatio = 1;
 	
 	/**
@@ -148,11 +149,20 @@ public class MediaPlayerPopup extends DialogBox {
 	 * 
 	 * @param mediaUrl The media file url
 	 */
-	public void setMediaFile(String mediaUrl) {
+	public void setMediaFile(String mediaUrl, String mimeType) {
 		this.mediaUrl = mediaUrl;
 		Util.removeMediaPlayer();
 		text.setHTML("<div id=\"mediaplayercontainer\"></div>\n");
-		Util.createMediaPlayer(mediaUrl, "400", "280");
+				
+		if (mimeType.equals("audio/mpeg")) {
+			mediaProvider = "sound";
+		} else if (mimeType.equals("video/x-flv") || mimeType.equals("video/mp4")) {
+			mediaProvider = "video";
+		} else if (mimeType.equals("image/jpeg") || mimeType.equals("image/gif") || mimeType.equals("image/png")) {
+			mediaProvider = "image";
+		}
+		
+		Util.createMediaPlayer(mediaUrl, mediaProvider, "400", "280");
 		actualZoom.setHTML("x"+actualRatio + "&nbsp;");
 	}
 	
@@ -197,7 +207,7 @@ public class MediaPlayerPopup extends DialogBox {
 			}
 		}
 		
-		Util.createMediaPlayer(mediaUrl, ""+width, ""+height);
+		Util.createMediaPlayer(mediaUrl, mediaProvider, ""+width, ""+height);
 		actualZoom.setHTML("x"+actualRatio + "&nbsp;");
 		center();
 	}
