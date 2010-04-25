@@ -380,6 +380,16 @@
     <exception-type>es.git.openkm.frontend.client.OKMException</exception-type>
     <location>/error.jsp</location>
   </error-page>
+  
+  <error-page>
+    <exception-type>es.git.openkm.backend.client.OKMException</exception-type>
+    <location>/admin/error.jsp</location>
+  </error-page>
+  
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error.jsp</location>
+  </error-page>
 
   <!-- Security configurarion -->
   <security-constraint>
