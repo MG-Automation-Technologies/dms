@@ -35,10 +35,10 @@
         	  <% String token = sm.getTokenByUserId(request.getRemoteUser()); %>
         	  <% if (token != null) { %>
         	    <% SessionInfo si = sm.getInfo(token);  %>
-        	    <%="<i>Session inactive from</i> "+si.getAccess().getTime()+"<br/>" %>
+        	    <%="<i>Session inactive from</i> "+FormatUtil.formatDate(si.getAccess())+"<br/>" %>
         	    <% Calendar expiration = (Calendar) si.getAccess().clone(); %>
         	    <% expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION); %>
-        	    <%="<i>Session will expire at</i> "+expiration.getTime()+"<br/>" %>
+        	    <%="<i>Session will expire at</i> "+FormatUtil.formatDate(expiration)+"<br/>" %>
         	  <% } %>
         	<% } %>
         <% } else { %>
