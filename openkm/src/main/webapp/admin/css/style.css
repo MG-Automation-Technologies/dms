@@ -96,7 +96,11 @@ div.ok {
 	text-align: left;
 }
 
+input.vanadium-invalid {
+	border: 1px solid #f00;
+}
+
 span.vanadium-invalid {
-	color: red;
-	margin-left:5px;
+	color: #f00;
+	margin-left: 5px;
 }
