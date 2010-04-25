@@ -40,7 +40,7 @@
 			out.println("<form action=\"role_action.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
 			out.println("<table class=\"form\" width=\"280px\" align=\"center\">");
-			out.println("<tr><td>Id</td><td><input class=\":required\" name=\"rol_id\" value=\""+rol.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
+			out.println("<tr><td>Id</td><td width=\"100%\"><input class=\":required :only_on_blur\" name=\"rol_id\" value=\""+rol.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
 			out.println("<tr><td colspan=\"2\" align=\"right\">");
 			out.println("<input type=\"button\" onclick=\"javascript:window.history.back()\" value=\"Cancel\">");
 			out.println("<input type=\"submit\" value=\"Send\">");

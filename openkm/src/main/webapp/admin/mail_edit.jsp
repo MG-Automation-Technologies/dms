@@ -45,11 +45,11 @@
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
 			out.println("<input type=\"hidden\" name=\"ma_id\" value=\""+id+"\">");
 			out.println("<table class=\"form\" width=\"345px\" align=\"center\">");
-			out.println("<tr><td>OKM user</td><td><input class=\":required\" name=\"ma_user\" value=\""+ma.getUser()+"\" readonly></td></tr>");
-			out.println("<tr><td>Mail host</td><td><input class=\":required\" name=\"ma_mhost\" value=\""+ma.getMailHost()+"\"></td></tr>");
-			out.println("<tr><td>Mail user</td><td><input class=\":required\" name=\"ma_muser\" value=\""+ma.getMailUser()+"\"></td></tr>");
-			out.println("<tr><td>Mail password</td><td><input class=\":required\" type=\"password\" name=\"ma_mpass\" value=\""+ma.getMailPassword()+"\"></td></tr>");
-			out.println("<tr><td>Mail folder</td><td><input name=\"ma_mfolder\" value=\""+ma.getMailFolder()+"\"></td></tr>");
+			out.println("<tr><td nowrap>OKM user</td><td width=\"100%\"><input class=\":required :only_on_blur\" name=\"ma_user\" value=\""+ma.getUser()+"\" readonly></td></tr>");
+			out.println("<tr><td nowrap>Mail host</td><td><input class=\":required :only_on_blur\" name=\"ma_mhost\" value=\""+ma.getMailHost()+"\"></td></tr>");
+			out.println("<tr><td nowrap>Mail user</td><td><input class=\":required :only_on_blur\" name=\"ma_muser\" value=\""+ma.getMailUser()+"\"></td></tr>");
+			out.println("<tr><td nowrap>Mail password</td><td><input class=\":required :only_on_blur\" type=\"password\" name=\"ma_mpass\" value=\""+ma.getMailPassword()+"\"></td></tr>");
+			out.println("<tr><td nowrap>Mail folder</td><td><input name=\"ma_mfolder\" value=\""+ma.getMailFolder()+"\"></td></tr>");
 			out.println("<tr><td>Active</td><td><input name=\"ma_active\" type=\"checkbox\" "+(ma.isActive()?"checked":"")+"></td></tr>");
 			out.println("<tr><td colspan=\"2\" align=\"right\">");
 			out.println("<input type=\"button\" onclick=\"javascript:window.history.back()\" value=\"Cancel\">");
