@@ -45,45 +45,50 @@
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
 		FormUtils.resetPropertyGroupsForms();
 		
-		Collection<PropertyGroup> pGroups = okmPG.getAllGroups(token);
-		for (Iterator<PropertyGroup> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
-			PropertyGroup pGroup = itGrp.next();
-			out.println("<tr class=\"fuzzy\">");
-			out.println("<td colspan=\"3\" align=\"center\"><b>"+pGroup.getLabel()+"</b></td>");
-			out.println("<td colspan=\"4\" align=\"center\"><b>"+pGroup.getName()+"</b></td>");
-			out.println("</tr>");
-			
-			Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup.getName());
-			int i = 0;
-			for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
-				FormElement fe = itMD.next();
-				out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
-				out.print("<td>"+fe.getLabel()+"</td>");
-				out.print("<td>"+fe.getName()+"</td>");
-				out.print("<td>"+fe.getValue()+"</td>");
-				out.print("<td>"+fe.getWidth()+"</td>");
-				out.print("<td>"+fe.getHeight()+"</td>");
-				
-				if (fe instanceof Input) {
-					Input input = (Input) fe;
-					out.print("<td>Input</td>");
-					out.print("<td><i>Type:</i> "+input.getType()+"</td>");
-				} else if (fe instanceof TextArea) {
-					TextArea textArea = (TextArea) fe;
-					out.print("<td>TextArea</td>");
-					out.print("<td></td>");
-				} else if (fe instanceof Select) {
-					Select select = (Select) fe;
-					out.print("<td>Select</td>");
-					out.print("<td><i>Type:</i> "+select.getType()+", ");
-					out.print("<i>Options:</i> "+select.getOptions()+"</td>");
-				} else if (fe instanceof Button) {
-					Button button = (Button) fe;
-					out.print("<td>Button</td>");
-					out.print("<td><i>Type:</i> "+button.getType()+"</td>");
-				}
+		try {
+			Collection<PropertyGroup> pGroups = okmPG.getAllGroups(token);
+		
+			for (Iterator<PropertyGroup> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
+				PropertyGroup pGroup = itGrp.next();
+				out.println("<tr class=\"fuzzy\">");
+				out.println("<td colspan=\"3\" align=\"center\"><b>"+pGroup.getLabel()+"</b></td>");
+				out.println("<td colspan=\"4\" align=\"center\"><b>"+pGroup.getName()+"</b></td>");
 				out.println("</tr>");
+				
+				Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup.getName());
+				int i = 0;
+				for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
+					FormElement fe = itMD.next();
+					out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
+					out.print("<td>"+fe.getLabel()+"</td>");
+					out.print("<td>"+fe.getName()+"</td>");
+					out.print("<td>"+fe.getValue()+"</td>");
+					out.print("<td>"+fe.getWidth()+"</td>");
+					out.print("<td>"+fe.getHeight()+"</td>");
+					
+					if (fe instanceof Input) {
+						Input input = (Input) fe;
+						out.print("<td>Input</td>");
+						out.print("<td><i>Type:</i> "+input.getType()+"</td>");
+					} else if (fe instanceof TextArea) {
+						TextArea textArea = (TextArea) fe;
+						out.print("<td>TextArea</td>");
+						out.print("<td></td>");
+					} else if (fe instanceof Select) {
+						Select select = (Select) fe;
+						out.print("<td>Select</td>");
+						out.print("<td><i>Type:</i> "+select.getType()+", ");
+						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
+					} else if (fe instanceof Button) {
+						Button button = (Button) fe;
+						out.print("<td>Button</td>");
+						out.print("<td><i>Type:</i> "+button.getType()+"</td>");
+					}
+					out.println("</tr>");
+				}
 			}
+		} catch (Exception e) {
+			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
 		}
 		
 		out.println("</table>");
