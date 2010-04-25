@@ -42,10 +42,11 @@
 			
 			out.println("<form action=\"user_action.jsp\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
-			out.println("<table class=\"form\" width=\"320px\">");
-			out.println("<tr><td>Id</td><td><input class=\":required\" name=\"usr_id\" value=\""+usr.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
-			out.println("<tr><td>Password</td><td><input type=\"password\" name=\"usr_pass\" value=\"\"></td></tr>");
-			out.println("<tr><td>Name</td><td><input class=\":required\" name=\"usr_name\" value=\""+usr.getName()+"\"></td></tr>");
+			out.println("<table class=\"form\" width=\"372px\">");
+			out.println("<tr><td>Id</td><td width=\"100%\"><input class=\":required :only_on_blur\" name=\"usr_id\" value=\""+usr.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
+			out.println("<tr><td>Password</td><td><input class=\""+(action.equals("c")?":required :only_on_blur":"")+"\" type=\"password\" name=\"usr_pass\" id=\"usr_pass\" value=\"\" autocomplete=\"off\"></td></tr>");
+			out.println("<tr><td nowrap>Confirm password</td><td><input class=\":same_as;usr_pass :only_on_blur\" type=\"password\" value=\"\" autocomplete=\"off\"></td></tr>");
+			out.println("<tr><td>Name</td><td><input class=\"\" name=\"usr_name\" value=\""+usr.getName()+"\"></td></tr>");
 			out.println("<tr><td>Mail</td><td><input class=\":email :required :only_on_blur\" name=\"usr_email\" value=\""+usr.getEmail()+"\"></td></tr>");
 			out.println("<tr><td>Active</td><td><input name=\"usr_active\" type=\"checkbox\" "+(usr.isActive()?"checked":"")+"></td></tr>");
 			out.println("<tr><td>Roles</td><td><select multiple name=\"usr_roles\">");
