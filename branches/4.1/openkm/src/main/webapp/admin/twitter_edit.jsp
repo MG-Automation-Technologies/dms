@@ -45,8 +45,8 @@
 			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
 			out.println("<input type=\"hidden\" name=\"ta_id\" value=\""+id+"\">");
 			out.println("<table class=\"form\" width=\"330px\">");
-			out.println("<tr><td>OKM user</td><td><input class=\":required\" name=\"ta_user\" value=\""+ta.getUser()+"\" readonly></td></tr>");
-			out.println("<tr><td>Twitter user</td><td><input class=\":required\" name=\"ta_tuser\" value=\""+ta.getTwitterUser()+"\"></td></tr>");
+			out.println("<tr><td nowrap>OKM user</td><td width=\"100%\"><input class=\":required :only_on_blur\" name=\"ta_user\" value=\""+ta.getUser()+"\" readonly></td></tr>");
+			out.println("<tr><td nowrap>Twitter user</td><td><input class=\":required :only_on_blur\" name=\"ta_tuser\" value=\""+ta.getTwitterUser()+"\"></td></tr>");
 			out.println("<tr><td>Active</td><td><input name=\"ta_active\" type=\"checkbox\" "+(ta.isActive()?"checked":"")+"></td></tr>");
 			out.println("<tr><td colspan=\"2\" align=\"right\">");
 			out.println("<input type=\"button\" onclick=\"javascript:window.history.back()\" value=\"Cancel\">");
