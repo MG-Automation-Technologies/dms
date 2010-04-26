@@ -63,4 +63,5 @@ application/x-php php
 audio/mpeg mp3
 audio/x-ogg ogg
 video/x-flv flv
+video/mp4 mp4
 application/x-shockwave-flash swf
