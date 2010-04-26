@@ -318,7 +318,8 @@ public class PersonalMenu extends MenuBase {
 		copyOption 				= true;
 		exportOption			= false;
 		
-		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("application/x-shockwave-flash") ||  
+		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || 
+				doc.getMimeType().equals("application/x-shockwave-flash") ||  
 				doc.getMimeType().equals("audio/mpeg") || doc.getMimeType().equals("image/gif") ||
 				doc.getMimeType().equals("image/jpeg") || doc.getMimeType().equals("image/png")) {
 			mediaPlayerOption = true;
