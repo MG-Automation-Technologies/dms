@@ -856,7 +856,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	public void mediaPlayerDocument() {
 		if (isDocumentSelected()) {
 			Main.get().mediaPlayerPopup.center();
-			Main.get().mediaPlayerPopup.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()));
+			Main.get().mediaPlayerPopup.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
 		}
 	}
 	
