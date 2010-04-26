@@ -240,9 +240,8 @@ public class Util {
     	$wnd.swfobject.removeSWF("jsmediaplayer");
 	}-*/;
     
-    public static native void createMediaPlayer(String mediaUrl, String width, String height) /*-{    
-        	
-    	$wnd.swfobject.embedSWF("/OpenKM/js/mediaplayer/player-licensed.swf", "mediaplayercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {file:mediaUrl,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
+   public static native void createMediaPlayer(String mediaUrl, String mediaProvider, String width, String height) /*-{    	
+    	$wnd.swfobject.embedSWF("/OpenKM/js/mediaplayer/player.swf", "mediaplayercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {file:mediaUrl,provider:mediaProvider,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
     }-*/;
     
     public static native void createPDFViewer(String pdfUrl, String width, String height) /*-{
