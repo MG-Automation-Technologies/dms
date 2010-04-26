@@ -12,6 +12,7 @@
 <%@ page import="com.openkm.bean.form.Input"%>
 <%@ page import="com.openkm.bean.form.Button"%>
 <%@ page import="com.openkm.bean.form.Select"%>
+<%@ page import="com.openkm.bean.form.Option"%>
 <%@ page import="com.openkm.bean.form.TextArea"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager"%>
@@ -78,7 +79,12 @@
 						Select select = (Select) fe;
 						out.print("<td>Select</td>");
 						out.print("<td><i>Type:</i> "+select.getType()+", ");
-						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
+						out.print("<i>Options:</i><ul>");
+						for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
+							Option opt = itOpt.next();
+							out.print("<li><i>Label:</i> "+opt.getLabel()+", <i>Value:</i> "+opt.getValue()+"</li>");
+						}
+						out.print("</ul></td>");
 					} else if (fe instanceof Button) {
 						Button button = (Button) fe;
 						out.print("<td>Button</td>");
@@ -107,6 +113,11 @@
 
 		try {
 			if (pgPath != null && !pgPath.equals("")) {
+				// Check xml property groups definition
+				FormUtils.resetPropertyGroupsForms();
+				FormUtils.parsePropertyGroupsForms();
+				
+				// If it is ok, register it
 				FileInputStream fis = new FileInputStream(pgPath);
 				DirectRepositoryModule.registerCustomNodeTypes(jcrSession, fis);
 				out.println("<div class=\"ok\">Property Group definition '"+new File(pgPath).getAbsolutePath()+"' registered'<div>");
