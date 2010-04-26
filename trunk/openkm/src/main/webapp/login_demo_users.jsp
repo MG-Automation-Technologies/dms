@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.bean.SessionInfo" %>
-<%@ page import="es.git.openkm.util.FormatUtil" %>
+<%@ page import="com.openkm.util.FormatUtil" %>
 <%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="java.util.ArrayList" %>
