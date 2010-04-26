@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -199,17 +199,17 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
 		log.debug("importZip("+token+", "+path+", "+is+")");
-		ZipInputStream zis = null;
+		ZipArchiveInputStream zis = null;
         File tmp = null;
         String errorMsg = null;
        						
 		try {
 			// Unzip files
-			zis = new ZipInputStream(is);
-			ZipEntry entry;
+			zis = new ZipArchiveInputStream(is);
+			ZipArchiveEntry entry;
 			tmp = FileUtils.createTempDir();
 			
-			while ((entry = zis.getNextEntry()) != null) {
+			while ((entry = zis.getNextZipEntry()) != null) {
 				String entryName = entry.getName();
 				
 				if (entry.isDirectory()) {
