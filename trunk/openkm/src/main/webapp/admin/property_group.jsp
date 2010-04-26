@@ -41,8 +41,6 @@
 		
 		out.println("<h1>Property groups</h1>");
 		out.println("<table class=\"results\" width=\"80%\">");
-		out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
-		out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 		OKMPropertyGroup okmPG = OKMPropertyGroup.getInstance();
 		FormUtils.resetPropertyGroupsForms();
 		
@@ -51,11 +49,13 @@
 		
 			for (Iterator<PropertyGroup> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
 				PropertyGroup pGroup = itGrp.next();
+				out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
 				out.println("<tr class=\"fuzzy\">");
 				out.println("<td colspan=\"3\" align=\"center\"><b>"+pGroup.getLabel()+"</b></td>");
 				out.println("<td colspan=\"4\" align=\"center\"><b>"+pGroup.getName()+"</b></td>");
 				out.println("</tr>");
 				
+				out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 				Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup.getName());
 				int i = 0;
 				for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
