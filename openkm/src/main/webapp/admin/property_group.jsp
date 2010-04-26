@@ -46,7 +46,12 @@
 		
 		try {
 			Collection<PropertyGroup> pGroups = okmPG.getAllGroups(token);
-		
+			
+			if (pGroups.isEmpty()) {
+				out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
+				out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
+			}
+			
 			for (Iterator<PropertyGroup> itGrp = pGroups.iterator(); itGrp.hasNext(); ) {
 				PropertyGroup pGroup = itGrp.next();
 				out.println("<tr><th colspan=\"3\">Property group label</th><th colspan=\"4\">Property group name</th></tr>");
