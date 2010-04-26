@@ -4,6 +4,7 @@
 <%@ page import="es.git.openkm.bean.form.Input"%>
 <%@ page import="es.git.openkm.bean.form.TextArea"%>
 <%@ page import="es.git.openkm.bean.form.Select"%>
+<%@ page import="es.git.openkm.bean.form.Option"%>
 <%@ page import="es.git.openkm.bean.form.Button"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessInstance"%>
 <%@ page import="es.git.openkm.bean.workflow.ProcessDefinition"%>
@@ -139,8 +140,13 @@
 					} else if (fe instanceof Select) {
 						Select select = (Select) fe;
 						out.print("<td>Select</td>");
-						out.print("<td><i>Type:</i> "+select.getType()+", ");
-						out.print("<i>Options:</i> "+select.getOptions()+"</td>");
+						out.print("<td><i>Type:</i> "+select.getType()+"<br/>");
+						out.print("<i>Options:</i><ul>");
+						for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
+							Option opt = itOpt.next();
+							out.print("<li><i>Label:</i> "+opt.getLabel()+", <i>Value:</i> "+opt.getValue()+"</li>");
+						}
+						out.print("</ul></td>");
 					} else if (fe instanceof Button) {
 						Button button = (Button) fe;
 						out.print("<td>Button</td>");
