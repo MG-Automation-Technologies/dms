@@ -30,8 +30,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.artofsolving.jodconverter.BasicDocumentFormatRegistry;
 import com.artofsolving.jodconverter.DefaultDocumentFormatRegistry;
 import com.artofsolving.jodconverter.DocumentConverter;
+import com.artofsolving.jodconverter.DocumentFamily;
 import com.artofsolving.jodconverter.DocumentFormat;
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
@@ -43,6 +45,7 @@ public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
+	private static BasicDocumentFormatRegistry registry =  new DefaultDocumentFormatRegistry();
 	private static DocConverter instance = new DocConverter();
 	public static final String PDF = "application/pdf";
 	public static final String SWF = "application/x-shockwave-flash";
@@ -66,11 +69,29 @@ public class DocConverter {
 		validOpenOffice.add("application/vnd.ms-excel");
 		validOpenOffice.add("application/vnd.ms-powerpoint");
 		
+		// Microsoft Office 2007
+		validOpenOffice.add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+		validOpenOffice.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		validOpenOffice.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		
 		// Images
 		validImageMagick.add("image/jpeg");
 		validImageMagick.add("image/png");
 		validImageMagick.add("image/gif");
 		validImageMagick.add("image/tiff");
+		
+		// Add new document types
+		DocumentFormat docx = new DocumentFormat("Microsoft Word 2007 XML", DocumentFamily.TEXT,
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx");
+		registry.addDocumentFormat(docx);
+		
+		DocumentFormat xlsx = new DocumentFormat("Microsoft Excel 2007 XML", DocumentFamily.SPREADSHEET,
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xlsx");
+		registry.addDocumentFormat(xlsx);
+		
+		DocumentFormat pptx = new DocumentFormat("Microsoft PowerPoint 2007 XML", DocumentFamily.PRESENTATION,
+				"application/vnd.openxmlformats-officedocument.presentationml.presentation", "pptx");
+		registry.addDocumentFormat(pptx);
 	}
 	
 	/**
@@ -130,8 +151,8 @@ public class DocConverter {
 				}
 				
 				// Convert
-				DocumentFormat dfFrom = new DefaultDocumentFormatRegistry().getFormatByMimeType(mimeFrom);
-				DocumentFormat dfTo = new DefaultDocumentFormatRegistry().getFormatByMimeType(mimeTo);
+				DocumentFormat dfFrom = registry.getFormatByMimeType(mimeFrom);
+				DocumentFormat dfTo = registry.getFormatByMimeType(mimeTo);
 				DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
 				converter.convert(is, dfFrom, os, dfTo);
 
