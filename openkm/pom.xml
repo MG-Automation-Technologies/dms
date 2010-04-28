@@ -111,6 +111,11 @@
       <version>1.0</version>
     </dependency>
     <dependency>
+      <groupId>de.schlichtherle.io</groupId>
+      <artifactId>truezip</artifactId>
+      <version>6.6</version>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.5.3</version>
@@ -245,7 +250,7 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>3.5-FINAL</version>
+      <version>3.6</version>
       <exclusions>
         <!-- JBoss already have its own log4j.jar -->
         <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
@@ -258,7 +263,7 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-scratchpad</artifactId>
-      <version>3.5-FINAL</version>
+      <version>3.6</version>
       <exclusions>
         <!-- JBoss already have its own log4j.jar -->
         <!-- http://www.coderanch.com/t/91054/JBoss/log-j-messages-JBoss-log -->
