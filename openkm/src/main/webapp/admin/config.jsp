@@ -82,7 +82,7 @@
 		int i = 0;
 		for (Iterator<String> it = Config.mimeAccept.iterator(); it.hasNext(); ) {
 			String mime = it.next();
-			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../com.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
+			out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td align=\"center\"><img src=\"../es.git.openkm.frontend.Main/img/icon/mime/"+mime+".gif\"></td><td>"+mime+"</td>");
 		}
 		out.println("</table>");
 	} else {
