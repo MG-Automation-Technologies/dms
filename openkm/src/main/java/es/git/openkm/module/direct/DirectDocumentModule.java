@@ -585,9 +585,12 @@ public class DirectDocumentModule implements DocumentModule {
 			note.setProperty(Note.USER, session.getUserID());
 			note.setProperty(Note.TEXT, text);
 			notesNode.save();
+			
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
-			UserActivity.log(session, "ADD_DOCUMENT_COMMENT", docPath, text);
+			UserActivity.log(session, "ADD_DOCUMENT_NOTE", docPath, text);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(notesNode);
@@ -911,7 +914,7 @@ public class DirectDocumentModule implements DocumentModule {
 			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()).delete();
 			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()).delete();
 			
-			// Add comment (as system user)
+			// Add note (as system user)
 			String systemToken = SessionManager.getInstance().getSystemToken();
 			addNote(systemToken, docPath, "New version "+version.getName()+" by "+session.getUserID()+": "+version.getComment());
 
