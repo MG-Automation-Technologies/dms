@@ -657,9 +657,12 @@ public class DirectDocumentModule implements DocumentModule {
 			note.setProperty(Note.USER, session.getUserID());
 			note.setProperty(Note.TEXT, text);
 			notesNode.save();
+			
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
-			UserActivity.log(session, "ADD_DOCUMENT_COMMENT", docPath, text);
+			UserActivity.log(session, "ADD_DOCUMENT_NOTE", docPath, text);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(notesNode);
