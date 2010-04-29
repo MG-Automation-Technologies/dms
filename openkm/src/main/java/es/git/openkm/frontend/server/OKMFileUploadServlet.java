@@ -206,7 +206,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			
 			// Unzip files
 			new File(tmpIn).archiveCopyAllTo(tmpOut);
-						
+			
 			// Import files
 			StringWriter out = new StringWriter();
 			ImpExpStats stats = RepositoryImporter.importDocuments(token, tmpOut, path, out, new TextInfoDecorator(tmpOut));
