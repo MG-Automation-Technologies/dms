@@ -1,7 +1,5 @@
 package com.openkm.frontend.server;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -26,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.schlichtherle.io.File;
+import de.schlichtherle.io.FileOutputStream;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMNotification;
 import com.openkm.bean.Document;
@@ -194,34 +194,25 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	private String importZip(String token, String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("importZip({}, {}, {})", new Object[] { token, path, is });
-		ZipInputStream zis = null;
-        File tmp = null;
+		log.debug("importZip("+token+", "+path+", "+is+")");
+        java.io.File tmpIn = null;
+        java.io.File tmpOut = null;
         String errorMsg = null;
        						
 		try {
-			// Unzip files
-			zis = new ZipInputStream(is);
-			ZipEntry entry;
-			tmp = FileUtils.createTempDir();
+			// Create temporal
+			tmpIn = File.createTempFile("okm", ".zip");
+	        tmpOut = FileUtils.createTempDir();
+	        FileOutputStream fos = new FileOutputStream(tmpIn);
+			IOUtils.copy(is, fos);
+			fos.close();
 			
-			while ((entry = zis.getNextEntry()) != null) {
-				String entryName = entry.getName();
-				
-				if (entry.isDirectory()) {
-					new File(tmp + File.separator + entryName).mkdirs();
-				} else {
-					new File(tmp + File.separator + entryName).getParentFile().mkdirs();
-					log.info(tmp + File.separator + entryName);
-					FileOutputStream fos = new FileOutputStream(tmp + File.separator + entryName);
-					IOUtils.copy(zis, fos);
-					fos.close();
-				}
-			}
+			// Unzip files
+			new File(tmpIn).archiveCopyAllTo(tmpOut);
 			
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(token, tmp, path, out, new TextInfoDecorator(tmp));
+			ImpExpStats stats = RepositoryImporter.importDocuments(token, tmpOut, path, out, new TextInfoDecorator(tmpOut));
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}
@@ -230,18 +221,17 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			log.error("Error importing zip", e);
 			throw e;
 		} finally {
-			if (tmp != null) {
-				try {
-					org.apache.commons.io.FileUtils.deleteDirectory(tmp);
-				} catch (IOException e) {
-					log.error("Error deleting temporal directory", e);
-					throw e;
-				}
+			if (tmpIn != null) {
+				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
 			}
-			
-			if (zis != null) {
+
+			if (tmpOut != null) {
+				org.apache.commons.io.FileUtils.deleteQuietly(tmpOut);
+			}
+
+			if (is != null) {
 				try {
-					zis.close();
+					is.close();
 				} catch (IOException e) {
 					log.error("Error closing zip input stream", e);
 					throw e;
@@ -249,7 +239,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			}
 		}
 		
-		log.debug("importZip: {}", errorMsg);
+		log.debug("importZip: "+errorMsg);
 		return errorMsg;
 	}
 }
