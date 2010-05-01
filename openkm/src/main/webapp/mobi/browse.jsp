@@ -91,14 +91,14 @@
             <option value="<%=ctxTaxonomy%>" <%=path.startsWith(ctxTaxonomy)?"selected":""%>>Taxonomy</option>
             <option value="<%=ctxTemplates%>" <%=path.startsWith(ctxTemplates)?"selected":""%>>Templates</option>
             <option value="<%=ctxPersonal%>" <%=path.startsWith(ctxPersonal)?"selected":""%>>My documents</option>
-            <!-- <option value="<%=ctxMail%>" <%=path.startsWith(ctxMail)?"selected":""%>>E-mail</option> -->
+            <option value="<%=ctxMail%>" <%=path.startsWith(ctxMail)?"selected":""%>>E-mail</option>
             <option value="<%=ctxTrash%>" <%=path.startsWith(ctxTrash)?"selected":""%>>Trash</option>
           </select>
         </form>
       </td>
       <td><form id="search" action="search.jsp"><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
       <td></td>
-      <td align="right"><a href="logout.jsp"><img src="img/logout.png" /></a></td>
+      <td align="right"><a href="logout.jsp" onclick="return confirm('Really you want to logout?')"><img src="img/logout.png" /></a></td>
     </tr>
   </table>
   <table class="results">

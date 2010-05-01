@@ -29,11 +29,15 @@
       sb.append(i++%2==0?"odd":"even");
       sb.append("\"><td width=\"18px\">");
       sb.append("<img src=\""+request.getContextPath()+"/es.git.openkm.frontend.Main/img/icon/mime/"+doc.getMimeType()+".gif\">");
-      sb.append("</td><td width=\"100%\" onclick=\"document.location='");
+      sb.append("</td><td width=\"100%\" onclick=\"if (confirm('Download "+FormatUtil.formatSize(doc.getActualVersion().getSize())+" document?')) { document.location='");
       sb.append(request.getContextPath());
-      sb.append("/OKMDownloadServlet?toPdf&id=");
+      if (doc.isConvertibleToPdf()) {
+      	sb.append("/OKMDownloadServlet?toPdf&id=");
+      } else {
+      	sb.append("/OKMDownloadServlet?id=");
+      }
       sb.append(URLEncoder.encode(doc.getPath(), "UTF-8"));
-      sb.append("'\">");
+      sb.append("'; }\">");
       sb.append(FileUtils.getName(doc.getPath()));
       sb.append("</td><td><a href=\"doc-properties.jsp?path=");
       sb.append(URLEncoder.encode(doc.getPath(), "UTF-8"));
