@@ -136,6 +136,7 @@
     <Reference Include="MSOpenKMCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\MSOpenKMCore\MSOpenKMCore\bin\Release\MSOpenKMCore.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <Private>False</Private>
@@ -159,25 +160,6 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="bean\CommandBarOption.cs" />
-    <Compile Include="bean\OKMDocument.cs" />
-    <Compile Include="bean\OKMDocumentType.cs" />
-    <Compile Include="bean\OKMPermissions.cs" />
-    <Compile Include="config\DocumentXML.cs" />
-    <Compile Include="form\ExplorerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form\ExplorerForm.Designer.cs">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="form\TreeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form\TreeForm.Designer.cs">
-      <DependentUpon>TreeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="logic\DocumentLogic.cs" />
-    <Compile Include="logic\OKMException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -191,7 +173,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -201,13 +182,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="util\FileUtil.cs" />
-    <Compile Include="util\ImageToPictureConverter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="util\ImageUtil.cs" />
-    <Compile Include="util\RegistryUtil.cs" />
-    <Compile Include="util\Util.cs" />
     <Compile Include="WordOpenKMAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -239,38 +213,6 @@
     <EmbeddedResource Include="edit.ico" />
     <EmbeddedResource Include="edit_disabled.ico" />
     <EmbeddedResource Include="edit_mask.ico" />
-    <EmbeddedResource Include="form\ExplorerForm.resx">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="images\tree\menuitem_childs.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_empty.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="images\tree\menuitem_childs_ro.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_childs_ro_subscribed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_childs_subscribed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_empty_ro.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_empty_ro_subscribed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\tree\menuitem_empty_subscribed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="cancel_checkout.ico" />
@@ -284,217 +226,6 @@
     <EmbeddedResource Include="add_document.ico" />
     <EmbeddedResource Include="add_document_mask.ico" />
     <EmbeddedResource Include="add_document_disabled.ico" />
-    <EmbeddedResource Include="form\ExplorerForm.ca-ES.resx">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ExplorerForm.en-GB.resx">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\ExplorerForm.es-ES.resx">
-      <DependentUpon>ExplorerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\TreeForm.ca-ES.resx">
-      <DependentUpon>TreeForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\TreeForm.en-GB.resx">
-      <DependentUpon>TreeForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\TreeForm.es-ES.resx">
-      <DependentUpon>TreeForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\TreeForm.resx">
-      <DependentUpon>TreeForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\icon\edit.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\icon\empty.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\icon\lock.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\illustrator.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\msword.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\octet-stream.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\pdf.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\rtf.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.ms-access.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.ms-excel.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.ms-powerpoint.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.ms-project.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.oasis.opendocument.database.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.oasis.opendocument.graphics.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.oasis.opendocument.presentation.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.oasis.opendocument.spreadsheet.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.oasis.opendocument.text.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.presentationml.presentation.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.presentationml.slideshow.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.presentationml.template.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.spreadsheetml.sheet.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.spreadsheetml.template.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.wordprocessingml.document.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.openxmlformats-officedocument.wordprocessingml.template.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\vnd.visio.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-argouml.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-compressed-tar.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-compressed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-gzip.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-mspublisher.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-perl.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-php.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-planner.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-rar-compressed.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-revelation.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-shellscript.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-shockwave-flash.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\x-tar.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\application\zip.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\audio\cd.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\audio\mpeg.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\audio\x-ogg.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\bmp.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\gif.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\jpeg.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\png.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\tiff.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\x-freehand.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\x-ico.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\image\x-psd.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\css.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\csv.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\html.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\plain.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\x-java.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\x-sql.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\text\xml.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\dvd.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\quicktime.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\x-flv.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\void.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="WordOpenKMAddIn_Code.ca-ES.resx">
       <DependentUpon>WordOpenKMAddIn_Code.cs</DependentUpon>
       <SubType>Designer</SubType>
