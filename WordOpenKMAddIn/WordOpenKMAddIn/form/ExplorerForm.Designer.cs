@@ -31,20 +31,20 @@
             this.cancel = new System.Windows.Forms.Button();
             this.edit = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.tree = new System.Windows.Forms.TreeView();
+            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(550, 575);
+            this.cancel.Location = new System.Drawing.Point(562, 544);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 2;
@@ -54,7 +54,7 @@
             // 
             // edit
             // 
-            this.edit.Location = new System.Drawing.Point(303, 575);
+            this.edit.Location = new System.Drawing.Point(315, 544);
             this.edit.Name = "edit";
             this.edit.Size = new System.Drawing.Size(75, 23);
             this.edit.TabIndex = 3;
@@ -62,8 +62,9 @@
             this.edit.UseVisualStyleBackColor = true;
             this.edit.Click += new System.EventHandler(this.edit_Click);
             // 
-            // dataGridView1
+            // dataGridView
             // 
+            this.dataGridView.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -73,50 +74,17 @@
             this.Column5,
             this.Column6,
             this.Column7});
-            this.dataGridView.Location = new System.Drawing.Point(255, 41);
-            this.dataGridView.Name = "dataGridView1";
+            this.dataGridView.Location = new System.Drawing.Point(252, 12);
+            this.dataGridView.Name = "dataGridView";
             this.dataGridView.Size = new System.Drawing.Size(712, 516);
             this.dataGridView.TabIndex = 1;
             // 
-            // Column7
+            // tree
             // 
-            this.Column7.HeaderText = "Column7";
-            this.Column7.Name = "Column7";
-            this.Column7.Width = 120;
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "Column6";
-            this.Column6.Name = "Column6";
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "Column5";
-            this.Column5.Name = "Column5";
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Column4";
-            this.Column4.Name = "Column4";
-            this.Column4.Width = 250;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.MinimumWidth = 25;
-            this.Column3.Name = "Column3";
-            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Column3.Width = 25;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.MinimumWidth = 25;
-            this.Column2.Name = "Column2";
-            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Column2.Width = 25;
+            this.tree.Location = new System.Drawing.Point(12, 12);
+            this.tree.Name = "tree";
+            this.tree.Size = new System.Drawing.Size(228, 516);
+            this.tree.TabIndex = 0;
             // 
             // Column1
             // 
@@ -127,22 +95,59 @@
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Column1.Width = 25;
             // 
-            // tree
+            // Column2
             // 
-            this.tree.Location = new System.Drawing.Point(21, 41);
-            this.tree.Name = "tree";
-            this.tree.Size = new System.Drawing.Size(228, 516);
-            this.tree.TabIndex = 0;
+            this.Column2.HeaderText = "Column2";
+            this.Column2.MinimumWidth = 25;
+            this.Column2.Name = "Column2";
+            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column2.Width = 25;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Column3";
+            this.Column3.MinimumWidth = 25;
+            this.Column3.Name = "Column3";
+            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column3.Width = 25;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Column4";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 274;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "Column5";
+            this.Column5.Name = "Column5";
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "Column6";
+            this.Column6.Name = "Column6";
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "Column7";
+            this.Column7.Name = "Column7";
+            this.Column7.Width = 120;
             // 
             // ExplorerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 610);
+            this.ClientSize = new System.Drawing.Size(976, 582);
+            this.ControlBox = false;
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.tree);
             this.Controls.Add(this.edit);
             this.Controls.Add(this.cancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ExplorerForm";
             this.Text = "OpenKMExplorerForm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
@@ -155,6 +160,7 @@
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Button edit;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.TreeView tree;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewImageColumn Column2;
         private System.Windows.Forms.DataGridViewImageColumn Column3;
@@ -162,6 +168,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
-        private System.Windows.Forms.TreeView tree;
     }
 }

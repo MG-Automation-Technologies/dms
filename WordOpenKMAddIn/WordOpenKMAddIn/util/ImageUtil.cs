@@ -6,35 +6,62 @@ using System.Drawing;
 using System.Windows.Forms;
 using WordOpenKMAddIn.bean;
 using MSOpenKMCore.ws;
+using System.IO;
 
 namespace WordOpenKMAddIn.util
 {
     class ImageUtil
     {
-        private const int IMG_FOLDER_EMPTY = 1;
-        private const int IMG_FOLDER_EMPTY_READ_ONLY = 2;
-        private const int IMG_FOLDER_EMPTY_READ_ONLY_SUBSCRIBED = 3;
-        private const int IMG_FOLDER_EMPTY_SUBSCRIBED = 4;
-        private const int IMG_FOLDER_CHILDS = 5;
-        private const int IMG_FOLDER_CHILDS_READ_ONLY = 6;
-        private const int IMG_FOLDER_CHILDS_READ_ONLY_SUBSCRIBED = 7;
-        private const int IMG_FOLDER_CHILDS_SUBSCRIBED = 8;
+        // Image index constants
+        private const int IMG_FOLDER_EMPTY                          = 0;
+        private const int IMG_FOLDER_EMPTY_READ_ONLY                = 1;
+        private const int IMG_FOLDER_EMPTY_READ_ONLY_SUBSCRIBED     = 2;
+        private const int IMG_FOLDER_EMPTY_SUBSCRIBED               = 3;
+        private const int IMG_FOLDER_CHILDS                         = 4;
+        private const int IMG_FOLDER_CHILDS_READ_ONLY               = 5;
+        private const int IMG_FOLDER_CHILDS_READ_ONLY_SUBSCRIBED    = 6;
+        private const int IMG_FOLDER_CHILDS_SUBSCRIBED              = 7;
 
         private ImageList imageList = null;
 
+        // Image Util
         public ImageUtil()
         {
-            imageList = new ImageList();
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_empty.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_empty_ro.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_empty_ro_subscribed.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_empty_subscribed.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_childs.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_childs_ro.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_childs_ro_subscribed.gif"));
-            imageList.Images.Add(Image.FromFile(@"images\menuitem_childs_subscribed.gif"));
+            try
+            {
+                imageList = new ImageList();
+                Stream s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_empty.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_empty_ro.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_empty_ro_subscribed.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_empty_subscribed.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_childs.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_childs_ro.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_childs_ro_subscribed.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+                s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.tree.menuitem_childs_subscribed.gif");
+                imageList.Images.Add(Image.FromStream(s));
+                s.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
+        // Return the image list
         public ImageList get()
         {
             return imageList;
@@ -43,57 +70,64 @@ namespace WordOpenKMAddIn.util
         // Selects the image index depending some folder values
         public int selectImageIndex(folder folderNode)
         {
-            bool hasWritePermission = ((folderNode.permissions & OKMPermissions.WRITE) == OKMPermissions.WRITE);
-
-            if (folderNode.hasChilds)
+            try
             {
-                if (folderNode.subscribed)
+                bool hasWritePermission = ((folderNode.permissions & OKMPermissions.WRITE) == OKMPermissions.WRITE);
+
+                if (folderNode.hasChilds)
                 {
-                    if (hasWritePermission)
+                    if (folderNode.subscribed)
                     {
-                        return IMG_FOLDER_CHILDS_SUBSCRIBED;
+                        if (hasWritePermission)
+                        {
+                            return IMG_FOLDER_CHILDS_SUBSCRIBED;
+                        }
+                        else
+                        {
+                            return IMG_FOLDER_CHILDS_READ_ONLY_SUBSCRIBED;
+                        }
                     }
                     else
                     {
-                        return IMG_FOLDER_CHILDS_READ_ONLY_SUBSCRIBED;
+                        if (hasWritePermission)
+                        {
+                            return IMG_FOLDER_CHILDS;
+                        }
+                        else
+                        {
+                            return IMG_FOLDER_CHILDS_READ_ONLY;
+                        }
                     }
                 }
                 else
                 {
-                    if (hasWritePermission)
+                    if (folderNode.subscribed)
                     {
-                        return IMG_FOLDER_CHILDS;
+                        if (hasWritePermission)
+                        {
+                            return IMG_FOLDER_EMPTY_SUBSCRIBED;
+                        }
+                        else
+                        {
+                            return IMG_FOLDER_EMPTY_READ_ONLY_SUBSCRIBED;
+                        }
                     }
                     else
                     {
-                        return IMG_FOLDER_CHILDS_READ_ONLY;
+                        if (hasWritePermission)
+                        {
+                            return IMG_FOLDER_EMPTY;
+                        }
+                        else
+                        {
+                            return IMG_FOLDER_EMPTY_READ_ONLY;
+                        }
                     }
                 }
             }
-            else
+            catch (Exception e)
             {
-                if (folderNode.subscribed)
-                {
-                    if (hasWritePermission)
-                    {
-                        return IMG_FOLDER_EMPTY_SUBSCRIBED;
-                    }
-                    else
-                    {
-                        return IMG_FOLDER_EMPTY_READ_ONLY_SUBSCRIBED;
-                    }
-                }
-                else
-                {
-                    if (hasWritePermission)
-                    {
-                        return IMG_FOLDER_EMPTY;
-                    }
-                    else
-                    {
-                        return IMG_FOLDER_EMPTY_READ_ONLY;
-                    }
-                }
+                throw e;
             }
         }
     }

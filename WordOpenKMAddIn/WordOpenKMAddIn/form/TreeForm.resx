@@ -118,12 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Send</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="treenavigator" xml:space="preserve">
     <value>Tree navigator</value>
+  </data>
+  <data name="uploaded" xml:space="preserve">
+    <value>Document successfully uploaded</value>
   </data>
 </root>

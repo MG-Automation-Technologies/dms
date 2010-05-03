@@ -7,8 +7,8 @@ namespace WordOpenKMAddIn.bean
 {
     class OKMPermissions
     {
-        public const byte READ = 1;
-        public const byte WRITE = 2;
-        public const byte REMOVE = 4;
+        public const byte READ      = 1;
+        public const byte WRITE     = 2;
+        public const byte REMOVE    = 4;
     }
 }

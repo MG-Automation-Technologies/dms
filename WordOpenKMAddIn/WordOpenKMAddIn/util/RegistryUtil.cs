@@ -14,11 +14,19 @@ namespace WordOpenKMAddIn.util
         {
             // Take a look here http://support.microsoft.com/kb/221837/es ( user could change default my documents path )
             // now this case is not contempled
-            RegistryKey myDocumentskey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\");
-            personal = (String)myDocumentskey.GetValue("Personal");
+            try
+            {
+                RegistryKey myDocumentskey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\");
+                personal = (String)myDocumentskey.GetValue("Personal");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
-        public String getPersonal() {
+        // Get local personal user folder
+        public String getLocalPersonalUserFolder() {
             return personal;
         }
     }

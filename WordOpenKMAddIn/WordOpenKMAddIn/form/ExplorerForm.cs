@@ -28,7 +28,6 @@ namespace WordOpenKMAddIn.form
         private String token = "";
         private TreeNode rootNode = null;
         private TreeNode actualNode = null;
-        private TreeNodeMouseClickEventHandler treeNodeMouseClickEventHandler;
 
         private OKMAuthService authService = null;
         private OKMRepositoryService repositoryService = null;
@@ -38,95 +37,194 @@ namespace WordOpenKMAddIn.form
         private String formType = ""; // Excel, word form type ( used to validating extensions files )
 
         private Word.Application application = null;
+        ComponentResourceManager resources = null;
 
         public ExplorerForm(Word.Application application, String formType, ConfigXML configXML)
         {
-            this.application = application;
-            this.formType = formType;
-            imageList = new ImageUtil();
-            this.configXML = configXML;
-            this.documentXML = new DocumentXML();
-            this.fileUtil = new FileUtil();
-            InitializeComponent();
-            treeNodeMouseClickEventHandler = new TreeNodeMouseClickEventHandler(nodeMouseClick);
-            initServices();
+            try
+            {
+                resources = new ComponentResourceManager(typeof(ExplorerForm));
 
-            // Adding click handler
-            tree.NodeMouseClick += treeNodeMouseClickEventHandler;
+                this.application = application;
+                this.formType = formType;
+                imageList = new ImageUtil();
+                this.configXML = configXML;
+                this.documentXML = new DocumentXML();
+                this.fileUtil = new FileUtil();
+                initServices();
 
-            // Column names
-            dataGridView.Columns[0].HeaderText = "";
-            dataGridView.Columns[1].HeaderText = "";
-            dataGridView.Columns[2].HeaderText = "";
-            dataGridView.Columns[3].HeaderText = "Name";
-            dataGridView.Columns[4].HeaderText = "Author";
-            dataGridView.Columns[5].HeaderText = "Version";
-            dataGridView.Columns[6].HeaderText = "Date";
+                // Initialize component
+                InitializeComponent();
+
+                // Centering form
+                this.CenterToParent();
+
+                // Column translations
+                dataGridView.Columns[0].HeaderText = "";
+                dataGridView.Columns[1].HeaderText = "";
+                dataGridView.Columns[2].HeaderText = "";
+                dataGridView.Columns[3].HeaderText = resources.GetString("name");
+                dataGridView.Columns[4].HeaderText = resources.GetString("author");
+                dataGridView.Columns[5].HeaderText = resources.GetString("version");
+                dataGridView.Columns[6].HeaderText = resources.GetString("date");
+
+                // Translations
+                edit.Text = resources.GetString("edit");
+                cancel.Text = resources.GetString("cancel");
+                this.Text = resources.GetString("documentexplorer");
+
+                // By default edit button is always disabled
+                edit.Enabled = false;
+
+                // Setting the image list
+                tree.ImageList = imageList.get();
+
+                // Grid user properties
+                dataGridView.AllowUserToAddRows = false;
+                dataGridView.AllowUserToDeleteRows = false;
+                dataGridView.AllowUserToOrderColumns = false;
+                dataGridView.MultiSelect = false;
+                dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+                // Adding click handlers
+                tree.NodeMouseClick += new TreeNodeMouseClickEventHandler(nodeMouseClick);
+                dataGridView.CellClick += new DataGridViewCellEventHandler(dataGridView_CellClick);
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "ExplorerForm - (ExplorerForm)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
+
+        
 
         // Init services
         private void initServices()
         {
-            authService = new OKMAuthService(configXML.getHost());
-            repositoryService = new OKMRepositoryService(configXML.getHost());
-            folderService = new OKMFolderService(configXML.getHost());
-            documentService = new OKMDocumentService(configXML.getHost());
+            try
+            {
+                authService = new OKMAuthService(configXML.getHost());
+                repositoryService = new OKMRepositoryService(configXML.getHost());
+                folderService = new OKMFolderService(configXML.getHost());
+                documentService = new OKMDocumentService(configXML.getHost());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Gets the root folder
         private void getRootFolder()
         {
-            folder rootFolder = repositoryService.getRootFolder(token);
-            rootNode = new TreeNode(Util.getFolderName(rootFolder), 0, imageList.selectImageIndex(rootFolder));
-            rootNode.Tag = rootFolder;
-            rootNode.Name = rootNode.Text;
-            tree.Nodes.Add(rootNode);
-            actualNode = rootNode;
+            try
+            {
+                folder rootFolder = repositoryService.getRootFolder(token);
+                int selectedImage = imageList.selectImageIndex(rootFolder);
+                rootNode = new TreeNode(Util.getFolderName(rootFolder), selectedImage, selectedImage);
+                rootNode.Tag = rootFolder;
+                rootNode.Name = rootNode.Text;
+                tree.Nodes.Add(rootNode);
+                actualNode = rootNode;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // getChilds
         private void getChilds()
         {
-            actualNode.Nodes.Clear(); // removes all nodes
-            foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
+            try
             {
-                TreeNode childNode = new TreeNode(Util.getFolderName(childFolder), 0, imageList.selectImageIndex(childFolder));
-                childNode.Tag = childFolder;
-                childNode.Name = childNode.Text;
-                actualNode.Nodes.Add(childNode);
+                actualNode.Nodes.Clear(); // removes all nodes
+                foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
+                {
+                    int selectedImage = imageList.selectImageIndex(childFolder);
+                    TreeNode childNode = new TreeNode(Util.getFolderName(childFolder), selectedImage, selectedImage);
+                    childNode.Tag = childFolder;
+                    childNode.Name = childNode.Text;
+                    actualNode.Nodes.Add(childNode);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
         // getDocumentChilds
         private void getDocumentChilds()
         {
-            dataGridView.Rows.Clear();
-            foreach (document rowDocument in documentService.getChilds(token, ((folder)actualNode.Tag).path))
+            try
             {
-                dataGridView.Rows.Add(1);
-                int rowCount = dataGridView.RowCount;
-                if (rowDocument.locked && !rowDocument.checkedOut)
+                dataGridView.Rows.Clear();
+                foreach (document rowDocument in documentService.getChilds(token, ((folder)actualNode.Tag).path))
                 {
-                    dataGridView.Rows[rowCount - 1].Cells[0].Value = Image.FromFile(@"images\icon\lock.gif");
+                    dataGridView.Rows.Add(1);
+                    int rowCount = dataGridView.RowCount;
+                    if (rowDocument.locked && !rowDocument.checkedOut)
+                    {
+                        Stream s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.icon.lock.gif");
+                        dataGridView.Rows[rowCount - 1].Cells[0].Value = Image.FromStream(s);
+                        s.Close();
+                    }
+                    else
+                    {
+                        Stream s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.icon.empty.gif");
+                        dataGridView.Rows[rowCount - 1].Cells[0].Value = Image.FromStream(s);
+                        s.Close();
+                    }
+                    if (rowDocument.checkedOut)
+                    {
+                        Stream s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.icon.edit.gif");
+                        dataGridView.Rows[rowCount - 1].Cells[1].Value = Image.FromStream(s);
+                        s.Close();
+                    }
+                    else
+                    {
+                        Stream s = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.icon.empty.gif");
+                        dataGridView.Rows[rowCount - 1].Cells[1].Value = Image.FromStream(s);
+                        s.Close();
+                    }
+                    Stream sTream = this.GetType().Assembly.GetManifestResourceStream("WordOpenKMAddIn.images.mime." + rowDocument.mimeType.Replace("/", ".") + ".gif");
+                    dataGridView.Rows[rowCount - 1].Cells[2].Value = Image.FromStream(sTream);
+                    sTream.Close();
+                    dataGridView.Rows[rowCount - 1].Cells[3].Value = Util.getDocumentName(rowDocument);
+                    dataGridView.Rows[rowCount - 1].Cells[4].Value = rowDocument.author;
+                    dataGridView.Rows[rowCount - 1].Cells[5].Value = rowDocument.actualVersion.name;
+                    dataGridView.Rows[rowCount - 1].Cells[6].Value = rowDocument.lastModified;
+                    dataGridView.Rows[rowCount - 1].Tag = rowDocument;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        // mouse click
+        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                // Evaluates buttons enabled
+                if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
+                {
+                    folder fld = (folder)actualNode.Tag;
+                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    evaluateEnabledButtonByPermissions(fld, doc);
                 }
                 else
                 {
-                    dataGridView.Rows[rowCount - 1].Cells[0].Value = Image.FromFile(@"images\icon\empty.gif");
+                    enableDefaultButtons();
                 }
-                if (rowDocument.checkedOut)
-                {
-                    dataGridView.Rows[rowCount - 1].Cells[1].Value = Image.FromFile(@"images\icon\edit.gif");
-                }
-                else
-                {
-                    dataGridView.Rows[rowCount - 1].Cells[1].Value = Image.FromFile(@"images\icon\empty.gif");
-                }
-                dataGridView.Rows[rowCount - 1].Cells[2].Value = Image.FromFile(@"images\mime\" + rowDocument.mimeType.Replace("/", @"\") + ".gif");
-                dataGridView.Rows[rowCount - 1].Cells[3].Value = fileUtil.getDocumentName(rowDocument);
-                dataGridView.Rows[rowCount - 1].Cells[4].Value = rowDocument.author;
-                dataGridView.Rows[rowCount - 1].Cells[5].Value = rowDocument.actualVersion.name;
-                dataGridView.Rows[rowCount - 1].Cells[6].Value = rowDocument.lastModified;
-                dataGridView.Rows[rowCount - 1].Tag = rowDocument;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -150,7 +248,19 @@ namespace WordOpenKMAddIn.form
                 actualNode.ExpandAll();
 
                 // Gets document childs
-                getDocumentChilds(); 
+                getDocumentChilds();
+
+                // Evaluates buttons enabled
+                if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
+                {
+                    folder fld = (folder) actualNode.Tag;
+                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    evaluateEnabledButtonByPermissions(fld, doc);
+                }
+                else
+                {
+                    enableDefaultButtons();
+                }
 
                 // Logout OpenKM
                 authService.logout(token);
@@ -159,6 +269,9 @@ namespace WordOpenKMAddIn.form
             {
                 if (!token.Equals(""))
                 {
+                    String errorMsg = "ExplorerForm - (nodeMouseClick)\n" + ex.Message + "\n\n" + ex.StackTrace;
+                    MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                     // Logout OpenKM
                     authService.logout(token);
                     token = "";
@@ -171,18 +284,11 @@ namespace WordOpenKMAddIn.form
         {
             try
             {
+                // Default buttons enabled
+                enableDefaultButtons();
+
                 // OpenKM authentication
                 token = authService.login(configXML.getUser(), configXML.getPassword());
-
-                // Setting the image list
-                tree.ImageList = imageList.get();
-
-                // Grid user properties
-                dataGridView.AllowUserToAddRows = false;
-                dataGridView.AllowUserToDeleteRows = false;
-                dataGridView.AllowUserToOrderColumns = false;
-                dataGridView.MultiSelect = false;
-                dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
                 // Suppress repainting the TreeView until all the objects have been created.
                 tree.BeginUpdate();
@@ -205,15 +311,29 @@ namespace WordOpenKMAddIn.form
                 // Begin repainting the TreeView.
                 tree.EndUpdate();
 
+                // Evaluates buttons enabled
+                if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
+                {
+                    folder fld = (folder)actualNode.Tag;
+                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+                    evaluateEnabledButtonByPermissions(fld, doc);
+                }
+                else
+                {
+                    enableDefaultButtons();
+                }
+
                 // Logout OpenKM
                 authService.logout(token);
                 token = "";
-
             }
             catch (Exception ex)
             {
                 if (!token.Equals(""))
                 {
+                    String errorMsg = "ExplorerForm - (startUp)\n" + ex.Message;
+                    MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                     // Logout OpenKM
                     authService.logout(token);
                     token = "";
@@ -221,30 +341,85 @@ namespace WordOpenKMAddIn.form
             }
         }
 
+        // Evaluates enabled buttons by permisions
+        private void evaluateEnabledButtonByPermissions(folder fld, document doc)
+        {
+            if (Util.hasWritePermission(fld, doc) && !doc.locked && !doc.checkedOut)
+            {
+                edit.Enabled = true;
+            }
+            else
+            {
+                edit.Enabled = false;
+            }
+        }
 
+        // Disables als buttons
+        private void disableAllButtons()
+        {
+            edit.Enabled = false;
+            cancel.Enabled = false;
+        }
+
+        // Defaults buttons enabled view
+        private void enableDefaultButtons()
+        {
+            edit.Enabled = false;
+            cancel.Enabled = true;
+        }
+
+        //  cancel button
         private void cancel_Click(object sender, EventArgs e)
         {
             Hide();
         }
 
+        // edit button
         private void edit_Click(object sender, EventArgs e)
         {
-            Hide();
-            if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count>0)
+            try
             {
-                document doc = (document) dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
-                OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, configXML.getHost(), configXML.getUser(), configXML.getPassword());
-                if (oKMDocument != null)
+                if (dataGridView.RowCount > 0 && dataGridView.SelectedRows.Count > 0)
                 {
-                    documentXML.add(oKMDocument);
-                    object missingValue = Type.Missing;
-                    object readOnly = false;
-                    object fileName = oKMDocument.getLocalFilename();
-                    application.Documents.Open(ref fileName,
-                        ref missingValue, ref readOnly, ref missingValue, ref missingValue, ref missingValue,
-                        ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue,
-                        ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue);
+                    bool editFile = true;
+                    document doc = (document)dataGridView.Rows[dataGridView.SelectedRows[0].Index].Tag;
+
+                    // We try to advice user in case selects some document extension that seems not be good to be opened with MS Word
+                    if (formType.Equals(OKMDocumentType.TYPE_WORD))
+                    {
+                        if (!Util.isDocumentValidToOpenWithMSWord(doc))
+                        {
+                            String msg = String.Format(resources.GetString("document_extension_warning"), Util.getDocumentName(doc));
+                            
+                            editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
+                        }
+                    }
+
+                    if (editFile)
+                    {
+                        OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, configXML.getHost(), configXML.getUser(), configXML.getPassword());
+                        if (oKMDocument != null)
+                        {
+                            documentXML.add(oKMDocument);
+                            object missingValue = Type.Missing;
+                            object readOnly = false;
+                            object fileName = oKMDocument.getLocalFilename();
+                            application.Documents.Open(ref fileName,
+                                ref missingValue, ref readOnly, ref missingValue, ref missingValue, ref missingValue,
+                                ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue,
+                                ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue);
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                String errorMsg = "ExplorerForm - (edit_Click)\n" + ex.Message + "\n\n" + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            finally
+            {
+                Hide();
             }
         }
     }

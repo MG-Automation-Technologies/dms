@@ -28,172 +28,239 @@ namespace WordOpenKMAddIn.config
         // Document XML
         public DocumentXML()
         {
-            fileUtil = new FileUtil();
-            documentList = new List<OKMDocument>();
-
-            // Create default %CURRENT USER%/My documents/OpenKM/ folder
-            if (!Directory.Exists(fileUtil.getConfigPath()))
+            try
             {
-                Directory.CreateDirectory(fileUtil.getConfigPath());
-            }
+                fileUtil = new FileUtil();
+                documentList = new List<OKMDocument>();
 
-            // Create configuration file
-            if (!File.Exists(fileUtil.getDocumentFilenamePath()))
+                // Create default %CURRENT USER%/My documents/OpenKM/ folder
+                if (!Directory.Exists(fileUtil.getConfigPath()))
+                {
+                    Directory.CreateDirectory(fileUtil.getConfigPath());
+                }
+
+                // Create configuration file
+                if (!File.Exists(fileUtil.getDocumentFilenamePath()))
+                {
+                    CreateDocumentFile();
+                }
+
+                // Always we reading configuration file
+                ReadDocumentFile();
+            }
+            catch (Exception e)
             {
-                CreateDocumentFile();
+                throw e;
             }
-
-            // Always we reading configuration file
-            ReadDocumentFile();
         }
 
         // Refresh document list
         public void refresh()
         {
-            ReadDocumentFile();
+            try
+            {
+                ReadDocumentFile();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Read document file
         private void ReadDocumentFile()
         {
-            XmlTextReader reader = new XmlTextReader(fileUtil.getDocumentFilenamePath());
-            OKMDocument doc = new OKMDocument();
-            documentList = new List<OKMDocument>();
+            XmlTextReader reader = null;
+            OKMDocument doc = null;
+            documentList = null;
 
-            while (reader.Read())
+            try
             {
-                switch (reader.NodeType)
+                reader = new XmlTextReader(fileUtil.getDocumentFilenamePath());
+                doc = new OKMDocument();
+                documentList = new List<OKMDocument>();
+
+                while (reader.Read())
                 {
-                    case XmlNodeType.Element:
-                        if (reader.Name.ToLower().Equals(XML_TAG_DOCUMENT))
-                        {
-                            doc = new OKMDocument();
-                        }
-                        else if (reader.Name.ToLower().Equals(XML_TAG_UUID))
-                        {
-                            if (reader.Read())
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if (reader.Name.ToLower().Equals(XML_TAG_DOCUMENT))
                             {
-                                doc.setUUID(reader.Value);
+                                doc = new OKMDocument();
                             }
-                        }
-                        else if (reader.Name.ToLower().Equals(XML_TAG_PATH))
-                        {
-                            if (reader.Read())
+                            else if (reader.Name.ToLower().Equals(XML_TAG_UUID))
                             {
-                                doc.setPath(reader.Value);
+                                if (reader.Read())
+                                {
+                                    doc.setUUID(reader.Value);
+                                }
                             }
-                        }
-                        else if (reader.Name.ToLower().Equals(XML_TAG_LOCAL_FILENAME))
-                        {
-                            if (reader.Read())
+                            else if (reader.Name.ToLower().Equals(XML_TAG_PATH))
                             {
-                                doc.setLocalFilename(reader.Value);
+                                if (reader.Read())
+                                {
+                                    doc.setPath(reader.Value);
+                                }
                             }
-                        }
-                        else if (reader.Name.ToLower().Equals(XML_TAG_NAME))
-                        {
-                            if (reader.Read())
+                            else if (reader.Name.ToLower().Equals(XML_TAG_LOCAL_FILENAME))
                             {
-                                doc.setName(reader.Value);
+                                if (reader.Read())
+                                {
+                                    doc.setLocalFilename(reader.Value);
+                                }
                             }
-                        }
-                        else if (reader.Name.ToLower().Equals(XML_TAG_TYPE))
-                        {
-                            if (reader.Read())
+                            else if (reader.Name.ToLower().Equals(XML_TAG_NAME))
                             {
-                                doc.setType(reader.Value);
-                                documentList.Add(doc);
+                                if (reader.Read())
+                                {
+                                    doc.setName(reader.Value);
+                                }
                             }
-                        }
-                        break;
+                            else if (reader.Name.ToLower().Equals(XML_TAG_TYPE))
+                            {
+                                if (reader.Read())
+                                {
+                                    doc.setType(reader.Value);
+                                    documentList.Add(doc);
+                                }
+                            }
+                            break;
 
-                    case XmlNodeType.Text:
-                        break;
+                        case XmlNodeType.Text:
+                            break;
 
-                    case XmlNodeType.EndElement:
-                        break;
+                        case XmlNodeType.EndElement:
+                            break;
+                    }
                 }
             }
-
-            reader.Close();
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+            }
         }
 
         // Add new document to document file
         public void add(OKMDocument oKMDocument)
         {
-            documentList.Add(oKMDocument);
-            CreateDocumentFile();
+            try 
+            {
+                documentList.Add(oKMDocument);
+                CreateDocumentFile();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Create document file
         public void CreateDocumentFile()
         {
-            // Deleting file if exists
-            if (File.Exists(fileUtil.getDocumentFilenamePath()))
+            XmlTextWriter writer = null;
+
+            try
             {
-                File.Delete(fileUtil.getDocumentFilenamePath());
+                // Deleting file if exists
+                if (File.Exists(fileUtil.getDocumentFilenamePath()))
+                {
+                    File.Delete(fileUtil.getDocumentFilenamePath());
+                }
+
+                writer = new XmlTextWriter(fileUtil.getDocumentFilenamePath(), null);
+
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartDocument();
+                writer.WriteStartElement(XML_TAG_OPENKM, "");                               // <openkm>
+
+                // Writing documents
+                foreach (OKMDocument doc in documentList)
+                {
+                    writer.WriteStartElement(XML_TAG_DOCUMENT, "");                         // <document>
+                    writer.WriteStartElement(XML_TAG_UUID, "");                             // <uuid>
+                    writer.WriteString(doc.getUUID());                                      // uuid value
+                    writer.WriteEndElement();                                               // </uuid>
+                    writer.WriteStartElement(XML_TAG_PATH, "");                             // <path>
+                    writer.WriteString(doc.getPath());                                      // path value
+                    writer.WriteEndElement();                                               // </localfilename>
+                    writer.WriteStartElement(XML_TAG_LOCAL_FILENAME, "");                   // <path>
+                    writer.WriteString(doc.getLocalFilename());                             // localfilename value
+                    writer.WriteEndElement();                                               // </path>
+                    writer.WriteStartElement(XML_TAG_NAME, "");                             // <name>
+                    writer.WriteString(doc.getName());                                      // name value
+                    writer.WriteEndElement();                                               // </name>
+                    writer.WriteStartElement(XML_TAG_TYPE, "");                             // <type>
+                    writer.WriteString(doc.getType());                                      // type value
+                    writer.WriteEndElement();                                               // </type>
+                    writer.WriteEndElement();                                               // </document>
+                }
+
+                writer.WriteFullEndElement();                                               // </openkm>
+                writer.WriteEndDocument();                                                  // EOF
             }
-
-            XmlTextWriter writer = new XmlTextWriter(fileUtil.getDocumentFilenamePath(), null);
-
-            writer.Formatting = Formatting.Indented;
-            writer.WriteStartDocument();
-            writer.WriteStartElement(XML_TAG_OPENKM, "");                               // <openkm>
-
-            // Writing documents
-            foreach (OKMDocument doc in documentList)
+            catch (Exception e)
             {
-                writer.WriteStartElement(XML_TAG_DOCUMENT, "");                         // <document>
-                writer.WriteStartElement(XML_TAG_UUID, "");                             // <uuid>
-                writer.WriteString(doc.getUUID());                                      // uuid value
-                writer.WriteEndElement();                                               // </uuid>
-                writer.WriteStartElement(XML_TAG_PATH, "");                             // <path>
-                writer.WriteString(doc.getPath());                                      // path value
-                writer.WriteEndElement();                                               // </localfilename>
-                writer.WriteStartElement(XML_TAG_LOCAL_FILENAME, "");                   // <path>
-                writer.WriteString(doc.getLocalFilename());                             // localfilename value
-                writer.WriteEndElement();                                               // </path>
-                writer.WriteStartElement(XML_TAG_NAME, "");                             // <name>
-                writer.WriteString(doc.getName());                                      // name value
-                writer.WriteEndElement();                                               // </name>
-                writer.WriteStartElement(XML_TAG_TYPE, "");                             // <type>
-                writer.WriteString(doc.getType());                                      // type value
-                writer.WriteEndElement();                                               // </type>
-                writer.WriteEndElement();                                               // </document>
+                throw e;
             }
-
-            writer.WriteFullEndElement();                                               // </openkm>
-            writer.WriteEndDocument();                                                  // EOF
-            writer.Close();
+            finally
+            {
+                if (writer != null)
+                {
+                    writer.Close();
+                }
+            }
         }
 
         // Returns if some local file is an openkm
         public bool isOpenKMDocument(String localFilename) {
-            bool found = false;
-
-            foreach (OKMDocument oKMDocument in documentList)
+            try
             {
-                if (oKMDocument.getLocalFilename().Equals(localFilename)) {
-                    found = true;
-                    break;
+                bool found = false;
+
+                foreach (OKMDocument oKMDocument in documentList)
+                {
+                    if (oKMDocument.getLocalFilename().Equals(localFilename))
+                    {
+                        found = true;
+                        break;
+                    }
                 }
+
+                return found;
             }
-            
-            return found;
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Return the openkm document xml data object
         public OKMDocument getOpenKMDocument(String localFilename)
         {
-            foreach (OKMDocument oKMDocument in documentList)
+            try
             {
-                if (oKMDocument.getLocalFilename().Equals(localFilename))
+                foreach (OKMDocument oKMDocument in documentList)
                 {
-                    return oKMDocument;
+                    if (oKMDocument.getLocalFilename().Equals(localFilename))
+                    {
+                        return oKMDocument;
+                    }
                 }
-            }
 
-            return null;
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // remove document from document file
@@ -216,12 +283,13 @@ namespace WordOpenKMAddIn.config
                 {
                     documentList.Remove(documentToRemove);
                 }
+
+                CreateDocumentFile();
             }
             catch (Exception e)
             {
+                throw e;
             }
-
-            CreateDocumentFile();
         }
     }
 }
