@@ -4,13 +4,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using MSOpenKMCore.config;
 using MSOpenKMCore.form;
-using WordOpenKMAddIn.bean;
-using WordOpenKMAddIn.config;
-using WordOpenKMAddIn.form;
-using WordOpenKMAddIn.util;
+using MSOpenKMCore.bean;
+using MSOpenKMCore.util;
 using Office = Microsoft.Office.Core;
 using Word = Microsoft.Office.Interop.Word;
-using WordOpenKMAddIn.logic;
+using MSOpenKMCore.logic;
 using System.IO;
 using System.Runtime.InteropServices;
 using stdole;
@@ -95,6 +93,7 @@ namespace WordOpenKMAddIn
                         openKMButton.DescriptionText = resources.GetString("configuration");
                         openKMButton.TooltipText = resources.GetString("configuration");
                         Image bmpButton = new Bitmap(GetType(), "openkm.ico");
+
                         Image bmpMask = new Bitmap(GetType(), "openkm_mask.ico");
                         IPictureDisp buttonIco = ImageToPictureConverter.Convert(bmpButton);
                         IPictureDisp maskIco = ImageToPictureConverter.Convert(bmpMask);
