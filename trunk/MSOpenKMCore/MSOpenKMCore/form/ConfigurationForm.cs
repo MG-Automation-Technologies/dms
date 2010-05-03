@@ -19,10 +19,11 @@ namespace MSOpenKMCore.form
         private TextBox textBoxPassword;
         private TextBox textBoxHost;
         private Button buttonAccept;
-        private ComponentResourceManager resources = new ComponentResourceManager(typeof(ConfigurationForm));
+        private ComponentResourceManager resources = null;
 
         public ConfigurationForm()
         {
+            resources = new ComponentResourceManager(typeof(ConfigurationForm));
             InitializeComponent();
             this.Text = resources.GetString("configuration");
             this.CenterToParent();
@@ -104,6 +105,7 @@ namespace MSOpenKMCore.form
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.Size = new System.Drawing.Size(165, 20);
             this.textBoxPassword.TabIndex = 6;
+            this.textBoxPassword.PasswordChar = '*';
             // 
             // textBoxHost
             // 
@@ -124,6 +126,11 @@ namespace MSOpenKMCore.form
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonAccept);
             this.Name = "ConfigurationForm";
+
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.ControlBox = false;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.ResumeLayout(false);
             this.PerformLayout();
 
