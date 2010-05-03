@@ -81,6 +81,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BAF921D6A6DF650F4C5567C06415190B"
+        "OwnerKey" = "8:_06E52764129FFB66D7ECA3EFE29487F5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CB44955FBB3CBC27B5AF178581E89101"
         "OwnerKey" = "8:_04C5438A7040481684736C187B436E4F"
         "MsmSig" = "8:_UNDEFINED"
@@ -567,7 +573,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Word OpenKM AddIn Installer"
         "ProductCode" = "8:{ED7186CD-1A8F-4780-A348-DB246C6B9ACE}"
-        "PackageCode" = "8:{8E8A9B04-1FA9-48F6-A3B1-0560F7AEC655}"
+        "PackageCode" = "8:{DCCC6512-2C87-438C-8964-CEC647178785}"
         "UpgradeCode" = "8:{E2D778A9-378D-44FA-99DF-8ACB13CC5D8F}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
