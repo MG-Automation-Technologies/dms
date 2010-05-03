@@ -27,12 +27,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import com.openkm.ws.client.AccessDeniedException_Exception;
@@ -51,8 +53,9 @@ import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
 import com.openkm.ws.client.VirusDetectedException_Exception;
 
 public class Util {
-
 	private static Logger log = Logger.getLogger(Util.class.getName());
+	private static QName documentServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMDocumentService");
+	private static QName folderServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMFolderService");
 
 	/**
 	 * 
@@ -63,7 +66,7 @@ public class Util {
 			UnsupportedMimeTypeException_Exception, VirusDetectedException_Exception {
 		log.info("uploadDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
 
-		OKMDocumentService okmDocumentService = new OKMDocumentService();
+		OKMDocumentService okmDocumentService = new OKMDocumentService(new URL(url+"/OKMDocument?wsdl"), documentServiceName);
 		OKMDocument okmDocument = okmDocumentService.getOKMDocumentPort();
 		Document doc = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,7 +102,7 @@ public class Util {
 			RepositoryException_Exception {
 		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
 
-		OKMFolderService okmFolderService = new OKMFolderService();
+		OKMFolderService okmFolderService = new OKMFolderService(new URL(url+"/OKMFolder?wsdl"), folderServiceName);
 		OKMFolder okmFolder = okmFolderService.getOKMFolderPort();
 		Folder fld = new Folder();
 
