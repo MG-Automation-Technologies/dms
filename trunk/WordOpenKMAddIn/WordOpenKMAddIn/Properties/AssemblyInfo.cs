@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WordOpenKMAddIn")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("darknight")]
+[assembly: AssemblyCompany("OpenKM")]
 [assembly: AssemblyProduct("WordOpenKMAddIn")]
-[assembly: AssemblyCopyright("Copyright © darknight 2010")]
+[assembly: AssemblyCopyright("Copyright © OpenKM 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

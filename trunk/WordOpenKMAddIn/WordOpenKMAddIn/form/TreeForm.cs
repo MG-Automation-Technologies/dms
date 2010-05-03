@@ -31,64 +31,100 @@ namespace WordOpenKMAddIn.form
         private OKMFolderService folderService = null;
 
         private Word.Application application = null;
+        ComponentResourceManager resources = null;
 
         public TreeForm(Word.Application application, ConfigXML configXML)
         {
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(TreeForm));
+            try
+            {
+                resources = new ComponentResourceManager(typeof(TreeForm));
 
-            this.application = application;
-            this.configXML = configXML;
-            imageList = new ImageUtil();
-            initServices();
+                this.application = application;
+                this.configXML = configXML;
+                imageList = new ImageUtil();
+                initServices();
 
-            // Initialize component
-            InitializeComponent();
+                // Initialize component
+                InitializeComponent();
 
-            // Centering form
-            this.CenterToParent();
+                // Centering form
+                this.CenterToParent();
 
-            // Translations
-            accept.Text = resources.GetString("accept");
-            cancel.Text = resources.GetString("cancel");
-            this.Text = resources.GetString("treenavigator");
+                // Translations
+                accept.Text = resources.GetString("accept");
+                cancel.Text = resources.GetString("cancel");
+                this.Text = resources.GetString("treenavigator");
 
-            // By default accept button is always disabled
-            accept.Enabled = false;
+                // By default accept button is always disabled
+                accept.Enabled = false;
 
-            // Adding click handler
-            treeNodeMouseClickEventHandler = new TreeNodeMouseClickEventHandler(nodeMouseClick);
-            tree.NodeMouseClick += treeNodeMouseClickEventHandler;
+                // Setting the image list
+                tree.ImageList = imageList.get();
+
+                // Adding click handler
+                treeNodeMouseClickEventHandler = new TreeNodeMouseClickEventHandler(nodeMouseClick);
+                tree.NodeMouseClick += treeNodeMouseClickEventHandler;
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "TreeForm - (TreeForm)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         // Init services
         private void initServices()
         {
-            authService = new OKMAuthService(configXML.getHost());
-            repositoryService = new OKMRepositoryService(configXML.getHost());
-            folderService = new OKMFolderService(configXML.getHost());
+            try
+            {
+                authService = new OKMAuthService(configXML.getHost());
+                repositoryService = new OKMRepositoryService(configXML.getHost());
+                folderService = new OKMFolderService(configXML.getHost());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Gets the root folder
         private void getRootFolder()
         {
-            folder rootFolder = repositoryService.getRootFolder(token);
-            rootNode = new TreeNode(Util.getFolderName(rootFolder), 0, imageList.selectImageIndex(rootFolder));
-            rootNode.Tag = rootFolder;
-            rootNode.Name = rootNode.Text;
-            tree.Nodes.Add(rootNode);
-            actualNode = rootNode;
+            try
+            {
+                folder rootFolder = repositoryService.getRootFolder(token);
+                int selectedImage = imageList.selectImageIndex(rootFolder);
+                rootNode = new TreeNode(Util.getFolderName(rootFolder), selectedImage, selectedImage);
+                rootNode.Tag = rootFolder;
+                rootNode.Name = rootNode.Text;
+                tree.Nodes.Add(rootNode);
+                actualNode = rootNode;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
         // getChilds
         private void getChilds()
         {
-            actualNode.Nodes.Clear(); // removes all nodes
-            foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
+            try
             {
-                TreeNode childNode = new TreeNode(Util.getFolderName(childFolder), 0, imageList.selectImageIndex(childFolder));
-                childNode.Tag = childFolder;
-                childNode.Name = childNode.Text;
-                actualNode.Nodes.Add(childNode);
+                actualNode.Nodes.Clear(); // removes all nodes
+                foreach (folder childFolder in folderService.getChilds(token, ((folder)actualNode.Tag).path))
+                {
+                    int selectedImage = imageList.selectImageIndex(childFolder);
+                    TreeNode childNode = new TreeNode(Util.getFolderName(childFolder), selectedImage, selectedImage);
+                    childNode.Tag = childFolder;
+                    childNode.Name = childNode.Text;
+                    actualNode.Nodes.Add(childNode);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
@@ -102,9 +138,6 @@ namespace WordOpenKMAddIn.form
 
                 // OpenKM authentication
                 token = authService.login(configXML.getUser(), configXML.getPassword());
-
-                // Setting the image list
-                tree.ImageList = imageList.get();
 
                 // Suppress repainting the TreeView until all the objects have been created.
                 tree.BeginUpdate();
@@ -130,10 +163,12 @@ namespace WordOpenKMAddIn.form
                 // Logout OpenKM
                 authService.logout(token);
                 token = "";
-
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                String errorMsg = "TreeForm - (startUp)\n" + e.Message;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 if (!token.Equals(""))
                 {
                     // Logout OpenKM
@@ -171,6 +206,9 @@ namespace WordOpenKMAddIn.form
             }
             catch (Exception ex)
             {
+                String errorMsg = "TreeForm - (nodeMouseClick)\n" + ex.Message + "\n\n" + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 if (!token.Equals(""))
                 {
                     // Logout OpenKM
@@ -216,17 +254,35 @@ namespace WordOpenKMAddIn.form
         //Accept button
         private void accept_Click(object sender, EventArgs e)
         {
-            disableAllButtons();
-            Word._Document activeDocument = application.ActiveDocument;
-            activeDocument.Save(); // Saves document
-            String localFileName = activeDocument.FullName;
-            String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
-            // Must save a temporary file to be uploaded
-            File.Copy(localFileName, localFileName + "_TEMP");
-            localFileName = localFileName + "_TEMP";
-            DocumentLogic.create(localFileName, docPath, configXML.getHost(), configXML.getUser(), configXML.getPassword());
-            File.Delete(localFileName); // Deletes temporary file
-            Hide();
+            String localFileName = "";
+            try
+            {
+                disableAllButtons();
+                Word._Document activeDocument = application.ActiveDocument;
+                activeDocument.Save(); // Saves document
+                localFileName = activeDocument.FullName;
+                String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
+                // Must save a temporary file to be uploaded
+                File.Copy(localFileName, localFileName + "_TEMP");
+                localFileName = localFileName + "_TEMP";
+                DocumentLogic.create(localFileName, docPath, configXML.getHost(), configXML.getUser(), configXML.getPassword());
+                File.Delete(localFileName); // Deletes temporary file
+                MessageBox.Show(resources.GetString("uploaded"));
+            }
+            catch (Exception ex)
+            {
+                // Ensure temporary file is deleted
+                if (!localFileName.Equals("") && File.Exists(localFileName))
+                {
+                    File.Delete(localFileName); // Deletes temporary file
+                }
+                String errorMsg = "TreeForm - (accept_Click)\n" + ex.Message + "\n\n" + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            finally
+            {
+                Hide();
+            }
         }
     }
 }

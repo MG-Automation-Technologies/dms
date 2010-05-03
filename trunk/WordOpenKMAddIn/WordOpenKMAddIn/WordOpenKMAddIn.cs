@@ -9,8 +9,7 @@ namespace WordOpenKMAddIn
 {
     public partial class WordOpenKMAddIn
     {
-
-        private void ordOpenKMAddIn_Startup(object sender, System.EventArgs e)
+        private void WordOpenKMAddIn_Startup(object sender, System.EventArgs e)
         {
             // Registering some events 
             Application.WindowActivate += new Microsoft.Office.Interop.Word.ApplicationEvents4_WindowActivateEventHandler(Application_WindowActivate);
@@ -27,8 +26,6 @@ namespace WordOpenKMAddIn
             saveToolbarPosition();
         }
 
-        
-
         #region Código generado por VSTO
 
         /// <summary>
@@ -37,7 +34,7 @@ namespace WordOpenKMAddIn
         /// </summary>
         private void InternalStartup()
         {
-            this.Startup += new System.EventHandler(ordOpenKMAddIn_Startup);
+            this.Startup += new System.EventHandler(WordOpenKMAddIn_Startup);
             this.Shutdown += new System.EventHandler(WordOpenKMAddIn_Shutdown);
         }
         

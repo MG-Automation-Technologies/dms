@@ -113,5 +113,23 @@ namespace WordOpenKMAddIn {
                 return ResourceManager.GetString("help", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿ Are you sure you want to cancel checkout document ?.
+        /// </summary>
+        internal static string sure_cancel_checkout {
+            get {
+                return ResourceManager.GetString("sure_cancel_checkout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿ Are you sure you want to checkin document ?.
+        /// </summary>
+        internal static string sure_check_in {
+            get {
+                return ResourceManager.GetString("sure_check_in", resourceCulture);
+            }
+        }
     }
 }

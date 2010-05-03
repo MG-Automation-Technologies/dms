@@ -135,4 +135,10 @@
   <data name="help" xml:space="preserve">
     <value>OpenKM online help</value>
   </data>
+  <data name="sure_cancel_checkout" xml:space="preserve">
+    <value>¿ Are you sure you want to cancel checkout document ?</value>
+  </data>
+  <data name="sure_check_in" xml:space="preserve">
+    <value>¿ Are you sure you want to checkin document ?</value>
+  </data>
 </root>

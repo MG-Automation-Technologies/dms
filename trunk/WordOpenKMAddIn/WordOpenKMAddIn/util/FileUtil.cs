@@ -11,7 +11,7 @@ namespace WordOpenKMAddIn.util
     {
         // Configuration file params
         private const String OPENKM_CONFIGURATION_FILE_NAME = "document.xml";
-        private const String OPENKM_FOLDER_NAME = "OpenKM";
+        private const String OPENKM_FOLDER_NAME             = "OpenKM";
 
         private RegistryUtil registryUtil = null;
         private String configPath = "";
@@ -20,9 +20,16 @@ namespace WordOpenKMAddIn.util
         // File util
         public FileUtil()
         {
-            registryUtil = new RegistryUtil();
-            configPath = registryUtil.getPersonal() + "\\" + OPENKM_FOLDER_NAME;
-            configDocumentFilenamePath = configPath + "\\" + OPENKM_CONFIGURATION_FILE_NAME;
+            try
+            {
+                registryUtil = new RegistryUtil();
+                configPath = registryUtil.getLocalPersonalUserFolder() + "\\" + OPENKM_FOLDER_NAME;
+                configDocumentFilenamePath = configPath + "\\" + OPENKM_CONFIGURATION_FILE_NAME;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // document filename path
@@ -39,39 +46,35 @@ namespace WordOpenKMAddIn.util
 
         // returns file name that not exist in disk
         public String getFilenameWithoutCollision (document doc) {
-            String fileName = getConfigPath() + @"\" + getDocumentName(doc); // Default path name
-            String docNamePart1 = fileName.Substring(0, fileName.LastIndexOf("."));
-            String docNamePart2 = fileName.Substring(fileName.LastIndexOf("."));
-
-            int count = 1;
-            while (File.Exists(fileName))
+            try
             {
-                fileName = docNamePart1 + "_" + count + docNamePart2;
-                count++;
+                String fileName = getConfigPath() + @"\" + Util.getDocumentName(doc); // Default path name
+                String docNamePart1 = fileName.Substring(0, fileName.LastIndexOf("."));
+                String docNamePart2 = fileName.Substring(fileName.LastIndexOf("."));
+
+                int count = 1;
+                while (File.Exists(fileName))
+                {
+                    fileName = docNamePart1 + "_" + count + docNamePart2;
+                    count++;
+                }
+
+                return fileName;
             }
-
-            return fileName;
-        }
-
-        // get the document Extension
-        public String getDocumentExtension(document doc)
-        {
-            return doc.path.Substring(doc.path.LastIndexOf(".") + 1);
-        }
-
-        // get the document name
-        public String getDocumentName(document doc)
-        {
-            return doc.path.Substring(doc.path.LastIndexOf("/") + 1);
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Read the local file
         public static byte[] readFile(string filePath)
         {
             byte[] buffer;
-            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            FileStream fileStream = null;
             try
             {
+                fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 int length = (int)fileStream.Length;  // get file length
                 buffer = new byte[length];            // create buffer
                 int count;                            // actual number of bytes read
@@ -81,12 +84,17 @@ namespace WordOpenKMAddIn.util
                 while ((count = fileStream.Read(buffer, sum, length - sum)) > 0)
                     sum += count;  // sum is a buffer offset for next reading
             }
+             catch (Exception e ) {
+                 throw e;
+            }
             finally
             {
-                fileStream.Close();
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                }
             }
             return buffer;
         }
-
     }
 }

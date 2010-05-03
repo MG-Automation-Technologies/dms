@@ -16,11 +16,15 @@ namespace WordOpenKMAddIn.logic
         public static OKMDocument checkoutDocument(document doc, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = new OKMAuthService(host);
-            OKMDocumentService documentService = new OKMDocumentService(host);
+            OKMAuthService authService = null;
+            OKMDocumentService documentService = null;
 
             try
             {
+                // Init services
+                authService = new OKMAuthService(host);
+                documentService = new OKMDocumentService(host);
+
                 // OpenKM authentication
                 token = authService.login(username, password);
 
@@ -48,7 +52,7 @@ namespace WordOpenKMAddIn.logic
 
                 return oKMDocument;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 if (!token.Equals(""))
                 {
@@ -56,7 +60,8 @@ namespace WordOpenKMAddIn.logic
                     authService.logout(token);
                     token = "";
                 }
-                return null;
+                String errorMSG = "DocumentLogic (checkoutDocument)\n" + e.Message + "\n\n" + e.StackTrace;
+                throw new OKMException(errorMSG);
             }
         }
 
@@ -64,11 +69,15 @@ namespace WordOpenKMAddIn.logic
         public static void cancelCheckout(OKMDocument oKMDocument, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = new OKMAuthService(host);
-            OKMDocumentService documentService = new OKMDocumentService(host);
+            OKMAuthService authService = null;
+            OKMDocumentService documentService = null;
 
             try
             {
+                // Init services
+                authService = new OKMAuthService(host);
+                documentService = new OKMDocumentService(host);
+
                 // OpenKM authentication
                 token = authService.login(username, password);
 
@@ -79,7 +88,7 @@ namespace WordOpenKMAddIn.logic
                 authService.logout(token);
                 token = "";
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 if (!token.Equals(""))
                 {
@@ -87,6 +96,8 @@ namespace WordOpenKMAddIn.logic
                     authService.logout(token);
                     token = "";
                 }
+                String errorMSG = "DocumentLogic (cancelCheckout)\n" + e.Message + "\n\n" + e.StackTrace;
+                throw new OKMException(errorMSG);
             }
         }
 
@@ -94,11 +105,15 @@ namespace WordOpenKMAddIn.logic
         public static void checkin(OKMDocument oKMDocument, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = new OKMAuthService(host);
-            OKMDocumentService documentService = new OKMDocumentService(host);
+            OKMAuthService authService = null;
+            OKMDocumentService documentService = null;
 
             try
             {
+                // Init services
+                authService = new OKMAuthService(host);
+                documentService = new OKMDocumentService(host);
+
                 // OpenKM authentication
                 token = authService.login(username, password);
 
@@ -110,7 +125,7 @@ namespace WordOpenKMAddIn.logic
                 authService.logout(token);
                 token = "";
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 if (!token.Equals(""))
                 {
@@ -118,6 +133,8 @@ namespace WordOpenKMAddIn.logic
                     authService.logout(token);
                     token = "";
                 }
+                String errorMSG = "DocumentLogic (checkin)\n" + e.Message + "\n\n" + e.StackTrace;
+                throw new OKMException(errorMSG);
             }
         }
 
@@ -125,24 +142,28 @@ namespace WordOpenKMAddIn.logic
         public static void create(String localFileName, String docPath, String host, String username, String password)
         {
             String token = "";
-            OKMAuthService authService = new OKMAuthService(host);
-            OKMDocumentService documentService = new OKMDocumentService(host);
+            OKMAuthService authService = null;
+            OKMDocumentService documentService = null;
 
             try
             {
+                // Init services
+                authService = new OKMAuthService(host);
+                documentService = new OKMDocumentService(host);
+
                 // OpenKM authentication
                 token = authService.login(username, password);
 
                 // create document
                 document doc = new document();
                 doc.path = docPath;
-                documentService.create(token, doc, FileUtil.readFile(localFileName + "_tmp"));
+                documentService.create(token, doc, FileUtil.readFile(localFileName));
 
                 // Logout OpenKM
                 authService.logout(token);
                 token = "";
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 if (!token.Equals(""))
                 {
@@ -150,6 +171,8 @@ namespace WordOpenKMAddIn.logic
                     authService.logout(token);
                     token = "";
                 }
+                String errorMSG = "DocumentLogic (create)\n" + e.Message + "\n\n" + e.StackTrace;
+                throw new OKMException(errorMSG);
             }
         }
     }
