@@ -24,10 +24,12 @@ package com.openkm.applet;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import com.openkm.ws.client.AccessDeniedException_Exception;
@@ -43,8 +45,8 @@ import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
 import com.openkm.ws.client.VirusDetectedException_Exception;
 
 public class Util {
-
 	private static Logger log = Logger.getLogger(Util.class.getName());
+	private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMDocumentService");
 
 	/**
 	 * 
@@ -57,7 +59,7 @@ public class Util {
 		log.info("uploadDocument(" + token + ", " + path + ", " + fileName + ", " + fileType + ", " + url
 				+ ", " + image);
 
-		OKMDocumentService okmDocumentService = new OKMDocumentService();
+		OKMDocumentService okmDocumentService = new OKMDocumentService(new URL(url+"/OKMDocument?wsdl") , DocumentServiceName);
 		OKMDocument okmDocument = okmDocumentService.getOKMDocumentPort();
 		Document doc = new Document();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
