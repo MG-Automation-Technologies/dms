@@ -110,6 +110,7 @@ public class MainMenu extends Composite {
 					private MenuItem czech;
 					private MenuItem usa;
 					private MenuItem indonesian;
+					private MenuItem portuguese;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -264,6 +265,7 @@ public class MainMenu extends Composite {
 						macedonian  = new MenuItem(Util.menuHTML("img/icon/menu/mk.gif", "Macedonian"), true, setLangMacedonian);
 						dutch = new MenuItem(Util.menuHTML("img/icon/menu/nl.gif", "Nederlands"), true, setLangNlBe);
 						polish = new MenuItem(Util.menuHTML("img/icon/menu/pl.gif", "Polish"), true, setLangPolish);
+						portuguese = new MenuItem(Util.menuHTML("img/icon/menu/pt.gif", "Português"), true, setLangPortuguese);
 						brazilian = new MenuItem(Util.menuHTML("img/icon/menu/br.gif", "Português do Brasil"), true, setLangPtBr);
 						romanian = new MenuItem(Util.menuHTML("img/icon/menu/ro.gif", "Romanian"), true, setRomanian);
 						russian = new MenuItem(Util.menuHTML("img/icon/menu/ru.gif", "Russian"), true, setRussian);
@@ -292,6 +294,7 @@ public class MainMenu extends Composite {
 						macedonian.addStyleName("okm-MainMenuItem");
 						dutch.addStyleName("okm-MainMenuItem");
 						polish.addStyleName("okm-MainMenuItem");
+						portuguese.addStyleName("okm-MainMenuItem");
 						brazilian.addStyleName("okm-MainMenuItem");
 						romanian.addStyleName("okm-MainMenuItem");
 						russian.addStyleName("okm-MainMenuItem");
@@ -320,6 +323,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(macedonian);
 					subMenuLanguage.addItem(dutch);
 					subMenuLanguage.addItem(polish);
+					subMenuLanguage.addItem(portuguese);
 					subMenuLanguage.addItem(brazilian);
 					subMenuLanguage.addItem(romanian);
 					subMenuLanguage.addItem(russian);
@@ -700,6 +704,14 @@ public class MainMenu extends Composite {
 	Command setLangMacedonian = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_mk_MK);
+		}
+	};
+	
+	
+	// Command menu to set Portuguese lang
+	Command setLangPortuguese = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_pt_PT);
 		}
 	};
 

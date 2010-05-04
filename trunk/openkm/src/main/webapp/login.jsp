@@ -38,6 +38,7 @@
     langs.put("Macedonian", Lang.LANG_mk_MK);
     langs.put("Nederlands", Lang.LANG_nl_NL);
     langs.put("Polish", Lang.LANG_pl_PL);
+    langs.put("Português", Lang.LANG_pt_PT);
     langs.put("Português do Brasil", Lang.LANG_pt_BR);
     langs.put("Romanian", Lang.LANG_ro_RO);
     langs.put("Russian", Lang.LANG_ru_RU);
