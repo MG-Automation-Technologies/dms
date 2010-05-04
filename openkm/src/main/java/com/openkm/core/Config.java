@@ -197,7 +197,7 @@ public class Config {
 	public static String SYSTEM_DEMO = "off";
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
-	public static String SYSTEM_OPENOFFICE = "off";
+	public static String SYSTEM_OPENOFFICE = "";
 	public static String SYSTEM_CONVERT = "";
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";

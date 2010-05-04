@@ -54,6 +54,7 @@ import com.openkm.dao.WorkflowDAO;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.DocConverter;
 import com.openkm.util.WarUtils;
 
 /**
@@ -179,6 +180,9 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         log.info("*** Activating thesaurus repository ***");
         RDFREpository.getInstance();
+        
+        log.info("*** Start OpenOffice manager ***");
+        DocConverter.getInstance().start();
     }
 
     /* (non-Javadoc)
@@ -186,6 +190,10 @@ public class RepositoryStartupServlet extends HttpServlet {
      */
     public void destroy() {
         super.destroy();
+
+        if (log == null) log("*** Start OpenOffice manager ***");
+        else log.info("*** Start OpenOffice manager ***");
+        DocConverter.getInstance().stop();
         
         if (hasConfiguredDataStore) {
         	if (log == null) log("*** Shutting down datastore garbage collection... ***");

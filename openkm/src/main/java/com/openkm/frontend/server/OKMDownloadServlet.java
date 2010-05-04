@@ -136,6 +136,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 				// Convert to PDF
 				if (toPdf || toSwf && !Config.SYSTEM_PDF2SWF.equals("") && !doc.getMimeType().equals(DocConverter.PDF)) {
 					if (pdfCache.exists()) {
+						is.close();
 						is = new FileInputStream(pdfCache);
 					} else {
 						if (doc.getMimeType().startsWith("image/")) {
@@ -144,6 +145,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 							converter.doc2pdf(is, doc.getMimeType(), pdfCache);
 						}
 						
+						is.close();
 						is = new FileInputStream(pdfCache);
 					}
 					

@@ -25,32 +25,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
+import org.artofsolving.jodconverter.OfficeDocumentConverter;
+import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
+import org.artofsolving.jodconverter.office.OfficeException;
+import org.artofsolving.jodconverter.office.OfficeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.artofsolving.jodconverter.BasicDocumentFormatRegistry;
-import com.artofsolving.jodconverter.DefaultDocumentFormatRegistry;
-import com.artofsolving.jodconverter.DocumentConverter;
-import com.artofsolving.jodconverter.DocumentFamily;
-import com.artofsolving.jodconverter.DocumentFormat;
-import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
 import com.openkm.core.Config;
 
 public class DocConverter {
 	private static Logger log = LoggerFactory.getLogger(DocConverter.class);
 	private static ArrayList<String> validOpenOffice = new ArrayList<String>();
 	private static ArrayList<String> validImageMagick = new ArrayList<String>();
-	private static BasicDocumentFormatRegistry registry =  new DefaultDocumentFormatRegistry();
-	private static DocConverter instance = new DocConverter();
+	private static DocConverter instance = null;
+	private static OfficeManager officeManager = null;
 	public static final String PDF = "application/pdf";
 	public static final String SWF = "application/x-shockwave-flash";
-
+	
 	private DocConverter() {
 		// Basic
 		validOpenOffice.add("text/plain");
@@ -80,33 +75,49 @@ public class DocConverter {
 		validImageMagick.add("image/png");
 		validImageMagick.add("image/gif");
 		validImageMagick.add("image/tiff");
-		
-		// Add new document types
-		DocumentFormat docx = new DocumentFormat("Microsoft Word 2007 XML", DocumentFamily.TEXT,
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx");
-		registry.addDocumentFormat(docx);
-		
-		DocumentFormat xlsx = new DocumentFormat("Microsoft Excel 2007 XML", DocumentFamily.SPREADSHEET,
-				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xlsx");
-		registry.addDocumentFormat(xlsx);
-		
-		DocumentFormat pptx = new DocumentFormat("Microsoft PowerPoint 2007 XML", DocumentFamily.PRESENTATION,
-				"application/vnd.openxmlformats-officedocument.presentationml.presentation", "pptx");
-		registry.addDocumentFormat(pptx);
 	}
 	
 	/**
 	 * Retrieve class instance
 	 */
 	public static DocConverter getInstance() {
+		if (instance == null) {
+			instance = new DocConverter();
+		
+			if (!Config.SYSTEM_OPENOFFICE.equals("")) {
+				log.info("*** Build Office Manager ***");
+				officeManager = new DefaultOfficeManagerConfiguration()
+					.setOfficeHome(Config.SYSTEM_OPENOFFICE)
+					.buildOfficeManager();
+			}
+		}
+		
 		return instance;
+	}
+	
+	/**
+	 * Start OpenOffice instance
+	 */
+	public void start() {
+		if (officeManager != null) {
+			officeManager.start();
+		}
+	}
+	
+	/**
+	 * Stop OpenOffice instance
+	 */
+	public void stop() {
+		if (officeManager != null) {
+			officeManager.stop();
+		}
 	}
 	
 	/**
 	 * Test if a MIME document can be converted to PDF
 	 */
 	public boolean convertibleToPdf(String from) {
-		if (Config.SYSTEM_OPENOFFICE.equals("on") && validOpenOffice.contains(from)) {
+		if (!Config.SYSTEM_OPENOFFICE.equals("") && validOpenOffice.contains(from)) {
 			return true;
 		} else if (!Config.SYSTEM_CONVERT.equals("") && validImageMagick.contains(from)) {
 			return true;
@@ -135,37 +146,22 @@ public class DocConverter {
 	 * @return Converted binary document content
 	 * @throws IOException If anything fails
 	 */
-	public void convert(InputStream is, String mimeFrom, OutputStream os, String mimeTo) throws IOException {
-		log.debug("convert("+is+", "+mimeFrom+", "+os+", "+mimeTo+")");
-				
-		if (validOpenOffice.contains(mimeFrom)) {
-			OpenOfficeConnection connection = null;
+	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
+		log.debug("convert("+inputFile+", "+mimeType+", "+outputFile+")");
 
-			try {
-				// Connect to an OpenOffice.org instance running on port 8100
-				connection = new SocketOpenOfficeConnection(8100);
-				connection.connect();
+		if (Config.SYSTEM_OPENOFFICE.equals("")) {
+			throw new IOException("system.openoffice not configured");
+		}
 
-				// Workaround for wrong Rich Tech Format MIME type in JODConverter
-				if (mimeFrom.equals("application/rtf")) {
-					mimeFrom = "text/rtf";
-				}
-			
-				// Convert
-				DocumentFormat dfFrom = registry.getFormatByMimeType(mimeFrom);
-				DocumentFormat dfTo = registry.getFormatByMimeType(mimeTo);
-				DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
-				converter.convert(is, dfFrom, os, dfTo);
+		if (!validOpenOffice.contains(mimeType)) {
+			throw new IOException("Invalid document conversion MIME type: "+mimeType);
+		}
 
-				log.debug("convert: void");
-			} finally {
-				// close the connection
-				if (connection != null && connection.isConnected()) {
-					connection.disconnect();
-				}
-			}
-		} else {
-			throw new IOException("Invalid document conversion MIME type");
+		try {
+			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
+			converter.convert(inputFile, outputFile);
+		} catch (OfficeException e) {
+			throw new IOException("Error convertind document: "+e.getMessage());
 		}
 	}
 	
@@ -174,16 +170,23 @@ public class DocConverter {
 	 */
 	public void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
 		log.info("** Convert from "+mimeType+" to PDF **");
+		File tmp = File.createTempFile("okm", ".doc");
+		FileOutputStream fos = null;
+		
 		try {
-			FileOutputStream os = new FileOutputStream(output);
-			instance.convert(is, mimeType, os, PDF);
-			os.flush();
-			os.close();
-			is.close();
+			fos = new FileOutputStream(tmp);
+			IOUtils.copy(is, fos);
+			fos.flush();
+			fos.close();
+			
+			convert(tmp, mimeType, output);
 		} catch (Exception e) {
 			log.error("Error in "+mimeType+" to PDF conversion", e);
 			output.delete();
 			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(fos);
+			tmp.delete();
 		}
 	}
 	
@@ -200,6 +203,7 @@ public class DocConverter {
 			IOUtils.copy(is, fos);
 			fos.flush();
 			fos.close();
+			
 			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_CONVERT, tmp.getPath(), output.getPath());
 			Process process = pb.start();
 			process.waitFor();
