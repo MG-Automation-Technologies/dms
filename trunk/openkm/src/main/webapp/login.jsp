@@ -31,6 +31,7 @@
     langs.put("Gallego", Lang.LANG_gl_ES);
     langs.put("Greece", Lang.LANG_el_GR);
     langs.put("Hungarian", Lang.LANG_hu_HU);
+    langs.put("Indonesian", Lang.LANG_id_ID);
     langs.put("Italian", Lang.LANG_it_IT);
     langs.put("Japanese", Lang.LANG_ja_JP);
     langs.put("Latvian", Lang.LANG_lv_LV);

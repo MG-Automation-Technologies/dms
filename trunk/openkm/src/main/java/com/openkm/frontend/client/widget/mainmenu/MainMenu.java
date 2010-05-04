@@ -109,6 +109,7 @@ public class MainMenu extends Composite {
 					private MenuItem bosnian;
 					private MenuItem czech;
 					private MenuItem usa;
+					private MenuItem indonesian;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -256,6 +257,7 @@ public class MainMenu extends Composite {
 						gallego = new MenuItem(Util.menuHTML("img/icon/menu/gl.gif", "Gallego"), true, setLangGallego);
 						greece = new MenuItem(Util.menuHTML("img/icon/menu/gr.gif", "Greece"), true, setLangGreece);
 						hungarian  = new MenuItem(Util.menuHTML("img/icon/menu/hu.gif", "Hungarian"), true, setHungarian);
+						indonesian = new MenuItem(Util.menuHTML("img/icon/menu/id.gif", "Indonesian"), true, setLangIndoneisan);
 						italian = new MenuItem(Util.menuHTML("img/icon/menu/it.gif", "Italian"), true, setLangItalian);
 						japanese = new MenuItem(Util.menuHTML("img/icon/menu/jp.gif", "Japanese"), true, setLangJapanese);
 						latvian = new MenuItem(Util.menuHTML("img/icon/menu/lv.gif", "Latvian"), true, setLangLativian);
@@ -283,6 +285,7 @@ public class MainMenu extends Composite {
 						gallego.addStyleName("okm-MainMenuItem");
 						greece.addStyleName("okm-MainMenuItem");
 						hungarian.addStyleName("okm-MainMenuItem");
+						indonesian.addStyleName("okm-MainMenuItem");
 						italian.addStyleName("okm-MainMenuItem");
 						japanese.addStyleName("okm-MainMenuItem");
 						latvian.addStyleName("okm-MainMenuItem");
@@ -310,6 +313,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(gallego);
 					subMenuLanguage.addItem(greece);
 					subMenuLanguage.addItem(hungarian);
+					subMenuLanguage.addItem(indonesian);
 					subMenuLanguage.addItem(italian);
 					subMenuLanguage.addItem(japanese);
 					subMenuLanguage.addItem(latvian);
@@ -664,7 +668,14 @@ public class MainMenu extends Composite {
 		}
 	};
 	
-	// Command menu to set French lang
+	// Command menu to set Indonesian lang
+	Command setLangIndoneisan = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_id_ID);
+		}
+	};
+	
+	// Command menu to set Italian lang
 	Command setLangItalian = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_it_IT);
