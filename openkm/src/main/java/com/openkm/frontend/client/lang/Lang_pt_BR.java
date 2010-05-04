@@ -106,7 +106,7 @@ public class Lang_pt_BR {
 	    lang.put("tree.folder.new", "Nova pasta");
 	    lang.put("tree.status.refresh.add.subscription", "Adding subscription");
 	    lang.put("tree.status.refresh.remove.subscription", "Deleting subscription");
-	    lang.put("tree.status.refresh.get.root", "Refresing root folder");
+	    lang.put("tree.status.refresh.get.root", "Refreshing root folder");
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Getting user home");
 	    lang.put("tree.status.refresh.purge.trash", "Cleaning trash");
@@ -145,7 +145,7 @@ public class Lang_pt_BR {
     			lang.put("general.menu.tools.skin.bigfont", "Big font");
     		lang.put("general.menu.debug.console", "Debug console");
     		lang.put("general.menu.administration", "Show administration");
-    		lang.put("general.menu.tools.preferences", "Prefererences");
+    		lang.put("general.menu.tools.preferences", "Preferences");
     			lang.put("general.menu.tools.user.preferences", "User configuration");
     	lang.put("general.menu.bookmark", "Bookmarks");
 	    	lang.put("general.menu.bookmark.home", "Home");
@@ -237,7 +237,7 @@ public class Lang_pt_BR {
 	    lang.put("fileupload.label.update", "Atualização de documentos");
 	    lang.put("fileupload.label.users.notify", "Notify to users");
 	    lang.put("fileupload.label.comment", "Comment");
-	    lang.put("fileupload.label.users.to.notify",  "Users be notified");
+	    lang.put("fileupload.label.users.to.notify",  "Users to notify");
 	    lang.put("fileupload.label.users",  "Users");
 	    lang.put("fileupload.label.must.select.users",  "You must select some user to notify");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
@@ -269,7 +269,7 @@ public class Lang_pt_BR {
 	    lang.put("tab.document.status.set.categories", "Updating categories");
 	    lang.put("tab.document.status.get.version.history.size", "Refreshing document history size");
 	    lang.put("tab.document.status.purge.version.history", "Compacting document history");
-	    lang.put("tab.document.status.restore.version", "Restoring document versión");
+	    lang.put("tab.document.status.restore.version", "Restoring document version");
 	    lang.put("tab.document.security", "Segurança");
 	    lang.put("tab.document.preview", "Preview");
 	    lang.put("tab.folder.properties", "Propriedades");
@@ -557,7 +557,7 @@ public class Lang_pt_BR {
 	    lang.put("dashboard.keyword.all", "All keywords");
 	    lang.put("dashboard.keyword.top", "Top keywords");
 	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Goto document");
+	    lang.put("dashboard.keyword.goto.document", "Go to document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
 	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
 	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
@@ -574,7 +574,7 @@ public class Lang_pt_BR {
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.password.error", "Error: passwords are diferent");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
@@ -587,7 +587,7 @@ public class Lang_pt_BR {
 	    
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
+	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Sem permissão para acessar o documento");

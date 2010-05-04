@@ -587,7 +587,7 @@ public class Lang_fr_FR {
 	    
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
+	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Vous n'avez pas la permission d'accéder à ce document");

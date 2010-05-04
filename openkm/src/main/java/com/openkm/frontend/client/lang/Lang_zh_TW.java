@@ -145,7 +145,7 @@ public class Lang_zh_TW {
     			lang.put("general.menu.tools.skin.bigfont", "大型字");
     		lang.put("general.menu.debug.console", "除錯控制台");
     		lang.put("general.menu.administration", "顯示管理平台");
-    		lang.put("general.menu.tools.preferences", "Prefererences");
+    		lang.put("general.menu.tools.preferences", "Preferences");
     	lang.put("general.menu.bookmark", "書籤");
 		lang.put("general.menu.bookmark.home", "首頁書籤");
 		lang.put("general.menu.bookmark.default.home", "設為預設首頁書籤");
@@ -555,7 +555,7 @@ public class Lang_zh_TW {
 	    lang.put("dashboard.keyword.all", "All keywords");
 	    lang.put("dashboard.keyword.top", "Top keywords");
 	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Goto document");
+	    lang.put("dashboard.keyword.goto.document", "Go to document");
 	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
 	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
 	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
@@ -572,7 +572,7 @@ public class Lang_zh_TW {
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.password.error", "Error: passwords are diferent");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
@@ -585,7 +585,7 @@ public class Lang_zh_TW {
 	    
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
+	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
 	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");
