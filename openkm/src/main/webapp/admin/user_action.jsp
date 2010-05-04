@@ -31,7 +31,12 @@
 		String usr_pass = request.getParameter("usr_pass") != null?request.getParameter("usr_pass"):"";
 		String usr_email = request.getParameter("usr_email") != null?request.getParameter("usr_email"):"";
 		boolean usr_active = request.getParameter("usr_active")!=null && request.getParameter("usr_active").equals("on");
-		List<String> usr_roles = request.getParameterValues("usr_roles")==null?new ArrayList<String>():Arrays.asList(request.getParameterValues("usr_roles"));
+		String[] usr_roles = request.getParameterValues("usr_roles") != null?request.getParameterValues("usr_roles"):new String[]{};
+		List<String> usr_rolesList = new ArrayList<String>();
+		
+		for (int i=0; i<usr_roles.length; i++) {
+			usr_rolesList.add(new String(usr_roles[i].getBytes("ISO-8859-1"), "UTF-8"));
+		}
 		
 		AuthDAO dao = AuthDAO.getInstance();
 		User usr = new User();
@@ -40,7 +45,7 @@
 		usr.setPass(new String(usr_pass.getBytes("ISO-8859-1"), "UTF-8"));
 		usr.setEmail(new String(usr_email.getBytes("ISO-8859-1"), "UTF-8"));
 		usr.setActive(usr_active);
-		usr.setRoles(usr_roles);
+		usr.setRoles(usr_rolesList);
 
 		try {
 			if (action.equals("c")) {
