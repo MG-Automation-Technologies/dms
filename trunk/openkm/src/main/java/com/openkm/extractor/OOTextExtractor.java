@@ -21,28 +21,20 @@
 
 package com.openkm.extractor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.CharArrayWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.net.ConnectException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.extractor.AbstractTextExtractor;
-import org.pdfbox.pdfparser.PDFParser;
-import org.pdfbox.pdmodel.PDDocument;
-import org.pdfbox.util.PDFTextStripper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.artofsolving.jodconverter.DefaultDocumentFormatRegistry;
-import com.artofsolving.jodconverter.DocumentConverter;
-import com.artofsolving.jodconverter.DocumentFormat;
-import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
+import com.openkm.util.DocConverter;
 
 /**
  * Text extractor for JPEG image documents.
@@ -55,7 +47,7 @@ public class OOTextExtractor extends AbstractTextExtractor {
      * Logger instance.
      */
     private static final Logger log = LoggerFactory.getLogger(OOTextExtractor.class);
-    private static OpenOfficeConnection connection = null;
+    //private static OpenOfficeConnection connection = null;
 
     /**
      * Creates a new <code>JpegTextExtractor</code> instance.
@@ -89,70 +81,24 @@ public class OOTextExtractor extends AbstractTextExtractor {
      */ 
 	public Reader extractText(InputStream stream, String type, String encoding) throws IOException {
 		String ret = "";
+		File fIn = File.createTempFile("okm", ".doc");
+		File fOut = File.createTempFile("okm", ".txt");
 		
     	try {
-    		// Convert to application/pdf
-			DocumentFormat dfFrom = new DefaultDocumentFormatRegistry().getFormatByMimeType(type);
-			DocumentFormat dfTo = new DefaultDocumentFormatRegistry().getFormatByMimeType("application/pdf");
-			DocumentConverter converter = new OpenOfficeDocumentConverter(getConnection());
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			converter.convert(stream, dfFrom, baos, dfTo);
-
-			// Convert to text/plain
-			baos.flush();
-			PDFParser parser = new PDFParser(new ByteArrayInputStream(baos.toByteArray()));
+    		FileOutputStream fos = new FileOutputStream(fIn);
+    		IOUtils.copy(stream, fos);
+			fos.flush();
+			fos.close();
 			
-			try {
-                parser.parse();
-                PDDocument document = parser.getPDDocument();
-                CharArrayWriter writer = new CharArrayWriter();
-                
-                PDFTextStripper stripper = new PDFTextStripper();
-                stripper.setLineSeparator("\n");
-                stripper.writeText(document, writer);
-                
-    			ret = new String(writer.toCharArray());
-            } finally {
-                try {
-                    PDDocument doc = parser.getPDDocument();
-                    if (doc != null) {
-                        doc.close();
-                    }
-                } catch (IOException ignored) {
-                	log.warn(ignored.getMessage());
-                }
-            }
-    		
-            baos.close();
+    		// Convert to text
+			DocConverter.getInstance().convert(fIn, type, fOut);
+			ret = FileUtils.readFileToString(fOut);
     		log.debug("TEXT: "+ret);
             return new StringReader(ret);
 		} finally {
 			stream.close();
-			closeConnection();
+			fIn.delete();
+			fOut.delete();
         }
     }
-	
-	/**
-	 * @return
-	 * @throws ConnectException
-	 */
-	private static OpenOfficeConnection getConnection() throws ConnectException {
-		if (connection == null) {
-	        // Connect to an OpenOffice.org instance running on port 8100
-			connection = new SocketOpenOfficeConnection(8100);
-			connection.connect();
-		}
-		
-		return connection;
-	}
-	
-	/**
-	 * 
-	 */
-	private static void closeConnection() {
-		// close the connection
-		if (connection != null && connection.isConnected()) {
-			connection.disconnect();
-		}
-	}
 }
