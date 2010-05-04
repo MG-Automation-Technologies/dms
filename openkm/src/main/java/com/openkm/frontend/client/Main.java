@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
@@ -166,6 +167,8 @@ public final class Main implements EntryPoint{
 		// Tries to capture lang parameter
 		if (loc.getParameter("lang")!=null && !loc.getParameter("lang").equals("")) {
 			lang = loc.getParameter("lang");
+		} else if (Cookies.getCookie("lang") != null && !Cookies.getCookie("lang").equals("")) {
+			lang = Cookies.getCookie("lang");
 		} else {
 			// First we initialize language values
 			lang = Util.getBrowserLanguage();
