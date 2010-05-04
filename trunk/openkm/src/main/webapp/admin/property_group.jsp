@@ -60,7 +60,7 @@
 				out.println("<td colspan=\"4\" align=\"center\"><b>"+pGroup.getName()+"</b></td>");
 				out.println("</tr>");
 				
-				out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
+				out.println("<tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
 				Collection<FormElement> mData = okmPG.getPropertyGroupForm(token, pGroup.getName());
 				int i = 0;
 				for (Iterator<FormElement> itMD = mData.iterator(); itMD.hasNext(); ) {
@@ -68,18 +68,22 @@
 					out.print("<tr class=\""+(i++%2==0?"odd":"even")+"\">");
 					out.print("<td>"+fe.getLabel()+"</td>");
 					out.print("<td>"+fe.getName()+"</td>");
-					out.print("<td>"+fe.getValue()+"</td>");
 					out.print("<td>"+fe.getWidth()+"</td>");
 					out.print("<td>"+fe.getHeight()+"</td>");
 					
 					if (fe instanceof Input) {
 						Input input = (Input) fe;
 						out.print("<td>Input</td>");
-						out.print("<td><i>Type:</i> "+input.getType()+"</td>");
+						out.print("<td>");
+						out.print("<i>Type:</i> "+input.getType()+"<br/>");
+						out.print("<i>Value:</i> "+input.getValue());
+						out.print("</td>");
 					} else if (fe instanceof TextArea) {
 						TextArea textArea = (TextArea) fe;
 						out.print("<td>TextArea</td>");
-						out.print("<td></td>");
+						out.print("<td>");
+						out.print("<i>Value:</i> "+textArea.getValue());
+						out.print("</td>");
 					} else if (fe instanceof Select) {
 						Select select = (Select) fe;
 						out.print("<td>Select</td>");
