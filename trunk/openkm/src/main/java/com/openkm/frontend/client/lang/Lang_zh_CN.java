@@ -145,7 +145,7 @@ public class Lang_zh_CN {
     			lang.put("general.menu.tools.skin.bigfont", "大号字体");
     		lang.put("general.menu.debug.console", "调试命令行");
     		lang.put("general.menu.administration", "显示管理");
-    		lang.put("general.menu.tools.preferences", "Prefererences首选项");
+    		lang.put("general.menu.tools.preferences", "Preferences首选项");
     			lang.put("general.menu.tools.user.preferences", "用户配置");
     	lang.put("general.menu.bookmark", "书签");
 	    	lang.put("general.menu.bookmark.home", "根目录");
@@ -556,7 +556,7 @@ public class Lang_zh_CN {
 	    lang.put("dashboard.keyword.all", "所有关键字");//All keywords
 	    lang.put("dashboard.keyword.top", "排在最前面的关键字");//Top keywords
 	    lang.put("dashboard.keyword.related", "关联关键字");//Related keywords
-	    lang.put("dashboard.keyword.goto.document", "转到文档");//Goto document
+	    lang.put("dashboard.keyword.goto.document", "转到文档");//Go to document
 	    lang.put("dashboard.keyword.clean.keywords", "清楚关键字");//Clean keywords
 	    lang.put("dashboard.mail.last.imported.mails", "电子邮件");//Electronic mails
 	    lang.put("dashboard.mail.last.imported.attached.documents", "附件");//Attachments
@@ -573,7 +573,7 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.imap.user", "IMAP用户名");//IMAP user name
 	    lang.put("user.preferences.imap.user.password", "IMAP用户密码");//IMAP user password
 	    lang.put("user.preferences.imap.folder", "IMAP文件夹");//IMAP folder
-	    lang.put("user.preferences.password.error", "错误：两次输入的密码不相同。");//Error: passwords are diferents
+	    lang.put("user.preferences.password.error", "错误：两次输入的密码不相同。");//Error: passwords are diferent
 	    lang.put("user.preferences.user.data", "用户账号");//User account
 	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
 	    lang.put("user.preferences.imap.error", "所有的想都必须在邮件配置中设置");//All fields are obligatory to set the mail configurations
@@ -586,7 +586,7 @@ public class Lang_zh_CN {
 	    
 	    // Categories
 	    lang.put("categories.folder.select.label", "增加自定义分类");//Add category
-	    lang.put("categories.folder.error.delete", "无法删除自定义分类，此分类下面还包含文档");//Can not delete category with documents
+	    lang.put("categories.folder.error.delete", "无法删除自定义分类，此分类下面还包含文档");//Cannot delete category with documents
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");

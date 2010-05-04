@@ -107,7 +107,7 @@ public class Lang_nl_NL {
 	    lang.put("tree.folder.new", "Nieuwe map");
 	    lang.put("tree.status.refresh.add.subscription", "Adding subscription");
 	    lang.put("tree.status.refresh.remove.subscription", "Deleting subscription");
-	    lang.put("tree.status.refresh.get.root", "Refresing root folder");
+	    lang.put("tree.status.refresh.get.root", "Refreshing root folder");
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Getting user home");
 	    lang.put("tree.status.refresh.purge.trash", "Cleaning trash");
@@ -575,7 +575,7 @@ public class Lang_nl_NL {
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferents");
+	    lang.put("user.preferences.password.error", "Error: passwords are diferent");
 	    lang.put("user.preferences.user.data", "User account");
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
@@ -588,7 +588,7 @@ public class Lang_nl_NL {
 	    
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Can not delete category with documents");
+	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Bestand toegang geweigerd");
