@@ -28,7 +28,8 @@
 		try {
 			User usr = new User();
 			
-			if (action.equals("u") || action.equals("d")) {
+			if ((action.equals("u") || action.equals("d")) && id != null) {
+				id = new String(id.getBytes("ISO-8859-1"), "UTF-8");
 				usr = dao.findUserByPk(id);
 			}
 			
