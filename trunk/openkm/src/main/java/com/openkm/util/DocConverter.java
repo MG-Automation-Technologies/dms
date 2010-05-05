@@ -83,7 +83,7 @@ public class DocConverter {
 	public static DocConverter getInstance() {
 		if (instance == null) {
 			instance = new DocConverter();
-		
+			
 			if (!Config.SYSTEM_OPENOFFICE.equals("")) {
 				log.info("*** Build Office Manager ***");
 				officeManager = new DefaultOfficeManagerConfiguration()
@@ -119,7 +119,7 @@ public class DocConverter {
 	public boolean convertibleToPdf(String from) {
 		if (!Config.SYSTEM_OPENOFFICE.equals("") && validOpenOffice.contains(from)) {
 			return true;
-		} else if (!Config.SYSTEM_CONVERT.equals("") && validImageMagick.contains(from)) {
+		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
 		}
 		
@@ -204,7 +204,7 @@ public class DocConverter {
 			fos.flush();
 			fos.close();
 			
-			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_CONVERT, tmp.getPath(), output.getPath());
+			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_IMG2PDF, tmp.getPath(), output.getPath());
 			Process process = pb.start();
 			process.waitFor();
 			String info = IOUtils.toString(process.getInputStream());

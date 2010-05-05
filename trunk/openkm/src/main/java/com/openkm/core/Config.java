@@ -113,7 +113,7 @@ public class Config {
 	public static String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static String PROPERTY_SYSTEM_OCR = "system.ocr";
 	public static String PROPERTY_SYSTEM_OPENOFFICE = "system.openoffice";
-	public static String PROPERTY_SYSTEM_CONVERT = "system.convert";
+	public static String PROPERTY_SYSTEM_IMG2PDF = "system.img2pdf";
 	public static String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
@@ -198,7 +198,7 @@ public class Config {
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
 	public static String SYSTEM_OPENOFFICE = "";
-	public static String SYSTEM_CONVERT = "";
+	public static String SYSTEM_IMG2PDF = "";
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
 	public static String SYSTEM_LOGIN_LOWERCASE = "off";
@@ -338,7 +338,7 @@ public class Config {
 			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
-			SYSTEM_CONVERT = config.getProperty(PROPERTY_SYSTEM_CONVERT, SYSTEM_CONVERT);
+			SYSTEM_IMG2PDF = config.getProperty(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
 			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
 			SYSTEM_LOGIN_LOWERCASE = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE);
@@ -419,7 +419,7 @@ public class Config {
 					PROPERTY_SYSTEM_READONLY+"="+SYSTEM_READONLY+", "+
 					PROPERTY_SYSTEM_OCR+"="+SYSTEM_OCR+", "+
 					PROPERTY_SYSTEM_OPENOFFICE+"="+SYSTEM_OPENOFFICE+", "+
-					PROPERTY_SYSTEM_CONVERT+"="+SYSTEM_CONVERT+", "+
+					PROPERTY_SYSTEM_IMG2PDF+"="+SYSTEM_IMG2PDF+", "+
 					PROPERTY_SYSTEM_PDF2SWF+"="+SYSTEM_PDF2SWF+", "+
 					PROPERTY_SYSTEM_ANTIVIR+"="+SYSTEM_ANTIVIR+", "+
 
