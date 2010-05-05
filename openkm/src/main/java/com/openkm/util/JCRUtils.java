@@ -24,20 +24,25 @@ package com.openkm.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlList;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlManager;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicy;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlPolicyIterator;
 import org.apache.jackrabbit.api.jsr283.security.Privilege;
+import org.apache.jackrabbit.core.RepositoryCopier;
+import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.principal.PrincipalImpl;
 import org.slf4j.Logger;
@@ -55,6 +60,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.module.direct.DirectRepositoryModule;
 
 public class JCRUtils {
 	private static Logger log = LoggerFactory.getLogger(JCRUtils.class);
@@ -257,5 +263,27 @@ public class JCRUtils {
 		Privilege[] privileges = new Privilege[] { acm.privilegeFromName(Privilege.JCR_ALL) };
 		((AccessControlList) acp).addAccessControlEntry(new PrincipalImpl(principal), privileges);
 		session.save();
+	}
+	
+	/**
+	 * Repository Hot-Backup 
+	 */
+	public static File hotBackup() throws RepositoryException, IOException {
+		log.debug("hotBackup()");
+		String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		String backDirName = "OpenKM" + Config.INSTALL + "_" + date; 
+		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
+		FileUtils.deleteQuietly(backDir);
+		backDir.mkdir();
+
+		try {
+			RepositoryCopier.copy((RepositoryImpl) DirectRepositoryModule.getRepository(), backDir);
+		} catch (javax.jcr.RepositoryException e) {
+			FileUtils.deleteQuietly(backDir);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.debug("hotBackup: {}", backDir);
+		return backDir;
 	}
 }
