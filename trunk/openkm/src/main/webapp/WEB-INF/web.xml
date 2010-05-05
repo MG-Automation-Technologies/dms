@@ -1,8 +1,7 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
-<web-app>
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"> 
   <display-name>OpenKM</display-name>
 
   <!-- Listeners -->
@@ -115,8 +114,19 @@
     <servlet-name>OKMPropertyServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMPropertyServlet</servlet-class>
   </servlet>
+  
+  <!-- Admin servlets -->
+  <servlet>
+    <servlet-name>StatsGraphServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.StatsGraphServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RepositoryBackupServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.RepositoryBackupServlet</servlet-class>
+  </servlet>
 
   <!-- Backend Servlets -->
+  <!-- 
   <servlet>
     <servlet-name>OKMPropertyGroupServletAdmin</servlet-name>
     <servlet-class>com.openkm.backend.server.OKMPropertyGroupServletAdmin</servlet-class>
@@ -169,6 +179,7 @@
     <servlet-name>OKMThesaurusServletAdmin</servlet-name>
     <servlet-class>com.openkm.backend.server.OKMThesaurusServletAdmin</servlet-class>
   </servlet>
+  -->
   
   <!-- WebServices -->
   <servlet>
@@ -297,8 +308,19 @@
     <servlet-name>OKMPropertyServlet</servlet-name>
     <url-pattern>/OKMPropertyServlet</url-pattern>
   </servlet-mapping>
+  
+  <!-- Admin Servlet Mappings -->
+  <servlet-mapping>
+    <servlet-name>StatsGraphServlet</servlet-name>
+    <url-pattern>/admin/StatsGraph</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RepositoryBackupServlet</servlet-name>
+    <url-pattern>/admin/RepositoryBackup</url-pattern>
+  </servlet-mapping>
 
   <!-- Backend Servlet Mappings -->
+  <!--
   <servlet-mapping>
     <servlet-name>OKMPropertyGroupServletAdmin</servlet-name>
     <url-pattern>/OKMPropertyGroupServletAdmin</url-pattern>
@@ -351,6 +373,7 @@
     <servlet-name>OKMThesaurusServletAdmin</servlet-name>
     <url-pattern>/OKMThesaurusServletAdmin</url-pattern>
   </servlet-mapping>
+  -->
 
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
