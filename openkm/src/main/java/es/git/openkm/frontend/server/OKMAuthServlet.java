@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import es.git.openkm.api.OKMAuth;
 import es.git.openkm.bean.Permission;
 import es.git.openkm.core.AccessDeniedException;
+import es.git.openkm.core.Config;
 import es.git.openkm.core.PathNotFoundException;
 import es.git.openkm.core.RepositoryException;
 import es.git.openkm.core.SessionManager;
@@ -363,9 +364,12 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		OKMAuth oKMAuth = OKMAuth.getInstance();
 		
 		try {
-			oKMAuth.revokeRole(token, path, role, Permission.READ, recursive);
-			oKMAuth.revokeRole(token, path, role, Permission.WRITE, recursive);
-			//oKMAuth.revokeRole(token, path, user, Permission.REMOVE);
+			// Preventing on demo removing default roles
+			if (!(Config.SYSTEM_DEMO.equals("on") && path.equals("/okm:root"))) {
+				oKMAuth.revokeRole(token, path, role, Permission.READ, recursive);
+				oKMAuth.revokeRole(token, path, role, Permission.WRITE, recursive);
+			//	oKMAuth.revokeRole(token, path, user, Permission.REMOVE);
+			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -391,7 +395,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		String token = getToken();
 		
 		try {
-			OKMAuth.getInstance().revokeRole(token, path, role, permissions, recursive);
+			// Preventing on demo removing default roles
+			if (!(Config.SYSTEM_DEMO.equals("on") && path.equals("/okm:root"))) {
+				OKMAuth.getInstance().revokeRole(token, path, role, permissions, recursive);
+			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
