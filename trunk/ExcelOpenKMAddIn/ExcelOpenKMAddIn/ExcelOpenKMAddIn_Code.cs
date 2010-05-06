@@ -389,6 +389,90 @@ namespace ExcelOpenKMAddIn
             }
         }
 
+        // Workbook activation event
+        private void Application_WorkbookActivate(Microsoft.Office.Interop.Excel.Workbook workBook)
+        {
+            try
+            {
+                MessageBox.Show("activate:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (workBook != null)
+                {
+                    refreshIcons(workBook.FullName);
+                }
+                else
+                {
+                    refreshIcons(null);
+                }
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "ExcelOpenKMAddIn - (Application_DocumentChange)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        // Before closing workbook event
+        private void Application_WorkbookBeforeClose(Microsoft.Office.Interop.Excel.Workbook workBook, ref bool Cancel)
+        {
+            MessageBox.Show("before close:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            // Last document must disable checkin / cancel checkin icons
+            if (this.Application.Workbooks.Count == 1)
+            {
+                refreshIcons(null);
+            }
+        }
+
+        // Document opened event
+        private void Application_WorkbookOpen(Microsoft.Office.Interop.Excel.Workbook workBook)
+        {
+            try
+            {
+                MessageBox.Show("book open:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (workBook != null)
+                {
+                    refreshIcons(workBook.FullName);
+                }
+                else
+                {
+                    refreshIcons(null);
+                }
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "ExcelOpenKMAddIn - (Application_DocumentChange)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        // Has focus event
+        private void AplicationWatcher_OnWindowHasFocus(int hwnd)
+        {
+            try
+            {
+                Excel.Workbook activeWorkbook = this.Application.ActiveWorkbook;
+                MessageBox.Show("has focus:" + activeWorkbook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (this.Application.Workbooks.Count > 0 && activeWorkbook != null)
+                {
+                    refreshIcons(activeWorkbook.FullName);
+                }
+                else
+                {
+                    refreshIcons(null);
+                }
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "ExcelOpenKMAddIn - (Application_DocumentChange)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        // Lost focus event
+        private void AplicationWatcher_OnWindowLostFocus(int hwnd)
+        {
+        }
+
         // Refreshing icons
         private void refreshIcons(String localFileName)
         {
@@ -548,6 +632,7 @@ namespace ExcelOpenKMAddIn
             catch (COMException)
             {
                 // Not trowed
+                int count = 0;
             }
             catch (Exception e)
             {

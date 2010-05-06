@@ -3,11 +3,14 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.Tools.Applications.Runtime;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
+using MSOpenKMCore.util;
 
 namespace ExcelOpenKMAddIn
 {
     public partial class ExcelOpenKMAddIn
     {
+        private AplicationWatcher aplicationWattcher;
+
         private void ExcelOpenKMIn_Startup(object sender, System.EventArgs e)
         {
             #region Código generado por VSTO
@@ -15,6 +18,17 @@ namespace ExcelOpenKMAddIn
             this.Application = (Excel.Application)Microsoft.Office.Tools.Excel.ExcelLocale1033Proxy.Wrap(typeof(Excel.Application), this.Application);
 
             #endregion
+
+            Application.WorkbookBeforeClose += new Microsoft.Office.Interop.Excel.AppEvents_WorkbookBeforeCloseEventHandler(Application_WorkbookBeforeClose);
+            Application.WorkbookActivate += new Microsoft.Office.Interop.Excel.AppEvents_WorkbookActivateEventHandler(Application_WorkbookActivate);
+            //Application.WorkbookDeactivate += new Microsoft.Office.Interop.Excel.AppEvents_WorkbookDeactivateEventHandler(Application_WorkbookDeactivate);
+            Application.WorkbookOpen += new Microsoft.Office.Interop.Excel.AppEvents_WorkbookOpenEventHandler(Application_WorkbookOpen);
+
+            // Excel has focus / lost focus events
+            aplicationWattcher = new AplicationWatcher();
+            aplicationWattcher.OnWindowHasFocus += new WindowHasFocus(AplicationWatcher_OnWindowHasFocus);
+            aplicationWattcher.OnWindowLostFocus += new WindowLostFocus(AplicationWatcher_OnWindowLostFocus);
+            aplicationWattcher.Start(Application.Hwnd);
 
             // Add toolbar
             addToolbar();
