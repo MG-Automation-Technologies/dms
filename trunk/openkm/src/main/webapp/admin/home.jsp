@@ -2,6 +2,7 @@
 <%@ page import="com.openkm.core.Config"%>
 <%@ page import="com.openkm.util.WarUtils"%>
 <%@ page import="com.openkm.api.OKMRepository"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,27 +13,26 @@
   <title>Main</title>
 </head>
 <body>
-<%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-		String token = (String) session.getAttribute("token");
-%>
-	<h1>OpenKM Administration</h1>
-	<table width="200px" class="form" style="margin-top: 25px">
-		<tr><td><b>OpenKM Enterprise Edition</b></td></tr>
-		<tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td>&copy; 2006-2010  OpenKM</td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td><b>Support</b></td></tr>
-		<tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td><b>Installation ID</b></td></tr>
-		<tr><td><%=OKMRepository.getInstance().getUuid(token) %></td></tr>
-	</table>
-<%
-	} else {
-		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
-	}
-%>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <h1>OpenKM Administration</h1>
+      <table width="200px" class="form" style="margin-top: 25px">
+        <tr><td><b>OpenKM Enterprise Edition</b></td></tr>
+        <tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td>&copy; 2006-2010  OpenKM</td></tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td><b>Support</b></td></tr>
+        <tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr><td><b>Installation ID</b></td></tr>
+        <tr><td><%=OKMRepository.getInstance().getUuid((String)session.getAttribute("token"))%></td></tr>
+      </table>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 </body>
 </html>
