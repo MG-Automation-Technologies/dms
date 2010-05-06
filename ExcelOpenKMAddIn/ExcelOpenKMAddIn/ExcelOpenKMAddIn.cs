@@ -18,10 +18,25 @@ namespace ExcelOpenKMAddIn
 
             // Add toolbar
             addToolbar();
+
+            commandBarOption.setEdit(true);
+            commandBarOption.setAdd(true);
+
+            // First time opening excel document must evaluate icons
+            /*Excel.Workbook activeWorkbook = this.Application.ActiveWorkbook;
+            if (this.Application.Workbooks.Count > 0 && activeWorkbook != null)
+            {
+                evaluateCommandBarIcons(activeWorkbook.FullName);
+            }
+            else
+            {
+                evaluateCommandBarIcons(null);
+            }*/
         }
 
         private void ExcelOPenKMAddIn_Shutdown(object sender, System.EventArgs e)
         {
+            saveToolbarPosition();
         }
 
         #region Código generado por VSTO
