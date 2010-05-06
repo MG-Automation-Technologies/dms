@@ -131,4 +131,11 @@ public class FormatUtil {
 			return "NULL";
 		}
 	}
+	
+	/**
+	 * Escape html tags 
+	 */
+	public static String escapeHtml(String str) {
+		return str.replace("<", "&lt;").replace(">", "&gt;");
+	}
 }

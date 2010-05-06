@@ -1,11 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.Iterator" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.openkm.util.FormatUtil" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%!
-	public String escape(String str) {
-		return str.replace("<", "&lt;").replace(">", "&gt;");
-	}
+<%
+	session.setAttribute("mimeAccept", Config.mimeAccept);
 %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,11 +50,11 @@
         <tr class="even"><td><b><%=Config.PROPERTY_RESTRICT_FILE_MIME %></b></td><td><%=Config.RESTRICT_FILE_MIME %></td></tr>
         <tr class="odd"><td><b><%=Config.PROPERTY_RESTRICT_FILE_EXTENSION %></b></td><td><%=Config.RESTRICT_FILE_EXTENSION %></td></tr>
 
-        <tr class="even"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_SUBJECT) %></td></tr>
-        <tr class="odd"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_BODY %></b></td><td><%=escape(Config.NOTIFICATION_MESSAGE_BODY) %></td></tr>
+        <tr class="even"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_SUBJECT %></b></td><td><%=FormatUtil.escapeHtml(Config.NOTIFICATION_MESSAGE_SUBJECT) %></td></tr>
+        <tr class="odd"><td><b><%=Config.PROPERTY_NOTIFICATION_MESSAGE_BODY %></b></td><td><%=FormatUtil.escapeHtml(Config.NOTIFICATION_MESSAGE_BODY) %></td></tr>
 
-        <tr class="even"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_SUBJECT) %></td></tr>
-        <tr class="odd"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_BODY %></b></td><td><%=escape(Config.SUBSCRIPTION_MESSAGE_BODY) %></td></tr>
+        <tr class="even"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_SUBJECT %></b></td><td><%=FormatUtil.escapeHtml(Config.SUBSCRIPTION_MESSAGE_SUBJECT) %></td></tr>
+        <tr class="odd"><td><b><%=Config.PROPERTY_SUBSCRIPTION_MESSAGE_BODY %></b></td><td><%=FormatUtil.escapeHtml(Config.SUBSCRIPTION_MESSAGE_BODY) %></td></tr>
 
         <tr class="even"><td><b><%=Config.PROPERTY_SUBSCRIPTION_TWITTER_USER %></b></td><td><%=Config.SUBSCRIPTION_TWITTER_USER %></td></tr>
         <tr class="odd"><td><b><%=Config.PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD %></b></td><td><%=Config.SUBSCRIPTION_TWITTER_PASSWORD %></td></tr>
@@ -78,8 +76,8 @@
       <h2>MIME types</h2>
       <table class="results" width="100%">
         <tr><th>Icon</th><th>MIME</th></tr>
-        <c:forEach var="mime" items="${mimeAccept}" varStatus="loopStatus">
-          <tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
+        <c:forEach var="mime" items="${mimeAccept}" varStatus="row">
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td align="center"><img src="../com.openkm.frontend.Main/img/icon/mime/${mime}.gif"/></td>
             <td>${mime}</td>
           </tr>
