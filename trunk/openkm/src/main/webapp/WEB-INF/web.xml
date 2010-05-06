@@ -124,6 +124,18 @@
     <servlet-name>RepositoryBackupServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.RepositoryBackupServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>WorkflowGraphServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.WorkflowGraphServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RegisterWorkflowServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.RegisterWorkflowServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ExecuteReportServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ExecuteReportServlet</servlet-class>
+  </servlet>
 
   <!-- Backend Servlets -->
   <!-- 
@@ -317,6 +329,18 @@
   <servlet-mapping>
     <servlet-name>RepositoryBackupServlet</servlet-name>
     <url-pattern>/admin/RepositoryBackup</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>WorkflowGraphServlet</servlet-name>
+    <url-pattern>/admin/WorkflowGraph</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>RegisterWorkflowServlet</servlet-name>
+    <url-pattern>/admin/RegisterWorkflow</url-pattern>
+  </servlet-mapping>
+     <servlet-mapping>
+    <servlet-name>ExecuteReportServlet</servlet-name>
+    <url-pattern>/admin/ExecuteReport</url-pattern>
   </servlet-mapping>
 
   <!-- Backend Servlet Mappings -->
