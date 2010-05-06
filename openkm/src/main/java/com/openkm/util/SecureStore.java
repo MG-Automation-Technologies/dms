@@ -69,7 +69,7 @@ public class SecureStore {
 		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
 		SecretKey sKey = keyFactory.generateSecret(keySpec);
 
-		Cipher cipher = Cipher.getInstance("DES");// cipher is not thread safe
+		Cipher cipher = Cipher.getInstance("DES"); // cipher is not thread safe
 		cipher.init(Cipher.DECRYPT_MODE, sKey);
 		byte[] dst = cipher.doFinal(src);
 
