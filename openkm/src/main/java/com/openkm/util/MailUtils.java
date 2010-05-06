@@ -103,7 +103,7 @@ public class MailUtils {
 	 * @throws MessagingException If there is any error.
 	 */
 	public static void send(String fromAddress, Collection<String> toAddress, String subject, String text) throws MessagingException {
-		log.debug("send("+fromAddress+", "+toAddress+", "+subject+", "+text+")");
+		log.debug("send({}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text });
 		Session mailSession = null;
 
 		try {
@@ -169,7 +169,8 @@ public class MailUtils {
 	public static void importMessages(String token, String uid, String host, String user, String password,
 			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
 			AccessDeniedException, RepositoryException {
-		log.info("importMessages("+token+", "+uid+", "+host+", "+user+", "+password+", "+imapFolder+")");
+		log.info("importMessages({}, {}, {}, {}, {}, {})", 
+				new Object[] { token, uid, host, user, password, imapFolder });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		
@@ -208,7 +209,7 @@ public class MailUtils {
 						sentDate.setTime(msg.getSentDate());
 					}
 					
-					log.info(i+" -> "+msg.getSubject()+" - "+msg.getReceivedDate());
+					log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
 					String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
 					
 					if (!okmRepository.hasNode(token, path)) {
@@ -261,7 +262,7 @@ public class MailUtils {
 					mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
 					
 					String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-					log.info("newMailPath: "+newMailPath);
+					log.info("newMailPath: {}", newMailPath);
 					
 					if (!okmRepository.hasNode(token, newMailPath)) {
 						okmMail.create(token, mail);
@@ -294,10 +295,7 @@ public class MailUtils {
 	}
 	
 	/**
-	 * @param p
-	 * @return
-	 * @throws MessagingException
-	 * @throws IOException
+	 * Get text from message
 	 */
 	private static String getText(Part p) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
@@ -393,10 +391,7 @@ public class MailUtils {
 	}
 	
 	/**
-	 * @param fullUrl
-	 * @return
-	 * @throws HttpException
-	 * @throws IOException
+	 * User tinyurl service as url shorter
 	 */
 	public static String getTinyUrl(String fullUrl) throws HttpException, IOException {
 		HttpClient httpclient = new HttpClient();
@@ -412,5 +407,47 @@ public class MailUtils {
 		method.releaseConnection();
 	
 		return sw.toString();
+	}
+	
+	/**
+	 * Test IMAP connection
+	 * @throws MessagingException 
+	 */
+	public static void testConnection(String host, String user, String password, String imapFolder)
+			throws IOException {
+		Properties props = System.getProperties();
+		Session session = Session.getDefaultInstance(props);
+		Store store = null;
+		Folder folder = null;
+		
+		try {
+			store = session.getStore("imaps");
+			store.connect(host, user, password);
+			folder = store.getFolder(imapFolder);
+			folder.open(Folder.READ_WRITE);
+			folder.close(false);
+		} catch (NoSuchProviderException e) {
+			throw new IOException(e.getMessage());
+		} catch (MessagingException e) {
+			throw new IOException(e.getMessage());
+		} finally {
+			// Try to close folder
+			if (folder != null) {
+				try {
+					folder.close(false);
+				} catch (MessagingException e) {
+					throw new IOException(e.getMessage());
+				}
+			}
+			
+			// Try to close store
+			if (store != null) {
+				try {
+					store.close();
+				} catch (MessagingException e) {
+					throw new IOException(e.getMessage());
+				}
+			}
+		}
 	}
 }
