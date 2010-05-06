@@ -39,16 +39,7 @@ import org.apache.commons.codec.binary.Base64;
 
 public class SecureStore {
 	/**
-	 * @param key
-	 * @param src
-	 * @return
-	 * @throws InvalidKeyException
-	 * @throws UnsupportedEncodingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchPaddingException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
+	 * DES encoder
 	 */
 	public static byte[] desEncode(String key, byte[] src)
 			throws InvalidKeyException, UnsupportedEncodingException,
@@ -67,16 +58,7 @@ public class SecureStore {
 	}
 
 	/**
-	 * @param key
-	 * @param src
-	 * @return
-	 * @throws InvalidKeyException
-	 * @throws UnsupportedEncodingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchPaddingException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
+	 * DES decoder
 	 */
 	public static byte[] desDecode(String key, byte[] src)
 			throws InvalidKeyException, UnsupportedEncodingException,
@@ -95,26 +77,21 @@ public class SecureStore {
 	}
 	
 	/**
-	 * @param src
-	 * @return
+	 * Base64 encoder
 	 */
 	public static String b64Encode(byte[] src) {
 		return new String(Base64.encodeBase64(src));
 	}
 	
 	/**
-	 * @param src
-	 * @return
-	 * @throws IOException
+	 * Base64 decoder
 	 */
 	public static byte[] b64Decode(String src) throws IOException {
 		return Base64.decodeBase64(src);
 	}
 	
 	/**
-	 * @param src
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 * MD5 encoder
 	 */
 	public static String md5Encode(byte[] src) throws NoSuchAlgorithmException {
 		StringBuilder sb = new StringBuilder();
