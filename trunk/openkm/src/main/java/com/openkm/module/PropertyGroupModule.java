@@ -69,7 +69,8 @@ public interface PropertyGroupModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void removeGroup(String token, String docPath, String grpName) throws 
-		NoSuchGroupException, LockException, PathNotFoundException, RepositoryException;
+			AccessDeniedException, NoSuchGroupException, LockException, PathNotFoundException,
+			RepositoryException;
 
 	/**
 	 * Get groups assigned to a document.

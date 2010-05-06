@@ -24,6 +24,7 @@ package com.openkm.module;
 import java.util.Collection;
 
 import com.openkm.bean.Bookmark;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -40,8 +41,8 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark add(String token, String nodePath, String name) throws PathNotFoundException,
-			ItemExistsException, RepositoryException;
+	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
+			PathNotFoundException, ItemExistsException, RepositoryException;
 
 	/**
 	 * Obtains properties from a previously created folder.
@@ -51,7 +52,7 @@ public interface BookmarkModule {
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void remove(String token, String name) throws PathNotFoundException, 
+	public void remove(String token, String name) throws AccessDeniedException, PathNotFoundException, 
 			RepositoryException;
 	
 	/**
@@ -65,7 +66,7 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark rename(String token, String name, String newName) throws 
+	public Bookmark rename(String token, String name, String newName) throws AccessDeniedException,
 			PathNotFoundException, ItemExistsException, RepositoryException;
 	
 	/**
@@ -84,7 +85,8 @@ public interface BookmarkModule {
 	 * @param nodePath A node path to be set as user home folder.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setUserHome(String token, String nodePath) throws RepositoryException;
+	public void setUserHome(String token, String nodePath) throws AccessDeniedException,
+			RepositoryException;
 	
 	/**
 	 * Get the user default home node

@@ -29,6 +29,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
@@ -132,8 +133,8 @@ public interface SearchModule {
 	 * @param name The name of the query to be saved.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public void saveSearch(String token, QueryParams params, String name) throws ItemExistsException,
-			RepositoryException;
+	public void saveSearch(String token, QueryParams params, String name) throws AccessDeniedException,
+			ItemExistsException, RepositoryException;
 	
 	/**
 	 * Get a saved search.
@@ -162,7 +163,8 @@ public interface SearchModule {
 	 * @throws PathNotFoundException If there is no saved search with this name.
 	 * @throws RepositoryException If there is any general repository problem or the query fails
 	 */
-	public void deleteSearch(String token, String name) throws PathNotFoundException, RepositoryException;
+	public void deleteSearch(String token, String name) throws AccessDeniedException,
+			PathNotFoundException, RepositoryException;
 	
 	/**
 	 * Return a Keyword map. This is a hash with the keywords and the occurrence.
