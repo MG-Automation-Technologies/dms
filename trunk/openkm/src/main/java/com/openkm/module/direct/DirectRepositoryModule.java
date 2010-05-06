@@ -628,6 +628,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("purgeTrash("+token+")");
 		Node userTrash = null;
 		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);

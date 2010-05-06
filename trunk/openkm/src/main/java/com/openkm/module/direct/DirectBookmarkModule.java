@@ -35,6 +35,8 @@ import com.openkm.bean.Bookmark;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -46,15 +48,16 @@ import com.openkm.util.UserActivity;
 
 public class DirectBookmarkModule implements BookmarkModule {
 	private static Logger log = LoggerFactory.getLogger(DirectBookmarkModule.class);
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#add(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	
 	@Override
-	public Bookmark add(String token, String nodePath, String name) throws
+	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
 			PathNotFoundException, ItemExistsException, RepositoryException {
-		log.debug("add("+token+", "+nodePath+", "+name+")");
+		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -86,17 +89,18 @@ public class DirectBookmarkModule implements BookmarkModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("add: "+newBookmark);
+		log.debug("add: {}", newBookmark);
 		return newBookmark;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#remove(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void remove(String token, String name) throws PathNotFoundException,
+	public void remove(String token, String name) throws AccessDeniedException, PathNotFoundException,
 			RepositoryException {
-		log.debug("remove("+token+", "+name+")");
+		log.debug("remove({}, {})", token, name);
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -122,15 +126,16 @@ public class DirectBookmarkModule implements BookmarkModule {
 		log.debug("remove: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public Bookmark rename(String token, String name, String newName) throws
+	public Bookmark rename(String token, String name, String newName) throws AccessDeniedException,
 			PathNotFoundException, ItemExistsException, RepositoryException {
-		log.debug("rename:(" + token + ", " + name + ", " + newName + ")");
+		log.debug("rename:({}, {}, {})", new Object[] { token, name, newName });
 		Bookmark renamedBookmark = null;
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			session = SessionManager.getInstance().get(token);
@@ -172,16 +177,13 @@ public class DirectBookmarkModule implements BookmarkModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("rename: "+renamedBookmark);
+		log.debug("rename: {}", renamedBookmark);
 		return renamedBookmark;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#getAll(java.lang.String)
-	 */
 	@Override
 	public Collection<Bookmark> getAll(String token) throws RepositoryException {
-		log.debug("getAll("+token+")");
+		log.debug("getAll({})", token);
 		Collection<Bookmark> ret = new ArrayList<Bookmark>();
 
 		try {
@@ -201,18 +203,20 @@ public class DirectBookmarkModule implements BookmarkModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getAll: "+ret);
+		log.debug("getAll: {}", ret);
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#setUserHome(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void setUserHome(String token, String nodePath) throws RepositoryException {
-		log.debug("setUserHome("+token+", "+nodePath+")");
+	public void setUserHome(String token, String nodePath) throws AccessDeniedException, 
+			RepositoryException {
+		log.debug("setUserHome({}, {})", token, nodePath);
 		Node userConfig = null;
-
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			Session session = SessionManager.getInstance().get(token);
 			Node rootNode = session.getRootNode();
@@ -232,12 +236,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 		log.debug("setUserHome: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.BookmarkModule#getUserHome(java.lang.String)
-	 */
 	@Override
 	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getUserHome("+token+")");
+		log.debug("getUserHome({})", token);
 		Bookmark ret = new Bookmark();
 
 		try {
@@ -255,22 +256,16 @@ public class DirectBookmarkModule implements BookmarkModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getUserHome: "+ret);
+		log.debug("getUserHome: {}", ret);
 		return ret;
 	}
 
 	/**
 	 * Get bookmark info
-	 *
-	 * @param session User session
-	 * @param name Bookmark name
-	 * @return The bookmakr info
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
 	 */
 	private Bookmark getProperties(Session session, String nodePath) throws
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
-		log.debug("getBookmark(" + session + ", " + nodePath + ")");
+		log.debug("getBookmark({}, {})", session, nodePath);
 		Bookmark bm = new Bookmark();
 		Node bookmark = session.getRootNode().getNode(nodePath.substring(1));
 
@@ -282,7 +277,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		// Unescape dangerous chars in name
 		bm.setName(bm.getName());
 
-		log.debug("getBookmark: "+bm);
+		log.debug("getBookmark: {}", bm);
 		return bm;
 	}
 

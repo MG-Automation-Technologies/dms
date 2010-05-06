@@ -288,6 +288,11 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("create(" + token + ", " + doc + ")");
 		Document newDocument = null;
 		Node parentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
 		
@@ -418,6 +423,10 @@ public class DirectDocumentModule implements DocumentModule {
 	public void delete(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + docPath + ")");
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			String name = FileUtils.getName(docPath);
@@ -566,6 +575,11 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, IOException {
 		log.debug("setContent(" + token + ", " + docPath + ", " + is + ")");
 		Node contentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
 
@@ -646,6 +660,10 @@ public class DirectDocumentModule implements DocumentModule {
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.info("addNote(" + token + ", " + docPath + ", " + text + ")");
 		Node notesNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -717,10 +735,15 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Document rename(String token, String docPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
+	public Document rename(String token, String docPath, String newName) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + docPath + ", " + newName + ")");
 		Document renamedDocument = null;
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			String parent = FileUtils.getParent(docPath);
@@ -773,9 +796,14 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void setProperties(String token, Document doc) throws VersionException, LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+	public void setProperties(String token, Document doc) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("setProperties(" + token + ", " + doc + ")");
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -825,9 +853,14 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void checkout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
+	public void checkout(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException {
 		log.debug("checkout(" + token + ", " + docPath + ")");
 		Transaction t = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			XASession session = (XASession)SessionManager.getInstance().get(token);
@@ -871,9 +904,14 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void cancelCheckout(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
+	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException {
 		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
 		Transaction t = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			XASession session = (XASession)SessionManager.getInstance().get(token);
@@ -947,6 +985,10 @@ public class DirectDocumentModule implements DocumentModule {
 		Version version = new Version();
 		Node contentNode = null;
 		Transaction t = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			XASession session = (XASession)SessionManager.getInstance().get(token);
@@ -1080,8 +1122,13 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
+	public void lock(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException {
 		log.debug("lock(" + token + ", " + docPath + ")");
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1114,8 +1161,13 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void unlock(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
+	public void unlock(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException {
 		log.debug("unlock(" + token + ", " + docPath + ")");
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1148,7 +1200,8 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException {
+	public boolean isLocked(String token, String docPath) throws RepositoryException,
+			PathNotFoundException {
 		log.debug("isLocked(" + token + ", " + docPath + ")");
 		boolean locked;
 
@@ -1169,7 +1222,8 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException, LockException {
+	public Lock getLock(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, LockException {
 		log.debug("getLock(" + token + ", " + docPath + ")");
 		Lock lock = new Lock();
 
@@ -1207,9 +1261,14 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	public void purge(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + docPath + ")");
 		Node parentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1311,10 +1370,15 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void move(String token, String docPath, String dstPath) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
+	public void move(String token, String docPath, String dstPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException {
 		log.debug("move(" + token + ", " + docPath + ", " + dstPath + ")");
 		Session session = null;
-
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			String name = FileUtils.getName(docPath);
 			session = SessionManager.getInstance().get(token);
@@ -1350,6 +1414,10 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, IOException {
 		log.debug("copy(" + token + ", " + docPath + ", " + dstPath + ")");
 		Node dstFolderNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1404,9 +1472,14 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void restoreVersion(String token, String docPath, String versionId) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	public void restoreVersion(String token, String docPath, String versionId) throws 
+			AccessDeniedException, RepositoryException, PathNotFoundException {
 		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
 		Node contentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1438,8 +1511,13 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException {
 		log.debug("purgeVersionHistory("+token+", "+docPath+")");
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -1475,7 +1553,8 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public long getVersionHistorySize(String token, String docPath) throws RepositoryException, PathNotFoundException {
+	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
+			PathNotFoundException {
 		log.debug("getVersionHistorySize(" + token + ", " + docPath + ")");
 		long ret = 0;
 

@@ -52,6 +52,10 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		Node node = null;
 		Node sNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -94,6 +98,10 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("removeScript({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);

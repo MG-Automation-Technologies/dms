@@ -64,15 +64,16 @@ import com.openkm.util.UserActivity;
 public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public synchronized void subscribe(String token, String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("subscribe(" + token + ", " + nodePath + ")");
 		Node node = null;
 		Node sNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -125,15 +126,16 @@ public class DirectNotificationModule implements NotificationModule {
 		log.debug("subscribe: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public synchronized void unsubscribe(String token, String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("unsubscribe(" + token + ", " + nodePath + ")");
 		Node node = null;
 		Node sNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);

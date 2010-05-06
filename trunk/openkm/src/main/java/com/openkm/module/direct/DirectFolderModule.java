@@ -183,6 +183,10 @@ public class DirectFolderModule implements FolderModule {
 		Folder newFolder = null;
 		Node parentNode = null;
 		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			String parent = FileUtils.getParent(fld.getPath());
 			String name = FileUtils.getName(fld.getPath());
@@ -358,9 +362,14 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void purge(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	public void purge(String token, String fldPath) throws AccessDeniedException, 
+			RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + fldPath + ")");
 		Node parentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -447,6 +456,10 @@ public class DirectFolderModule implements FolderModule {
 		Folder renamedFolder = null;
 		Session session = null;
 		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			String parent = FileUtils.getParent(fldPath);
 			String name = FileUtils.getName(fldPath);
@@ -498,10 +511,15 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
+	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("move(" + token + ", " + fldPath + ", " + dstPath + ")");
 		Session session = null;
-
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			String name = FileUtils.getName(fldPath);
 			session = SessionManager.getInstance().get(token);
@@ -536,6 +554,10 @@ public class DirectFolderModule implements FolderModule {
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
 		log.debug("copy(" + token + ", " + fldPath + ", " + dstPath + ")");
 		Transaction t = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			String name = FileUtils.getName(fldPath);

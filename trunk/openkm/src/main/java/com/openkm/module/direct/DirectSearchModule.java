@@ -68,6 +68,7 @@ import com.openkm.bean.ResultSet;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Select;
 import com.openkm.cache.UserKeywordsManager;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
@@ -81,9 +82,6 @@ import com.openkm.util.UserActivity;
 public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
 			ParseException, RepositoryException {
@@ -97,9 +95,6 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
 			RepositoryException {
@@ -113,9 +108,6 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
 			ParseException,	RepositoryException {
@@ -129,9 +121,6 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QuestionParams)
-	 */
 	@Override
 	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException, 
 			RepositoryException {
@@ -140,10 +129,7 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("find: " + ret);
 		return ret;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findPaginated(java.lang.String, com.openkm.bean.QueryParams, int, int)
-	 */
+
 	@Override
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
 			throws IOException, ParseException, RepositoryException {
@@ -388,10 +374,7 @@ public class DirectSearchModule implements SearchModule {
 		log.info("prepareStatement: "+sb.toString());
 		return sb.toString();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByStatement(java.lang.String, java.lang.String, int)
-	 */
+
 	@Override
 	public Collection<QueryResult> findByStatement(String token, String statement, String type) throws RepositoryException {
 		log.debug("findByStatement(" + token + ", " + statement + ")");
@@ -400,9 +383,7 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByStatementPaginated(java.lang.String, java.lang.String, java.lang.String, int, int)
-	 */
+
 	@Override
 	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, int limit) throws RepositoryException {
 		log.debug("findByStatement(" + token + ", " + statement + ", " + type + ", " + offset + ", " + limit + ")");
@@ -487,12 +468,14 @@ public class DirectSearchModule implements SearchModule {
 		return rs;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#saveSearch(java.lang.String, com.openkm.bean.QueryParams, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void saveSearch(String token, QueryParams params, String name) throws ItemExistsException, RepositoryException {
+	public void saveSearch(String token, QueryParams params, String name) throws 
+			AccessDeniedException, ItemExistsException, RepositoryException {
 		log.debug("saveSearch("+token+", "+params+", "+name+")");
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -522,18 +505,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	/**
-	 * @param savedSearch
-	 * @param params
-	 * @throws ValueFormatException
-	 * @throws VersionException
-	 * @throws LockException
-	 * @throws ConstraintViolationException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws javax.jcr.AccessDeniedException
-	 * @throws javax.jcr.ItemExistsException
-	 * @throws InvalidItemStateException
-	 * @throws ReferentialIntegrityException
-	 * @throws NoSuchNodeTypeException
+	 * Save search parameters
 	 */
 	public void saveSearch(Node savedSearch, QueryParams params)
 			throws ValueFormatException, VersionException, LockException,
@@ -651,9 +623,6 @@ public class DirectSearchModule implements SearchModule {
 		return qp;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#getAllSearchs(java.lang.String)
-	 */
 	@Override
 	public Collection<String> getAllSearchs(String token) throws RepositoryException {
 		log.debug("getAllSearchs("+token+")");
@@ -681,12 +650,14 @@ public class DirectSearchModule implements SearchModule {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#deleteSearch(java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void deleteSearch(String token, String name) throws PathNotFoundException, RepositoryException {
+	public void deleteSearch(String token, String name) throws AccessDeniedException,
+			PathNotFoundException, RepositoryException {
 		log.debug("deleteSearch("+token+", "+name+")");
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -717,9 +688,6 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("deleteSearch: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#getKeywords(java.lang.String, java.util.Collection)
-	 */
 	@Override
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException {
 		log.info("getKeywordMap("+token+", "+filter+")");
@@ -810,10 +778,7 @@ public class DirectSearchModule implements SearchModule {
 		log.info("getKeywordMapCached: "+keywordMap);
 		return keywordMap;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException {
 		log.info("getCategorizedDocuments("+token+", "+categoryId+")");
