@@ -301,7 +301,7 @@
 			
 			out.println("<h2>Process Image</h2>");
 			out.println("<center>");
-			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"&node="+URLEncoder.encode(pi.getRootToken().getNode(), "UTF-8")+"\" />");
+			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/WorkflowGraph?id="+pd.getId()+"&node="+URLEncoder.encode(pi.getRootToken().getNode(), "UTF-8")+"\" />");
 			out.println("</center>");
 		}
 	} else {
