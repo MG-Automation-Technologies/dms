@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -51,6 +52,10 @@ public class DirectPropertyModule implements PropertyModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("addCategory(" + token + ", " + nodePath + ", " + category + ")");
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -116,6 +121,10 @@ public class DirectPropertyModule implements PropertyModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("removeCategory(" + token + ", " + nodePath + ", " + category + ")");
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -179,6 +188,10 @@ public class DirectPropertyModule implements PropertyModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("addKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -243,6 +256,10 @@ public class DirectPropertyModule implements PropertyModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("removeKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			Session session = SessionManager.getInstance().get(token);

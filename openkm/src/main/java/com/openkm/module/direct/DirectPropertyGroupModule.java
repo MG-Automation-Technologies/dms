@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -64,6 +65,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -103,10 +108,14 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public void removeGroup(String token, String docPath, String grpName)
-			throws NoSuchGroupException, LockException, PathNotFoundException,
+			throws AccessDeniedException, NoSuchGroupException, LockException, PathNotFoundException,
 			RepositoryException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -267,6 +276,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);

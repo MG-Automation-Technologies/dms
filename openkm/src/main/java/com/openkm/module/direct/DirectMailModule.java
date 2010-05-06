@@ -187,6 +187,10 @@ public class DirectMailModule implements MailModule {
 		Mail newMail = null;
 		Transaction t = null;
 		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
 		try {
 			String parent = FileUtils.getParent(mail.getPath());
 			String name = FileUtils.getName(mail.getPath());
@@ -268,9 +272,14 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public void delete(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
+	public void delete(String token, String mailPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException {
 		log.debug("delete(" + token + ", " + mailPath + ")");
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			String name = FileUtils.getName(mailPath);
@@ -313,9 +322,14 @@ public class DirectMailModule implements MailModule {
 	}	
 	
 	@Override
-	public void purge(String token, String mailPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
+	public void purge(String token, String mailPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException {
 		log.debug("purge(" + token + ", " + mailPath + ")");
 		Node parentNode = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			Session session = SessionManager.getInstance().get(token);
@@ -346,10 +360,15 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
+	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("rename:(" + token + ", " + mailPath + ", " + newName + ")");
 		Mail renamedMail = null;
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			String parent = FileUtils.getParent(mailPath);
@@ -402,9 +421,14 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, ItemExistsException {
+	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException {
 		log.debug("move(" + token + ", " + mailPath + ", " + dstPath + ")");
 		Session session = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 
 		try {
 			String name = FileUtils.getName(mailPath);
@@ -484,6 +508,10 @@ public class DirectMailModule implements MailModule {
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
 		log.debug("copy(" + token + ", " + mailPath + ", " + dstPath + ")");
 		Transaction t = null;
+		
+		if (Config.SYSTEM_READONLY.equals("on")) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
 		
 		try {
 			XASession session = (XASession)SessionManager.getInstance().get(token);
