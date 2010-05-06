@@ -64,7 +64,7 @@
 			out.println("</table>");
 			out.println("<hr>");
 			out.println("<h2><center>Upload process definition</center></h2>");
-			out.println("<form action=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowUploadServletAdmin\" method=\"POST\" enctype='multipart/form-data'>");
+			out.println("<form action=\"/OpenKM"+Config.INSTALL+"/RegisterWorkflow\" method=\"POST\" enctype='multipart/form-data'>");
 			out.println("<table class=\"form\">");
 			out.println("<tr><td>");
 			out.println("<input type=\"file\" name=\"definition\">");

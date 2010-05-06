@@ -165,7 +165,7 @@
 			
 			out.println("<h2>Process Image</h2>");
 			out.println("<center>");
-			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/OKMWorkflowViewServletAdmin?id="+pd.getId()+"\" />");
+			out.println("<img src=\"/OpenKM"+Config.INSTALL+"/WorkflowGraph?id="+pd.getId()+"\" />");
 			out.println("</center>");
 		}
 	} else {
