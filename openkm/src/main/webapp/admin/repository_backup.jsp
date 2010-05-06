@@ -1,11 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.File" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
-<%@ page import="com.openkm.util.impexp.RepositoryExporter" %>
-<%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
-<%@ page import="com.openkm.util.impexp.ImpExpStats" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
