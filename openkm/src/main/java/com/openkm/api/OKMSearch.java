@@ -32,6 +32,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
@@ -125,7 +126,7 @@ public class OKMSearch implements SearchModule {
 
 	@Override
 	public void saveSearch(String token, QueryParams params, String name)
-			throws ItemExistsException, RepositoryException {
+			throws AccessDeniedException, ItemExistsException, RepositoryException {
 		log.debug("saveSearch(" + token + ", " + params + ", " + name + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.saveSearch(token, params, name);
@@ -152,8 +153,8 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, String name) throws PathNotFoundException,
-			RepositoryException {
+	public void deleteSearch(String token, String name) throws AccessDeniedException, 
+			PathNotFoundException, RepositoryException {
 		log.debug("deleteSearch(" + token + ", " + name + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		sm.deleteSearch(token, name);
