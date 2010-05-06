@@ -67,8 +67,8 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 
 	@Override
 	public void removeGroup(String token, String docPath, String grpName)
-			throws NoSuchGroupException, LockException, PathNotFoundException, 
-			RepositoryException {
+			throws AccessDeniedException, NoSuchGroupException, LockException,
+			PathNotFoundException, RepositoryException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.removeGroup(token, docPath, grpName);
