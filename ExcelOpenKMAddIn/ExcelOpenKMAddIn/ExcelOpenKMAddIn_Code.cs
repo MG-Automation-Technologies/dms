@@ -53,7 +53,7 @@ namespace ExcelOpenKMAddIn
 
                 // Initialize forms
                 configurationForm = new ConfigurationForm();
-                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_WORD, configXML, docXML);
+                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_EXCEL, configXML, docXML);
                 treeForm = new TreeForm(this.Application, configXML);
 
                 // VSTO API uses object-wrapped booleans
@@ -202,7 +202,7 @@ namespace ExcelOpenKMAddIn
             }
             catch (Exception e)
             {
-                String errorMsg = "WordOpenKMAddIn - (addToolbar)\n" + e.Message + "\n\n" + e.StackTrace;
+                String errorMsg = "ExcelOpenKMAddIn - (addToolbar)\n" + e.Message + "\n\n" + e.StackTrace;
                 MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -224,7 +224,7 @@ namespace ExcelOpenKMAddIn
             }
             catch (Exception e)
             {
-                String errorMsg = "WordOpenKMAddIn - (saveToolbarPosition)\n" + e.Message + "\n\n" + e.StackTrace;
+                String errorMsg = "ExcelOpenKMAddIn - (saveToolbarPosition)\n" + e.Message + "\n\n" + e.StackTrace;
                 MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -394,7 +394,6 @@ namespace ExcelOpenKMAddIn
         {
             try
             {
-                MessageBox.Show("activate:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 if (workBook != null)
                 {
                     refreshIcons(workBook.FullName);
@@ -414,8 +413,6 @@ namespace ExcelOpenKMAddIn
         // Before closing workbook event
         private void Application_WorkbookBeforeClose(Microsoft.Office.Interop.Excel.Workbook workBook, ref bool Cancel)
         {
-            MessageBox.Show("before close:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
             // Last document must disable checkin / cancel checkin icons
             if (this.Application.Workbooks.Count == 1)
             {
@@ -428,7 +425,6 @@ namespace ExcelOpenKMAddIn
         {
             try
             {
-                MessageBox.Show("book open:" + workBook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 if (workBook != null)
                 {
                     refreshIcons(workBook.FullName);
@@ -451,7 +447,6 @@ namespace ExcelOpenKMAddIn
             try
             {
                 Excel.Workbook activeWorkbook = this.Application.ActiveWorkbook;
-                MessageBox.Show("has focus:" + activeWorkbook.FullName, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 if (this.Application.Workbooks.Count > 0 && activeWorkbook != null)
                 {
                     refreshIcons(activeWorkbook.FullName);
