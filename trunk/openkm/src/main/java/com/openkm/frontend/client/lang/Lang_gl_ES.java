@@ -447,6 +447,7 @@ public class Lang_gl_ES {
 	    lang.put("button.copy.clipboard", "Copia al portapapeles");	
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Seleccionar");
+	    lang.put("button.test", "Comprobar");
 	    
 	    // Group
 	    lang.put("group.label", "Engadir grupo de propiedad");
@@ -579,6 +580,8 @@ public class Lang_gl_ES {
 	    lang.put("user.preferences.mail.data", "Cuenta de correo");
 	    lang.put("user.preferences.imap.error", "Todos los campos son obligatorios para configurar el correo");
 	    lang.put("user.preferences.imap.password.error.void", "La clave de IMAP no puede estar vacía en la creación");
+	    lang.put("user.preferences.imap.test.error","Configuración de IMAP incorrecta");
+	    lang.put("user.preferences.imap.test.ok","Configuración de IMAP correcta");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Añadir una palabra clave del thesaurus");

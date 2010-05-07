@@ -446,6 +446,7 @@ public class Lang_zh_CN {
 	    lang.put("button.copy.clipboard", "复制到剪切板");	//Copy to clipboard
 	    lang.put("button.start", "开始");
 	    lang.put("button.select", "选择");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "新增属性组");
@@ -578,6 +579,8 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
 	    lang.put("user.preferences.imap.error", "所有的想都必须在邮件配置中设置");//All fields are obligatory to set the mail configurations
 	    lang.put("user.preferences.imap.password.error.void", "在配置IMAP邮箱的时候，密码不能为空");//Password must not be empty on IMAP mail creation
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "增加知识库关键字");//Add thesaurus keyword

@@ -447,6 +447,7 @@ public class Lang_cs_CZ {
 	    lang.put("button.copy.clipboard", "Zkopírovat do clipboardu");	
 	    lang.put("button.start", "Start");
 	    lang.put("button.select", "Vybrat");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Přidat skupinu vlastností");
@@ -579,6 +580,8 @@ public class Lang_cs_CZ {
 	    lang.put("user.preferences.mail.data", "Mailový účet");
 	    lang.put("user.preferences.imap.error", "Všechna pole jsou povinná pokud chcete dostávat upozornění mailem.");
 	    lang.put("user.preferences.imap.password.error.void", "Heslo IMAP musí být vyplněno");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 	    
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");

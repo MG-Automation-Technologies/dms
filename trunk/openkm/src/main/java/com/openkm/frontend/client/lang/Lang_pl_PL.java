@@ -449,6 +449,7 @@ public class Lang_pl_PL {
 	    lang.put("button.copy.clipboard", "Skopiuj do schowka");	
 	    lang.put("button.start", "Start");
 	    lang.put("button.select", "Select");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Dodaj grupę właściwości");
@@ -581,6 +582,8 @@ public class Lang_pl_PL {
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
