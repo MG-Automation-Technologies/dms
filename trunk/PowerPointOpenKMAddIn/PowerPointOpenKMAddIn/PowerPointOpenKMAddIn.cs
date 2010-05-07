@@ -8,8 +8,13 @@ namespace PowerPointOpenKMAddIn
 {
     public partial class PowerPointOpenKMAddIn
     {
+
         private void PowerPointOpenKMAddIn_Startup(object sender, System.EventArgs e)
         {
+            // Register event interest with the PowerPoint Application
+            Application.WindowActivate += new Microsoft.Office.Interop.PowerPoint.EApplication_WindowActivateEventHandler(Application_WindowActivate);
+            Application.PresentationClose += new Microsoft.Office.Interop.PowerPoint.EApplication_PresentationCloseEventHandler(Application_PresentationClose);
+
             // Add toolbar
             addToolbar();
         }
