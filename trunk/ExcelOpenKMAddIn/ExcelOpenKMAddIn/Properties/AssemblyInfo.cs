@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ExcelOpenKMAddIn")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("darknight")]
+[assembly: AssemblyCompany("OpenKM")]
 [assembly: AssemblyProduct("ExcelOpenKMAddIn")]
-[assembly: AssemblyCopyright("Copyright © darknight 2010")]
+[assembly: AssemblyCopyright("Copyright © OpenKM 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

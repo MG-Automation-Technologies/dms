@@ -4,12 +4,14 @@ using Microsoft.VisualStudio.Tools.Applications.Runtime;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using MSOpenKMCore.util;
+using System.Timers;
 
 namespace ExcelOpenKMAddIn
 {
     public partial class ExcelOpenKMAddIn
     {
         private AplicationWatcher aplicationWattcher;
+        System.Timers.Timer timer = null;
 
         private void ExcelOpenKMIn_Startup(object sender, System.EventArgs e)
         {
@@ -33,25 +35,36 @@ namespace ExcelOpenKMAddIn
             // Add toolbar
             addToolbar();
 
-            commandBarOption.setEdit(true);
-            commandBarOption.setAdd(true);
-
-            // First time opening excel document must evaluate icons
-            /*Excel.Workbook activeWorkbook = this.Application.ActiveWorkbook;
-            if (this.Application.Workbooks.Count > 0 && activeWorkbook != null)
-            {
-                evaluateCommandBarIcons(activeWorkbook.FullName);
-            }
-            else
-            {
-                evaluateCommandBarIcons(null);
-            }*/
+            // Creating a timer to evaluating first workbook ( solves problems firing some event at first time loading )
+            timer = new System.Timers.Timer();
+            timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            timer.Interval = 1000; // 1 second ( after loading we evaluate icons )
+            timer.Enabled = true;
+            GC.KeepAlive(timer);
         }
 
         private void ExcelOPenKMAddIn_Shutdown(object sender, System.EventArgs e)
         {
             saveToolbarPosition();
         }
+
+        // Specify what you want to happen when the Elapsed event is 
+        // raised.
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            timer.Close(); // We ensure timer is only executed one time
+            // First time opening excel document must evaluate icons
+            Excel.Workbook activeWorkbook = this.Application.ActiveWorkbook;
+            if (this.Application.Workbooks.Count > 0 && activeWorkbook != null)
+            {
+                refreshIcons(activeWorkbook.FullName);
+            }
+            else
+            {
+                refreshIcons(null);
+            }
+        }
+
 
         #region Código generado por VSTO
 
