@@ -53,7 +53,7 @@ namespace WordOpenKMAddIn
 
                 // Initialize forms
                 configurationForm = new ConfigurationForm();
-                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_WORD, configXML);
+                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_WORD, configXML, docXML);
                 treeForm = new TreeForm(this.Application, configXML);
 
                 // VSTO API uses object-wrapped booleans
