@@ -53,7 +53,7 @@ namespace PowerPointOpenKMAddIn
 
                 // Initialize forms
                 configurationForm = new ConfigurationForm();
-                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_WORD, configXML, docXML);
+                explorerForm = new ExplorerForm(this.Application, OKMDocumentType.TYPE_POWER_POINT, configXML, docXML);
                 treeForm = new TreeForm(this.Application, configXML);
 
                 // VSTO API uses object-wrapped booleans
@@ -278,6 +278,7 @@ namespace PowerPointOpenKMAddIn
                         PowerPoint.Presentation presentationDocument = Application.ActivePresentation;
                         String localFileName = presentationDocument.FullName;
                         presentationDocument.Save(); // save document
+                        presentationDocument.Close(); // close document
                         docXML.refresh(); // Refresh document list
                         if (docXML.isOpenKMDocument(localFileName))
                         {
@@ -289,7 +290,6 @@ namespace PowerPointOpenKMAddIn
                                 File.Delete(localFileName);
                             }
                         }
-                        presentationDocument.Close(); // close document
                     }
                 }
             }
@@ -312,6 +312,7 @@ namespace PowerPointOpenKMAddIn
                         PowerPoint.Presentation presentationDocument = Application.ActivePresentation;
                         String localFileName = presentationDocument.FullName;
                         presentationDocument.Save(); // save document
+                        presentationDocument.Close(); // Close document
                         docXML.refresh(); // Refresh document list
                         if (docXML.isOpenKMDocument(localFileName))
                         {
@@ -323,7 +324,7 @@ namespace PowerPointOpenKMAddIn
                                 File.Delete(localFileName);
                             }
                         }
-                        presentationDocument.Close(); // Close document
+                        
                     }
                 }
             }
@@ -384,6 +385,35 @@ namespace PowerPointOpenKMAddIn
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        private void Application_WindowActivate(Microsoft.Office.Interop.PowerPoint.Presentation presentation, Microsoft.Office.Interop.PowerPoint.DocumentWindow Wn)
+        {
+            try
+            {
+                if (presentation != null)
+                {
+                    refreshIcons(presentation.FullName);
+                }
+                else
+                {
+                    refreshIcons(null);
+                }
+            }
+            catch (Exception e)
+            {
+                String errorMsg = "PowerPointOpenKMAddIn - (Application_DocumentChange)\n" + e.Message + "\n\n" + e.StackTrace;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void Application_PresentationClose(Microsoft.Office.Interop.PowerPoint.Presentation presentation)
+        {
+            // Last document must disable checkin / cancel checkin icons
+            if (this.Application.Presentations.Count == 1)
+            {
+                refreshIcons(null);
             }
         }
 
