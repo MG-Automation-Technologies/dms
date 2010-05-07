@@ -447,6 +447,7 @@ public class Lang_hu_HU {
 	    lang.put("button.copy.clipboard", "Vágolapra másolás");	
 	    lang.put("button.start", "Indítás");
 	    lang.put("button.select", "Select");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Tulajdonság hozzáadása");
@@ -579,6 +580,8 @@ public class Lang_hu_HU {
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");

@@ -448,6 +448,7 @@ public class Lang_ca_ES {
 	    lang.put("button.copy.clipboard", "Copia al portapapers");	    
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Sel.leciona");
+	    lang.put("button.test", "Comprovar");
 	    
 	    // Group
 	    lang.put("group.label", "Afegeix grup de propietats");
@@ -580,6 +581,8 @@ public class Lang_ca_ES {
 	    lang.put("user.preferences.mail.data", "Compte de mail");
 	    lang.put("user.preferences.imap.error", "Tots els camps son obligatoris per configurar el correu");
 	    lang.put("user.preferences.imap.password.error.void", "El clau de IMAP no pot ser buit en la creació");
+	    lang.put("user.preferences.imap.test.error","Configuració de IMAP incorrecta");
+	    lang.put("user.preferences.imap.test.ok","Configuració de IMAP correcta");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Afegir una paraula clau del thesaurus");

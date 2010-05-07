@@ -447,6 +447,7 @@ public class Lang_id_ID {
 	    lang.put("button.copy.clipboard", "Copy ke clipboard");	
 	    lang.put("button.start", "Menstart");
 	    lang.put("button.select", "Pilih");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Tambah grup properti");
@@ -579,6 +580,8 @@ public class Lang_id_ID {
 	    lang.put("user.preferences.mail.data", "Account mail");
 	    lang.put("user.preferences.imap.error", "Semua field wajib menset konfigurasi mail");
 	    lang.put("user.preferences.imap.password.error.void", "Password nggak boleh kosong  untuk mail IMAP");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Tambah keyword pada thesaurus ");

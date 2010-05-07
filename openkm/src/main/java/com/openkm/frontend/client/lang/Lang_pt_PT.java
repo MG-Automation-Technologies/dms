@@ -447,6 +447,7 @@ public class Lang_pt_PT {
 	    lang.put("button.copy.clipboard", "Copiar para área de transferência");	
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Seleccionar");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Adicionar grupo de propriedades");
@@ -579,6 +580,8 @@ public class Lang_pt_PT {
 	    lang.put("user.preferences.mail.data", "Conta de E-Mail");
 	    lang.put("user.preferences.imap.error", "Todos os campos são obrigatórios para configurar o E-Mail");
 	    lang.put("user.preferences.imap.password.error.void", "Tem de ser inserida a senha do servidor IMAP");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Adicionar palavra-chave");

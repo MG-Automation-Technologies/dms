@@ -448,6 +448,7 @@ public class Lang_bs_BA {
 	    lang.put("button.copy.clipboard", "Kopiraj u clipboard");	
 	    lang.put("button.start", "Počni");
 	    lang.put("button.select", "Izaberi");
+	    lang.put("button.test", "Test");
 	    
 	    // Group
 	    lang.put("group.label", "Dodaj grupu vlasništva");
@@ -580,6 +581,8 @@ public class Lang_bs_BA {
 	    lang.put("user.preferences.mail.data", "Mail account");
 	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
 	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
+	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
+	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
 	    
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
