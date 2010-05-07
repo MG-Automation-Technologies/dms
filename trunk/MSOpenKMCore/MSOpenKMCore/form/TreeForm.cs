@@ -13,6 +13,7 @@ using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 using MSOpenKMCore.util;
 
 namespace MSOpenKMCore.form
@@ -261,7 +262,7 @@ namespace MSOpenKMCore.form
                 if (application is Word.Application)
                 {
                     Word._Document activeDocument = ((Word.Application) application).ActiveDocument;
-                    activeDocument.Save(); // Saves document
+                    activeDocument.Save(); // Saves the document
                     localFileName = activeDocument.FullName;
                 }
                 else if (application is Excel.Application)
@@ -269,6 +270,12 @@ namespace MSOpenKMCore.form
                     Excel.Workbook actitiveWorkBook = ((Excel.Application)application).ActiveWorkbook;
                     actitiveWorkBook.Save(); // Saves the document;
                     localFileName = actitiveWorkBook.FullName;
+                }
+                else if (application is PowerPoint.Application)
+                {
+                    PowerPoint.Presentation activePresentation = ((PowerPoint.Application)application).ActivePresentation;
+                    activePresentation.Save(); // Saves the document
+                    localFileName = activePresentation.FullName;
                 }
                 String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded

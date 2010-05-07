@@ -161,10 +161,52 @@ namespace MSOpenKMCore.util
                 }
             }
 
-            // Special case, document could start with doc*
+            // Special case, document could start with xl*
             if (!valid)
             {
                 if (docExtension.StartsWith("xl"))
+                {
+                    valid = true;
+                }
+            }
+
+            return valid;
+        }
+
+        // Return if document is valid to be opened with ms excel
+        public static bool isDocumentValidToOpenWithMSPowerPoint(document doc)
+        {
+            bool valid = false;
+            String[] EXCEL_EXTENSIONS = new String[9] {"htm","html","mht","mhtml","txt","rtf","doc","wpd","wps"};
+
+            String docExtension = getDocumentExtension(doc);
+            foreach (String extension in EXCEL_EXTENSIONS)
+            {
+                if (docExtension.Equals(extension))
+                {
+                    valid = true;
+                    break;
+                }
+            }
+
+            // Special case, document could start with pps* ppt* pot*
+            if (!valid)
+            {
+                if (docExtension.StartsWith("pps"))
+                {
+                    valid = true;
+                }
+            }
+            if (!valid)
+            {
+                if (docExtension.StartsWith("ppt"))
+                {
+                    valid = true;
+                }
+            }
+            if (!valid)
+            {
+                if (docExtension.StartsWith("pot"))
                 {
                     valid = true;
                 }

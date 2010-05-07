@@ -144,4 +144,7 @@
   <data name="excel_document_extension_warning" xml:space="preserve">
     <value>La extensión del documento [{0}] parece no ser valida para MS Excel. ¿ Está seguro que desea abrir el documento ?</value>
   </data>
+  <data name="powerpoint_document_extension_warning" xml:space="preserve">
+    <value>La extensión del documento [{0}] parece no ser valida para MS PowerPoint. ¿ Está seguro que desea abrir el documento ?</value>
+  </data>
 </root>
