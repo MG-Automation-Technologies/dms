@@ -33,5 +33,5 @@ import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 public interface OKMGeneralServiceAsync {
 	
 	public void getFileUploadStatus(AsyncCallback<GWTFileUploadingStatus> callback);
-	
+	public void testImapConnection(String host, String user, String password, String imapFolder, AsyncCallback<Boolean> callback);
 }

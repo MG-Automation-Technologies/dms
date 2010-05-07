@@ -32,5 +32,5 @@ import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 public interface OKMGeneralService extends RemoteService {
 	
 	public GWTFileUploadingStatus getFileUploadStatus();
-	
+	public Boolean testImapConnection(String host, String user, String password, String imapFolder);
 }
