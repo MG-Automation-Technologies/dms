@@ -142,5 +142,35 @@ namespace MSOpenKMCore.util
 
             return valid;
         }
+
+        // Return if document is valid to be opened with ms excel
+        public static bool isDocumentValidToOpenWithMSExcel(document doc)
+        {
+            bool valid = false;
+            String[] EXCEL_EXTENSIONS = new String[16] {"xls","xlt","htm","html","mht","mhtml","xml",
+                                                       "xla","xlm","xlc","xlw","odc","uxdc","prn",
+                                                       "txt","csv"};
+
+            String docExtension = getDocumentExtension(doc);
+            foreach (String extension in EXCEL_EXTENSIONS)
+            {
+                if (docExtension.Equals(extension))
+                {
+                    valid = true;
+                    break;
+                }
+            }
+
+            // Special case, document could start with doc*
+            if (!valid)
+            {
+                if (docExtension.StartsWith("xl"))
+                {
+                    valid = true;
+                }
+            }
+
+            return valid;
+        }
     }
 }

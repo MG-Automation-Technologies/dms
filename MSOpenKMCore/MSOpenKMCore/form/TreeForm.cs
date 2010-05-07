@@ -12,6 +12,7 @@ using MSOpenKMCore.ws;
 using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
 using Word = Microsoft.Office.Interop.Word;
+using Excel = Microsoft.Office.Interop.Excel;
 using MSOpenKMCore.util;
 
 namespace MSOpenKMCore.form
@@ -29,10 +30,10 @@ namespace MSOpenKMCore.form
         private OKMRepositoryService repositoryService = null;
         private OKMFolderService folderService = null;
 
-        private Word.Application application = null;
+        private Object application = null;
         ComponentResourceManager resources = null;
 
-        public TreeForm(Word.Application application, ConfigXML configXML)
+        public TreeForm(Object application, ConfigXML configXML)
         {
             try
             {
@@ -257,9 +258,18 @@ namespace MSOpenKMCore.form
             try
             {
                 disableAllButtons();
-                Word._Document activeDocument = application.ActiveDocument;
-                activeDocument.Save(); // Saves document
-                localFileName = activeDocument.FullName;
+                if (application is Word.Application)
+                {
+                    Word._Document activeDocument = ((Word.Application) application).ActiveDocument;
+                    activeDocument.Save(); // Saves document
+                    localFileName = activeDocument.FullName;
+                }
+                else if (application is Excel.Application)
+                {
+                    Excel.Workbook actitiveWorkBook = ((Excel.Application)application).ActiveWorkbook;
+                    actitiveWorkBook.Save(); // Saves the document;
+                    localFileName = actitiveWorkBook.FullName;
+                }
                 String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded
                 File.Copy(localFileName, localFileName + "_TEMP");

@@ -9,6 +9,7 @@ using MSOpenKMCore.util;
 using System.IO;
 
 using Word = Microsoft.Office.Interop.Word;
+using Excel = Microsoft.Office.Interop.Excel;
 using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
 
@@ -19,7 +20,6 @@ namespace MSOpenKMCore.form
         private ImageUtil imageList = null;
         private ConfigXML configXML = null;
         private DocumentXML documentXML = null;
-        private FileUtil fileUtil = null;
         private String token = "";
         private TreeNode rootNode = null;
         private TreeNode actualNode = null;
@@ -31,10 +31,10 @@ namespace MSOpenKMCore.form
 
         private String formType = ""; // Excel, word form type ( used to validating extensions files )
 
-        private Word.Application application = null;
+        private Object application  = null;
         ComponentResourceManager resources = null;
 
-        public ExplorerForm(Word.Application application, String formType, ConfigXML configXML)
+        public ExplorerForm(Object application, String formType, ConfigXML configXML, DocumentXML docXML)
         {
             try
             {
@@ -44,8 +44,7 @@ namespace MSOpenKMCore.form
                 this.formType = formType;
                 imageList = new ImageUtil();
                 this.configXML = configXML;
-                this.documentXML = new DocumentXML();
-                this.fileUtil = new FileUtil();
+                this.documentXML = docXML;
                 initServices();
 
                 // Initialize component
@@ -384,25 +383,45 @@ namespace MSOpenKMCore.form
                     {
                         if (!Util.isDocumentValidToOpenWithMSWord(doc))
                         {
-                            String msg = String.Format(resources.GetString("document_extension_warning"), Util.getDocumentName(doc));
+                            String msg = String.Format(resources.GetString("word_document_extension_warning"), Util.getDocumentName(doc));
                             
+                            editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
+                        }
+                    } 
+                    else if (formType.Equals(OKMDocumentType.TYPE_EXCEL)) 
+                    {
+                        if (!Util.isDocumentValidToOpenWithMSExcel(doc))
+                        {
+                            String msg = String.Format(resources.GetString("excel_document_extension_warning"), Util.getDocumentName(doc));
+
                             editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
                         }
                     }
 
                     if (editFile)
                     {
-                        OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, configXML.getHost(), configXML.getUser(), configXML.getPassword());
+                        OKMDocument oKMDocument = DocumentLogic.checkoutDocument(doc, formType, configXML.getHost(), configXML.getUser(), configXML.getPassword());
                         if (oKMDocument != null)
                         {
                             documentXML.add(oKMDocument);
                             object missingValue = Type.Missing;
                             object readOnly = false;
                             object fileName = oKMDocument.getLocalFilename();
-                            application.Documents.Open(ref fileName,
-                                ref missingValue, ref readOnly, ref missingValue, ref missingValue, ref missingValue,
-                                ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue,
-                                ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue);
+                            
+                            if (application is Word.Application)
+                            {
+                                ((Word.Application)application).Documents.Open(ref fileName,
+                                    ref missingValue, ref readOnly, ref missingValue, ref missingValue, ref missingValue,
+                                    ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue,
+                                    ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue);
+                            }
+                            else if (application is Excel.Application)
+                            {
+                                ((Excel.Application)application).Workbooks.Open(oKMDocument.getLocalFilename(),
+                                    missingValue, readOnly, missingValue, missingValue, missingValue,
+                                    missingValue, missingValue, missingValue, missingValue, missingValue,
+                                    missingValue, missingValue, missingValue, missingValue);
+                            }
                         }
                     }
                 }
