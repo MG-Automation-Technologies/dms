@@ -184,6 +184,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		test = new Button(Main.i18n("button.test"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
+				imapTestError.setVisible(false);
+				imapTestOK.setVisible(false);
 				test.setEnabled(false);
 				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
 				endPoint.setServiceEntryPoint(Config.OKMGeneralService);
