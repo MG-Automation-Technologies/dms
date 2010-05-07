@@ -10,6 +10,8 @@ using System.IO;
 
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using Office = Microsoft.Office.Core;
 using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
 
@@ -397,6 +399,15 @@ namespace MSOpenKMCore.form
                             editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
                         }
                     }
+                    else if (formType.Equals(OKMDocumentType.TYPE_POWER_POINT))
+                    {
+                        if (!Util.isDocumentValidToOpenWithMSPowerPoint(doc))
+                        {
+                            String msg = String.Format(resources.GetString("powerpoint_document_extension_warning"), Util.getDocumentName(doc));
+
+                            editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
+                        }
+                    }
 
                     if (editFile)
                     {
@@ -421,6 +432,10 @@ namespace MSOpenKMCore.form
                                     missingValue, readOnly, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue);
+                            } else if (application is PowerPoint.Application)
+                            {
+                                ((PowerPoint.Application)application).Presentations.Open(oKMDocument.getLocalFilename(), Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse,
+                                  Office.MsoTriState.msoTrue);
                             }
                         }
                     }
