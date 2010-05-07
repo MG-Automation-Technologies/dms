@@ -129,7 +129,7 @@
   <data name="documentexplorer" xml:space="preserve">
     <value>Document explorer</value>
   </data>
-  <data name="document_extension_warning" xml:space="preserve">
+  <data name="word_document_extension_warning" xml:space="preserve">
     <value>The document extension of [{0}] seems to be not valid MS Word extension. ¿ Are you sure you want to open this file ?</value>
   </data>
   <data name="edit" xml:space="preserve">
@@ -140,5 +140,8 @@
   </data>
   <data name="version" xml:space="preserve">
     <value>Version</value>
+  </data>
+  <data name="excel_document_extension_warning" xml:space="preserve">
+    <value>The document extension of [{0}] seems to be not valid MS Excel extension. ¿ Are you sure you want to open this file ?</value>
   </data>
 </root>

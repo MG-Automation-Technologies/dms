@@ -13,7 +13,7 @@ namespace MSOpenKMCore.logic
     {
 
         // check out document
-        public static OKMDocument checkoutDocument(document doc, String host, String username, String password)
+        public static OKMDocument checkoutDocument(document doc, String type, String host, String username, String password)
         {
             String token = "";
             OKMAuthService authService = null;
@@ -29,7 +29,7 @@ namespace MSOpenKMCore.logic
                 token = authService.login(username, password);
 
                 // Create a new document
-                OKMDocument oKMDocument = Util.copy(doc, OKMDocumentType.TYPE_WORD);
+                OKMDocument oKMDocument = Util.copy(doc, type);
 
                 // Creates new document
                 FileStream fileStream = new FileStream(oKMDocument.getLocalFilename(), FileMode.CreateNew);
