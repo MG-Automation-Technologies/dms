@@ -498,6 +498,28 @@ public class DirectRepositoryModule implements RepositoryModule {
 		return personalFolder;
 	}
 	
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException {
+		log.debug("getPersonalFolderBase(" + token + ")");
+		Folder personalFolderBase = new Folder();
+		
+		try {
+			Session session = SessionManager.getInstance().get(token);
+			personalFolderBase = new DirectFolderModule().getProperties(session, "/"+Repository.HOME);
+			
+			// Activity log
+			UserActivity.log(session, "GET_PERSONAL_FOLDER", null, personalFolderBase.getPath());
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+		
+		log.debug("getPersonalFolderBase: "+personalFolderBase);
+		return personalFolderBase;
+	}
+	
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getMailFolder(" + token + ")");

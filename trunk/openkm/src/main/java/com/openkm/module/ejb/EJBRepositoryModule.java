@@ -47,6 +47,11 @@ public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub

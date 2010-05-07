@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -78,7 +79,12 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			folder =  OKMRepository.getInstance().getPersonalFolder(token);
+			// Administrators user can see all user homes
+			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+				folder =  OKMRepository.getInstance().getPersonalFolderBase(token);
+			} else {
+				folder =  OKMRepository.getInstance().getPersonalFolder(token);
+			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
