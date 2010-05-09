@@ -432,7 +432,7 @@ public class MailUtils {
 			throw new IOException(e.getMessage());
 		} finally {
 			// Try to close folder
-			if (folder != null) {
+			if (folder != null && folder.isOpen()) {
 				try {
 					folder.close(false);
 				} catch (MessagingException e) {
