@@ -14,6 +14,7 @@ using MSOpenKMCore.logic;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using Visio = Microsoft.Office.Interop.Visio;
 using MSOpenKMCore.util;
 
 namespace MSOpenKMCore.form
@@ -276,6 +277,12 @@ namespace MSOpenKMCore.form
                     PowerPoint.Presentation activePresentation = ((PowerPoint.Application)application).ActivePresentation;
                     activePresentation.Save(); // Saves the document
                     localFileName = activePresentation.FullName;
+                }
+                else if (application is Visio.Application)
+                {
+                    Visio.Document activeDocument = ((Visio.Application)application).ActiveDocument;
+                    activeDocument.Save(); // Saves the document
+                    localFileName = activeDocument.FullName;
                 }
                 String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded

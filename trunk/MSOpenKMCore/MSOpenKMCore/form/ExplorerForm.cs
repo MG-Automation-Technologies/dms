@@ -11,6 +11,7 @@ using System.IO;
 using Word = Microsoft.Office.Interop.Word;
 using Excel = Microsoft.Office.Interop.Excel;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using Visio = Microsoft.Office.Interop.Visio;
 using Office = Microsoft.Office.Core;
 using MSOpenKMCore.bean;
 using MSOpenKMCore.logic;
@@ -386,7 +387,6 @@ namespace MSOpenKMCore.form
                         if (!Util.isDocumentValidToOpenWithMSWord(doc))
                         {
                             String msg = String.Format(resources.GetString("word_document_extension_warning"), Util.getDocumentName(doc));
-                            
                             editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
                         }
                     } 
@@ -395,7 +395,6 @@ namespace MSOpenKMCore.form
                         if (!Util.isDocumentValidToOpenWithMSExcel(doc))
                         {
                             String msg = String.Format(resources.GetString("excel_document_extension_warning"), Util.getDocumentName(doc));
-
                             editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
                         }
                     }
@@ -404,7 +403,14 @@ namespace MSOpenKMCore.form
                         if (!Util.isDocumentValidToOpenWithMSPowerPoint(doc))
                         {
                             String msg = String.Format(resources.GetString("powerpoint_document_extension_warning"), Util.getDocumentName(doc));
-
+                            editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
+                        }
+                    }
+                    else if (formType.Equals(OKMDocumentType.TYPE_VISIO))
+                    {
+                        if (!Util.isDocumentValidToOpenWithMSVisio(doc))
+                        {
+                            String msg = String.Format(resources.GetString("visio_document_extension_warning"), Util.getDocumentName(doc));
                             editFile = (MessageBox.Show(msg, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK);
                         }
                     }
@@ -432,10 +438,15 @@ namespace MSOpenKMCore.form
                                     missingValue, readOnly, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue);
-                            } else if (application is PowerPoint.Application)
+                            } 
+                            else if (application is PowerPoint.Application)
                             {
                                 ((PowerPoint.Application)application).Presentations.Open(oKMDocument.getLocalFilename(), Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse,
                                   Office.MsoTriState.msoTrue);
+                            }
+                            else if (application is Visio.Application)
+                            {
+                                ((Visio.Application)application).Documents.Open(oKMDocument.getLocalFilename());
                             }
                         }
                     }

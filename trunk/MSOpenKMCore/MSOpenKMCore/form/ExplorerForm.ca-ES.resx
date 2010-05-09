@@ -147,4 +147,7 @@
   <data name="powerpoint_document_extension_warning" xml:space="preserve">
     <value>La extensió del document [{0}] sembla que no es vàlida per MS PowerPoint. ¿ Segur que vol obrir el document ?</value>
   </data>
+  <data name="visio_document_extension_warning" xml:space="preserve">
+    <value>La extensió del document [{0}] sembla que no es vàlida per MS Visio. ¿ Segur que vol obrir el document ?</value>
+  </data>
 </root>
