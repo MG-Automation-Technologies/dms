@@ -329,7 +329,8 @@ public interface DocumentModule {
 	 * @throws LockException If the node is not locked.
 	 * @return The lock info.
 	 */
-	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException, LockException;
+	public Lock getLock(String token, String docPath) throws RepositoryException, 
+			PathNotFoundException, LockException;
 	
 	/**
 	 * Deletes definitively a document from the repository. It is a phisical delete, so
@@ -342,7 +343,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 */
-	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException;
+	public void purge(String token, String docPath) throws AccessDeniedException, 
+			RepositoryException, PathNotFoundException;
 
 	/**
 	 * Move a document to another location in the repository.
@@ -359,7 +361,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void move(String token, String docPath, String fldPath) throws PathNotFoundException,
-		ItemExistsException, AccessDeniedException, RepositoryException;
+			ItemExistsException, AccessDeniedException, RepositoryException;
 	
 	/**
 	 * Copy a document to another location in the repository.
@@ -375,9 +377,8 @@ public interface DocumentModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void copy(String token, String docPath, String fldPath) throws 
-			ItemExistsException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, IOException;
+	public void copy(String token, String docPath, String fldPath) throws ItemExistsException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException;
 	
 	/**
 	 * Revert the document to an specific previous version.
@@ -391,7 +392,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void restoreVersion(String token, String docPath, String versionId) throws 
-		PathNotFoundException, AccessDeniedException, RepositoryException;
+			PathNotFoundException, AccessDeniedException, RepositoryException;
 
 	/**
 	 * Purge a Document version history, so delete all previous verions but last one. 
@@ -404,8 +405,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public void purgeVersionHistory(String token, String docPath) throws 
-		AccessDeniedException, RepositoryException, PathNotFoundException;
+	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException;
 
 	/**
 	 * Get the version size of a Document.
@@ -417,8 +418,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public long getVersionHistorySize(String token, String docPath) throws 
-		RepositoryException, PathNotFoundException;
+	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
+			PathNotFoundException;
 	
 	/**
 	 * Test if a document path is valid.
@@ -430,8 +431,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public boolean isValid(String token, String docPath) throws 
-		PathNotFoundException, AccessDeniedException, RepositoryException;
+	public boolean isValid(String token, String docPath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException;
 	
 	/**
 	 * Get the document path from a UUID
