@@ -177,10 +177,10 @@ namespace MSOpenKMCore.util
         public static bool isDocumentValidToOpenWithMSPowerPoint(document doc)
         {
             bool valid = false;
-            String[] EXCEL_EXTENSIONS = new String[9] {"htm","html","mht","mhtml","txt","rtf","doc","wpd","wps"};
+            String[] POWERPOINT_EXTENSIONS = new String[9] {"htm","html","mht","mhtml","txt","rtf","doc","wpd","wps"};
 
             String docExtension = getDocumentExtension(doc);
-            foreach (String extension in EXCEL_EXTENSIONS)
+            foreach (String extension in POWERPOINT_EXTENSIONS)
             {
                 if (docExtension.Equals(extension))
                 {
@@ -207,6 +207,41 @@ namespace MSOpenKMCore.util
             if (!valid)
             {
                 if (docExtension.StartsWith("pot"))
+                {
+                    valid = true;
+                }
+            }
+
+            return valid;
+        }
+
+        // Return if document is valid to be opened with ms visio
+        public static bool isDocumentValidToOpenWithMSVisio(document doc)
+        {
+            bool valid = false;
+            String[] VISIO_EXTENSIONS = new String[9] { "vsd", "vxd", "vss", "vsx", "vst", "vtx", "vsw", "svg", "svgz" };
+
+            String docExtension = getDocumentExtension(doc);
+            foreach (String extension in VISIO_EXTENSIONS)
+            {
+                if (docExtension.Equals(extension))
+                {
+                    valid = true;
+                    break;
+                }
+            }
+
+            // Special case, document could start with vs* v?x
+            if (!valid)
+            {
+                if (docExtension.StartsWith("vs"))
+                {
+                    valid = true;
+                }
+            }
+            if (!valid)
+            {
+                if (docExtension.StartsWith("v") && docExtension.Length == 3 && docExtension.EndsWith("x"))
                 {
                     valid = true;
                 }

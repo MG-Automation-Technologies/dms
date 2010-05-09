@@ -147,4 +147,7 @@
   <data name="powerpoint_document_extension_warning" xml:space="preserve">
     <value>The document extension of [{0}] seems to be not valid MS PowerPoint extension. ¿ Are you sure you want to open this file ?</value>
   </data>
+  <data name="visio_document_extension_warning" xml:space="preserve">
+    <value>The document extension of [{0}] seems to be not valid MS Visio extension. ¿ Are you sure you want to open this file ?</value>
+  </data>
 </root>
