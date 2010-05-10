@@ -182,7 +182,7 @@ public class OKMAccessManager implements AccessManager {
 	}
 
 	/**
-	 * 
+	 * Check access
 	 */
 	private boolean checkAccess(Path absPath, int permissions) throws RepositoryException {
 		log.debug("checkAccess({}, {} => {})", new Object[] { absPath, permissions, permissionsToString(permissions) });
@@ -250,7 +250,7 @@ public class OKMAccessManager implements AccessManager {
 						}
 
 						if ((permissions & Permission.READ) != 0) {
-							// Comprueba los usuarios de lectura
+							// Check for READ permissions
 							try {
 								access = checkRead(node);
 							} catch (PathNotFoundException e) {
@@ -260,12 +260,21 @@ public class OKMAccessManager implements AccessManager {
 								access = true;
 							}
 						} else if ((permissions & Permission.ADD_NODE) != 0 || 
-								(permissions & Permission.SET_PROPERTY) != 0 ||
-								(permissions & Permission.REMOVE_NODE) != 0 ||
-								(permissions & Permission.REMOVE_PROPERTY) != 0) {
-							// Comprueba los usuarios de escritura
+								(permissions & Permission.SET_PROPERTY) != 0) {
+							// Check for WRITE permissions
 							try {
 								access = checkWrite(node);
+							} catch (PathNotFoundException e) {
+								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
+										subject.getPrincipals(), e.getMessage(),
+										node.getPrimaryNodeType().getName() });
+								access = true;
+							}
+						} else if ((permissions & Permission.REMOVE_NODE) != 0 ||
+								(permissions & Permission.REMOVE_PROPERTY) != 0) {
+							// Check for DELETE permissions
+							try {
+								access = checkDelete(node);
 							} catch (PathNotFoundException e) {
 								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
 										subject.getPrincipals(), e.getMessage(),
@@ -287,7 +296,7 @@ public class OKMAccessManager implements AccessManager {
 	}
 
 	/**
-	 * 
+	 * Check read access
 	 */
 	private boolean checkRead(Node node) throws ValueFormatException, RepositoryException,
 			PathNotFoundException {
@@ -308,8 +317,7 @@ public class OKMAccessManager implements AccessManager {
 
 		// If there is no user specific access, try with roles
 		if (!access) {
-			// Propiedad no definida en nt:versionHistory, nt:version y
-			// okm:resource
+			// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
 			Value[] roles = node.getProperty(com.openkm.bean.Permission.ROLES_READ).getValues();
 
 			for (int i = 0; i < roles.length; i++) {
@@ -327,7 +335,7 @@ public class OKMAccessManager implements AccessManager {
 	}
 
 	/**
-	 * 
+	 * Check write access
 	 */
 	private boolean checkWrite(Node node) throws ValueFormatException, RepositoryException,
 			PathNotFoundException {
@@ -347,8 +355,7 @@ public class OKMAccessManager implements AccessManager {
 
 		// If there is no user specific access, try with roles
 		if (!access) {
-			// Propiedad no definida en nt:versionHistory, nt:version y
-			// okm:resource
+			// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
 			Value[] roles = node.getProperty(com.openkm.bean.Permission.ROLES_WRITE).getValues();
 
 			for (int i = 0; i < roles.length; i++) {
@@ -362,6 +369,44 @@ public class OKMAccessManager implements AccessManager {
 		}
 
 		log.debug("checkWrite: {}", access);
+		return access;
+	}
+
+	/**
+	 * Check delete access
+	 */
+	private boolean checkDelete(Node node) throws ValueFormatException, RepositoryException,
+			PathNotFoundException {
+		log.debug("checkDelete({})", node);
+		// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
+		Value[] users = node.getProperty(com.openkm.bean.Permission.USERS_DELETE).getValues();
+		boolean access = false;
+
+		for (int i = 0; i < users.length; i++) {
+			log.debug("{} User: {}", com.openkm.bean.Permission.USERS_DELETE, users[i].getString());
+
+			if (principalUser.equals(users[i].getString())) {
+				access = true;
+				break;
+			}
+		}
+
+		// If there is no user specific access, try with roles
+		if (!access) {
+			// Propiedad no definida en nt:versionHistory, nt:version y okm:resource
+			Value[] roles = node.getProperty(com.openkm.bean.Permission.ROLES_DELETE).getValues();
+
+			for (int i = 0; i < roles.length; i++) {
+				log.debug("{} Rol: {}", com.openkm.bean.Permission.ROLES_DELETE, roles[i].getString());
+
+				if (principalRoles.contains(roles[i].getString())) {
+					access = true;
+					break;
+				}
+			}
+		}
+
+		log.debug("checkDelete: {}", access);
 		return access;
 	}
 
