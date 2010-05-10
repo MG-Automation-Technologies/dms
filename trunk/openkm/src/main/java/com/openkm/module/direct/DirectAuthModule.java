@@ -74,7 +74,7 @@ public class DirectAuthModule implements AuthModule {
 	@SuppressWarnings("unchecked")
 	public synchronized String login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
 			RepositoryException {
-		log.debug("login(" + user + ", " + pass + ")");
+		log.debug("login({}, {})", user, pass);
 		String token = null;
 
 		try {
@@ -88,8 +88,7 @@ public class DirectAuthModule implements AuthModule {
 			} else {
 				InitialContext ctx = new InitialContext();
 				Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
-
-				log.info("Principals: "+subject.getPrincipals());
+				log.info("Principals: {}", subject.getPrincipals());
 
 				Object obj = Subject.doAs(subject, new PrivilegedAction() {
 					public Object run() {
@@ -162,23 +161,12 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("login: " + token);
+		log.debug("login: {}", token);
 		return token;
 	}
 
 	/**
-	 * @param session
-	 * @throws javax.jcr.RepositoryException
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws ValueFormatException
-	 * @throws javax.jcr.AccessDeniedException
-	 * @throws ItemExistsException
-	 * @throws ConstraintViolationException
-	 * @throws InvalidItemStateException
-	 * @throws ReferentialIntegrityException
-	 * @throws VersionException
-	 * @throws LockException
-	 * @throws NoSuchNodeTypeException
+	 * Load user data
 	 */
 	public static void loadUserData(Session session)
 			throws javax.jcr.RepositoryException,
@@ -187,7 +175,7 @@ public class DirectAuthModule implements AuthModule {
 			ConstraintViolationException, InvalidItemStateException,
 			ReferentialIntegrityException, VersionException, LockException,
 			NoSuchNodeTypeException {
-		log.info("loadUserData("+session.getUserID()+")");
+		log.info("loadUserData({})", session.getUserID());
 		if (session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
 			log.info("** User Home already created **");
 			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
@@ -235,8 +223,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userHome.setProperty(Permission.USERS_READ, new String[] { userId });
 		userHome.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userHome.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userHome.setProperty(Permission.ROLES_READ, new String[] {});
 		userHome.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userHome.setProperty(Permission.ROLES_DELETE, new String[] {});
 		
 		log.info("** Create user '"+userId+"' trash ("+userHome.getPath()+"/"+Repository.TRASH+") **");
 		Node userTrash = userHome.addNode(Repository.TRASH, Folder.TYPE);
@@ -246,8 +236,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userTrash.setProperty(Permission.USERS_READ, new String[] { userId });
 		userTrash.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userTrash.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userTrash.setProperty(Permission.ROLES_READ, new String[] {});
 		userTrash.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userTrash.setProperty(Permission.ROLES_DELETE, new String[] {});
 		
 		log.info("** Create user '"+userId+"' config ("+userHome.getPath()+"/"+Repository.USER_CONFIG+") **");
 		Node userConfig = userHome.addNode(Repository.USER_CONFIG, Repository.USER_CONFIG_TYPE);
@@ -257,8 +249,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userConfig.setProperty(Permission.USERS_READ, new String[] { userId });
 		userConfig.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userConfig.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userConfig.setProperty(Permission.ROLES_READ, new String[] {});
 		userConfig.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userConfig.setProperty(Permission.ROLES_DELETE, new String[] {});
 
 		log.info("** Create user '"+userId+"' personal documents ("+userHome.getPath()+"/"+Repository.PERSONAL+") **");
 		Node userDocuments = userHome.addNode(Repository.PERSONAL, Folder.TYPE);
@@ -268,8 +262,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userDocuments.setProperty(Permission.USERS_READ, new String[] { userId });
 		userDocuments.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userDocuments.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userDocuments.setProperty(Permission.ROLES_READ, new String[] {});
 		userDocuments.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userDocuments.setProperty(Permission.ROLES_DELETE, new String[] {});
 
 		log.info("** Create user '"+userId+"' mail ("+userHome.getPath()+"/"+Repository.MAIL+") **");
 		Node userMail = userHome.addNode(Repository.MAIL, Folder.TYPE);
@@ -279,8 +275,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userMail.setProperty(Permission.USERS_READ, new String[] { userId });
 		userMail.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userMail.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userMail.setProperty(Permission.ROLES_READ, new String[] {});
 		userMail.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userMail.setProperty(Permission.ROLES_DELETE, new String[] {});
 
 		log.info("** Create user '"+userId+"' query ("+userHome.getPath()+"/"+QueryParams.LIST+") **");
 		Node userQuery = userHome.addNode(QueryParams.LIST, QueryParams.LIST_TYPE);
@@ -288,8 +286,10 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userQuery.setProperty(Permission.USERS_READ, new String[] { userId });
 		userQuery.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userQuery.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userQuery.setProperty(Permission.ROLES_READ, new String[] {});
 		userQuery.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userQuery.setProperty(Permission.ROLES_DELETE, new String[] {});
 
 		log.info("** Create user '"+userId+"' bookmark ("+userHome.getPath()+"/"+Bookmark.LIST+") **");
 		Node userBookmark = userHome.addNode(Bookmark.LIST, Bookmark.LIST_TYPE);
@@ -297,30 +297,26 @@ public class DirectAuthModule implements AuthModule {
 		// Auth info
 		userBookmark.setProperty(Permission.USERS_READ, new String[] { userId });
 		userBookmark.setProperty(Permission.USERS_WRITE, new String[] { userId });
+		userBookmark.setProperty(Permission.USERS_DELETE, new String[] { userId });
 		userBookmark.setProperty(Permission.ROLES_READ, new String[] {});
 		userBookmark.setProperty(Permission.ROLES_WRITE, new String[] {});
+		userBookmark.setProperty(Permission.ROLES_DELETE, new String[] {});
 		
 		// Save
 		okmHome.save();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#login()
-	 */
 	@Override
 	public String login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
 		log.debug("login()");
 		String token = login(null, null);
-		log.debug("login: " + token);
+		log.debug("login: {}", token);
 		return token;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
-	 */
 	@Override
 	public synchronized void logout(String token) throws AccessDeniedException, RepositoryException {
-		log.debug("logout(" + token + ")");
+		log.debug("logout({})", token);
 		Session session = SessionManager.getInstance().get(token);
 
 		try {
@@ -353,14 +349,10 @@ public class DirectAuthModule implements AuthModule {
 		log.debug("logout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantUser(java.lang.String, java.lang.String, java.lang.String, int)
-	 */
 	@Override
-	public void grantUser(String token, String nodePath, String user,
-			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("grantUser(" + token + ", " + nodePath + ", " + user
-				+ ", " + permissions + ", " + recursive + ")");
+	public void grantUser(String token, String nodePath, String user, int permissions,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, permissions, recursive });
 		Node node = null;
 
 		// TODO: Comprobar si el usuario es dueño del nodo.
@@ -374,6 +366,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_READ;
 			} else if (permissions == Permission.WRITE) {
 				property = Permission.USERS_WRITE;
+			} else if (permissions == Permission.DELETE) {
+				property = Permission.USERS_DELETE;
 			}
 
 			synchronized (node) {
@@ -404,14 +398,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param user
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Grant user
 	 */
-	private void grantUser(Node node, String user, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void grantUser(Node node, String user, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualUsers = node.getProperty(property).getValues();
 		ArrayList<String> newUsers = new ArrayList<String>();
 
@@ -428,23 +418,19 @@ public class DirectAuthModule implements AuthModule {
 			node.setProperty(property, (String[])newUsers.toArray(new String[newUsers.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
-			log.warn("grantUser -> LockException : "+node.getPath());
+			log.warn("grantUser -> LockException : {}", node.getPath());
 			JCRUtils.discardsPendingChanges(node);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn("grantUser -> AccessDeniedException : "+node.getPath());
+			log.warn("grantUser -> AccessDeniedException : {}", node.getPath());
 			JCRUtils.discardsPendingChanges(node);
 		}
 	}
 
 	/**
-	 * @param node
-	 * @param user
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Grant user recursively
 	 */
-	private void grantUserInDepth(Node node, String user, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void grantUserInDepth(Node node, String user, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		grantUser(node, user, property);
 
 		if (node.isNodeType(Folder.TYPE)) {
@@ -455,14 +441,10 @@ public class DirectAuthModule implements AuthModule {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeUser(java.lang.String, java.lang.String, java.lang.String, int)
-	 */
 	@Override
-	public void revokeUser(String token, String nodePath, String user,
-			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("revokeUser(" + token + ", " + nodePath + ", " + user
-				+ ", " + permissions + ", " + recursive + ")");
+	public void revokeUser(String token, String nodePath, String user, int permissions,
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		Node node = null;
 
 		// TODO: Comprobar si el usuario es dueño del nodo.
@@ -476,7 +458,9 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_READ;
 			} else if (permissions == Permission.WRITE) {
 				property = Permission.USERS_WRITE;
-			}
+			} else if (permissions == Permission.DELETE) {
+				property = Permission.USERS_DELETE;
+			} 
 
 			synchronized (node) {
 				if (recursive) {
@@ -506,14 +490,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param user
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Revoke user
 	 */
-	private void revokeUser(Node node, String user, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void revokeUser(Node node, String user, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualUsers = node.getProperty(property).getValues();
 		ArrayList<String> newUsers = new ArrayList<String>();
 
@@ -536,14 +516,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param user
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Revoke user recursively
 	 */
-	private void revokeUserInDepth(Node node, String user, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void revokeUserInDepth(Node node, String user, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		revokeUser(node, user, property);
 
 		if (node.isNodeType(Folder.TYPE)) {
@@ -554,14 +530,10 @@ public class DirectAuthModule implements AuthModule {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantRole(java.lang.String, java.lang.String, java.lang.String, int)
-	 */
 	@Override
-	public void grantRole(String token, String nodePath, String role,
-			int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("grantRole(" + token + ", " + nodePath + ", " + role
-				+ ", " + permissions + ", " + recursive + ")");
+	public void grantRole(String token, String nodePath, String role, int permissions, 
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
 
 		// TODO: Comprobar si el usuario es dueño del nodo.
@@ -575,6 +547,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_READ;
 			} else if (permissions == Permission.WRITE) {
 				property = Permission.ROLES_WRITE;
+			} else if (permissions == Permission.DELETE) {
+				property = Permission.ROLES_DELETE;
 			}
 
 			synchronized (node) {
@@ -605,14 +579,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param role
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Grant role
 	 */
-	private void grantRole(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void grantRole(Node node, String role, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualRoles = node.getProperty(property).getValues();
 		ArrayList<String> newRoles = new ArrayList<String>();
 
@@ -638,14 +608,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param role
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Grant role recursively
 	 */
-	private void grantRoleInDepth(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void grantRoleInDepth(Node node, String role, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		grantRole(node, role, property);
 
 		if (node.isNodeType(Folder.TYPE)) {
@@ -656,13 +622,10 @@ public class DirectAuthModule implements AuthModule {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeRole(java.lang.String, java.lang.String, java.lang.String, int)
-	 */
 	@Override
-	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("revokeRole(" + token + ", " + nodePath + ", " + role
-				+ ", " + permissions + ", " + recursive + ")");
+	public void revokeRole(String token, String nodePath, String role, int permissions, 
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
 
 		// TODO: Comprobar si el usuario es dueño del nodo.
@@ -676,6 +639,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_READ;
 			} else if (permissions == Permission.WRITE) {
 				property = Permission.ROLES_WRITE;
+			} else if (permissions == Permission.DELETE) {
+				property = Permission.ROLES_DELETE;
 			}
 
 			synchronized (node) {
@@ -706,12 +671,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param role
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Revoke role
 	 */
 	private void revokeRole(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualRoles = node.getProperty(property).getValues();
@@ -736,12 +696,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	/**
-	 * @param node
-	 * @param role
-	 * @param property
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
+	 * Revoke role recursively
 	 */
 	private void revokeRoleInDepth(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
 		revokeRole(node, role, property);
@@ -754,12 +709,9 @@ public class DirectAuthModule implements AuthModule {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedUsers(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("getGrantedUsers(" + token + ", " + nodePath + ")");
+		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
 
 		try {
@@ -783,6 +735,18 @@ public class DirectAuthModule implements AuthModule {
 					users.put(usersWrite[i].getString(), new Byte(Permission.WRITE));
 				}
 			}
+			
+			Value[] usersDelete = node.getProperty(Permission.USERS_DELETE).getValues();
+
+			for (int i=0; i<usersDelete.length; i++) {
+				Byte previous = (Byte) users.get(usersDelete[i].getString());
+
+				if (previous != null) {
+					users.put(usersDelete[i].getString(), new Byte((byte) (previous.byteValue() | Permission.DELETE)));
+				} else {
+					users.put(usersDelete[i].getString(), new Byte(Permission.DELETE));
+				}
+			}
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -791,16 +755,13 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getGrantedUsers: "+users);
+		log.debug("getGrantedUsers: {}", users);
 		return users;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedRoles(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("getGrantedRoles(" + token + ", " + nodePath + ")");
+		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		HashMap<String, Byte> roles = new HashMap<String, Byte>();
 
 		try {
@@ -824,6 +785,18 @@ public class DirectAuthModule implements AuthModule {
 					roles.put(rolesWrite[i].getString(), new Byte(Permission.WRITE));
 				}
 			}
+			
+			Value[] rolesDelete = node.getProperty(Permission.ROLES_DELETE).getValues();
+
+			for (int i=0; i<rolesDelete.length; i++) {
+				Byte previous = (Byte) roles.get(rolesDelete[i].getString());
+
+				if (previous != null) {
+					roles.put(rolesDelete[i].getString(), new Byte((byte) (previous.byteValue() | Permission.DELETE)));
+				} else {
+					roles.put(rolesDelete[i].getString(), new Byte(Permission.DELETE));
+				}
+			}
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -832,7 +805,7 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getGrantedRoles: "+roles);
+		log.debug("getGrantedRoles: {}", roles);
 		return roles;
 	}
 
@@ -884,12 +857,9 @@ public class DirectAuthModule implements AuthModule {
 		return principalAdapter;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getUsers(java.lang.String)
-	 */
 	@Override
 	public Collection<String> getUsers(String token) throws RepositoryException {
-		log.debug("getUsers("+token+")");
+		log.debug("getUsers({})", token);
 		Collection<String> list = null;
 
 		try {
@@ -900,16 +870,13 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getUsers:"+list);
+		log.debug("getUsers: {}", list);
 		return list;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getRoles(java.lang.String)
-	 */
 	@Override
 	public Collection<String> getRoles(String token) throws RepositoryException {
-		log.debug("getRoles("+token+")");
+		log.debug("getRoles({})", token);
 		Collection<String> list = null;
 
 		try {
@@ -920,7 +887,7 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getRoles:"+list);
+		log.debug("getRoles: {}", list);
 		return list;
 	}
 
@@ -929,7 +896,7 @@ public class DirectAuthModule implements AuthModule {
 	 */
 	@Override
 	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException {
-		log.debug("getMails("+token+")");
+		log.debug("getMails({})", token);
 		Collection<String> list = null;
 
 		try {
@@ -940,7 +907,7 @@ public class DirectAuthModule implements AuthModule {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
-		log.debug("getMails:"+list);
+		log.debug("getMails: {}", list);
 		return list;
 	}
 }
