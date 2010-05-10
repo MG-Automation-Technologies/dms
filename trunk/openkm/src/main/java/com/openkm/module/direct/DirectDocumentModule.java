@@ -155,6 +155,10 @@ public class DirectDocumentModule implements DocumentModule {
 			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.WRITE)) {
 				doc.setPermissions((byte) (doc.getPermissions() | Permission.WRITE));
 			}
+			
+			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.DELETE)) {
+				doc.setPermissions((byte) (doc.getPermissions() | Permission.DELETE));
+			}
 		}
 		
 		// Get user subscription
