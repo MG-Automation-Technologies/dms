@@ -596,6 +596,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		viewValues = new HashMap<String, ToolBarOption>();
 		toolBarOption = getDefaultRootToolBar();
 		
+		// ONLY TO DEVELOPMENT TESTINGT
+		//enableAllToolBarForTestingPurpose();
+		
 		createFolder = new HTML(Util.imageHTML("img/icon/actions/add_folder.gif",Main.i18n("tree.menu.directory.create")));
 		findFolder = new HTML(Util.imageHTML("img/icon/actions/folder_find.gif",Main.i18n("tree.menu.directory.find.folder")));
 		lock = new HTML(Util.imageHTML("img/icon/actions/lock_disabled.gif",Main.i18n("general.menu.file.lock")));
@@ -884,6 +887,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			// The remove property group is special case depends on tab property enabled, with this call we force to set false
 			evaluateRemoveGroupProperty(false);
 			
+			// ONLY TO DEVELOPMENT TESTINGT
+			//enableAllToolBarForTestingPurpose();
+			
 			// Sets the permission to main menu
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
 		}
@@ -1050,6 +1056,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableFindFolder();
 			}
 			
+			// ONLY TO DEVELOPMENT TESTINGT
+			//enableAllToolBarForTestingPurpose();
+			
 			// Sets the permission to main menu
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
 			
@@ -1127,6 +1136,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableAddSubscription();
 				disableRemoveSubscription();
 			}
+			
+			// ONLY TO DEVELOPMENT TESTINGT
+			//enableAllToolBarForTestingPurpose();
 			
 			// Sets the permission to main menu
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
@@ -1594,6 +1606,39 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public void disableAddNote() {
 		toolBarOption.addNoteOption = false;
+	}
+	
+	
+	/**
+	 * Only used on developement to testing purposes
+	 */
+	private void enableAllToolBarForTestingPurpose() {
+		enableCreateDirectory();
+		enableFindFolder();
+		enableAddDocument();
+		enableCheckout();
+		enableCheckin();
+		enableCancelCheckout();
+		enableLock();
+		enableUnlock();
+		enableDownload();
+		enableDownloadPdf();
+		enableDelete();
+		enableAddPropertyGroup();
+		enableRemovePropertyGroup();
+		enableAddSubscription();
+		enableRemoveSubscription();
+		enableFiredRemovePropertyGroup();
+		enableHome();
+		enableRefresh();
+		enableRename();
+		enableCopy();
+		enableMove();
+		enableExport();
+		enableWorkflow();
+		enableAddNote();
+		enableScanner();
+		enableUploader();
 	}
 
 	/**
