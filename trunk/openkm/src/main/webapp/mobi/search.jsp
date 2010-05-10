@@ -1,12 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page errorPage="error.jsp" %>
-<%@ page import="java.text.DecimalFormat" %>
-<%@ page import="java.util.Iterator" %>
-<%@ page import="java.net.URLEncoder" %>
 <%@ page import="javax.jcr.Session" %>
 <%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.api.OKMSearch" %>
-<%@ page import="com.openkm.bean.Document" %>
 <%@ page import="com.openkm.bean.QueryResult" %>
 <%@ page import="com.openkm.util.FileUtils" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
