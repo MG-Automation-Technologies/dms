@@ -331,9 +331,11 @@ public class Lang_fr_FR {
 	    lang.put("security.group.name", "Groupe");
 	    lang.put("security.group.permission.read", "Lecture");
 	    lang.put("security.group.permission.write", "Ecriture");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Utilisateur");
 	    lang.put("security.user.permission.read", "Lecture");
 	    lang.put("security.user.permission.write", "Ecriture");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Utilisateurs");
 	    lang.put("security.groups", "Groupes");
 	    lang.put("security.recursive", "Appliquer les changements de façon recursive");

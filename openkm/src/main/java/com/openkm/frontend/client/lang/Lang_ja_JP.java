@@ -331,9 +331,11 @@ public class Lang_ja_JP {
 		lang.put("security.group.name", "グループ");
 		lang.put("security.group.permission.read", "読込");
 		lang.put("security.group.permission.write", "書込");
+		lang.put("security.group.permission.delete", "Delete");
 		lang.put("security.user.name", "ユーザ");
 		lang.put("security.user.permission.read", "読込");
 		lang.put("security.user.permission.write", "書込");
+		lang.put("security.user.permission.delete", "Delete");
 		lang.put("security.users", "ユーザ");
 		lang.put("security.groups", "グループ");
 		lang.put("security.recursive", "アクセス許可を再帰的に子フォルダ適用する");

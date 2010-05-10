@@ -332,9 +332,11 @@ public class Lang_nl_NL {
 	    lang.put("security.group.name", "Groep");
 	    lang.put("security.group.permission.read", "Lees");
 	    lang.put("security.group.permission.write", "Schrijf");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Gebruiker");
 	    lang.put("security.user.permission.read", "Lees");
 	    lang.put("security.user.permission.write", "Schrijf");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Gebruikers");
 	    lang.put("security.groups", "Groepen");
 	    lang.put("security.recursive", "Overerfbare rechten");

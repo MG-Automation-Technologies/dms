@@ -815,7 +815,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 			
 			// Enables or disables deleting ( in root is not enabled by default 
-			if(!isRoot && ((folderParent.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE)) {
+			if(!isRoot && ((folderParent.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) &&
+			   ((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE)) {
 				enableDelete();
 			} else {
 				disableDelete();

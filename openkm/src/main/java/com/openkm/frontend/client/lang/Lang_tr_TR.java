@@ -331,9 +331,11 @@ public class Lang_tr_TR {
 	    lang.put("security.group.name", "Grup");
 	    lang.put("security.group.permission.read", "Oku");
 	    lang.put("security.group.permission.write", "Yaz");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Kullanýcý");
 	    lang.put("security.user.permission.read", "Oku");
 	    lang.put("security.user.permission.write", "Yaz");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Kullanýcýlar");
 	    lang.put("security.groups", "Gruplar");
 	    lang.put("security.recursive", "Deðiþimlere Ýzin Ver");

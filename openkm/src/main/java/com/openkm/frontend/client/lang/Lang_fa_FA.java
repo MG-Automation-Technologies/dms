@@ -331,9 +331,11 @@ public class Lang_fa_FA {
 	    lang.put("security.group.name", "گروه");
 	    lang.put("security.group.permission.read", "خواندن");
 	    lang.put("security.group.permission.write", "نوشتن");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "کاربر");
 	    lang.put("security.user.permission.read", "خواندن");
 	    lang.put("security.user.permission.write", "نوشتن");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "کاربران");
 	    lang.put("security.groups", "گروه ها");
 	    lang.put("security.recursive", "تغییر دسترسی بازگشتی");
