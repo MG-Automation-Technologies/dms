@@ -66,4 +66,5 @@ video/x-flv flv
 video/mp4 mp4
 video/mpeg mpg mpeg
 video/x-msvideo avi
+video/x-ms-wmv wmv
 application/x-shockwave-flash swf
