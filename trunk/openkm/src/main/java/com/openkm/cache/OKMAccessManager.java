@@ -227,14 +227,16 @@ public class OKMAccessManager implements AccessManager {
 						}
 						
 						// Put permissions into cache
+						// READ
 						HashSet<String> sUsersRead = new HashSet<String>();
 						Value[] vUsersRead = node.getProperty(Permission.USERS_READ).getValues();
 						for (int i = 0; i < vUsersRead.length; i++) sUsersRead.add(vUsersRead[i].getString());
 						
 						HashSet<String> sRolesRead = new HashSet<String>();
 						Value[] vRolesRead = node.getProperty(Permission.ROLES_READ).getValues();
-						for (int i = 0; i < vRolesRead.length; i++) sRolesRead.add(vRolesRead[i].getString());
+						for (int i = 0; i < vRolesRead.length; i++) sRolesRead.add(vRolesRead[i].getString());												
 						
+						// WRITE
 						HashSet<String> sUsersWrite = new HashSet<String>();
 						Value[] vUsersWrite = node.getProperty(Permission.USERS_WRITE).getValues();
 						for (int i = 0; i < vUsersWrite.length; i++) sUsersWrite.add(vUsersWrite[i].getString());
@@ -243,11 +245,22 @@ public class OKMAccessManager implements AccessManager {
 						Value[] vRolesWrite = node.getProperty(Permission.ROLES_WRITE).getValues();
 						for (int i = 0; i < vRolesWrite.length; i++) sRolesWrite.add(vRolesWrite[i].getString());
 						
+						// DELETE
+						HashSet<String> sUsersDelete = new HashSet<String>();
+						Value[] vUsersDelete = node.getProperty(Permission.USERS_DELETE).getValues();
+						for (int i = 0; i < vUsersDelete.length; i++) sUsersDelete.add(vUsersDelete[i].getString());
+						
+						HashSet<String> sRolesDelete = new HashSet<String>();
+						Value[] vRolesDelete = node.getProperty(Permission.ROLES_DELETE).getValues();
+						for (int i = 0; i < vRolesDelete.length; i++) sRolesDelete.add(vRolesDelete[i].getString());
+						
 						nPerms = new NodePermissions();
 						nPerms.setUsersRead(sUsersRead);
 						nPerms.setRolesRead(sRolesRead);
 						nPerms.setUsersWrite(sUsersWrite);
 						nPerms.setRolesWrite(sRolesWrite);
+						nPerms.setUsersDelete(sUsersDelete);
+						nPerms.setRolesDelete(sRolesDelete);
 						
 						NodePermissionsManager.put(nodeId, nPerms);
 					}
