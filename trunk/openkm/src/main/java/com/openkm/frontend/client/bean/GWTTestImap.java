@@ -19,20 +19,35 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
+package com.openkm.frontend.client.bean;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.bean.GWTTestImap;
-
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * @author jllort
  *
  */
-public interface OKMGeneralServiceAsync {
+public class GWTTestImap implements IsSerializable {
 	
-	public void getFileUploadStatus(AsyncCallback<GWTFileUploadingStatus> callback);
-	public void testImapConnection(String host, String user, String password, String imapFolder, AsyncCallback<GWTTestImap> callback);
+	private boolean error = false;
+	private String errorMsg = "";
+	
+	public GWTTestImap() {
+	}
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
 }

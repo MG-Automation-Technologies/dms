@@ -24,6 +24,7 @@ package com.openkm.frontend.client.service;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
+import com.openkm.frontend.client.bean.GWTTestImap;
 
 /**
  * @author jllort
@@ -32,5 +33,5 @@ import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 public interface OKMGeneralService extends RemoteService {
 	
 	public GWTFileUploadingStatus getFileUploadStatus();
-	public Boolean testImapConnection(String host, String user, String password, String imapFolder);
+	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder);
 }
