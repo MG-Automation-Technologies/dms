@@ -743,6 +743,10 @@ iframe {
 	color : red;
 }
 
+.okm-Input-Ok {
+	color : green;
+}
+
 /* Selects */
 .okm-Select {
 	border: 1px solid #A5A596;

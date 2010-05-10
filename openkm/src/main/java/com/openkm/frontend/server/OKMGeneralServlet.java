@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
+import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.util.MailUtils;
 
@@ -69,14 +70,16 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	/* (non-Javadoc)
 	 * @see com.openkm.frontend.client.service.OKMGeneralService#testImapConnection(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public Boolean testImapConnection(String host, String user, String password, String imapFolder) {
+	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder) {
 		log.debug("testImapConnection(host:"+host+",user:"+user+",imapFolder"+imapFolder+")");
-		Boolean test = new Boolean(true);
+		GWTTestImap test = new GWTTestImap();
 		
 		try {
+			test.setError(false);
 			MailUtils.testConnection(host, user, password, imapFolder);
 		} catch (IOException e) {
-			test = new Boolean(false);
+			test.setError(true);
+			test.setErrorMsg(e.getMessage());
 			e.printStackTrace();
 		}
 		

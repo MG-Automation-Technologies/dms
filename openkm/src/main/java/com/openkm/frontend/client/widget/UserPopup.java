@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMGeneralService;
@@ -189,13 +190,14 @@ public class UserPopup extends DialogBox implements ClickHandler {
 				test.setEnabled(false);
 				ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
 				endPoint.setServiceEntryPoint(Config.OKMGeneralService);
-				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<Boolean>() {
+				generalService.testImapConnection(hostText.getText(), imapUserText.getText(), imapUserPasswordText.getText(), imapFolderText.getText(), new AsyncCallback<GWTTestImap>() {					
 					@Override
-					public void onSuccess(Boolean result) {
-						if (result.booleanValue()) {
+					public void onSuccess(GWTTestImap result) {
+						if (!result.isError()) {
 							imapTestError.setVisible(false);
 							imapTestOK.setVisible(true);
 						} else {
+							imapTestError.setHTML(Main.i18n("user.preferences.imap.test.error") + "<br>" + result.getErrorMsg());
 							imapTestError.setVisible(true);
 							imapTestOK.setVisible(false);
 						}
@@ -209,8 +211,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 						test.setEnabled(true);
 						Main.get().showError("testImapConnection", caught);
 					}
-				}
-				);
+				});
 			}			
 		});
 		
@@ -314,7 +315,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		imapPassordError.setStyleName("okm-Input-Error");
 		imapError.setStyleName("okm-Input-Error");
 		imapTestError.setStyleName("okm-Input-Error");
-		imapTestOK.setStyleName("okm-Input");
+		imapTestOK.setStyleName("okm-Input-Ok");
 		update.setStyleName("okm-Button");
 		cancel.setStyleName("okm-Button");
 		delete.setStyleName("okm-Button");
