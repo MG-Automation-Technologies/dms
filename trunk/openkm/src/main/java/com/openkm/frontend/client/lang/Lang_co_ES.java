@@ -331,9 +331,11 @@ public class Lang_co_ES {
 	    lang.put("security.group.name", "Grupo");
 	    lang.put("security.group.permission.read", "Lectura");
 	    lang.put("security.group.permission.write", "Escritura");
+	    lang.put("security.group.permission.delete", "Eliminar");
 	    lang.put("security.user.name", "Usuario");
 	    lang.put("security.user.permission.read", "Lectura");
 	    lang.put("security.user.permission.write", "Escritura");
+	    lang.put("security.user.permission.delete", "Eliminar");
 	    lang.put("security.users", "Usuarios");
 	    lang.put("security.groups", "Grupos");
 	    lang.put("security.recursive", "Aplicar cambios de forma recursiva");

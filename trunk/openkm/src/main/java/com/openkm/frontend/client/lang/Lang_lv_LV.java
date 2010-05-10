@@ -331,9 +331,11 @@ public class Lang_lv_LV {
 	    lang.put("security.group.name", "Grupa");
 	    lang.put("security.group.permission.read", "Lasīt");
 	    lang.put("security.group.permission.write", "Rakstīt");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Lietotājs");
 	    lang.put("security.user.permission.read", "Lasīt");
 	    lang.put("security.user.permission.write", "Rakstīt");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Lietotāji");
 	    lang.put("security.groups", "Grupas");
 	    lang.put("security.recursive", "Rekursīvas tiesību maiņas");

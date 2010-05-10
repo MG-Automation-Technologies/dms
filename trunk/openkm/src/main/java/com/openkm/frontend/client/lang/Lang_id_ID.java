@@ -331,9 +331,11 @@ public class Lang_id_ID {
 	    lang.put("security.group.name", "Grup");
 	    lang.put("security.group.permission.read", "Baca");
 	    lang.put("security.group.permission.write", "Tulis");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "User");
 	    lang.put("security.user.permission.read", "Baca");
 	    lang.put("security.user.permission.write", "Tulis");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "User");
 	    lang.put("security.groups", "Grup");
 	    lang.put("security.recursive", "Perubahan permisi rekursif");

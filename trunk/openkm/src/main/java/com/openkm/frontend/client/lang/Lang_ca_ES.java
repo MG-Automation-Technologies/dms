@@ -330,10 +330,12 @@ public class Lang_ca_ES {
 	    lang.put("security.label", "Seguretat");
 	    lang.put("security.group.name", "Grup");
 	    lang.put("security.group.permission.read", "Lectura");
-	    lang.put("security.group.permission.write", "Escriptura");	    
+	    lang.put("security.group.permission.write", "Escriptura");	   
+	    lang.put("security.group.permission.delete", "Eliminar");
 	    lang.put("security.user.name", "Usuari");
 	    lang.put("security.user.permission.read", "Lectura");
 	    lang.put("security.user.permission.write", "Escriptura");
+	    lang.put("security.user.permission.delete", "Eliminar");
 	    lang.put("security.users", "Usuaris");
 	    lang.put("security.groups", "Grups");
 	    lang.put("security.recursive", "Aplica canvis de forma recursiva");

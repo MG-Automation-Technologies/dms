@@ -331,9 +331,11 @@ public class Lang_bs_BA {
 	    lang.put("security.group.name", "Grupa");
 	    lang.put("security.group.permission.read", "Čitaj");
 	    lang.put("security.group.permission.write", "Piši");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Korisnik");
 	    lang.put("security.user.permission.read", "Čitaj");
 	    lang.put("security.user.permission.write", "Piši");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Korisnici");
 	    lang.put("security.groups", "Grupe");
 	    lang.put("security.recursive", "Rekurzivne promjene dozvola");

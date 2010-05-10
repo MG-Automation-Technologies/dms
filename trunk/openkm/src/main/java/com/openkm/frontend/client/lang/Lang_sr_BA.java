@@ -331,9 +331,11 @@ public class Lang_sr_BA {
 	    lang.put("security.group.name", "Grupa");
 	    lang.put("security.group.permission.read", "Čitanje");
 	    lang.put("security.group.permission.write", "Pisanje");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Korisnik");
 	    lang.put("security.user.permission.read", "Čitanje");
 	    lang.put("security.user.permission.write", "Pisanje");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Korisnici");
 	    lang.put("security.groups", "Grupe");
 	    lang.put("security.recursive", "Rekurzivna izmjena privilegija");

@@ -331,9 +331,11 @@ public class Lang_hu_HU {
 	    lang.put("security.group.name", "Csoport");
 	    lang.put("security.group.permission.read", "Olvasható");
 	    lang.put("security.group.permission.write", "Módosítható");
+	    lang.put("security.group.permission.delete", "Delete");
 	    lang.put("security.user.name", "Felhasználó");
 	    lang.put("security.user.permission.read", "Olvasható");
 	    lang.put("security.user.permission.write", "Módosítható");
+	    lang.put("security.user.permission.delete", "Delete");
 	    lang.put("security.users", "Felhasználók");
 	    lang.put("security.groups", "Csoportok");
 	    lang.put("security.recursive", "Jogosultságok rekurzív módosítása");
