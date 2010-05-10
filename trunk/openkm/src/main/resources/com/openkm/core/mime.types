@@ -64,5 +64,6 @@ audio/mpeg mp3
 audio/x-ogg ogg
 video/x-flv flv
 video/mp4 mp4
+video/mpeg mpg mpeg
 video/x-msvideo avi
 application/x-shockwave-flash swf
