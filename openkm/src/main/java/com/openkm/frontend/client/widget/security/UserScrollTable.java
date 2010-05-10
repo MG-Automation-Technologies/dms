@@ -58,6 +58,7 @@ public class UserScrollTable extends Composite {
 	
 	private final int PROPERTY_READ 	= 0;
 	private final int PROPERTY_WRITE 	= 1;
+	private final int PROPERTY_DELETE 	= 2;
 	
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -128,13 +129,15 @@ public class UserScrollTable extends Composite {
 		
 		// Level 1 headers
 		if (isAssigned) {
-			table.setSize("190","235");
+			table.setSize("240","235");
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
 			headerTable.setHTML(0, 1, Main.i18n("security.user.permission.read"));
 			headerTable.setHTML(0, 2, Main.i18n("security.user.permission.write"));
+			headerTable.setHTML(0, 3, Main.i18n("security.user.permission.delete"));
 			table.setColumnWidth(0,52);
 			table.setColumnWidth(1,50);
 			table.setColumnWidth(2,50);
+			table.setColumnWidth(3,50);
 		} else {
 			table.setSize("115","235");
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
@@ -157,6 +160,7 @@ public class UserScrollTable extends Composite {
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
 			headerTable.setHTML(0, 1, Main.i18n("security.user.permission.read"));
 			headerTable.setHTML(0, 2, Main.i18n("security.user.permission.write"));
+			headerTable.setHTML(0, 3, Main.i18n("security.user.permission.delete"));
 		} else {
 			headerTable.setHTML(0, 0, Main.i18n("security.user.name"));
 		}
@@ -175,6 +179,7 @@ public class UserScrollTable extends Composite {
 		
 		CheckBox checkReadPermission = new CheckBox();
 		CheckBox checkWritePermission = new CheckBox();
+		CheckBox checkDeletePermission = new CheckBox();
 		
 		ClickHandler checkBoxReadListener = new ClickHandler() { 
 			@Override
@@ -208,6 +213,22 @@ public class UserScrollTable extends Composite {
 			}
 		};
 		
+		ClickHandler checkBoxDeleteListener = new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				flag_property = PROPERTY_DELETE;
+				Widget sender = (Widget) event.getSource();
+				
+				// Actions are inverse to check value because before user perform check on checkbox
+				// it has inverse value
+				if (((CheckBox) sender).getValue()) {
+					grant(dataTable.getText(rows, 0), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
+				} else {
+					revoke(dataTable.getText(rows, 0), GWTPermission.DELETE, Main.get().securityPopup.recursive.getValue());
+				}
+			}
+		};
+		
 		checkReadPermission.addClickHandler(checkBoxReadListener);
 		
 		if ((permission.byteValue() & GWTPermission.READ) == GWTPermission.READ) {
@@ -230,6 +251,18 @@ public class UserScrollTable extends Composite {
 			checkWritePermission.setValue(false);
 			dataTable.setWidget(rows, 2, checkWritePermission);
 			dataTable.getCellFormatter().setHorizontalAlignment(rows,2,HasAlignment.ALIGN_CENTER);
+		}
+		
+		checkDeletePermission.addClickHandler(checkBoxDeleteListener);
+		
+		if ((permission.byteValue() & GWTPermission.DELETE) == GWTPermission.DELETE) {
+			checkDeletePermission.setValue(true);
+			dataTable.setWidget(rows, 3, checkDeletePermission);
+			dataTable.getCellFormatter().setHorizontalAlignment(rows,3,HasAlignment.ALIGN_CENTER);
+		} else {
+			checkDeletePermission.setValue(false);
+			dataTable.setWidget(rows, 3, checkDeletePermission);
+			dataTable.getCellFormatter().setHorizontalAlignment(rows,3,HasAlignment.ALIGN_CENTER);
 		}
 	}
 	
@@ -320,6 +353,9 @@ public class UserScrollTable extends Composite {
 				case PROPERTY_WRITE:
 					((CheckBox) dataTable.getWidget(rowIndex, 2)).setValue(false);
 					break;
+				case PROPERTY_DELETE:
+					((CheckBox) dataTable.getWidget(rowIndex, 3)).setValue(false);
+					break;
 			}
 			
 			Main.get().showError("GrantUser", caught);
@@ -336,7 +372,8 @@ public class UserScrollTable extends Composite {
 			
 				// If user has no grants must be deleted
 				if (!((CheckBox) dataTable.getWidget(selectedRow, 1)).getValue() && 
-					!((CheckBox) dataTable.getWidget(selectedRow, 2)).getValue()) {
+					!((CheckBox) dataTable.getWidget(selectedRow, 2)).getValue() && 
+					!((CheckBox) dataTable.getWidget(selectedRow, 3)).getValue()) {
 					Main.get().securityPopup.securityUser.unassignedUser.addRow(dataTable.getText(selectedRow, 0));
 					removeSelectedRow();
 				}
@@ -350,6 +387,9 @@ public class UserScrollTable extends Composite {
 					break;
 				case PROPERTY_WRITE:
 					((CheckBox) dataTable.getWidget(rowIndex, 2)).setValue(true);
+					break;
+				case PROPERTY_DELETE:
+					((CheckBox) dataTable.getWidget(rowIndex, 3)).setValue(true);
 					break;
 			}
 			

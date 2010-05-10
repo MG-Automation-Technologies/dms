@@ -65,7 +65,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
 	// Number of columns
-	public static final int NUMBER_OF_COLUMNS	= 7;
+	public static final int NUMBER_OF_COLUMNS	= 9;
 	
 	private String path;	
 	private ScrollTable table;
@@ -135,16 +135,18 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		table.setColumnWidth(0,110);
 	    table.setColumnWidth(1,90);
 	    table.setColumnWidth(2,90);
-	    table.setColumnWidth(3,80);
-	    table.setColumnWidth(4,110);
-	    table.setColumnWidth(5,90);
+	    table.setColumnWidth(3,90);
+	    table.setColumnWidth(4,80);
+	    table.setColumnWidth(5,110);
 	    table.setColumnWidth(6,90);
+	    table.setColumnWidth(7,90);
+	    table.setColumnWidth(8,90);
 	    
 	    table.setPreferredColumnWidth(0, 110);
 		table.setPreferredColumnWidth(1, 90);
-		table.setPreferredColumnWidth(4, 110);
+		table.setPreferredColumnWidth(5, 110);
 		
-		table.setColumnSortable(3, false);
+		table.setColumnSortable(4, false);
 	    
 		button = new Button(Main.i18n("button.update"), this);
 		button.setStyleName("okm-Button");
@@ -153,13 +155,15 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	    headerTable.setHTML(0, 0, Main.i18n("security.group.name"));
 	    headerTable.setHTML(0, 1, Main.i18n("security.group.permission.read"));
 	    headerTable.setHTML(0, 2, Main.i18n("security.group.permission.write"));
-	    headerTable.setWidget(0, 3, button);
-	    headerTable.setHTML(0, 4, Main.i18n("security.user.name"));
-	    headerTable.setHTML(0, 5, Main.i18n("security.user.permission.read"));
-	    headerTable.setHTML(0, 6, Main.i18n("security.user.permission.write"));
+	    headerTable.setHTML(0, 3, Main.i18n("security.group.permission.delete"));
+	    headerTable.setWidget(0, 4, button);
+	    headerTable.setHTML(0, 5, Main.i18n("security.user.name"));
+	    headerTable.setHTML(0, 6, Main.i18n("security.user.permission.read"));
+	    headerTable.setHTML(0, 7, Main.i18n("security.user.permission.write"));
+	    headerTable.setHTML(0, 8, Main.i18n("security.user.permission.delete"));
 	    
-	    headerTable.getCellFormatter().setHorizontalAlignment(0,3,HasAlignment.ALIGN_CENTER);
-	    headerTable.getCellFormatter().setVerticalAlignment(0,3,HasAlignment.ALIGN_MIDDLE);
+	    headerTable.getCellFormatter().setHorizontalAlignment(0,4,HasAlignment.ALIGN_CENTER);
+	    headerTable.getCellFormatter().setVerticalAlignment(0,4,HasAlignment.ALIGN_MIDDLE);
 
 	    // Table data
 	    dataTable.setSelectionPolicy(SelectionGrid.SelectionPolicy.ONE_ROW);
@@ -188,10 +192,12 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 		headerTable.setHTML(0, 0, Main.i18n("security.group.name"));
 		headerTable.setHTML(0, 1, Main.i18n("security.group.permission.read"));
 		headerTable.setHTML(0, 2, Main.i18n("security.group.permission.write"));
+		headerTable.setHTML(0, 3, Main.i18n("security.group.permission.delete"));
 		button.setText(Main.i18n("button.update"));
-		headerTable.setHTML(0, 4, Main.i18n("security.user.name"));
-		headerTable.setHTML(0, 5, Main.i18n("security.user.permission.read"));
-		headerTable.setHTML(0, 6, Main.i18n("security.user.permission.write"));
+		headerTable.setHTML(0, 5, Main.i18n("security.user.name"));
+		headerTable.setHTML(0, 6, Main.i18n("security.user.permission.read"));
+		headerTable.setHTML(0, 7, Main.i18n("security.user.permission.write"));
+		headerTable.setHTML(0, 8, Main.i18n("security.user.permission.delete"));
 	}
 	
 	/**
@@ -219,22 +225,29 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 			dataTable.insertRow(rows);
 		}
 		
-		dataTable.setHTML(rows, 4, userName);
+		dataTable.setHTML(rows, 5, userName);
 		
 		if ((permission.byteValue() & GWTPermission.READ) == GWTPermission.READ) {
-			dataTable.setHTML(rows, 5, Util.imageItemHTML(withPermission,""));
+			dataTable.setHTML(rows, 6, Util.imageItemHTML(withPermission,""));
 		} else {
-			dataTable.setHTML(rows, 5, Util.imageItemHTML(withoutPermission,""));
+			dataTable.setHTML(rows, 7, Util.imageItemHTML(withoutPermission,""));
 		}
 		
 		if ((permission.byteValue() & GWTPermission.WRITE) == GWTPermission.WRITE) {
-			dataTable.setHTML(rows, 6, Util.imageItemHTML(withPermission,""));
+			dataTable.setHTML(rows, 7, Util.imageItemHTML(withPermission,""));
 		} else {
-			dataTable.setHTML(rows, 6, Util.imageItemHTML(withoutPermission,""));
+			dataTable.setHTML(rows, 7, Util.imageItemHTML(withoutPermission,""));
 		}
 		
-		dataTable.getCellFormatter().setHorizontalAlignment(rows,5,HasAlignment.ALIGN_CENTER);
+		if ((permission.byteValue() & GWTPermission.DELETE) == GWTPermission.DELETE) {
+			dataTable.setHTML(rows, 8, Util.imageItemHTML(withPermission,""));
+		} else {
+			dataTable.setHTML(rows, 8, Util.imageItemHTML(withoutPermission,""));
+		}
+		
 		dataTable.getCellFormatter().setHorizontalAlignment(rows,6,HasAlignment.ALIGN_CENTER);
+		dataTable.getCellFormatter().setHorizontalAlignment(rows,7,HasAlignment.ALIGN_CENTER);
+		dataTable.getCellFormatter().setHorizontalAlignment(rows,8,HasAlignment.ALIGN_CENTER);
 	}
 	
 	/**
@@ -264,8 +277,15 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 			dataTable.setHTML(rows, 2, Util.imageItemHTML(withoutPermission,""));
 		}
 		
+		if ((permission.byteValue() & GWTPermission.DELETE) == GWTPermission.DELETE) {
+			dataTable.setHTML(rows, 3, Util.imageItemHTML(withPermission,""));
+		} else {
+			dataTable.setHTML(rows, 3, Util.imageItemHTML(withoutPermission,""));
+		}
+		
 		dataTable.getCellFormatter().setHorizontalAlignment(rows,1,HasAlignment.ALIGN_CENTER);
 		dataTable.getCellFormatter().setHorizontalAlignment(rows,2,HasAlignment.ALIGN_CENTER);
+		dataTable.getCellFormatter().setHorizontalAlignment(rows,3,HasAlignment.ALIGN_CENTER);
 	}
 	
 	/**
