@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -613,13 +614,12 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				// Check the result to see if an OK message is returned from the
 				// server.
 				
-				// Esto es para que funcione en el Shell ya que devuelve la cadena
-				// dentro de un tag <pre>
+				// Return params could be <pre> or <pre style= with some IE and chrome
 				String msg = event.getResults().startsWith("<pre>") ? 
 						event.getResults().substring(5, event.getResults().length() - 6) :
 						event.getResults();
-								
-				if (msg.equals(returnOKMessage)) {
+				
+				if (msg.contains(returnOKMessage)) {
 					uploadItem.setLoaded();
 				} else {
 					uploadItem.setFailed(msg);
