@@ -60,7 +60,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	
 	// Number of columns
-	public static final int ASSIGNED_ROLES_NUMBER_OF_COLUMNS	= 3;
+	public static final int ASSIGNED_ROLES_NUMBER_OF_COLUMNS	= 4;
 	public static final int UNASSIGNED_ROLES_NUMBER_OF_COLUMNS	= 1;
 	
 	public RoleScrollTable assignedRole;

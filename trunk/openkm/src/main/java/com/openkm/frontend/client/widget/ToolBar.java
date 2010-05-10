@@ -792,13 +792,15 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableScanner();
 			disableUploader();
 			
+			boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
+							 Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
+							 Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
+							 Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
+							 Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
+							 Main.get().mailRootFolder.getPath().equals(folder.getPath());
+			
 			// On folder parent don't enables subscription
-			if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
-				Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
-				Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
-				Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
-				Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
-				Main.get().mailRootFolder.getPath().equals(folder.getPath())) {
+			if (isRoot) {
 				disableAddSubscription();
 				disableRemoveSubscription();
 				disableExport();
@@ -812,27 +814,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableRemoveSubscription();
 			}
 			
+			// Enables or disables deleting ( in root is not enabled by default 
+			if(!isRoot && ((folderParent.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE)) {
+				enableDelete();
+			} else {
+				disableDelete();
+			}
+			
 			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (originPanel != FILE_BROWSER) {
 					enableAddDocument();
 					enableCreateDirectory();
 				}
 				// Evaluates special case root node that must not be deleted;
-				if (Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
-					Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
-					Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
-					Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
-					Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
-					Main.get().mailRootFolder.getPath().equals(folder.getPath())) {
-					disableDelete();
-				} else if((folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE){
-					enableDelete();
+				if (!isRoot) {
 					enableRename(); 
 					enableCopy();
 					enableMove();
 					enableExport();
-				} else {
-					disableDelete();
 				}
 				
 				// Enable scanner button
@@ -849,7 +848,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					disableCreateDirectory();
 					disableAddDocument();
 				}
-				disableDelete();
 			}
 			
 			// Except taxonomy and thesaurus stack panels always disabling 
@@ -918,6 +916,17 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableDownloadPdf();
 			}
 			
+			// Checking delete permissions
+			if (((doc.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) && 
+				((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE ) &&
+				!doc.isCheckedOut() && !doc.isLocked() &&
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+				enableDelete();
+			} else {
+				disableDelete();
+			}
+			
 			if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (!doc.isCheckedOut() && !doc.isLocked()) {
 					enableCheckout();
@@ -937,7 +946,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
 						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
 						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
-						enableDelete();
 						enableRename();
 						enableCopy();
 						enableMove();
@@ -960,7 +968,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							enableUploader();
 						}
 					} else {
-						disableDelete();
 						disableAddPropertyGroup();
 						disableRemovePropertyGroup();
 					}
@@ -972,7 +979,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							disableCheckout();
 							disableLock();
 							disableUnlock();
-							disableDelete();
 							enableAddPropertyGroup();
 							enableRemovePropertyGroup();
 							enableAddNote();
@@ -986,7 +992,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 							disableCancelCheckout();
 							disableCheckout();
 							disableLock();
-							disableDelete();
 							enableAddPropertyGroup();
 							enableRemovePropertyGroup();
 							enableAddNote();
@@ -1011,7 +1016,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 				disableCheckout();
 				disableCheckin();
 				disableCancelCheckout();
-				disableDelete();
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableWorkflow();
@@ -1061,7 +1065,6 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void checkToolButtomPermissions(GWTMail mail, GWTFolder folder) {
 		// Only if toolbar is enabled must change tools icons values
 		if (isEnabled()) {
-			boolean disable = false;
 			
 			disableDownload();
 			disableRename(); 
@@ -1085,27 +1088,24 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			disableScanner();
 			disableUploader();
 			
-			if ((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
-
-				if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
-					enableDelete();
-					enableRename();
-					enableCopy();
-					enableMove();
-					enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
-					// On mail panel is not able to uploading files
-					if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL ) {
-						enableAddDocument();
-					} 
-				} else {
-					disableDelete();
-				}				
+			// Checking delete permissions
+			if (((mail.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) && 
+				((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE )) {
+				enableDelete();
 			} else {
-				disable = true;
+				disableDelete();
 			}
 			
-			if (disable) {
-				disableDelete();
+			if (((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) && 
+				((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)) {
+				enableRename();
+				enableCopy();
+				enableMove();
+				enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
+				// On mail panel is not able to uploading files
+				if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL ) {
+					enableAddDocument();
+				} 		
 			} 
 			
 			// Onnly on taxonomy enables to send document link by mail 

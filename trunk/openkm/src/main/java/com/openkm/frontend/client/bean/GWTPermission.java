@@ -33,7 +33,7 @@ public class GWTPermission implements IsSerializable {
 	
 	public static final byte READ = 1;
 	public static final byte WRITE = 2;
-	public static final byte REMOVE = 4;
+	public static final byte DELETE = 4;
 	
 	private String item;
 	private int permissions;
