@@ -127,6 +127,10 @@ public class DirectMailModule implements MailModule {
 			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.WRITE)) {
 				mail.setPermissions((byte) (mail.getPermissions() | Permission.WRITE));
 			}
+			
+			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.DELETE)) {
+				mail.setPermissions((byte) (mail.getPermissions() | Permission.DELETE));
+			}
 		}
 		
 		log.debug("Permisos: "+mailPath+": "+mail.getPermissions());
