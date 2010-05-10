@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.api.OKMWorkflow"%>
-<%@ page import="com.openkm.bean.workflow.ProcessDefinition"%>
-<%@ page import="com.openkm.bean.workflow.ProcessInstance"%>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="com.openkm.api.OKMWorkflow" %>
+<%@ page import="com.openkm.bean.workflow.ProcessDefinition" %>
+<%@ page import="com.openkm.bean.workflow.ProcessInstance" %>
+<%@ page import="java.util.HashMap" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	request.setCharacterEncoding("UTF-8");
@@ -21,10 +21,10 @@
 			response.sendRedirect("wf_processes.jsp");
 		}
 	} else {
-		session.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions(token));
+		pageContext.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions(token));
 	}
 	
-	session.setAttribute("mimeAccept", Config.mimeAccept);
+	pageContext.setAttribute("mimeAccept", Config.mimeAccept);
 %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -64,7 +64,7 @@
       </table>
       <hr/>
       <h2 style="text-align: center">Upload process definition</h2>
-      <form action="RegisterWorkflow" method="post" enctype='multipart/form-data'>
+      <form action="RegisterWorkflow" method="post" enctype="multipart/form-data">
         <table class="form">
           <tr><td><input type="file" name="definition"/></td></tr>
           <tr><td align="right"><input type="submit" value="Upload"/></td></tr>
