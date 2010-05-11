@@ -3,6 +3,13 @@
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"> 
   <display-name>OpenKM</display-name>
+  
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://www.openkm.com/tags/utils</taglib-uri>
+      <taglib-location>/WEB-INF/tlds/utils.tld</taglib-location>
+    </taglib>
+  </jsp-config>
 
   <!-- Listeners -->
   <listener>
@@ -115,6 +122,12 @@
     <servlet-class>com.openkm.frontend.server.OKMPropertyServlet</servlet-class>
   </servlet>
   
+  <!-- Mobile servlets -->
+  <servlet>
+  	<servlet-name>HandlerServlet</servlet-name>
+  	<servlet-class>com.openkm.servlet.mobi.HandlerServlet</servlet-class>
+  </servlet>
+  
   <!-- Admin servlets -->
   <servlet>
     <servlet-name>StatsGraphServlet</servlet-name>
@@ -136,62 +149,6 @@
     <servlet-name>ExecuteReportServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.ExecuteReportServlet</servlet-class>
   </servlet>
-
-  <!-- Backend Servlets -->
-  <!-- 
-  <servlet>
-    <servlet-name>OKMPropertyGroupServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMPropertyGroupServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMWorkflowServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMWorkflowServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMReportServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMReportServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMRepositoryServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMRepositoryServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMStatsServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMStatsServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMStatsGraphServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMSearchServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMSearchServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMGeneralUtilsServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMGeneralUtilsServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMUserServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMUserServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMWorkflowUploadServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMWorkflowUploadServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMWorkflowViewServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMWorkflowViewServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMFolderServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMFolderServletAdmin</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMThesaurusServletAdmin</servlet-name>
-    <servlet-class>com.openkm.backend.server.OKMThesaurusServletAdmin</servlet-class>
-  </servlet>
-  -->
   
   <!-- WebServices -->
   <servlet>
@@ -236,7 +193,7 @@
     <servlet-name>Test</servlet-name>
     <servlet-class>com.openkm.servlet.TestServlet</servlet-class>
   </servlet>
-  
+    
   <!-- Frontend Servlet Mappings -->
   <!-- 
   <servlet-mapping>
@@ -321,6 +278,12 @@
     <url-pattern>/OKMPropertyServlet</url-pattern>
   </servlet-mapping>
   
+  <!-- Mobile Servlets Mappings -->
+  <servlet-mapping>
+  	<servlet-name>HandlerServlet</servlet-name>
+  	<url-pattern>/mobi/handler</url-pattern>
+  </servlet-mapping>
+  
   <!-- Admin Servlet Mappings -->
   <servlet-mapping>
     <servlet-name>StatsGraphServlet</servlet-name>
@@ -342,62 +305,6 @@
     <servlet-name>ExecuteReportServlet</servlet-name>
     <url-pattern>/admin/ExecuteReport</url-pattern>
   </servlet-mapping>
-
-  <!-- Backend Servlet Mappings -->
-  <!--
-  <servlet-mapping>
-    <servlet-name>OKMPropertyGroupServletAdmin</servlet-name>
-    <url-pattern>/OKMPropertyGroupServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMWorkflowServletAdmin</servlet-name>
-    <url-pattern>/OKMWorkflowServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMReportServletAdmin</servlet-name>
-    <url-pattern>/OKMReportServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMRepositoryServletAdmin</servlet-name>
-    <url-pattern>/OKMRepositoryServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMStatsServletAdmin</servlet-name>
-    <url-pattern>/OKMStatsServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMStatsGraphServletAdmin</servlet-name>
-    <url-pattern>/OKMStatsGraphServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMSearchServletAdmin</servlet-name>
-    <url-pattern>/OKMSearchServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMGeneralUtilsServletAdmin</servlet-name>
-    <url-pattern>/OKMGeneralUtilsServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMUserServletAdmin</servlet-name>
-    <url-pattern>/OKMUserServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMWorkflowUploadServletAdmin</servlet-name>
-    <url-pattern>/OKMWorkflowUploadServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMWorkflowViewServletAdmin</servlet-name>
-    <url-pattern>/OKMWorkflowViewServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMFolderServletAdmin</servlet-name>
-    <url-pattern>/OKMFolderServletAdmin</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>OKMThesaurusServletAdmin</servlet-name>
-    <url-pattern>/OKMThesaurusServletAdmin</url-pattern>
-  </servlet-mapping>
-  -->
 
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
@@ -450,11 +357,6 @@
   <error-page>
     <exception-type>com.openkm.frontend.client.OKMException</exception-type>
     <location>/error.jsp</location>
-  </error-page>
-
-  <error-page>
-    <exception-type>com.openkm.backend.client.OKMException</exception-type>
-    <location>/admin/error.jsp</location>
   </error-page>
 
   <error-page>
