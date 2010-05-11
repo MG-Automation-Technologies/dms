@@ -248,12 +248,20 @@ public class Util {
     	pdfUrl = encodeURIComponent(pdfUrl);
 		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
 	}-*/;
-       
-    public static native void copyToClipboard(String text) /*-{
-    	new $wnd.copyToClipboard(text);
-	}-*/;
     
     public static native String[] getJREs() /*-{
 		return $wnd.deployJava.getJREs();
+	}-*/;  
+    
+    public static native void createURLClipboardButton(String textToCopy) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "urlclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
+    public static native void createWebDavClipboardButton(String textToCopy) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "webdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
+    public static native void createFolderWebDavClipboardButton(String textToCopy) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
 }

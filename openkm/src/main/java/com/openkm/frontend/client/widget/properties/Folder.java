@@ -29,6 +29,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -45,7 +46,6 @@ public class Folder extends Composite {
 	private FlexTable tableSubscribedUsers;
 	private FlexTable table;
 	private GWTFolder folder;
-	private Button copyWebdavToClipBoard;
 	
 	/**
 	 * The folder
@@ -55,18 +55,6 @@ public class Folder extends Composite {
 		tableProperties = new FlexTable();
 		tableSubscribedUsers = new FlexTable();
 		scrollPanel = new ScrollPanel(table);
-		
-		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				String url = Main.get().workspaceUserProperties.getApplicationURL();
-				int idx = url.lastIndexOf('/');
-				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
-				Util.copyToClipboard(url);
-			}
-		});
-		
-		copyWebdavToClipBoard.setStyleName("okm-Button");
 		
 		tableProperties.setWidth("100%");
 		tableProperties.setHTML(0, 0, "<b>"+Main.i18n("folder.uuid")+"</b>");
@@ -80,7 +68,7 @@ public class Folder extends Composite {
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
 		tableProperties.setHTML(4, 1, "");
 		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
-		tableProperties.setWidget(5, 1, copyWebdavToClipBoard);
+		tableProperties.setWidget(5, 1, new HTML(""));
 		
 		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 				
@@ -130,6 +118,14 @@ public class Folder extends Composite {
 	 */
 	public void set(GWTFolder folder) {
 		this.folder = folder;
+		
+		// Webdav
+		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
+		int idx = webdavUrl.lastIndexOf('/');
+		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
+		tableProperties.setWidget(5, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+		Util.createFolderWebDavClipboardButton(webdavUrl);
+		
 		tableProperties.setHTML(0, 1, folder.getUuid());
 		tableProperties.setHTML(1, 1, folder.getName());
 		tableProperties.setHTML(2, 1, folder.getParentPath());
@@ -196,6 +192,5 @@ public class Folder extends Composite {
 		}
 		
 		tableSubscribedUsers.setHTML(0, 0, "<b>"+Main.i18n("folder.subscribed.users")+"<b>");
-		copyWebdavToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
 	}
 }
