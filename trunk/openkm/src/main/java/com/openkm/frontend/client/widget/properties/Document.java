@@ -37,6 +37,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
@@ -49,6 +50,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -86,8 +88,6 @@ public class Document extends Composite {
 	private FlexTable tableSubscribedCategories;
 	private FlexTable table;
 	private GWTDocument document;
-	private Button copyUrlToClipBoard;
-	private Button copyWebdavToClipBoard;
 	private HorizontalPanel keywordPanel;
 	private SimplePanel sp;
 	private ScrollPanel scrollPanel;
@@ -119,25 +119,6 @@ public class Document extends Composite {
 		keywordPanel = new HorizontalPanel();
 		sp = new SimplePanel();
 		sp.setWidth("16px");
-
-		copyUrlToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				String url = Main.get().workspaceUserProperties.getApplicationURL();
-				url += "?docPath=" + URL.encodeComponent(document.getPath());
-				Util.copyToClipboard(url);
-			}
-		});
-
-		copyWebdavToClipBoard = new Button(Main.i18n("button.copy.clipboard"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				String url = Main.get().workspaceUserProperties.getApplicationURL();
-				int idx = url.lastIndexOf('/');
-				url = url.substring(0, url.lastIndexOf('/', idx-1)) + "/repository/default" + document.getPath();
-				Util.copyToClipboard(url);
-			}
-		});
 
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
 		keywordList = new ArrayList<String>();
@@ -192,8 +173,6 @@ public class Document extends Composite {
 		
 		keywordPanel.add(vPanel);
 		keywordPanel.add(sp);
-		copyUrlToClipBoard.setStyleName("okm-Button");
-		copyWebdavToClipBoard.setStyleName("okm-Button");
 		
 		tableProperties.setHTML(0, 0, "<b>"+Main.i18n("document.uuid")+"</b>");
 		tableProperties.setHTML(0, 1, "");
@@ -218,9 +197,9 @@ public class Document extends Composite {
 		tableProperties.setHTML(10, 0, "<b>"+Main.i18n("document.history.size")+"</b>");
 		tableProperties.setHTML(10, 1, "");
 		tableProperties.setHTML(11, 0, "<b>"+Main.i18n("document.url")+"</b>");
-		tableProperties.setWidget(11, 1, copyUrlToClipBoard);
+		tableProperties.setWidget(11, 1, new HTML(""));
 		tableProperties.setHTML(12, 0, "<b>"+Main.i18n("document.webdav")+"</b>");
-		tableProperties.setWidget(12, 1, copyWebdavToClipBoard);
+		tableProperties.setWidget(12, 1, new HTML(""));
 		
 		tableProperties.getCellFormatter().setVerticalAlignment(7, 0, HasAlignment.ALIGN_TOP);
 		
@@ -307,6 +286,19 @@ public class Document extends Composite {
 		keywordMap = new HashMap<String,Widget>();
 		keyWordsListPending = new ArrayList<String>();
 		this.document = doc;
+		
+		// URL clipboard button
+		String url = Main.get().workspaceUserProperties.getApplicationURL();
+		url += "?docPath=" + URL.encodeComponent(document.getPath());
+		tableProperties.setWidget(11, 1, new HTML("<div id=\"urlclipboardcontainer\"></div>\n"));
+		Util.createURLClipboardButton(url);
+		
+		// Webdav button
+		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
+		int idx = webdavUrl.lastIndexOf('/');
+		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + document.getPath();
+		tableProperties.setWidget(12, 1, new HTML("<div id=\"webdavclipboardcontainer\"></div>\n"));
+		Util.createWebDavClipboardButton(webdavUrl);
 		
 		tableProperties.setHTML(0, 1, doc.getUuid());
 		tableProperties.setHTML(1, 1, doc.getName());
@@ -469,9 +461,6 @@ public class Document extends Composite {
 				tableProperties.setHTML(9, 1, Main.i18n("document.subscribed.no"));
 			}
 		}
-		
-		copyUrlToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
-		copyWebdavToClipBoard.setHTML(Main.i18n("button.copy.clipboard"));
 	}	
 	
 	/**
