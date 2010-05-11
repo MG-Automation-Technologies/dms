@@ -68,10 +68,19 @@
         <tr class="even"><td><b><%=Config.PROPERTY_SYSTEM_ANTIVIR %></b></td><td><%=Config.SYSTEM_ANTIVIR %></td></tr>
         <tr class="odd"><td><b><%=Config.PROPERTY_SYSTEM_LOGIN_LOWERCASE %></b></td><td><%=Config.SYSTEM_LOGIN_LOWERCASE %></td></tr>
 
-        <tr class="even"><td><b><%=Config.PROPERTY_APPLICATION_URL %></b></td><td><%=Config.APPLICATION_URL %></td></tr>
-        <tr class="odd"><td><b><%=Config.PROPERTY_DEFAULT_LANG %></b></td><td><%=Config.DEFAULT_LANG %></td></tr>
-        <tr class="even"><td><b><%=Config.PROPERTY_USER_KEYWORDS_CACHE %></b></td><td><%=Config.USER_KEYWORDS_CACHE %></td></tr>
-        <tr class="odd"><td><b><%=Config.PROPERTY_USER_SIZE_CACHE %></b></td><td><%=Config.USER_SIZE_CACHE %></td></tr>
+		<!-- Wizard -->
+		<tr class="even"><td><b><%=Config.PROPERTY_WIZARD_PROPERTY_GROUPS %></b></td><td><%=Config.WIZARD_PROPERTY_GROUPS %></td></tr>
+		<tr class="odd"><td><b><%=Config.PROPERTY_WIZARD_KEYWORDS %></b></td><td><%=Config.WIZARD_KEYWORDS %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_WIZARD_CATEGORIES %></b></td><td><%=Config.WIZARD_CATEGORIES %></td></tr>
+		
+		<!-- Schedule -->
+		<tr class="odd"><td><b><%=Config.PROPERTY_SCHEDULE_REPOSITORY_INFO %></b></td><td><%=Config.SCHEDULE_REPOSITORY_INFO %></td></tr>
+		<tr class="even"><td><b><%=Config.PROPERTY_SCHEDULE_MAIL_IMPORTER %></b></td><td><%=Config.SCHEDULE_MAIL_IMPORTER %></td></tr>
+		
+        <tr class="odd"><td><b><%=Config.PROPERTY_APPLICATION_URL %></b></td><td><%=Config.APPLICATION_URL %></td></tr>
+        <tr class="even"><td><b><%=Config.PROPERTY_DEFAULT_LANG %></b></td><td><%=Config.DEFAULT_LANG %></td></tr>
+        <tr class="odd"><td><b><%=Config.PROPERTY_USER_KEYWORDS_CACHE %></b></td><td><%=Config.USER_KEYWORDS_CACHE %></td></tr>
+        <tr class="even"><td><b><%=Config.PROPERTY_USER_SIZE_CACHE %></b></td><td><%=Config.USER_SIZE_CACHE %></td></tr>
       </table>
       <h2>MIME types</h2>
       <table class="results" width="100%">

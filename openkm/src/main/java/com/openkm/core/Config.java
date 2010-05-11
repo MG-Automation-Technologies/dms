@@ -124,6 +124,12 @@ public class Config {
 	public static String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
 	
+	// Wizard
+	public static String PROPERTY_WIZARD_PROPERTY_GROUPS = "wizard.property.groups";
+	public static String PROPERTY_WIZARD_KEYWORDS = "wizard.keywords";
+	public static String PROPERTY_WIZARD_CATEGORIES = "wizard.categories";
+	
+	// Schedule
 	public static String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
 	public static String PROPERTY_SCHEDULE_MAIL_IMPORTER = "schedule.mail.importer";
 	
@@ -209,6 +215,12 @@ public class Config {
 	public static String USER_KEYWORDS_CACHE = "off";
 	public static String USER_SIZE_CACHE = "off";
 	
+	// Wizard
+	public static String WIZARD_PROPERTY_GROUPS = "off";
+	public static String WIZARD_KEYWORDS = "off";
+	public static String WIZARD_CATEGORIES = "off";
+	
+	// Schedule
 	private static String SCHEDULE_REPOSITORY_INFO_STR = "86400"; // 24*60*60 = 24 hours
 	public static long SCHEDULE_REPOSITORY_INFO = Long.parseLong(SCHEDULE_REPOSITORY_INFO_STR) * 1000;
 	private static String SCHEDULE_MAIL_IMPORTER_STR = "3600"; // 60*60 = 1 hour
@@ -349,6 +361,12 @@ public class Config {
 			USER_KEYWORDS_CACHE = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE);
 			USER_SIZE_CACHE = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE);
 			
+			// Wizard
+			WIZARD_PROPERTY_GROUPS = config.getProperty(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS);
+			WIZARD_KEYWORDS = config.getProperty(PROPERTY_WIZARD_KEYWORDS, WIZARD_KEYWORDS);
+			WIZARD_CATEGORIES = config.getProperty(PROPERTY_WIZARD_CATEGORIES, WIZARD_CATEGORIES);
+			
+			// Schedule
 			SCHEDULE_REPOSITORY_INFO_STR = config.getProperty(PROPERTY_SCHEDULE_REPOSITORY_INFO, SCHEDULE_REPOSITORY_INFO_STR);
 			SCHEDULE_REPOSITORY_INFO = Long.parseLong(SCHEDULE_REPOSITORY_INFO_STR) * 1000;
 			SCHEDULE_MAIL_IMPORTER_STR = config.getProperty(PROPERTY_SCHEDULE_MAIL_IMPORTER, SCHEDULE_MAIL_IMPORTER_STR);
