@@ -22,11 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMWorkflow;
-import com.openkm.backend.client.OKMException;
-import com.openkm.backend.client.config.ErrorCode;
 import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
+import com.openkm.frontend.client.OKMException;
 
 /**
  * Register workflow Servlet
@@ -36,7 +35,8 @@ public class RegisterWorkflowServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("unchecked")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
+			ServletException, IOException {
 		String token = (String) request.getSession().getAttribute("token");
 		String fileName = null;
 		byte[] content = null;
@@ -77,20 +77,16 @@ public class RegisterWorkflowServlet extends HttpServlet {
 			}
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
-			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_ParseException);
-			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
+			throw new ServletException(e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_Repository);
-			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
+			throw new ServletException(e.getMessage());
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_IOException);
-			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
+			throw new ServletException(e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			String code = ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowUploadServiceAdmin, ErrorCode.CAUSE_General);
-			sendErrorRedirect(request, response, new OKMException(code, e.getMessage()));
+			throw new ServletException(e.getMessage());
 		} finally {
 			out.flush();
 			out.close();
