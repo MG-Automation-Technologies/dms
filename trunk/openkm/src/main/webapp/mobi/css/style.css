@@ -34,12 +34,12 @@ table.results th {
 }
 
 table.results tr.odd {
-	background-color: #F6F6EE;
+	background-color: #E0ECFF;
 	height: 25px;
 }
 
 table.results tr.even {
-	background-color: #E0ECFF;
+	background-color: #F6F6EE;
 	height: 25px;
 }
 
