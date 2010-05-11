@@ -23,15 +23,15 @@
         <form id="context" action="handler">
           <input type="hidden" name="action" value="browse"/>
           <select name="path" onchange="document.getElementById('context').submit()">
-            <c:set var="tmp"><u:startsWith string="${ctxTaxonomy}" prefix="/okm:root"/></c:set>
+            <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxTaxonomy}"/></c:set>
             <option value="${ctxTaxonomy}" <c:if test="${tmp}">selected</c:if>>Taxonomy</option>
-            <c:set var="tmp"><u:startsWith string="${ctxTemplates}" prefix="/okm:templates"/></c:set>
+            <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxTemplates}"/></c:set>
             <option value="${ctxTemplates}" <c:if test="${tmp}">selected</c:if>>Templates</option>
-            <c:set var="tmp"><u:startsWith string="${ctxPersonal}" prefix="/okm:home/${userId}/okm:personal"/></c:set>
+            <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxPersonal}"/></c:set>
             <option value="${ctxPersonal}" <c:if test="${tmp}">selected</c:if>>My documents</option>
-            <c:set var="tmp"><u:startsWith string="${ctxMail}" prefix="/okm:home/${userId}/okm:mail"/></c:set>
+            <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxMail}"/></c:set>
             <option value="${ctxMail}" <c:if test="${tmp}">selected</c:if>>E-mail</option>
-            <c:set var="tmp"><u:startsWith string="${ctxTrash}" prefix="/okm:home/${userId}/okm:trash"/></c:set>
+            <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxTrash}"/></c:set>
             <option value="${ctxTrash}" <c:if test="${tmp}">selected</c:if>>Trash</option>
           </select>
         </form>
