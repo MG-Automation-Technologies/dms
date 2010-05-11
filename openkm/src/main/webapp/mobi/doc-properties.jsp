@@ -1,44 +1,8 @@
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page errorPage="error.jsp"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="javax.jcr.Session"%>
-<%@page import="com.openkm.core.SessionManager"%>
-<%@page import="com.openkm.api.OKMDocument"%>
-<%@page import="com.openkm.bean.Document"%>
-<%@page import="com.openkm.util.FileUtils"%>
-<%@page import="com.openkm.util.FormatUtil"%>
-<%@include file="session.jsp"%>
-<% 
-  request.setCharacterEncoding("UTF-8");
-  String token = (String) session.getAttribute("token");
-  Session jcrSession = SessionManager.getInstance().get(token);
-  String path = request.getParameter("path");
-  OKMDocument okmDocument = OKMDocument.getInstance();
-  int i = 0;
-
-  if (path == null || path.equals("")) {
-    path = "/okm:root";
-  }
-  
-  path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-  Document doc = okmDocument.getProperties(token, path);
-  String status = "Available";
-  
-  if (doc.isCheckedOut()) {
-	  status = "Checkout by "+doc.getLockInfo().getOwner();
-  } else if (doc.isLocked()) {
-	  status = "Locked by "+doc.getLockInfo().getOwner();
-  }
-  
-  StringBuilder sb = new StringBuilder();
-  for (Iterator<String> it = doc.getSubscriptors().iterator(); it.hasNext();) {
-    sb.append("<tr class=\"");
-    sb.append(i++%2==0?"odd":"even");
-    sb.append("\"><td>");
-    sb.append(it.next());
-    sb.append("</td></tr>");
-  }
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page errorPage="error.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="f" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -50,22 +14,46 @@
 </head>
 <body>
   <table class="results">
-    <tr><th colspan="2">Document <span style="font-weight: normal"><%=doc.getPath()%></span></th></tr>
+    <tr><th colspan="2">Document <span style="font-weight: normal">${path}</span></th></tr>
     <tr><th>Property</th><th>Value</th></tr>
-    <tr class="odd"><td><b>UUID</b></td><td><%=doc.getUuid()%></td></tr>
-    <tr class="even"><td><b>Name</b></td><td><%=FileUtils.getName(doc.getPath())%></td></tr>
-    <tr class="odd"><td><b>Folder</b></td><td><%=FileUtils.getParent(doc.getPath())%></td></tr>
-    <tr class="even"><td><b>Size</b></td><td><%=FormatUtil.formatSize(doc.getActualVersion().getSize())%></td></tr>
-    <tr class="odd"><td><b>Created</b></td><td><%=FormatUtil.formatDate(doc.getActualVersion().getCreated())%> by <%=doc.getActualVersion().getAuthor()%></td></tr>
-    <tr class="even"><td><b>Modified</b></td><td><%=FormatUtil.formatDate(doc.getLastModified())%> by <%=doc.getAuthor()%></td></tr>
-    <tr class="odd"><td><b>MIME</b></td><td><%=doc.getMimeType()%></td></tr>
-    <tr class="even"><td><b>Keywords</b></td><td><%=doc.getKeywords()%></td></tr>
-    <tr class="odd"><td><b>Status</b></td><td><%=status%></td></tr>
-    <tr class="even"><td><b>Subscribed</b></td><td><%=doc.isSubscribed()?"Yes":"No"%></td></tr>
+    <tr class="even"><td><b>UUID</b></td><td>${doc.uuid}</td></tr>
+    <tr class="odd"><td><b>Name</b></td><td><u:getName path="${doc.path}"/></td></tr>
+    <tr class="even"><td><b>Folder</b></td><td><u:getParent path="${doc.path}"/></td></tr>
+    <tr class="odd"><td><b>Size</b></td><td><u:formatSize size="${doc.actualVersion.size}"/></td></tr>
+    <tr class="even"><td><b>Created</b></td><td><f:formatDate value="${doc.actualVersion.created.time}" type="both"/> by ${doc.actualVersion.author}</td></tr>
+    <tr class="odd"><td><b>Modified</b></td><td><f:formatDate value="${doc.lastModified.time}" type="both"/> by ${doc.author}</td></tr>
+    <tr class="even"><td><b>MIME</b></td><td>${doc.mimeType}</td></tr>
+    <tr class="odd"><td><b>Keywords</b></td>
+      <td>
+        <c:forEach var="keyword" items="${doc.keywords}">
+          ${keyword}
+        </c:forEach>
+      </td>
+    </tr>
+    <tr class="even"><td><b>Categories</b></td>
+      <td>
+        <c:forEach var="category" items="${doc.categories}">
+          ${category}
+        </c:forEach>
+      </td>
+    </tr>
+    <c:choose>
+      <c:when test="${doc.checkedOut}"><c:set var="status" value="Checkout by ${doc.lockInfo.owner}"/></c:when>
+      <c:when test="${doc.locked}"><c:set var="status" value="Locked by ${doc.lockInfo.owner}"/></c:when>
+      <c:otherwise><c:set var="status" value="Available"/></c:otherwise>
+    </c:choose>
+    <tr class="odd"><td><b>Status</b></td><td>${status}</td></tr>
+    <c:choose>
+      <c:when test="${doc.subscribed}"><c:set var="subscribed" value="Yes"/></c:when>
+      <c:otherwise><c:set var="subscribed" value="No"/></c:otherwise>
+    </c:choose>
+    <tr class="even"><td><b>Subscribed</b></td><td>${subscribed}</td></tr>
   </table>
   <table class="results">
     <tr><th>Subscribed users</th></tr>
-    <%=sb%>
+    <c:forEach var="sub" items="${doc.subscriptors}" varStatus="row">
+      <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}"><td>${sub}</td></tr>
+    </c:forEach>
   </table>
 </body>
 </html>

@@ -1,25 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page errorPage="error.jsp" %>
-<%@ page import="javax.jcr.Session" %>
-<%@ page import="com.openkm.core.SessionManager" %>
-<%@ page import="com.openkm.api.OKMSearch" %>
-<%@ page import="com.openkm.bean.QueryResult" %>
-<%@ page import="com.openkm.util.FileUtils" %>
-<%@ page import="com.openkm.util.FormatUtil" %>
-<%@ include file="session.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-	request.setCharacterEncoding("UTF-8");
-	String token = (String) session.getAttribute("token");
-	Session jcrSession = SessionManager.getInstance().get(token);
-	String query = request.getParameter("query");
-	OKMSearch okmSearch = OKMSearch.getInstance();
-
-	if (query != null && !query.equals("")) {
-		query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-		pageContext.setAttribute("queryResult", okmSearch.findByContent(token, query));
-	}
-%>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -31,11 +13,9 @@
 </head>
 <body>
   <table class="results">
-    <tr><th colspan="4">Query: <span style="font-weight: normal"><%=query%></span></th></tr>
+    <tr><th colspan="4">Query: <span style="font-weight: normal">${query}</span></th></tr>
     <tr><th></th><th>Name</th><th></th><th>Size</th></tr>
     <c:forEach var="qr" items="${queryResult}" varStatus="row">
-      <c:set var="size"><%=FormatUtil.formatSize(((QueryResult)pageContext.getAttribute("qr")).getDocument().getActualVersion().getSize())%></c:set>
-      <c:set var="name"><%=FileUtils.getName(((QueryResult)pageContext.getAttribute("qr")).getDocument().getPath())%></c:set>
       <c:url value="../OKMDownloadServlet" var="urlDownload">
         <c:if test="${qr.document.convertibleToPdf}">
             <c:param name="toPdf"/>
@@ -47,9 +27,11 @@
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
         <td width="18px"><img src="../com.openkm.frontend.Main/img/icon/mime/${qr.document.mimeType}.gif"/></td>
-        <td width="100%" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }">${name}</td>
+        <td width="100%" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }">
+          <u:getName path="${qr.document.path}"/>
+        </td>
         <td><a href="${urlProperties}"><img src="img/properties.png"/></a></td>
-        <td nowrap="nowrap">${size}</td>
+        <td nowrap="nowrap"><u:formatSize size="${qr.document.actualVersion.size}"/></td>
       </tr>
     </c:forEach>
   </table>
