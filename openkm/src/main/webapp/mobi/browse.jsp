@@ -38,7 +38,7 @@
       </td>
       <td><form id="search" action="handler"><input type="hidden" name="action" value="search"/><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
       <td></td>
-      <td align="right"><a href="logout.jsp" onclick="return confirm('Really want to logout?')"><img src="img/logout.png" /></a></td>
+      <td align="right"><a href="handler?action=logout" onclick="return confirm('Really want to logout?')"><img src="img/logout.png" /></a></td>
     </tr>
   </table>
   <table class="results">

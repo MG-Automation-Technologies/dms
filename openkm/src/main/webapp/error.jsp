@@ -34,7 +34,12 @@
     </tr>
     <% } else { %>
     <tr>
-      <td colspan="2"><%=exception.getMessage() %></td>
+      <td><b>Class:</b></td>
+      <td><%=exception.getClass().getName() %></td>
+    </tr>
+    <tr>
+      <td><b>Message:</b></td>
+      <td><%=exception.getMessage() %></td>
     </tr>
     <% } %>
     <tr>
