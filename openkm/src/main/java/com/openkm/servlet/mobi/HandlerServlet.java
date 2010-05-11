@@ -60,16 +60,26 @@ public class HandlerServlet extends HttpServlet {
 				logout(request, response);
 			}
 		} catch (UserAlreadyLoggerException e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} catch (AccessDeniedException e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} catch (PathNotFoundException e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
-			e.printStackTrace();
+			sendErrorRedirect(request,response, e);
 		}
+	}
+	
+	/**
+	 * Dispatch errors 
+	 */
+	private void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response,
+			Throwable e) throws ServletException, IOException {
+		request.setAttribute ("javax.servlet.jsp.jspException", e);
+		ServletContext sc = getServletConfig().getServletContext();
+		sc.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 	
 	/**
