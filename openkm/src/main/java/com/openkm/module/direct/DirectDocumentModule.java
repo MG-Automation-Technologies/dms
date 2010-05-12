@@ -288,7 +288,7 @@ public class DirectDocumentModule implements DocumentModule {
 		contentNode.checkin();
 		
 		// Update user items size
-		if (Config.USER_SIZE_CACHE.equals("on")) {
+		if (Config.USER_SIZE_CACHE) {
 			UserItemsManager.incSize(session.getUserID(), size);
 			UserItemsManager.incDocuments(session.getUserID(), 1);
 		}
