@@ -134,18 +134,11 @@ public class DirectAuthModule implements AuthModule {
 					loggedUsers--;
 				}
 				
-				//log.info("loggedUsers: "+loggedUsers);
-				
-				if (loggedUsers < Config.MAX_USERS || session.getUserID().equals(Config.ADMIN_USER)) {
-					// Add generated session to pool
-					token = UUIDGenerator.generate(this);
-					log.info("Add generated session to pool: "+token);
-					sessions.put(token, session);
-					loadUserData(session);
-				} else {
-					log.warn("Maximun allowed users: "+Config.MAX_USERS+", Logged users: "+loggedUsers);
-					throw new AccessDeniedException("Maximun logged users allowed");
-				}
+				// Add generated session to pool
+				token = UUIDGenerator.generate(this);
+				log.info("Add generated session to pool: "+token);
+				sessions.put(token, session);
+				loadUserData(session);
 			}
 
 			// Activity log

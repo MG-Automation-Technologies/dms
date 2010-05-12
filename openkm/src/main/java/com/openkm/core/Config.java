@@ -52,9 +52,6 @@ public class Config {
 	// Multihost
 	public static String INSTALL = "";
 
-	// Maximum allowed users
-	public static int MAX_USERS = 10;
-
 	// Configuration files
 	public static String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static String MIME_FILE = "mime.types";
@@ -188,7 +185,8 @@ public class Config {
 	private static String MAX_SEARCH_RESULTS_STR = "261006"; // Almost infinite
 	public static int MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
 	
-	public static String RESTRICT_FILE_MIME = "off";
+	public static String RESTRICT_FILE_MIME_STR = "false";
+	public static boolean RESTRICT_FILE_MIME = Boolean.getBoolean(RESTRICT_FILE_MIME_STR);
 	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
 
 	public static String NOTIFICATION_MESSAGE_SUBJECT = "OpenKM - NOTIFICATION - $documentName";
@@ -336,7 +334,8 @@ public class Config {
 			MAX_SEARCH_RESULTS_STR = config.getProperty(PROPERTY_MAX_SEARCH_RESULTS, MAX_SEARCH_RESULTS_STR);
 			MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
 
-			RESTRICT_FILE_MIME = config.getProperty(PROPERTY_RESTRICT_FILE_MIME, RESTRICT_FILE_MIME);
+			RESTRICT_FILE_MIME_STR = config.getProperty(PROPERTY_RESTRICT_FILE_MIME, RESTRICT_FILE_MIME_STR);
+			RESTRICT_FILE_MIME = Boolean.getBoolean(RESTRICT_FILE_MIME_STR);
 			RESTRICT_FILE_EXTENSION = config.getProperty(PROPERTY_RESTRICT_FILE_EXTENSION, RESTRICT_FILE_EXTENSION);
 			
 			NOTIFICATION_MESSAGE_SUBJECT = config.getProperty(PROPERTY_NOTIFICATION_MESSAGE_SUBJECT, NOTIFICATION_MESSAGE_SUBJECT);
@@ -493,12 +492,12 @@ public class Config {
 			}
 		} catch (FileNotFoundException e) {
 			log.warn("** No "+MIME_FILE+" file found **");
-			if (RESTRICT_FILE_MIME.equals("on")) {
+			if (RESTRICT_FILE_MIME) {
 				log.warn("** File upload disabled **");
 			}
 		} catch (IOException e) {
 			log.warn("** IO Error reading "+MIME_FILE+" **");
-			if (RESTRICT_FILE_MIME.equals("on")) {
+			if (RESTRICT_FILE_MIME) {
 				log.warn("** File upload disabled **");
 			}
 		} finally {
