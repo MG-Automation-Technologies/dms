@@ -396,6 +396,8 @@ public class OKMHandler implements IOHandler, PropertyHandler {
     		String[] usersWrite = JCRUtils.usrValue2String(usersWriteParent, session.getUserID()); 
     		Value[] usersDeleteParent = parentNode.getProperty(Permission.USERS_DELETE).getValues();
     		String[] usersDelete = JCRUtils.usrValue2String(usersDeleteParent, session.getUserID());
+    		Value[] usersPermissionParent = parentNode.getProperty(Permission.USERS_PERMISSION).getValues();
+    		String[] usersPermission = JCRUtils.usrValue2String(usersPermissionParent, session.getUserID());
     		
     		Value[] rolesReadParent = parentNode.getProperty(Permission.ROLES_READ).getValues();
     		String[] rolesRead = JCRUtils.rolValue2String(rolesReadParent); 
@@ -403,14 +405,18 @@ public class OKMHandler implements IOHandler, PropertyHandler {
     		String[] rolesWrite = JCRUtils.rolValue2String(rolesWriteParent); 
     		Value[] rolesDeleteParent = parentNode.getProperty(Permission.ROLES_DELETE).getValues();
     		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
+    		Value[] rolesPermissionParent = parentNode.getProperty(Permission.ROLES_PERMISSION).getValues();
+    		String[] rolesPermission = JCRUtils.rolValue2String(rolesPermissionParent);
 	
     		// Set auth info
     		mainNode.setProperty(Permission.USERS_READ, usersRead);
     		mainNode.setProperty(Permission.USERS_WRITE, usersWrite);
     		mainNode.setProperty(Permission.USERS_DELETE, usersDelete);
+    		mainNode.setProperty(Permission.USERS_PERMISSION, usersPermission);
     		mainNode.setProperty(Permission.ROLES_READ, rolesRead);
     		mainNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
     		mainNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
+    		mainNode.setProperty(Permission.ROLES_PERMISSION, rolesPermission);
 
     		if (contentNode.isNodeType(Document.CONTENT_TYPE)) {
     			// Esta línea vale millones!! Resuelve la incidencia del isCkechedOut.
