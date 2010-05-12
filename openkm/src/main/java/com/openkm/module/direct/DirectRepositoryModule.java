@@ -271,11 +271,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmRoot.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
 				okmRoot.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmRoot.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmRoot.setProperty(Permission.USERS_PERMISSION, new String[] { session.getUserID() });
+				okmRoot.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
 				okmRoot.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmRoot.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				okmRoot.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmRoot.setProperty(Permission.ROLES_PERMISSION, new String[] { Config.DEFAULT_USER_ROLE });
+				okmRoot.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 
 				okmRootPath = okmRoot.getPath();
 				
@@ -291,11 +291,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmHome.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
 				okmHome.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmHome.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmHome.setProperty(Permission.USERS_PERMISSION, new String[] { session.getUserID() });
+				okmHome.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
 				okmHome.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmHome.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				okmHome.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmHome.setProperty(Permission.ROLES_PERMISSION, new String[] { Config.DEFAULT_USER_ROLE });
+				okmHome.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create template base node
 				log.info("Create template base node");
@@ -309,11 +309,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmTemplate.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
 				okmTemplate.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmTemplate.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmTemplate.setProperty(Permission.USERS_PERMISSION, new String[] { session.getUserID() });
+				okmTemplate.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
 				okmTemplate.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmTemplate.setProperty(Permission.ROLES_WRITE, new String[] {});
 				okmTemplate.setProperty(Permission.ROLES_DELETE, new String[] {});
-				okmTemplate.setProperty(Permission.ROLES_PERMISSION, new String[] {});
+				okmTemplate.setProperty(Permission.ROLES_SECURITY, new String[] {});
 				
 				// Create thesaurus base node
 				log.info("Create thesaurus base node");
@@ -327,11 +327,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmThesaurus.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
 				okmThesaurus.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmThesaurus.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmThesaurus.setProperty(Permission.USERS_PERMISSION, new String[] { session.getUserID() });
+				okmThesaurus.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
 				okmThesaurus.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmThesaurus.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				okmThesaurus.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmThesaurus.setProperty(Permission.ROLES_PERMISSION, new String[] { Config.DEFAULT_USER_ROLE });
+				okmThesaurus.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create categories base node
 				log.info("Create categories base node");
@@ -345,11 +345,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 				okmCategories.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
 				okmCategories.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
 				okmCategories.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmCategories.setProperty(Permission.USERS_PERMISSION, new String[] { session.getUserID() });
+				okmCategories.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
 				okmCategories.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
 				okmCategories.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
 				okmCategories.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmCategories.setProperty(Permission.ROLES_PERMISSION, new String[] { Config.DEFAULT_USER_ROLE });
+				okmCategories.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 				
 				// Create config base node
 				log.info("Create config node");
