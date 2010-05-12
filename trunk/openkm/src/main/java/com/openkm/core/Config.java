@@ -215,8 +215,10 @@ public class Config {
 	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
-	public static String USER_KEYWORDS_CACHE = "off";
-	public static String USER_SIZE_CACHE = "off";
+	private static String USER_KEYWORDS_CACHE_STR = "off";
+	public static boolean USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
+	private static String USER_SIZE_CACHE_STR = "off";
+	public static boolean USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
 	
 	// Wizard
 	private static String WIZARD_PROPERTY_GROUPS_STR = "";
@@ -368,8 +370,10 @@ public class Config {
 			UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
-			USER_KEYWORDS_CACHE = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE);
-			USER_SIZE_CACHE = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE);
+			USER_KEYWORDS_CACHE_STR = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR);
+			USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
+			USER_SIZE_CACHE_STR = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE_STR);
+			USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
 			
 			// Wizard
 			WIZARD_PROPERTY_GROUPS_STR = config.getProperty(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS_STR);
