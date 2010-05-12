@@ -328,7 +328,7 @@ public class DirectDocumentModule implements DocumentModule {
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
 
-			if (Config.RESTRICT_FILE_MIME.equals("on") && !Config.mimeAccept.contains(mimeType)) {
+			if (Config.RESTRICT_FILE_MIME && !Config.mimeAccept.contains(mimeType)) {
 				throw new UnsupportedMimeTypeException(mimeType);
 			}
 			

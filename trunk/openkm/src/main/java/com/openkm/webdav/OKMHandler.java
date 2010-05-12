@@ -169,7 +169,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         	log.debug("Size: "+context.getContentLength());
         	
         	// Restrict for MIME
-        	if (Config.RESTRICT_FILE_MIME.equals("on") && !Config.mimeAccept.contains(mimeType)) {
+        	if (Config.RESTRICT_FILE_MIME && !Config.mimeAccept.contains(mimeType)) {
         		return false;
         	}
         	
