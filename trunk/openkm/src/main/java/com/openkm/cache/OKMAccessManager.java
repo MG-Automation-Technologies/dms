@@ -254,14 +254,14 @@ public class OKMAccessManager implements AccessManager {
 						Value[] vRolesDelete = node.getProperty(Permission.ROLES_DELETE).getValues();
 						for (int i = 0; i < vRolesDelete.length; i++) sRolesDelete.add(vRolesDelete[i].getString());
 						
-						// PERMISSION
-						HashSet<String> sUsersPermission = new HashSet<String>();
-						Value[] vUsersPermission = node.getProperty(Permission.USERS_PERMISSION).getValues();
-						for (int i = 0; i < vUsersPermission.length; i++) sUsersPermission.add(vUsersPermission[i].getString());
+						// SECURITY
+						HashSet<String> sUsersSecurity= new HashSet<String>();
+						Value[] vUsersSecurity = node.getProperty(Permission.USERS_SECURITY).getValues();
+						for (int i = 0; i < vUsersSecurity.length; i++) sUsersSecurity.add(vUsersSecurity[i].getString());
 						
-						HashSet<String> sRolesPermission = new HashSet<String>();
-						Value[] vRolesPermission = node.getProperty(Permission.ROLES_PERMISSION).getValues();
-						for (int i = 0; i < vRolesPermission.length; i++) sRolesPermission.add(vRolesPermission[i].getString());
+						HashSet<String> sRolesSecurity = new HashSet<String>();
+						Value[] vRolesSecurity = node.getProperty(Permission.ROLES_SECURITY).getValues();
+						for (int i = 0; i < vRolesSecurity.length; i++) sRolesSecurity.add(vRolesSecurity[i].getString());
 						
 						nPerms = new NodePermissions();
 						nPerms.setUsersRead(sUsersRead);
@@ -270,8 +270,8 @@ public class OKMAccessManager implements AccessManager {
 						nPerms.setRolesWrite(sRolesWrite);
 						nPerms.setUsersDelete(sUsersDelete);
 						nPerms.setRolesDelete(sRolesDelete);
-						nPerms.setUsersPermission(sUsersPermission);
-						nPerms.setRolesPermission(sRolesPermission);
+						nPerms.setUsersSecurity(sUsersSecurity);
+						nPerms.setRolesSecurity(sRolesSecurity);
 						
 						NodePermissionsManager.put(nodeId, nPerms);
 					}
