@@ -224,9 +224,11 @@ public class DirectAuthModule implements AuthModule {
 		userHome.setProperty(Permission.USERS_READ, new String[] { userId });
 		userHome.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userHome.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userHome.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userHome.setProperty(Permission.ROLES_READ, new String[] {});
 		userHome.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userHome.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userHome.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 		
 		log.info("** Create user '"+userId+"' trash ("+userHome.getPath()+"/"+Repository.TRASH+") **");
 		Node userTrash = userHome.addNode(Repository.TRASH, Folder.TYPE);
@@ -237,9 +239,11 @@ public class DirectAuthModule implements AuthModule {
 		userTrash.setProperty(Permission.USERS_READ, new String[] { userId });
 		userTrash.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userTrash.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userTrash.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userTrash.setProperty(Permission.ROLES_READ, new String[] {});
 		userTrash.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userTrash.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userTrash.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 		
 		log.info("** Create user '"+userId+"' config ("+userHome.getPath()+"/"+Repository.USER_CONFIG+") **");
 		Node userConfig = userHome.addNode(Repository.USER_CONFIG, Repository.USER_CONFIG_TYPE);
@@ -250,9 +254,11 @@ public class DirectAuthModule implements AuthModule {
 		userConfig.setProperty(Permission.USERS_READ, new String[] { userId });
 		userConfig.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userConfig.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userConfig.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userConfig.setProperty(Permission.ROLES_READ, new String[] {});
 		userConfig.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userConfig.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userConfig.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 
 		log.info("** Create user '"+userId+"' personal documents ("+userHome.getPath()+"/"+Repository.PERSONAL+") **");
 		Node userDocuments = userHome.addNode(Repository.PERSONAL, Folder.TYPE);
@@ -263,9 +269,11 @@ public class DirectAuthModule implements AuthModule {
 		userDocuments.setProperty(Permission.USERS_READ, new String[] { userId });
 		userDocuments.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userDocuments.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userDocuments.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userDocuments.setProperty(Permission.ROLES_READ, new String[] {});
 		userDocuments.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userDocuments.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userDocuments.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 
 		log.info("** Create user '"+userId+"' mail ("+userHome.getPath()+"/"+Repository.MAIL+") **");
 		Node userMail = userHome.addNode(Repository.MAIL, Folder.TYPE);
@@ -276,9 +284,11 @@ public class DirectAuthModule implements AuthModule {
 		userMail.setProperty(Permission.USERS_READ, new String[] { userId });
 		userMail.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userMail.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userMail.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userMail.setProperty(Permission.ROLES_READ, new String[] {});
 		userMail.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userMail.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userMail.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 
 		log.info("** Create user '"+userId+"' query ("+userHome.getPath()+"/"+QueryParams.LIST+") **");
 		Node userQuery = userHome.addNode(QueryParams.LIST, QueryParams.LIST_TYPE);
@@ -287,9 +297,11 @@ public class DirectAuthModule implements AuthModule {
 		userQuery.setProperty(Permission.USERS_READ, new String[] { userId });
 		userQuery.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userQuery.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userQuery.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userQuery.setProperty(Permission.ROLES_READ, new String[] {});
 		userQuery.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userQuery.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userQuery.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 
 		log.info("** Create user '"+userId+"' bookmark ("+userHome.getPath()+"/"+Bookmark.LIST+") **");
 		Node userBookmark = userHome.addNode(Bookmark.LIST, Bookmark.LIST_TYPE);
@@ -298,9 +310,11 @@ public class DirectAuthModule implements AuthModule {
 		userBookmark.setProperty(Permission.USERS_READ, new String[] { userId });
 		userBookmark.setProperty(Permission.USERS_WRITE, new String[] { userId });
 		userBookmark.setProperty(Permission.USERS_DELETE, new String[] { userId });
+		userBookmark.setProperty(Permission.USERS_PERMISSION, new String[] { userId });
 		userBookmark.setProperty(Permission.ROLES_READ, new String[] {});
 		userBookmark.setProperty(Permission.ROLES_WRITE, new String[] {});
 		userBookmark.setProperty(Permission.ROLES_DELETE, new String[] {});
+		userBookmark.setProperty(Permission.ROLES_PERMISSION, new String[] {});
 		
 		// Save
 		okmHome.save();
@@ -368,6 +382,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_WRITE;
 			} else if (permissions == Permission.DELETE) {
 				property = Permission.USERS_DELETE;
+			} else if (permissions == Permission.PERMISSION) {
+				property = Permission.USERS_PERMISSION;
 			}
 
 			synchronized (node) {
@@ -460,6 +476,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.USERS_WRITE;
 			} else if (permissions == Permission.DELETE) {
 				property = Permission.USERS_DELETE;
+			} else if (permissions == Permission.PERMISSION) {
+				property = Permission.USERS_PERMISSION;
 			} 
 
 			synchronized (node) {
@@ -549,6 +567,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_WRITE;
 			} else if (permissions == Permission.DELETE) {
 				property = Permission.ROLES_DELETE;
+			} else if (permissions == Permission.PERMISSION) {
+				property = Permission.ROLES_PERMISSION;
 			}
 
 			synchronized (node) {
@@ -641,6 +661,8 @@ public class DirectAuthModule implements AuthModule {
 				property = Permission.ROLES_WRITE;
 			} else if (permissions == Permission.DELETE) {
 				property = Permission.ROLES_DELETE;
+			} else if (permissions == Permission.PERMISSION) {
+				property = Permission.ROLES_PERMISSION;
 			}
 
 			synchronized (node) {
@@ -747,6 +769,18 @@ public class DirectAuthModule implements AuthModule {
 					users.put(usersDelete[i].getString(), new Byte(Permission.DELETE));
 				}
 			}
+			
+			Value[] usersPermission = node.getProperty(Permission.USERS_PERMISSION).getValues();
+
+			for (int i=0; i<usersPermission.length; i++) {
+				Byte previous = (Byte) users.get(usersPermission[i].getString());
+
+				if (previous != null) {
+					users.put(usersPermission[i].getString(), new Byte((byte) (previous.byteValue() | Permission.PERMISSION)));
+				} else {
+					users.put(usersPermission[i].getString(), new Byte(Permission.PERMISSION));
+				}
+			}
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -795,6 +829,18 @@ public class DirectAuthModule implements AuthModule {
 					roles.put(rolesDelete[i].getString(), new Byte((byte) (previous.byteValue() | Permission.DELETE)));
 				} else {
 					roles.put(rolesDelete[i].getString(), new Byte(Permission.DELETE));
+				}
+			}
+			
+			Value[] rolesPermission = node.getProperty(Permission.ROLES_PERMISSION).getValues();
+
+			for (int i=0; i<rolesPermission.length; i++) {
+				Byte previous = (Byte) roles.get(rolesPermission[i].getString());
+
+				if (previous != null) {
+					roles.put(rolesPermission[i].getString(), new Byte((byte) (previous.byteValue() | Permission.PERMISSION)));
+				} else {
+					roles.put(rolesPermission[i].getString(), new Byte(Permission.PERMISSION));
 				}
 			}
 		} catch (javax.jcr.PathNotFoundException e) {

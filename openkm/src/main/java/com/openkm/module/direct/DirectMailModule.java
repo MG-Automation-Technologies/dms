@@ -169,6 +169,8 @@ public class DirectMailModule implements MailModule {
 		String[] usersWrite = JCRUtils.usrValue2String(usersWriteParent, session.getUserID()); 
 		Value[] usersDeleteParent = parentNode.getProperty(Permission.USERS_DELETE).getValues();
 		String[] usersDelete = JCRUtils.usrValue2String(usersDeleteParent, session.getUserID());
+		Value[] usersPermissionParent = parentNode.getProperty(Permission.USERS_PERMISSION).getValues();
+		String[] usersPermission = JCRUtils.usrValue2String(usersPermissionParent, session.getUserID());
 		
 		Value[] rolesReadParent = parentNode.getProperty(Permission.ROLES_READ).getValues();
 		String[] rolesRead = JCRUtils.rolValue2String(rolesReadParent); 
@@ -176,14 +178,18 @@ public class DirectMailModule implements MailModule {
 		String[] rolesWrite = JCRUtils.rolValue2String(rolesWriteParent); 
 		Value[] rolesDeleteParent = parentNode.getProperty(Permission.ROLES_DELETE).getValues();
 		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
+		Value[] rolesPermissionParent = parentNode.getProperty(Permission.ROLES_PERMISSION).getValues();
+		String[] rolesPermission = JCRUtils.rolValue2String(rolesPermissionParent);
 		
 		// Set auth info
 		mailNode.setProperty(Permission.USERS_READ, usersRead);
 		mailNode.setProperty(Permission.USERS_WRITE, usersWrite);
 		mailNode.setProperty(Permission.USERS_DELETE, usersDelete);
+		mailNode.setProperty(Permission.USERS_PERMISSION, usersPermission);
 		mailNode.setProperty(Permission.ROLES_READ, rolesRead);
 		mailNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
 		mailNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
+		mailNode.setProperty(Permission.ROLES_PERMISSION, rolesPermission);
 		
 		parentNode.save();
 		
