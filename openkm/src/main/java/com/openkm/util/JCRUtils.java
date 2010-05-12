@@ -24,16 +24,21 @@ package com.openkm.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.security.auth.Subject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jackrabbit.api.jsr283.security.AccessControlList;
@@ -289,5 +294,29 @@ public class JCRUtils {
 		
 		log.debug("hotBackup: {}", backDir);
 		return backDir;
+	}
+	
+	/**
+	 * Get JCR Session
+	 */
+	public static Session getSession() throws NamingException {
+		InitialContext ctx = new InitialContext();
+		Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
+		Session session = Subject.doAs(subject, new PrivilegedAction<Session>() {
+			public Session run() {
+				Session s = null;
+
+				try {
+					s = DirectRepositoryModule.getRepository().login();
+				} catch (LoginException e) {
+					return null;
+				} catch (javax.jcr.RepositoryException e) {
+					return null;
+				}
+
+				return s;
+			}
+		});
+		return session;
 	}
 }
