@@ -9,11 +9,11 @@ public class NodePermissions implements Serializable {
 	private HashSet<String> usersRead;
 	private HashSet<String> usersWrite;
 	private HashSet<String> usersDelete;
-	private HashSet<String> usersPermission;
+	private HashSet<String> usersSecurity;
 	private HashSet<String> rolesRead;
 	private HashSet<String> rolesWrite;
 	private HashSet<String> rolesDelete;
-	private HashSet<String> rolesPermission;
+	private HashSet<String> rolesSecurity;
 	
 	public HashSet<String> getUsersRead() {
 		return usersRead;
@@ -63,19 +63,19 @@ public class NodePermissions implements Serializable {
 		this.rolesDelete = rolesDelete;
 	}
 
-	public HashSet<String> getUsersPermission() {
-		return usersPermission;
+	public HashSet<String> getUsersSecurity() {
+		return usersSecurity;
 	}
 
-	public void setUsersPermission(HashSet<String> usersPermission) {
-		this.usersPermission = usersPermission;
+	public void setUsersSecurity(HashSet<String> usersSecurity) {
+		this.usersSecurity = usersSecurity;
 	}
 
-	public HashSet<String> getRolesPermission() {
-		return rolesPermission;
+	public HashSet<String> getRolesSecurity() {
+		return rolesSecurity;
 	}
 
-	public void setRolesPermission(HashSet<String> rolesPermission) {
-		this.rolesPermission = rolesPermission;
+	public void setRolesSecurity(HashSet<String> rolesSecurity) {
+		this.rolesSecurity = rolesSecurity;
 	}
 }
