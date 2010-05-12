@@ -46,7 +46,7 @@ import com.openkm.ws.client.VirusDetectedException_Exception;
 
 public class Util {
 	private static Logger log = Logger.getLogger(Util.class.getName());
-	private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMDocumentService");
+	private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMDocumentService");
 
 	/**
 	 * 
