@@ -171,7 +171,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowListener 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		log.info("windowClosed: calling 'destroyScannerApplet'");
-		win.call("destroyScannerApplet", new Object[] {});
+		if (win != null) {
+			win.call("destroyScannerApplet", new Object[] {});
+		} else {
+			JOptionPane.showMessageDialog(null, "destroyScannerApplet", "JavaScript call",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	@Override
