@@ -291,8 +291,8 @@ public class OKMAccessManager implements AccessManager {
 							// Check for PERMISSION permissions
 							try {
 								access = checkProperties(node, 
-										com.openkm.bean.Permission.USERS_PERMISSION,
-										com.openkm.bean.Permission.ROLES_PERMISSION);
+										com.openkm.bean.Permission.USERS_SECURITY,
+										com.openkm.bean.Permission.ROLES_SECURITY);
 							} catch (PathNotFoundException e) {
 								log.debug("{} PropertyNotFoundException({}) in {}", new Object[] {
 										subject.getPrincipals(), e.getMessage(),
