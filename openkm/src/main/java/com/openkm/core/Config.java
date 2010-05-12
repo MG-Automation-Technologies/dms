@@ -211,7 +211,8 @@ public class Config {
 	private static String SYSTEM_LOGIN_LOWERCASE_STR = "off";
 	public static boolean SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 	
-	public static String UPDATE_INFO = "on";
+	private static String UPDATE_INFO_STR = "on";
+	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
 	public static String DEFAULT_LANG = "";
 	public static String USER_KEYWORDS_CACHE = "off";
@@ -363,7 +364,8 @@ public class Config {
 			SYSTEM_LOGIN_LOWERCASE_STR = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR);
 			SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 			
-			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
+			UPDATE_INFO_STR = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO_STR);
+			UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 			USER_KEYWORDS_CACHE = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE);
