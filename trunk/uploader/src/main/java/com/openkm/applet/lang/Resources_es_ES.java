@@ -25,7 +25,7 @@ public class Resources_es_ES extends Resources {
 	@Override
 	protected Object[][] getContents() {
 		return new Object[][] { 
-			{ "drag.here", "Arrastra ficheros aquí" }, 
+			{ "drag.here", "Arrastra aquí" }, 
 			{ "exit", "Salir" }
 		};
 	}

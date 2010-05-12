@@ -27,7 +27,7 @@ public class Resources extends ListResourceBundle {
 	@Override
 	protected Object[][] getContents() {
 		return new Object[][] { 
-			{ "drag.here", "Drag files here" }, 
+			{ "drag.here", "Drag here" }, 
 			{ "exit", "Exit" }
 		};
 	}

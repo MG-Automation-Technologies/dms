@@ -144,6 +144,10 @@ public class Util {
 	 * 
 	 */
 	 public static Locale parseLocaleString(String localeString) {
+		 if (localeString == null) {
+			 localeString = "en-GB";
+		 }
+		 
 		 String[] parts = localeString.split("-");
 		 String language = (parts.length > 0 ? parts[0] : "");
 		 String country = (parts.length > 1 ? parts[1] : "");
