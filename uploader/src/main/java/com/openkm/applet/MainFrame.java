@@ -365,7 +365,12 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 		@Override
 		public void windowClosed(WindowEvent we) {
 			log.info("windowClosed: calling 'destroyUploaderApplet'");
-			win.call("destroyUploaderApplet", new Object[] {});
+			if (win != null) {
+				win.call("destroyUploaderApplet", new Object[] {});
+			} else {
+				JOptionPane.showMessageDialog(null, "destroyUploaderApplet", "JavaScript call",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
 }
