@@ -208,7 +208,8 @@ public class Config {
 	public static String SYSTEM_IMG2PDF = "";
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
-	public static String SYSTEM_LOGIN_LOWERCASE = "off";
+	private static String SYSTEM_LOGIN_LOWERCASE_STR = "off";
+	public static boolean SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 	
 	public static String UPDATE_INFO = "on";
 	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
@@ -359,7 +360,8 @@ public class Config {
 			SYSTEM_IMG2PDF = config.getProperty(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
 			SYSTEM_PDF2SWF = config.getProperty(PROPERTY_SYSTEM_PDF2SWF, SYSTEM_PDF2SWF);
 			SYSTEM_ANTIVIR = config.getProperty(PROPERTY_SYSTEM_ANTIVIR, SYSTEM_ANTIVIR);
-			SYSTEM_LOGIN_LOWERCASE = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE);
+			SYSTEM_LOGIN_LOWERCASE_STR = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR);
+			SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 			
 			UPDATE_INFO = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO);
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);

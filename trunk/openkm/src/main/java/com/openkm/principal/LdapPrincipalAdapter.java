@@ -66,7 +66,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
 			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
-				if (Config.SYSTEM_LOGIN_LOWERCASE.equals("on")) {
+				if (Config.SYSTEM_LOGIN_LOWERCASE) {
 					user = user.toLowerCase();
 				}
 				
