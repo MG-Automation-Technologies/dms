@@ -23,8 +23,6 @@ package com.openkm.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,40 +32,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.kea.Term;
-import com.openkm.kea.RDFREpository;
-
 /**
- * Servlet Class
- * 
- * @web.servlet name="Test" display-name="Name for Test"
- *              description="Description for Test"
- * @web.servlet-mapping url-pattern="/Test"
+ * Only for testing purposes
  */
 public class TestServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(TestServlet.class);
-	private static final long serialVersionUID = 8388111332983911121L;
+	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
 		String token = (String)request.getSession().getAttribute("token");
-		
-		//KEATree.recursiveGenerateTree(null, 0, token, "/okm:root/borrar", new Vector<String>());
-		
-		List<Term> terms = RDFREpository.getInstance().getTerms();
-		
-		for (ListIterator<Term> it = terms.listIterator(); it.hasNext();) {
-			Term term = it.next();
-			log.info("id:"+term.getUid() + " text:" +term.getText());
-		}		
-		
 		PrintWriter out = response.getWriter();
 		log.info("Token: "+token);
 		out.println("Token: "+token);
 		response.setContentType("text/html");
 		
 		try {
-			// Dummy
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
