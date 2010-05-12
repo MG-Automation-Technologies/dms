@@ -53,7 +53,7 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("addCategory(" + token + ", " + nodePath + ", " + category + ")");
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -122,7 +122,7 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("removeCategory(" + token + ", " + nodePath + ", " + category + ")");
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -189,7 +189,7 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("addKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -257,7 +257,7 @@ public class DirectPropertyModule implements PropertyModule {
 		log.debug("removeKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 

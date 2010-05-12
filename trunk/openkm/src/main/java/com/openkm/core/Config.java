@@ -201,7 +201,8 @@ public class Config {
 	
 	private static String SYSTEM_DEMO_STR = "off";
 	public static boolean SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
-	public static String SYSTEM_READONLY = "off";
+	private static String SYSTEM_READONLY_STR = "off";
+	public static boolean SYSTEM_READONLY = "on".equalsIgnoreCase(SYSTEM_READONLY_STR);
 	public static String SYSTEM_OCR = "";
 	public static String SYSTEM_OPENOFFICE = "";
 	public static String SYSTEM_IMG2PDF = "";
@@ -351,7 +352,8 @@ public class Config {
 			
 			SYSTEM_DEMO_STR = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO_STR);
 			SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
-			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
+			SYSTEM_READONLY_STR = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY_STR);
+			SYSTEM_READONLY = "on".equalsIgnoreCase(SYSTEM_READONLY_STR);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
 			SYSTEM_IMG2PDF = config.getProperty(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);

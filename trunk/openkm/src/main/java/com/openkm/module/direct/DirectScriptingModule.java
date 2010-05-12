@@ -53,7 +53,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		Node node = null;
 		Node sNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -99,7 +99,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		Node node = null;
 		Node sNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 

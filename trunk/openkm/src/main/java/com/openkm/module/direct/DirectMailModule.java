@@ -115,7 +115,7 @@ public class DirectMailModule implements MailModule {
 		mail.setAttachments(attachments);
 		
 		// Get permissions
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			mail.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
@@ -203,7 +203,7 @@ public class DirectMailModule implements MailModule {
 		Mail newMail = null;
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -293,7 +293,7 @@ public class DirectMailModule implements MailModule {
 		log.debug("delete(" + token + ", " + mailPath + ")");
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -343,7 +343,7 @@ public class DirectMailModule implements MailModule {
 		log.debug("purge(" + token + ", " + mailPath + ")");
 		Node parentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -382,7 +382,7 @@ public class DirectMailModule implements MailModule {
 		Mail renamedMail = null;
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -442,7 +442,7 @@ public class DirectMailModule implements MailModule {
 		log.debug("move(" + token + ", " + mailPath + ", " + dstPath + ")");
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -525,7 +525,7 @@ public class DirectMailModule implements MailModule {
 		log.debug("copy(" + token + ", " + mailPath + ", " + dstPath + ")");
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		

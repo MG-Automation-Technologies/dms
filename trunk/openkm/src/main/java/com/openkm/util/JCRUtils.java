@@ -275,10 +275,10 @@ public class JCRUtils {
 		File backDir = new File(System.getProperty("java.io.tmpdir") + File.separator + backDirName);
 		FileUtils.deleteQuietly(backDir);
 		backDir.mkdir();
-		String oldSystemReadonly = Config.SYSTEM_READONLY; 
+		boolean oldSystemReadonly = Config.SYSTEM_READONLY; 
 
 		try {
-			Config.SYSTEM_READONLY = "on";
+			Config.SYSTEM_READONLY = true;
 			RepositoryCopier.copy((RepositoryImpl) DirectRepositoryModule.getRepository(), backDir);
 		} catch (javax.jcr.RepositoryException e) {
 			FileUtils.deleteQuietly(backDir);
