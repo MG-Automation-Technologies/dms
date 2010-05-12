@@ -246,6 +246,8 @@ public class DirectDocumentModule implements DocumentModule {
 		String[] usersWrite = JCRUtils.usrValue2String(usersWriteParent, session.getUserID());
 		Value[] usersDeleteParent = parentNode.getProperty(Permission.USERS_DELETE).getValues();
 		String[] usersDelete = JCRUtils.usrValue2String(usersDeleteParent, session.getUserID());
+		Value[] usersPermissionParent = parentNode.getProperty(Permission.USERS_PERMISSION).getValues();
+		String[] usersPermission = JCRUtils.usrValue2String(usersPermissionParent, session.getUserID());
 
 		Value[] rolesReadParent = parentNode.getProperty(Permission.ROLES_READ).getValues();
 		String[] rolesRead = JCRUtils.rolValue2String(rolesReadParent);
@@ -253,14 +255,18 @@ public class DirectDocumentModule implements DocumentModule {
 		String[] rolesWrite = JCRUtils.rolValue2String(rolesWriteParent);
 		Value[] rolesDeleteParent = parentNode.getProperty(Permission.ROLES_DELETE).getValues();
 		String[] rolesDelete = JCRUtils.rolValue2String(rolesDeleteParent);
+		Value[] rolesPermissionParent = parentNode.getProperty(Permission.ROLES_PERMISSION).getValues();
+		String[] rolesPermission = JCRUtils.rolValue2String(rolesPermissionParent);
 
 		// Set auth info
 		documentNode.setProperty(Permission.USERS_READ, usersRead);
 		documentNode.setProperty(Permission.USERS_WRITE, usersWrite);
 		documentNode.setProperty(Permission.USERS_DELETE, usersDelete);
+		documentNode.setProperty(Permission.USERS_PERMISSION, usersPermission);
 		documentNode.setProperty(Permission.ROLES_READ, rolesRead);
 		documentNode.setProperty(Permission.ROLES_WRITE, rolesWrite);
 		documentNode.setProperty(Permission.ROLES_DELETE, rolesDelete);
+		documentNode.setProperty(Permission.ROLES_PERMISSION, rolesPermission);
 
 		Node contentNode = documentNode.addNode(Document.CONTENT, Document.CONTENT_TYPE);
 		contentNode.setProperty(Document.SIZE, size);
