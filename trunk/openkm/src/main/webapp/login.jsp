@@ -73,7 +73,7 @@
     <div id="form">
       <form name="login" method="post" action="j_security_check" onsubmit="setCookie()">
         <label for="j_username">User</label><br/>
-        <input name="j_username" id="j_username" type="text" <%=(Config.SYSTEM_LOGIN_LOWERCASE.equals("on"))?"onkeyup=\"makeLowercase();\"":""%>/><br/><br/>
+        <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onkeyup=\"makeLowercase();\"":""%>/><br/><br/>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
         <% if (!FormatUtil.isMobile(request)) { %> 
@@ -97,7 +97,7 @@
     </div>
   </div>
 
-  <% if (Config.SYSTEM_DEMO.equalsIgnoreCase("on")) { %>
+  <% if (Config.SYSTEM_DEMO) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>
   <% } %>
   
