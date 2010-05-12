@@ -29,17 +29,17 @@ public class Permission implements Serializable {
 	public static final String USERS_READ = "okm:authUsersRead";
 	public static final String USERS_WRITE = "okm:authUsersWrite";
 	public static final String USERS_DELETE = "okm:authUsersDelete";
-	public static final String USERS_PERMISSION = "okm:authUsersPermission";
+	public static final String USERS_SECURITY = "okm:authUsersSecurity";
 	public static final String ROLES_READ = "okm:authRolesRead";
 	public static final String ROLES_WRITE = "okm:authRolesWrite";
 	public static final String ROLES_DELETE = "okm:authRolesDelete";
-	public static final String ROLES_PERMISSION = "okm:authRolesPermission";
+	public static final String ROLES_SECURITY = "okm:authRolesSecurity";
 	
 	public static final byte NONE = 0;
 	public static final byte READ = 1;
 	public static final byte WRITE = 2;
 	public static final byte DELETE = 4;
-	public static final byte PERMISSION = 8; 
+	public static final byte SECURITY = 8; 
 	
 	private String item;
 	private int permissions;
