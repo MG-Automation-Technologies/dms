@@ -21,6 +21,7 @@
 
 package com.openkm.webdav;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -41,6 +42,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -262,6 +264,13 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             	log.debug("CHECKIN");
             	contentNode.checkin();
             }
+            
+            // Remove pdf & preview from cache
+            Node documentNode = contentNode.getParent();
+            log.info("Delete: {}", Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf");
+            log.info("Delete: {}", Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf");
+			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
+			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
         } catch (RepositoryException e) {
             success = false;
             throw new IOException(e.getMessage());
@@ -308,6 +317,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             if (isCollection) {
                 return false;
             }
+            
             try {
                 contentNode.setProperty(JcrConstants.JCR_DATA, in);
             } finally {
@@ -376,7 +386,8 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         		parentNode = documentNode.getParent();
         		
         		// Basic document properties
-        		documentNode.setProperty(com.openkm.bean.Property.KEYWORDS, "");
+        		documentNode.setProperty(com.openkm.bean.Property.KEYWORDS, new String[]{});
+        		documentNode.setProperty(com.openkm.bean.Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
         		documentNode.setProperty(Document.AUTHOR, session.getUserID());
         		documentNode.setProperty(Document.NAME, documentNode.getName());
         		
