@@ -145,7 +145,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		mailAccount.setId(workspace.getImapID());
 		
 		// Disable user configuration modification in demo
-		if (!Config.SYSTEM_DEMO.equalsIgnoreCase("on")) {
+		if (!Config.SYSTEM_DEMO) {
 			try {
 				AuthDAO authDAO = AuthDAO.getInstance();
 				
@@ -173,7 +173,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	 */
 	public void deleteMailAccount(int id)  throws OKMException {
 		// Disable user configuration modification in demo
-		if (!Config.SYSTEM_DEMO.equalsIgnoreCase("on")) {
+		if (!Config.SYSTEM_DEMO) {
 			try {
 				AuthDAO authDAO = AuthDAO.getInstance();
 				authDAO.deleteMailAccount(id);

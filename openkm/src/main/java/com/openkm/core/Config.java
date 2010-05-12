@@ -185,7 +185,7 @@ public class Config {
 	private static String MAX_SEARCH_RESULTS_STR = "261006"; // Almost infinite
 	public static int MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
 	
-	public static String RESTRICT_FILE_MIME_STR = "off";
+	private static String RESTRICT_FILE_MIME_STR = "off";
 	public static boolean RESTRICT_FILE_MIME = "on".equalsIgnoreCase(RESTRICT_FILE_MIME_STR);
 	public static String RESTRICT_FILE_EXTENSION = "*~,*.bak";
 
@@ -199,7 +199,8 @@ public class Config {
 	public static String SUBSCRIPTION_TWITTER_PASSWORD = "";
 	public static String SUBSCRIPTION_TWITTER_STATUS = "OpenKM - $documentUrl - $documentPath - $userId - $eventType";
 	
-	public static String SYSTEM_DEMO = "off";
+	private static String SYSTEM_DEMO_STR = "off";
+	public static boolean SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
 	public static String SYSTEM_READONLY = "off";
 	public static String SYSTEM_OCR = "";
 	public static String SYSTEM_OPENOFFICE = "";
@@ -215,7 +216,7 @@ public class Config {
 	public static String USER_SIZE_CACHE = "off";
 	
 	// Wizard
-	public static String WIZARD_PROPERTY_GROUPS_STR = "";
+	private static String WIZARD_PROPERTY_GROUPS_STR = "";
 	public static String[] WIZARD_PROPERTY_GROUPS = WIZARD_PROPERTY_GROUPS_STR.split(",");
 	public static String WIZARD_KEYWORDS = "";
 	public static String WIZARD_CATEGORIES = "";
@@ -348,7 +349,8 @@ public class Config {
 			SUBSCRIPTION_TWITTER_PASSWORD = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_PASSWORD, SUBSCRIPTION_TWITTER_PASSWORD);
 			SUBSCRIPTION_TWITTER_STATUS = config.getProperty(PROPERTY_SUBSCRIPTION_TWITTER_STATUS, SUBSCRIPTION_TWITTER_STATUS);
 			
-			SYSTEM_DEMO = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO);
+			SYSTEM_DEMO_STR = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO_STR);
+			SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
 			SYSTEM_READONLY = config.getProperty(PROPERTY_SYSTEM_READONLY, SYSTEM_READONLY);
 			SYSTEM_OCR = config.getProperty(PROPERTY_SYSTEM_OCR, SYSTEM_OCR);
 			SYSTEM_OPENOFFICE = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE, SYSTEM_OPENOFFICE);
