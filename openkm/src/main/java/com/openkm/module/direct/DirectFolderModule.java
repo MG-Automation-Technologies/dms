@@ -99,7 +99,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		// Get permissions
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			fld.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
@@ -196,7 +196,7 @@ public class DirectFolderModule implements FolderModule {
 		Folder newFolder = null;
 		Node parentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -380,7 +380,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("purge(" + token + ", " + fldPath + ")");
 		Node parentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -469,7 +469,7 @@ public class DirectFolderModule implements FolderModule {
 		Folder renamedFolder = null;
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -529,7 +529,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("move(" + token + ", " + fldPath + ", " + dstPath + ")");
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -568,7 +568,7 @@ public class DirectFolderModule implements FolderModule {
 		log.debug("copy(" + token + ", " + fldPath + ", " + dstPath + ")");
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		

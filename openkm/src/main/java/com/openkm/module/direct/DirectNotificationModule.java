@@ -71,7 +71,7 @@ public class DirectNotificationModule implements NotificationModule {
 		Node node = null;
 		Node sNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -133,7 +133,7 @@ public class DirectNotificationModule implements NotificationModule {
 		Node node = null;
 		Node sNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 

@@ -143,7 +143,7 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		// Get permissions
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			doc.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
@@ -305,7 +305,7 @@ public class DirectDocumentModule implements DocumentModule {
 		Document newDocument = null;
 		Node parentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -440,7 +440,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("delete(" + token + ", " + docPath + ")");
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -592,7 +592,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setContent(" + token + ", " + docPath + ", " + is + ")");
 		Node contentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -677,7 +677,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.info("addNote(" + token + ", " + docPath + ", " + text + ")");
 		Node notesNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -757,7 +757,7 @@ public class DirectDocumentModule implements DocumentModule {
 		Document renamedDocument = null;
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -817,7 +817,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("setProperties(" + token + ", " + doc + ")");
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -874,7 +874,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("checkout(" + token + ", " + docPath + ")");
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -925,7 +925,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1002,7 +1002,7 @@ public class DirectDocumentModule implements DocumentModule {
 		Node contentNode = null;
 		Transaction t = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1142,7 +1142,7 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, PathNotFoundException, LockException {
 		log.debug("lock(" + token + ", " + docPath + ")");
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1181,7 +1181,7 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, PathNotFoundException, LockException {
 		log.debug("unlock(" + token + ", " + docPath + ")");
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1282,7 +1282,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("purge(" + token + ", " + docPath + ")");
 		Node parentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1391,7 +1391,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("move(" + token + ", " + docPath + ", " + dstPath + ")");
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -1431,7 +1431,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("copy(" + token + ", " + docPath + ", " + dstPath + ")");
 		Node dstFolderNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1493,7 +1493,7 @@ public class DirectDocumentModule implements DocumentModule {
 		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
 		Node contentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -1531,7 +1531,7 @@ public class DirectDocumentModule implements DocumentModule {
 			RepositoryException, PathNotFoundException {
 		log.debug("purgeVersionHistory("+token+", "+docPath+")");
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 

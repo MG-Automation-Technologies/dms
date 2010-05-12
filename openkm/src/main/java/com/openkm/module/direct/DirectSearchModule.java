@@ -473,7 +473,7 @@ public class DirectSearchModule implements SearchModule {
 			AccessDeniedException, ItemExistsException, RepositoryException {
 		log.debug("saveSearch("+token+", "+params+", "+name+")");
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -655,7 +655,7 @@ public class DirectSearchModule implements SearchModule {
 			PathNotFoundException, RepositoryException {
 		log.debug("deleteSearch("+token+", "+name+")");
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		

@@ -55,7 +55,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -98,7 +98,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			RepositoryException {
 		log.debug("remove({}, {})", token, name);
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -133,7 +133,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		Bookmark renamedBookmark = null;
 		Session session = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
@@ -213,7 +213,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		log.debug("setUserHome({}, {})", token, nodePath);
 		Node userConfig = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		

@@ -66,7 +66,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -113,7 +113,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
@@ -277,7 +277,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		

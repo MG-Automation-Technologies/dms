@@ -671,7 +671,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		log.debug("purgeTrash("+token+")");
 		Node userTrash = null;
 		
-		if (Config.SYSTEM_READONLY.equals("on")) {
+		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
