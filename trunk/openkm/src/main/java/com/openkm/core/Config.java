@@ -216,9 +216,10 @@ public class Config {
 	public static String USER_SIZE_CACHE = "off";
 	
 	// Wizard
-	public static String WIZARD_PROPERTY_GROUPS = "off";
-	public static String WIZARD_KEYWORDS = "off";
-	public static String WIZARD_CATEGORIES = "off";
+	public static String WIZARD_PROPERTY_GROUPS_STR = "";
+	public static String[] WIZARD_PROPERTY_GROUPS = WIZARD_PROPERTY_GROUPS_STR.split(",");
+	public static String WIZARD_KEYWORDS = "";
+	public static String WIZARD_CATEGORIES = "";
 	
 	// Schedule
 	private static String SCHEDULE_REPOSITORY_INFO_STR = "86400"; // 24*60*60 = 24 hours
@@ -362,7 +363,8 @@ public class Config {
 			USER_SIZE_CACHE = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE);
 			
 			// Wizard
-			WIZARD_PROPERTY_GROUPS = config.getProperty(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS);
+			WIZARD_PROPERTY_GROUPS_STR = config.getProperty(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS_STR);
+			WIZARD_PROPERTY_GROUPS = WIZARD_PROPERTY_GROUPS_STR.split(","); 
 			WIZARD_KEYWORDS = config.getProperty(PROPERTY_WIZARD_KEYWORDS, WIZARD_KEYWORDS);
 			WIZARD_CATEGORIES = config.getProperty(PROPERTY_WIZARD_CATEGORIES, WIZARD_CATEGORIES);
 			
