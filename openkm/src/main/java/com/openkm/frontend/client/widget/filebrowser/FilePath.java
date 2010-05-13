@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
@@ -83,14 +84,14 @@ public class FilePath  extends Composite {
 	/**
 	 * Gets ayncronous root node
 	 */
-	final AsyncCallback<String> callbackGetRootNode = new AsyncCallback<String>() {
-		public void onSuccess(String result) {
+	final AsyncCallback<GWTFolder> callbackGetRootFolder = new AsyncCallback<GWTFolder>() {
+		public void onSuccess(GWTFolder result) {
 			//Only executes on initalization to get root path node
-			setPath(result);
+			setPath(result.getPath());
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetRootNode", caught);
+			Main.get().showError("GetRootFolder", caught);
 		}
 	};
 	
@@ -100,6 +101,6 @@ public class FilePath  extends Composite {
 	public void getRootPath() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getRootPath(callbackGetRootNode);
+		repositoryService.getRootFolder(callbackGetRootFolder);
 	}	
 }
