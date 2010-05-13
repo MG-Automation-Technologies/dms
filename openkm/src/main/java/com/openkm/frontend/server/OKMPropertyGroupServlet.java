@@ -333,7 +333,22 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	/* (non-Javadoc)
 	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getPropertyGroupWizard()
 	 */
-	public String[] getPropertyGroupWizard() {
-		return Config.WIZARD_PROPERTY_GROUPS;
+	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException {
+		
+		List<GWTPropertyGroup> allPropertyGroupList = getAllGroups();
+		List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
+		
+		for (int i=0; i<Config.WIZARD_PROPERTY_GROUPS.length; i++) {
+			String propertyGroup = Config.WIZARD_PROPERTY_GROUPS[i];
+			for (Iterator<GWTPropertyGroup> it = allPropertyGroupList.iterator(); it.hasNext();) {
+				GWTPropertyGroup gWTPropertyGroup = it.next();
+				if (gWTPropertyGroup.getName().equals(propertyGroup)) {
+					wizardPropertyGroupsList.add(gWTPropertyGroup);
+					break;
+				}
+			}
+		}
+		
+		return wizardPropertyGroupsList;
 	}
 }

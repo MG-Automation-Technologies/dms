@@ -91,10 +91,10 @@ public class PropertyGroupWidget extends Composite {
 		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
 
 		table.setWidth("100%");
-		
+
 		table.setWidget(0, 0, widget);
 		table.getFlexCellFormatter().setColSpan(0,0,2);
-		
+			
 		// Widget format
 		table.getCellFormatter().setHorizontalAlignment(0,0,HasAlignment.ALIGN_CENTER);
 		table.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_MIDDLE);
@@ -103,7 +103,7 @@ public class PropertyGroupWidget extends Composite {
 		rowFormatter.setStyleName(0, "okm-Security-Title");
 		
 		cellFormatter = table.getCellFormatter(); // Gets the cell formatter
-		
+			
 		// Format borders and margins
 		cellFormatter.addStyleName(0,0,"okm-Security-Title-RightBorder");
 		
@@ -402,14 +402,12 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
-			//Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
 			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedSetProperties();
 			}
 		}
 
 		public void onFailure(Throwable caught) {
-			//Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
 			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedSetProperties();
 			}
@@ -595,7 +593,6 @@ public class PropertyGroupWidget extends Composite {
 				rows ++;
 			}
 		}
-		//Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.setProperties(docPath, grpName, hSaveProperties, callbackSetProperties);
