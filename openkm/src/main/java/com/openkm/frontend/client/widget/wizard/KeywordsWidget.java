@@ -190,10 +190,12 @@ public class KeywordsWidget extends Composite {
 			keywordList.add(keyword);
 		}
 		
+		table.setStyleName("okm-DisableSelect");
 		suggestKey.setStyleName("okm-KeyMap-Suggest");
 		suggestKey.addStyleName("okm-Input");
 		hKeyPanel.setStylePrimaryName("okm-cloudWrap");
 		keywordsCloud.setStylePrimaryName("okm-cloudWrap");
+		thesaurusImage.addStyleName("okm-Hyperlink");
 		
 		initWidget(table);
 	}

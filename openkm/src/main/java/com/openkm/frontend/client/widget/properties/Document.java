@@ -83,7 +83,8 @@ import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 public class Document extends Composite {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
-	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);
+	
+	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);	
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
 	private FlexTable tableSubscribedCategories;
