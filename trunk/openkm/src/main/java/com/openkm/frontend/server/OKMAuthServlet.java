@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.LoginException;
 import javax.jcr.Session;
 
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.util.RoleComparator;
 import com.openkm.frontend.client.util.UserComparator;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 /**
@@ -62,9 +64,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	private static Logger log = LoggerFactory.getLogger(OKMAuthServlet.class);
 	private static final long serialVersionUID = 2638205115826644606L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#logout()
-	 */
+	@Override
 	public void logout() throws OKMException {
 		log.debug("logout()");
 		
@@ -87,12 +87,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("logout: void");
 	}
 	
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getGrantedRoles(java.lang.String)
-	 */
+	@Override
 	public HashMap<String, Byte> getGrantedRoles(String nodePath) throws OKMException {
-		log.debug("getGrantedRoles("+nodePath+")");
+		log.debug("getGrantedRoles({})", nodePath);
 		
 		String token = getToken();
 		HashMap<String, Byte> hm = new HashMap<String, Byte>();
@@ -112,16 +109,14 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getGrantedRoles: "+hm);
+		log.debug("getGrantedRoles: {}", hm);
 		
 		return hm;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getGrantedUsers(java.lang.String)
-	 */
+	@Override
 	public HashMap<String, Byte> getGrantedUsers(String nodePath) throws OKMException {
-		log.debug("getGrantedUsers("+nodePath+")");
+		log.debug("getGrantedUsers({})", nodePath);
 		String token = getToken();
 		HashMap<String, Byte> hm = new HashMap<String, Byte>();
 		
@@ -142,26 +137,22 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		}
 
 		
-		log.debug("getGrantedUsers: "+hm);
+		log.debug("getGrantedUsers: {}", hm);
 		return hm;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getRemoteUser()
-	 */
+	@Override
 	public String getRemoteUser() {
 		log.debug("getRemoteUser()");
 		String user = getThreadLocalRequest().getRemoteUser();
 		
-		log.debug("getRemoteUser: "+user);
+		log.debug("getRemoteUser: {}", user);
 		return user;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getUngrantedUsers(java.lang.String)
-	 */
+	@Override
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException {
-		log.debug("getUngrantedUsers("+ nodePath +")");
+		log.debug("getUngrantedUsers({})", nodePath);
 		List<String> userList = new ArrayList<String>(); 
 		String token = getToken();
 		Map<String,Byte> hm = new HashMap<String,Byte> ();
@@ -201,15 +192,13 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getUngrantedUsers: "+userList);
+		log.debug("getUngrantedUsers: {}", userList);
 		return userList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getUngrantedRoles(java.lang.String)
-	 */
+	@Override
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException {
-		log.debug("getUngrantedRoles("+ nodePath +")");
+		log.debug("getUngrantedRoles({})", nodePath);
 		List<String> roleList = new ArrayList<String>(); 
 		String token = getToken();
 		HashMap<String,Byte>  hm = new HashMap<String,Byte> ();
@@ -254,15 +243,13 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 
-		log.debug("getUngrantedRoles: "+roleList);
+		log.debug("getUngrantedRoles: {}", roleList);
 		return roleList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#grantUser(java.lang.String, java.lang.String, int)
-	 */
+	@Override
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException {
-		log.debug("grantUser("+ path +","+ user +","+ permissions +")");
+		log.debug("grantUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
 		String token = getToken();
 		
 		try {
@@ -284,11 +271,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("grantUser: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#removeUser(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException {
-		log.debug("revokeUser("+ path +","+ user +")");
+		log.debug("revokeUser({}, {}, {})", new Object[] { path, user, recursive });
 		String token = getToken();
 		OKMAuth oKMAuth = OKMAuth.getInstance();
 		
@@ -313,12 +298,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("revokeUser: void");
 	}
 	
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#revokeUser(java.lang.String, java.lang.String, int)
-	 */
+	@Override
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException {
-		log.debug("revokeUser("+ path +","+ user +","+ permissions +")");
+		log.debug("revokeUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
 		String token = getToken();
 		
 		try {
@@ -339,12 +321,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 
 		log.debug("revokeUser: void");
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#grantRole(java.lang.String, java.lang.String, int)
-	 */
+		
+	@Override
 	public void grantRole(String path, String role, int permissions, boolean recursive) throws OKMException  {
-		log.debug("grantRole("+ path +","+ role +","+ permissions +")");
+		log.debug("grantRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
 		String token = getToken();
 		
 		try {
@@ -366,11 +346,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("grantRole: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#removeRole(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void revokeRole(String path, String role, boolean recursive) throws OKMException {
-		log.debug("revokeRole("+ path +","+ role +")");
+		log.debug("revokeRole({}, {}, {})", new Object[] { path, role, recursive });
 		String token = getToken();
 		OKMAuth oKMAuth = OKMAuth.getInstance();
 		
@@ -397,11 +375,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("revokeRole: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#revokeRole(java.lang.String, java.lang.String, int)
-	 */
+	@Override
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException {
-		log.debug("revokeRole("+ path +","+ role +","+ permissions +")");
+		log.debug("revokeRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
 		String token = getToken();
 		
 		try {
@@ -425,23 +401,35 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("revokeRole: void");
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#keepAlive()
-	 */
+	@Override
 	public void keepAlive() throws OKMException {
 		log.debug("keepAlive()");
 		String token = getToken();
-		Session session = SessionManager.getInstance().get(token);
-		
-		// Activity log
-		UserActivity.log(session, "KEEP_ALIVE", null, null);
+		Session session = null;
+						
+		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
+			// Activity log
+			UserActivity.log(session, "KEEP_ALIVE", null, null);
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+		}
+				
 		log.debug("keepAlive: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMAuthService#getAllUsers()
-	 */
+	@Override
 	public List<String> getAllUsers() throws OKMException {
 		log.debug("getAllUsers()");
 		String token = getToken();
@@ -463,7 +451,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getAllUsers: "+userList);
+		log.debug("getAllUsers: {}", userList);
 		return userList;
 	}
 }
