@@ -53,6 +53,11 @@ import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 public class ThesaurusSelectPopup extends DialogBox  {	
 	
 	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
+	
+	public static final int NONE 				= -1;
+	public static final int DOCUMENT_PROPERTIES = 0;
+	public static final int WIZARD			 	= 1;
+	
 	private final int TAB_TREE 		= 0;
 	private final int TAB_KEYWORDS 	= 1;
 	
@@ -71,7 +76,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	public TabPanel tabPanel;
 	private int selectedRow = -1;
 	private int selectedTab = TAB_TREE;
-	
+	private int selectedFrom = NONE;
 	
 	public ThesaurusSelectPopup() {
 		// Establishes auto-close when click outside
@@ -192,8 +197,16 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	 */
 	public void executeAction(String actualPath) {
 		String keyword = actualPath.substring(actualPath.lastIndexOf("/")+1).replace(" ", "_");
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeywordToPendinList(keyword);
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addPendingKeyWordsList();
+		switch (selectedFrom) {
+			case DOCUMENT_PROPERTIES:
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeywordToPendinList(keyword);
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addPendingKeyWordsList();
+				break;
+			case WIZARD:
+				Main.get().wizardPopup.keywordsWidget.addKeywordToPendinList(keyword);
+				Main.get().wizardPopup.keywordsWidget.addPendingKeyWordsList();
+				break;
+		}
 	}
 	
 	/**
@@ -220,7 +233,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	/**
 	 * Shows the popup 
 	 */
-	public void show(){
+	public void show(int selectedFrom){
+		this.selectedFrom = selectedFrom;
 		initButtons();
 		int left = (Window.getClientWidth()-300) / 2;
 		int top = (Window.getClientHeight()-225) / 2;
@@ -232,7 +246,7 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		removeAllRows();
 		keyword.setText("");
 		evaluateEnableAction();
-		super.show();
+		center();
 	}
 	
 	/**

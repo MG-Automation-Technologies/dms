@@ -70,6 +70,7 @@ public class WizardPopup extends DialogBox {
 	private PropertyGroupWidget propertyGroupWidget = null;
 	private int status = STATUS_NONE;
 	private Button actualButton;
+	public KeywordsWidget keywordsWidget;
 	
 	/**
 	 * WizardPopup
@@ -310,7 +311,7 @@ public class WizardPopup extends DialogBox {
 	 */
 	private void setKeywords() {
 		// To be implemented
-		KeywordsWidget keywordsWidget = new KeywordsWidget(docPath, new HTML(Main.i18n("document.keywords")));
+		keywordsWidget = new KeywordsWidget(docPath, new HTML(Main.i18n("document.keywords")));
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		HTML space = new HTML("");
