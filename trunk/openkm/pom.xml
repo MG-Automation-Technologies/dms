@@ -145,6 +145,12 @@
       <version>1.4.1</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-annotations-ejb3</artifactId>
+      <version>4.2.3.GA</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Misc -->
     <dependency>
@@ -213,6 +219,11 @@
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-jcr-server</artifactId>
       <version>${jcr.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr-servlet</artifactId>
+      <version>1.5.2</version>
     </dependency>
 
     <!-- Twitter4j -->
