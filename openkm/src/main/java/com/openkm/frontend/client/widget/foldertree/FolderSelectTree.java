@@ -123,7 +123,7 @@ public class FolderSelectTree extends Composite {
 			
 			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
-				getCategories();
+				getCategoriesFolder();
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TEMPLATES :
@@ -135,7 +135,7 @@ public class FolderSelectTree extends Composite {
 					
 					default:
 						Main.get().activeFolderTree.folderSelectPopup.enableTemplates();
-						getTemplate();
+						getTemplatesFolder();
 						break;
 				}
 				
@@ -173,12 +173,12 @@ public class FolderSelectTree extends Composite {
 				
 			case PanelDefinition.NAVIGATOR_CATEGORIES :
 				Main.get().activeFolderTree.folderSelectPopup.enableCategories();
-				getTemplate();
+				getTemplatesFolder();
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TEMPLATES :
 				Main.get().activeFolderTree.folderSelectPopup.enableTemplates();
-				getTemplate();
+				getTemplatesFolder();
 				break;
 			
 			case PanelDefinition.NAVIGATOR_PERSONAL :
@@ -246,7 +246,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetRootFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -285,13 +285,13 @@ public class FolderSelectTree extends Composite {
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getRoot(callbackGetRoot);
+		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetTemplate = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetTemplatesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -317,7 +317,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetMail = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetMailFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -344,7 +344,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous personal documents node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetPersonal = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetPersonalFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -370,7 +370,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous gategories documents node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetCategoriesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -399,26 +399,26 @@ public class FolderSelectTree extends Composite {
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getPersonal(callbackGetPersonal);
+		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
 	/**
 	 * Gets the categories documents
 	 */
-	public void getCategories() {
+	public void getCategoriesFolder() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getCategories(callbackGetCategories);
+		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}				
 	
 	
 	/**
 	 * Gets the template
 	 */
-	public void getTemplate() {
+	public void getTemplatesFolder() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getTemplate(callbackGetTemplate);
+		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
 	/**
@@ -427,7 +427,7 @@ public class FolderSelectTree extends Composite {
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getMail(callbackGetMail);
+		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
 	/**
