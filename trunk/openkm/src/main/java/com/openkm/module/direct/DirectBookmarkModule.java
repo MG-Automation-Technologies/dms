@@ -54,13 +54,19 @@ public class DirectBookmarkModule implements BookmarkModule {
 			PathNotFoundException, ItemExistsException, RepositoryException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node rootNode = session.getRootNode();
 			Node userBookmarkList = rootNode.getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 			Node node = rootNode.getNode(nodePath.substring(1));
@@ -87,6 +93,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("add: {}", newBookmark);
@@ -97,13 +107,19 @@ public class DirectBookmarkModule implements BookmarkModule {
 	public void remove(String token, String name) throws AccessDeniedException, PathNotFoundException,
 			RepositoryException {
 		log.debug("remove({}, {})", token, name);
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 
 			// Escape dangerous chars in name
@@ -121,6 +137,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("remove: void");
@@ -138,7 +158,12 @@ public class DirectBookmarkModule implements BookmarkModule {
 		}
 
 		try {
-			session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 
 			// Escape dangerous chars in name
@@ -175,6 +200,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("rename: {}", renamedBookmark);
@@ -185,9 +214,15 @@ public class DirectBookmarkModule implements BookmarkModule {
 	public Collection<Bookmark> getAll(String token) throws RepositoryException {
 		log.debug("getAll({})", token);
 		Collection<Bookmark> ret = new ArrayList<Bookmark>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 
 			for (NodeIterator it = userBookmarkList.getNodes(); it.hasNext(); ) {
@@ -201,6 +236,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getAll: {}", ret);
@@ -212,13 +251,19 @@ public class DirectBookmarkModule implements BookmarkModule {
 			RepositoryException {
 		log.debug("setUserHome({}, {})", token, nodePath);
 		Node userConfig = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node rootNode = session.getRootNode();
 			userConfig = rootNode.getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
 			Node node = rootNode.getNode(nodePath.substring(1));
@@ -231,6 +276,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(userConfig);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("setUserHome: void");
@@ -240,9 +289,15 @@ public class DirectBookmarkModule implements BookmarkModule {
 	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
 		log.debug("getUserHome({})", token);
 		Bookmark ret = new Bookmark();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+
 					session.getUserID()+"/"+Repository.USER_CONFIG);
 			ret.setName(Bookmark.HOME_PATH);
@@ -254,6 +309,10 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getUserHome: {}", ret);
@@ -282,9 +341,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Get node type
 	 */
 	private String getNodeType(Node node) throws javax.jcr.RepositoryException  {
 		String ret = "unknown";
