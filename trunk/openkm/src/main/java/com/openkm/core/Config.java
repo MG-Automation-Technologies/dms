@@ -43,7 +43,7 @@ public class Config {
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
 	public static final String TMP_DIR = getTempDir();
-	public static final boolean IN_SERVER = inServer(); 
+	public static final boolean IN_SERVER = inServer();
 	
 	// Preview cache
 	public static final String PDF_CACHE = HOME_DIR+File.separator+"cache"+File.separator+"pdf";
@@ -51,7 +51,10 @@ public class Config {
 	
 	// Multihost
 	public static String INSTALL = "";
-
+	
+	// Session management
+	public static final boolean SESSION_MANAGER = false;
+	
 	// Configuration files
 	public static String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static String MIME_FILE = "mime.types";
