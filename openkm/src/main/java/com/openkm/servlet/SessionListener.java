@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.SessionInfo;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.direct.DirectAuthModule;
@@ -46,30 +47,26 @@ import com.openkm.util.UserActivity;
 public class SessionListener implements HttpSessionListener {
 	private static Logger log = LoggerFactory.getLogger(SessionListener.class);
 	
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpSessionListener#sessionCreated(javax.servlet.http.HttpSessionEvent)
-	 */
+	@Override
 	public void sessionCreated(HttpSessionEvent se) {
 		log.debug("New session created on "+new Date()+" with id "+se.getSession().getId());
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpSessionListener#sessionDestroyed(javax.servlet.http.HttpSessionEvent)
-	 */
+	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		log.debug("Session destroyed on "+new Date()+" with id "+se.getSession().getId());
 		
 		try {
-			SessionManager sm = SessionManager.getInstance();
-			String token = (String) se.getSession().getAttribute("token");
-			SessionInfo si = sm.getInfo(token);
-			
-			if (si != null) {
-				// Activity log
-				Session system = DirectRepositoryModule.getSystemSession();
-				UserActivity.log(system, "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
-			
-				new DirectAuthModule().logout(token);
+			if (Config.SESSION_MANAGER) {
+				String token = (String) se.getSession().getAttribute("token");
+				SessionInfo si = SessionManager.getInstance().getInfo(token);
+				
+				if (si != null) {
+					// Activity log
+					Session system = DirectRepositoryModule.getSystemSession();
+					UserActivity.log(system, "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
+					new DirectAuthModule().logout(token);
+				}
 			}
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
