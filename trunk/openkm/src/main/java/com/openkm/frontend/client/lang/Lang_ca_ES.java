@@ -1,5 +1,5 @@
 /**
- *  OpenKM, Open Document Management System (http://www.openkm.com)
+*  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
  *
  *  No bytes were intentionally harmed during the development of this application.
@@ -316,6 +316,7 @@ public class Lang_ca_ES {
 	    lang.put("folder.subscribed.yes", "Si");
 	    lang.put("folder.subscribed.no", "No");
 	    lang.put("folder.subscribed.users", "Usuaris subscrits");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -451,6 +452,7 @@ public class Lang_ca_ES {
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Sel.leciona");
 	    lang.put("button.test", "Comprovar");
+	    lang.put("button.next", "Següent");
 	    
 	    // Group
 	    lang.put("group.label", "Afegeix grup de propietats");
@@ -594,6 +596,9 @@ public class Lang_ca_ES {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Afegir una categoria");
 	    lang.put("categories.folder.error.delete", "No es pot eliminar una categoria amb documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Assistent de document");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");

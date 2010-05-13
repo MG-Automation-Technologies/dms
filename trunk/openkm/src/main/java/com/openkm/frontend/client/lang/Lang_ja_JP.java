@@ -316,6 +316,7 @@ public class Lang_ja_JP {
 		lang.put("folder.subscribed.yes", "はい");
 		lang.put("folder.subscribed.no", "いいえ");
 		lang.put("folder.subscribed.users", "認証ユーザ");
+		lang.put("folder.url", "URL");
 		lang.put("folder.webdav", "WebDAV");
 		
 		// Version
@@ -450,6 +451,7 @@ public class Lang_ja_JP {
 		lang.put("button.start", "Start");
 		lang.put("button.select", "Select");
 		lang.put("button.test", "Test");
+		lang.put("button.next", "Next");
 		
 		// Group
 		lang.put("group.label", "Add property group");
@@ -593,6 +595,9 @@ public class Lang_ja_JP {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 		// Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文書へのアクセスが拒否されました");

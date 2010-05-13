@@ -316,6 +316,7 @@ public class Lang_es_ES {
 	    lang.put("folder.subscribed.yes", "Sí");
 	    lang.put("folder.subscribed.no", "No");
 	    lang.put("folder.subscribed.users", "Usuarios suscritos");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -331,11 +332,11 @@ public class Lang_es_ES {
 	    lang.put("security.group.name", "Grupo");
 	    lang.put("security.group.permission.read", "Lectura");
 	    lang.put("security.group.permission.write", "Escritura");
-	    lang.put("security.group.permission.delete", "Eliminar");
+	    lang.put("security.group.permission.delete", "Borrado");
 	    lang.put("security.user.name", "Usuario");
 	    lang.put("security.user.permission.read", "Lectura");
 	    lang.put("security.user.permission.write", "Escritura");
-	    lang.put("security.user.permission.delete", "Eliminar");
+	    lang.put("security.user.permission.delete", "Borrado");
 	    lang.put("security.users", "Usuarios");
 	    lang.put("security.groups", "Grupos");
 	    lang.put("security.recursive", "Aplicar cambios de forma recursiva");
@@ -450,6 +451,7 @@ public class Lang_es_ES {
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Seleccionar");
 	    lang.put("button.test", "Comprobar");
+	    lang.put("button.next", "Siguiente");
 	    
 	    // Group
 	    lang.put("group.label", "Añadir grupo de propiedad");
@@ -593,6 +595,9 @@ public class Lang_es_ES {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Añadir categoría");
 	    lang.put("categories.folder.error.delete", "No se puede eliminar una categoría con documentos");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Asistente de documento");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

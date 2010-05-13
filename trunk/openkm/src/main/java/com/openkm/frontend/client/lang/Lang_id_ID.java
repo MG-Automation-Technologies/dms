@@ -316,6 +316,7 @@ public class Lang_id_ID {
 	    lang.put("folder.subscribed.yes", "Ya");
 	    lang.put("folder.subscribed.no", "Tidak");
 	    lang.put("folder.subscribed.users", "User tersubskripsi");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_id_ID {
 	    lang.put("button.start", "Menstart");
 	    lang.put("button.select", "Pilih");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Tambah grup properti");
@@ -593,6 +595,9 @@ public class Lang_id_ID {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Tambah kategori");
 	    lang.put("categories.folder.error.delete", "Tak bisa hapus kategori yang ada dokumennya");
+
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Akses Dokumen ditolak");

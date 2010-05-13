@@ -316,6 +316,7 @@ public class Lang_bs_BA {
 	    lang.put("folder.subscribed.yes", "Da");
 	    lang.put("folder.subscribed.no", "Ne");
 	    lang.put("folder.subscribed.users", "Potpisani korisnici");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -451,6 +452,7 @@ public class Lang_bs_BA {
 	    lang.put("button.start", "Počni");
 	    lang.put("button.select", "Izaberi");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Dodaj grupu vlasništva");
@@ -594,6 +596,9 @@ public class Lang_bs_BA {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Prisup dokumentima odbijen");

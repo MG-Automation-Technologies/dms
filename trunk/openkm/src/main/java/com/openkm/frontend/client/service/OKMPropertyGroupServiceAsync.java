@@ -42,4 +42,5 @@ public interface OKMPropertyGroupServiceAsync {
 	public void getMetaData(String grpName, AsyncCallback<Collection<GWTFormElement>> callback);
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties, AsyncCallback<?> callback);
 	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
+	public void getPropertyGroupWizard(AsyncCallback<String[]> callback);
 }

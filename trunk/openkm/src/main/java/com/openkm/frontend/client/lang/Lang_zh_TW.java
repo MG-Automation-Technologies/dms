@@ -315,6 +315,7 @@ public class Lang_zh_TW {
 	    lang.put("folder.subscribed.yes", "是");
 	    lang.put("folder.subscribed.no", "否");
 		lang.put("folder.subscribed.users", "已訂閱使用者");
+		lang.put("folder.url", "URL");
 		lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -448,6 +449,7 @@ public class Lang_zh_TW {
 	    lang.put("button.start", "開始");
 	    lang.put("button.select", "Select");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "新增屬性群組");
@@ -591,6 +593,9 @@ public class Lang_zh_TW {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");

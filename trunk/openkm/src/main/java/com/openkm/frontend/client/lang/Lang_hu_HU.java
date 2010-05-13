@@ -316,6 +316,7 @@ public class Lang_hu_HU {
 	    lang.put("folder.subscribed.yes", "Igen");
 	    lang.put("folder.subscribed.no", "Nem");
 	    lang.put("folder.subscribed.users", "Változásokról értesített felhasználók");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_hu_HU {
 	    lang.put("button.start", "Indítás");
 	    lang.put("button.select", "Select");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Tulajdonság hozzáadása");
@@ -593,6 +595,9 @@ public class Lang_hu_HU {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "A dokumentum nem hozzáférhető");

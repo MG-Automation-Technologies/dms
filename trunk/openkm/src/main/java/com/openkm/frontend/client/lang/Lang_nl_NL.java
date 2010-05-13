@@ -317,6 +317,7 @@ public class Lang_nl_NL {
 	    lang.put("folder.subscribed.yes", "Yes");
 	    lang.put("folder.subscribed.no", "No");
 	    lang.put("folder.subscribed.users", "Subscribed users");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -451,6 +452,7 @@ public class Lang_nl_NL {
 	    lang.put("button.start", "Start");
 	    lang.put("button.select", "Selecteer");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Property groep toevoegen");
@@ -594,6 +596,9 @@ public class Lang_nl_NL {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Bestand toegang geweigerd");

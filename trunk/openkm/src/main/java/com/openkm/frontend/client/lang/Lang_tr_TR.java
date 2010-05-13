@@ -316,6 +316,7 @@ public class Lang_tr_TR {
 	    lang.put("folder.subscribed.yes", "Evet");
 	    lang.put("folder.subscribed.no", "Hayýr");
 	    lang.put("folder.subscribed.users", "Onaylanmýþ Kullanýcýlar");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_tr_TR {
 	    lang.put("button.start", "Start");
 	    lang.put("button.select", "Select");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Özel Grup Ekle");
@@ -593,6 +595,9 @@ public class Lang_tr_TR {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Dokümana Ýþlemi engellendi");
