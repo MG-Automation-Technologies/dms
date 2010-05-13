@@ -49,12 +49,12 @@ public class SessionListener implements HttpSessionListener {
 	
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
-		log.debug("New session created on "+new Date()+" with id "+se.getSession().getId());
+		log.debug("New session created on {} with id {}", new Date(), se.getSession().getId());
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
-		log.debug("Session destroyed on "+new Date()+" with id "+se.getSession().getId());
+		log.debug("Session destroyed on {} with id {}", new Date(), se.getSession().getId());
 		
 		try {
 			if (Config.SESSION_MANAGER) {
