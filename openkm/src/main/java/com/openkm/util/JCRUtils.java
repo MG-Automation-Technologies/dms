@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -57,6 +56,7 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.FileSizeExceededException;
@@ -65,6 +65,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 
 public class JCRUtils {
@@ -209,8 +210,80 @@ public class JCRUtils {
 	}
 	
 	/**
-	 * @param id
-	 * @return
+	 * Make a silent logout
+	 */
+	public static void logout(Session session) {
+		if (session != null) {
+			session.logout();
+		}
+	}
+	
+	/**
+	 * Add lock token to user data
+	 */
+	public static void addLockToken(Session session, Node node) throws javax.jcr.PathNotFoundException, 
+			javax.jcr.RepositoryException {
+		log.debug("addLockToken({}, {})", session, node);
+		Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
+		String lockToken = getLockToken(node.getUUID());
+		
+		synchronized (userConfig) {
+			Value[] property = userConfig.getProperty(Repository.LOCK_TOKENS).getValues();
+			Value[] newProperty = new Value[property.length+1];
+			boolean alreadyAdded = false;
+			
+			for (int i=0; i<property.length; i++) {
+				newProperty[i] = property[i];
+				
+				if (property[i].equals(lockToken)) {
+					alreadyAdded = true;
+				}
+			}
+			
+			if (!alreadyAdded) {
+				newProperty[newProperty.length-1] = session.getValueFactory().createValue(lockToken);
+				userConfig.setProperty(Repository.LOCK_TOKENS, newProperty);
+				userConfig.save();
+			}
+		}
+		
+		log.debug("addLockToken: void");
+	}
+
+	/**
+	 * Remove lock token from user data
+	 */
+	public static void removeLockToken(Session session, Node node)  throws javax.jcr.PathNotFoundException, 
+			javax.jcr.RepositoryException {
+		log.debug("removeLockToken({}, {})", session, node);
+		Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
+		String lockToken = getLockToken(node.getUUID());
+		boolean removed = false;
+		
+		synchronized (userConfig) {
+			Value[] property = userConfig.getProperty(Repository.LOCK_TOKENS).getValues();
+			ArrayList<Value> newProperty = new ArrayList<Value>();
+			
+			for (int i=0; i<property.length; i++) {
+				if (!property[i].getString().equals(lockToken)) {
+					newProperty.add(property[i]);
+				} else {
+					removed = true;
+				}
+			}
+			
+			if (removed) {
+				userConfig.setProperty(Repository.LOCK_TOKENS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
+				userConfig.save();
+			}
+		}
+		
+		log.debug("removeLockToken: void");
+	}	
+
+	
+	/**
+	 * Obtain lock token from node id
 	 */
 	public static String getLockToken(String id) {
 		StringBuffer buf = new StringBuffer();
@@ -220,9 +293,8 @@ public class JCRUtils {
 		return buf.toString();
 	}
 	
-	 /**
-	 * @param uuid
-	 * @return
+	/**
+	 * Calculate check digit for lock token
 	 */
 	private static char getCheckDigit(String uuid) {
         int result = 0;
@@ -299,24 +371,41 @@ public class JCRUtils {
 	/**
 	 * Get JCR Session
 	 */
-	public static Session getSession() throws NamingException {
-		InitialContext ctx = new InitialContext();
-		Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
-		Session session = Subject.doAs(subject, new PrivilegedAction<Session>() {
-			public Session run() {
-				Session s = null;
+	public static Session getSession() throws javax.jcr.LoginException, javax.jcr.RepositoryException {
+		Object obj = null;
+		
+		try {
+			InitialContext ctx = new InitialContext();
+			Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
+			obj = Subject.doAs(subject, new PrivilegedAction<Object>() {
+				public Object run() {
+					Session s = null;
 
-				try {
-					s = DirectRepositoryModule.getRepository().login();
-				} catch (LoginException e) {
-					return null;
-				} catch (javax.jcr.RepositoryException e) {
-					return null;
+					try {
+						s = DirectRepositoryModule.getRepository().login();
+					} catch (javax.jcr.LoginException e) {
+						return e;
+					} catch (javax.jcr.RepositoryException e) {
+						return e;
+					}
+
+					return s;
 				}
-
-				return s;
-			}
-		});
-		return session;
+			});
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
+		if (obj instanceof javax.jcr.LoginException) {
+			throw (javax.jcr.LoginException) obj;
+		} else if (obj instanceof javax.jcr.RepositoryException) {
+			throw (javax.jcr.LoginException) obj;
+		} else if (obj instanceof javax.jcr.Session) {
+			Session session = (javax.jcr.Session) obj;
+			DirectAuthModule.loadUserData(session);
+			return session;
+		} else {
+			return null;
+		}
 	}
 }
