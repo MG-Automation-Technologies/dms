@@ -50,15 +50,21 @@ public class DirectPropertyModule implements PropertyModule {
 	public void addCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("addCategory(" + token + ", " + nodePath + ", " + category + ")");
+		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
@@ -110,6 +116,10 @@ public class DirectPropertyModule implements PropertyModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("addCategory: void");
@@ -119,15 +129,21 @@ public class DirectPropertyModule implements PropertyModule {
 	public void removeCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("removeCategory(" + token + ", " + nodePath + ", " + category + ")");
+		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			boolean removed = false;
 			
@@ -177,6 +193,10 @@ public class DirectPropertyModule implements PropertyModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("removeCategory: void");
@@ -186,15 +206,21 @@ public class DirectPropertyModule implements PropertyModule {
 	public void addKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("addKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
+		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
@@ -245,6 +271,10 @@ public class DirectPropertyModule implements PropertyModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("addKeyword: void");
@@ -254,15 +284,21 @@ public class DirectPropertyModule implements PropertyModule {
 	public void removeKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("removeKeyword(" + token + ", " + nodePath + ", " + keyword + ")");
+		log.debug("removeKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			boolean removed = false;
 			
@@ -312,8 +348,12 @@ public class DirectPropertyModule implements PropertyModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("removeKeyword: void");
-	}	
+	}
 }
