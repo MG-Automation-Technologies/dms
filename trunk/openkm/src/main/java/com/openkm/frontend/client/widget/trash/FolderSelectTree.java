@@ -161,7 +161,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetRootFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			//Only executes on initalization and the actualItem is root element on initialization
 			//We put the id on root
@@ -176,7 +176,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetRoot", caught);
+			Main.get().showError("GetRootFolder", caught);
 		}
 	};
 	
@@ -197,7 +197,7 @@ public class FolderSelectTree extends Composite {
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getRoot(callbackGetRoot);
+		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
 	/**
