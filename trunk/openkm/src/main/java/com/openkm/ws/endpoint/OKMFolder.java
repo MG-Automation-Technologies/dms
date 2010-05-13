@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,7 @@ import com.openkm.ws.util.FolderArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMFolder {
 	private static Logger log = LoggerFactory.getLogger(OKMFolder.class);
 
@@ -56,10 +58,10 @@ public class OKMFolder {
 	 */
 	public Folder create(String token, Folder fld) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException {
-		log.debug("create(" + token + ", " + fld + ")");
+		log.debug("create({}, {})", token, fld);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFolder = fm.create(token, fld);
-		log.debug("create: " +  newFolder);
+		log.debug("create: {}", newFolder);
 		return newFolder;
 	}
 
@@ -68,10 +70,10 @@ public class OKMFolder {
 	 */
 	public Folder getProperties(String token, String fldPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("getProperties(" + token + ", " + fldPath + ")");
+		log.debug("getProperties({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = fm.getProperties(token, fldPath);
-		log.debug("getProperties: " +  fld);
+		log.debug("getProperties: {}", fld);
 		return fld;
 	}
 
@@ -80,7 +82,7 @@ public class OKMFolder {
 	 */
 	public void delete(String token, String fldPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("delete(" + token + ", " + fldPath + ")");
+		log.debug("delete({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.delete(token, fldPath);
 		log.debug("delete: void");
@@ -91,10 +93,10 @@ public class OKMFolder {
 	 */
 	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("rename("+token+", " + fldPath + ")");
+		log.debug("rename({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder renamedFolder = fm.rename(token, fldPath, newName);
-		log.debug("rename: "+renamedFolder);
+		log.debug("rename: {}", renamedFolder);
 		return renamedFolder;
 	}
 	
@@ -103,7 +105,7 @@ public class OKMFolder {
 	 */
 	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("move(" + token + ", " + fldPath + ", " + dstPath + ")");
+		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.move(token, fldPath, dstPath);
 		log.debug("move: void");
@@ -114,12 +116,12 @@ public class OKMFolder {
 	 */
 	public FolderArray getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
-		log.debug("getChilds(" + token + ", " + fldPath + ")");
+		log.debug("getChilds({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		FolderArray fa = new FolderArray();
 		Collection<Folder> col = fm.getChilds(token, fldPath);
 		fa.setValue((Folder []) col.toArray(new Folder[col.size()]));
-		log.debug("getChilds: " + fa);
+		log.debug("getChilds: {}", fa);
 		return fa;
 	}
 	
@@ -128,10 +130,10 @@ public class OKMFolder {
 	 */
 	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
-		log.debug("isValid("+token+", "+fldPath+")");
+		log.debug("isValid({} {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		boolean valid = fm.isValid(token, fldPath);
-		log.debug("isValid: "+valid);
+		log.debug("isValid: {}", valid);
 		return valid;
 	}
 }

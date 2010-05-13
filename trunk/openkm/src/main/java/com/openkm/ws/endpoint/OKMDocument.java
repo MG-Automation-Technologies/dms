@@ -31,6 +31,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
 import org.apache.commons.io.IOUtils;
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,7 @@ import com.openkm.ws.util.VersionArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMDocument {
 	private static Logger log = LoggerFactory.getLogger(OKMDocument.class);
 
@@ -68,12 +70,12 @@ public class OKMDocument {
 	public Document create(String token, Document doc, byte[] content) throws IOException,
 			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException,
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("create(" + token + ", " + doc + ")");
+		log.debug("create({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
 		Document newDocument = dm.create(token, doc, bais);
 		bais.close();
-		log.debug("create: "+newDocument);
+		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 
@@ -82,7 +84,7 @@ public class OKMDocument {
 	 */
 	public void delete(String token, String docPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("delete(" + token + ", " + docPath + ")");
+		log.debug("delete({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.delete(token, docPath);
 		log.debug("delete: void");
@@ -93,10 +95,10 @@ public class OKMDocument {
 	 */
 	public Document getProperties(String token, String docPath) throws RepositoryException, 
 			PathNotFoundException {
-		log.debug("getProperties(" + token + ", " + docPath + ")");
+		log.debug("getProperties({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = dm.getProperties(token, docPath);
-		log.debug("getProperties: " + doc);
+		log.debug("getProperties: {}", doc);
 		return doc;
 	}
 
@@ -105,13 +107,13 @@ public class OKMDocument {
 	 */
 	public byte[] getContent(String token, String docPath, boolean checkout) throws RepositoryException, 
 			IOException, PathNotFoundException {
-		log.debug("getContent(" + token + ", " + docPath + ")");
+		log.debug("getContent({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContent(token, docPath, checkout);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(is, baos);
 		byte[] data = baos.toByteArray();
-		log.debug("getContent: " + data);
+		log.debug("getContent: {}", data);
 		return data;
 	}
 
@@ -120,13 +122,13 @@ public class OKMDocument {
 	 */
 	public byte[] getContentByVersion(String token, String docPath, String versionId) 
 			throws RepositoryException, IOException, PathNotFoundException {
-		log.debug("getContentByVersion(" + token + ", " + docPath + ", " + versionId + ")");
+		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContentByVersion(token, docPath, versionId); 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(is, baos);
 		byte[] data = baos.toByteArray();
-		log.debug("getContentByVersion: " + data);
+		log.debug("getContentByVersion: {}", data);
 		return data;
 	}
 
@@ -135,12 +137,12 @@ public class OKMDocument {
 	 */
 	public DocumentArray getChilds(String token, String fldId) throws RepositoryException,
 			PathNotFoundException {
-		log.debug("getChilds(" + token + ", " + fldId + ")");
+		log.debug("getChilds({}, {})", token, fldId);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		DocumentArray da = new DocumentArray();
 		Collection<Document> col = dm.getChilds(token, fldId);
 		da.setValue((Document[]) col.toArray(new Document[col.size()]));
-		log.debug("getChilds: " + da);
+		log.debug("getChilds: {}", da);
 		return da;
 	}
 	
@@ -149,10 +151,10 @@ public class OKMDocument {
 	 */
 	public Document rename(String token, String docPath, String newName) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException {
-		log.debug("rename(" + token + ", " + docPath + ", " + newName + ")");
+		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
-		log.debug("rename: "+renamedDocument);
+		log.debug("rename: {}", renamedDocument);
 		return renamedDocument;
 	}
 	
@@ -161,7 +163,7 @@ public class OKMDocument {
 	 */
 	public void setProperties(String token, Document doc) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, VersionException, LockException {
-		log.debug("setProperties(" + token + ", " + doc + ")");
+		log.debug("setProperties({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setProperties(token, doc);
 		log.debug("setProperties: void");
@@ -172,7 +174,7 @@ public class OKMDocument {
 	 */
 	public void checkout(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("checkout(" + token + ", " + docPath + ")");
+		log.debug("checkout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.checkout(token, docPath);
 		log.debug("checkout: void");
@@ -183,7 +185,7 @@ public class OKMDocument {
 	 */
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
+		log.debug("cancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.cancelCheckout(token, docPath);
 		log.debug("cancelCheckout: void");
@@ -195,10 +197,10 @@ public class OKMDocument {
 	public Version checkin(String token, String docPath, String comment) throws LockException, 
 			VersionException, PathNotFoundException, AccessDeniedException,
 			RepositoryException {
-		log.debug("checkin(" + token + ", " + docPath + ", " + comment + ")");
+		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Version version = dm.checkin(token, docPath, comment);
-		log.debug("checkin: "+version);
+		log.debug("checkin: {}", version);
 		return version;
 	}
 
@@ -207,12 +209,12 @@ public class OKMDocument {
 	 */
 	public VersionArray getVersionHistory(String token, String docPath) throws 
 			PathNotFoundException, RepositoryException {
-		log.debug("getVersionHistory(" + token + ", " + docPath + ")");
+		log.debug("getVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		VersionArray va = new VersionArray();
 		Collection<Version> col = dm.getVersionHistory(token, docPath);
 		va.setValue((Version[]) col.toArray(new Version[col.size()]));
-		log.debug("getVersionHistory: " + va);
+		log.debug("getVersionHistory: {}", va);
 		return va;
 	}
 
@@ -223,7 +225,7 @@ public class OKMDocument {
 			FileSizeExceededException, VirusDetectedException, VersionException,
 			LockException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException {
-		log.debug("setContent(" + token + ", " + docPath + ", " + content + ")");
+		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, content });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
 		dm.setContent(token, docPath, bais);
@@ -236,7 +238,7 @@ public class OKMDocument {
 	 */
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("lock(" + token + ", " + docPath + ")");
+		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
 		log.debug("lock: void");
@@ -247,7 +249,7 @@ public class OKMDocument {
 	 */
 	public void unlock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("unlock(" + token + ", " + docPath + ")");
+		log.debug("unlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.unlock(token, docPath);
 		log.debug("unlock: void");
@@ -258,7 +260,7 @@ public class OKMDocument {
 	 */
 	public void purge(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("purge(" + token + ", " + docPath + ")");
+		log.debug("purge({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purge(token, docPath);
 		log.debug("purge: void");
@@ -270,7 +272,7 @@ public class OKMDocument {
 	public void move(String token, String docPath, String fldPath) throws LockException, 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException {
-		log.debug("move(" + token + ", " + docPath + ", " + fldPath + ")");
+		log.debug("move({}, {}, {})", new Object[] { token, docPath, fldPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, fldPath);
 		log.debug("move: void");
@@ -281,7 +283,7 @@ public class OKMDocument {
 	 */
 	public void restoreVersion(String token, String docPath, String versionId)
 			throws AccessDeniedException, RepositoryException, PathNotFoundException {
-		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
+		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.restoreVersion(token, docPath, versionId);
 		log.debug("restoreVersion: void");
@@ -292,7 +294,7 @@ public class OKMDocument {
 	 */
 	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("purgeVersionHistory(" + token + ", " + docPath + ")");
+		log.debug("purgeVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purgeVersionHistory(token, docPath);
 		log.debug("purgeVersionHistory: void");
@@ -303,10 +305,10 @@ public class OKMDocument {
 	 */
 	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
 			PathNotFoundException {
-		log.debug("getVersionHistorySize(" + token + ", " + docPath + ")");
+		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		long size = dm.getVersionHistorySize(token, docPath);
-		log.debug("getVersionHistorySize: "+size);
+		log.debug("getVersionHistorySize: {}", size);
 		return size;
 	}
 	
@@ -326,10 +328,10 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getPath(java.lang.String, java.lang.String)
 	 */
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
-		log.debug("getPath("+token+", "+uuid+")");
+		log.debug("getPath({}, {})", token, uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		String path = dm.getPath(token, uuid);
-		log.debug("getPath: "+path);
+		log.debug("getPath: {}", path);
 		return path;
 	}
 }

@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,7 @@ import com.openkm.ws.util.StringArrayPairArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMPropertyGroup {
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroup.class);
 

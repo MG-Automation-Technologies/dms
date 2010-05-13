@@ -24,6 +24,7 @@ package com.openkm.ws.endpoint;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ import com.openkm.module.RepositoryModule;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMRepository {
 	private static Logger log = LoggerFactory.getLogger(OKMRepository.class);
 
@@ -51,10 +53,10 @@ public class OKMRepository {
 	 */
 	public Folder getRootFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getRootFolder(" + token + ")");
+		log.debug("getRootFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder root = rm.getRootFolder(token);
-		log.debug("getRootFolder: " + root);
+		log.debug("getRootFolder: {}", root);
 		return root;
 	}
 
@@ -63,10 +65,10 @@ public class OKMRepository {
 	 */
 	public Folder getTrashFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getTrashFolder(" + token + ")");
+		log.debug("getTrashFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder trash = rm.getTrashFolder(token);
-		log.debug("getTrashFolder: " + trash);
+		log.debug("getTrashFolder: {}", trash);
 		return trash;
 	}
 
@@ -75,10 +77,10 @@ public class OKMRepository {
 	 */
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getTemplatesFolder(" + token + ")");
+		log.debug("getTemplatesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder templatesFolder = rm.getTemplatesFolder(token);
-		log.debug("getTemplatesFolder: " + templatesFolder);
+		log.debug("getTemplatesFolder: {}", templatesFolder);
 		return templatesFolder;
 	}
 
@@ -87,10 +89,10 @@ public class OKMRepository {
 	 */
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getPersonalFolder(" + token + ")");
+		log.debug("getPersonalFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolder(token);
-		log.debug("getPersonalFolder: " + personalFolder);
+		log.debug("getPersonalFolder: {}", personalFolder);
 		return personalFolder;
 	}
 	
@@ -99,10 +101,10 @@ public class OKMRepository {
 	 */
 	public Folder getMailFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getMailFolder(" + token + ")");
+		log.debug("getMailFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolder(token);
-		log.debug("getMailFolder: " + mailFolder);
+		log.debug("getMailFolder: {}", mailFolder);
 		return mailFolder;
 	}
 	
@@ -111,10 +113,10 @@ public class OKMRepository {
 	 */
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getThesaurusFolder(" + token + ")");
+		log.debug("getThesaurusFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder thesaurusFolder = rm.getThesaurusFolder(token);
-		log.debug("getThesaurusFolder: " + thesaurusFolder);
+		log.debug("getThesaurusFolder: {}", thesaurusFolder);
 		return thesaurusFolder;
 	}
 
@@ -123,10 +125,10 @@ public class OKMRepository {
 	 */
 	public Folder getCategoriesFolder(String token) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getCategoriesFolder(" + token + ")");
+		log.debug("getCategoriesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder categoriesFolder = rm.getCategoriesFolder(token);
-		log.debug("getCategoriesFolder: " + categoriesFolder);
+		log.debug("getCategoriesFolder: {}", categoriesFolder);
 		return categoriesFolder;
 	}
 
@@ -134,7 +136,7 @@ public class OKMRepository {
 	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
 	 */
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
-		log.debug("purgeTrash(" + token + ")");
+		log.debug("purgeTrash({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		rm.purgeTrash(token);
 		log.debug("purgeTrash: void");
@@ -144,10 +146,10 @@ public class OKMRepository {
 	 * @see com.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
 	 */
 	public boolean hasNode(String token, String path) throws RepositoryException {
-		log.debug("hasNode("+token+" , "+path+")");
+		log.debug("hasNode({}, {})", token, path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		boolean ret = rm.hasNode(token, path);
-		log.debug("hasNode: "+ret);
+		log.debug("hasNode: {}", ret);
 		return ret;
 	}
 	
