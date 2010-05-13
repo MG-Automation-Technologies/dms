@@ -205,7 +205,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetRootFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -219,7 +219,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetRoot", caught);
+			Main.get().showError("GetRootFolder", caught);
 		}
 	};
 	
@@ -240,13 +240,13 @@ public class FolderSelectTree extends Composite {
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getRoot(callbackGetRoot);
+		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
 	/**
 	 * Gets asyncronous template node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetTemplate = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetTemplatesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -259,7 +259,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetTemplate", caught);
+			Main.get().showError("GetTemplatesFolder", caught);
 		}
 	};
 	
@@ -269,13 +269,13 @@ public class FolderSelectTree extends Composite {
 	public void getTemplate() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getTemplate(callbackGetTemplate);
+		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
 	/**
 	 * Gets asyncronous categories node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetCategoriesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -288,7 +288,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetCategories", caught);
+			Main.get().showError("GetCategoriesFolder", caught);
 		}
 	};
 	
@@ -298,13 +298,13 @@ public class FolderSelectTree extends Composite {
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getCategories(callbackGetCategories);
+		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	
 	/**
 	 * Gets asyncronous mail node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetMail = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetMailFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -317,7 +317,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetMail", caught);
+			Main.get().showError("GetMailFolder", caught);
 		}
 	};
 	
@@ -327,13 +327,13 @@ public class FolderSelectTree extends Composite {
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getMail(callbackGetMail);
+		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
 	/**
 	 * Gets asyncronous personal documents node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetPersonal = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetPersonalFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -346,7 +346,7 @@ public class FolderSelectTree extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetPersonal", caught);
+			Main.get().showError("GetPersonalFolder", caught);
 		}
 	};
 	
@@ -356,13 +356,13 @@ public class FolderSelectTree extends Composite {
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getPersonal(callbackGetPersonal);
+		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
 	/**
 	 * Gets asyncronous trash node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetTrash = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetTrashFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folderItem = result;
 			
@@ -375,7 +375,7 @@ public class FolderSelectTree extends Composite {
 		}
 		
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetTrash", caught);
+			Main.get().showError("GetTrashFolder", caught);
 		}
 	};
 	
@@ -385,7 +385,7 @@ public class FolderSelectTree extends Composite {
 	public void getTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getTrash(callbackGetTrash);
+		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	
 	/**
