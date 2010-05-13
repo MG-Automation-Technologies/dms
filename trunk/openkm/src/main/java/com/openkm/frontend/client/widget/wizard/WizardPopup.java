@@ -21,6 +21,8 @@
 
 package com.openkm.frontend.client.widget.wizard;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -36,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -62,7 +65,7 @@ public class WizardPopup extends DialogBox {
 	
 	private FiredVerticalPanel vPanelFired;
 	private String docPath = "";
-	private String[] groups = null;
+	private List<GWTPropertyGroup> groupsList = null;
 	private int groupIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
 	private int status = STATUS_NONE;
@@ -104,10 +107,10 @@ public class WizardPopup extends DialogBox {
 	/**
 	 * Gets asyncronous to get property groups wizard
 	 */
-	final AsyncCallback<String[]> callbackGetPropertyGroupWizard = new AsyncCallback<String[]>() {
-		public void onSuccess(String[] result) {
+	final AsyncCallback<List<GWTPropertyGroup>> callbackGetPropertyGroupWizard = new AsyncCallback<List<GWTPropertyGroup>>() {
+		public void onSuccess(List<GWTPropertyGroup> result) {
 			groupIndex = 0;
-			groups = result;
+			groupsList = result;
 			addPropertyGroups();
 		}
 
@@ -122,7 +125,7 @@ public class WizardPopup extends DialogBox {
 	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			groupIndex++;
-			if (groups.length>groupIndex) {
+			if (groupsList.size()>groupIndex) {
 				addPropertyGroups();
 			} else {
 				groupIndex = 0; // restarting property group index to setting
@@ -145,17 +148,17 @@ public class WizardPopup extends DialogBox {
 	 * Add property groups to a document
 	 */
 	private void addPropertyGroups() {
-		if (groups!=null && groups.length>groupIndex) {
+		if (groupsList!=null && groupsList.size()>groupIndex) {
 			status = STATUS_PROPERTY_GROUPS;
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-			propertyGroupService.addGroup(docPath, groups[groupIndex], callbackAddGroup);
+			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
-		} else if(groups==null) {
+		} else if(groupsList==null) {
 			status = STATUS_CATEGORIES;
 			showNextWizard();
 			
-		} else if(groups.length==0) {
+		} else if(groupsList.size()==0) {
 			status = STATUS_CATEGORIES;
 			showNextWizard();
 		}
@@ -169,8 +172,9 @@ public class WizardPopup extends DialogBox {
 		HTML space = new HTML("");
 		hPanel.add(actualButton);
 		hPanel.add(space);
-		hPanel.setCellWidth(space, "5");
-		propertyGroupWidget = new PropertyGroupWidget(docPath, groups[groupIndex], new HTML(""), vPanelFired );
+		hPanel.setCellWidth(space, "3");
+		propertyGroupWidget = new PropertyGroupWidget(docPath, groupsList.get(groupIndex).getName(), 
+				   									  new HTML(groupsList.get(groupIndex).getLabel()), vPanelFired );
 		vPanelFired.clear();
 		vPanelFired.add(propertyGroupWidget);
 		vPanelFired.add(hPanel);
@@ -178,7 +182,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.add(space2);
 		vPanelFired.setCellVerticalAlignment(propertyGroupWidget, HasAlignment.ALIGN_TOP);
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
-		vPanelFired.setCellHeight(space2, "3");
+		vPanelFired.setCellHeight(space2, "5");
 		propertyGroupWidget.getProperties();
 	}
 	
@@ -188,8 +192,8 @@ public class WizardPopup extends DialogBox {
 	private void showNextWizard() {
 		switch (status) {
 			case STATUS_PROPERTY_GROUPS:
-				if (groups!=null && groups.length>groupIndex) {
-					if (groups.length==groupIndex+1) {
+				if (groupsList!=null && groupsList.size()>groupIndex) {
+					if (groupsList.size()==groupIndex+1) {
 						// Case last property group to be added
 						if (!Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() && 
 							!Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {

@@ -54,5 +54,5 @@ public interface OKMPropertyGroupService extends RemoteService {
 	
 	public void removeGroup( String docPath, String grpName) throws OKMException;
 	
-	public String[] getPropertyGroupWizard();
+	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException;
 }
