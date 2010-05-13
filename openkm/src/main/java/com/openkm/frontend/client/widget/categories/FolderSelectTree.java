@@ -170,7 +170,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetCategoriesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -209,7 +209,7 @@ public class FolderSelectTree extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
-		repositoryService.getCategories(callbackGetCategories);
+		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	
 	/**
