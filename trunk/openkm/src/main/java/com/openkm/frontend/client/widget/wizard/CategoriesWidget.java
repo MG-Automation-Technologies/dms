@@ -98,7 +98,7 @@ public class CategoriesWidget extends Composite {
 		// Categories
 		vPanel = new VerticalPanel();		
 		vPanel.setWidth("390");
-		vPanel.setHeight("200");
+		vPanel.setHeight("175");
 		
 		scrollDirectoryPanel = new ScrollPanel();
 		scrollDirectoryPanel.setSize("380", "150");
