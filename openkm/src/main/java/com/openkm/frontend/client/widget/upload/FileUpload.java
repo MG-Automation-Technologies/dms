@@ -99,7 +99,13 @@ public class FileUpload extends DialogBox {
             		       ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
             		closeButton.setEnabled(true);
             		if (ffUpload.getUploadState() != FancyFileUpload.EMPTY_STATE && enableAddButton) {
-           				addButton.setVisible(true);
+            			if (ffUpload.getUploadState() == FancyFileUpload.UPLOADED_STATE) {
+            				boolean visible = !ffUpload.isWizard();
+            				closeButton.setVisible(visible);
+           					addButton.setVisible(visible);
+            			} else {
+            				addButton.setVisible(true);
+            			}
             		}
                }
             }
@@ -163,6 +169,16 @@ public class FileUpload extends DialogBox {
 			Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
 		}
 		super.hide();
+	}
+	
+	/**
+	 * resetAfterWizardFinished
+	 */
+	public void resetAfterWizardFinished() {
+		ffUpload.refresh();
+		closeButton.setVisible(true);
+		addButton.setVisible(true);
+		super.show();
 	}
 	
 	/**

@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.schlichtherle.io.File;
-import de.schlichtherle.io.FileOutputStream;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMNotification;
 import com.openkm.bean.Document;
@@ -41,6 +37,9 @@ import com.openkm.util.FileUtils;
 import com.openkm.util.impexp.ImpExpStats;
 import com.openkm.util.impexp.RepositoryImporter;
 import com.openkm.util.impexp.TextInfoDecorator;
+
+import de.schlichtherle.io.File;
+import de.schlichtherle.io.FileOutputStream;
 
 /**
  * Servlet Class
@@ -71,9 +70,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		boolean importZip = false;
 		String users = null;
 		String message = null;
-		String uploadedDocPath = null;
 		String comment = null;
 		PrintWriter out = null;
+		String uploadedDocPath = null;
 
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -132,7 +131,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							doc.setPath(path+"/"+fileName);
 							OKMDocument.getInstance().create(token, doc, is);
 							uploadedDocPath = doc.getPath();
-							out.print(returnOKMessage);
+							out.print(returnOKMessage + " <path>"+uploadedDocPath+"</path>"); // Return the path of the inserted document in response
 						}
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
@@ -141,7 +140,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					document.setContent(token, path, is);
 					document.checkin(token, path, comment);
 					uploadedDocPath = path;
-					out.print(returnOKMessage);
+					out.print(returnOKMessage + " <path>"+uploadedDocPath+"</path>"); // Return the path of the inserted document in response
 				}
 				
 				listener.setUploadFinish(true); // Mark uploading operation has finished

@@ -36,6 +36,7 @@ import com.openkm.api.OKMPropertyGroup;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -327,5 +328,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		}
 		
 		log.debug("removeGroup: ");
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getPropertyGroupWizard()
+	 */
+	public String[] getPropertyGroupWizard() {
+		return Config.WIZARD_PROPERTY_GROUPS;
 	}
 }

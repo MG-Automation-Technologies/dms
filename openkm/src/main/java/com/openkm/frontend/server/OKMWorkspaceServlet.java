@@ -71,6 +71,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setWorkflowProcessIntanceVariableUUID(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
 		workspace.setWorkflowProcessIntanceVariablePath(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH);
 		
+		// Is a wizard to uploading documents
+		workspace.setWizardPropertyGroups(Config.WIZARD_PROPERTY_GROUPS.length>0);
+		workspace.setWizardCategories(!Config.WIZARD_CATEGORIES.equals(""));
+		workspace.setWizardKeywords(!Config.WIZARD_KEYWORDS.equals(""));
+		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
 			User user = new User();

@@ -23,17 +23,14 @@ package com.openkm.frontend.client.widget.properties;
 
 import java.util.Iterator;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.panel.PanelDefinition;
@@ -67,8 +64,10 @@ public class Folder extends Composite {
 		tableProperties.setHTML(3, 1, "");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
 		tableProperties.setHTML(4, 1, "");
-		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.url")+"</b>");
 		tableProperties.setWidget(5, 1, new HTML(""));
+		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setWidget(6, 1, new HTML(""));
 		
 		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 				
@@ -119,11 +118,17 @@ public class Folder extends Composite {
 	public void set(GWTFolder folder) {
 		this.folder = folder;
 		
+		// url
+		String url = Main.get().workspaceUserProperties.getApplicationURL();
+		url += "?fldPath=" + URL.encodeComponent(folder.getPath());
+		tableProperties.setWidget(5, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
+		Util.createFolderURLClipboardButton(url);
+		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		int idx = webdavUrl.lastIndexOf('/');
 		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
-		tableProperties.setWidget(5, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+		tableProperties.setWidget(6, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
 		tableProperties.setHTML(0, 1, folder.getUuid());
@@ -181,7 +186,8 @@ public class Folder extends Composite {
 		tableProperties.setHTML(2, 0, "<b>"+Main.i18n("folder.parent")+"</b>");
 		tableProperties.setHTML(3, 0, "<b>"+Main.i18n("folder.created")+"</b>");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
-		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.url")+"</b>");
+		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
 		
 		if (folder!=null) {
 			if (folder.isSubscribed()) {
