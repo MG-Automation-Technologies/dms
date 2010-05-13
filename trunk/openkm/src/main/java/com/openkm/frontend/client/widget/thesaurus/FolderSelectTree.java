@@ -176,7 +176,7 @@ public class FolderSelectTree extends Composite {
 	/**
 	 * Gets asyncronous root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetThesaurus = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetThesaurusFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization and the actualItem is root 
 			// element on initialization
@@ -192,7 +192,7 @@ public class FolderSelectTree extends Composite {
 
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
-			Main.get().showError("GetThesaurus", caught);
+			Main.get().showError("GetThesaurusFolder", caught);
 		}
 	};
 	
@@ -215,7 +215,7 @@ public class FolderSelectTree extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
 		Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagRoot();
-		repositoryService.getThesaurus(callbackGetThesaurus);
+		repositoryService.getThesaurusFolder(callbackGetThesaurusFolder);
 	}
 	
 	/**
