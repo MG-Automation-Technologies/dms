@@ -50,7 +50,7 @@ public class OKMHttpServlet extends HttpServlet {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getToken(HttpServletRequest req) throws OKMException {
-		log.debug("getToken("+req+")");
+		log.debug("getToken({})", req);
 		String token = "";
 		
 		if (Config.SESSION_MANAGER) {
@@ -86,7 +86,7 @@ public class OKMHttpServlet extends HttpServlet {
 			}
 		}
 		
-		log.debug("getToken: "+token);
+		log.debug("getToken: {}", token);
 		return token;
 	}
 }
