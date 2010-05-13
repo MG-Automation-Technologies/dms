@@ -76,9 +76,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private DataStoreGarbageCollector dsgc;
 	private boolean hasConfiguredDataStore;
 
-    /* (non-Javadoc)
-     * @see javax.servlet.GenericServlet#init()
-     */
+    @Override
     public void init() throws ServletException {
         super.init();
         
@@ -185,9 +183,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         DocConverter.getInstance().start();
     }
 
-    /* (non-Javadoc)
-     * @see javax.servlet.Servlet#destroy()
-     */
+    @Override
     public void destroy() {
         super.destroy();
 
