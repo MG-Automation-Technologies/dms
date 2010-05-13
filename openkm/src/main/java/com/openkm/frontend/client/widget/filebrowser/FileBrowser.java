@@ -113,6 +113,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private int actualView = PanelDefinition.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
+	private String selectedRowByPath = "";
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
@@ -1244,6 +1245,14 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void mantainSelectedRow() {
 		selectedRowId = table.getSelectedId();
+	}
+	
+	/**
+	 * Mantain the selected row by Path
+	 * @param path
+	 */
+	public void mantainSelectedRowByPath(String path) {
+		selectedRowId = path;
 	}
 	
 	/**

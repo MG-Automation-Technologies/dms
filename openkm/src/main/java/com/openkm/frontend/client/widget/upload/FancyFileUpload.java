@@ -405,8 +405,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * Refresh folders and documents
 	 */
 	public void refresh() {
-		// Must preservate the selected row after refreshing
-		Main.get().mainPanel.browser.fileBrowser.mantainSelectedRow();
 		if (importZip.getValue()) {
 			Main.get().activeFolderTree.refresh(true);
 		} else {
@@ -619,17 +617,28 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				String msg = event.getResults();
 				
 				if (msg.contains(returnOKMessage)) {
+					String docPath = "";
+					if (msg.indexOf("path[")>0 && msg.indexOf("]path")>0) {
+						docPath = msg.substring(msg.indexOf("path[")+5,msg.indexOf("]path"));
+					}
+					
 					// Case is not importing a zip and wizard is enabled
 					if (!importZip.getValue() && 
 						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
-						String docPath = msg.substring(msg.indexOf("path[")+5,msg.indexOf("]path"));
+						
 						Main.get().wizardPopup.start(docPath);
 						wizard = true;
 					} else {
 						wizard = false;
 					}
+					
+					// By default selected row after uploading is uploaded file
+					if (!docPath.equals("")) {
+						Main.get().mainPanel.browser.fileBrowser.mantainSelectedRowByPath(docPath);
+					}
+					
 					uploadItem.setLoaded();
 				} else {
 					uploadItem.setFailed(msg);
