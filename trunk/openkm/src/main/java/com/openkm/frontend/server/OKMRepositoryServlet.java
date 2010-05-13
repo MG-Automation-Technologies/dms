@@ -49,9 +49,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(OKMRepositoryServlet.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getUpdateMessage()
-	 */
+	@Override
 	public String getUpdateMessage() throws OKMException {
 		log.debug("getUpdateMessage()");
 		
@@ -69,11 +67,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getPersonal()
-	 */
-	public GWTFolder getPersonal() throws OKMException {
-		log.debug("getPersonal()");
+	@Override
+	public GWTFolder getPersonalFolder() throws OKMException {
+		log.debug("getPersonalFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -97,15 +93,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getPersonal: "+gWTFolder);
+		log.debug("getPersonalFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getTemplate()
-	 */
-	public GWTFolder getTemplate() throws OKMException {
-		log.debug("getTemplate()");
+	@Override
+	public GWTFolder getTemplatesFolder() throws OKMException {
+		log.debug("getTemplateFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -124,13 +118,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getTemplate: "+gWTFolder);
+		log.debug("getTemplatesFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#purgeTrash()
-	 */
+	@Override
 	public void purgeTrash() throws OKMException {
 		log.debug("purgeTrash()");
 		String token = getToken();
@@ -151,11 +143,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("purgeTrash: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getTrash()
-	 */
-	public GWTFolder getTrash() throws OKMException {
-		log.debug("getTrash()");
+	@Override
+	public GWTFolder getTrashFolder() throws OKMException {
+		log.debug("getTrashFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -174,21 +164,19 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getTrash: "+gWTFolder);
+		log.debug("getTrashFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getRoot()
-	 */
-	public GWTFolder getRoot() throws OKMException {
-		log.debug("getRoot()");
+	@Override
+	public GWTFolder getRootFolder() throws OKMException {
+		log.debug("getRootFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			folder =  OKMRepository.getInstance().getRootFolder(token);
+			folder = OKMRepository.getInstance().getRootFolder(token);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -201,40 +189,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getRoot: "+gWTFolder);
+		log.debug("getRootFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getRootPath()
-	 */
-	public String getRootPath() throws OKMException {
-		log.debug("getRootPath()");
-		String token = getToken();
-		String fldPath = "";
 		
-		try {
-			fldPath = OKMRepository.getInstance().getRootFolder(token).getPath();
-		} catch (PathNotFoundException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet,ErrorCode.CAUSE_General), e.getMessage());
-		}
-		
-		log.debug("getRootPath: "+fldPath);
-		return fldPath;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getMail()
-	 */
-	public GWTFolder getMail() throws OKMException {
-		log.debug("getMail()");
+	@Override
+	public GWTFolder getMailFolder() throws OKMException {
+		log.debug("getMailFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -253,15 +214,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getMail: "+gWTFolder);
+		log.debug("getMailFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getThesaurus()
-	 */
-	public GWTFolder getThesaurus() throws OKMException {
-		log.debug("getThesaurus()");
+	@Override
+	public GWTFolder getThesaurusFolder() throws OKMException {
+		log.debug("getThesaurusFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -280,15 +239,13 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getThesaurus: "+gWTFolder);
+		log.debug("getThesaurusFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getCategories()
-	 */
-	public GWTFolder getCategories() throws OKMException {
-		log.debug("getCategories()");
+	@Override
+	public GWTFolder getCategoriesFolder() throws OKMException {
+		log.debug("getCategoriesFolder()");
 		String token = getToken();
 		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
@@ -307,13 +264,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getCategories: "+gWTFolder);
+		log.debug("getCategoriesFolder: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMRepositoryService#getPathByUUID(java.lang.String)
-	 */
+	@Override
 	public String getPathByUUID(String uuid) throws OKMException {
 		log.debug("getPathByUUID()");
 		String token = getToken();
