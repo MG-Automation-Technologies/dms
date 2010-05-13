@@ -90,7 +90,7 @@ public class StartUp {
 	/**
 	 * Gets asyncronous taxonomy root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetRoot = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetRootFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			//Only executes on initalization and evalues root Node permissions
 			Main.get().taxonomyRootFolder = result;
@@ -99,14 +99,14 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetRoot", caught);
+			Main.get().showError("GetRootFolder", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous template root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetTemplate = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetTemplatesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization
 			Main.get().templatesRootFolder = result;
@@ -114,14 +114,14 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetTemplate", caught);
+			Main.get().showError("GetTemplatesFolder", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous mail root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetMail = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetMailFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization
 			Main.get().mailRootFolder = result;
@@ -129,14 +129,14 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getMail", caught);
+			Main.get().showError("GetMailFolder", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous thesaurus root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetThesaurus = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetThesaurusFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization
 			Main.get().thesaurusRootFolder = result;
@@ -144,14 +144,14 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getThesaurus", caught);
+			Main.get().showError("GetThesaurusFolder", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous categories root node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetCategories = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetCategoriesFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			// Only executes on initalization
 			Main.get().categoriesRootFolder = result;
@@ -159,7 +159,7 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getThesaurus", caught);
+			Main.get().showError("GetCategoriesFolder", caught);
 		}
 	};
 
@@ -173,35 +173,35 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getUserHome", caught);
+			Main.get().showError("GetUserHome", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous personal documents node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetPersonal = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetPersonalFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			Main.get().personalRootFolder = result;
 			nextStatus(STARTUP_GET_MAIL);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetPersonal", caught);
+			Main.get().showError("GetPersonalFolder", caught);
 		}
 	};
 	
 	/**
 	 * Gets asyncronous trash node
 	 */
-	final AsyncCallback<GWTFolder> callbackGetTrash = new AsyncCallback<GWTFolder>() {
+	final AsyncCallback<GWTFolder> callbackGetTrashFolder = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			Main.get().trashRootFolder = result;
 			nextStatus(STARTUP_GET_USER_HOME);
 		}
 		
 		public void onFailure(Throwable caught) {
-			Main.get().showError("GetTrash", caught);
+			Main.get().showError("GetTrashFolder", caught);
 		}
 	};
 	
@@ -227,7 +227,7 @@ public class StartUp {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("getTranslations", caught);
+			Main.get().showError("GetPropertyGroupTranslations", caught);
 		}
 	};
 	
@@ -237,7 +237,7 @@ public class StartUp {
 	public void getTrash() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getTrash(callbackGetTrash);
+		repositoryService.getTrashFolder(callbackGetTrashFolder);
 	}
 	
 	/**
@@ -246,7 +246,7 @@ public class StartUp {
 	public void getPersonal() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getPersonal(callbackGetPersonal);
+		repositoryService.getPersonalFolder(callbackGetPersonalFolder);
 	}
 	
 	/**
@@ -265,7 +265,7 @@ public class StartUp {
 	public void getTemplate() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getTemplate(callbackGetTemplate);
+		repositoryService.getTemplatesFolder(callbackGetTemplatesFolder);
 	}
 	
 	/**
@@ -274,7 +274,7 @@ public class StartUp {
 	public void getMail() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getMail(callbackGetMail);
+		repositoryService.getMailFolder(callbackGetMailFolder);
 	}
 	
 	/**
@@ -283,13 +283,13 @@ public class StartUp {
 	public void getThesaurus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getThesaurus(callbackGetThesaurus);
+		repositoryService.getThesaurusFolder(callbackGetThesaurusFolder);
 	}
 	
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);
-		repositoryService.getCategories(callbackGetCategories);
+		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}	
 	
 	
@@ -299,7 +299,7 @@ public class StartUp {
 	public void getRoot() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		repositoryService.getRoot(callbackGetRoot);
+		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
 	/**
