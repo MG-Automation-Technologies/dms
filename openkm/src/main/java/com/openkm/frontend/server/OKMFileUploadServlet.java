@@ -77,6 +77,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			String token = getToken(request);
+			response.setContentType("text/plain");
 			out = response.getWriter();	
 
 			// Create a factory for disk-based file items
@@ -131,7 +132,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							doc.setPath(path+"/"+fileName);
 							OKMDocument.getInstance().create(token, doc, is);
 							uploadedDocPath = doc.getPath();
-							out.print(returnOKMessage + " <path>"+uploadedDocPath+"</path>"); // Return the path of the inserted document in response
+							out.print(returnOKMessage + " path["+uploadedDocPath+"]path"); // Return the path of the inserted document in response
 						}
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
@@ -140,7 +141,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					document.setContent(token, path, is);
 					document.checkin(token, path, comment);
 					uploadedDocPath = path;
-					out.print(returnOKMessage + " <path>"+uploadedDocPath+"</path>"); // Return the path of the inserted document in response
+					out.print(returnOKMessage + " path["+uploadedDocPath+"]path"); // Return the path of the inserted document in response
 				}
 				
 				listener.setUploadFinish(true); // Mark uploading operation has finished
