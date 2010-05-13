@@ -96,7 +96,7 @@ public class DirectDocumentModule implements DocumentModule {
 	 */
 	public Document getProperties(Session session, String docPath) throws
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
-		log.debug("getProperties[session](" + session + ", " + docPath + ")");
+		log.debug("getProperties[session]({}, {})", session, docPath);
 		Document doc = new Document();
 
 		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
@@ -159,6 +159,10 @@ public class DirectDocumentModule implements DocumentModule {
 			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.DELETE)) {
 				doc.setPermissions((byte) (doc.getPermissions() | Permission.DELETE));
 			}
+			
+			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.SECURITY)) {
+				doc.setPermissions((byte) (doc.getPermissions() | Permission.SECURITY));
+			}
 		}
 		
 		// Get user subscription
@@ -218,7 +222,8 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setNotes(notes);
 		
-		log.debug("getProperties[session]: "+doc);
+		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
+		log.debug("getProperties[session]: {}", doc);
 		return doc;
 	}
 
@@ -301,9 +306,10 @@ public class DirectDocumentModule implements DocumentModule {
 			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			IOException {
-		log.debug("create(" + token + ", " + doc + ")");
+		log.debug("create({}, {})", token, doc);
 		Document newDocument = null;
 		Node parentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -317,6 +323,12 @@ public class DirectDocumentModule implements DocumentModule {
 		File tmpKea = File.createTempFile("kea", fileExtention, new File(Config.TMP_DIR));
 
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String parent = FileUtils.getParent(doc.getPath());
 			String name = FileUtils.getName(doc.getPath());
 			int size = is.available();
@@ -385,8 +397,7 @@ public class DirectDocumentModule implements DocumentModule {
 		        }        
 	        }
 	        // Ends KEA
-
-			Session session = SessionManager.getInstance().get(token);
+	        
 			parentNode = session.getRootNode().getNode(parent.substring(1));
 			Node documentNode = create(session, parentNode, name, mimeType, keywords.toArray(new String[keywords.size()]), is);
 			
@@ -426,18 +437,22 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			tmpJcr.delete();
-			tmpAvr.delete();
-			tmpKea.delete();
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpJcr);
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpAvr);
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpKea);
+						
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("create: " + newDocument);
+		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 
 	@Override
 	public void delete(String token, String docPath) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException {
-		log.debug("delete(" + token + ", " + docPath + ")");
+		log.debug("delete({}, {})", token, docPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -445,8 +460,13 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String name = FileUtils.getName(docPath);
-			session = SessionManager.getInstance().get(token);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node parentNode = documentNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
@@ -485,6 +505,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("delete: void");
@@ -492,11 +516,17 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public Document getProperties(String token, String docPath) throws RepositoryException, PathNotFoundException {
-		log.debug("getProperties(" + token + ", " + docPath + ")");
+		log.debug("getProperties({}, {})", token, docPath);
 		Document doc = null;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			doc = getProperties(session, docPath);
 
 			// Activity log
@@ -507,9 +537,13 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getProperties: "+doc);
+		log.debug("getProperties: {}", doc);
 		return doc;
 	}
 	
@@ -518,23 +552,29 @@ public class DirectDocumentModule implements DocumentModule {
 	 */
 	public InputStream getContent(Session session, Node docNode) throws javax.jcr.PathNotFoundException,
 			javax.jcr.RepositoryException, IOException {
-		log.debug("getContent[session](" + session + ", " + docNode+ ")");
+		log.debug("getContent[session]({}, {})", session, docNode);
 		
 		Node contentNode = docNode.getNode(Document.CONTENT);
 		InputStream is = contentNode.getProperty(JcrConstants.JCR_DATA).getStream();
 		
-		log.debug("getContent[]session: "+is);
+		log.debug("getContent[]session: {}", is);
 		return is;
 	}
 
 	@Override
 	public InputStream getContent(String token, String docPath, boolean checkout) throws
 			PathNotFoundException, RepositoryException, IOException {
-		log.debug("getContent(" + token + ", " + docPath + ")");
+		log.debug("getContent({}, {})", token, docPath);
 		InputStream is;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			is = getContent(session, documentNode);
 
@@ -549,20 +589,30 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw e;
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getContent: "+is);
+		log.debug("getContent: {}", is);
 		return is;
 	}
 
 	@Override
 	public InputStream getContentByVersion(String token, String docPath, String versionId)
 			throws RepositoryException, PathNotFoundException, IOException {
-		log.debug("getContentByVersion(" + token + ", " + docPath + ")");
+		log.debug("getContentByVersion({}, {})", token, docPath);
 		InputStream is;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -578,6 +628,10 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getContentByVersion: "+is);
@@ -589,8 +643,9 @@ public class DirectDocumentModule implements DocumentModule {
 			FileSizeExceededException, VirusDetectedException, VersionException, 
 			LockException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("setContent(" + token + ", " + docPath + ", " + is + ")");
+		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, is });
 		Node contentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -600,6 +655,12 @@ public class DirectDocumentModule implements DocumentModule {
 		File tmpAvr = File.createTempFile("okm", ".avr");
 
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			int size = is.available();
 		
 			if (size > Config.MAX_FILE_SIZE) {
@@ -625,8 +686,7 @@ public class DirectDocumentModule implements DocumentModule {
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
 				VirusDetection.detect(tmpAvr);
 			}
-
-			Session session = SessionManager.getInstance().get(token);
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			contentNode = documentNode.getNode(Document.CONTENT);
 			contentNode.setProperty(Document.SIZE, size);
@@ -664,8 +724,12 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(contentNode);
 			throw e;
 		} finally {
-			tmpJcr.delete();
-			tmpAvr.delete();
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpJcr);
+			org.apache.commons.io.FileUtils.deleteQuietly(tmpAvr);
+						
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("setContent: void");
@@ -674,15 +738,21 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void addNote(String token, String docPath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.info("addNote(" + token + ", " + docPath + ", " + text + ")");
+		log.info("addNote({}, {}, {})", new Object[] { token, docPath, text });
 		Node notesNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			notesNode = documentNode.getNode(Note.LIST);
 			Calendar cal = Calendar.getInstance();
@@ -713,18 +783,29 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(notesNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("addNote: void");
 	}
 
 	@Override
-	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
-		log.debug("getChilds(" + token + ", " + fldPath + ")");
+	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException {
+		log.debug("getChilds({}, {})", token, fldPath);
 		ArrayList<Document> childs = new ArrayList<Document>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -744,6 +825,10 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getChilds: "+childs);
@@ -753,7 +838,7 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public Document rename(String token, String docPath, String newName) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException {
-		log.debug("rename:(" + token + ", " + docPath + ", " + newName + ")");
+		log.debug("rename:({}, {}, {})", new Object[] { token, docPath, newName });
 		Document renamedDocument = null;
 		Session session = null;
 		
@@ -762,10 +847,15 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String parent = FileUtils.getParent(docPath);
 			String name = FileUtils.getName(docPath);
-			session = SessionManager.getInstance().get(token);
-
+			
 			// Escape dangerous chars in name
 			newName = FileUtils.escape(newName);
 
@@ -805,24 +895,34 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("rename: "+renamedDocument);
+		log.debug("rename: {}", renamedDocument);
 		return renamedDocument;
 	}
 
 	@Override
 	public void setProperties(String token, Document doc) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("setProperties(" + token + ", " + doc + ")");
+		log.debug("setProperties({}, {})", token, doc);
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 			
 			synchronized (documentNode) {
@@ -863,6 +963,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("setProperties: void");
@@ -871,15 +975,21 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void checkout(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("checkout(" + token + ", " + docPath + ")");
+		log.debug("checkout({}, {})", token, docPath);
 		Transaction t = null;
+		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			XASession session = (XASession)SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = (XASession) SessionManager.getInstance().get(token);
+			} else {
+				session = (XASession) JCRUtils.getSession();
+			}
+			
 			javax.jcr.lock.Lock lck = null;
 
 			t = new Transaction(session);
@@ -888,6 +998,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			lck = documentNode.lock(true, false);
+			JCRUtils.addLockToken(session, documentNode);
 			contentNode.checkout();
 
 			t.end();
@@ -914,6 +1025,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("checkout: void");
@@ -922,25 +1037,30 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("cancelCheckout(" + token + ", " + docPath + ")");
+		log.debug("cancelCheckout({}, {})", token, docPath);
 		Transaction t = null;
+		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			XASession session = (XASession)SessionManager.getInstance().get(token);
-			Node documentNode = null;
+			if (Config.SESSION_MANAGER) {
+				session = (XASession) SessionManager.getInstance().get(token);
+			} else {
+				session = (XASession) JCRUtils.getSession();
+			}
 
 			t = new Transaction(session);
 			t.start();
 
-			documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			contentNode.restore(contentNode.getBaseVersion(), true);
 			documentNode.unlock();
-
+			JCRUtils.removeLockToken(session, documentNode);
+			
 			t.end();
 			t.commit();
 
@@ -968,18 +1088,29 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("cancelCheckout: void");
 	}
 
 	@Override
-	public boolean isCheckedOut(String token, String docPath) throws RepositoryException, PathNotFoundException {
-		log.debug("isCheckedOut(" + token + ", " + docPath + ")");
+	public boolean isCheckedOut(String token, String docPath) throws RepositoryException, 
+			PathNotFoundException {
+		log.debug("isCheckedOut({}, {})", token, docPath);
 		boolean checkedOut = false;
+		Session session = null;
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			checkedOut = contentNode.isCheckedOut();
@@ -989,31 +1120,40 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("isCheckedOut: "+checkedOut);
+		log.debug("isCheckedOut: {}", checkedOut);
 		return checkedOut;
 	}
 
 	@Override
-	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException, RepositoryException, PathNotFoundException, LockException, VersionException {
-		log.debug("checkin(" + token + ", " + docPath + ", " + comment + ")");
+	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException, 
+			RepositoryException, PathNotFoundException, LockException, VersionException {
+		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		Version version = new Version();
 		Node contentNode = null;
 		Transaction t = null;
+		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			XASession session = (XASession)SessionManager.getInstance().get(token);
-			Node documentNode = null;
-
+			if (Config.SESSION_MANAGER) {
+				session = (XASession) SessionManager.getInstance().get(token);
+			} else {
+				session = (XASession) JCRUtils.getSession();
+			}
+			
 			t = new Transaction(session);
 			t.start();
 
-			documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
 				contentNode = documentNode.getNode(Document.CONTENT);
@@ -1031,7 +1171,8 @@ public class DirectDocumentModule implements DocumentModule {
 				version.setName(ver.getName());
 				version.setCreated(ver.getCreated());
 				version.setActual(true);
-				documentNode.unlock();				
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
 			}
 			
 			t.end();
@@ -1077,6 +1218,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("checkin: "+version);
@@ -1086,11 +1231,17 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public Collection<Version> getVersionHistory(String token, String docPath) throws
 			PathNotFoundException, RepositoryException {
-		log.debug("getVersionHistory(" + token + ", " + docPath + ")");
+		log.debug("getVersionHistory({}, {})", token, docPath);
 		ArrayList<Version> history = new ArrayList<Version>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -1131,26 +1282,37 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getVersionHistory: "+history);
+		log.debug("getVersionHistory: {}", history);
 		return history;
 	}
 
 	@Override
 	public void lock(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("lock(" + token + ", " + docPath + ")");
+		log.debug("lock({}, {})", token, docPath);
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lck = documentNode.lock(true, false);
-
+			JCRUtils.addLockToken(session, documentNode);
+			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "LOCK", null);
 
@@ -1171,6 +1333,10 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("lock: void");
@@ -1179,16 +1345,23 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void unlock(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("unlock(" + token + ", " + docPath + ")");
+		log.debug("unlock({}, {}", token, docPath);
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			documentNode.unlock();
+			JCRUtils.removeLockToken(session, documentNode);
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "UNLOCK", null);
@@ -1210,6 +1383,10 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("unlock: void");
@@ -1218,11 +1395,17 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public boolean isLocked(String token, String docPath) throws RepositoryException,
 			PathNotFoundException {
-		log.debug("isLocked(" + token + ", " + docPath + ")");
+		log.debug("isLocked({}, {})", token, docPath);
 		boolean locked;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			locked = documentNode.isLocked();
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -1231,20 +1414,30 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.debug("isLocked: "+locked);
+		log.debug("isLocked: {}", locked);
 		return locked;
 	}
 
 	@Override
 	public Lock getLock(String token, String docPath) throws RepositoryException,
 			PathNotFoundException, LockException {
-		log.debug("getLock(" + token + ", " + docPath + ")");
+		log.debug("getLock({}, {})", token, docPath);
 		Lock lock = new Lock();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			lock = getLock(session, docPath);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
@@ -1255,39 +1448,50 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.debug("getLock: "+lock);
+		log.debug("getLock: {}", lock);
 		return lock;
 	}
 
 	/**
 	 * Retrieve lock info from a document path
 	 */
-	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException, javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
-		log.debug("getLock(" + session + ", " + docPath + ")");
+	private Lock getLock(Session session, String docPath) throws UnsupportedRepositoryOperationException,
+			javax.jcr.lock.LockException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException {
+		log.debug("getLock({}, {})", session, docPath);
 		Lock lock = new Lock();
 		Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 		javax.jcr.lock.Lock lck = documentNode.getLock();
 		lock.setOwner(lck.getLockOwner());
 		lock.setNodePath(lck.getNode().getPath());
 		lock.setToken(lck.getLockToken());
-		log.debug("getLock: "+lock);
+		log.debug("getLock: {}", lock);
 		return lock;
 	}
 
 	@Override
 	public void purge(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("purge(" + token + ", " + docPath + ")");
+		log.debug("purge({}, {})", token, docPath);
 		Node parentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null;
 			
@@ -1323,6 +1527,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("purge: void");
@@ -1339,7 +1547,7 @@ public class DirectDocumentModule implements DocumentModule {
 		String author = contentNode.getProperty(Document.AUTHOR).getString();
 		VersionHistory vh = contentNode.getVersionHistory();
 		HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>();
-		log.debug("VersionHistory UUID: "+vh.getUUID());
+		log.debug("VersionHistory UUID: {}", vh.getUUID());
 
 		// Remove pdf & preview from cache
 		new File(Config.PDF_CACHE + File.separator + docNode.getUUID()).delete();
@@ -1388,7 +1596,7 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void move(String token, String docPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("move(" + token + ", " + docPath + ", " + dstPath + ")");
+		log.debug("move({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -1396,8 +1604,13 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);	
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String name = FileUtils.getName(docPath);
-			session = SessionManager.getInstance().get(token);
 			session.move(docPath, dstPath+"/"+name);
 			session.save();
 
@@ -1419,6 +1632,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("move: void");
@@ -1428,15 +1645,21 @@ public class DirectDocumentModule implements DocumentModule {
 	public void copy(String token, String docPath, String dstPath) throws
 			ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException {
-		log.debug("copy(" + token + ", " + docPath + ", " + dstPath + ")");
+		log.debug("copy({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Node dstFolderNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node srcDocumentNode = session.getRootNode().getNode(docPath.substring(1));
 			dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
 			copy(session, srcDocumentNode, dstFolderNode);
@@ -1466,6 +1689,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(dstFolderNode);
 			throw e;
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("copy: void");
@@ -1476,7 +1703,7 @@ public class DirectDocumentModule implements DocumentModule {
 	 */
 	public void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws ValueFormatException, 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
-		log.debug("copy(" + srcDocumentNode + ", " + dstFolderNode + ")");
+		log.debug("copy({}, {}, {})", new Object[] { session, srcDocumentNode, dstFolderNode });
 		
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
@@ -1490,15 +1717,21 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void restoreVersion(String token, String docPath, String versionId) throws 
 			AccessDeniedException, RepositoryException, PathNotFoundException {
-		log.debug("restoreVersion(" + token + ", " + docPath + ", " + versionId + ")");
+		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		Node contentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 
 			synchronized (documentNode) {
@@ -1521,6 +1754,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("restoreVersion: void");
@@ -1529,14 +1766,20 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("purgeVersionHistory("+token+", "+docPath+")");
+		log.debug("purgeVersionHistory({}, {})", token, docPath);
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -1563,6 +1806,10 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("purgeVersionHistory: void");
@@ -1571,11 +1818,17 @@ public class DirectDocumentModule implements DocumentModule {
 	@Override
 	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
 			PathNotFoundException {
-		log.debug("getVersionHistorySize(" + token + ", " + docPath + ")");
+		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		long ret = 0;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -1596,19 +1849,30 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getVersionHistorySize: "+ret);
+		log.debug("getVersionHistorySize: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("isValid(" + token + ", " + docPath + ")");
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException {
+		log.debug("isValid({}, {})", token, docPath);
 		boolean valid = false;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getRootNode().getNode(docPath.substring(1));
 
 			if (node.isNodeType(Document.TYPE)) {
@@ -1623,19 +1887,29 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("isValid: "+valid);
+		log.debug("isValid: {}", valid);
 		return valid;
 	}
 
 	@Override
 	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
-		log.debug("getPath(" + token + ", " + uuid + ")");
+		log.debug("getPath({}, {})", token, uuid);
 		String path = null;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getNodeByUUID(uuid);
 
 			if (node.isNodeType(Document.TYPE)) {
@@ -1647,9 +1921,13 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getPath: "+path);
+		log.debug("getPath: {}", path);
 		return path;
 	}
 }
