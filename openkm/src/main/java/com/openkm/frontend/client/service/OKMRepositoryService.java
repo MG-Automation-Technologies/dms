@@ -32,14 +32,13 @@ import com.openkm.frontend.client.bean.GWTFolder;
  */
 public interface OKMRepositoryService extends RemoteService {
 	public String getUpdateMessage() throws OKMException;
-	public String getRootPath() throws OKMException;
-	public GWTFolder getRoot() throws OKMException;
-	public GWTFolder getTrash() throws OKMException;
+	public GWTFolder getRootFolder() throws OKMException;
+	public GWTFolder getTrashFolder() throws OKMException;
 	public void purgeTrash() throws OKMException;
-	public GWTFolder getTemplate() throws OKMException;
-	public GWTFolder getPersonal() throws OKMException;
-	public GWTFolder getMail() throws OKMException;
-	public GWTFolder getThesaurus() throws OKMException;
-	public GWTFolder getCategories() throws OKMException;
+	public GWTFolder getTemplatesFolder() throws OKMException;
+	public GWTFolder getPersonalFolder() throws OKMException;
+	public GWTFolder getMailFolder() throws OKMException;
+	public GWTFolder getThesaurusFolder() throws OKMException;
+	public GWTFolder getCategoriesFolder() throws OKMException;
 	public String getPathByUUID(String uuid) throws OKMException;
 }
