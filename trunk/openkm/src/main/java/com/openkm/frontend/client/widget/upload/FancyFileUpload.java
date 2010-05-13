@@ -13,7 +13,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -34,7 +33,6 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.widgetideas.client.ProgressBar;
 import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.config.Config;
@@ -115,6 +113,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private ProgressBar progressBar;
 	private TextFormatter progressiveFormater;
 	private TextFormatter finalFormater;
+	private boolean wizard = false;
 
 	/**
 	 * Internal timer for checking if pending delay is over.
@@ -312,7 +311,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			status.setHTML(Main.i18n("fileupload.status.ok"));
 			widgetState = UPLOADED_STATE;
 			fileUplodingStartedFlag = false;
-			refresh();
+			if (!wizard) {
+				refresh();
+			}
 			fireChange();
 			Main.get().mainPanel.dashboard.userDashboard.getUserLastModifiedDocuments();
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
@@ -398,18 +399,18 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		private void init() {
 			vNotifyPanel.setVisible(true);
 		}
-		
-		/**
-		 * Refresh folders and documents
-		 */
-		private void refresh() {
-			// Must preservate the selected row after refreshing
-			Main.get().mainPanel.browser.fileBrowser.mantainSelectedRow();
-			if (importZip.getValue()) {
-				Main.get().activeFolderTree.refresh(true);
-			} else {
-				Main.get().mainPanel.browser.fileBrowser.refresh(Main.get().activeFolderTree.getActualPath());
-			}
+	}
+	
+	/**
+	 * Refresh folders and documents
+	 */
+	public void refresh() {
+		// Must preservate the selected row after refreshing
+		Main.get().mainPanel.browser.fileBrowser.mantainSelectedRow();
+		if (importZip.getValue()) {
+			Main.get().activeFolderTree.refresh(true);
+		} else {
+			Main.get().mainPanel.browser.fileBrowser.refresh(Main.get().activeFolderTree.getActualPath());
 		}
 	}
 
@@ -620,6 +621,19 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 						event.getResults();
 				
 				if (msg.contains(returnOKMessage)) {
+					// Case is not importing a zip and wizard is enabled
+					if (!importZip.getValue() && 
+						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
+						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
+						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
+						if (msg.indexOf("&lt;path&gt;")>0 && msg.indexOf("&lt;/path&gt;")>0) {
+							String docPath = msg.substring(msg.indexOf("&lt;path&gt;")+12,msg.indexOf("&lt;/path&gt;"));
+							Main.get().wizardPopup.start(docPath);
+						}
+						wizard = true;
+					} else {
+						wizard = false;
+					}
 					uploadItem.setLoaded();
 				} else {
 					uploadItem.setFailed(msg);
@@ -664,6 +678,15 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 */
 	public int getUploadState() {
 		return widgetState;
+	}
+	
+	/**
+	 * isWizard
+	 * 
+	 * @return
+	 */
+	public boolean isWizard() {
+		return wizard;
 	}
 
 	/**

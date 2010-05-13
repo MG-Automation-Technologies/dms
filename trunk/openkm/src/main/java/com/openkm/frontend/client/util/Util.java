@@ -261,6 +261,10 @@ public class Util {
 		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "webdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
     
+    public static native void createFolderURLClipboardButton(String textToCopy) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "folderurlclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
     public static native void createFolderWebDavClipboardButton(String textToCopy) /*-{
 		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "folderwebdavclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;

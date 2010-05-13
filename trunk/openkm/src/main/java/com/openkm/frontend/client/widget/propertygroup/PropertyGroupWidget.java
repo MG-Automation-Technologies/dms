@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.properties;
+package com.openkm.frontend.client.widget.propertygroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +41,6 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -49,133 +48,54 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
-import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
-import com.openkm.frontend.client.widget.ConfirmPopup;
 
 /**
- * PropertyGroup
+ * PropertyGroupWidget
  * 
  * @author jllort
  *
  */
-public class PropertyGroup extends Composite {
+public class PropertyGroupWidget extends Composite {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	private final static String MAP_LIST_VALUES = "_LIST_VALUES";
 	
-	private ScrollPanel scrollPanel;
 	private FlexTable table;
 	private String grpName;
-	private String grpLabel;
-	private GWTDocument doc;
-	private Button changeButton;
-	private Button removeButton;
-	private Button cancelButton;
+	private String docPath;
 	private Map<String, String[]> hProperties = new HashMap<String, String[]>();
 	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
 	private HashMap<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
-	private boolean editValues = false;
 	private CellFormatter cellFormatter;
-	private HorizontalPanel hPanel;
+	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
+	
 	
 	/**
 	 * PropertyGroup
+	 * 
+	 * @param grpName The group name
+	 * @param widget Widget at firs row
 	 */
-	public PropertyGroup(String grpName, String groupLabel, GWTDocument doc, GWTFolder folder, boolean visible) {	
+	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
 		table = new FlexTable();
-		scrollPanel = new ScrollPanel(table);
-		hPanel = new HorizontalPanel();
+		this.docPath = docPath;
 		this.grpName = grpName;
-		this.grpLabel = groupLabel;
-		this.doc = doc;
-		
-		changeButton = new Button(Main.i18n("button.change"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				if (!editValues) {
-					Main.get().mainPanel.disableKeyShorcuts(); // Disables key shortcuts while updating
-					changeButton.setHTML(Main.i18n("button.memory"));
-					cancelButton.setVisible(true);
-					edit();
-					editValues = true;
-					removeButton.setVisible(false);
-				} else {
-					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-					changeButton.setHTML(Main.i18n("button.change"));
-					setProperties();
-					editValues = false;
-					removeButton.setVisible(true);
-					cancelButton.setVisible(false);
-				}
-			}
-		});
-		
-		removeButton = new Button(Main.i18n("button.delete"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				if (!editValues) {
-					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP);
-					Main.get().confirmPopup.show();
-				} 
-			}
-		});
-		
-		cancelButton = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
-			@Override
-			public void onClick(ClickEvent event) {
-				if (editValues) {
-					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
-					changeButton.setHTML(Main.i18n("button.change"));
-					editValues = false;
-					cancelEdit();
-					removeButton.setVisible(true);
-					cancelButton.setVisible(false);
-				} 
-			}
-		});
-		
-		// Checking button permisions
-		if (!visible) {
-			changeButton.setVisible(visible);
-			removeButton.setVisible(visible);
-			
-		} else if ( ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) &&
-			     ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE))  {
-	    	 		changeButton.setVisible(true);
-	    	 		removeButton.setVisible(true);
-	    	 		
-		} else {
-			changeButton.setVisible(false);
-			removeButton.setVisible(false);
-		}
+		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
 
 		table.setWidth("100%");
 		
-		hPanel.add(changeButton);
-		hPanel.add(new HTML("&nbsp;&nbsp;"));
-		hPanel.add(cancelButton);
-		hPanel.add(new HTML("&nbsp;&nbsp;"));
-		hPanel.add(removeButton);
-		
-		cancelButton.setVisible(false);  // Not shows cancel button
-		
-		table.setWidget(0, 0, hPanel);
+		table.setWidget(0, 0, widget);
 		table.getFlexCellFormatter().setColSpan(0,0,2);
 		
-		// Button format
-		changeButton.setStyleName("okm-Button");
-		removeButton.setStyleName("okm-Button");
-		cancelButton.setStyleName("okm-Button");
+		// Widget format
 		table.getCellFormatter().setHorizontalAlignment(0,0,HasAlignment.ALIGN_CENTER);
 		table.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_MIDDLE);
 		
@@ -187,9 +107,7 @@ public class PropertyGroup extends Composite {
 		// Format borders and margins
 		cellFormatter.addStyleName(0,0,"okm-Security-Title-RightBorder");
 		
-		getProperties();
-		
-		initWidget(scrollPanel);
+		initWidget(table);
 	}
 	
 	/**
@@ -220,14 +138,6 @@ public class PropertyGroup extends Composite {
 	}
 	
 	/**
-	 * Lang refresh
-	 */
-	public void langRefresh() {
-		changeButton.setHTML(Main.i18n("button.change"));
-		removeButton.setHTML(Main.i18n("button.delete"));		
-	}	
-	
-	/**
 	 * Gets asyncronous to group properties
 	 */
 	final AsyncCallback<Map<String, String[]>> callbackGetProperties = new AsyncCallback<Map<String, String[]>>() {
@@ -238,6 +148,9 @@ public class PropertyGroup extends Composite {
 
 		public void onFailure(Throwable caught) {
 			Main.get().showError("getProperties", caught);
+			if (propertyGroupWidgetToFire!=null) {
+				propertyGroupWidgetToFire.finishedGetProperties();
+			}
 		}
 	};
 
@@ -470,10 +383,17 @@ public class PropertyGroup extends Composite {
 					}
 				}
 			}
+			
+			if (propertyGroupWidgetToFire!=null) {
+				propertyGroupWidgetToFire.finishedGetProperties();
+			}
 		}
 
 		public void onFailure(Throwable caught) {
 			Main.get().showError("getMetaData", caught);
+			if (propertyGroupWidgetToFire!=null) {
+				propertyGroupWidgetToFire.finishedGetProperties();
+			}
 		}
 	};
 	
@@ -482,11 +402,17 @@ public class PropertyGroup extends Composite {
 	 */
 	final AsyncCallback<Object> callbackSetProperties = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			//Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			if (propertyGroupWidgetToFire!=null) {
+				propertyGroupWidgetToFire.finishedSetProperties();
+			}
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			//Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			if (propertyGroupWidgetToFire!=null) {
+				propertyGroupWidgetToFire.finishedSetProperties();
+			}
 			Main.get().showError("setProperties", caught);
 		}
 	};
@@ -506,7 +432,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Edit values
 	 */
-	private void edit(){
+	public void edit(){
 		int rows = 1;
 
 		for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
@@ -568,7 +494,7 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Sets the properties values
 	 */
-	private void setProperties() {
+	public void setProperties() {
 		Map<String, String[]> hSaveProperties = new HashMap<String, String[]>();
 		int rows = 1;
 		
@@ -669,16 +595,17 @@ public class PropertyGroup extends Composite {
 				rows ++;
 			}
 		}
-		Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
+		//Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.setProperties(doc.getPath(), grpName, hSaveProperties, callbackSetProperties);
+		propertyGroupService.setProperties(docPath, grpName, hSaveProperties, callbackSetProperties);
 	}
+	
 	
 	/**
 	 * Cancel edition and restores values
 	 */
-	private void cancelEdit() {
+	public void cancelEdit() {
 
 		int rows = 1;
 		
@@ -826,37 +753,28 @@ public class PropertyGroup extends Composite {
 	/**
 	 * Gets all group properties 
 	 */
-	private void getProperties() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-			propertyGroupService.getProperties(doc.getPath(), grpName, callbackGetProperties);
-		}
+	public void getProperties() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		propertyGroupService.getProperties(docPath, grpName, callbackGetProperties);
 	}
 	
 	/**
 	 * Gets all metadata group properties 
 	 */
-	private void getMetaData() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-			propertyGroupService.getMetaData(grpName, callbackGetMetaData);
-		}
+	public void getMetaData() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		propertyGroupService.getMetaData(grpName, callbackGetMetaData);
 	}
 
 	/**
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
-		if (gwtDocument!= null) {
-			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-			propertyGroupService.removeGroup(doc.getPath(), grpName, callbackRemoveGroup);
-		}
+		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
+		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
+		propertyGroupService.removeGroup(docPath, grpName, callbackRemoveGroup);
 	}
 	
 	/**
@@ -866,14 +784,5 @@ public class PropertyGroup extends Composite {
 	 */
 	public String getGrpName(){
 		return grpName;
-	}
-	
-	/**
-	 * Gets the group label
-	 * 
-	 * @return The group label
-	 */
-	public String getGrpLabel(){
-		return grpLabel;
 	}
 }
