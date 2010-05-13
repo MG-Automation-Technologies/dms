@@ -26,6 +26,7 @@ import java.util.Arrays;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ import com.openkm.ws.util.StringArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMTest {
 	private static Logger log = LoggerFactory.getLogger(OKMTest.class);
 	
@@ -48,22 +50,22 @@ public class OKMTest {
 	 * 
 	 */
 	public void simple(String param1) {
-		log.info("simple(" + param1 + ")");
+		log.info("simple({})", param1);
 	}
 	
 	/**
 	 * 
 	 */
 	public void complex(Note note) {
-		log.info("complex(" + note + ")");
+		log.info("complex({})", note);
 	}
 	
 	/**
 	 * 
 	 */
 	public String[] sort1(String[] a) {
-		log.info("sort1(" + a + ")");
-		if (a != null) log.info("sort1: a.length=" + a.length);
+		log.info("sort1({})", a);
+		if (a != null) log.info("sort1: a.length={}", a.length);
 		Arrays.sort(a);
 		return a;
 	}
@@ -72,12 +74,20 @@ public class OKMTest {
 	 * 
 	 */
 	public StringArray sort2(StringArray a) {
-		log.info("sort2(" + a + ")");
+		log.info("sort2({})", a);
 		if (a != null) {
-			log.info("sort2: a.value=" + a.getValue());
-			if (a.getValue() != null) log.info("sort2: a.length=" + a.getValue().length);
+			log.info("sort2: a.value={}", a.getValue());
+			if (a.getValue() != null) log.info("sort2: a.length={}", a.getValue().length);
 		}
 		Arrays.sort(a.getValue());
 		return a;
+	}
+	
+	/**
+	 * 
+	 */
+	public String greetings(String name) {
+		log.info("greetings({})", name);
+		return "Hello, "+name+"!";
 	}
 }

@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,7 @@ import com.openkm.ws.util.StringArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMAuth {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);
 	
@@ -59,10 +61,10 @@ public class OKMAuth {
 	 */
 	public String login(String user, String pass) throws AccessDeniedException,
 			UserAlreadyLoggerException, RepositoryException {
-		log.debug("login(" + user + ", " + pass + ")");
+		log.debug("login({}, {})", user, pass);
 		AuthModule am = ModuleManager.getAuthModule();
 		String token = am.login(user, pass);
-		log.debug("login: " + token);
+		log.debug("login: {}", token);
 		return token;
 	}
 
@@ -70,7 +72,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
 	 */
 	public void logout(String token) throws AccessDeniedException, RepositoryException {
-		log.debug("logout("+token+")");
+		log.debug("logout({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		am.logout(token); 
 		log.debug("logout: void");
@@ -81,7 +83,7 @@ public class OKMAuth {
 	 */
 	public BytePairArray getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("getGrantedRoles("+token+", "+nodePath+")");
+		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedRoles(token, nodePath);
 		Set<String> keys = hm.keySet();
@@ -98,7 +100,7 @@ public class OKMAuth {
 		
 		BytePairArray uh = new BytePairArray();
 		uh.setValue(tmp);
-		log.debug("getGrantedRoles: " + uh);
+		log.debug("getGrantedRoles: {}", uh);
 		return uh;
 	}
 
@@ -107,7 +109,7 @@ public class OKMAuth {
 	 */
 	public BytePairArray getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("getGrantedUsers("+token+", "+nodePath+")");
+		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedUsers(token, nodePath);
 		Set<String> keys = hm.keySet();
@@ -124,7 +126,7 @@ public class OKMAuth {
 		
 		BytePairArray uh = new BytePairArray();
 		uh.setValue(tmp);
-		log.debug("getGrantedUsers: " + uh);
+		log.debug("getGrantedUsers: {}", uh);
 		return uh;
 	}
 
@@ -132,12 +134,12 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#getRoles(java.lang.String)
 	 */
 	public StringArray getRoles(String token) throws RepositoryException {
-		log.debug("getRoles("+token+")");
+		log.debug("getRoles({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();
 		Collection<String> col = am.getRoles(token);
 		sa.setValue((String[]) col.toArray(new String[col.size()])); 
-		log.debug("getRoles: " + sa);
+		log.debug("getRoles: {}", sa);
 		return sa;
 	}
 
@@ -145,12 +147,12 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#getUsers(java.lang.String)
 	 */
 	public StringArray getUsers(String token) throws RepositoryException {
-		log.debug("getUsers("+token+")");
+		log.debug("getUsers({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();
 		Collection<String> col = am.getUsers(token);
 		sa.setValue((String[]) col.toArray(new String[col.size()])); 
-		log.debug("getUsers: " + sa);
+		log.debug("getUsers: {]", sa);
 		return sa;
 	}
 
@@ -159,7 +161,7 @@ public class OKMAuth {
 	 */
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("grantRole("+token+", "+nodePath+", "+role+", "+permissions+", "+recursive+")");
+		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantRole(token, nodePath, role, permissions, recursive); 
 		log.debug("grantRole: void");
@@ -170,7 +172,7 @@ public class OKMAuth {
 	 */
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("grantUser("+token+", "+nodePath+", "+user+", "+permissions+", "+recursive+")");
+		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantUser(token, nodePath, user, permissions, recursive); 
 		log.debug("grantUser: void");
@@ -181,7 +183,7 @@ public class OKMAuth {
 	 */
 	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("revokeRole("+token+", "+nodePath+", "+user+", "+permissions+", "+recursive+")");
+		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeRole(token, nodePath, user, permissions, recursive); 
 		log.debug("revokeRole: void");
@@ -192,7 +194,7 @@ public class OKMAuth {
 	 */
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("revokeUser("+token+", "+nodePath+", "+user+", "+permissions+", "+recursive+")");
+		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeUser(token, nodePath, user, permissions, recursive); 
 		log.debug("revokeUser: void");

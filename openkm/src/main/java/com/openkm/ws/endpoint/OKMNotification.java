@@ -27,6 +27,7 @@ import java.util.Collection;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ import com.openkm.ws.util.StringArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMNotification {
 	private static Logger log = LoggerFactory.getLogger(OKMNotification.class);
 	
@@ -54,7 +56,7 @@ public class OKMNotification {
 	 */
 	public void subscribe(String token, String nodePath) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("subscribe("+token+", "+nodePath+")");
+		log.debug("subscribe({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.subscribe(token, nodePath);
 		log.debug("subscribe: void");
@@ -65,7 +67,7 @@ public class OKMNotification {
 	 */
 	public void unsubscribe(String token, String nodePath) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("unsubscribe("+token+", "+nodePath+")");
+		log.debug("unsubscribe({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.unsubscribe(token, nodePath);
 		log.debug("unsubscribe: void");
@@ -76,12 +78,12 @@ public class OKMNotification {
 	 */
 	public StringArray getSubscriptors(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("getSubscriptors("+token+", "+nodePath+")");
+		log.debug("getSubscriptors({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		StringArray sa = new StringArray();
 		Collection<String> col = nm.getSubscriptors(token, nodePath);
 		sa.setValue(col.toArray(new String[col.size()]));
-		log.debug("getSubscriptors: "+sa);
+		log.debug("getSubscriptors: {}", sa);
 		return sa;
 	}
 
@@ -89,7 +91,7 @@ public class OKMNotification {
 	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
 	 */
 	public void notify(String token, String nodePath, StringArray users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify("+token+", "+nodePath+", "+users+", "+message+")");
+		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.notify(token, nodePath, Arrays.asList(users.getValue()), message);
 		log.debug("notify: void");

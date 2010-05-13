@@ -31,6 +31,7 @@ import java.util.Set;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,7 @@ import com.openkm.ws.util.StringArray;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
+@SecurityDomain("OpenKM")
 public class OKMSearch {
 	private static Logger log = LoggerFactory.getLogger(OKMSearch.class);
 	
@@ -64,12 +66,12 @@ public class OKMSearch {
 	 */
 	public QueryResultArray findByContent(String token, String words) throws IOException, ParseException, 
 			RepositoryException {
-		log.debug("findByContent(" + token + ", " + words + ")");
+		log.debug("findByContent({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
 		Collection<QueryResult> col = sm.findByContent(token, words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByContent: " + qra);
+		log.debug("findByContent: {}", qra);
 		return qra;
 	}
 
@@ -78,12 +80,12 @@ public class OKMSearch {
 	 */
 	public QueryResultArray findByName(String token, String words) throws IOException, ParseException,
 			RepositoryException {
-		log.debug("findByName(" + token + ", " + words + ")");
+		log.debug("findByName({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
 		Collection<QueryResult> col = sm.findByName(token, words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByName: " + qra);
+		log.debug("findByName: {}", qra);
 		return qra;
 	}
 
@@ -92,12 +94,12 @@ public class OKMSearch {
 	 */
 	public QueryResultArray findByKeywords(String token, String words) throws IOException, ParseException,
 			RepositoryException {
-		log.debug("findByKeywords(" + token + ", " + words + ")");
+		log.debug("findByKeywords({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
 		Collection<QueryResult> col = sm.findByKeywords(token, words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByKeywords: " + qra);
+		log.debug("findByKeywords: {}", qra);
 		return qra;
 	}
 
@@ -106,12 +108,12 @@ public class OKMSearch {
 	 */
 	public QueryResultArray findByStatement(String token, String statement, String type)
 			throws RepositoryException {
-		log.debug("findByStatement(" + token + ", " + statement + ")");
+		log.debug("findByStatement({} ,{})", token, statement);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
 		Collection<QueryResult> col = sm.findByStatement(token, statement, type);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByStatement: " + qra);
+		log.debug("findByStatement: {}", qra);
 		return qra;
 	}
 	
