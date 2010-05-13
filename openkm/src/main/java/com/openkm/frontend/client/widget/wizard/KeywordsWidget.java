@@ -50,6 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
@@ -166,6 +167,15 @@ public class KeywordsWidget extends Composite {
 		table.setWidget(4, 0, keywordsCloud);
 		table.getFlexCellFormatter().setColSpan(4,0,2);
 		cellFormatter.setHorizontalAlignment(4,0,HasAlignment.ALIGN_CENTER);
+		
+		// Reloading keyword list
+		multiWordkSuggestKey.clear();
+		keywordList = new ArrayList<String>();
+		for (Iterator<GWTKeyword> it = Main.get().mainPanel.dashboard.keyMapDashboard.getAllKeywordList().iterator(); it.hasNext();) {
+			String keyword = it.next().getKeyword();
+			multiWordkSuggestKey.add(keyword);
+			keywordList.add(keyword);
+		}
 		
 		suggestKey.setStyleName("okm-KeyMap-Suggest");
 		suggestKey.addStyleName("okm-Input");
