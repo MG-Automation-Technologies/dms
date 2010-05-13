@@ -53,4 +53,6 @@ public interface OKMPropertyGroupService extends RemoteService {
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException;
 	
 	public void removeGroup( String docPath, String grpName) throws OKMException;
+	
+	public String[] getPropertyGroupWizard();
 }

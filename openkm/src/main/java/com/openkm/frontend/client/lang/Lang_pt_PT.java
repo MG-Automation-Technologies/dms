@@ -316,6 +316,7 @@ public class Lang_pt_PT {
 	    lang.put("folder.subscribed.yes", "Sim");
 	    lang.put("folder.subscribed.no", "Não");
 	    lang.put("folder.subscribed.users", "Utilizadores subscritos");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_pt_PT {
 	    lang.put("button.start", "Iniciar");
 	    lang.put("button.select", "Seleccionar");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Adicionar grupo de propriedades");
@@ -593,6 +595,9 @@ public class Lang_pt_PT {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Adicionar categoria");
 	    lang.put("categories.folder.error.delete", "Não é possível eliminar categoria com documentos atribuídos");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Sem permissão para aceder a documento");

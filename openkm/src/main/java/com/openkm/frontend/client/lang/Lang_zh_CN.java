@@ -316,6 +316,7 @@ public class Lang_zh_CN {
 	    lang.put("folder.subscribed.yes", "是");
 	    lang.put("folder.subscribed.no", "否");
 	    lang.put("folder.subscribed.users", "订阅用户");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -449,6 +450,7 @@ public class Lang_zh_CN {
 	    lang.put("button.start", "开始");
 	    lang.put("button.select", "选择");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "新增属性组");
@@ -592,6 +594,9 @@ public class Lang_zh_CN {
 	    // Categories
 	    lang.put("categories.folder.select.label", "增加自定义分类");//Add category
 	    lang.put("categories.folder.error.delete", "无法删除自定义分类，此分类下面还包含文档");//Cannot delete category with documents
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");

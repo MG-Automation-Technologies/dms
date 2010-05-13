@@ -65,6 +65,7 @@ import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
 import com.openkm.frontend.client.widget.upload.FileUpload;
+import com.openkm.frontend.client.widget.wizard.WizardPopup;
 
 /**
  * Main entry point application
@@ -106,6 +107,7 @@ public final class Main implements EntryPoint{
 	public ImageViewerPopup imageViewerPopup;
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
+	public WizardPopup wizardPopup;
 	public VerticalBarSplitter verticalBarSplitter;
 	public HorizontalBarSplitter horizontalBarSplitter;
 	
@@ -268,6 +270,11 @@ public final class Main implements EntryPoint{
 		findFolderSelectPopup.setHeight("240px");
 		findFolderSelectPopup.setStyleName("okm-Popup");
 		findFolderSelectPopup.addStyleName("okm-DisableSelect");
+		wizardPopup = new WizardPopup();
+		wizardPopup.setWidth("400px");
+		wizardPopup.setHeight("40px");
+		wizardPopup.setStyleName("okm-Popup");
+		wizardPopup.addStyleName("okm-DisableSelect");
 		
 		verticalBarSplitter = new VerticalBarSplitter();
 		horizontalBarSplitter = new HorizontalBarSplitter();

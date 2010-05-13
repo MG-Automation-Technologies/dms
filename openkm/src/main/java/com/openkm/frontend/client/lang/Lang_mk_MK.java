@@ -316,6 +316,7 @@ public class Lang_mk_MK {
 	    lang.put("folder.subscribed.yes", "Да");
 	    lang.put("folder.subscribed.no", "Не");
 	    lang.put("folder.subscribed.users", "Преплатени корисници");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_mk_MK {
 	    lang.put("button.start", "Отпочни");
 	    lang.put("button.select", "Избери");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Додади група на својства");
@@ -593,6 +595,9 @@ public class Lang_mk_MK {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Пристапот до документот е одбиен");

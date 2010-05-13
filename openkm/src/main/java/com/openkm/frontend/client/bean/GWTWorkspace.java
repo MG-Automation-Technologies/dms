@@ -47,6 +47,9 @@ public class GWTWorkspace implements IsSerializable {
 	private String workflowRunConfigForm = "";
 	private String workflowProcessIntanceVariableUUID = "";
 	private String workflowProcessIntanceVariablePath = "";
+	private boolean wizardPropertyGroups = false;
+	private boolean wizardKeywords = false;
+	private boolean wizardCategories = false;
 
 	/**
 	 * GWTWorkspace
@@ -180,5 +183,29 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWorkflowProcessIntanceVariablePath(String workflowProcessIntanceVariablePath) {
 		this.workflowProcessIntanceVariablePath = workflowProcessIntanceVariablePath;
+	}
+	
+	public boolean isWizardPropertyGroups() {
+		return wizardPropertyGroups;
+	}
+
+	public void setWizardPropertyGroups(boolean wizardPropertyGroups) {
+		this.wizardPropertyGroups = wizardPropertyGroups;
+	}
+	
+	public boolean isWizardKeywords() {
+		return wizardKeywords;
+	}
+
+	public void setWizardKeywords(boolean wizardKeywords) {
+		this.wizardKeywords = wizardKeywords;
+	}
+	
+	public boolean isWizardCategories() {
+		return wizardCategories;
+	}
+
+	public void setWizardCategories(boolean wizardCategories) {
+		this.wizardCategories = wizardCategories;
 	}
 }

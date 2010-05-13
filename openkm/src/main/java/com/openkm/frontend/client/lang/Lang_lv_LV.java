@@ -316,6 +316,7 @@ public class Lang_lv_LV {
 	    lang.put("folder.subscribed.yes", "Jā");
 	    lang.put("folder.subscribed.no", "Nē");
 	    lang.put("folder.subscribed.users", "Lietotāji, kuri abonējuši");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_lv_LV {
 	    lang.put("button.start", "Sākt");
 	    lang.put("button.select", "Select");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Pievienot īpašību grupu");
@@ -593,6 +595,9 @@ public class Lang_lv_LV {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Pieeja dokumentam liegta");

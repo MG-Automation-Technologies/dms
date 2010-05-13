@@ -321,6 +321,7 @@ public class Lang_ru_RU {
 	    lang.put("folder.subscribed.yes", "Да");
 	    lang.put("folder.subscribed.no", "Нет");
 	    lang.put("folder.subscribed.users", "Подписанные пользователи");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -455,6 +456,7 @@ public class Lang_ru_RU {
 	    lang.put("button.start", "Начать");
 	    lang.put("button.select", "Выбрать");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Добавить группу свойств");
@@ -598,6 +600,9 @@ public class Lang_ru_RU {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Доступ к документ запрещен");

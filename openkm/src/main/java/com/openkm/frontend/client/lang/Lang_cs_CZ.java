@@ -316,6 +316,7 @@ public class Lang_cs_CZ {
 	    lang.put("folder.subscribed.yes", "Ano");
 	    lang.put("folder.subscribed.no", "Ne");
 	    lang.put("folder.subscribed.users", "Uživatelé kterým je zasíláno upozornění");
+	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
 	    
 	    // Version
@@ -450,6 +451,7 @@ public class Lang_cs_CZ {
 	    lang.put("button.start", "Start");
 	    lang.put("button.select", "Vybrat");
 	    lang.put("button.test", "Test");
+	    lang.put("button.next", "Next");
 	    
 	    // Group
 	    lang.put("group.label", "Přidat skupinu vlastností");
@@ -593,6 +595,9 @@ public class Lang_cs_CZ {
 	    // Categories
 	    lang.put("categories.folder.select.label", "Add category");
 	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    
+	    // Wizard
+	    lang.put("wizard.document.uploading","Document wizard");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Přístup k dokumentu není povolen");
