@@ -75,7 +75,7 @@ public class DirectFolderModule implements FolderModule {
 	 */
 	public Folder getProperties(Session session, String fldPath) throws 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException  {
-		log.debug("getProperties[session]:({}, {})", session, fldPath);
+		log.debug("getProperties[session]({}, {})", session, fldPath);
 		Folder fld = new Folder();
 		Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			
@@ -111,6 +111,10 @@ public class DirectFolderModule implements FolderModule {
 			
 			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE)) {
 				fld.setPermissions((byte) (fld.getPermissions() | Permission.DELETE));
+			}
+			
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.MODIFY_AC)) {
+				fld.setPermissions((byte) (fld.getPermissions() | Permission.SECURITY));
 			}
 		}
 		
@@ -682,7 +686,7 @@ public class DirectFolderModule implements FolderModule {
 	private void copyHelper(Session session, Node srcFolderNode, Node dstFolderNode) throws NoSuchNodeTypeException, 
 			VersionException, ConstraintViolationException, javax.jcr.lock.LockException, 
 			javax.jcr.RepositoryException, IOException {
-		log.debug("copyHelper({}, {})", srcFolderNode.getPath(), dstFolderNode.getPath());
+		log.debug("copyHelper({}, {}, {})", new Object[] { session, srcFolderNode.getPath(), dstFolderNode.getPath() });
 		
 		for (NodeIterator it = srcFolderNode.getNodes(); it.hasNext(); ) {
 			Node child = it.nextNode();
@@ -823,8 +827,8 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String fldPath) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException {
 		log.debug("isValid({}, {})", token, fldPath);
 		boolean valid = false;
 		Session session = null;
