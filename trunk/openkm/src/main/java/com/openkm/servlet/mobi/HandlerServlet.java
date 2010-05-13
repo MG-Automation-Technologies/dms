@@ -2,7 +2,6 @@ package com.openkm.servlet.mobi;
 
 import java.io.IOException;
 
-import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,10 +17,10 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMSearch;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.core.UserAlreadyLoggerException;
 
 /**
@@ -43,9 +42,11 @@ public class HandlerServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		 
 		try {
-			if (session.getAttribute("token") == null) {
-				String token = OKMAuth.getInstance().login();
-				session.setAttribute("token", token);
+			if (Config.SESSION_MANAGER) {
+				if (session.getAttribute("token") == null) {
+					String token = OKMAuth.getInstance().login();
+					session.setAttribute("token", token);
+				}
 			}
 			
 			if (action.equals("") || action.equals("browse")) {
@@ -90,7 +91,7 @@ public class HandlerServlet extends HttpServlet {
 		log.info("browse({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String token = (String) request.getSession().getAttribute("token");
-		Session jcrSession = SessionManager.getInstance().get(token);
+		String userId = request.getRemoteUser();
 		String path = request.getParameter("path");
 		
 		if (path == null || path.equals("")) {
@@ -100,7 +101,7 @@ public class HandlerServlet extends HttpServlet {
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(token, path));
 		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(token, path));
-		sc.setAttribute("userId", jcrSession.getUserID());
+		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/browse.jsp").forward(request, response);
 	}
