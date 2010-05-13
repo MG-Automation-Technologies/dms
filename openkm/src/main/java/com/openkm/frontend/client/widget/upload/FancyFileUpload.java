@@ -613,7 +613,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				// Check the result to see if an OK message is returned from the
 				// server.
 				
-				// Return params could be <pre> or <pre style= with some IE and chrome
+				// Return params could be <pre> or <pre style=""> with some IE and chrome
 				String msg = event.getResults();
 				
 				if (msg.contains(returnOKMessage)) {
