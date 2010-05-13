@@ -616,9 +616,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				// server.
 				
 				// Return params could be <pre> or <pre style= with some IE and chrome
-				String msg = event.getResults().startsWith("<pre>") ? 
-						event.getResults().substring(5, event.getResults().length() - 6) :
-						event.getResults();
+				String msg = event.getResults();
 				
 				if (msg.contains(returnOKMessage)) {
 					// Case is not importing a zip and wizard is enabled
@@ -626,10 +624,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
-						if (msg.indexOf("&lt;path&gt;")>0 && msg.indexOf("&lt;/path&gt;")>0) {
-							String docPath = msg.substring(msg.indexOf("&lt;path&gt;")+12,msg.indexOf("&lt;/path&gt;"));
-							Main.get().wizardPopup.start(docPath);
-						}
+						String docPath = msg.substring(msg.indexOf("path[")+5,msg.indexOf("]path"));
+						Main.get().wizardPopup.start(docPath);
 						wizard = true;
 					} else {
 						wizard = false;
