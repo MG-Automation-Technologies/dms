@@ -220,11 +220,6 @@
       <artifactId>jackrabbit-jcr-server</artifactId>
       <version>${jcr.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.jackrabbit</groupId>
-      <artifactId>jackrabbit-jcr-servlet</artifactId>
-      <version>1.5.2</version>
-    </dependency>
 
     <!-- Twitter4j -->
     <dependency>
