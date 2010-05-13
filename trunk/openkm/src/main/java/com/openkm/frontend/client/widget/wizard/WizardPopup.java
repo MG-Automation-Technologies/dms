@@ -229,6 +229,7 @@ public class WizardPopup extends DialogBox {
 				
 			case STATUS_KEYWORDS:
 				if (Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords()) {
+					actualButton = acceptButton();
 					setKeywords();
 				} else {
 					status = STATUS_FINISH;
@@ -291,6 +292,8 @@ public class WizardPopup extends DialogBox {
 				break;
 				
 			case STATUS_KEYWORDS:
+				status = STATUS_FINISH;
+				showNextWizard();
 				break;
 		}
 	}
@@ -307,6 +310,23 @@ public class WizardPopup extends DialogBox {
 	 */
 	private void setKeywords() {
 		// To be implemented
+		KeywordsWidget keywordsWidget = new KeywordsWidget(docPath, new HTML(Main.i18n("document.keywords")));
+		
+		HorizontalPanel hPanel = new HorizontalPanel();
+		HTML space = new HTML("");
+		hPanel.add(actualButton);
+		hPanel.add(space);
+		hPanel.setCellWidth(space, "3");
+
+		vPanelFired.clear();
+		vPanelFired.add(keywordsWidget);
+		vPanelFired.add(hPanel);
+		HTML space2 = new HTML("");
+		vPanelFired.add(space2);
+		vPanelFired.setCellVerticalAlignment(keywordsWidget, HasAlignment.ALIGN_TOP);
+		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
+		vPanelFired.setCellHeight(space2, "5");
+		actualButton.setEnabled(true);
 	}
 	
 	/**

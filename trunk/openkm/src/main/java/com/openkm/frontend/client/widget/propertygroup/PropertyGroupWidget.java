@@ -81,8 +81,10 @@ public class PropertyGroupWidget extends Composite {
 	/**
 	 * PropertyGroup
 	 * 
+	 * @param docPath The document path
 	 * @param grpName The group name
 	 * @param widget Widget at firs row
+	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 */
 	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
 		table = new FlexTable();
