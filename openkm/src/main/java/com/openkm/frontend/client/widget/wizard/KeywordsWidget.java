@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -56,6 +57,8 @@ import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
+import com.openkm.frontend.client.widget.properties.PropertiesImageBundle;
+import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**
  * KeywordsWidget
@@ -66,6 +69,7 @@ import com.openkm.frontend.client.widget.dashboard.TagCloud;
 public class KeywordsWidget extends Composite {
 	
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
+	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);
 	
 	private FlexTable table;
 	private String docPath;
@@ -80,6 +84,7 @@ public class KeywordsWidget extends Composite {
 	private FlowPanel hKeyPanel;
 	private Collection<String> docKeywords;
 	private boolean remove = true;
+	private Image thesaurusImage;
 	
 	/**
 	 * KeywordsWidget
@@ -127,11 +132,19 @@ public class KeywordsWidget extends Composite {
 			}
 		});
 		
+		thesaurusImage = proImageBundle.bookOpenIcon().createImage();
+		thesaurusImage.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.WIZARD);
+			}
+		});
+		
 		VerticalPanel vPanel = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.add(suggestKey);
 		hPanel.add(new HTML("&nbsp;"));
-		//hPanel.add(thesaurusImage);
+		hPanel.add(thesaurusImage);
 		hKeyPanel = new FlowPanel();
 		HTML space = new HTML("");
 		vPanel.add(hPanel);

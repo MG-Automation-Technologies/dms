@@ -72,6 +72,7 @@ import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
+import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**
  * Document
@@ -153,7 +154,7 @@ public class Document extends Composite {
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show();
+				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.DOCUMENT_PROPERTIES);
 			}
 		});
 		
