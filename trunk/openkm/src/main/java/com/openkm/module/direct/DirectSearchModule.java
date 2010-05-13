@@ -481,14 +481,20 @@ public class DirectSearchModule implements SearchModule {
 	@Override
 	public void saveSearch(String token, QueryParams params, String name) throws 
 			AccessDeniedException, ItemExistsException, RepositoryException {
-		log.debug("saveSearch("+token+", "+params+", "+name+")");
+		log.debug("saveSearch({}, {}, {})", new Object[] { token, params, name });
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
 			Node savedSearch = userQuery.addNode(name, QueryParams.TYPE);
 			
@@ -509,6 +515,10 @@ public class DirectSearchModule implements SearchModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("saveSearch: void");
@@ -546,12 +556,9 @@ public class DirectSearchModule implements SearchModule {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#runSearch(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public QueryParams getSearch(String token, String name) throws PathNotFoundException, RepositoryException {
-		log.debug("getSearch("+token+", "+name+")");
+		log.debug("getSearch({}, {})", token, name);
 		QueryParams qp = new QueryParams();
 		Session session = null;
 		
@@ -586,15 +593,12 @@ public class DirectSearchModule implements SearchModule {
 			}
 		}
 		
-		log.debug("getSearch: "+qp);
+		log.debug("getSearch: {}", qp);
 		return qp;
 	}
 
 	/**
-	 * @param savedQuery
-	 * @return
-	 * @throws javax.jcr.RepositoryException
-	 * @throws ValueFormatException
+	 * Get saved search
 	 */
 	public QueryParams getSearch(Node savedQuery) throws javax.jcr.RepositoryException, 
 			ValueFormatException {
@@ -645,7 +649,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<String> getAllSearchs(String token) throws RepositoryException {
-		log.debug("getAllSearchs("+token+")");
+		log.debug("getAllSearchs({})", token);
 		Collection<String> ret = new ArrayList<String>();
 		Session session = null;
 		
@@ -676,21 +680,27 @@ public class DirectSearchModule implements SearchModule {
 			}
 		}
 		
-		log.debug("getAllSearchs: "+ret);
+		log.debug("getAllSearchs: {}", ret);
 		return ret;
 	}
 
 	@Override
 	public void deleteSearch(String token, String name) throws AccessDeniedException,
 			PathNotFoundException, RepositoryException {
-		log.debug("deleteSearch("+token+", "+name+")");
+		log.debug("deleteSearch({}, {})", token, name);
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
 			Node savedQuery = userQuery.getNode(name);
 			boolean isDashboard = savedQuery.getProperty(QueryParams.DASHBOARD).getBoolean();
@@ -713,14 +723,19 @@ public class DirectSearchModule implements SearchModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("deleteSearch: void");
 	}
 
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws RepositoryException {
-		log.info("getKeywordMap("+token+", "+filter+")");
+	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws 
+			RepositoryException {
+		log.info("getKeywordMap({}, {})", token, filter);
 		Map<String, Integer> cloud = null;
 		
 		if (Config.USER_KEYWORDS_CACHE) {
@@ -729,18 +744,16 @@ public class DirectSearchModule implements SearchModule {
 			cloud = getKeywordMapLive(token, filter);
 		}
 		
-		log.info("getKeywordMap: "+cloud);
+		log.info("getKeywordMap: {}", cloud);
 		return cloud;
 	}
 	
 	/**
-	 * @param token
-	 * @param filter
-	 * @return
-	 * @throws RepositoryException
+	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapLive(String token, Collection<String> filter) throws RepositoryException {
-		log.info("getKeywordMapLive("+token+", "+filter+")");
+	private Map<String, Integer> getKeywordMapLive(String token, Collection<String> filter) throws 
+			RepositoryException {
+		log.info("getKeywordMapLive({}, {})", token, filter);
 		String statement = "/jcr:root//element(*,okm:document)";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
 		Session session = null;
@@ -785,47 +798,68 @@ public class DirectSearchModule implements SearchModule {
 			}
 		}
 
-		log.info("getKeywordMapLive: "+cloud);
+		log.info("getKeywordMapLive: {}", cloud);
 		return cloud;
 	}
 
 	/**
-	 * @param token
-	 * @param filter
-	 * @return
-	 * @throws RepositoryException
+	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws RepositoryException {
-		log.info("getKeywordMapCached("+token+", "+filter+")");
-		Session session = SessionManager.getInstance().get(token);
-		HashMap<String, ArrayList<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
+	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws 
+			RepositoryException {
+		log.info("getKeywordMapCached({}, {})", token, filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
+		Session session = null;
 		
-		for (Iterator<ArrayList<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
-			ArrayList<String> docKeywords = kwIt.next();
+		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
 			
-			if (filter != null && docKeywords.containsAll(filter)) {
-				for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
-					String keyword = itDocKeywords.next();
-					if (!filter.contains(keyword)) {
-						Integer occurs = keywordMap.get(keyword)!=null?keywordMap.get(keyword):0;
-						keywordMap.put(keyword, occurs+1);
+			HashMap<String, ArrayList<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
+						
+			for (Iterator<ArrayList<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
+				ArrayList<String> docKeywords = kwIt.next();
+				
+				if (filter != null && docKeywords.containsAll(filter)) {
+					for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
+						String keyword = itDocKeywords.next();
+						if (!filter.contains(keyword)) {
+							Integer occurs = keywordMap.get(keyword)!=null?keywordMap.get(keyword):0;
+							keywordMap.put(keyword, occurs+1);
+						}
 					}
 				}
 			}
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.info("getKeywordMapCached: "+keywordMap);
+		log.info("getKeywordMapCached: {}", keywordMap);
 		return keywordMap;
 	}
 
 	@Override
-	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws RepositoryException {
-		log.info("getCategorizedDocuments("+token+", "+categoryId+")");
-		Session session = SessionManager.getInstance().get(token);
+	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws 
+			RepositoryException {
+		log.info("getCategorizedDocuments({}, {})", token, categoryId);
 		ArrayList<Document> documents = new ArrayList<Document>();
+		Session session = null;
 		
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token); 
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node category = session.getNodeByUUID(categoryId);
 			
 			for (PropertyIterator it = category.getReferences(); it.hasNext(); ) {
@@ -840,9 +874,13 @@ public class DirectSearchModule implements SearchModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.info("getCategorizedDocuments: "+documents);
+		log.info("getCategorizedDocuments: {}", documents);
 		return documents;
 	}
 }
