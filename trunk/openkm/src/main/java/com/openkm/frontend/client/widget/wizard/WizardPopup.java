@@ -71,6 +71,7 @@ public class WizardPopup extends DialogBox {
 	private int status = STATUS_NONE;
 	private Button actualButton;
 	public KeywordsWidget keywordsWidget;
+	public CategoriesWidget categoriesWidget;
 	
 	/**
 	 * WizardPopup
@@ -290,6 +291,8 @@ public class WizardPopup extends DialogBox {
 				break;
 				
 			case STATUS_CATEGORIES:
+				status = STATUS_KEYWORDS;
+				showNextWizard();
 				break;
 				
 			case STATUS_KEYWORDS:
@@ -303,7 +306,23 @@ public class WizardPopup extends DialogBox {
 	 * setCategories
 	 */
 	private void setCategories() {
-		// To be implemented
+		categoriesWidget = new CategoriesWidget(docPath, new HTML(Main.i18n("document.categories")));
+		
+		HorizontalPanel hPanel = new HorizontalPanel();
+		HTML space = new HTML("");
+		hPanel.add(actualButton);
+		hPanel.add(space);
+		hPanel.setCellWidth(space, "3");
+
+		vPanelFired.clear();
+		vPanelFired.add(categoriesWidget);
+		vPanelFired.add(hPanel);
+		HTML space2 = new HTML("");
+		vPanelFired.add(space2);
+		vPanelFired.setCellVerticalAlignment(categoriesWidget, HasAlignment.ALIGN_TOP);
+		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
+		vPanelFired.setCellHeight(space2, "5");
+		actualButton.setEnabled(true);
 	}
 	
 	/**
