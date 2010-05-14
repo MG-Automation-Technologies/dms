@@ -24,7 +24,6 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.Coordenates;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
@@ -178,25 +177,26 @@ public class Util {
 	 * @param params
 	 */
 	public static void downloadFile(final String path, final String params) {
-		String amp = "";
-		if (!params.equals("") && !params.endsWith("&")) {
-			amp = "&";
-		}
-		// Chrome need some delay to downloading or kills some RPC calls
-		if (Util.getUserAgent().equals("chrome")) {
-			Timer donwloadingTimer = new Timer(){
-				public void run() {
-					String amp = "";
-					if (!params.equals("") && !params.endsWith("&")) {
-						amp = "&";
-					}
-					Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
+		Timer donwloadingTimer = new Timer(){
+			public void run() {
+				String amp = "";
+				if (!params.equals("") && !params.endsWith("&")) {
+					amp = "&";
 				}
-			};
-			donwloadingTimer.schedule(1000);
-		} else {
-			Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
-		}
+				Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
+			}
+		};
+		donwloadingTimer.schedule(500);
+//		String amp = "";
+//		if (!params.equals("") && !params.endsWith("&")) {
+//			amp = "&";
+//		}
+//		// Chrome need some delay to downloading or kills some RPC calls
+//		if (Util.getUserAgent().equals("chrome")) {
+//			
+//		} else {
+//			Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
+//		}
 	}
 	
 	/**
