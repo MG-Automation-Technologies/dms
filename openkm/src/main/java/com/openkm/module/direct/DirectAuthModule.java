@@ -574,11 +574,17 @@ public class DirectAuthModule implements AuthModule {
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
-
+		Session session = null;
+		
 		// TODO: Comprobar si el usuario es dueño del nodo.
 		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -614,6 +620,10 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("grantRole: void");
@@ -726,7 +736,8 @@ public class DirectAuthModule implements AuthModule {
 	/**
 	 * Revoke role
 	 */
-	private void revokeRole(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void revokeRole(Node node, String role, String property) throws ValueFormatException,
+			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualRoles = node.getProperty(property).getValues();
 		ArrayList<String> newRoles = new ArrayList<String>();
 
@@ -751,7 +762,8 @@ public class DirectAuthModule implements AuthModule {
 	/**
 	 * Revoke role recursively
 	 */
-	private void revokeRoleInDepth(Node node, String role, String property) throws ValueFormatException, PathNotFoundException, javax.jcr.RepositoryException {
+	private void revokeRoleInDepth(Node node, String role, String property) throws ValueFormatException, 
+			PathNotFoundException, javax.jcr.RepositoryException {
 		revokeRole(node, role, property);
 
 		if (node.isNodeType(Folder.TYPE)) {
@@ -763,7 +775,8 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
 		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
 		Session session = null;
@@ -835,7 +848,8 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		HashMap<String, Byte> roles = new HashMap<String, Byte>();
 		Session session = null;
@@ -908,22 +922,38 @@ public class DirectAuthModule implements AuthModule {
 
 	/**
 	 *  View user session info
-	 *
-	 * @param token The user login token.
 	 */
-	public void view(String token) {
-		Session session = SessionManager.getInstance().get(token);
-
-		String[] atributes = session.getAttributeNames();
-		log.info("** ATRIBUTES **");
-		for (int i=0; i<atributes.length; i++) {
-			log.info(atributes[i]+" -> "+session.getAttribute(atributes[i]));
-		}
-
-		String[] lockTokens = session.getLockTokens();
-		log.info("** LOCK TOKENS **");
-		for (int i=0; i<lockTokens.length; i++) {
-			log.info(lockTokens[i]);
+	public void view(String token) throws RepositoryException {
+		Session session = null;
+		
+		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
+			String[] atributes = session.getAttributeNames();
+			log.info("** ATRIBUTES **");
+			for (int i=0; i<atributes.length; i++) {
+				log.info(atributes[i]+" -> "+session.getAttribute(atributes[i]));
+			}
+			
+			String[] lockTokens = session.getLockTokens();
+			log.info("** LOCK TOKENS **");
+			for (int i=0; i<lockTokens.length; i++) {
+				log.info(lockTokens[i]);
+			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 	}
 
