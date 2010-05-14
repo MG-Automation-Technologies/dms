@@ -54,11 +54,13 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
+import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.WorkflowModule;
 import com.openkm.util.FormUtils;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WorkflowUtils;
 
@@ -68,12 +70,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public void registerProcessDefinition(String token, ZipInputStream zis)
 			throws ParseException, RepositoryException {
-		log.debug("registerProcessDefinition("+token+", "+zis+")");
+		log.debug("registerProcessDefinition({}, {})", token, zis);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		InputStream is = null;
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
 									
 			// Check xml form definition  
@@ -93,6 +101,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} finally {
 			IOUtils.closeQuietly(is);
 			jbpmContext.close();
+			
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("registerProcessDefinition: void");
@@ -101,11 +113,17 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public void deleteProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
-		log.debug("deleteProcessDefinition("+token+", "+processDefinitionId+")");
+		log.debug("deleteProcessDefinition({}, {})", token, processDefinitionId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			graphSession.deleteProcessDefinition(processDefinitionId);
 			jbpmContext.getSession().flush();
@@ -116,6 +134,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throw new RepositoryException(e);
 		} finally {
 			jbpmContext.close();
+			
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("deleteProcessDefinition: void");
@@ -124,12 +146,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId)
 			throws RepositoryException {
-		log.debug("getProcessDefinition("+token+", "+processDefinitionId+")");
+		log.debug("getProcessDefinition({}, {})", token, processDefinitionId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessDefinition vo = new ProcessDefinition();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			vo = WorkflowUtils.copy(pd);
@@ -140,9 +168,13 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throw new RepositoryException(e);
 		} finally {
 			jbpmContext.close();
+			
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.debug("getProcessDefinition: "+vo);
+		log.debug("getProcessDefinition: {}", vo);
 		return vo;
 	}
 
@@ -562,9 +594,15 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("findUserTaskInstances("+token+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			
 			for (Iterator it = taskMgmtSession.findTaskInstances(session.getUserID()).iterator(); it.hasNext(); ) {
@@ -581,6 +619,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throw new RepositoryException(e);
 		} finally {
 			jbpmContext.close();
+			
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("findUserTaskInstances: "+al);
@@ -594,9 +636,15 @@ public class DirectWorkflowModule implements WorkflowModule {
 		log.debug("findPooledTaskInstances("+token+")");
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			
 			for (Iterator it = taskMgmtSession.findPooledTaskInstances(session.getUserID()).iterator(); it.hasNext(); ) {
@@ -613,6 +661,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throw new RepositoryException(e);
 		} finally {
 			jbpmContext.close();
+			
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("findPooledTaskInstances: "+al);
