@@ -155,7 +155,10 @@ public class TabDocument extends Composite {
 		security.GetGrants();
 		preview.setPreviewAvailable(doc.isConvertibleToSwf());
 		
-		if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && !doc.isCheckedOut() && !doc.isLocked()) {
+		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+			(doc.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY && 
+			!doc.isCheckedOut() && !doc.isLocked()) {
 			security.setChangePermision(true);
 		} else {
 			security.setChangePermision(false);

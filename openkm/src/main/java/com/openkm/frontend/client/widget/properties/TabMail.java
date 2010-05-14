@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
 
@@ -101,7 +102,9 @@ public class TabMail extends Composite {
 		security.setPath(gWTMail.getPath());
 		security.GetGrants();
 		
-		if ((gWTMail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
+		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+			(gWTMail.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
 			security.setChangePermision(true);
 		} else {
 			security.setChangePermision(false);

@@ -335,10 +335,12 @@ public class Lang_pl_PL {
 	    lang.put("security.group.permission.read", "Odczyt");
 	    lang.put("security.group.permission.write", "Zapis");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Użytkownik");
 	    lang.put("security.user.permission.read", "Odczyt");
 	    lang.put("security.user.permission.write", "Zapis");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Użytkownik");
 	    lang.put("security.groups", "Grupy");
 	    lang.put("security.recursive", "Dziedziczenie uprawnień");

@@ -334,10 +334,12 @@ public class Lang_ro_RO {
 	    lang.put("security.group.permission.read", "Citire");
 	    lang.put("security.group.permission.write", "Scriere");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Utilizator");
 	    lang.put("security.user.permission.read", "Citire");
 	    lang.put("security.user.permission.write", "Scriere");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Utilizatori");
 	    lang.put("security.groups", "Grupuri");
 	    lang.put("security.recursive", "Modificare recursiva a drepturilor");

@@ -333,10 +333,12 @@ public class Lang_sv_SE {
 	    lang.put("security.group.permission.read", "Läs");
 	    lang.put("security.group.permission.write", "Skriv");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Användare");
 	    lang.put("security.user.permission.read", "Läs");
 	    lang.put("security.user.permission.write", "Skriv");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Användare");
 	    lang.put("security.groups", "Grupper");
 	    lang.put("security.recursive", "Rekursiva behörighetsförändringar");

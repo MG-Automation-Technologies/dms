@@ -333,10 +333,12 @@ public class Lang_mk_MK {
 	    lang.put("security.group.permission.read", "Читај");
 	    lang.put("security.group.permission.write", "Запишувај");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Корисник");
 	    lang.put("security.user.permission.read", "Читај");
 	    lang.put("security.user.permission.write", "Запишуај");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Корисници");
 	    lang.put("security.groups", "Групи");
 	    lang.put("security.recursive", "Рекурзивна промена на дозволите");

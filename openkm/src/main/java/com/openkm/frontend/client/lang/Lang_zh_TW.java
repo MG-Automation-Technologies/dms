@@ -332,10 +332,13 @@ public class Lang_zh_TW {
 	    lang.put("security.group.permission.read", "讀");
 	    lang.put("security.group.permission.write", "寫");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "使用者");
 		lang.put("security.user.permission.read", "讀");
 		lang.put("security.user.permission.write", "寫");
 		lang.put("security.user.permission.delete", "Delete");
+		lang.put("security.user.permission.security", "Security");
+		lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "使用者");
 	    lang.put("security.groups", "群組");
 	    lang.put("security.recursive", "Recursive permission changes");
