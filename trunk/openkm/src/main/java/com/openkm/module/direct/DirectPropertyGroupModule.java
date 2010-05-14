@@ -65,13 +65,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -101,6 +107,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("addGroup: void");
@@ -112,13 +122,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			RepositoryException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -140,6 +156,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("removeGroup: void");
@@ -150,9 +170,15 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			throws IOException, ParseException, PathNotFoundException, RepositoryException {
 		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
@@ -175,6 +201,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("getGroups: {}", ret);
@@ -186,9 +216,15 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			RepositoryException {
 		log.debug("getAllGroups({})", token);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
@@ -209,6 +245,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("getAllGroups: {}", ret);
@@ -220,9 +260,15 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
 		log.debug("getProperties({}, {})", token, grpName);
 		HashMap<String, String[]> ret = new HashMap<String, String[]>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
@@ -264,6 +310,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("getProperties: {}", ret);
@@ -276,13 +326,19 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
@@ -322,6 +378,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("setProperties: void");
@@ -332,9 +392,15 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			ParseException, RepositoryException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		Collection<FormElement> ret = new ArrayList<FormElement>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
@@ -352,6 +418,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.info("getPropertyGroupForm: {}", ret);
