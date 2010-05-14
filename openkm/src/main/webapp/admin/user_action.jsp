@@ -1,5 +1,6 @@
 <%@ page import="com.openkm.core.SessionManager"%>
 <%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="com.openkm.util.JCRUtils"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.User"%>
@@ -23,55 +24,68 @@
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		String token = (String) session.getAttribute("token");
-		Session jcrSession = SessionManager.getInstance().get(token);
-		request.setCharacterEncoding("UTF-8");
-		String action = request.getParameter("action");
-		String usr_id = request.getParameter("usr_id") != null?request.getParameter("usr_id"):"";
-		String usr_name = request.getParameter("usr_name") != null?request.getParameter("usr_name"):"";
-		String usr_pass = request.getParameter("usr_pass") != null?request.getParameter("usr_pass"):"";
-		String usr_email = request.getParameter("usr_email") != null?request.getParameter("usr_email"):"";
-		boolean usr_active = request.getParameter("usr_active")!=null && request.getParameter("usr_active").equals("on");
-		String[] usr_roles = request.getParameterValues("usr_roles") != null?request.getParameterValues("usr_roles"):new String[]{};
-		List<String> usr_rolesList = new ArrayList<String>();
+		Session jcrSession = null;
 		
-		for (int i=0; i<usr_roles.length; i++) {
-			usr_rolesList.add(new String(usr_roles[i].getBytes("ISO-8859-1"), "UTF-8"));
-		}
-		
-		AuthDAO dao = AuthDAO.getInstance();
-		User usr = new User();
-		usr.setId(new String(usr_id.getBytes("ISO-8859-1"), "UTF-8"));
-		usr.setName(new String(usr_name.getBytes("ISO-8859-1"), "UTF-8"));
-		usr.setPass(new String(usr_pass.getBytes("ISO-8859-1"), "UTF-8"));
-		usr.setEmail(new String(usr_email.getBytes("ISO-8859-1"), "UTF-8"));
-		usr.setActive(usr_active);
-		usr.setRoles(usr_rolesList);
-
 		try {
-			if (action.equals("c")) {
-				dao.createUser(usr);
-				
-				for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
-					dao.grantRole(usr.getId(), it.next());
-				}
-			} else if (action.equals("u")) {
-				dao.updateUser(usr);
-				if (!usr.getPass().equals("")) dao.updateUserPassword(usr.getId(), usr.getPass());
-				dao.deleteUserRoles(usr);
-				
-				for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
-					dao.grantRole(usr.getId(), it.next());
-				}
-			} else if (action.equals("d")) {
-				dao.deleteUser(usr);
+			if (Config.SESSION_MANAGER) {
+				jcrSession = SessionManager.getInstance().get(token);
+			} else {
+				jcrSession = JCRUtils.getSession(); 
+			}
+		
+			request.setCharacterEncoding("UTF-8");
+			String action = request.getParameter("action");
+			String usr_id = request.getParameter("usr_id") != null?request.getParameter("usr_id"):"";
+			String usr_name = request.getParameter("usr_name") != null?request.getParameter("usr_name"):"";
+			String usr_pass = request.getParameter("usr_pass") != null?request.getParameter("usr_pass"):"";
+			String usr_email = request.getParameter("usr_email") != null?request.getParameter("usr_email"):"";
+			boolean usr_active = request.getParameter("usr_active")!=null && request.getParameter("usr_active").equals("on");
+			String[] usr_roles = request.getParameterValues("usr_roles") != null?request.getParameterValues("usr_roles"):new String[]{};
+			List<String> usr_rolesList = new ArrayList<String>();
+			
+			for (int i=0; i<usr_roles.length; i++) {
+				usr_rolesList.add(new String(usr_roles[i].getBytes("ISO-8859-1"), "UTF-8"));
 			}
 			
-			// Activity log
-			UserActivity.log(jcrSession, "USER_ACTION", usr.toString(), action);
+			AuthDAO dao = AuthDAO.getInstance();
+			User usr = new User();
+			usr.setId(new String(usr_id.getBytes("ISO-8859-1"), "UTF-8"));
+			usr.setName(new String(usr_name.getBytes("ISO-8859-1"), "UTF-8"));
+			usr.setPass(new String(usr_pass.getBytes("ISO-8859-1"), "UTF-8"));
+			usr.setEmail(new String(usr_email.getBytes("ISO-8859-1"), "UTF-8"));
+			usr.setActive(usr_active);
+			usr.setRoles(usr_rolesList);
 			
-			response.sendRedirect("user_list.jsp");
-		} catch (SQLException e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
+			try {
+				if (action.equals("c")) {
+					dao.createUser(usr);
+					
+					for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
+						dao.grantRole(usr.getId(), it.next());
+					}
+				} else if (action.equals("u")) {
+					dao.updateUser(usr);
+					if (!usr.getPass().equals("")) dao.updateUserPassword(usr.getId(), usr.getPass());
+					dao.deleteUserRoles(usr);
+					
+					for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
+						dao.grantRole(usr.getId(), it.next());
+					}
+				} else if (action.equals("d")) {
+					dao.deleteUser(usr);
+				}
+				
+				// Activity log
+				UserActivity.log(jcrSession, "USER_ACTION", usr.toString(), action);
+				
+				response.sendRedirect("user_list.jsp");
+			} catch (SQLException e) {
+				out.println("<div class=\"error\">"+e.getMessage()+"</div>");
+			}
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(jcrSession);
+			}
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
