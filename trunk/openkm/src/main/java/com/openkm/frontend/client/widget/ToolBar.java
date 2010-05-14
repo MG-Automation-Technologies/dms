@@ -27,6 +27,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -40,11 +41,15 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
@@ -65,6 +70,7 @@ import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.mainmenu.Bookmark;
 import com.openkm.frontend.client.widget.upload.FancyFileUpload;
@@ -75,31 +81,31 @@ import com.openkm.frontend.client.widget.upload.FancyFileUpload;
  * @author jllort
  *
  */
-public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPanel {
+public class ToolBar extends Composite implements OriginPanel {
 	
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 		
 	private HorizontalPanel panel;
-	private HTML createFolder;
-	private HTML findFolder;
-	private HTML lock;
-	private HTML unLock;
-	private HTML addDocument;
-	private HTML delete;
-	private HTML edit;
-	private HTML checkin;
-	private HTML cancelCheckout;
-	private HTML download;
-	private HTML downloadPdf;
-	private HTML addPropertyGroup;
-	private HTML removePropertyGroup;
-	private HTML startWorkflow;
-	private HTML addSubscription;
-	private HTML removeSubscription;
-	private HTML home;
-	private HTML refresh;
+	private ToolBarButton createFolderButton;
+	private ToolBarButton findFolder;
+	private ToolBarButton lock;
+	private ToolBarButton unLock;
+	private ToolBarButton addDocument;
+	private ToolBarButton delete;
+	private ToolBarButton edit;
+	private ToolBarButton checkin;
+	private ToolBarButton cancelCheckout;
+	private ToolBarButton download;
+	private ToolBarButton downloadPdf;
+	private ToolBarButton addPropertyGroup;
+	private ToolBarButton removePropertyGroup;
+	private ToolBarButton startWorkflow;
+	private ToolBarButton addSubscription;
+	private ToolBarButton removeSubscription;
+	private ToolBarButton home;
+	private ToolBarButton refresh;
 	private HTML scanner;
 	private HTML uploader;
 		
@@ -258,7 +264,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Edit Handler
 	 */
-	ClickHandler checkoutHandler = new ClickHandler() { 
+	ClickHandler editHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.checkoutOption){
@@ -393,7 +399,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	/**
 	 * Add workflow Handler
 	 */
-	ClickHandler addWorkflowHandler = new ClickHandler() { 
+	ClickHandler startWorkflowHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.workflowOption) {
@@ -598,42 +604,79 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		
 		// ONLY TO DEVELOPMENT TESTINGT
 		//enableAllToolBarForTestingPurpose();
+		createFolderButton = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.createFolder()), 
+											   Main.i18n("tree.menu.directory.create"), createFolderHandler);
 		
-		createFolder = new HTML(Util.imageHTML("img/icon/actions/add_folder.gif",Main.i18n("tree.menu.directory.create")));
-		findFolder = new HTML(Util.imageHTML("img/icon/actions/folder_find.gif",Main.i18n("tree.menu.directory.find.folder")));
-		lock = new HTML(Util.imageHTML("img/icon/actions/lock_disabled.gif",Main.i18n("general.menu.file.lock")));
-		unLock = new HTML(Util.imageHTML("img/icon/actions/unlock_disabled.gif",Main.i18n("general.menu.file.unlock")));
-		addDocument = new HTML(Util.imageHTML("img/icon/actions/add_document.gif",Main.i18n("general.menu.file.add.document")));
-		delete = new HTML(Util.imageHTML("img/icon/actions/delete_disabled.gif",Main.i18n("general.menu.file.delete")));
-		edit = new HTML(Util.imageHTML("img/icon/actions/checkout_disabled.gif",Main.i18n("general.menu.file.checkout")));
-		checkin = new HTML(Util.imageHTML("img/icon/actions/checkin_disabled.gif",Main.i18n("general.menu.file.checkin")));
-		cancelCheckout  = new HTML(Util.imageHTML("img/icon/actions/cancel_checkout_disabled.gif",Main.i18n("general.menu.file.cancel.checkout")));
-		download  = new HTML(Util.imageHTML("img/icon/actions/download_disabled.gif",Main.i18n("general.menu.file.download.document")));
-		downloadPdf  = new HTML(Util.imageHTML("img/icon/actions/download_pdf_disabled.gif",Main.i18n("general.menu.file.download.document.pdf")));
-		addPropertyGroup = new HTML(Util.imageHTML("img/icon/actions/add_property_group_disabled.gif",Main.i18n("filebrowser.menu.add.property.group")));
-		removePropertyGroup = new HTML(Util.imageHTML("img/icon/actions/remove_property_group_disabled.gif",Main.i18n("filebrowser.menu.remove.property.group")));
-		startWorkflow = new HTML(Util.imageHTML("img/icon/actions/start_workflow_disabled.gif",Main.i18n("filebrowser.menu.start.workflow")));
-		addSubscription = new HTML(Util.imageHTML("img/icon/actions/add_subscription_disabled.gif",Main.i18n("filebrowser.menu.add.subscription")));
-		removeSubscription = new HTML(Util.imageHTML("img/icon/actions/remove_subscription_disabled.gif",Main.i18n("filebrowser.menu.remove.subscription")));
-		home  = new HTML(Util.imageHTML("img/icon/actions/bookmark_go.gif",Main.i18n("general.menu.bookmark.home"))); 
-		refresh  = new HTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
+		findFolder = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.findFolder()), 
+				  					   Main.i18n("tree.menu.directory.find.folder"), findFolderHandler);
+			
+		
+		lock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
+				   				 Main.i18n("general.menu.file.lock"), lockHandler);
+			
+		unLock = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.lockDisabled()), 
+  				 				   Main.i18n("general.menu.file.unlock"), unLockHandler);
+			
+		addDocument = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addDocument()), 
+				   						Main.i18n("general.menu.file.add.document"), addDocumentHandler);
+			
+			
+		delete = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.deleteDisabled()), 
+								   Main.i18n("general.menu.file.delete"), deleteHandler);
+			
+		edit = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkoutDisabled()), 
+				   				 Main.i18n("general.menu.file.checkout"), editHandler);
+			
+		checkin = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.checkinDisabled()), 
+  				 					Main.i18n("general.menu.file.checkin"), checkinHandler);
+			
+		cancelCheckout = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.cancelCheckoutDisabled()), 
+											Main.i18n("general.menu.file.cancel.checkout"), cancelCheckoutHandler);
+			
+		download = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadDisabled()),
+									  Main.i18n("general.menu.file.download.document"), downloadHandler);
+			
+		downloadPdf = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.downloadPdfDisabled()),
+				  						Main.i18n("general.menu.file.download.document.pdf"), downloadPdfHandler); 
+			
+		addPropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addPropertyGroupDisabled()),
+											 Main.i18n("filebrowser.menu.add.property.group"), addPropertyGroupHandler); 
+			
+		removePropertyGroup = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removePropertyGroupDisabled()),
+				 								Main.i18n("filebrowser.menu.remove.property.group"), removePropertyGroupHandler); 
+			
+		startWorkflow = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.startWorkflowDisabled()),
+										  Main.i18n("filebrowser.menu.start.workflow"), startWorkflowHandler); 
+			
+
+		addSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.addSubscriptionDisabled()),
+				  							Main.i18n("filebrowser.menu.add.subscription"), addSubscriptionHandler); 
+			
+		removeSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removeSubscriptionDisabled()),
+											   Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
+
+		home  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
+				   				  Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
+			
+		refresh  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
+ 				  					 Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
+			
 		scanner  = new HTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
 		uploader  = new HTML(Util.imageHTML("img/icon/actions/upload.gif",Main.i18n("general.menu.file.uploader")));
 		
-		createFolder.addClickHandler(createFolderHandler);
 		findFolder.addClickHandler(findFolderHandler);
 		lock.addClickHandler(lockHandler);
 		unLock.addClickHandler(unLockHandler);
 		addDocument.addClickHandler(addDocumentHandler);
 		delete.addClickHandler(deleteHandler);
-		edit.addClickHandler(checkoutHandler);
+		edit.addClickHandler(editHandler);
 		checkin.addClickHandler(checkinHandler);
 		cancelCheckout.addClickHandler(cancelCheckoutHandler);
 		download.addClickHandler(downloadHandler);
 		downloadPdf.addClickHandler(downloadPdfHandler);
 		addPropertyGroup.addClickHandler(addPropertyGroupHandler);
 		removePropertyGroup.addClickHandler(removePropertyGroupHandler);
-		startWorkflow.addClickHandler(addWorkflowHandler);
+		startWorkflow.addClickHandler(startWorkflowHandler);
 		addSubscription.addClickHandler(addSubscriptionHandler);
 		removeSubscription.addClickHandler(removeSubscriptionHandler);
 		home.addClickHandler(arrowHomeHandler);
@@ -657,8 +700,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 			}
 		};
 		
-		createFolder.addMouseOverHandler(mouseOverHandler);
-		createFolder.addMouseOutHandler(mouseOutHandler);
+		createFolderButton.addMouseOverHandler(mouseOverHandler);
+		createFolderButton.addMouseOutHandler(mouseOutHandler);
 		findFolder.addMouseOverHandler(mouseOverHandler);
 		findFolder.addMouseOutHandler(mouseOutHandler);
 		lock.addMouseOverHandler(mouseOverHandler);
@@ -698,7 +741,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		uploader.addMouseOverHandler(mouseOverHandler);
 		uploader.addMouseOutHandler(mouseOutHandler);
 		
-		createFolder.setStyleName("okm-ToolBar-button");
+		createFolderButton.setStyleName("okm-ToolBar-button");
 		findFolder.setStyleName("okm-ToolBar-button");
 		lock.setStyleName("okm-ToolBar-button");
 		unLock.setStyleName("okm-ToolBar-button");
@@ -724,7 +767,7 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 		panel.addStyleName("okm-ToolBar");
 		panel.add(space());
-		panel.add(createFolder);
+		panel.add(createFolderButton);
 		panel.add(space());
 		panel.add(findFolder);
 		panel.add(space());
@@ -1159,8 +1202,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public void enableCreateDirectory() {
 		toolBarOption.createFolderOption = true;
-		createFolder.setStyleName("okm-ToolBar-button");
-		createFolder.setHTML(Util.imageHTML("img/icon/actions/add_folder.gif",Main.i18n("tree.menu.directory.create")));
+		createFolderButton.setStyleName("okm-ToolBar-button");
+		createFolderButton.setResource(OKMBundleResources.INSTANCE.createFolder()); 
+		createFolderButton.setTitle(Main.i18n("tree.menu.directory.create"));
 	}
 	
 	/**
@@ -1168,8 +1212,9 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	 */
 	public void disableCreateDirectory() {
 		toolBarOption.createFolderOption = false;
-		createFolder.setStyleName("okm-ToolBar-button-disabled");
-		createFolder.setHTML(Util.imageHTML("img/icon/actions/add_folder_disabled.gif",Main.i18n("tree.menu.directory.create")));
+		createFolderButton.setStyleName("okm-ToolBar-button-disabled");
+		createFolderButton.setResource(OKMBundleResources.INSTANCE.createFolderDisabled()); 
+		createFolderButton.setTitle(Main.i18n("tree.menu.directory.create"));
 	}
 	
 	/**
@@ -1178,7 +1223,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableFindFolder() {
 		toolBarOption.findFolderOption = true;
 		findFolder.setStyleName("okm-ToolBar-button");
-		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find.gif",Main.i18n("tree.menu.directory.find.folder")));
+		findFolder.setResource(OKMBundleResources.INSTANCE.findFolder());
+		findFolder.setTitle("tree.menu.directory.find.folder");
 	}
 	
 	/**
@@ -1187,7 +1233,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableFindFolder() {
 		toolBarOption.findFolderOption = false;
 		findFolder.setStyleName("okm-ToolBar-button-disabled");
-		findFolder.setHTML(Util.imageHTML("img/icon/actions/folder_find_disabled.gif",Main.i18n("tree.menu.directory.find.folder")));
+		findFolder.setResource(OKMBundleResources.INSTANCE.findFolderDisabled());
+		findFolder.setTitle("tree.menu.directory.find.folder");
 	}
 	
 	/**
@@ -1196,7 +1243,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableCheckout() {
 		toolBarOption.checkoutOption = true;
 		edit.setStyleName("okm-ToolBar-button");
-		edit.setHTML(Util.imageHTML("img/icon/actions/checkout.gif",Main.i18n("general.menu.file.checkout")));
+		edit.setResource(OKMBundleResources.INSTANCE.checkout());
+		edit.setTitle("general.menu.file.checkout");
 	}
 	
 	/**
@@ -1205,7 +1253,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableCheckout() {
 		toolBarOption.checkoutOption = false;
 		edit.setStyleName("okm-ToolBar-button-disabled");
-		edit.setHTML(Util.imageHTML("img/icon/actions/checkout_disabled.gif",Main.i18n("general.menu.file.checkout")));
+		edit.setResource(OKMBundleResources.INSTANCE.checkoutDisabled());
+		edit.setTitle("general.menu.file.checkout");
 	}
 	
 	/**
@@ -1214,7 +1263,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableCheckin() {
 		toolBarOption.checkinOption = true;
 		checkin.setStyleName("okm-ToolBar-button");
-		checkin.setHTML(Util.imageHTML("img/icon/actions/checkin.gif",Main.i18n("general.menu.file.checkin")));
+		checkin.setResource(OKMBundleResources.INSTANCE.checkin());
+		checkin.setTitle("general.menu.file.checkin");
 	}
 	
 	/**
@@ -1223,7 +1273,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableCheckin() {
 		toolBarOption.checkinOption = false;
 		checkin.setStyleName("okm-ToolBar-button-disabled");
-		checkin.setHTML(Util.imageHTML("img/icon/actions/checkin_disabled.gif",Main.i18n("general.menu.file.checkin")));
+		checkin.setResource(OKMBundleResources.INSTANCE.checkinDisabled());
+		checkin.setTitle("general.menu.file.checkin");
 	}
 	
 	/**
@@ -1232,7 +1283,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableCancelCheckout() {
 		toolBarOption.cancelCheckoutOption = true;
 		cancelCheckout.setStyleName("okm-ToolBar-button");
-		cancelCheckout.setHTML(Util.imageHTML("img/icon/actions/cancel_checkout.gif",Main.i18n("general.menu.file.cancel.checkout")));
+		cancelCheckout.setResource(OKMBundleResources.INSTANCE.cancelCheckout());
+		cancelCheckout.setTitle("general.menu.file.cancel.checkout");
 	}
 	
 	/**
@@ -1241,7 +1293,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableCancelCheckout() {
 		toolBarOption.cancelCheckoutOption = false;
 		cancelCheckout.setStyleName("okm-ToolBar-button-disabled");
-		cancelCheckout.setHTML(Util.imageHTML("img/icon/actions/cancel_checkout_disabled.gif",Main.i18n("general.menu.file.cancel.checkout")));
+		cancelCheckout.setResource(OKMBundleResources.INSTANCE.cancelCheckoutDisabled());
+		cancelCheckout.setTitle("general.menu.file.cancel.checkout");
 	}
 	
 	/**
@@ -1250,7 +1303,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableLock() {
 		toolBarOption.lockOption = false;
 		lock.setStyleName("okm-ToolBar-button-disabled");
-		lock.setHTML(Util.imageHTML("img/icon/actions/lock_disabled.gif",Main.i18n("general.menu.file.lock")));
+		lock.setResource(OKMBundleResources.INSTANCE.lockDisabled());
+		lock.setTitle("general.menu.file.lock");
 	}
 	
 	/**
@@ -1259,7 +1313,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableLock() {
 		toolBarOption.lockOption = true;
 		lock.setStyleName("okm-ToolBar-button");
-		lock.setHTML(Util.imageHTML("img/icon/actions/lock.gif",Main.i18n("general.menu.file.lock")));
+		lock.setResource(OKMBundleResources.INSTANCE.lock());
+		lock.setTitle("general.menu.file.lock");
 	}
 	
 	/**
@@ -1268,7 +1323,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableUnlock() {
 		toolBarOption.unLockOption = false;
 		unLock.setStyleName("okm-ToolBar-button-disabled");
-		unLock.setHTML(Util.imageHTML("img/icon/actions/unlock_disabled.gif",Main.i18n("general.menu.file.unlock")));
+		unLock.setResource(OKMBundleResources.INSTANCE.unLockDisabled());
+		unLock.setTitle("general.menu.file.unlock");
 	}
 	
 	/**
@@ -1277,7 +1333,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableUnlock() {
 		toolBarOption.unLockOption = true;
 		unLock.setStyleName("okm-ToolBar-button");
-		unLock.setHTML(Util.imageHTML("img/icon/actions/unlock.gif",Main.i18n("general.menu.file.unlock")));
+		unLock.setResource(OKMBundleResources.INSTANCE.unLock());
+		unLock.setTitle("general.menu.file.unlock");
 	}
 	
 	/**
@@ -1286,7 +1343,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableDownload() {
 		toolBarOption.downloadOption = false;
 		download.setStyleName("okm-ToolBar-button-disabled");
-		download.setHTML(Util.imageHTML("img/icon/actions/download_disabled.gif",Main.i18n("general.menu.file.download.document")));
+		download.setResource(OKMBundleResources.INSTANCE.downloadDisabled());
+		download.setTitle("general.menu.file.download.document");
 	}
 	
 	/**
@@ -1295,7 +1353,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableDownload() {
 		toolBarOption.downloadOption = true;
 		download.setStyleName("okm-ToolBar-button");
-		download.setHTML(Util.imageHTML("img/icon/actions/download.gif",Main.i18n("general.menu.file.download.document")));
+		download.setResource(OKMBundleResources.INSTANCE.download());
+		download.setTitle("general.menu.file.download.document");
 	}
 
 	/**
@@ -1304,7 +1363,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableDownloadPdf() {
 		toolBarOption.downloadPdfOption = false;
 		downloadPdf.setStyleName("okm-ToolBar-button-disabled");
-		downloadPdf.setHTML(Util.imageHTML("img/icon/actions/download_pdf_disabled.gif",Main.i18n("general.menu.file.download.document.pdf")));
+		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdfDisabled());
+		downloadPdf.setTitle("general.menu.file.download.document.pdf");
 	}
 	
 	/**
@@ -1313,7 +1373,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableDownloadPdf() {
 		toolBarOption.downloadPdfOption = true;
 		downloadPdf.setStyleName("okm-ToolBar-button");
-		downloadPdf.setHTML(Util.imageHTML("img/icon/actions/download_pdf.gif",Main.i18n("general.menu.file.download.document.pdf")));
+		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdf());
+		downloadPdf.setTitle("general.menu.file.download.document.pdf");
 	}
 
 	/**
@@ -1336,7 +1397,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableDelete() {
 		toolBarOption.deleteOption = false;
 		delete.setStyleName("okm-ToolBar-button-disabled");
-		delete.setHTML(Util.imageHTML("img/icon/actions/delete_disabled.gif",Main.i18n("general.menu.file.delete")));
+		delete.setResource(OKMBundleResources.INSTANCE.deleteDisabled());
+		delete.setTitle("general.menu.file.delete");
 	}
 	
 	/**
@@ -1345,7 +1407,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableDelete() {
 		toolBarOption.deleteOption = true;
 		delete.setStyleName("okm-ToolBar-button");
-		delete.setHTML(Util.imageHTML("img/icon/actions/delete.gif",Main.i18n("general.menu.file.delete")));
+		delete.setResource(OKMBundleResources.INSTANCE.delete());
+		delete.setTitle("general.menu.file.delete");
 	}
 	
 	/**
@@ -1354,7 +1417,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableRefresh() {
 		toolBarOption.refreshOption = false;
 		refresh.setStyleName("okm-ToolBar-button-disabled");
-		refresh.setHTML(Util.imageHTML("img/icon/actions/refresh_disabled.gif",Main.i18n("general.menu.file.refresh")));
+		refresh.setResource(OKMBundleResources.INSTANCE.refreshDisabled());
+		refresh.setTitle("general.menu.file.refresh");
 	}
 	
 	/**
@@ -1363,7 +1427,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableRefresh() {
 		toolBarOption.refreshOption = true;
 		refresh.setStyleName("okm-ToolBar-button");
-		refresh.setHTML(Util.imageHTML("img/icon/actions/refresh.gif",Main.i18n("general.menu.file.refresh")));
+		refresh.setResource(OKMBundleResources.INSTANCE.refresh());
+		refresh.setTitle("general.menu.file.refresh");
 	}
 	
 	/**
@@ -1372,7 +1437,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableAddDocument() {
 		toolBarOption.addDocumentOption = false;
 		addDocument.setStyleName("okm-ToolBar-button-disabled");
-		addDocument.setHTML(Util.imageHTML("img/icon/actions/add_document_disabled.gif",Main.i18n("general.menu.file.add.document")));
+		addDocument.setResource(OKMBundleResources.INSTANCE.addDocumentDisabled());
+		addDocument.setTitle("general.menu.file.add.document");	
 	}
 	
 	/**
@@ -1381,7 +1447,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableAddDocument() {
 		toolBarOption.addDocumentOption = true;
 		addDocument.setStyleName("okm-ToolBar-button");
-		addDocument.setHTML(Util.imageHTML("img/icon/actions/add_document.gif",Main.i18n("general.menu.file.add.document")));
+		addDocument.setResource(OKMBundleResources.INSTANCE.addDocument());
+		addDocument.setTitle("general.menu.file.add.document");	
 	}
 	
 	/**
@@ -1390,7 +1457,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableAddPropertyGroup() {
 		toolBarOption.addPropertyGroupOption = false;
 		addPropertyGroup.setStyleName("okm-ToolBar-button-disabled");
-		addPropertyGroup.setHTML(Util.imageHTML("img/icon/actions/add_property_group_disabled.gif",Main.i18n("filebrowser.menu.add.property.group")));
+		addPropertyGroup.setResource(OKMBundleResources.INSTANCE.addPropertyGroupDisabled());
+		addPropertyGroup.setTitle("filebrowser.menu.add.property.group");
 	}
 	
 	/**
@@ -1399,7 +1467,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableAddPropertyGroup() {
 		toolBarOption.addPropertyGroupOption = true;
 		addPropertyGroup.setStyleName("okm-ToolBar-button");
-		addPropertyGroup.setHTML(Util.imageHTML("img/icon/actions/add_property_group.gif",Main.i18n("filebrowser.menu.add.property.group")));
+		addPropertyGroup.setResource(OKMBundleResources.INSTANCE.addPropertyGroup());
+		addPropertyGroup.setTitle("filebrowser.menu.add.property.group");
 	}
 	
 	/**
@@ -1408,7 +1477,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableAddSubscription() {
 		toolBarOption.addSubscription = false;
 		addSubscription.setStyleName("okm-ToolBar-button-disabled");
-		addSubscription.setHTML(Util.imageHTML("img/icon/actions/add_subscription_disabled.gif",Main.i18n("filebrowser.menu.add.subscription")));
+		addSubscription.setResource(OKMBundleResources.INSTANCE.addSubscriptionDisabled());
+		addSubscription.setTitle("filebrowser.menu.add.subscription");
 	}
 	
 	/**
@@ -1417,7 +1487,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableAddSubscription() {
 		toolBarOption.addSubscription = true;
 		addSubscription.setStyleName("okm-ToolBar-button");
-		addSubscription.setHTML(Util.imageHTML("img/icon/actions/add_subscription.gif",Main.i18n("filebrowser.menu.add.subscription")));
+		addSubscription.setResource(OKMBundleResources.INSTANCE.addSubscription());
+		addSubscription.setTitle("filebrowser.menu.add.subscription");
 	}
 	
 	/**
@@ -1426,7 +1497,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableRemoveSubscription() {
 		toolBarOption.removeSubscription = false;
 		removeSubscription.setStyleName("okm-ToolBar-button-disabled");
-		removeSubscription.setHTML(Util.imageHTML("img/icon/actions/remove_subscription_disabled.gif",Main.i18n("filebrowser.menu.remove.subscription")));
+		removeSubscription.setResource(OKMBundleResources.INSTANCE.removeSubscriptionDisabled());
+		removeSubscription.setTitle("filebrowser.menu.remove.subscription");
 	}
 	
 	/**
@@ -1435,7 +1507,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableRemoveSubscription() {
 		toolBarOption.removeSubscription = true;
 		removeSubscription.setStyleName("okm-ToolBar-button");
-		removeSubscription.setHTML(Util.imageHTML("img/icon/actions/remove_subscription.gif",Main.i18n("filebrowser.menu.remove.subscription")));
+		removeSubscription.setResource(OKMBundleResources.INSTANCE.removeSubscription());
+		removeSubscription.setTitle("filebrowser.menu.remove.subscription");
 	}
 	
 	/**
@@ -1444,7 +1517,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableHome() {
 		toolBarOption.homeOption = false;
 		home.setStyleName("okm-ToolBar-button-disabled");
-		home.setHTML(Util.imageHTML("img/icon/actions/bookmark_go_disabled.gif",Main.i18n("general.menu.bookmark.home")));
+		home.setResource(OKMBundleResources.INSTANCE.homeDisabled());
+		home.setTitle("general.menu.bookmark.home");
 	}
 	
 	/**
@@ -1453,7 +1527,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableHome() {
 		toolBarOption.homeOption = true;
 		home.setStyleName("okm-ToolBar-button");
-		home.setHTML(Util.imageHTML("img/icon/actions/bookmark_go.gif",Main.i18n("general.menu.bookmark.home")));
+		home.setResource(OKMBundleResources.INSTANCE.home());
+		home.setTitle("general.menu.bookmark.home");
 	}
 	
 	/**
@@ -1476,7 +1551,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void disableWorkflow() {
 		toolBarOption.workflowOption = false;
 		startWorkflow.setStyleName("okm-ToolBar-button-disabled");
-		startWorkflow.setHTML(Util.imageHTML("img/icon/actions/start_workflow_disabled.gif",Main.i18n("filebrowser.menu.start.workflow")));
+		startWorkflow.setResource(OKMBundleResources.INSTANCE.startWorkflowDisabled());
+		startWorkflow.setTitle("filebrowser.menu.start.workflow");
 	}
 	
 	/**
@@ -1485,7 +1561,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 	public void enableWorkflow() {
 		toolBarOption.workflowOption = true;
 		startWorkflow.setStyleName("okm-ToolBar-button");
-		startWorkflow.setHTML(Util.imageHTML("img/icon/actions/start_workflow.gif",Main.i18n("filebrowser.menu.start.workflow")));
+		startWorkflow.setResource(OKMBundleResources.INSTANCE.startWorkflow());
+		startWorkflow.setTitle("filebrowser.menu.start.workflow");
 	}
 	
 	/**
@@ -1986,7 +2063,8 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		// Special case removePropertyGroupOption is only evaluated on TabDocument tab changing by evaluateRemoveGroupProperty method
 		if (!toolBarOption.removePropertyGroupOption) { // We evaluate for changing panel desktop / search ( only disable option )
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
-			removePropertyGroup.setHTML(Util.imageHTML("img/icon/actions/remove_property_group_disabled.gif",Main.i18n("filebrowser.menu.remove.property.group")));
+			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroupDisabled());
+			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
 		}
 		
 		if (toolBarOption.workflowOption) { enableWorkflow(); } else { disableWorkflow();}
@@ -2020,10 +2098,12 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		// Show or hides button
 		if (toolBarOption.removePropertyGroupOption && toolBarOption.firedRemovePropertyGroupOption) {
 			removePropertyGroup.setStyleName("okm-ToolBar-button");
-			removePropertyGroup.setHTML(Util.imageHTML("img/icon/actions/remove_property_group.gif",Main.i18n("filebrowser.menu.remove.property.group")));
+			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroup());
+			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
 		} else {
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
-			removePropertyGroup.setHTML(Util.imageHTML("img/icon/actions/remove_property_group_disabled.gif",Main.i18n("filebrowser.menu.remove.property.group")));
+			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroupDisabled());
+			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
 		}
 	}
 	
@@ -2331,46 +2411,82 @@ public class ToolBar extends Composite implements HasAllMouseHandlers, OriginPan
 		return toolBarOption;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
+	/**
+	 * ToolBarButton
+	 * 
+	 * @author jllort
+	 *
 	 */
-	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-	    return addDomHandler(handler, MouseDownEvent.getType());
-	}
-	  
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
-	 */
-	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-		return addDomHandler(handler, MouseMoveEvent.getType());
-	}
+	private class ToolBarButton extends HorizontalPanel implements HasAllMouseHandlers, HasClickHandlers {
+		
+		Image image;
+		
+		public ToolBarButton(Image image, String title, ClickHandler handler) {
+			super();
+			this.image = image;
+			this.image.setTitle(title);
+			addClickHandler(handler); // Adding clickhandler to widget
+			
+			add(image);
+			setCellHorizontalAlignment(image, HasAlignment.ALIGN_CENTER);
+			setCellVerticalAlignment(image, HasAlignment.ALIGN_MIDDLE);
+			setSize("24", "24");
+			setCellHeight(image, "24");
+			setCellWidth(image, "24");
+			
+			sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS);
+		}
+		
+		/* (non-Javadoc)
+		 * @see com.google.gwt.user.client.ui.UIObject#setTitle(java.lang.String)
+		 */
+		public void setTitle(String title) {
+			image.setTitle(title);
+		}
+		
+		/**
+		 * setResource
+		 * 
+		 * @param resource
+		 */
+		public void setResource(ImageResource resource) {
+			image.setResource(resource);
+		}
+		
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+		    return addHandler(handler, ClickEvent.getType());
+		}
 
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
-	 */
-	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-	    return addDomHandler(handler, MouseOutEvent.getType());
-	}
+		@Override
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+		    return addDomHandler(handler, MouseMoveEvent.getType());
+		}
 
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
-	 */
-	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-	    return addDomHandler(handler, MouseOverEvent.getType());
-	}
+		@Override
+		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		    return addDomHandler(handler, MouseOutEvent.getType());
+		}
 
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
-	 */
-	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-	    return addDomHandler(handler, MouseUpEvent.getType());
-	}
+		@Override
+		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		    return addDomHandler(handler, MouseOverEvent.getType());
+		}
 
-	/* (non-Javadoc)
-	 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
-	 */
-	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
-	    return addDomHandler(handler, MouseWheelEvent.getType());
+		@Override
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+		    return addDomHandler(handler, MouseUpEvent.getType());
+		}
+		
+		@Override
+		public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+		    return addDomHandler(handler, MouseWheelEvent.getType());
+		}
+
+		@Override
+		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+		    return addDomHandler(handler, MouseDownEvent.getType());
+		}
 	}
 	
 	/**
