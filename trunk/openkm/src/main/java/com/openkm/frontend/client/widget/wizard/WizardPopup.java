@@ -156,7 +156,7 @@ public class WizardPopup extends DialogBox {
 			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 			propertyGroupService.addGroup(docPath, groupsList.get(groupIndex).getName(), callbackAddGroup);
 			
-		} else if(groupsList==null) {
+		} else if(groupsList==null || (groupsList!=null && groupsList.isEmpty() )) {
 			status = STATUS_CATEGORIES;
 			showNextWizard();
 			
@@ -323,6 +323,7 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
 		vPanelFired.setCellHeight(space2, "5");
 		actualButton.setEnabled(true);
+		changeView(); 
 	}
 	
 	/**
@@ -347,6 +348,17 @@ public class WizardPopup extends DialogBox {
 		vPanelFired.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_RIGHT);
 		vPanelFired.setCellHeight(space2, "5");
 		actualButton.setEnabled(true);
+		changeView();
+	}
+	
+	/**
+	 * changeView
+	 * 
+	 * Ensures fileupload is hiden and panel is centered
+	 */
+	private void changeView() {
+		Main.get().fileUpload.hide();
+		center();
 	}
 	
 	/**
@@ -370,8 +382,7 @@ public class WizardPopup extends DialogBox {
 				propertyGroupWidget.edit();
 				actualButton.setEnabled(true);
 			}
-			Main.get().fileUpload.hide();
-			center();
+			changeView();
 		}
 		
 		@Override
