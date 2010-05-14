@@ -102,9 +102,7 @@ public class ErrorPopup extends DialogBox implements ClickHandler {
 		
 		if (logout) {
 			Log.debug("onClick: redirect");
-			Main.get().redirect = true;
 			Window.open("/OpenKM", "_self", "");
-			Main.get().redirect = false;
 		}
 		
 		Log.debug("onClick: void");

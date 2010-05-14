@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.util;
 
 import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.Coordenates;
@@ -176,13 +177,26 @@ public class Util {
 	 * @param path
 	 * @param params
 	 */
-	public static void downloadFile(String path, String params) {
-		Main.get().redirect = true;
+	public static void downloadFile(final String path, final String params) {
+		String amp = "";
 		if (!params.equals("") && !params.endsWith("&")) {
-			params += "&";
+			amp = "&";
 		}
-		Window.open(Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path), "_self", "");
-		Main.get().redirect = false;
+		// Chrome need some delay to downloading or kills some RPC calls
+		if (Util.getUserAgent().equals("chrome")) {
+			Timer donwloadingTimer = new Timer(){
+				public void run() {
+					String amp = "";
+					if (!params.equals("") && !params.endsWith("&")) {
+						amp = "&";
+					}
+					Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
+				}
+			};
+			donwloadingTimer.schedule(1000);
+		} else {
+			Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
+		}
 	}
 	
 	/**
@@ -227,6 +241,7 @@ public class Util {
         try {
             if ( window.opera ) return 'opera';
             var ua = navigator.userAgent.toLowerCase();
+            if ( ua.indexOf('chrome') != -1 ) return 'chrome';
             if ( ua.indexOf('webkit' ) != -1 ) return 'safari';
             if ( ua.indexOf('msie 6.0') != -1 ) return 'ie6';
             if ( ua.indexOf('msie 7.0') != -1 ) return 'ie7';
