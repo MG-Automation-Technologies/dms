@@ -402,6 +402,12 @@ public class OKMAccessManager implements AccessManager {
 			}
 			if ((permissions & Permission.SET_PROPERTY) != 0) {
 				sb.append("set_property ");
+			} 
+			if ((permissions & Permission.READ_AC) != 0) {
+				sb.append("read_ac ");
+			}
+			if ((permissions & Permission.MODIFY_AC) != 0) {
+				sb.append("modify_ac ");
 			}
 		}
 
