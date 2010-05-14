@@ -176,27 +176,12 @@ public class Util {
 	 * @param path
 	 * @param params
 	 */
-	public static void downloadFile(final String path, final String params) {
-		Timer donwloadingTimer = new Timer(){
-			public void run() {
-				String amp = "";
-				if (!params.equals("") && !params.endsWith("&")) {
-					amp = "&";
-				}
-				Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
-			}
-		};
-		donwloadingTimer.schedule(500);
-//		String amp = "";
-//		if (!params.equals("") && !params.endsWith("&")) {
-//			amp = "&";
-//		}
-//		// Chrome need some delay to downloading or kills some RPC calls
-//		if (Util.getUserAgent().equals("chrome")) {
-//			
-//		} else {
-//			Window.open(Config.OKMDownloadServlet + "?" + params + amp + "id=" + URL.encodeComponent(path), "_self", "");
-//		}
+	public static void downloadFile(String path, String params) {
+
+		if (!params.equals("") && !params.endsWith("&")) {
+			params += "&";
+		}
+		Window.open(Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path), "_self", "");
 	}
 	
 	/**

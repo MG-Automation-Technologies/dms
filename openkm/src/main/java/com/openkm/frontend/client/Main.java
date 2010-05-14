@@ -292,8 +292,6 @@ public final class Main implements EntryPoint{
 				startUp.keepAlive.cancel();
 			}
 		});
-	    
-	    
 		
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel

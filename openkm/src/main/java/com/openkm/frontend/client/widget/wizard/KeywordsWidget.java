@@ -55,9 +55,9 @@ import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
-import com.openkm.frontend.client.widget.properties.PropertiesImageBundle;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 
 /**
@@ -69,7 +69,6 @@ import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
 public class KeywordsWidget extends Composite {
 	
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
-	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);
 	
 	private FlexTable table;
 	private String docPath;
@@ -132,7 +131,7 @@ public class KeywordsWidget extends Composite {
 			}
 		});
 		
-		thesaurusImage = proImageBundle.bookOpenIcon().createImage();
+		thesaurusImage = new Image(OKMBundleResources.INSTANCE.bookOpenIcon());
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

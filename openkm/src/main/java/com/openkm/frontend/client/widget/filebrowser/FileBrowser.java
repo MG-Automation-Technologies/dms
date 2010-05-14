@@ -30,6 +30,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -605,8 +606,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 			mantainSelectedRow();
 			table.downloadDocument(true);
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
-			refresh(fldId);
-			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+			Timer refreshCheckoutDocument = new Timer() {
+				@Override
+				public void run() {
+					Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+				}				
+			};
+			// Ten second before downloading document is executed refreshing checkout
+			// We must ensure document is yet donwloading because Window.open in _self kills RPC calls temporary
+			// while browser not detects is a file to be donwloaded
+			refreshCheckoutDocument.schedule(10000); 
+			//refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
