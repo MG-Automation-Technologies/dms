@@ -50,6 +50,7 @@ import org.apache.jackrabbit.api.XASession;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,20 +148,21 @@ public class DirectDocumentModule implements DocumentModule {
 			doc.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
-			
-			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.READ)) {
+			Path path = ((NodeImpl)documentNode).getPrimaryPath();
+			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
 				doc.setPermissions(Permission.READ);
 			}
 			
-			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.WRITE)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
 				doc.setPermissions((byte) (doc.getPermissions() | Permission.WRITE));
 			}
 			
-			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.DELETE)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE)) {
 				doc.setPermissions((byte) (doc.getPermissions() | Permission.DELETE));
 			}
 			
-			if (am.isGranted(((NodeImpl)documentNode).getId(), Permission.SECURITY)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.MODIFY_AC)) {
 				doc.setPermissions((byte) (doc.getPermissions() | Permission.SECURITY));
 			}
 		}
@@ -222,7 +224,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setNotes(notes);
 		
-		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
+		log.info("Permisos: {} => {}", docPath, doc.getPermissions());
 		log.debug("getProperties[session]: {}", doc);
 		return doc;
 	}
