@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.widget.dashboard;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
@@ -40,7 +39,6 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -48,10 +46,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.center.Dashboard;
-
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * HorizontalToolBar
@@ -60,7 +57,6 @@ import com.openkm.frontend.client.panel.center.Dashboard;
  *
  */
 public class HorizontalToolBar extends Composite {
-	private DashboardImageBundle dbImageBundle = (DashboardImageBundle) GWT.create(DashboardImageBundle.class);
 	private HorizontalPanel hPanel;
 	private ToolBarBox user;
 	private ToolBarBox mail;
@@ -75,12 +71,12 @@ public class HorizontalToolBar extends Composite {
 	 */
 	public HorizontalToolBar() {
 		hPanel = new HorizontalPanel();
-		user = new ToolBarBox(dbImageBundle.userIcon(), Main.i18n("dashboard.tab.user"));
-		mail = new ToolBarBox(dbImageBundle.mailIcon(), Main.i18n("dashboard.tab.mail"));
-		news = new ToolBarBox(dbImageBundle.newsIcon(), Main.i18n("dashboard.tab.news"));
-		general = new ToolBarBox(dbImageBundle.generalIcon(), Main.i18n("dashboard.tab.general"));
-		workflow = new ToolBarBox(dbImageBundle.workflowIcon(), Main.i18n("dashboard.tab.workflow"));
-		keywordMap = new ToolBarBox(dbImageBundle.keywordMapIcon(), Main.i18n("dashboard.tab.keymap"));
+		user = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.userIcon()), Main.i18n("dashboard.tab.user"));
+		mail = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.mailIcon()), Main.i18n("dashboard.tab.mail"));
+		news = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.newsIcon()), Main.i18n("dashboard.tab.news"));
+		general = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.generalIcon()), Main.i18n("dashboard.tab.general"));
+		workflow = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.workflowIcon()), Main.i18n("dashboard.tab.workflow"));
+		keywordMap = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.keywordMapIcon()), Main.i18n("dashboard.tab.keymap"));
 		
 		enabledWidget = user; // Setting the enabled widget
 		
@@ -300,14 +296,14 @@ public class HorizontalToolBar extends Composite {
 		 * @param url
 		 * @param text
 		 */
-		public ToolBarBox(AbstractImagePrototype img, String text) {
+		public ToolBarBox(Image img, String text) {
 			super();
 			sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS);
 			
 			vPanel = new VerticalPanel();
 			HTML space1 = new HTML("&nbsp;");
 			HTML space2 = new HTML("&nbsp;");
-			image = img.createImage();
+			image = img;
 			html = new HTML(text);
 			html.setText(text);
 			html.setTitle(text);

@@ -31,7 +31,6 @@ import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -115,7 +114,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private int actualView = PanelDefinition.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
-	private String selectedRowByPath = "";
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object

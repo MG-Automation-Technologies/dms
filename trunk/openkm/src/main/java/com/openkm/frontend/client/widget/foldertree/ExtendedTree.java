@@ -24,7 +24,6 @@ package com.openkm.frontend.client.widget.foldertree;
 import java.util.Vector;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;

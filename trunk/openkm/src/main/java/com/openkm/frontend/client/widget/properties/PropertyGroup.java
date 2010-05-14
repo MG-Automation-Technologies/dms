@@ -56,22 +56,14 @@ import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
  */
 public class PropertyGroup extends Composite {
 	
-	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
-	private final static String MAP_LIST_VALUES = "_LIST_VALUES";
-	
 	private ScrollPanel scrollPanel;
 	PropertyGroupWidget propertyGroupWidget;
 	private String grpName;
 	private String grpLabel;
-	private GWTDocument doc;
 	private Button changeButton;
 	private Button removeButton;
 	private Button cancelButton;
-	private Map<String, String[]> hProperties = new HashMap<String, String[]>();
-	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
-	private HashMap<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private boolean editValues = false;
-	private CellFormatter cellFormatter;
 	private FiredHorizontalPanel hPanelFired;
 	
 	/**
@@ -83,7 +75,6 @@ public class PropertyGroup extends Composite {
 		scrollPanel = new ScrollPanel(propertyGroupWidget);
 		this.grpName = grpName;
 		this.grpLabel = groupLabel;
-		this.doc = doc;
 		
 		changeButton = new Button(Main.i18n("button.change"), new ClickHandler() { 
 			@Override
