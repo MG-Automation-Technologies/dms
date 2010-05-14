@@ -32,6 +32,7 @@ import com.google.gwt.resources.client.ImageResource;
  *
  */
 public interface OKMBundleResources extends ClientBundle {
+	
 	public static final OKMBundleResources INSTANCE =  GWT.create(OKMBundleResources.class);
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/delete.gif")
@@ -42,4 +43,22 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/stackpanel/table_key.gif")
 	public ImageResource tableKeyIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/toolbar/user.png")
+	public ImageResource userIcon();
+
+	@Source("com/openkm/frontend/public/img/icon/toolbar/mail.png")
+	public ImageResource mailIcon();
+
+	@Source("com/openkm/frontend/public/img/icon/toolbar/news.png")
+	public ImageResource newsIcon();
+
+	@Source("com/openkm/frontend/public/img/icon/toolbar/general.png")
+	public ImageResource generalIcon();
+
+	@Source("com/openkm/frontend/public/img/icon/toolbar/workflow.png")
+	public ImageResource workflowIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/toolbar/keyword_map.png")
+	public ImageResource keywordMapIcon();
 }
