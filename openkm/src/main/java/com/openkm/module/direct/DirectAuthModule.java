@@ -473,11 +473,17 @@ public class DirectAuthModule implements AuthModule {
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		Node node = null;
+		Session session = null;
 
 		// TODO: Comprobar si el usuario es dueño del nodo.
 		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -513,6 +519,10 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("revokeUser: void");
@@ -658,11 +668,17 @@ public class DirectAuthModule implements AuthModule {
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
-
+		Session session = null;
+		
 		// TODO: Comprobar si el usuario es dueño del nodo.
 		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -698,6 +714,10 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("revokeRole: void");
