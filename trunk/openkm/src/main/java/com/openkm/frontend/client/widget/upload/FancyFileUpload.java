@@ -55,6 +55,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
 	
 	// Upload actions
+	public static final int ACTION_NONE   = -1;
 	public static final int ACTION_INSERT = 0;
 	public static final int ACTION_UPDATE = 1;
 	
@@ -102,7 +103,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private HTML removeButtom;
 	private VerticalPanel buttonPanel;
 	private HTML versionHTMLBR;
-	private TextBox versionComment;
+	private TextArea versionComment;
 	private ScrollPanel versionCommentScrollPanel;
 	private TextBox users;
 	private TextArea message;
@@ -114,6 +115,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private TextFormatter progressiveFormater;
 	private TextFormatter finalFormater;
 	private boolean wizard = false;
+	private int action = ACTION_NONE;
 
 	/**
 	 * Internal timer for checking if pending delay is over.
@@ -210,7 +212,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			statusZipNotifyScroll = new ScrollPanel(statusZipNotify);
 			statusZipNotifyScroll.setAlwaysShowScrollBars(false);
 			statusZipNotifyScroll.setVisible(false);
-			statusZipNotifyScroll.setSize("260","100");
+			statusZipNotifyScroll.setSize("280","100");
 			statusZipNotifyScroll.setStyleName("okm-Bookmark-Panel");
 			statusZipNotifyScroll.addStyleName("okm-Input");
 			
@@ -243,7 +245,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			hPBPanel.setCellHorizontalAlignment(progressBar, HasAlignment.ALIGN_LEFT); // Corrects some problem with centering progress status 
 			progressBar.setSize("260", "20"); 
 			
-			pendingPanel.setWidth("260");
+			pendingPanel.setWidth("280");
 			pendingPanel.setVisible(true);
 			pendingPanel.add(status);
 			pendingPanel.add(hPBPanel);
@@ -478,8 +480,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		// Adds version comment
 		versionHTMLBR = new HTML("<br>");
 		mainPanel.add(versionHTMLBR);
-		versionComment = new TextBox();
-		versionComment.setWidth("260");
+		versionComment = new TextArea();
+		versionComment.setWidth("280");
+		versionComment.setHeight("50");
 		versionComment.setName("comment");
 		versionComment.setStyleName("okm-Input");
 		versionCommentText = new HTML(Main.i18n("fileupload.label.comment"));
@@ -546,7 +549,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		message = new TextArea();
 		commentTXT = new HTML(Main.i18n("fileupload.label.notify.comment"));
 		message.setName("message");
-		message.setSize("260","60");
+		message.setSize("280","60");
 		message.setStyleName("okm-Input");
 		notifyTable = new UserScrollTable(true);
 		userTable = new UserScrollTable(false);
@@ -566,7 +569,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		removeButtom.addClickHandler(removeButtomListener);
 		
 		hUserPanel = new HorizontalPanel();
-		hUserPanel.setSize("260","140");
+		hUserPanel.setSize("280","140");
 		hUserPanel.add(notifyTable);
 		hUserPanel.add(buttonPanel);
 		hUserPanel.add(userTable);
@@ -623,7 +626,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					}
 					
 					// Case is not importing a zip and wizard is enabled
-					if (!importZip.getValue() && 
+					if (!importZip.getValue() && action== ACTION_INSERT &&
 						(Main.get().workspaceUserProperties.getWorkspace().isWizardPropertyGroups() || 
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardCategories() ||
 						 Main.get().workspaceUserProperties.getWorkspace().isWizardKeywords())) {
@@ -730,6 +733,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	}
 
 	public void setAction(int action) {
+		this.action = action;
 		switch (action) {
 			case ACTION_INSERT :
 				versionComment.setVisible(false);
