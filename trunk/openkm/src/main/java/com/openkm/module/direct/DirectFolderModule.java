@@ -104,7 +104,7 @@ public class DirectFolderModule implements FolderModule {
 			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
 				fld.setPermissions(Permission.READ);
 			}
-
+			
 			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
 				fld.setPermissions((byte) (fld.getPermissions() | Permission.WRITE));
 			}
