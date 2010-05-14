@@ -99,12 +99,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
-			IOUtils.closeQuietly(is);
-			jbpmContext.close();
-			
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
 			}
+			
+			IOUtils.closeQuietly(is);
+			jbpmContext.close();
 		}
 		
 		log.debug("registerProcessDefinition: void");
@@ -133,11 +133,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
-			jbpmContext.close();
-			
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
 			}
+			
+			jbpmContext.close();
 		}
 		
 		log.debug("deleteProcessDefinition: void");
@@ -167,11 +167,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
-			jbpmContext.close();
-			
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
 			}
+			
+			jbpmContext.close();
 		}
 		
 		log.debug("getProcessDefinition: {}", vo);
@@ -181,12 +181,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node)
 			throws RepositoryException {
-		log.debug("getProcessDefinitionImage("+token+", "+processDefinitionId+", "+node+")");
+		log.debug("getProcessDefinitionImage({}, {}, {})", new Object[] { token, processDefinitionId, node });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		byte[] image = null;
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
@@ -218,24 +224,34 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("getProcessDefinitionImage: "+image);
+		log.debug("getProcessDefinitionImage: {}", image);
 		return image;
 	}
 
 	@Override
 	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
 			throws ParseException, RepositoryException {
-		log.debug("getProcessDefinitionForms("+token+", "+processDefinitionId+")");
+		log.debug("getProcessDefinitionForms({}, {})", token, processDefinitionId);
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
 		InputStream is = null;
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
@@ -253,11 +269,15 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
 		
-		log.info("getProcessDefinitionForms: "+forms);
+		log.info("getProcessDefinitionForms: {}", forms);
 		//log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return forms;
 	}
@@ -265,12 +285,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, Map<String, Object> variables)
 			throws RepositoryException {
-		log.debug("runProcessDefinition("+token+", "+processDefinitionId+", "+variables+")");
+		log.debug("runProcessDefinition({}, {}, {})", new Object[] { token, processDefinitionId, variables });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			jbpmContext.setActorId(session.getUserID());
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
@@ -294,22 +320,32 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("runProcessDefinition: "+vo);
+		log.debug("runProcessDefinition: {}", vo);
 		return vo;
 	}
 
 	@Override
 	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, String transitionName)
 			throws RepositoryException {
-		log.debug("sendProcessInstanceSignal("+token+", "+processInstanceId+", "+transitionName+")");
+		log.debug("sendProcessInstanceSignal({}, {}, {})", new Object[] { token, processInstanceId, transitionName });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			org.jbpm.graph.exe.Token t = pi.getRootToken();
@@ -328,21 +364,31 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("sendProcessInstanceSignal: "+vo);
+		log.debug("sendProcessInstanceSignal: {}", vo);
 		return vo;
 	}
 
 	@Override
 	public void deleteProcessInstance(String token, long processInstanceId)
 			throws RepositoryException {
-		log.debug("deleteProcessInstance("+token+", "+processInstanceId+")");
+		log.debug("deleteProcessInstance({}, {})", token, processInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			graphSession.deleteProcessInstance(processInstanceId);
 			jbpmContext.getSession().flush();
@@ -352,6 +398,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -362,12 +412,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@SuppressWarnings("unchecked")
 	public Collection<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
 			throws RepositoryException {
-		log.debug("findProcessInstances("+token+", "+processDefinitionId+")");
+		log.debug("findProcessInstances({}, {})", token, processDefinitionId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<ProcessInstance> al = new ArrayList<ProcessInstance>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findProcessInstances(processDefinitionId).iterator(); it.hasNext(); ) {
@@ -379,23 +435,32 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("findProcessInstances: "+al);
+		log.debug("findProcessInstances: {}", al);
 		return al;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findAllProcessDefinitions(String token)
-			throws RepositoryException {
-		log.debug("findAllProcessDefinitions("+token+")");
+	public Collection<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException {
+		log.debug("findAllProcessDefinitions({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findAllProcessDefinitions().iterator(); it.hasNext(); ){
@@ -407,23 +472,33 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("findAllProcessDefinitions: "+al);
+		log.debug("findAllProcessDefinitions: {}", al);
 		return al;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)
-			throws RepositoryException {
-		log.debug("findLatestProcessDefinitions("+token+")");
+	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)	throws 
+			RepositoryException {
+		log.debug("findLatestProcessDefinitions({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findLatestProcessDefinitions().iterator(); it.hasNext(); ) {
@@ -435,23 +510,33 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("findLatestProcessDefinitions: "+al);
+		log.debug("findLatestProcessDefinitions: {}", al);
 		return al;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name)
-			throws RepositoryException {
-		log.debug("findAllProcessDefinitionVersions("+token+", "+name+")");
+	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws
+			RepositoryException {
+		log.debug("findAllProcessDefinitionVersions({}, {})", token, name);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findAllProcessDefinitionVersions(name).iterator(); it.hasNext(); ){
@@ -463,22 +548,32 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("findAllProcessDefinitionVersions: "+al);
+		log.debug("findAllProcessDefinitionVersions: {}", al);
 		return al;
 	}
 
 	@Override
-	public ProcessInstance getProcessInstance(String token, long processInstanceId)
-			throws RepositoryException {
-		log.debug("getProcessInstance("+token+", "+processInstanceId+")");
+	public ProcessInstance getProcessInstance(String token, long processInstanceId)	throws 
+			RepositoryException {
+		log.debug("getProcessInstance({}, {})", token, processInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			vo = WorkflowUtils.copy(pi);
@@ -488,10 +583,14 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("getProcessInstance: "+vo);
+		log.debug("getProcessInstance: {}", vo);
 		return vo;
 	}
 
