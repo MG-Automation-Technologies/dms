@@ -213,7 +213,7 @@ public class JCRUtils {
 	 * Make a silent logout
 	 */
 	public static void logout(Session session) {
-		if (session != null) {
+		if (session != null && session.isLive()) {
 			session.logout();
 		}
 	}
