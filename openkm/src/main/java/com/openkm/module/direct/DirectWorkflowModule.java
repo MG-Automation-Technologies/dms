@@ -595,13 +595,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void suspendProcessInstance(String token, long processInstanceId)
-			throws RepositoryException {
-		log.info("suspendProcessInstance("+token+", "+processInstanceId+")");
+	public void suspendProcessInstance(String token, long processInstanceId) throws RepositoryException {
+		log.info("suspendProcessInstance({}, {})", token, processInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.suspend();
 			jbpmContext.getSession().flush();
@@ -611,6 +616,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -618,13 +627,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void resumeProcessInstance(String token, long processInstanceId)
-			throws RepositoryException {
-		log.info("resumeProcessInstance("+token+", "+processInstanceId+")");
+	public void resumeProcessInstance(String token, long processInstanceId) throws RepositoryException {
+		log.info("resumeProcessInstance({}, {})", token, processInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.resume();
 			jbpmContext.getSession().flush();
@@ -634,6 +648,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -641,13 +659,19 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void addProcessInstanceVariable(String token, long processInstanceId, String name,
-			Object value) throws RepositoryException {
-		log.info("addProcessInstanceVariable("+token+", "+processInstanceId+", "+name+", "+value+")");
+	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value)
+			throws RepositoryException {
+		log.info("addProcessInstanceVariable({}, {}, {}, {})", new Object[] { token, processInstanceId, name, value });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.getContextInstance().setVariable(name, value);
 			jbpmContext.getSession().flush();
@@ -657,6 +681,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
