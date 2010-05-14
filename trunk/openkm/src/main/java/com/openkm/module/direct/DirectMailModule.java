@@ -64,15 +64,11 @@ public class DirectMailModule implements MailModule {
 	private static Logger log = LoggerFactory.getLogger(DirectMailModule.class);
 
 	/**
-	 * @param session
-	 * @param fldPath
-	 * @return
-	 * @throws javax.jcr.RepositoryException 
-	 * @throws javax.jcr.PathNotFoundException 
+	 * Get mail properties
 	 */
 	public Mail getProperties(Session session, String mailPath) throws 
 			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException  {
-		log.debug("getProperties[session]:(" + session + ", " + mailPath + ")");
+		log.debug("getProperties[session]({}, {})", session, mailPath);
 		Mail mail = new Mail();
 		Node mailNode = session.getRootNode().getNode(mailPath.substring(1));
 			
@@ -131,16 +127,19 @@ public class DirectMailModule implements MailModule {
 			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.DELETE)) {
 				mail.setPermissions((byte) (mail.getPermissions() | Permission.DELETE));
 			}
+			
+			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.SECURITY)) {
+				mail.setPermissions((byte) (mail.getPermissions() | Permission.SECURITY));
+			}
 		}
 		
-		log.debug("Permisos: "+mailPath+": "+mail.getPermissions());
-		log.debug("getProperties[session]: " + mail);
+		log.debug("Permisos: {} => {}", mailPath, mail.getPermissions());
+		log.debug("getProperties[session]: {}", mail);
 		return mail;
 	}
 
 	/**
 	 * Create a new mail
-	 * @throws IOException 
 	 */
 	private Node create(Session session, Node parentNode, String name, long size, String from, 
 			String[] reply, String[] to, String[] cc, String[] bcc, Calendar sentDate, 
@@ -199,18 +198,24 @@ public class DirectMailModule implements MailModule {
 	@Override
 	public Mail create(String token, Mail mail) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, VirusDetectedException {
-		log.debug("create(" + token + ", " + mail + ")");
+		log.debug("create({}, {})", token, mail);
 		Mail newMail = null;
 		Transaction t = null;
+		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = (XASession) SessionManager.getInstance().get(token);	
+			} else {
+				session = (XASession) JCRUtils.getSession();
+			}
+			
 			String parent = FileUtils.getParent(mail.getPath());
 			String name = FileUtils.getName(mail.getPath());
-			XASession session = (XASession)SessionManager.getInstance().get(token);
 			Node parentNode = session.getRootNode().getNode(parent.substring(1));
 			
 			// Escape dangerous chars in name
@@ -258,19 +263,30 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("create: " + newMail);
+		log.debug("create: {}", newMail);
 		return newMail;
 	}
 
 	@Override
-	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, RepositoryException {
-		log.debug("get:(" + token + ", " + mailPath + ")");
+	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
+			RepositoryException {
+		log.debug("getProperties({}, {})", token, mailPath);
 		Mail mail = null;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			mail = getProperties(session, mailPath);
 			
 			// Activity log
@@ -281,16 +297,20 @@ public class DirectMailModule implements MailModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("get: " + mail);
+		log.debug("get: {}", mail);
 		return mail;
 	}
 
 	@Override
 	public void delete(String token, String mailPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException {
-		log.debug("delete(" + token + ", " + mailPath + ")");
+		log.debug("delete({}, {})", token, mailPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -298,8 +318,13 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String name = FileUtils.getName(mailPath);
-			session = SessionManager.getInstance().get(token);
 			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
 			Node parentNode = folderNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
@@ -332,6 +357,10 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 				
 		log.debug("delete: void");
@@ -340,15 +369,21 @@ public class DirectMailModule implements MailModule {
 	@Override
 	public void purge(String token, String mailPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException {
-		log.debug("purge(" + token + ", " + mailPath + ")");
+		log.debug("purge({}, {})", token, mailPath);
 		Node parentNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
 			parentNode = folderNode.getParent();
 			folderNode.remove();
@@ -371,14 +406,19 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
+		
 		log.debug("purge: void");
 	}
 
 	@Override
 	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException {
-		log.debug("rename:(" + token + ", " + mailPath + ", " + newName + ")");
+		log.debug("rename({}, {}, {})", new Object[] { token, mailPath, newName });
 		Mail renamedMail = null;
 		Session session = null;
 		
@@ -387,10 +427,15 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String parent = FileUtils.getParent(mailPath);
 			String name = FileUtils.getName(mailPath);
-			session = SessionManager.getInstance().get(token);
-				
+							
 			// Escape dangerous chars in name
 			newName = FileUtils.escape(newName);
 			
@@ -430,16 +475,20 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
-		log.debug("rename: "+renamedMail);
+		log.debug("rename: {}", renamedMail);
 		return renamedMail;
 	}
 	
 	@Override
 	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException {
-		log.debug("move(" + token + ", " + mailPath + ", " + dstPath + ")");
+		log.debug("move({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -447,8 +496,13 @@ public class DirectMailModule implements MailModule {
 		}
 
 		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			String name = FileUtils.getName(mailPath);
-			session = SessionManager.getInstance().get(token);
 			session.move(mailPath, dstPath+"/"+name);
 			session.save();
 			
@@ -470,23 +524,21 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("move: void");
 	}
 	
 	/**
-	 * @param session
-	 * @param srcMailNode
-	 * @param dstFolderNode
-	 * @throws ValueFormatException
-	 * @throws javax.jcr.PathNotFoundException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
+	 * Copy recursively
 	 */
 	public void copy(Session session, Node srcMailNode, Node dstFolderNode) throws ValueFormatException, 
 		javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
-		log.debug("copy(" + session + ", " + srcMailNode + ", " + dstFolderNode + ")");
+		log.debug("copy({}, {}, {})", new Object[] { session, srcMailNode, dstFolderNode });
 		
 		String name = srcMailNode.getName();
 		long size = srcMailNode.getProperty(Mail.SIZE).getLong();
@@ -512,9 +564,7 @@ public class DirectMailModule implements MailModule {
 			if (node.isNodeType(Document.TYPE)) {
 				ddm.copy(session, node, mNode);
 			}
-		}		
-		
-
+		}
 		
 		log.debug("copy: void");
 	}
@@ -522,15 +572,21 @@ public class DirectMailModule implements MailModule {
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
-		log.debug("copy(" + token + ", " + mailPath + ", " + dstPath + ")");
+		log.debug("copy({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Transaction t = null;
+		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			XASession session = (XASession)SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = (XASession) SessionManager.getInstance().get(token);
+			} else {
+				session = (XASession) JCRUtils.getSession();
+			}
+			
 			t = new Transaction(session);
 			t.start();
 			
@@ -567,18 +623,28 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw e;
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
-
+		
 		log.debug("copy: void");
 	}
 	
 	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
-		log.debug("findChilds(" + token + ", " + fldPath + ")");
+		log.debug("findChilds({}, {})", token, fldPath);
 		ArrayList<Mail> childs = new ArrayList<Mail>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -597,20 +663,30 @@ public class DirectMailModule implements MailModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 				
-		log.debug("findChilds: "+childs);
+		log.debug("findChilds: {}", childs);
 		return childs;
 	}
 
 	@Override
 	public boolean isValid(String token, String mailPath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("isValid(" + token + ", " + mailPath + ")");
+		log.debug("isValid({}, {})", token, mailPath);
 		boolean valid = false;
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getRootNode().getNode(mailPath.substring(1));
 			
 			if (node.isNodeType(Mail.TYPE)) {
@@ -625,9 +701,13 @@ public class DirectMailModule implements MailModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("isValid: "+valid);
+		log.debug("isValid: {}", valid);
 		return valid;
 	}
 }
