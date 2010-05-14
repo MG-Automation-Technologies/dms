@@ -69,6 +69,7 @@ import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.TagCloud;
@@ -84,7 +85,6 @@ public class Document extends Composite {
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
 	
-	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);	
 	private FlexTable tableProperties;
 	private FlexTable tableSubscribedUsers;
 	private FlexTable tableSubscribedCategories;
@@ -151,7 +151,7 @@ public class Document extends Composite {
 			}
 		});
 		
-		thesaurusImage = proImageBundle.bookOpenIcon().createImage();
+		thesaurusImage = new Image(OKMBundleResources.INSTANCE.bookOpenIcon());
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -214,7 +214,7 @@ public class Document extends Composite {
 		HorizontalPanel hPanelCategories = new HorizontalPanel();
 		categoriesText = new HTML("<b>"+Main.i18n("document.categories")+"</b>");
 	
-		categoriesImage = proImageBundle.tableKeyIcon().createImage();
+		categoriesImage = new Image(OKMBundleResources.INSTANCE.tableKeyIcon());
 		categoriesImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -772,7 +772,7 @@ public class Document extends Composite {
 		});
 		anchor.setStyleName("okm-KeyMap-ImageHover");
 		
-		Image delete = proImageBundle.deleteIcon().createImage();
+		Image delete = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 		delete.setStyleName("okm-KeyMap-ImageHover");
 		delete.addClickHandler(new ClickHandler() {
 			@Override

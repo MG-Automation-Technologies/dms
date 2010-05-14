@@ -48,8 +48,8 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyService;
 import com.openkm.frontend.client.service.OKMPropertyServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
-import com.openkm.frontend.client.widget.properties.PropertiesImageBundle;
 
 /**
  * CategoriesWidget
@@ -60,7 +60,6 @@ import com.openkm.frontend.client.widget.properties.PropertiesImageBundle;
 public class CategoriesWidget extends Composite {
 	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
 	
-	private PropertiesImageBundle proImageBundle = (PropertiesImageBundle) GWT.create(PropertiesImageBundle.class);
 	private FlexTable table;
 	private String docPath;
 	private CellFormatter cellFormatter;	
@@ -247,7 +246,7 @@ public class CategoriesWidget extends Composite {
 		});
 		anchor.setStyleName("okm-KeyMap-ImageHover");
 		
-		Image delete = proImageBundle.deleteIcon().createImage();
+		Image delete = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 		delete.setStyleName("okm-KeyMap-ImageHover");
 		delete.addClickHandler(new ClickHandler() {
 			@Override

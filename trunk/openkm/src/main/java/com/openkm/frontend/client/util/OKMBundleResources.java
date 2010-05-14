@@ -19,23 +19,27 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.properties;
+package com.openkm.frontend.client.util;
 
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.ImageBundle;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 
 /**
+ * OKMBundleResources
+ * 
  * @author jllort
  *
  */
-public interface PropertiesImageBundle extends ImageBundle {
-
-	@Resource("com/openkm/frontend/public/img/icon/actions/delete.gif")
-	public AbstractImagePrototype deleteIcon();
+public interface OKMBundleResources extends ClientBundle {
+	public static final OKMBundleResources INSTANCE =  GWT.create(OKMBundleResources.class);
 	
-	@Resource("com/openkm/frontend/public/img/icon/stackpanel/book_open.gif")
-	public AbstractImagePrototype bookOpenIcon();
+	@Source("com/openkm/frontend/public/img/icon/actions/delete.gif")
+	public ImageResource deleteIcon();
 	
-	@Resource("com/openkm/frontend/public/img/icon/stackpanel/table_key.gif")
-	public AbstractImagePrototype tableKeyIcon();
+	@Source("com/openkm/frontend/public/img/icon/stackpanel/book_open.gif")
+	public ImageResource bookOpenIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/stackpanel/table_key.gif")
+	public ImageResource tableKeyIcon();
 }
