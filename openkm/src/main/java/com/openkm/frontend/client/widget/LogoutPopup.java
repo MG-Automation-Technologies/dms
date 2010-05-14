@@ -101,9 +101,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	 */
 	public void onClick(ClickEvent event) {
 		super.hide();
-		Main.get().redirect = true;
 		Window.open("/OpenKM"+Config.INSTALL+"/", "_self", null);
-		Main.get().redirect = false;
 	}
 	
 	/**

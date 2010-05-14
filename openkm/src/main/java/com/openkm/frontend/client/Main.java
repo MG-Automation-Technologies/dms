@@ -114,9 +114,6 @@ public final class Main implements EntryPoint{
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
 	
-	// To avoid the logout in the onClose event fired in case of documentDownload
-	public boolean redirect = false;
-	
 	// Language declarations
 	private String lang;
 	private HashMap<String, String> hI18n;
