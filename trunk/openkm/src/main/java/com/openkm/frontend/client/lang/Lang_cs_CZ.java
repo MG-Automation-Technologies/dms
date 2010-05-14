@@ -333,10 +333,12 @@ public class Lang_cs_CZ {
 	    lang.put("security.group.permission.read", "Číst");
 	    lang.put("security.group.permission.write", "Zapisovat");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Uživatel");
 	    lang.put("security.user.permission.read", "Číst");
 	    lang.put("security.user.permission.write", "Zapisovat");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Uživatelé");
 	    lang.put("security.groups", "Skupiny");
 	    lang.put("security.recursive", "Nastavit práva rekurzivně");

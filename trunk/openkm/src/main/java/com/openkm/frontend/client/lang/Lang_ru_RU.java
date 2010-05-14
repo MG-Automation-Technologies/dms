@@ -338,10 +338,12 @@ public class Lang_ru_RU {
 	    lang.put("security.group.permission.read", "Читать");
 	    lang.put("security.group.permission.write", "Изменять");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Пользователь");
 	    lang.put("security.user.permission.read", "Читать");
 	    lang.put("security.user.permission.write", "Изменять");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Пользователи");
 	    lang.put("security.groups", "Группы");
 	    lang.put("security.recursive", "Рекурсивное изменение прав");

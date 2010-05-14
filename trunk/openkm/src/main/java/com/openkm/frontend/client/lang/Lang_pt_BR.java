@@ -333,10 +333,12 @@ public class Lang_pt_BR {
 	    lang.put("security.group.permission.read", "Leitura");
 	    lang.put("security.group.permission.write", "Escrita");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Usuário");
 	    lang.put("security.user.permission.read", "Leitura");
 	    lang.put("security.user.permission.write", "Escrita");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Usuários");
 	    lang.put("security.groups", "Grupos");
 	    lang.put("security.recursive", "Aplicar alterações de forma recursiva");

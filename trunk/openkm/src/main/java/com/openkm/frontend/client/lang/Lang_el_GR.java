@@ -333,10 +333,12 @@ public class Lang_el_GR {
 	    lang.put("security.group.permission.read", "Ανάγνωση");
 	    lang.put("security.group.permission.write", "Εγγραφή");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Χρήστης");
 	    lang.put("security.user.permission.read", "Ανάγνωση");
 	    lang.put("security.user.permission.write", "Εγγραφή");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Χρήστες");
 	    lang.put("security.groups", "Ομάδες");
 	    lang.put("security.recursive", "Αναδρομικές αλλαγές αδειών ");

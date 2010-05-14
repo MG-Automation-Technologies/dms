@@ -333,6 +333,7 @@ public class Lang_bs_BA {
 	    lang.put("security.group.permission.read", "Čitaj");
 	    lang.put("security.group.permission.write", "Piši");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "Korisnik");
 	    lang.put("security.user.permission.read", "Čitaj");
 	    lang.put("security.user.permission.write", "Piši");

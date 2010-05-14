@@ -333,10 +333,12 @@ public class Lang_zh_CN {
 	    lang.put("security.group.permission.read", "读");
 	    lang.put("security.group.permission.write", "写");
 	    lang.put("security.group.permission.delete", "Delete");
+	    lang.put("security.group.permission.security", "Security");
 	    lang.put("security.user.name", "用户");
 	    lang.put("security.user.permission.read", "读");
 	    lang.put("security.user.permission.write", "写");
 	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "用户");
 	    lang.put("security.groups", "组");
 	    lang.put("security.recursive", "递归修改权限");
