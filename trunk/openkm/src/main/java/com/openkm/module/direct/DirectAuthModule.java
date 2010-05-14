@@ -72,8 +72,8 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public synchronized String login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
-			RepositoryException {
+	public synchronized String login(String user, String pass) throws AccessDeniedException,
+			UserAlreadyLoggerException, RepositoryException {
 		log.debug("login({}, {})", user, pass);
 		String token = null;
 
@@ -127,13 +127,6 @@ public class DirectAuthModule implements AuthModule {
 					logout(oldToken);
 				}
 			} else {
-				int loggedUsers = sessions.getTokens().size();
-				
-				// okmAdmin user is excluded from the allowed users count
-				if (sessions.getTokenByUserId(Config.ADMIN_USER) != null) {
-					loggedUsers--;
-				}
-				
 				// Add generated session to pool
 				token = UUIDGenerator.generate(this);
 				log.info("Add generated session to pool: "+token);
@@ -157,18 +150,15 @@ public class DirectAuthModule implements AuthModule {
 		log.debug("login: {}", token);
 		return token;
 	}
-
+	
 	/**
 	 * Load user data
 	 */
-	public static void loadUserData(Session session)
-			throws javax.jcr.RepositoryException,
-			javax.jcr.PathNotFoundException, ValueFormatException,
-			javax.jcr.AccessDeniedException, ItemExistsException,
-			ConstraintViolationException, InvalidItemStateException,
-			ReferentialIntegrityException, VersionException, LockException,
-			NoSuchNodeTypeException {
-		log.info("loadUserData({})", session.getUserID());
+	public static void loadUserData(Session session) throws javax.jcr.RepositoryException,
+			javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.AccessDeniedException,
+			ItemExistsException, ConstraintViolationException, InvalidItemStateException,
+			ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException {
+		log.info("loadUserData({}) -> {}", session.getUserID(), session);
 		if (session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
 			log.info("** User Home already created **");
 			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
@@ -176,7 +166,7 @@ public class DirectAuthModule implements AuthModule {
 			Value[] lockTokensValues = lockTokensProperty.getValues();
 
 			// Reload previous session lockTokens
-			log.info(session.getUserID()+" # lockTokensValues.length: "+lockTokensValues.length);
+			log.info("{} # lockTokensValues.length: {}", session.getUserID(), lockTokensValues.length);
 			for (int i=0; i<lockTokensValues.length; i++) {
 				String lockToken = lockTokensValues[i].getString();
 
@@ -189,26 +179,27 @@ public class DirectAuthModule implements AuthModule {
 			userConfig.save();
 		} else { // Create user space filesystem
 			// Create user home
-			Node okmHome = session.getRootNode().getNode(Repository.HOME);
-			createUserHome(okmHome, session.getUserID());
-			
-			log.info("** SAVING... **");
-			okmHome.save();
-			log.info("** SAVED **");
+			synchronized (session.getUserID()) {
+				if (!session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
+					Node okmHome = session.getRootNode().getNode(Repository.HOME);
+					createUserHome(okmHome, session.getUserID());
+					log.info("** SAVING... **");
+					okmHome.save();
+					log.info("** SAVED **");
+				}
+			}
 		}
 	}
 
 	/**
-	 * @param okmHome
-	 * @param userId
+	 * Create user home
 	 */
-	public static void createUserHome(Node okmHome, String userId)
-			throws ItemExistsException, javax.jcr.PathNotFoundException,
-			NoSuchNodeTypeException, LockException, VersionException,
-			ConstraintViolationException, javax.jcr.RepositoryException,
-			ValueFormatException, javax.jcr.AccessDeniedException,
-			InvalidItemStateException, ReferentialIntegrityException {
-		log.info("** Create user '"+userId+"' home ("+okmHome.getPath()+"/"+userId+") **");
+	public static void createUserHome(Node okmHome, String userId) throws ItemExistsException,
+			javax.jcr.PathNotFoundException, NoSuchNodeTypeException, LockException, 
+			VersionException, ConstraintViolationException, javax.jcr.RepositoryException,
+			ValueFormatException, javax.jcr.AccessDeniedException, InvalidItemStateException, 
+			ReferentialIntegrityException {
+		log.info("** Create user '{}' home '{}' **", userId, okmHome.getPath()+"/"+userId);
 		Node userHome = okmHome.addNode(userId, Folder.TYPE);
 		userHome.setProperty(Folder.AUTHOR, userId);
 		userHome.setProperty(Folder.NAME, userId);
@@ -223,7 +214,7 @@ public class DirectAuthModule implements AuthModule {
 		userHome.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userHome.setProperty(Permission.ROLES_SECURITY, new String[] {});
 		
-		log.info("** Create user '"+userId+"' trash ("+userHome.getPath()+"/"+Repository.TRASH+") **");
+		log.info("** Create user '{}' trash '{}' **", userId, userHome.getPath()+"/"+Repository.TRASH);
 		Node userTrash = userHome.addNode(Repository.TRASH, Folder.TYPE);
 		userTrash.setProperty(Folder.AUTHOR,  userId);
 		userTrash.setProperty(Folder.NAME, Repository.TRASH);
@@ -238,7 +229,7 @@ public class DirectAuthModule implements AuthModule {
 		userTrash.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userTrash.setProperty(Permission.ROLES_SECURITY, new String[] {});
 		
-		log.info("** Create user '"+userId+"' config ("+userHome.getPath()+"/"+Repository.USER_CONFIG+") **");
+		log.info("** Create user '{}' config '{}' **", userId, userHome.getPath()+"/"+Repository.USER_CONFIG);
 		Node userConfig = userHome.addNode(Repository.USER_CONFIG, Repository.USER_CONFIG_TYPE);
 		userConfig.setProperty(Bookmark.HOME_PATH, "/"+Repository.ROOT);
 		userConfig.setProperty(Bookmark.HOME_TYPE, Folder.TYPE);
@@ -253,7 +244,7 @@ public class DirectAuthModule implements AuthModule {
 		userConfig.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userConfig.setProperty(Permission.ROLES_SECURITY, new String[] {});
 
-		log.info("** Create user '"+userId+"' personal documents ("+userHome.getPath()+"/"+Repository.PERSONAL+") **");
+		log.info("** Create user '{}' personal documents '{}' **", userId, userHome.getPath()+"/"+Repository.PERSONAL);
 		Node userDocuments = userHome.addNode(Repository.PERSONAL, Folder.TYPE);
 		userDocuments.setProperty(Folder.AUTHOR, userId);
 		userDocuments.setProperty(Folder.NAME, Repository.PERSONAL);
@@ -268,7 +259,7 @@ public class DirectAuthModule implements AuthModule {
 		userDocuments.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userDocuments.setProperty(Permission.ROLES_SECURITY, new String[] {});
 
-		log.info("** Create user '"+userId+"' mail ("+userHome.getPath()+"/"+Repository.MAIL+") **");
+		log.info("** Create user '{}' mail '{}' **", userId, userHome.getPath()+"/"+Repository.MAIL);
 		Node userMail = userHome.addNode(Repository.MAIL, Folder.TYPE);
 		userMail.setProperty(Folder.AUTHOR, userId);
 		userMail.setProperty(Folder.NAME, Repository.MAIL);
@@ -283,7 +274,7 @@ public class DirectAuthModule implements AuthModule {
 		userMail.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userMail.setProperty(Permission.ROLES_SECURITY, new String[] {});
 
-		log.info("** Create user '"+userId+"' query ("+userHome.getPath()+"/"+QueryParams.LIST+") **");
+		log.info("** Create user '{}' query '{}' **", userId, userHome.getPath()+"/"+QueryParams.LIST);
 		Node userQuery = userHome.addNode(QueryParams.LIST, QueryParams.LIST_TYPE);
 
 		// Auth info
@@ -296,7 +287,7 @@ public class DirectAuthModule implements AuthModule {
 		userQuery.setProperty(Permission.ROLES_DELETE, new String[] {});
 		userQuery.setProperty(Permission.ROLES_SECURITY, new String[] {});
 
-		log.info("** Create user '"+userId+"' bookmark ("+userHome.getPath()+"/"+Bookmark.LIST+") **");
+		log.info("** Create user '{}' bookmark '{}' **", userId, userHome.getPath()+"/"+Bookmark.LIST);
 		Node userBookmark = userHome.addNode(Bookmark.LIST, Bookmark.LIST_TYPE);
 
 		// Auth info
@@ -324,26 +315,39 @@ public class DirectAuthModule implements AuthModule {
 	@Override
 	public synchronized void logout(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("logout({})", token);
-		Session session = SessionManager.getInstance().get(token);
-
+		Session session = null;
+			
 		try {
-			if (session.isLive()) {
-				Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
-				Property lockTokens = userConfig.getProperty(Repository.LOCK_TOKENS);
-				String[] sessionLockTokens = session.getLockTokens();
-				lockTokens.setValue(sessionLockTokens);
-				userConfig.save();
-
-				log.info(session.getUserID()+" # sessionLockTokens.length: "+sessionLockTokens.length);
-				for (int i=0; i<sessionLockTokens.length; i++) {
-					log.info(session.getUserID()+" # sessionLockTokens saved: "+sessionLockTokens[i]);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
+			if (Config.SESSION_MANAGER) {
+				if (session.isLive()) {
+					Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
+					Property lockTokens = userConfig.getProperty(Repository.LOCK_TOKENS);
+					String[] sessionLockTokens = session.getLockTokens();
+					lockTokens.setValue(sessionLockTokens);
+					userConfig.save();
+					
+					log.info(session.getUserID()+" # sessionLockTokens.length: "+sessionLockTokens.length);
+					for (int i=0; i<sessionLockTokens.length; i++) {
+						log.info(session.getUserID()+" # sessionLockTokens saved: "+sessionLockTokens[i]);
+					}
+					
+					// Activity log
+					UserActivity.log(session, "LOGOUT", null, null);
+					
+					SessionManager.getInstance().remove(token);
+					session.logout();
 				}
-
+			} else {
 				// Activity log
-				UserActivity.log(session, "LOGOUT", null, null);
-
-				SessionManager.getInstance().remove(token);
-				session.logout();
+				if (session.isLive()) {
+					UserActivity.log(session, "LOGOUT", null, null);
+				}
 			}
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -351,8 +355,12 @@ public class DirectAuthModule implements AuthModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
-
+		
 		log.debug("logout: void");
 	}
 
@@ -361,11 +369,17 @@ public class DirectAuthModule implements AuthModule {
 			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, permissions, recursive });
 		Node node = null;
-
+		Session session = null;
+		
 		// TODO: Comprobar si el usuario es dueño del nodo.
 		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -401,6 +415,10 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("grantUser: void");
@@ -413,7 +431,7 @@ public class DirectAuthModule implements AuthModule {
 			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualUsers = node.getProperty(property).getValues();
 		ArrayList<String> newUsers = new ArrayList<String>();
-
+		
 		for (int i=0; i<actualUsers.length; i++) {
 			newUsers.add(actualUsers[i].getString());
 		}
@@ -728,9 +746,15 @@ public class DirectAuthModule implements AuthModule {
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 
 			Value[] usersRead = node.getProperty(Permission.USERS_READ).getValues();
@@ -780,6 +804,10 @@ public class DirectAuthModule implements AuthModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getGrantedUsers: {}", users);
@@ -790,9 +818,15 @@ public class DirectAuthModule implements AuthModule {
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		HashMap<String, Byte> roles = new HashMap<String, Byte>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 
 			Value[] rolesRead = node.getProperty(Permission.ROLES_READ).getValues();
@@ -842,6 +876,10 @@ public class DirectAuthModule implements AuthModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("getGrantedRoles: {}", roles);
