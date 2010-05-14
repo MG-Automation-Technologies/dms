@@ -1092,13 +1092,19 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void endTaskInstance(String token, long taskInstanceId,
-			String transitionName) throws RepositoryException {
-		log.info("endTaskInstance("+token+", "+taskInstanceId+")");
+	public void endTaskInstance(String token, long taskInstanceId, String transitionName) throws 
+			RepositoryException {
+		log.info("endTaskInstance({}, {})", token, taskInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			
@@ -1115,6 +1121,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -1122,13 +1132,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void suspendTaskInstance(String token, long taskInstanceId)
-			throws RepositoryException {
-		log.info("suspendTaskInstance("+token+", "+taskInstanceId+")");
+	public void suspendTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+		log.info("suspendTaskInstance({}, {})", token, taskInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.suspend();
@@ -1139,6 +1154,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
