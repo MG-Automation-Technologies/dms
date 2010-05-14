@@ -1165,13 +1165,18 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void resumeTaskInstance(String token, long taskInstanceId)
-			throws RepositoryException {
-		log.info("resumeTaskInstance("+token+", "+taskInstanceId+")");
+	public void resumeTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+		log.info("resumeTaskInstance({}, {})", token, taskInstanceId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.resume();
@@ -1182,6 +1187,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -1189,23 +1198,32 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public Token getToken(String token, long tokenId)
-			throws RepositoryException {
-		log.debug("getToken("+token+", "+tokenId+")");
+	public Token getToken(String token, long tokenId) throws RepositoryException {
+		log.debug("getToken({}, {})", token, tokenId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Token vo = new Token();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			vo = WorkflowUtils.copy(t);
 			vo.setProcessInstance(WorkflowUtils.copy(t.getProcessInstance())); // Avoid recursion
-						
+			
 			// Activity log
 			UserActivity.log(session, "GET_TOKEN", ""+tokenId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
