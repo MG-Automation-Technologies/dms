@@ -72,7 +72,14 @@ public class ExtendedStackPanel extends StackPanel {
 	 * @param index The new stack index selected
 	 * @param refresh Enables or disables refreshing
 	 */
-	private void changeView(int index, boolean refresh){
+	private void changeView(int index, boolean refresh) {
+		// If there's folder creating or renaming must cancel it before changing view
+		if (Main.get().activeFolderTree.isFolderCreating()) {
+			Main.get().activeFolderTree.removeTmpFolderCreate();
+		} else if (Main.get().activeFolderTree.isFolderRenaming()) {
+			Main.get().activeFolderTree.cancelRename();
+		}
+		
 		switch (index) {
 			case PanelDefinition.NAVIGATOR_TAXONOMY:
 				Main.get().activeFolderTree = Main.get().mainPanel.navigator.taxonomyTree;
