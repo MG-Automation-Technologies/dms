@@ -111,6 +111,7 @@ public class MainMenu extends Composite {
 					private MenuItem usa;
 					private MenuItem indonesian;
 					private MenuItem portuguese;
+					private MenuItem arabic;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -243,6 +244,7 @@ public class MainMenu extends Composite {
 					// Submenu Language options
 					subMenuLanguage = new MenuBar(true);
 					subMenuLanguage.setStyleName("okm-SubMenuBar");
+						arabic = new MenuItem(Util.menuHTML("img/icon/menu/ps.gif", "Arabic"), true, setLangArabic);
 						bosnian = new MenuItem(Util.menuHTML("img/icon/menu/bs.gif", "Bosnian"), true, setLangBosnian);
 						catalan = new MenuItem(Util.menuHTML("img/icon/menu/ca.gif", "Català"), true, setLangCatalan);
 						chineseSimple = new MenuItem(Util.menuHTML("img/icon/menu/cn.gif", "Chinese simple"), true, setLangChinese);
@@ -272,6 +274,7 @@ public class MainMenu extends Composite {
 						serbian = new MenuItem(Util.menuHTML("img/icon/menu/rs.gif", "Serbian"), true, setLangSerbian);
 						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
 						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
+						arabic.addStyleName("okm-MainMenuItem");
 						bosnian.addStyleName("okm-MainMenuItem");
 						catalan.addStyleName("okm-MainMenuItem");
 						chineseSimple.addStyleName("okm-MainMenuItem");
@@ -301,6 +304,7 @@ public class MainMenu extends Composite {
 						serbian.addStyleName("okm-MainMenuItem");
 						swedish.addStyleName("okm-MainMenuItem");
 						turkish.addStyleName("okm-MainMenuItem");
+					subMenuLanguage.addItem(arabic);
 					subMenuLanguage.addItem(bosnian);
 					subMenuLanguage.addItem(catalan);
 					subMenuLanguage.addItem(chineseSimple);
@@ -571,6 +575,13 @@ public class MainMenu extends Composite {
 	Command setLangSpanish = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_es_ES);
+		}
+	};
+	
+	// Command menu to set Arabic lang
+	Command setLangArabic = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_ar_PS);
 		}
 	};
 	
