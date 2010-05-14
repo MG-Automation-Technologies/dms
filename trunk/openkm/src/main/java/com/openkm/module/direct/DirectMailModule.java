@@ -39,6 +39,7 @@ import org.apache.jackrabbit.api.XASession;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.security.AccessManager;
+import org.apache.jackrabbit.spi.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,20 +116,21 @@ public class DirectMailModule implements MailModule {
 			mail.setPermissions(Permission.NONE);
 		} else {
 			AccessManager am = ((SessionImpl) session).getAccessManager();
-			
-			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.READ)) {
+			Path path = ((NodeImpl)mailNode).getPrimaryPath();
+			//Path path = ((SessionImpl)session).getHierarchyManager().getPath(((NodeImpl)folderNode).getId());
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.READ)) {
 				mail.setPermissions(Permission.READ);
 			}
 			
-			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.WRITE)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.ADD_NODE)) {
 				mail.setPermissions((byte) (mail.getPermissions() | Permission.WRITE));
 			}
 			
-			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.DELETE)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.REMOVE_NODE)) {
 				mail.setPermissions((byte) (mail.getPermissions() | Permission.DELETE));
 			}
 			
-			if (am.isGranted(((NodeImpl)mailNode).getId(), Permission.SECURITY)) {
+			if (am.isGranted(path, org.apache.jackrabbit.core.security.authorization.Permission.MODIFY_AC)) {
 				mail.setPermissions((byte) (mail.getPermissions() | Permission.SECURITY));
 			}
 		}
