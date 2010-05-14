@@ -386,14 +386,12 @@ iframe {
 
 .okm-ToolBar-button {
 	background-color: #E5E5E1;
-	padding: 4px 4px 4px 4px;
 	cursor: pointer;
   	cursor: hand;
 }
 
 .okm-ToolBar-button-disabled {
 	background-color: #E5E5E1;
-	padding: 4px 4px 4px 4px;
 }
 
 .okm-ToolBar-space {
