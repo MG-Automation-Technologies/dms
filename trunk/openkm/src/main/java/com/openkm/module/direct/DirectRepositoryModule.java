@@ -185,7 +185,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error("# MKK-2 # MKK-2 # MKK-2 # MKK-2 # MKK-2 # MKK-2 # MKK-2 #");
 		}
 		
-		log.debug("getSystemSession: "+systemSession);
+		log.debug("getSystemSession: {}", systemSession);
 		return systemSession;
 	}
 
@@ -193,10 +193,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * Initialize the repository.
 	 * 
 	 * @return The root path of the initialized repository.
-	 * @throws AccessDeniedException If there is any security problem: you can't access the parent document folder because of lack of permissions.
+	 * @throws AccessDeniedException If there is any security problem: you can't access the parent
+	 * document folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public synchronized static String initialize() throws javax.jcr.RepositoryException, FileNotFoundException, InvalidNodeTypeDefException, ParseException {
+	public synchronized static String initialize() throws javax.jcr.RepositoryException, 
+			FileNotFoundException, InvalidNodeTypeDefException, ParseException {
 		log.debug("initialize()");
 				
 		// Initializes Repository and SystemSession
@@ -209,17 +211,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		SessionManager.getInstance().putSystem(systemSession);
 		log.debug("*** System user created "+systemSession.getUserID());				
 				
-		log.debug("initialize: "+okmRootPath);
+		log.debug("initialize: {}", okmRootPath);
 		return okmRootPath;
 	}
 	
 	/**
-	 * @param session
-	 * @return
-	 * @throws RepositoryException
-	 * @throws FileNotFoundException 
-	 * @throws InvalidNodeTypeDefException 
-	 * @throws ParseException 
+	 * Create OpenKM repository structure
 	 */
 	public synchronized static String create(Session session) throws javax.jcr.RepositoryException,
 			FileNotFoundException, InvalidNodeTypeDefException, ParseException {
@@ -404,7 +401,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	/**
 	 * Remove a repository from disk.
 	 * 
-	 * @throws AccessDeniedException If there is any security problem: you can't access the parent document folder because of lack of permissions. 
+	 * @throws AccessDeniedException If there is any security problem: you can't access the parent
+	 * document folder because of lack of permissions. 
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public synchronized void remove() throws RepositoryException {
@@ -423,12 +421,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 		} catch (IOException e) {
 			System.err.println("No previous repository found");
 		}
+		
 		log.debug("create: void");
 	}
 	
 	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getRootFolder(" + token + ")");
+		log.debug("getRootFolder({})", token);
 		Folder rootFolder = new Folder();
 		Session session = null;
 		
@@ -455,13 +454,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getRootFolder: "+rootFolder);
+		log.debug("getRootFolder: {}", rootFolder);
 		return rootFolder;
 	}
 	
 	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getTrash(" + token + ")");
+		log.debug("getTrashFolder({})", token);
 		Folder trashFolder = new Folder();
 		Session session = null;
 		
@@ -488,13 +487,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getTrashFolder: "+trashFolder);
+		log.debug("getTrashFolder: {}", trashFolder);
 		return trashFolder;
 	}
 	
 	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getTemplatesFolder(" + token + ")");
+		log.debug("getTemplatesFolder({})", token);
 		Folder templatesFolder = new Folder();
 		Session session = null;
 		
@@ -521,13 +520,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getTemplatesFolder: "+templatesFolder);
+		log.debug("getTemplatesFolder: {}", templatesFolder);
 		return templatesFolder;
 	}
 	
 	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getPersonalFolder(" + token + ")");
+		log.debug("getPersonalFolder({})", token);
 		Folder personalFolder = new Folder();
 		Session session = null;
 		
@@ -554,13 +553,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getPersonalFolder: "+personalFolder);
+		log.debug("getPersonalFolder: {}", personalFolder);
 		return personalFolder;
 	}
 	
 	@Override
 	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getPersonalFolderBase(" + token + ")");
+		log.debug("getPersonalFolderBase({})", token);
 		Folder personalFolderBase = new Folder();
 		Session session = null;
 		
@@ -587,13 +586,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getPersonalFolderBase: "+personalFolderBase);
+		log.debug("getPersonalFolderBase: {}", personalFolderBase);
 		return personalFolderBase;
 	}
 	
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getMailFolder(" + token + ")");
+		log.debug("getMailFolder({})", token);
 		Folder mailFolder = new Folder();
 		Session session = null;
 		
@@ -621,13 +620,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getMailFolder: "+mailFolder);
+		log.debug("getMailFolder: {}", mailFolder);
 		return mailFolder;
 	}
 	
 	@Override
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getThesaurusFolder(" + token + ")");
+		log.debug("getThesaurusFolder({})", token);
 		Folder thesaurusFolder = new Folder();
 		Session session = null;
 		
@@ -654,13 +653,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getThesaurusFolder: "+thesaurusFolder);
+		log.debug("getThesaurusFolder: {}", thesaurusFolder);
 		return thesaurusFolder;
 	}
 	
 	@Override
 	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getCategoriesFolder(" + token + ")");
+		log.debug("getCategoriesFolder({})", token);
 		Folder categoriesFolder = new Folder();
 		Session session = null;
 		
@@ -687,7 +686,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 		}
 		
-		log.debug("getCategoriesFolder: "+categoriesFolder);
+		log.debug("getCategoriesFolder: {}", categoriesFolder);
 		return categoriesFolder;
 	}
 	
@@ -706,8 +705,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	public synchronized static void registerCustomNodeTypes(Session session, InputStream cndFile)
 			throws FileNotFoundException, ParseException,
 			javax.jcr.RepositoryException, InvalidNodeTypeDefException {
-		log.debug("registerCustomNodeTypes(" + session + ", " + cndFile
-						+ ")");
+		log.debug("registerCustomNodeTypes({}, {})", session, cndFile);
 
 		// Read in the CND file
 		InputStreamReader fileReader = new InputStreamReader(cndFile);
@@ -748,15 +746,21 @@ public class DirectRepositoryModule implements RepositoryModule {
 
 	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
-		log.debug("purgeTrash("+token+")");
+		log.debug("purgeTrash({})", token);
 		Node userTrash = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
 			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
@@ -805,6 +809,10 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(userTrash);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("purgeTrash: void");
@@ -822,18 +830,28 @@ public class DirectRepositoryModule implements RepositoryModule {
 	
 	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
-		log.debug("hasNode(" + token + ", " + path + ")");
+		log.debug("hasNode({}, {})", token, path);
 		boolean ret = false;
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			ret = session.getRootNode().hasNode(path.substring(1));
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("hasNode: "+ret);
+		log.debug("hasNode: {}", ret);
 		return ret;
 	}
 
