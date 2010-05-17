@@ -44,9 +44,7 @@ public class CompletePasswordValidator implements PasswordValidator {
 	}
 	
 	/**
-	 * validateLength
-	 * 
-	 * @throws AuthException
+	 * Validate length
 	 */
 	private void validateLength(String password) throws ValidatorException {
 		if (Config.VALIDATOR_PASSWORD_MIN_LENGTH > 0 && 
