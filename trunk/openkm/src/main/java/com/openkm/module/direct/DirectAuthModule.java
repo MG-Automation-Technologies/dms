@@ -69,7 +69,7 @@ import com.openkm.util.UserActivity;
 public class DirectAuthModule implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(DirectAuthModule.class);
 	private static PrincipalAdapter principalAdapter = null;
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public synchronized String login(String user, String pass) throws AccessDeniedException,
@@ -985,7 +985,7 @@ public class DirectAuthModule implements AuthModule {
 
 		return principalAdapter;
 	}
-
+	
 	@Override
 	public Collection<String> getUsers(String token) throws RepositoryException {
 		log.debug("getUsers({})", token);
