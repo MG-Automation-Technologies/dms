@@ -38,6 +38,9 @@ import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
 import com.openkm.util.WarUtils;
+import com.openkm.validator.ValidatorException;
+import com.openkm.validator.ValidatorFactory;
+import com.openkm.validator.password.PasswordValidator;
 
 /**
  * Servlet Class
@@ -186,5 +189,24 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#isValidPassword(java.lang.String)
+	 */
+	public String isValidPassword(String password) throws OKMException {
+		String msg = "";
+		try {
+			PasswordValidator passwordValidator = ValidatorFactory.getPasswordValidator();
+			try {
+				passwordValidator.Validate(password);
+			} catch (ValidatorException e) {
+				msg = e.getMessage();
+			}
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
+		return msg;
 	}
 }

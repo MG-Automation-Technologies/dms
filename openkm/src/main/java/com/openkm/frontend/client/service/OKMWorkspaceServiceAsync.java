@@ -34,4 +34,5 @@ public interface OKMWorkspaceServiceAsync {
 	public void getUserDocumentsSize(AsyncCallback<Double> callback);
 	public void updateUserWorkspace(GWTWorkspace workspace, AsyncCallback<?> callback);
 	public void deleteMailAccount(int id, AsyncCallback<?> callback);
+	public void isValidPassword(String password, AsyncCallback<String> callback );
 }

@@ -30,9 +30,9 @@ import com.openkm.validator.ValidatorException;
 /**
  * Complex password validator
  */
-public class CompleteAuthValidator implements PasswordValidator {
+public class CompletePasswordValidator implements PasswordValidator {
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(CompleteAuthValidator.class);
+	private static Logger log = LoggerFactory.getLogger(CompletePasswordValidator.class);
 		
 	@Override
 	public void Validate(String password) throws ValidatorException {
