@@ -81,6 +81,17 @@ public class Status extends PopupPanel {
 	}
 	
 	/**
+	 * isPanelRefreshing
+	 * 
+	 * @return
+	 */
+	public boolean isPanelRefreshing () {
+		return (flag_versionHistory || flag_UserSecurity || flag_RoleSecurity || flag_groupProperties 
+				|| flag_getVersionHistorySize || flag_keywords || flag_purgeVersionHistory || flag_restoreVersion 
+				|| flag_Categories);
+	}
+	
+	/**
 	 * Refreshing the panel
 	 */
 	public void refresh() {
@@ -224,8 +235,7 @@ public class Status extends PopupPanel {
 	public void setPurgeVersionHistory() {
 		msg.setHTML(Main.i18n("tab.document.status.purge.version.history"));
 		flag_purgeVersionHistory = true;
-		refresh();
-	}
+		refresh();	}
 	
 	/**
 	 * Unset the purge version history flag

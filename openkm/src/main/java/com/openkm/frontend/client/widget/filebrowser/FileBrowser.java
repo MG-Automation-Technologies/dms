@@ -30,7 +30,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -114,6 +113,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private int actualView = PanelDefinition.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
+	private boolean pendingChekoutFile = false;
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
@@ -273,6 +273,16 @@ public class FileBrowser extends Composite implements OriginPanel {
 	}
 	
 	/**
+	 * Donwload a pending checkout file
+	 */
+	public void pendingCheckoutFile() {
+		if (pendingChekoutFile) {
+			pendingChekoutFile = false;
+			table.downloadDocument(true);
+		}
+	}
+	
+	/**
 	 * Refresh the panel
 	 * 
 	 * @param fldId The path id
@@ -288,9 +298,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 		// On initialization fldId==null
 		if (fldId != null) {
 			filePath.setPath(fldId);
-			
-			// Set applet current path
-			// Main.get().mainPanel.topPanel.toolBar.setPath(fldId);
 		}
 	}
 	
@@ -602,19 +609,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackCheckOut = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			mantainSelectedRow();
-			table.downloadDocument(true);
+			pendingChekoutFile = true; // Sets that there's a pending checkout file to be donwloaded
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
-			Timer refreshCheckoutDocument = new Timer() {
-				@Override
-				public void run() {
-					Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
-				}				
-			};
-			// Ten second before downloading document is executed refreshing checkout
-			// We must ensure document is yet donwloading because Window.open in _self kills RPC calls temporary
-			// while browser not detects is a file to be donwloaded
-			refreshCheckoutDocument.schedule(10000); 
-			//refresh(fldId);
+			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
 		}
 
 		public void onFailure(Throwable caught) {
