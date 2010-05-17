@@ -25,6 +25,12 @@ import com.openkm.validator.ValidatorException;
 
 public interface PasswordValidator {
 	
+	/**
+	 * Validate
+	 * 
+	 * @param password
+	 * @throws ValidatorException
+	 */
 	public void Validate(String password) throws ValidatorException;
 	
 }
