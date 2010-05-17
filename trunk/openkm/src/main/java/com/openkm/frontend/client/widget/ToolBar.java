@@ -106,8 +106,8 @@ public class ToolBar extends Composite implements OriginPanel {
 	private ToolBarButton removeSubscription;
 	private ToolBarButton home;
 	private ToolBarButton refresh;
-	private HTML scanner;
-	private HTML uploader;
+	private ToolBarButton scanner;
+	private ToolBarButton uploader;
 		
 	private boolean enabled = true;  // Indicates if toolbar is enabled or disabled
 	private boolean propertyGroupEnabled = false; // Indicates if property group is enabled, used only on changing language
@@ -655,14 +655,17 @@ public class ToolBar extends Composite implements OriginPanel {
 		removeSubscription = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.removeSubscriptionDisabled()),
 											   Main.i18n("filebrowser.menu.remove.subscription"), removeSubscriptionHandler); 
 
-		home  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
+		home = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.home()),
 				   				  Main.i18n("general.menu.bookmark.home"), arrowHomeHandler); 
 			
-		refresh  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
+		refresh = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.refresh()),
  				  					 Main.i18n("general.menu.file.refresh"), arrowRefreshHandler); 
 			
-		scanner  = new HTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
-		uploader  = new HTML(Util.imageHTML("img/icon/actions/upload.gif",Main.i18n("general.menu.file.uploader")));
+		scanner = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.scanner()),
+					 				Main.i18n("general.menu.file.scanner"), scannerHandler); 
+			
+		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
+ 				Main.i18n("general.menu.file.uploader"), scannerHandler); 
 		
 		findFolder.addClickHandler(findFolderHandler);
 		lock.addClickHandler(lockHandler);
@@ -1571,7 +1574,8 @@ public class ToolBar extends Composite implements OriginPanel {
 	public void disableScanner() {
 		toolBarOption.scannerOption = false;
 		scanner.setStyleName("okm-ToolBar-button-disabled");
-		scanner.setHTML(Util.imageHTML("img/icon/actions/scanner_disabled.gif",Main.i18n("general.menu.file.scanner")));
+		scanner.setResource(OKMBundleResources.INSTANCE.scannerDisabled());
+		scanner.setTitle(Main.i18n("general.menu.file.scanner"));
 	}
 	
 	/**
@@ -1580,7 +1584,8 @@ public class ToolBar extends Composite implements OriginPanel {
 	public void enableScanner() {
 		toolBarOption.scannerOption = true;
 		scanner.setStyleName("okm-ToolBar-button");
-		scanner.setHTML(Util.imageHTML("img/icon/actions/scanner.gif",Main.i18n("general.menu.file.scanner")));
+		scanner.setResource(OKMBundleResources.INSTANCE.scanner());
+		scanner.setTitle(Main.i18n("general.menu.file.scanner"));
 	}
 	
 	/**
@@ -1589,7 +1594,8 @@ public class ToolBar extends Composite implements OriginPanel {
 	public void disableUploader() {
 		toolBarOption.uploaderOption = false;
 		uploader.setStyleName("okm-ToolBar-button-disabled");
-		uploader.setHTML(Util.imageHTML("img/icon/actions/upload_disabled.gif",Main.i18n("general.menu.file.uploader")));
+		uploader.setResource(OKMBundleResources.INSTANCE.uploaderDisabled());
+		uploader.setTitle(Main.i18n("general.menu.file.uploader"));
 	}
 	
 	/**
@@ -1598,7 +1604,8 @@ public class ToolBar extends Composite implements OriginPanel {
 	public void enableUploader() {
 		toolBarOption.uploaderOption = true;
 		uploader.setStyleName("okm-ToolBar-button");
-		uploader.setHTML(Util.imageHTML("img/icon/actions/upload.gif",Main.i18n("general.menu.file.uploader")));
+		uploader.setResource(OKMBundleResources.INSTANCE.uploader());
+		uploader.setTitle(Main.i18n("general.menu.file.uploader"));
 	}
 	
 	/**
