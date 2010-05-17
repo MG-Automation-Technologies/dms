@@ -52,13 +52,18 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		Node node = null;
 		Node sNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -87,6 +92,10 @@ public class DirectScriptingModule implements ScriptingModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("setScript: void");
@@ -98,13 +107,18 @@ public class DirectScriptingModule implements ScriptingModule {
 		log.debug("removeScript({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -134,6 +148,10 @@ public class DirectScriptingModule implements ScriptingModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("removeScript: void");
@@ -144,9 +162,14 @@ public class DirectScriptingModule implements ScriptingModule {
 			AccessDeniedException, RepositoryException {
 		log.debug("getScript({}, {})", token, nodePath);
 		String code = null;
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Node node = session.getRootNode().getNode(nodePath.substring(1));
@@ -163,9 +186,13 @@ public class DirectScriptingModule implements ScriptingModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getScript: " + code);
+		log.debug("getScript: {}", code);
 		return code;
 	}
 
@@ -198,8 +225,8 @@ public class DirectScriptingModule implements ScriptingModule {
 	/**
 	 * Check script helper method for recursion.
 	 */
-	private static void checkScriptsHelper(Session session, Node scriptNode, Node eventNode, String eventType)
-			throws javax.jcr.RepositoryException {
+	private static void checkScriptsHelper(Session session, Node scriptNode, Node eventNode,
+			String eventType) throws javax.jcr.RepositoryException {
 		log.debug("checkScriptsHelper({}, {}, {}, {})", new Object[] { session, scriptNode, eventNode,
 				eventType });
 
