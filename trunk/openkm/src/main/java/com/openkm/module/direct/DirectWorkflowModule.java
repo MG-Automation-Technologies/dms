@@ -1234,11 +1234,17 @@ public class DirectWorkflowModule implements WorkflowModule {
 	@Override
 	public void addTokenComment(String token, long tokenId, String message)
 			throws RepositoryException {
-		log.info("addTokenComment("+token+", "+tokenId+", "+message+")");
+		log.info("addTokenComment({}, {}, {})", new Object[] { token, tokenId, message });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.addComment(new org.jbpm.graph.exe.Comment(session.getUserID(), message));
 			jbpmContext.getSession().flush();
@@ -1248,6 +1254,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -1256,11 +1266,17 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	public void suspendToken(String token, long tokenId) throws RepositoryException {
-		log.info("suspendToken("+token+", "+tokenId+")");
+		log.info("suspendToken({}, {})", token, tokenId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.suspend();
 			jbpmContext.getSession().flush();
@@ -1270,6 +1286,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -1278,11 +1298,17 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	public void resumeToken(String token, long tokenId) throws RepositoryException {
-		log.info("resumeToken("+token+", "+tokenId+")");
+		log.info("resumeToken({}, {})", token, tokenId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-				
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.resume();
 			jbpmContext.getSession().flush();
@@ -1292,6 +1318,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
@@ -1299,14 +1329,20 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public Token sendTokenSignal(String token, long tokenId,
-			String transitionName) throws RepositoryException {
-		log.debug("sendTokenSignal("+token+", "+tokenId+", "+transitionName+")");
+	public Token sendTokenSignal(String token, long tokenId, String transitionName) throws 
+			RepositoryException {
+		log.debug("sendTokenSignal({}, {}, {})", new Object[] { token, tokenId, transitionName });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Token vo = new Token();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 
 			if (transitionName != null && !transitionName.equals("")) {
@@ -1324,21 +1360,31 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
-		log.debug("sendTokenSignal: "+vo);
+		log.debug("sendTokenSignal: {}", vo);
 		return vo;
 	}
 
 	@Override
-	public void setTokenNode(String token, long tokenId, String nodeName)
-			throws RepositoryException {
-		log.debug("setTokenNode("+token+", "+tokenId+", "+nodeName+")");
+	public void setTokenNode(String token, long tokenId, String nodeName) throws 
+			RepositoryException {
+		log.debug("setTokenNode({}, {}, {})", new Object[] { token, tokenId, nodeName });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			org.jbpm.graph.def.Node node = t.getProcessInstance().getProcessDefinition().getNode(nodeName);
 			t.setNode(node);
@@ -1349,10 +1395,13 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+			
 			jbpmContext.close();
 		}
 		
 		log.debug("setTokenNode: void");
 	}
 }
-
