@@ -65,18 +65,24 @@ public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
 	
 	@Override
-	public synchronized void subscribe(String token, String nodePath) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("subscribe(" + token + ", " + nodePath + ")");
+	public synchronized void subscribe(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("subscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -121,24 +127,34 @@ public class DirectNotificationModule implements NotificationModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 		
 		log.debug("subscribe: void");
 	}
 	
 	@Override
-	public synchronized void unsubscribe(String token, String nodePath) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("unsubscribe(" + token + ", " + nodePath + ")");
+	public synchronized void unsubscribe(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("unsubscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
+		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -177,21 +193,29 @@ public class DirectNotificationModule implements NotificationModule {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
 		log.debug("unsubscribe: void");
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
-	 */
+	
 	@Override
-	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("getSusbcriptions(" + token + ", " + nodePath + ")");
+	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("getSusbcriptions({}, {})", token, nodePath);
 		ArrayList<String> users = new ArrayList<String>();
-
+		Session session = null;
+		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 			
 			if (node.isNodeType(Notification.TYPE)) {
@@ -207,23 +231,31 @@ public class DirectNotificationModule implements NotificationModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getSusbcriptions: "+users);
+		log.debug("getSusbcriptions: {}", users);
 		return users;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
-	 */
+	
 	@Override
-	public void notify(String token, String nodePath, Collection<String> users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify("+token+", "+nodePath+", "+users+", "+message+")");
+	public void notify(String token, String nodePath, Collection<String> users, String message) throws
+			PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
+		Session session = null;
 		
 		if (!users.isEmpty()) {
 			try {
-				Session session = SessionManager.getInstance().get(token);
-				log.debug("Nodo: "+nodePath+", Message: "+message);
+				if (Config.SESSION_MANAGER) {
+					session = SessionManager.getInstance().get(token);
+				} else {
+					session = JCRUtils.getSession();
+				}
+				
+				log.debug("Nodo: {}, Message: {}", nodePath, message);
 				Collection<String> emails = new DirectAuthModule().getMails(null, users);
 				
 				// Get session user email address
@@ -262,6 +294,10 @@ public class DirectNotificationModule implements NotificationModule {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				if (!Config.SESSION_MANAGER) {
+					JCRUtils.logout(session);
+				}
 			}
 		}
 
@@ -276,7 +312,7 @@ public class DirectNotificationModule implements NotificationModule {
 	 * @param eventType Type of modification event
 	 */
 	public static void checkSubscriptions(Node node, String user, String eventType, String comment) {
-		log.debug("checkSubscriptions("+node+", "+user+", "+eventType+", "+comment+")");
+		log.debug("checkSubscriptions({}, {}, {}, {})", new Object[] { node, user, eventType, comment });
 		Collection<String> users = null;
 		
 		try {
@@ -366,7 +402,7 @@ public class DirectNotificationModule implements NotificationModule {
 					
 					for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
 						TwitterAccount ta = itTwitter.next();
-						log.info("Twitter Notify from "+twitter.getUserId()+" to "+ta.getTwitterUser()+" ("+itUser+") - "+swStatus.toString());
+						log.info("Twitter Notify from {} to {} ({}) - {}", new Object[] { twitter.getUserId(), ta.getTwitterUser(), itUser, swStatus.toString() });
 						twitter.sendDirectMessage(ta.getTwitterUser(), swStatus.toString());
 					}
 				}
@@ -389,12 +425,11 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	/**
-	 * @param node
-	 * @return
-	 * @throws javax.jcr.RepositoryException
+	 * Check for subscriptions recursively
 	 */
-	private static Collection<String> checkSubscriptionsHelper(Node node) throws javax.jcr.RepositoryException {
-		log.debug("checkSubscriptionsHelper: "+node.getPath());
+	private static Collection<String> checkSubscriptionsHelper(Node node) throws 
+			javax.jcr.RepositoryException {
+		log.debug("checkSubscriptionsHelper: {}", node.getPath());
 		ArrayList<String> al = new ArrayList<String>();
 		
 		if (node.isNodeType(Folder.TYPE) || node.isNodeType(Document.TYPE)) {
