@@ -60,9 +60,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyGroupModule.class);
 
 	@Override
-	public void addGroup(String token, String docPath, String grpName)
-			throws NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -117,9 +116,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void removeGroup(String token, String docPath, String grpName)
-			throws AccessDeniedException, NoSuchGroupException, LockException, PathNotFoundException,
-			RepositoryException {
+	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException,
+			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -166,8 +164,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<PropertyGroup> getGroups(String token, String docPath)
-			throws IOException, ParseException, PathNotFoundException, RepositoryException {
+	public Collection<PropertyGroup> getGroups(String token, String docPath) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException {
 		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
@@ -321,8 +319,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
-			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
+			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
