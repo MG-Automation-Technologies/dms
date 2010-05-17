@@ -43,9 +43,6 @@ public class OKMStats implements StatsModule {
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getDocumentsByContext(java.lang.String)
-	 */
 	@Override
 	public StatsInfo getDocumentsByContext(String token) throws RepositoryException {
 		log.debug("getDocumentsByContext("+token+")");
@@ -55,9 +52,6 @@ public class OKMStats implements StatsModule {
 		return stats;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getDocumentsSizeByContext(java.lang.String)
-	 */
 	@Override
 	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
 		log.debug("getDocumentsSizeByContext("+token+")");
@@ -67,14 +61,12 @@ public class OKMStats implements StatsModule {
 		return stats;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getFoldersByContext(java.lang.String)
-	 */
 	@Override
 	public StatsInfo getFoldersByContext(String token) throws RepositoryException {
 		log.debug("getFoldersByContext("+token+")");
 		StatsModule sm = ModuleManager.getStatsModule();
 		StatsInfo stats = sm.getFoldersByContext(token);
 		log.debug("getFoldersByContext: "+stats);
-		return stats;	}
+		return stats;
+	}
 }
