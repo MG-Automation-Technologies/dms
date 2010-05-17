@@ -80,60 +80,62 @@ public class DirectAuthModule implements AuthModule {
 		try {
 			final javax.jcr.Repository r = DirectRepositoryModule.getRepository();
 			Session session = null;
-
-			// If user and pass are null, there is an external authentication system
-			// using JAAS.
-			if (user != null && pass != null) {
-				session = r.login(new SimpleCredentials(user, pass.toCharArray()));
-			} else {
-				InitialContext ctx = new InitialContext();
-				Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
-				log.info("Principals: {}", subject.getPrincipals());
-
-				Object obj = Subject.doAs(subject, new PrivilegedAction() {
-					public Object run() {
-						Session s = null;
-
-						try {
-							s = r.login();
-						} catch (LoginException e) {
-							return e;
-						} catch (javax.jcr.RepositoryException e) {
-							return new LoginException(e);
-						}
-
-						return s;
-					}
-				});
-
-				try {
-					session = (Session) obj;
-				} catch (ClassCastException cce) {
-					throw (LoginException) obj;
-				}
-			}
-
-			// Check for a previous session
-			SessionManager sessions = SessionManager.getInstance();
-			String oldToken = sessions.getTokenByUserId(session.getUserID());
-
-			if (oldToken != null) {
-				Session oldSession = sessions.getInfo(oldToken).getSession();
-
-				if (oldSession.isLive()) {
-					session.logout();
-					throw new UserAlreadyLoggerException("User already logged");
+			
+			if (Config.SESSION_MANAGER) {
+				// If user and pass are null, there is an external authentication system
+				// using JAAS.
+				if (user != null && pass != null) {
+					session = r.login(new SimpleCredentials(user, pass.toCharArray()));
 				} else {
-					logout(oldToken);
-				}
-			} else {
-				// Add generated session to pool
-				token = UUIDGenerator.generate(this);
-				log.info("Add generated session to pool: "+token);
-				sessions.put(token, session);
-				loadUserData(session);
-			}
+					InitialContext ctx = new InitialContext();
+					Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
+					log.info("Principals: {}", subject.getPrincipals());
 
+					Object obj = Subject.doAs(subject, new PrivilegedAction() {
+						public Object run() {
+							Session s = null;
+							
+							try {
+								s = r.login();
+							} catch (LoginException e) {
+								return e;
+							} catch (javax.jcr.RepositoryException e) {
+								return new LoginException(e);
+							}
+							
+							return s;
+						}
+					});
+					
+					try {
+						session = (Session) obj;
+					} catch (ClassCastException cce) {
+						throw (LoginException) obj;
+					}
+				}
+				
+				// Check for a previous session
+				SessionManager sessions = SessionManager.getInstance();
+				String oldToken = sessions.getTokenByUserId(session.getUserID());
+				
+				if (oldToken != null) {
+					Session oldSession = sessions.getInfo(oldToken).getSession();
+					
+					if (oldSession.isLive()) {
+						session.logout();
+						throw new UserAlreadyLoggerException("User already logged");
+					} else {
+						logout(oldToken);
+					}
+				} else {
+					// Add generated session to pool
+					token = UUIDGenerator.generate(this);
+					log.info("Add generated session to pool: {}", token);
+					sessions.put(token, session);
+					loadUserData(session);
+				}
+			}
+			
 			// Activity log
 			UserActivity.log(session, "LOGIN", null, null);
 		} catch (LoginException e) {
@@ -345,7 +347,7 @@ public class DirectAuthModule implements AuthModule {
 				}
 			} else {
 				// Activity log
-				if (session.isLive()) {
+				if (session != null && session.isLive()) {
 					UserActivity.log(session, "LOGOUT", null, null);
 				}
 			}
@@ -650,10 +652,10 @@ public class DirectAuthModule implements AuthModule {
 			node.setProperty(property, (String[])newRoles.toArray(new String[newRoles.size()]));
 			node.save();
 		} catch (javax.jcr.lock.LockException e) {
-			log.warn("grantRole -> LockException : "+node.getPath());
+			log.warn("grantRole -> LockException : {}", node.getPath());
 			JCRUtils.discardsPendingChanges(node);
 		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn("grantRole -> AccessDeniedException : "+node.getPath());
+			log.warn("grantRole -> AccessDeniedException : {}", node.getPath());
 			JCRUtils.discardsPendingChanges(node);
 		}
 	}
