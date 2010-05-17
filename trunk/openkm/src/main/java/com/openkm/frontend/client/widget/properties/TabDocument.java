@@ -68,6 +68,7 @@ public class TabDocument extends Composite {
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
+	private boolean pendingDownloadFile = false;
 	
 	/**
 	 * The Document tab
@@ -144,6 +145,12 @@ public class TabDocument extends Composite {
 	 * @param doc The document object
 	 */
 	public void setProperties(GWTDocument doc) {	
+		// We must declare status here due pending downloading ( fired by status )
+		Main.get().mainPanel.browser.tabMultiple.status.setUserSecurity();
+		Main.get().mainPanel.browser.tabMultiple.status.setRoleSecurity();
+		Main.get().mainPanel.browser.tabMultiple.status.setVersionHistory();
+		Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
+		
 		this.doc = doc;
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
 		

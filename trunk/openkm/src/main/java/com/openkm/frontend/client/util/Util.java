@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.util;
 
 import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.openkm.frontend.client.bean.Coordenates;
 import com.openkm.frontend.client.config.Config;

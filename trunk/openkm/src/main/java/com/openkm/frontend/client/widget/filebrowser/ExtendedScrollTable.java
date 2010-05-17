@@ -33,6 +33,8 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.openkm.frontend.client.Main;
@@ -72,6 +74,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	private int rowAction = ACTION_NONE;
 	
 	private boolean dragged = false;
+	private Timer timer = null;
 	
 	/**
 	 * @param dataTable
@@ -377,7 +380,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
 									 														 Main.get().activeFolderTree.getFolder());
 						} else {
-							// When document is selected always enable save button
 							Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
 							GWTDocument doc = getDocument();
 							Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
@@ -410,15 +412,24 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
 								 														 Main.get().activeFolderTree.getFolder());
 					} else {
-						if (enableOpen) {
-							downloadDocument(false);
-						}
 						Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
 						GWTDocument doc = getDocument();
-						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
-							Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
-						}
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
+						// We come here before executing click ( click is always executed ) 
+						if (enableOpen) {
+							if (Main.get().mainPanel.browser.tabMultiple.status.isPanelRefreshing()) {
+								refreshDownloadTimer();
+							} else {
+								// We doing and extra time, because when Status unsetGroup is fired in TabDocument needs some extra time to finishing method
+								Timer downloadTimer = new Timer() {
+									@Override
+									public void run() {
+										downloadDocument(false);
+									}
+								};
+								downloadTimer.schedule(200);
+							}
+						} 
 					}
 				}
 				break;
@@ -939,5 +950,33 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	 */
 	public boolean hasRows() {
 		return dataTable.getRowCount()>0;
+	}
+	
+	/**
+	 * refreshDownloadTimer
+	 * 
+	 * @return
+	 */
+	private void refreshDownloadTimer() {
+		timer = new Timer() {
+			@Override
+			public void run() {
+				// While status is visible must continue evaluating
+				if (Main.get().mainPanel.browser.tabMultiple.status.isPanelRefreshing()) {
+					timer.schedule(500);
+				} else {
+					timer.cancel();
+					// We doing and extra time, because when Status unsetGroup is fired in TabDocument needs some extra time to finishing method
+					Timer downloadTimer = new Timer() {
+						@Override
+						public void run() {
+							downloadDocument(false);
+						}
+					};
+					downloadTimer.schedule(200);
+				}
+			}
+		};
+		timer.schedule(500);
 	}
 }
