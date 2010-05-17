@@ -50,4 +50,14 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+  <tag>
+    <name>escapeHtml</name>
+    <tag-class>com.openkm.util.tags.EscapeHtmlTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>string</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
 </taglib>
