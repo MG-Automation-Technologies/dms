@@ -35,9 +35,11 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
+import com.openkm.core.Config;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.StatsModule;
+import com.openkm.util.JCRUtils;
 
 public class DirectStatsModule implements StatsModule {
 	private static Logger log = LoggerFactory.getLogger(DirectStatsModule.class);
@@ -51,18 +53,21 @@ public class DirectStatsModule implements StatsModule {
 	private static String TRASH_DOCUMENTS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:document)";
 	private static String TRASH_FOLDERS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:folder)";
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getDocumentsByContext(java.lang.String)
-	 */
 	@Override
 	public StatsInfo getDocumentsByContext(String token) throws RepositoryException {
-		log.debug("getDocumentsByContext(" + token + ")");
+		log.debug("getDocumentsByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
 			long taxonomyDocuments = getCount(queryManager, TAXONOMY_DOCUMENTS);
@@ -87,24 +92,31 @@ public class DirectStatsModule implements StatsModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getDocumentsByContext: " + si);
+		log.debug("getDocumentsByContext: {}", si);
 		return si;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getFoldersByContext(java.lang.String)
-	 */
+	
 	@Override
 	public StatsInfo getFoldersByContext(String token) throws RepositoryException {
-		log.debug("getFoldersByContext(" + token + ")");
+		log.debug("getFoldersByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
 			long taxonomyFolders = getCount(queryManager, TAXONOMY_FOLDERS);
@@ -129,34 +141,41 @@ public class DirectStatsModule implements StatsModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getFoldersByContext: " + si);
+		log.debug("getFoldersByContext: {}", si);
 		return si;
 	}
 
 	/**
 	 * Get result node count.
 	 */
-	private long getCount(QueryManager queryManager, String statement) throws
-			InvalidQueryException, javax.jcr.RepositoryException {
+	private long getCount(QueryManager queryManager, String statement) throws InvalidQueryException,
+			javax.jcr.RepositoryException {
 		Query query = queryManager.createQuery(statement, "xpath");
 		QueryResult result = query.execute();
 		return result.getRows().getSize();
 	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.module.StatsModule#getDocumentsSizeByContext(java.lang.String)
-	 */
+	
 	@Override
 	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
-		log.debug("getDocumentsSizeByContext(" + token + ")");
+		log.debug("getDocumentsSizeByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
+		Session session = null;
 		
 		try {
-			Session session = SessionManager.getInstance().get(token);
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
 			long taxonomyDocumentSize = getSize(queryManager, TAXONOMY_DOCUMENTS);
@@ -181,17 +200,21 @@ public class DirectStatsModule implements StatsModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 
-		log.debug("getDocumentsSizeByContext: " + si);
+		log.debug("getDocumentsSizeByContext: {}", si);
 		return si;
 	}
 	
 	/**
 	 * Get document node size.
 	 */
-	private long getSize(QueryManager queryManager, String statement) throws
-			InvalidQueryException, javax.jcr.RepositoryException {
+	private long getSize(QueryManager queryManager, String statement) throws InvalidQueryException,
+			javax.jcr.RepositoryException {
 		Query query = queryManager.createQuery(statement, "xpath");
 		QueryResult result = query.execute();
 		long size = 0;
