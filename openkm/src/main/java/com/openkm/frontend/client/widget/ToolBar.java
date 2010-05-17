@@ -667,26 +667,6 @@ public class ToolBar extends Composite implements OriginPanel {
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
  				Main.i18n("general.menu.file.uploader"), scannerHandler); 
 		
-		findFolder.addClickHandler(findFolderHandler);
-		lock.addClickHandler(lockHandler);
-		unLock.addClickHandler(unLockHandler);
-		addDocument.addClickHandler(addDocumentHandler);
-		delete.addClickHandler(deleteHandler);
-		edit.addClickHandler(editHandler);
-		checkin.addClickHandler(checkinHandler);
-		cancelCheckout.addClickHandler(cancelCheckoutHandler);
-		download.addClickHandler(downloadHandler);
-		downloadPdf.addClickHandler(downloadPdfHandler);
-		addPropertyGroup.addClickHandler(addPropertyGroupHandler);
-		removePropertyGroup.addClickHandler(removePropertyGroupHandler);
-		startWorkflow.addClickHandler(startWorkflowHandler);
-		addSubscription.addClickHandler(addSubscriptionHandler);
-		removeSubscription.addClickHandler(removeSubscriptionHandler);
-		home.addClickHandler(arrowHomeHandler);
-		refresh.addClickHandler(arrowRefreshHandler);
-		scanner.addClickHandler(scannerHandler);
-		uploader.addClickHandler(uploaderHandler);
-		
 		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
