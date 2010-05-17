@@ -142,18 +142,24 @@ public class DirectRepositoryModule implements RepositoryModule {
 	public synchronized static void shutdown() {
 		log.debug("shutdownRepository()");
 		
-		// Preserve system user config
-        String token = SessionManager.getInstance().getSystemToken();
-    	log.info("*** Logout (system): "+token+" ***");
-    	
-    	try {
-    		new DirectAuthModule().logout(token);
-		} catch (AccessDeniedException e) {
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			e.printStackTrace();
+		if (Config.SESSION_MANAGER) {
+			// Preserve system user config
+			String token = SessionManager.getInstance().getSystemToken();
+			log.info("*** Logout (system): "+token+" ***");
+			
+			try {
+				new DirectAuthModule().logout(token);
+			} catch (AccessDeniedException e) {
+				e.printStackTrace();
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if (systemSession != null && systemSession.isLive()) {
+				systemSession.logout();
+			}
 		}
-				
+		
 		systemSession = null;
         ((RepositoryImpl)repository).shutdown();
         repository = null;
