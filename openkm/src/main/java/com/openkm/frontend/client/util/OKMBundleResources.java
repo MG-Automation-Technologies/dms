@@ -169,4 +169,16 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/refresh_disabled.gif")
 	public ImageResource refreshDisabled();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/scanner_disabled.gif")
+	public ImageResource scannerDisabled();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/scanner.gif")
+	public ImageResource scanner();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/upload_disabled.gif")
+	public ImageResource uploaderDisabled();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/upload.gif")
+	public ImageResource uploader();
 }
