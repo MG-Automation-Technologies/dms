@@ -35,4 +35,5 @@ public interface OKMWorkspaceService extends RemoteService {
 	public Double getUserDocumentsSize() throws OKMException;
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException;
 	public void deleteMailAccount(int id)  throws OKMException;
+	public String isValidPassword(String password) throws OKMException;
 }
