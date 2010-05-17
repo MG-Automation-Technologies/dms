@@ -21,6 +21,7 @@
 
 package com.openkm.module.direct;
 
+import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
@@ -65,7 +66,11 @@ public class DirectStatsModule implements StatsModule {
 			if (Config.SESSION_MANAGER) {
 				session = SessionManager.getInstance().get(token);
 			} else {
-				session = JCRUtils.getSession();
+				try {
+					session = JCRUtils.getSession();
+				} catch (LoginException e) {
+					session = DirectRepositoryModule.getSystemSession();
+				}
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -93,7 +98,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
+			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
@@ -114,7 +119,11 @@ public class DirectStatsModule implements StatsModule {
 			if (Config.SESSION_MANAGER) {
 				session = SessionManager.getInstance().get(token);
 			} else {
-				session = JCRUtils.getSession();
+				try {
+					session = JCRUtils.getSession();
+				} catch (LoginException e) {
+					session = DirectRepositoryModule.getSystemSession();
+				}
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -142,7 +151,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
+			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
@@ -173,7 +182,11 @@ public class DirectStatsModule implements StatsModule {
 			if (Config.SESSION_MANAGER) {
 				session = SessionManager.getInstance().get(token);
 			} else {
-				session = JCRUtils.getSession();
+				try {
+					session = JCRUtils.getSession();
+				} catch (LoginException e) {
+					session = DirectRepositoryModule.getSystemSession();
+				}
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -201,7 +214,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
+			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
