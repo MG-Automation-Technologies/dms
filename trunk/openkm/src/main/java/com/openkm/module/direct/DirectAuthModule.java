@@ -968,7 +968,7 @@ public class DirectAuthModule implements AuthModule {
 	private PrincipalAdapter getPrincipalAdapter() throws RepositoryException {
 		if (principalAdapter == null) {
 			try {
-				log.info("PrincipalAdapter: "+Config.PRINCIPAL_ADAPTER);
+				log.info("PrincipalAdapter: {}", Config.PRINCIPAL_ADAPTER);
 				Object object = Class.forName(Config.PRINCIPAL_ADAPTER).newInstance();
 				principalAdapter = (PrincipalAdapter) object;
 			} catch (ClassNotFoundException e) {
