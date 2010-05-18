@@ -20,7 +20,7 @@
   <table width="100%" cellpadding="2" cellspacing="2">
     <tr>
       <td>
-        <form id="context" action="handler">
+        <form id="context" action="Handler">
           <input type="hidden" name="action" value="browse"/>
           <select name="path" onchange="document.getElementById('context').submit()">
             <c:set var="tmp"><u:startsWith string="${path}" prefix="${ctxTaxonomy}"/></c:set>
@@ -36,9 +36,9 @@
           </select>
         </form>
       </td>
-      <td><form id="search" action="handler"><input type="hidden" name="action" value="search"/><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
+      <td><form id="search" action="Handler"><input type="hidden" name="action" value="search"/><input name="query" type="text"/><input type="image" src="img/search.png" style="vertical-align: middle; border: 0;"/></form></td>
       <td></td>
-      <td align="right"><a href="handler?action=logout" onclick="return confirm('Really want to logout?')"><img src="img/logout.png" /></a></td>
+      <td align="right"><a href="Handler?action=logout" onclick="return confirm('Really want to logout?')"><img src="img/logout.png" /></a></td>
     </tr>
   </table>
   <table class="results">
@@ -50,10 +50,10 @@
         <c:when test="${fld.hasChilds}"><c:set var="fldImg" value="menuitem_childs.gif"/></c:when>
         <c:otherwise><c:set var="fldImg" value="menuitem_empty.gif"/></c:otherwise>
       </c:choose>
-      <c:url value="handler" var="urlDownload">
+      <c:url value="Handler" var="urlDownload">
         <c:param name="path" value="${fld.path}"/>
       </c:url>
-      <c:url value="handler" var="urlProperties">
+      <c:url value="Handler" var="urlProperties">
         <c:param name="action" value="fldprop"/>
         <c:param name="path" value="${fld.path}"/>
       </c:url>
@@ -75,7 +75,7 @@
         </c:if>
         <c:param name="id" value="${doc.path}"/>
       </c:url>
-      <c:url value="handler" var="urlProperties">
+      <c:url value="Handler" var="urlProperties">
         <c:param name="action" value="docprop"/>
         <c:param name="path" value="${doc.path}"/>
       </c:url>
