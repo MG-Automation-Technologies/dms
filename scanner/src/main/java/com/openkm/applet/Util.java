@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -51,17 +52,19 @@ public class Util {
 			String url, BufferedImage image) throws MalformedURLException, IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + fileName + ", " + fileType +
 				", " + url + ", " + image + ")");
-		File tmp = File.createTempFile("okm", "."+fileType);
-		FileOutputStream fos = new FileOutputStream(tmp);
+		File tmpDir = createTempDir();
+		File tmpFile = new File(tmpDir, fileName+"."+fileType);
+		FileOutputStream fos = new FileOutputStream(tmpFile);
 		String response = "";
 		
 		try {
 			if (ImageIO.write(image, fileType, fos)) {
 				fos.flush();
+				fos.close();
 				
 				HttpClient client = new DefaultHttpClient();
 				MultipartEntity form = new MultipartEntity();
-				form.addPart("file", new FileBody(tmp));
+				form.addPart("file", new FileBody(tmpFile));
 				form.addPart("path", new StringBody(path));
 				form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
 				HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
@@ -74,11 +77,27 @@ public class Util {
 				log.warning("Not appropiated writer found!");
 			}
 		} finally {
-			tmp.delete();
+			FileUtils.deleteQuietly(tmpDir);
 		}
 		
 		log.info("createDocument: "+response);
 		return response;
+	}
+	
+	/**
+	 * Creates a temporal and unique directory
+	 * 
+	 * @throws IOException If something fails.
+	 */
+	public static File createTempDir() throws IOException {
+		File tmpFile = File.createTempFile("okm", null);
+		
+		if (!tmpFile.delete())
+            throw new IOException();
+        if (!tmpFile.mkdir())
+            throw new IOException();
+        
+        return tmpFile;       
 	}
 	
 	/**
