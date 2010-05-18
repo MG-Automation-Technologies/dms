@@ -21,6 +21,8 @@
 
 package com.openkm.applet;
 
+import javax.swing.JOptionPane;
+
 /**
  * Error code to determine more exactly by administrator the error cause
  * without needed to go to log file making general error codification for
@@ -92,6 +94,29 @@ public class ErrorCode {
 	 */
 	public static String get(String origin, String cause) {
 		return "OKM-" + origin + cause;
+	}
+
+	/**
+	 * Display error code
+	 */
+	public static void displayError(String response, String path) {
+		if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_AccessDenied))) {
+			JOptionPane.showMessageDialog(null, path, "Access denied", JOptionPane.ERROR_MESSAGE);
+		} else if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_PathNotFound))) {
+			JOptionPane.showMessageDialog(null, path, "Path not found", JOptionPane.ERROR_MESSAGE);
+		} else  if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_ItemExists))) {
+			JOptionPane.showMessageDialog(null, path, "Item exists", JOptionPane.ERROR_MESSAGE);
+		} else if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_UnsupportedMimeType))) {
+			JOptionPane.showMessageDialog(null, path, "Unsupported mime type", JOptionPane.ERROR_MESSAGE);
+		} else if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_FileSizeExceeded))) {
+			JOptionPane.showMessageDialog(null, path, "File size exceeded", JOptionPane.ERROR_MESSAGE);
+		} else if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_Repository))) {
+			JOptionPane.showMessageDialog(null, path, "Repository error", JOptionPane.ERROR_MESSAGE);
+		} else if (response.equals(get(ORIGIN_OKMUploadService, CAUSE_IOException))) {
+			JOptionPane.showMessageDialog(null, path, "IO error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, path, "Unknown error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
 

@@ -278,47 +278,14 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			String response = Util.createDocument(token, path, url, fs);
 			if (!response.startsWith("OKM_OK")) {
 				log.log(Level.SEVERE, "Error: " + response);
+				ErrorCode.displayError(response, path+"/"+fs.getName());
 				
-				if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_AccessDenied))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Access denied", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_PathNotFound))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Path not found", JOptionPane.ERROR_MESSAGE);
-				} else  if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_ItemExists))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Item exists", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_UnsupportedMimeType))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unsupported mime type", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "File size exceeded", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Repository error", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "IO error", JOptionPane.ERROR_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unknown error", JOptionPane.ERROR_MESSAGE);
-				}
 			}
 		} else if (fs.isDirectory()) {
 			String response = Util.createFolder(token, path, url, fs);
 			if (!response.startsWith("OKM_OK")) {
 				log.log(Level.SEVERE, "Error: " + response);
-				
-				if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_AccessDenied))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Access denied", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_PathNotFound))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Path not found", JOptionPane.ERROR_MESSAGE);
-				} else  if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_ItemExists))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Item exists", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_UnsupportedMimeType))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unsupported mime type", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "File size exceeded", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Repository error", JOptionPane.ERROR_MESSAGE);
-				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException))) {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "IO error", JOptionPane.ERROR_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unknown error", JOptionPane.ERROR_MESSAGE);
-				}
+				ErrorCode.displayError(response, path+"/"+fs.getName());
 			}
 			
 			File[] files = fs.listFiles();
