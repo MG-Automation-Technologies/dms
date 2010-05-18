@@ -170,5 +170,4 @@ public class WorkspaceUserProperties {
 	public GWTWorkspace getWorkspace() {
 		return workspace;
 	}
-	
 }
