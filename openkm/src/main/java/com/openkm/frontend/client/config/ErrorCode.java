@@ -85,10 +85,10 @@ public class ErrorCode {
 	/**
 	 * Gets the error
 	 * 
-	 * The final error code returned by appplication is ORIGIN_CODE_ERROR + CAUSE_CODE_ERROR
-	 * exemple ERROR 001001 = Error causes on OKMFolderService and originated by Repository Exception
+	 * The final error code returned by application is ORIGIN_CODE_ERROR + CAUSE_CODE_ERROR
+	 * example ERROR 001001 = Error causes on OKMFolderService and originated by Repository Exception
 	 * 
-	 * @param origin The error origine
+	 * @param origin The error origin
 	 * @param cause The error cause
 	 * @return The error
 	 */
