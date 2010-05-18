@@ -318,6 +318,9 @@ public class Lang_id_ID {
 	    lang.put("folder.subscribed.users", "User tersubskripsi");
 	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
+	    lang.put("folder.number.folders","Number of folders");
+	    lang.put("folder.number.documents","Number of documents");
+	    lang.put("folder.number.mails","Number of mails");
 	    
 	    // Version
 	    lang.put("version.name", "Versi");

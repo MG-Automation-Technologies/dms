@@ -191,4 +191,32 @@ public class TabFolder extends Composite {
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 	}
+	
+	/**
+	 * resetNumericFolderValues
+	 */
+	public void resetNumericFolderValues() {
+		folder.resetNumericFolderValues();
+	}
+	
+	/**
+	 * setNumberOfFolders
+	 */
+	public void setNumberOfFolders(int num) {
+		folder.setNumberOfFolders(num);
+	}
+	
+	/**
+	 * setNumberOfDocuments
+	 */
+	public void setNumberOfDocuments(int num) {
+		folder.setNumberOfDocuments(num);
+	}
+	
+	/**
+	 * setNumberOfMails
+	 */
+	public void setNumberOfMails(int num) {
+		folder.setNumberOfMails(num);
+	}
 }

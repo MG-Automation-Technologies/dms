@@ -318,6 +318,9 @@ public class Lang_es_ES {
 	    lang.put("folder.subscribed.users", "Usuarios suscritos");
 	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
+	    lang.put("folder.number.folders","Número de carpetas");
+	    lang.put("folder.number.documents","Número de documentos");
+	    lang.put("folder.number.mails","Número de correos electrónicos");
 	    
 	    // Version
 	    lang.put("version.name", "Versión");

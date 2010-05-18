@@ -30,6 +30,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -114,6 +115,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
 	private boolean pendingChekoutFile = false;
+	private int numberOfFolders = 0;
+	private int numberOfDocuments = 0;
+	private int numberOfMails = 0;
 	
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
@@ -275,10 +279,16 @@ public class FileBrowser extends Composite implements OriginPanel {
 	/**
 	 * Donwload a pending checkout file
 	 */
-	public void pendingCheckoutFile() {
+	private void pendingCheckoutFile() {
 		if (pendingChekoutFile) {
 			pendingChekoutFile = false;
-			table.downloadDocument(true);
+			Timer timer = new Timer(){
+				@Override
+				public void run() {
+					table.downloadDocument(true);
+				}
+			};
+			timer.schedule(200); // Time to finishing last method call
 		}
 	}
 	
@@ -289,6 +299,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void refresh(String fldId) {
 		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS);
+		Main.get().mainPanel.browser.tabMultiple.tabFolder.resetNumericFolderValues();
+		numberOfFolders = 0;
+		numberOfDocuments = 0;
+		numberOfMails = 0;
 		// Because its asyncronous the getFolderChilds when finishes calls the getDocumentChilds(flId)
 		// to be sure refresh forlder before document files
 		// and each time refresh file browser content needs to reset values
@@ -356,6 +370,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<List<GWTFolder>> callbackGetFolderChilds = new AsyncCallback<List<GWTFolder>>() {
 		public void onSuccess(List<GWTFolder> result) {
 			List<GWTFolder> folderList = result;
+			numberOfFolders = folderList.size();
+			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfFolders(numberOfFolders);
 			removeAllRows();
 			
 			for (Iterator<GWTFolder> it = folderList.iterator(); it.hasNext();) {
@@ -379,7 +395,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	final AsyncCallback<List<GWTDocument>> callbackGetDocumentChilds = new AsyncCallback<List<GWTDocument>>() {
 		public void onSuccess(List<GWTDocument> result){
-			List<GWTDocument> documentList = result;		
+			List<GWTDocument> documentList = result;	
+			numberOfDocuments = result.size();
+			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfDocuments(numberOfDocuments);
 			
 			for (Iterator<GWTDocument> it = documentList.iterator(); it.hasNext();){
 				GWTDocument doc = it.next();
@@ -394,6 +412,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 				getMailChilds(fldId);
 			} else {
 				selectSelectedRowInTable();
+				pendingCheckoutFile();
 			}
 		}
 
@@ -409,6 +428,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<List<GWTMail>> callbackGetMailChilds = new AsyncCallback<List<GWTMail>>() {
 		public void onSuccess(List<GWTMail> result){
 			List<GWTMail> mailList = result;	
+			numberOfMails = result.size();
+			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfMails(numberOfMails);
 			
 			for (Iterator<GWTMail> it = mailList.iterator(); it.hasNext();) {
 				addRow(it.next());
@@ -425,6 +446,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 			
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_CATEGORIES);
+			pendingCheckoutFile();
 		}
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
@@ -612,6 +634,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 			pendingChekoutFile = true; // Sets that there's a pending checkout file to be donwloaded
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+			refresh(fldId); // downloading document is made after finising refresh althought there's RPC call in getUserCheckedOutDocuments
+			                // we suppose refresh it'll be more slower, and downloading must be done after last RPC call is finished
 		}
 
 		public void onFailure(Throwable caught) {
