@@ -51,7 +51,7 @@ public class Util {
 			String url, BufferedImage image) throws MalformedURLException, IOException {
 		log.info("createDocument(" + token + ", " + path + ", " + fileName + ", " + fileType +
 				", " + url + ", " + image + ")");
-		File tmp = File.createTempFile("okm", fileType);
+		File tmp = File.createTempFile("okm", "."+fileType);
 		FileOutputStream fos = new FileOutputStream(tmp);
 		String response = "";
 		
