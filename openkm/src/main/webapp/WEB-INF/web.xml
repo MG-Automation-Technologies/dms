@@ -149,6 +149,10 @@
     <servlet-name>ExecuteReportServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.ExecuteReportServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>BenchmarkServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.BenchmarkServlet</servlet-class>
+  </servlet>
   
   <!-- WebServices -->
   <servlet>
@@ -281,7 +285,7 @@
   <!-- Mobile Servlets Mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
-  	<url-pattern>/mobi/handler</url-pattern>
+  	<url-pattern>/mobi/Handler</url-pattern>
   </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
@@ -301,9 +305,13 @@
     <servlet-name>RegisterWorkflowServlet</servlet-name>
     <url-pattern>/admin/RegisterWorkflow</url-pattern>
   </servlet-mapping>
-     <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>ExecuteReportServlet</servlet-name>
     <url-pattern>/admin/ExecuteReport</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BenchmarkServlet</servlet-name>
+    <url-pattern>/admin/Benchmark</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
