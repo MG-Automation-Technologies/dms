@@ -22,64 +22,63 @@
 package com.openkm.applet;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
 
-import com.openkm.ws.client.AccessDeniedException_Exception;
-import com.openkm.ws.client.Document;
-import com.openkm.ws.client.FileSizeExceededException_Exception;
-import com.openkm.ws.client.IOException_Exception;
-import com.openkm.ws.client.ItemExistsException_Exception;
-import com.openkm.ws.client.OKMDocument;
-import com.openkm.ws.client.OKMDocumentService;
-import com.openkm.ws.client.PathNotFoundException_Exception;
-import com.openkm.ws.client.RepositoryException_Exception;
-import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
-import com.openkm.ws.client.VirusDetectedException_Exception;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 public class Util {
 	private static Logger log = Logger.getLogger(Util.class.getName());
-	private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMDocumentService");
-
+    
 	/**
+	 * Upload scanned document to OpenKM
 	 * 
 	 */
-	public static void uploadDocument(String token, String path, String fileName, String fileType,
-			String url, BufferedImage image) throws IOException, AccessDeniedException_Exception,
-			FileSizeExceededException_Exception, IOException_Exception, ItemExistsException_Exception,
-			PathNotFoundException_Exception, RepositoryException_Exception,
-			UnsupportedMimeTypeException_Exception, VirusDetectedException_Exception {
-		log.info("uploadDocument(" + token + ", " + path + ", " + fileName + ", " + fileType + ", " + url
-				+ ", " + image);
-
-		OKMDocumentService okmDocumentService = new OKMDocumentService(new URL(url+"/OKMDocument?wsdl") , DocumentServiceName);
-		OKMDocument okmDocument = okmDocumentService.getOKMDocumentPort();
-		Document doc = new Document();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
+	public static String createDocument(String token, String path, String fileName, String fileType,
+			String url, BufferedImage image) throws MalformedURLException, IOException {
+		log.info("createDocument(" + token + ", " + path + ", " + fileName + ", " + fileType +
+				", " + url + ", " + image + ")");
+		File tmp = File.createTempFile("okm", fileType);
+		FileOutputStream fos = new FileOutputStream(tmp);
+		String response = "";
+		
 		try {
-			if (ImageIO.write(image, fileType, baos)) {
-				baos.flush();
-
-				BindingProvider bp = (BindingProvider)okmDocument; 
-				bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
-				doc.setPath(path + "/" + fileName + "." + fileType);
-				okmDocument.create(token, doc, baos.toByteArray());
+			if (ImageIO.write(image, fileType, fos)) {
+				fos.flush();
+				
+				HttpClient client = new DefaultHttpClient();
+				MultipartEntity form = new MultipartEntity();
+				form.addPart("file", new FileBody(tmp));
+				form.addPart("path", new StringBody(path));
+				form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
+				HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
+				post.setHeader("Cookie", "jsessionid="+token);
+				post.setEntity(form);
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				response = client.execute(post, responseHandler);
+				
 			} else {
 				log.warning("Not appropiated writer found!");
 			}
 		} finally {
-			if (baos != null) {
-				baos.close();
-			}
+			tmp.delete();
 		}
+		
+		log.info("createDocument: "+response);
+		return response;
 	}
 	
 	/**

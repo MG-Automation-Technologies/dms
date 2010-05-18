@@ -31,7 +31,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.xml.ws.WebServiceException;
 
 import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.Scanner;
@@ -41,17 +40,7 @@ import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
 import uk.co.mmscomputing.device.scanner.ScannerListener;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata.Type;
 
-import com.openkm.ws.client.AccessDeniedException_Exception;
-import com.openkm.ws.client.FileSizeExceededException_Exception;
-import com.openkm.ws.client.IOException_Exception;
-import com.openkm.ws.client.ItemExistsException_Exception;
-import com.openkm.ws.client.PathNotFoundException_Exception;
-import com.openkm.ws.client.RepositoryException_Exception;
-import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
-import com.openkm.ws.client.VirusDetectedException_Exception;
-
 public class ScannerManager implements ScannerListener {
-
 	private static Logger log = Logger.getLogger(ScannerManager.class.getName());
 	private String token;
 	private String path;
@@ -118,49 +107,16 @@ public class ScannerManager implements ScannerListener {
 			BufferedImage image = metadata.getImage();
 
 			try {
-				Util.uploadDocument(token, path, fileName, fileType, url, image);
-
-				// Refresh file list
+				String response = Util.createDocument(token, path, fileName, fileType, url, image);
+				if (!response.startsWith("OKM_OK")) {
+					log.log(Level.SEVERE, "Error: " + response);
+					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
+				}
+								
 				win.call("refresh", new Object[] {});
-			} catch (VirusDetectedException_Exception e) {
-				log.log(Level.SEVERE, "VirusDetectedException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (FileSizeExceededException_Exception e) {
-				log.log(Level.SEVERE, "FileSizeExceededException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (UnsupportedMimeTypeException_Exception e) {
-				log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (ItemExistsException_Exception e) {
-				log.log(Level.SEVERE, "ItemExistsException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (PathNotFoundException_Exception e) {
-				log.log(Level.SEVERE, "PathNotFoundException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (AccessDeniedException_Exception e) {
-				log.log(Level.SEVERE, "AccessDeniedException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (RepositoryException_Exception e) {
-				log.log(Level.SEVERE, "RepositoryException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (IOException_Exception e) {
-				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (WebServiceException e) {
-				log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", 
 						JOptionPane.ERROR_MESSAGE);
 			} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
 				log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
