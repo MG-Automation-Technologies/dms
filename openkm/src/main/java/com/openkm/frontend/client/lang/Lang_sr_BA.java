@@ -318,6 +318,9 @@ public class Lang_sr_BA {
 	    lang.put("folder.subscribed.users", "Potpisani korisnici");
 	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
+	    lang.put("folder.number.folders","Number of folders");
+	    lang.put("folder.number.documents","Number of documents");
+	    lang.put("folder.number.mails","Number of mails");
 	    
 	    // Version
 	    lang.put("version.name", "Verzija");

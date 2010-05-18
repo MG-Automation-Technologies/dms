@@ -158,6 +158,34 @@ public class TabMultiple extends Composite {
 	}
 	
 	/**
+	 * resetNumericFolderValues
+	 */
+	public void resetNumericFolderValues() {
+		tabFolder.resetNumericFolderValues();
+	}
+	
+	/**
+	 * setNumberOfFolders
+	 */
+	public void setNumberOfFolders(int num) {
+		tabFolder.setNumberOfFolders(num);
+	}
+	
+	/**
+	 * setNumberOfDocuments
+	 */
+	public void setNumberOfDocuments(int num) {
+		tabFolder.setNumberOfDocuments(num);
+	}
+	
+	/**
+	 * setNumberOfMails
+	 */
+	public void setNumberOfMails(int num) {
+		tabFolder.setNumberOfMails(num);
+	}
+	
+	/**
 	 * Sets the size
 	 * 
 	 * @param width int The width size

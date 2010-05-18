@@ -68,7 +68,6 @@ public class TabDocument extends Composite {
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
-	private boolean pendingDownloadFile = false;
 	
 	/**
 	 * The Document tab

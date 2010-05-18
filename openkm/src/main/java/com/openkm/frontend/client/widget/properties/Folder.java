@@ -64,10 +64,16 @@ public class Folder extends Composite {
 		tableProperties.setHTML(3, 1, "");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
 		tableProperties.setHTML(4, 1, "");
-		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.url")+"</b>");
-		tableProperties.setWidget(5, 1, new HTML(""));
-		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
-		tableProperties.setWidget(6, 1, new HTML(""));
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.number.folders")+"</b>");
+		tableProperties.setHTML(5, 1, "");
+		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.number.documents")+"</b>");
+		tableProperties.setHTML(6, 1, "");
+		tableProperties.setHTML(7, 0, "<b>"+Main.i18n("folder.number.mails")+"</b>");
+		tableProperties.setHTML(7, 1, "");
+		tableProperties.setHTML(8, 0, "<b>"+Main.i18n("folder.url")+"</b>");
+		tableProperties.setWidget(8, 1, new HTML(""));
+		tableProperties.setHTML(9, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setWidget(9, 1, new HTML(""));
 		
 		tableSubscribedUsers.setHTML(0,0,"<b>"+Main.i18n("folder.subscribed.users")+"<b>");
 				
@@ -87,6 +93,9 @@ public class Folder extends Composite {
 		setRowWordWarp(2, 0, true, tableProperties);
 		setRowWordWarp(3, 0, true, tableProperties);
 		setRowWordWarp(4, 0, true, tableProperties);
+		setRowWordWarp(5, 0, true, tableProperties);
+		setRowWordWarp(6, 0, true, tableProperties);
+		setRowWordWarp(7, 0, true, tableProperties);
 		setRowWordWarp(0, 0, true, tableSubscribedUsers);
 		
 		tableProperties.setStyleName("okm-DisableSelect");
@@ -121,14 +130,14 @@ public class Folder extends Composite {
 		// url
 		String url = Main.get().workspaceUserProperties.getApplicationURL();
 		url += "?fldPath=" + URL.encodeComponent(folder.getPath());
-		tableProperties.setWidget(5, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
+		tableProperties.setWidget(8, 1, new HTML("<div id=\"folderurlclipboardcontainer\"></div>\n"));
 		Util.createFolderURLClipboardButton(url);
 		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
 		int idx = webdavUrl.lastIndexOf('/');
 		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
-		tableProperties.setWidget(6, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
 		Util.createFolderWebDavClipboardButton(webdavUrl);
 		
 		tableProperties.setHTML(0, 1, folder.getUuid());
@@ -157,6 +166,9 @@ public class Folder extends Composite {
 		setRowWordWarp(2, 1, true, tableProperties);
 		setRowWordWarp(3, 1, true, tableProperties);
 		setRowWordWarp(4, 1, true, tableProperties);
+		setRowWordWarp(5, 1, true, tableProperties);
+		setRowWordWarp(6, 1, true, tableProperties);
+		setRowWordWarp(7, 1, true, tableProperties);
 		
 		// Remove all table rows >= 1
 		while (tableSubscribedUsers.getRowCount() > 1) {
@@ -176,6 +188,36 @@ public class Folder extends Composite {
 			tableSubscribedUsers.setVisible(true);
 		}
 	}
+
+	/**
+	 * resetNumericFolderValues
+	 */
+	public void resetNumericFolderValues() {
+		tableProperties.setHTML(5, 1, "");
+		tableProperties.setHTML(6, 1, "");
+		tableProperties.setHTML(7, 1, "");
+	}
+	
+	/**
+	 * setNumberOfFolders
+	 */
+	public void setNumberOfFolders(int num) {
+		tableProperties.setHTML(5, 1, ""+num);
+	}
+	
+	/**
+	 * setNumberOfDocuments
+	 */
+	public void setNumberOfDocuments(int num) {
+		tableProperties.setHTML(6, 1, ""+num);
+	}
+	
+	/**
+	 * setNumberOfMails
+	 */
+	public void setNumberOfMails(int num) {
+		tableProperties.setHTML(7, 1, ""+num);
+	}
 		
 	/**
 	 * Language refresh
@@ -186,8 +228,11 @@ public class Folder extends Composite {
 		tableProperties.setHTML(2, 0, "<b>"+Main.i18n("folder.parent")+"</b>");
 		tableProperties.setHTML(3, 0, "<b>"+Main.i18n("folder.created")+"</b>");
 		tableProperties.setHTML(4, 0, "<b>"+Main.i18n("folder.subscribed")+"</b>");
-		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.url")+"</b>");
-		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
+		tableProperties.setHTML(5, 0, "<b>"+Main.i18n("folder.number.folders")+"</b>");
+		tableProperties.setHTML(6, 0, "<b>"+Main.i18n("folder.number.documents")+"</b>");
+		tableProperties.setHTML(7, 0, "<b>"+Main.i18n("folder.number.mails")+"</b>");
+		tableProperties.setHTML(8, 0, "<b>"+Main.i18n("folder.url")+"</b>");
+		tableProperties.setHTML(9, 0, "<b>"+Main.i18n("folder.webdav")+"</b>");
 		
 		if (folder!=null) {
 			if (folder.isSubscribed()) {

@@ -156,9 +156,6 @@ public class UserDashboard extends Composite {
 			chechoutDocuments.setHeaderResults(result.size());
 			Main.get().mainPanel.bottomPanel.userInfo.setCheckoutDocuments(result.size());
 			chechoutDocuments.unsetRefreshing();
-			if (!firstTime) {
-				Main.get().mainPanel.browser.fileBrowser.pendingCheckoutFile();
-			}
 		}
 
 		public void onFailure(Throwable caught) {
