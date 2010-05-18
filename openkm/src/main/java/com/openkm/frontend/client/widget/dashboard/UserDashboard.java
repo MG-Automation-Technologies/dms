@@ -63,6 +63,7 @@ public class UserDashboard extends Composite {
 	
 	private boolean firstTime = true; 
 	private int tmpSubscriptions = 0;
+	private boolean checkoutDocumentFlag = false;
 	
 	/**
 	 * UserDashboard
@@ -156,6 +157,7 @@ public class UserDashboard extends Composite {
 			chechoutDocuments.setHeaderResults(result.size());
 			Main.get().mainPanel.bottomPanel.userInfo.setCheckoutDocuments(result.size());
 			chechoutDocuments.unsetRefreshing();
+			checkoutDocumentFlag = false; // Marks rpc calls are finished and can checkout document
 		}
 
 		public void onFailure(Throwable caught) {
@@ -258,6 +260,19 @@ public class UserDashboard extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
 		endPoint.setServiceEntryPoint(Config.OKMDashboardService);		
 		dashboardService.getUserLockedDocuments(callbackGetUserLockedDocuments);
+	}
+	
+	/**
+	 * setPendingCheckoutDocumentFlag
+	 * 
+	 * Flag to ensure RPC calls are finished
+	 */
+	public void setPendingCheckoutDocumentFlag() {
+		checkoutDocumentFlag = true;
+	}
+	
+	public boolean isPendingCheckoutDocumentFlag() {
+		return checkoutDocumentFlag;
 	}
 	
 	/**

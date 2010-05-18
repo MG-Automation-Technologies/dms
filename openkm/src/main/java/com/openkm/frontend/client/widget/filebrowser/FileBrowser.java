@@ -282,13 +282,24 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private void pendingCheckoutFile() {
 		if (pendingChekoutFile) {
 			pendingChekoutFile = false;
-			Timer timer = new Timer(){
-				@Override
-				public void run() {
-					table.downloadDocument(true);
-				}
-			};
-			timer.schedule(200); // Time to finishing last method call
+			if (!Main.get().mainPanel.dashboard.userDashboard.isPendingCheckoutDocumentFlag()) {
+				Timer timer = new Timer() {
+					@Override
+					public void run() {
+						table.downloadDocument(true);
+					}
+				};
+				timer.schedule(200); // Time to ensure finishing last method call is really finished
+			} else {
+				// After 200ms returns validating RPC userDashboard finished
+				Timer timer = new Timer() {
+					@Override
+					public void run() {
+						pendingCheckoutFile();
+					}
+				};
+				timer.schedule(200); // Time to finishing last method call
+			}
 		}
 	}
 	
@@ -633,7 +644,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 			mantainSelectedRow();
 			pendingChekoutFile = true; // Sets that there's a pending checkout file to be donwloaded
 			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().mainPanel.dashboard.userDashboard.setPendingCheckoutDocumentFlag(); // Marks flag to ensure all rpc calls has finished before downloading document
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+			pendingChekoutFile = true;
 			refresh(fldId); // downloading document is made after finising refresh althought there's RPC call in getUserCheckedOutDocuments
 			                // we suppose refresh it'll be more slower, and downloading must be done after last RPC call is finished
 		}
