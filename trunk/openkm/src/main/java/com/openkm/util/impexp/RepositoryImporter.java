@@ -49,9 +49,9 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository.
 	 */
-	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
-			throws PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException {
+	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, 
+			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, 
+			AccessDeniedException, RepositoryException, IOException {
 		log.debug("importDocuments({}, {}, {}, {})", new Object[] { token, fs, fldPath, deco });
 		ImpExpStats stats;
 		
@@ -88,10 +88,10 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository (recursive).
 	 */
-	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, Writer out, InfoDecorator deco) 
-			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
-			ItemExistsException, RepositoryException, IOException {
-		log.debug("importDocumentsHelper("+token+", "+fs+", "+fldPath+", "+out+", "+deco+")");
+	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, 
+			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
+			AccessDeniedException, ItemExistsException, RepositoryException, IOException {
+		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
 		
@@ -110,7 +110,7 @@ public class RepositoryImporter {
 					stats.setDocuments(stats.getDocuments() + tmp.getDocuments());
 					stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 				} catch (ItemExistsException e) {
-					log.warn("ItemExistsException: "+e.getMessage());
+					log.warn("ItemExistsException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), "ItemExists"));
 					out.flush();
 					stats.setOk(false);
@@ -129,22 +129,22 @@ public class RepositoryImporter {
 					stats.setSize(stats.getSize() + size);
 					stats.setDocuments(stats.getDocuments() + 1);
 				} catch (UnsupportedMimeTypeException e) {
-					log.warn("UnsupportedMimeTypeException: "+e.getMessage());
+					log.warn("UnsupportedMimeTypeException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), "UnsupportedMimeType"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (FileSizeExceededException e) {
-					log.warn("FileSizeExceededException: "+e.getMessage());
+					log.warn("FileSizeExceededException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), "FileSizeExceeded"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (VirusDetectedException e) {
-					log.warn("VirusWarningException: "+e.getMessage());
+					log.warn("VirusWarningException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), "VirusWarningException"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (ItemExistsException e) {
-					log.warn("ItemExistsException: "+e.getMessage());
+					log.warn("ItemExistsException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), "ItemExists"));
 					out.flush();
 					stats.setOk(docOk = false);
@@ -159,7 +159,7 @@ public class RepositoryImporter {
 			}
 		}
 		
-		log.debug("importDocumentsHelper: "+stats);
+		log.debug("importDocumentsHelper: {}", stats);
 		return stats;
 	}
 }
