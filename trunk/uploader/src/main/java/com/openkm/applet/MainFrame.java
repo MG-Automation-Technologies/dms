@@ -67,15 +67,6 @@ import javax.xml.ws.WebServiceException;
 
 import netscape.javascript.JSObject;
 
-import com.openkm.ws.client.AccessDeniedException_Exception;
-import com.openkm.ws.client.FileSizeExceededException_Exception;
-import com.openkm.ws.client.IOException_Exception;
-import com.openkm.ws.client.ItemExistsException_Exception;
-import com.openkm.ws.client.PathNotFoundException_Exception;
-import com.openkm.ws.client.RepositoryException_Exception;
-import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
-import com.openkm.ws.client.VirusDetectedException_Exception;
-
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements DropTargetListener, ActionListener {
 	private static Logger log = Logger.getLogger(MainFrame.class.getName());
@@ -267,8 +258,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			log.log(Level.SEVERE, "UnsupportedFlavorException: " + e.getMessage(), e);
 		} catch (WebServiceException e) {
 			log.log(Level.SEVERE, "WebServiceException: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Webservices failure",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Webservices failure", JOptionPane.ERROR_MESSAGE);
 		} catch (Throwable e) { // Catch anything else
 			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(null, e.getMessage(), "General failure", JOptionPane.ERROR_MESSAGE);
@@ -281,47 +271,63 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	 * 
 	 */
 	private static void createDocumentHelper(String token, String path, String url, File fs)
-			throws IOException, AccessDeniedException_Exception, PathNotFoundException_Exception,
-			RepositoryException_Exception, IOException_Exception {
+			throws IOException {
 		log.info("uploadDocumentHelper(" + token + ", " + path + ", " + url + ", " + fs + ")");
 
 		if (fs.isFile()) {
-			try {
-				Util.createDocument(token, path, url, fs);
-			} catch (VirusDetectedException_Exception e) {
-				log.log(Level.SEVERE, "VirusDetectedException: - > " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Virus detected",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (FileSizeExceededException_Exception e) {
-				log.log(Level.SEVERE, "FileSizeExceededException: - > " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "FileSize exceeded",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (UnsupportedMimeTypeException_Exception e) {
-				log.log(Level.SEVERE, "UnsupportedMimeTypeException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Unsupported mime type",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (ItemExistsException_Exception e) {
-				log.log(Level.WARNING, "ItemExistsException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Item exists",
-						JOptionPane.WARNING_MESSAGE);
+			String response = Util.createDocument(token, path, url, fs);
+			if (!response.startsWith("OKM_OK")) {
+				log.log(Level.SEVERE, "Error: " + response);
+				
+				if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_AccessDenied))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Access denied", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_PathNotFound))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Path not found", JOptionPane.ERROR_MESSAGE);
+				} else  if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_ItemExists))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Item exists", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_UnsupportedMimeType))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unsupported mime type", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "File size exceeded", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Repository error", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "IO error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unknown error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		} else if (fs.isDirectory()) {
-			try {
-				Util.createFolder(token, path, url, fs);
-			} catch (ItemExistsException_Exception e) {
-				log.warning("ItemExistsException: " + e.getMessage());
-				JOptionPane.showMessageDialog(null, e.getMessage(), "Item exists",
-						JOptionPane.WARNING_MESSAGE);
+			String response = Util.createFolder(token, path, url, fs);
+			if (!response.startsWith("OKM_OK")) {
+				log.log(Level.SEVERE, "Error: " + response);
+				
+				if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_AccessDenied))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Access denied", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_PathNotFound))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Path not found", JOptionPane.ERROR_MESSAGE);
+				} else  if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_ItemExists))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Item exists", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_UnsupportedMimeType))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unsupported mime type", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "File size exceeded", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Repository error", JOptionPane.ERROR_MESSAGE);
+				} else if (response.equals(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException))) {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "IO error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, path+"/"+fs.getName(), "Unknown error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
-
+			
 			File[] files = fs.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
 			}
 		} else {
 			log.log(Level.WARNING, "Unknown file type");
-			JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type",
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type", JOptionPane.WARNING_MESSAGE);
 		}
 
 		log.info("importDocumentsHelper: void");

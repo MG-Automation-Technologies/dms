@@ -21,95 +21,64 @@
 
 package com.openkm.applet;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
-
-import com.openkm.ws.client.AccessDeniedException_Exception;
-import com.openkm.ws.client.Document;
-import com.openkm.ws.client.FileSizeExceededException_Exception;
-import com.openkm.ws.client.Folder;
-import com.openkm.ws.client.IOException_Exception;
-import com.openkm.ws.client.ItemExistsException_Exception;
-import com.openkm.ws.client.OKMDocument;
-import com.openkm.ws.client.OKMDocumentService;
-import com.openkm.ws.client.OKMFolder;
-import com.openkm.ws.client.OKMFolderService;
-import com.openkm.ws.client.PathNotFoundException_Exception;
-import com.openkm.ws.client.RepositoryException_Exception;
-import com.openkm.ws.client.UnsupportedMimeTypeException_Exception;
-import com.openkm.ws.client.VirusDetectedException_Exception;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 public class Util {
 	private static Logger log = Logger.getLogger(Util.class.getName());
-	private static QName documentServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMDocumentService");
-	private static QName folderServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMFolderService");
-
+	
 	/**
 	 * 
 	 */
-	public static void createDocument(String token, String path, String url, File file) throws IOException,
-			AccessDeniedException_Exception, FileSizeExceededException_Exception, IOException_Exception,
-			ItemExistsException_Exception, PathNotFoundException_Exception, RepositoryException_Exception,
-			UnsupportedMimeTypeException_Exception, VirusDetectedException_Exception {
-		log.info("uploadDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
-
-		OKMDocumentService okmDocumentService = new OKMDocumentService(new URL(url+"/OKMDocument?wsdl"), documentServiceName);
-		OKMDocument okmDocument = okmDocumentService.getOKMDocumentPort();
-		Document doc = new Document();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		FileInputStream fis = null;
-
-		try {
-			fis = new FileInputStream(file);
-			byte[] buffer = new byte[1024 * 4];
-			int n = 0;
-			while (-1 != (n = fis.read(buffer))) {
-				baos.write(buffer, 0, n);
-			}
-
-			BindingProvider bp = (BindingProvider) okmDocument;
-			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMDocument");
-			doc.setPath(path + "/" + file.getName());
-			okmDocument.create(token, doc, baos.toByteArray());
-		} finally {
-			if (fis != null) {
-				fis.close();
-			}
-			if (baos != null) {
-				baos.close();
-			}
-		}
+	public static String createDocument(String token, String path, String url, File file) throws IOException {
+		log.info("createDocument(" + token + ", " + path + ", " + url + ", " + file + ")");
+		HttpClient client = new DefaultHttpClient();
+		MultipartEntity form = new MultipartEntity();
+		form.addPart("file", new FileBody(file));
+		form.addPart("path", new StringBody(path));
+		form.addPart("action", new StringBody("0")); // FancyFileUpload.ACTION_INSERT
+		HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
+		post.setHeader("Cookie", "jsessionid="+token);
+		post.setEntity(form);
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		String response = client.execute(post, responseHandler);
+		log.info("createDocument: "+response);
+		return response;
 	}
 
 	/**
 	 * 
 	 */
-	public static void createFolder(String token, String path, String url, File file) throws IOException,
-			AccessDeniedException_Exception, ItemExistsException_Exception, PathNotFoundException_Exception,
-			RepositoryException_Exception {
+	public static String createFolder(String token, String path, String url, File file) throws IOException {
 		log.info("createFolder(" + token + ", " + path + ", " + url + ", " + file + ")");
-
-		OKMFolderService okmFolderService = new OKMFolderService(new URL(url+"/OKMFolder?wsdl"), folderServiceName);
-		OKMFolder okmFolder = okmFolderService.getOKMFolderPort();
-		Folder fld = new Folder();
-
-		BindingProvider bp = (BindingProvider) okmFolder;
-		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url+"/OKMFolder");
-		fld.setPath(path + "/" + file.getName());
-		okmFolder.create(token, fld);
+		HttpClient client = new DefaultHttpClient();
+		MultipartEntity form = new MultipartEntity();
+		form.addPart("folder", new StringBody(file.getName()));
+		form.addPart("path", new StringBody(path));
+		form.addPart("action", new StringBody("2")); // FancyFileUpload.ACTION_FOLDER
+		HttpPost post = new HttpPost(url+"/OKMFileUploadServlet;jsessionid="+token);
+		post.setHeader("Cookie", "jsessionid="+token);
+		post.setEntity(form);
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		String response = client.execute(post, responseHandler);
+		log.info("createFolder: "+response);
+		return response;
 	}
 
 	/**
