@@ -87,7 +87,7 @@ public class OKMAccessManager implements AccessManager {
 				principalUser = userPrincipal.getName();
 				principalRoles.add(Config.DEFAULT_USER_ROLE);
 			} else if (obj instanceof java.security.acl.Group) {
-				log.info("j.s.a.Group: {}", obj);
+				log.debug("j.s.a.Group: {}", obj);
 				java.security.acl.Group group = (java.security.acl.Group) obj;
 				for (Enumeration<? extends java.security.Principal> groups = group.members(); groups
 						.hasMoreElements();) {
