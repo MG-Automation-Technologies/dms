@@ -78,16 +78,17 @@ public class BenchmarkServlet extends HttpServlet {
 		long tSize = 0;
 		long tBegin = System.currentTimeMillis();
 		response.setContentType("text/html");
-		out.print("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		out.print("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-		out.print("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-		out.print("<head>");
-		out.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-		out.print("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
-		out.print("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" />");
-		out.print("<title>Benchmark</title>");
-		out.print("</head>");
-		out.print("<body>");
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" />");
+		out.println("<title>Benchmark</title>");
+		out.println("</head>");
+		out.println("<body>");
+		out.println("<h1>Benchmark</h1>");
 		
 		try {
 			Folder fld = new Folder();
@@ -102,8 +103,10 @@ public class BenchmarkServlet extends HttpServlet {
 						fld.getPath(), out, new HTMLInfoDecorator());
 				long end = System.currentTimeMillis();
 				tSize += stats.getSize();
+				out.println("<hr/>");
 				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
+				out.println("<hr/>");
 			}
 		} catch (PathNotFoundException e) {
 			out.print("PathNotFoundException: "+e.getMessage());
@@ -123,6 +126,7 @@ public class BenchmarkServlet extends HttpServlet {
 		out.println("<hr/>");
 		out.println("<b>Total size:</b> "+FormatUtil.formatSize(tSize)+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
+		out.println("<hr/>");
 		out.print("</body>");
 		out.print("</html>");
 		out.flush();
