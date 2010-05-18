@@ -56,9 +56,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	private static Logger log = LoggerFactory.getLogger(OKMWorkspaceServlet.class);
 	private static final long serialVersionUID = 8673521252684830906L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#getWorkspaceUser()
-	 */
+	@Override
 	public GWTWorkspace getUserWorkspace() throws OKMException {
 		GWTWorkspace workspace = new GWTWorkspace();
 		
@@ -68,11 +66,16 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
-		workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
 		workspace.setWorkflowRunConfigForm(Config.WORKFLOW_RUN_CONFIG_FORM);
 		workspace.setWorkflowProcessIntanceVariableUUID(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
 		workspace.setWorkflowProcessIntanceVariablePath(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH);
+
+		if (Config.SESSION_MANAGER) {
+			workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
+		} else {
+			workspace.setToken(getThreadLocalRequest().getSession().getId());
+		}
 		
 		// Is a wizard to uploading documents
 		workspace.setWizardPropertyGroups(Config.WIZARD_PROPERTY_GROUPS.length>0);
@@ -114,9 +117,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		return workspace;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#getUserDocumentsSize()
-	 */
+	@Override
 	public Double getUserDocumentsSize() throws OKMException {
 		String token = getToken();
 		Double docSize = new Double(0);
@@ -132,9 +133,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		return docSize;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#updateUserWorkspace(com.openkm.frontend.client.bean.GWTWorkspace)
-	 */
+	@Override
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
 		// For updating user
 		User user = new User();
@@ -176,9 +175,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#deleteMailAccount(int)
-	 */
+	@Override
 	public void deleteMailAccount(int id)  throws OKMException {
 		// Disable user configuration modification in demo
 		if (!Config.SYSTEM_DEMO) {
@@ -191,9 +188,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMWorkspaceService#isValidPassword(java.lang.String)
-	 */
+	@Override
 	public String isValidPassword(String password) throws OKMException {
 		String msg = "";
 		try {

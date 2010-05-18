@@ -23,8 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDocument;
+import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMNotification;
 import com.openkm.bean.Document;
+import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
@@ -63,6 +65,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
+		log.info("doPost({}, {})", request, response);
 		String fileName = null;
 		InputStream is = null;
 		String path = null;
@@ -72,6 +75,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		String users = null;
 		String message = null;
 		String comment = null;
+		String folder = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
 
@@ -80,7 +84,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			String token = getToken(request);
 			response.setContentType("text/plain");
 			out = response.getWriter();	
-
+			log.info("isMultipart: {}", isMultipart);
+			
 			// Create a factory for disk-based file items
 			if (isMultipart) {
 				FileItemFactory factory = new DiskFileItemFactory(); 
@@ -107,6 +112,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						if (item.getFieldName().equals("importZip")) { importZip = true; }
 						if (item.getFieldName().equals("message")) { message = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("comment")) { comment = item.getString("UTF-8"); }
+						if (item.getFieldName().equals("folder")) { folder = item.getString("UTF-8"); }
 					} else {
 						fileName = item.getName();
 						is = item.getInputStream();
@@ -117,7 +123,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 				if (action == FancyFileUpload.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
-							log.debug("Import zip file '{}' into '{}'", fileName, path);
+							log.info("Import zip file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(token, path, is);
 							log.warn("erroMsg: {}", erroMsg);
 							
@@ -128,7 +134,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							}
 						} else {
 							fileName = FilenameUtils.getName(fileName);
-							log.debug("Upload file '{}' into '{}'", fileName, path);
+							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
 							doc.setPath(path+"/"+fileName);
 							OKMDocument.getInstance().create(token, doc, is);
@@ -137,12 +143,18 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						}
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
-					log.debug("File updated: {}", path);
+					log.info("File updated: {}", path);
 					OKMDocument document = OKMDocument.getInstance();
 					document.setContent(token, path, is);
 					document.checkin(token, path, comment);
 					uploadedDocPath = path;
 					out.print(returnOKMessage + " path["+uploadedDocPath+"]path"); // Return the path of the inserted document in response
+				} else if (action == FancyFileUpload.ACTION_FOLDER) {
+					log.info("Folder create: {}", path);
+					Folder fld = new Folder();
+					fld.setPath(path+"/"+folder);
+					OKMFolder.getInstance().create(token, fld);
+					out.print(returnOKMessage);
 				}
 				
 				listener.setUploadFinish(true); // Mark uploading operation has finished
@@ -178,9 +190,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			log.error(e.getMessage(), e);
 			out.print("Exception: "+e.toString());
 		} finally {
-			is.close();
+			IOUtils.closeQuietly(is);
 			out.flush();
-			out.close();
+			IOUtils.closeQuietly(out);
 			System.gc();
 		}
 	}
