@@ -665,7 +665,7 @@ public class ToolBar extends Composite implements OriginPanel {
 					 				Main.i18n("general.menu.file.scanner"), scannerHandler); 
 			
 		uploader  = new ToolBarButton(new Image(OKMBundleResources.INSTANCE.uploader()),
- 				Main.i18n("general.menu.file.uploader"), scannerHandler); 
+ 				Main.i18n("general.menu.file.uploader"), uploaderHandler); 
 		
 		MouseOverHandler mouseOverHandler = new MouseOverHandler(){
 			@Override
@@ -2359,7 +2359,7 @@ public class ToolBar extends Composite implements OriginPanel {
 					"<param name=\"lang\" value=\""+Main.get().getLang()+"\">"+
 					"</applet>");
 		} else {
-			Main.get().showError("setScannerApplet", new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBrowser, ErrorCode.CAUSE_Configuration), "JRE support not detected in your browser"));
+			Main.get().showError("setUploaderApplet", new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBrowser, ErrorCode.CAUSE_Configuration), "JRE support not detected in your browser"));
 		}
 	}
 
