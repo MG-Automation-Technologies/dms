@@ -160,15 +160,15 @@ public class DirectAuthModule implements AuthModule {
 			javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.AccessDeniedException,
 			ItemExistsException, ConstraintViolationException, InvalidItemStateException,
 			ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException {
-		log.info("loadUserData({}) -> {}", session.getUserID(), session);
+		log.debug("loadUserData({}) -> {}", session.getUserID(), session);
 		if (session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
-			log.info("** User Home already created **");
+			log.debug("** User Home already created **");
 			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
 			Property lockTokensProperty = userConfig.getProperty(Repository.LOCK_TOKENS);
 			Value[] lockTokensValues = lockTokensProperty.getValues();
 
 			// Reload previous session lockTokens
-			log.info("{} # lockTokensValues.length: {}", session.getUserID(), lockTokensValues.length);
+			log.debug("{} # lockTokensValues.length: {}", session.getUserID(), lockTokensValues.length);
 			for (int i=0; i<lockTokensValues.length; i++) {
 				String lockToken = lockTokensValues[i].getString();
 
