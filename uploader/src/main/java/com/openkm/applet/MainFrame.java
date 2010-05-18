@@ -274,27 +274,37 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			throws IOException {
 		log.info("uploadDocumentHelper(" + token + ", " + path + ", " + url + ", " + fs + ")");
 
-		if (fs.isFile()) {
-			String response = Util.createDocument(token, path, url, fs);
-			if (!response.startsWith("OKM_OK")) {
-				log.log(Level.SEVERE, "Error: " + response);
-				ErrorCode.displayError(response, path+"/"+fs.getName());
+		try{
+			if (fs.isFile()) {
+				String response = Util.createDocument(token, path, url, fs);
+				if (!response.startsWith("OKM_OK")) {
+					log.log(Level.SEVERE, "Error: " + response);
+					ErrorCode.displayError(response, path+"/"+fs.getName());
+				}
+			} else if (fs.isDirectory()) {
+				String response = Util.createFolder(token, path, url, fs);
+				if (!response.startsWith("OKM_OK")) {
+					log.log(Level.SEVERE, "Error: " + response);
+					ErrorCode.displayError(response, path+"/"+fs.getName());
+				}
 				
+				File[] files = fs.listFiles();
+				for (int i = 0; i < files.length; i++) {
+					createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
+				}
+			} else {
+				log.log(Level.WARNING, "Unknown file type");
+				JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type", 
+						JOptionPane.WARNING_MESSAGE);
 			}
-		} else if (fs.isDirectory()) {
-			String response = Util.createFolder(token, path, url, fs);
-			if (!response.startsWith("OKM_OK")) {
-				log.log(Level.SEVERE, "Error: " + response);
-				ErrorCode.displayError(response, path+"/"+fs.getName());
-			}
-			
-			File[] files = fs.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
-			}
-		} else {
-			log.log(Level.WARNING, "Unknown file type");
-			JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type", JOptionPane.WARNING_MESSAGE);
+		} catch (IOException e) {
+			log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
+			log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 		log.info("importDocumentsHelper: void");
