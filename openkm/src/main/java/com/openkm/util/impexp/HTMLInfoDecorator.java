@@ -40,7 +40,7 @@ public class HTMLInfoDecorator implements InfoDecorator {
 			sb.append("<tr class=\"odd\">");
 		}
 		
-		sb.append("<td>");
+		sb.append("<td nowrap>");
 		sb.append(idx);
 		sb.append(" (");
 		sb.append(idx * 100 / total);
@@ -59,7 +59,7 @@ public class HTMLInfoDecorator implements InfoDecorator {
 			sb.append(error);
 		}
 		
-		sb.append("</div></td><td>");
+		sb.append("</div></td><td nowrap>");
 		sb.append(FormatUtil.formatSize(size));
 		sb.append("</td></tr>");
 		
