@@ -126,16 +126,16 @@ public class BenchmarkServlet extends HttpServlet {
 				out.println("<hr/>");
 			}
 		} catch (PathNotFoundException e) {
-			out.print("PathNotFoundException: "+e.getMessage());
+			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
 			out.flush();
 		} catch (ItemExistsException e) {
-			out.print("ItemExistsException: "+e.getMessage());
+			out.println("<div class=\"warn\">ItemExistsException: "+e.getMessage()+"</div>");
 			out.flush();
 		} catch (AccessDeniedException e) {
-			out.print("AccessDeniedException: "+e.getMessage());
+			out.println("<div class=\"warn\">AccessDeniedException: "+e.getMessage()+"</div>");
 			out.flush();
 		} catch (RepositoryException e) {
-			out.print("RepositoryException: "+e.getMessage());
+			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
 		
