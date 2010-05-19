@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,8 +76,10 @@ public class BenchmarkServlet extends HttpServlet {
 		String path = WebUtil.getString(request, "param1");
 		int times = WebUtil.getInt(request, "param2");
 		PrintWriter out = response.getWriter();
-		long tSize = 0;
+		ImpExpStats tStats = new ImpExpStats();
 		long tBegin = System.currentTimeMillis();
+		File dir = new File(path);
+		int docs = FileUtils.listFiles(dir, null, true).size();
 		response.setContentType("text/html");
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
@@ -91,23 +94,34 @@ public class BenchmarkServlet extends HttpServlet {
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<h1>Benchmark</h1>");
+		out.println("<b>- Path:</b> "+path+"<br/>");
+		out.println("<b>- Times:</b> "+times+"<br/>");
+		out.println("<b>- Documents:</b> "+docs+"<br/>");
 		
 		try {
 			Folder fld = new Folder();
 			fld.setPath("/okm:root/Benchmark");
 			OKMFolder.getInstance().create(null, fld);
-			
+						
 			for (int i=0; i<times; i++) {
 				out.println("<h2>Iteration "+i+"</h2>");
+				out.println("<table class=\"results\" width=\"100%\">");
+				out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
+				
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
 				OKMFolder.getInstance().create(null, fld);
-				ImpExpStats stats = RepositoryImporter.importDocuments(null, new File(path), 
-						fld.getPath(), out, new HTMLInfoDecorator());
+				ImpExpStats stats = RepositoryImporter.importDocuments(null, dir, fld.getPath(),
+						out, new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
-				tSize += stats.getSize();
-				out.println("<hr/>");
+				tStats.setSize(tStats.getSize() + stats.getSize());
+				tStats.setFolders(tStats.getFolders() + stats.getFolders());
+				tStats.setDocuments(tStats.getDocuments() + stats.getDocuments());
+				
+				out.println("<table>");
 				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
+				out.println("<b>Folders:</b> "+FormatUtil.formatSize(stats.getFolders())+"<br/>");
+				out.println("<b>Documents:</b> "+FormatUtil.formatSize(stats.getDocuments())+"<br/>");
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 				out.println("<hr/>");
 			}
@@ -126,10 +140,10 @@ public class BenchmarkServlet extends HttpServlet {
 		}
 		
 		long tEnd = System.currentTimeMillis();
-		out.println("<hr/>");
-		out.println("<b>Total size:</b> "+FormatUtil.formatSize(tSize)+"<br/>");
+		out.println("<b>Total size:</b> "+FormatUtil.formatSize(tStats.getSize())+"<br/>");
+		out.println("<b>Total folders:</b> "+FormatUtil.formatSize(tStats.getFolders())+"<br/>");
+		out.println("<b>Total documents:</b> "+FormatUtil.formatSize(tStats.getDocuments())+"<br/>");
 		out.println("<b>Total time:</b> "+FormatUtil.formatSeconds(tEnd - tBegin)+"<br/>");
-		out.println("<hr/>");
 		out.print("</body>");
 		out.print("</html>");
 		out.flush();
