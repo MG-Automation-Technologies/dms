@@ -27,8 +27,8 @@
               </select>
             </td>
           </tr>
-          <tr><td>Parameter 1</td><td><input type="text" name="param1"/></td></tr>
-          <tr><td>Parameter 2</td><td><input type="text" name="param2"/></td></tr>
+          <tr><td>Parameter 1</td><td><input type="text" name="param1" size="32"/></td></tr>
+          <tr><td>Parameter 2</td><td><input type="text" name="param2" size="32"/></td></tr>
           <tr><td colspan="2" align="right"><input type="submit" value="Send"/></td></tr>
         </table>
       </form>
