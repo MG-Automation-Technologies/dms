@@ -224,7 +224,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		doc.setNotes(notes);
 		
-		log.info("Permisos: {} => {}", docPath, doc.getPermissions());
+		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
 		log.debug("getProperties[session]: {}", doc);
 		return doc;
 	}
@@ -354,8 +354,8 @@ public class DirectDocumentModule implements DocumentModule {
 			int read;
 			while ((read = is.read(buff)) != -1) {
 				fosJcr.write(buff, 0, read);
-				fosAvr.write(buff, 0, read);
-				fosKea.write(buff, 0, read);
+				if (!Config.SYSTEM_ANTIVIR.equals("")) fosAvr.write(buff, 0, read);
+				if (!Config.KEA_MODEL_FILE.equals("")) fosKea.write(buff, 0, read);
 			}
 			fosJcr.flush();
 			fosJcr.close();
