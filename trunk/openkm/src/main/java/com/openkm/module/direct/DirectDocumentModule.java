@@ -377,7 +377,7 @@ public class DirectDocumentModule implements DocumentModule {
 			// Start KEA
 			Collection<String> keywords = doc.getKeywords() != null ? doc.getKeywords() : new ArrayList<String>(); // Adding submitted keywords
 	        if (!Config.KEA_MODEL_FILE.equals("")) {
-		        MetadataExtractor mdExtractor = new MetadataExtractor(Integer.parseInt(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER));
+		        MetadataExtractor mdExtractor = new MetadataExtractor(Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_NUMBER);
 		        MetadataDTO mdDTO = mdExtractor.extract(is, tmpKea);
 		        log.info("Creator: "+mdDTO.getCreator());
 		        log.info("Title: "+mdDTO.getTitle());
@@ -389,7 +389,7 @@ public class DirectDocumentModule implements DocumentModule {
 		        for (ListIterator<Term> it = mdDTO.getSubjectsAsTerms().listIterator(); it.hasNext();) {
 		        	Term term =  it.next();
 		        	log.info("Term:" + term.getText());
-		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION.equals("on")) {
+		        	if (Config.KEA_AUTOMATIC_KEYWORD_EXTRACTION_RESTRICTION) {
 		        		if (RDFREpository.getInstance().getKeywords().contains(term.getText())) {
 		        			keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
 		        		}
