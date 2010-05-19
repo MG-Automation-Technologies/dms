@@ -21,6 +21,8 @@
 
 package com.openkm.util;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -40,11 +42,15 @@ public class WebUtil {
 	 */
 	public static final String getString(HttpServletRequest request, String name) {
 		String value = request.getParameter(name);
-		if (value == null) {
-			return EMPTY_STRING;
-		} else { 
-			return value;
+		String stringValue = EMPTY_STRING;
+		if (value != null) {
+			try {
+				return new String(value.getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// Ignore
+			}
 		}
+		return stringValue;
 	}
 
 	/**
@@ -57,11 +63,15 @@ public class WebUtil {
 	 */
 	public static final String getString(HttpServletRequest request, String name, String defaultValue) {
 		String value = request.getParameter(name);
-		if (value == null) {
-			return defaultValue;
-		} else { 
-			return value;
+		String stringValue = defaultValue; 
+		if (value != null) {
+			try {
+				return new String(value.getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// Ignore
+			}
 		}
+		return stringValue;
 	}
 	
 	/**
