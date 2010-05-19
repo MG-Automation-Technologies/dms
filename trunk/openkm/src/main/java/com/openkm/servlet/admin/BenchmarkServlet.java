@@ -96,6 +96,7 @@ public class BenchmarkServlet extends HttpServlet {
 			OKMFolder.getInstance().create(null, fld);
 			
 			for (int i=0; i<times; i++) {
+				out.println("<h2>Iteration "+i+"</h2>");
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
 				OKMFolder.getInstance().create(null, fld);
