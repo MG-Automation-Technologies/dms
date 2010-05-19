@@ -253,7 +253,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(token, path, tmp, out, new HTMLInfoDecorator());
+			RepositoryExporter.exportDocuments(token, path, tmp, out, new HTMLInfoDecorator(0));
 			out.close();
 			
 			// Zip files
