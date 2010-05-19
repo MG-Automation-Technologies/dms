@@ -65,7 +65,7 @@ public class RegisterWorkflowServlet extends HttpServlet {
 
 				if (fileName != null && !fileName.equals("")) {
 					fileName = FilenameUtils.getName(fileName);
-					log.info("Upload file: " + fileName);
+					log.info("Upload file: {}", fileName);
 					InputStream is = new ByteArrayInputStream(content);
 					ZipInputStream zis = new ZipInputStream(is);
 					OKMWorkflow.getInstance().registerProcessDefinition(token, zis);
