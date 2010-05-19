@@ -65,4 +65,15 @@ function selectAllOptions(selStr) {
 	for (var i=0; i<sel.options.length; i++) {
 		sel.options[i].selected = true;
 	}
+
+/**
+ * 
+ */
+function scrollToBottom() {
+	bottom = document.body.scrollHeight;
+	current = window.innerHeight + document.body.scrollTop;
+	if ((bottom-current) > 0) {
+		window.scrollTo(0, bottom);
+		setTimeout('scrollToBottom()', 1000);
+	}
 }
