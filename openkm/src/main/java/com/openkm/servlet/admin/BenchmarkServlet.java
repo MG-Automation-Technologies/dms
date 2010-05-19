@@ -123,7 +123,6 @@ public class BenchmarkServlet extends HttpServlet {
 				out.println("<b>Folders:</b> "+FormatUtil.formatSize(stats.getFolders())+"<br/>");
 				out.println("<b>Documents:</b> "+FormatUtil.formatSize(stats.getDocuments())+"<br/>");
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
-				out.println("<hr/>");
 			}
 		} catch (PathNotFoundException e) {
 			out.println("<div class=\"warn\">PathNotFoundException: "+e.getMessage()+"</div>");
@@ -140,6 +139,7 @@ public class BenchmarkServlet extends HttpServlet {
 		}
 		
 		long tEnd = System.currentTimeMillis();
+		out.println("<hr/>");
 		out.println("<b>Total size:</b> "+FormatUtil.formatSize(tStats.getSize())+"<br/>");
 		out.println("<b>Total folders:</b> "+FormatUtil.formatSize(tStats.getFolders())+"<br/>");
 		out.println("<b>Total documents:</b> "+FormatUtil.formatSize(tStats.getDocuments())+"<br/>");
