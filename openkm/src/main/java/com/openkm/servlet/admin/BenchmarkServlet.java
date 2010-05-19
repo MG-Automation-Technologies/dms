@@ -85,6 +85,8 @@ public class BenchmarkServlet extends HttpServlet {
 		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
 		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
 		out.println("<link rel=\"stylesheet\" href=\"css/style.css\" type=\"text/css\" />");
+		out.println("<script src=\"js/biblioteca.js\" type=\"text/javascript\"></script>");
+		out.println("<script type=\"text/javascript\">scrollToBottom();</script>");
 		out.println("<title>Benchmark</title>");
 		out.println("</head>");
 		out.println("<body>");
