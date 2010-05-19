@@ -320,8 +320,10 @@ public class DirectDocumentModule implements DocumentModule {
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
 		
-		// Added to kea
-		String fileExtention = doc.getPath().substring(doc.getPath().indexOf('.')); // Must have the same extension
+		// Add to kea
+		int idx = doc.getPath().indexOf('.');
+		// Must have the same extension
+		String fileExtention = idx>0?doc.getPath().substring(idx):".bin";
 		File tmpKea = File.createTempFile("kea", fileExtention, new File(Config.TMP_DIR));
 
 		try {
