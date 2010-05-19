@@ -130,7 +130,7 @@ public class RepositoryExporter {
 			IOUtils.copy(is, fos);
 			is.close();
 			fos.close();
-			out.write(deco.print(docChild.getPath(), null));
+			out.write(deco.print(docChild.getPath(), docChild.getActualVersion().getSize(), null));
 			out.flush();
 			
 			// Stats

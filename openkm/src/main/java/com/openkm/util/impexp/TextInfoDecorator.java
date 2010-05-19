@@ -30,7 +30,7 @@ public class TextInfoDecorator implements InfoDecorator {
 		this.cut = tmp.getPath().length()+1;
 	}
 	
-	public String print(String path, String error) {
+	public String print(String path, long size, String error) {
 		StringBuffer sb = new StringBuffer();
 		
 		if (error != null) {

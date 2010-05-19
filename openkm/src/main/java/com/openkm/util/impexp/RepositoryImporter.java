@@ -111,7 +111,7 @@ public class RepositoryImporter {
 					stats.setFolders(stats.getFolders() + tmp.getFolders() + 1);
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: {}", e.getMessage());
-					out.write(deco.print(files[i].getPath(), "ItemExists"));
+					out.write(deco.print(files[i].getPath(), files[i].length(), "ItemExists"));
 					out.flush();
 					stats.setOk(false);
 				}
@@ -130,22 +130,22 @@ public class RepositoryImporter {
 					stats.setDocuments(stats.getDocuments() + 1);
 				} catch (UnsupportedMimeTypeException e) {
 					log.warn("UnsupportedMimeTypeException: {}", e.getMessage());
-					out.write(deco.print(files[i].getPath(), "UnsupportedMimeType"));
+					out.write(deco.print(files[i].getPath(), files[i].length(), "UnsupportedMimeType"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (FileSizeExceededException e) {
 					log.warn("FileSizeExceededException: {}", e.getMessage());
-					out.write(deco.print(files[i].getPath(), "FileSizeExceeded"));
+					out.write(deco.print(files[i].getPath(), files[i].length(), "FileSizeExceeded"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (VirusDetectedException e) {
 					log.warn("VirusWarningException: {}", e.getMessage());
-					out.write(deco.print(files[i].getPath(), "VirusWarningException"));
+					out.write(deco.print(files[i].getPath(), files[i].length(), "VirusWarningException"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (ItemExistsException e) {
 					log.warn("ItemExistsException: {}", e.getMessage());
-					out.write(deco.print(files[i].getPath(), "ItemExists"));
+					out.write(deco.print(files[i].getPath(), files[i].length(), "ItemExists"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} finally {
@@ -153,7 +153,7 @@ public class RepositoryImporter {
 				}
 
 				if (docOk) {
-					out.write(deco.print(files[i].getPath(), null));
+					out.write(deco.print(files[i].getPath(), files[i].length(), null));
 					out.flush();
 				}
 			}
