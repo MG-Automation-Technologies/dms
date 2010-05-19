@@ -151,16 +151,6 @@ public class Folder extends Composite {
 			tableProperties.setHTML(4, 1, Main.i18n("folder.subscribed.no"));
 		}
 		
-		// Some preoperties only must be visible on taxonomy or trash view
-		int actualView = Main.get().mainPanel.navigator.getStackIndex();
-		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH){
-			tableProperties.getCellFormatter().setVisible(4,0,true);
-			tableProperties.getCellFormatter().setVisible(4,1,true);
-		} else {
-			tableProperties.getCellFormatter().setVisible(4,0,false);
-			tableProperties.getCellFormatter().setVisible(4,1,false);
-		}
-		
 		setRowWordWarp(0, 1, true, tableProperties);
 		setRowWordWarp(1, 1, true, tableProperties);
 		setRowWordWarp(2, 1, true, tableProperties);
@@ -181,11 +171,41 @@ public class Folder extends Composite {
 			setRowWordWarp(tableSubscribedUsers.getRowCount()-1, 0, true, tableSubscribedUsers);
 		}
 		
-		// Some data must not be visible on personal view
-		if (actualView==PanelDefinition.NAVIGATOR_PERSONAL) {
-			tableSubscribedUsers.setVisible(false);
-		} else {
-			tableSubscribedUsers.setVisible(true);
+		// Some preoperties only must be visible on taxonomy or trash view
+		int actualView = Main.get().mainPanel.navigator.getStackIndex();
+		switch(actualView) {
+			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
+			case PanelDefinition.NAVIGATOR_TRASH:
+				tableSubscribedUsers.setVisible(true);
+				tableProperties.getRowFormatter().setVisible(4, true); // Is user subscribed
+				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
+				tableProperties.getRowFormatter().setVisible(6, true); // Number of documents
+				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
+				break;
+				
+			case PanelDefinition.NAVIGATOR_THESAURUS:
+			case PanelDefinition.NAVIGATOR_CATEGORIES:
+				tableSubscribedUsers.setVisible(true);
+				tableProperties.getRowFormatter().setVisible(4, false);
+				tableProperties.getRowFormatter().setVisible(5, true);
+				tableProperties.getRowFormatter().setVisible(6, true);
+				tableProperties.getRowFormatter().setVisible(7, false);
+				break;
+			case PanelDefinition.NAVIGATOR_MAIL:
+				tableSubscribedUsers.setVisible(false);
+				tableProperties.getRowFormatter().setVisible(4, false);
+				tableProperties.getRowFormatter().setVisible(5, true);
+				tableProperties.getRowFormatter().setVisible(6, false);
+				tableProperties.getRowFormatter().setVisible(7, false);
+				break;
+		
+			case PanelDefinition.NAVIGATOR_PERSONAL:
+				tableSubscribedUsers.setVisible(false); // Some data must not be visible on personal view
+				tableProperties.getRowFormatter().setVisible(4, false);
+				tableProperties.getRowFormatter().setVisible(5, true); // Number of folders
+				tableProperties.getRowFormatter().setVisible(6, true); // Number of documents
+				tableProperties.getRowFormatter().setVisible(7, true); // Number of e-mails
+				break;
 		}
 	}
 
