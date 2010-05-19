@@ -312,19 +312,21 @@ public class DirectDocumentModule implements DocumentModule {
 		Document newDocument = null;
 		Node parentNode = null;
 		Session session = null;
-		
+				
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
 		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
+		String parent = FileUtils.getParent(doc.getPath());
+		String name = FileUtils.getName(doc.getPath());
+		int size = is.available();
 		
-		// Add to kea
-		int idx = doc.getPath().indexOf('.');
-		// Must have the same extension
-		String fileExtention = idx>0?doc.getPath().substring(idx):".bin";
-		File tmpKea = File.createTempFile("kea", fileExtention, new File(Config.TMP_DIR));
+		// Add to kea - must have the same extension
+		int idx = name.lastIndexOf('.');
+		String fileExtention = idx>0?name.substring(idx):".tmp";
+		File tmpKea = File.createTempFile("kea", fileExtention);
 
 		try {
 			if (Config.SESSION_MANAGER) {
@@ -333,10 +335,6 @@ public class DirectDocumentModule implements DocumentModule {
 				session = JCRUtils.getSession();
 			}
 			
-			String parent = FileUtils.getParent(doc.getPath());
-			String name = FileUtils.getName(doc.getPath());
-			int size = is.available();
-
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 			doc.setPath(parent+"/"+name);
