@@ -37,8 +37,8 @@ public interface AuthModule {
 	 * 
 	 * @param user User name for login.
 	 * @param pass Password for login.
-	 * @return A token with autorization info for next API invocations.
-	 * @throws AccessDeniedException If autorization fails.
+	 * @return A token with authorization info for next API invocations.
+	 * @throws AccessDeniedException If authorization fails.
 	 * @throws UserAlreadyLoggerException If the user is already logged into the system.  
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
@@ -49,18 +49,18 @@ public interface AuthModule {
 	 * Logins into the repository and gets a token with user info for future API
 	 * invocations.
 	 * 
-	 * @return A token with autorization info for next API invocations.
-	 * @throws AccessDeniedException If autorization fails.
+	 * @return A token with authorization info for next API invocations.
+	 * @throws AccessDeniedException If authorization fails.
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
 	public String login() throws UserAlreadyLoggerException, AccessDeniedException, 
 			RepositoryException;
 
 	/**
-	 * Log out from the repostory. Invalidates the autorization token.
+	 * Log out from the repository. Invalidates the authorization token.
 	 * 
 	 * @param token The session authorization token.
-	 * @throws AccessDeniedException If autorization fails.
+	 * @throws AccessDeniedException If authorization fails.
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
 	public void logout(String token) throws AccessDeniedException,
