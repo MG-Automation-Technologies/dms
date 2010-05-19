@@ -21,10 +21,30 @@
 
 package com.openkm.util.impexp;
 
-public class HTMLInfoDecorator implements InfoDecorator {
+import com.openkm.util.FormatUtil;
 
-	public String print(String path, String error) {
+public class HTMLInfoDecorator implements InfoDecorator {
+	private int idx;
+	private int total;
+	
+	public HTMLInfoDecorator(int total) {
+		this.total = total;
+	}
+	
+	public String print(String path, long size, String error) {
 		StringBuffer sb = new StringBuffer();
+		
+		if (idx++ % 2 == 0) {
+			sb.append("<tr class=\"even\">");
+		} else {
+			sb.append("<tr class=\"odd\">");
+		}
+		
+		sb.append("<td>");
+		sb.append(idx);
+		sb.append(" (");
+		sb.append(idx * 100 / total);
+		sb.append("%)</td><td>");
 		
 		if (error != null) {
 			sb.append("<div class=\"warn\">");
@@ -38,8 +58,10 @@ public class HTMLInfoDecorator implements InfoDecorator {
 			sb.append(" -> ");
 			sb.append(error);
 		}
-				
-		sb.append("</div>\n");
+		
+		sb.append("</div></td><td>");
+		sb.append(FormatUtil.formatSize(size));
+		sb.append("</td></tr>");
 		
 		return sb.toString();
 	}
