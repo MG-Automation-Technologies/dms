@@ -2,19 +2,15 @@
  * 
  */ 
 function disabledFormFields() {
-  for (var i=0;i<document.forms[0].elements.length;i++) {
-    var field = document.forms[0].elements[i];
-    if (field.type == 'text' ||
-      field.type == 'textarea' ||
-      field.type == 'file' ||
-      field.type == 'select-one' ||
-      field.type == 'select-multiple' ||
-      field.type == 'radio' ||
-      field.type == 'checkbox' ||
-      field.type == 'password') {
-        field.readOnly = true;
-    }
-  }
+	for (var i=0;i<document.forms[0].elements.length;i++) {
+		var field = document.forms[0].elements[i];
+		if (field.type == 'text' || field.type == 'textarea' ||
+				field.type == 'file' || field.type == 'select-one' ||
+				field.type == 'select-multiple' || field.type == 'radio' ||
+				field.type == 'checkbox' || field.type == 'password') {
+			field.readOnly = true;
+		}
+	}
 }
 
 /**
@@ -70,9 +66,9 @@ function selectAllOptions(selStr) {
  * 
  */
 function scrollToBottom() {
-	bottom = document.body.scrollHeight;
-	current = window.innerHeight + document.body.scrollTop;
-	if ((bottom-current) > 0) {
+	var bottom = document.body.scrollHeight;
+	var current = window.innerHeight + document.body.scrollTop;
+	if (bottom-current > 0) {
 		window.scrollTo(0, bottom);
 		setTimeout('scrollToBottom()', 1000);
 	}
