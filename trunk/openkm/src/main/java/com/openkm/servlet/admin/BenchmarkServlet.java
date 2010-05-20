@@ -84,13 +84,15 @@ public class BenchmarkServlet extends HttpServlet {
 		response.setContentType("text/html");
 		header(out);
 		out.println("<h1>Benchmark</h1>");
-						
+		out.flush();
+		
 		try {
 			File dir = new File(path);
 			int docs = FileUtils.listFiles(dir, null, true).size();
 			out.println("<b>- Path:</b> "+path+"<br/>");
 			out.println("<b>- Times:</b> "+times+"<br/>");
 			out.println("<b>- Documents:</b> "+docs+"<br/>");
+			out.flush();
 			
 			Folder fld = new Folder();
 			fld.setPath("/okm:root/Benchmark");
@@ -99,6 +101,7 @@ public class BenchmarkServlet extends HttpServlet {
 			
 			for (int i=0; i<times; i++) {
 				out.println("<h2>Iteration "+i+"</h2>");
+				out.flush();
 				//out.println("<table class=\"results\" width=\"100%\">");
 				//out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
 				
@@ -118,6 +121,7 @@ public class BenchmarkServlet extends HttpServlet {
 				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
 				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
+				out.flush();
 			}
 			
 			tEnd = System.currentTimeMillis();
@@ -161,7 +165,8 @@ public class BenchmarkServlet extends HttpServlet {
 		response.setContentType("text/html");
 		header(out);
 		out.println("<h1>Benchmark</h1>");
-				
+		out.flush();
+		
 		try {
 			cInfo = OKMFolder.getInstance().getContentInfo(null, src);
 			out.println("<b>- Source:</b> "+src+"<br/>");
@@ -170,6 +175,7 @@ public class BenchmarkServlet extends HttpServlet {
 			out.println("<b>- Mails:</b> "+cInfo.getMails()+"<br/>");
 			out.println("<b>- Folders:</b> "+cInfo.getFolders()+"<br/>");
 			out.println("<b>- Documents:</b> "+cInfo.getDocuments()+"<br/>");
+			out.flush();
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i<times; i++) {
@@ -181,6 +187,7 @@ public class BenchmarkServlet extends HttpServlet {
 				OKMFolder.getInstance().copy(null, src, fld.getPath());
 				long end = System.currentTimeMillis();
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
+				out.flush();
 			}
 			
 			tEnd = System.currentTimeMillis();
