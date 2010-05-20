@@ -179,7 +179,8 @@ public class BenchmarkServlet extends HttpServlet {
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i<times; i++) {
-				out.println("<h2>Iteration "+i+"</h2>");				
+				out.println("<h2>Iteration "+i+"</h2>");
+				out.flush();
 				long begin = System.currentTimeMillis();
 				Folder fld = new Folder();
 				fld.setPath(dst+"/"+i);
