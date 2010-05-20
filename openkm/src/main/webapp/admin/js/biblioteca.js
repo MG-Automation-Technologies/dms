@@ -63,7 +63,8 @@ function selectAllOptions(selStr) {
 	}
 
 /**
- * 
+ * window.scroll(0, document.height);
+ * window.scroll(0, document.body.offsetHeight);
  */
 function scrollToBottom() {
 	var bottom = document.body.scrollHeight;
