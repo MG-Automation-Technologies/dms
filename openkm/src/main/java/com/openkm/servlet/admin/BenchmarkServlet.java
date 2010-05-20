@@ -105,8 +105,8 @@ public class BenchmarkServlet extends HttpServlet {
 						
 			for (int i=0; i<times; i++) {
 				out.println("<h2>Iteration "+i+"</h2>");
-				out.println("<table class=\"results\" width=\"100%\">");
-				out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
+				//out.println("<table class=\"results\" width=\"100%\">");
+				//out.println("<tr><th>#</th><th>Document</th><th>Size</th></tr>");
 				
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
@@ -118,7 +118,8 @@ public class BenchmarkServlet extends HttpServlet {
 				tStats.setFolders(tStats.getFolders() + stats.getFolders());
 				tStats.setDocuments(tStats.getDocuments() + stats.getDocuments());
 				
-				out.println("<table>");
+				//out.println("<table>");
+				out.println("<br/>");
 				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
 				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
 				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");

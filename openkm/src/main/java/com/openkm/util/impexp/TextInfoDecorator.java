@@ -30,6 +30,7 @@ public class TextInfoDecorator implements InfoDecorator {
 		this.cut = tmp.getPath().length()+1;
 	}
 	
+	@Override
 	public String print(String path, long size, String error) {
 		StringBuffer sb = new StringBuffer();
 		

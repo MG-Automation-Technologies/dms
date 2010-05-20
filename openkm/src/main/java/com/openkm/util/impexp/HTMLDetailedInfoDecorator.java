@@ -21,41 +21,49 @@
 
 package com.openkm.util.impexp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.openkm.util.FormatUtil;
 
-public class HTMLInfoDecorator implements InfoDecorator {
-	private static Logger log = LoggerFactory.getLogger(HTMLInfoDecorator.class);
+public class HTMLDetailedInfoDecorator implements InfoDecorator {
 	private int idx;
 	private int total;
-	private int oldPerCent = -1;
 	
-	public HTMLInfoDecorator(int total) {
+	public HTMLDetailedInfoDecorator(int total) {
 		this.total = total;
 	}
 	
 	@Override
 	public String print(String path, long size, String error) {
-		log.debug("print({}, {}, {})", new Object[] { path, size, error });
 		StringBuffer sb = new StringBuffer();
-		int perCent = idx++ * 100 / total;
 		
-		if (perCent > oldPerCent) {
-			sb.append(" (");
-			sb.append(perCent);
-			sb.append("%)");
-			oldPerCent = perCent;
+		if (idx++ % 2 == 0) {
+			sb.append("<tr class=\"even\">");
+		} else {
+			sb.append("<tr class=\"odd\">");
 		}
+		
+		sb.append("<td nowrap>");
+		sb.append(idx);
+		sb.append(" (");
+		sb.append(idx * 100 / total);
+		sb.append("%)</td><td>");
 		
 		if (error != null) {
 			sb.append("<div class=\"warn\">");
-			sb.append(path);
-			sb.append(" -> ");
-			sb.append(error);
-			sb.append("</div>");
+		} else {
+			sb.append("<div>");
 		}
 		
-		log.debug("print: {}", sb.toString());
+		sb.append(path);
+		
+		if (error != null) {
+			sb.append(" -> ");
+			sb.append(error);
+		}
+		
+		sb.append("</div></td><td nowrap>");
+		sb.append(FormatUtil.formatSize(size));
+		sb.append("</td></tr>");
+		
 		return sb.toString();
 	}
 }
