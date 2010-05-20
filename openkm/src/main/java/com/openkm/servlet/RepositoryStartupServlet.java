@@ -187,8 +187,8 @@ public class RepositoryStartupServlet extends HttpServlet {
     public void destroy() {
         super.destroy();
 
-        if (log == null) log("*** Start OpenOffice manager ***");
-        else log.info("*** Start OpenOffice manager ***");
+        if (log == null) log("*** Shutting down OpenOffice manager ***");
+        else log.info("*** Shutting down OpenOffice manager ***");
         DocConverter.getInstance().stop();
         
         if (hasConfiguredDataStore) {
