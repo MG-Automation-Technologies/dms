@@ -1207,7 +1207,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.findFolderOption = true;
 		findFolder.setStyleName("okm-ToolBar-button");
 		findFolder.setResource(OKMBundleResources.INSTANCE.findFolder());
-		findFolder.setTitle("tree.menu.directory.find.folder");
+		findFolder.setTitle(Main.i18n("tree.menu.directory.find.folder"));
 	}
 	
 	/**
@@ -1217,7 +1217,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.findFolderOption = false;
 		findFolder.setStyleName("okm-ToolBar-button-disabled");
 		findFolder.setResource(OKMBundleResources.INSTANCE.findFolderDisabled());
-		findFolder.setTitle("tree.menu.directory.find.folder");
+		findFolder.setTitle(Main.i18n("tree.menu.directory.find.folder"));
 	}
 	
 	/**
@@ -1227,7 +1227,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.checkoutOption = true;
 		edit.setStyleName("okm-ToolBar-button");
 		edit.setResource(OKMBundleResources.INSTANCE.checkout());
-		edit.setTitle("general.menu.file.checkout");
+		edit.setTitle(Main.i18n("general.menu.file.checkout"));
 	}
 	
 	/**
@@ -1237,7 +1237,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.checkoutOption = false;
 		edit.setStyleName("okm-ToolBar-button-disabled");
 		edit.setResource(OKMBundleResources.INSTANCE.checkoutDisabled());
-		edit.setTitle("general.menu.file.checkout");
+		edit.setTitle(Main.i18n("general.menu.file.checkout"));
 	}
 	
 	/**
@@ -1247,7 +1247,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.checkinOption = true;
 		checkin.setStyleName("okm-ToolBar-button");
 		checkin.setResource(OKMBundleResources.INSTANCE.checkin());
-		checkin.setTitle("general.menu.file.checkin");
+		checkin.setTitle(Main.i18n("general.menu.file.checkin"));
 	}
 	
 	/**
@@ -1257,7 +1257,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.checkinOption = false;
 		checkin.setStyleName("okm-ToolBar-button-disabled");
 		checkin.setResource(OKMBundleResources.INSTANCE.checkinDisabled());
-		checkin.setTitle("general.menu.file.checkin");
+		checkin.setTitle(Main.i18n("general.menu.file.checkin"));
 	}
 	
 	/**
@@ -1267,7 +1267,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.cancelCheckoutOption = true;
 		cancelCheckout.setStyleName("okm-ToolBar-button");
 		cancelCheckout.setResource(OKMBundleResources.INSTANCE.cancelCheckout());
-		cancelCheckout.setTitle("general.menu.file.cancel.checkout");
+		cancelCheckout.setTitle(Main.i18n("general.menu.file.cancel.checkout"));
 	}
 	
 	/**
@@ -1277,7 +1277,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.cancelCheckoutOption = false;
 		cancelCheckout.setStyleName("okm-ToolBar-button-disabled");
 		cancelCheckout.setResource(OKMBundleResources.INSTANCE.cancelCheckoutDisabled());
-		cancelCheckout.setTitle("general.menu.file.cancel.checkout");
+		cancelCheckout.setTitle(Main.i18n("general.menu.file.cancel.checkout"));
 	}
 	
 	/**
@@ -1287,7 +1287,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.lockOption = false;
 		lock.setStyleName("okm-ToolBar-button-disabled");
 		lock.setResource(OKMBundleResources.INSTANCE.lockDisabled());
-		lock.setTitle("general.menu.file.lock");
+		lock.setTitle(Main.i18n("general.menu.file.lock"));
 	}
 	
 	/**
@@ -1297,7 +1297,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.lockOption = true;
 		lock.setStyleName("okm-ToolBar-button");
 		lock.setResource(OKMBundleResources.INSTANCE.lock());
-		lock.setTitle("general.menu.file.lock");
+		lock.setTitle(Main.i18n("general.menu.file.lock"));
 	}
 	
 	/**
@@ -1307,7 +1307,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.unLockOption = false;
 		unLock.setStyleName("okm-ToolBar-button-disabled");
 		unLock.setResource(OKMBundleResources.INSTANCE.unLockDisabled());
-		unLock.setTitle("general.menu.file.unlock");
+		unLock.setTitle(Main.i18n("general.menu.file.unlock"));
 	}
 	
 	/**
@@ -1317,7 +1317,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.unLockOption = true;
 		unLock.setStyleName("okm-ToolBar-button");
 		unLock.setResource(OKMBundleResources.INSTANCE.unLock());
-		unLock.setTitle("general.menu.file.unlock");
+		unLock.setTitle(Main.i18n("general.menu.file.unlock"));
 	}
 	
 	/**
@@ -1327,7 +1327,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.downloadOption = false;
 		download.setStyleName("okm-ToolBar-button-disabled");
 		download.setResource(OKMBundleResources.INSTANCE.downloadDisabled());
-		download.setTitle("general.menu.file.download.document");
+		download.setTitle(Main.i18n("general.menu.file.download.document"));
 	}
 	
 	/**
@@ -1337,7 +1337,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.downloadOption = true;
 		download.setStyleName("okm-ToolBar-button");
 		download.setResource(OKMBundleResources.INSTANCE.download());
-		download.setTitle("general.menu.file.download.document");
+		download.setTitle(Main.i18n("general.menu.file.download.document"));
 	}
 
 	/**
@@ -1347,7 +1347,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.downloadPdfOption = false;
 		downloadPdf.setStyleName("okm-ToolBar-button-disabled");
 		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdfDisabled());
-		downloadPdf.setTitle("general.menu.file.download.document.pdf");
+		downloadPdf.setTitle(Main.i18n("general.menu.file.download.document.pdf"));
 	}
 	
 	/**
@@ -1357,7 +1357,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.downloadPdfOption = true;
 		downloadPdf.setStyleName("okm-ToolBar-button");
 		downloadPdf.setResource(OKMBundleResources.INSTANCE.downloadPdf());
-		downloadPdf.setTitle("general.menu.file.download.document.pdf");
+		downloadPdf.setTitle(Main.i18n("general.menu.file.download.document.pdf"));
 	}
 
 	/**
@@ -1381,7 +1381,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.deleteOption = false;
 		delete.setStyleName("okm-ToolBar-button-disabled");
 		delete.setResource(OKMBundleResources.INSTANCE.deleteDisabled());
-		delete.setTitle("general.menu.file.delete");
+		delete.setTitle(Main.i18n("general.menu.file.delete"));
 	}
 	
 	/**
@@ -1391,7 +1391,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.deleteOption = true;
 		delete.setStyleName("okm-ToolBar-button");
 		delete.setResource(OKMBundleResources.INSTANCE.delete());
-		delete.setTitle("general.menu.file.delete");
+		delete.setTitle(Main.i18n("general.menu.file.delete"));
 	}
 	
 	/**
@@ -1401,7 +1401,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.refreshOption = false;
 		refresh.setStyleName("okm-ToolBar-button-disabled");
 		refresh.setResource(OKMBundleResources.INSTANCE.refreshDisabled());
-		refresh.setTitle("general.menu.file.refresh");
+		refresh.setTitle(Main.i18n("general.menu.file.refresh"));
 	}
 	
 	/**
@@ -1411,7 +1411,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.refreshOption = true;
 		refresh.setStyleName("okm-ToolBar-button");
 		refresh.setResource(OKMBundleResources.INSTANCE.refresh());
-		refresh.setTitle("general.menu.file.refresh");
+		refresh.setTitle(Main.i18n("general.menu.file.refresh"));
 	}
 	
 	/**
@@ -1421,7 +1421,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addDocumentOption = false;
 		addDocument.setStyleName("okm-ToolBar-button-disabled");
 		addDocument.setResource(OKMBundleResources.INSTANCE.addDocumentDisabled());
-		addDocument.setTitle("general.menu.file.add.document");	
+		addDocument.setTitle(Main.i18n("general.menu.file.add.document"));	
 	}
 	
 	/**
@@ -1431,7 +1431,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addDocumentOption = true;
 		addDocument.setStyleName("okm-ToolBar-button");
 		addDocument.setResource(OKMBundleResources.INSTANCE.addDocument());
-		addDocument.setTitle("general.menu.file.add.document");	
+		addDocument.setTitle(Main.i18n("general.menu.file.add.document"));	
 	}
 	
 	/**
@@ -1441,7 +1441,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addPropertyGroupOption = false;
 		addPropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 		addPropertyGroup.setResource(OKMBundleResources.INSTANCE.addPropertyGroupDisabled());
-		addPropertyGroup.setTitle("filebrowser.menu.add.property.group");
+		addPropertyGroup.setTitle(Main.i18n("filebrowser.menu.add.property.group"));
 	}
 	
 	/**
@@ -1451,7 +1451,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addPropertyGroupOption = true;
 		addPropertyGroup.setStyleName("okm-ToolBar-button");
 		addPropertyGroup.setResource(OKMBundleResources.INSTANCE.addPropertyGroup());
-		addPropertyGroup.setTitle("filebrowser.menu.add.property.group");
+		addPropertyGroup.setTitle(Main.i18n("filebrowser.menu.add.property.group"));
 	}
 	
 	/**
@@ -1461,7 +1461,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addSubscription = false;
 		addSubscription.setStyleName("okm-ToolBar-button-disabled");
 		addSubscription.setResource(OKMBundleResources.INSTANCE.addSubscriptionDisabled());
-		addSubscription.setTitle("filebrowser.menu.add.subscription");
+		addSubscription.setTitle(Main.i18n("filebrowser.menu.add.subscription"));
 	}
 	
 	/**
@@ -1471,7 +1471,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.addSubscription = true;
 		addSubscription.setStyleName("okm-ToolBar-button");
 		addSubscription.setResource(OKMBundleResources.INSTANCE.addSubscription());
-		addSubscription.setTitle("filebrowser.menu.add.subscription");
+		addSubscription.setTitle(Main.i18n("filebrowser.menu.add.subscription"));
 	}
 	
 	/**
@@ -1481,7 +1481,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.removeSubscription = false;
 		removeSubscription.setStyleName("okm-ToolBar-button-disabled");
 		removeSubscription.setResource(OKMBundleResources.INSTANCE.removeSubscriptionDisabled());
-		removeSubscription.setTitle("filebrowser.menu.remove.subscription");
+		removeSubscription.setTitle(Main.i18n("filebrowser.menu.remove.subscription"));
 	}
 	
 	/**
@@ -1491,7 +1491,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.removeSubscription = true;
 		removeSubscription.setStyleName("okm-ToolBar-button");
 		removeSubscription.setResource(OKMBundleResources.INSTANCE.removeSubscription());
-		removeSubscription.setTitle("filebrowser.menu.remove.subscription");
+		removeSubscription.setTitle(Main.i18n("filebrowser.menu.remove.subscription"));
 	}
 	
 	/**
@@ -1501,7 +1501,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.homeOption = false;
 		home.setStyleName("okm-ToolBar-button-disabled");
 		home.setResource(OKMBundleResources.INSTANCE.homeDisabled());
-		home.setTitle("general.menu.bookmark.home");
+		home.setTitle(Main.i18n("general.menu.bookmark.home"));
 	}
 	
 	/**
@@ -1511,7 +1511,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.homeOption = true;
 		home.setStyleName("okm-ToolBar-button");
 		home.setResource(OKMBundleResources.INSTANCE.home());
-		home.setTitle("general.menu.bookmark.home");
+		home.setTitle(Main.i18n("general.menu.bookmark.home"));
 	}
 	
 	/**
@@ -1535,7 +1535,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.workflowOption = false;
 		startWorkflow.setStyleName("okm-ToolBar-button-disabled");
 		startWorkflow.setResource(OKMBundleResources.INSTANCE.startWorkflowDisabled());
-		startWorkflow.setTitle("filebrowser.menu.start.workflow");
+		startWorkflow.setTitle(Main.i18n("filebrowser.menu.start.workflow"));
 	}
 	
 	/**
@@ -1545,7 +1545,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		toolBarOption.workflowOption = true;
 		startWorkflow.setStyleName("okm-ToolBar-button");
 		startWorkflow.setResource(OKMBundleResources.INSTANCE.startWorkflow());
-		startWorkflow.setTitle("filebrowser.menu.start.workflow");
+		startWorkflow.setTitle(Main.i18n("filebrowser.menu.start.workflow"));
 	}
 	
 	/**
@@ -2051,7 +2051,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		if (!toolBarOption.removePropertyGroupOption) { // We evaluate for changing panel desktop / search ( only disable option )
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroupDisabled());
-			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
+			removePropertyGroup.setTitle(Main.i18n("filebrowser.menu.remove.property.group"));
 		}
 		
 		if (toolBarOption.workflowOption) { enableWorkflow(); } else { disableWorkflow();}
@@ -2086,11 +2086,11 @@ public class ToolBar extends Composite implements OriginPanel {
 		if (toolBarOption.removePropertyGroupOption && toolBarOption.firedRemovePropertyGroupOption) {
 			removePropertyGroup.setStyleName("okm-ToolBar-button");
 			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroup());
-			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
+			removePropertyGroup.setTitle(Main.i18n("filebrowser.menu.remove.property.group"));
 		} else {
 			removePropertyGroup.setStyleName("okm-ToolBar-button-disabled");
 			removePropertyGroup.setResource(OKMBundleResources.INSTANCE.removePropertyGroupDisabled());
-			removePropertyGroup.setTitle("filebrowser.menu.remove.property.group");
+			removePropertyGroup.setTitle(Main.i18n("filebrowser.menu.remove.property.group"));
 		}
 	}
 	
