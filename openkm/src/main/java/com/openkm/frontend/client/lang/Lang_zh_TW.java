@@ -317,9 +317,9 @@ public class Lang_zh_TW {
 		lang.put("folder.subscribed.users", "已訂閱使用者");
 		lang.put("folder.url", "URL");
 		lang.put("folder.webdav", "WebDAV");
-		lang.put("folder.number.folders","Number of folders");
-	    lang.put("folder.number.documents","Number of documents");
-	    lang.put("folder.number.mails","Number of mails");
+		lang.put("folder.number.folders", "Folders");
+	    lang.put("folder.number.documents", "Documents");
+	    lang.put("folder.number.mails", "Mails");
 	    
 	    // Version
 	    lang.put("version.name", "版本");
