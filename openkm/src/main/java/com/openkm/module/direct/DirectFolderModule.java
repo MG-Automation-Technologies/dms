@@ -644,6 +644,7 @@ public class DirectFolderModule implements FolderModule {
 			Node srcFolderNode = session.getRootNode().getNode(fldPath.substring(1)); 
 			Node dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
 			Node newFolder = create(session, dstFolderNode, name);
+			dstFolderNode.save();
 			copyHelper(session, srcFolderNode, newFolder);
 			
 			t.end();
@@ -693,10 +694,13 @@ public class DirectFolderModule implements FolderModule {
 			
 			if (child.isNodeType(Document.TYPE)) {
 				new DirectDocumentModule().copy(session, child, dstFolderNode);
+				dstFolderNode.save();
 			} else if (child.isNodeType(Mail.TYPE)) {
 				new DirectMailModule().copy(session, child, dstFolderNode);
+				dstFolderNode.save();
 			} else if (child.isNodeType(Folder.TYPE)) {
 				Node newFolder = create(session, dstFolderNode, child.getName());
+				dstFolderNode.save();
 				copyHelper(session, child, newFolder);
 			}
 		}
