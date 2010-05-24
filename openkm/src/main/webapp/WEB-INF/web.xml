@@ -128,6 +128,12 @@
   	<servlet-class>com.openkm.servlet.mobi.HandlerServlet</servlet-class>
   </servlet>
   
+  <!-- Syndication servlet -->
+  <servlet>
+    <servlet-name>SyndicationServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
+  </servlet>
+  
   <!-- Admin servlets -->
   <servlet>
     <servlet-name>StatsGraphServlet</servlet-name>
@@ -286,6 +292,12 @@
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
   	<url-pattern>/mobi/Handler</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Syndication servlet -->
+  <servlet-mapping>
+    <servlet-name>SyndicationServlet</servlet-name>
+    <url-pattern>/Syndication</url-pattern>
   </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
