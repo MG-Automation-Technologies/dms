@@ -91,7 +91,7 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 	 */
 	@Override
 	public boolean canExport(ExportContext context, boolean isCollection) {
-		log.info("canExport(" + context + ", " + isCollection + ")");
+		log.info("canExport({}, {})", context, isCollection);
 		if (context == null || context.isCompleted()) {
 			return false;
 		}
@@ -105,7 +105,7 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 	 */
 	@Override
 	public boolean canExport(ExportContext context, DavResource resource) {
-		log.info("canExport(" + context + ", " + resource + ")");
+		log.info("canExport({}, {})", context, resource);
 		if (resource == null) {
 			return false;
 		}
@@ -114,7 +114,7 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 
 	@Override
 	public boolean exportContent(ExportContext context, boolean isCollection) throws IOException {
-		log.info("exportContent(" + context + ", " + isCollection + ")");
+		log.info("exportContent({}, {})", context, isCollection);
 		if (!canExport(context, isCollection)) {
 			throw new IOException(getName() + ": Cannot export " + context.getExportRoot());
 		}
@@ -177,7 +177,7 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 
 	@Override
 	public boolean exportContent(ExportContext context, DavResource resource) throws IOException {
-		log.info("exportContent(" + context + ", " + resource + ")");
+		log.info("exportContent({}, {})", context, resource);
 		if (!canExport(context, resource)) {
 			throw new IOException(getName() + ": Cannot export " + context.getExportRoot());
 		}
@@ -254,7 +254,8 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 	}
 
 	@Override
-	public boolean exportProperties(PropertyExportContext exportContext, boolean isCollection) throws RepositoryException {
+	public boolean exportProperties(PropertyExportContext exportContext, boolean isCollection) throws 
+			RepositoryException {
 		// export-content facility only... no responsible for propfind.
 		throw new RepositoryException(getName() + ": Cannot export properties for context " + exportContext); 
 	}
@@ -266,7 +267,8 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws RepositoryException {
+	public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws
+			RepositoryException {
 		// export facilities only -> throw
 		throw new RepositoryException(getName() + ": Cannot import properties."); 	
 	}
