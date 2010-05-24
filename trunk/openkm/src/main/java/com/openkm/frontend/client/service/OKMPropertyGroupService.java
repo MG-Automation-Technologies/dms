@@ -37,22 +37,13 @@ import com.openkm.frontend.client.bean.GWTPropertyGroup;
  *
  */
 public interface OKMPropertyGroupService extends RemoteService {
-
 	public List<GWTPropertyGroup> getAllGroups() throws OKMException;
-	
 	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException;
-	
 	public void addGroup(String docPath, String grpName) throws OKMException;
-	
 	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException;
-	
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException;
-	
 	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException;
-	
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException;
-	
 	public void removeGroup( String docPath, String grpName) throws OKMException;
-	
 	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException;
 }
