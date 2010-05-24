@@ -133,10 +133,12 @@ public class SyndicationServlet extends HttpServlet {
 				SyndImage img = new SyndImageImpl();
 				img.setTitle(feed.getTitle());
 				img.setUrl(Config.APPLICATION_BASE+"/img/logo_short.gif");
+				img.setLink(Config.APPLICATION_BASE);
 				feed.setImage(img);
 				feed.setLanguage("en");
 				feed.setFeedType(FEED_TYPE);
 				feed.setDescription(feed.getTitle());
+				feed.setLink(Config.APPLICATION_BASE);
 				output.output(feed, response.getWriter());
 			} else {
 				response.setContentType("text/plain; charset=UTF-8");
@@ -183,8 +185,7 @@ public class SyndicationServlet extends HttpServlet {
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setLink("http://www.openkm.com");
-		
+				
 		for (DashboardStatsDocumentResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
 			entry.setTitle(item.getDocument().getPath());
@@ -205,7 +206,6 @@ public class SyndicationServlet extends HttpServlet {
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setLink("http://www.openkm.com");
 		
 		for (DashboardStatsFolderResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
@@ -227,7 +227,6 @@ public class SyndicationServlet extends HttpServlet {
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setLink("http://www.openkm.com");
 		
 		for (DashboardStatsMailResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
