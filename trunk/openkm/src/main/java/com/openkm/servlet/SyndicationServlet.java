@@ -22,6 +22,10 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jcr.Credentials;
 import javax.jcr.LoginException;
@@ -38,7 +42,18 @@ import org.apache.jackrabbit.server.CredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.DashboardStatsDocumentResult;
+import com.openkm.bean.DashboardStatsFolderResult;
+import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.core.Config;
+import com.openkm.module.direct.DirectDashboardModule;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
 
 /**
  * Syndication Servlet
@@ -46,18 +61,81 @@ import com.openkm.module.direct.DirectRepositoryModule;
 public class SyndicationServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(TestServlet.class);
 	private static final long serialVersionUID = 1L;
+	private static final String MIME_TYPE = "application/xml; charset=UTF-8";
+	private static final String FEED_TYPE = "atom_0.3";
 	private CredentialsProvider cp = new BasicCredentialsProvider(null);
-	
+
+	/**
+	 * 
+	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		String action = request.getPathInfo();
 		Session session = null;
+		log.info("action: {}", action);
 		
 		try {
 			session = getSession(request);
-			log.info("SessionId: {}", session.getUserID());
+			SyndFeed feed = null;
+			
+			if ("/userLockedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user locked documents",
+						new DirectDashboardModule().getUserLockedDocuments(session));
+			} else if ("/userCheckedOutDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user checked-out documents",
+						new DirectDashboardModule().getUserCheckedOutDocuments(session));
+			} else if ("/userSubscribedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user subscribed documents",
+						new DirectDashboardModule().getUserSubscribedDocuments(session));
+			} else if ("/userSubscribedFolders".equals(action)) {
+				feed = getFeedFolders("OpenKM: user subscribed folders",
+						new DirectDashboardModule().getUserSubscribedFolders(session));
+			} else if ("/userLastUploadedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user last uploaded documents",
+						new DirectDashboardModule().getUserLastUploadedDocuments(session));
+			} else if ("/userLastModifiedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user last modified documents",
+						new DirectDashboardModule().getUserLastModifiedDocuments(session));
+			} else if ("/userLastDownloadedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user last downloaded documents",
+						new DirectDashboardModule().getUserLastDownloadedDocuments(session));
+			} else if ("/userLastImportedMails".equals(action)) {
+				feed = getFeedMails("OpenKM: user last imported mails",
+						new DirectDashboardModule().getUserLastImportedMails(session));
+			} else if ("/userLastImportedMailAttachments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: user last imported mail attachments",
+						new DirectDashboardModule().getUserLastImportedMailAttachments(session));
+			} else if ("/lastWeekTopDownloadedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last week top downloaded documents",
+						new DirectDashboardModule().getLastWeekTopDownloadedDocuments(session));
+			} else if ("/lastMonthTopDownloadedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last month top downloaded documents",
+						new DirectDashboardModule().getLastMonthTopDownloadedDocuments(session));
+			} else if ("/lastWeekTopModifiedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last week top modified documents",
+						new DirectDashboardModule().getLastWeekTopModifiedDocuments(session));
+			} else if ("/lastMonthTopModifiedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last month top modified documents",
+						new DirectDashboardModule().getLastMonthTopModifiedDocuments(session));
+			} else if ("/lastModifiedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last modified documents",
+						new DirectDashboardModule().getLastModifiedDocuments(session));
+			} else if ("/lastUploadedDocuments".equals(action)) {
+				feed = getFeedDocuments("OpenKM: last uploaded documents",
+						new DirectDashboardModule().getLastUploadedDocuments(session));
+			}
+			
+			feed.setFeedType(FEED_TYPE);
+			response.setContentType(MIME_TYPE);
+			SyndFeedOutput output = new SyndFeedOutput();
+			output.output(feed, response.getWriter());
 		} catch (LoginException e) {
-			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM RSS Server\"");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Syndication Server\"");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		} catch (RepositoryException e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		} catch (FeedException e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {
@@ -66,19 +144,89 @@ public class SyndicationServlet extends HttpServlet {
 			}
 		}
 	}
-		
+
 	/**
-	 * Get JCR cession
+	 * Get JCR session
 	 */
-	public synchronized Session getSession(HttpServletRequest request) throws LoginException, 
-			RepositoryException, ServletException {
+	private synchronized Session getSession(HttpServletRequest request)
+			throws LoginException, javax.jcr.RepositoryException,
+			ServletException {
 		Credentials creds = cp.getCredentials(request);
 		Repository rep = DirectRepositoryModule.getRepository();
-		
+
 		if (creds == null) {
-            return rep.login();
-        } else {
-            return rep.login(creds);
-        }
-    }
+			return rep.login();
+		} else {
+			return rep.login(creds);
+		}
+	}
+	 
+	/**
+	 * Get feed documents
+	 */
+	private SyndFeed getFeedDocuments(String title, ArrayList<DashboardStatsDocumentResult> result) throws
+			FeedException, RepositoryException,	SQLException, IOException {
+		List<SyndEntry> entries = new ArrayList<SyndEntry>();
+		SyndFeed feed = new SyndFeedImpl();
+		feed.setTitle(title);
+		feed.setLink("http://www.openkm.com");
+		
+		for (DashboardStatsDocumentResult item : result) {
+			SyndEntry entry = new SyndEntryImpl();
+			entry.setTitle(item.getDocument().getPath());
+			entry.setAuthor(item.getDocument().getActualVersion().getAuthor());
+			entry.setPublishedDate(item.getDate().getTime());
+			entry.setLink(Config.APPLICATION_URL + "?docPath=" + URLEncoder.encode(item.getDocument().getPath(), "UTF-8"));
+			entries.add(entry);
+		}
+		
+		feed.setEntries(entries);
+		return feed;
+	}
+	
+	/**
+	 * Get feed folders
+	 */
+	private SyndFeed getFeedFolders(String title, ArrayList<DashboardStatsFolderResult> result) throws
+			FeedException, RepositoryException,	SQLException, IOException {
+		List<SyndEntry> entries = new ArrayList<SyndEntry>();
+		SyndFeed feed = new SyndFeedImpl();
+		feed.setTitle(title);
+		feed.setLink("http://www.openkm.com");
+		
+		for (DashboardStatsFolderResult item : result) {
+			SyndEntry entry = new SyndEntryImpl();
+			entry.setTitle(item.getFolder().getPath());
+			entry.setAuthor(item.getFolder().getAuthor());
+			entry.setPublishedDate(item.getDate().getTime());
+			entry.setLink(Config.APPLICATION_URL + "?docPath=" + URLEncoder.encode(item.getFolder().getPath(), "UTF-8"));
+			entries.add(entry);
+		}
+		
+		feed.setEntries(entries);
+		return feed;
+	}
+	
+	/**
+	 * Get feed mails
+	 */
+	private SyndFeed getFeedMails(String title, ArrayList<DashboardStatsMailResult> result) throws
+			FeedException, RepositoryException,	SQLException, IOException {
+		List<SyndEntry> entries = new ArrayList<SyndEntry>();
+		SyndFeed feed = new SyndFeedImpl();
+		feed.setTitle(title);
+		feed.setLink("http://www.openkm.com");
+		
+		for (DashboardStatsMailResult item : result) {
+			SyndEntry entry = new SyndEntryImpl();
+			entry.setTitle(item.getMail().getPath());
+			entry.setAuthor(item.getMail().getFrom());
+			entry.setPublishedDate(item.getDate().getTime());
+			entry.setLink(Config.APPLICATION_URL + "?docPath=" + URLEncoder.encode(item.getMail().getPath(), "UTF-8"));
+			entries.add(entry);
+		}
+		
+		feed.setEntries(entries);
+		return feed;
+	}
 }
