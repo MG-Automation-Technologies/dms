@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.util.FileUtils;
 
 public class LocatorFactoryImplEx extends AbstractLocatorFactory {
-
     private static Logger log = LoggerFactory.getLogger(LocatorFactoryImplEx.class);
 
     /**
@@ -43,11 +42,11 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
     }
 
     /**
-     *
      * @see AbstractLocatorFactory#getRepositoryPath(String, String)
      */
+    @Override
     protected String getRepositoryPath(String resourcePath, String wspPath) {
-    	log.debug("getRepositoryPath("+resourcePath+", "+wspPath+")");
+    	log.debug("getRepositoryPath({}, {})", resourcePath, wspPath);
         if (resourcePath == null) {
             return resourcePath;
         }
@@ -62,7 +61,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
             }
             
             String ret = (repositoryPath.length() == 0) ? "/" : repositoryPath;
-            log.debug("getRepositoryPath: "+ret);
+            log.debug("getRepositoryPath: {}", ret);
             return ret;
         } else {
             throw new IllegalArgumentException("Unexpected format of resource path.");
@@ -70,16 +69,16 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
     }
 
     /**
-     *
      * @see AbstractLocatorFactory#getResourcePath(String, String)
      */
+    @Override
     protected String getResourcePath(String repositoryPath, String wspPath) {
-    	log.debug("getResourcePath("+repositoryPath+", "+wspPath+")");
+    	log.debug("getResourcePath({}, {})", repositoryPath, wspPath);
         if (repositoryPath == null) {
             throw new IllegalArgumentException("Cannot build resource path from 'null' repository path");
         }
         String ret = (startsWithWorkspace(repositoryPath, wspPath)) ? repositoryPath : wspPath + repositoryPath;
-        log.debug("getResourcePath: "+ret);
+        log.debug("getResourcePath: {}", ret);
         return ret;
     }
 
