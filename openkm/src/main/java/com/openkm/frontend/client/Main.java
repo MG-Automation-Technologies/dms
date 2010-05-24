@@ -159,7 +159,7 @@ public final class Main implements EntryPoint{
 		// Request parameter
 		loc = WindowUtils.getLocation();
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
-			fldPath = loc.getParameter("docPath").substring(0,loc.getParameter("docPath").lastIndexOf("/")); 
+			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
 			docPath = loc.getParameter("docPath"); 
 		}
 		
