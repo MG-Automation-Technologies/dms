@@ -69,7 +69,7 @@ public class CommonUI {
 				Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
 			}
 			
-			Main.get().activeFolderTree.openAllPathFolder(path,docPath);
+			Main.get().activeFolderTree.openAllPathFolder(path, docPath);
 		}
 	}
 	
