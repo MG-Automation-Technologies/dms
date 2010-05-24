@@ -83,11 +83,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         // Read config file
         Config.load();
         
-        // Try a default OpenKM server location
-        if (Config.APPLICATION_URL.equals("")) {
-        	Config.APPLICATION_URL = "http://localhost:8080"+getServletContext().getContextPath()+"/com.openkm.frontend.Main/index.jsp";
-        }
-        
         // Get OpenKM version
         WarUtils.readAppVersion(getServletContext());
         log.info("*** Application version: "+WarUtils.getAppVersion()+" ***");
