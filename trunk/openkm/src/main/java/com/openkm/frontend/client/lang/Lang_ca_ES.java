@@ -605,6 +605,25 @@ public class Lang_ca_ES {
 	    // Wizard
 	    lang.put("wizard.document.uploading","Assistent de document");
 	    
+	    // User info
+	    lang.put("user.info.chat.online","Conectat");
+	    lang.put("user.info.chat.offline","Desconectat");
+	    lang.put("user.info.chat.connect","Conectar el chat");
+	    lang.put("user.info.chat.disconnect","Desconectar el chat");
+	    lang.put("user.info.chat.new.room","Nou chat");
+	    lang.put("user.info.locked.actual","Documents bloquejats");
+	    lang.put("user.info.checkout.actual","Documents editats");
+	    lang.put("user.info.subscription.actual","Suscripcions actuals");
+	    lang.put("user.info.news.new","Novetats");
+	    lang.put("user.info.workflow.pending","Workflows pendients");
+	    
+	    // Users online popup
+	    lang.put("user.online","Usuaris conectats");
+	    
+	    // Chat room
+	    lang.put("chat.room","Chat");
+	    lang.put("chat.users.in.room","Usuaris");
+	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Lock, "No s'ha pogut bloquejar el document");

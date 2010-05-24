@@ -604,6 +604,25 @@ public class Lang_ja_JP {
 	    // Wizard
 	    lang.put("wizard.document.uploading","Document wizard");
 	    
+	    // User info
+	    lang.put("user.info.chat.online","Online");
+	    lang.put("user.info.chat.offline","Offline");
+	    lang.put("user.info.chat.connect","Connect to chat");
+	    lang.put("user.info.chat.disconnect","Disconnet chat");
+	    lang.put("user.info.chat.new.room","Net chat room");
+	    lang.put("user.info.locked.actual","Locked documents");
+	    lang.put("user.info.checkout.actual","Checkout documents");
+	    lang.put("user.info.subscription.actual","Actual subscriptions");
+	    lang.put("user.info.news.new","News");
+	    lang.put("user.info.workflow.pending","Pending workflows");
+	    
+	    // Users online popup
+	    lang.put("user.online","Users online");
+	    
+	    // Chat room
+	    lang.put("chat.room","Chat");
+	    lang.put("chat.users.in.room","Users");
+	    
 		// Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文書へのアクセスが拒否されました");
 		lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Lock, "文書のロックが拒否されました");
