@@ -436,4 +436,11 @@ public class WizardPopup extends DialogBox {
 			vPanel.add(widget);
 		}
 	}
+	
+	/**
+	 * langRefresh
+	 */
+	public void langRefresh() {
+		setText(Main.i18n("wizard.document.uploading"));
+	}
 }
