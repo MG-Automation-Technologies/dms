@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
  * <code>IOHandler</code>s.
  */
 public class IOManagerImpl implements IOManager {
-
     private static Logger log = LoggerFactory.getLogger(IOManagerImpl.class);
-
     private final List<IOHandler> ioHandlers = new ArrayList<IOHandler>();
 
     /**
@@ -59,6 +57,7 @@ public class IOManagerImpl implements IOManager {
     /**
      * @see IOManager#addIOHandler(IOHandler)
      */
+    @Override
     public void addIOHandler(IOHandler ioHandler) {
         if (ioHandler == null) {
             throw new IllegalArgumentException("'null' is not a valid IOHandler.");
@@ -70,6 +69,7 @@ public class IOManagerImpl implements IOManager {
     /**
      * @see IOManager#getIOHandlers()
      */
+    @Override
     public IOHandler[] getIOHandlers() {
         return (IOHandler[]) ioHandlers.toArray(new IOHandler[ioHandlers.size()]);
     }
@@ -77,6 +77,7 @@ public class IOManagerImpl implements IOManager {
     /**
      * @see IOManager#importContent(ImportContext, boolean)
      */
+    @Override
     public boolean importContent(ImportContext context, boolean isCollection) throws IOException {
         boolean success = false;
         if (context != null) {
@@ -101,6 +102,7 @@ public class IOManagerImpl implements IOManager {
     /**
      * @see IOManager#importContent(ImportContext, DavResource)
      */
+    @Override
     public boolean importContent(ImportContext context, DavResource resource) throws IOException {
         boolean success = false;
         if (context != null && resource != null) {
@@ -125,8 +127,9 @@ public class IOManagerImpl implements IOManager {
     /**
      * @see IOManager#exportContent(ExportContext, boolean)
      */
+    @Override
     public boolean exportContent(ExportContext context, boolean isCollection) throws IOException {
-    	log.debug("exportContent("+context+", "+isCollection+")");
+    	log.debug("exportContent({}, {})", context, isCollection);
         boolean success = false;
         if (context != null) {
             IOListener ioListener = context.getIOListener();
@@ -144,14 +147,16 @@ public class IOManagerImpl implements IOManager {
             }
             context.informCompleted(success);
         }
+        log.debug("exportContent: {}", success);
         return success;
     }
 
     /**
      * @see IOManager#exportContent(ExportContext, DavResource)
      */
+    @Override
     public boolean exportContent(ExportContext context, DavResource resource) throws IOException {
-    	log.debug("exportContent("+context+", "+resource+")");
+    	log.debug("exportContent({}, {})", context, resource);
         boolean success = false;
         if (context != null && resource != null) {
             IOListener ioListener = context.getIOListener();
@@ -166,11 +171,11 @@ public class IOManagerImpl implements IOManager {
                     success = ioh.exportContent(context, resource);
                     ioListener.onEnd(ioh, context, success);
                 }
-                log.debug("-> "+ioh.getName()+" --> "+success);
+                log.debug("-> {} --> {}", ioh.getName(), success);
             }
             context.informCompleted(success);
         }
-        log.debug("exportContent: "+success);
+        log.debug("exportContent: {}", success);
         return success;
     }
 }
