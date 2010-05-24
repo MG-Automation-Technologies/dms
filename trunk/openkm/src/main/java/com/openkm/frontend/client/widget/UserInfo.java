@@ -1,17 +1,33 @@
 package com.openkm.frontend.client.widget;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.service.OKMChatService;
+import com.openkm.frontend.client.service.OKMChatServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.chat.ChatRoomPopup;
 
 public class UserInfo extends Composite {
+	
+	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
+	private static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
+	private static final int NEW_ROOM_REFRESHING_TIME = 200;
 	
 	private HorizontalPanel panel;
 	private Image advertisement;
@@ -30,34 +46,52 @@ public class UserInfo extends Composite {
 	private Image imgNewsDocuments;
 	private HTML newsWorkflows;	
 	private Image imgWorkflows;
+	private Image imgChat;
+	private Image imgNewChatRoom;
+	private boolean chatConnected = false;
+	private HTML usersConnected;
+	private List<String> connectUsersList;
 	
 	/**
 	 * UserInfo
 	 */
 	public UserInfo() {
-		img = new Image("img/icon/connect.gif");
+		connectUsersList = new ArrayList<String>();
+		img = new Image(OKMBundleResources.INSTANCE.openkmConnected());
 		panel = new HorizontalPanel();
 		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		user = new HTML("");
 		userRepositorySize = new HTML("");
+		usersConnected = new HTML(Main.i18n("user.info.chat.offline"));
 		lockedDocuments = new HTML("");
 		checkoutDocuments = new HTML("");
 		subscriptions = new HTML("");
 		newsDocuments = new HTML("");
 		newsWorkflows = new HTML("");
-		imgRepositorySize = new Image("img/icon/user_repository.gif");
-		imgLockedDocuments = new Image("img/icon/lock.gif");
-		imgCheckoutDocuments = new Image("img/icon/edit.gif");
-		imgSubscriptions = new Image("img/icon/subscribed.gif");
-		imgNewsDocuments = new Image("img/icon/news.gif");
-		imgWorkflows = new Image("img/icon/workflow.gif");
+		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
+		imgChat = new Image(OKMBundleResources.INSTANCE.chatDisconnected());
+		imgNewChatRoom = new Image(OKMBundleResources.INSTANCE.newChatRoom());
+		imgLockedDocuments = new Image(OKMBundleResources.INSTANCE.lock());
+		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
+		imgSubscriptions = new Image(OKMBundleResources.INSTANCE.subscribed());
+		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
+		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
 		imgRepositorySize.setVisible(false);
+		usersConnected.setVisible(false);
+		imgNewChatRoom.setVisible(false);
 		imgLockedDocuments.setVisible(false);
 		imgCheckoutDocuments.setVisible(false);
 		imgSubscriptions.setVisible(false);
 		imgNewsDocuments.setVisible(false);
 		imgWorkflows.setVisible(false);
+		usersConnected.setTitle(Main.i18n("user.info.chat.connect"));
+		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
+		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
+		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
+		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
+		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
+		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
 		
 		imgLockedDocuments.addClickHandler(new ClickHandler() { 
 			@Override
@@ -99,8 +133,57 @@ public class UserInfo extends Composite {
 			}
 		});
 		
+		imgChat.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!chatConnected) {
+					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+					endPoint.setServiceEntryPoint(Config.OKMChatService);
+					chatService.login(new AsyncCallback<Object>() {
+						@Override
+						public void onSuccess(Object result) {
+							chatConnected = true;
+							imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
+							usersConnected.setVisible(true);
+							imgNewChatRoom.setVisible(true);
+							refreshConnectedUsers();
+							getPendingChatRoomUser();
+						}
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("GetLoginChat", caught);
+						}
+					});
+				} else {
+					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+					endPoint.setServiceEntryPoint(Config.OKMChatService);
+					chatService.logout(new AsyncCallback<Object>() {
+						@Override
+						public void onSuccess(Object result) {
+							chatConnected = false;
+							usersConnected.setVisible(false);
+							imgNewChatRoom.setVisible(false);
+							usersConnected.setHTML("");
+							imgChat.setResource(OKMBundleResources.INSTANCE.chatDisconnected());
+						}
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("GetLogoutChat", caught);
+						}
+					});
+				}
+			}
+		});
 		
-		advertisement = new Image("img/icon/actions/warning.gif");
+		imgNewChatRoom.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().onlineUsersPopup.center();
+				Main.get().onlineUsersPopup.refreshOnlineUsers();
+			}
+		});
+		
+		advertisement = new Image(OKMBundleResources.INSTANCE.warning());
 		advertisement.setVisible(false);
 		
 		advertisement.addClickHandler( new ClickHandler() { 
@@ -115,10 +198,20 @@ public class UserInfo extends Composite {
 		panel.add(img);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(user);
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgRepositorySize);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(userRepositorySize);
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
+		panel.add(new HTML("&nbsp;"));
+		panel.add(imgChat);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(imgNewChatRoom);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(usersConnected);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgLockedDocuments);
 		panel.add(new HTML("&nbsp;"));
@@ -138,12 +231,14 @@ public class UserInfo extends Composite {
 		panel.add(imgWorkflows);
 		panel.add(newsWorkflows);
 		panel.add(new HTML("&nbsp;"));
-
+		
 		imgLockedDocuments.setStyleName("okm-Hyperlink");
 		imgCheckoutDocuments.setStyleName("okm-Hyperlink");
 		imgSubscriptions.setStyleName("okm-Hyperlink");
 		imgNewsDocuments.setStyleName("okm-Hyperlink");
 		imgWorkflows.setStyleName("okm-Hyperlink");
+		imgChat.setStyleName("okm-Hyperlink");
+		imgNewChatRoom.setStyleName("okm-Hyperlink");
 		
 		initWidget(panel);
 	}
@@ -154,7 +249,7 @@ public class UserInfo extends Composite {
 	 * @param user The user value
 	 */
 	public void setUser(String user, boolean isAdmin) {
-		this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+user+ "&nbsp;");
+		this.user.setHTML("&nbsp;"+Main.i18n("user.info.chat.online")+" "+user+ "&nbsp;");
 		if (isAdmin) {
 			this.user.addStyleName("okm-Input-System");
 		} 
@@ -209,9 +304,9 @@ public class UserInfo extends Composite {
 		imgNewsDocuments.setVisible(true);
 		newsDocuments.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
-			imgNewsDocuments.setUrl("img/icon/news_alert.gif");
+			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.newsAlert());
 		} else {
-			imgNewsDocuments.setUrl("img/icon/news.gif");
+			imgNewsDocuments.setResource(OKMBundleResources.INSTANCE.news());
 		}
 	}
 	
@@ -224,9 +319,9 @@ public class UserInfo extends Composite {
 		imgWorkflows.setVisible(true);
 		newsWorkflows.setHTML("&nbsp;"+value+ "&nbsp;");
 		if (value>0) {
-			imgWorkflows.setUrl("img/icon/workflow_alert.gif");
+			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflowAlert());
 		} else {
-			imgWorkflows.setUrl("img/icon/workflow.gif");
+			imgWorkflows.setResource(OKMBundleResources.INSTANCE.workflow());
 		}
 	}
 	
@@ -246,6 +341,94 @@ public class UserInfo extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
-		this.user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+		if (chatConnected) {
+			user.setHTML("&nbsp;"+ Main.i18n("user.info.chat.online")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+		} else {
+			user.setHTML("&nbsp;"+ Main.i18n("user.info.chat.offline")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+		}
+		if (chatConnected) {
+			usersConnected.setTitle(Main.i18n("user.info.chat.disconnect"));
+		} else {
+			usersConnected.setTitle(Main.i18n("user.info.chat.connect"));
+		}
+		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
+		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
+		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
+		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
+		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
+		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+	}
+	
+	/**
+	 * refreshConnectedUsers
+	 */
+	private void refreshConnectedUsers() {
+		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.getLogedUsers(new AsyncCallback<List<String>>() {
+				@Override
+				public void onSuccess(List<String> result) {
+					connectUsersList = result;
+					usersConnected.setHTML("(" + result.size() +") Connected");
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							refreshConnectedUsers();
+						}
+					};
+					timer.schedule(USERS_IN_ROOM_REFRESHING_TIME); // Each minute seconds refreshing connected users
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("GetLogedUsers", caught);
+				}
+			});
+		}
+	}
+	
+	/**
+	 * getPendingChatRoomUser
+	 */
+	private void getPendingChatRoomUser() {
+		if (chatConnected) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.getPendingChatRoomUser(new AsyncCallback<List<String>>() {
+				
+				@Override
+				public void onSuccess(List<String> result) {
+					for (Iterator<String> it = result.iterator(); it.hasNext();) {
+						String room = it.next();
+						ChatRoomPopup chatRoomPopup = new ChatRoomPopup("",room);
+						chatRoomPopup.center();
+						chatRoomPopup.getPendingMessage(room);
+					}
+					
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							getPendingChatRoomUser();
+						}
+					};
+					timer.schedule(NEW_ROOM_REFRESHING_TIME); // Each minute seconds refreshing connected users
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("GetLogedUsers", caught);
+				}
+			});
+		}
+	}
+	
+	/**
+	 * getConnectedUserList
+	 * 
+	 * @return
+	 */
+	public List<String> getConnectedUserList() {
+		return connectUsersList;
 	}
 }
