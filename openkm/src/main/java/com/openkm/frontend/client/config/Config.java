@@ -47,4 +47,5 @@ public class Config {
 	public static final String OKMGeneralService = "/OpenKM"+INSTALL+"/OKMGeneralServlet";
 	public static final String OKMThesaurusService = "/OpenKM"+INSTALL+"/OKMThesaurusServlet";
 	public static final String OKMPropertyService = "/OpenKM"+INSTALL+"/OKMPropertyServlet";
+	public static final String OKMChatService = "/OpenKM"+INSTALL+"/OKMChatServlet";
 }

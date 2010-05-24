@@ -603,6 +603,25 @@ public class Lang_zh_TW {
 	    // Wizard
 	    lang.put("wizard.document.uploading","Document wizard");
 	    
+	    // User info
+	    lang.put("user.info.chat.online","Online");
+	    lang.put("user.info.chat.offline","Offline");
+	    lang.put("user.info.chat.connect","Connect to chat");
+	    lang.put("user.info.chat.disconnect","Disconnet chat");
+	    lang.put("user.info.chat.new.room","Net chat room");
+	    lang.put("user.info.locked.actual","Locked documents");
+	    lang.put("user.info.checkout.actual","Checkout documents");
+	    lang.put("user.info.subscription.actual","Actual subscriptions");
+	    lang.put("user.info.news.new","News");
+	    lang.put("user.info.workflow.pending","Pending workflows");
+	    
+	    // Users online popup
+	    lang.put("user.online","Users online");
+	    
+	    // Chat room
+	    lang.put("chat.room","Chat");
+	    lang.put("chat.users.in.room","Users");
+	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "找不到文件");

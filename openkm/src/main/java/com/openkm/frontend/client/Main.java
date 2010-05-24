@@ -57,6 +57,7 @@ import com.openkm.frontend.client.widget.MsgPopup;
 import com.openkm.frontend.client.widget.NotifyPopup;
 import com.openkm.frontend.client.widget.UserPopup;
 import com.openkm.frontend.client.widget.WorkflowPopup;
+import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
 import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.resize.HorizontalBarSplitter;
@@ -108,6 +109,7 @@ public final class Main implements EntryPoint{
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
+	public OnlineUsersPopup onlineUsersPopup;
 	public VerticalBarSplitter verticalBarSplitter;
 	public HorizontalBarSplitter horizontalBarSplitter;
 	
@@ -272,7 +274,11 @@ public final class Main implements EntryPoint{
 		wizardPopup.setHeight("40px");
 		wizardPopup.setStyleName("okm-Popup");
 		wizardPopup.addStyleName("okm-DisableSelect");
-		
+		onlineUsersPopup = new OnlineUsersPopup();
+		onlineUsersPopup.setWidth("250px");
+		onlineUsersPopup.setHeight("350px");
+		onlineUsersPopup.setStyleName("okm-Popup");
+		onlineUsersPopup.addStyleName("okm-DisableSelect");
 		verticalBarSplitter = new VerticalBarSplitter();
 		horizontalBarSplitter = new HorizontalBarSplitter();
 
@@ -339,6 +345,8 @@ public final class Main implements EntryPoint{
 		imageViewerPopup.langRefresh();
 		debugConsolePopup.langRefresh();
 		findFolderSelectPopup.langRefresh();
+		wizardPopup.langRefresh();
+		onlineUsersPopup.langRefresh();
 		// Refreshing all menus on tabs not only the active
 		mainPanel.navigator.taxonomyTree.langRefresh();
 		mainPanel.navigator.thesaurusTree.langRefresh();
