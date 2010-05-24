@@ -1,4 +1,5 @@
 <%@ page import="java.io.File" %>
+<%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
@@ -53,8 +54,10 @@
 				SessionManager sm = SessionManager.getInstance();
 				String token = sm.getTokenByUserId(Config.SYSTEM_USER);
 				out.println("<hr/>");
+				File dir = new File(fsPath);
+				int docs = FileUtils.listFiles(dir, null, true).size();
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(token, new File(fsPath), repoPath, out, new HTMLInfoDecorator());
+				ImpExpStats stats = RepositoryImporter.importDocuments(token, dir, repoPath, out, new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Filesystem '"+new File(fsPath).getAbsolutePath()+"' imported into '"+repoPath+"'</div>");
