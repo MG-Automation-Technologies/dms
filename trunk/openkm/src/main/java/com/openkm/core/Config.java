@@ -239,7 +239,8 @@ public class Config {
 	
 	private static String UPDATE_INFO_STR = "on";
 	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
-	public static String APPLICATION_URL = "http://localhost:8080/OpenKM/com.openkm.frontend.Main/index.jsp";
+	public static String APPLICATION_URL = "http://localhost:8080/OpenKM"+INSTALL+"/com.openkm.frontend.Main/index.jsp";
+	public static String APPLICATION_BASE = getBase(APPLICATION_URL);
 	public static String DEFAULT_LANG = "";
 	private static String USER_KEYWORDS_CACHE_STR = "off";
 	public static boolean USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
@@ -339,7 +340,7 @@ public class Config {
 	}
 	
 	/**
-	 * 
+	 * Test if is running in application server
 	 */
 	private static boolean inServer() {
 		if (System.getProperty("jboss.home.dir") != null || System.getProperty("catalina.home") != null) {
@@ -347,6 +348,20 @@ public class Config {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Get url base
+	 */
+	private static String getBase(String url) {
+		String ret = "";
+		
+		int idx1 = url.lastIndexOf('/');
+		if (idx1 > 0) ret = url.substring(0, idx1);
+		int idx2 = ret.lastIndexOf('/');
+		if (idx2 > 0) ret = ret.substring(0, idx2);
+		
+		return ret;
 	}
 	
 	public static void load() {
@@ -461,6 +476,7 @@ public class Config {
 			UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 			values.put(PROPERTY_UPDATE_INFO, UPDATE_INFO_STR+" ("+UPDATE_INFO+")");
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
+			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 			values.put(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
