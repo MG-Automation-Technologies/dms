@@ -583,16 +583,6 @@ public class ToolBar extends Composite implements OriginPanel {
 		space.setStyleName("okm-ToolBar-space");
 		return space;
 	}
-	
-	/**
-	 * Gets the HTML separator code
-	 * 
-	 * @return Separator tool bar
-	 */
-	private HTML separator() {
-		HTML space = new HTML(Util.imageHTML("img/icon/toolbar/separator.gif"));
-		return space;
-	}
 
 	/**
 	 * Tool Bar
@@ -758,11 +748,11 @@ public class ToolBar extends Composite implements OriginPanel {
 		panel.add(space());
 		panel.add(downloadPdf);
 		panel.add(space());
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(lock);
 		panel.add(space());
 		panel.add(unLock);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addDocument);
 		panel.add(space());
 		panel.add(edit);
@@ -772,20 +762,20 @@ public class ToolBar extends Composite implements OriginPanel {
 		panel.add(cancelCheckout);
 		panel.add(space());
 		panel.add(delete);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addPropertyGroup);
 		panel.add(space());
 		panel.add(removePropertyGroup);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(startWorkflow);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addSubscription);
 		panel.add(space());
 		panel.add(removeSubscription);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(refresh);
 		panel.add(home);
-		panel.add(separator());
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(scanner);
 		panel.add(uploader);
 		

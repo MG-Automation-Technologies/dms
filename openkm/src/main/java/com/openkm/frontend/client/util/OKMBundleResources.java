@@ -181,4 +181,40 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/upload.gif")
 	public ImageResource uploader();
+	
+	@Source("com/openkm/frontend/public/img/icon/chat/chat_disconnected.png")
+	public ImageResource chatDisconnected();
+	
+	@Source("com/openkm/frontend/public/img/icon/chat/chat_connected.png")
+	public ImageResource chatConnected();
+	
+	@Source("com/openkm/frontend/public/img/icon/chat/new_chat_room.png")
+	public ImageResource newChatRoom();
+	
+	@Source("com/openkm/frontend/public/img/icon/connect.gif")
+	public ImageResource openkmConnected();
+	
+	@Source("com/openkm/frontend/public/img/icon/user_repository.gif")
+	public ImageResource repositorySize();
+	
+	@Source("com/openkm/frontend/public/img/icon/subscribed.gif")
+	public ImageResource subscribed();
+	
+	@Source("com/openkm/frontend/public/img/icon/news_alert.gif")
+	public ImageResource newsAlert();
+	
+	@Source("com/openkm/frontend/public/img/icon/news.gif")
+	public ImageResource news();
+	
+	@Source("com/openkm/frontend/public/img/icon/workflow_alert.gif")
+	public ImageResource workflowAlert();
+	
+	@Source("com/openkm/frontend/public/img/icon/workflow.gif")
+	public ImageResource workflow();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/warning.gif")
+	public ImageResource warning();
+	
+	@Source("com/openkm/frontend/public/img/icon/toolbar/separator.gif")
+	public ImageResource separator();
 }

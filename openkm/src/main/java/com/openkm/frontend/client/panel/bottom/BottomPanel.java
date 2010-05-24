@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.widget.UserInfo;

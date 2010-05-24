@@ -23,6 +23,8 @@ package com.openkm.frontend.server;
 
 import java.util.Enumeration;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -90,5 +92,12 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 		
 		log.debug("getToken: {}", token);
 		return token;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
 	}
 }
