@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,7 +62,6 @@ import com.sun.syndication.io.SyndFeedOutput;
 public class SyndicationServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(TestServlet.class);
 	private static final long serialVersionUID = 1L;
-	private static final String MIME_TYPE = "application/xml; charset=UTF-8";
 	private static final String FEED_TYPE = "atom_0.3";
 	private CredentialsProvider cp = new BasicCredentialsProvider(null);
 
@@ -125,10 +125,17 @@ public class SyndicationServlet extends HttpServlet {
 						new DirectDashboardModule().getLastUploadedDocuments(session));
 			}
 			
-			feed.setFeedType(FEED_TYPE);
-			response.setContentType(MIME_TYPE);
-			SyndFeedOutput output = new SyndFeedOutput();
-			output.output(feed, response.getWriter());
+			if (feed != null) {
+				response.setContentType("application/xml; charset=UTF-8");
+				SyndFeedOutput output = new SyndFeedOutput();
+				feed.setFeedType(FEED_TYPE);
+				output.output(feed, response.getWriter());
+			} else {
+				response.setContentType("text/plain; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("Unknown syndicantion feed");
+				out.close();
+			}
 		} catch (LoginException e) {
 			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Syndication Server\"");
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
