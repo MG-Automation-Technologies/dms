@@ -73,7 +73,6 @@ import com.openkm.core.Config;
 import com.openkm.util.JCRUtils;
 
 public class OKMHandler implements IOHandler, PropertyHandler {
-
 	private static Logger log = LoggerFactory.getLogger(OKMHandler.class);
 
     //private String collectionNodetype = JcrConstants.NT_FOLDER;
@@ -108,7 +107,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @param ioManager
      */
     public OKMHandler(IOManager ioManager) {
-    	log.debug("OKMHandler("+ioManager+")");
+    	log.debug("OKMHandler({})", ioManager);
         this.ioManager = ioManager;
     }
 
@@ -122,7 +121,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @param contentNodetype
      */
     public OKMHandler(IOManager ioManager, String collectionNodetype, String defaultNodetype, String contentNodetype) {
-    	log.debug("OKMHandler("+ioManager+", "+collectionNodetype+", "+defaultNodetype+", "+contentNodetype+")");
+    	log.debug("OKMHandler({}, {}, {}, {})", new Object[] { ioManager, collectionNodetype, defaultNodetype, contentNodetype });
     	this.ioManager = ioManager;
         this.collectionNodetype = collectionNodetype;
         this.defaultNodetype = defaultNodetype;
@@ -154,7 +153,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @see OKMHandler#canImport(ImportContext, boolean)
      */
     public boolean canImport(ImportContext context, boolean isCollection) {
-    	log.debug("canImport("+context+", "+isCollection+")");
+    	log.debug("canImport({}, {})", context, isCollection);
         if (context == null || context.isCompleted()) {
             return false;
         }
@@ -164,9 +163,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         	// Check file restrictions (Don't check folders)
         	String mimeType = Config.mimeTypes.getContentType(context.getSystemId().toLowerCase());
         	
-        	log.debug("File "+context.getSystemId());
-        	log.debug("MimeType: "+mimeType);
-        	log.debug("Size: "+context.getContentLength());
+        	log.debug("File: {}", context.getSystemId());
+        	log.debug("MimeType: {}", mimeType);
+        	log.debug("Size: {}", context.getContentLength());
         	
         	// Restrict for MIME
         	if (Config.RESTRICT_FILE_MIME && !Config.mimeAccept.contains(mimeType)) {
@@ -180,10 +179,10 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         		String re = wildcard2regexp(wc);
         		
         		if (Pattern.matches(re, context.getSystemId())) {
-        			log.debug("Filename BAD -> "+re+" ("+wc+")");
+        			log.debug("Filename BAD -> {} ({})", re, wc);
         			return false;
         		} else {
-        			log.debug("Filename GOOD -> "+re+" ("+wc+")");
+        			log.debug("Filename GOOD -> {} ({})", re, wc);
         		}
         	}
 
@@ -240,7 +239,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @see OKMHandler#importContent(ImportContext, boolean)
      */
     public boolean importContent(ImportContext context, boolean isCollection) throws IOException {
-    	log.debug("importContent("+context+", "+isCollection+")");
+    	log.debug("importContent({}, {})", context, isCollection);
         if (!canImport(context, isCollection)) {
             throw new IOException(getName() + ": Cannot import " + context.getSystemId());
         }
@@ -291,7 +290,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @see OKMHandler#importContent(ImportContext, DavResource)
      */
     public boolean importContent(ImportContext context, DavResource resource) throws IOException {
-    	log.debug("importContent("+context+", "+resource+")");
+    	log.debug("importContent({}, {})", context, resource);
         if (!canImport(context, resource)) {
             throw new IOException(getName() + ": Cannot import " + context.getSystemId());
         }
@@ -309,7 +308,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @throws IOException
      */
     protected boolean importData(ImportContext context, boolean isCollection, Node contentNode) throws IOException, RepositoryException {
-    	log.debug("importData("+context+", "+isCollection+", "+contentNode+")");
+    	log.debug("importData({}, {}, {})", new Object[] {context, isCollection, contentNode });
         InputStream in = context.getInputStream();
         if (in != null) {
             // NOTE: with the default folder-nodetype (nt:folder) no inputstream
@@ -331,14 +330,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
     /**
      * Imports the properties present on the specified context to the content
      * node.
-     *
-     * @param context
-     * @param isCollection
-     * @param contentNode
-     * @return
      */
     protected boolean importProperties(ImportContext context, boolean isCollection, Node contentNode) {
-    	log.debug("importProperties("+context+", "+isCollection+", "+contentNode+")");
+    	log.debug("importProperties({}, {}, {})", new Object[] { context, isCollection, contentNode });
         try {
             // set mimeType property upon resource creation but don't modify
             // it on a subsequent PUT. In contrast to a PROPPATCH request, which
@@ -453,14 +447,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * Please note: If the jcr:content node already exists and contains child
      * nodes, those will be removed in order to make sure, that the import
      * really replaces the existing content of the file-node.
-     *
-     * @param context
-     * @param isCollection
-     * @return
-     * @throws RepositoryException
      */
     protected Node getContentNode(ImportContext context, boolean isCollection) throws RepositoryException {
-        log.debug("getContentNode("+context+", "+isCollection+")");
+        log.debug("getContentNode({}, {})", context, isCollection);
     	Node parentNode = (Node)context.getImportRoot();
         String name = context.getSystemId();
 
@@ -509,6 +498,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      *
      * @see OKMHandler#canExport(ExportContext, boolean)
      */
+    @Override
     public boolean canExport(ExportContext context, boolean isCollection) {
     	//log.debug("canExport("+context+", "+isCollection+")");
         if (context == null || context.isCompleted()) {
@@ -537,6 +527,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
     /**
      * @see OKMHandler#canExport(ExportContext, DavResource)
      */
+    @Override
     public boolean canExport(ExportContext context, DavResource resource) {
     	//log.debug("canExport("+context+", "+resource+")");
         if (resource == null) {
@@ -554,8 +545,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @see #exportProperties(ExportContext, boolean, Node)
      * @see #exportData(ExportContext, boolean, Node)
      */
+    @Override
     public boolean exportContent(ExportContext context, boolean isCollection) throws IOException {
-    	log.debug("exportContent("+context+", "+isCollection+")");
+    	log.debug("exportContent({}, {})", context, isCollection);
         if (!canExport(context, isCollection)) {
             throw new IOException(getName() + ": Cannot export " + context.getExportRoot());
         }
@@ -579,8 +571,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      *
      * @see OKMHandler#exportContent(ExportContext, DavResource)
      */
+    @Override
     public boolean exportContent(ExportContext context, DavResource resource) throws IOException {
-    	log.debug("exportContent("+context+", "+resource+")");
+    	log.debug("exportContent({}, {})", context, resource);
         if (!canExport(context, resource)) {
             throw new IOException(getName() + ": Cannot export " + context.getExportRoot());
         }
@@ -593,14 +586,10 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * Please note, that subclasses that define a different structure of the
      * content node should create their own
      * {@link  #exportData(ExportContext, boolean, Node) exportData} method.
-     *
-     * @param context
-     * @param isCollection
-     * @param contentNode
-     * @throws IOException
      */
-    protected void exportData(ExportContext context, boolean isCollection, Node contentNode) throws IOException, RepositoryException {
-    	log.debug("exportData("+context+", "+isCollection+", "+contentNode+")");
+    protected void exportData(ExportContext context, boolean isCollection, Node contentNode) throws 
+    		IOException, RepositoryException {
+    	log.debug("exportData({}, {}, {})", new Object[] { context, isCollection, contentNode });
         if (contentNode.hasProperty(JcrConstants.JCR_DATA)) {
             Property p = contentNode.getProperty(JcrConstants.JCR_DATA);
             IOUtil.spool(p.getStream(), context.getOutputStream());
@@ -612,13 +601,10 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * The content length is determined by the length of the jcr:data property
      * if it is present. The creation time however is retrieved from the parent
      * node (in case of isCollection == false only).
-     *
-     * @param context
-     * @param isCollection
-     * @param contentNode
      */
-    protected void exportProperties(ExportContext context, boolean isCollection, Node contentNode) throws IOException {
-        log.debug("exportProperties("+context+", "+isCollection+", "+contentNode+")");
+    protected void exportProperties(ExportContext context, boolean isCollection, Node contentNode) throws
+    		IOException {
+        log.debug("exportProperties({}, {}, {})", new Object[] { context, isCollection, contentNode });
     	try {
             // only non-collections: 'jcr:created' is present on the parent 'fileNode' only
             if (!isCollection && contentNode.getDepth() > 0 && contentNode.getParent().hasProperty(JcrConstants.JCR_CREATED)) {
@@ -661,7 +647,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             }
         } catch (RepositoryException e) {
             // should never occur
-            log.error("Unexpected error {0} while exporting properties: {1}", e.getClass().getName(), e.getMessage());
+            log.error("Unexpected error {} while exporting properties: {}", e.getClass().getName(), e.getMessage());
             throw new IOException(e.getMessage());
         }
     }
@@ -677,7 +663,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @throws RepositoryException
      */
     protected Node getContentNode(ExportContext context, boolean isCollection) throws RepositoryException {
-        log.debug("getContentNode("+context+", "+isCollection+")");
+        log.debug("getContentNode({}, {})", context, isCollection);
     	Node contentNode = (Node)context.getExportRoot();
         // 'file' nodes must have an jcr:content child node (see canExport)
         if (!isCollection) {
@@ -692,7 +678,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @return nodetype name
      */
     protected String getCollectionNodeType() {
-    	//log.debug("getCollectionNodeType: "+collectionNodetype);
+    	//log.debug("getCollectionNodeType: {}", collectionNodetype);
         return collectionNodetype;
     }
 
@@ -702,7 +688,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @return nodetype name
      */
     protected String getNodeType() {
-    	//log.debug("getNodeType: "+defaultNodetype);
+    	//log.debug("getNodeType: {}", defaultNodetype);
         return defaultNodetype;
     }
 
@@ -714,19 +700,21 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @return nodetype name
      */
     protected String getContentNodeType() {
-    	//log.debug("getContentNodeType: "+contentNodetype);
+    	//log.debug("getContentNodeType: {}", contentNodetype);
         return contentNodetype;
     }
 
     //----------------------------------------------------< PropertyHandler >---
-
+    @Override
     public boolean canExport(PropertyExportContext context, boolean isCollection) {
-    	//log.debug("canExport("+context+", "+isCollection+")");
+    	//log.debug("canExport({}, {})", context, isCollection);
         return canExport((ExportContext) context, isCollection);
     }
-
-    public boolean exportProperties(PropertyExportContext exportContext, boolean isCollection) throws RepositoryException {
-    	log.debug("exportProperties("+exportContext+", "+isCollection+")");
+    
+    @Override
+    public boolean exportProperties(PropertyExportContext exportContext, boolean isCollection) throws
+    		RepositoryException {
+    	log.debug("exportProperties({}, {}", exportContext, isCollection);
         if (!canExport(exportContext, isCollection)) {
             throw new RepositoryException("PropertyHandler " + getName() + " failed to export properties.");
         }
@@ -743,7 +731,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
                 String name = p.getName();
                 PropertyDefinition def = p.getDefinition();
                 if (def.isMultiple() || isDefinedByFilteredNodeType(def)) {
-                    log.debug("Skip property '" + name + "': not added to webdav property set.");
+                    log.debug("Skip property '{}': not added to webdav property set.", name);
                     continue;
                 }
                 if (JcrConstants.JCR_DATA.equals(name)
@@ -762,9 +750,10 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             return false;
         }
     }
-
+    
+    @Override
     public boolean canImport(PropertyImportContext context, boolean isCollection) {
-    	log.debug("canImport("+context+", "+isCollection+")");
+    	log.debug("canImport({}, {})", context, isCollection);
         if (context == null || context.isCompleted()) {
             return false;
         }
@@ -772,13 +761,16 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         try {
             return contextItem != null && contextItem.isNode() && (isCollection || ((Node)contextItem).hasNode(JcrConstants.JCR_CONTENT));
         } catch (RepositoryException e) {
-            log.error("Unexpected error: " + e.getMessage());
+            log.error("Unexpected error: {}", e.getMessage());
             return false;
         }
     }
-
-    public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws RepositoryException {
-        log.debug("importProperties("+importContext+", "+isCollection+")");
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws
+    		RepositoryException {
+        log.debug("importProperties({}, {})", importContext, isCollection);
     	if (!canImport(importContext, isCollection)) {
             throw new RepositoryException("PropertyHandler " + getName() + " failed import properties");
         }
@@ -839,14 +831,14 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @return a <code>DavPropertyName</code> for the given jcr name.
      */
     private DavPropertyName getDavName(String jcrName, Session session) throws RepositoryException {
-    	//log.debug("getDavName("+jcrName+", "+session+")");
+    	//log.debug("getDavName({}, {})", jcrName, session);
         // make sure the local name is xml compliant
         String localName = ISO9075.encode(Text.getLocalName(jcrName));
         String prefix = Text.getNamespacePrefix(jcrName);
         String uri = session.getNamespaceURI(prefix);
         Namespace namespace = Namespace.getNamespace(prefix, uri);
         DavPropertyName name = DavPropertyName.create(localName, namespace);
-        //log.debug("getDavName"+name);
+        //log.debug("getDavName: {}", name);
         return name;
     }
 
