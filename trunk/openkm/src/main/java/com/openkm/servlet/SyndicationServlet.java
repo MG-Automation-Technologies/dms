@@ -53,6 +53,8 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.feed.synd.SyndImage;
+import com.sun.syndication.feed.synd.SyndImageImpl;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 
@@ -62,7 +64,7 @@ import com.sun.syndication.io.SyndFeedOutput;
 public class SyndicationServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(TestServlet.class);
 	private static final long serialVersionUID = 1L;
-	private static final String FEED_TYPE = "atom_0.3";
+	private static final String FEED_TYPE = "rss_2.0"; // atom_0.3
 	private CredentialsProvider cp = new BasicCredentialsProvider(null);
 
 	/**
@@ -79,56 +81,62 @@ public class SyndicationServlet extends HttpServlet {
 			SyndFeed feed = null;
 			
 			if ("/userLockedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user locked documents",
-						new DirectDashboardModule().getUserLockedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserLockedDocuments(session));
+				feed.setTitle("OpenKM: user locked documents");
 			} else if ("/userCheckedOutDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user checked-out documents",
-						new DirectDashboardModule().getUserCheckedOutDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserCheckedOutDocuments(session));
+				feed.setTitle("OpenKM: user checked-out documents");
 			} else if ("/userSubscribedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user subscribed documents",
-						new DirectDashboardModule().getUserSubscribedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserSubscribedDocuments(session));
+				feed.setTitle("OpenKM: user subscribed documents");
 			} else if ("/userSubscribedFolders".equals(action)) {
-				feed = getFeedFolders("OpenKM: user subscribed folders",
-						new DirectDashboardModule().getUserSubscribedFolders(session));
+				feed = getFeedFolders(new DirectDashboardModule().getUserSubscribedFolders(session));
+				feed.setTitle("OpenKM: user subscribed folders");
 			} else if ("/userLastUploadedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user last uploaded documents",
-						new DirectDashboardModule().getUserLastUploadedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserLastUploadedDocuments(session));
+				feed.setTitle("OpenKM: user last uploaded documents");
 			} else if ("/userLastModifiedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user last modified documents",
-						new DirectDashboardModule().getUserLastModifiedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserLastModifiedDocuments(session));
+				feed.setTitle("OpenKM: user last modified documents");
 			} else if ("/userLastDownloadedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user last downloaded documents",
-						new DirectDashboardModule().getUserLastDownloadedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserLastDownloadedDocuments(session));
+				feed.setTitle("OpenKM: user last downloaded documents");
 			} else if ("/userLastImportedMails".equals(action)) {
-				feed = getFeedMails("OpenKM: user last imported mails",
-						new DirectDashboardModule().getUserLastImportedMails(session));
+				feed = getFeedMails(new DirectDashboardModule().getUserLastImportedMails(session));
+				feed.setTitle("OpenKM: user last imported mails");
 			} else if ("/userLastImportedMailAttachments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: user last imported mail attachments",
-						new DirectDashboardModule().getUserLastImportedMailAttachments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getUserLastImportedMailAttachments(session));
+				feed.setTitle("OpenKM: user last imported mail attachments");
 			} else if ("/lastWeekTopDownloadedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last week top downloaded documents",
-						new DirectDashboardModule().getLastWeekTopDownloadedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastWeekTopDownloadedDocuments(session));
+				feed.setTitle("OpenKM: last week top downloaded documents");
 			} else if ("/lastMonthTopDownloadedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last month top downloaded documents",
-						new DirectDashboardModule().getLastMonthTopDownloadedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastMonthTopDownloadedDocuments(session));
+				feed.setTitle("OpenKM: last month top downloaded documents");
 			} else if ("/lastWeekTopModifiedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last week top modified documents",
-						new DirectDashboardModule().getLastWeekTopModifiedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastWeekTopModifiedDocuments(session));
+				feed.setTitle("OpenKM: last week top modified documents");
 			} else if ("/lastMonthTopModifiedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last month top modified documents",
-						new DirectDashboardModule().getLastMonthTopModifiedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastMonthTopModifiedDocuments(session));
+				feed.setTitle("OpenKM: last month top modified documents");
 			} else if ("/lastModifiedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last modified documents",
-						new DirectDashboardModule().getLastModifiedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastModifiedDocuments(session));
+				feed.setTitle("OpenKM: last modified documents");
 			} else if ("/lastUploadedDocuments".equals(action)) {
-				feed = getFeedDocuments("OpenKM: last uploaded documents",
-						new DirectDashboardModule().getLastUploadedDocuments(session));
+				feed = getFeedDocuments(new DirectDashboardModule().getLastUploadedDocuments(session));
+				feed.setTitle("OpenKM: last uploaded documents");
 			}
 			
 			if (feed != null) {
 				response.setContentType("application/xml; charset=UTF-8");
 				SyndFeedOutput output = new SyndFeedOutput();
+				SyndImage img = new SyndImageImpl();
+				img.setTitle(feed.getTitle());
+				img.setUrl(Config.APPLICATION_BASE+"/img/logo_short.gif");
+				feed.setImage(img);
+				feed.setLanguage("en");
 				feed.setFeedType(FEED_TYPE);
+				feed.setDescription(feed.getTitle());
 				output.output(feed, response.getWriter());
 			} else {
 				response.setContentType("text/plain; charset=UTF-8");
@@ -171,11 +179,10 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed documents
 	 */
-	private SyndFeed getFeedDocuments(String title, ArrayList<DashboardStatsDocumentResult> result) throws
+	private SyndFeed getFeedDocuments(ArrayList<DashboardStatsDocumentResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setTitle(title);
 		feed.setLink("http://www.openkm.com");
 		
 		for (DashboardStatsDocumentResult item : result) {
@@ -194,11 +201,10 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed folders
 	 */
-	private SyndFeed getFeedFolders(String title, ArrayList<DashboardStatsFolderResult> result) throws
+	private SyndFeed getFeedFolders(ArrayList<DashboardStatsFolderResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setTitle(title);
 		feed.setLink("http://www.openkm.com");
 		
 		for (DashboardStatsFolderResult item : result) {
@@ -217,11 +223,10 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed mails
 	 */
-	private SyndFeed getFeedMails(String title, ArrayList<DashboardStatsMailResult> result) throws
+	private SyndFeed getFeedMails(ArrayList<DashboardStatsMailResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
-		feed.setTitle(title);
 		feed.setLink("http://www.openkm.com");
 		
 		for (DashboardStatsMailResult item : result) {
