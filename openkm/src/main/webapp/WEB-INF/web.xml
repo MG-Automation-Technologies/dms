@@ -297,7 +297,7 @@
   <!-- Syndication servlet -->
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
-    <url-pattern>/Syndication</url-pattern>
+    <url-pattern>/feed/*</url-pattern>
   </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
