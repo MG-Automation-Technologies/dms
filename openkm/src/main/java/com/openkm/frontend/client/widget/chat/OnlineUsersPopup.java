@@ -187,6 +187,7 @@ public class OnlineUsersPopup extends DialogBox {
 					ChatRoomPopup chatRoomPopup = new ChatRoomPopup(user, result);
 					chatRoomPopup.center();
 					chatRoomPopup.getPendingMessage(result);
+					Main.get().mainPanel.bottomPanel.userInfo.addChatRoom(chatRoomPopup);
 				}
 				
 				@Override

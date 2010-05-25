@@ -269,11 +269,16 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
      * @param msg
      */
     private synchronized void addUserMessageToRoom(String room, String msg) {
-    	String message =  getThreadLocalRequest().getRemoteUser() + ": " + msg;
+    	String actualUser = getThreadLocalRequest().getRemoteUser();
+    	String message =  actualUser + ": " + msg;
     	if (msgUsersRooms.containsKey(room)) {
     		Map<String, List<String>> roomMap = msgUsersRooms.get(room);
     		for (Iterator<String> it = roomMap.keySet().iterator(); it.hasNext();) {
-    			roomMap.get(it.next()).add(message); // Adding message for each user available
+    			String user = it.next();
+    			// Pending message is not added to himself ( that's done by UI )
+    			if (!user.equals(actualUser)) {
+    				roomMap.get(it.next()).add(message); // Adding message for each user available
+    			}
     		}
     	}
     }

@@ -21,6 +21,7 @@ import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.chat.ChatRoomDialogBox;
 import com.openkm.frontend.client.widget.chat.ChatRoomPopup;
 
 public class UserInfo extends Composite {
@@ -51,12 +52,14 @@ public class UserInfo extends Composite {
 	private boolean chatConnected = false;
 	private HTML usersConnected;
 	private List<String> connectUsersList;
+	private List<ChatRoomDialogBox> chatRoomList;
 	
 	/**
 	 * UserInfo
 	 */
 	public UserInfo() {
 		connectUsersList = new ArrayList<String>();
+		chatRoomList = new ArrayList<ChatRoomDialogBox>();
 		img = new Image(OKMBundleResources.INSTANCE.openkmConnected());
 		panel = new HorizontalPanel();
 		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
@@ -357,6 +360,11 @@ public class UserInfo extends Composite {
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
 		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		
+		// Resfreshing actual chatrooms
+		for (Iterator<ChatRoomDialogBox> it = chatRoomList.iterator(); it.hasNext();) {
+			it.next().langRefresh();
+		}
 	}
 	
 	/**
@@ -404,6 +412,7 @@ public class UserInfo extends Composite {
 						ChatRoomPopup chatRoomPopup = new ChatRoomPopup("",room);
 						chatRoomPopup.center();
 						chatRoomPopup.getPendingMessage(room);
+						addChatRoom(chatRoomPopup);
 					}
 					
 					Timer timer = new Timer() {
@@ -430,5 +439,27 @@ public class UserInfo extends Composite {
 	 */
 	public List<String> getConnectedUserList() {
 		return connectUsersList;
+	}
+	
+	/**
+	 * addChatRoom
+	 * 
+	 * @param chatRoom
+	 */
+	public void addChatRoom(ChatRoomDialogBox chatRoom) {
+		if (!chatRoomList.contains(chatRoom)) {
+			chatRoomList.add(chatRoom);
+		}
+	}
+	
+	/**
+	 * removeChatRoom
+	 * 
+	 * @param chatRoom
+	 */
+	public void removeChatRoom(ChatRoomDialogBox chatRoom) {
+		if (chatRoomList.contains(chatRoom)) {
+			chatRoomList.remove(chatRoom);
+		}
 	}
 }
