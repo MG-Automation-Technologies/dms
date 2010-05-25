@@ -45,7 +45,6 @@ import com.openkm.util.UUIDGenerator;
  *                           value="A value"
  */
 public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatService {
-	
 	private static final long serialVersionUID = 3780857624687394918L;
 	private static final int DELAY = 100; // mseg
 	
@@ -55,39 +54,28 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
 	private static Map<String, HashMap<String,List<String>>> msgUsersRooms= new HashMap<String, HashMap<String,List<String>>>(); // room is the key
 															// user is the subkey, messages are copied to each user
 	
-	/**
-     * Init
-     */
     @Override
     public void init(final ServletConfig config) throws ServletException {
     	super.init(config);
     	usersLogged = new ArrayList<String>();
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#login()
-     */
+    @Override
     public void login() {
     	loginUser();
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#logout()
-     */
+    @Override
     public void logout() {
     	logoutUser();
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#getLogedUsers()
-     */
+    @Override
     public List<String> getLogedUsers() {
     	return usersLogged;
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#createNewChatRoom(java.lang.String)
-     */
+    @Override
     public String createNewChatRoom(String user) {
     	String room = UUIDGenerator.generate(""); // Used to unique identifying room
     	String actualUser = getThreadLocalRequest().getRemoteUser();
@@ -101,9 +89,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	return room;
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#getPendingMessage(java.lang.String)
-     */
+    @Override
     public List<String> getPendingMessage(String room) {
     	int countCycle = 0;
 		List<String> pendingMessages = new ArrayList<String>();
@@ -123,9 +109,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	return pendingMessages;
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#getPendingChatRoomUser()
-     */
+    @Override
     public List<String> getPendingChatRoomUser() {
     	int countCycle = 0;
     	List<String> pendingRooms = new ArrayList<String>();
@@ -145,33 +129,25 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	return pendingRooms;
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#addMessageToRoom(java.lang.String, java.lang.String)
-     */
+    @Override
     public void addMessageToRoom(String room, String msg) {
     	addUserMessageToRoom(room, msg);
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#closeRoom(java.lang.String)
-     */
+    @Override
     public void closeRoom(String room) {
     	removeUserRoom(room);
     	removeUserMessageRoom(room);
     	deleteEmptyMessageRoom(room); // Evaluates if message room must be deleted
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#addUserToChatRoom(java.lang.String, java.lang.String)
-     */
+    @Override
     public void addUserToChatRoom(String room, String user) {
     	addPendingRoomToUser(room, user);
     	addUserToChatRoom(room, user);
     }
     
-    /* (non-Javadoc)
-     * @see com.openkm.frontend.client.service.OKMChatService#usersInRoom(java.lang.String)
-     */
+    @Override
     public String usersInRoom(String room) {
 		System.out.println("number of users in room " + getNumberOfUsersInRoom(room));
     	return String.valueOf(getNumberOfUsersInRoom(room));
@@ -218,9 +194,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * addUserToRoom
-     * 
-     * @param room
-     * @param user
      */
     private synchronized void addRoomToUser(String room, String user) {
     	if (!usersRooms.keySet().contains(user)) {
@@ -237,8 +210,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * removeUserRoom
-     * 
-     * @param room
      */
     private synchronized void removeUserRoom(String room) {
     	String user = getThreadLocalRequest().getRemoteUser();
@@ -252,9 +223,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * addPendingUserRoom
-     * 
-     * @param room
-     * @param user
      */
     private synchronized void addPendingRoomToUser(String room, String user) {
     	if (!pendingUsersRooms.keySet().contains(user)) {
@@ -271,8 +239,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * getPendingUserRoom
-     * 
-     * @return
      */
     private synchronized List<String> getPendingUserRoom() {
     	String actualUser = getThreadLocalRequest().getRemoteUser();
@@ -287,9 +253,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * getPendingUserRoomMessage
-     * 
-     * @param room
-     * @return
      */
     private synchronized List<String> getPendingUserRoomMessage(String room) {
     	String user = getThreadLocalRequest().getRemoteUser();
@@ -304,9 +267,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * addUserMessageToRoom
-     * 
-     * @param room
-     * @param msg
      */
     private synchronized void addUserMessageToRoom(String room, String msg) {
     	String actualUser = getThreadLocalRequest().getRemoteUser();
@@ -325,8 +285,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * createMessageRoom
-     * 
-     * @param room
      */
     private synchronized void createMessageRoom(String room) {
     	if (!msgUsersRooms.containsKey(room)) {
@@ -334,12 +292,8 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	}
     }
     
-    
     /**
      * createUserMessageRoom
-     * 
-     * @param room
-     * @param user
      */
     private synchronized void createUserMessageRoom(String room, String user) {
     	if (msgUsersRooms.containsKey(room)) {
@@ -351,8 +305,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * removeUserMessageRoom
-     * 
-     * @param room
      */
     private synchronized void removeUserMessageRoom(String room) {
     	String user = getThreadLocalRequest().getRemoteUser();
@@ -365,8 +317,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * evaluateDeleteMessageRoom
-     * 
-     * @param room
      */
     private synchronized void deleteEmptyMessageRoom(String room) {
     	// Room message without users must be deleted
@@ -379,9 +329,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * getNumberOfUsersInRoom
-     * 
-     * @param room
-     * @return
      */
     private synchronized int getNumberOfUsersInRoom(String room) {
     	if (msgUsersRooms.containsKey(room)) {

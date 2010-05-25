@@ -55,9 +55,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	private static Logger log = LoggerFactory.getLogger(OKMBookmarkServlet.class);
 	private static final long serialVersionUID = 1L;
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#getAll()
-	 */
+	@Override
 	public List<GWTBookmark> getAll() throws OKMException {
 		log.debug("getAll()");
 		List<GWTBookmark> bookmarkList = new ArrayList<GWTBookmark>(); 
@@ -68,10 +66,8 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 			
 			for (Iterator<Bookmark> it = col.iterator(); it.hasNext();) {		
 				Bookmark bookmark = it.next();
-				log.debug("Bookmark: "+bookmark);
+				log.debug("Bookmark: {}", bookmark);
 				GWTBookmark bookmarkClient = Util.copy(bookmark);
-
-				log.debug("Bookmark: "+bookmark+" -> DocumentClient: "+bookmarkClient);
 				bookmarkList.add(bookmarkClient);
 			}
 			
@@ -84,15 +80,13 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getAll: "+bookmarkList);
+		log.debug("getAll: {}", bookmarkList);
 		return bookmarkList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#add(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTBookmark add(String nodePath, String name) throws OKMException {
-		log.debug("add("+nodePath +","+name +")");
+		log.debug("add({}, {})", nodePath, name);
 		String token = getToken();
 		
 		try {
@@ -112,11 +106,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#remove(java.lang.String)
-	 */
+	@Override
 	public void remove(String name) throws OKMException {
-		log.debug("remove("+name +")");
+		log.debug("remove({})", name);
 		String token = getToken();
 		
 		try {
@@ -135,11 +127,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		log.debug("remove: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#setUserHome(java.lang.String)
-	 */
+	@Override
 	public void setUserHome(String name) throws OKMException {
-		log.debug("setUserHome("+name +")");
+		log.debug("setUserHome({})", name);
 		String token = getToken();
 		
 		try {
@@ -155,9 +145,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		log.debug("setUserHome: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#getUserHome()
-	 */
+	@Override
 	public GWTBookmark getUserHome() throws OKMException {
 		log.debug("getUserHome()");
 		String token = getToken();
@@ -176,11 +164,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMBookmarkService#rename(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTBookmark rename(String name, String newName) throws OKMException {
-		log.debug("rename("+name +"," + newName +")");
+		log.debug("rename({}, {})", name, newName);
 		String token = getToken();
 		
 		try {
