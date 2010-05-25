@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -46,6 +47,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMChatService;
 import com.openkm.frontend.client.service.OKMChatServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * Chat room popup
@@ -56,7 +58,8 @@ import com.openkm.frontend.client.service.OKMChatServiceAsync;
 public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
-	private final static int DELAY = 200; // mseg
+	private final static int DELAY_PENDING_MESSAGE  = 200; // mseg
+	private final static int DELAY_USERS_IN_ROOM 	= 3*1000; // 3 seg
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -64,9 +67,10 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	private TextArea textArea;
 	private FlexTable table;
 	private ScrollPanel scrollPanel;
-	private List<String> usersInRoom;
 	private HTML usersInRoomText;
 	private ChatRoomDialogBox singleton;
+	private boolean chatRoomActive = true;
+	private Image addUserToChatRoom;
 	
 	/**
 	 * Chat room popup
@@ -76,20 +80,26 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		super(false,false);
 		setText(Main.i18n("chat.room"));
 		singleton = this;
-		
-		usersInRoom = new ArrayList<String>();
-		usersInRoom.add(user);
-		usersInRoom.add(Main.get().workspaceUserProperties.getUser());
+		chatRoomActive = true;
 		
 		usersInRoomText = new HTML("");
-		refreshUsersInRoom();
+		addUserToChatRoom = new Image(OKMBundleResources.INSTANCE.addUserToChatRoom());
+		addUserToChatRoom.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Main.get().onlineUsersPopup.setAction(OnlineUsersPopup.ACTION_ADD_USER_TO_ROOM, room);
+				Main.get().onlineUsersPopup.center();
+				Main.get().onlineUsersPopup.refreshOnlineUsers();
+			}
+		});
 		
 		close = new Button(Main.i18n("button.close"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				chatRoomActive = false;
 				ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
 				endPoint.setServiceEntryPoint(Config.OKMChatService);
-				chatService.logout(new AsyncCallback<Object>() {
+				chatService.closeRoom(room,new AsyncCallback<Object>() {
 					@Override
 					public void onSuccess(Object arg0) {
 						Main.get().mainPanel.bottomPanel.userInfo.removeChatRoom(singleton);
@@ -107,7 +117,20 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
+		HTML space4 = new HTML("");
+		hPanel.add(space4);
+		hPanel.add(addUserToChatRoom);
 		hPanel.add(usersInRoomText);
+		HTML space5 = new HTML("");
+		hPanel.add(space5);
+		
+		hPanel.setCellHorizontalAlignment(addUserToChatRoom, HasAlignment.ALIGN_LEFT);
+		hPanel.setCellHorizontalAlignment(usersInRoomText, HasAlignment.ALIGN_RIGHT);
+		hPanel.setCellWidth(space4, "5");
+		hPanel.setCellWidth(addUserToChatRoom, "50%");
+		hPanel.setCellWidth(usersInRoomText, "50%");
+		hPanel.setCellWidth(space5, "5");
+		hPanel.setWidth("100%");
 		
 		table = new FlexTable();
 		table.setBorderWidth(0);
@@ -184,6 +207,8 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		
 		setStyleName("okm-Popup");
 		
+		refreshUsersInRoom(room); // Refresh users in room
+		
 		super.hide();
 		setWidget(vPanel);
 	}
@@ -194,14 +219,35 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	public void langRefresh() {
 		setText(Main.i18n("chat.room"));
 		close.setHTML(Main.i18n("button.close"));
-		refreshUsersInRoom();
 	}
 	
 	/**
 	 * refreshUsersInRoom()
 	 */
-	private void refreshUsersInRoom() {
-		usersInRoomText.setHTML("(" + usersInRoom.size() +") " + Main.i18n("chat.users.in.room"));
+	private void refreshUsersInRoom(final String room) {
+		if (chatRoomActive) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.usersInRoom(room, new AsyncCallback<String>() {
+				
+				@Override
+				public void onSuccess(String result) {
+					usersInRoomText.setHTML("(" + result +") " + Main.i18n("chat.users.in.room"));	
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							refreshUsersInRoom(room);
+						}
+					};
+					timer.schedule(DELAY_USERS_IN_ROOM);
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("UsersInRoom", caught);
+				}
+			});
+		}
 	}
 	
 	/**
@@ -210,30 +256,31 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	 * @param room
 	 */
 	public void getPendingMessage(final String room) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-		endPoint.setServiceEntryPoint(Config.OKMChatService);
-		chatService.getPendingMessage(room, new AsyncCallback<List<String>>() {
-			
-			@Override
-			public void onSuccess(List<String> result) {
-				for (Iterator<String> it = result.iterator(); it.hasNext();) {
-					addMessage(it.next());
-				}
-				Timer timer = new Timer() {
-
-					@Override
-					public void run() {
-						getPendingMessage(room);
+		if (chatRoomActive) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.getPendingMessage(room, new AsyncCallback<List<String>>() {
+				
+				@Override
+				public void onSuccess(List<String> result) {
+					for (Iterator<String> it = result.iterator(); it.hasNext();) {
+						addMessage(it.next());
 					}
-				};
-				timer.schedule(DELAY);
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Main.get().showError("getPendingMessage", caught);
-			}
-		});
+					Timer timer = new Timer() {
+						@Override
+						public void run() {
+							getPendingMessage(room);
+						}
+					};
+					timer.schedule(DELAY_PENDING_MESSAGE);
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("getPendingMessage", caught);
+				}
+			});
+		}
 	}
 	
 	/**

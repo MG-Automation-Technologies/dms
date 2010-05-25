@@ -23,10 +23,12 @@ import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.chat.ChatRoomDialogBox;
 import com.openkm.frontend.client.widget.chat.ChatRoomPopup;
+import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
 
 public class UserInfo extends Composite {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
+	
 	private static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
 	private static final int NEW_ROOM_REFRESHING_TIME = 200;
 	
@@ -88,7 +90,7 @@ public class UserInfo extends Composite {
 		imgSubscriptions.setVisible(false);
 		imgNewsDocuments.setVisible(false);
 		imgWorkflows.setVisible(false);
-		usersConnected.setTitle(Main.i18n("user.info.chat.connect"));
+		imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
@@ -181,6 +183,7 @@ public class UserInfo extends Composite {
 		imgNewChatRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				Main.get().onlineUsersPopup.setAction(OnlineUsersPopup.ACTION_NEW_CHAT);
 				Main.get().onlineUsersPopup.center();
 				Main.get().onlineUsersPopup.refreshOnlineUsers();
 			}
@@ -252,7 +255,7 @@ public class UserInfo extends Composite {
 	 * @param user The user value
 	 */
 	public void setUser(String user, boolean isAdmin) {
-		this.user.setHTML("&nbsp;"+Main.i18n("user.info.chat.online")+" "+user+ "&nbsp;");
+		this.user.setHTML("&nbsp;"+Main.i18n("general.connected")+" "+user+ "&nbsp;");
 		if (isAdmin) {
 			this.user.addStyleName("okm-Input-System");
 		} 
@@ -344,15 +347,13 @@ public class UserInfo extends Composite {
 	 * langRefresh
 	 */
 	public void langRefresh() {
+		user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
 		if (chatConnected) {
-			user.setHTML("&nbsp;"+ Main.i18n("user.info.chat.online")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
+			imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
+			usersConnected.setHTML("(" + connectUsersList.size() +") " + Main.i18n("user.info.chat.online"));
 		} else {
-			user.setHTML("&nbsp;"+ Main.i18n("user.info.chat.offline")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
-		}
-		if (chatConnected) {
-			usersConnected.setTitle(Main.i18n("user.info.chat.disconnect"));
-		} else {
-			usersConnected.setTitle(Main.i18n("user.info.chat.connect"));
+			imgChat.setTitle(Main.i18n("user.info.chat.connect"));
+			usersConnected.setHTML(Main.i18n("user.info.chat.offline"));
 		}
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
@@ -378,7 +379,7 @@ public class UserInfo extends Composite {
 				@Override
 				public void onSuccess(List<String> result) {
 					connectUsersList = result;
-					usersConnected.setHTML("(" + result.size() +") Connected");
+					usersConnected.setHTML("(" + connectUsersList.size() +") " + Main.i18n("user.info.chat.online"));
 					Timer timer = new Timer() {
 						@Override
 						public void run() {

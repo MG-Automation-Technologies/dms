@@ -152,9 +152,29 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	addUserMessageToRoom(room, msg);
     }
     
+    /* (non-Javadoc)
+     * @see com.openkm.frontend.client.service.OKMChatService#closeRoom(java.lang.String)
+     */
     public void closeRoom(String room) {
     	removeUserRoom(room);
     	removeUserMessageRoom(room);
+    	deleteEmptyMessageRoom(room); // Evaluates if message room must be deleted
+    }
+    
+    /* (non-Javadoc)
+     * @see com.openkm.frontend.client.service.OKMChatService#addUserToChatRoom(java.lang.String, java.lang.String)
+     */
+    public void addUserToChatRoom(String room, String user) {
+    	addPendingRoomToUser(room, user);
+    	addUserToChatRoom(room, user);
+    }
+    
+    /* (non-Javadoc)
+     * @see com.openkm.frontend.client.service.OKMChatService#usersInRoom(java.lang.String)
+     */
+    public String usersInRoom(String room) {
+		System.out.println("number of users in room " + getNumberOfUsersInRoom(room));
+    	return String.valueOf(getNumberOfUsersInRoom(room));
     }
 
     /**
@@ -297,7 +317,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     			String user = it.next();
     			// Pending message is not added to himself ( that's done by UI )
     			if (!user.equals(actualUser)) {
-    				roomMap.get(it.next()).add(message); // Adding message for each user available
+    				roomMap.get(user).add(message); // Adding message for each user available
     			}
     		}
     	}
@@ -338,8 +358,36 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	String user = getThreadLocalRequest().getRemoteUser();
     	if (msgUsersRooms.containsKey(room)) {
     		if (msgUsersRooms.get(room).containsKey(user)) {
-    			msgUsersRooms.remove(user);
+    			msgUsersRooms.get(room).remove(user);
     		}
+    	}
+    }
+    
+    /**
+     * evaluateDeleteMessageRoom
+     * 
+     * @param room
+     */
+    private synchronized void deleteEmptyMessageRoom(String room) {
+    	// Room message without users must be deleted
+    	if (msgUsersRooms.containsKey(room)) {
+    		if (msgUsersRooms.get(room).keySet().size()==0) {
+    			msgUsersRooms.remove(room);
+    		}
+    	}
+    }
+    
+    /**
+     * getNumberOfUsersInRoom
+     * 
+     * @param room
+     * @return
+     */
+    private synchronized int getNumberOfUsersInRoom(String room) {
+    	if (msgUsersRooms.containsKey(room)) {
+    		return msgUsersRooms.get(room).keySet().size();
+    	} else {
+    		return 0;
     	}
     }
 }

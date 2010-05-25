@@ -37,4 +37,7 @@ public interface OKMChatService extends RemoteService {
 	public List<String> getPendingChatRoomUser();
 	public List<String> getPendingMessage(String room);
 	public void addMessageToRoom(String room, String msg);
+	public void closeRoom(String room);
+	public void addUserToChatRoom(String room, String user);
+	public String usersInRoom(String room);
 }

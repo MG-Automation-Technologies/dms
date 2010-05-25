@@ -37,4 +37,7 @@ public interface OKMChatServiceAsync {
 	public void getPendingChatRoomUser(AsyncCallback<List<String>> callback);
 	public void getPendingMessage(String room, AsyncCallback<List<String>> callback);
 	public void addMessageToRoom(String room, String msg, AsyncCallback<?> callback);
+	public void closeRoom(String room, AsyncCallback<?> callback);
+	public void addUserToChatRoom(String room, String user, AsyncCallback<?> callback);
+	public void usersInRoom(String room, AsyncCallback<String> callback);
 }
