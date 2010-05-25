@@ -799,54 +799,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			DirectSearchModule directSearch = new DirectSearchModule();
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			
-			synchronized (userQuery) {
-				Node savedQuery = userQuery.getNode(name);
-				
-				// Get the saved query params
-				QueryParams params = directSearch.getSearch(savedQuery);
-				log.debug("PARAMS: {}", params.toString());
-				
-				// Set query date (first time)
-				if (params.getLastModifiedTo() == null) {
-					Calendar firstExecution = Calendar.getInstance();
-					firstExecution.add(Calendar.MONTH, -1);
-					params.setLastModifiedTo(firstExecution);
-				}
-				
-				Calendar lastExecution = resetHours(params.getLastModifiedTo());
-				Calendar actualDate = resetHours(Calendar.getInstance());
-				log.debug("lastExecution -> {}", lastExecution.getTime());
-				log.debug("actualDate -> {}", actualDate.getTime());
-				
-				if (lastExecution.before(actualDate)) {
-					params.setLastModifiedFrom(params.getLastModifiedTo());
-				}
-				
-				params.setLastModifiedTo(Calendar.getInstance());
-				
-				// Prepare statement
-				log.debug("PARAMS {}", params);
-				String statement = directSearch.prepareStatement(params);
-				log.debug("STATEMENT {}", statement);
-				
-				// Execute query
-				al = executeQueryDocument(session, statement, null, MAX_RESULTS);
-				
-				// Update query params
-				directSearch.saveSearch(savedQuery, params);
-				userQuery.save();
-			}
-			
-			// Check for already visited results
-			checkVisitedDocuments(session.getUserID(), name, al);
+			al = find(session, name);
 		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -854,6 +810,60 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		}
 		
+		log.debug("find: {}", al);
+		return al;
+	}
+	
+	/**
+	 * Convenient method for syndication
+	 */
+	public ArrayList<DashboardStatsDocumentResult> find(Session session, String name) throws 
+			javax.jcr.RepositoryException, SQLException, ParseException, IOException {
+		log.debug("find({}, {})", session, name);
+		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
+		DirectSearchModule directSearch = new DirectSearchModule();
+		Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
+		
+		synchronized (userQuery) {
+			Node savedQuery = userQuery.getNode(name);
+			
+			// Get the saved query params
+			QueryParams params = directSearch.getSearch(savedQuery);
+			log.debug("PARAMS: {}", params.toString());
+			
+			// Set query date (first time)
+			if (params.getLastModifiedTo() == null) {
+				Calendar firstExecution = Calendar.getInstance();
+				firstExecution.add(Calendar.MONTH, -1);
+				params.setLastModifiedTo(firstExecution);
+			}
+			
+			Calendar lastExecution = resetHours(params.getLastModifiedTo());
+			Calendar actualDate = resetHours(Calendar.getInstance());
+			log.debug("lastExecution -> {}", lastExecution.getTime());
+			log.debug("actualDate -> {}", actualDate.getTime());
+			
+			if (lastExecution.before(actualDate)) {
+				params.setLastModifiedFrom(params.getLastModifiedTo());
+			}
+			
+			params.setLastModifiedTo(Calendar.getInstance());
+			
+			// Prepare statement
+			log.debug("PARAMS {}", params);
+			String statement = directSearch.prepareStatement(params);
+			log.debug("STATEMENT {}", statement);
+			
+			// Execute query
+			al = executeQueryDocument(session, statement, null, MAX_RESULTS);
+			
+			// Update query params
+			directSearch.saveSearch(savedQuery, params);
+			userQuery.save();
+		}
+	
+		// Check for already visited results
+		checkVisitedDocuments(session.getUserID(), name, al);
 		log.debug("find: {}", al);
 		return al;
 	}
