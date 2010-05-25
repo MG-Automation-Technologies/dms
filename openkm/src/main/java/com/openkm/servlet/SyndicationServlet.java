@@ -125,6 +125,10 @@ public class SyndicationServlet extends HttpServlet {
 			} else if ("/lastUploadedDocuments".equals(action)) {
 				feed = getFeedDocuments(new DirectDashboardModule().getLastUploadedDocuments(session));
 				feed.setTitle("OpenKM: last uploaded documents");
+			} else if (action != null && action.startsWith("/news_")) {
+				String name = action.substring(6);
+				feed = getFeedDocuments(new DirectDashboardModule().find(session, name));
+				feed.setTitle("OpenKM: "+action);
 			}
 			
 			if (feed != null) {
