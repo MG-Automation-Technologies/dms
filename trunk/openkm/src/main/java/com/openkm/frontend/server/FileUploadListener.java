@@ -26,54 +26,47 @@ import java.io.Serializable;
 import org.apache.commons.fileupload.ProgressListener;
 
 /**
-	 * File upload listener to show uploading status
-	 * 
-	 * @author jllort
-	 *
+ * File upload listener to show uploading status
+ * 
+ * @author jllort
+ *
+ */
+public class FileUploadListener implements ProgressListener, Serializable {
+	private static final long serialVersionUID = -4945332468806137001L;
+	private volatile long bytesRead = 0L, contentLength = 0L, item = 0L;   
+	private boolean uploadFinish = false;
+
+	/**
+	 * FileUploadListener
 	 */
-	public class FileUploadListener implements ProgressListener, Serializable {
-		private static final long serialVersionUID = -4945332468806137001L;
-
-		private volatile long 
-        	bytesRead = 0L,
-        	contentLength = 0L,
-        	item = 0L;   
-		
-		private boolean uploadFinish = false;
-    
-		/**
-		 * FileUploadListener
-		 */
-		public FileUploadListener() {
-			super();
-		}
-    
-		/* (non-Javadoc)
-		 * @see org.apache.commons.fileupload.ProgressListener#update(long, long, int)
-		 */
-		public void update(long aBytesRead, long aContentLength, int anItem) {
-			bytesRead = aBytesRead;
-			contentLength = aContentLength;
-			item = anItem;
-		}
-    
-		public long getBytesRead() {
-			return bytesRead;
-		}
-    
-		public long getContentLength() {
-			return contentLength;
-		}
-    
-		public long getItem() {
-			return item;
-		}
-
-		public boolean isUploadFinish() {
-			return uploadFinish;
-		}
-
-		public void setUploadFinish(boolean uploadFinish) {
-			this.uploadFinish = uploadFinish;
-		}
+	public FileUploadListener() {
+		super();
 	}
+
+	@Override
+	public void update(long aBytesRead, long aContentLength, int anItem) {
+		bytesRead = aBytesRead;
+		contentLength = aContentLength;
+		item = anItem;
+	}
+
+	public long getBytesRead() {
+		return bytesRead;
+	}
+
+	public long getContentLength() {
+		return contentLength;
+	}
+
+	public long getItem() {
+		return item;
+	}
+
+	public boolean isUploadFinish() {
+		return uploadFinish;
+	}
+
+	public void setUploadFinish(boolean uploadFinish) {
+		this.uploadFinish = uploadFinish;
+	}
+}
