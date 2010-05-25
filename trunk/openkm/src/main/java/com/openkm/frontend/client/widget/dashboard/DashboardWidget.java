@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -84,6 +85,7 @@ public class DashboardWidget extends Composite {
 	private FlexTable table;
 	private Image zoomImage;
 	private Image viewedImage;
+	private Image feedImage;
 	private boolean zoom = false;
 	private boolean flagZoom = true;
 	private List<GWTDashboardStatsDocumentResult> lastDocList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -93,11 +95,12 @@ public class DashboardWidget extends Composite {
 	private String source;
 	public Status status;
 	private String headerTextKey;
+	private String feedUrl = "";
 	
 	/**
 	 * DashboardWidget
 	 */
-	public DashboardWidget(String source, String headerTextKey, String iconUrl, boolean zoom) {
+	public DashboardWidget(String source, String headerTextKey, String iconUrl, boolean zoom, String feedUrl) {
 		status = new Status();
 		status.setStyleName("okm-StatusPopup");
 		
@@ -112,6 +115,7 @@ public class DashboardWidget extends Composite {
 		vPanel = new VerticalPanel();
 		this.source = source;
 		this.headerTextKey = headerTextKey;
+		this.feedUrl = feedUrl;
 		
 		// Sets or unsets visible table
 		table.setVisible(zoom);
@@ -528,6 +532,16 @@ public class DashboardWidget extends Composite {
 				}
 			});
 			
+			feedImage = new Image("img/feed.gif");
+			feedImage.setStyleName("okm-Hyperlink");
+			
+			feedImage.addClickHandler(new ClickHandler() { 
+				@Override
+				public void onClick(ClickEvent event) {
+					Window.open(Config.OKMFeedService+feedUrl, "_blank", null);
+				}
+			});
+			
 			addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
@@ -564,6 +578,7 @@ public class DashboardWidget extends Composite {
 			center.add(iconImagePanel);
 			center.add(titlePanel);
 			center.add(headerNotViewedResults);
+			center.add(feedImage);
 			center.add(viewedImage);
 			center.add(zoomImage);
 			
@@ -571,15 +586,18 @@ public class DashboardWidget extends Composite {
 			center.setWidth("100%");
 			center.setCellVerticalAlignment(iconImagePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(iconImagePanel, HasAlignment.ALIGN_LEFT);
-			center.setCellHorizontalAlignment(viewedImage, HasAlignment.ALIGN_LEFT);
+			center.setCellHorizontalAlignment(feedImage, HasAlignment.ALIGN_LEFT);
+			center.setCellHorizontalAlignment(viewedImage, HasAlignment.ALIGN_CENTER);
 			center.setCellHorizontalAlignment(zoomImage, HasAlignment.ALIGN_RIGHT);
 			center.setCellVerticalAlignment(titlePanel, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(headerNotViewedResults, HasAlignment.ALIGN_MIDDLE);
 			center.setCellHorizontalAlignment(headerNotViewedResults, HasAlignment.ALIGN_RIGHT);
-	
+			
+			center.setCellVerticalAlignment(feedImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(viewedImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellVerticalAlignment(zoomImage, HasAlignment.ALIGN_MIDDLE);
 			center.setCellWidth(iconImagePanel, "22");
+			center.setCellWidth(feedImage, "16");
 			center.setCellWidth(viewedImage, "22");
 			center.setCellWidth(zoomImage, "16");
 			center.setHeight(""+HEADER_SQUARE);
@@ -659,9 +677,6 @@ public class DashboardWidget extends Composite {
 			return notViewed;
 		}
 		
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
-		 */
 		@Override
 		public HandlerRegistration addClickHandler(ClickHandler handler) {
 			return addHandler(handler, ClickEvent.getType());
