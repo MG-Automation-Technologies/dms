@@ -64,9 +64,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	private static Logger log = LoggerFactory.getLogger(OKMSearchServlet.class);
 	private static final long serialVersionUID = 8673521252684830906L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#getSearchs()
-	 */
+	@Override
 	public List<String> getAllSearchs() throws OKMException {
 		log.debug("getAllSearchs()");
 		List<String> resultList = new ArrayList<String>(); 
@@ -77,7 +75,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();) {		
 				String search = it.next();
-				log.debug("search: "+search);
+				log.debug("search: {}", search);
 				
 				resultList.add(search);
 			}
@@ -89,15 +87,13 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getAllSearchs: "+resultList);
+		log.debug("getAllSearchs: {}", resultList);
 		return resultList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#saveSearch(com.openkm.frontend.client.bean.GWTQueryParams, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void saveSearch(GWTQueryParams params, String type, String name) throws OKMException {
-		log.debug("saveSearch("+params+", "+type+", "+name+")");
+		log.debug("saveSearch({}, {}, {})", new Object[] { params, type, name });
 		String token = getToken();
 		
 		try {
@@ -113,14 +109,12 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("saveSearch: ");
+		log.debug("saveSearch: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#getSearch(java.lang.String)
-	 */
+	@Override
 	public GWTQueryParams getSearch (String name) throws OKMException {
-		log.debug("getSearch("+ name +")");
+		log.debug("getSearch({})", name);
 		GWTQueryParams gwtQueryParams = new GWTQueryParams();
 		String token = getToken();
 		
@@ -141,13 +135,11 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 
-		log.debug("getSearch: "+gwtQueryParams);
+		log.debug("getSearch: {}", gwtQueryParams);
 		return gwtQueryParams;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#deleteSearch(java.lang.String)
-	 */
+	@Override
 	public void deleteSearch(String name) throws OKMException {
 		log.debug("deleteSearch()");
 		String token = getToken();
@@ -165,14 +157,12 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("deleteSearch: ");
+		log.debug("deleteSearch: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#findPaginated(com.openkm.frontend.client.bean.GWTQueryParams, int, int)
-	 */
+	@Override
 	public GWTResultSet findPaginated(GWTQueryParams params, int offset, int limit) throws OKMException {
-		log.debug("findPaginated("+offset+","+limit+")");
+		log.debug("findPaginated({}, {}, {})", new Object[] { params, offset, limit });
 		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
 		String token = getToken();
 		ResultSet results;
@@ -203,14 +193,11 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("findPaginated: "+resultList);
+		log.debug("findPaginated: {}", resultList);
 		return gwtResultSet;
 	}
 	
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#find(com.openkm.frontend.client.bean.GWTQueryParams)
-	 */
+	@Override
 	public GWTResultSet find(GWTQueryParams params) throws OKMException {
 		log.debug("find()");
 		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
@@ -243,13 +230,11 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("find: "+resultList);
+		log.debug("find: {}", resultList);
 		return gwtResultSet;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMSearchService#getKeywordMap(java.util.Collection)
-	 */
+	@Override
 	public List<GWTKeyword> getKeywordMap(Collection<String> filter) throws OKMException {
 		log.debug("getKeywordMap()");
 		List<GWTKeyword> keyList = new ArrayList<GWTKeyword>();
@@ -297,13 +282,12 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 			}
 			
 			Collections.sort(keyList, KeywordComparator.getInstance());
-			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} 
 		
-		log.debug("getKeywordMap: ");
+		log.debug("getKeywordMap: {}", keyList);
 		return keyList;
 	}
 }

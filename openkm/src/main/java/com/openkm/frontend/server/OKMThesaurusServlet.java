@@ -47,12 +47,9 @@ public class OKMThesaurusServlet extends OKMRemoteServiceServlet implements OKMT
 	private static Logger log = LoggerFactory.getLogger(OKMThesaurusServlet.class);
 	private static final long serialVersionUID = -4436438730167948558L;
 	
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMThesaurusService#getKeywords(java.lang.String)
-	 */
+	@Override
 	public List<String> getKeywords(final String filter) throws OKMException {
-		log.debug("getKeywords("+filter+")");
+		log.debug("getKeywords({})", filter);
 		List<String> keywordList = new ArrayList<String>();
 		List<String> keywords = RDFREpository.getInstance().getKeywords();
 		int index = -1;
@@ -82,7 +79,7 @@ public class OKMThesaurusServlet extends OKMRemoteServiceServlet implements OKMT
 			}
 		}
 		
-		log.debug("getKeywords: "+keywordList);
+		log.debug("getKeywords: {}", keywordList);
 		return keywordList;
 	}
 }

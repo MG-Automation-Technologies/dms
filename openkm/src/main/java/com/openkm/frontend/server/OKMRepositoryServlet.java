@@ -52,12 +52,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public String getUpdateMessage() throws OKMException {
 		log.debug("getUpdateMessage()");
-		
 		String token = getToken();
+		String msg = "";
 
 		try {
-			return OKMRepository.getInstance().getUpdateMessage(token);
-			
+			msg = OKMRepository.getInstance().getUpdateMessage(token);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -65,6 +64,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_General), e.getMessage());
 		}
+		
+		log.debug("getUpdateMessage: {}", msg);
+		return msg;
 	}
 	
 	@Override
