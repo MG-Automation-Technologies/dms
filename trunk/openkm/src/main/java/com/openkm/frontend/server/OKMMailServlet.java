@@ -57,11 +57,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	private static Logger log = LoggerFactory.getLogger(OKMMailServlet.class);
 	private static final long serialVersionUID = 6444705787188086209L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#getChilds(java.lang.String)
-	 */
+	@Override
 	public List<GWTMail> getChilds(String fldPath) throws OKMException {
-		log.debug("getMailChilds("+fldPath+")");
+		log.debug("getChilds({})", fldPath);
 		List<GWTMail> mailList = new ArrayList<GWTMail>(); 
 		String token = getToken();
 		
@@ -70,18 +68,15 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 				fldPath = OKMRepository.getInstance().getMailFolder(token).getPath();
 			} 
 			
-			log.debug("ParentFolder: "+fldPath);
+			log.debug("ParentFolder: {}", fldPath);
 			Collection<Mail> col = OKMMail.getInstance().getChilds(token, fldPath);
 			
 			for (Iterator<Mail> it = col.iterator(); it.hasNext();) {		
 				Mail mail = it.next();
-				log.debug("Mail: "+mail);
+				log.debug("Mail: {}", mail);
 				GWTMail mailClient = Util.copy(mail);
-
-				log.debug("Mail: "+mail+" -> MailClient: "+mailClient);
 				mailList.add(mailClient);
 			}
-			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -90,14 +85,13 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
+		log.debug("getChilds: {}", mailList);
 		return mailList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#delete(java.lang.String)
-	 */
+	@Override
 	public void delete(String mailPath) throws OKMException {
-		log.debug("delete("+mailPath+")");
+		log.debug("delete({})", mailPath);
 		String token = getToken();
 		
 		try {
@@ -115,13 +109,13 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
+		
+		log.debug("delete: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#move(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void move(String mailPath, String destPath) throws OKMException {
-		log.debug("move("+mailPath+","+destPath+")");
+		log.debug("move({}, {})", mailPath, destPath);
 		String token = getToken();
 		
 		try {
@@ -146,11 +140,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		log.debug("move: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#purge(java.lang.String)
-	 */
+	@Override
 	public void purge(String mailPath) throws OKMException {
-		log.debug("purge("+mailPath+")");
+		log.debug("purge({})", mailPath);
 		String token = getToken();
 		
 		try {
@@ -172,11 +164,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		log.debug("purge: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#copy(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void copy(String mailPath, String fldPath) throws OKMException {
-		log.debug("copy("+mailPath+", " + fldPath + ")");
+		log.debug("copy({}, {})", mailPath, fldPath);
 		String token = getToken();
 		
 		try {
@@ -204,11 +194,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		log.debug("copy: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMMailService#getProperties(java.lang.String)
-	 */
+	@Override
 	public GWTMail getProperties(String mailPath) throws OKMException {
-		log.debug("getProperties("+mailPath+ ")");
+		log.debug("getProperties({})", mailPath);
 		String token = getToken();
 		GWTMail mailClient = new GWTMail();
 		
@@ -226,7 +214,6 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		}
 		
 		log.debug("copy: getProperties");
-		
 		return mailClient;
 	}
 }
