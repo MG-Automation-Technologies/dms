@@ -37,7 +37,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 
 /**
- * Extends the RemoteServiceServlet to optain token auth on developement and production
+ * Extends the RemoteServiceServlet to obtain token auth on development and production
  * environments. Config.GWTDS determines the environment development and production values.
  * 
  * @author jllort
@@ -47,6 +47,11 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	private static Logger log = LoggerFactory.getLogger(OKMRemoteServiceServlet.class);
 	private static final long serialVersionUID = 1801666502721600473L;
 	public static String sessionToken = null;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+	}
 	
 	/**
 	 * @return The server token
@@ -92,12 +97,5 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 		
 		log.debug("getToken: {}", token);
 		return token;
-	}
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
 	}
 }
