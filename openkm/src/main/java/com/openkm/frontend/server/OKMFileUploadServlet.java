@@ -207,7 +207,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	private String importZip(String token, String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("importZip("+token+", "+path+", "+is+")");
+		log.debug("importZip({}, {}, {})", new Object[] { token, path, is });
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
         String errorMsg = null;
@@ -252,7 +252,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			}
 		}
 		
-		log.debug("importZip: "+errorMsg);
+		log.debug("importZip: {}", errorMsg);
 		return errorMsg;
 	}
 }

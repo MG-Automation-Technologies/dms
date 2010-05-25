@@ -57,11 +57,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	private static Logger log = LoggerFactory.getLogger(OKMFolderServlet.class);
 	private static final long serialVersionUID = -4436438730167948558L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#create(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTFolder create(String fldPath, String fldPathParent) throws OKMException {
-		log.debug("create("+fldPath+", "+fldPathParent+")");
+		log.debug("create({}, {})", fldPath, fldPathParent);
 		String token = getToken();
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder = new Folder();
@@ -86,15 +84,13 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("create: "+gWTFolder);
+		log.debug("create: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#delete(java.lang.String)
-	 */
+	@Override
 	public void delete(String fldPath) throws OKMException {
-		log.debug("delete("+fldPath+")");
+		log.debug("delete({})", fldPath);
 		String token = getToken();
 		
 		try {
@@ -119,22 +115,18 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		log.debug("delete: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#getChilds(java.lang.String)
-	 */
+	@Override
 	public List<GWTFolder> getChilds(String fldPath) throws OKMException {
-		log.debug("getFolderChilds("+fldPath+")");
+		log.debug("getFolderChilds({})", fldPath);
 		List<GWTFolder> folderList = new ArrayList<GWTFolder>(); 
 		String token = getToken();
 		
 		try {
-			log.debug("ParentFolder: "+fldPath);
+			log.debug("ParentFolder: {}", fldPath);
 			Collection<Folder> col = OKMFolder.getInstance().getChilds(token, fldPath);
 			for (Iterator<Folder> it = col.iterator(); it.hasNext();){				
 				Folder folder = it.next();
 				GWTFolder gWTFolder = Util.copy(folder);
-
-				log.debug("Folder: "+folder+"  ->  gWTFolder: "+gWTFolder);
 				folderList.add(gWTFolder);
 			}
 			
@@ -150,15 +142,13 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getFolderChilds: "+folderList);
+		log.debug("getFolderChilds: {}", folderList);
 		return folderList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#rename(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTFolder rename(String fldId, String newName)  throws OKMException  {
-		log.debug("rename(" + fldId + "," + newName + ")");
+		log.debug("rename({}, {})", fldId, newName);
 		String token = getToken();
 		GWTFolder gWTFolder = new GWTFolder();
 		
@@ -181,16 +171,13 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("rename: "+gWTFolder);
-		
+		log.debug("rename: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#move(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void move(String fldPath, String dstPath) throws OKMException {
-		log.debug("move("+fldPath+","+dstPath+")");
+		log.debug("move({}, {})", fldPath, dstPath);
 		String token = getToken();
 		
 		try {
@@ -215,11 +202,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		log.debug("move: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#purge(java.lang.String)
-	 */
+	@Override
 	public void purge(String fldPath) throws OKMException {
-		log.debug("purge("+fldPath+")");
+		log.debug("purge({})", fldPath);
 		String token = getToken();
 		
 		try {
@@ -241,13 +226,10 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		log.debug("purge: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#get(java.lang.String)
-	 */
+	@Override
 	public GWTFolder getProperties(String fldPath) throws OKMException {
-		log.debug("get("+fldPath+")");
+		log.debug("getProperties({})", fldPath);
 		String token = getToken();
-
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
@@ -263,16 +245,13 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("get: " + gWTFolder);
-		
+		log.debug("getProperties: {}", gWTFolder);
 		return gWTFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#copy(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void copy(String fldPath, String dstPath) throws OKMException {
-		log.debug("copy("+fldPath+", " + dstPath + ")");
+		log.debug("copy({}, {})", fldPath, dstPath);
 		String token = getToken();
 		
 		try {
@@ -297,11 +276,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		log.debug("copy: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMFolderService#isValid(java.lang.String)
-	 */
+	@Override
 	public Boolean isValid(String fldPath) throws OKMException {
-		log.debug("isValid("+fldPath+")");
+		log.debug("isValid({})", fldPath);
 		String token = getToken();
 		
 		try {
