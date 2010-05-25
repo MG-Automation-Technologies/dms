@@ -65,11 +65,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	private static Logger log = LoggerFactory.getLogger(OKMDocumentServlet.class);
 	private static final long serialVersionUID = 5746570509074299745L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#getChilds(java.lang.String)
-	 */
+	@Override
 	public List<GWTDocument> getChilds(String fldPath) throws OKMException {
-		log.debug("getDocumentChilds("+fldPath+")");
+		log.debug("getDocumentChilds({})", fldPath);
 		List<GWTDocument> docList = new ArrayList<GWTDocument>(); 
 		String token = getToken();
 		
@@ -99,15 +97,13 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 					docList.add(docClient);
 				}
 			} else {
-				log.debug("ParentFolder: "+fldPath);
+				log.debug("ParentFolder: {}", fldPath);
 				Collection<Document> col = OKMDocument.getInstance().getChilds(token, fldPath);
 				
 				for (Iterator<Document> it = col.iterator(); it.hasNext();) {		
 					Document doc = it.next();
-					log.debug("Document: "+doc);
+					log.debug("Document: {}", doc);
 					GWTDocument docClient = Util.copy(doc);
-	
-					log.debug("Document: "+doc+" -> DocumentClient: "+docClient);
 					docList.add(docClient);
 				}
 			}
@@ -124,27 +120,23 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getDocumentChilds: "+docList);
+		log.debug("getDocumentChilds: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#getVersionHistory(java.lang.String)
-	 */
+	@Override
 	public List<GWTVersion> getVersionHistory (String docPath) throws OKMException {
-		log.debug("getVersionHistory("+docPath+")");
+		log.debug("getVersionHistory({})", docPath);
 		List<GWTVersion> versionList = new ArrayList<GWTVersion>(); 
 		String token = getToken();
 		
 		try {
-			log.debug("docPath: "+docPath);
 			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(token, docPath);
 			
 			for (Iterator<Version> it = col.iterator(); it.hasNext();){		
 				Version version = it.next();
-				log.debug("version: " + version);
+				log.debug("version: {}", version);
 				GWTVersion versionClient = Util.copy(version);
-				log.debug("Version: "+version+" -> VersionClient: "+versionClient);
 				versionList.add(versionClient); 
 			}
 		} catch (PathNotFoundException e) {
@@ -158,15 +150,13 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getVersionHistory: "+versionList);
+		log.debug("getVersionHistory: {}", versionList);
 		return versionList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#delete(java.lang.String)
-	 */
+	@Override
 	public void delete(String docPath) throws OKMException {
-		log.debug("delete("+docPath+")");
+		log.debug("delete({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -191,11 +181,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("delete: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#checkout(java.lang.String)
-	 */
+	@Override
 	public void checkout(String docPath) throws OKMException {
-		log.debug("checkout("+docPath+")");
+		log.debug("checkout({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -220,11 +208,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("checkout: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#cancelCheckout(java.lang.String)
-	 */
+	@Override
 	public void cancelCheckout(String docPath) throws OKMException {
-		log.debug("cancelCheckout("+docPath+")");
+		log.debug("cancelCheckout({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -249,11 +235,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("cancelCheckout: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#lock(java.lang.String)
-	 */
+	@Override
 	public void lock(String docPath) throws OKMException {
-		log.debug("lock("+docPath+")");
+		log.debug("lock({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -278,11 +262,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("lock: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#unlock(java.lang.String)
-	 */
+	@Override
 	public void unlock(String docPath) throws OKMException {
-		log.debug("lock("+docPath+")");
+		log.debug("lock({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -307,12 +289,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("lock: void");
 	}
 	
-
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#rename(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTDocument rename(String docPath, String newName) throws OKMException {
-		log.debug("rename("+docPath+", "+ newName +")");
+		log.debug("rename({}, {})", docPath, newName);
 		String token = getToken();		
 		GWTDocument gWTDocument = new GWTDocument();
 		
@@ -335,15 +314,13 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("rename: "+gWTDocument);
+		log.debug("rename: {}", gWTDocument);
 		return gWTDocument;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#move(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void move(String docPath, String destPath) throws OKMException {
-		log.debug("move("+docPath+","+destPath+")");
+		log.debug("move({}, {})", docPath, destPath);
 		String token = getToken();
 		
 		try {
@@ -368,11 +345,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("move: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#purge(java.lang.String)
-	 */
+	@Override
 	public void purge(String docPath) throws OKMException {
-		log.debug("purge("+docPath+")");
+		log.debug("purge({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -394,11 +369,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("purge: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#restoreVersion(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void restoreVersion(String docPath, String versionId) throws OKMException {
-		log.debug("restoreVersion("+docPath+", "+versionId+")");
+		log.debug("restoreVersion({}, {})", docPath, versionId);
 		String token = getToken();
 		
 		try {
@@ -420,11 +393,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("restoreVersion: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#get(java.lang.String)
-	 */
+	@Override
 	public GWTDocument get(String docPath) throws OKMException {
-		log.debug("get("+docPath+")");
+		log.debug("get({})", docPath);
 		String token = getToken();
 		GWTDocument gWTDocument = new GWTDocument();
 		
@@ -441,15 +412,13 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("get: "+gWTDocument);
+		log.debug("get: {}", gWTDocument);
 		return gWTDocument;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#copy(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void copy(String docPath, String fldPath) throws OKMException {
-		log.debug("copy("+docPath+", " + fldPath + ")");
+		log.debug("copy({}, {})", docPath, fldPath);
 		String token = getToken();
 		
 		try {
@@ -477,11 +446,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("copy: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#isValid(java.lang.String)
-	 */
+	@Override
 	public Boolean isValid(String docPath) throws OKMException {
-		log.debug("isValid("+docPath+")");
+		log.debug("isValid({})", docPath);
 		String token = getToken();
 		
 		try {
@@ -501,11 +468,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#getVersionHistorySize(java.lang.String)
-	 */
+	@Override
 	public Long getVersionHistorySize(String docPath) throws OKMException {
-		log.debug("getVersionHistorySize("+docPath+")");
+		log.debug("getVersionHistorySize({})", docPath);
 		String token = getToken();
 	
 		try {
@@ -522,11 +487,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDocumentService#purgeVersionHistory(java.lang.String)
-	 */
+	@Override
 	public void purgeVersionHistory(String docPath) throws OKMException {
-		log.debug("purgeVersionHistory("+docPath+")");
+		log.debug("purgeVersionHistory({})", docPath);
 		String token = getToken();
 	
 		try {
@@ -548,8 +511,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		log.debug("purgeVersionHistory: void");
 	}
 	
+	@Override
 	public void addNote(String docPath, String text) throws OKMException {
-		log.debug("addNote("+docPath+", "+text+")");
+		log.debug("addNote({}, {})", docPath, text);
 		String token = getToken();
 		
 		try {
