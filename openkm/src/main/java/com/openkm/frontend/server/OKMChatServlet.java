@@ -151,6 +151,11 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     public void addMessageToRoom(String room, String msg) {
     	addUserMessageToRoom(room, msg);
     }
+    
+    public void closeRoom(String room) {
+    	removeUserRoom(room);
+    	removeUserMessageRoom(room);
+    }
 
     /**
      * loginUser
@@ -194,18 +199,33 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     /**
      * addUserToRoom
      * 
-     * @param roomName
+     * @param room
      * @param user
      */
-    private synchronized void addRoomToUser(String roomName, String user) {
+    private synchronized void addRoomToUser(String room, String user) {
     	if (!usersRooms.keySet().contains(user)) {
     		List<String> userRoomList = new ArrayList<String>();
-    		userRoomList.add(roomName);
+    		userRoomList.add(room);
     		usersRooms.put(user, userRoomList);
     	} else {
     		List<String> userRoomList = usersRooms.get(user);
-    		if (!userRoomList.contains(roomName)) {
-    			userRoomList.add(roomName);
+    		if (!userRoomList.contains(room)) {
+    			userRoomList.add(room);
+    		}
+    	}
+    }
+    
+    /**
+     * removeUserRoom
+     * 
+     * @param room
+     */
+    private synchronized void removeUserRoom(String room) {
+    	String user = getThreadLocalRequest().getRemoteUser();
+    	if (usersRooms.keySet().contains(user)) {
+    		List<String> userRoomList = usersRooms.get(user);
+    		if (userRoomList.contains(room)) {
+    			userRoomList.remove(room);
     		}
     	}
     }
@@ -305,6 +325,20 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	if (msgUsersRooms.containsKey(room)) {
     		if (!msgUsersRooms.get(room).containsKey(user)) {
     			msgUsersRooms.get(room).put(user, new ArrayList<String>());
+    		}
+    	}
+    }
+    
+    /**
+     * removeUserMessageRoom
+     * 
+     * @param room
+     */
+    private synchronized void removeUserMessageRoom(String room) {
+    	String user = getThreadLocalRequest().getRemoteUser();
+    	if (msgUsersRooms.containsKey(room)) {
+    		if (msgUsersRooms.get(room).containsKey(user)) {
+    			msgUsersRooms.remove(user);
     		}
     	}
     }
