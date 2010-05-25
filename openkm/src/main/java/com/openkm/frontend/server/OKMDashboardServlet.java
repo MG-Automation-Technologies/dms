@@ -56,13 +56,10 @@ import com.openkm.frontend.client.service.OKMDashboardService;
  *                           value="A value"
  */
 public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMDashboardService {
-
 	private static Logger log = LoggerFactory.getLogger(OKMDashboardServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLockedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserLockedDocuments() throws OKMException {
 		log.debug("getUserLockedDocuments()");
 		List<GWTDashboardStatsDocumentResult> lockList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -73,8 +70,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardStatsDocumentResult documentResult = it.next();
 				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
-
-				log.debug("DocumentResult: "+documentResult+" -> DocumentResultClient: "+documentResultClient);
 				lockList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -82,14 +77,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLockedDocuments:"+lockList);
+		log.debug("getUserLockedDocuments: {}", lockList);
 		return lockList;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserCheckedOutDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserCheckedOutDocuments() throws OKMException {
 		log.debug("getUserCheckedOutDocuments()");
 		List<GWTDashboardStatsDocumentResult> chekoutList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -100,8 +92,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {
 				DashboardStatsDocumentResult documentResult = it.next();
 				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
-
-				log.debug("DocumentResult: "+documentResult+" -> DocumentResultClient: "+documentResultClient);
 				chekoutList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -109,13 +99,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserCheckedOutDocuments:"+chekoutList);
+		log.debug("getUserCheckedOutDocuments: {}", chekoutList);
 		return chekoutList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLastModifiedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserLastModifiedDocuments() throws OKMException {
 		log.debug("getUserLastModifiedDocuments()");
 		List<GWTDashboardStatsDocumentResult> lastModifiedList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -126,8 +114,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardStatsDocumentResult documentResult = it.next();
 				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
-
-				log.debug("DocumentResult: "+documentResult+" -> DocumentResultClient: "+documentResultClient);
 				lastModifiedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -135,13 +121,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLastModifiedDocuments:"+lastModifiedList);
+		log.debug("getUserLastModifiedDocuments: {}", lastModifiedList);
 		return lastModifiedList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserSubscribedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserSubscribedDocuments() throws OKMException {
 		log.debug("getUserSubscribedDocuments()");
 		List<GWTDashboardStatsDocumentResult> subscribedList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -152,8 +136,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardStatsDocumentResult documentResult = it.next();
 				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
-
-				log.debug("DocumentResult: "+documentResult+" -> DocumentResultClient: "+documentResultClient);
 				subscribedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -161,13 +143,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserSubscribedDocuments:"+subscribedList);
+		log.debug("getUserSubscribedDocuments: {}", subscribedList);
 		return subscribedList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLastUploadedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserLastUploadedDocuments() throws OKMException {
 		log.debug("getUserLastUploadedDocuments()");
 		List<GWTDashboardStatsDocumentResult> lastUploadedList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -178,8 +158,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardStatsDocumentResult documentResult = it.next();
 				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
-
-				log.debug("DocumentResult: "+documentResult+" -> DocumentResultClient: "+documentResultClient);
 				lastUploadedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -187,13 +165,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLastUploadedDocuments:"+lastUploadedList);
+		log.debug("getUserLastUploadedDocuments: {}", lastUploadedList);
 		return lastUploadedList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserSubscribedFolders()
-	 */
+	@Override
 	public List<GWTDashboardStatsFolderResult> getUserSubscribedFolders() throws OKMException {
 		log.debug("getUserSubscribedFolders()");
 		List<GWTDashboardStatsFolderResult> subscribedList = new ArrayList<GWTDashboardStatsFolderResult>();
@@ -204,8 +180,6 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<DashboardStatsFolderResult> it = col.iterator(); it.hasNext();) {		
 				DashboardStatsFolderResult folderResult = it.next();
 				GWTDashboardStatsFolderResult folderResultClient = Util.copy(folderResult);
-
-				log.debug("FolderResult: "+folderResult+" -> FolderResultClient: "+folderResultClient);
 				subscribedList.add(folderResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -213,13 +187,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserSubscribedFolders:"+subscribedList);
+		log.debug("getUserSubscribedFolders: {}", subscribedList);
 		return subscribedList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserSearchs()
-	 */
+	@Override
 	public List<String> getUserSearchs() throws OKMException {
 		log.debug("getUserSearchs()");
 		List<String> searchList = new ArrayList<String>();
@@ -229,21 +201,18 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<String> it = OKMDashboard.getInstance().getUserSearchs(token).iterator(); it.hasNext(); ) {
 				searchList.add(it.next());
 			}
-			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserSearchs:"+searchList);
+		log.debug("getUserSearchs: {}", searchList);
 		return searchList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#find(java.lang.String)
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> find(String name) throws OKMException {
-		log.debug("find("+name+")");
+		log.debug("find({})", name);
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
 		String token = getToken();
 		
@@ -262,13 +231,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("find:"+docList);
+		log.debug("find: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastWeekTopDownloadedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException {
 		log.debug("getLastWeekTopDownloadedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -283,13 +250,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastWeekTopDownloadedDocuments:"+docList);
+		log.debug("getLastWeekTopDownloadedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastMonthTopDownloadedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException {
 		log.debug("getLastMonthTopDownloadedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -304,13 +269,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastMonthTopDownloadedDocuments:"+docList);
+		log.debug("getLastMonthTopDownloadedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastWeekTopModifiedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException {
 		log.debug("getLastWeekTopModifiedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -325,13 +288,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastWeekTopModifiedDocuments:"+docList);
+		log.debug("getLastWeekTopModifiedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastMonthTopModifiedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastMonthTopModifiedDocuments() throws OKMException {
 		log.debug("getLastMonthTopModifiedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -346,13 +307,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastMonthTopModifiedDocuments:"+docList);
+		log.debug("getLastMonthTopModifiedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLastDownloadedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserLastDownloadedDocuments() throws OKMException {
 		log.debug("getUserLastDownloadedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -367,13 +326,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLastDownloadedDocuments:"+docList);
+		log.debug("getUserLastDownloadedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastModifiedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastModifiedDocuments() throws OKMException {
 		log.debug("getLastModifiedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -388,13 +345,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastModifiedDocuments:"+docList);
+		log.debug("getLastModifiedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getLastUploadedDocuments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getLastUploadedDocuments() throws OKMException {
 		log.debug("getLastWeekTopUploadedDocuments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -409,13 +364,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getLastWeekTopUploadedDocuments:"+docList);
+		log.debug("getLastWeekTopUploadedDocuments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLastImportedMailAttachments()
-	 */
+	@Override
 	public List<GWTDashboardStatsDocumentResult> getUserLastImportedMailAttachments() throws OKMException {
 		log.debug("getUserLastImportedMailAttachments()");
 		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
@@ -430,13 +383,11 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLastImportedMailAttachments:"+docList);
+		log.debug("getUserLastImportedMailAttachments: {}", docList);
 		return docList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#getUserLastImportedMails()
-	 */
+	@Override
 	public List<GWTDashboardStatsMailResult> getUserLastImportedMails() throws OKMException {
 		log.debug("getUserLastImportedMails()");
 		List<GWTDashboardStatsMailResult> mailList = new ArrayList<GWTDashboardStatsMailResult>();
@@ -451,16 +402,14 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
 		
-		log.debug("getUserLastImportedMails:"+mailList);
+		log.debug("getUserLastImportedMails: {}", mailList);
 		return mailList;
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMDashboardService#visiteNode(java.lang.String, java.lang.String, java.util.Date)
-	 */
+	@Override
 	public void visiteNode(String source, String node, Date date) throws OKMException {
-		log.debug("visiteNode("+source+", "+node+", "+date+")");
+		log.debug("visiteNode({}, {}, {})", new Object[] { source, node, date });
 		String token = getToken();
 		
 		try {
