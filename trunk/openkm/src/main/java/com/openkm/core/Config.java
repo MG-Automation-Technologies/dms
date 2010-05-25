@@ -167,6 +167,10 @@ public class Config {
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "validator.password.error.min.digits";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "validator.password.error.min.special";
 	
+	// Chat
+	public static final String PROPERTY_CHAT_ENABLED = "chat.enabled";
+	public static final String PROPERTY_CHAT_AUTOLOGIN = "chat.autologin";
+	
 	/**
 	 *  Default values
 	 */
@@ -295,6 +299,12 @@ public class Config {
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_UPPERCASE = "Password error: too few uppercase characters";
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "Password error: too few digits";
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "Password error: too few special characters";
+	
+	// Chat
+	private static String CHAT_ENABLED_STR = "on";
+	public static boolean CHAT_ENABLED = "on".equalsIgnoreCase(CHAT_ENABLED_STR);
+	private static String CHAT_AUTOLOGIN_STR = "on";
+	public static boolean CHAT_AUTOLOGIN = "on".equalsIgnoreCase(CHAT_AUTOLOGIN_STR);
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
@@ -563,6 +573,14 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS, VALIDATOR_PASSWORD_ERROR_MIN_DIGITS);
 			VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = config.getProperty(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
+			
+			// Chat
+			CHAT_ENABLED_STR = config.getProperty(PROPERTY_CHAT_ENABLED, CHAT_ENABLED_STR);
+			CHAT_ENABLED = "on".equalsIgnoreCase(CHAT_ENABLED_STR);
+			values.put(PROPERTY_CHAT_ENABLED, CHAT_ENABLED_STR+" ("+CHAT_ENABLED+")");
+			CHAT_AUTOLOGIN_STR = config.getProperty(PROPERTY_CHAT_AUTOLOGIN, CHAT_AUTOLOGIN_STR);
+			CHAT_AUTOLOGIN = "on".equalsIgnoreCase(CHAT_AUTOLOGIN_STR);
+			values.put(PROPERTY_CHAT_AUTOLOGIN, CHAT_AUTOLOGIN_STR+" ("+CHAT_AUTOLOGIN+")");
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
