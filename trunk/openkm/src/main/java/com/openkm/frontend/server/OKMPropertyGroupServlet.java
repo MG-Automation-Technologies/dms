@@ -62,9 +62,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroupServlet.class);
 	private static final long serialVersionUID = 2638205115826644606L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getAllGroups()
-	 */
+	@Override
 	public List<GWTPropertyGroup> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
@@ -79,7 +77,6 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 				
 				groupList.add(group);
 			}
-
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -88,15 +85,13 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getAllGroups: "+groupList);
+		log.debug("getAllGroups: {}", groupList);
 		return groupList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getAllGroups(java.lang.String)
-	 */
+	@Override
 	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException {
-		log.debug("getAllGroups("+ docPath +")");
+		log.debug("getAllGroups({})", docPath);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
 		String token = getToken();
 
@@ -106,7 +101,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
-				log.debug("Group: "+group);
+				log.debug("Group: {}", group);
 				
 				groupList.add(group);
 			}
@@ -115,7 +110,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			if (!actualGroupsList.isEmpty()) {
 				for (Iterator<GWTPropertyGroup> it = actualGroupsList.iterator(); it.hasNext();) {	
 					GWTPropertyGroup group = it.next();
-					log.debug("Removing Group: "+group);
+					log.debug("Removing Group: {}", group);
 					
 					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); itGroupList.hasNext();) {
 						GWTPropertyGroup groupListElement = itGroupList.next();
@@ -137,20 +132,17 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getAllGroups: "+groupList);
+		log.debug("getAllGroups: {}", groupList);
 		return groupList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#addGroup(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void addGroup(String docPath, String grpName) throws OKMException {
-		log.debug("addGroup()");
+		log.debug("addGroup({}, {})", docPath, grpName);
 		String token = getToken();
 		
 		try {
 			OKMPropertyGroup.getInstance().addGroup(token, docPath, grpName);
-			
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
@@ -171,14 +163,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("addGroup: ");
+		log.debug("addGroup: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getGroups(java.lang.String)
-	 */
+	@Override
 	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException {
-		log.debug("getGroups(" + docPath +")");
+		log.debug("getGroups({})", docPath);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
 		String token = getToken();
 
@@ -187,7 +177,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
-				log.debug("Group: "+group);
+				log.debug("Group: {}", group);
 
 				groupList.add(group);
 			}
@@ -202,15 +192,13 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getGroups: ");
+		log.debug("getGroups: {}", groupList);
 		return groupList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getProperties(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException {
-		log.debug("getProperties(" + docPath + ", " + grpName +")");
+		log.debug("getProperties({}, {})", docPath, grpName);
 		String token = getToken();
 		Map<String, String[]> properties = new HashMap<String, String[]>();
 
@@ -231,15 +219,13 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getProperties: ");
+		log.debug("getProperties: {}", properties);
 		return properties;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getMetaData(java.lang.String)
-	 */
+	@Override
 	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException {
-		log.debug("getMetaData(" + grpName +")");
+		log.debug("getMetaData({})", grpName);
 		String token = getToken();
 		Collection<FormElement> properties = new ArrayList<FormElement>();
 		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
@@ -262,15 +248,13 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getMetaData: ");
+		log.debug("getMetaData: {}", gwtProperties);
 		return gwtProperties;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#setProperties(java.lang.String, java.util.HashMap)
-	 */
+	@Override
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException {
-		log.debug("setProperties(" + docPath +")");
+		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
 		String token = getToken();
 		
 		try {
@@ -298,14 +282,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("setProperties: ");
+		log.debug("setProperties: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#removeGroup(java.lang.String, java.lang.String)
-	 */
-	public void removeGroup( String docPath, String grpName) throws OKMException  {
-		log.debug("removeGroup(" + docPath + "," + grpName +")");
+	@Override
+	public void removeGroup(String docPath, String grpName) throws OKMException  {
+		log.debug("removeGroup({}, {})", docPath, grpName);
 		String token = getToken();
 		
 		try {
@@ -327,14 +309,11 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("removeGroup: ");
+		log.debug("removeGroup: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyGroupService#getPropertyGroupWizard()
-	 */
+	@Override
 	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException {
-		
 		List<GWTPropertyGroup> allPropertyGroupList = getAllGroups();
 		List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
 		

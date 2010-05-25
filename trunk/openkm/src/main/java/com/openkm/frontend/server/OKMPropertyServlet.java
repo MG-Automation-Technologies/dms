@@ -48,11 +48,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyServlet.class);
 	private static final long serialVersionUID = 1138063389446959876L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyService#addCategory(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void addCategory(String nodePath, String category) throws OKMException {
-		log.debug("addCategory(nodePath:"+nodePath+" category:"+category+")");
+		log.debug("addCategory({}, {})", nodePath, category);
 		String token = getToken();
 		try {
 			OKMProperty.getInstance().addCategory(token, nodePath, category);
@@ -75,11 +73,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		log.debug("addCategory: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyService#removeCategory(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void removeCategory(String nodePath, String category) throws OKMException {
-		log.debug("removeCategory(nodePath:"+nodePath+" category:"+category+")");
+		log.debug("removeCategory({}, {})", nodePath, category);
 		String token = getToken();
 		try {
 			OKMProperty.getInstance().removeCategory(token, nodePath, category);
@@ -102,11 +98,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		log.debug("removeCategory: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyService#addKeyword(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void addKeyword(String nodePath, String keyword) throws OKMException {
-		log.debug("addKeyword(nodePath:"+nodePath+" keyword:"+keyword+")");
+		log.debug("addKeyword({}, {})", nodePath, keyword);
 		String token = getToken();
 		try {
 			OKMProperty.getInstance().addKeyword(token, nodePath, keyword);
@@ -129,11 +123,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		log.debug("addKeyword: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMPropertyService#removeKeyword(java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void removeKeyword(String nodePath, String keyword) throws OKMException {
-		log.debug("removeKeyword(nodePath:"+nodePath+" keyword:"+keyword+")");
+		log.debug("removeKeyword({}, {})", nodePath, keyword);
 		String token = getToken();
 		try {
 			OKMProperty.getInstance().removeKeyword(token, nodePath, keyword);
@@ -155,5 +147,4 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		}
 		log.debug("addKeyword: void");
 	}
-
 }
