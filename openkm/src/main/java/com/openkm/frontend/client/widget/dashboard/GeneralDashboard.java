@@ -68,12 +68,24 @@ public class GeneralDashboard extends Composite {
 		vPanelRight = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
-		lastWeekTopDownloadedDocuments = new DashboardWidget("LastWeekTopDownloadedDocuments","dashboard.general.last.week.top.downloaded.documents", "img/icon/actions/download.gif", true);
-		lastMonthTopDownloadedDocuments = new DashboardWidget("LastMonthTopDownloadedDocuments", "dashboard.general.last.month.top.downloaded.documents", "img/icon/actions/download.gif", false);
-		lastWeekTopModifiedDocuments = new DashboardWidget("LastWeekTopModifiedDocuments", "dashboard.general.last.week.top.modified.documents", "img/icon/actions/checkin.gif", false);
-		lastMonthTopModifiedDocuments = new DashboardWidget("LastMonthTopModifiedDocuments", "dashboard.general.last.month.top.modified.documents", "img/icon/actions/checkin.gif", false);
-		lastModifiedDocuments = new DashboardWidget("LastModifiedDocuments", "dashboard.user.last.modified.documents", "img/icon/actions/checkin.gif", true);
-		lastUploadedDocuments = new DashboardWidget("LastUploadedDocuments", "dashboard.general.last.uploaded.documents", "img/icon/actions/add_document.gif", false);
+		lastWeekTopDownloadedDocuments = new DashboardWidget("LastWeekTopDownloadedDocuments",
+				"dashboard.general.last.week.top.downloaded.documents", "img/icon/actions/download.gif",
+				true, "lastWeekTopDownloadedDocuments");
+		lastMonthTopDownloadedDocuments = new DashboardWidget("LastMonthTopDownloadedDocuments",
+				"dashboard.general.last.month.top.downloaded.documents", "img/icon/actions/download.gif",
+				false, "lastMonthTopDownloadedDocuments");
+		lastWeekTopModifiedDocuments = new DashboardWidget("LastWeekTopModifiedDocuments",
+				"dashboard.general.last.week.top.modified.documents", "img/icon/actions/checkin.gif",
+				false, "lastWeekTopModifiedDocuments");
+		lastMonthTopModifiedDocuments = new DashboardWidget("LastMonthTopModifiedDocuments",
+				"dashboard.general.last.month.top.modified.documents", "img/icon/actions/checkin.gif",
+				false, "lastMonthTopModifiedDocuments");
+		lastModifiedDocuments = new DashboardWidget("LastModifiedDocuments",
+				"dashboard.user.last.modified.documents", "img/icon/actions/checkin.gif",
+				true, "lastModifiedDocuments");
+		lastUploadedDocuments = new DashboardWidget("LastUploadedDocuments",
+				"dashboard.general.last.uploaded.documents", "img/icon/actions/add_document.gif",
+				false, "lastUploadedDocuments");
 		
 		vPanelLeft.add(lastWeekTopDownloadedDocuments);
 		vPanelLeft.add(lastMonthTopDownloadedDocuments);

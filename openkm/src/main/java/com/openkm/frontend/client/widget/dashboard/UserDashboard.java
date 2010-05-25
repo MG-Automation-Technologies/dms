@@ -76,13 +76,23 @@ public class UserDashboard extends Composite {
 		hPanel.add(vPanelLeft);
 		hPanel.add(vPanelRight);
 		
-		lockedDocuments = new DashboardWidget("UserLockedDocuments", "dashboard.user.locked.documents", "img/icon/lock.gif", true);
-		chechoutDocuments = new DashboardWidget("UserCheckedOutDocuments", "dashboard.user.checkout.documents", "img/icon/actions/checkout.gif", true);
-		lastModifiedDocuments = new DashboardWidget("UserLastModifiedDocuments", "dashboard.user.last.modified.documents", "img/icon/actions/checkin.gif", true);
-		lastDownloadedDocuments = new DashboardWidget("UserLastDownloadedDocuments", "dashboard.user.last.downloaded.documents", "img/icon/actions/download.gif", false);
-		subscribedDocuments = new DashboardWidget("UserSubscribedDocuments", "dashboard.user.subscribed.documents", "img/icon/subscribed.gif", false);
-		subscribedFolder = new DashboardWidget("UserSubscribedFolders", "dashboard.user.subscribed.folders", "img/icon/subscribed.gif", false);
-		lastUploadedDocuments = new DashboardWidget("UserLastUploadedDocuments", "dashboard.user.last.uploaded.documents", "img/icon/actions/add_document.gif", true);
+		lockedDocuments = new DashboardWidget("UserLockedDocuments", "dashboard.user.locked.documents",
+				"img/icon/lock.gif", true, "userLockedDocuments");
+		chechoutDocuments = new DashboardWidget("UserCheckedOutDocuments", "dashboard.user.checkout.documents",
+				"img/icon/actions/checkout.gif", true, "userCheckedOutDocuments");
+		lastModifiedDocuments = new DashboardWidget("UserLastModifiedDocuments",
+				"dashboard.user.last.modified.documents","img/icon/actions/checkin.gif", true,
+				"userLastModifiedDocuments");
+		lastDownloadedDocuments = new DashboardWidget("UserLastDownloadedDocuments",
+				"dashboard.user.last.downloaded.documents", "img/icon/actions/download.gif", false,
+				"userLastDownloadedDocuments");
+		subscribedDocuments = new DashboardWidget("UserSubscribedDocuments", "dashboard.user.subscribed.documents",
+				"img/icon/subscribed.gif", false, "userSubscribedDocuments");
+		subscribedFolder = new DashboardWidget("UserSubscribedFolders", "dashboard.user.subscribed.folders",
+				"img/icon/subscribed.gif", false, "userSubscribedFolders");
+		lastUploadedDocuments = new DashboardWidget("UserLastUploadedDocuments",
+				"dashboard.user.last.uploaded.documents", "img/icon/actions/add_document.gif", true,
+				"userLastUploadedDocuments");
 		
 		vPanelLeft.add(lockedDocuments);
 		vPanelLeft.add(chechoutDocuments);

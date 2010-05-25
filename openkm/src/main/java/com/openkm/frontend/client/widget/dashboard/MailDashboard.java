@@ -65,8 +65,11 @@ public class MailDashboard extends Composite {
 		vPanelRight = new VerticalPanel();
 		hPanel = new HorizontalPanel();
 		
-		userLastImportedMails = new DashboardWidget("UserLastImportedMails","dashboard.mail.last.imported.mails", "img/email.gif", true);
-		userLastImportedAttachments = new DashboardWidget("UserLastImportedMailAttachments", "dashboard.mail.last.imported.attached.documents", "img/email_attach.gif", true);
+		userLastImportedMails = new DashboardWidget("UserLastImportedMails",
+				"dashboard.mail.last.imported.mails", "img/email.gif", true, "userLastImportedMails");
+		userLastImportedAttachments = new DashboardWidget("UserLastImportedMailAttachments",
+				"dashboard.mail.last.imported.attached.documents", "img/email_attach.gif", true,
+				"userLastImportedMailAttachments");
 		
 		vPanelLeft.add(userLastImportedMails);
 		vPanelRight.add(userLastImportedAttachments);

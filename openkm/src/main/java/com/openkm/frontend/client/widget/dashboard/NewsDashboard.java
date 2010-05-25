@@ -106,7 +106,8 @@ public class NewsDashboard extends WidgetToFire {
 				String key = it.next();
 				if (!keyMap.contains(key)) {
 					keyMap.add(key);
-					DashboardWidget dashboardWidget = new DashboardWidget( key, key, "img/icon/news.gif", true);
+					DashboardWidget dashboardWidget = new DashboardWidget(key, key, "img/icon/news.gif", true, 
+							"news_"+key);
 					dashboardWidget.setWidgetToFire(Main.get().mainPanel.dashboard.newsDashboard);
 					hWidgetSearch.put(key, dashboardWidget);
 					dashboardWidget.setWidth(columnWidth);
