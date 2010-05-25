@@ -32,11 +32,9 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -55,7 +53,7 @@ import com.openkm.frontend.client.service.OKMChatServiceAsync;
  * @author jllort
  *
  */
-public class ChatRoomPopup extends DialogBox {
+public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	private final static int DELAY = 200; // mseg
@@ -68,6 +66,7 @@ public class ChatRoomPopup extends DialogBox {
 	private ScrollPanel scrollPanel;
 	private List<String> usersInRoom;
 	private HTML usersInRoomText;
+	private ChatRoomDialogBox singleton;
 	
 	/**
 	 * Chat room popup
@@ -76,6 +75,7 @@ public class ChatRoomPopup extends DialogBox {
 		// Establishes auto-close when click outside
 		super(false,false);
 		setText(Main.i18n("chat.room"));
+		singleton = this;
 		
 		usersInRoom = new ArrayList<String>();
 		usersInRoom.add(user);
@@ -87,6 +87,19 @@ public class ChatRoomPopup extends DialogBox {
 		close = new Button(Main.i18n("button.close"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+				endPoint.setServiceEntryPoint(Config.OKMChatService);
+				chatService.logout(new AsyncCallback<Object>() {
+					@Override
+					public void onSuccess(Object arg0) {
+						Main.get().mainPanel.bottomPanel.userInfo.removeChatRoom(singleton);
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Main.get().showError("Logout", caught);
+					}
+				});
 				hide();
 			}
 		});
@@ -109,18 +122,25 @@ public class ChatRoomPopup extends DialogBox {
 		textArea.setSize("390", "50");
 		textArea.addKeyUpHandler(new KeyUpHandler() {
 			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length()>0) {
+			public void onKeyUp(KeyUpEvent event) {		
+				if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length()==1) {
+					// Case only has typewrite a enter character, reset textArea values
+					textArea.setText("");
+				} else 	if ((char)KeyCodes.KEY_ENTER == event.getNativeKeyCode() && textArea.getText().length()>1) {
+					textArea.setEnabled(false);
 					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
 					endPoint.setServiceEntryPoint(Config.OKMChatService);
-					chatService.addMessageToRoom(room, textArea.getText(), new AsyncCallback<Object>() {
+					chatService.addMessageToRoom(room, formatingMessage(textArea.getText()), new AsyncCallback<Object>() {
 						@Override
 						public void onSuccess(Object result) {
+							addMessage(Main.get().workspaceUserProperties.getUser() +": " + formatingMessage(textArea.getText()));
 							textArea.setText("");
+							textArea.setEnabled(true);
 						}
 						
 						@Override
 						public void onFailure(Throwable caught) {
+							textArea.setEnabled(true);
 							Main.get().showError("AddMessageToRoom", caught);
 						}
 					});
@@ -223,5 +243,15 @@ public class ChatRoomPopup extends DialogBox {
 	 */
 	private void addMessage(String msg) {
 		table.setHTML(table.getRowCount(),0,msg);
+	}
+	
+	/**
+	 * formatingMessage
+	 * 
+	 * @param msg
+	 * @return
+	 */
+	private String formatingMessage(String msg) {
+		return msg.replaceAll("\\n", "</br>");
 	}
 }
