@@ -46,15 +46,12 @@ import com.openkm.frontend.client.service.OKMNotifyService;
  *                           value="A value"
  */
 public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyService {
-	
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(OKMFolderServlet.class);
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMNotifyService#subscribe(java.lang.String)
-	 */
-	public void subscribe( String nodePath) throws OKMException  {
-		log.debug("subscribe("+nodePath+")");
+	@Override
+	public void subscribe(String nodePath) throws OKMException  {
+		log.debug("subscribe({})", nodePath);
 		String token = getToken();
 		
 		try {
@@ -76,11 +73,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		log.debug("subscribe: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMNotifyService#unsubscribe(java.lang.String)
-	 */
-	public void unsubscribe( String nodePath) throws OKMException {
-		log.debug("subscribe("+nodePath+")");
+	@Override
+	public void unsubscribe(String nodePath) throws OKMException {
+		log.debug("subscribe({})", nodePath);
 		String token = getToken();
 		
 		try {
@@ -102,11 +97,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		log.debug("subscribe: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMNotifyService#notify(java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public void notify(String docPath, String users, String message) throws OKMException {
-		log.debug("notify("+docPath+")");
+		log.debug("notify({}, {}, {})", new Object[] { docPath, users, message });
 		String token = getToken();
 		
 		try {
@@ -121,6 +114,8 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		} catch (RepositoryException e) { 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} 
+		}
+		
+		log.debug("notify: void");
 	}
 }
