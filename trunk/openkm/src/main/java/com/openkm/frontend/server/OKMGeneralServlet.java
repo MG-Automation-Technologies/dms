@@ -46,12 +46,11 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	private static Logger log = LoggerFactory.getLogger(OKMGeneralServlet.class);
 	private static final long serialVersionUID = -879908904295685769L;
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMGeneralService#getFileUploadStatus()
-	 */
+	@Override
 	public GWTFileUploadingStatus getFileUploadStatus() {
 		log.debug("getFileUploadStatus()");
 		GWTFileUploadingStatus fus = new GWTFileUploadingStatus(); 
+		
 		if (getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS)!=null) {
 			FileUploadListener listener = (FileUploadListener)getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS);
 			fus.setStarted(true);
@@ -63,15 +62,13 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
             }
 		}
 		
-		log.debug("getFileUploadStatus:");
+		log.debug("getFileUploadStatus: {}", fus);
 		return fus;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.frontend.client.service.OKMGeneralService#testImapConnection(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
+	@Override
 	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder) {
-		log.debug("testImapConnection(host:"+host+",user:"+user+",imapFolder"+imapFolder+")");
+		log.debug("testImapConnection({}, {}, {}, {})", new Object[] { host, user, password, imapFolder });
 		GWTTestImap test = new GWTTestImap();
 		
 		try {
@@ -83,6 +80,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 			e.printStackTrace();
 		}
 		
+		log.debug("testImapConnection: {}", test);
 		return test;
 	}
 }

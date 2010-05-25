@@ -35,7 +35,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 
 /**
- * Extends the RemoteServiceServlet to optain token auth on developement and production
+ * Extends the RemoteServiceServlet to obtain token auth on development and production
  * environments. Config.GWTDS determines the environment development and production values.
  * 
  * @author jllort
