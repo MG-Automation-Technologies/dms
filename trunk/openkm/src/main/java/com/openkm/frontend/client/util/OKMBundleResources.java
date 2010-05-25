@@ -191,6 +191,9 @@ public interface OKMBundleResources extends ClientBundle {
 	@Source("com/openkm/frontend/public/img/icon/chat/new_chat_room.png")
 	public ImageResource newChatRoom();
 	
+	@Source("com/openkm/frontend/public/img/icon/chat/add_user.png")
+	public ImageResource addUserToChatRoom();
+	
 	@Source("com/openkm/frontend/public/img/icon/connect.gif")
 	public ImageResource openkmConnected();
 	

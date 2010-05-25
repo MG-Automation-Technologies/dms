@@ -52,12 +52,18 @@ public class OnlineUsersPopup extends DialogBox {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	
+	public static final int ACTION_NONE 			= -1;
+	public static final int ACTION_NEW_CHAT 		= 0;
+	public static final int ACTION_ADD_USER_TO_ROOM = 1;
+	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private Button cancel;
 	private Button accept;
 	private ExtendedFlexTable table;
 	private ScrollPanel scrollPanel;
+	private int action = ACTION_NONE;
+	private String room = "";
 	
 	/**
 	 * Online users popup
@@ -80,7 +86,8 @@ public class OnlineUsersPopup extends DialogBox {
 		accept = new Button(Main.i18n("button.accept"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				createNewChatRoom();
+				hide();
+				executeAction();
 			}
 		});
 		
@@ -196,6 +203,59 @@ public class OnlineUsersPopup extends DialogBox {
 				}
 			});
 		}
-		hide();
+	}
+	
+	/**
+	 * addUserToRoom
+	 */
+	public void addUserToRoom() {
+		if (table.getSelectedRow()>=0) {
+			String user = table.getHTML(table.getSelectedRow(), 0);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.addUserToChatRoom(room, user, new AsyncCallback<Object>() {
+				@Override
+				public void onSuccess(Object result) {
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("AddUserToChatRoom", caught);
+				}
+			});
+		}
+	}
+	
+	/**
+	 * setAction
+	 * 
+	 * @param action
+	 */
+	public void setAction(int action) {
+		setAction(action,"");
+	}
+	
+	/**
+	 * setAction
+	 * 
+	 * @param action
+	 */
+	public void setAction(int action, String room) {
+		this.action = action;
+		this.room = room;
+	}
+	
+	/**
+	 * executeAction
+	 */
+	private void executeAction() {
+		switch (action) {
+			case ACTION_NEW_CHAT:
+				createNewChatRoom();
+				break;
+			case ACTION_ADD_USER_TO_ROOM:
+				addUserToRoom();
+				break;
+		}
 	}
 }
