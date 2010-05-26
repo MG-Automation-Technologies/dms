@@ -22,9 +22,9 @@
         <tr><th>File</th><th>Action</th></tr>
         <c:forEach var="log" items="${files}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${log}</td>
+            <td>${log.path}</td>
             <td>
-              <a href="LogCat?action=<%=WebUtil.VIEW%>&file=${log}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
+              <a href="LogCat?action=<%=WebUtil.VIEW%>&file=${log.name}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
             </td>
           </tr>
         </c:forEach>

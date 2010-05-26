@@ -22,6 +22,7 @@
         <input type="hidden" name="action" value="<%=WebUtil.VIEW%>"/>
         <input type="hidden" name="file" value="${file}"/>
         <table class="form">
+          <tr><td>File</td><td>${file}</td></tr>
           <tr><td>Begin</td><td><input type="text" name="begin" value="${begin}"/></td></tr>
           <tr><td>End</td><td><input type="text" name="end" value="${end}"/></td></tr>
           <tr><td>String</td><td><input type="text" name="str" value="${str}"/></td></tr>
