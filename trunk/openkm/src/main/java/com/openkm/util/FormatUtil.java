@@ -162,6 +162,7 @@ public class FormatUtil {
 			int maxLines = 0;
 			
 			for (LineIterator lit = FileUtils.lineIterator(flog); lit.hasNext(); ) {
+				lit.nextLine();
 				maxLines++;
 			}
 			
@@ -173,10 +174,6 @@ public class FormatUtil {
 				end += maxLines + 1;
 			}
 		}
-		
-		log.info("length: {}", flog.length());
-		log.info("begin: {}", begin);
-		log.info("end: {}", end);
 		
 		for (LineIterator lit = FileUtils.lineIterator(flog); lit.hasNext(); ) {
 			String line = lit.nextLine();
