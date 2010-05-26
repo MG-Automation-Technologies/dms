@@ -208,7 +208,7 @@ public class Config {
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = ""; // (&(objectClass=inetOrgPerson)(mail=*))
 	public static String PRINCIPAL_LDAP_MAIL_ATTRIBUTE = ""; // mail
 	
-	private static String MAX_FILE_SIZE_STR = "25"; // 25 Megas
+	private static String MAX_FILE_SIZE_STR = "64"; // 64 Megas
 	public static int MAX_FILE_SIZE = Integer.parseInt(MAX_FILE_SIZE_STR) * 1024 * 1024;
 	private static String MAX_SEARCH_RESULTS_STR = "261006"; // Almost infinite
 	public static int MAX_SEARCH_RESULTS = Integer.parseInt(MAX_SEARCH_RESULTS_STR);
