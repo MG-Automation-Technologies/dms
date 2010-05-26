@@ -21,20 +21,31 @@
 
 package com.openkm.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.openkm.bean.LogMessage;
 
 /**
  * @author pavila
  *
  */
 public class FormatUtil {
+	private static Logger log = LoggerFactory.getLogger(FormatUtil.class);
 	
 	/**
 	 * Detect if the current browser is a mobile one
@@ -137,5 +148,49 @@ public class FormatUtil {
 	 */
 	public static String escapeHtml(String str) {
 		return str.replace("<", "&lt;").replace(">", "&gt;");
+	}
+	
+	/**
+	 * Parser log file
+	 */
+	public static Collection<LogMessage> parseLog(File flog, int begin, int end, String str) throws IOException {
+		log.info("parseLog({}, {}, {}, {})", new Object[] { flog, begin, end, str });
+		ArrayList<LogMessage> al = new ArrayList<LogMessage>();
+		int i = 0;
+		
+		if (begin < 0 || end < 0) {
+			int maxLines = 0;
+			
+			for (LineIterator lit = FileUtils.lineIterator(flog); lit.hasNext(); ) {
+				maxLines++;
+			}
+			
+			if (begin < 0) {
+				begin += maxLines;
+			}
+			
+			if (end < 0) {
+				end += maxLines + 1;
+			}
+		}
+		
+		log.info("length: {}", flog.length());
+		log.info("begin: {}", begin);
+		log.info("end: {}", end);
+		
+		for (LineIterator lit = FileUtils.lineIterator(flog); lit.hasNext(); ) {
+			String line = lit.nextLine();
+			i++;
+			
+			if ((str == null || line.indexOf(str) > -1) && i >= begin && i <= end) {
+				LogMessage lm = new LogMessage();
+				lm.setLine(i);
+				lm.setMessage(line);
+				al.add(lm);
+			}
+		}
+		
+		log.info("parseLog: {}", al);
+		return al;
 	}
 }
