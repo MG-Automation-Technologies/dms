@@ -22,6 +22,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -46,12 +48,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.core.Config;
 import com.openkm.core.SessionManager;
+import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.WebUtil;
 
@@ -151,6 +155,9 @@ public class RepositoryServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Get child from node
+	 */
 	private Collection<HashMap<String, String>> getChilds(Node node) throws RepositoryException {
 		ArrayList<HashMap<String, String>> al = new ArrayList<HashMap<String,String>>();
 
@@ -176,6 +183,9 @@ public class RepositoryServlet extends HttpServlet {
 		return al;
 	}
 	
+	/**
+	 * Make child node comparable
+	 */
 	protected class ChildCmp implements Comparator<HashMap<String, String>> {
 		@Override
 		public int compare(HashMap<String, String> arg0, HashMap<String, String> arg1) {
@@ -183,6 +193,9 @@ public class RepositoryServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Get properties from node
+	 */
 	private Collection<HashMap<String, String>> getProperties(Node node) throws ValueFormatException, RepositoryException {
 		ArrayList<HashMap<String, String>> al = new ArrayList<HashMap<String,String>>();
 		
@@ -196,10 +209,22 @@ public class RepositoryServlet extends HttpServlet {
 			hm.put("multiple", Boolean.toString(pd.isMultiple()));
 			hm.put("type", NODE_TYPE[pd.getRequiredType()]);
 			
-			if (pd.isMultiple()) {
-				hm.put("value", toString(p.getValues()));
+			if (pd.getRequiredType() == PropertyType.BINARY) {
+				InputStream is = p.getStream();
+				
+				try {
+					hm.put("value", "DATA: "+FormatUtil.formatSize(is.available()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					IOUtils.closeQuietly(is);
+				}
 			} else {
-				hm.put("value", p.getString());
+				if (pd.isMultiple()) {
+					hm.put("value", toString(p.getValues()));
+				} else {
+					hm.put("value", p.getString());
+				}
 			}
 						
 			al.add(hm);
@@ -209,6 +234,9 @@ public class RepositoryServlet extends HttpServlet {
 		return al;
 	}
 	
+	/**
+	 * Make properties comparable
+	 */
 	protected class PropertyCmp implements Comparator<HashMap<String, String>> {
 		@Override
 		public int compare(HashMap<String, String> arg0, HashMap<String, String> arg1) {
