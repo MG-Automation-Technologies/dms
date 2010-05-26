@@ -30,8 +30,11 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 public class WebUtil {
-
 	public static final String EMPTY_STRING = "";
+	public static final String LIST = "list";
+	public static final String VIEW = "view";
+	public static final String EDIT = "edit";
+	public static final String DELETE = "delete";
 	
 	/**
 	 * Extrae un parámetro de tipo String del request. Si el parámetro no existe devuelve
