@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
@@ -126,21 +125,6 @@ public class Notes extends Composite {
 		}
 		
 		initWidget(scrollPanel);
-	}
-	
-	/**
-	 * Set the WordWarp for all the row cells
-	 * 
-	 * @param row The row cell
-	 * @param columns Number of row columns
-	 * @param warp
-	 * @param table The table to change word wrap
-	 */
-	private void setRowWordWarp(int row, int columns, boolean warp, FlexTable table) {
-		CellFormatter cellFormatter = table.getCellFormatter();
-		for (int i=0; i<columns; i++) {
-			cellFormatter.setWordWrap(row, i, false);
-		}
 	}
 	
 	/**

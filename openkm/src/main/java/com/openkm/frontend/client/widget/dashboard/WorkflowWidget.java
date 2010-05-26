@@ -30,17 +30,15 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.widget.ConfirmPopup;
@@ -179,22 +177,25 @@ public class WorkflowWidget extends Composite {
 		for (ListIterator<GWTTaskInstance> it = taskIntanceList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
 			final GWTTaskInstance taskInstanceResult = it.next();
-			Hyperlink taskName = new Hyperlink();
+			Anchor taskName = new Anchor();
 			taskName.setText(taskInstanceResult.getName());
 			taskName.setTitle(taskInstanceResult.getProcessInstance().getProcessDefinition().getName());
 			switch (widgetType) {
 			
 				case TYPE_PENDING_TASK:
-					taskName.addClickListener(new ClickListener() {
-						public void onClick(Widget sender) {
+					taskName.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
 							Main.get().mainPanel.dashboard.workflowDashboard.workflowFormPanel.setTaskInstance(taskInstanceResult);
 						}
 					});
 					break;
 					
 				case TYPE_POOLED_TASK:
-					taskName.addClickListener(new ClickListener() {
-						public void onClick(Widget sender) {
+					taskName.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
 							Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_GET_POOLED_WORKFLOW_TASK);
 							Main.get().confirmPopup.show();
 							taskInstancePooled = taskInstanceResult;

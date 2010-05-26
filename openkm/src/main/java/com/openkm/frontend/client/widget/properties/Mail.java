@@ -27,12 +27,12 @@ import java.util.Map;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
@@ -155,7 +155,7 @@ public class Mail extends Composite {
 	 * @param mail The document object
 	 */
 	public void set(GWTMail mail) {
-		Hyperlink hFrom = new Hyperlink();
+		Anchor hFrom = new Anchor();
 		final String mailFrom = mail.getFrom().substring(mail.getFrom().indexOf("<")+1, mail.getFrom().indexOf(">"));
 		hFrom.setHTML(mail.getFrom().replace("<", "&lt;").replace(">", "&gt;"));
 		hFrom.setTitle("mailto:"+mailFrom);
@@ -171,7 +171,7 @@ public class Mail extends Composite {
 		
 		VerticalPanel replyPanel = new VerticalPanel();
 		for (int i=0; i<mail.getReply().length; i++) {
-			Hyperlink hReply = new Hyperlink();
+			Anchor hReply = new Anchor();
 			final String mailReply = mail.getReply()[i].substring(mail.getReply()[i].indexOf("<")+1, mail.getReply()[i].indexOf(">"));
 			hReply.setHTML(mail.getReply()[i].replace("<", "&lt;").replace(">", "&gt;"));
 			hReply.setTitle("mailto:"+mailReply);
@@ -189,7 +189,7 @@ public class Mail extends Composite {
 		
 		VerticalPanel toPanel = new VerticalPanel();
 		for (int i=0; i<mail.getTo().length; i++) {
-			Hyperlink hTo = new Hyperlink();
+			Anchor hTo = new Anchor();
 			final String mailTo = mail.getTo()[i].substring(mail.getTo()[i].indexOf("<")+1, mail.getTo()[i].indexOf(">"));
 			hTo.setHTML(mail.getTo()[i].replace("<", "&lt;").replace(">", "&gt;"));
 			hTo.setTitle("mailto:"+mailTo);
@@ -220,7 +220,7 @@ public class Mail extends Composite {
 			final GWTDocument attach = it.next();
 			attachmentsList.put(new Integer(count), attach);
 			count++;
-			Hyperlink hLink = new Hyperlink();
+			Anchor hLink = new Anchor();
 			hLink.setHTML(attach.getName());
 			hLink.setTitle(attach.getName());
 			hLink.setStyleName("okm-Mail-Link");

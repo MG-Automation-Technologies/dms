@@ -24,7 +24,6 @@ package com.openkm.frontend.client.widget.startup;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -33,17 +32,17 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.util.OKMBundleResources;
 
 /**
  * @author jllort
  *
  */
 public class StartUpPopup extends DialogBox implements ClickHandler {
-	private StartUpImageBundle suImageBundle = (StartUpImageBundle) GWT.create(StartUpImageBundle.class);
 	private VerticalPanel vPanel;
 	private VerticalPanel status;
 	private ScrollPanel scrollPanel;
@@ -88,7 +87,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		vPanel.setHeight("220px");
 		
 		for (int i=0; i<StartUp.STARTUP_KEEP_ALIVE; i++) {
-			table.setWidget(0, i, suImageBundle.loadedDisabledIcon().createImage());
+			table.setWidget(0, i, new Image(OKMBundleResources.INSTANCE.loadedDisabledIcon()));
 		}
 		
 		setText(Main.i18n("startup.openkm"));
@@ -114,7 +113,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 				tmpHTML.setWordWrap(false);
 				status.add(tmpHTML);
 				scrollPanel.ensureVisible(tmpHTML);
-				table.setWidget(0, i, suImageBundle.loadedErrorIcon().createImage());
+				table.setWidget(0, i, new Image(OKMBundleResources.INSTANCE.loadedErrorIcon()));
 			}
 		}
 		
@@ -126,7 +125,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		}
 		status.add(tmpHTML);
 		scrollPanel.ensureVisible(tmpHTML);
-		table.setWidget(0, actual, suImageBundle.loadedIcon().createImage());
+		table.setWidget(0, actual, new Image(OKMBundleResources.INSTANCE.loadedIcon()));
 		this.actual = actual;
 	}
 	

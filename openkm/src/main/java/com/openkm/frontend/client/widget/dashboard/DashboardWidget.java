@@ -36,16 +36,15 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
@@ -58,6 +57,7 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 
 /**
@@ -211,7 +211,7 @@ public class DashboardWidget extends Composite {
 			int row = table.getRowCount();
 			final GWTDashboardStatsDocumentResult dsDocumentResult = it.next();
 			final GWTDocument doc = dsDocumentResult.getDocument();
-			Hyperlink docName = new Hyperlink();
+			Anchor docName = new Anchor();
 			docName.setText(doc.getName());
 			docName.setTitle(doc.getPath());
 			docName.addClickHandler(new ClickHandler() { 
@@ -227,7 +227,6 @@ public class DashboardWidget extends Composite {
 				}
 			});
 			docName.setStyleName("okm-Hyperlink");
-						
 			table.setHTML(row, 0, Util.mimeImageHTML(doc.getMimeType()));
 			table.setWidget(row, 1, docName);
 			DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
@@ -272,8 +271,7 @@ public class DashboardWidget extends Composite {
 					table.setHTML(row, 0, Util.imageItemHTML("img/menuitem_empty_ro.gif"));
 				}
 			}
-			
-			Hyperlink folderName = new Hyperlink(); 
+			Anchor folderName = new Anchor();
 			folderName.setText(folder.getName());
 			folderName.setTitle(folder.getPath());
 			folderName.addClickHandler(new ClickHandler() { 
@@ -315,7 +313,7 @@ public class DashboardWidget extends Composite {
 			int row = table.getRowCount();
 			final GWTDashboardStatsMailResult dsMailResult = it.next();
 			final GWTMail mail = dsMailResult.getMail();
-			Hyperlink mailName = new Hyperlink();
+			Anchor mailName = new Anchor();
 			mailName.setText(mail.getSubject());
 			mailName.setTitle(mail.getPath());
 			mailName.addClickHandler(new ClickHandler() { 
@@ -515,13 +513,13 @@ public class DashboardWidget extends Composite {
 			
 			zoom = visible;
 			if (zoom) {
-				zoomImage = new Image("img/zoom_out.gif");
+				zoomImage = new Image(OKMBundleResources.INSTANCE.zoomOut());
 			} else {
-				zoomImage = new Image("img/zoom_in.gif");
+				zoomImage = new Image(OKMBundleResources.INSTANCE.zoomIn());
 			}
 			zoomImage.setStyleName("okm-Hyperlink");
 			
-			viewedImage = new Image("img/viewed.gif");
+			viewedImage = new Image(OKMBundleResources.INSTANCE.viewed());
 			viewedImage.setStyleName("okm-Hyperlink");
 			
 			viewedImage.addClickHandler(new ClickHandler() { 
@@ -532,7 +530,7 @@ public class DashboardWidget extends Composite {
 				}
 			});
 			
-			feedImage = new Image("img/feed.gif");
+			feedImage = new Image(OKMBundleResources.INSTANCE.feed());
 			feedImage.setStyleName("okm-Hyperlink");
 			
 			feedImage.addClickHandler(new ClickHandler() { 
@@ -549,9 +547,9 @@ public class DashboardWidget extends Composite {
 						zoom = !zoom;
 						table.setVisible(zoom);
 						if (zoom) {
-							zoomImage.setUrl("img/zoom_out.gif");
+							zoomImage.setResource(OKMBundleResources.INSTANCE.zoomOut());
 						} else {
-							zoomImage.setUrl("img/zoom_in.gif");
+							zoomImage.setResource(OKMBundleResources.INSTANCE.zoomIn());
 						}
 					} else {
 						flagZoom = true;
@@ -650,13 +648,13 @@ public class DashboardWidget extends Composite {
 				headerNotViewedResults.setHTML("&nbsp;" + Main.i18n("dashboard.new.items") + ":&nbsp;" + value + "&nbsp;&nbsp;");
 				titlePanel.setStyleName("okm-NotViewed");
 				headerNotViewedResults.setStyleName("okm-NotViewed");
-				viewedImage.setUrl("img/viewed_pending.gif");
+				viewedImage.setResource(OKMBundleResources.INSTANCE.pending());
 				
 			} else {
 				headerNotViewedResults.setHTML("");
 				titlePanel.removeStyleName("okm-NotViewed");
 				headerNotViewedResults.removeStyleName("okm-NotViewed");
-				viewedImage.setUrl("img/viewed.gif");
+				viewedImage.setResource(OKMBundleResources.INSTANCE.viewed());
 			}
 		}
 		
