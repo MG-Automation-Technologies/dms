@@ -163,6 +163,10 @@
     <servlet-name>BenchmarkServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.BenchmarkServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LogCatServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.LogCatServlet</servlet-class>
+  </servlet>
   
   <!-- WebServices -->
   <servlet>
@@ -332,6 +336,10 @@
   <servlet-mapping>
     <servlet-name>BenchmarkServlet</servlet-name>
     <url-pattern>/admin/Benchmark</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogCatServlet</servlet-name>
+    <url-pattern>/admin/LogCat</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
