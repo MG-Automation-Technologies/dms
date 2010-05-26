@@ -101,6 +101,11 @@ div.ok {
 	text-align: left;
 }
 
+span.highlight {
+	color: red;
+	font-weight: bold;
+}
+
 input.vanadium-invalid {
 	border: 1px solid #f00;
 }
