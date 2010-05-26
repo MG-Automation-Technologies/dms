@@ -44,6 +44,7 @@ import com.openkm.util.WebUtil;
 public class LogCatServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(LogCatServlet.class);
+	private static File logFolder = new File(Config.HOME_DIR + "/server/default/log");
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
@@ -66,11 +67,9 @@ public class LogCatServlet extends HttpServlet {
 	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
-		log.debug("list({}, {})", request, response);
+		log.info("list({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		File dir = new File(Config.HOME_DIR + "/server/default/log");
-		sc.setAttribute("path", dir.getPath());
-		sc.setAttribute("files", FileUtils.listFiles(dir, null, false));
+		sc.setAttribute("files", FileUtils.listFiles(logFolder, null, false));
 		sc.getRequestDispatcher("/admin/logcat.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -86,8 +85,8 @@ public class LogCatServlet extends HttpServlet {
 		String str = WebUtil.getString(request, "str");
 		String file = WebUtil.getString(request, "file");
 		ServletContext sc = getServletContext();
-		File lf = new File(file);
-		sc.setAttribute("file", lf.getPath());
+		File lf = new File(logFolder, file);
+		sc.setAttribute("file", file);
 		sc.setAttribute("begin", begin);
 		sc.setAttribute("end", end);
 		sc.setAttribute("str", str);
