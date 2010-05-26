@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.widget.chat;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -58,6 +57,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
 public class ChatRoomPopup extends ChatRoomDialogBox {
 	
 	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
+	
 	private final static int DELAY_PENDING_MESSAGE  = 200; // mseg
 	private final static int DELAY_USERS_IN_ROOM 	= 3*1000; // 3 seg
 	
@@ -71,6 +71,7 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	private ChatRoomDialogBox singleton;
 	private boolean chatRoomActive = true;
 	private Image addUserToChatRoom;
+	private String connectedRoom = "";
 	
 	/**
 	 * Chat room popup
@@ -81,15 +82,30 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		setText(Main.i18n("chat.room"));
 		singleton = this;
 		chatRoomActive = true;
+		connectedRoom = room;
 		
 		usersInRoomText = new HTML("");
 		addUserToChatRoom = new Image(OKMBundleResources.INSTANCE.addUserToChatRoom());
 		addUserToChatRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().onlineUsersPopup.setAction(OnlineUsersPopup.ACTION_ADD_USER_TO_ROOM, room);
-				Main.get().onlineUsersPopup.center();
-				Main.get().onlineUsersPopup.refreshOnlineUsers();
+				ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+				endPoint.setServiceEntryPoint(Config.OKMChatService);
+				chatService.getUsersInRoom(room, new AsyncCallback<List<String>>() {
+					
+					@Override
+					public void onSuccess(List<String> result) {
+						Main.get().onlineUsersPopup.setAction(OnlineUsersPopup.ACTION_ADD_USER_TO_ROOM, room);
+						Main.get().onlineUsersPopup.setUsersInChat(result);
+						Main.get().onlineUsersPopup.center();
+						Main.get().onlineUsersPopup.refreshOnlineUsers();
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Main.get().showError("Logout", caught);
+					}
+				});
 			}
 		});
 		
@@ -127,8 +143,8 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 		hPanel.setCellHorizontalAlignment(addUserToChatRoom, HasAlignment.ALIGN_LEFT);
 		hPanel.setCellHorizontalAlignment(usersInRoomText, HasAlignment.ALIGN_RIGHT);
 		hPanel.setCellWidth(space4, "5");
-		hPanel.setCellWidth(addUserToChatRoom, "50%");
-		hPanel.setCellWidth(usersInRoomText, "50%");
+		hPanel.setCellWidth(addUserToChatRoom, "189");
+		hPanel.setCellWidth(usersInRoomText, "189");
 		hPanel.setCellWidth(space5, "5");
 		hPanel.setWidth("100%");
 		
@@ -300,5 +316,24 @@ public class ChatRoomPopup extends ChatRoomDialogBox {
 	 */
 	private String formatingMessage(String msg) {
 		return msg.replaceAll("\\n", "</br>");
+	}
+	
+	/**
+	 * getRoom
+	 * 
+	 * @param room
+	 */
+	public String getRoom() {
+		return connectedRoom;
+	}
+	
+	/**
+	 * setChatRoomActive
+	 * 
+	 * @param active
+	 */
+	public void setChatRoomActive(boolean active) {
+		hide();
+		chatRoomActive = active;
 	}
 }

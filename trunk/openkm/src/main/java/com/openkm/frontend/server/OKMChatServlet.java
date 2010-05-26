@@ -22,6 +22,7 @@
 package com.openkm.frontend.server;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,6 +49,20 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
 	private static final long serialVersionUID = 3780857624687394918L;
 	private static final int DELAY = 100; // mseg
 	
+	private static final int ACTION_LOGIN 					 		= 0;
+	private static final int ACTION_LOGOUT 					 		= 1;
+	private static final int ACTION_ADD_ROOM_TO_USER 		 		= 2;
+	private static final int ACTION_REMOVE_USER_ROOM 		 		= 3;
+	private static final int ACTION_ADD_PENDING_ROOM_TO_USER 		= 4;
+	private static final int ACTION_GET_PENDING_USER_ROOM 	 		= 5;
+	private static final int ACTION_GET_PENDING_USER_ROOM_MESSAGE 	= 6;
+	private static final int ACTION_ADD_USER_MESSAGE_TO_ROOM	 	= 7;
+	private static final int ACTION_CREATE_MESSAGE_ROOM	 			= 8;
+	private static final int ACTION_CREATE_MESSAGE_USER_ROOM	 	= 9;
+	private static final int ACTION_REMOVE_USER_MESSAGE_ROOM	 	= 10;
+	private static final int ACTION_DELETE_EMPTY_MESSAGE_ROOM	 	= 11;
+	private static final int ACTION_GET_USERS_IN_MESSAGE_ROOM	 	= 12;
+	
 	private static List<String> usersLogged;
 	private static Map<String, List<String>> usersRooms= new HashMap<String, List<String>>(); // user is the key
 	private static Map<String, List<String>> pendingUsersRooms= new HashMap<String, List<String>>(); // user is the key
@@ -62,12 +77,12 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     @Override
     public void login() {
-    	loginUser();
+    	usersLoggedAction(ACTION_LOGIN);
     }
     
     @Override
     public void logout() {
-    	logoutUser();
+    	usersLoggedAction(ACTION_LOGOUT);
     }
     
     @Override
@@ -80,261 +95,271 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	String room = UUIDGenerator.generate(""); // Used to unique identifying room
     	String actualUser = getThreadLocalRequest().getRemoteUser();
     	// Add users to rooms
-    	addRoomToUser(room, user);
-    	addPendingRoomToUser(room, user);
-    	addRoomToUser(room, actualUser);
-    	createMessageRoom(room);
-    	createUserMessageRoom(room, user);
-    	createUserMessageRoom(room, actualUser);
+    	usersRoomAction(room, user, ACTION_ADD_ROOM_TO_USER);
+    	pendingRoomAction(room, user, ACTION_ADD_PENDING_ROOM_TO_USER);
+    	usersRoomAction(room, actualUser, ACTION_ADD_ROOM_TO_USER);
+    	messageUserRoomAction(room,"","",ACTION_CREATE_MESSAGE_ROOM);
+    	messageUserRoomAction(room, user, "", ACTION_CREATE_MESSAGE_USER_ROOM);
+    	messageUserRoomAction(room, actualUser, "", ACTION_CREATE_MESSAGE_USER_ROOM);
     	return room;
     }
     
     @Override
     public List<String> getPendingMessage(String room) {
+    	String user = getThreadLocalRequest().getRemoteUser();
     	int countCycle = 0;
 		List<String> pendingMessages = new ArrayList<String>();
 		
 		// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
     	do  {
-    		pendingMessages = getPendingUserRoomMessage(room);
+    		pendingMessages = messageUserRoomAction(room,user,"",ACTION_GET_PENDING_USER_ROOM_MESSAGE); 
 			countCycle++;
     		try {
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 
-    	} while (pendingMessages.isEmpty() && (countCycle<100));
+    	} while (pendingMessages.isEmpty() && (countCycle<100) && usersLogged.contains(user));
     	
     	return pendingMessages;
     }
     
     @Override
     public List<String> getPendingChatRoomUser() {
+    	String user = getThreadLocalRequest().getRemoteUser();
     	int countCycle = 0;
     	List<String> pendingRooms = new ArrayList<String>();
     	
     	// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
     	do  {
-    		pendingRooms = getPendingUserRoom();
+    		pendingRooms = pendingRoomAction("", user, ACTION_GET_PENDING_USER_ROOM); 
 			countCycle++;
     		try {
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 
-    	} while (pendingRooms.isEmpty() && (countCycle<100));
+    	} while (pendingRooms.isEmpty() && (countCycle<100) && usersLogged.contains(user));
     	
     	return pendingRooms;
     }
     
     @Override
     public void addMessageToRoom(String room, String msg) {
-    	addUserMessageToRoom(room, msg);
+    	String user = getThreadLocalRequest().getRemoteUser();
+    	messageUserRoomAction(room, user, msg, ACTION_ADD_USER_MESSAGE_TO_ROOM);
     }
     
     @Override
     public void closeRoom(String room) {
-    	removeUserRoom(room);
-    	removeUserMessageRoom(room);
-    	deleteEmptyMessageRoom(room); // Evaluates if message room must be deleted
+    	String user = getThreadLocalRequest().getRemoteUser();
+    	usersRoomAction(room, user, ACTION_REMOVE_USER_ROOM);
+    	messageUserRoomAction(room, user, "", ACTION_REMOVE_USER_MESSAGE_ROOM);
+    	messageUserRoomAction(room, "", "", ACTION_DELETE_EMPTY_MESSAGE_ROOM); // Evaluates if message room must be deleted
     }
     
     @Override
     public void addUserToChatRoom(String room, String user) {
-    	addPendingRoomToUser(room, user);
-    	addUserToChatRoom(room, user);
+    	usersRoomAction(room, user, ACTION_ADD_ROOM_TO_USER);
+    	pendingRoomAction(room, user, ACTION_ADD_PENDING_ROOM_TO_USER);
+    	messageUserRoomAction(room, user, "", ACTION_CREATE_MESSAGE_USER_ROOM);
     }
     
     @Override
     public String usersInRoom(String room) {
-		System.out.println("number of users in room " + getNumberOfUsersInRoom(room));
-    	return String.valueOf(getNumberOfUsersInRoom(room));
+    	return String.valueOf(messageUserRoomAction(room, "", "", ACTION_GET_USERS_IN_MESSAGE_ROOM).size());
+    }
+    
+    @Override
+    public List<String> getUsersInRoom(String room) {
+    	return messageUserRoomAction(room, "", "", ACTION_GET_USERS_IN_MESSAGE_ROOM);
     }
 
     /**
-     * loginUser
+     * Synchronized users logged actions
+     * 
+     * @param action
      */
-    private synchronized void loginUser() {
+    private synchronized void usersLoggedAction(int action) {
     	String user = getThreadLocalRequest().getRemoteUser();
-    	if (!usersLogged.contains(user)) {
-    		usersLogged.add(user);
+    	switch (action) {
+    		case ACTION_LOGIN:
+    	    	if (!usersLogged.contains(user)) {
+    	    		usersLogged.add(user);
+    	    	}
+    	    	Collections.sort(usersLogged); // Always we sort logged users
+    			break;
+    			
+    		case ACTION_LOGOUT:
+    			if (usersLogged.contains(user)) {
+    	    		usersLogged.remove(user);
+    	    	}
+    	    	if (pendingUsersRooms.containsKey(user)) {
+    	    		pendingUsersRooms.remove(user);
+    	    	}
+    	    	if (usersRooms.containsKey(user)) {
+    	    		List<String> rooms = usersRooms.get(user);
+    	    		for (Iterator<String> it = rooms.iterator(); it.hasNext();) {
+    	    			String room = it.next();
+    	    			if (msgUsersRooms.containsKey(room)) {
+    	    				Map<String, List<String>> roomMessages = msgUsersRooms.get(room);
+    	    				if (roomMessages.containsKey(user)) {
+    	    					roomMessages.remove(user);
+    	    				}
+    	    			}
+    	    		}
+    	    	}
+    			break;
     	}
-    	Collections.sort(usersLogged); // Always we sort logged users
     }
     
     /**
-     * logoutUser
+     * Synchronized users room actions
+     * 
+     * @param room
+     * @param user
+     * @param action
      */
-    private synchronized void logoutUser() {
-    	String user = getThreadLocalRequest().getRemoteUser();
-    	if (usersLogged.contains(user)) {
-    		usersLogged.remove(user);
+    private synchronized void usersRoomAction(String room, String user, int action) {
+    	switch (action) {
+    		case ACTION_ADD_ROOM_TO_USER:
+    			if (!usersRooms.keySet().contains(user)) {
+    	    		List<String> userRoomList = new ArrayList<String>();
+    	    		userRoomList.add(room);
+    	    		usersRooms.put(user, userRoomList);
+    	    	} else {
+    	    		List<String> userRoomList = usersRooms.get(user);
+    	    		if (!userRoomList.contains(room)) {
+    	    			userRoomList.add(room);
+    	    		}
+    	    	}
+    			break;
+    		
+    		case ACTION_REMOVE_USER_ROOM:
+    	    	if (usersRooms.keySet().contains(user)) {
+    	    		List<String> userRoomList = usersRooms.get(user);
+    	    		if (userRoomList.contains(room)) {
+    	    			userRoomList.remove(room);
+    	    		}
+    	    	}
+    			break;
     	}
-    	if (pendingUsersRooms.containsKey(user)) {
-    		pendingUsersRooms.remove(user);
+    }
+    
+    /**
+     * Synchronized pending room actions
+     * 
+     * @param room
+     * @param user
+     * @param action
+     * @return
+     */
+    private synchronized List<String> pendingRoomAction(String room, String user, int action) {
+    	switch(action) {
+    		case ACTION_ADD_PENDING_ROOM_TO_USER:
+    			if (!pendingUsersRooms.keySet().contains(user)) {
+    	    		List<String> userPendingRoomList = new ArrayList<String>();
+    	    		userPendingRoomList.add(room);
+    	    		pendingUsersRooms.put(user, userPendingRoomList);
+    	    	} else {
+    	    		List<String> userPendingRoomList = pendingUsersRooms.get(user);
+    	    		if (!userPendingRoomList.contains(room)) {
+    	    			userPendingRoomList.add(room);
+    	    		}
+    	    	}
+    			return new ArrayList<String>();
+    		
+    		case ACTION_GET_PENDING_USER_ROOM:
+    	    	if (pendingUsersRooms.keySet().contains(user)) {
+    	    		List<String> userRooms = pendingUsersRooms.get(user);
+    	    		pendingUsersRooms.remove(user);
+    	    		return userRooms;
+    	    	} else {
+    	    		return new ArrayList<String>();
+    	    	}
+    			
+    		default:
+    			return new ArrayList<String>();
     	}
-    	if (usersRooms.containsKey(user)) {
-    		List<String> rooms = usersRooms.get(user);
-    		for (Iterator<String> it = rooms.iterator(); it.hasNext();) {
-    			String room = it.next();
+    }
+    
+    /**
+     * Synchronized message user room actions
+     * 
+     * @param room
+     * @param user
+     * @param msg
+     * @param action
+     * @return
+     */
+    private synchronized List<String> messageUserRoomAction(String room, String user, String msg, int action) {
+    	switch(action) {
+    		case ACTION_GET_PENDING_USER_ROOM_MESSAGE:
+    	    	if (msgUsersRooms.containsKey(room) && msgUsersRooms.get(room).containsKey(user)) {
+    	    		List<String> messages = msgUsersRooms.get(room).get(user);
+    	    		msgUsersRooms.get(room).put(user, new ArrayList<String>()); // Empty messages
+    	    		return messages;
+    	    	} else {
+    	    		return new ArrayList<String>();
+    	    	}
+    	   
+    		case ACTION_ADD_USER_MESSAGE_TO_ROOM:
+    			String message =  user + ": " + msg;
+    	    	if (msgUsersRooms.containsKey(room)) {
+    	    		Map<String, List<String>> roomMap = msgUsersRooms.get(room);
+    	    		for (Iterator<String> it = roomMap.keySet().iterator(); it.hasNext();) {
+    	    			String roomUser = it.next();
+    	    			// Pending message is not added to himself ( that's done by UI )
+    	    			if (!roomUser.equals(user)) {
+    	    				roomMap.get(roomUser).add(message); // Adding message for each user available
+    	    			}
+    	    		}
+    	    	}
+    	    	return new ArrayList<String>();
+    	    	
+    		case ACTION_CREATE_MESSAGE_ROOM:
+    			if (!msgUsersRooms.containsKey(room)) {
+    	    		msgUsersRooms.put(room, new HashMap<String, List<String>>());
+    	    	}
+    			return new ArrayList<String>();
+    			
+    		case ACTION_CREATE_MESSAGE_USER_ROOM:
     			if (msgUsersRooms.containsKey(room)) {
-    				Map<String, List<String>> roomMessages = msgUsersRooms.get(room);
-    				if (roomMessages.containsKey(user)) {
-    					roomMessages.remove(user);
-    				}
-    			}
-    		}
-    	}
-    	// Could be needed some garbage collector ( because meanwhile finishing it could be added some message etc ... )
-    	// Need more control on logout operation.
-    	// Need to be removed msgUserRoom too !!!
-    }
-    
-    /**
-     * addUserToRoom
-     */
-    private synchronized void addRoomToUser(String room, String user) {
-    	if (!usersRooms.keySet().contains(user)) {
-    		List<String> userRoomList = new ArrayList<String>();
-    		userRoomList.add(room);
-    		usersRooms.put(user, userRoomList);
-    	} else {
-    		List<String> userRoomList = usersRooms.get(user);
-    		if (!userRoomList.contains(room)) {
-    			userRoomList.add(room);
-    		}
-    	}
-    }
-    
-    /**
-     * removeUserRoom
-     */
-    private synchronized void removeUserRoom(String room) {
-    	String user = getThreadLocalRequest().getRemoteUser();
-    	if (usersRooms.keySet().contains(user)) {
-    		List<String> userRoomList = usersRooms.get(user);
-    		if (userRoomList.contains(room)) {
-    			userRoomList.remove(room);
-    		}
-    	}
-    }
-    
-    /**
-     * addPendingUserRoom
-     */
-    private synchronized void addPendingRoomToUser(String room, String user) {
-    	if (!pendingUsersRooms.keySet().contains(user)) {
-    		List<String> userPendingRoomList = new ArrayList<String>();
-    		userPendingRoomList.add(room);
-    		pendingUsersRooms.put(user, userPendingRoomList);
-    	} else {
-    		List<String> userPendingRoomList = pendingUsersRooms.get(user);
-    		if (!userPendingRoomList.contains(room)) {
-    			userPendingRoomList.add(room);
-    		}
-    	}
-    }
-    
-    /**
-     * getPendingUserRoom
-     */
-    private synchronized List<String> getPendingUserRoom() {
-    	String actualUser = getThreadLocalRequest().getRemoteUser();
-    	if (pendingUsersRooms.keySet().contains(actualUser)) {
-    		List<String> userRooms = pendingUsersRooms.get(actualUser);
-    		pendingUsersRooms.remove(actualUser);
-    		return userRooms;
-    	} else {
-    		return new ArrayList<String>();
-    	}
-    }
-    
-    /**
-     * getPendingUserRoomMessage
-     */
-    private synchronized List<String> getPendingUserRoomMessage(String room) {
-    	String user = getThreadLocalRequest().getRemoteUser();
-    	if (msgUsersRooms.containsKey(room) && msgUsersRooms.get(room).containsKey(user)) {
-    		List<String> messages = msgUsersRooms.get(room).get(user);
-    		msgUsersRooms.get(room).put(user, new ArrayList<String>()); // Empty messages
-    		return messages;
-    	} else {
-    		return new ArrayList<String>();
-    	}
-    }
-    
-    /**
-     * addUserMessageToRoom
-     */
-    private synchronized void addUserMessageToRoom(String room, String msg) {
-    	String actualUser = getThreadLocalRequest().getRemoteUser();
-    	String message =  actualUser + ": " + msg;
-    	if (msgUsersRooms.containsKey(room)) {
-    		Map<String, List<String>> roomMap = msgUsersRooms.get(room);
-    		for (Iterator<String> it = roomMap.keySet().iterator(); it.hasNext();) {
-    			String user = it.next();
-    			// Pending message is not added to himself ( that's done by UI )
-    			if (!user.equals(actualUser)) {
-    				roomMap.get(user).add(message); // Adding message for each user available
-    			}
-    		}
-    	}
-    }
-    
-    /**
-     * createMessageRoom
-     */
-    private synchronized void createMessageRoom(String room) {
-    	if (!msgUsersRooms.containsKey(room)) {
-    		msgUsersRooms.put(room, new HashMap<String, List<String>>());
-    	}
-    }
-    
-    /**
-     * createUserMessageRoom
-     */
-    private synchronized void createUserMessageRoom(String room, String user) {
-    	if (msgUsersRooms.containsKey(room)) {
-    		if (!msgUsersRooms.get(room).containsKey(user)) {
-    			msgUsersRooms.get(room).put(user, new ArrayList<String>());
-    		}
-    	}
-    }
-    
-    /**
-     * removeUserMessageRoom
-     */
-    private synchronized void removeUserMessageRoom(String room) {
-    	String user = getThreadLocalRequest().getRemoteUser();
-    	if (msgUsersRooms.containsKey(room)) {
-    		if (msgUsersRooms.get(room).containsKey(user)) {
-    			msgUsersRooms.get(room).remove(user);
-    		}
-    	}
-    }
-    
-    /**
-     * evaluateDeleteMessageRoom
-     */
-    private synchronized void deleteEmptyMessageRoom(String room) {
-    	// Room message without users must be deleted
-    	if (msgUsersRooms.containsKey(room)) {
-    		if (msgUsersRooms.get(room).keySet().size()==0) {
-    			msgUsersRooms.remove(room);
-    		}
-    	}
-    }
-    
-    /**
-     * getNumberOfUsersInRoom
-     */
-    private synchronized int getNumberOfUsersInRoom(String room) {
-    	if (msgUsersRooms.containsKey(room)) {
-    		return msgUsersRooms.get(room).keySet().size();
-    	} else {
-    		return 0;
+    	    		if (!msgUsersRooms.get(room).containsKey(user)) {
+    	    			msgUsersRooms.get(room).put(user, new ArrayList<String>());
+    	    		}
+    	    	}
+    			return new ArrayList<String>();
+    			
+    		case ACTION_REMOVE_USER_MESSAGE_ROOM:
+    			if (msgUsersRooms.containsKey(room)) {
+    	    		if (msgUsersRooms.get(room).containsKey(user)) {
+    	    			msgUsersRooms.get(room).remove(user);
+    	    		}
+    	    	}
+    			return new ArrayList<String>();
+    			
+    		case ACTION_DELETE_EMPTY_MESSAGE_ROOM:
+    			// Room message without users must be deleted
+    	    	if (msgUsersRooms.containsKey(room)) {
+    	    		if (msgUsersRooms.get(room).keySet().size()==0) {
+    	    			msgUsersRooms.remove(room);
+    	    		}
+    	    	}
+    			return new ArrayList<String>();
+    			
+    		case ACTION_GET_USERS_IN_MESSAGE_ROOM:
+    			if (msgUsersRooms.containsKey(room)) {
+    				Collection<String> userList = msgUsersRooms.get(room).keySet();
+    	    		return new ArrayList<String>(userList);
+    	    	} else {
+    	    		return new ArrayList<String>();
+    	    	}
+    			
+    		default:
+    			return new ArrayList<String>();
     	}
     }
 }

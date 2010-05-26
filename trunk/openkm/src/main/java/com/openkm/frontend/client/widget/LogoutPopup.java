@@ -32,11 +32,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
+import com.openkm.frontend.client.service.OKMChatService;
+import com.openkm.frontend.client.service.OKMChatServiceAsync;
+import com.openkm.frontend.client.widget.chat.ChatRoomDialogBox;
 
 /**
  * Logout
@@ -51,6 +53,7 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 	private Button button;
 	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
 	
 	/**
 	 * Logout popup
@@ -124,9 +127,68 @@ public class LogoutPopup extends DialogBox implements ClickHandler {
 		setText(Main.i18n("logout.label"));
 		show();
 		Log.debug("Logout()");
-		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
-		authService.logout(callbackLogout);
-		Log.debug("Logout: void");
+		if (Main.get().mainPanel.bottomPanel.userInfo.isConnectedToChat()) {
+			disconnectChat();
+		} else {
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			authService.logout(callbackLogout);
+			Log.debug("Logout: void");
+		}
+	}
+	
+	/**
+	 * disconnectChat
+	 * 
+	 * Recursivelly disconnecting chat rooms and chat before login out
+	 *
+	 */
+	private void disconnectChat() {
+		// Disconnect rooms
+		if (Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().size()>0) {
+			final ChatRoomDialogBox chatRoom = Main.get().mainPanel.bottomPanel.userInfo.getChatRoomList().get(0);
+			chatRoom.setChatRoomActive(false);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
+				@Override
+				public void onSuccess(Object arg0) {
+					Main.get().mainPanel.bottomPanel.userInfo.removeChatRoom(chatRoom);
+					disconnectChat(); // Recursive call
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("CloseRoom", caught);
+					// If happens some problem always we try continue disconnecting chat rooms
+					Main.get().mainPanel.bottomPanel.userInfo.removeChatRoom(chatRoom);
+					disconnectChat(); // Recursive call
+				}
+			});
+		} else {
+			// Disconnect chat
+			Main.get().mainPanel.bottomPanel.userInfo.disconnectChat(); // Only used to change view and disabling some RPC
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.logout(new AsyncCallback<Object>() {
+				@Override
+				public void onSuccess(Object result) {
+					// Logout
+					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+					endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+					authService.logout(callbackLogout);
+					Log.debug("Logout: void");
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("GetLogoutChat", caught);
+					// If happens some problem always we try logout
+					ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+					endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+					authService.logout(callbackLogout);
+					Log.debug("Logout: void");
+				}
+			});
+		}
 	}
 }

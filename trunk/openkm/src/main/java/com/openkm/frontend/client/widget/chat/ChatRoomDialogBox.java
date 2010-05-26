@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.DialogBox;
  * @author jllort
  *
  */
-public class ChatRoomDialogBox extends DialogBox implements HasTranslations {
+public class ChatRoomDialogBox extends DialogBox implements HasTranslations, HasChatRoom {
 	
 	/**
 	 * ChatRoomDialogBox
@@ -43,5 +43,14 @@ public class ChatRoomDialogBox extends DialogBox implements HasTranslations {
 	
 	@Override
 	public void langRefresh() {
+	}
+
+	@Override
+	public String getRoom() {
+		return "";
+	}
+
+	@Override
+	public void setChatRoomActive(boolean active) {
 	}
 }

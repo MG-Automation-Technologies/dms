@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.chat;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class OnlineUsersPopup extends DialogBox {
 	private ScrollPanel scrollPanel;
 	private int action = ACTION_NONE;
 	private String room = "";
+	private List<String> usersInChat;
 	
 	/**
 	 * Online users popup
@@ -74,6 +76,7 @@ public class OnlineUsersPopup extends DialogBox {
 		super(false,true);
 		
 		setText(Main.i18n("user.online"));
+		usersInChat = new ArrayList<String>();
 		
 		vPanel = new VerticalPanel();
 		cancel = new Button(Main.i18n("button.cancel"), new ClickHandler() {
@@ -86,7 +89,6 @@ public class OnlineUsersPopup extends DialogBox {
 		accept = new Button(Main.i18n("button.accept"), new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				hide();
 				executeAction();
 			}
 		});
@@ -142,7 +144,12 @@ public class OnlineUsersPopup extends DialogBox {
 			int rows = table.getRowCount();
 			String user = it.next();
 			// Only we add other user than actual UI user connected ( you can not chat yourself )
-			if (!user.equals(actualUser)) {
+			// Evaluate case new chat or existing chat
+			if (action == ACTION_NEW_CHAT  && !user.equals(actualUser)) {
+				table.setHTML(rows, 0, user);
+				table.getRowFormatter().setStyleName(rows, "okm-Table-Row");
+				setRowWordWarp(rows, 1, false);
+			} else if (!user.equals(actualUser) && !usersInChat.contains(user)) {
 				table.setHTML(rows, 0, user);
 				table.getRowFormatter().setStyleName(rows, "okm-Table-Row");
 				setRowWordWarp(rows, 1, false);
@@ -248,7 +255,8 @@ public class OnlineUsersPopup extends DialogBox {
 	/**
 	 * executeAction
 	 */
-	private void executeAction() {
+	public void executeAction() {
+		hide();
 		switch (action) {
 			case ACTION_NEW_CHAT:
 				createNewChatRoom();
@@ -257,5 +265,14 @@ public class OnlineUsersPopup extends DialogBox {
 				addUserToRoom();
 				break;
 		}
+	}
+	
+	/**
+	 * setUsersInChat
+	 * 
+	 * @param usersInChat
+	 */
+	public void setUsersInChat(List<String> usersInChat) {
+		this.usersInChat = usersInChat;
 	}
 }

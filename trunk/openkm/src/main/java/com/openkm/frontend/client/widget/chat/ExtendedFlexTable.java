@@ -74,7 +74,7 @@ public class ExtendedFlexTable extends FlexTable {
             	markSelectedRow(selectedRow);
             	Main.get().onlineUsersPopup.enableAcceptButton();
             	DOM.eventCancelBubble(event, true);
-            	Main.get().onlineUsersPopup.createNewChatRoom();
+            	Main.get().onlineUsersPopup.executeAction();
             }
 		}
 
