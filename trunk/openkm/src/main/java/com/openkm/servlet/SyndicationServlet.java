@@ -216,7 +216,7 @@ public class SyndicationServlet extends HttpServlet {
 			entry.setTitle(item.getFolder().getPath());
 			entry.setAuthor(item.getFolder().getAuthor());
 			entry.setPublishedDate(item.getDate().getTime());
-			entry.setLink(Config.APPLICATION_URL + "?docPath=" + URLEncoder.encode(item.getFolder().getPath(), "UTF-8"));
+			entry.setLink(Config.APPLICATION_URL + "?fldPath=" + URLEncoder.encode(item.getFolder().getPath(), "UTF-8"));
 			entries.add(entry);
 		}
 		
