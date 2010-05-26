@@ -41,13 +41,13 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
@@ -98,7 +98,7 @@ public class WorkflowFormPanel extends Composite {
 	private TitleWidget parametersTittle;
 	private TitleWidget commentsTitle;
 	private TitleWidget formsTitle;
-	private Hyperlink documentLink;
+	private Anchor documentLink;
 	private VerticalPanel newNotePanel;
 	private TextArea textArea;
 	private HTML addComment;
@@ -337,7 +337,7 @@ public class WorkflowFormPanel extends Composite {
 				repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
 					@Override
 					public void onSuccess(final String docPath) {
-						Hyperlink link = new Hyperlink();
+						Anchor link = new Anchor();
 						link.setText(docPath);
 						table.setWidget(10, 1, link);
 						link.addClickHandler(new ClickHandler() { 
@@ -350,7 +350,7 @@ public class WorkflowFormPanel extends Composite {
 						link.setStyleName("okm-Hyperlink");
 						
 						// Clones link
-						documentLink = new Hyperlink();
+						documentLink = new Anchor();
 						documentLink.setText(docPath);
 						documentLink.addClickHandler(new ClickHandler() { 
 							@Override
