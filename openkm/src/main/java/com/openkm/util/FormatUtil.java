@@ -45,6 +45,7 @@ import com.openkm.bean.LogMessage;
  *
  */
 public class FormatUtil {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(FormatUtil.class);
 	
 	/**
@@ -154,7 +155,7 @@ public class FormatUtil {
 	 * Parser log file
 	 */
 	public static Collection<LogMessage> parseLog(File flog, int begin, int end, String str) throws IOException {
-		log.debug("parseLog({}, {}, {}, {})", new Object[] { flog, begin, end, str });
+		//log.debug("parseLog({}, {}, {}, {})", new Object[] { flog, begin, end, str });
 		ArrayList<LogMessage> al = new ArrayList<LogMessage>();
 		int i = 0;
 		
@@ -177,9 +178,20 @@ public class FormatUtil {
 		
 		for (LineIterator lit = FileUtils.lineIterator(flog); lit.hasNext(); ) {
 			String line = lit.nextLine();
+			int idx = line.indexOf(str);
 			i++;
 			
-			if ((str == null || line.indexOf(str) > -1) && i >= begin && i <= end) {
+			if ((str == null || idx > -1) && i >= begin && i <= end) {
+				if (idx > -1) {
+					StringBuilder sb = new StringBuilder();
+					sb.append(line.substring(0, idx));
+					sb.append("<span class=\"highlight\">");
+					sb.append(line.substring(idx, idx + str.length()));
+					sb.append("</span>");
+					sb.append(line.substring(idx + str.length()));
+					line = sb.toString();
+				}
+				
 				LogMessage lm = new LogMessage();
 				lm.setLine(i);
 				lm.setMessage(line);
@@ -187,7 +199,7 @@ public class FormatUtil {
 			}
 		}
 		
-		log.debug("parseLog: {}", al);
+		//log.debug("parseLog: {}", al);
 		return al;
 	}
 }
