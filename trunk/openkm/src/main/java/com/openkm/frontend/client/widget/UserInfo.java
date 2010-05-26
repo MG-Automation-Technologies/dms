@@ -51,6 +51,7 @@ public class UserInfo extends Composite {
 	private Image imgWorkflows;
 	private Image imgChat;
 	private Image imgNewChatRoom;
+	private Image imgChatSeparator;
 	private boolean chatConnected = false;
 	private HTML usersConnected;
 	private List<String> connectUsersList;
@@ -76,6 +77,7 @@ public class UserInfo extends Composite {
 		newsWorkflows = new HTML("");
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
 		imgChat = new Image(OKMBundleResources.INSTANCE.chatDisconnected());
+		imgChatSeparator = new Image(OKMBundleResources.INSTANCE.separator());
 		imgNewChatRoom = new Image(OKMBundleResources.INSTANCE.newChatRoom());
 		imgLockedDocuments = new Image(OKMBundleResources.INSTANCE.lock());
 		imgCheckoutDocuments = new Image(OKMBundleResources.INSTANCE.checkout());
@@ -83,6 +85,8 @@ public class UserInfo extends Composite {
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
 		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
 		imgRepositorySize.setVisible(false);
+		imgChat.setVisible(false);
+		imgChatSeparator.setVisible(false);
 		usersConnected.setVisible(false);
 		imgNewChatRoom.setVisible(false);
 		imgLockedDocuments.setVisible(false);
@@ -142,23 +146,7 @@ public class UserInfo extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!chatConnected) {
-					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-					endPoint.setServiceEntryPoint(Config.OKMChatService);
-					chatService.login(new AsyncCallback<Object>() {
-						@Override
-						public void onSuccess(Object result) {
-							chatConnected = true;
-							imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
-							usersConnected.setVisible(true);
-							imgNewChatRoom.setVisible(true);
-							refreshConnectedUsers();
-							getPendingChatRoomUser();
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Main.get().showError("GetLoginChat", caught);
-						}
-					});
+					loginChat();
 				} else {
 					chatConnected = false; // Trying disable other RPC calls
 					logoutChat();
@@ -203,7 +191,7 @@ public class UserInfo extends Composite {
 		panel.add(new HTML("&nbsp;"));
 		panel.add(usersConnected);
 		panel.add(new HTML("&nbsp;"));
-		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
+		panel.add(imgChatSeparator);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgLockedDocuments);
 		panel.add(new HTML("&nbsp;"));
@@ -524,5 +512,36 @@ public class UserInfo extends Composite {
 				}
 			});
 		}
+	}
+	
+	/**
+	 * enableChat
+	 */
+	public void enableChat() {
+		imgChat.setVisible(true);
+		imgChatSeparator.setVisible(true);
+	}
+	
+	/**
+	 * loginChat
+	 */
+	public void loginChat() {
+		ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+		endPoint.setServiceEntryPoint(Config.OKMChatService);
+		chatService.login(new AsyncCallback<Object>() {
+			@Override
+			public void onSuccess(Object result) {
+				chatConnected = true;
+				imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
+				usersConnected.setVisible(true);
+				imgNewChatRoom.setVisible(true);
+				refreshConnectedUsers();
+				getPendingChatRoomUser();
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("GetLoginChat", caught);
+			}
+		});
 	}
 }

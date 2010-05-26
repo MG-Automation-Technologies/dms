@@ -50,6 +50,8 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean wizardPropertyGroups = false;
 	private boolean wizardKeywords = false;
 	private boolean wizardCategories = false;
+	private boolean chatEnabled = false;
+	private boolean chatAutoLogin = false;
 
 	/**
 	 * GWTWorkspace
@@ -207,5 +209,21 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWizardCategories(boolean wizardCategories) {
 		this.wizardCategories = wizardCategories;
+	}
+	
+	public boolean isChatAutoLogin() {
+		return chatAutoLogin;
+	}
+
+	public void setChatAutoLogin(boolean chatAutoLogin) {
+		this.chatAutoLogin = chatAutoLogin;
+	}
+
+	public boolean isChatEnabled() {
+		return chatEnabled;
+	}
+
+	public void setChatEnabled(boolean chatEnabled) {
+		this.chatEnabled = chatEnabled;
 	}
 }

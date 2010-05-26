@@ -87,6 +87,12 @@ public class WorkspaceUserProperties {
 			user = result.getUser();
 			applicationURL = result.getApplicationURL();
 			Main.get().mainPanel.bottomPanel.userInfo.setUser(user, result.isAdmin());
+			if (result.isChatEnabled()) {
+				Main.get().mainPanel.bottomPanel.userInfo.enableChat();
+				if (result.isChatAutoLogin()) {
+					Main.get().mainPanel.bottomPanel.userInfo.loginChat();
+				}
+			}
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize();
 			
