@@ -82,6 +82,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setWizardCategories(!Config.WIZARD_CATEGORIES.equals(""));
 		workspace.setWizardKeywords(!Config.WIZARD_KEYWORDS.equals(""));
 		
+		// Is chat enabled and autologin
+		workspace.setChatEnabled(Config.CHAT_ENABLED);
+		workspace.setChatAutoLogin(Config.CHAT_AUTOLOGIN);
+		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
 			User user = new User();

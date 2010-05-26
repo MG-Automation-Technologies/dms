@@ -220,4 +220,28 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/toolbar/separator.gif")
 	public ImageResource separator();
+	
+	@Source("com/openkm/frontend/public/img/zoom_out.gif")
+	public ImageResource zoomOut();
+	
+	@Source("com/openkm/frontend/public/img/zoom_in.gif")
+	public ImageResource zoomIn();
+	
+	@Source("com/openkm/frontend/public/img/viewed.gif")
+	public ImageResource viewed();
+	
+	@Source("com/openkm/frontend/public/img/viewed_pending.gif")
+	public ImageResource pending();
+	
+	@Source("com/openkm/frontend/public/img/feed.png")
+	public ImageResource feed();
+	
+	@Source("com/openkm/frontend/public/img/icon/loaded.gif")
+	public ImageResource loadedIcon();
+
+	@Source("com/openkm/frontend/public/img/icon/loaded_disabled.gif")
+	public ImageResource loadedDisabledIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/loaded_error.gif")
+	public ImageResource loadedErrorIcon();
 }
