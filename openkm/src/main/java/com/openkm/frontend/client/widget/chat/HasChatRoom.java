@@ -19,26 +19,24 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
-
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.RemoteService;
+package com.openkm.frontend.client.widget.chat;
 
 /**
+ * HasTranslations
+ * 
  * @author jllort
  *
  */
-public interface OKMChatService extends RemoteService {
-	public void login();
-	public void logout();
-	public List<String> getLogedUsers();
-	public String createNewChatRoom(String user);
-	public List<String> getPendingChatRoomUser();
-	public List<String> getPendingMessage(String room);
-	public void addMessageToRoom(String room, String msg);
-	public void closeRoom(String room);
-	public void addUserToChatRoom(String room, String user);
-	public String usersInRoom(String room);
-	public List<String> getUsersInRoom(String room);
+public interface HasChatRoom {
+	
+	/**
+	 * langRefresh
+	 */
+	public abstract String getRoom();
+	
+	/**
+	 * @param active
+	 */
+	public abstract void setChatRoomActive(boolean active);
+	
 }

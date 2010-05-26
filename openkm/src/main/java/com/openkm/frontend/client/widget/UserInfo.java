@@ -160,22 +160,8 @@ public class UserInfo extends Composite {
 						}
 					});
 				} else {
-					ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
-					endPoint.setServiceEntryPoint(Config.OKMChatService);
-					chatService.logout(new AsyncCallback<Object>() {
-						@Override
-						public void onSuccess(Object result) {
-							chatConnected = false;
-							usersConnected.setVisible(false);
-							imgNewChatRoom.setVisible(false);
-							usersConnected.setHTML("");
-							imgChat.setResource(OKMBundleResources.INSTANCE.chatDisconnected());
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Main.get().showError("GetLogoutChat", caught);
-						}
-					});
+					chatConnected = false; // Trying disable other RPC calls
+					logoutChat();
 				}
 			}
 		});
@@ -461,6 +447,82 @@ public class UserInfo extends Composite {
 	public void removeChatRoom(ChatRoomDialogBox chatRoom) {
 		if (chatRoomList.contains(chatRoom)) {
 			chatRoomList.remove(chatRoom);
+		}
+	}
+	
+	/**
+	 * isConnectedToChat
+	 * 
+	 * @return
+	 */
+	public boolean isConnectedToChat() {
+		return chatConnected;
+	}
+	
+	/**
+	 * getChatRoomList
+	 * 
+	 * @return
+	 */
+	public List<ChatRoomDialogBox> getChatRoomList() {
+		return chatRoomList;
+	}
+	
+	/**
+	 * disconnectChat
+	 * 
+	 * Used before logout ( in logout popup is made disconnection )
+	 */
+	public void disconnectChat() {
+		chatConnected = false;
+		usersConnected.setVisible(false);
+		imgNewChatRoom.setVisible(false);
+		usersConnected.setHTML("");
+		imgChat.setResource(OKMBundleResources.INSTANCE.chatDisconnected());
+	}
+	
+	/**
+	 * disconnectChat
+	 * 
+	 * Recursivelly disconnecting chat rooms and chat before login out
+	 *
+	 */
+	private void logoutChat() {
+		// Disconnect rooms
+		if (getChatRoomList().size()>0) {
+			final ChatRoomDialogBox chatRoom = getChatRoomList().get(0);
+			chatRoom.setChatRoomActive(false);
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.closeRoom(chatRoom.getRoom(),new AsyncCallback<Object>() {
+				@Override
+				public void onSuccess(Object arg0) {
+					removeChatRoom(chatRoom);
+					logoutChat(); // Recursive call
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("CloseRoom", caught);
+					// If happens some problem always we try continue disconnecting chat rooms
+					removeChatRoom(chatRoom);
+					logoutChat(); // Recursive call
+				}
+			});
+		} else {
+			// Disconnect chat
+			disconnectChat(); // Only used to change view and disabling some RPC
+			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
+			endPoint.setServiceEntryPoint(Config.OKMChatService);
+			chatService.logout(new AsyncCallback<Object>() {
+				@Override
+				public void onSuccess(Object result) {
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					Main.get().showError("GetLogoutChat", caught);
+				}
+			});
 		}
 	}
 }

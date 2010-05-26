@@ -40,4 +40,5 @@ public interface OKMChatServiceAsync {
 	public void closeRoom(String room, AsyncCallback<?> callback);
 	public void addUserToChatRoom(String room, String user, AsyncCallback<?> callback);
 	public void usersInRoom(String room, AsyncCallback<String> callback);
+	public void getUsersInRoom(String room, AsyncCallback<List<String>> callback);
 }
