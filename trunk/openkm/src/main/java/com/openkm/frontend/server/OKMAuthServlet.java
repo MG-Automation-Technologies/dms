@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
@@ -155,24 +154,15 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("getUngrantedUsers({})", nodePath);
 		List<String> userList = new ArrayList<String>(); 
 		String token = getToken();
-		Map<String,Byte> hm = new HashMap<String,Byte> ();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getUsers(token);
-			hm = OKMAuth.getInstance().getGrantedUsers(token, nodePath);
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(token, nodePath).keySet();
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
-				boolean found = false;
 				
-				// Not add users that are granted
-				for (Iterator<String> ith = hm.keySet().iterator(); ith.hasNext(); ) {
-					if ((ith.next()).equals(user)){
-						found = true;
-					}
-				}
-				
-				if (!found) {
+				if (!grantedUsers.contains(user)) {
 					userList.add(user);
 				}
 			}
@@ -201,31 +191,19 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("getUngrantedRoles({})", nodePath);
 		List<String> roleList = new ArrayList<String>(); 
 		String token = getToken();
-		HashMap<String,Byte>  hm = new HashMap<String,Byte> ();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getRoles(token);
-			hm = OKMAuth.getInstance().getGrantedRoles(token, nodePath);
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(token, nodePath).keySet();
 			
 			//Not add rols that are granted
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
-				boolean found = false;
 				String rol = it.next();
 				
-				for (Iterator<String> ith = hm.keySet().iterator(); ith.hasNext();){
-					if ((ith.next()).equals(rol)){
-						found = true;
-					}
-				}
-				
-				if (!found) {
+				// Always removing UserRole and AdminRole ( must be only used as connection grant not assigned to repository )
+				if (!grantedRoles.contains(rol) && !rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE)) {
 					roleList.add(rol);
 				}
-			}
-			
-			//Always removing userRole ( must be only used as connection grant not assigned to repository )
-			if (hm.keySet().contains(Config.DEFAULT_USER_ROLE)) {
-				hm.remove(Config.DEFAULT_USER_ROLE);
 			}
 			
 			Collections.sort(roleList, RoleComparator.getInstance());
@@ -244,6 +222,83 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		}
 
 		log.debug("getUngrantedRoles: {}", roleList);
+		return roleList;
+	}
+	
+	@Override
+	public List<String> getFilteredUngrantedUsers(String nodePath, String filter) throws OKMException {
+		log.debug("getFilteredUngrantedUsers({})", nodePath);
+		List<String> userList = new ArrayList<String>(); 
+		String token = getToken();
+		
+		try {
+			Collection<String> col = OKMAuth.getInstance().getUsers(token);
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(token, nodePath).keySet();
+			
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String user = it.next();
+				
+				if (!grantedUsers.contains(user) && user.toLowerCase().startsWith(filter.toLowerCase())) {
+					userList.add(user);
+				}
+			}
+			
+			Collections.sort(userList, UserComparator.getInstance());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
+		}  catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		}  catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getFilteredUngrantedUsers: {}", userList);
+		return userList;
+	}
+	
+	@Override
+	public List<String> getFilteredUngrantedRoles(String nodePath, String filter) throws OKMException {
+		log.debug("getFilteredUngrantedRoles({})", nodePath);
+		List<String> roleList = new ArrayList<String>(); 
+		String token = getToken();
+		
+		try {
+			Collection<String> col = OKMAuth.getInstance().getRoles(token);
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(token, nodePath).keySet();
+			
+			//Not add rols that are granted
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String rol = it.next();
+				
+				// Always removing UserRole and AdminRole ( must be only used as connection grant not assigned to repository )
+				if (!grantedRoles.contains(rol) && rol.toLowerCase().startsWith(filter.toLowerCase()) &&
+					!rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE)) {
+					roleList.add(rol);
+				}
+			}
+			
+			Collections.sort(roleList, RoleComparator.getInstance());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
+		}  catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
+		}
+
+		log.debug("getFilteredUngrantedRoles: {}", roleList);
 		return roleList;
 	}
 	
