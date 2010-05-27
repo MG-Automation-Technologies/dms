@@ -165,4 +165,13 @@ public class NotifyUser extends Composite {
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 		authService.getAllUsers( callbackAllUsers);
 	}
+	
+	/**
+	 * Gets the all users by filter
+	 */
+	public void getFilteredAllUsers(String filter) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+		authService.getFilteredAllUsers(filter, callbackAllUsers);
+	}
 }

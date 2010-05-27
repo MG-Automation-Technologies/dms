@@ -820,4 +820,11 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	public void disableErrorNotify() {
 		errorNotify.setVisible(false); 
 	}
+	
+	/**
+	 * enableAdvancedFilter
+	 */
+	public void enableAdvancedFilter() {
+		notifyPanel.enableAdvancedFilter();
+	}
 }

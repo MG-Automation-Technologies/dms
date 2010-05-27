@@ -537,4 +537,61 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("getAllRoles: {}", roleList);
 		return roleList;
 	}
+	
+	@Override
+	public List<String> getFilteredAllUsers(String filter) throws OKMException {
+		log.debug("getFilteredAllUsers()");
+		String token = getToken();
+		List<String> userList = new ArrayList<String>();
+		
+		try {
+			Collection<String> col = OKMAuth.getInstance().getUsers(token);
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String user = it.next();
+				if (user.toLowerCase().startsWith(filter.toLowerCase())) {
+					userList.add(user);
+				}
+			}
+			
+			Collections.sort(userList, UserComparator.getInstance());
+		}  catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getFilteredAllUsers: {}", userList);
+		return userList;
+	}
+	
+	@Override
+	public List<String> getFilteredAllRoles(String filter) throws OKMException {
+		log.debug("getFilteredAllRoles()");
+		String token = getToken();
+		List<String> roleList = new ArrayList<String>();
+		
+		try {
+			Collection<String> col = OKMAuth.getInstance().getRoles(token);
+			for (Iterator<String> it = col.iterator(); it.hasNext();){
+				String rol = it.next();
+				if (!rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE) &&
+					rol.toLowerCase().startsWith(filter.toLowerCase())) {
+					roleList.add(rol);
+				}
+			}
+			
+			Collections.sort(roleList, RoleComparator.getInstance());
+		}  catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthServlet, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("getFilteredAllRoles: {}", roleList);
+		return roleList;
+	}
 }
