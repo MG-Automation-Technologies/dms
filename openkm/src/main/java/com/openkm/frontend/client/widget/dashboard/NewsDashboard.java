@@ -28,12 +28,10 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
 import com.openkm.frontend.client.config.Config;
@@ -62,7 +60,7 @@ public class NewsDashboard extends WidgetToFire {
 	private String actualRefreshingKey = "";
 	private boolean refreshFind = true;
 	private int newsDocuments = 0;
-	Timer newsRefreshing;
+
 	private boolean firstTime = true;
 	
 	/**
@@ -185,13 +183,6 @@ public class NewsDashboard extends WidgetToFire {
 			dashboardService.find(actualRefreshingKey, callbackFind);
 		} else {
 			Main.get().mainPanel.bottomPanel.userInfo.setNewsDocuments(newsDocuments);
-			newsRefreshing = new Timer() {
-				public void run() {
-					refreshAllSearchs();
-				}
-			};
-			
-			newsRefreshing.scheduleRepeating(1800*1000); // 30 min
 			firstTime = false;
 		}
 	}

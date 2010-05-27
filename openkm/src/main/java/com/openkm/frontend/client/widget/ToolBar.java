@@ -1666,7 +1666,7 @@ public class ToolBar extends Composite implements OriginPanel {
 	/**
 	 * Only used on developement to testing purposes
 	 */
-	private void enableAllToolBarForTestingPurpose() {
+/*	private void enableAllToolBarForTestingPurpose() {
 		enableCreateDirectory();
 		enableFindFolder();
 		enableAddDocument();
@@ -1693,7 +1693,7 @@ public class ToolBar extends Composite implements OriginPanel {
 		enableAddNote();
 		enableScanner();
 		enableUploader();
-	}
+	} */
 
 	/**
 	 * Gets the defatul Tool Bar object values for root
