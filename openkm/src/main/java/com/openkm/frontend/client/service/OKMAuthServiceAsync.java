@@ -37,6 +37,8 @@ public interface OKMAuthServiceAsync {
 	public void getRemoteUser(AsyncCallback<String> callback);
 	public void getUngrantedUsers(String nodePath, AsyncCallback<List<String>> callback);
 	public void getUngrantedRoles(String nodePath, AsyncCallback<List<String>> callback);
+	public void getFilteredUngrantedUsers(String nodePath, String filter, AsyncCallback<List<String>> callback);
+	public void getFilteredUngrantedRoles(String nodePath, String filter, AsyncCallback<List<String>> callback);
 	public void grantUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
 	public void revokeUser(String path, String user, boolean recursive, AsyncCallback<?> callback);
 	public void revokeUser(String path, String user, int permissions, boolean recursive, AsyncCallback<?> callback);
