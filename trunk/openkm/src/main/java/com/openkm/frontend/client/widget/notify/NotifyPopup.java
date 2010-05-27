@@ -201,6 +201,7 @@ public class NotifyPopup extends DialogBox  {
 		roles = "";
 		message.setText("");
 		notifyPanel.reset();
+		notifyPanel.getAll();
 		doc = new GWTDocument();
 		errorNotify.setVisible(false);
 	}
