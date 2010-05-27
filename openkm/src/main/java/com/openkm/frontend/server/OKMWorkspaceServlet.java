@@ -86,6 +86,13 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setChatEnabled(Config.CHAT_ENABLED);
 		workspace.setChatAutoLogin(Config.CHAT_AUTOLOGIN);
 		
+		// Schedule time
+		workspace.setKeepAliveSchedule(Config.SCHEDULE_SESSION_KEEPALIVE);
+		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
+		
+		// Advanced filters ( used when there a lot of users and groups )
+		workspace.setAdvancedFilters(true);
+		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
 			User user = new User();
