@@ -107,6 +107,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isAdvancedFilters()) {
 				Main.get().securityPopup.enableAdvancedFilter();
 				Main.get().fileUpload.enableAdvancedFilter();
+				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
 			// Getting update messages 

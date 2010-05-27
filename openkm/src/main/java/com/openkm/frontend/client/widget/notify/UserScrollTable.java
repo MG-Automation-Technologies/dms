@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.upload;
+package com.openkm.frontend.client.widget.notify;
 
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
@@ -30,30 +30,31 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
+
 import com.openkm.frontend.client.Main;
 
 /**
- * RoleScrollTable
+ * UserScrollTable
  * 
  * @author jllort
  *
  */
-public class RoleScrollTable extends Composite {
-	
+public class UserScrollTable extends Composite {
+	// Number of columns
 	public static final int NUMBER_OF_COLUMNS	= 1;
 	
 	private ScrollTable table;
+	private boolean isUserToNofity = false;
 	private FixedWidthFlexTable headerTable;
 	private FixedWidthGrid dataTable;
-	private boolean isRolesToNofity = false;
-	
+
 	/**
-	 * RoleScrollTable
+	 * UserScrollTable
 	 * 
-	 * @param isAssigned
+	 * @param isUserToNofity
 	 */
-	public RoleScrollTable(boolean isRolesToNofity) {
-		this.isRolesToNofity = isRolesToNofity;
+	public UserScrollTable(boolean isUserToNofity) {
+		this.isUserToNofity = isUserToNofity;
 		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){			
 			public AbstractImagePrototype scrollTableAscending() {
@@ -108,12 +109,12 @@ public class RoleScrollTable extends Composite {
 		table.setSize("128","140");
 		
 		// Level 1 headers
-	    if (isRolesToNofity) {
-	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
+	    if (isUserToNofity) {
+	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
 		}
-
+	    
 	    table.setColumnWidth(0,120);
 	    
 	    // Table data
@@ -125,38 +126,38 @@ public class RoleScrollTable extends Composite {
 	}
 	
 	/**
-	 * Adds new roleName name row
+	 * Adds new username row
 	 * 
-	 * @param roleName The user name value
+	 * @param userName The user name value
 	 */
-	public void addRow(String roleName) {
+	public void addRow(String userName) {
 		int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
-		dataTable.setHTML(rows, 0, roleName);
+		dataTable.setHTML(rows, 0, userName);
 	}
 	
 	/**
-	 * Gets the role
+	 * Gets the user
 	 * 
-	 * @return The role
+	 * @return The user
 	 */
-	public String getRole() {
-		String role = null;
+	public String getUser() {
+		String user = null;
 		
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
 			if (dataTable.isRowSelected(selectedRow)) {
-				role = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),0);
+				user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),0);
 			}
 		}
-	
-		return role;
+		
+		return user;
 	}
 	
 	/**
 	 * Selects the las row
 	 */
-	public void selectLastRow(){
+	public void selectLastRow() {
 		if (dataTable.getRowCount()>0) {
 			dataTable.selectRow(dataTable.getRowCount()-1,true);
 		}
@@ -184,27 +185,27 @@ public class RoleScrollTable extends Composite {
 	 * 
 	 * @return The users string
 	 */
-	public String getRolesToNotify() {
-		String roles = "";
+	public String getUsersToNotify() {
+		String users = "";
 		
 		if (dataTable.getRowCount()>0) {
 			for (int i = 0; i<dataTable.getRowCount(); i++){
-				roles += dataTable.getText(i,0) + ",";
+				users += dataTable.getText(i,0) + ",";
 			}
 		}
 		
 		// Removes last ',' character
-		if (roles.length()>0) {
-			roles = roles.substring(0, roles.length()-1);
+		if (users.length()>0) {
+			users = users.substring(0, users.length()-1);
 		}
 		
-		return roles;
+		return users;
 	}
 	
 	/**
 	 * Removes all rows except the first
 	 */
-	public void removeAllRows() {
+	private void removeAllRows() {
 		// Purge all rows 
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
@@ -220,16 +221,16 @@ public class RoleScrollTable extends Composite {
 	}
 	
 	/**
-	 * Lang refresh
+	 * Lang refreshing
 	 */
 	public void langRefresh() {
-		if (isRolesToNofity) {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
+		if (isUserToNofity) {
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
 		}
 	}
-
+	
 	/**
 	 * getDataTable
 	 * 

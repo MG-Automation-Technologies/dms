@@ -37,6 +37,7 @@ import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.notify.NotifyPanel;
 
 /**
  * FancyFileUpload
@@ -177,6 +178,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			send.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
+					users.setText(notifyPanel.getUsersToNotify());
+					roles.setText(notifyPanel.getRolesToNotify());
 					if (notifyToUser.getValue() && users.getText().equals("") && roles.getText().equals("")) {
 						errorNotify.setVisible(true);
 					} else if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
@@ -461,7 +464,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		
 		// Adds error panel, whem user select notify but not select any user
 		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorNotify.setWidth("255");
+		errorNotify.setWidth("270");
 		errorNotify.setVisible(false);
 		errorNotify.setStyleName("fancyfileupload-failed");
 		mainPanel.add(errorNotify);
@@ -794,24 +797,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
 		endPoint.setServiceEntryPoint(Config.OKMGeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
-	}
-	
-	/**
-	 * setUsersToNotify
-	 * 
-	 * @param notifyUsers
-	 */
-	public void setUsersToNotify(String notifyUsers) {
-		users.setText(notifyUsers);
-	}
-	
-	/**
-	 * setRolesToNotify
-	 * 
-	 * @param notifyUsers
-	 */
-	public void setRolesToNotify(String notifyRoles) {
-		roles.setText(notifyRoles);
 	}
 	
 	/**

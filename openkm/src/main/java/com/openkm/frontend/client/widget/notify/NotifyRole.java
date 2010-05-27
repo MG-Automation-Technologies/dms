@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.upload;
+package com.openkm.frontend.client.widget.notify;
 
 import java.util.Iterator;
 import java.util.List;
@@ -121,8 +121,8 @@ public class NotifyRole extends Composite {
 				notifyRolesTable.addRow(rolesTable.getRole());	
 				notifyRolesTable.selectLastRow();
 				rolesTable.removeSelectedRow();
-				Main.get().fileUpload.setRolesToNotify(notifyRolesTable.getRolesToNotify());
-				Main.get().fileUpload.disableErrorNotify(); // always disable error user
+				Main.get().fileUpload.disableErrorNotify();  // Used in both widgets
+				Main.get().notifyPopup.disableErrorNotify(); // has no bad efeccts disabling 
 			}
 		}
 	};
@@ -137,7 +137,6 @@ public class NotifyRole extends Composite {
 				rolesTable.addRow(notifyRolesTable.getRole());
 				rolesTable.selectLastRow();
 				notifyRolesTable.removeSelectedRow();
-				Main.get().fileUpload.setRolesToNotify(notifyRolesTable.getRolesToNotify());
 			}
 		}
 	};
@@ -173,5 +172,14 @@ public class NotifyRole extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 		authService.getFilteredAllRoles(filter, callbackAllRoles);
+	}
+	
+	/**
+	 * getRolesToNotify
+	 * 
+	 * @return
+	 */
+	public String getRolesToNotify() {
+		return notifyRolesTable.getRolesToNotify();
 	}
 }
