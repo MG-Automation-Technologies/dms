@@ -345,6 +345,8 @@ public class Lang_el_GR {
 	    lang.put("security.users", "Χρήστες");
 	    lang.put("security.groups", "Ομάδες");
 	    lang.put("security.recursive", "Αναδρομικές αλλαγές αδειών ");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

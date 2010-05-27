@@ -347,6 +347,8 @@ public class Lang_pl_PL {
 	    lang.put("security.users", "Użytkownik");
 	    lang.put("security.groups", "Grupy");
 	    lang.put("security.recursive", "Dziedziczenie uprawnień");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

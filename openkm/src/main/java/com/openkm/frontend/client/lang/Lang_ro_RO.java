@@ -346,6 +346,8 @@ public class Lang_ro_RO {
 	    lang.put("security.users", "Utilizatori");
 	    lang.put("security.groups", "Grupuri");
 	    lang.put("security.recursive", "Modificare recursiva a drepturilor");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

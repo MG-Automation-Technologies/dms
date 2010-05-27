@@ -346,6 +346,8 @@ public class Lang_nl_NL {
 	    lang.put("security.users", "Gebruikers");
 	    lang.put("security.groups", "Groepen");
 	    lang.put("security.recursive", "Overerfbare rechten");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

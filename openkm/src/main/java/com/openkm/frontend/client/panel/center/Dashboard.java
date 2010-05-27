@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.panel.center;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -60,6 +61,7 @@ public class Dashboard extends ExtendedComposite {
 	public WorkflowDashboard workflowDashboard;
 	public KeyMapDashboard keyMapDashboard;
 	private int actualView = 0; 
+	Timer dashboardRefreshing;
 	
 	/**
 	 * Dashboard
@@ -197,5 +199,20 @@ public class Dashboard extends ExtendedComposite {
 		generalDashboard.refreshAll();
 		workflowDashboard.findUserTaskInstances();
 		keyMapDashboard.refreshAll();
+	}
+	
+	/**
+	 * startRefreshingDashboard
+	 * 
+	 * @param scheduleTime
+	 */
+	public void startRefreshingDashboard(double scheduleTime) {
+		dashboardRefreshing = new Timer() {
+			public void run() {
+				refreshAll();
+			}
+		};
+		
+		dashboardRefreshing.scheduleRepeating(new Double(scheduleTime).intValue()); 
 	}
 }

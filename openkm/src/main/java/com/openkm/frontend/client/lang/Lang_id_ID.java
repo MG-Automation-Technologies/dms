@@ -345,6 +345,8 @@ public class Lang_id_ID {
 	    lang.put("security.users", "User");
 	    lang.put("security.groups", "Grup");
 	    lang.put("security.recursive", "Perubahan permisi rekursif");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview tak tersedia");

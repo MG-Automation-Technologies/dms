@@ -345,6 +345,8 @@ public class Lang_gl_ES {
 	    lang.put("security.users", "Usuarios");
 	    lang.put("security.groups", "Grupos");
 	    lang.put("security.recursive", "Aplicar cambios de forma recursiva");
+	    lang.put("secutiry.filter.by.users","Filtro de usuarios");
+	    lang.put("secutiry.filter.by.groups","Filtro de grupos");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Previsualización no disponible");
