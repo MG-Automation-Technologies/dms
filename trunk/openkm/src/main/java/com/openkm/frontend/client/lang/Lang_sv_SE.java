@@ -345,6 +345,8 @@ public class Lang_sv_SE {
 	    lang.put("security.users", "Användare");
 	    lang.put("security.groups", "Grupper");
 	    lang.put("security.recursive", "Rekursiva behörighetsförändringar");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

@@ -345,6 +345,8 @@ public class Lang_ar_PS {
 	    lang.put("security.users", "مستخدمون");
 	    lang.put("security.groups", "مجموعات");
 	    lang.put("security.recursive", "تغير الإذن بشكل تكراري");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "المعاينة غير متوفرة");

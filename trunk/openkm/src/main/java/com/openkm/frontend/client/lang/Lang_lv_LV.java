@@ -345,6 +345,8 @@ public class Lang_lv_LV {
 	    lang.put("security.users", "Lietotāji");
 	    lang.put("security.groups", "Grupas");
 	    lang.put("security.recursive", "Rekursīvas tiesību maiņas");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

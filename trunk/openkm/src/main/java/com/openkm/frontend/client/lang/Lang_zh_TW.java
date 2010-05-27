@@ -345,6 +345,8 @@ public class Lang_zh_TW {
 	    lang.put("security.users", "使用者");
 	    lang.put("security.groups", "群組");
 	    lang.put("security.recursive", "Recursive permission changes");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

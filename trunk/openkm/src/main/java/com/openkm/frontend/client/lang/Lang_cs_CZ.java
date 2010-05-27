@@ -345,6 +345,8 @@ public class Lang_cs_CZ {
 	    lang.put("security.users", "Uživatelé");
 	    lang.put("security.groups", "Skupiny");
 	    lang.put("security.recursive", "Nastavit práva rekurzivně");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Náhled není dostupný");

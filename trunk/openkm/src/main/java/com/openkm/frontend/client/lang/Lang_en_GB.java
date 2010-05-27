@@ -345,6 +345,8 @@ public class Lang_en_GB {
 	    lang.put("security.users", "Users");
 	    lang.put("security.groups", "Groups");
 	    lang.put("security.recursive", "Recursive permission changes");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

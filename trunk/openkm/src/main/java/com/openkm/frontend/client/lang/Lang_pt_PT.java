@@ -345,6 +345,8 @@ public class Lang_pt_PT {
 	    lang.put("security.users", "Utilizadores");
 	    lang.put("security.groups", "Grupos");
 	    lang.put("security.recursive", "Aplicar alterações de forma recursiva");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Pré-visualização indisponível");

@@ -52,6 +52,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean wizardCategories = false;
 	private boolean chatEnabled = false;
 	private boolean chatAutoLogin = false;
+	private double keepAliveSchedule = 900*1000; 	// 15 minutes
+	private double dashboardSchedule = 1800*1000; 	// 30 minutes
+	private boolean advancedFilters = false;
 
 	/**
 	 * GWTWorkspace
@@ -225,5 +228,29 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setChatEnabled(boolean chatEnabled) {
 		this.chatEnabled = chatEnabled;
+	}
+	
+	public double getDashboardSchedule() {
+		return dashboardSchedule;
+	}
+
+	public void setDashboardSchedule(double dashboardSchedule) {
+		this.dashboardSchedule = dashboardSchedule;
+	}
+
+	public double getKeepAliveSchedule() {
+		return keepAliveSchedule;
+	}
+
+	public void setKeepAliveSchedule(double keepAliveSchedule) {
+		this.keepAliveSchedule = keepAliveSchedule;
+	}
+	
+	public boolean isAdvancedFilters() {
+		return advancedFilters;
+	}
+
+	public void setAdvancedFilters(boolean advancedFilters) {
+		this.advancedFilters = advancedFilters;
 	}
 }

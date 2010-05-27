@@ -345,6 +345,8 @@ public class Lang_hu_HU {
 	    lang.put("security.users", "Felhasználók");
 	    lang.put("security.groups", "Csoportok");
 	    lang.put("security.recursive", "Jogosultságok rekurzív módosítása");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

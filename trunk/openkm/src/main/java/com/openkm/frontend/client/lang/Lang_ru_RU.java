@@ -350,6 +350,8 @@ public class Lang_ru_RU {
 	    lang.put("security.users", "Пользователи");
 	    lang.put("security.groups", "Группы");
 	    lang.put("security.recursive", "Рекурсивное изменение прав");
+	    lang.put("secutiry.filter.by.users","Users filter");
+	    lang.put("secutiry.filter.by.groups","Groups filter");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");
