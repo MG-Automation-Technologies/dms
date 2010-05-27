@@ -225,4 +225,11 @@ public class FileUpload extends DialogBox {
 	public void disableErrorNotify() {
 		ffUpload.disableErrorNotify();
 	}
+	
+	/**
+	 * enableAdvancedFilter
+	 */
+	public void enableAdvancedFilter() {
+		ffUpload.enableAdvancedFilter();
+	}
 }

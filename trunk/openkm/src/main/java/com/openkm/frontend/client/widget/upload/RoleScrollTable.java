@@ -105,7 +105,7 @@ public class RoleScrollTable extends Composite {
 		table = new ScrollTable(dataTable,headerTable,scrollTableImages);
 		table.setCellSpacing(0);
 		table.setCellPadding(0);
-		table.setSize("130","140");
+		table.setSize("128","140");
 		
 		// Level 1 headers
 	    if (isRolesToNofity) {

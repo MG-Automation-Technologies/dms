@@ -21,10 +21,22 @@
 
 package com.openkm.frontend.client.widget.upload;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 
 /**
@@ -42,6 +54,13 @@ public class NotifyPanel extends Composite {
 	private VerticalPanel vPanel;
 	private NotifyUser notifyUser;
 	private NotifyRole notifyRole;
+	private boolean filterView = false;
+	private CheckBox checkBoxFilter;
+	private TextBox filter;
+	private HorizontalPanel filterPanel;
+	private HTML filterText;
+	private String usersFilter = "";
+	private String groupsFilter = "";
 	
 	/**
 	 * NotifyPanel
@@ -57,9 +76,89 @@ public class NotifyPanel extends Composite {
 		tabPanel.selectTab(TAB_USERS);
 		tabPanel.setWidth("100%");
 		
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				switch (event.getSelectedItem().intValue()) {
+					case TAB_USERS:
+						groupsFilter = filter.getText();
+						filter.setText(usersFilter);
+						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+						break;
+					case TAB_GROUPS:
+						usersFilter = filter.getText();
+						filter.setText(groupsFilter);
+						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+						break;
+				}
+			}
+		});
+		
+		filterPanel = new HorizontalPanel();
+		filterPanel.setVisible(false);
+		checkBoxFilter = new CheckBox();
+		checkBoxFilter.setValue(false);
+		checkBoxFilter.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				notifyUser.reset();
+				notifyRole.reset();
+				Widget sender = (Widget) event.getSource();
+				if (((CheckBox) sender).getValue()) {
+					filter.setText("");
+					filter.setEnabled(true);
+				} else {
+					filter.setText("");
+					filter.setEnabled(false);
+					usersFilter = "";
+					groupsFilter = "";
+					getAll();
+				}
+			}
+		});
+		filter = new TextBox();
+		filterText = new HTML(Main.i18n("secutiry.filter.by.users"));
+		filterPanel.add(checkBoxFilter);
+		filterPanel.add(new HTML("&nbsp;"));
+		filterPanel.add(filterText);
+		filterPanel.add(new HTML("&nbsp;"));
+		filterPanel.add(filter);
+		
+		filterPanel.setCellVerticalAlignment(checkBoxFilter, HasAlignment.ALIGN_MIDDLE);
+		filterPanel.setCellVerticalAlignment(filterText, HasAlignment.ALIGN_MIDDLE);
+		filterPanel.setCellVerticalAlignment(filter, HasAlignment.ALIGN_MIDDLE);
+		
+		filter.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (filter.getText().length()>=3) {
+					TabBar tabBar = tabPanel.getTabBar();
+					int selected = tabBar.getSelectedTab();
+					switch(selected) {
+						case TAB_USERS:
+							notifyUser.reset();
+							notifyUser.getFilteredAllUsers(filter.getText());
+							break;
+							
+						case TAB_GROUPS:
+							notifyRole.reset();
+							notifyRole.getFilteredAllRoles(filter.getText());
+							break;
+					}
+				} else {
+					notifyUser.reset();
+					notifyRole.reset();
+				}
+			}
+		});
+		
+		vPanel.add(filterPanel);
 		vPanel.add(tabPanel);
 		
+		vPanel.setCellHorizontalAlignment(filterPanel, VerticalPanel.ALIGN_RIGHT);
+		
 		tabPanel.addStyleName("okm-DisableSelect");
+		filter.setStyleName("okm-Input");
 		
 		initWidget(vPanel);
 	}
@@ -87,6 +186,15 @@ public class NotifyPanel extends Composite {
 		tabPanel.add(notifyRole, Main.i18n("fileupload.label.groups"));
 		tabPanel.selectTab(selected);
 		
+		switch (selected) {
+			case TAB_USERS:
+				filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+				break;
+			case TAB_GROUPS:
+				filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+				break;
+		}
+		
 		notifyUser.langRefresh();
 		notifyRole.langRefresh();
 	}
@@ -95,7 +203,18 @@ public class NotifyPanel extends Composite {
 	 * Gets all users and roles
 	 */
 	public void getAll() {
-		notifyUser.getAllUsers();
-		notifyRole.getAllRoles();
+		if (!filterView || !checkBoxFilter.getValue()) {
+			notifyUser.getAllUsers();
+			notifyRole.getAllRoles();
+		} 
+	}
+	
+	/**
+	 * enableAdvancedFilter
+	 */
+	public void enableAdvancedFilter() {
+		filterView = true;
+		filterPanel.setVisible(true);
+		checkBoxFilter.setValue(true);
 	}
 }

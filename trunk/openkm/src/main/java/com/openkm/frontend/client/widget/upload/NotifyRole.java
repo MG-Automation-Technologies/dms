@@ -165,4 +165,13 @@ public class NotifyRole extends Composite {
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 		authService.getAllRoles(callbackAllRoles);
 	}
+	
+	/**
+	 * Gets all roles
+	 */
+	public void getFilteredAllRoles(String filter) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+		authService.getFilteredAllRoles(filter, callbackAllRoles);
+	}
 }
