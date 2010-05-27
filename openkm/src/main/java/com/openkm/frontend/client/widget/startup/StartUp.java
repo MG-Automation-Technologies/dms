@@ -69,7 +69,6 @@ public class StartUp {
 	public static final int STARTUP_LOADING_TRASH							= 22;
 	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 23;
 	public static final int STARTUP_GET_USER_VALUES							= 24;
-	public static final int STARTUP_KEEP_ALIVE								= 25;
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -302,10 +301,7 @@ public class StartUp {
 		repositoryService.getRootFolder(callbackGetRootFolder);
 	}
 	
-	/**
-	 * Sets the keep alive
-	 */
-	public void keepAlive() {
+	public void startKeepAlive(double scheduleTime) {
 		// KeepAlieve thread
 	    ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);
@@ -315,7 +311,7 @@ public class StartUp {
 			}
 		};
 		
-		keepAlive.scheduleRepeating(900*1000); // 15 min
+		keepAlive.scheduleRepeating(new Double(scheduleTime).intValue()); // 15 min
 	}
 	
 	/**
@@ -453,17 +449,11 @@ public class StartUp {
 					case STARTUP_GET_USER_VALUES:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.user.values"), STARTUP_GET_USER_VALUES);
 						Main.get().workspaceUserProperties.init();
-						break;
-						
-					case STARTUP_KEEP_ALIVE:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.keep.alive"), STARTUP_KEEP_ALIVE);
-						keepAlive();
 						enabled = false;
 						if (!error) {
 							Main.get().startUpPopup.hide();
 						} 
-						break;
-						
+						break;						
 				}			
 			}
 		}
@@ -604,12 +594,7 @@ public class StartUp {
 			
 			case STARTUP_GET_USER_VALUES:
 				msg = Main.i18n("startup.loading.user.values");
-				break;
-			
-			case STARTUP_KEEP_ALIVE:
-				msg = Main.i18n("startup.keep.alive");
-				break;
-				
+				break;				
 		}			
 		
 		return msg;

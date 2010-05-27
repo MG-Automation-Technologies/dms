@@ -159,6 +159,14 @@ public class SecurityRole extends Composite implements HasWidgets {
 	}
 	
 	/**
+	 * resetUnassigned
+	 */
+	public void resetUnassigned() {
+		unassignedRole.reset();
+		unassignedRole.getDataTable().resize(0, UNASSIGNED_ROLES_NUMBER_OF_COLUMNS);
+	}
+	
+	/**
 	 * Call back get granted roles
 	 */
 	final AsyncCallback<HashMap<String, Byte>> callbackGetGrantedRoles = new AsyncCallback<HashMap<String, Byte>>() {
@@ -249,6 +257,18 @@ public class SecurityRole extends Composite implements HasWidgets {
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getUngrantedRoles(path, callbackGetUngrantedRoles);
+		}
+	}
+	
+	/**
+	 * Gets the granted roles by filter
+	 */
+	public void getFilteredUngrantedRoles(String filter) {
+		if (path != null) {
+			resetUnassigned();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			authService.getFilteredUngrantedRoles(path, filter, callbackGetUngrantedRoles);
 		}
 	}
 	
