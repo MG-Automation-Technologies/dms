@@ -244,4 +244,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/loaded_error.gif")
 	public ImageResource loadedErrorIcon();
+	
+	@Source("com/openkm/frontend/public/img/icon/security/add.gif")
+	public ImageResource add();
+	
+	@Source("com/openkm/frontend/public/img/icon/security/remove.gif")
+	public ImageResource remove();
 }

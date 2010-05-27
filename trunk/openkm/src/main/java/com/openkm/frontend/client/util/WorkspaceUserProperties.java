@@ -24,7 +24,6 @@ package com.openkm.frontend.client.util;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.Config;
@@ -32,7 +31,6 @@ import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
 import com.openkm.frontend.client.service.OKMWorkspaceServiceAsync;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * Workspace user properties
@@ -70,7 +68,6 @@ public class WorkspaceUserProperties {
 		public void onSuccess(String result) {
 			msg = result;
 			Main.get().mainPanel.bottomPanel.userInfo.setUpdateMessage(msg);
-			Main.get().startUp.nextStatus(StartUp.STARTUP_KEEP_ALIVE);
 		}
 
 		public void onFailure(Throwable caught){
@@ -102,6 +99,16 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.topPanel.tabWorkspace.enableAdministration();
 			}
 			
+			// Starting schedulers
+			Main.get().startUp.startKeepAlive(workspace.getKeepAliveSchedule());
+			Main.get().mainPanel.dashboard.startRefreshingDashboard(workspace.getDashboardSchedule());
+			
+			// Enabling advanced filters
+			if (workspace.isAdvancedFilters()) {
+				Main.get().securityPopup.enableAdvancedFilter();
+			}
+			
+			// Getting update messages 
 			getUpdateMessage();
 		}
 

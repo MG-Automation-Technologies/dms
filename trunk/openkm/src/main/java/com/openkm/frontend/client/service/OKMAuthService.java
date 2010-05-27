@@ -39,6 +39,8 @@ public interface OKMAuthService extends RemoteService {
 	public String getRemoteUser();
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException;
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException;
+	public List<String> getFilteredUngrantedUsers(String nodePath, String filter) throws OKMException;
+	public List<String> getFilteredUngrantedRoles(String nodePath, String filter) throws OKMException;
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException;
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException;
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException;
