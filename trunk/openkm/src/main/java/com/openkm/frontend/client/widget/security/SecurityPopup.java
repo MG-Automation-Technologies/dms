@@ -23,14 +23,23 @@ package com.openkm.frontend.client.widget.security;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.openkm.frontend.client.Main;
 
@@ -42,6 +51,9 @@ import com.openkm.frontend.client.Main;
  */
 public class SecurityPopup extends DialogBox implements ClickHandler {
 	
+	private static final int TAB_USERS 	= 0;
+	private static final int TAB_GROUPS = 1;
+	
 	private VerticalPanel vPanel;
 	private TabPanel tabPanel;
 	public SecurityUser securityUser;
@@ -49,6 +61,13 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	public CheckBox recursive;
 	private Button button;
 	private SimplePanel sp;
+	private boolean filterView = false;
+	private CheckBox checkBoxFilter;
+	private TextBox filter;
+	private HorizontalPanel filterPanel;
+	private HTML filterText;
+	private String usersFilter = "";
+	private String groupsFilter = "";
 	
 	/**
 	 * Security popup
@@ -74,7 +93,83 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		tabPanel.selectTab(0);
 		tabPanel.setWidth("100%");
 		
+		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				switch (event.getSelectedItem().intValue()) {
+					case TAB_USERS:
+						groupsFilter = filter.getText();
+						filter.setText(usersFilter);
+						filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+						break;
+					case TAB_GROUPS:
+						usersFilter = filter.getText();
+						filter.setText(groupsFilter);
+						filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+						break;
+				}
+			}
+		});
+		
+		filterPanel = new HorizontalPanel();
+		filterPanel.setVisible(false);
+		checkBoxFilter = new CheckBox();
+		checkBoxFilter.setValue(false);
+		checkBoxFilter.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				securityUser.resetUnassigned();
+				securityRole.resetUnassigned();
+				Widget sender = (Widget) event.getSource();
+				if (((CheckBox) sender).getValue()) {
+					filter.setText("");
+					filter.setEnabled(true);
+				} else {
+					filter.setText("");
+					filter.setEnabled(false);
+					usersFilter = "";
+					groupsFilter = "";
+					refreshUnassigned();
+				}
+			}
+		});
+		filter = new TextBox();
+		filterText = new HTML(Main.i18n("secutiry.filter.by.users"));
+		filterPanel.add(checkBoxFilter);
+		filterPanel.add(new HTML("&nbsp;"));
+		filterPanel.add(filterText);
+		filterPanel.add(new HTML("&nbsp;"));
+		filterPanel.add(filter);
+		filterPanel.add(new HTML("&nbsp;"));
+		
+		filterPanel.setCellVerticalAlignment(checkBoxFilter, HasAlignment.ALIGN_MIDDLE);
+		filterPanel.setCellVerticalAlignment(filterText, HasAlignment.ALIGN_MIDDLE);
+		filterPanel.setCellVerticalAlignment(filter, HasAlignment.ALIGN_MIDDLE);
+		
+		filter.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (filter.getText().length()>=3) {
+					TabBar tabBar = tabPanel.getTabBar();
+					int selected = tabBar.getSelectedTab();
+					switch(selected) {
+						case TAB_USERS:
+							securityUser.getFilteredUngrantedUsers(filter.getText());
+							break;
+							
+						case TAB_GROUPS:
+							securityRole.getFilteredUngrantedRoles(filter.getText());
+							break;
+					}
+				} else {
+					securityUser.resetUnassigned();
+					securityRole.resetUnassigned();
+				}
+			}
+		});
+		
 		vPanel.add(sp);
+		vPanel.add(filterPanel);
 		vPanel.add(tabPanel);
 		vPanel.add(recursive);
 		vPanel.add(button);
@@ -83,12 +178,14 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		vPanel.setCellHeight(tabPanel, "255");
 		vPanel.setCellHeight(recursive, "25");
 		vPanel.setCellHeight(button, "25");
+		vPanel.setCellHorizontalAlignment(filterPanel, VerticalPanel.ALIGN_RIGHT);
 		vPanel.setCellHorizontalAlignment(tabPanel, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(tabPanel, VerticalPanel.ALIGN_TOP);
 		vPanel.setCellHorizontalAlignment(button, VerticalPanel.ALIGN_CENTER);
 		vPanel.setCellVerticalAlignment(button, VerticalPanel.ALIGN_MIDDLE);
 		
 		button.setStyleName("okm-Button");
+		filter.setStyleName("okm-Input");
 
 		super.hide();
 		setWidget(vPanel);
@@ -121,6 +218,15 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		tabPanel.add(securityRole, Main.i18n("security.groups"));
 		tabPanel.selectTab(selected);
 		
+		switch (selected) {
+			case TAB_USERS:
+				filterText.setHTML(Main.i18n("secutiry.filter.by.users"));
+				break;
+			case TAB_GROUPS:
+				filterText.setHTML(Main.i18n("secutiry.filter.by.groups"));
+				break;
+		}
+		
 		securityUser.langRefresh();
 		securityRole.langRefresh();
 	}
@@ -137,14 +243,36 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		Main.get().securityPopup.securityRole.setPath(path);
 		securityUser.reset();
 		securityRole.reset();
+		filter.setText("");
+		usersFilter = "";
+		groupsFilter = "";
 		securityUser.getGrantedUsers();
-		securityUser.getUngrantedUsers();
 		securityRole.getGrantedRoles();
-		securityRole.getUngrantedRoles();
+		if (!filterView) {
+			securityUser.getUngrantedUsers();
+			securityRole.getUngrantedRoles();
+		} 
 		super.show();
 		
 		// Fill width must be done on visible widgets
 		securityUser.fillWidth();
 		securityRole.fillWidth();
+	}
+	
+	/**
+	 * refreshUnassigned
+	 */
+	public void refreshUnassigned() {
+		securityUser.getUngrantedUsers();
+		securityRole.getUngrantedRoles();
+	}
+	
+	/**
+	 * enableAdvancedFilter
+	 */
+	public void enableAdvancedFilter() {
+		filterView = true;
+		filterPanel.setVisible(true);
+		checkBoxFilter.setValue(true);
 	}
 }

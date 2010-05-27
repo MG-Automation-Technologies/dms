@@ -33,21 +33,20 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.UserComparator;
-import com.openkm.frontend.client.util.Util;
 
 /**
  * Security User
@@ -70,8 +69,8 @@ public class SecurityUser extends Composite implements HasWidgets {
 	private SimplePanel spLeft;
 	private SimplePanel spRight;
 	private SimplePanel spHeight;
-	private HTML addButtom;
-	private HTML removeButtom;
+	private Image addButtom;
+	private Image removeButtom;
 	private String path = "";
 	private String tmpUser = "";
 		
@@ -90,15 +89,15 @@ public class SecurityUser extends Composite implements HasWidgets {
 		spRight.setWidth("1");
 		spHeight.setHeight("30");
 		
-		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
-		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
+		addButtom = new Image(OKMBundleResources.INSTANCE.add());
+		removeButtom = new Image(OKMBundleResources.INSTANCE.remove());
 		
 		buttonPanel.add(addButtom);
 		buttonPanel.add(spHeight); // separator
 		buttonPanel.add(removeButtom);
 		
-		addButtom.addClickHandler(addButtomListener);
-		removeButtom.addClickHandler(removeButtomListener);
+		addButtom.addClickHandler(addButtomHandler);
+		removeButtom.addClickHandler(removeButtomHandler);
 		
 		panel.add(spLeft);
 		panel.add(assignedUser);
@@ -118,7 +117,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	/**
 	 * Add buttom listener
 	 */
-	ClickHandler addButtomListener = new ClickHandler() { 
+	ClickHandler addButtomHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (unassignedUser.getUser() != null) {
@@ -131,7 +130,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	/**
 	 * Remove buttom listener
 	 */
-	ClickHandler removeButtomListener = new ClickHandler() { 
+	ClickHandler removeButtomHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (assignedUser.getUser() != null) {
@@ -156,6 +155,14 @@ public class SecurityUser extends Composite implements HasWidgets {
 		assignedUser.reset();
 		unassignedUser.reset();
 		assignedUser.getDataTable().resize(0, ASSIGNED_USER_NUMBER_OF_COLUMNS);
+		unassignedUser.getDataTable().resize(0, UNASSIGNED_USER_NUMBER_OF_COLUMNS);
+	}
+	
+	/**
+	 * resetUnassigned
+	 */
+	public void resetUnassigned() {
+		unassignedUser.reset();
 		unassignedUser.getDataTable().resize(0, UNASSIGNED_USER_NUMBER_OF_COLUMNS);
 	}
 	
@@ -253,6 +260,17 @@ public class SecurityUser extends Composite implements HasWidgets {
 		}
 	}
 	
+	/**
+	 * Gets the ungranted users by filter
+	 */
+	public void getFilteredUngrantedUsers(String filter) {
+		if (path != null) {
+			resetUnassigned();
+			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
+			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
+			authService.getFilteredUngrantedUsers(path, filter, callbackGetUngrantedUsers);
+		}
+	}
 
 	/**
 	 * Grant the user
