@@ -239,6 +239,8 @@ public class Lang_el_GR {
 	    lang.put("fileupload.label.comment", "Σχόλιο");
 	    lang.put("fileupload.label.users.to.notify",  "Ειδοποίηση χρηστών");
 	    lang.put("fileupload.label.users",  "Χρήστες");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Πρέπει να επιλέξετε κάποιο χρήστη για ειδοποίηση");
 	    lang.put("fileupload.label.importZip", "Εισαγωγή εγγράφων από zip");
 	    lang.put("fileupload.label.notify.comment", "Μήνυμα ειδοποίησης");

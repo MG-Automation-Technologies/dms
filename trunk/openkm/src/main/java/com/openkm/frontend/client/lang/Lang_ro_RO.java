@@ -240,6 +240,8 @@ public class Lang_ro_RO {
 	    lang.put("fileupload.label.comment", "Comentariu");
 	    lang.put("fileupload.label.users.to.notify",  "Utilizatorii vor fi notificati");
 	    lang.put("fileupload.label.users",  "Utilizatori");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Trebuie sa selectati un utilizator pentru a fi notificat");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 	    lang.put("fileupload.label.notify.comment", "Mesaj de notificare");

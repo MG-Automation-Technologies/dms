@@ -239,6 +239,8 @@ public class Lang_ja_JP {
 		lang.put("fileupload.label.comment", "コメント");
 		lang.put("fileupload.label.users.to.notify",  "通知するユーザ");
 		lang.put("fileupload.label.users",  "利用者");
+		lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 		lang.put("fileupload.label.must.select.users",  "通知するユーザを選択して下さい");
 		lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 		lang.put("fileupload.label.notify.comment", "通知メッセージ");

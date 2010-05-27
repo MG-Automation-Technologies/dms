@@ -239,6 +239,8 @@ public class Lang_lv_LV {
 	    lang.put("fileupload.label.comment", "Komentārs");
 	    lang.put("fileupload.label.users.to.notify",  "Informējamie leitotāji");
 	    lang.put("fileupload.label.users",  "Lietotāji");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Jāizvēlas kāds lietotājs, kuru informēt");
 	    lang.put("fileupload.label.importZip", "Importēt Dokumentus no ZIP");
 	    lang.put("fileupload.label.notify.comment", "Brīdinājuma ziņa");

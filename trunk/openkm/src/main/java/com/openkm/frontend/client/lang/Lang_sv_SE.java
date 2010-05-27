@@ -239,6 +239,8 @@ public class Lang_sv_SE {
 	    lang.put("fileupload.label.comment", "Kommentera");
 	    lang.put("fileupload.label.users.to.notify",  "Användare att meddela");
 	    lang.put("fileupload.label.users",  "Användare");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Du måste välja användare att meddela");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 	    lang.put("fileupload.label.notify.comment", "Notifieringsmeddelande");

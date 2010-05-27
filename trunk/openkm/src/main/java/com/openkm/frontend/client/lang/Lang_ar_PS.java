@@ -239,6 +239,8 @@ public class Lang_ar_PS {
 	    lang.put("fileupload.label.comment", "تعليق");
 	    lang.put("fileupload.label.users.to.notify",  "إعلام المستخدمين");
 	    lang.put("fileupload.label.users",  "المستخدمين");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "يجب تحديد بعض المستخدمين للإبلاغ");
 	    lang.put("fileupload.label.importZip", "استيراد المستندات من ملف مضغوط");
 	    lang.put("fileupload.label.notify.comment", "رسالة التبليغ");

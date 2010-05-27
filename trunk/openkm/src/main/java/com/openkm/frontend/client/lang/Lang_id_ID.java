@@ -239,6 +239,8 @@ public class Lang_id_ID {
 	    lang.put("fileupload.label.comment", "Komentar");
 	    lang.put("fileupload.label.users.to.notify",  "User sudah dinotifikasi");
 	    lang.put("fileupload.label.users",  "Pengguna");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Pilih user yang akan dinotifikasi");
 	    lang.put("fileupload.label.importZip", "Impor Dokumen dari ZIP");
 	    lang.put("fileupload.label.notify.comment", "Berita Notifikasi");

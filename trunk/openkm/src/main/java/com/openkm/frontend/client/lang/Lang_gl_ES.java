@@ -239,6 +239,8 @@ public class Lang_gl_ES {
 	    lang.put("fileupload.label.comment", "Comentario");
 	    lang.put("fileupload.label.users.to.notify",  "Usuarios a notificar");
 	    lang.put("fileupload.label.users",  "Usuarios");
+	    lang.put("fileupload.label.groups.to.notify","Grupos a notificar");
+	    lang.put("fileupload.label.groups","Grupos");
 	    lang.put("fileupload.label.must.select.users",  "Seleccione algún usuario ao que notificar");
 	    lang.put("fileupload.label.importZip", "Importar documentos desde ZIP");
 	    lang.put("fileupload.label.notify.comment", "Mensaxe de notificación");

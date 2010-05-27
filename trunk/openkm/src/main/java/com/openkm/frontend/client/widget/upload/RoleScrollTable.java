@@ -30,31 +30,30 @@ import com.google.gwt.gen2.table.client.AbstractScrollTable.ScrollTableImages;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
-
 import com.openkm.frontend.client.Main;
 
 /**
- * UserScrollTable
+ * RoleScrollTable
  * 
  * @author jllort
  *
  */
-public class UserScrollTable extends Composite {
-	// Number of columns
+public class RoleScrollTable extends Composite {
+	
 	public static final int NUMBER_OF_COLUMNS	= 1;
 	
 	private ScrollTable table;
-	private boolean isUserToNofity = false;
 	private FixedWidthFlexTable headerTable;
 	private FixedWidthGrid dataTable;
-
+	private boolean isRolesToNofity = false;
+	
 	/**
-	 * UserScrollTable
+	 * RoleScrollTable
 	 * 
-	 * @param isUserToNofity
+	 * @param isAssigned
 	 */
-	public UserScrollTable(boolean isUserToNofity) {
-		this.isUserToNofity = isUserToNofity;
+	public RoleScrollTable(boolean isRolesToNofity) {
+		this.isRolesToNofity = isRolesToNofity;
 		
 		ScrollTableImages scrollTableImages = new ScrollTableImages(){			
 			public AbstractImagePrototype scrollTableAscending() {
@@ -109,12 +108,12 @@ public class UserScrollTable extends Composite {
 		table.setSize("130","140");
 		
 		// Level 1 headers
-	    if (isUserToNofity) {
-	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users.to.notify"));
+	    if (isRolesToNofity) {
+	    	headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
 		}
-	    
+
 	    table.setColumnWidth(0,120);
 	    
 	    // Table data
@@ -126,38 +125,38 @@ public class UserScrollTable extends Composite {
 	}
 	
 	/**
-	 * Adds new username row
+	 * Adds new roleName name row
 	 * 
-	 * @param userName The user name value
+	 * @param roleName The user name value
 	 */
-	public void addRow(String userName) {
+	public void addRow(String roleName) {
 		int rows = dataTable.getRowCount();
 		dataTable.insertRow(rows);
-		dataTable.setHTML(rows, 0, userName);
+		dataTable.setHTML(rows, 0, roleName);
 	}
 	
 	/**
-	 * Gets the user
+	 * Gets the role
 	 * 
-	 * @return The user
+	 * @return The role
 	 */
-	public String getUser() {
-		String user = null;
+	public String getRole() {
+		String role = null;
 		
 		if (!dataTable.getSelectedRows().isEmpty()) {
 			int selectedRow = ((Integer) dataTable.getSelectedRows().iterator().next()).intValue();
 			if (dataTable.isRowSelected(selectedRow)) {
-				user = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),0);
+				role = dataTable.getHTML(((Integer) dataTable.getSelectedRows().iterator().next()).intValue(),0);
 			}
 		}
-		
-		return user;
+	
+		return role;
 	}
 	
 	/**
 	 * Selects the las row
 	 */
-	public void selectLastRow() {
+	public void selectLastRow(){
 		if (dataTable.getRowCount()>0) {
 			dataTable.selectRow(dataTable.getRowCount()-1,true);
 		}
@@ -185,27 +184,27 @@ public class UserScrollTable extends Composite {
 	 * 
 	 * @return The users string
 	 */
-	public String getUsersToNotify() {
-		String users = "";
+	public String getRolesToNotify() {
+		String roles = "";
 		
 		if (dataTable.getRowCount()>0) {
 			for (int i = 0; i<dataTable.getRowCount(); i++){
-				users += dataTable.getText(i,0) + ",";
+				roles += dataTable.getText(i,0) + ",";
 			}
 		}
 		
 		// Removes last ',' character
-		if (users.length()>0) {
-			users = users.substring(0, users.length()-1);
+		if (roles.length()>0) {
+			roles = roles.substring(0, roles.length()-1);
 		}
 		
-		return users;
+		return roles;
 	}
 	
 	/**
 	 * Removes all rows except the first
 	 */
-	private void removeAllRows() {
+	public void removeAllRows() {
 		// Purge all rows 
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
@@ -221,16 +220,16 @@ public class UserScrollTable extends Composite {
 	}
 	
 	/**
-	 * Lang refreshing
+	 * Lang refresh
 	 */
 	public void langRefresh() {
-		if (isUserToNofity) {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users.to.notify"));
+		if (isRolesToNofity) {
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups.to.notify"));
 		} else {
-			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.users"));
+			headerTable.setHTML(0, 0, Main.i18n("fileupload.label.groups"));
 		}
 	}
-	
+
 	/**
 	 * getDataTable
 	 * 

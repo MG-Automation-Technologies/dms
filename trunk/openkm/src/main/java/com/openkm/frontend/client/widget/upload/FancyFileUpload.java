@@ -1,8 +1,5 @@
 package com.openkm.frontend.client.widget.upload;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
@@ -37,8 +34,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.PanelDefinition;
-import com.openkm.frontend.client.service.OKMAuthService;
-import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -51,7 +46,6 @@ import com.openkm.frontend.client.util.Util;
  */
 public class FancyFileUpload extends Composite implements HasText, HasChangeHandlers {
 	
-	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
 	
 	// Upload actions
@@ -97,21 +91,17 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	private HTML importZipText = new HTML();
 	private HorizontalPanel hNotifyPanel = new HorizontalPanel();
 	private HorizontalPanel hUnzipPanel = new HorizontalPanel();
-	private UserScrollTable notifyTable;
-	private UserScrollTable userTable;
-	private HorizontalPanel hUserPanel = new HorizontalPanel();
-	private HTML addButtom;
-	private HTML removeButtom;
-	private VerticalPanel buttonPanel;
+	private NotifyPanel notifyPanel = new NotifyPanel();
 	private HTML versionHTMLBR;
 	private TextArea versionComment;
 	private ScrollPanel versionCommentScrollPanel;
 	private TextBox users;
+	private TextBox roles;
 	private TextArea message;
 	private VerticalPanel vNotifyPanel = new VerticalPanel();
 	private HTML commentTXT;
 	private ScrollPanel messageScroll;
-	private HTML errorUserNotify;
+	private HTML errorNotify;
 	private ProgressBar progressBar;
 	private TextFormatter progressiveFormater;
 	private TextFormatter finalFormater;
@@ -187,12 +177,10 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			send.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					if (notifyToUser.getValue() && users.getText().equals("")) {
-						errorUserNotify.setVisible(true);
-					} else {
-						if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
-							pendingUpload();
-						}
+					if (notifyToUser.getValue() && users.getText().equals("") && roles.getText().equals("")) {
+						errorNotify.setVisible(true);
+					} else if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
+						pendingUpload();
 					}
 				}
 			});
@@ -369,8 +357,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			message.setText("");
 			versionComment.setText("");
 			users.setText("");
-			notifyTable.reset();
-			userTable.reset();
+			roles.setText("");
+			notifyPanel.reset();
 			getAllUsers();
 			
 			// On on root stack panel enabled must be enabled notify to user option
@@ -380,7 +368,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				hNotifyPanel.setVisible(true);
 			}
 			
-			errorUserNotify.setVisible(false);
+			errorNotify.setVisible(false);
 			vNotifyPanel.setVisible(false);
 			notifyToUser.setValue(false);
 			importZip.setValue(false);
@@ -472,11 +460,11 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		mainPanel.add(uploadItem);
 		
 		// Adds error panel, whem user select notify but not select any user
-		errorUserNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
-		errorUserNotify.setWidth("255");
-		errorUserNotify.setVisible(false);
-		errorUserNotify.setStyleName("fancyfileupload-failed");
-		mainPanel.add(errorUserNotify);
+		errorNotify = new HTML(Main.i18n("fileupload.label.must.select.users"));
+		errorNotify.setWidth("255");
+		errorNotify.setVisible(false);
+		errorNotify.setStyleName("fancyfileupload-failed");
+		mainPanel.add(errorNotify);
 		
 		// Adds version comment
 		versionHTMLBR = new HTML("<br>");
@@ -522,6 +510,9 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		users = new TextBox();
 		users.setName("users");
 		users.setVisible(false);
+		roles = new TextBox();
+		roles.setName("roles");
+		roles.setVisible(false);
 		notifyToUser = new CheckBox();
 		notifyToUser.addClickHandler(new ClickHandler() { 
 			@Override
@@ -530,7 +521,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 						vNotifyPanel.setVisible(true);
 						importZip.setValue(false);
 					} else {
-						errorUserNotify.setVisible(false);
+						errorNotify.setVisible(false);
 						vNotifyPanel.setVisible(false);
 					}
 				}
@@ -552,31 +543,6 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		message.setName("message");
 		message.setSize("280","60");
 		message.setStyleName("okm-Input");
-		notifyTable = new UserScrollTable(true);
-		userTable = new UserScrollTable(false);
-		notifyTable.addStyleName("okm-Input");
-		userTable.addStyleName("okm-Input");
-		notifyTable.reset();
-		userTable.reset();
-		addButtom = new HTML(Util.imageHTML("img/icon/security/add.gif"));
-		removeButtom = new HTML(Util.imageHTML("img/icon/security/remove.gif"));
-		buttonPanel = new VerticalPanel();
-		
-		buttonPanel.add(addButtom);
-		buttonPanel.add(new HTML("<br><br><br>")); // separator
-		buttonPanel.add(removeButtom);
-		
-		addButtom.addClickHandler(addButtomListener);
-		removeButtom.addClickHandler(removeButtomListener);
-		
-		hUserPanel = new HorizontalPanel();
-		hUserPanel.setSize("280","140");
-		hUserPanel.add(notifyTable);
-		hUserPanel.add(buttonPanel);
-		hUserPanel.add(userTable);
-		hUserPanel.setCellVerticalAlignment(buttonPanel,VerticalPanel.ALIGN_MIDDLE);
-		hUserPanel.setCellHorizontalAlignment(buttonPanel,HorizontalPanel.ALIGN_CENTER);
-		hUserPanel.setCellWidth(buttonPanel,"20");
 		
 		vNotifyPanel = new VerticalPanel();
 		vNotifyPanel.add(commentTXT);
@@ -587,10 +553,11 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 
 		vNotifyPanel.add(messageScroll);
 		vNotifyPanel.add(new HTML("<br>"));
-		vNotifyPanel.add(hUserPanel);
+		vNotifyPanel.add(notifyPanel);
 		vNotifyPanel.add(new HTML("<br>"));
 		
 		mainPanel.add(users);
+		mainPanel.add(roles);
 		mainPanel.add(vNotifyPanel);
 		
 		// Set align to panels
@@ -768,58 +735,8 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		importZipText.setHTML(Main.i18n("fileupload.label.importZip"));
 		versionCommentText.setHTML(Main.i18n("fileupload.label.comment"));
 		commentTXT.setHTML(Main.i18n("fileupload.label.notify.comment"));
-		notifyTable.langRefresh();
-		userTable.langRefresh();
+		notifyPanel.langRefresh();
 	}
-	
-	/**
-	 * Add buttom listener
-	 */
-	ClickHandler addButtomListener = new ClickHandler() { 
-		@Override
-		public void onClick(ClickEvent event) {
-			if (userTable.getUser() != null) {
-				notifyTable.addRow(userTable.getUser());	
-				notifyTable.selectLastRow();
-				userTable.removeSelectedRow();
-				users.setText(notifyTable.getUsersToNotify());
-				errorUserNotify.setVisible(false); // always disable error user
-			}
-		}
-	};
-	
-	/**
-	 * Remove buttom listener
-	 */
-	ClickHandler removeButtomListener = new ClickHandler() { 
-		@Override
-		public void onClick(ClickEvent event) {
-			if (notifyTable.getUser() != null) {
-				userTable.addRow(notifyTable.getUser());
-				userTable.selectLastRow();
-				notifyTable.removeSelectedRow();
-				users.setText(notifyTable.getUsersToNotify());
-			}
-		}
-	};
-	
-	/**
-	 * Call back get granted users
-	 */
-	final AsyncCallback<List<String>> callbackAllUsers = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result) {
-			List<String> users = result;
-			
-			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
-				String userName = it.next();
-				userTable.addRow(userName);
-			}
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("GetGrantedUsers", caught);
-		}
-	};
 	
 	/**
 	 * Call back get file upload status
@@ -870,14 +787,37 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * Gets all users
 	 */
 	private void getAllUsers() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
-		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
-		authService.getAllUsers( callbackAllUsers);
+		notifyPanel.getAll();
 	}
 	
 	private void getFileUploadStatus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
 		endPoint.setServiceEntryPoint(Config.OKMGeneralService);	
 		generalService.getFileUploadStatus(callbackGetFileUploadStatus);
+	}
+	
+	/**
+	 * setUsersToNotify
+	 * 
+	 * @param notifyUsers
+	 */
+	public void setUsersToNotify(String notifyUsers) {
+		users.setText(notifyUsers);
+	}
+	
+	/**
+	 * setRolesToNotify
+	 * 
+	 * @param notifyUsers
+	 */
+	public void setRolesToNotify(String notifyRoles) {
+		roles.setText(notifyRoles);
+	}
+	
+	/**
+	 * disableErrorNotify
+	 */
+	public void disableErrorNotify() {
+		errorNotify.setVisible(false); 
 	}
 }

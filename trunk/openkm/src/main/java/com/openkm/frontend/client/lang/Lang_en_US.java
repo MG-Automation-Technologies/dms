@@ -239,6 +239,8 @@ public class Lang_en_US {
 	    lang.put("fileupload.label.comment", "Comment");
 	    lang.put("fileupload.label.users.to.notify",  "Users to be notified");
 	    lang.put("fileupload.label.users",  "Users");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "You must select some user to notify");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 	    lang.put("fileupload.label.notify.comment", "Notification message");

@@ -239,6 +239,8 @@ public class Lang_sr_BA {
 	    lang.put("fileupload.label.comment", "Komentar");
 	    lang.put("fileupload.label.users.to.notify",  "Korisnici su obavješteni");
 	    lang.put("fileupload.label.users",  "Korisnici");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Morate selektovati nekog korisnika");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 	    lang.put("fileupload.label.notify.comment", "Obavještajna poruka");

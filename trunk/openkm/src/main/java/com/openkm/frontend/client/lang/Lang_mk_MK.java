@@ -239,6 +239,8 @@ public class Lang_mk_MK {
 	    lang.put("fileupload.label.comment", "Коментар");
 	    lang.put("fileupload.label.users.to.notify",  "Корисници кои ќе бидат известени");
 	    lang.put("fileupload.label.users",  "Корисници");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Морате да изберете некој корисник да го известите");
 	    lang.put("fileupload.label.importZip", "Увези документи од ZIP");
 	    lang.put("fileupload.label.notify.comment", "Белешка за известување");
