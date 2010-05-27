@@ -240,6 +240,8 @@ public class Lang_nl_NL {
 	    lang.put("fileupload.label.comment", "Commentaar");
 	    lang.put("fileupload.label.users.to.notify",  "Gebruikers voor notificatie");
 	    lang.put("fileupload.label.users",  "Gebruikers");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "U moet een gebruiker selecteren voor notificatie");
 	    lang.put("fileupload.label.importZip", "Import Documenten vanuit ZIP");
 	    lang.put("fileupload.label.notify.comment", "Notificatie bericht");

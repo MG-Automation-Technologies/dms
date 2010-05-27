@@ -49,4 +49,5 @@ public interface OKMAuthService extends RemoteService {
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException;
 	public void keepAlive() throws OKMException;
 	public List<String> getAllUsers() throws OKMException;
+	public List<String> getAllRoles() throws OKMException;
 }

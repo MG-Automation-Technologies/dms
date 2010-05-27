@@ -239,6 +239,8 @@ public class Lang_cs_CZ {
 	    lang.put("fileupload.label.comment", "Poznámka");
 	    lang.put("fileupload.label.users.to.notify",  "Uživatelé kteří budou upozorněni");
 	    lang.put("fileupload.label.users",  "Uživatelé");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Musíte zvolit uživatele, který má být upozorněn");
 	    lang.put("fileupload.label.importZip", "Nahrát dokumenty ze ZIP souboru");
 	    lang.put("fileupload.label.notify.comment", "Zpráva o změně");

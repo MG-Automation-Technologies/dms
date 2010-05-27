@@ -199,4 +199,30 @@ public class FileUpload extends DialogBox {
 	public void setPath(String path) {
 		ffUpload.setPath(path);
 	}
+	
+	/**
+	 * setUsersToNotify
+	 * 
+	 * @param users
+	 */
+	public void setUsersToNotify(String notifyUsers) {
+		ffUpload.setUsersToNotify(notifyUsers);
+	}
+	
+	/**
+	 * setRolesToNotify
+	 * 
+	 * @param users
+	 */
+	public void setRolesToNotify(String notifyRoles) {
+		ffUpload.setRolesToNotify(notifyRoles);
+	}
+	
+
+	/**
+	 * disableErrorNotify
+	 */
+	public void disableErrorNotify() {
+		ffUpload.disableErrorNotify();
+	}
 }

@@ -239,6 +239,8 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.label.comment", "评论");
 	    lang.put("fileupload.label.users.to.notify",  "被通知的用户");
 	    lang.put("fileupload.label.users",  "用户");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "你必须选择通知的用户");
 	    lang.put("fileupload.label.importZip", "从zip压缩包中导入文档");
 	    lang.put("fileupload.label.notify.comment", "通知消息");

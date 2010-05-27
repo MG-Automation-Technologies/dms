@@ -239,6 +239,8 @@ public class Lang_hu_HU {
 	    lang.put("fileupload.label.comment", "Megjegyzés");
 	    lang.put("fileupload.label.users.to.notify",  "Értesített felhasználók");
 	    lang.put("fileupload.label.users",  "Felhasználók");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Legalább egy felhasználót ki kell választani az értesítéshez");
 	    lang.put("fileupload.label.importZip", "Dokumentum importálása tömörített (ZIP) fájlból");
 	    lang.put("fileupload.label.notify.comment", "Értesítő üzenet");

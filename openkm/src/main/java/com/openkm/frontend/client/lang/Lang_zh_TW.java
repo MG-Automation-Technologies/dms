@@ -238,6 +238,8 @@ public class Lang_zh_TW {
 		lang.put("fileupload.label.comment", "註解");
 	    lang.put("fileupload.label.users.to.notify",  "被通知的使用者");
 	    lang.put("fileupload.label.users",  "使用者");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "需選擇要通知的使用者");
 	    lang.put("fileupload.label.importZip", "匯入ZIP文件");
 		lang.put("fileupload.label.notify.comment", "通知訊息");

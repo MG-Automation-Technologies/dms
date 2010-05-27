@@ -244,6 +244,8 @@ public class Lang_ru_RU {
 	    lang.put("fileupload.label.comment", "Комментарий");
 	    lang.put("fileupload.label.users.to.notify",  "Уведомлённые пользователи");
 	    lang.put("fileupload.label.users",  "Пользователи");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Вы должны выбрать пользователя для уведомления");
 	    lang.put("fileupload.label.importZip", "Импортировать документы из ZIP-файла");
 	    lang.put("fileupload.label.notify.comment", "Сообщение уведомления");

@@ -47,4 +47,5 @@ public interface OKMAuthServiceAsync {
 	public void revokeRole(String path, String role, int permissions, boolean recursive, AsyncCallback<?> callback);
 	public void keepAlive(AsyncCallback<?> callback);
 	public void getAllUsers(AsyncCallback<List<String>> callback);
+	public void getAllRoles(AsyncCallback<List<String>> callback);
 }

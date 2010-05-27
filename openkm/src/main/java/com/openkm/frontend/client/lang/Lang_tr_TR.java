@@ -239,6 +239,8 @@ public class Lang_tr_TR {
 	    lang.put("fileupload.label.comment", "Yorum");
 	    lang.put("fileupload.label.users.to.notify",  "Haber Verilen Kullanýcýlar");
 	    lang.put("fileupload.label.users",  "Kullanýcýlar");
+	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
+	    lang.put("fileupload.label.groups","Groups");
 	    lang.put("fileupload.label.must.select.users",  "Haber Vermek Ýçin Kullanýcý Seçiniz");
 	    lang.put("fileupload.label.importZip", "Import Documents from ZIP");
 	    lang.put("fileupload.label.notify.comment", "Uyarý Mesajý");

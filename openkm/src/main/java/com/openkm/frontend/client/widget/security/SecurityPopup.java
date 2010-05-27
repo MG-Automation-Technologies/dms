@@ -90,7 +90,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 				
 		tabPanel.add(securityUser, Main.i18n("security.users"));
 		tabPanel.add(securityRole, Main.i18n("security.groups"));
-		tabPanel.selectTab(0);
+		tabPanel.selectTab(TAB_USERS);
 		tabPanel.setWidth("100%");
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
