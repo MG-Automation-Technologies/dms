@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.upload;
+package com.openkm.frontend.client.widget.notify;
 
 import java.util.Iterator;
 import java.util.List;
@@ -121,8 +121,8 @@ public class NotifyUser extends Composite {
 				notifyUsersTable.addRow(userTable.getUser());	
 				notifyUsersTable.selectLastRow();
 				userTable.removeSelectedRow();
-				Main.get().fileUpload.setUsersToNotify(notifyUsersTable.getUsersToNotify());
-				Main.get().fileUpload.disableErrorNotify(); // always disable error user
+				Main.get().fileUpload.disableErrorNotify();  // Used in both widgets
+				Main.get().notifyPopup.disableErrorNotify(); // has no bad effect disabling both
 			}
 		}
 	};
@@ -134,10 +134,9 @@ public class NotifyUser extends Composite {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (notifyUsersTable.getUser() != null) {
-				userTable.addRow(notifyUsersTable.getUser());
+				userTable.addRow(notifyUsersTable.getUser());				
 				userTable.selectLastRow();
 				notifyUsersTable.removeSelectedRow();
-				Main.get().fileUpload.setUsersToNotify(notifyUsersTable.getUsersToNotify());
 			}
 		}
 	};
@@ -173,5 +172,14 @@ public class NotifyUser extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 		authService.getFilteredAllUsers(filter, callbackAllUsers);
+	}
+	
+	/**
+	 * getUsersToNotify
+	 * 
+	 * @return
+	 */
+	public String getUsersToNotify() {
+		return notifyUsersTable.getUsersToNotify();
 	}
 }

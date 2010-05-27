@@ -98,8 +98,8 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	}
 	
 	@Override
-	public void notify(String docPath, String users, String message) throws OKMException {
-		log.debug("notify({}, {}, {})", new Object[] { docPath, users, message });
+	public void notify(String docPath, String users, String roles, String message) throws OKMException {
+		log.debug("notify({}, {}, {})", new Object[] { docPath, users, roles, message });
 		String token = getToken();
 		
 		try {

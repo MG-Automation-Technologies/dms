@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.widget.upload;
+package com.openkm.frontend.client.widget.notify;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -216,5 +216,23 @@ public class NotifyPanel extends Composite {
 		filterView = true;
 		filterPanel.setVisible(true);
 		checkBoxFilter.setValue(true);
+	}
+	
+	/**
+	 * getRolesToNotify
+	 * 
+	 * @return
+	 */
+	public String getRolesToNotify() {
+		return notifyRole.getRolesToNotify();
+	}
+	
+	/**
+	 * getUsersToNotify
+	 * 
+	 * @return
+	 */
+	public String getUsersToNotify() {
+		return notifyUser.getUsersToNotify();
 	}
 }
