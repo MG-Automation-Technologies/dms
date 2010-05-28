@@ -75,7 +75,7 @@ public class UserInfo extends Composite {
 		panel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		user = new HTML("");
 		userRepositorySize = new HTML("");
-		usersConnected = new HTML(Main.i18n("user.info.chat.offline"));
+		usersConnected = new HTML(Main.i18n(""));
 		lockedDocuments = new HTML("");
 		checkoutDocuments = new HTML("");
 		subscriptions = new HTML("");
@@ -372,10 +372,10 @@ public class UserInfo extends Composite {
 		user.setHTML("&nbsp;"+ Main.i18n("general.connected")+" "+Main.get().workspaceUserProperties.getUser() + "&nbsp;");
 		if (chatConnected) {
 			imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
-			usersConnected.setHTML("(" + connectUsersList.size() +") " + Main.i18n("user.info.chat.online"));
+			usersConnected.setHTML("(" + connectUsersList.size() +") ");
 		} else {
 			imgChat.setTitle(Main.i18n("user.info.chat.connect"));
-			usersConnected.setHTML(Main.i18n("user.info.chat.offline"));
+			usersConnected.setHTML(Main.i18n(""));
 		}
 		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
@@ -403,7 +403,7 @@ public class UserInfo extends Composite {
 				@Override
 				public void onSuccess(List<String> result) {
 					connectUsersList = result;
-					usersConnected.setHTML("(" + connectUsersList.size() +") " + Main.i18n("user.info.chat.online"));
+					usersConnected.setHTML("(" + connectUsersList.size() +") ");
 					Timer timer = new Timer() {
 						@Override
 						public void run() {
@@ -593,6 +593,7 @@ public class UserInfo extends Composite {
 			public void onSuccess(Object result) {
 				chatConnected = true;
 				imgChat.setResource(OKMBundleResources.INSTANCE.chatConnected());
+				imgChat.setTitle(Main.i18n("user.info.chat.disconnect"));
 				usersConnected.setVisible(true);
 				imgNewChatRoom.setVisible(true);
 				refreshConnectedUsers();
