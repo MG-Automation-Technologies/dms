@@ -52,7 +52,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMFolder;
+import com.openkm.bean.ContentInfo;
+import com.openkm.bean.Folder;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.SessionManager;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
@@ -91,6 +96,7 @@ public class RepositoryServlet extends HttpServlet {
 		String uuid = WebUtil.getString(request, "uuid");
 		String token = (String) request.getSession().getAttribute("token");
 		ServletContext sc = getServletContext();
+		ContentInfo ci = null;
 		Session session = null;
 		Node node = null;
 
@@ -102,6 +108,8 @@ public class RepositoryServlet extends HttpServlet {
 				request.getSession().setAttribute("stats", true);
 			}
 		}
+		
+		log.info("Session Stats: "+request.getSession().getAttribute("stats")+"");
 
 		try {
 			if (Config.SESSION_MANAGER) {
@@ -123,6 +131,20 @@ public class RepositoryServlet extends HttpServlet {
 			// Activity log
 			UserActivity.log(session, "REPOSITORY_VIEW", node.getPath(), null);
 			
+			if (request.getSession().getAttribute("stats") != null && node.isNodeType(Folder.TYPE)) {
+				try {
+					log.info("set  contentinfo");
+					ci = OKMFolder.getInstance().getContentInfo(token, node.getPath());
+				} catch (AccessDeniedException e) {
+					e.printStackTrace();
+				} catch (com.openkm.core.RepositoryException e) {
+					e.printStackTrace();
+				} catch (PathNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			sc.setAttribute("contentInfo", ci);
 			sc.setAttribute("node", node);
 			sc.setAttribute("holdsLock", node.holdsLock());
 			sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
