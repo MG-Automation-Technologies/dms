@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.bean.Document"%>
+<%@ page import="com.openkm.bean.Document" %>
+<%@ page import="com.openkm.bean.Folder" %>
 <%@ page import="com.openkm.util.WebUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -16,7 +17,8 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
-  <c:set var="contentType"><%=Document.CONTENT_TYPE%></c:set>
+  <c:set var="DocumentContentType"><%=Document.CONTENT_TYPE%></c:set>
+  <c:set var="FolderType"><%=Folder.TYPE%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Repository</h1>
@@ -27,6 +29,31 @@
         <li><b>Type</b>: ${fn:toUpperCase(node.primaryNodeType.name)}</li>
         <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
       </ul>
+      <c:if test="${node.primaryNodeType.name == FolderType}">
+        <h2>Statistics</h2>
+        <ul>
+          <c:choose>
+            <c:when test="${contentInfo != null}">
+              <c:url value="Repository" var="urlDeactivate">
+                <c:param name="path" value="${node.path}"/>
+                <c:param name="stats" value="0"/>
+              </c:url>
+              <li><a href="${urlDeactivate}">Deactivate</a></li>
+              <li><b>Size</b>: ${contentInfo.size}</li>
+              <li><b>Folders</b>: ${contentInfo.folders} </li>
+              <li><b>Documents</b>: ${contentInfo.documents}</li>
+              <li><b>Mails</b>: ${contentInfo.mails}</li>
+            </c:when>
+            <c:otherwise>
+              <c:url value="Repository" var="urlActivate">
+                <c:param name="path" value="${node.path}"/>
+                <c:param name="stats" value="1"/>
+              </c:url>
+              <li><a href="${urlActivate}">Activate</a></li>
+            </c:otherwise>
+          </c:choose>
+        </ul>
+      </c:if>
       <h2>Actions</h2>
       <ul>
         <c:if test="${node.depth > 0}">
@@ -72,7 +99,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${fn:toUpperCase(child.primaryNodeType.name)}</td>
             <td><c:if test="${child.locked}"><img src="img/true.png"/></c:if></td>
-            <td><c:if test="${child.primaryNodeType.name == contentType && child.checkedOut}"><img src="img/true.png"/></c:if></td>
+            <td><c:if test="${child.primaryNodeType.name == DocumentContentType && child.checkedOut}"><img src="img/true.png"/></c:if></td>
             <td><a href="${urlList}">${child.name}</a></td>
           </tr>
         </c:forEach>
