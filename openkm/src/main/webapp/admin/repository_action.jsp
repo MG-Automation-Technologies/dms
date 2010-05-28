@@ -1,6 +1,7 @@
 <%@ page import="com.openkm.bean.Folder"%>
 <%@ page import="com.openkm.bean.Document"%>
 <%@ page import="com.openkm.util.UserActivity"%>
+<%@ page import="com.openkm.util.JCRUtils"%>
 <%@ page import="com.openkm.api.OKMScripting"%>
 <%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.core.Config" %>
@@ -16,14 +17,20 @@
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
 		String token = (String) session.getAttribute("token");
-		Session jcrSession = SessionManager.getInstance().get(token);
 		String path = request.getParameter("path");
 		String action = request.getParameter("action");
+		Session jcrSession = null;
 				
 		if (path != null && action != null) {
 			path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 			
 			try {
+				if (Config.SESSION_MANAGER) {
+					jcrSession = SessionManager.getInstance().get(token);
+				} else {
+					jcrSession = JCRUtils.getSession();
+				}
+				
 				Node node = jcrSession.getRootNode().getNode(path.substring(1));
 				
 				if (action.equals("unlock")) {
@@ -78,6 +85,10 @@
 				response.getWriter().println("<pre>");
 				e.printStackTrace(response.getWriter());
 				response.getWriter().println("</pre>");
+			} finally {
+				if (!Config.SESSION_MANAGER) {
+					JCRUtils.logout(jcrSession);
+				}
 			}
 		}
 	} else {
