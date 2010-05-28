@@ -26,44 +26,46 @@
       <ul>
         <li><b>Path</b>: ${breadcrumb}</li>
         <li><b>Depth</b>: ${node.depth}</li>
-        <li><b>Type</b>: ${fn:toUpperCase(node.primaryNodeType.name)}</li>
-        <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
+        <li><b>Type</b>: ${fn:toUpperCase(node.primaryNodeType.name)}</li>        
         <c:if test="${node.depth > 0}">
-          <c:url value="Repository" var="urlRemoveContent">
-            <c:param name="path" value="${node.path}"/>
-            <c:param name="action" value="remove_content"/>
-          </c:url>
-          <c:url value="Repository" var="urlRemoveCurrent">
-            <c:param name="path" value="${node.path}"/>
-            <c:param name="action" value="remove_current"/>
-          </c:url>
-          <li><a href="${urlRemoveContent}">Remove contents</a></li>
-          <li><a href="${urlRemoveCurrent}">Remove current</a></li>
-        </c:if>
-        <c:if test="${node.locked && holdsLock}">
-          <c:url value="Repository" var="urlUnlock">
-            <c:param name="path" value="${node.path}"/>
-            <c:param name="action" value="unlock"/>
-          </c:url>
-          <li><a href="${urlUnlock}">Unlock</a></li>
-        </c:if>
-        <c:if test="${node.primaryNodeType.name == FolderType}">
-          <c:choose>
-            <c:when test="${contentInfo != null}">
-              <c:url value="Repository" var="urlDeactivate">
+          <li><b>Actions</b>:
+            <c:url value="Repository" var="urlRemoveContent">
+              <c:param name="path" value="${node.path}"/>
+              <c:param name="action" value="remove_content"/>
+            </c:url>
+            <c:url value="Repository" var="urlRemoveCurrent">
+              <c:param name="path" value="${node.path}"/>
+              <c:param name="action" value="remove_current"/>
+            </c:url>
+            <a href="${urlRemoveContent}">Remove contents</a> -
+            <a href="${urlRemoveCurrent}">Remove current</a>
+            <c:if test="${node.locked && holdsLock}">
+              <c:url value="Repository" var="urlUnlock">
                 <c:param name="path" value="${node.path}"/>
-                <c:param name="stats" value="0"/>
+                <c:param name="action" value="unlock"/>
               </c:url>
-              <li><a href="${urlDeactivate}">Disable statistics</a></li>
-            </c:when>
-            <c:otherwise>
-              <c:url value="Repository" var="urlActivate">
-                <c:param name="path" value="${node.path}"/>
-                <c:param name="stats" value="1"/>
-              </c:url>
-              <li><a href="${urlActivate}">Enable statistics</a></li>
-            </c:otherwise>
-          </c:choose>
+              - <a href="${urlUnlock}">Unlock</a>
+            </c:if>
+            <c:if test="${node.primaryNodeType.name == FolderType}">
+              <c:choose>
+                <c:when test="${contentInfo != null}">
+                  <c:url value="Repository" var="urlDeactivate">
+                    <c:param name="path" value="${node.path}"/>
+                    <c:param name="stats" value="0"/>
+                  </c:url>
+                  - <a href="${urlDeactivate}">Disable statistics</a>
+                </c:when>
+                <c:otherwise>
+                  <c:url value="Repository" var="urlActivate">
+                    <c:param name="path" value="${node.path}"/>
+                    <c:param name="stats" value="1"/>
+                  </c:url>
+                  - <a href="${urlActivate}">Enable statistics</a>
+                </c:otherwise>
+              </c:choose>
+            </c:if>
+          </li>
+          <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
         </c:if>
       </ul>
       <c:if test="${contentInfo != null}">
