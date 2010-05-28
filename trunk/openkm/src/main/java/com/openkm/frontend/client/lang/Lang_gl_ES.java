@@ -619,6 +619,8 @@ public class Lang_gl_ES {
 	    lang.put("user.info.subscription.actual","Suscripciones actuales");
 	    lang.put("user.info.news.new","Novedades");
 	    lang.put("user.info.workflow.pending","Workflows pendientes");
+	    lang.put("user.info.quota.used","Utilizado");
+	    lang.put("user.info.user.quota","Cuota utilizada");
 	    
 	    // Users online popup
 	    lang.put("user.online","Usuarios conectados");
@@ -679,5 +681,6 @@ public class Lang_gl_ES {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Erro interno do repositorio");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error en la configuración del navegador");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error ha excedido la cuota de usuario, contacte con el administrador");
 	  }
 }

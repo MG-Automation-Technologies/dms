@@ -55,6 +55,8 @@ public class GWTWorkspace implements IsSerializable {
 	private double keepAliveSchedule = 900*1000; 	// 15 minutes
 	private double dashboardSchedule = 1800*1000; 	// 30 minutes
 	private boolean advancedFilters = false;
+	private boolean userQuotaLimit = false;
+	private int userQuotaLimitSize = 0;
 
 	/**
 	 * GWTWorkspace
@@ -252,5 +254,21 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setAdvancedFilters(boolean advancedFilters) {
 		this.advancedFilters = advancedFilters;
+	}
+	
+	public boolean isUserQuotaLimit() {
+		return userQuotaLimit;
+	}
+
+	public void setUserQuotaLimit(boolean userQuotaLimit) {
+		this.userQuotaLimit = userQuotaLimit;
+	}
+	
+	public int getUserQuotaLimitSize() {
+		return userQuotaLimitSize;
+	}
+
+	public void setUserQuotaLimitSize(int userQuotaLimitSize) {
+		this.userQuotaLimitSize = userQuotaLimitSize;
 	}
 }
