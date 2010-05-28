@@ -41,6 +41,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -78,26 +79,97 @@ public class RepositoryServlet extends HttpServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
+		String token = (String) request.getSession().getAttribute("token");
+		Session session = null;
 		
-		if (action.equals(WebUtil.VIEW)) {
-			//view(request, response);
-		} else if (action.equals(WebUtil.LIST) || action.equals("")) {
-			list(request, response);
-		} else {
-			ServletContext sc = getServletContext();
-			sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
+		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
+			if (action.equals("unlock")) {
+				unlock(request, response, session);
+			} else if (action.equals("checkin")) {
+				checkin(request, response, session);
+			} else if (action.equals("remove_current")) {
+				removeCurrent(request, response, session);
+			}
+			
+			list(request, response, session);
+		} catch (LoginException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			sendErrorRedirect(request,response, e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
 		}
 	}
+	
+	/**
+	 * Unlock node
+	 */
+	private void unlock(HttpServletRequest request, HttpServletResponse response, Session session)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.info("unlock({}, {})", request, response);
+		String path = WebUtil.getString(request, "path");
+		Node node = session.getRootNode().getNode(path.substring(1));
+		Lock lock = node.getLock();
+		
+		if (lock.getLockOwner().equals(session.getUserID())) {
+			node.unlock();
+		} else {
+			String lt = JCRUtils.getLockToken(node.getUUID());
+			session.addLockToken(lt);
+			node.unlock();	
+			session.removeLockToken(lt);
+		}
+			
+		log.debug("unlock: void");
+	}
+	
+	/**
+	 * Node check-in
+	 */
+	private void checkin(HttpServletRequest request, HttpServletResponse response, Session session)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.info("checkin({}, {})", request, response);
+		String path = WebUtil.getString(request, "path");
 
-	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Node node = session.getRootNode().getNode(path.substring(1));
+		node.checkin();
+		
+		log.debug("checkin: void");
+	}
+
+	private void removeCurrent(HttpServletRequest request, HttpServletResponse response, Session session)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.info("removeCurrent({}, {})", request, response);
+		String path = WebUtil.getString(request, "path");
+				
+		Node node = session.getRootNode().getNode(path.substring(1));
+		Node parent = node.getParent();
+		node.remove();
+		parent.save();
+		path = parent.getPath();
+
+		log.debug("removeCurrent: void");
+	}
+
+	/**
+	 * List node properties and children
+	 */
+	private void list(HttpServletRequest request, HttpServletResponse response, Session session)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.info("list({}, {})", request, response);
 		String stats = WebUtil.getString(request, "stats");
 		String path = WebUtil.getString(request, "path");
 		String uuid = WebUtil.getString(request, "uuid");
-		String token = (String) request.getSession().getAttribute("token");
 		ServletContext sc = getServletContext();
 		ContentInfo ci = null;
-		Session session = null;
 		Node node = null;
 
 		// Respository stats calculation
@@ -108,61 +180,39 @@ public class RepositoryServlet extends HttpServlet {
 				request.getSession().setAttribute("stats", true);
 			}
 		}
-		
-		log.info("Session Stats: "+request.getSession().getAttribute("stats")+"");
 
-		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
-			// Handle path or uuid
-			if (!path.equals("")) {
-				node = session.getRootNode().getNode(path.substring(1));
-			} else if (!uuid.equals("")) {
-				node = session.getNodeByUUID(uuid);
-				path = node.getPath();
-			} else {
-				node = session.getRootNode();
-			}
-			
-			// Activity log
-			UserActivity.log(session, "REPOSITORY_VIEW", node.getPath(), null);
-			
-			if (request.getSession().getAttribute("stats") != null && node.isNodeType(Folder.TYPE)) {
-				try {
-					log.info("set  contentinfo");
-					ci = OKMFolder.getInstance().getContentInfo(token, node.getPath());
-				} catch (AccessDeniedException e) {
-					e.printStackTrace();
-				} catch (com.openkm.core.RepositoryException e) {
-					e.printStackTrace();
-				} catch (PathNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			sc.setAttribute("contentInfo", ci);
-			sc.setAttribute("node", node);
-			sc.setAttribute("holdsLock", node.holdsLock());
-			sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
-			sc.setAttribute("properties", getProperties(node));
-			sc.setAttribute("children", getChildren(node));
-			sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
-		} catch (LoginException e) {
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
+		// Handle path or uuid
+		if (!path.equals("")) {
+			node = session.getRootNode().getNode(path.substring(1));
+		} else if (!uuid.equals("")) {
+			node = session.getNodeByUUID(uuid);
+			path = node.getPath();
+		} else {
+			node = session.getRootNode();
+		}
+		
+		// Activity log
+		UserActivity.log(session, "REPOSITORY_VIEW", node.getPath(), null);
+		
+		if (request.getSession().getAttribute("stats") != null && node.isNodeType(Folder.TYPE)) {
+			try {
+				ci = OKMFolder.getInstance().getContentInfo(null, node.getPath());
+			} catch (AccessDeniedException e) {
+				e.printStackTrace();
+			} catch (com.openkm.core.RepositoryException e) {
+				e.printStackTrace();
+			} catch (PathNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 		
+		sc.setAttribute("contentInfo", ci);
+		sc.setAttribute("node", node);
+		sc.setAttribute("holdsLock", node.holdsLock());
+		sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
+		sc.setAttribute("properties", getProperties(node));
+		sc.setAttribute("children", getChildren(node));
+		sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 
@@ -278,5 +328,15 @@ public class RepositoryServlet extends HttpServlet {
 		}
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Dispatch errors 
+	 */
+	private void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response,
+			Throwable e) throws ServletException, IOException {
+		request.setAttribute ("javax.servlet.jsp.jspException", e);
+		ServletContext sc = getServletConfig().getServletContext();
+		sc.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 }
