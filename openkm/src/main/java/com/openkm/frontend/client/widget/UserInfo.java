@@ -289,7 +289,7 @@ public class UserInfo extends Composite {
 				quotaExceeded = false;
 				imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota1());
 			}
-			quotaUsed.setHTML(percent + "% " + Main.i18n("user.info.quota.used"));
+			quotaUsed.setHTML(percent + "%");
 		}
 	}
 	
@@ -384,7 +384,7 @@ public class UserInfo extends Composite {
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
 		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
-		quotaUsed.setHTML(percent + "% " + Main.i18n("user.info.quota.used"));
+		quotaUsed.setHTML(percent + "%");
 		
 		// Resfreshing actual chatrooms
 		for (Iterator<ChatRoomDialogBox> it = chatRoomList.iterator(); it.hasNext();) {
