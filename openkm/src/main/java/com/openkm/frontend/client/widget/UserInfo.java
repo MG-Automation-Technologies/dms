@@ -56,6 +56,12 @@ public class UserInfo extends Composite {
 	private HTML usersConnected;
 	private List<String> connectUsersList;
 	private List<ChatRoomDialogBox> chatRoomList;
+	private Image imgUserQuota;
+	private boolean userQuota = false;
+	private int quotaLimit = 0;
+	private boolean quotaExceeded = false;
+	private HTML quotaUsed;
+	private int percent = 0;
 	
 	/**
 	 * UserInfo
@@ -75,7 +81,10 @@ public class UserInfo extends Composite {
 		subscriptions = new HTML("");
 		newsDocuments = new HTML("");
 		newsWorkflows = new HTML("");
+		quotaUsed = new HTML("");
+		quotaUsed.setVisible(false);
 		imgRepositorySize = new Image(OKMBundleResources.INSTANCE.repositorySize());
+		imgUserQuota = new Image(OKMBundleResources.INSTANCE.quota1());
 		imgChat = new Image(OKMBundleResources.INSTANCE.chatDisconnected());
 		imgChatSeparator = new Image(OKMBundleResources.INSTANCE.separator());
 		imgNewChatRoom = new Image(OKMBundleResources.INSTANCE.newChatRoom());
@@ -85,6 +94,7 @@ public class UserInfo extends Composite {
 		imgNewsDocuments = new Image(OKMBundleResources.INSTANCE.news());
 		imgWorkflows = new Image(OKMBundleResources.INSTANCE.workflow());
 		imgRepositorySize.setVisible(false);
+		imgUserQuota.setVisible(false);
 		imgChat.setVisible(false);
 		imgChatSeparator.setVisible(false);
 		usersConnected.setVisible(false);
@@ -95,6 +105,7 @@ public class UserInfo extends Composite {
 		imgNewsDocuments.setVisible(false);
 		imgWorkflows.setVisible(false);
 		imgChat.setTitle(Main.i18n("user.info.chat.connect"));
+		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
@@ -183,6 +194,11 @@ public class UserInfo extends Composite {
 		panel.add(imgRepositorySize);
 		panel.add(new HTML("&nbsp;"));
 		panel.add(userRepositorySize);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(imgUserQuota);
+		panel.add(new HTML("&nbsp;"));
+		panel.add(quotaUsed);
+		panel.add(new HTML("&nbsp;"));
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(new HTML("&nbsp;"));
 		panel.add(imgChat);
@@ -243,6 +259,38 @@ public class UserInfo extends Composite {
 	public void setUserRepositorySize(double size) {
 		imgRepositorySize.setVisible(true);
 		userRepositorySize.setHTML("&nbsp;"+Util.formatSize(size)+ "&nbsp;");
+		if (userQuota) {
+			if (size>0) {
+				if (size>=quotaLimit) {
+					quotaExceeded = true;
+					percent=100;
+					imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota6());
+				} else {
+					// Calculating %
+					percent = new Double((size*100)/quotaLimit).intValue();
+					if (percent==0) {
+						percent=1;
+					} else if (percent>100) {
+						percent=100;
+					}
+					if (percent<=20) {
+						imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota1());
+					} else if (percent<=40) {
+						imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota2());
+					} else if (percent<=60) {
+						imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota3());
+					} else if (percent<=80) {
+						imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota4());
+					} else {
+						imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota5());
+					}
+				}
+			} else {
+				quotaExceeded = false;
+				imgUserQuota.setResource(OKMBundleResources.INSTANCE.quota1());
+			}
+			quotaUsed.setHTML(percent + "% " + Main.i18n("user.info.quota.used"));
+		}
 	}
 	
 	/**
@@ -329,12 +377,14 @@ public class UserInfo extends Composite {
 			imgChat.setTitle(Main.i18n("user.info.chat.connect"));
 			usersConnected.setHTML(Main.i18n("user.info.chat.offline"));
 		}
+		imgUserQuota.setTitle(Main.i18n("user.info.user.quota"));
 		imgNewChatRoom.setTitle(Main.i18n("user.info.chat.new.room"));
 		imgLockedDocuments.setTitle(Main.i18n("user.info.locked.actual"));
 		imgCheckoutDocuments.setTitle(Main.i18n("user.info.checkout.actual"));
 		imgSubscriptions.setTitle(Main.i18n("user.info.subscription.actual"));
 		imgNewsDocuments.setTitle(Main.i18n("user.info.news.new"));
 		imgWorkflows.setTitle(Main.i18n("user.info.workflow.pending"));
+		quotaUsed.setHTML(percent + "% " + Main.i18n("user.info.quota.used"));
 		
 		// Resfreshing actual chatrooms
 		for (Iterator<ChatRoomDialogBox> it = chatRoomList.iterator(); it.hasNext();) {
@@ -523,6 +573,16 @@ public class UserInfo extends Composite {
 	}
 	
 	/**
+	 * enableUserQuota
+	 */
+	public void enableUserQuota(int quotaLimit) {
+		this.quotaLimit = quotaLimit;
+		imgUserQuota.setVisible(true);
+		quotaUsed.setVisible(true);
+		userQuota = true;
+	}
+	
+	/**
 	 * loginChat
 	 */
 	public void loginChat() {
@@ -543,5 +603,14 @@ public class UserInfo extends Composite {
 				Main.get().showError("GetLoginChat", caught);
 			}
 		});
+	}
+	
+	/**
+	 * isQuotaExceed
+	 * 
+	 * @return
+	 */
+	public boolean isQuotaExceed() {
+		return quotaExceeded;
 	}
 }

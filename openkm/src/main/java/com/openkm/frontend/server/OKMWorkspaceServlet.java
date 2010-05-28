@@ -93,6 +93,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Advanced filters ( used when there a lot of users and groups )
 		workspace.setAdvancedFilters(true);
 		
+		// User quota ( limit user repository size )
+		workspace.setUserQuotaLimit(true);
+		workspace.setUserQuotaLimitSize(5*1048576); // 5*1048576 = 5MB
+		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {			
 			User user = new User();
