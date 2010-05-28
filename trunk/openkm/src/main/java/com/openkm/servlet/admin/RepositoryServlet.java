@@ -52,7 +52,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
 import com.openkm.core.Config;
 import com.openkm.core.SessionManager;
 import com.openkm.util.FormatUtil;
@@ -121,10 +120,14 @@ public class RepositoryServlet extends HttpServlet {
 				node = session.getRootNode();
 			}
 			
-			sc.setAttribute("path", createPath(node.getPath()));
+			log.info("--> "+path);
+			
+			sc.setAttribute("node", node);
+			sc.setAttribute("holdsLock", node.holdsLock());
+			sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
 			sc.setAttribute("properties", getProperties(node));
-			sc.setAttribute("childs", getChilds(node));
-			sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
+			sc.setAttribute("children", getChildren(node));
+			//sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
 		} catch (LoginException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
@@ -140,43 +143,36 @@ public class RepositoryServlet extends HttpServlet {
 		log.debug("list: void");
 	}
 
-	private String createPath(String path) throws UnsupportedEncodingException {
+	private String createBreadcrumb(String path) throws UnsupportedEncodingException {
 		int idx = path.lastIndexOf('/');
 		if (idx > 0) {
 			String name = path.substring(idx+1);
 			String parent = path.substring(0, idx);
-			return createPath(parent)+" / <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+name+"</a>";
+			return createBreadcrumb(parent)+" / <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+name+"</a>";
 		} else {
 			if (!path.substring(1).equals("")) {
-				return "/ <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+path.substring(1)+"</a>";
+				return "<a href=\"Repository?path=\">ROOT</a> / <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+path.substring(1)+"</a>";
 			} else {
-				return "/";
+				return "<a href=\"Repository?path=\">ROOT</a> /";
 			}
 		}
 	}
 	
 	/**
-	 * Get child from node
+	 * Get children from node
 	 */
-	private Collection<HashMap<String, String>> getChilds(Node node) throws RepositoryException {
-		ArrayList<HashMap<String, String>> al = new ArrayList<HashMap<String,String>>();
+	private Collection<Node> getChildren(Node node) throws RepositoryException {
+		ArrayList<Node> al = new ArrayList<Node>();
 
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
-			HashMap<String, String> hm = new HashMap<String, String>();
 			Node child = ni.nextNode();
-			
-			hm.put("type", child.getPrimaryNodeType().getName().toUpperCase());
-			hm.put("path", child.getPath());
-			hm.put("name", child.getName());
-			
-			if (child.isNodeType(Document.TYPE)) {
-				hm.put("locked", Boolean.toString(child.isLocked()));
-			} else if (child.isNodeType(Document.CONTENT_TYPE)) {
-				hm.put("locked", Boolean.toString(child.isLocked()));
-				hm.put("checkedOut", Boolean.toString(child.isCheckedOut()));
+			try {
+				log.info("Path: "+URLEncoder.encode(child.getPath(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			al.add(hm);
+			al.add(child);
 		}
 		
 		Collections.sort(al, new ChildCmp());
@@ -186,10 +182,14 @@ public class RepositoryServlet extends HttpServlet {
 	/**
 	 * Make child node comparable
 	 */
-	protected class ChildCmp implements Comparator<HashMap<String, String>> {
+	protected class ChildCmp implements Comparator<Node> {
 		@Override
-		public int compare(HashMap<String, String> arg0, HashMap<String, String> arg1) {
-			return arg0.get("name").compareTo(arg1.get("name"));
+		public int compare(Node arg0, Node arg1) {
+			try {
+				return arg0.getName().compareTo(arg1.getName());
+			} catch (RepositoryException e) {
+				return 0;
+			}
 		}
 	}
 	
@@ -244,6 +244,9 @@ public class RepositoryServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Convert multi-value property to string 
+	 */
 	private String toString(Value[] v) throws ValueFormatException, IllegalStateException, 
 			RepositoryException {
 		StringBuilder sb = new StringBuilder();
