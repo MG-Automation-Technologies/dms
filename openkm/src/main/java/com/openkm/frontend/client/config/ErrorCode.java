@@ -81,6 +81,7 @@ public class ErrorCode {
 	public static final String CAUSE_InvalidNodeTypeDefException= "020";
 	public static final String CAUSE_SQLException 				= "021";
 	public static final String CAUSE_Configuration 				= "022";
+	public static final String CAUSE_QuotaExceed 				= "023";
 
 	/**
 	 * Gets the error

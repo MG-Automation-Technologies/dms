@@ -619,6 +619,8 @@ public class Lang_de_DE {
 	    lang.put("user.info.subscription.actual","Actual subscriptions");
 	    lang.put("user.info.news.new","News");
 	    lang.put("user.info.workflow.pending","Pending workflows");
+	    lang.put("user.info.quota.used","Used");
+	    lang.put("user.info.user.quota","Used quota");
 	    
 	    // Users online popup
 	    lang.put("user.online","Users online");
@@ -679,5 +681,6 @@ public class Lang_de_DE {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Interner Repositoriefehler");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error in browser configuration");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error user quota exceed, contact with adminitrator");
 	  }
 }

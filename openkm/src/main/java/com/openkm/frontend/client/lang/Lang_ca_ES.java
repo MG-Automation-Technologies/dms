@@ -620,6 +620,8 @@ public class Lang_ca_ES {
 	    lang.put("user.info.subscription.actual","Suscripcions actuals");
 	    lang.put("user.info.news.new","Novetats");
 	    lang.put("user.info.workflow.pending","Workflows pendients");
+	    lang.put("user.info.quota.used","Utilitzat");
+	    lang.put("user.info.user.quota","Quota utilizada");
 	    
 	    // Users online popup
 	    lang.put("user.online","Usuaris conectats");
@@ -680,5 +682,6 @@ public class Lang_ca_ES {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Error intern del repositori");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error en la configuració del navegador");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error ha superat la quota de usuario, contacti amb l'administrador");
 	  }
 }

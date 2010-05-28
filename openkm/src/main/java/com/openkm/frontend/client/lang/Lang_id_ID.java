@@ -619,6 +619,8 @@ public class Lang_id_ID {
 	    lang.put("user.info.subscription.actual","Actual subscriptions");
 	    lang.put("user.info.news.new","News");
 	    lang.put("user.info.workflow.pending","Pending workflows");
+	    lang.put("user.info.quota.used","Used");
+	    lang.put("user.info.user.quota","Used quota");
 	    
 	    // Users online popup
 	    lang.put("user.online","Users online");
@@ -679,5 +681,6 @@ public class Lang_id_ID {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Internal error pada repository");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error saat mengkonfigurasi browser");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error user quota exceed, contact with adminitrator");
 	  }
 }

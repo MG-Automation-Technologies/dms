@@ -250,4 +250,22 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/security/remove.gif")
 	public ImageResource remove();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota1.gif")
+	public ImageResource quota1();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota2.gif")
+	public ImageResource quota2();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota3.gif")
+	public ImageResource quota3();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota4.gif")
+	public ImageResource quota4();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota5.gif")
+	public ImageResource quota5();
+	
+	@Source("com/openkm/frontend/public/img/icon/quota/quota6.gif")
+	public ImageResource quota6();
 }

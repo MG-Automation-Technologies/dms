@@ -90,8 +90,11 @@ public class WorkspaceUserProperties {
 					Main.get().mainPanel.bottomPanel.userInfo.loginChat();
 				}
 			}
+			if (result.isUserQuotaLimit() && workspace.getUserQuotaLimitSize()>0) {
+				Main.get().mainPanel.bottomPanel.userInfo.enableUserQuota(workspace.getUserQuotaLimitSize());
+			}
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
-			getUserDocumentsSize();
+			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
 			
 			// Show administration menu on admin user
 			if (result.isAdmin()) {
