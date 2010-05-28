@@ -109,7 +109,7 @@ public class RepositoryServlet extends HttpServlet {
 				session = JCRUtils.getSession();
 			}
 			
-			// Handle part or uuid
+			// Handle path or uuid
 			if (!path.equals("")) {
 				node = session.getRootNode().getNode(path.substring(1));
 			} else if (!uuid.equals("")) {
