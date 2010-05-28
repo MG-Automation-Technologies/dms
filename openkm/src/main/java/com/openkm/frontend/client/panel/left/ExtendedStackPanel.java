@@ -29,6 +29,11 @@ import com.openkm.frontend.client.panel.PanelDefinition;
 
 public class ExtendedStackPanel extends StackPanel {
 	
+	private boolean categoriesVisible	= false;
+	private boolean thesaurusVisible 	= false;
+	private boolean personalVisible 	= false;
+	private int hiddenStacks = 3;
+
 	private boolean firstTime = true; // Controls firstime starting application must not execute main singleton because causes errors
 	  								  // some objects are still not accessible due initialization process
 	
@@ -63,7 +68,7 @@ public class ExtendedStackPanel extends StackPanel {
 	 * @return The stack index value
 	 */
 	public int getStackIndex() {
-		return stackIndex;
+		return indexCorrectedChangeViewIndex(stackIndex);
 	}
 	
 	/**
@@ -80,7 +85,7 @@ public class ExtendedStackPanel extends StackPanel {
 			Main.get().activeFolderTree.cancelRename();
 		}
 		
-		switch (index) {
+		switch (indexCorrectedChangeViewIndex(index)) {
 			case PanelDefinition.NAVIGATOR_TAXONOMY:
 				Main.get().activeFolderTree = Main.get().mainPanel.navigator.taxonomyTree;
 				Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
@@ -160,8 +165,117 @@ public class ExtendedStackPanel extends StackPanel {
 	 * @param refresh Enables or disables refreshing
 	 */
 	public void showStack( int index, boolean refresh ) {
-		stackIndex = index;
-		changeView(index,refresh);
-        super.showStack(index);
+		stackIndex = correctedStackIndex(index);
+		changeView(stackIndex,refresh);
+        super.showStack(stackIndex);
 	} 
+	
+	/**
+	 * isCategoriesVisible
+	 * 
+	 * @return
+	 */
+	public boolean isCategoriesVisible() {
+		return categoriesVisible;
+	}
+	
+	/**
+	 * isThesaurusVisible
+	 * 
+	 * @return
+	 */
+	public boolean isThesaurusVisible() {
+		return thesaurusVisible;
+	}
+	
+	/**
+	 * personalVisible
+	 * 
+	 * @return
+	 */
+	public boolean isPersonal() {
+		return personalVisible;
+	}
+
+	/**
+	 * showCategories
+	 * 
+	 * @param 
+	 */
+	public void showCategories() {
+		hiddenStacks--;
+		categoriesVisible = true;
+	}
+	
+	/**
+	 * showThesaurus
+	 * 
+	 */
+	public void showThesaurus() {
+		hiddenStacks--;
+		thesaurusVisible = true;
+	}
+	
+	/**
+	 * showPersonal
+	 * 
+	 * @param 
+	 */
+	public void showPersonal() {
+		hiddenStacks--;
+		personalVisible = true;
+	}
+	
+	/**
+	 * indexCorrectedChangeViewIndex
+	 * 
+	 * Return index correction made depending visible panels
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public int indexCorrectedChangeViewIndex(int index) {
+		int corrected = index;
+		if (!categoriesVisible && corrected>=PanelDefinition.NAVIGATOR_CATEGORIES) {
+			corrected++;
+		}
+		if (!thesaurusVisible && corrected>=PanelDefinition.NAVIGATOR_THESAURUS) {
+			corrected++;
+		}
+		if (!personalVisible && corrected>=PanelDefinition.NAVIGATOR_PERSONAL) {
+			corrected++;
+		}
+		return corrected;
+	}
+	
+	/**
+	 * correctedStackIndex
+	 * 
+	 * Return index correction, made depending visible panels
+	 * 
+	 * @param index
+	 * @return
+	 */
+	private int correctedStackIndex(int index) {
+		int corrected = index;
+		if (!personalVisible && corrected>=PanelDefinition.NAVIGATOR_PERSONAL) {
+			corrected--;
+		}
+		if (!thesaurusVisible && corrected>=PanelDefinition.NAVIGATOR_THESAURUS) {
+			corrected--;
+		}
+		if (!categoriesVisible && corrected>=PanelDefinition.NAVIGATOR_CATEGORIES) {
+			corrected--;
+		}
+		return corrected;
+	}
+	
+	/**
+	 * getHiddenStacks
+	 * 
+	 * @return
+	 */
+	public int getHiddenStacks() {
+		return hiddenStacks;
+	}
 }
