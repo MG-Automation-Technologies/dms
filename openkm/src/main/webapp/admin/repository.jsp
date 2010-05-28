@@ -28,34 +28,6 @@
         <li><b>Depth</b>: ${node.depth}</li>
         <li><b>Type</b>: ${fn:toUpperCase(node.primaryNodeType.name)}</li>
         <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
-      </ul>
-      <c:if test="${node.primaryNodeType.name == FolderType}">
-        <h2>Statistics</h2>
-        <ul>
-          <c:choose>
-            <c:when test="${contentInfo != null}">
-              <c:url value="Repository" var="urlDeactivate">
-                <c:param name="path" value="${node.path}"/>
-                <c:param name="stats" value="0"/>
-              </c:url>
-              <li><a href="${urlDeactivate}">Deactivate</a></li>
-              <li><b>Size</b>: ${contentInfo.size}</li>
-              <li><b>Folders</b>: ${contentInfo.folders} </li>
-              <li><b>Documents</b>: ${contentInfo.documents}</li>
-              <li><b>Mails</b>: ${contentInfo.mails}</li>
-            </c:when>
-            <c:otherwise>
-              <c:url value="Repository" var="urlActivate">
-                <c:param name="path" value="${node.path}"/>
-                <c:param name="stats" value="1"/>
-              </c:url>
-              <li><a href="${urlActivate}">Activate</a></li>
-            </c:otherwise>
-          </c:choose>
-        </ul>
-      </c:if>
-      <h2>Actions</h2>
-      <ul>
         <c:if test="${node.depth > 0}">
           <c:url value="Repository" var="urlRemoveContent">
             <c:param name="path" value="${node.path}"/>
@@ -75,7 +47,34 @@
           </c:url>
           <li><a href="${urlUnlock}">Unlock</a></li>
         </c:if>
+        <c:if test="${node.primaryNodeType.name == FolderType}">
+          <c:choose>
+            <c:when test="${contentInfo != null}">
+              <c:url value="Repository" var="urlDeactivate">
+                <c:param name="path" value="${node.path}"/>
+                <c:param name="stats" value="0"/>
+              </c:url>
+              <li><a href="${urlDeactivate}">Disable statistics</a></li>
+            </c:when>
+            <c:otherwise>
+              <c:url value="Repository" var="urlActivate">
+                <c:param name="path" value="${node.path}"/>
+                <c:param name="stats" value="1"/>
+              </c:url>
+              <li><a href="${urlActivate}">Enable statistics</a></li>
+            </c:otherwise>
+          </c:choose>
+        </c:if>
       </ul>
+      <c:if test="${contentInfo != null}">
+        <h2>Statistics</h2>
+        <ul>
+          <li><b>Size</b>: <u:formatSize size="${contentInfo.size}"/></li>
+          <li><b>Folders</b>: ${contentInfo.folders} </li>
+          <li><b>Documents</b>: ${contentInfo.documents}</li>
+          <li><b>Mails</b>: ${contentInfo.mails}</li>
+        </ul>
+      </c:if>
       <h2>Properties</h2>
       <table class="results" width="90%">
         <tr><th>Type</th><th>Multiple</th><th>Protected</th><th>Name</th><th>Value</th></tr>
