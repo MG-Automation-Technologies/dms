@@ -57,6 +57,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean advancedFilters = false;
 	private boolean userQuotaLimit = false;
 	private int userQuotaLimitSize = 0;
+	private boolean categoriesStackVisible = false;
+	private boolean thesaurusStackVisible = false;
+	private boolean personalStackVisible = false;
 
 	/**
 	 * GWTWorkspace
@@ -270,5 +273,29 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setUserQuotaLimitSize(int userQuotaLimitSize) {
 		this.userQuotaLimitSize = userQuotaLimitSize;
+	}
+	
+	public boolean isCategoriesStackVisible() {
+		return categoriesStackVisible;
+	}
+
+	public void setCategoriesStackVisible(boolean categoriesStackVisible) {
+		this.categoriesStackVisible = categoriesStackVisible;
+	}
+
+	public boolean isThesaurusStackVisible() {
+		return thesaurusStackVisible;
+	}
+
+	public void setThesaurusStackVisible(boolean thesaurusStackVisible) {
+		this.thesaurusStackVisible = thesaurusStackVisible;
+	}
+
+	public boolean isPersonalStackVisible() {
+		return personalStackVisible;
+	}
+
+	public void setPersonalStackVisible(boolean personalStackVisible) {
+		this.personalStackVisible = personalStackVisible;
 	}
 }

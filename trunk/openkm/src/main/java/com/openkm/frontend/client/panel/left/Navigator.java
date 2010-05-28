@@ -23,7 +23,6 @@ package com.openkm.frontend.client.panel.left;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.panel.PanelDefinition;
@@ -51,7 +50,7 @@ public class Navigator extends ExtendedSizeComposite {
 	public ScrollPanel scrollThesaurusPanel;
 	private ScrollPanel scrollTrashPanel;
 	private ExtendedScrollPanel scrollTemplatePanel;
-	private ExtendedScrollPanel scrollMyDocumentsPanel;
+	private ExtendedScrollPanel scrollPersonalPanel;
 	private ExtendedScrollPanel scrollMailPanel;
 	public VerticalPanel verticalTaxonomyPanel;
 	public VerticalPanel verticalCategoriesPanel;
@@ -68,6 +67,8 @@ public class Navigator extends ExtendedSizeComposite {
 	public TrashTree trashTree;
 	public MailTree mailTree;
 	public Status status;
+	private int width = 0;
+	private int height = 0;
 	
 	public Navigator() {
 		stackPanel = new ExtendedStackPanel();
@@ -81,8 +82,8 @@ public class Navigator extends ExtendedSizeComposite {
 		scrollTrashPanel.setSize("100%", "100%");
 		scrollTemplatePanel = new ExtendedScrollPanel();
 		scrollTemplatePanel.setSize("100%", "100%");
-		scrollMyDocumentsPanel = new ExtendedScrollPanel();
-		scrollMyDocumentsPanel.setSize("100%", "100%");
+		scrollPersonalPanel = new ExtendedScrollPanel();
+		scrollPersonalPanel.setSize("100%", "100%");
 		scrollMailPanel = new ExtendedScrollPanel();
 		scrollMailPanel.setSize("100%", "100%");
 		verticalTaxonomyPanel = new VerticalPanel();
@@ -129,15 +130,15 @@ public class Navigator extends ExtendedSizeComposite {
 		verticalTemplatePanel.add(templateTree);
 		scrollTemplatePanel.add(verticalTemplatePanel);
 		verticalMyDocumentsPanel.add(personalTree);
-		scrollMyDocumentsPanel.add(verticalMyDocumentsPanel);
+		scrollPersonalPanel.add(verticalMyDocumentsPanel);
 		verticalMailPanel.add(mailTree);
 		scrollMailPanel.add(verticalMailPanel);
 		
 		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
-		stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
-		stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+		//stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+		//stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
-		stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+		//stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
 		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		stackPanel.showStack(0);
@@ -152,18 +153,25 @@ public class Navigator extends ExtendedSizeComposite {
 	/**
 	 * Refresh language descriptions
 	 */
-	public void langRefresh() {	
-		stackPanel.setStackText(0, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
-		stackPanel.setStackText(1, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
-		stackPanel.setStackText(2, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
-		stackPanel.setStackText(3, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
-		stackPanel.setStackText(4, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
-		stackPanel.setStackText(5, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
-		stackPanel.setStackText(6, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+	public void langRefresh() {
+		int count = 0;
+		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		if (stackPanel.isCategoriesVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+			categoriesTree.langRefresh();
+		}
+		if (stackPanel.isThesaurusVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+			thesaurusTree.langRefresh();
+		}
+		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		if (stackPanel.isPersonal()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+			personalTree.langRefresh();
+		}
+		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		taxonomyTree.langRefresh();
-		categoriesTree.langRefresh();
-		thesaurusTree.langRefresh();
-		personalTree.langRefresh();
 		templateTree.langRefresh();
 		mailTree.langRefresh();
 		trashTree.langRefresh();
@@ -176,15 +184,79 @@ public class Navigator extends ExtendedSizeComposite {
 	 * @param height The widget height
 	 */
 	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		int hiddenStacks = stackPanel.getHiddenStacks();
 		stackPanel.setSize(""+width, ""+height);
 		// Substract 2 pixels for borders on stackPanel
-		scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollMyDocumentsPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollMailPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
-		scrollTrashPanel.setSize(""+(width-2), ""+(height-2-(PanelDefinition.NUMBER_OF_STACKS * PanelDefinition.STACK_HEIGHT)));
+		scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		if (stackPanel.isCategoriesVisible()) {
+			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
+		scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		scrollMailPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+	}
+	
+	/**
+	 * showCategories
+	 */
+	public void showCategories() {
+		stackPanel.showCategories();
+	}
+	
+	/**
+	 * showThesaurus
+	 */
+	public void showThesaurus() {
+		stackPanel.showThesaurus();
+	}
+	
+	/**
+	 * showPersonal
+	 */
+	public void showPersonal() {
+		stackPanel.showPersonal();
+	}
+	
+	/**
+	 * refreshContentPanels
+	 */
+	private void refreshStartupContentPanels() {
+		int selected = stackPanel.getStackIndex();
+		
+		while (stackPanel.getWidgetCount() > 0) {
+			stackPanel.remove(0);
+		}
+		
+		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		if (stackPanel.isCategoriesVisible()) {
+			stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
+		}
+		if (stackPanel.isThesaurusVisible()) {
+			stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
+		}
+		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		if (stackPanel.isPersonal()) {
+			stackPanel.add(scrollPersonalPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
+		}
+		stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+		
+		stackPanel.showStack(selected);
+	}
+	
+	/**
+	 * refreshView
+	 * 
+	 * Only must be executed in starting up time
+	 * 
+	 */
+	public void refreshView() {
+		refreshStartupContentPanels();
+		setSize(width, height);
 	}
 	
 	/**
