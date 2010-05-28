@@ -97,7 +97,7 @@ public class HandlerServlet extends HttpServlet {
 		if (path == null || path.equals("")) {
 			path = "/okm:root";
 		}
-		  
+		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(token, path));
 		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(token, path));
