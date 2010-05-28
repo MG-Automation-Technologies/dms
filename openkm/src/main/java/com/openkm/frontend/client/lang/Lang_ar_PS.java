@@ -609,8 +609,6 @@ public class Lang_ar_PS {
 	    lang.put("wizard.document.uploading", "Document wizard");
 	    
 	    // User info
-	    lang.put("user.info.chat.online", "Online");
-	    lang.put("user.info.chat.offline", "Offline");
 	    lang.put("user.info.chat.connect", "Connect to chat");
 	    lang.put("user.info.chat.disconnect", "Disconnet chat");
 	    lang.put("user.info.chat.new.room", "Net chat room");

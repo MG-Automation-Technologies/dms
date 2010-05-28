@@ -610,8 +610,6 @@ public class Lang_ca_ES {
 	    lang.put("wizard.document.uploading", "Assistent de document");
 	    
 	    // User info
-	    lang.put("user.info.chat.online","Conectat");
-	    lang.put("user.info.chat.offline", "Desconectat");
 	    lang.put("user.info.chat.connect", "Conectar el chat");
 	    lang.put("user.info.chat.disconnect", "Desconectar el chat");
 	    lang.put("user.info.chat.new.room", "Nou chat");
