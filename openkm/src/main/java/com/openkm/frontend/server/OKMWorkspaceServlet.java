@@ -95,7 +95,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		// User quota ( limit user repository size )
 		workspace.setUserQuotaLimit(true);
-		workspace.setUserQuotaLimitSize(5*1048576); // 5*1048576 = 5MB
+		workspace.setUserQuotaLimitSize(10*1048576); // 10*1048576 = 5MB
+		
+		// Stack visibility
+		workspace.setCategoriesStackVisible(true);
+		workspace.setThesaurusStackVisible(true);
+		workspace.setPersonalStackVisible(true);
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {

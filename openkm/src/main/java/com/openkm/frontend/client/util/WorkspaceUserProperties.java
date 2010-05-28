@@ -113,6 +113,24 @@ public class WorkspaceUserProperties {
 				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
+			// showing stack
+			boolean refreshStack = false;
+			if (workspace.isCategoriesStackVisible()) {
+				Main.get().mainPanel.navigator.showCategories();
+				refreshStack = true;
+			}
+			if (workspace.isThesaurusStackVisible()) {
+				Main.get().mainPanel.navigator.showThesaurus();
+				refreshStack = true;
+			}
+			if (workspace.isPersonalStackVisible()) {
+				Main.get().mainPanel.navigator.showPersonal();
+				refreshStack = true;
+			}
+			if (refreshStack) {
+				Main.get().mainPanel.navigator.refreshView();
+			}
+			
 			// Getting update messages 
 			getUpdateMessage();
 		}
