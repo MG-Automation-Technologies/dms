@@ -31,8 +31,10 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.widgetideas.client.ProgressBar;
 import com.google.gwt.widgetideas.client.ProgressBar.TextFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMGeneralService;
 import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
@@ -178,12 +180,17 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			send.addClickHandler(new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					users.setText(notifyPanel.getUsersToNotify());
-					roles.setText(notifyPanel.getRolesToNotify());
-					if (notifyToUser.getValue() && users.getText().equals("") && roles.getText().equals("")) {
-						errorNotify.setVisible(true);
-					} else if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
-						pendingUpload();
+					if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+						Main.get().showError("UserQuotaExceed", 
+					             			 new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed, ""));
+					} else {
+						users.setText(notifyPanel.getUsersToNotify());
+						roles.setText(notifyPanel.getRolesToNotify());
+						if (notifyToUser.getValue() && users.getText().equals("") && roles.getText().equals("")) {
+							errorNotify.setVisible(true);
+						} else if (uploadFileWidget.getFilename() != null && !uploadFileWidget.getFilename().equals("")) {
+							pendingUpload();
+						}
 					}
 				}
 			});

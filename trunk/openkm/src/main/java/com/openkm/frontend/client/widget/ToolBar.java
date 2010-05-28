@@ -191,7 +191,12 @@ public class ToolBar extends Composite implements OriginPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.addDocumentOption) {
-				executeAddDocument();
+				if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+					Main.get().showError("UserQuotaExceed", 
+				             new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed,""));
+				} else {
+					executeAddDocument();
+				}
 			}
 		}
 	};
@@ -267,8 +272,13 @@ public class ToolBar extends Composite implements OriginPanel {
 	ClickHandler editHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
-			if (toolBarOption.checkoutOption){
-				executeCheckout();
+			if (toolBarOption.checkoutOption) {
+				if (Main.get().mainPanel.bottomPanel.userInfo.isQuotaExceed()) {
+					Main.get().showError("UserQuotaExceed", 
+				             new OKMException("OKM-"+ErrorCode.ORIGIN_OKMBrowser + ErrorCode.CAUSE_QuotaExceed,""));
+				} else {
+					executeCheckout();
+				}
 			}
 		}
 	};
