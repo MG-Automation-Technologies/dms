@@ -622,7 +622,7 @@ public class DirectFolderModule implements FolderModule {
 	public void copy(String token, String fldPath, String dstPath) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
 		log.debug("copy({}, {}, {})", new Object[] { token, fldPath, dstPath });
-		Transaction t = null;
+		//Transaction t = null;
 		XASession session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -637,8 +637,8 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			String name = FileUtils.getName(fldPath);
-			t = new Transaction(session);
-			t.start();
+			//t = new Transaction(session);
+			//t.start();
 			
 			// Make some work
 			Node srcFolderNode = session.getRootNode().getNode(fldPath.substring(1)); 
@@ -647,30 +647,30 @@ public class DirectFolderModule implements FolderModule {
 			dstFolderNode.save();
 			copyHelper(session, srcFolderNode, newFolder);
 			
-			t.end();
-			t.commit();
+			//t.end();
+			//t.commit();
 			
 			// Activity log
 			UserActivity.log(session, "COPY_FOLDER", fldPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
-			t.rollback();
+			//t.rollback();
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
-			t.rollback();
+			//t.rollback();
 			throw new ItemExistsException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
-			t.rollback();
+			//t.rollback();
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
-			t.rollback();
+			//t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (java.io.IOException e) {
 			log.error(e.getMessage(), e);
-			t.rollback();
+			//t.rollback();
 			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
