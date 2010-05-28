@@ -56,6 +56,7 @@ import com.openkm.core.Config;
 import com.openkm.core.SessionManager;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
@@ -118,6 +119,9 @@ public class RepositoryServlet extends HttpServlet {
 			} else {
 				node = session.getRootNode();
 			}
+			
+			// Activity log
+			UserActivity.log(session, "REPOSITORY_VIEW", node.getPath(), null);
 			
 			sc.setAttribute("node", node);
 			sc.setAttribute("holdsLock", node.holdsLock());
