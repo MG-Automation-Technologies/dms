@@ -111,7 +111,6 @@ public class RepositoryServlet extends HttpServlet {
 			
 			// Handle part or uuid
 			if (!path.equals("")) {
-				path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 				node = session.getRootNode().getNode(path.substring(1));
 			} else if (!uuid.equals("")) {
 				node = session.getNodeByUUID(uuid);
@@ -120,14 +119,12 @@ public class RepositoryServlet extends HttpServlet {
 				node = session.getRootNode();
 			}
 			
-			log.info("--> "+path);
-			
 			sc.setAttribute("node", node);
 			sc.setAttribute("holdsLock", node.holdsLock());
 			sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
 			sc.setAttribute("properties", getProperties(node));
 			sc.setAttribute("children", getChildren(node));
-			//sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
 		} catch (LoginException e) {
 			e.printStackTrace();
 		} catch (RepositoryException e) {
@@ -166,12 +163,6 @@ public class RepositoryServlet extends HttpServlet {
 
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
 			Node child = ni.nextNode();
-			try {
-				log.info("Path: "+URLEncoder.encode(child.getPath(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			al.add(child);
 		}
 		
