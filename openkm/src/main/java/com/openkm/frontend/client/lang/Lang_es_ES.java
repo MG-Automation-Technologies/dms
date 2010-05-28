@@ -606,28 +606,27 @@ public class Lang_es_ES {
 	    lang.put("categories.folder.error.delete", "No se puede eliminar una categoría con documentos");
 	    
 	    // Wizard
-	    lang.put("wizard.document.uploading","Asistente de documento");
+	    lang.put("wizard.document.uploading", "Asistente de documento");
 	    
 	    // User info
-	    lang.put("user.info.chat.online","Conectado");
-	    lang.put("user.info.chat.offline","Desconecado");
-	    lang.put("user.info.chat.connect","Conectar al chat");
-	    lang.put("user.info.chat.disconnect","Desconectar al chat");
-	    lang.put("user.info.chat.new.room","Nueva ventana");
-	    lang.put("user.info.locked.actual","Documentos bloqueados");
-	    lang.put("user.info.checkout.actual","Documentos editados");
-	    lang.put("user.info.subscription.actual","Suscripciones actuales");
-	    lang.put("user.info.news.new","Novedades");
-	    lang.put("user.info.workflow.pending","Workflows pendientes");
-	    lang.put("user.info.quota.used","Utilizado");
-	    lang.put("user.info.user.quota","Cuota utilizada");
+	    lang.put("user.info.chat.online", "Conectado");
+	    lang.put("user.info.chat.offline", "Desconecado");
+	    lang.put("user.info.chat.connect", "Conectar al chat");
+	    lang.put("user.info.chat.disconnect", "Desconectar al chat");
+	    lang.put("user.info.chat.new.room", "Nueva ventana");
+	    lang.put("user.info.locked.actual", "Documentos bloqueados");
+	    lang.put("user.info.checkout.actual", "Documentos editados");
+	    lang.put("user.info.subscription.actual", "Suscripciones actuales");
+	    lang.put("user.info.news.new", "Novedades");
+	    lang.put("user.info.workflow.pending", "Workflows pendientes");
+	    lang.put("user.info.user.quota", "Cuota utilizada");
 	    
 	    // Users online popup
-	    lang.put("user.online","Usuarios conectados");
+	    lang.put("user.online", "Usuarios conectados");
 	    
 	    // Chat room
-	    lang.put("chat.room","Chat");
-	    lang.put("chat.users.in.room","Usuarios");
+	    lang.put("chat.room", "Chat");
+	    lang.put("chat.users.in.room", "Usuarios");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No tiene permisos para acceder al documento");

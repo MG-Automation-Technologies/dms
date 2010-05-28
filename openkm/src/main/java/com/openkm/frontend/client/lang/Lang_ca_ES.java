@@ -607,28 +607,27 @@ public class Lang_ca_ES {
 	    lang.put("categories.folder.error.delete", "No es pot eliminar una categoria amb documents");
 	    
 	    // Wizard
-	    lang.put("wizard.document.uploading","Assistent de document");
+	    lang.put("wizard.document.uploading", "Assistent de document");
 	    
 	    // User info
 	    lang.put("user.info.chat.online","Conectat");
-	    lang.put("user.info.chat.offline","Desconectat");
-	    lang.put("user.info.chat.connect","Conectar el chat");
-	    lang.put("user.info.chat.disconnect","Desconectar el chat");
-	    lang.put("user.info.chat.new.room","Nou chat");
-	    lang.put("user.info.locked.actual","Documents bloquejats");
-	    lang.put("user.info.checkout.actual","Documents editats");
-	    lang.put("user.info.subscription.actual","Suscripcions actuals");
-	    lang.put("user.info.news.new","Novetats");
-	    lang.put("user.info.workflow.pending","Workflows pendients");
-	    lang.put("user.info.quota.used","Utilitzat");
-	    lang.put("user.info.user.quota","Quota utilizada");
+	    lang.put("user.info.chat.offline", "Desconectat");
+	    lang.put("user.info.chat.connect", "Conectar el chat");
+	    lang.put("user.info.chat.disconnect", "Desconectar el chat");
+	    lang.put("user.info.chat.new.room", "Nou chat");
+	    lang.put("user.info.locked.actual", "Documents bloquejats");
+	    lang.put("user.info.checkout.actual", "Documents editats");
+	    lang.put("user.info.subscription.actual", "Suscripcions actuals");
+	    lang.put("user.info.news.new", "Novetats");
+	    lang.put("user.info.workflow.pending", "Workflows pendients");
+	    lang.put("user.info.user.quota", "Quota utilizada");
 	    
 	    // Users online popup
-	    lang.put("user.online","Usuaris conectats");
+	    lang.put("user.online", "Usuaris conectats");
 	    
 	    // Chat room
-	    lang.put("chat.room","Chat");
-	    lang.put("chat.users.in.room","Usuaris");
+	    lang.put("chat.room", "Chat");
+	    lang.put("chat.users.in.room", "Usuaris");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "No teniu permisos per a accedir al document");
