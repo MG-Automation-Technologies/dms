@@ -98,7 +98,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setUserQuotaLimitSize(5*1048576); // 5*1048576 = 5MB
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
-		try {			
+		try {
 			User user = new User();
 			
 			if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
@@ -176,7 +176,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 					authDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
 					if (!user.getEmail().equals("")) authDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
 				}
-			
+				
 				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
 					authDAO.updateMailAccount(mailAccount);
 					if (!mailAccount.getMailPassword().equals("")) authDAO.updateMailAccountPassword(mailAccount);
