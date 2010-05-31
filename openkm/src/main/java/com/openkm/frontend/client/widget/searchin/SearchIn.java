@@ -82,13 +82,6 @@ import com.openkm.frontend.client.widget.searchsaved.Status;
  */
 public class SearchIn extends Composite {
 	
-	private static final int SELECT_NAVIGATOR_TAXONOMY 		= 0;
-	private static final int SELECT_NAVIGATOR_TEMPLATES 	= 1;
-	private static final int SELECT_NAVIGATOR_PERSONAL 		= 2;
-	private static final int SELECT_NAVIGATOR_MAIL 			= 3;
-	private static final int SELECT_NAVIGATOR_TRASH 		= 4;
-	//private static final int SELECT_NAVIGATOR_ALL_CONTEXT 	= 5;
-	
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	
@@ -160,6 +153,16 @@ public class SearchIn extends Composite {
 	HorizontalPanel searchTypePanel;
 	final CheckBox searchTypeAnd;
 	final CheckBox searchTypeOr;
+	private boolean personalVisible = false;
+	private boolean mailVisible		= false;
+	private int posTaxonomy = 0;
+	private int posTemplates = 0;
+	private int posPersonal = 0;
+	private int posMail = 0;
+	private int posTrash = 0;
+	private String trashContextValue = "";
+	private String personalContextValue = "";
+	private String mailContextValue = "";
 	
 	/**
 	 * SearchIn
@@ -269,8 +272,7 @@ public class SearchIn extends Composite {
 		cleanButton = new Button(Main.i18n("button.clean"), new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
-				context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
+				context.setSelectedIndex(posTaxonomy);
 				content.setText("");
 				path.setText("");
 				categoryPath.setText("");
@@ -369,14 +371,22 @@ public class SearchIn extends Composite {
 		
 		context = new ListBox();
 		context.setStyleName("okm-Select");
+		int count = 0;
+		posTaxonomy = count++;
 		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
+		posTemplates = count++;
 		context.addItem(Main.i18n("leftpanel.label.templates"),"");
-		context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
-		context.addItem(Main.i18n("leftpanel.label.mail"),"");
+		if (personalVisible) {
+			posPersonal = count++;
+			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
+		}
+		if (mailVisible) {
+			posMail = count ++;
+			context.addItem(Main.i18n("leftpanel.label.mail"),"");
+		}
+		posTrash = count ++;
 		context.addItem(Main.i18n("leftpanel.label.trash"),"");
-		//context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
-		//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
-		context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
+		context.setSelectedIndex(posTaxonomy);
 		
 		context.addChangeHandler(new ChangeHandler(){
 			@Override
@@ -812,12 +822,15 @@ public class SearchIn extends Composite {
 		tableMail.setHTML(1, 0, Main.i18n("mail.to"));
 		tableMail.setHTML(2, 0, Main.i18n("mail.subject"));
 		
-		context.setItemText(SELECT_NAVIGATOR_TAXONOMY,Main.i18n("leftpanel.label.taxonomy"));
-		context.setItemText(SELECT_NAVIGATOR_TEMPLATES,Main.i18n("leftpanel.label.templates"));
-		context.setItemText(SELECT_NAVIGATOR_PERSONAL,Main.i18n("leftpanel.label.my.documents"));
-		context.setItemText(SELECT_NAVIGATOR_MAIL,Main.i18n("leftpanel.label.mail"));
-		context.setItemText(SELECT_NAVIGATOR_TRASH,Main.i18n("leftpanel.label.trash"));
-		//context.setItemText(PanelDefinition.NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
+		context.setItemText(posTaxonomy,Main.i18n("leftpanel.label.taxonomy"));
+		context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		if (personalVisible) {
+			context.setItemText(posPersonal,Main.i18n("leftpanel.label.my.documents"));
+		}
+		if (mailVisible) {
+			context.setItemText(posMail,Main.i18n("leftpanel.label.mail"));
+		}
+		context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
 		
 		document.setHTML(Main.i18n("search.type.document"));
 		folder.setHTML(Main.i18n("search.type.folder"));
@@ -1058,18 +1071,17 @@ public class SearchIn extends Composite {
 		
 		boolean advancedSearchFlag = false;
 		if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTaxonomy())) {
-			context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
+			context.setSelectedIndex(posTaxonomy);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextPersonal())) {
-			context.setSelectedIndex(SELECT_NAVIGATOR_PERSONAL);
+			context.setSelectedIndex(posTemplates);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTemplates())) {
-			context.setSelectedIndex(SELECT_NAVIGATOR_PERSONAL);
+			context.setSelectedIndex(posPersonal);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextMail())) {
-			context.setSelectedIndex(SELECT_NAVIGATOR_MAIL);
+			context.setSelectedIndex(posMail);
 		} else if (gWTParams.getPath().startsWith(Main.get().repositoryContext.getContextTrash())) {
-			context.setSelectedIndex(SELECT_NAVIGATOR_TRASH);
+			context.setSelectedIndex(posTrash);
 		} else {
-			//context.setSelectedIndex(PanelDefinition.NAVIGATOR_ALL_CONTEXT);
-			context.setSelectedIndex(SELECT_NAVIGATOR_TAXONOMY);
+			context.setSelectedIndex(posTaxonomy);
 		}
 		
 		if (!gWTParams.getCategoryUuid().equals("")) {
@@ -1212,23 +1224,24 @@ public class SearchIn extends Composite {
 	public void setContextValue(String contextValue, int stackView){
 		switch (stackView) {
 		 	case PanelDefinition.NAVIGATOR_TAXONOMY:
-		 		context.setValue(SELECT_NAVIGATOR_TAXONOMY,contextValue);
+		 		context.setValue(posTaxonomy,contextValue);
 		 		break;
 		 	
 		 	case PanelDefinition.NAVIGATOR_TEMPLATES:
-		 		context.setValue(SELECT_NAVIGATOR_TEMPLATES,contextValue);
+		 		context.setValue(posTemplates,contextValue);
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_PERSONAL:
-		 		context.setValue(SELECT_NAVIGATOR_PERSONAL,contextValue);
+		 		personalContextValue = contextValue;
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_MAIL:
-		 		context.setValue(SELECT_NAVIGATOR_MAIL,contextValue);
+		 		mailContextValue = contextValue;
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_TRASH:
-		 		context.setValue(SELECT_NAVIGATOR_TRASH,contextValue);
+		 		trashContextValue = contextValue;
+		 		context.setValue(posTrash,contextValue);
 		 		break;
 		}
 	}
@@ -1322,5 +1335,51 @@ public class SearchIn extends Composite {
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.saveSearch(params, type, name, callbackSaveSearch);
+	}	
+		
+	/**
+	 * showPersonal
+	 */
+	public void showPersonal() {
+		// removing trash and add after
+		context.removeItem(posTrash);
+		posPersonal = posTrash; 
+		posTrash++;
+		context.addItem(Main.i18n("leftpanel.label.my.documents"), personalContextValue);
+		context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
+		personalVisible = true;
+	}
+	
+	/**
+	 * showMail
+	 */
+	public void showMail() {
+		// removing trash and add after
+		context.removeItem(posTrash);
+		posMail = posTrash;
+		posTrash++;
+		context.addItem(Main.i18n("leftpanel.label.mail"), mailContextValue);
+		context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
+		mailVisible = true;
+	}
+	
+	/**
+	 * getSelectedView
+	 * 
+	 * @return
+	 */
+	public int getSelectedView() {
+		int index = context.getSelectedIndex();
+		if (index==posTaxonomy) {
+			return PanelDefinition.NAVIGATOR_TAXONOMY;
+		} else if (index==posTemplates) {
+			return PanelDefinition.NAVIGATOR_TEMPLATES;
+		} else if (index==posPersonal) {
+			return PanelDefinition.NAVIGATOR_PERSONAL;
+		} else if (index==posMail) {
+			return PanelDefinition.NAVIGATOR_MAIL;
+		} else {
+			return PanelDefinition.NAVIGATOR_TRASH;
+		}
 	}
 }
