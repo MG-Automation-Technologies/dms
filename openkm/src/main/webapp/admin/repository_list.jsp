@@ -16,7 +16,7 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Repository</h1>
+      <h1>Repository view</h1>
       <h2>Info</h2>
       <ul>
         <li><b>Path</b>: ${breadcrumb}</li>
@@ -24,18 +24,18 @@
         <li><b>Type</b>: ${fn:toUpperCase(node.primaryNodeType.name)}</li>        
         <c:if test="${node.depth > 0}">
           <li><b>Actions</b>:
-            <c:url value="Repository" var="urlRemoveContent">
+            <c:url value="RepositoryView" var="urlRemoveContent">
               <c:param name="path" value="${node.path}"/>
               <c:param name="action" value="remove_content"/>
             </c:url>
-            <c:url value="Repository" var="urlRemoveCurrent">
+            <c:url value="RepositoryView" var="urlRemoveCurrent">
               <c:param name="path" value="${node.path}"/>
               <c:param name="action" value="remove_current"/>
             </c:url>
             <a href="${urlRemoveContent}">Remove contents</a> -
             <a href="${urlRemoveCurrent}">Remove current</a>
             <c:if test="${node.locked && holdsLock}">
-              <c:url value="Repository" var="urlUnlock">
+              <c:url value="RepositoryView" var="urlUnlock">
                 <c:param name="path" value="${node.path}"/>
                 <c:param name="action" value="unlock"/>
               </c:url>
@@ -44,14 +44,14 @@
             <c:if test="${isFolder}">
               <c:choose>
                 <c:when test="${contentInfo != null}">
-                  <c:url value="Repository" var="urlDeactivate">
+                  <c:url value="RepositoryView" var="urlDeactivate">
                     <c:param name="path" value="${node.path}"/>
                     <c:param name="stats" value="0"/>
                   </c:url>
                   - <a href="${urlDeactivate}">Disable statistics</a>
                 </c:when>
                 <c:otherwise>
-                  <c:url value="Repository" var="urlActivate">
+                  <c:url value="RepositoryView" var="urlActivate">
                     <c:param name="path" value="${node.path}"/>
                     <c:param name="stats" value="1"/>
                   </c:url>
@@ -64,14 +64,14 @@
                 <b>Scripting</b>:
                 <c:choose>
                   <c:when test="${isScripting}">
-                    <c:url value="Repository" var="urlRemoveScript">
+                    <c:url value="RepositoryView" var="urlRemoveScript">
                       <c:param name="path" value="${node.path}"/>
                       <c:param name="action" value="remove_script"/>
                     </c:url>
                     <a href="${urlRemoveScript}">Remove script</a>
                   </c:when>
                   <c:otherwise>
-                  <c:url value="Repository" var="urlSetScript">
+                  <c:url value="RepositoryView" var="urlSetScript">
                       <c:param name="path" value="${node.path}"/>
                       <c:param name="action" value="set_script"/>
                     </c:url>
@@ -113,7 +113,7 @@
             <td>${property.value}</td>
             <td align="center">
               <c:if test="${property.type == 'STRING'}">
-                <c:url value="Repository" var="urlEdit">
+                <c:url value="RepositoryView" var="urlEdit">
                   <c:param name="path" value="${node.path}"/>
                   <c:param name="property" value="${property.name}"/>
                   <c:param name="action" value="edit"/>
@@ -128,7 +128,7 @@
       <table class="results" width="90%">
         <tr><th>Type</th><th>Locked</th><th>CheckedOut</th><th>Name</th></tr>
         <c:forEach var="child" items="${children}" varStatus="row">
-          <c:url value="Repository" var="urlList">
+          <c:url value="RepositoryView" var="urlList">
             <c:param name="path" value="${child.path}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">

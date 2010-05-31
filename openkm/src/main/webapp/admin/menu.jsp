@@ -12,7 +12,7 @@
   &nbsp;
   <a target="frame" href="search.jsp"><img src="img/toolbar/search.png" title="Repository Search"></a>
   &nbsp;
-  <a target="frame" href="repository_view.jsp"><img src="img/toolbar/view.png" title="Repository view"></a>
+  <a target="frame" href="RepositoryView"><img src="img/toolbar/view.png" title="Repository view"></a>
   &nbsp;
   <a target="frame" href="property_group.jsp"><img src="img/toolbar/properties.png" title="Property groups"></a>
   &nbsp;
