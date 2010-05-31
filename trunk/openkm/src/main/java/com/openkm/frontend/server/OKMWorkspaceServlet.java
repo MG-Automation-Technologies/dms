@@ -98,10 +98,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setUserQuotaLimitSize(10*1048576); // 10*1048576 = 5MB
 		
 		// Stack visibility
-		workspace.setCategoriesStackVisible(false);
-		workspace.setThesaurusStackVisible(false);
-		workspace.setPersonalStackVisible(false);
-		workspace.setMailStackVisible(false);
+		workspace.setCategoriesStackVisible(true);
+		workspace.setThesaurusStackVisible(true);
+		workspace.setPersonalStackVisible(true);
+		workspace.setMailStackVisible(true);
 		
 		AuthDAO authDAO = AuthDAO.getInstance();
 		try {
