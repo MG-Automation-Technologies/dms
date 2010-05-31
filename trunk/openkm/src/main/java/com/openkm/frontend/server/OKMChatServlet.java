@@ -63,7 +63,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
 	private static final int ACTION_DELETE_EMPTY_MESSAGE_ROOM	 	= 11;
 	private static final int ACTION_GET_USERS_IN_MESSAGE_ROOM	 	= 12;
 	
-	private static List<String> usersLogged;
+	private static List<String> usersLogged = new ArrayList<String>();
 	private static Map<String, List<String>> usersRooms= new HashMap<String, List<String>>(); // user is the key
 	private static Map<String, List<String>> pendingUsersRooms= new HashMap<String, List<String>>(); // user is the key
 	private static Map<String, HashMap<String,List<String>>> msgUsersRooms= new HashMap<String, HashMap<String,List<String>>>(); // room is the key
@@ -72,7 +72,6 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     @Override
     public void init(final ServletConfig config) throws ServletException {
     	super.init(config);
-    	usersLogged = new ArrayList<String>();
     }
     
     @Override
