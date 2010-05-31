@@ -163,6 +163,8 @@ public final class Main implements EntryPoint{
 		if (loc.getParameter("docPath")!=null && !loc.getParameter("docPath").equals("")) {
 			fldPath = loc.getParameter("docPath").substring(0, loc.getParameter("docPath").lastIndexOf("/")); 
 			docPath = loc.getParameter("docPath"); 
+		} else if (loc.getParameter("fldPath")!=null && !loc.getParameter("fldPath").equals("")) {
+			fldPath = loc.getParameter("fldPath"); 
 		}
 		
 		// Tries to capture lang parameter
