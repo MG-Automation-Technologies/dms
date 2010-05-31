@@ -133,6 +133,7 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showPersonal();
 				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showPersonal();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showPersonal();
+				Main.get().mainPanel.search.searchIn.showPersonal();
 				refreshStack = true;
 			}
 			if (workspace.isMailStackVisible()) {
@@ -145,6 +146,7 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showMail();
 				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showMail();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showMail();
+				Main.get().mainPanel.search.searchIn.showMail();
 				refreshStack = true;
 			}
 			if (refreshStack) {
