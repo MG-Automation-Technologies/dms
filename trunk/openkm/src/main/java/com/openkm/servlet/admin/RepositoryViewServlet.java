@@ -71,10 +71,10 @@ import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
- * Repository servlet
+ * RepositoryView servlet
  */
-public class RepositoryServlet extends HttpServlet {
-	private static Logger log = LoggerFactory.getLogger(RepositoryServlet.class);
+public class RepositoryViewServlet extends HttpServlet {
+	private static Logger log = LoggerFactory.getLogger(RepositoryViewServlet.class);
 	private static final long serialVersionUID = 1L;
 	private static final String[] NODE_TYPE = { "UNDEFINED", "STRING", "BINARY", "LONG", "DOUBLE", 
 		"DATE", "BOOLEAN", "NAME", "PATH", "REFERENCE" };
@@ -84,6 +84,7 @@ public class RepositoryServlet extends HttpServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
+		String path = WebUtil.getString(request, "path");
 		String token = (String) request.getSession().getAttribute("token");
 		Session session = null;
 		
@@ -95,27 +96,25 @@ public class RepositoryServlet extends HttpServlet {
 			}
 			
 			if (action.equals("unlock")) {
-				unlock(session, request, response);
+				unlock(session, path, request, response);
 			} else if (action.equals("checkin")) {
-				checkin(session, request, response);
+				checkin(session, path, request, response);
 			} else if (action.equals("remove_content")) {
-				removeContent(session, request, response);
+				removeContent(session, path, request, response);
 			} else if (action.equals("remove_current")) {
-				removeCurrent(session, request, response);
+				path = removeCurrent(session, path, request, response);
 			} else if (action.equals("edit")) {
-				edit(session, request, response);
+				edit(session, path, request, response);
 			} else if (action.equals("save")) {
-				save(session, request, response);
+				save(session, path, request, response);
 			} else if (action.equals("set_script")) {
-				String path = WebUtil.getString(request, "path");
 				OKMScripting.getInstance().setScript(token, path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
-				String path = WebUtil.getString(request, "path");
 				OKMScripting.getInstance().removeScript(token, path);
 			}
 			
 			if (!action.equals("edit")) {
-				list(session, request, response);
+				list(session, path, request, response);
 			}
 		} catch (LoginException e) {
 			sendErrorRedirect(request,response, e);
@@ -137,10 +136,9 @@ public class RepositoryServlet extends HttpServlet {
 	/**
 	 * Unlock node
 	 */
-	private void unlock(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void unlock(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("unlock({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
+		log.info("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Lock lock = node.getLock();
 		
@@ -154,32 +152,30 @@ public class RepositoryServlet extends HttpServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_UNLOCK", node.getPath(), "");
+		UserActivity.log(session, "REPOSITORY_UNLOCK", path, "");
 		log.debug("unlock: void");
 	}
 	
 	/**
 	 * Node check-in
 	 */
-	private void checkin(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void checkin(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("checkin({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
+		log.info("checkin({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		node.checkin();
 
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_CHECKIN", node.getPath(), "");
+		UserActivity.log(session, "REPOSITORY_CHECKIN", path, "");
 		log.debug("checkin: void");
 	}
 
 	/**
 	 * Remove children nodes
 	 */
-	private void removeContent(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void removeContent(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("removeCurrent({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
+		log.info("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 						
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
@@ -189,36 +185,34 @@ public class RepositoryServlet extends HttpServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_REMOVE_CONTENT", node.getPath(), "");
+		UserActivity.log(session, "REPOSITORY_REMOVE_CONTENT", path, "");
 		log.debug("removeCurrent: void");
 	}
 	
 	/**
 	 * Remove current node and its children
 	 */
-	private void removeCurrent(Session session, HttpServletRequest request, HttpServletResponse response)
+	private String removeCurrent(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("removeCurrent({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
-		
+		log.info("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Node parent = node.getParent();
+		String parentPath = parent.getPath();
 		node.remove();
 		parent.save();
-		path = parent.getPath();
-		
+				
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_REMOVE_CURRENT", node.getPath(), "");
-		log.debug("removeCurrent: void");
+		UserActivity.log(session, "REPOSITORY_REMOVE_CURRENT", path, "");
+		log.debug("removeCurrent: {}", path);
+		return parentPath;
 	}
 	
 	/**
 	 * Edit property
 	 */
-	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void edit(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
+		log.debug("edit({}, {}, {}, {})", new Object[] { session, path, request, response });
 		String property = WebUtil.getString(request, "property");
 		ServletContext sc = getServletContext();
 		Node node = session.getRootNode().getNode(path.substring(1));
@@ -234,7 +228,7 @@ public class RepositoryServlet extends HttpServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_EDIT", node.getPath(), property+" : "+value);
+		UserActivity.log(session, "REPOSITORY_EDIT", path, property+" : "+value);
 		
 		sc.setAttribute("node", node);
 		sc.setAttribute("property", prop);
@@ -247,10 +241,9 @@ public class RepositoryServlet extends HttpServlet {
 	/**
 	 * Save property
 	 */
-	private void save(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void save(Session session, String path, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.debug("save({}, {}, {})", new Object[] { session, request, response });
-		String path = WebUtil.getString(request, "path");
+		log.debug("save({}, {}, {}, {})", new Object[] { session, path, request, response });
 		String value = WebUtil.getString(request, "value");
 		String property = WebUtil.getString(request, "property");
 		Node node = session.getRootNode().getNode(path.substring(1));
@@ -273,18 +266,17 @@ public class RepositoryServlet extends HttpServlet {
 		node.save();
 		
 		// Activity log
-		UserActivity.log(session, "REPOSITORY_SAVE", node.getPath(), property+" : "+value);
+		UserActivity.log(session, "REPOSITORY_SAVE", path, property+" : "+value);
 		log.debug("save: void");
 	}
 
 	/**
 	 * List node properties and children
 	 */
-	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void list(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("list({}, {}, {})", new Object[] { session, request, response });
+		log.info("list({}, {}, {}, {})", new Object[] { session, path, request, response });
 		String stats = WebUtil.getString(request, "stats");
-		String path = WebUtil.getString(request, "path");
 		String uuid = WebUtil.getString(request, "uuid");
 		ServletContext sc = getServletContext();
 		ContentInfo ci = null;
@@ -334,7 +326,7 @@ public class RepositoryServlet extends HttpServlet {
 		sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
 		sc.setAttribute("properties", getProperties(node));
 		sc.setAttribute("children", getChildren(node));
-		sc.getRequestDispatcher("/admin/repository.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/repository_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 
@@ -346,12 +338,12 @@ public class RepositoryServlet extends HttpServlet {
 		if (idx > 0) {
 			String name = path.substring(idx+1);
 			String parent = path.substring(0, idx);
-			return createBreadcrumb(parent)+" / <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+name+"</a>";
+			return createBreadcrumb(parent)+" / <a href=\"RepositoryView?path="+URLEncoder.encode(path, "UTF-8")+"\">"+name+"</a>";
 		} else {
 			if (!path.substring(1).equals("")) {
-				return "<a href=\"Repository?path=\">ROOT</a> / <a href=\"Repository?path="+URLEncoder.encode(path, "UTF-8")+"\">"+path.substring(1)+"</a>";
+				return "<a href=\"RepositoryView?path=\">ROOT</a> / <a href=\"RepositoryView?path="+URLEncoder.encode(path, "UTF-8")+"\">"+path.substring(1)+"</a>";
 			} else {
-				return "<a href=\"Repository?path=\">ROOT</a> /";
+				return "<a href=\"RepositoryView?path=\">ROOT</a> /";
 			}
 		}
 	}
