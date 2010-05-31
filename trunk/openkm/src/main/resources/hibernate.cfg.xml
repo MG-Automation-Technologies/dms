@@ -202,6 +202,13 @@
     <mapping resource="org/jbpm/taskmgmt/log/SwimlaneLog.hbm.xml"/>
     <mapping resource="org/jbpm/taskmgmt/log/SwimlaneCreateLog.hbm.xml"/>
     <mapping resource="org/jbpm/taskmgmt/log/SwimlaneAssignLog.hbm.xml"/>
+    
+    <!-- OpenKM -->
+    <mapping resource="com/openkm/dao/bean/Activity.hbm.xml" />
+    <mapping resource="com/openkm/dao/bean/User.hbm.xml" />
+    <mapping resource="com/openkm/dao/bean/Role.hbm.xml" />
+    <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml" />
+    <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml" />
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
