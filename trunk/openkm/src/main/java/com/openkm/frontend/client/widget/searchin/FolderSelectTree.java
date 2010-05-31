@@ -110,7 +110,7 @@ public class FolderSelectTree extends Composite {
 		if (categories) {
 			changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
 		} else {
-			changeView(Main.get().mainPanel.search.searchIn.context.getSelectedIndex());
+			changeView(Main.get().mainPanel.search.searchIn.getSelectedView());
 		}
 	}
 	
