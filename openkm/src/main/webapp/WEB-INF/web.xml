@@ -168,8 +168,8 @@
     <servlet-class>com.openkm.servlet.admin.LogCatServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>RepositoryServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.admin.RepositoryServlet</servlet-class>
+    <servlet-name>RepositoryViewServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.RepositoryViewServlet</servlet-class>
   </servlet>
   
   <!-- WebServices -->
@@ -346,8 +346,8 @@
     <url-pattern>/admin/LogCat</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>RepositoryServlet</servlet-name>
-    <url-pattern>/admin/Repository</url-pattern>
+    <servlet-name>RepositoryViewServlet</servlet-name>
+    <url-pattern>/admin/RepositoryView</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
