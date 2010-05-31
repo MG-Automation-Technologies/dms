@@ -139,7 +139,7 @@ public class Navigator extends ExtendedSizeComposite {
 		//stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
 		//stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
-		stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		//stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
 		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		stackPanel.showStack(0);
 		stackPanel.setStyleName("okm-StackPanel");
@@ -165,15 +165,17 @@ public class Navigator extends ExtendedSizeComposite {
 			thesaurusTree.langRefresh();
 		}
 		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
-		if (stackPanel.isPersonal()) {
+		if (stackPanel.isPersonalVisible()) {
 			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 			personalTree.langRefresh();
 		}
-		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		if (stackPanel.isMailVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+			mailTree.langRefresh();
+		}
 		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		taxonomyTree.langRefresh();
 		templateTree.langRefresh();
-		mailTree.langRefresh();
 		trashTree.langRefresh();
 	}
 	
@@ -193,10 +195,16 @@ public class Navigator extends ExtendedSizeComposite {
 		if (stackPanel.isCategoriesVisible()) {
 			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		}
-		scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
-		scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		if (stackPanel.isThesaurusVisible()) {
+			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
+		if (stackPanel.isPersonalVisible()) {
+			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
 		scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
-		scrollMailPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		if (stackPanel.isMailVisible()) {
+			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
 		scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 	}
 	
@@ -222,6 +230,13 @@ public class Navigator extends ExtendedSizeComposite {
 	}
 	
 	/**
+	 * showMail
+	 */
+	public void showMail() {
+		stackPanel.showMail();
+	}
+	
+	/**
 	 * refreshContentPanels
 	 */
 	private void refreshStartupContentPanels() {
@@ -239,10 +254,12 @@ public class Navigator extends ExtendedSizeComposite {
 			stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		}
 		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
-		if (stackPanel.isPersonal()) {
+		if (stackPanel.isPersonalVisible()) {
 			stackPanel.add(scrollPersonalPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		}
-		stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		if (stackPanel.isMailVisible()) {
+			stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
+		}
 		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		
 		stackPanel.showStack(selected);

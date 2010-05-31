@@ -127,6 +127,10 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.navigator.showPersonal();
 				refreshStack = true;
 			}
+			if (workspace.isMailStackVisible()) {
+				Main.get().mainPanel.navigator.showMail();
+				refreshStack = true;
+			}
 			if (refreshStack) {
 				Main.get().mainPanel.navigator.refreshView();
 			}

@@ -60,6 +60,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean categoriesStackVisible = false;
 	private boolean thesaurusStackVisible = false;
 	private boolean personalStackVisible = false;
+	private boolean mailStackVisible = false;
 
 	/**
 	 * GWTWorkspace
@@ -297,5 +298,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setPersonalStackVisible(boolean personalStackVisible) {
 		this.personalStackVisible = personalStackVisible;
+	}
+	
+	public boolean isMailStackVisible() {
+		return mailStackVisible;
+	}
+
+	public void setMailStackVisible(boolean mailStackVisible) {
+		this.mailStackVisible = mailStackVisible;
 	}
 }
