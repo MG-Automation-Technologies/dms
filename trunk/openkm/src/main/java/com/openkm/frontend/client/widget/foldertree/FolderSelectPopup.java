@@ -101,6 +101,13 @@ public class FolderSelectPopup extends DialogBox  {
 	private HTML status = new HTML();
 	private String msgProperty = "";
 	private String errorMsgProperty = "";
+	private boolean personalVisible = false;
+	private boolean mailVisible		= false;
+	private int posTaxonomy = 0;
+	private int posCategories = 0;
+	private int posTemplates = 0;
+	private int posPersonal = 0;
+	private int posMail = 0;
 	
 	public FolderSelectPopup() {
 		// Establishes auto-close when click outside
@@ -346,10 +353,15 @@ public class FolderSelectPopup extends DialogBox  {
 				break;
 				
 			default:
-				contextListBox.setItemText(0,Main.i18n("leftpanel.label.taxonomy"));
-				contextListBox.setItemText(1,Main.i18n("leftpanel.label.templates"));
-				contextListBox.setItemText(2,Main.i18n("leftpanel.label.my.documents"));
-				contextListBox.setItemText(3,Main.i18n("leftpanel.label.mail"));
+				int count = 0;
+				contextListBox.setItemText(count++,Main.i18n("leftpanel.label.taxonomy"));
+				contextListBox.setItemText(count++,Main.i18n("leftpanel.label.templates"));
+				if (personalVisible) {
+					contextListBox.setItemText(count++,Main.i18n("leftpanel.label.my.documents"));
+				}
+				if (mailVisible) {
+					contextListBox.setItemText(count++,Main.i18n("leftpanel.label.mail"));
+				}
 				break;
 		}
 	}
@@ -693,11 +705,21 @@ public class FolderSelectPopup extends DialogBox  {
 	public void setEntryPoint(int entryPoint) {
 		removeAllContextListItems();
 		if (entryPoint!=FolderSelectPopup.ENTRYPOINT_CATEGORIES) {
+			int count = 0;
+			posTaxonomy = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.taxonomy"),""+PanelDefinition.NAVIGATOR_TAXONOMY);
+			posTemplates = count++;
 			contextListBox.addItem(Main.i18n("leftpanel.label.templates"),""+PanelDefinition.NAVIGATOR_TEMPLATES);
-			contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
-			contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+			if (personalVisible) {
+				posPersonal = count++;			
+				contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
+			}
+			if (mailVisible) {
+				posMail = count++;
+				contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+			}
 		} else {
+			posCategories = 0;
 			contextListBox.addItem(Main.i18n("leftpanel.label.categories"),""+PanelDefinition.NAVIGATOR_CATEGORIES);
 		}
 		this.entryPoint = entryPoint;
@@ -717,35 +739,35 @@ public class FolderSelectPopup extends DialogBox  {
 	 * Enable taxonomy
 	 */
 	public void enableTaxonomy () {
-		contextListBox.setItemSelected(0,true);
+		contextListBox.setItemSelected(posTaxonomy,true);
 	}
 	
 	/**
 	 * Enable my documents
 	 */
 	public void enableMyDocuments() {
-		contextListBox.setItemSelected(2,true);
+		contextListBox.setItemSelected(posPersonal,true);
 	}
 	
 	/**
 	 * Enable templates
 	 */
 	public void enableTemplates() {
-		contextListBox.setItemSelected(1,true);
+		contextListBox.setItemSelected(posTemplates,true);
 	}
 	
 	/**
 	 * Enable templates
 	 */
 	public void enableMails() {
-		contextListBox.setItemSelected(3,true);
+		contextListBox.setItemSelected(posMail,true);
 	}
 	
 	/**
 	 * Enable categories
 	 */
 	public void enableCategories() {
-		contextListBox.setItemSelected(0,true);
+		contextListBox.setItemSelected(posCategories,true);
 	}
 	
 	/**
@@ -821,5 +843,21 @@ public class FolderSelectPopup extends DialogBox  {
 		while (contextListBox.getItemCount()>0) {
 			contextListBox.removeItem(0);
 		}
+	}
+	
+	/**
+	 * showPersonal
+	 */
+	public void showPersonal() {
+		contextListBox.addItem(Main.i18n("leftpanel.label.my.documents"),""+PanelDefinition.NAVIGATOR_PERSONAL);
+		personalVisible = true;
+	}
+	
+	/**
+	 * showMail
+	 */
+	public void showMail() {
+		contextListBox.addItem(Main.i18n("leftpanel.label.mail"),""+PanelDefinition.NAVIGATOR_MAIL);
+		mailVisible = true;
 	}
 }
