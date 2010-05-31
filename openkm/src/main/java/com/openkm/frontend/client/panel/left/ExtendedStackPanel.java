@@ -32,7 +32,8 @@ public class ExtendedStackPanel extends StackPanel {
 	private boolean categoriesVisible	= false;
 	private boolean thesaurusVisible 	= false;
 	private boolean personalVisible 	= false;
-	private int hiddenStacks = 3;
+	private boolean mailVisible			= false;
+	private int hiddenStacks = 4;
 
 	private boolean firstTime = true; // Controls firstime starting application must not execute main singleton because causes errors
 	  								  // some objects are still not accessible due initialization process
@@ -189,12 +190,21 @@ public class ExtendedStackPanel extends StackPanel {
 	}
 	
 	/**
-	 * personalVisible
+	 * isPersonalVisible
 	 * 
 	 * @return
 	 */
-	public boolean isPersonal() {
+	public boolean isPersonalVisible() {
 		return personalVisible;
+	}
+	
+	/**
+	 * isMailVisible
+	 * 
+	 * @return
+	 */
+	public boolean isMailVisible() {
+		return mailVisible;
 	}
 
 	/**
@@ -227,6 +237,16 @@ public class ExtendedStackPanel extends StackPanel {
 	}
 	
 	/**
+	 * showMail
+	 * 
+	 * @param 
+	 */
+	public void showMail() {
+		hiddenStacks--;
+		mailVisible = true;
+	}
+	
+	/**
 	 * indexCorrectedChangeViewIndex
 	 * 
 	 * Return index correction made depending visible panels
@@ -245,6 +265,9 @@ public class ExtendedStackPanel extends StackPanel {
 		if (!personalVisible && corrected>=PanelDefinition.NAVIGATOR_PERSONAL) {
 			corrected++;
 		}
+		if (!mailVisible && corrected>=PanelDefinition.NAVIGATOR_MAIL) {
+			corrected++;
+		}
 		return corrected;
 	}
 	
@@ -258,6 +281,9 @@ public class ExtendedStackPanel extends StackPanel {
 	 */
 	private int correctedStackIndex(int index) {
 		int corrected = index;
+		if (!mailVisible && corrected>=PanelDefinition.NAVIGATOR_MAIL) {
+			corrected--;
+		}
 		if (!personalVisible && corrected>=PanelDefinition.NAVIGATOR_PERSONAL) {
 			corrected--;
 		}
