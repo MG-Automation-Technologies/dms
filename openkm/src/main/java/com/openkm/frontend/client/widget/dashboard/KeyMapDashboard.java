@@ -39,6 +39,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -59,6 +60,7 @@ import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 
@@ -69,13 +71,6 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
  *
  */
 public class KeyMapDashboard extends Composite {
-	
-	private static final int SELECT_NAVIGATOR_TAXONOMY 		= 0;
-	private static final int SELECT_NAVIGATOR_TEMPLATES 	= 1;
-	private static final int SELECT_NAVIGATOR_PERSONAL 		= 2;
-	private static final int SELECT_NAVIGATOR_MAIL 			= 3;
-	private static final int SELECT_NAVIGATOR_TRASH 		= 4;
-	private static final int SELECT_NAVIGATOR_ALL_CONTEXT 	= 5;
 	
 	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
 	private HorizontalSplitPanel horizontalSplitPanel;
@@ -111,9 +106,16 @@ public class KeyMapDashboard extends Composite {
 	private int totalMaxFrequency = 1;   
 	private int totalMinFrequency = 1;   
 	private TagCloud tagCloud;
-	
+	private boolean personalVisible = false;
+	private boolean mailVisible		= false;
 	private boolean firstTime = true;
 	private boolean refresh = false;
+	private int posTaxonomy = 0;
+	private int posTemplates = 0;
+	private int posPersonal = 0;
+	private int posMail = 0;
+	private int posTrash = 0;
+	private int posAllContext = 0;
 	
 	/**
 	 * KeyMapDashboard
@@ -265,7 +267,7 @@ public class KeyMapDashboard extends Composite {
 					keyRelatedTable.unselectAllRows();
 					keyRelatedTable.setVisible(false);
 					table.reset();
-					context.setSelectedIndex(SELECT_NAVIGATOR_ALL_CONTEXT);
+					context.setSelectedIndex(posAllContext);
 					controlSearchIn.refreshControl(0);
 					
 					getKeywordMap(); // Gets related keyMap 
@@ -299,13 +301,24 @@ public class KeyMapDashboard extends Composite {
 		HorizontalPanel internalPaginationPanel = new HorizontalPanel();
 		context = new ListBox();
 		context.setStyleName("okm-Select");
+		int count = 0;
+		posTaxonomy = count++;
 		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
+		posTemplates = count++;
 		context.addItem(Main.i18n("leftpanel.label.templates"),"");
-		context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
-		context.addItem(Main.i18n("leftpanel.label.mail"),"");
+		if (personalVisible) {
+			posPersonal = count++;
+			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
+		}
+		if (mailVisible) {
+			posMail = count ++;
+			context.addItem(Main.i18n("leftpanel.label.mail"),"");
+		}
+		posTrash = count ++;
 		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		posAllContext = count++;
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
-		context.setSelectedIndex(SELECT_NAVIGATOR_ALL_CONTEXT);
+		context.setSelectedIndex(posAllContext);
 		
 		context.addChangeHandler(new ChangeHandler(){
 			@Override
@@ -427,12 +440,16 @@ public class KeyMapDashboard extends Composite {
 		resultPageTXT.setHTML(Main.i18n("search.page.results"));
 		controlSearchIn.langRefresh();
 		
-		context.setItemText(SELECT_NAVIGATOR_TAXONOMY,Main.i18n("leftpanel.label.taxonomy"));
-		context.setItemText(SELECT_NAVIGATOR_TEMPLATES,Main.i18n("leftpanel.label.templates"));
-		context.setItemText(SELECT_NAVIGATOR_PERSONAL,Main.i18n("leftpanel.label.my.documents"));
-		context.setItemText(SELECT_NAVIGATOR_MAIL,Main.i18n("leftpanel.label.mail"));
-		context.setItemText(SELECT_NAVIGATOR_TRASH,Main.i18n("leftpanel.label.trash"));
-		context.setItemText(SELECT_NAVIGATOR_ALL_CONTEXT,Main.i18n("leftpanel.label.all.repository"));
+		context.setItemText(posTaxonomy,Main.i18n("leftpanel.label.taxonomy"));
+		context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		if (personalVisible) {
+			context.setItemText(posPersonal,Main.i18n("leftpanel.label.my.documents"));
+		}
+		if (mailVisible) {
+			context.setItemText(posMail ,Main.i18n("leftpanel.label.mail"));
+		}
+		context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+		context.setItemText(posAllContext,Main.i18n("leftpanel.label.all.repository"));
 		
 		table.langRefresh();
 	}
@@ -600,25 +617,19 @@ public class KeyMapDashboard extends Composite {
 		params.setDomain(GWTQueryParams.DOCUMENT); // Only make searches for documents
 		limit = Integer.parseInt(resultPage.getItemText(resultPage.getSelectedIndex()));
 		
-		switch (context.getSelectedIndex()) {
-			case SELECT_NAVIGATOR_TAXONOMY:
-				params.setPath(Main.get().repositoryContext.getContextTaxonomy());
-				break;
-			case SELECT_NAVIGATOR_TEMPLATES:
-				params.setPath(Main.get().repositoryContext.getContextTemplates());
-				break;
-			case SELECT_NAVIGATOR_PERSONAL:
-				params.setPath(Main.get().repositoryContext.getContextPersonal());
-				break;
-			case SELECT_NAVIGATOR_MAIL:
-				params.setPath(Main.get().repositoryContext.getContextMail());
-				break;
-			case SELECT_NAVIGATOR_TRASH:
-				params.setPath(Main.get().repositoryContext.getContextTrash());
-				break;
-			case SELECT_NAVIGATOR_ALL_CONTEXT:
-				params.setPath("");
-				break;
+		int index = context.getSelectedIndex();
+		if (index==posTaxonomy) {
+			params.setPath(Main.get().repositoryContext.getContextTaxonomy());
+		} else if (index==posTemplates) {
+			params.setPath(Main.get().repositoryContext.getContextTemplates());
+		} else if (index==posPersonal){
+			params.setPath(Main.get().repositoryContext.getContextPersonal());
+		} else if (index==posMail) {
+			params.setPath(Main.get().repositoryContext.getContextMail());
+		} else if (index==posTrash) {
+			params.setPath(Main.get().repositoryContext.getContextTrash());
+		} else if (index== posAllContext) {
+			params.setPath("");
 		}
 		
 		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
@@ -772,7 +783,7 @@ public class KeyMapDashboard extends Composite {
 			tagCloud.calculateFrequencies(relatedKeywordList);
 			for (Iterator<GWTKeyword> it = relatedKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
-				Hyperlink tagLink = new Hyperlink(keyword.getKeyword(), null); 
+				Anchor tagLink = new Anchor(keyword.getKeyword(), null); 
 				tagLink.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -797,7 +808,7 @@ public class KeyMapDashboard extends Composite {
 			totalMinFrequency = tagCloud.getMinFrequency();
 			for (Iterator<GWTKeyword> it = allKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
-				Hyperlink tagLink = new Hyperlink(keyword.getKeyword(), null); 
+				Anchor tagLink = new Anchor(keyword.getKeyword(), null); 
 				tagLink.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -932,5 +943,37 @@ public class KeyMapDashboard extends Composite {
 		// Sets the maximun an minumum frequencies ( used by document properties tag cloud )
 		totalMaxFrequency = tagCloud.getMaxFrequency();
 		totalMinFrequency = tagCloud.getMinFrequency();
+	}
+	
+	/**
+	 * showPersonal
+	 */
+	public void showPersonal() {
+		// removing trash and allcontext and add after
+		context.removeItem(posAllContext);
+		context.removeItem(posTrash);
+		posPersonal = posTrash; 
+		posTrash++;
+		posAllContext++;
+		context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
+		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
+		personalVisible = true;
+	}
+	
+	/**
+	 * showMail
+	 */
+	public void showMail() {
+		// removing trash and allcontext and add after
+		context.removeItem(posAllContext);
+		context.removeItem(posTrash);
+		posMail = posTrash;
+		posTrash++;
+		posAllContext++;
+		context.addItem(Main.i18n("leftpanel.label.mail"),"");
+		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
+		mailVisible = true;
 	}
 }

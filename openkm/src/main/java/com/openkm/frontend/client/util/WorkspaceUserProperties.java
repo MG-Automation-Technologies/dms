@@ -125,10 +125,26 @@ public class WorkspaceUserProperties {
 			}
 			if (workspace.isPersonalStackVisible()) {
 				Main.get().mainPanel.navigator.showPersonal();
+				Main.get().mainPanel.navigator.taxonomyTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.categoriesTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.thesaurusTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.personalTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.templateTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.dashboard.keyMapDashboard.showPersonal();
 				refreshStack = true;
 			}
 			if (workspace.isMailStackVisible()) {
 				Main.get().mainPanel.navigator.showMail();
+				Main.get().mainPanel.navigator.taxonomyTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.categoriesTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.thesaurusTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.personalTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.templateTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.dashboard.keyMapDashboard.showMail();
 				refreshStack = true;
 			}
 			if (refreshStack) {
