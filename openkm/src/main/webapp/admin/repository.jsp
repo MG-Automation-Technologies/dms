@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.bean.Document" %>
-<%@ page import="com.openkm.bean.Folder" %>
-<%@ page import="com.openkm.util.WebUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
@@ -106,14 +103,24 @@
       </c:if>
       <h2>Properties</h2>
       <table class="results" width="90%">
-        <tr><th>Type</th><th>Multiple</th><th>Protected</th><th>Name</th><th>Value</th></tr>
+        <tr><th>Type</th><th>Multiple</th><th>Protected</th><th>Name</th><th>Value</th><th>Action</th></tr>
         <c:forEach var="property" items="${properties}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${property.type}</td>
-            <td><c:if test="${property.multiple}"><img src="img/true.png"/></c:if></td>
-            <td><c:if test="${property.protected}"><img src="img/true.png"/></c:if></td>
+            <td align="center"><c:if test="${property.multiple}"><img src="img/true.png"/></c:if></td>
+            <td align="center"><c:if test="${property.protected}"><img src="img/true.png"/></c:if></td>
             <td>${property.name}</td>
             <td>${property.value}</td>
+            <td align="center">
+              <c:if test="${property.type == 'STRING'}">
+                <c:url value="Repository" var="urlEdit">
+                  <c:param name="path" value="${node.path}"/>
+                  <c:param name="property" value="${property.name}"/>
+                  <c:param name="action" value="edit"/>
+                </c:url>
+                <a href="${urlEdit}"><img src="img/action/edit.png" title="Edit" alt="Edit"/></a>
+              </c:if>
+            </td>
           </tr>
         </c:forEach>
       </table>
