@@ -17,8 +17,6 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
-  <c:set var="DocumentContentType"><%=Document.CONTENT_TYPE%></c:set>
-  <c:set var="FolderType"><%=Folder.TYPE%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Repository</h1>
@@ -46,7 +44,7 @@
               </c:url>
               - <a href="${urlUnlock}">Unlock</a>
             </c:if>
-            <c:if test="${node.primaryNodeType.name == FolderType}">
+            <c:if test="${isFolder}">
               <c:choose>
                 <c:when test="${contentInfo != null}">
                   <c:url value="Repository" var="urlDeactivate">
@@ -64,10 +62,39 @@
                 </c:otherwise>
               </c:choose>
             </c:if>
+            <c:if test="${isDocument || isFolder}">
+              <li>
+                <b>Scripting</b>:
+                <c:choose>
+                  <c:when test="${isScripting}">
+                    <c:url value="Repository" var="urlRemoveScript">
+                      <c:param name="path" value="${node.path}"/>
+                      <c:param name="action" value="remove_script"/>
+                    </c:url>
+                    <a href="${urlRemoveScript}">Remove script</a>
+                  </c:when>
+                  <c:otherwise>
+                  <c:url value="Repository" var="urlSetScript">
+                      <c:param name="path" value="${node.path}"/>
+                      <c:param name="action" value="set_script"/>
+                    </c:url>
+                    <a href="${urlSetScript}">Set script</a>
+                  </c:otherwise>
+                </c:choose> 
+              </li>
+            </c:if>
           </li>
           <c:if test="${node.locked}"><li><b>Locked</b></li></c:if>
         </c:if>
       </ul>
+      <c:if test="${fn:length(node.mixinNodeTypes) > 0}">
+        <h2>Mixin</h2>
+        <ul>
+          <c:forEach var="mixin" items="${node.mixinNodeTypes}">
+            <li>${mixin.name}</li>
+          </c:forEach>
+        </ul>
+      </c:if>
       <c:if test="${contentInfo != null}">
         <h2>Statistics</h2>
         <ul>
@@ -100,7 +127,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${fn:toUpperCase(child.primaryNodeType.name)}</td>
             <td><c:if test="${child.locked}"><img src="img/true.png"/></c:if></td>
-            <td><c:if test="${child.primaryNodeType.name == DocumentContentType && child.checkedOut}"><img src="img/true.png"/></c:if></td>
+            <td><c:if test="${isDocumentContent && child.checkedOut}"><img src="img/true.png"/></c:if></td>
             <td><a href="${urlList}">${child.name}</a></td>
           </tr>
         </c:forEach>

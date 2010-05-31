@@ -54,8 +54,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMScripting;
 import com.openkm.bean.ContentInfo;
+import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
@@ -93,14 +96,28 @@ public class RepositoryServlet extends HttpServlet {
 				unlock(request, response, session);
 			} else if (action.equals("checkin")) {
 				checkin(request, response, session);
+			} else if (action.equals("remove_content")) {
+				removeContent(request, response, session);
 			} else if (action.equals("remove_current")) {
 				removeCurrent(request, response, session);
+			} else if (action.equals("set_script")) {
+				String path = WebUtil.getString(request, "path");
+				OKMScripting.getInstance().setScript(token, path, Config.DEFAULT_SCRIPT);
+			} else if (action.equals("remove_script")) {
+				String path = WebUtil.getString(request, "path");
+				OKMScripting.getInstance().removeScript(token, path);
 			}
-			
+						
 			list(request, response, session);
 		} catch (LoginException e) {
 			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (PathNotFoundException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (AccessDeniedException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (com.openkm.core.RepositoryException e) {
 			sendErrorRedirect(request,response, e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -138,13 +155,32 @@ public class RepositoryServlet extends HttpServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.info("checkin({}, {})", request, response);
 		String path = WebUtil.getString(request, "path");
-
 		Node node = session.getRootNode().getNode(path.substring(1));
 		node.checkin();
-		
 		log.debug("checkin: void");
 	}
 
+	/**
+	 * Remove children nodes
+	 */
+	private void removeContent(HttpServletRequest request, HttpServletResponse response, Session session)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.info("removeCurrent({}, {})", request, response);
+		String path = WebUtil.getString(request, "path");
+		Node node = session.getRootNode().getNode(path.substring(1));
+						
+		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
+			Node child = ni.nextNode();
+			child.remove();
+			node.save();
+		}
+		
+		log.debug("removeCurrent: void");
+	}
+	
+	/**
+	 * Remove current node and its children
+	 */
 	private void removeCurrent(HttpServletRequest request, HttpServletResponse response, Session session)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.info("removeCurrent({}, {})", request, response);
@@ -208,6 +244,10 @@ public class RepositoryServlet extends HttpServlet {
 		
 		sc.setAttribute("contentInfo", ci);
 		sc.setAttribute("node", node);
+		sc.setAttribute("isFolder", node.isNodeType(Folder.TYPE));
+		sc.setAttribute("isDocument", node.isNodeType(Document.TYPE));
+		sc.setAttribute("isDocumentContent", node.isNodeType(Document.CONTENT_TYPE));
+		sc.setAttribute("isScripting", node.isNodeType(Scripting.TYPE));
 		sc.setAttribute("holdsLock", node.holdsLock());
 		sc.setAttribute("breadcrumb", createBreadcrumb(node.getPath()));
 		sc.setAttribute("properties", getProperties(node));
@@ -216,6 +256,9 @@ public class RepositoryServlet extends HttpServlet {
 		log.debug("list: void");
 	}
 
+	/**
+	 * Create bread crumb for easy navigation
+	 */
 	private String createBreadcrumb(String path) throws UnsupportedEncodingException {
 		int idx = path.lastIndexOf('/');
 		if (idx > 0) {
