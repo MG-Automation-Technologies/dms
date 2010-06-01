@@ -27,6 +27,7 @@ import org.hibernate.cfg.Configuration;
 
 /**
  * See org.jbpm.persistence.db.DbPersistenceServiceFactory
+ * See http://www.java2s.com/Code/Java/Hibernate/CollectionMappingManyToManymapbasedonHashMap.htm
  * 
  * @author pavila
  */
@@ -74,8 +75,9 @@ public class SessionFactoryUtil {
 	 * Closes the session factory
 	 */
 	public static void close() {
-		if (sessionFactory != null)
+		if (sessionFactory != null) {
 			sessionFactory.close();
+		}
 		sessionFactory = null;
 	}
 }
