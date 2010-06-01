@@ -139,15 +139,9 @@ public class DocConverter {
 
 	/**
 	 * Convert a document format to another one.
-	 * 
-	 * @param mimeFrom Original document MIME type
-	 * @param mimeTo Destination document MIME type
-	 * @param dataFrom Binary document content
-	 * @return Converted binary document content
-	 * @throws IOException If anything fails
 	 */
 	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
-		log.debug("convert("+inputFile+", "+mimeType+", "+outputFile+")");
+		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
 		if (Config.SYSTEM_OPENOFFICE.equals("")) {
 			throw new IOException("system.openoffice not configured");
@@ -169,7 +163,7 @@ public class DocConverter {
 	 * Convert document to PDF.
 	 */
 	public void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.info("** Convert from "+mimeType+" to PDF **");
+		log.info("** Convert from {} to PDF **", mimeType);
 		File tmp = File.createTempFile("okm", ".doc");
 		FileOutputStream fos = null;
 		
@@ -181,7 +175,7 @@ public class DocConverter {
 			
 			convert(tmp, mimeType, output);
 		} catch (Exception e) {
-			log.error("Error in "+mimeType+" to PDF conversion", e);
+			log.error("Error in {} to PDF conversion", mimeType, e);
 			output.delete();
 			throw new IOException("Error in "+mimeType+" to PDF conversion", e);
 		} finally {
@@ -191,10 +185,26 @@ public class DocConverter {
 	}
 	
 	/**
+	 * Convert document to TXT.
+	 */
+	public void doc2txt(File input, String mimeType, File output) throws IOException {
+		log.info("** Convert from {} to TXT **", mimeType);
+		
+		try {
+			convert(input, mimeType, output);
+		} catch (Exception e) {
+			log.error("Error in {} to TXT conversion", mimeType, e);
+			output.delete();
+			throw new IOException("Error in "+mimeType+" to TXT conversion", e);
+		} finally {
+		}
+	}
+	
+	/**
 	 * Convert IMG to PDF (for document preview feature).
 	 */
 	public void img2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.info("** Convert from "+mimeType+" to PDF **");
+		log.info("** Convert from {} to PDF **", mimeType);
 		File tmp = File.createTempFile("okm", ".img");
 		FileOutputStream fos = null;
 		
