@@ -39,9 +39,7 @@ import com.openkm.core.Config;
 public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(UsersRolesPrincipalAdapter.class);
 		
-	/* (non-Javadoc)
-	 * @see com.openkm.principal.PrincipalAdapter#getUsers()
-	 */
+	@Override
 	public Collection<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		ArrayList<String> list = new ArrayList<String>();
@@ -50,10 +48,8 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		try {
 			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-users.properties"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -64,13 +60,11 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 		
-		log.debug("getUsers: "+list);
+		log.debug("getUsers: {}", list);
 		return list;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.principal.PrincipalAdapter#getRoles()
-	 */
+	@Override
 	public Collection<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		ArrayList<String> list = new ArrayList<String>();
@@ -79,10 +73,8 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		try {
 			prop.load(new FileInputStream(Config.HOME_DIR+"/server/default/conf/props/openkm-roles.properties"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -96,13 +88,11 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 		
-		log.debug("getRoles: "+list);
+		log.debug("getRoles: {}", list);
 		return list;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.principal.PrincipalAdapter#getMails(java.util.Collection)
-	 */
+	@Override
 	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
 		ArrayList<String> list = new ArrayList<String>();
@@ -125,7 +115,7 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 		
-		log.debug("getMails: "+list);
+		log.debug("getMails: {}", list);
 		return list;
 	}
 }
