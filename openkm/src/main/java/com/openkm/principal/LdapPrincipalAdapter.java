@@ -119,6 +119,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	 * LDAP Search
 	 */
 	private ArrayList<String> ldapSearch(String searchBase, String searchFilter, String attribute) {
+		log.debug("ldapSearch({}, {}, {})", new Object[] { searchBase, searchFilter, attribute } );
 		ArrayList<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
 
@@ -153,7 +154,8 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-
+		
+		log.debug("ldapSearch: {}", al);
 		return al;
 	}
 }
