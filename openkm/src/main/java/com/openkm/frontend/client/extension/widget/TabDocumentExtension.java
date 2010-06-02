@@ -33,5 +33,4 @@ import com.openkm.frontend.client.extension.HasLanguageExtension;
  */
  
  public abstract class TabDocumentExtension extends Composite implements HasDocumentExtension, HasLanguageExtension {
-	
  }
