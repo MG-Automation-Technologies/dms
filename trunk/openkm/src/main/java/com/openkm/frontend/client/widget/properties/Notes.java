@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.properties;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -44,6 +45,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -246,6 +248,7 @@ public class Notes extends Composite {
 				Main.get().mainPanel.browser.fileBrowser.addNoteIconToSelectedRow();
 				document.setHasNotes(true);
 			}
+			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -268,5 +271,14 @@ public class Notes extends Composite {
 		}
 		
 		documentService.addNote(document.getPath(), noteText, callbackAddNote);
+	}
+	
+	/**
+	 * getNotes
+	 * 
+	 * @return
+	 */
+	public Collection<GWTNote> getNotes() {
+		return document.getNotes();
 	}
 }

@@ -21,9 +21,11 @@
 
 package com.openkm.frontend.client.extension.comunicator;
 
+import java.util.Collection;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
-
+import com.openkm.frontend.client.bean.GWTNote;
 
 /**
  * TabDocumentComunicator
@@ -49,5 +51,41 @@ public class TabDocumentComunicator {
 	 */
 	public static GWTDocument getDocument() {
 		return Main.get().mainPanel.browser.tabMultiple.tabDocument.getDocument();
+	}
+	
+	/**
+	 * addKeyword
+	 * 
+	 * @param keyword
+	 */
+	public static void addKeyword(String keyword) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeyword(keyword);
+	}
+	
+	/**
+	 * removeKeyword
+	 * 
+	 * @param keyword
+	 */
+	public static void removeKeyword(String keyword) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
+	}
+	
+	/**
+	 * getKeywords
+	 * 
+	 * @return
+	 */
+	public static Collection<String> getKeywords() {
+		return Main.get().mainPanel.browser.tabMultiple.tabDocument.document.getKeywords();
+	}
+	
+	/**
+	 * getNotes
+	 * 
+	 * @return
+	 */
+	public static Collection<GWTNote> getNotes() {
+		return Main.get().mainPanel.browser.tabMultiple.tabDocument.notes.getNotes();
 	}
 }
