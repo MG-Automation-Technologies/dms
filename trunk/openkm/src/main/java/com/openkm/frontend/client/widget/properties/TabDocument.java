@@ -34,13 +34,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.HasDocumentHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -51,7 +53,7 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class TabDocument extends Composite {
+public class TabDocument extends Composite implements HasDocumentEvent, HasDocumentHandlerExtension {
 	
 	public static final int TAB_PREVIEW = 4;
 	
@@ -70,6 +72,7 @@ public class TabDocument extends Composite {
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	private List<TabDocumentExtension> widgetExtensionList;
+	private List<DocumentHandlerExtension> docHandlerExtensionList;
 	private int height = 0;
 	private int width = 0;
 	
@@ -86,6 +89,7 @@ public class TabDocument extends Composite {
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList<PropertyGroup>();
 		widgetExtensionList = new ArrayList<TabDocumentExtension>();
+		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
 
 		tabPanel.add(document, Main.i18n("tab.document.properties"));
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
@@ -103,6 +107,7 @@ public class TabDocument extends Composite {
 				if (tabIndex == TAB_PREVIEW) {
 					preview.showEmbedSWF(doc.getUuid());
 				}
+				fireEvent(HasDocumentEvent.TAB_CHANGED);
 			}
 		});
 		
@@ -148,6 +153,8 @@ public class TabDocument extends Composite {
 		if (selectedTab == TAB_PREVIEW) {
 			preview.showEmbedSWF(doc.getUuid());
 		}
+		
+		fireEvent(HasDocumentEvent.PANEL_RESIZED);
 	}
 	
 	/**
@@ -195,12 +202,15 @@ public class TabDocument extends Composite {
 
 		getGroups(doc.getPath()); // Gets all the property group assigned to a document
 							      // Here evalutates selectedTab
+		
+		fireEvent(HasDocumentEvent.DOCUMENT_CHANGED);
 	}
 	
 	/**
 	 * Refresh security values
 	 */
 	public void securityRefresh() {
+		fireEvent(HasDocumentEvent.SECURITY_CHANGED);
 		Main.get().mainPanel.browser.fileBrowser.securityRefresh();
 	}
 	
@@ -355,13 +365,48 @@ public class TabDocument extends Composite {
 	}
 	
 	/**
+	 * getSelectedTab
+	 * 
+	 * @return
+	 */
+	public int getSelectedTab() {
+		return selectedTab;
+	}
+	
+	/**
+	 * getDocument
+	 * 
+	 * @return
+	 */
+	public GWTDocument getDocument() {
+		return doc;
+	}
+	
+	/**
 	 * addDocumentExtension
 	 * 
 	 * @param extension
 	 */
 	public void addDocumentExtension(TabDocumentExtension extension) {
 		widgetExtensionList.add(extension);
+		
 		tabPanel.add(extension, extension.getTabText());
 		extension.setPixelSize(width, height-20); // Substract tab height
+	}
+	
+	/**
+	 * addDocumentHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	public void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
+		docHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(DocumentEventConstant event) {
+		for (Iterator<DocumentHandlerExtension> it = docHandlerExtensionList.iterator(); it.hasNext();) {
+			it.next().onChange(event);
+		}
 	}
 }
