@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
 
 /**
@@ -69,6 +70,24 @@ public class TabDocumentComunicator {
 	 */
 	public static void removeKeyword(String keyword) {
 		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
+	}
+	
+	/**
+	 * addCategory
+	 * 
+	 * @param keyword
+	 */
+	public static void addCategory(GWTFolder category) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(category);
+	}
+	
+	/**
+	 * removeKeyword
+	 * 
+	 * @param keyword
+	 */
+	public static void removeCategory(String UUID) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeCategory(UUID);
 	}
 	
 	/**
