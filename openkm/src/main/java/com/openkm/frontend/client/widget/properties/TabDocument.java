@@ -41,6 +41,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 
@@ -68,6 +69,9 @@ public class TabDocument extends Composite {
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
+	private List<TabDocumentExtension> widgetExtensionList;
+	private int height = 0;
+	private int width = 0;
 	
 	/**
 	 * The Document tab
@@ -81,6 +85,7 @@ public class TabDocument extends Composite {
 		preview = new Preview();
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList<PropertyGroup>();
+		widgetExtensionList = new ArrayList<TabDocumentExtension>();
 
 		tabPanel.add(document, Main.i18n("tab.document.properties"));
 		tabPanel.add(notes, Main.i18n("tab.document.notes"));
@@ -119,6 +124,8 @@ public class TabDocument extends Composite {
 	 * @param height Height of the widget
 	 */
 	public void setSize(int width, int height) {
+		this.height = height;
+		this.width = width;
 		tabPanel.setPixelSize(width, height);
 		document.setPixelSize(width,height-20); // Substract tab height
 		preview.setPixelSize(width,height-20); // Substract tab height
@@ -127,6 +134,11 @@ public class TabDocument extends Composite {
 		version.fillWidth();
 		security.setPixelSize(width-2,height-22); // Substract tab height
 		security.fillWidth();
+		
+		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().setPixelSize(width,height-20); // Substract tab height
+		}
+		
 		if (!propertyGroup.isEmpty()) {			 // Sets size to propety groups	
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
 				PropertyGroup group =  it.next();
@@ -160,6 +172,10 @@ public class TabDocument extends Composite {
 		version.getVersionHistory();
 		security.GetGrants();
 		preview.setPreviewAvailable(doc.isConvertibleToSwf());
+		
+		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().set(doc);
+		}
 		
 		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
 		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
@@ -205,6 +221,13 @@ public class TabDocument extends Composite {
 		tabPanel.add(security, Main.i18n("tab.document.security"));
 		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		
+		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			TabDocumentExtension extension = it.next();
+			extension.setLang(Main.get().getLang());
+			extension.langRefresh();
+			tabPanel.add(extension, extension.getTabText());
+		}
+		
 		// Refresh lang property group
 		if (!propertyGroup.isEmpty()) {
 			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext();){
@@ -236,6 +259,10 @@ public class TabDocument extends Composite {
 		notes.setVisibleButtons(visible);
 		version.setVisibleButtons(visible);
 		security.setVisibleButtons(visible);
+		
+		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().setVisible(visible);
+		}
 	}
 	
 	/**
@@ -325,5 +352,16 @@ public class TabDocument extends Composite {
 		}	
 		version.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+	}
+	
+	/**
+	 * addDocumentExtension
+	 * 
+	 * @param extension
+	 */
+	public void addDocumentExtension(TabDocumentExtension extension) {
+		widgetExtensionList.add(extension);
+		tabPanel.add(extension, extension.getTabText());
+		extension.setPixelSize(width, height-20); // Substract tab height
 	}
 }
