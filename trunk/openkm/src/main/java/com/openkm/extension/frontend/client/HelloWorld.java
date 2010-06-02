@@ -24,12 +24,16 @@ package com.openkm.extension.frontend.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.extension.ExtensionUIComunicator;
-import com.openkm.frontend.client.extension.HasDocumentExtension;
+import com.openkm.frontend.client.extension.comunicator.GeneralExtensionComunicator;
+import com.openkm.frontend.client.extension.comunicator.TabDocumentComunicator;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEventConstant;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
@@ -38,7 +42,7 @@ import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
  * @author jllort
  *
  */
-public class HelloWorld extends TabDocumentExtension implements HasDocumentExtension {
+public class HelloWorld extends TabDocumentExtension implements DocumentHandlerExtension {
 	
 	Button refresh;
 	VerticalPanel vPanel;
@@ -49,7 +53,7 @@ public class HelloWorld extends TabDocumentExtension implements HasDocumentExten
 		refresh.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ExtensionUIComunicator.refreshUI();
+				GeneralExtensionComunicator.refreshUI();
 			}
 		});
 		vPanel = new VerticalPanel();
@@ -75,7 +79,6 @@ public class HelloWorld extends TabDocumentExtension implements HasDocumentExten
 	@Override
 	public void set(GWTDocument doc) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -87,6 +90,23 @@ public class HelloWorld extends TabDocumentExtension implements HasDocumentExten
 	@Override
 	public void setLang(String code) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onChange(DocumentEventConstant event) {
+		if (event.equals(HasDocumentEvent.DOCUMENT_CHANGED)) {
+			Window.alert("document changed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.KEYWORD_CHANGED)) {
+			Window.alert("keyword changed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.CATEGORY_CHANGED)) {
+			Window.alert("category changed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.TAB_CHANGED)) {
+			Window.alert("tab changed - " +event.getType() + " - actual tab " + TabDocumentComunicator.getSelectedTab());
+		} else if (event.equals(HasDocumentEvent.PANEL_RESIZED)) {
+			Window.alert("panel resized - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.SECURITY_CHANGED)) {
+			Window.alert("security changed - " +event.getType());
+		}
 	}
 }
 
