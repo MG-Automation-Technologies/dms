@@ -96,16 +96,22 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 	public void onChange(DocumentEventConstant event) {
 		if (event.equals(HasDocumentEvent.DOCUMENT_CHANGED)) {
 			Window.alert("document changed - " +event.getType());
-		} else if (event.equals(HasDocumentEvent.KEYWORD_CHANGED)) {
-			Window.alert("keyword changed - " +event.getType());
-		} else if (event.equals(HasDocumentEvent.CATEGORY_CHANGED)) {
-			Window.alert("category changed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.KEYWORD_ADDED)) {
+			Window.alert("keyword added - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.KEYWORD_REMOVED)) {
+			Window.alert("keyword removed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.CATEGORY_ADDED)) {
+			Window.alert("category added - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.CATEGORY_REMOVED)) {
+			Window.alert("category removed - " +event.getType());
 		} else if (event.equals(HasDocumentEvent.TAB_CHANGED)) {
 			Window.alert("tab changed - " +event.getType() + " - actual tab " + TabDocumentComunicator.getSelectedTab());
 		} else if (event.equals(HasDocumentEvent.PANEL_RESIZED)) {
 			Window.alert("panel resized - " +event.getType());
 		} else if (event.equals(HasDocumentEvent.SECURITY_CHANGED)) {
 			Window.alert("security changed - " +event.getType());
+		} else if (event.equals(HasDocumentEvent.NOTE_ADDED)) {
+			Window.alert("note added - " +event.getType());
 		}
 	}
 }

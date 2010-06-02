@@ -60,6 +60,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
@@ -485,9 +486,11 @@ public class Document extends Composite {
 			if (keyWordsListPending.isEmpty()) {
 				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
 				drawTagCloud(document.getKeywords());
+				Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_ADDED);
 			} else {
 				addPendingKeyWordsList();
 			}
+			
 		}
 
 		public void onFailure(Throwable caught) {
@@ -507,6 +510,7 @@ public class Document extends Composite {
 	final AsyncCallback<Object> callbackRemoveKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_REMOVED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -521,6 +525,7 @@ public class Document extends Composite {
 	final AsyncCallback<Object> callbackAddCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -535,6 +540,7 @@ public class Document extends Composite {
 	final AsyncCallback<Object> callbackRemoveCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_REMOVED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -786,5 +792,14 @@ public class Document extends Composite {
 			tableSubscribedCategories.setWidget(row, 1, new HTML(""));
 		}
 		setRowWordWarp(row, 1, true, tableSubscribedCategories);
+	}
+	
+	/**
+	 * getKeywords
+	 * 
+	 * @return
+	 */
+	public Collection<String>  getKeywords() {
+		return document.getKeywords();
 	}
 }
