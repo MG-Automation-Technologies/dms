@@ -50,6 +50,12 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMThesaurusService;
 import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 
+/**
+ * ThesaurusSelectPopup
+ * 
+ * @author jllort
+ *
+ */
 public class ThesaurusSelectPopup extends DialogBox  {	
 	
 	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
@@ -78,6 +84,9 @@ public class ThesaurusSelectPopup extends DialogBox  {
 	private int selectedTab = TAB_TREE;
 	private int selectedFrom = NONE;
 	
+	/**
+	 * ThesaurusSelectPopup
+	 */
 	public ThesaurusSelectPopup() {
 		// Establishes auto-close when click outside
 		super(false,true);
