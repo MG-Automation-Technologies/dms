@@ -309,6 +309,7 @@ public final class Main implements EntryPoint{
 		// every time switching stack panel
 		activeFolderTree = mainPanel.navigator.taxonomyTree;
 		
+		// Start extensions
 		ExtensionManager.start(Customization.getExtensionWidgets());
 		
 		// Initialize on startup when all objects are created sequentially

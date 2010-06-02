@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
@@ -39,8 +40,14 @@ public class ExtensionManager {
 	public static void start(List<Object> extensions) {
 		for (Iterator<Object> it = extensions.iterator(); it.hasNext();) {
 			Object obj = it.next();
+			// Registering widgets
 			if (obj instanceof TabDocumentExtension) {
 				addTabDocument((TabDocumentExtension)obj);
+			}
+			
+			// Registering handlers
+			if (obj instanceof DocumentHandlerExtension) {
+				addDocumentHandlerExtension((DocumentHandlerExtension)obj);
 			}
 		}
 	}
@@ -52,5 +59,14 @@ public class ExtensionManager {
 	 */
 	private static void addTabDocument(TabDocumentExtension extension) {
 		Main.get().mainPanel.browser.tabMultiple.tabDocument.addDocumentExtension(extension);
+	}
+	
+	/**
+	 * addDocumentHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
+		Main.get().mainPanel.browser.tabMultiple.tabDocument.addDocumentHandlerExtension(handlerExtension);
 	}
 }
