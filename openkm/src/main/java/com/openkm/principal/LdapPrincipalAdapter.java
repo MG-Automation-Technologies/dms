@@ -55,6 +55,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		log.debug("getUsers()");
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE,
 				Config.PRINCIPAL_LDAP_USER_SEARCH_FILTER,
 				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
@@ -79,6 +82,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		log.debug("getRoles()");
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 				Config.PRINCIPAL_LDAP_ROLE_SEARCH_BASE, 
 				Config.PRINCIPAL_LDAP_ROLE_SEARCH_FILTER,
 				Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
@@ -103,6 +109,9 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		for (Iterator<String> it = users.iterator(); it.hasNext();) {
 			String user = it.next();
 			ArrayList<String> ldap = ldapSearch(
+					Config.PRINCIPAL_LDAP_SERVER,
+					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 					MessageFormat.format(Config.PRINCIPAL_LDAP_MAIL_SEARCH_BASE, user), 
 					Config.PRINCIPAL_LDAP_MAIL_SEARCH_FILTER, 
 					Config.PRINCIPAL_LDAP_MAIL_ATTRIBUTE);
@@ -118,35 +127,48 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	/**
 	 * LDAP Search
 	 */
-	private ArrayList<String> ldapSearch(String searchBase, String searchFilter, String attribute) {
-		log.debug("ldapSearch({}, {}, {})", new Object[] { searchBase, searchFilter, attribute } );
+	public ArrayList<String> ldapSearch(String url, String principal, String credentials, 
+			String searchBase, String searchFilter, String attribute) {
+		log.debug("ldapSearch({}, {}, {}, {}, {}, {})", new Object[] {
+				url, principal, credentials, searchBase, searchFilter, attribute } );
 		ArrayList<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
 
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		env.put(Context.SECURITY_AUTHENTICATION, "simple");
-		env.put(Context.PROVIDER_URL, Config.PRINCIPAL_LDAP_SERVER);
-
+		env.put(Context.PROVIDER_URL, url);
+		
 		// Optional is some cases (Max OS/X)
-		if (!Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL.equals(""))
-			env.put(Context.SECURITY_PRINCIPAL, Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL);
-		if (!Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS.equals(""))
-			env.put(Context.SECURITY_CREDENTIALS, Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS);			
+		if (!principal.equals(""))
+			env.put(Context.SECURITY_PRINCIPAL, principal);
+		if (!credentials.equals(""))
+			env.put(Context.SECURITY_CREDENTIALS, credentials);			
 		
 		try {
 			DirContext ctx = new InitialDirContext(env);
 			SearchControls searchCtls = new SearchControls();
 			searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 			NamingEnumeration<SearchResult> results = ctx.search(searchBase, searchFilter, searchCtls);
-
+			
 			while (results.hasMore()) {
 				SearchResult searchResult = (SearchResult) results.next();
 				Attributes attributes = searchResult.getAttributes();
-				Attribute attrib = attributes.get(attribute);
 				
-				if (attrib != null) {
-					String item = (String) attrib.get();
-					al.add(item);
+				if (attribute.equals("")) {
+					StringBuilder sb = new StringBuilder();
+					for (NamingEnumeration<?> ne = attributes.getAll(); ne.hasMore(); ) {
+						Attribute attr = (Attribute)ne.nextElement();
+						sb.append(attr.toString());
+						sb.append("\n");
+					}
+					al.add(sb.toString());
+				} else {
+					Attribute attrib = attributes.get(attribute);
+					
+					if (attrib != null) {
+						String item = (String) attrib.get();
+						al.add(item);
+					}
 				}
 			}
 
