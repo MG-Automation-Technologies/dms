@@ -33,10 +33,11 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
-
+import com.openkm.extension.frontend.client.Customization;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.RepositoryContext;
+import com.openkm.frontend.client.extension.ExtensionManager;
 import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.util.Location;
@@ -147,6 +148,9 @@ public final class Main implements EntryPoint{
 	// Repository context
 	public RepositoryContext repositoryContext;
 	
+	/* (non-Javadoc)
+	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
+	 */
 	public void onModuleLoad() {
 		Log.setUncaughtExceptionHandler();
 		Log.setCurrentLogLevel(Log.LOG_LEVEL_OFF);
@@ -304,6 +308,8 @@ public final class Main implements EntryPoint{
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel
 		activeFolderTree = mainPanel.navigator.taxonomyTree;
+		
+		ExtensionManager.start(Customization.getExtensionWidgets());
 		
 		// Initialize on startup when all objects are created sequentially
 		startUpPopup.show();
