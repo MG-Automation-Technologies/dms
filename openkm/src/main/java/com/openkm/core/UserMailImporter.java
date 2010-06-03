@@ -21,16 +21,16 @@
 
 package com.openkm.core;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
-import com.openkm.dao.AuthDAO;
+import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.util.MailUtils;
 
@@ -43,11 +43,10 @@ public class UserMailImporter extends TimerTask {
         
 		try {
 			Collection<String> users = OKMAuth.getInstance().getUsers(systemToken);
-			AuthDAO authDao = AuthDAO.getInstance();
-			
+						
 			for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
 				String uid = usrIt.next();
-				Collection<MailAccount> mailAccounts = authDao.findMailAccountsByUser(uid, true);
+				List<MailAccount> mailAccounts = MailAccountDAO.findByUser(uid, true);
 				
 				for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
 					MailAccount ma = maIt.next();
@@ -56,7 +55,7 @@ public class UserMailImporter extends TimerTask {
 			}
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
