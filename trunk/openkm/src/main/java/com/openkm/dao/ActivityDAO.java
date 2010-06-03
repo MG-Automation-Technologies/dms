@@ -21,7 +21,6 @@
 
 package com.openkm.dao;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
@@ -56,23 +55,21 @@ public class ActivityDAO  {
 	@SuppressWarnings("unchecked")
 	public static List<Activity> findByFilter(ActivityFilter filter) throws DatabaseException {
 		log.debug("findByFilter({})", filter);
-		String qs = "SELECT act_date, act_user, act_token, act_action, act_item, act_params "+
-			"FROM activity WHERE act_date BETWEEN ? AND ? ";
-		if (filter.getActUser() != null && !filter.getActUser().equals("")) 
-			qs += "AND act_user=? ";
-		if (filter.getActAction() != null && !filter.getActAction().equals("")) 
-			qs += "AND act_action=? ";
+		String qs = "from Activity a where a.date between :begin and :end ";
+		if (filter.getUser() != null && !filter.getUser().equals("")) 
+			qs += "and a.user=:user ";
+		if (filter.getAction() != null && !filter.getAction().equals("")) 
+			qs += "and a.action=:action ";
 
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
-			q.setTimestamp(1, new Timestamp(filter.getActDateBegin().getTimeInMillis()));
-			q.setTimestamp(2, new Timestamp(filter.getActDateEnd().getTimeInMillis()));
-			int pCount = 3;
-			
-			if (filter.getActUser() != null && !filter.getActUser().equals("")) 
-				q.setString(pCount++, filter.getActUser());
-			if (filter.getActAction() != null && !filter.getActAction().equals(""))
-				q.setString(pCount++, filter.getActAction());
+			q.setCalendar("begin", filter.getBegin());
+			q.setCalendar("end", filter.getEnd());
+						
+			if (filter.getUser() != null && !filter.getUser().equals("")) 
+				q.setString("user", filter.getUser());
+			if (filter.getAction() != null && !filter.getAction().equals(""))
+				q.setString("action", filter.getAction());
 		
 			List<Activity> ret = q.list();
 			log.debug("findByFilter: {}", ret);
