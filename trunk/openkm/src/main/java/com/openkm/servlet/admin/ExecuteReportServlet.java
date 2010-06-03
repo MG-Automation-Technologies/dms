@@ -56,9 +56,8 @@ import com.openkm.bean.report.admin.ReportLockedDocument;
 import com.openkm.bean.report.admin.ReportSubscribedDocuments;
 import com.openkm.bean.report.admin.ReportUser;
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.AbstractDAO;
 import com.openkm.dao.AuthDAO;
-import com.openkm.dao.WorkflowDAO;
+import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.bean.User;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.ReportUtil;
@@ -78,60 +77,59 @@ public class ExecuteReportServlet extends BaseServlet {
 	public static final String REPORT_WORKFLOW_WORKLOAD = "ReportWorkflowWorkload.jrxml";
 	
 	@SuppressWarnings("unchecked")
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("doGet >>>");
-        Collection col = null;
-        AbstractDAO dao = null;
-        Connection con = null;
-        
-        // Setting default report type
-        int type = ReportUtil.REPORT_PDF_OUTPUT;
-        String mimeType = "application/pdf";
-        String fileName = "";
-        boolean downloading = true;
-        
-        // Getting params
-        String reportType = WebUtil.getString(request, "type", "pdf");
-        String jasperFile = WebUtil.getString(request, "jasperFile");
-        
-        // Setting report type
-        if (reportType.equals("html")) {
-        	type = ReportUtil.REPORT_HTML_OUTPUT;
-        	downloading = false;
-        } 
-
-        try {
-	        // Charging the collection
-	        if (jasperFile.equals(REPORT_REGISTERED_USERS)) {
-	        	col = reportUsers();
-	        	fileName = REPORT_REGISTERED_USERS.substring(0, REPORT_REGISTERED_USERS.indexOf(".")) + "." + reportType;
-	        } else if (jasperFile.equals(REPORT_LOCKED_DOCUMENTS)) {
-	        	col = reportLockedDocuments();
-	        	fileName = REPORT_LOCKED_DOCUMENTS.substring(0, REPORT_LOCKED_DOCUMENTS.indexOf(".")) + "." + reportType;
-	        } else if (jasperFile.equals(REPORT_SUBSCRIBED_DOCUMENTS)) {
-	        	col = reportSubscribedDocuments();
-	        	fileName = REPORT_SUBSCRIBED_DOCUMENTS.substring(0, REPORT_SUBSCRIBED_DOCUMENTS.indexOf(".")) + "." + reportType;
-	        } else if (jasperFile.equals(REPORT_WORKFLOW_WORKLOAD)) {
-	        	fileName = REPORT_WORKFLOW_WORKLOAD.substring(0, REPORT_WORKFLOW_WORKLOAD.indexOf(".")) + "." + reportType;
-	        	dao = WorkflowDAO.getInstance();
-	        	con = dao.getConnection();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws 
+			ServletException, IOException {
+		log.debug("doGet >>>");
+		Collection col = null;
+		Connection con = null;
+		
+		// Setting default report type
+		int type = ReportUtil.REPORT_PDF_OUTPUT;
+		String mimeType = "application/pdf";
+		String fileName = "";
+		boolean downloading = true;
+		
+		// Getting params
+		String reportType = WebUtil.getString(request, "type", "pdf");
+		String jasperFile = WebUtil.getString(request, "jasperFile");
+		
+		// Setting report type
+		if (reportType.equals("html")) {
+			type = ReportUtil.REPORT_HTML_OUTPUT;
+			downloading = false;
+		}
+		
+		try {
+			// Charging the collection
+			if (jasperFile.equals(REPORT_REGISTERED_USERS)) {
+				col = reportUsers();
+				fileName = REPORT_REGISTERED_USERS.substring(0, REPORT_REGISTERED_USERS.indexOf(".")) + "." + reportType;
+			} else if (jasperFile.equals(REPORT_LOCKED_DOCUMENTS)) {
+				col = reportLockedDocuments();
+				fileName = REPORT_LOCKED_DOCUMENTS.substring(0, REPORT_LOCKED_DOCUMENTS.indexOf(".")) + "." + reportType;
+			} else if (jasperFile.equals(REPORT_SUBSCRIBED_DOCUMENTS)) {
+				col = reportSubscribedDocuments();
+				fileName = REPORT_SUBSCRIBED_DOCUMENTS.substring(0, REPORT_SUBSCRIBED_DOCUMENTS.indexOf(".")) + "." + reportType;
+			} else if (jasperFile.equals(REPORT_WORKFLOW_WORKLOAD)) {
+				fileName = REPORT_WORKFLOW_WORKLOAD.substring(0, REPORT_WORKFLOW_WORKLOAD.indexOf(".")) + "." + reportType;
+				con = LegacyDAO.getConnection();
 	        }
-	        
-	        if (downloading) {
-	            // Only when downloading
-		        // Setting headers 
-		        String agent = request.getHeader("USER-AGENT");
-		        
-		        // Disable browser cache
-		        response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-		        response.setHeader("Cache-Control", "max-age=0, must-revalidate");
-		        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		        response.setHeader("Pragma", "no-cache");
-		        
-		        // Set MIME type
-		        response.setContentType(mimeType);
-		        
-		        if (null != agent && -1 != agent.indexOf("MSIE")) {
+			
+			if (downloading) {
+				// Only when downloading
+				// Setting headers 
+				String agent = request.getHeader("USER-AGENT");
+				
+				// Disable browser cache
+				response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+				response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+				response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+				response.setHeader("Pragma", "no-cache");
+				
+				// Set MIME type
+				response.setContentType(mimeType);
+				
+				if (null != agent && -1 != agent.indexOf("MSIE")) {
 					log.debug("Agent: Explorer");
 					fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
 				} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
@@ -140,30 +138,28 @@ public class ExecuteReportServlet extends BaseServlet {
 				} else {
 					log.debug("Agent: Unknown");
 				}
-		        
-		        // Setting filename
-		        response.setHeader("Content-disposition", "attachment; filename=\""+ fileName +"\"");
-	        }
-	        
-	        Map<String, String> parameters = new HashMap<String, String>();
-	        String host = com.openkm.core.Config.APPLICATION_URL;
-	        parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
-	        
-	        if (con != null) {
-	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, con);
-	        } else {
-	        	ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
-	        }
-        } catch (SQLException e) {
+				
+				// Setting filename
+				response.setHeader("Content-disposition", "attachment; filename=\""+ fileName +"\"");
+			}
+			
+			Map<String, String> parameters = new HashMap<String, String>();
+			String host = com.openkm.core.Config.APPLICATION_URL;
+			parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
+			
+			if (con != null) {
+				ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, con);
+			} else {
+				ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, col);
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (dao != null) {
-				dao.closeConnection(con);
-			}
+			LegacyDAO.close(con);
 		}
-    }
+	}
 	
 	/**
 	 * Gets all the users data
