@@ -31,12 +31,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.extension.comunicator.TabDocumentComunicator;
-import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
-import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEventConstant;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
+import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
