@@ -61,6 +61,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean thesaurusStackVisible = false;
 	private boolean personalStackVisible = false;
 	private boolean mailStackVisible = false;
+	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
 	 * GWTWorkspace
@@ -306,5 +307,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setMailStackVisible(boolean mailStackVisible) {
 		this.mailStackVisible = mailStackVisible;
+	}
+	
+	public GWTAvailableOption getAvailableOption() {
+		return availableOption;
+	}
+
+	public void setAvailableOption(GWTAvailableOption availableOption) {
+		this.availableOption = availableOption;
 	}
 }

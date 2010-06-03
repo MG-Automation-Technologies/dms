@@ -113,6 +113,9 @@ public class WorkspaceUserProperties {
 				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
+			// Enabling some actions
+			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
+			
 			// showing stack
 			boolean refreshStack = false;
 			if (workspace.isCategoriesStackVisible()) {

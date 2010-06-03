@@ -36,6 +36,7 @@ import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.User;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -105,6 +106,30 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setPersonalStackVisible(true);
 		workspace.setMailStackVisible(true);
 		
+		// Available options
+		GWTAvailableOption availableOption = new GWTAvailableOption();
+		availableOption.setAddDocumentOption(true);
+		availableOption.setAddPropertyGroupOption(true);
+		availableOption.setAddSubscription(true);
+		availableOption.setCancelCheckoutOption(true);
+		availableOption.setCheckinOption(true);
+		availableOption.setCheckoutOption(true);
+		availableOption.setCreateFolderOption(true);
+		availableOption.setDeleteOption(true);
+		availableOption.setDownloadOption(true);
+		availableOption.setDownloadPdfOption(true);
+		availableOption.setFindFolderOption(true);
+		availableOption.setHomeOption(true);
+		availableOption.setLockOption(true);
+		availableOption.setRefreshOption(true);
+		availableOption.setRemovePropertyGroupOption(true);
+		availableOption.setRemoveSubscription(true);
+		availableOption.setScannerOption(true);
+		availableOption.setUnLockOption(true);
+		availableOption.setUploaderOption(true);
+		availableOption.setWorkflowOption(true);
+		workspace.setAvailableOption(availableOption);
+
 		try {
 			User user = new User();
 			
