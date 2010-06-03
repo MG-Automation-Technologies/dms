@@ -22,6 +22,10 @@
 package com.openkm.frontend.client.widget.properties;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -31,11 +35,14 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasFolderEvent;
+import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasFolderHandlerExtension;
+import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 
@@ -45,7 +52,7 @@ import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
  * @author jllort
  *
  */
-public class TabFolder extends Composite {
+public class TabFolder extends Composite implements HasFolderEvent, HasFolderHandlerExtension {
 	
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	
@@ -53,8 +60,14 @@ public class TabFolder extends Composite {
 	private Folder folder;
 	private SecurityScrollTable security;
 	private VerticalPanel panel;
+	private List<TabFolderExtension> widgetExtensionList;
+	private List<FolderHandlerExtension> folderHandlerExtensionList;
+	private int height = 0;
+	private int width = 0;
 	
 	public TabFolder() {
+		widgetExtensionList = new ArrayList<TabFolderExtension>();
+		folderHandlerExtensionList = new ArrayList<FolderHandlerExtension>();
 		tabPanel = new TabPanel();
 		folder = new Folder();
 		security = new SecurityScrollTable();
@@ -70,6 +83,7 @@ public class TabFolder extends Composite {
 				if (event.getSelectedItem().intValue()==1) {
 					security.fillWidth(); // Always when shows fires fill width
 				}
+				fireEvent(HasFolderEvent.TAB_CHANGED);
 			}
 		});
 		panel.add(tabPanel);
@@ -93,10 +107,18 @@ public class TabFolder extends Composite {
 	 * @param height Height of the widget
 	 */
 	public void setSize(int width, int height) {
+		this.height = height;
+		this.width = width;
 		tabPanel.setSize(""+width, ""+height);
 		folder.setPixelSize(width,height-20); // Substract tab height
 		security.setPixelSize(width-2,height-22); // Substract tab height
 		security.fillWidth();
+		
+		// Setting size to extension
+		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().setPixelSize(width,height-20);
+		}
+		fireEvent(HasFolderEvent.PANEL_RESIZED);
 	}
 	
 	/**
@@ -113,6 +135,13 @@ public class TabFolder extends Composite {
 		} else {
 			security.setChangePermision(false);
 		}
+		
+		// Setting folder object to extensions
+		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().set(folder);
+		}
+		
+		fireEvent(HasFolderEvent.FOLDER_CHANGED);
 	}
 	
 	/**
@@ -127,6 +156,7 @@ public class TabFolder extends Composite {
 		} else {
 			Main.get().activeFolderTree.securityRefresh();
 		}
+		fireEvent(HasFolderEvent.SECURITY_CHANGED);
 	}
 	
 	/**
@@ -142,6 +172,13 @@ public class TabFolder extends Composite {
 		
 		tabPanel.add(folder, Main.i18n("tab.folder.properties"));
 		tabPanel.add(security, Main.i18n("tab.folder.security"));
+		
+		// Adding extensions
+		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			TabFolderExtension extension = it.next();
+			tabPanel.add(extension, extension.getTabText());
+		}
+		
 		tabPanel.selectTab(selected);
 		
 		folder.langRefresh();
@@ -179,8 +216,13 @@ public class TabFolder extends Composite {
 	 * 
 	 * @param visible The visible value
 	 */
-	public void setVisibleButtons(boolean visible){
+	public void setVisibleButtons(boolean visible) {
 		security.setVisibleButtons(visible);
+		
+		// Setting visible to extensions
+		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().setVisibleButtons(visible);
+		}
 	}
 	
 	/**
@@ -218,5 +260,29 @@ public class TabFolder extends Composite {
 	 */
 	public void setNumberOfMails(int num) {
 		folder.setNumberOfMails(num);
+	}
+	
+	/**
+	 * addFolderExtension
+	 * 
+	 * @param extension
+	 */
+	public void addFolderExtension(TabFolderExtension extension) {
+		widgetExtensionList.add(extension);
+		
+		tabPanel.add(extension, extension.getTabText());
+		extension.setPixelSize(width,height-20);
+	}
+	
+	@Override
+	public void addFolderHandlerExtension(FolderHandlerExtension handlerExtension) {
+		folderHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(FolderEventConstant event) {
+		for (Iterator<FolderHandlerExtension> it = folderHandlerExtensionList.iterator(); it.hasNext(); ) {
+			it.next().onChange(event);
+		}
 	}
 }
