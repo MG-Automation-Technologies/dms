@@ -21,7 +21,7 @@
 
 package com.openkm.frontend.server;
 
-import java.sql.SQLException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -29,8 +29,10 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDashboard;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.AuthDAO;
+import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.User;
 import com.openkm.frontend.client.OKMException;
@@ -103,12 +105,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setPersonalStackVisible(true);
 		workspace.setMailStackVisible(true);
 		
-		AuthDAO authDAO = AuthDAO.getInstance();
 		try {
 			User user = new User();
 			
 			if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
-				user = authDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
+				user = AuthDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
 				workspace.setEmail(user.getEmail());
 			} else {
 				user.setId(getThreadLocalRequest().getRemoteUser());
@@ -118,14 +119,14 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				user.setPass("");
 			}
 			
-			for (Iterator<MailAccount> it = authDAO.findMailAccountsByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
+			for (Iterator<MailAccount> it = MailAccountDAO.findByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
 				MailAccount mailAccount = it.next();
 				workspace.setImapHost(mailAccount.getMailHost());
 				workspace.setImapUser(mailAccount.getMailUser());
 				workspace.setImapFolder(mailAccount.getMailFolder());
 				workspace.setImapID(mailAccount.getId());
 			}
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 		}
 		
@@ -175,22 +176,22 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Disable user configuration modification in demo
 		if (!Config.SYSTEM_DEMO) {
 			try {
-				AuthDAO authDAO = AuthDAO.getInstance();
-				
 				// Can change password
 				if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
-					authDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
-					if (!user.getEmail().equals("")) authDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
+					AuthDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
+					if (!user.getEmail().equals("")) AuthDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
 				}
 				
-				if (authDAO.findMailAccountsByUser(workspace.getUser(), false).size() > 0) {
-					authDAO.updateMailAccount(mailAccount);
-					if (!mailAccount.getMailPassword().equals("")) authDAO.updateMailAccountPassword(mailAccount);
+				if (MailAccountDAO.findByUser(workspace.getUser(), false).size() > 0) {
+					MailAccountDAO.update(mailAccount);
+					if (!mailAccount.getMailPassword().equals("")) MailAccountDAO.updatePassword(mailAccount);
 				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0 &&
 						   !mailAccount.getMailPassword().equals("")) {
-					authDAO.createMailAccount(mailAccount);
+					MailAccountDAO.create(mailAccount);
 				}
-			} catch (SQLException e) {
+			} catch (DatabaseException e) {
+				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+			} catch (NoSuchAlgorithmException e) {
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
 		}
@@ -201,9 +202,8 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Disable user configuration modification in demo
 		if (!Config.SYSTEM_DEMO) {
 			try {
-				AuthDAO authDAO = AuthDAO.getInstance();
-				authDAO.deleteMailAccount(id);
-			} catch (SQLException e) {
+				MailAccountDAO.delete(id);
+			} catch (DatabaseException e) {
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
 		}
