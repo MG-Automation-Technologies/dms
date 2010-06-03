@@ -19,22 +19,34 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension;
+package com.openkm.frontend.client.extension.comunicator;
 
-import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.ToolBarOption;
+
 
 /**
- * DocumentExtension
+ * GeneralComunicator
  * 
  * @author jllort
  *
  */
-public interface HasDocumentExtension {
+public class GeneralComunicator {
 	
-	public abstract String getTabText();
+	/**
+	 * refreshUI
+	 */
+	public static void refreshUI() {
+		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
+	}
 	
-	public abstract void set(GWTDocument doc);
-	
-	public abstract void setVisibleButtons(boolean visible);
-	
+	/**
+	 * getToolBarOption
+	 * 
+	 * @return
+	 */
+	public ToolBarOption getToolBarOption() {
+		return Main.get().mainPanel.topPanel.toolBar.getToolBarOption();
+	}
+
 }

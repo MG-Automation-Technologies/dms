@@ -31,4 +31,6 @@ public interface HasLanguageExtension {
 	
 	public abstract void setLang(String code);
 	
+	public abstract void langRefresh();
+	
 }

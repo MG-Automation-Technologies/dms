@@ -22,19 +22,21 @@
 package com.openkm.frontend.client.extension;
 
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTMail;
 
 /**
- * DocumentExtension
+ * HasPermissionsExtension
  * 
  * @author jllort
  *
  */
-public interface HasDocumentExtension {
+public interface HasPermissionsExtension {
 	
-	public abstract String getTabText();
+	public abstract void checkPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel);
 	
-	public abstract void set(GWTDocument doc);
+	public abstract void checkPermissions(GWTDocument doc, GWTFolder folder);
 	
-	public abstract void setVisibleButtons(boolean visible);
+	public abstract void checkPermissions(GWTMail mail, GWTFolder folder);
 	
 }

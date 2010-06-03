@@ -26,7 +26,9 @@ import java.util.List;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
  * ExtensionManager
@@ -42,12 +44,17 @@ public class ExtensionManager {
 			Object obj = it.next();
 			// Registering widgets
 			if (obj instanceof TabDocumentExtension) {
-				addTabDocument((TabDocumentExtension)obj);
+				addTabDocument((TabDocumentExtension) obj);
+			} else if (obj instanceof ToolBarButtonExtension) {
+				addToolBarButton((ToolBarButtonExtension) obj);
 			}
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {
-				addDocumentHandlerExtension((DocumentHandlerExtension)obj);
+				addDocumentHandlerExtension((DocumentHandlerExtension) obj);
+			}
+			if (obj instanceof ToolBarHandlerExtension) {
+				addToolBarHandlerExtension((ToolBarHandlerExtension) obj);
 			}
 		}
 	}
@@ -68,5 +75,23 @@ public class ExtensionManager {
 	 */
 	private static void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
 		Main.get().mainPanel.browser.tabMultiple.tabDocument.addDocumentHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addToolBarButton
+	 * 
+	 * @param extension
+	 */
+	private static void addToolBarButton(ToolBarButtonExtension extension) {
+		Main.get().mainPanel.topPanel.toolBar.addToolBarButton(extension);
+	}
+	
+	/**
+	 * addToolBarHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addToolBarHandlerExtension(ToolBarHandlerExtension handlerExtension) {
+		Main.get().mainPanel.topPanel.toolBar.addToolBarHandlerExtension(handlerExtension);
 	}
 }
