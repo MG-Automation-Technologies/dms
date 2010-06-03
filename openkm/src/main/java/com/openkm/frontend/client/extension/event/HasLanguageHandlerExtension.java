@@ -19,43 +19,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
-
-import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.ToolBarOption;
+package com.openkm.frontend.client.extension.event;
 
 
 /**
- * GeneralComunicator
+ * HasLanguageHandlerExtension
  * 
  * @author jllort
  *
  */
-public class GeneralComunicator {
+public interface HasLanguageHandlerExtension {
 	
-	/**
-	 * refreshUI
-	 */
-	public static void refreshUI() {
-		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
-	}
+	void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension);
 	
-	/**
-	 * getToolBarOption
-	 * 
-	 * @return
-	 */
-	public ToolBarOption getToolBarOption() {
-		return Main.get().mainPanel.topPanel.toolBar.getToolBarOption();
-	}
-	
-	/**
-	 * getLang
-	 * 
-	 * @return
-	 */
-	public String getLang() {
-		return Main.get().getLang();
-	}
-
 }
