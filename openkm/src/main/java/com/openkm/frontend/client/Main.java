@@ -21,7 +21,10 @@
 
 package com.openkm.frontend.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -38,6 +41,9 @@ import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.RepositoryContext;
 import com.openkm.frontend.client.extension.ExtensionManager;
+import com.openkm.frontend.client.extension.event.HasLanguageEvent;
+import com.openkm.frontend.client.extension.event.HasLanguageHandlerExtension;
+import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
 import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.util.Location;
@@ -75,7 +81,7 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
  * @author jllort
  *
  */
-public final class Main implements EntryPoint{
+public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	
 	private static Main singleton;
 	
@@ -148,6 +154,9 @@ public final class Main implements EntryPoint{
 	// Repository context
 	public RepositoryContext repositoryContext;
 	
+	// Lnaguage widget handlers
+	List<LanguageHandlerExtension> langHandlerExtensionList;
+	
 	/* (non-Javadoc)
 	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
 	 */
@@ -158,6 +167,7 @@ public final class Main implements EntryPoint{
 		singleton = this;
 		
 		// All objects defined before singleton to use global reference.
+		langHandlerExtensionList = new ArrayList<LanguageHandlerExtension>();
 		
 		// Saves repository context paths
 		repositoryContext = new RepositoryContext();
@@ -330,6 +340,7 @@ public final class Main implements EntryPoint{
 	public void refreshLang(String lang) {
 		this.lang = lang;
 		hI18n = Lang.getLang(lang);
+		fireEvent(HasLanguageEvent.LANGUAGE_CHANGED);
 		mainPanel.navigator.langRefresh();
 		mainPanel.topPanel.langRefresh();
 		mainPanel.browser.langRefresh();
@@ -424,6 +435,18 @@ public final class Main implements EntryPoint{
 	public static String refresh() {
 		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		return "";
+	}
+	
+	@Override
+	public void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension) {
+		langHandlerExtensionList.add(handlerExtension);
+	}
+	
+	@Override
+	public void fireEvent(LanguageEventConstant event) {
+		for (Iterator<LanguageHandlerExtension> it = langHandlerExtensionList.iterator(); it.hasNext();) {
+			it.next().onChange(event);
+		}
 	}
 	
 	/**
