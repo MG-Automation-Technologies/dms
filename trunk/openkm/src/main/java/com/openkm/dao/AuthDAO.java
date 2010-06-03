@@ -195,21 +195,14 @@ public class AuthDAO {
 	/**
 	 * Get user from database
 	 */
-	@SuppressWarnings("unchecked")
 	public static User findUserByPk(String usrId) throws DatabaseException {
 		log.debug("findUserByPk({})", usrId);
-		String qs = "from User u where u.id= :id";
+		String qs = "from User u where u.id=:id";
 		
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
-			q.setEntity("id", usrId);
-			List<User> results = q.list();
-			User ret = null;
-			
-			if (results.size() == 1) {
-				ret = results.get(0); 
-			}
-			
+			q.setString("id", usrId);
+			User ret = (User) q.setMaxResults(1).uniqueResult();
 			log.debug("findUserByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -270,7 +263,6 @@ public class AuthDAO {
 	/**
 	 * Find role by pk
 	 */
-	@SuppressWarnings("unchecked")
 	public Role findRoleByPk(String rolId) throws DatabaseException {
 		log.debug("findRoleByPk({})", rolId);
 		String qs = "from Role r where r.id= :id";
@@ -278,13 +270,7 @@ public class AuthDAO {
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
 			q.setString("id", rolId);
-			List<Role> results = q.list();
-			Role ret = null;
-			
-			if (results.size() == 1) {
-				ret = results.get(0); 
-			}
-			
+			Role ret = (Role) q.setMaxResults(1).uniqueResult();
 			log.debug("findRoleByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
