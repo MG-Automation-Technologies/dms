@@ -3,7 +3,7 @@
 <%@ page import="com.openkm.dao.bean.ActivityFilter" %>
 <%@ page import="com.openkm.dao.bean.Activity" %>
 <%@ page import="com.openkm.module.direct.DirectAuthModule" %>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
@@ -90,28 +90,27 @@
 				out.println("<tr><th>Date</th><th>User</th><th>Token</th><th>Action</th><th>Item</th><th>Params</th></tr>");
 			
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				ActivityDAO dao = ActivityDAO.getInstance();
 				ActivityFilter filter = new ActivityFilter();
 				Calendar begin = Calendar.getInstance();
 				begin.setTime(sdf.parse(date_begin));
-				filter.setActDateBegin(begin);
+				filter.setBegin(begin);
 				Calendar end = Calendar.getInstance();
 				end.setTime(sdf.parse(date_end));
-				filter.setActDateEnd(end);
-				filter.setActUser(user);
-				filter.setActAction(action);
-				Collection<Activity> al = dao.findByFilter(filter);
+				filter.setEnd(end);
+				filter.setUser(user);
+				filter.setAction(action);
+				Collection<Activity> al = ActivityDAO.findByFilter(filter);
 				
 				int i = 0;
 				for (Iterator<Activity> it = al.iterator(); it.hasNext(); ) {
 					Activity vo = it.next();
-					out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+vo.getActDate().getTime()+"</td><td>"+vo.getActUser()+"</td><td>"+
-							vo.getActToken()+"</td><td>"+vo.getActAction()+"</td><td>"+
-							vo.getActItem()+"</td><td>"+vo.getActParams()+"</td></tr>");
+					out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+vo.getDate().getTime()+"</td><td>"+vo.getUser()+"</td><td>"+
+							vo.getToken()+"</td><td>"+vo.getAction()+"</td><td>"+
+							vo.getItem()+"</td><td>"+vo.getParams()+"</td></tr>");
 				}
 				
 				out.println("</table>");
-			} catch (SQLException e) {
+			} catch (DatabaseException e) {
 				out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 			}
 		} else {
