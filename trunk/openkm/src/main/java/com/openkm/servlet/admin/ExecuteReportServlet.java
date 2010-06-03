@@ -45,7 +45,6 @@ import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -68,7 +67,7 @@ import com.openkm.util.WebUtil;
 /**
  * Execute report servlet
  */
-public class ExecuteReportServlet extends HttpServlet {
+public class ExecuteReportServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(ExecuteReportServlet.class);
 	

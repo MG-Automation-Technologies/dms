@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -52,9 +51,9 @@ import com.openkm.util.FormatUtil;
 /**
  * Stats graphical servlet
  */
-public class StatsGraphServlet extends HttpServlet {
-	private static Logger log = LoggerFactory.getLogger(StatsGraphServlet.class);
+public class StatsGraphServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger log = LoggerFactory.getLogger(StatsGraphServlet.class);
 	private static final String DOCUMENTS = "0";
 	private static final String DOCUMENTS_SIZE = "1";
 	private static final String FOLDERS = "2";
