@@ -24,50 +24,59 @@ package com.openkm.dao.bean;
 import java.util.Calendar;
 
 public class DashboardStats {
-	private String dsUser;
-	private String dsSource;
-	private String dsNode;
-	private Calendar dsDate;
+	private int id;
+	private String user;
+	private String source;
+	private String node;
+	private Calendar date;
 	
-	public String getDsUser() {
-		return dsUser;
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getUser() {
+		return user;
 	}
 
-	public void setDsUser(String dsUser) {
-		this.dsUser = dsUser;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public String getDsSource() {
-		return dsSource;
+	public String getSource() {
+		return source;
 	}
 
-	public void setDsSource(String dsSource) {
-		this.dsSource = dsSource;
+	public void setSource(String source) {
+		this.source = source;
 	}
 
-	public String getDsNode() {
-		return dsNode;
+	public String getNode() {
+		return node;
 	}
 
-	public void setDsNode(String dsNode) {
-		this.dsNode = dsNode;
+	public void setNode(String node) {
+		this.node = node;
 	}
 
-	public Calendar getDsDate() {
-		return dsDate;
+	public Calendar getDate() {
+		return date;
 	}
 
-	public void setDsDate(Calendar dsDate) {
-		this.dsDate = dsDate;
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("dsUser="); sb.append(dsUser);
-		sb.append(", actSource="); sb.append(dsSource);
-		sb.append(", dsNode="); sb.append(dsNode);
-		sb.append(", dsDate="); sb.append(dsDate==null?null:dsDate.getTime());
+		sb.append("user="); sb.append(user);
+		sb.append(", source="); sb.append(source);
+		sb.append(", node="); sb.append(node);
+		sb.append(", date="); sb.append(date==null?null:date.getTime());
 		sb.append("}");
 		return sb.toString();
 	}

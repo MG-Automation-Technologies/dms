@@ -21,8 +21,8 @@
 
 package com.openkm.dao.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class User {
 	private String id = "";
@@ -30,7 +30,7 @@ public class User {
 	private String pass = "";
 	private String email = "";
 	private boolean active = false;
-	private List<String> roles = new ArrayList<String>();
+	private Set<Role> roles = new HashSet<Role>();
 
 	public String getId() {
 		return id;
@@ -63,16 +63,12 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public void addRole(String role) {
-		this.roles.add(role);
-	}
-	
-	public List<String> getRoles() {
+		
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
