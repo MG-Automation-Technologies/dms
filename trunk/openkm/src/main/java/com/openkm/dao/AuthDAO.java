@@ -57,7 +57,7 @@ public class AuthDAO {
 	/**
 	 * Update user in database
 	 */
-	public void updateUser(User user) throws DatabaseException {
+	public static void updateUser(User user) throws DatabaseException {
 		log.debug("updateUser({})", user);
 		String qs = "update User u set u.name= :name, u.email= :email, u.active= :active where u.id= :id";
 		
@@ -121,9 +121,9 @@ public class AuthDAO {
 	/**
 	 * Delete user from database
 	 */
-	public void deleteUser(User user) throws DatabaseException {
+	public static void deleteUser(User user) throws DatabaseException {
 		log.debug("deleteUser({})", user);
-		String qsUser = "DELETE FROM users WHERE usr_id=?";
+		String qsUser = "delete from User u where u.id=?";
 		String qsRole = "DELETE FROM user_role WHERE ur_user=?";
 		String qsMail = "DELETE FROM mail_accounts WHERE ma_user=?";
 		String qsTwitter = "DELETE FROM twitter_accounts WHERE ta_user=?";
@@ -178,7 +178,7 @@ public class AuthDAO {
 	 * Get all users in database
 	 */
 	@SuppressWarnings("unchecked")
-	public List<User> findUsersByRole(boolean filterByActive, String role) throws DatabaseException {
+	public static List<User> findUsersByRole(boolean filterByActive, String role) throws DatabaseException {
 		log.debug("findUsersByRole({})", role);
 		String qs = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? "+(filterByActive?"AND usr_active='true'":"")+" ORDER BY usr_id";
 		
@@ -213,7 +213,7 @@ public class AuthDAO {
 	/**
 	 * Create role in database
 	 */
-	public void createRole(Role role) throws DatabaseException {
+	public static void createRole(Role role) throws DatabaseException {
 		log.debug("createRole({})", role);
 	
 		try {
@@ -228,7 +228,7 @@ public class AuthDAO {
 	/**
 	 * Delete role from database
 	 */
-	public void deleteRole(String rolId) throws DatabaseException {
+	public static void deleteRole(String rolId) throws DatabaseException {
 		log.debug("deleteRole({})", rolId);
 		
 		try {
@@ -263,7 +263,7 @@ public class AuthDAO {
 	/**
 	 * Find role by pk
 	 */
-	public Role findRoleByPk(String rolId) throws DatabaseException {
+	public static Role findRoleByPk(String rolId) throws DatabaseException {
 		log.debug("findRoleByPk({})", rolId);
 		String qs = "from Role r where r.id= :id";
 		
@@ -281,7 +281,7 @@ public class AuthDAO {
 	/**
 	 * Grant role to user
 	 */
-	public void grantRole(String usrId, String rolId) throws DatabaseException {
+	public static void grantRole(String usrId, String rolId) throws DatabaseException {
 		log.debug("grantRole({}, {})", usrId, rolId);
 
 		try {
