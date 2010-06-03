@@ -127,6 +127,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				workspace.setImapID(mailAccount.getId());
 			}
 		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 		}
 		
