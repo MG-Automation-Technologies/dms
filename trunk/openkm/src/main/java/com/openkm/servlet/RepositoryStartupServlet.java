@@ -49,7 +49,6 @@ import com.openkm.core.SessionManager;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
-import com.openkm.dao.WorkflowDAO;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
@@ -135,7 +134,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
-        WorkflowDAO.getInstance().closeConnection(WorkflowDAO.getInstance().getConnection());
         JbpmConfiguration.getInstance().createJbpmContext().getGraphSession();
         JbpmConfiguration.getInstance().getJobExecutor().start();//startJobExecutor();
         
