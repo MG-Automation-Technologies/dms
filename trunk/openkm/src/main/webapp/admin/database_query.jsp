@@ -30,14 +30,15 @@
         <c:otherwise>
           <table class="results" width="100%">
             <tr>
-              <c:forEach var="col" items="columns">
+              <c:forEach var="col" items="${columns}">
                 <th>${col}</th>
               </c:forEach>
             </tr>
             <c:forEach var="result" items="${results}" varStatus="row">
               <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${log.path}</td>
-              <td></td>
+                <c:forEach var="tp" items="${result}">
+                  <td>${tp}</td>
+                </c:forEach>
               </tr>
             </c:forEach>
           </table>
