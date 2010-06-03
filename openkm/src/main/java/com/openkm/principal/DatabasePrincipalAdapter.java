@@ -21,7 +21,6 @@
 
 package com.openkm.principal;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
@@ -43,13 +43,13 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		ArrayList<String> list = new ArrayList<String>();
 
 		try {
-			Collection<User> col = AuthDAO.getInstance().findAllUsers(Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
+			Collection<User> col = AuthDAO.findAllUsers(Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
 			
 			for (Iterator<User> it = col.iterator(); it.hasNext(); ) {
 				User dbUser = it.next();
 				list.add(dbUser.getId());
 			}
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
 		}
 
@@ -63,13 +63,13 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		ArrayList<String> list = new ArrayList<String>();
 				
 		try {
-			Collection<Role> col = AuthDAO.getInstance().findAllRoles();
+			Collection<Role> col = AuthDAO.findAllRoles();
 			
 			for (Iterator<Role> it = col.iterator(); it.hasNext(); ) {
 				Role dbRole = it.next();
 				list.add(dbRole.getId());
 			}
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
 		}
 		
@@ -85,12 +85,12 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		try {
 			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
 				String userId = it.next();
-				com.openkm.dao.bean.User user = AuthDAO.getInstance().findUserByPk(userId);
+				com.openkm.dao.bean.User user = AuthDAO.findUserByPk(userId);
 				if (user != null && !user.getEmail().equals("")) {
 					list.add(user.getEmail());
 				}
 			}
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			throw new PrincipalAdapterException(e.getMessage(), e);
 		}
 
