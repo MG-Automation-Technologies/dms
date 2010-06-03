@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -2448,6 +2449,34 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public ToolBarOption getToolBarOption() {
 		return toolBarOption;
+	}
+	
+	/**
+	 * setAvailableOption
+	 * 
+	 * @param option
+	 */
+	public void setAvailableOption(GWTAvailableOption option) {
+		createFolderButton.setVisible(option.isCreateFolderOption());
+		findFolder.setVisible(option.isFindFolderOption());
+		lock.setVisible(option.isLockOption());
+		unLock.setVisible(option.isUnLockOption());
+		addDocument.setVisible(option.isAddDocumentOption());
+		delete.setVisible(option.isDeleteOption());
+		edit.setVisible(option.isCheckoutOption());
+		checkin.setVisible(option.isCheckinOption());
+		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		download.setVisible(option.isDownloadOption());
+		downloadPdf.setVisible(option.isDownloadPdfOption());
+		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
+		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
+		startWorkflow.setVisible(option.isWorkflowOption());
+		addSubscription.setVisible(option.isAddSubscription());
+		removeSubscription.setVisible(option.isRemoveSubscription());
+		home.setVisible(option.isHomeOption());
+		refresh.setVisible(option.isRefreshOption());
+		scanner.setVisible(option.isScannerOption());
+		uploader.setVisible(option.isUploaderOption());
 	}
 	
 	/**
