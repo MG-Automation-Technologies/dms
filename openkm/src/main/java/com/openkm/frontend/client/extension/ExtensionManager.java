@@ -25,10 +25,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
-import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
-import com.openkm.frontend.client.extension.event.ToolBarHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
+import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
@@ -46,13 +48,18 @@ public class ExtensionManager {
 			// Registering widgets
 			if (obj instanceof TabDocumentExtension) {
 				addTabDocument((TabDocumentExtension) obj);
+			} else if (obj instanceof TabFolderExtension) {
+				addTabFolder((TabFolderExtension) obj);
 			} else if (obj instanceof ToolBarButtonExtension) {
 				addToolBarButton((ToolBarButtonExtension) obj);
-			}
+			} 
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {
 				addDocumentHandlerExtension((DocumentHandlerExtension) obj);
+			}
+			if (obj instanceof FolderHandlerExtension) {
+				addFolderHandlerExtension((FolderHandlerExtension) obj);
 			}
 			if (obj instanceof ToolBarHandlerExtension) {
 				addToolBarHandlerExtension((ToolBarHandlerExtension) obj);
@@ -82,6 +89,15 @@ public class ExtensionManager {
 	}
 	
 	/**
+	 * addFolderHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addFolderHandlerExtension(FolderHandlerExtension handlerExtension) {
+		Main.get().mainPanel.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
+	}
+	
+	/**
 	 * addToolBarButton
 	 * 
 	 * @param extension
@@ -106,5 +122,14 @@ public class ExtensionManager {
 	 */
 	private static void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension) {
 		Main.get().addLanguageHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addTabFolder
+	 * 
+	 * @param extension
+	 */
+	private static void addTabFolder(TabFolderExtension extension) {
+		Main.get().mainPanel.browser.tabMultiple.tabFolder.addFolderExtension(extension);
 	}
 }
