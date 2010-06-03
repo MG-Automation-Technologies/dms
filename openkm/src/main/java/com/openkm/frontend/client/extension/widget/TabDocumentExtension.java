@@ -23,7 +23,6 @@ package com.openkm.frontend.client.extension.widget;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.openkm.frontend.client.extension.HasDocumentExtension;
-import com.openkm.frontend.client.extension.HasLanguageExtension;
 
 /**
  * TabDocumentExtension
@@ -32,5 +31,5 @@ import com.openkm.frontend.client.extension.HasLanguageExtension;
  *
  */
  
- public abstract class TabDocumentExtension extends Composite implements HasDocumentExtension, HasLanguageExtension {
+ public abstract class TabDocumentExtension extends Composite implements HasDocumentExtension {
  }

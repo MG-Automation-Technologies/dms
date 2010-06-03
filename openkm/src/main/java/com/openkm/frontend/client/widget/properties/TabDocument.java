@@ -233,8 +233,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		
 		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
 			TabDocumentExtension extension = it.next();
-			extension.setLang(Main.get().getLang());
-			extension.langRefresh();
 			tabPanel.add(extension, extension.getTabText());
 		}
 		

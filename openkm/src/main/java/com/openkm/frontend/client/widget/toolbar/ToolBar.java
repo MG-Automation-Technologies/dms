@@ -2439,12 +2439,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void langRefresh() {
 		evaluateShowIcons();
 		evaluateRemoveGroupProperty(propertyGroupEnabled);
-		// Refreshing language in extensions
-		for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			ToolBarButtonExtension button = it.next();
-			button.setLang(Main.get().getLang());
-			button.langRefresh();
-		}
 	}
 	
 	/**
