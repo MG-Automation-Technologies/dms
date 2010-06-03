@@ -21,23 +21,15 @@
 
 package com.openkm.frontend.client.extension.widget;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Image;
-import com.openkm.frontend.client.extension.HasEnabledExtension;
-import com.openkm.frontend.client.extension.HasPermissionsExtension;
-import com.openkm.frontend.client.widget.toolbar.ToolBarButton;
+import com.google.gwt.user.client.ui.Composite;
+import com.openkm.frontend.client.extension.HasFolderExtension;
 
 /**
- * ToolBarButtonExtension
+ * TabDocumentExtension
  * 
  * @author jllort
  *
  */
-public abstract class ToolBarButtonExtension extends ToolBarButton 
-											 implements HasPermissionsExtension, 
-											 			HasEnabledExtension {
-
-	public ToolBarButtonExtension(Image image, String title, ClickHandler handler) {
-		super(image, title, handler);
-	}
-}
+ 
+ public abstract class TabFolderExtension extends Composite implements HasFolderExtension {
+ }
