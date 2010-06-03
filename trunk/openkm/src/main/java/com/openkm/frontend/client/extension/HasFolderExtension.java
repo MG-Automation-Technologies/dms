@@ -24,7 +24,7 @@ package com.openkm.frontend.client.extension;
 import com.openkm.frontend.client.bean.GWTFolder;
 
 /**
- * DocumentExtension
+ * HasFolderExtension
  * 
  * @author jllort
  *
@@ -34,5 +34,7 @@ public interface HasFolderExtension {
 	public abstract String getTabText();
 	
 	public abstract void set(GWTFolder doc);
+	
+	public abstract void setVisibleButtons(boolean visible);
 	
 }

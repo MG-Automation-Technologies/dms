@@ -24,7 +24,7 @@ package com.openkm.frontend.client.extension;
 import com.openkm.frontend.client.bean.GWTDocument;
 
 /**
- * DocumentExtension
+ * HasDocumentExtension
  * 
  * @author jllort
  *
