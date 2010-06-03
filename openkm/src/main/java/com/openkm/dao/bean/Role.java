@@ -23,6 +23,7 @@ package com.openkm.dao.bean;
 
 public class Role {
 	private String id = "";
+	private boolean active = false;
 		
 	public String getId() {
 		return id;
@@ -32,10 +33,18 @@ public class Role {
 		this.id = id;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
+		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();
 	}

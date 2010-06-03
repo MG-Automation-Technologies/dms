@@ -24,70 +24,79 @@ package com.openkm.dao.bean;
 import java.util.Calendar;
 
 public class Activity {
-	private Calendar actDate;
-	private String actUser;
-	private String actToken;
-	private String actAction;
-	private String actItem;
-	private String actParams;
+	private int id;
+	private Calendar date;
+	private String user;
+	private String token;
+	private String action;
+	private String item;
+	private String params;
 	
-	public String getActAction() {
-		return actAction;
+	public int getId() {
+		return id;
 	}
 	
-	public void setActAction(String actAction) {
-		this.actAction = actAction;
+	public void setId(int id) {
+		this.id = id;
 	}
 	
-	public Calendar getActDate() {
-		return actDate;
+	public String getAction() {
+		return action;
 	}
 	
-	public void setActDate(Calendar actDate) {
-		this.actDate = actDate;
+	public void setAction(String action) {
+		this.action = action;
 	}
 	
-	public String getActParams() {
-		return actParams;
+	public Calendar getDate() {
+		return date;
 	}
 	
-	public void setActParams(String actParams) {
-		this.actParams = actParams;
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 	
-	public String getActToken() {
-		return actToken;
+	public String getParams() {
+		return params;
 	}
 	
-	public void setActToken(String actToken) {
-		this.actToken = actToken;
+	public void setParams(String params) {
+		this.params = params;
 	}
 	
-	public String getActUser() {
-		return actUser;
+	public String getToken() {
+		return token;
 	}
 	
-	public void setActUser(String actUser) {
-		this.actUser = actUser;
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public String getActItem() {
-		return actItem;
+	public String getItem() {
+		return item;
 	}
 
-	public void setActItem(String actItem) {
-		this.actItem = actItem;
+	public void setItem(String item) {
+		this.item = item;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("actDate="); sb.append(actDate==null?null:actDate.getTime());
-		sb.append(", actUser="); sb.append(actUser);
-		sb.append(", actToken="); sb.append(actToken);
-		sb.append(", actAction="); sb.append(actAction);
-		sb.append(", actItem="); sb.append(actItem);
-		sb.append(", actParams="); sb.append(actParams);
+		sb.append("date="); sb.append(date==null?null:date.getTime());
+		sb.append(", user="); sb.append(user);
+		sb.append(", token="); sb.append(token);
+		sb.append(", action="); sb.append(action);
+		sb.append(", item="); sb.append(item);
+		sb.append(", params="); sb.append(params);
 		sb.append("}");
 		return sb.toString();
 	}
