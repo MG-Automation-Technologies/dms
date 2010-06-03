@@ -4,7 +4,8 @@
 <%@ page import="com.openkm.util.UserActivity"%>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.MailAccount"%>
-<%@ page import="java.sql.SQLException"%>
+<%@ page import="com.openkm.dao.MailAccountDAO"%>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="javax.jcr.Session"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -31,7 +32,6 @@
 		String ma_mfolder = WebUtil.getString(request, "ma_mfolder");
 		boolean ma_active = WebUtil.getBoolean(request, "ma_active");
 
-		AuthDAO dao = AuthDAO.getInstance();
 		MailAccount ma = new MailAccount();
 		ma.setId(ma_id);
 		ma.setUser(new String(ma_user.getBytes("ISO-8859-1"), "UTF-8"));
@@ -43,18 +43,18 @@
 		
 		try {
 			if (action.equals("c")) {
-				dao.createMailAccount(ma);
+				MailAccountDAO.create(ma);
 			} else if (action.equals("u")) {
-				dao.updateMailAccount(ma);
+				MailAccountDAO.update(ma);
 			} else if (action.equals("d")) {
-				dao.deleteMailAccount(ma_id);
+				MailAccountDAO.delete(ma_id);
 			}
 			
 			// Activity log
 			UserActivity.log(jcrSession, "USER_MAIL_ACTION", ma.toString(), action);
 			
 			response.sendRedirect("mail_list.jsp?user="+ma.getUser());
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
 		}
 	} else {

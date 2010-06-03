@@ -1,7 +1,7 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -18,14 +18,13 @@
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
-		AuthDAO dao = AuthDAO.getInstance();
-
+		
 		out.println("<h1>Roles <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
-				
+		
 		try {
 			out.println("<table class=\"results\" width=\"30%\">");
 			out.println("<tr><th>Id</th><th width=\"25px\"><a href=\"role_edit.jsp?action=c\"><img src=\"img/action/new.png\" alt=\"New role\" title=\"New role\"/></a></th></tr>");
-			Collection<Role> roles = dao.findAllRoles();
+			Collection<Role> roles = AuthDAO.findAllRoles();
 			
 			int i = 0;
 			for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
@@ -36,7 +35,7 @@
 			}
 				
 			out.println("</table>");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {

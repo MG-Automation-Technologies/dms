@@ -2,7 +2,7 @@
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.Role"%>
 <%@ page import="com.openkm.dao.bean.User"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -23,14 +23,13 @@
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("id");
 		String action = request.getParameter("action");
-		AuthDAO dao = AuthDAO.getInstance();
 		
 		try {
 			User usr = new User();
 			
 			if ((action.equals("u") || action.equals("d")) && id != null) {
 				id = new String(id.getBytes("ISO-8859-1"), "UTF-8");
-				usr = dao.findUserByPk(id);
+				usr = AuthDAO.findUserByPk(id);
 			}
 			
 			if (action.equals("c")) {
@@ -52,7 +51,7 @@
 			out.println("<tr><td>Active</td><td><input name=\"usr_active\" type=\"checkbox\" "+(usr.isActive()?"checked":"")+"></td></tr>");
 			out.println("<tr><td>Roles</td><td><select multiple name=\"usr_roles\">");
 			
-			Collection<Role> roles = dao.findAllRoles();
+			Collection<Role> roles = AuthDAO.findAllRoles();
 			for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
 				Role rol = it.next();
 				out.println("<option value=\""+rol.getId()+"\" "+(usr.getRoles().contains(rol.getId())?"selected":"")+">"+rol.getId()+"</option>");
@@ -65,7 +64,7 @@
 			out.println("</td></tr>");
 			out.println("</table>");
 			out.println("</form>");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {
