@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
@@ -55,6 +56,9 @@ public class ExtensionManager {
 			}
 			if (obj instanceof ToolBarHandlerExtension) {
 				addToolBarHandlerExtension((ToolBarHandlerExtension) obj);
+			}
+			if (obj instanceof LanguageHandlerExtension) {
+				addLanguageHandlerExtension((LanguageHandlerExtension) obj);
 			}
 		}
 	}
@@ -93,5 +97,14 @@ public class ExtensionManager {
 	 */
 	private static void addToolBarHandlerExtension(ToolBarHandlerExtension handlerExtension) {
 		Main.get().mainPanel.topPanel.toolBar.addToolBarHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addLanguageHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension) {
+		Main.get().addLanguageHandlerExtension(handlerExtension);
 	}
 }

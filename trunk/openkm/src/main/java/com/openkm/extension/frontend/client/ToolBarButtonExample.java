@@ -30,8 +30,11 @@ import com.openkm.extension.frontend.client.util.OKMExtensionBundleResources;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
+import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent;
+import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.ToolBarHandlerExtension;
+import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent.ToolBarEventConstant;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
@@ -71,24 +74,10 @@ public class ToolBarButtonExample  {
 	 * @author jllort
 	 *
 	 */
-	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension {
+	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension {
 		
 		public ToolBarButton(Image image, String title, ClickHandler handler) {
 			super(image, title, handler);
-		}
-
-		@Override
-		public void langRefresh() {
-			if (lang.equals("en-GB")) {
-				title = "title";
-			} else {
-				title = "other title";
-			}
-		}
-
-		@Override
-		public void setLang(String code) {
-			lang = code;
 		}
 
 		@Override
@@ -126,6 +115,13 @@ public class ToolBarButtonExample  {
 			if (event.equals(HasToolBarEvent.EXECUTE_ADD_DOCUMENT)) {
 				Window.alert("executed add document - " + event.getType());
 			} 
+		}
+		
+		@Override
+		public void onChange(LanguageEventConstant event) {
+			if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
+				Window.alert("language changed");
+			}
 		}
 	}
 }

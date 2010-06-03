@@ -31,9 +31,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.extension.comunicator.TabDocumentComunicator;
-import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.event.HasLanguageEvent;
+import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEventConstant;
+import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 
 /**
@@ -42,7 +45,7 @@ import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
  * @author jllort
  *
  */
-public class HelloWorld extends TabDocumentExtension implements DocumentHandlerExtension {
+public class HelloWorld extends TabDocumentExtension implements DocumentHandlerExtension, LanguageHandlerExtension {
 	
 	Button refresh;
 	VerticalPanel vPanel;
@@ -71,12 +74,6 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 	}
 
 	@Override
-	public void langRefresh() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void set(GWTDocument doc) {
 		// TODO Auto-generated method stub
 	}
@@ -85,11 +82,6 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 	public void setVisibleButtons(boolean visible) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void setLang(String code) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -113,6 +105,13 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 		} else if (event.equals(HasDocumentEvent.NOTE_ADDED)) {
 			Window.alert("note added - " +event.getType());
 		}
+	}
+
+	@Override
+	public void onChange(LanguageEventConstant event) {
+		if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
+			Window.alert("language changed");
+		} 
 	}
 }
 

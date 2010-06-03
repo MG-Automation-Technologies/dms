@@ -21,16 +21,18 @@
 
 package com.openkm.frontend.client.extension;
 
+import com.openkm.frontend.client.bean.GWTFolder;
+
 /**
- * LanguageExtension
+ * DocumentExtension
  * 
  * @author jllort
  *
  */
-public interface HasLanguageExtension {
+public interface HasFolderExtension {
 	
-	public abstract void setLang(String code);
+	public abstract String getTabText();
 	
-	public abstract void langRefresh();
+	public abstract void set(GWTFolder doc);
 	
 }
