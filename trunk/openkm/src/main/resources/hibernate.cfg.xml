@@ -20,7 +20,7 @@
     <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 
     <!-- DataSource properties (begin) -->
-    <property name="hibernate.connection.datasource">java:/OKMWorkflowDS</property>
+    <property name="hibernate.connection.datasource">java:/OpenKMDS</property>
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
     <!-- DataSource properties (end) -->
 
@@ -204,11 +204,12 @@
     <mapping resource="org/jbpm/taskmgmt/log/SwimlaneAssignLog.hbm.xml"/>
     
     <!-- OpenKM -->
-    <mapping resource="com/openkm/dao/bean/Activity.hbm.xml" />
-    <mapping resource="com/openkm/dao/bean/User.hbm.xml" />
-    <mapping resource="com/openkm/dao/bean/Role.hbm.xml" />
-    <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml" />
-    <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml" />
+    <mapping resource="com/openkm/dao/bean/User.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Role.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Activity.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
