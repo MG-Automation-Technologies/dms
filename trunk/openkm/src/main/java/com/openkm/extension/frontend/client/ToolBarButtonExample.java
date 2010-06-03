@@ -32,10 +32,10 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent;
-import com.openkm.frontend.client.extension.event.LanguageHandlerExtension;
-import com.openkm.frontend.client.extension.event.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent.LanguageEventConstant;
 import com.openkm.frontend.client.extension.event.HasToolBarEvent.ToolBarEventConstant;
+import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**

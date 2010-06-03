@@ -42,8 +42,9 @@ public class Customization {
 		List<Object> extensions = new ArrayList<Object>();
 		
 		// add here your widget extensions
-		extensions.add(new HelloWorld());
-		extensions.add(new ToolBarButtonExample().getButton());
+//		extensions.add(new HelloWorld());
+//		extensions.add(new ToolBarButtonExample().getButton());
+//		extensions.add(new TabFolderExample());
 		
 		return extensions;
 	}
