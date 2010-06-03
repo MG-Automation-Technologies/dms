@@ -62,6 +62,7 @@ public class Config {
 	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static final String MIME_FILE = "mime.types";
 	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
+	public static final String DATASOURCE = "java:/OpenKM"+INSTALL+"DS";
 	
 	// Default script
 	public static final String DEFAULT_SCRIPT = "print(\"UserId: \"+session.getUserID());\n" +
