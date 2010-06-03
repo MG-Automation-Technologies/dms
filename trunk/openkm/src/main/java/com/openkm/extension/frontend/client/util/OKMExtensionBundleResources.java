@@ -1,4 +1,3 @@
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
@@ -20,33 +19,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client;
+package com.openkm.extension.frontend.client.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 
 /**
- * Customization
+ * OKMExtensionBundleResources
  * 
  * @author jllort
  *
  */
-public class Customization {
+public interface OKMExtensionBundleResources extends ClientBundle {
 	
-	/**
-	 * getExtensionWidgets
-	 * 
-	 * @return
-	 */
-	public static List<Object> getExtensionWidgets() {
-		List<Object> extensions = new ArrayList<Object>();
-		
-		// add here your widget extensions
-		extensions.add(new HelloWorld());
-		extensions.add(new ToolBarButtonExample().getButton());
-		
-		return extensions;
-	}
+	public static final OKMExtensionBundleResources INSTANCE =  GWT.create(OKMExtensionBundleResources.class);
 	
-	
+	@Source("com/openkm/extension/frontend/public/img/box.png")
+	public ImageResource box();
 }

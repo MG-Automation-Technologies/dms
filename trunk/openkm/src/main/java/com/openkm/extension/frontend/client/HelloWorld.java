@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.bean.GWTDocument;
-import com.openkm.frontend.client.extension.comunicator.GeneralExtensionComunicator;
+import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.extension.comunicator.TabDocumentComunicator;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
@@ -53,7 +53,7 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 		refresh.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				GeneralExtensionComunicator.refreshUI();
+				GeneralComunicator.refreshUI();
 			}
 		});
 		vPanel = new VerticalPanel();
