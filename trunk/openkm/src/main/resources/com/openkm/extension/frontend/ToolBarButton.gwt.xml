@@ -2,8 +2,8 @@
 <!DOCTYPE module SYSTEM "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
 <module>
 
-  <!-- Inherit the extension widgets -->
-  <inherits name="com.openkm.extension.frontend.HelloWorld"/>
-  <inherits name="com.openkm.extension.frontend.ToolBarButton"/>
+  <!-- Inherit the core Web Toolkit stuff -->
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.http.HTTP"/>
 
 </module>
