@@ -111,6 +111,7 @@ public class Lang_ro_RO {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Se incarca pagina de pornire");
 	    lang.put("tree.status.refresh.purge.trash", "Se curata cosul de gunoi");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Restaurare");

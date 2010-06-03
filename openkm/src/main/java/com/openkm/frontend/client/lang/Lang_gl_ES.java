@@ -110,6 +110,7 @@ public class Lang_gl_ES {
 	    lang.put("tree.status.refresh.get.keywords", "Refrescando palabras clave");
 	    lang.put("tree.status.refresh.get.user.home", "Obtendo inicio do usuario");
 	    lang.put("tree.status.refresh.purge.trash", "Vaciando lixo");
+	    lang.put("tree.menu.directory.find.folder","Buscar carpeta");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Restaurar");

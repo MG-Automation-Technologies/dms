@@ -115,6 +115,7 @@ public class Lang_ru_RU {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Получаю начальный элемент");
 	    lang.put("tree.status.refresh.purge.trash", "Очищаю корзину");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Восстановить");

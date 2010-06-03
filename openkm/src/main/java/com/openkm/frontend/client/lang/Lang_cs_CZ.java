@@ -110,6 +110,7 @@ public class Lang_cs_CZ {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Získává se domovský adresář");
 	    lang.put("tree.status.refresh.purge.trash", "Vyprazdňuje se koš");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Obnovit");

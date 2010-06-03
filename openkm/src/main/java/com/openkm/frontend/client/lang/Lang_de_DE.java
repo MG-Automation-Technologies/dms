@@ -110,6 +110,7 @@ public class Lang_de_DE {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Hole Benutzer Home");
 	    lang.put("tree.status.refresh.purge.trash", "Leere Papierkorb");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Wiederherstellen");

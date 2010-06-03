@@ -110,6 +110,7 @@ public class Lang_sv_SE {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Hämtar användarnas hemkataloger");
 	    lang.put("tree.status.refresh.purge.trash", "Rensar papperskorgen");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Återskapa");

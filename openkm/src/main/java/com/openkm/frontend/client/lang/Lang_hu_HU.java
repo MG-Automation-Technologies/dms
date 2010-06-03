@@ -110,6 +110,7 @@ public class Lang_hu_HU {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Saját mappa frissítése...");
 	    lang.put("tree.status.refresh.purge.trash", "Kuka ürítése...");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Visszaállítás");

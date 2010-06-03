@@ -110,6 +110,7 @@ public class Lang_mk_MK {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Примам корисничка домашна папка");
 	    lang.put("tree.status.refresh.purge.trash", "Чистење на ѓубрето");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Поврати");

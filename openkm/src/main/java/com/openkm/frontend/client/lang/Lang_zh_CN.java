@@ -110,6 +110,7 @@ public class Lang_zh_CN {
 	    lang.put("tree.status.refresh.get.keywords", "正在刷新关键字");//Refreshing keywords
 	    lang.put("tree.status.refresh.get.user.home", "正在获得用户根目录");
 	    lang.put("tree.status.refresh.purge.trash", "正在清空回收站");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "恢复");

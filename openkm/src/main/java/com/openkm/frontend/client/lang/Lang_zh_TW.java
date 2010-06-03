@@ -110,6 +110,7 @@ public class Lang_zh_TW {
 		lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 		lang.put("tree.status.refresh.get.user.home", "正在取得使用者首頁書籤");
 	    lang.put("tree.status.refresh.purge.trash", "正在清除回收筒");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "重新載入");

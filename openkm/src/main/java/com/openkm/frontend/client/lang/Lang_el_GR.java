@@ -110,6 +110,7 @@ public class Lang_el_GR {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Λήψη κόμβο χρήστη");
 	    lang.put("tree.status.refresh.purge.trash", "Άδειασμα απορριμάτων");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Επαναφορά");

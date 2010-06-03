@@ -110,6 +110,7 @@ public class Lang_ja_JP {
 		lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 		lang.put("tree.status.refresh.get.user.home", "ユーザホームの取得中...");
 		lang.put("tree.status.refresh.purge.trash", "ごみ箱の消去中...");
+		lang.put("tree.menu.directory.find.folder","Find folder");
 		
 		// Trash
 		lang.put("trash.menu.directory.restore", "ディレクトリの復元");

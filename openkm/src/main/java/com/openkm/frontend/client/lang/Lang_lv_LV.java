@@ -110,6 +110,7 @@ public class Lang_lv_LV {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Saņem leitotāja mājas");
 	    lang.put("tree.status.refresh.purge.trash", "iztīra miskasti");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Restaurēt");
