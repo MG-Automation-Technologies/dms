@@ -18,7 +18,7 @@ public class TwitterAccountDAO {
 	/**
 	 * Create account
 	 */
-	public void create(TwitterAccount ta) throws DatabaseException {
+	public static void create(TwitterAccount ta) throws DatabaseException {
 		log.debug("create({})", ta);
 
 		try {
@@ -33,7 +33,7 @@ public class TwitterAccountDAO {
 	/**
 	 * Update
 	 */
-	public void update(TwitterAccount ta) throws DatabaseException {
+	public static void update(TwitterAccount ta) throws DatabaseException {
 		log.debug("update({})", ta);
 
 		try {
@@ -48,7 +48,7 @@ public class TwitterAccountDAO {
 	/**
 	 * Delete
 	 */
-	public void delete(int taId) throws DatabaseException {
+	public static void delete(int taId) throws DatabaseException {
 		log.debug("delete({})", taId);
 
 		try {
@@ -92,7 +92,7 @@ public class TwitterAccountDAO {
 	 * Find all twitter accounts
 	 */
 	@SuppressWarnings("unchecked")
-	public List<TwitterAccount> findAll(boolean filterByActive) throws 
+	public static List<TwitterAccount> findAll(boolean filterByActive) throws 
 			DatabaseException {
 		log.debug("findAll()");
 		String qs = "from TwitterAccount ta " + 
@@ -117,7 +117,7 @@ public class TwitterAccountDAO {
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
-	public TwitterAccount findByPk(int taId) throws DatabaseException {
+	public static TwitterAccount findByPk(int taId) throws DatabaseException {
 		log.debug("findByPk({})", taId);
 		String qs = "from TwitterAccount ta where ta.id= :id";
 				
