@@ -21,149 +21,108 @@
 
 package com.openkm.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.ActivityFilter;
 
-public class ActivityDAO extends AbstractDAO {
+public class ActivityDAO  {
 	private static Logger log = LoggerFactory.getLogger(ActivityDAO.class);
-	private static ActivityDAO instance = null;
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getDataSourceName()
-	 */
-	protected String getDataSourceName() {
-		return "java:/OKMActivity"+Config.INSTALL+"DS";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getTableName()
-	 */
-	protected String getTableName() {
-		return "activity";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getSchema()
-	 */
-	protected String getSchema() {
-		return "activity";
-	}
 
 	private ActivityDAO() {}
 	
 	/**
-	 * @return
+	 * Create activity
 	 */
-	public static synchronized ActivityDAO getInstance() { 
-		if (instance == null) {
-			log.debug("getInstance()");
-			instance = new ActivityDAO();
-		}
-		
-		return instance;
+	public static void create(Activity activity) throws DatabaseException {
+	    try {
+	    	HibernateHelper.getSession().save(activity);
+	    } catch (HibernateException e) {
+	    	throw new DatabaseException(e.getMessage(), e);
+	    }
 	}
 	
 	/**
-	 * @param vo
-	 * @throws SQLException
+	 * Find by filter
 	 */
-	public void create(Activity vo) throws SQLException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		String sql = "INSERT INTO activity (act_date, act_user, act_token, act_action, act_item, act_params) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+	@SuppressWarnings("unchecked")
+	public static List<Activity> findByFilter(ActivityFilter filter) throws DatabaseException {
+		log.debug("findByFilter({})", filter);
+		String qs = "SELECT act_date, act_user, act_token, act_action, act_item, act_params "+
+			"FROM activity WHERE act_date BETWEEN ? AND ? ";
+		if (filter.getActUser() != null && !filter.getActUser().equals("")) 
+			qs += "AND act_user=? ";
+		if (filter.getActAction() != null && !filter.getActAction().equals("")) 
+			qs += "AND act_action=? ";
 
 		try {
-			con = getConnection();
+			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setTimestamp(1, new Timestamp(filter.getActDateBegin().getTimeInMillis()));
+			q.setTimestamp(2, new Timestamp(filter.getActDateEnd().getTimeInMillis()));
+			int pCount = 3;
 			
-			if (con != null) {
-				stmt = con.prepareStatement(sql);
-				stmt.setTimestamp(1, new Timestamp(vo.getActDate().getTimeInMillis()));
-				stmt.setString(2, vo.getActUser());
-				stmt.setString(3, vo.getActToken());
-				stmt.setString(4, vo.getActAction());
-				stmt.setString(5, vo.getActItem());
-				stmt.setString(6, vo.getActParams());
-				stmt.execute();
-			} else {
-				log.info("["+vo.getActUser()+", "+vo.getActToken()+"] "+vo.getActAction()+" - "+vo.getActItem()+" ("+vo.getActParams()+") ");
-			}
-		} finally {
-			closeStatement(stmt);
-			closeConnection(con);
+			if (filter.getActUser() != null && !filter.getActUser().equals("")) 
+				q.setString(pCount++, filter.getActUser());
+			if (filter.getActAction() != null && !filter.getActAction().equals(""))
+				q.setString(pCount++, filter.getActAction());
+		
+			List<Activity> ret = q.list();
+			log.debug("findByFilter: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
 	}
-
+	
 	/**
-	 * @param filter
-	 * @return
-	 * @throws SQLException
+	 * Get activity date
 	 */
-	public Collection<Activity> findByFilter(ActivityFilter filter) throws SQLException {
-		log.debug("findByFilter("+filter+")");
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		ArrayList<Activity> al = new ArrayList<Activity>();
-		String sql = "SELECT act_date, act_user, act_token, act_action, act_item, act_params "+
-			"FROM activity WHERE act_date BETWEEN ? AND ? ";
-
-		if (filter.getActUser() != null && !filter.getActUser().equals("")) 
-			sql += "AND act_user=? ";
-		if (filter.getActAction() != null && !filter.getActAction().equals("")) 
-			sql += "AND act_action=? ";
-
+	@SuppressWarnings("unchecked")
+	public static Calendar getActivityDate(String user, String action, String item) throws 
+			DatabaseException {
+		log.debug("getActivityDate({}, {}, {})", new Object[] { user, action, item });
+		String qsAct = "select max(a.date) from Activity a " +
+			"where a.user= :user and a.action= :action and a.item= :item";
+		String qsNoAct = "select max(a.date) from Activity a " +
+			"where (a.action='CREATE_DOCUMENT' or a.action='SET_DOCUMENT_CONTENT') and a.item= :item";
+		
 		try {
-			con = getConnection();
+			Query q = null;
 			
-			if (con != null) {
-				PreparedStatement pst = con.prepareStatement(sql);
-				pst.setTimestamp(1, new Timestamp(filter.getActDateBegin().getTimeInMillis()));
-				pst.setTimestamp(2, new Timestamp(filter.getActDateEnd().getTimeInMillis()));
-				int pCount = 3;
-				
-				if (filter.getActUser() != null && !filter.getActUser().equals("")) 
-					pst.setString(pCount++, filter.getActUser());
-				if (filter.getActAction() != null && !filter.getActAction().equals(""))
-					pst.setString(pCount++, filter.getActAction());
-				
-				rs = pst.executeQuery();
-				
-				while (rs.next()) {
-					Activity vo = new Activity();
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getTimestamp(1).getTime());
-					vo.setActDate(cal);
-					vo.setActUser(rs.getString(2));
-					vo.setActToken(rs.getString(3));
-					vo.setActAction(rs.getString(4));
-					vo.setActItem(rs.getString(5));
-					vo.setActParams(rs.getString(6));
-					al.add(vo);
-				}
+			if (action != null) {
+				q = HibernateHelper.getSession().createQuery(qsAct);
+				q.setString("user", user);
+				q.setString("action", action);
+				q.setString("item", item);
 			} else {
-				log.error("Can't connect to activity database");
+				q = HibernateHelper.getSession().createQuery(qsNoAct);
+				q.setString("item", item);
 			}
-		} finally {
-			closeResultSet(rs);
-			closeStatement(stmt);
-			closeConnection(con);
+			
+			List<Activity> results = q.list();
+			Calendar ret = null;
+			
+			if (results.size() == 1) {
+				if (results.get(0).getDate() != null) {
+					ret = results.get(0).getDate();
+				} else {
+					// May be the document has been moved or renamed? 
+					ret = Calendar.getInstance();
+				}
+			}
+			
+			log.debug("getActivityDate: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
-
-		log.debug("findByFilter: "+al);
-		return al;
 	}
 }

@@ -36,6 +36,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,16 @@ public abstract class AbstractDAO {
 	protected abstract String getDataSourceName();
 	protected abstract String getTableName();
 	protected abstract String getSchema();
+	
+	protected static void close(Transaction tx) {
+		if (tx != null && tx.isActive()) {
+	        try {
+	          tx.rollback();
+	        } catch (HibernateException e1) {
+	        	log.debug("Error rolling back transaction");
+	        }
+		}
+	}
 	
 	/**
 	 * 

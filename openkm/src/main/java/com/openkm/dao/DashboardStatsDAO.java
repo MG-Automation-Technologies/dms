@@ -21,156 +21,131 @@
 
 package com.openkm.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.DashboardStats;
 
-public class DashboardStatsDAO extends AbstractDAO {
+public class DashboardStatsDAO {
 	private static Logger log = LoggerFactory.getLogger(DashboardStatsDAO.class);
-	private static DashboardStatsDAO instance = null;
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getDataSourceName()
-	 */
-	protected String getDataSourceName() {
-		return "java:/OKMDashboardStats"+Config.INSTALL+"DS";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getTableName()
-	 */
-	protected String getTableName() {
-		return "dashboard_stats";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openkm.dao.AbstractDAO#getSchema()
-	 */
-	protected String getSchema() {
-		return "dashboard_stats";
-	}
 
 	private DashboardStatsDAO() {}
 	
 	/**
-	 * @return
+	 * Get dashboard stats
 	 */
-	public static synchronized DashboardStatsDAO getInstance() { 
-		if (instance == null) {
-			log.debug("getInstance()");
-			instance = new DashboardStatsDAO();
+	@SuppressWarnings("unchecked")
+	public DashboardStats findByPk(int dsId) throws DatabaseException {
+		log.debug("findByPk({})", dsId);
+		String qs = "from DashboardStats ds where ds.id= :id";
+		
+		try {
+			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setInteger("id", dsId);
+			List<DashboardStats> results = q.list(); // uniqueResult
+			DashboardStats ret = null;
+			
+			if (results.size() == 1) {
+				ret = results.get(0);
+			}
+			
+			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Create dashboard stats
+	 */
+	public static void create(DashboardStats dashboardStats) throws DatabaseException {
+		try {
+			HibernateHelper.getSession().save(dashboardStats);
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Delete dashboard stats
+	 */
+	public void delete(int dsId) throws DatabaseException {
+		try {
+			DashboardStats ds = findByPk(dsId);
+			HibernateHelper.getSession().update(ds);
+			HibernateHelper.getSession().delete(ds);
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Find by user source
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<DashboardStats> findByUserSource(String user, String source) throws 
+			DatabaseException {
+		log.debug("findByUserSource({}, {})", user, source);
+		String qs = "from DashboardStats ds where ds.user= :user and ds.source= :source";
+
+		try {
+			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("user", user);
+			q.setString("source", source);
+			List<DashboardStats> ret = q.list();
+			log.debug("findByUserSource: "+ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Delete visited nodes
+	 */
+	public static void deleteVisitedNodes(String user, String source) throws DatabaseException {
+		log.debug("deleteVisitedNodes({}, {})", user, source);
+		String qs = "delete from DashboardStats ds where ds.user= :user and ds.source= :source";
+
+		try {
+			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("user", user);
+			q.setString("source", source);
+			q.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
 		
-		return instance;
+		log.debug("deleteVisitedNodes: void");
 	}
 	
 	/**
-	 * @param vo
-	 * @throws SQLException
+	 * Delete old visited node
 	 */
-	public void create(DashboardStats vo) throws SQLException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		String sql = "INSERT INTO dashboard_stats (ds_user, ds_source, ds_node, ds_date) "
-				+ "VALUES (?, ?, ?, ?)";
-
+	public static void purgeOldVisitedNode(String user, String source, String node, Calendar date) throws 
+			DatabaseException {
+		log.debug("purgeOldVisitedNode({}, {}, {}, {})", new Object[] { user, source, node, date });
+		String qs = "delete from DashboardStats ds where ds.user= :user and ds.source= :source "+
+			"and ds.node= :node and ds.date= :date";
+		
 		try {
-			con = getConnection();
-			
-			if (con != null) {
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getDsUser());
-				stmt.setString(2, vo.getDsSource());
-				stmt.setString(3, vo.getDsNode());
-				stmt.setTimestamp(4, new Timestamp(vo.getDsDate().getTimeInMillis()));
-				stmt.execute();
-			} else {
-				log.error("Can't connect to dashboard stats database");
-			}
-		} finally {
-			closeStatement(stmt);
-			closeConnection(con);
+			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("user", user);
+			q.setString("source", source);
+			q.setString("node", node);
+			q.setCalendar("date", date);
+			q.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
-	}
-	
-	/**
-	 * @param vo
-	 * @throws SQLException
-	 */
-	public void delete(DashboardStats vo) throws SQLException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		String sql = "DELETE FROM dashboard_stats WHERE ds_user=? AND ds_source=? AND ds_node=?";
-
-		try {
-			con = getConnection();
-			
-			if (con != null) {
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, vo.getDsUser());
-				stmt.setString(2, vo.getDsSource());
-				stmt.setString(3, vo.getDsNode());
-				stmt.execute();
-			} else {
-				log.error("Can't connect to dashboard stats database");
-			}
-		} finally {
-			closeStatement(stmt);
-			closeConnection(con);
-		}
-	}
-
-	/**
-	 * @param filter
-	 * @return
-	 * @throws SQLException
-	 */
-	public Collection<DashboardStats> findByUserSource(String user, String source) throws SQLException {
-		log.debug("findByUserSource("+user+", "+source+")");
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		ArrayList<DashboardStats> al = new ArrayList<DashboardStats>();
-		String sql = "SELECT ds_date, ds_node FROM dashboard_stats WHERE ds_user=? AND ds_source=?";
-
-		try {
-			con = getConnection();
-			
-			if (con != null) {
-				PreparedStatement pst = con.prepareStatement(sql);
-				pst.setString(1, user);
-				pst.setString(2, source);
-				rs = pst.executeQuery();
-				
-				while (rs.next()) {
-					DashboardStats vo = new DashboardStats();
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getTimestamp(1).getTime());
-					vo.setDsDate(cal);
-					vo.setDsNode(rs.getString(2));
-					al.add(vo);
-				}
-			} else {
-				log.error("Can't connect to dashboard stats database");
-			}
-		} finally {
-			closeResultSet(rs);
-			closeStatement(stmt);
-			closeConnection(con);
-		}
-
-		log.debug("findByUserSource: "+al);
-		return al;
+		
+		log.debug("purgeOldVisitedNode: void");
 	}
 }
