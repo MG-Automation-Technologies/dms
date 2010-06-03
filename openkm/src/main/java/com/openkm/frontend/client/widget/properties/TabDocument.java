@@ -41,8 +41,8 @@ import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
-import com.openkm.frontend.client.extension.event.DocumentHandlerExtension;
-import com.openkm.frontend.client.extension.event.HasDocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -140,6 +140,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		security.setPixelSize(width-2,height-22); // Substract tab height
 		security.fillWidth();
 		
+		// Setting size to extension
 		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
 			it.next().setPixelSize(width,height-20); // Substract tab height
 		}
