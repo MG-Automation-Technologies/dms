@@ -19,24 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
-
-import com.openkm.frontend.client.Main;
-
+package com.openkm.frontend.client.extension;
 
 /**
- * GeneralExtensionComunicator
+ * HasEnabledExtension
  * 
  * @author jllort
  *
  */
-public class GeneralExtensionComunicator {
+public interface HasEnabledExtension {
 	
-	/**
-	 * refreshUI
-	 */
-	public static void refreshUI() {
-		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
-	}
-
+	public abstract boolean isEnabled();
+	
+	public abstract void enable(boolean enable);
+	
 }
