@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.openkm.dao.bean.DashboardStats" table="OKM_DASHBOARD_STATS">
+    <id name="id" column="DS_ID"><generator class="native"/></id>
+    <property name="user" column="DS_USER" not-null="true"/>
+    <property name="source" column="DS_SOURCE" not-null="true"/>
+    <property name="node" column="DS_NODE" not-null="true"/>
+    <property name="date" column="DS_DATE" not-null="true"/>
+  </class>
+</hibernate-mapping>

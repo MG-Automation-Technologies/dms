@@ -4,11 +4,11 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Activity" table="OKM_ACTIVITY">
     <id name="id" column="ID"><generator class="native"/></id>
-    <property name="date" column="DATE" type="timestamp"/>
-    <property name="user" column="USER"/>
-    <property name="token" column="TOKEN"/>
-    <property name="action" column="ACTION"/>
-    <property name="item" column="ITEM"/>
-    <property name="params" column="PARAMS"/>
+    <property name="date" column="ACT_DATE" not-null="true"/>
+    <property name="user" column="ACT_USER" not-null="true"/>
+    <property name="token" column="ACT_TOKEN"/>
+    <property name="action" column="ACT_ACTION" not-null="true"/>
+    <property name="item" column="ACT_ITEM"/>
+    <property name="params" column="ACT_PARAMS"/>
   </class>
 </hibernate-mapping>

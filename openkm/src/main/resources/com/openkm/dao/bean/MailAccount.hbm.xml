@@ -2,13 +2,13 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.MailAccount" table="OKM_MAIL_ACCOUNT">
-    <id name="id" column="ID"><generator class="native"/></id>
-    <property name="okmUser" column="OKM_USER"/>
-    <property name="host" column="HOST"/>
-    <property name="folder" column="FOLDER"/>
-    <property name="user" column="USER"/>
-    <property name="password" column="PASSWORD"/>
-    <property name="active" column="ACTIVE"/>
+  <class name="com.openkm.dao.bean.MailAccount" table="OKM_MAIL_ACCOUNTS">
+    <id name="id" column="MA_ID"><generator class="native"/></id>
+    <property name="user" column="MA_USER" not-null="true"/>
+    <property name="mailHost" column="MA_MHOST" not-null="true"/>
+    <property name="mailFolder" column="MA_MFOLDER" not-null="true"/>
+    <property name="mailUser" column="MA_MUSER" not-null="true"/>
+    <property name="mailPassword" column="MA_MPASS" not-null="true"/>
+    <property name="active" column="MA_ACTIVE" not-null="true"/>
   </class>
 </hibernate-mapping>
