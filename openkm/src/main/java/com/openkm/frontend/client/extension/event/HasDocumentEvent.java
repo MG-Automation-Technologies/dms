@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.extension.event;
 
 /**
- * DocumentEventConstant
+ * HasDocumentEvent
  * 
  * 
  * @author jllort
