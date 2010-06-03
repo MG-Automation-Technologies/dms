@@ -2,8 +2,8 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.Activity" table="OKM_ACTIVITY">
-    <id name="id" column="ID"></id>
-    <property name="active" column="ACTIVE"/>
+  <class name="com.openkm.dao.bean.Role" table="OKM_ROLES">
+    <id name="id" column="ROL_ID"><generator class="assigned"/></id>
+    <property name="active" column="ROL_ACTIVE" not-null="true"/>
   </class>
 </hibernate-mapping>
