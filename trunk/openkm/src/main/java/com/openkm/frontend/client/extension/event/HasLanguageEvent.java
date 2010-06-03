@@ -19,43 +19,48 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.extension.comunicator;
-
-import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.ToolBarOption;
-
+package com.openkm.frontend.client.extension.event;
 
 /**
- * GeneralComunicator
+ * HasLanguageEvent
+ * 
  * 
  * @author jllort
  *
  */
-public class GeneralComunicator {
-	
-	/**
-	 * refreshUI
-	 */
-	public static void refreshUI() {
-		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
-	}
-	
-	/**
-	 * getToolBarOption
-	 * 
-	 * @return
-	 */
-	public ToolBarOption getToolBarOption() {
-		return Main.get().mainPanel.topPanel.toolBar.getToolBarOption();
-	}
-	
-	/**
-	 * getLang
-	 * 
-	 * @return
-	 */
-	public String getLang() {
-		return Main.get().getLang();
-	}
 
+public interface HasLanguageEvent {
+	
+	/**
+	 * DocumentEventConstant
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public static class LanguageEventConstant {
+		
+		static final int EVENT_LANGUAGE_CHANGED	= 1;
+		
+		private int type = 0;
+		
+		/**
+		 * DocumentEventConstant
+		 * 
+		 * @param type
+		 */
+		private LanguageEventConstant(int type) {
+			this.type = type;
+		}
+		
+		public int getType(){
+			return type;
+		}
+	}
+	
+	LanguageEventConstant LANGUAGE_CHANGED = new LanguageEventConstant(LanguageEventConstant.EVENT_LANGUAGE_CHANGED);
+	
+	/**
+	 * @param event
+	 */
+	void fireEvent(LanguageEventConstant event);
 }
