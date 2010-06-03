@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.widget.TabWorkspace;
-import com.openkm.frontend.client.widget.ToolBar;
 import com.openkm.frontend.client.widget.mainmenu.MainMenu;
+import com.openkm.frontend.client.widget.toolbar.ToolBar;
 
 /**
  * Top panel
