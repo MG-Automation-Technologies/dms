@@ -24,50 +24,50 @@ package com.openkm.dao.bean;
 import java.util.Calendar;
 
 public class ActivityFilter {
-	private Calendar actDateBegin;
-	private Calendar actDateEnd;
-	private String actUser;
-	private String actAction;
+	private Calendar begin;
+	private Calendar end;
+	private String user;
+	private String action;
 	
-	public Calendar getActDateBegin() {
-		return actDateBegin;
+	public Calendar getBegin() {
+		return begin;
 	}
 	
-	public void setActDateBegin(Calendar actDateBegin) {
-		this.actDateBegin = actDateBegin;
+	public void setBegin(Calendar begin) {
+		this.begin = begin;
 	}
 	
-	public Calendar getActDateEnd() {
-		return actDateEnd;
+	public Calendar getEnd() {
+		return end;
 	}
 	
-	public void setActDateEnd(Calendar actDateEnd) {
-		this.actDateEnd = actDateEnd;
+	public void setEnd(Calendar end) {
+		this.end = end;
 	}
 	
-	public String getActUser() {
-		return actUser;
+	public String getUser() {
+		return user;
 	}
 	
-	public void setActUser(String actUser) {
-		this.actUser = actUser;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public String getActAction() {
-		return actAction;
+	public String getAction() {
+		return action;
 	}
 
-	public void setActAction(String actAction) {
-		this.actAction = actAction;
+	public void setAction(String action) {
+		this.action = action;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("actDateBegin="); sb.append(actDateBegin==null?null:actDateBegin.getTime());
-		sb.append(", actDateEnd="); sb.append(actDateEnd==null?null:actDateEnd.getTime());
-		sb.append(", actUser="); sb.append(actUser);
-		sb.append(", actAction="); sb.append(actAction);
+		sb.append("begin="); sb.append(begin==null?null:begin.getTime());
+		sb.append(", end="); sb.append(end==null?null:end.getTime());
+		sb.append(", user="); sb.append(user);
+		sb.append(", action="); sb.append(action);
 		sb.append("}");
 		return sb.toString();
 	}
