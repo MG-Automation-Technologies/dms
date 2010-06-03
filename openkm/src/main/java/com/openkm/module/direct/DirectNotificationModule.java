@@ -53,7 +53,7 @@ import com.openkm.core.Config;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
-import com.openkm.dao.AuthDAO;
+import com.openkm.dao.TwitterAccountDAO;
 import com.openkm.dao.bean.TwitterAccount;
 import com.openkm.module.NotificationModule;
 import com.openkm.util.FileUtils;
@@ -394,11 +394,9 @@ public class DirectNotificationModule implements NotificationModule {
 					Velocity.evaluate(context, swStatus, "SubscriptionTwitterStatus", Config.SUBSCRIPTION_TWITTER_STATUS);	
 				}
 				
-				AuthDAO auth = AuthDAO.getInstance();
-				
 				for (Iterator<String> itUsers = users.iterator(); itUsers.hasNext(); ) {
 					String itUser = itUsers.next();
-					Collection<TwitterAccount> twitterAccounts = auth.findTwitterAccountsByUser(itUser, true);
+					Collection<TwitterAccount> twitterAccounts = TwitterAccountDAO.findByUser(itUser, true);
 					
 					for (Iterator<TwitterAccount> itTwitter = twitterAccounts.iterator(); itTwitter.hasNext(); ) {
 						TwitterAccount ta = itTwitter.next();

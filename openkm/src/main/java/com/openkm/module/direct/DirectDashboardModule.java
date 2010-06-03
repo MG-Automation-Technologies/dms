@@ -22,18 +22,12 @@
 package com.openkm.module.direct;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -43,6 +37,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,11 +52,14 @@ import com.openkm.bean.Repository;
 import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.DashboardStatsDAO;
+import com.openkm.dao.HibernateHelper;
+import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.DashboardStats;
 import com.openkm.module.DashboardModule;
 import com.openkm.util.JCRUtils;
@@ -69,14 +67,11 @@ import com.openkm.util.UserActivity;
 
 public class DirectDashboardModule implements DashboardModule {
 	private static Logger log = LoggerFactory.getLogger(DirectDashboardModule.class);
-	private static ActivityDAO actDao = ActivityDAO.getInstance();
-	private static DashboardStatsDAO dsDao = DashboardStatsDAO.getInstance();
 	private static final int MAX_RESULTS = 20;
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token) throws RepositoryException {
+	public List<DashboardStatsDocumentResult> getUserLockedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLockedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = null;
 		Session session = null;
 		
 		try {
@@ -86,8 +81,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLockedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserLockedDocuments(session);
+			log.debug("getUserLockedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -96,19 +93,16 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getUserLockedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserLockedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserLockedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLockedDocuments({})", session);
-		String statement = "/jcr:root/okm:root//element(*, okm:document)[@jcr:lockOwner='"+session.getUserID()+"' and okm:content/@jcr:isCheckedOut=false()]";
-		ArrayList<DashboardStatsDocumentResult> al = executeQueryDocument(session, statement, "LOCK_DOCUMENT", Integer.MAX_VALUE);
+		String qs = "/jcr:root/okm:root//element(*, okm:document)[@jcr:lockOwner='"+session.getUserID()+"' and okm:content/@jcr:isCheckedOut=false()]";
+		List<DashboardStatsDocumentResult> al = executeQueryDocument(session, qs, "LOCK_DOCUMENT", Integer.MAX_VALUE);
 
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserLockedDocuments", al);
@@ -117,9 +111,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException {
+	public List<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException {
 		log.debug("getUserCheckedOutDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = null;
 		Session session = null;
 		
 		try {
@@ -129,8 +122,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserCheckedOutDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserCheckedOutDocuments(session);
+			log.debug("getUserCheckedOutDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -139,19 +134,16 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getUserCheckedOutDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserCheckedOutDocuments(Session session) throws 
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserCheckedOutDocuments(Session session) throws 
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserCheckedOutDocuments({})", session);
-		String statement = "/jcr:root/okm:root//element(*, okm:document)[@jcr:lockOwner='"+session.getUserID()+"' and okm:content/@jcr:isCheckedOut=true()]";
-		ArrayList<DashboardStatsDocumentResult> al = executeQueryDocument(session, statement, "CHECKOUT_DOCUMENT", Integer.MAX_VALUE);
+		String qs = "/jcr:root/okm:root//element(*, okm:document)[@jcr:lockOwner='"+session.getUserID()+"' and okm:content/@jcr:isCheckedOut=true()]";
+		List<DashboardStatsDocumentResult> al = executeQueryDocument(session, qs, "CHECKOUT_DOCUMENT", Integer.MAX_VALUE);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserCheckedOutDocuments", al);
@@ -160,9 +152,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
+	public List<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
 		log.debug("getUserSubscribedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = null;
 		Session session = null;
 		
 		try {
@@ -172,8 +163,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserSubscribedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserSubscribedDocuments(session);
+			log.debug("getUserSubscribedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -182,19 +175,16 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getUserSubscribedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserSubscribedDocuments(Session session) throws 
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserSubscribedDocuments(Session session) throws 
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserSubscribedDocuments({})", session);
-		String statement = "/jcr:root/okm:root//element(*, mix:notification)[@jcr:primaryType='okm:document' and @okm:subscriptors='"+session.getUserID()+"']";
-		ArrayList<DashboardStatsDocumentResult> al = executeQueryDocument(session, statement, "SUBSCRIBE_USER", Integer.MAX_VALUE);
+		String qs = "/jcr:root/okm:root//element(*, mix:notification)[@jcr:primaryType='okm:document' and @okm:subscriptors='"+session.getUserID()+"']";
+		List<DashboardStatsDocumentResult> al = executeQueryDocument(session, qs, "SUBSCRIBE_USER", Integer.MAX_VALUE);
 			
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserSubscribedDocuments", al);
@@ -203,9 +193,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
+	public List<DashboardStatsFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
 		log.debug("getUserSubscribedFolders({})", token);
-		ArrayList<DashboardStatsFolderResult> al = null;
 		Session session = null;
 		
 		try {
@@ -215,8 +204,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserSubscribedFolders(session);
-		} catch (SQLException e) {
+			List<DashboardStatsFolderResult> al = getUserSubscribedFolders(session);
+			log.debug("getUserSubscribedFolders: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -225,19 +216,16 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getUserSubscribedFolders: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsFolderResult> getUserSubscribedFolders(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsFolderResult> getUserSubscribedFolders(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserSubscribedFolders({})", session);
-		String statement = "/jcr:root/okm:root//element(*, mix:notification)[@jcr:primaryType='okm:folder' and @okm:subscriptors='"+session.getUserID()+"']";
-		ArrayList<DashboardStatsFolderResult> al = executeQueryFolder(session, statement, "SUBSCRIBE_USER", Integer.MAX_VALUE);
+		String qs = "/jcr:root/okm:root//element(*, mix:notification)[@jcr:primaryType='okm:folder' and @okm:subscriptors='"+session.getUserID()+"']";
+		List<DashboardStatsFolderResult> al = executeQueryFolder(session, qs, "SUBSCRIBE_USER", Integer.MAX_VALUE);
 
 		// Check for already visited results
 		checkVisitedFolders(session.getUserID(), "UserSubscribedFolders", al);
@@ -248,12 +236,12 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Execute query with documents
 	 */
-	private ArrayList<DashboardStatsDocumentResult> executeQueryDocument(Session session, String statement, String action, int maxResults) 
-			throws javax.jcr.RepositoryException, SQLException {
+	private ArrayList<DashboardStatsDocumentResult> executeQueryDocument(Session session, String qs,
+			String action, int maxResults) throws javax.jcr.RepositoryException, DatabaseException {
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(statement, "xpath");
+		Query query = queryManager.createQuery(qs, "xpath");
 		QueryResult result = query.execute();
 		int i = 0;
 		
@@ -262,7 +250,7 @@ public class DirectDashboardModule implements DashboardModule {
 			Document doc = new DirectDocumentModule().getProperties(session, node.getPath());
 			DashboardStatsDocumentResult vo = new DashboardStatsDocumentResult();
 			vo.setDocument(doc);
-			vo.setDate(getActivityDate(session.getUserID(), action, node.getPath()));
+			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getPath()));
 			vo.setVisited(false);
 			al.add(vo);
 		}
@@ -280,12 +268,12 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Execute query with folders
 	 */
-	private ArrayList<DashboardStatsFolderResult> executeQueryFolder(Session session, String statement, String action, int maxResults) 
-			throws javax.jcr.RepositoryException, SQLException {
+	private ArrayList<DashboardStatsFolderResult> executeQueryFolder(Session session, String qs,
+			String action, int maxResults) throws javax.jcr.RepositoryException, DatabaseException {
 		ArrayList<DashboardStatsFolderResult> al = new ArrayList<DashboardStatsFolderResult>();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
-		Query query = queryManager.createQuery(statement, "xpath");
+		Query query = queryManager.createQuery(qs, "xpath");
 		QueryResult result = query.execute();
 		int i = 0;
 		
@@ -294,7 +282,7 @@ public class DirectDashboardModule implements DashboardModule {
 			Folder fld = new DirectFolderModule().getProperties(session, node.getPath());
 			DashboardStatsFolderResult vo = new DashboardStatsFolderResult();
 			vo.setFolder(fld);
-			vo.setDate(getActivityDate(session.getUserID(), action, node.getPath()));
+			vo.setDate(ActivityDAO.getActivityDate(session.getUserID(), action, node.getPath()));
 			vo.setVisited(false);
 			al.add(vo);
 		}
@@ -309,57 +297,9 @@ public class DirectDashboardModule implements DashboardModule {
 		return al;
 	}
 	
-	/**
-	 * Get activity date
-	 */
-	private Calendar getActivityDate(String user, String action, String item) throws SQLException {
-		log.debug("getActivityDate({}, {}, {})", new Object[] { user, action, item });
-		String sqlAction = "SELECT MAX(act_date) FROM activity " +
-			"WHERE act_user = ? AND act_action = ? AND act_item = ?";
-		String sqlNoAction = "SELECT MAX(act_date) FROM activity " +
-			"WHERE ( act_action = 'CREATE_DOCUMENT' OR act_action = 'SET_DOCUMENT_CONTENT' ) AND act_item = ?";
-		Calendar cal = Calendar.getInstance();
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = actDao.getConnection();
-			
-			if (action != null) {
-				stmt = con.prepareStatement(sqlAction);
-				stmt.setString(1, user);
-				stmt.setString(2, action);
-				stmt.setString(3, item);
-			} else {
-				stmt = con.prepareStatement(sqlNoAction);
-				stmt.setString(1, item);
-			}
-			
-			rs = stmt.executeQuery();
-			
-			if (rs.next()) {
-				if (rs.getTimestamp(1) != null) {
-					cal.setTimeInMillis(rs.getTimestamp(1).getTime());
-				} else {
-					// May be the document has been moved or renamed? 
-					cal.setTimeInMillis(0);
-				}
-			}
-		} finally {
-			actDao.closeResultSet(rs);
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
-		}
-		
-		log.debug("getActivityDate: {}", cal);
-		return cal;
-	}
-
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException {
+	public List<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastUploadedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -369,8 +309,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLastUploadedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserLastUploadedDocuments(session);
+			log.debug("getUserLastUploadedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -379,21 +321,17 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getUserLastUploadedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserLastUploadedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserLastUploadedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastUploadedDocuments({})", session);
-		String statement = "SELECT act_item, act_date FROM activity "+
-			"WHERE act_action='CREATE_DOCUMENT' "+
-			"AND act_user=? ORDER BY act_date DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getDocuments(session, statement);
+		String qs = "from Activity a where a.action='CREATE_DOCUMENT' and a.user= :user " +
+			"order by a.date desc";
+		List<DashboardStatsDocumentResult> al = getDocuments(session, qs);
 			
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserLastUploadedDocuments", al);
@@ -402,9 +340,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException {
+	public List<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException {
 		log.debug("getUserLastModifiedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -414,8 +351,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLastModifiedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserLastModifiedDocuments(session);
+			log.debug("getUserLastModifiedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -424,21 +363,18 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getUserLastModifiedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserLastModifiedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserLastModifiedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastModifiedDocuments({})", session);
-		String statement = "SELECT DISTINCT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='SET_DOCUMENT_CONTENT' AND act_user=? "+
-			"GROUP BY act_item ORDER BY MAX(act_date) DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getDocuments(session, statement);
+		String qs = "select distinct a.item, max(a.date) from Activity a "+
+			"where a.action='SET_DOCUMENT_CONTENT' and a.user= :user "+
+			"group by a.item order by max(a.date) desc";
+		List<DashboardStatsDocumentResult> al = getDocuments(session, qs);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserLastModifiedDocuments", al);
@@ -447,10 +383,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
+	public List<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
 			throws RepositoryException {
 		log.debug("getUserLastDownloadedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -460,8 +395,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLastDownloadedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserLastDownloadedDocuments(session);
+			log.debug("getUserLastDownloadedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -470,21 +407,18 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getUserLastDownloadedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastDownloadedDocuments({})", session);
-		String statement = "SELECT DISTINCT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='GET_DOCUMENT_CONTENT' AND act_user=? "+
-			"GROUP BY act_item ORDER BY MAX(act_date) DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getDocuments(session, statement);
+		String qs = "select distinct a.item, max(a.date) from Activity a "+
+			"where a.action='GET_DOCUMENT_CONTENT' and a.user= :user "+
+			"group by a.item order by max(a.date) desc";
+		List<DashboardStatsDocumentResult> al = getDocuments(session, qs);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserLastDownloadedDocuments", al);
@@ -493,10 +427,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token) 
+	public List<DashboardStatsMailResult> getUserLastImportedMails(String token) 
 			throws RepositoryException {
 		log.debug("getUserLastImportedMails({})", token);
-		ArrayList<DashboardStatsMailResult> al = new ArrayList<DashboardStatsMailResult>();
 		Session session = null;
 		
 		try {
@@ -506,8 +439,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLastImportedMails(session);
-		} catch (SQLException e) {
+			List<DashboardStatsMailResult> al = getUserLastImportedMails(session);
+			log.debug("getUserLastImportedMails: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -516,21 +451,17 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getUserLastImportedMails: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsMailResult> getUserLastImportedMails(Session session) throws 
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsMailResult> getUserLastImportedMails(Session session) throws 
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastImportedMails({})", session);
-		String statement = "SELECT act_item, act_date FROM activity "+
-			"WHERE act_action='CREATE_MAIL' "+
-			"AND act_user=? ORDER BY act_date DESC";
-		ArrayList<DashboardStatsMailResult> al = getMails(session, statement);
+		String sq = "from Activity a where a.action='CREATE_MAIL' and a.user= :user " +
+			"order by a.date desc";
+		List<DashboardStatsMailResult> al = getMails(session, sq);
 		
 		// Check for already visited results
 		checkVisitedMails(session.getUserID(), "UserLastImportedMails", al);
@@ -539,10 +470,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token) 
+	public List<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token) 
 			throws RepositoryException {
 		log.debug("getUserLastImportedMailAttachments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -552,8 +482,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getUserLastImportedMailAttachments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getUserLastImportedMailAttachments(session);
+			log.debug("getUserLastImportedMailAttachments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -562,21 +494,17 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getUserLastImportedMailAttachments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastImportedMailAttachments({})", session);
-		String statement = "SELECT act_item, act_date FROM activity "+
-			"WHERE act_action='CREATE_MAIL_ATTACHMENT' "+
-			"AND act_user=? ORDER BY act_date DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getDocuments(session, statement);
+		String qs = "from Activity a where a.action='CREATE_MAIL_ATTACHMENT' and a.user= :user " +
+			"order by a.date desc";
+		List<DashboardStatsDocumentResult> al = getDocuments(session, qs);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "UserLastImportedMailAttachments", al);
@@ -588,37 +516,31 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get documents from statement
 	 */
-	private ArrayList<DashboardStatsDocumentResult> getDocuments(Session session, String statement) 
-			throws javax.jcr.RepositoryException, SQLException {
-		log.debug("getDocuments({}, {})", session, statement);
+	@SuppressWarnings("unchecked")
+	private ArrayList<DashboardStatsDocumentResult> getDocuments(Session session, String qs) 
+			throws javax.jcr.RepositoryException, DatabaseException {
+		log.debug("getDocuments({}, {})", session, qs);
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		int i = 0;
 		
 		try {
-			con = actDao.getConnection();
-			stmt = con.prepareStatement(statement);
-			stmt.setString(1, session.getUserID());
-			rs = stmt.executeQuery();
+			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("user", session.getUserID());
+			q.setMaxResults(MAX_RESULTS);
 			
-			while (rs.next() && i++ < MAX_RESULTS) {
-				if (session.getRootNode().hasNode(rs.getString(1).substring(1))) {
-					Document doc = new DirectDocumentModule().getProperties(session, rs.getString(1));
+			for (Iterator<Activity> it = q.list().iterator(); it.hasNext(); ) {
+				Activity act = it.next();
+				
+				if (session.getRootNode().hasNode(act.getItem().substring(1))) {
+					Document doc = new DirectDocumentModule().getProperties(session, act.getItem());
 					DashboardStatsDocumentResult vo = new DashboardStatsDocumentResult();
 					vo.setDocument(doc);
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getTimestamp(2).getTime());
-					vo.setDate(cal);
+					vo.setDate(act.getDate());
 					vo.setVisited(false);
 					al.add(vo);
 				}
 			}
-		} finally {
-			actDao.closeResultSet(rs);
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
 		
 		log.debug("getDocuments: {}", al);
@@ -628,37 +550,31 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get mails from statement
 	 */
-	private ArrayList<DashboardStatsMailResult> getMails(Session session, String statement) 
-			throws javax.jcr.RepositoryException, SQLException {
-		log.debug("getMails({}, {})", session, statement);
+	@SuppressWarnings("unchecked")
+	private ArrayList<DashboardStatsMailResult> getMails(Session session, String qs) 
+			throws javax.jcr.RepositoryException, DatabaseException {
+		log.debug("getMails({}, {})", session, qs);
 		ArrayList<DashboardStatsMailResult> al = new ArrayList<DashboardStatsMailResult>();
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		int i = 0;
 		
 		try {
-			con = actDao.getConnection();
-			stmt = con.prepareStatement(statement);
-			stmt.setString(1, session.getUserID());
-			rs = stmt.executeQuery();
+			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("user", session.getUserID());
+			q.setMaxResults(MAX_RESULTS);
 			
-			while (rs.next() && i++ < MAX_RESULTS) {
-				if (session.getRootNode().hasNode(rs.getString(1).substring(1))) {
-					Mail mail = new DirectMailModule().getProperties(session, rs.getString(1));
+			for (Iterator<Activity> it = q.list().iterator(); it.hasNext(); ) {
+				Activity act = it.next();
+				
+				if (session.getRootNode().hasNode(act.getItem().substring(1))) {
+					Mail mail = new DirectMailModule().getProperties(session, act.getItem());
 					DashboardStatsMailResult vo = new DashboardStatsMailResult();
 					vo.setMail(mail);
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getTimestamp(2).getTime());
-					vo.setDate(cal);
+					vo.setDate(act.getDate());
 					vo.setVisited(false);
 					al.add(vo);
 				}
 			}
-		} finally {
-			actDao.closeResultSet(rs);
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
 		
 		log.debug("getMails: {}", al);
@@ -695,10 +611,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
+			String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, "xpath");
+			Query query = queryManager.createQuery(qs, "xpath");
 			QueryResult result = query.execute();
 			
 			for (NodeIterator nit = result.getNodes(); nit.hasNext(); ) {
@@ -749,9 +665,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<String> getUserSearchs(String token) throws RepositoryException {
+	public List<String> getUserSearchs(String token) throws RepositoryException {
 		log.debug("getUserSearchs({})", token);
-		Collection<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<String>();
 		Session session = null;
 		
 		try {
@@ -786,7 +702,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardStatsDocumentResult> find(String token, String name) 
+	public List<DashboardStatsDocumentResult> find(String token, String name) 
 			throws IOException, ParseException, RepositoryException {
 		log.debug("find({}, {})", token, name);
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
@@ -800,7 +716,7 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			al = find(session, name);
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -818,7 +734,7 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Convenient method for syndication
 	 */
 	public ArrayList<DashboardStatsDocumentResult> find(Session session, String name) throws 
-			javax.jcr.RepositoryException, SQLException, ParseException, IOException {
+			javax.jcr.RepositoryException, DatabaseException, ParseException, IOException {
 		log.debug("find({}, {})", session, name);
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		DirectSearchModule directSearch = new DirectSearchModule();
@@ -851,11 +767,11 @@ public class DirectDashboardModule implements DashboardModule {
 			
 			// Prepare statement
 			log.debug("PARAMS {}", params);
-			String statement = directSearch.prepareStatement(params);
-			log.debug("STATEMENT {}", statement);
+			String qs = directSearch.prepareStatement(params);
+			log.debug("STATEMENT {}", qs);
 			
 			// Execute query
-			al = executeQueryDocument(session, statement, null, MAX_RESULTS);
+			al = executeQueryDocument(session, qs, null, MAX_RESULTS);
 			
 			// Update query params
 			directSearch.saveSearch(savedQuery, params);
@@ -881,10 +797,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token) 
+	public List<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token) 
 			throws RepositoryException {
 		log.debug("getLastWeekTopDownloadedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -894,8 +809,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastWeekTopDownloadedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastWeekTopDownloadedDocuments(session);
+			log.debug("getLastWeekTopDownloadedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -904,23 +821,20 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getLastWeekTopDownloadedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastWeekTopDownloadedDocuments({})", session);
-		String statement = "SELECT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='GET_DOCUMENT_CONTENT' AND act_item LIKE '/okm:root/%' "+
-			"AND act_date>? GROUP BY act_item ORDER BY COUNT(act_item) DESC";
+		String qs = "select a.item, max(a.date) from Activity a "+
+			"where a.action='GET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.WEEK_OF_YEAR, -1);
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, cal);
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, cal);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastWeekTopDownloadedDocuments", al);
@@ -929,10 +843,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token) 
+	public List<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token) 
 			throws RepositoryException {
 		log.debug("getLastMonthTopDownloadedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -942,8 +855,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastMonthTopDownloadedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastMonthTopDownloadedDocuments(session);
+			log.debug("getLastMonthTopDownloadedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -952,23 +867,20 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getLastMonthTopDownloadedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastMonthTopDownloadedDocuments({})", session);
-		String statement = "SELECT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='GET_DOCUMENT_CONTENT' AND act_item LIKE '/okm:root/%' "+
-			"AND act_date>? GROUP BY act_item ORDER BY COUNT(act_item) DESC";
+		String qs = "select a.item, max(a.date) from Activity a "+
+			"where a.action='GET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, cal);
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, cal);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastMonthTopDownloadedDocuments", al);
@@ -977,10 +889,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token) 
+	public List<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token) 
 			throws RepositoryException {
 		log.debug("getLastWeekTopModifiedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -990,8 +901,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastWeekTopModifiedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastWeekTopModifiedDocuments(session);
+			log.debug("getLastWeekTopModifiedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
@@ -1002,23 +915,20 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getLastWeekTopModifiedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastWeekTopModifiedDocuments({})", session);
-		String statement = "SELECT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='SET_DOCUMENT_CONTENT' AND act_item LIKE '/okm:root/%' "+
-			"AND act_date>? GROUP BY act_item ORDER BY COUNT(act_item) DESC";
+		String qs = "select a.item, max(a.date) from Activity a "+
+			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.WEEK_OF_YEAR, -1);
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, cal);
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, cal);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastWeekTopModifiedDocuments", al);
@@ -1027,10 +937,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token) 
+	public List<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token) 
 			throws RepositoryException {
 		log.debug("getLastMonthTopModifiedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -1040,8 +949,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastMonthTopModifiedDocuments(session); 
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastMonthTopModifiedDocuments(session);
+			log.debug("getLastMonthTopModifiedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -1050,23 +961,20 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getLastMonthTopModifiedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastMonthTopModifiedDocuments({})", session);
-		String statement = "SELECT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='SET_DOCUMENT_CONTENT' AND act_item LIKE '/okm:root/%' "+
-			"AND act_date>? GROUP BY act_item ORDER BY COUNT(act_item) DESC";
+		String qs = "select a.item, max(a.date) from Activity a "+
+			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+			"and a.date>:date group by a.item order by count(a.item) desc";
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -1);
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, cal); 
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, cal); 
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastMonthTopModifiedDocuments", al);
@@ -1075,10 +983,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
+	public List<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
 			throws RepositoryException {
 		log.debug("getLastModifiedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -1088,8 +995,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastModifiedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastModifiedDocuments(session);
+			log.debug("getLastModifiedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
@@ -1100,21 +1009,18 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-
-		log.debug("getLastModifiedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastModifiedDocuments(Session session) throws
-			javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastModifiedDocuments(Session session) throws
+			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastModifiedDocuments({})", session);
-		String statement = "SELECT DISTINCT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='SET_DOCUMENT_CONTENT' AND act_item LIKE '/okm:root/%' "+
-			"GROUP BY act_item ORDER BY MAX(act_date) DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, null);
+		String qs = "select distinct a.item, max(a.date) from Activity a "+
+			"where a.action='SET_DOCUMENT_CONTENT' and a.item like '/okm:root/%' "+
+			"group by a.item order by max(a.date) desc";
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, null);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastModifiedDocuments", al);
@@ -1123,10 +1029,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token) 
+	public List<DashboardStatsDocumentResult> getLastUploadedDocuments(String token) 
 			throws RepositoryException {
 		log.debug("getLastUploadedDocuments({})", token);
-		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -1136,8 +1041,10 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = getLastUploadedDocuments(session);
-		} catch (SQLException e) {
+			List<DashboardStatsDocumentResult> al = getLastUploadedDocuments(session);
+			log.debug("getLastUploadedDocuments: {}", al);
+			return al;
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -1146,21 +1053,18 @@ public class DirectDashboardModule implements DashboardModule {
 				JCRUtils.logout(session);
 			}
 		}
-		
-		log.debug("getLastUploadedDocuments: {}", al);
-		return al;
 	}
 	
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardStatsDocumentResult> getLastUploadedDocuments(Session session) 
-			throws javax.jcr.RepositoryException, SQLException {
+	public List<DashboardStatsDocumentResult> getLastUploadedDocuments(Session session) 
+			throws javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getLastUploadedDocuments({})", session);
-		String statement = "SELECT DISTINCT act_item, MAX(act_date) FROM activity "+
-			"WHERE act_action='CREATE_DOCUMENT' AND act_item LIKE '/okm:root/%' "+
-			"GROUP BY act_item ORDER BY MAX(act_date) DESC";
-		ArrayList<DashboardStatsDocumentResult> al = getTopDocuments(session, statement, null);
+		String qs = "select distinct a.item, max(a.date) from Activity a "+
+			"where a.action='CREATE_DOCUMENT' and a.item like '/okm:root/%' "+
+			"group by a.item order by max(a.date) desc";
+		List<DashboardStatsDocumentResult> al = getTopDocuments(session, qs, null);
 		
 		// Check for already visited results
 		checkVisitedDocuments(session.getUserID(), "LastUploadedDocuments", al);
@@ -1172,45 +1076,41 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get top documents
 	 */
-	private ArrayList<DashboardStatsDocumentResult> getTopDocuments(Session session, String statement, Calendar date) 
-			throws javax.jcr.RepositoryException, SQLException {
-		log.debug("getTopDocuments({}, {}, {})", new Object[] { session, statement, (date!=null?date.getTime():"null") });
+	@SuppressWarnings("unchecked")
+	private ArrayList<DashboardStatsDocumentResult> getTopDocuments(Session session, String qs, Calendar date) 
+			throws javax.jcr.RepositoryException, DatabaseException {
+		log.debug("getTopDocuments({}, {}, {})", new Object[] { session, qs, (date!=null?date.getTime():"null") });
 		ArrayList<DashboardStatsDocumentResult> al = new ArrayList<DashboardStatsDocumentResult>();
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		int i = 0;
 		
 		try {
-			con = actDao.getConnection();
-			stmt = con.prepareStatement(statement);
+			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
 			
 			if (date != null) {
-				stmt.setDate(1, new Date(date.getTimeInMillis())); 
+				q.setCalendar("date", date); 
 			}
 			
-			rs = stmt.executeQuery();
+			q.setMaxResults(MAX_RESULTS);
 			
-			while (rs.next() && i++ < MAX_RESULTS) {
-				if (session.getRootNode().hasNode(rs.getString(1).substring(1))) {
-					Document doc = new DirectDocumentModule().getProperties(session, rs.getString(1));
+			for (Iterator<Object[]> it = q.list().iterator(); it.hasNext(); ) {
+				Object[] obj = it.next();
+				String resItem = (String) obj[0];
+				Calendar resDate = (Calendar) obj[1];
+				
+				if (session.getRootNode().hasNode(resItem.substring(1))) {
+					Document doc = new DirectDocumentModule().getProperties(session, resItem);
 					DashboardStatsDocumentResult vo = new DashboardStatsDocumentResult();
 					vo.setDocument(doc);
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(rs.getTimestamp(2).getTime());
-					vo.setDate(cal);
+					vo.setDate(resDate);
 					vo.setVisited(false);
 					al.add(vo);
 				}
 			}
-		} finally {
-			actDao.closeResultSet(rs);
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+			
+			log.debug("getTopDocuments: {}", al);
+			return al;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
 		}
-		
-		log.debug("getTopDocuments: {}", al);
-		return al;
 	}
 	
 	@Override
@@ -1227,16 +1127,14 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			DashboardStats vo = new DashboardStats();
-			vo.setDsUser(session.getUserID());
-			vo.setDsSource(source);
-			vo.setDsNode(node);
-			vo.setDsDate(date);
-			dsDao.create(vo);
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
+			vo.setUser(session.getUserID());
+			vo.setSource(source);
+			vo.setNode(node);
+			vo.setDate(date);
+			DashboardStatsDAO.create(vo);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -1251,8 +1149,8 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Check visited documents
 	 */
 	private void checkVisitedDocuments(String user, String source, 
-			Collection<DashboardStatsDocumentResult> docResult) throws SQLException {
-		Collection<DashboardStats> visitedNodes = dsDao.findByUserSource(user, source);
+			List<DashboardStatsDocumentResult> docResult) throws DatabaseException {
+		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
@@ -1262,51 +1160,30 @@ public class DirectDashboardModule implements DashboardModule {
 				DashboardStats visitedNode = itVisited.next();
 			
 				// Same node path and same activity log date ? 
-				if (visitedNode.getDsNode().equals(dsDocResult.getDocument().getPath()) && 
-						visitedNode.getDsDate().equals(dsDocResult.getDate())) {
+				if (visitedNode.getNode().equals(dsDocResult.getDocument().getPath()) && 
+						visitedNode.getDate().equals(dsDocResult.getDate())) {
 					dsDocResult.setVisited(true);
 				}
 			}
 		}
-		
-		// Purge old visited nodes
-		String statement = "DELETE FROM dashboard_stats "+
-			"WHERE ds_user=? AND ds_source=? AND ds_node=? AND ds_date=?";
-		Connection con = null;
-		PreparedStatement stmt = null;
 			
-		try {
-			con = dsDao.getConnection();
-			stmt = con.prepareStatement(statement);
+		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			DashboardStats visitedNode = itVisited.next();
+			boolean old = true;
 			
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
-				boolean old = true;
+			for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
+				DashboardStatsDocumentResult dsDocResult = itDocs.next();
 				
-				for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
-					DashboardStatsDocumentResult dsDocResult = itDocs.next();
-					
-					// Same node path and same activity log date ? 
-					if (visitedNode.getDsNode().equals(dsDocResult.getDocument().getPath()) && 
-							visitedNode.getDsDate().equals(dsDocResult.getDate())) {
-						old = false;
-					}
-				}
-
-				if (old) {
-					stmt.setString(1, user);
-					stmt.setString(2, source);
-					stmt.setString(3, visitedNode.getDsNode());
-					stmt.setTimestamp(4, new Timestamp(visitedNode.getDsDate().getTimeInMillis()));
-					stmt.executeUpdate();
+				// Same node path and same activity log date ? 
+				if (visitedNode.getNode().equals(dsDocResult.getDocument().getPath()) && 
+						visitedNode.getDate().equals(dsDocResult.getDate())) {
+					old = false;
 				}
 			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		} finally {
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+			
+			if (old) {
+				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+			}
 		}
 	}
 	
@@ -1314,8 +1191,8 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Check visited folders
 	 */
 	private void checkVisitedFolders(String user, String source, 
-			Collection<DashboardStatsFolderResult> fldResult) throws SQLException {
-		Collection<DashboardStats> visitedNodes = dsDao.findByUserSource(user, source);
+			List<DashboardStatsFolderResult> fldResult) throws DatabaseException {
+		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
@@ -1324,51 +1201,30 @@ public class DirectDashboardModule implements DashboardModule {
 			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
 				DashboardStats visitedNode = itVisited.next();
 			
-				if (visitedNode.getDsNode().equals(dsFldResult.getFolder().getPath()) && 
-						visitedNode.getDsDate().equals(dsFldResult.getDate())) {
+				if (visitedNode.getNode().equals(dsFldResult.getFolder().getPath()) && 
+						visitedNode.getDate().equals(dsFldResult.getDate())) {
 					dsFldResult.setVisited(true);
 				}
 			}
 		}
-		
-		// Purge old visited nodes
-		String statement = "DELETE FROM dashboard_stats "+
-			"WHERE ds_user=? AND ds_source=? AND ds_node=? AND ds_date=?";
-		Connection con = null;
-		PreparedStatement stmt = null;
 			
-		try {
-			con = dsDao.getConnection();
-			stmt = con.prepareStatement(statement);
+		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			DashboardStats visitedNode = itVisited.next();
+			boolean old = true;
 			
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
-				boolean old = true;
+			for (Iterator<DashboardStatsFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
+				DashboardStatsFolderResult dsFldResult = itFlds.next();
 				
-				for (Iterator<DashboardStatsFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
-					DashboardStatsFolderResult dsFldResult = itFlds.next();
-					
-					// Same node path and same activity log date ? 
-					if (visitedNode.getDsNode().equals(dsFldResult.getFolder().getPath()) && 
-							visitedNode.getDsDate().equals(dsFldResult.getDate())) {
-						old = false;
-					}
-				}
-
-				if (old) {
-					stmt.setString(1, user);
-					stmt.setString(2, source);
-					stmt.setString(3, visitedNode.getDsNode());
-					stmt.setTimestamp(4, new Timestamp(visitedNode.getDsDate().getTimeInMillis()));
-					stmt.executeUpdate();
+				// Same node path and same activity log date ? 
+				if (visitedNode.getNode().equals(dsFldResult.getFolder().getPath()) && 
+						visitedNode.getDate().equals(dsFldResult.getDate())) {
+					old = false;
 				}
 			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		} finally {
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+			
+			if (old) {
+				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+			}
 		}
 	}
 
@@ -1376,8 +1232,8 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Check visited mails
 	 */
 	private void checkVisitedMails(String user, String source, 
-			Collection<DashboardStatsMailResult> mailResult) throws SQLException {
-		Collection<DashboardStats> visitedNodes = dsDao.findByUserSource(user, source);
+			List<DashboardStatsMailResult> mailResult) throws DatabaseException {
+		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
@@ -1387,77 +1243,30 @@ public class DirectDashboardModule implements DashboardModule {
 				DashboardStats visitedNode = itVisited.next();
 			
 				// Same node path and same activity log date ? 
-				if (visitedNode.getDsNode().equals(dsMailResult.getMail().getPath()) && 
-						visitedNode.getDsDate().equals(dsMailResult.getDate())) {
+				if (visitedNode.getNode().equals(dsMailResult.getMail().getPath()) && 
+						visitedNode.getDate().equals(dsMailResult.getDate())) {
 					dsMailResult.setVisited(true);
 				}
 			}
 		}
-		
-		// Purge old visited nodes
-		String statement = "DELETE FROM dashboard_stats "+
-			"WHERE ds_user=? AND ds_source=? AND ds_node=? AND ds_date=?";
-		Connection con = null;
-		PreparedStatement stmt = null;
 			
-		try {
-			con = dsDao.getConnection();
-			stmt = con.prepareStatement(statement);
+		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			DashboardStats visitedNode = itVisited.next();
+			boolean old = true;
 			
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
-				boolean old = true;
+			for (Iterator<DashboardStatsMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
+				DashboardStatsMailResult dsMailResult = itMails.next();
 				
-				for (Iterator<DashboardStatsMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
-					DashboardStatsMailResult dsMailResult = itMails.next();
-					
-					// Same node path and same activity log date ? 
-					if (visitedNode.getDsNode().equals(dsMailResult.getMail().getPath()) && 
-							visitedNode.getDsDate().equals(dsMailResult.getDate())) {
-						old = false;
-					}
-				}
-
-				if (old) {
-					stmt.setString(1, user);
-					stmt.setString(2, source);
-					stmt.setString(3, visitedNode.getDsNode());
-					stmt.setTimestamp(4, new Timestamp(visitedNode.getDsDate().getTimeInMillis()));
-					stmt.executeUpdate();
+				// Same node path and same activity log date ? 
+				if (visitedNode.getNode().equals(dsMailResult.getMail().getPath()) && 
+						visitedNode.getDate().equals(dsMailResult.getDate())) {
+					old = false;
 				}
 			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		} finally {
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
+			
+			if (old) {
+				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+			}
 		}
-	}
-
-	/**
-	 * Delete visited nodes
-	 */
-	public void deleteVisitedNodes(String user, String source) throws SQLException {
-		log.info("deleteVisitedNodes({}, {})", user, source);
-		String statement = "DELETE FROM dashboard_stats WHERE ds_user=? AND ds_source=?";
-		Connection con = null;
-		PreparedStatement stmt = null;
-
-		try {
-			con = dsDao.getConnection();
-			stmt = con.prepareStatement(statement);
-			stmt.setString(1, user);
-			stmt.setString(2, source);
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			log.error(e.getMessage(), e);
-			throw e;
-		} finally {
-			actDao.closeStatement(stmt);
-			actDao.closeConnection(con);
-		}
-		
-		log.info("deleteVisitedNodes: void");
 	}
 }

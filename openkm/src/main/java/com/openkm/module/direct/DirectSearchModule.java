@@ -22,7 +22,6 @@
 package com.openkm.module.direct;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,11 +69,13 @@ import com.openkm.bean.form.Select;
 import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
+import com.openkm.dao.DashboardStatsDAO;
 import com.openkm.module.SearchModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
@@ -709,12 +710,12 @@ public class DirectSearchModule implements SearchModule {
 			
 			// Purge visited nodes table
 			if (isDashboard) {
-				new DirectDashboardModule().deleteVisitedNodes(session.getUserID(), name);
+				DashboardStatsDAO.deleteVisitedNodes(session.getUserID(), name);
 			}
 			
 			// Activity log
 			UserActivity.log(session, "DELETE_SAVED_SEARCH", name, null);
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.PathNotFoundException e) {
