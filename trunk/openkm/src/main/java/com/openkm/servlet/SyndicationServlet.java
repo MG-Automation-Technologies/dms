@@ -185,7 +185,7 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed documents
 	 */
-	private SyndFeed getFeedDocuments(ArrayList<DashboardStatsDocumentResult> result) throws
+	private SyndFeed getFeedDocuments(List<DashboardStatsDocumentResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
@@ -206,7 +206,7 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed folders
 	 */
-	private SyndFeed getFeedFolders(ArrayList<DashboardStatsFolderResult> result) throws
+	private SyndFeed getFeedFolders(List<DashboardStatsFolderResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
@@ -227,7 +227,7 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed mails
 	 */
-	private SyndFeed getFeedMails(ArrayList<DashboardStatsMailResult> result) throws
+	private SyndFeed getFeedMails(List<DashboardStatsMailResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
