@@ -49,7 +49,6 @@ import com.openkm.core.SessionManager;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
-import com.openkm.dao.AuthDAO;
 import com.openkm.dao.WorkflowDAO;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectAuthModule;
@@ -118,8 +117,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         UserKeywordsManager.deserialize();
         
         log.info("*** User database initialized ***");
-        AuthDAO auth = AuthDAO.getInstance();
-        auth.closeConnection(auth.getConnection());
+        
         
         // Test for datastore
         SessionManager sm = SessionManager.getInstance();
