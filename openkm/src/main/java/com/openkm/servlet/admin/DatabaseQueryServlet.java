@@ -24,8 +24,11 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -73,22 +76,30 @@ public class DatabaseQueryServlet extends BaseServlet {
 			if (!qs.equals("")) {
 				con = LegacyDAO.getConnection();
 				stmt = con.createStatement();
-				rs = stmt.executeQuery(qs);
 				
-				while (rs.next()) {
-					log.info(rs.getString(1));
-				}
-												
 				if (qs.toUpperCase().startsWith("SELECT")) {
+					rs = stmt.executeQuery(qs);
+					ResultSetMetaData md = rs.getMetaData();
+					List<String> columns = new ArrayList<String>();
+					List<List<String>> results = new ArrayList<List<String>>();
 					
-					//for (Iterator it = q.list().iterator(); it.hasNext(); ) {
-						//log.info(it.next().toString());
-					//}
-					//sc.setAttribute("results", q.list());
-					//sc.setAttribute("columns", q.getReturnTypes());
+					for (int i=1; i<md.getColumnCount()+1; i++) {
+						columns.add(md.getColumnName(i));
+					}
+					
+					for (int i=0; rs.next() && i++ < Config.MAX_SEARCH_RESULTS; ) {
+						List<String> row = new ArrayList<String>();
+						for (int j=1; j<md.getColumnCount()+1; j++) {
+							row.add(rs.getString(j));
+						}
+						results.add(row);
+					}
+					
+					sc.setAttribute("columns", columns);
+					sc.setAttribute("results", results);
 				} else {
-					//int rows = q.executeUpdate();
-					//sc.setAttribute("rows", rows);
+					int rows = stmt.executeUpdate(qs);
+					sc.setAttribute("rows", rows);
 				}
 				sc.setAttribute("qs", qs);
 			}
