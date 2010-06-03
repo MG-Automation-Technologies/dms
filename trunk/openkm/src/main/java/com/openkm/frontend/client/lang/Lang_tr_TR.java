@@ -111,6 +111,7 @@ public class Lang_tr_TR {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Kullanýcý Açýlýyor");
 	    lang.put("tree.status.refresh.purge.trash", "Geri Dönüþüm Kutusu Temizleniyor");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Yükle");

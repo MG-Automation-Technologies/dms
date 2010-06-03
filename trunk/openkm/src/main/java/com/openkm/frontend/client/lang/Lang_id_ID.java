@@ -110,6 +110,7 @@ public class Lang_id_ID {
 	    lang.put("tree.status.refresh.get.keywords", "Merefresh keyword");
 	    lang.put("tree.status.refresh.get.user.home", "Sedang mengambil home pengguna");
 	    lang.put("tree.status.refresh.purge.trash", "Membersihkan trash");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Restore");

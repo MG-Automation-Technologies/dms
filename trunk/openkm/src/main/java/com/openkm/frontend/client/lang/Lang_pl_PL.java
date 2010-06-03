@@ -112,6 +112,7 @@ public class Lang_pl_PL {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Pobieranie zawartości katalogu domowego");
 	    lang.put("tree.status.refresh.purge.trash", "Opróżnianie śmietnika");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Przywróć");

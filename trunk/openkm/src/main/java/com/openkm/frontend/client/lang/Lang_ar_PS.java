@@ -110,6 +110,7 @@ public class Lang_ar_PS {
 	    lang.put("tree.status.refresh.get.keywords", "تحديث الكلمات المفتاحية");
 	    lang.put("tree.status.refresh.get.user.home", "الحصول على مسار المستخدم");
 	    lang.put("tree.status.refresh.purge.trash", "تنظيف سلة المحذوفات");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "استعادة");

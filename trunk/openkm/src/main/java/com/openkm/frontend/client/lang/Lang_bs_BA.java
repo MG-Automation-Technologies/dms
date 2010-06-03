@@ -110,6 +110,7 @@ public class Lang_bs_BA {
 	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
 	    lang.put("tree.status.refresh.get.user.home", "Dobavljanje glavne početne stranice");
 	    lang.put("tree.status.refresh.purge.trash", "Čišćenje smeća");
+	    lang.put("tree.menu.directory.find.folder","Find folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Vrati");
