@@ -47,7 +47,6 @@ import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -73,9 +72,9 @@ import com.openkm.util.WebUtil;
 /**
  * RepositoryView servlet
  */
-public class RepositoryViewServlet extends HttpServlet {
-	private static Logger log = LoggerFactory.getLogger(RepositoryViewServlet.class);
+public class RepositoryViewServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
+	private static Logger log = LoggerFactory.getLogger(RepositoryViewServlet.class);
 	private static final String[] NODE_TYPE = { "UNDEFINED", "STRING", "BINARY", "LONG", "DOUBLE", 
 		"DATE", "BOOLEAN", "NAME", "PATH", "REFERENCE" };
 	
@@ -449,15 +448,5 @@ public class RepositoryViewServlet extends HttpServlet {
 		}
 		
 		return sb.toString();
-	}
-	
-	/**
-	 * Dispatch errors 
-	 */
-	private void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response,
-			Throwable e) throws ServletException, IOException {
-		request.setAttribute ("javax.servlet.jsp.jspException", e);
-		ServletContext sc = getServletConfig().getServletContext();
-		sc.getRequestDispatcher("/error.jsp").forward(request, response);
 	}
 }

@@ -23,7 +23,6 @@ package com.openkm.servlet.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,32 +32,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.util.FileUtils;
-import com.openkm.util.JCRUtils;
 
 /**
- * Repository backup servlet
+ * Database query
  */
-public class RepositoryBackupServlet extends BaseServlet {
-	private static Logger log = LoggerFactory.getLogger(RepositoryBackupServlet.class);
+public class DatabaseQueryServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	
+	private static Logger log = LoggerFactory.getLogger(DatabaseQueryServlet.class);
+		
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		File backup = null;
 		
 		try {
-			backup = JCRUtils.hotBackup();
-			String archive = backup.getName() + ".zip";
-			log.info("FileName: {}", archive);
-			response.setHeader("Content-disposition", "attachment; filename=\""+archive+"\"");
-			response.setContentType("application/zip");
-			OutputStream out = response.getOutputStream();
-			FileUtils.createZip(backup, out);
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 			FileUtils.deleteQuietly(backup);
 		}

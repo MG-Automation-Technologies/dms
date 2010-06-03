@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,12 +24,11 @@ import com.openkm.api.OKMWorkflow;
 import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.frontend.client.OKMException;
 
 /**
  * Register workflow Servlet
  */
-public class RegisterWorkflowServlet extends HttpServlet {
+public class RegisterWorkflowServlet extends BaseServlet {
 	private static Logger log = LoggerFactory.getLogger(RegisterWorkflowServlet.class);
 	private static final long serialVersionUID = 1L;
 	
@@ -91,16 +89,5 @@ public class RegisterWorkflowServlet extends HttpServlet {
 			out.flush();
 			out.close();
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	protected void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response, OKMException e)
-			throws ServletException, IOException {
-		log.error("sendErrorRedirect: "+e.toString());
-		String errorJSP = "/admin/error.jsp";
-		request.setAttribute("javax.servlet.jsp.jspException", e);
-		request.getRequestDispatcher(errorJSP).forward(request, response);
 	}
 }

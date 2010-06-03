@@ -26,7 +26,6 @@ import java.io.Writer;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +35,7 @@ import com.openkm.kea.tree.KEATree;
 /**
  * Register thesaurus servlet
  */
-public class RegisterThesaurusServlet extends HttpServlet {
+public class RegisterThesaurusServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
