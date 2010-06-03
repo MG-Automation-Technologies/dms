@@ -21,7 +21,6 @@
 
 package com.openkm.util;
 
-import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.jcr.Session;
@@ -29,6 +28,7 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.DatabaseException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.bean.Activity;
@@ -39,13 +39,9 @@ import com.openkm.dao.bean.Activity;
  */
 public class UserActivity {
 	private static Logger log = LoggerFactory.getLogger(UserActivity.class);
-	private static ActivityDAO dao = ActivityDAO.getInstance();
-	
+		
 	/**
-	 * @param session
-	 * @param action
-	 * @param node
-	 * @param params
+	 * Log activity
 	 */
 	public static void log(Session session, String action, String item, String params) {
 		String token = SessionManager.getInstance().getTokenByUserId(session.getUserID());
@@ -54,16 +50,16 @@ public class UserActivity {
 			Activity vo = new Activity();
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new java.util.Date());
-			vo.setActDate(cal);
-			vo.setActUser(session.getUserID());
-			vo.setActToken(token);
-			vo.setActAction(action);
-			vo.setActItem(item);
-			vo.setActParams(params);
+			vo.setDate(cal);
+			vo.setUser(session.getUserID());
+			vo.setToken(token);
+			vo.setAction(action);
+			vo.setItem(item);
+			vo.setParams(params);
 			log.debug(vo.toString());
-			dao.create(vo);
-		} catch (SQLException se) {
-			log.error(se.getMessage());
+			ActivityDAO.create(vo);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage());
 		}
 	}
 }
