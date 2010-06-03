@@ -1,7 +1,7 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -20,14 +20,13 @@
 		request.setCharacterEncoding("UTF-8");
 		String id = request.getParameter("id");
 		String action = request.getParameter("action");
-		AuthDAO dao = AuthDAO.getInstance();
 		
 		try {
 			Role rol = new Role();
 			
 			if ((action.equals("u") || action.equals("d")) && id != null) {
 				id = new String(id.getBytes("ISO-8859-1"), "UTF-8");
-				rol = dao.findRoleByPk(id);
+				rol = AuthDAO.findRoleByPk(id);
 			}
 			
 			if (action.equals("c")) {
@@ -48,7 +47,7 @@
 			out.println("</td></tr>");
 			out.println("</table>");
 			out.println("</form>");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {

@@ -3,7 +3,7 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="javax.jcr.Session"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24,22 +24,21 @@
 		String action = request.getParameter("action");
 		String rol_id = request.getParameter("rol_id") != null?request.getParameter("rol_id"):"";
 		
-		AuthDAO dao = AuthDAO.getInstance();
 		Role rol = new Role();
 		rol.setId(new String(rol_id.getBytes("ISO-8859-1"), "UTF-8"));
 
 		try {
 			if (action.equals("c")) {
-				dao.createRole(rol);
+				AuthDAO.createRole(rol);
 			} else if (action.equals("d")) {
-				dao.deleteRole(rol);
+				AuthDAO.deleteRole(rol.getId());
 			}
 			
 			// Activity log
 			UserActivity.log(jcrSession, "ROLE_ACTION", rol.toString(), action);
 			
 			response.sendRedirect("role_list.jsp");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {

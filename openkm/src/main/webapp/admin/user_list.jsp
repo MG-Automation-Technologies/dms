@@ -2,7 +2,7 @@
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.Role"%>
 <%@ page import="com.openkm.dao.bean.User"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -20,7 +20,6 @@
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");
 		String roleFilter = request.getParameter("roleFilter");
-		AuthDAO dao = AuthDAO.getInstance();
 
 		out.println("<h1>Users <span style=\"font-size: 10px;\">(<a href=\"role_list.jsp\">Roles</a>)</font></h1>");
 		out.println("<form action=\"user_list.jsp\">");
@@ -28,7 +27,7 @@
 		out.println("<tr><td>Role</td><td><select name=\"roleFilter\">");
 		out.println("<option value=\"\" ></option>");
 		
-		Collection<Role> roles = dao.findAllRoles();
+		Collection<Role> roles = AuthDAO.findAllRoles();
 		for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
 			Role rol = it.next();
 			out.println("<option value=\""+rol.getId()+"\" "+(rol.getId().equals(roleFilter)?"selected":"")+">"+rol.getId()+"</option>");
@@ -46,9 +45,9 @@
 			Collection<User> users = null;
 			
 			if (roleFilter == null || roleFilter.equals("")) {
-				users = dao.findAllUsers(false);
+				users = AuthDAO.findAllUsers(false);
 			} else {
-				users = dao.findUsersByRole(false, roleFilter);
+				users = AuthDAO.findUsersByRole(false, roleFilter);
 			}
 			
 			int i = 0;
@@ -64,9 +63,9 @@
 						" &nbsp; <a href=\"twitter_list.jsp?user="+usr.getId()+"\"><img src=\"img/action/twitter.png\" alt=\"Twitter accounts\" title=\"Twitter accounts\"/></a>"+
 						"</td></tr>");
 			}
-				
+			
 			out.println("</table>");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {

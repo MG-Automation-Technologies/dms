@@ -2,7 +2,8 @@
 <%@ page import="com.openkm.util.WebUtil"%>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.TwitterAccount"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="com.openkm.dao.TwitterAccountDAO"%>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -22,13 +23,12 @@
 		String action = WebUtil.getString(request, "action");
 		int id = WebUtil.getInt(request, "id");
 		String user = WebUtil.getString(request, "user");
-		AuthDAO dao = AuthDAO.getInstance();
-		
+				
 		try {
 			TwitterAccount ta = new TwitterAccount();
 			
 			if (action.equals("u") || action.equals("d")) {
-				ta = dao.findTwitterAccountByPk(id);
+				ta = TwitterAccountDAO.findByPk(id);
 			} else {
 				ta.setUser(user);
 			}
@@ -54,7 +54,7 @@
 			out.println("</td></tr>");
 			out.println("</table>");
 			out.println("</form>");
-		} catch (SQLException e) {
+		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		}
 	} else {

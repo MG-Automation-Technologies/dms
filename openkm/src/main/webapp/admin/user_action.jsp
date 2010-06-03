@@ -4,7 +4,10 @@
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
 <%@ page import="com.openkm.dao.bean.User"%>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.Set"%>
+<%@ page import="java.util.HashSet"%>
+<%@ page import="com.openkm.dao.bean.Role"%>
+<%@ page import="com.openkm.core.DatabaseException"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Arrays"%>
 <%@ page import="java.util.List"%>
@@ -41,13 +44,14 @@
 			String usr_email = request.getParameter("usr_email") != null?request.getParameter("usr_email"):"";
 			boolean usr_active = request.getParameter("usr_active")!=null && request.getParameter("usr_active").equals("on");
 			String[] usr_roles = request.getParameterValues("usr_roles") != null?request.getParameterValues("usr_roles"):new String[]{};
-			List<String> usr_rolesList = new ArrayList<String>();
+			Set<Role> usr_rolesList = new HashSet<Role>();
 			
 			for (int i=0; i<usr_roles.length; i++) {
-				usr_rolesList.add(new String(usr_roles[i].getBytes("ISO-8859-1"), "UTF-8"));
+				Role rol = new Role();
+				rol.setId(new String(usr_roles[i].getBytes("ISO-8859-1"), "UTF-8"));
+				usr_rolesList.add(rol);
 			}
 			
-			AuthDAO dao = AuthDAO.getInstance();
 			User usr = new User();
 			usr.setId(new String(usr_id.getBytes("ISO-8859-1"), "UTF-8"));
 			usr.setName(new String(usr_name.getBytes("ISO-8859-1"), "UTF-8"));
@@ -58,28 +62,28 @@
 			
 			try {
 				if (action.equals("c")) {
-					dao.createUser(usr);
+					AuthDAO.createUser(usr);
 					
-					for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
-						dao.grantRole(usr.getId(), it.next());
+					for (Iterator<Role> it = usr.getRoles().iterator(); it.hasNext(); ) {
+						AuthDAO.grantRole(usr.getId(), it.next().getId());
 					}
 				} else if (action.equals("u")) {
-					dao.updateUser(usr);
-					if (!usr.getPass().equals("")) dao.updateUserPassword(usr.getId(), usr.getPass());
-					dao.deleteUserRoles(usr);
+					AuthDAO.updateUser(usr);
+					if (!usr.getPass().equals("")) AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
+					//AuthDAO.deleteUserRoles(usr);
 					
-					for (Iterator<String> it = usr.getRoles().iterator(); it.hasNext(); ) {
-						dao.grantRole(usr.getId(), it.next());
+					for (Iterator<Role> it = usr.getRoles().iterator(); it.hasNext(); ) {
+						AuthDAO.grantRole(usr.getId(), it.next().getId());
 					}
 				} else if (action.equals("d")) {
-					dao.deleteUser(usr);
+					AuthDAO.deleteUser(usr);
 				}
 				
 				// Activity log
 				UserActivity.log(jcrSession, "USER_ACTION", usr.toString(), action);
 				
 				response.sendRedirect("user_list.jsp");
-			} catch (SQLException e) {
+			} catch (DatabaseException e) {
 				out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 			}
 		} finally {
