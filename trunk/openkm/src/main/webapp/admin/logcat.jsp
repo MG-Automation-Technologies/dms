@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.util.WebUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24,7 +23,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${log.path}</td>
             <td>
-              <a href="LogCat?action=<%=WebUtil.VIEW%>&file=${log.name}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
+              <a href="LogCat?action=view&file=${log.name}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
             </td>
           </tr>
         </c:forEach>
