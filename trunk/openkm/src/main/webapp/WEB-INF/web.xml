@@ -175,7 +175,11 @@
     <servlet-name>DatabaseQueryServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.DatabaseQueryServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.AuthServlet</servlet-class>
+  </servlet>
+    
   <!-- WebServices -->
   <servlet>
     <servlet-name>OKMDocument</servlet-name>
@@ -357,7 +361,11 @@
     <servlet-name>DatabaseQueryServlet</servlet-name>
     <url-pattern>/admin/DatabaseQuery</url-pattern>
   </servlet-mapping>
-
+  <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/admin/Auth</url-pattern>
+  </servlet-mapping>
+  
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
     <servlet-name>OKMDocument</servlet-name>
