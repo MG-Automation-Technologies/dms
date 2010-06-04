@@ -1,0 +1,165 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+package com.openkm.servlet.admin;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import javax.jcr.LoginException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.SessionManager;
+import com.openkm.dao.AuthDAO;
+import com.openkm.dao.bean.User;
+import com.openkm.util.JCRUtils;
+import com.openkm.util.UserActivity;
+import com.openkm.util.WebUtil;
+
+/**
+ * User servlet
+ */
+public class AuthServlet extends BaseServlet {
+	private static final long serialVersionUID = 1L;
+	private static Logger log = LoggerFactory.getLogger(AuthServlet.class);
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doGet({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String action = WebUtil.getString(request, "action");
+		String token = (String) request.getSession().getAttribute("token");
+		Session session = null;
+		
+		try {
+			if (Config.SESSION_MANAGER) {
+				session = SessionManager.getInstance().get(token);
+			} else {
+				session = JCRUtils.getSession();
+			}
+			
+			if (action.equals("userEdit")) {
+				edit(session, request, response);
+			} else if (action.equals("userUpdate")) {
+				update(session, request, response);
+			}
+			
+			if (action.equals("") || action.equals("userList")) {
+				list(session, request, response);
+			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} finally {
+			if (!Config.SESSION_MANAGER) {
+				JCRUtils.logout(session);
+			}
+		}
+	}
+	
+	/**
+	 * Edit property
+	 */
+	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		String usrId = WebUtil.getString(request, "usrId");
+		
+		// Activity log
+		UserActivity.log(session, "USER_EDIT", usrId, null);
+				
+		sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
+		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+		log.debug("edit: void");
+	}
+	
+	/**
+	 * Update user
+	 */
+	private void update(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("save({}, {}, {})", new Object[] { session, request, response });
+		User usr = new User();
+		usr.setId(WebUtil.getString(request, "usr_id"));
+		usr.setName(WebUtil.getString(request, "usr_name"));
+		usr.setPass(WebUtil.getString(request, "usr_pass"));
+		usr.setEmail(WebUtil.getString(request, "usr_email"));
+		usr.setActive(WebUtil.getBoolean(request, "usr_active"));
+		List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
+		for (String rolId : usrRoles) {
+			usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+		}
+				
+		// Activity log
+		UserActivity.log(session, "USER_SAVE", usr.getId(), usr.toString());
+		
+		AuthDAO.updateUser(usr);
+		if (!usr.getPass().equals("")) {
+			AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
+		}
+		
+		log.debug("save: void");
+	}
+
+	/**
+	 * List node properties and children
+	 */
+	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, DatabaseException {
+		log.debug("list({}, {}, {})", new Object[] { session, request, response });
+		String roleFilter = WebUtil.getString(request, "roleFilter");
+		ServletContext sc = getServletContext();
+		
+		// Activity log
+		UserActivity.log(session, "USER_LIST", null, null);
+		
+		if (roleFilter.equals("")) {
+			sc.setAttribute("users", AuthDAO.findAllUsers(false));
+		} else {
+			sc.setAttribute("users", AuthDAO.findUsersByRole(false, roleFilter));
+		}
+		sc.setAttribute("roles", AuthDAO.findAllRoles());
+		sc.setAttribute("roleFilter", roleFilter);
+		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
+		log.debug("list: void");
+	}
+}
