@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.util.Calendar;
 
-public class DashboardStats {
+public class Dashboard {
 	private int id;
 	private String user;
 	private String source;
