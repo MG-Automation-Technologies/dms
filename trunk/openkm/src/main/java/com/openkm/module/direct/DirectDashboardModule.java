@@ -57,10 +57,10 @@ import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
-import com.openkm.dao.DashboardStatsDAO;
+import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.HibernateHelper;
 import com.openkm.dao.bean.Activity;
-import com.openkm.dao.bean.DashboardStats;
+import com.openkm.dao.bean.Dashboard;
 import com.openkm.module.DashboardModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -1126,12 +1126,12 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			DashboardStats vo = new DashboardStats();
+			Dashboard vo = new Dashboard();
 			vo.setUser(session.getUserID());
 			vo.setSource(source);
 			vo.setNode(node);
 			vo.setDate(date);
-			DashboardStatsDAO.create(vo);
+			DashboardDAO.create(vo);
 		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
@@ -1150,14 +1150,14 @@ public class DirectDashboardModule implements DashboardModule {
 	 */
 	private void checkVisitedDocuments(String user, String source, 
 			List<DashboardStatsDocumentResult> docResult) throws DatabaseException {
-		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
+		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
 			DashboardStatsDocumentResult dsDocResult = itDocs.next();
 								
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
+			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+				Dashboard visitedNode = itVisited.next();
 			
 				// Same node path and same activity log date ? 
 				if (visitedNode.getNode().equals(dsDocResult.getDocument().getPath()) && 
@@ -1167,8 +1167,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		}
 			
-		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			DashboardStats visitedNode = itVisited.next();
+		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			Dashboard visitedNode = itVisited.next();
 			boolean old = true;
 			
 			for (Iterator<DashboardStatsDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
@@ -1182,7 +1182,7 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			if (old) {
-				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+				DashboardDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
 			}
 		}
 	}
@@ -1192,14 +1192,14 @@ public class DirectDashboardModule implements DashboardModule {
 	 */
 	private void checkVisitedFolders(String user, String source, 
 			List<DashboardStatsFolderResult> fldResult) throws DatabaseException {
-		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
+		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
 			DashboardStatsFolderResult dsFldResult = itFlds.next();
 			
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
+			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+				Dashboard visitedNode = itVisited.next();
 			
 				if (visitedNode.getNode().equals(dsFldResult.getFolder().getPath()) && 
 						visitedNode.getDate().equals(dsFldResult.getDate())) {
@@ -1208,8 +1208,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		}
 			
-		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			DashboardStats visitedNode = itVisited.next();
+		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			Dashboard visitedNode = itVisited.next();
 			boolean old = true;
 			
 			for (Iterator<DashboardStatsFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
@@ -1223,7 +1223,7 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			if (old) {
-				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+				DashboardDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
 			}
 		}
 	}
@@ -1233,14 +1233,14 @@ public class DirectDashboardModule implements DashboardModule {
 	 */
 	private void checkVisitedMails(String user, String source, 
 			List<DashboardStatsMailResult> mailResult) throws DatabaseException {
-		List<DashboardStats> visitedNodes = DashboardStatsDAO.findByUserSource(user, source);
+		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 		
 		// Set already visited nodes
 		for (Iterator<DashboardStatsMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
 			DashboardStatsMailResult dsMailResult = itMails.next();
 								
-			for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				DashboardStats visitedNode = itVisited.next();
+			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+				Dashboard visitedNode = itVisited.next();
 			
 				// Same node path and same activity log date ? 
 				if (visitedNode.getNode().equals(dsMailResult.getMail().getPath()) && 
@@ -1250,8 +1250,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		}
 			
-		for (Iterator<DashboardStats> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			DashboardStats visitedNode = itVisited.next();
+		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
+			Dashboard visitedNode = itVisited.next();
 			boolean old = true;
 			
 			for (Iterator<DashboardStatsMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
@@ -1265,7 +1265,7 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			if (old) {
-				DashboardStatsDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
+				DashboardDAO.purgeOldVisitedNode(user, source, visitedNode.getNode(), visitedNode.getDate());
 			}
 		}
 	}

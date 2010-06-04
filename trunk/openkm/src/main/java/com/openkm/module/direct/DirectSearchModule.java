@@ -75,7 +75,7 @@ import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
-import com.openkm.dao.DashboardStatsDAO;
+import com.openkm.dao.DashboardDAO;
 import com.openkm.module.SearchModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
@@ -710,7 +710,7 @@ public class DirectSearchModule implements SearchModule {
 			
 			// Purge visited nodes table
 			if (isDashboard) {
-				DashboardStatsDAO.deleteVisitedNodes(session.getUserID(), name);
+				DashboardDAO.deleteVisitedNodes(session.getUserID(), name);
 			}
 			
 			// Activity log
