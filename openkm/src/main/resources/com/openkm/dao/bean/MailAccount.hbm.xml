@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.MailAccount" table="OKM_MAIL_ACCOUNTS">
+  <class name="com.openkm.dao.bean.MailAccount" table="OKM_MAIL_ACCOUNT">
     <id name="id" column="MA_ID"><generator class="native"/></id>
     <property name="user" column="MA_USER" not-null="true"/>
     <property name="mailHost" column="MA_MHOST" not-null="true"/>

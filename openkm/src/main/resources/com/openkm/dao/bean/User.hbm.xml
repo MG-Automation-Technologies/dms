@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="com.openkm.dao.bean.User" table="OKM_USERS">
+  <class name="com.openkm.dao.bean.User" table="OKM_USER">
     <id name="id" column="USR_ID"><generator class="assigned"/></id>
     <property name="name" column="USR_NAME" not-null="true"/>
     <property name="pass" column="USR_PASS" not-null="true"/>
