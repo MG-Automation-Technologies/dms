@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Bookmark;
-import com.openkm.bean.DashboardStatsDocumentResult;
-import com.openkm.bean.DashboardStatsFolderResult;
-import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.bean.DashboardDocumentResult;
+import com.openkm.bean.DashboardFolderResult;
+import com.openkm.bean.DashboardMailResult;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
@@ -67,9 +67,9 @@ import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
 import com.openkm.frontend.client.bean.GWTComment;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
@@ -503,55 +503,55 @@ public class Util {
 	}
 
 	/**
-	 * Copy the DashboardStatsDocumentResult data to GWTDashboardStatsDocumentResult
+	 * Copy the DashboardDocumentResult data to GWTDashboardDocumentResult
 	 * 
-	 * @param dsDocumentResult The original DashboardStatsDocumentResult
-	 * @return The GWTDashboardStatsDocumentResult object with data values from de original
-	 * DashboardStatsDocumentResult
+	 * @param dsDocumentResult The original DashboardDocumentResult
+	 * @return The GWTDashboardDocumentResult object with data values from the original
+	 * DashboardDocumentResult
 	 */
-	public static GWTDashboardStatsDocumentResult copy(DashboardStatsDocumentResult dsDocumentResult) {
-		GWTDashboardStatsDocumentResult gwtDashboardStatsDocumentResult = new GWTDashboardStatsDocumentResult();
+	public static GWTDashboardDocumentResult copy(DashboardDocumentResult dsDocumentResult) {
+		GWTDashboardDocumentResult gwtDashboardDocumentResult = new GWTDashboardDocumentResult();
 		
-		gwtDashboardStatsDocumentResult.setDocument(copy(dsDocumentResult.getDocument()));
-		gwtDashboardStatsDocumentResult.setVisited(dsDocumentResult.isVisited());
-		gwtDashboardStatsDocumentResult.setDate(dsDocumentResult.getDate().getTime());
+		gwtDashboardDocumentResult.setDocument(copy(dsDocumentResult.getDocument()));
+		gwtDashboardDocumentResult.setVisited(dsDocumentResult.isVisited());
+		gwtDashboardDocumentResult.setDate(dsDocumentResult.getDate().getTime());
 		
-		return gwtDashboardStatsDocumentResult;
+		return gwtDashboardDocumentResult;
 	}
 	
 	/**
-	 * Copy the DashboardStatsFolderResult data to GWTDashboardStatsFolderResult
+	 * Copy the DashboardFolderResult data to GWTDashboardFolderResult
 	 * 
-	 * @param dsFolderResult The original DashboardStatsFolderResult
-	 * @return The GWTDashboardStatsFolderResult object with data values from de original
-	 * DashboardStatsFolderResult
+	 * @param dsFolderResult The original DashboardFolderResult
+	 * @return The GWTDashboardFolderResult object with data values from the original
+	 * DashboardFolderResult
 	 */
-	public static GWTDashboardStatsFolderResult copy(DashboardStatsFolderResult dsFolderResult) {
-		GWTDashboardStatsFolderResult gwtDashboardStatsFolderResult = new GWTDashboardStatsFolderResult();
+	public static GWTDashboardFolderResult copy(DashboardFolderResult dsFolderResult) {
+		GWTDashboardFolderResult gwtDashboardFolderResult = new GWTDashboardFolderResult();
 		
-		gwtDashboardStatsFolderResult.setFolder(copy(dsFolderResult.getFolder()));
-		gwtDashboardStatsFolderResult.setVisited(dsFolderResult.isVisited());
-		gwtDashboardStatsFolderResult.setDate(dsFolderResult.getDate().getTime());
+		gwtDashboardFolderResult.setFolder(copy(dsFolderResult.getFolder()));
+		gwtDashboardFolderResult.setVisited(dsFolderResult.isVisited());
+		gwtDashboardFolderResult.setDate(dsFolderResult.getDate().getTime());
 		
-		return gwtDashboardStatsFolderResult;
+		return gwtDashboardFolderResult;
 	}
 	
 	
 	/**
-	 * Copy the DashboardStatsMailResult data to GWTDashboardStatsMailResult
+	 * Copy the DashboardMailResult data to GWTDashboardMailResult
 	 * 
-	 * @param dsMailResult The original DashboardStatsMailResult
-	 * @return The GWTDashboardStatsMailResult object with data values from de original
-	 * DashboardStatsMailResult
+	 * @param dsMailResult The original DashboardMailResult
+	 * @return The GWTDashboardMailResult object with data values from the original
+	 * DashboardMailResult
 	 */
-	public static GWTDashboardStatsMailResult copy(DashboardStatsMailResult dsmailResult) {
-		GWTDashboardStatsMailResult gwtDashboardStatsMailResult = new GWTDashboardStatsMailResult();
+	public static GWTDashboardMailResult copy(DashboardMailResult dsmailResult) {
+		GWTDashboardMailResult gwtDashboardMailResult = new GWTDashboardMailResult();
 		
-		gwtDashboardStatsMailResult.setMail(copy(dsmailResult.getMail()));
-		gwtDashboardStatsMailResult.setVisited(dsmailResult.isVisited());
-		gwtDashboardStatsMailResult.setDate(dsmailResult.getDate().getTime());
+		gwtDashboardMailResult.setMail(copy(dsmailResult.getMail()));
+		gwtDashboardMailResult.setVisited(dsmailResult.isVisited());
+		gwtDashboardMailResult.setDate(dsmailResult.getDate().getTime());
 		
-		return gwtDashboardStatsMailResult;
+		return gwtDashboardMailResult;
 	}
 	
 	
