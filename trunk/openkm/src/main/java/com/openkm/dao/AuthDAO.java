@@ -178,14 +178,21 @@ public class AuthDAO {
 	 * Get all users in database
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<User> findUsersByRole(boolean filterByActive, String role) throws DatabaseException {
-		log.debug("findUsersByRole({})", role);
-		String qs = "SELECT usr_id, usr_name, usr_email, usr_active, usr_pass FROM users, user_role WHERE ur_user=usr_id AND ur_role=? "+(filterByActive?"AND usr_active='true'":"")+" ORDER BY usr_id";
+	public static List<User> findUsersByRole(boolean filterByActive, String rolId) throws DatabaseException {
+		log.info("findUsersByRole({}, {})", filterByActive, rolId);
+		String qs = "select u from User u, Role r where r.id=:rolId " + 
+			(filterByActive?"and u.active=:active":"")+" order by u.id";
 		
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
+			q.setString("rolId", rolId);
+			
+			if (filterByActive) {
+				q.setBoolean("active", true);
+			}
+			
 			List<User> ret = q.list();
-			log.debug("findUsersByRole: "+ret);
+			log.info("findUsersByRole: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

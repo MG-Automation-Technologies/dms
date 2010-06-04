@@ -30,26 +30,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.DashboardStats;
+import com.openkm.dao.bean.Dashboard;
 
-public class DashboardStatsDAO {
-	private static Logger log = LoggerFactory.getLogger(DashboardStatsDAO.class);
+public class DashboardDAO {
+	private static Logger log = LoggerFactory.getLogger(DashboardDAO.class);
 
-	private DashboardStatsDAO() {}
+	private DashboardDAO() {}
 	
 	/**
 	 * Get dashboard stats
 	 */
 	@SuppressWarnings("unchecked")
-	public DashboardStats findByPk(int dsId) throws DatabaseException {
+	public Dashboard findByPk(int dsId) throws DatabaseException {
 		log.debug("findByPk({})", dsId);
 		String qs = "from DashboardStats ds where ds.id= :id";
 		
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
 			q.setInteger("id", dsId);
-			List<DashboardStats> results = q.list(); // uniqueResult
-			DashboardStats ret = null;
+			List<Dashboard> results = q.list(); // uniqueResult
+			Dashboard ret = null;
 			
 			if (results.size() == 1) {
 				ret = results.get(0);
@@ -65,7 +65,7 @@ public class DashboardStatsDAO {
 	/**
 	 * Create dashboard stats
 	 */
-	public static void create(DashboardStats dashboardStats) throws DatabaseException {
+	public static void create(Dashboard dashboardStats) throws DatabaseException {
 		try {
 			HibernateHelper.getSession().save(dashboardStats);
 		} catch (HibernateException e) {
@@ -78,7 +78,7 @@ public class DashboardStatsDAO {
 	 */
 	public void delete(int dsId) throws DatabaseException {
 		try {
-			DashboardStats ds = findByPk(dsId);
+			Dashboard ds = findByPk(dsId);
 			HibernateHelper.getSession().update(ds);
 			HibernateHelper.getSession().delete(ds);
 		} catch (HibernateException e) {
@@ -90,7 +90,7 @@ public class DashboardStatsDAO {
 	 * Find by user source
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<DashboardStats> findByUserSource(String user, String source) throws 
+	public static List<Dashboard> findByUserSource(String user, String source) throws 
 			DatabaseException {
 		log.debug("findByUserSource({}, {})", user, source);
 		String qs = "from DashboardStats ds where ds.user= :user and ds.source= :source";
@@ -99,7 +99,7 @@ public class DashboardStatsDAO {
 			Query q = HibernateHelper.getSession().createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
-			List<DashboardStats> ret = q.list();
+			List<Dashboard> ret = q.list();
 			log.debug("findByUserSource: "+ret);
 			return ret;
 		} catch (HibernateException e) {

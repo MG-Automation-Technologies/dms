@@ -27,12 +27,21 @@ import org.hibernate.cfg.Configuration;
 
 /**
  * Hibernate session helper
- * 
+ * Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
  * @author pavila
  */
 public class HibernateHelper {
 	private static final ThreadLocal<Session> session = new ThreadLocal<Session>();
-	private static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+	private static final boolean SHOW_SQL = true;
+	private static SessionFactory sessionFactory = null;
+	
+	static {
+		if (SHOW_SQL) {
+			sessionFactory = new Configuration().configure().setProperty("hibernate.show_sql", "true").buildSessionFactory();
+		} else {
+			sessionFactory = new Configuration().configure().buildSessionFactory();
+		}
+	}
 	
 	/**
 	 * Disable constructor to guaranty a single instance
