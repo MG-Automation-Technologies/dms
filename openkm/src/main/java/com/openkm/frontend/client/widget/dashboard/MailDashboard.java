@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -109,8 +109,8 @@ public class MailDashboard extends Composite {
 	/**
 	 * Get last user imported mails callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsMailResult>> callbackGetUserLastImportedMails = new AsyncCallback<List<GWTDashboardStatsMailResult>>() {
-		public void onSuccess(List<GWTDashboardStatsMailResult> result){
+	final AsyncCallback<List<GWTDashboardMailResult>> callbackGetUserLastImportedMails = new AsyncCallback<List<GWTDashboardMailResult>>() {
+		public void onSuccess(List<GWTDashboardMailResult> result){
 			userLastImportedMails.setMails(result);
 			userLastImportedMails.setHeaderResults(result.size());
 			userLastImportedMails.unsetRefreshing();
@@ -125,8 +125,8 @@ public class MailDashboard extends Composite {
 	/**
 	 * Gets last imported mail attachments documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLastImportedMailAttachments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserLastImportedMailAttachments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			userLastImportedAttachments.setDocuments(result);
 			userLastImportedAttachments.setHeaderResults(result.size());
 			userLastImportedAttachments.unsetRefreshing();

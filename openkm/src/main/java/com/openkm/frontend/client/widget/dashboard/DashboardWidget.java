@@ -46,9 +46,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -88,9 +88,9 @@ public class DashboardWidget extends Composite {
 	private Image feedImage;
 	private boolean zoom = false;
 	private boolean flagZoom = true;
-	private List<GWTDashboardStatsDocumentResult> lastDocList = new ArrayList<GWTDashboardStatsDocumentResult>();
-	private List<GWTDashboardStatsFolderResult> lastFolderList = new ArrayList<GWTDashboardStatsFolderResult>();
-	private List<GWTDashboardStatsMailResult> lastMailList = new ArrayList<GWTDashboardStatsMailResult>();
+	private List<GWTDashboardDocumentResult> lastDocList = new ArrayList<GWTDashboardDocumentResult>();
+	private List<GWTDashboardFolderResult> lastFolderList = new ArrayList<GWTDashboardFolderResult>();
+	private List<GWTDashboardMailResult> lastMailList = new ArrayList<GWTDashboardMailResult>();
 	private WidgetToFire widgetToFire;
 	private String source;
 	public Status status;
@@ -203,13 +203,13 @@ public class DashboardWidget extends Composite {
 	 * 
 	 * @param docList document list
 	 */
-	public void setDocuments(List<GWTDashboardStatsDocumentResult> docList) {
+	public void setDocuments(List<GWTDashboardDocumentResult> docList) {
 		int documentsNotViewed = 0;
 		removeAllRows();
 		
-		for (ListIterator<GWTDashboardStatsDocumentResult> it = docList.listIterator(); it.hasNext();) {
+		for (ListIterator<GWTDashboardDocumentResult> it = docList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
-			final GWTDashboardStatsDocumentResult dsDocumentResult = it.next();
+			final GWTDashboardDocumentResult dsDocumentResult = it.next();
 			final GWTDocument doc = dsDocumentResult.getDocument();
 			Anchor docName = new Anchor();
 			docName.setText(doc.getName());
@@ -250,12 +250,12 @@ public class DashboardWidget extends Composite {
 	 * 
 	 * @param folderList folder list
 	 */
-	public void setFolders(List<GWTDashboardStatsFolderResult> folderList) {
+	public void setFolders(List<GWTDashboardFolderResult> folderList) {
 		int folderNotViewed = 0;
 		removeAllRows();
-		for (ListIterator<GWTDashboardStatsFolderResult> it = folderList.listIterator(); it.hasNext();) {
+		for (ListIterator<GWTDashboardFolderResult> it = folderList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
-			final GWTDashboardStatsFolderResult folderResult = it.next();
+			final GWTDashboardFolderResult folderResult = it.next();
 			final GWTFolder folder = folderResult.getFolder();
 			
 			if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
@@ -305,13 +305,13 @@ public class DashboardWidget extends Composite {
 	 * 
 	 * @param mailList mail list
 	 */
-	public void setMails(List<GWTDashboardStatsMailResult> mailList) {
+	public void setMails(List<GWTDashboardMailResult> mailList) {
 		int documentsNotViewed = 0;
 		removeAllRows();
 		
-		for (ListIterator<GWTDashboardStatsMailResult> it = mailList.listIterator(); it.hasNext();) {
+		for (ListIterator<GWTDashboardMailResult> it = mailList.listIterator(); it.hasNext();) {
 			int row = table.getRowCount();
-			final GWTDashboardStatsMailResult dsMailResult = it.next();
+			final GWTDashboardMailResult dsMailResult = it.next();
 			final GWTMail mail = dsMailResult.getMail();
 			Anchor mailName = new Anchor();
 			mailName.setText(mail.getSubject());
@@ -358,24 +358,24 @@ public class DashboardWidget extends Composite {
 			table.getRowFormatter().removeStyleName(i, "okm-NotViewed");
 		}
 		
-		for (ListIterator<GWTDashboardStatsDocumentResult> it = lastDocList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsDocumentResult dsDocumentResult = it.next();
+		for (ListIterator<GWTDashboardDocumentResult> it = lastDocList.listIterator(); it.hasNext(); ) {
+			GWTDashboardDocumentResult dsDocumentResult = it.next();
 			if (!dsDocumentResult.isVisited()) {
 				visiteNode(source, dsDocumentResult.getDocument().getPath(), dsDocumentResult.getDate());
 				dsDocumentResult.setVisited(true);
 			}
 		}
 		
-		for (ListIterator<GWTDashboardStatsFolderResult> it = lastFolderList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsFolderResult folderResult =  it.next();
+		for (ListIterator<GWTDashboardFolderResult> it = lastFolderList.listIterator(); it.hasNext(); ) {
+			GWTDashboardFolderResult folderResult =  it.next();
 			if (!folderResult.isVisited()) {
 				visiteNode(source, folderResult.getFolder().getPath(), folderResult.getDate());
 				folderResult.setVisited(true);
 			}
 		}
 		
-		for (ListIterator<GWTDashboardStatsMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsMailResult mailResult =  it.next();
+		for (ListIterator<GWTDashboardMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
+			GWTDashboardMailResult mailResult =  it.next();
 			if (!mailResult.isVisited()) {
 				visiteNode(source, mailResult.getMail().getPath(), mailResult.getDate());
 				mailResult.setVisited(true);
@@ -401,8 +401,8 @@ public class DashboardWidget extends Composite {
 	private void markPathAsViewed(String path) {
 		int count = 0;
 		int decrement = 0;
-		for (ListIterator<GWTDashboardStatsDocumentResult> it = lastDocList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsDocumentResult dsDocumentResult = it.next();
+		for (ListIterator<GWTDashboardDocumentResult> it = lastDocList.listIterator(); it.hasNext(); ) {
+			GWTDashboardDocumentResult dsDocumentResult = it.next();
 			if (dsDocumentResult.getDocument().getPath().equals(path)) {
 				table.getRowFormatter().removeStyleName(count++, "okm-NotViewed");
 				decrement++;
@@ -413,8 +413,8 @@ public class DashboardWidget extends Composite {
 		}
 		
 		count = 0;
-		for (ListIterator<GWTDashboardStatsFolderResult> it = lastFolderList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsFolderResult dsFolderResult = it.next();
+		for (ListIterator<GWTDashboardFolderResult> it = lastFolderList.listIterator(); it.hasNext(); ) {
+			GWTDashboardFolderResult dsFolderResult = it.next();
 			if (dsFolderResult.getFolder().getPath().equals(path)) {
 				table.getRowFormatter().removeStyleName(count++, "okm-NotViewed");
 				decrement++;
@@ -425,8 +425,8 @@ public class DashboardWidget extends Composite {
 		}
 		
 		count = 0;
-		for (ListIterator<GWTDashboardStatsMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
-			GWTDashboardStatsMailResult dsMailResult = it.next();
+		for (ListIterator<GWTDashboardMailResult> it = lastMailList.listIterator(); it.hasNext(); ) {
+			GWTDashboardMailResult dsMailResult = it.next();
 			if (dsMailResult.getMail().getPath().equals(path)) {
 				table.getRowFormatter().removeStyleName(count++, "okm-NotViewed");
 				decrement++;
