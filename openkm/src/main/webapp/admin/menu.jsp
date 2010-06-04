@@ -19,11 +19,11 @@
   <a target="frame" href="logged_users.jsp"><img src="img/toolbar/logged.png" title="Logged users"></a>
   &nbsp;
 <% if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) { %>
-  <a target="frame" href="user_list.jsp"><img src="img/toolbar/users.png" title="Users"></a>
-  &nbsp;
-  <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
+  <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>
   &nbsp;
 <% } %>
+  <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
+  &nbsp;
   <a target="frame" href="report.jsp"><img src="img/toolbar/report.png" title="Reports"></a>
   &nbsp;
   <a target="frame" href="activity_log.jsp"><img src="img/toolbar/activity.png" title="Activity log"></a>

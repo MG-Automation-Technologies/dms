@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.util.WebUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -19,7 +18,7 @@
       <h1>LogCat</h1>
       <h2>View log</h2>
       <form action="LogCat">
-        <input type="hidden" name="action" value="<%=WebUtil.VIEW%>"/>
+        <input type="hidden" name="action" value="view"/>
         <input type="hidden" name="file" value="${file}"/>
         <table class="form">
           <tr><td>File</td><td>${file}</td></tr>
