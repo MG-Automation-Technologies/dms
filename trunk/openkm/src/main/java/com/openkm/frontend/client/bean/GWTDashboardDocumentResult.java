@@ -26,21 +26,21 @@ import java.util.Date;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * @author jllort
+ * 
+ * @author pavila
  *
  */
-public class GWTDashboardStatsMailResult implements IsSerializable {
-
-	private GWTMail mail;
+public class GWTDashboardDocumentResult implements IsSerializable {
+	private GWTDocument document;
 	private boolean visited;
 	private Date date;
-	
-	public GWTMail getMail() {
-		return mail;
+
+	public GWTDocument getDocument() {
+		return document;
 	}
 
-	public void setMail(GWTMail mail) {
-		this.mail = mail;
+	public void setDocument(GWTDocument document) {
+		this.document = document;
 	}
 
 	public boolean isVisited() {
@@ -62,9 +62,9 @@ public class GWTDashboardStatsMailResult implements IsSerializable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("GWTMail="); sb.append(mail);
-		sb.append(", visited="); sb.append(visited);
-		sb.append(", date="); sb.append(date);
+		sb.append("visited="); sb.append(visited);
+		sb.append(", date="); sb.append(date==null?null:date.getTime());
+		sb.append(", document="); sb.append(document);
 		sb.append("]");
 		return sb.toString();
 	}
