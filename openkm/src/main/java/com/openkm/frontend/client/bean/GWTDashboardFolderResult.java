@@ -30,18 +30,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author pavila
  *
  */
-public class GWTDashboardStatsDocumentResult implements IsSerializable {
-
-	private GWTDocument document;
+public class GWTDashboardFolderResult implements IsSerializable {
+	private GWTFolder folder;
 	private boolean visited;
 	private Date date;
 
-	public GWTDocument getDocument() {
-		return document;
+	public GWTFolder getFolder() {
+		return folder;
 	}
 
-	public void setDocument(GWTDocument document) {
-		this.document = document;
+	public void setFolder(GWTFolder folder) {
+		this.folder = folder;
 	}
 
 	public boolean isVisited() {
@@ -58,15 +57,5 @@ public class GWTDashboardStatsDocumentResult implements IsSerializable {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-	
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append("visited="); sb.append(visited);
-		sb.append(", date="); sb.append(date==null?null:date.getTime());
-		sb.append(", document="); sb.append(document);
-		sb.append("]");
-		return sb.toString();
 	}
 }
