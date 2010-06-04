@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -17,6 +18,11 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
+      <c:choose>
+        <c:when test="${action == 'userNew'}"><h1>User new</h1></c:when>
+        <c:when test="${action == 'userUpdate'}"><h1>User update</h1></c:when>
+        <c:when test="${action == 'userDelete'}"><h1>User delete</h1></c:when>
+      </c:choose>
       <form action="user_action.jsp">
         <input type="hidden" name="action" value=""/>
         <table class="form" width="372px">
@@ -25,10 +31,10 @@
             <td width="100%">
               <c:choose>
                 <c:when test="${action != 'userNew'}">
-                  <input class=":required :only_on_blur" name="usr_id" value=""/>
+                  <input class=":required :only_on_blur" name="usr_id" value="${user.id}" readonly="readonly"/>
                 </c:when>
                 <c:otherwise>
-                  <input class=":required :only_on_blur" name="usr_id" value="${user.id}" readonly="readonly"/>
+                  <input class=":required :only_on_blur" name="usr_id" value=""/>
                 </c:otherwise>
               </c:choose>
             </td>
@@ -75,8 +81,15 @@
             <td>Roles</td>
             <td>
               <select multiple="multiple" name="usr_roles">
-                <c:forEach var="role" items="${user.roles}">
-                  
+                <c:forEach var="role" items="${roles}">
+                  <c:choose>
+                    <c:when test="${fn:contains(user.roles, role)}">
+                      <option value="${role.id}" selected="selected">${role.id}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${role.id}">${role.id}</option>
+                    </c:otherwise>
+                  </c:choose>
                 </c:forEach>
               </select>
             </td>

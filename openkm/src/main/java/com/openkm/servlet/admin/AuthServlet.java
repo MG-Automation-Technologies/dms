@@ -69,6 +69,8 @@ public class AuthServlet extends BaseServlet {
 			
 			if (action.equals("userNew")) {
 				userNew(session, request, response);
+			} else if (action.equals("userEdit")) {
+				userEdit(session, request, response);
 			} else if (action.equals("userUpdate")) {
 				userUpdate(session, request, response);
 			}
@@ -102,6 +104,7 @@ public class AuthServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
 		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		log.debug("edit: void");
@@ -118,7 +121,9 @@ public class AuthServlet extends BaseServlet {
 		
 		// Activity log
 		UserActivity.log(session, "USER_EDIT", usrId, null);
-				
+		
+		sc.setAttribute("action", WebUtil.getString(request, "action"));
+		sc.setAttribute("roles", AuthDAO.findAllRoles());
 		sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
 		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		log.debug("edit: void");
