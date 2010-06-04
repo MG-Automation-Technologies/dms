@@ -24,19 +24,18 @@ package com.openkm.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class DashboardStatsDocumentResult implements Serializable {
-
-	private static final long serialVersionUID = -6397091381621834328L;
-	private Document document;
+public class DashboardMailResult implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Mail mail;
 	private boolean visited;
 	private Calendar date;
 	
-	public Document getDocument() {
-		return document;
+	public Mail getMail() {
+		return mail;
 	}
 
-	public void setDocument(Document document) {
-		this.document = document;
+	public void setMail(Mail mail) {
+		this.mail = mail;
 	}
 
 	public boolean isVisited() {
@@ -58,9 +57,9 @@ public class DashboardStatsDocumentResult implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("visited="); sb.append(visited);
-		sb.append(", date="); sb.append(date==null?null:date.getTime());
-		sb.append(", document="); sb.append(document);
+		sb.append("mail="); sb.append(mail);
+		sb.append(", visited="); sb.append(visited);
+		sb.append(", date="); sb.append(date);
 		sb.append("}");
 		return sb.toString();
 	}

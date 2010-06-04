@@ -24,19 +24,18 @@ package com.openkm.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class DashboardStatsFolderResult implements Serializable {
-
-	private static final long serialVersionUID = -6397091381621834328L;
-	private Folder folder;
+public class DashboardDocumentResult implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private Document document;
 	private boolean visited;
 	private Calendar date;
 	
-	public Folder getFolder() {
-		return folder;
+	public Document getDocument() {
+		return document;
 	}
 
-	public void setFolder(Folder folder) {
-		this.folder = folder;
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 	public boolean isVisited() {
@@ -58,9 +57,9 @@ public class DashboardStatsFolderResult implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("folder="); sb.append(folder);
-		sb.append(", visited="); sb.append(visited);
-		sb.append(", date="); sb.append(date);
+		sb.append("visited="); sb.append(visited);
+		sb.append(", date="); sb.append(date==null?null:date.getTime());
+		sb.append(", document="); sb.append(document);
 		sb.append("}");
 		return sb.toString();
 	}
