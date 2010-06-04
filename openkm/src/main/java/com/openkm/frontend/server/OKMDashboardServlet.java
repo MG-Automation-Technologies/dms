@@ -33,15 +33,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDashboard;
-import com.openkm.bean.DashboardStatsDocumentResult;
-import com.openkm.bean.DashboardStatsFolderResult;
-import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.bean.DashboardDocumentResult;
+import com.openkm.bean.DashboardFolderResult;
+import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMDashboardService;
 
@@ -60,16 +60,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserLockedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserLockedDocuments() throws OKMException {
 		log.debug("getUserLockedDocuments()");
-		List<GWTDashboardStatsDocumentResult> lockList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> lockList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsDocumentResult> col = OKMDashboard.getInstance().getUserLockedDocuments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
-				DashboardStatsDocumentResult documentResult = it.next();
-				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLockedDocuments(token);
+			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
+				DashboardDocumentResult documentResult = it.next();
+				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
 				lockList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -82,16 +82,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserCheckedOutDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserCheckedOutDocuments() throws OKMException {
 		log.debug("getUserCheckedOutDocuments()");
-		List<GWTDashboardStatsDocumentResult> chekoutList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> chekoutList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsDocumentResult> col = OKMDashboard.getInstance().getUserCheckedOutDocuments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {
-				DashboardStatsDocumentResult documentResult = it.next();
-				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserCheckedOutDocuments(token);
+			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {
+				DashboardDocumentResult documentResult = it.next();
+				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
 				chekoutList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -104,16 +104,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserLastModifiedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserLastModifiedDocuments() throws OKMException {
 		log.debug("getUserLastModifiedDocuments()");
-		List<GWTDashboardStatsDocumentResult> lastModifiedList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> lastModifiedList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsDocumentResult> col = OKMDashboard.getInstance().getUserLastModifiedDocuments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
-				DashboardStatsDocumentResult documentResult = it.next();
-				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastModifiedDocuments(token);
+			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
+				DashboardDocumentResult documentResult = it.next();
+				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
 				lastModifiedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -126,16 +126,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserSubscribedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserSubscribedDocuments() throws OKMException {
 		log.debug("getUserSubscribedDocuments()");
-		List<GWTDashboardStatsDocumentResult> subscribedList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> subscribedList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsDocumentResult> col = OKMDashboard.getInstance().getUserSubscribedDocuments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
-				DashboardStatsDocumentResult documentResult = it.next();
-				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserSubscribedDocuments(token);
+			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
+				DashboardDocumentResult documentResult = it.next();
+				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
 				subscribedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -148,16 +148,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserLastUploadedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserLastUploadedDocuments() throws OKMException {
 		log.debug("getUserLastUploadedDocuments()");
-		List<GWTDashboardStatsDocumentResult> lastUploadedList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> lastUploadedList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsDocumentResult> col = OKMDashboard.getInstance().getUserLastUploadedDocuments(token);
-			for (Iterator<DashboardStatsDocumentResult> it = col.iterator(); it.hasNext();) {		
-				DashboardStatsDocumentResult documentResult = it.next();
-				GWTDashboardStatsDocumentResult documentResultClient = Util.copy(documentResult);
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastUploadedDocuments(token);
+			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
+				DashboardDocumentResult documentResult = it.next();
+				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
 				lastUploadedList.add(documentResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -170,16 +170,16 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsFolderResult> getUserSubscribedFolders() throws OKMException {
+	public List<GWTDashboardFolderResult> getUserSubscribedFolders() throws OKMException {
 		log.debug("getUserSubscribedFolders()");
-		List<GWTDashboardStatsFolderResult> subscribedList = new ArrayList<GWTDashboardStatsFolderResult>();
+		List<GWTDashboardFolderResult> subscribedList = new ArrayList<GWTDashboardFolderResult>();
 		String token = getToken();
 		
 		try {
-			Collection<DashboardStatsFolderResult> col = OKMDashboard.getInstance().getUserSubscribedFolders(token);
-			for (Iterator<DashboardStatsFolderResult> it = col.iterator(); it.hasNext();) {		
-				DashboardStatsFolderResult folderResult = it.next();
-				GWTDashboardStatsFolderResult folderResultClient = Util.copy(folderResult);
+			Collection<DashboardFolderResult> col = OKMDashboard.getInstance().getUserSubscribedFolders(token);
+			for (Iterator<DashboardFolderResult> it = col.iterator(); it.hasNext();) {		
+				DashboardFolderResult folderResult = it.next();
+				GWTDashboardFolderResult folderResultClient = Util.copy(folderResult);
 				subscribedList.add(folderResultClient);
 			}
 		} catch (RepositoryException e) {
@@ -211,13 +211,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> find(String name) throws OKMException {
+	public List<GWTDashboardDocumentResult> find(String name) throws OKMException {
 		log.debug("find({})", name);
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (IOException e) {
@@ -236,13 +236,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException {
 		log.debug("getLastWeekTopDownloadedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopDownloadedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopDownloadedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -255,13 +255,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException {
 		log.debug("getLastMonthTopDownloadedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopDownloadedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopDownloadedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -274,13 +274,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException {
 		log.debug("getLastWeekTopModifiedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopModifiedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopModifiedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -293,13 +293,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastMonthTopModifiedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastMonthTopModifiedDocuments() throws OKMException {
 		log.debug("getLastMonthTopModifiedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopModifiedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopModifiedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -312,13 +312,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserLastDownloadedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserLastDownloadedDocuments() throws OKMException {
 		log.debug("getUserLastDownloadedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getUserLastDownloadedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastDownloadedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -331,13 +331,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastModifiedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastModifiedDocuments() throws OKMException {
 		log.debug("getLastModifiedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastModifiedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastModifiedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -350,13 +350,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getLastUploadedDocuments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getLastUploadedDocuments() throws OKMException {
 		log.debug("getLastWeekTopUploadedDocuments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getLastUploadedDocuments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastUploadedDocuments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -369,13 +369,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsDocumentResult> getUserLastImportedMailAttachments() throws OKMException {
+	public List<GWTDashboardDocumentResult> getUserLastImportedMailAttachments() throws OKMException {
 		log.debug("getUserLastImportedMailAttachments()");
-		List<GWTDashboardStatsDocumentResult> docList = new ArrayList<GWTDashboardStatsDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsDocumentResult> it = OKMDashboard.getInstance().getUserLastImportedMailAttachments(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastImportedMailAttachments(token).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -388,13 +388,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardStatsMailResult> getUserLastImportedMails() throws OKMException {
+	public List<GWTDashboardMailResult> getUserLastImportedMails() throws OKMException {
 		log.debug("getUserLastImportedMails()");
-		List<GWTDashboardStatsMailResult> mailList = new ArrayList<GWTDashboardStatsMailResult>();
+		List<GWTDashboardMailResult> mailList = new ArrayList<GWTDashboardMailResult>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<DashboardStatsMailResult> it = OKMDashboard.getInstance().getUserLastImportedMails(token).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardMailResult> it = OKMDashboard.getInstance().getUserLastImportedMails(token).iterator(); it.hasNext(); ) {
 				mailList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
