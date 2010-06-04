@@ -31,7 +31,7 @@
                 <option value=""></option>
                 <c:forEach var="role" items="${roles}">
                   <c:choose>
-                    <c:when test="${role.id == $roleFilter}">
+                    <c:when test="${role.id == roleFilter}">
                       <option value="${role.id}" selected="selected">${role.id}</option>
                     </c:when>
                     <c:otherwise>

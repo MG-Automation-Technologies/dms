@@ -172,10 +172,11 @@ public class AuthServlet extends BaseServlet {
 		if (roleFilter.equals("")) {
 			sc.setAttribute("users", AuthDAO.findAllUsers(false));
 		} else {
+			sc.setAttribute("roleFilter", roleFilter);
 			sc.setAttribute("users", AuthDAO.findUsersByRole(false, roleFilter));
 		}
+		
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
-		sc.setAttribute("roleFilter", roleFilter);
 		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
