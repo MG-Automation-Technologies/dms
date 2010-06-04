@@ -108,26 +108,26 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();
-		availableOption.setAddDocumentOption(true);
-		availableOption.setAddPropertyGroupOption(true);
-		availableOption.setAddSubscription(true);
-		availableOption.setCancelCheckoutOption(true);
-		availableOption.setCheckinOption(true);
-		availableOption.setCheckoutOption(true);
 		availableOption.setCreateFolderOption(true);
-		availableOption.setDeleteOption(true);
+		availableOption.setFindFolderOption(true);
 		availableOption.setDownloadOption(true);
 		availableOption.setDownloadPdfOption(true);
-		availableOption.setFindFolderOption(true);
-		availableOption.setHomeOption(true);
 		availableOption.setLockOption(true);
-		availableOption.setRefreshOption(true);
-		availableOption.setRemovePropertyGroupOption(true);
-		availableOption.setRemoveSubscription(true);
-		availableOption.setScannerOption(true);
 		availableOption.setUnLockOption(true);
-		availableOption.setUploaderOption(true);
+		availableOption.setAddDocumentOption(true);
+		availableOption.setCheckinOption(true);
+		availableOption.setCheckoutOption(true);
+		availableOption.setCancelCheckoutOption(true);
+		availableOption.setDeleteOption(true);	
+		availableOption.setAddPropertyGroupOption(true);
+		availableOption.setRemovePropertyGroupOption(true);
 		availableOption.setWorkflowOption(true);
+		availableOption.setAddSubscription(true);
+		availableOption.setRemoveSubscription(true);
+		availableOption.setRefreshOption(true);
+		availableOption.setHomeOption(true);
+		availableOption.setScannerOption(true);
+		availableOption.setUploaderOption(true);
 		workspace.setAvailableOption(availableOption);
 
 		try {
