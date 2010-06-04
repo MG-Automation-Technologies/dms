@@ -43,9 +43,9 @@ import org.apache.jackrabbit.server.CredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.DashboardStatsDocumentResult;
-import com.openkm.bean.DashboardStatsFolderResult;
-import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.bean.DashboardDocumentResult;
+import com.openkm.bean.DashboardFolderResult;
+import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.Config;
 import com.openkm.module.direct.DirectDashboardModule;
 import com.openkm.module.direct.DirectRepositoryModule;
@@ -185,12 +185,12 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed documents
 	 */
-	private SyndFeed getFeedDocuments(List<DashboardStatsDocumentResult> result) throws
+	private SyndFeed getFeedDocuments(List<DashboardDocumentResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
 				
-		for (DashboardStatsDocumentResult item : result) {
+		for (DashboardDocumentResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
 			entry.setTitle(item.getDocument().getPath());
 			entry.setAuthor(item.getDocument().getActualVersion().getAuthor());
@@ -206,12 +206,12 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed folders
 	 */
-	private SyndFeed getFeedFolders(List<DashboardStatsFolderResult> result) throws
+	private SyndFeed getFeedFolders(List<DashboardFolderResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
 		
-		for (DashboardStatsFolderResult item : result) {
+		for (DashboardFolderResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
 			entry.setTitle(item.getFolder().getPath());
 			entry.setAuthor(item.getFolder().getAuthor());
@@ -227,12 +227,12 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get feed mails
 	 */
-	private SyndFeed getFeedMails(List<DashboardStatsMailResult> result) throws
+	private SyndFeed getFeedMails(List<DashboardMailResult> result) throws
 			FeedException, RepositoryException,	SQLException, IOException {
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
 		SyndFeed feed = new SyndFeedImpl();
 		
-		for (DashboardStatsMailResult item : result) {
+		for (DashboardMailResult item : result) {
 			SyndEntry entry = new SyndEntryImpl();
 			entry.setTitle(item.getMail().getPath());
 			entry.setAuthor(item.getMail().getFrom());
