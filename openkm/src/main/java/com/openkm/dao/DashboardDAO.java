@@ -43,7 +43,7 @@ public class DashboardDAO {
 	@SuppressWarnings("unchecked")
 	public Dashboard findByPk(int dsId) throws DatabaseException {
 		log.debug("findByPk({})", dsId);
-		String qs = "from DashboardStats ds where ds.id= :id";
+		String qs = "from Dashboard db where db.id=:id";
 		
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
@@ -93,7 +93,7 @@ public class DashboardDAO {
 	public static List<Dashboard> findByUserSource(String user, String source) throws 
 			DatabaseException {
 		log.debug("findByUserSource({}, {})", user, source);
-		String qs = "from DashboardStats ds where ds.user= :user and ds.source= :source";
+		String qs = "from Dashboard db where db.user=:user and db.source=:source";
 
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
@@ -112,7 +112,7 @@ public class DashboardDAO {
 	 */
 	public static void deleteVisitedNodes(String user, String source) throws DatabaseException {
 		log.debug("deleteVisitedNodes({}, {})", user, source);
-		String qs = "delete from DashboardStats ds where ds.user= :user and ds.source= :source";
+		String qs = "delete from Dashboard db where db.user=:user and db.source=:source";
 
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
@@ -132,8 +132,8 @@ public class DashboardDAO {
 	public static void purgeOldVisitedNode(String user, String source, String node, Calendar date) throws 
 			DatabaseException {
 		log.debug("purgeOldVisitedNode({}, {}, {}, {})", new Object[] { user, source, node, date });
-		String qs = "delete from DashboardStats ds where ds.user= :user and ds.source= :source "+
-			"and ds.node= :node and ds.date= :date";
+		String qs = "delete from Dashboard db where db.user=:user and db.source=:source "+
+			"and db.node=:node and db.date=:date";
 		
 		try {
 			Query q = HibernateHelper.getSession().createQuery(qs);
