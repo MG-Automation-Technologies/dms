@@ -26,31 +26,31 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 
 /**
  * @author jllort
  *
  */
 public interface OKMDashboardServiceAsync {
-	public void getUserLockedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserCheckedOutDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserLastModifiedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback); 
-	public void getUserSubscribedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserLastUploadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback); 
-	public void getUserSubscribedFolders(AsyncCallback<List<GWTDashboardStatsFolderResult>> callback);
+	public void getUserLockedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserCheckedOutDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserLastModifiedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
+	public void getUserSubscribedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserLastUploadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
+	public void getUserSubscribedFolders(AsyncCallback<List<GWTDashboardFolderResult>> callback);
 	public void getUserSearchs(AsyncCallback<List<String>> callback);
-	public void find(String name, AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback); 
-	public void getLastWeekTopDownloadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getLastMonthTopDownloadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getLastWeekTopModifiedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getLastMonthTopModifiedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserLastDownloadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getLastModifiedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getLastUploadedDocuments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserLastImportedMailAttachments(AsyncCallback<List<GWTDashboardStatsDocumentResult>> callback);
-	public void getUserLastImportedMails(AsyncCallback<List<GWTDashboardStatsMailResult>> callback);
+	public void find(String name, AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
+	public void getLastWeekTopDownloadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getLastMonthTopDownloadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getLastWeekTopModifiedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getLastMonthTopModifiedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserLastDownloadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getLastModifiedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getLastUploadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserLastImportedMailAttachments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
+	public void getUserLastImportedMails(AsyncCallback<List<GWTDashboardMailResult>> callback);
 	public void visiteNode(String source, String node, Date date, AsyncCallback<?> callback);
 }
