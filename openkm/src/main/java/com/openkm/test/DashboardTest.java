@@ -14,8 +14,8 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMNotification;
 import com.openkm.api.OKMSearch;
-import com.openkm.bean.DashboardStatsDocumentResult;
-import com.openkm.bean.DashboardStatsFolderResult;
+import com.openkm.bean.DashboardDocumentResult;
+import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.QueryParams;
@@ -65,37 +65,37 @@ public class DashboardTest {
 		
 		// DashBoard
 		log.info(" *** Locked documents *** ");
-		Collection<DashboardStatsDocumentResult> documents = new DirectDashboardModule().getUserLockedDocuments(token);
+		Collection<DashboardDocumentResult> documents = new DirectDashboardModule().getUserLockedDocuments(token);
 				
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 
 		log.info(" *** CheckedOut documents *** ");
 		documents = new DirectDashboardModule().getUserCheckedOutDocuments(token);
 				
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 
 		log.info(" *** Subscribed folders *** ");
-		Collection<DashboardStatsFolderResult> folders = new DirectDashboardModule().getUserSubscribedFolders(token);
+		Collection<DashboardFolderResult> folders = new DirectDashboardModule().getUserSubscribedFolders(token);
 				
-		for (Iterator<DashboardStatsFolderResult> it = folders.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardFolderResult> it = folders.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 
 		log.info(" *** Subscribed documents *** ");
 		documents = new DirectDashboardModule().getUserSubscribedDocuments(token);
 				
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 		
 		log.info(" *** Last modified documents *** ");
 		documents = new DirectDashboardModule().getUserLastModifiedDocuments(token);
 				
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 		
@@ -149,9 +149,9 @@ public class DashboardTest {
 		}
 		
 		log.info(" *** Find documents *** ");
-		Collection<DashboardStatsDocumentResult> documents = OKMDashboard.getInstance().find(token, "prueba");
+		Collection<DashboardDocumentResult> documents = OKMDashboard.getInstance().find(token, "prueba");
 		
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 
@@ -160,7 +160,7 @@ public class DashboardTest {
 		log.info(" *** Find documents *** ");
 		documents = OKMDashboard.getInstance().find(token, "prueba");
 		
-		for (Iterator<DashboardStatsDocumentResult> it = documents.iterator(); it.hasNext(); ) {
+		for (Iterator<DashboardDocumentResult> it = documents.iterator(); it.hasNext(); ) {
 			log.info("# "+it.next());
 		}
 
