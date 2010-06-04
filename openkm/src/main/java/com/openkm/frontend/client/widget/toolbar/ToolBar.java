@@ -781,10 +781,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(space());
 		panel.add(downloadPdf);
 		panel.add(space());
-		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
+		panel.add(new Image(OKMBundleResources.INSTANCE.separator())); // pos 9
 		panel.add(lock);
 		panel.add(space());
 		panel.add(unLock);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addDocument);
 		panel.add(space());
@@ -795,22 +796,35 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		panel.add(cancelCheckout);
 		panel.add(space());
 		panel.add(delete);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addPropertyGroup);
 		panel.add(space());
 		panel.add(removePropertyGroup);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(startWorkflow);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(addSubscription);
 		panel.add(space());
 		panel.add(removeSubscription);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(refresh);
+		panel.add(space());
 		panel.add(home);
+		panel.add(space());
 		panel.add(new Image(OKMBundleResources.INSTANCE.separator()));
 		panel.add(scanner);
+		panel.add(space());
 		panel.add(uploader);
+		panel.add(space());
+		
+		// Hide all buttons at startup
+		for (int i=0; i<panel.getWidgetCount(); i++) {
+			panel.getWidget(i).setVisible(false);
+		}
 		
 		initWidget(panel);
 	}
@@ -2457,26 +2471,71 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * @param option
 	 */
 	public void setAvailableOption(GWTAvailableOption option) {
+		// FIRST
 		createFolderButton.setVisible(option.isCreateFolderOption());
-		findFolder.setVisible(option.isFindFolderOption());
-		lock.setVisible(option.isLockOption());
-		unLock.setVisible(option.isUnLockOption());
-		addDocument.setVisible(option.isAddDocumentOption());
-		delete.setVisible(option.isDeleteOption());
-		edit.setVisible(option.isCheckoutOption());
-		checkin.setVisible(option.isCheckinOption());
-		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		panel.getWidget(2).setVisible(option.isCreateFolderOption()); // Hide space
+		findFolder.setVisible(option.isCreateFolderOption());
+		panel.getWidget(4).setVisible(option.isCreateFolderOption()); // Hide space
 		download.setVisible(option.isDownloadOption());
+		panel.getWidget(6).setVisible(option.isDownloadOption()); // hide space
 		downloadPdf.setVisible(option.isDownloadPdfOption());
+		panel.getWidget(8).setVisible(option.isDownloadPdfOption()); // hide space
+		panel.getWidget(9).setVisible(option.isCreateFolderOption() || option.isFindFolderOption() ||
+					                  option.isDownloadOption() || option.isDownloadPdfOption()); // hide separator
+ 
+		
+		// SECOND
+		lock.setVisible(option.isLockOption());
+		panel.getWidget(11).setVisible(option.isLockOption()); // hide space
+		unLock.setVisible(option.isUnLockOption());
+		panel.getWidget(13).setVisible(option.isUnLockOption()); // hide space
+		panel.getWidget(14).setVisible(option.isLockOption() || option.isUnLockOption()); // hide separator
+		
+		// THIRD
+		addDocument.setVisible(option.isAddDocumentOption());
+		panel.getWidget(16).setVisible(option.isAddDocumentOption()); // hide space
+		edit.setVisible(option.isCheckoutOption());
+		panel.getWidget(18).setVisible(option.isCheckoutOption()); // hide space
+		checkin.setVisible(option.isCheckinOption());
+		panel.getWidget(20).setVisible(option.isCheckinOption()); // hide space
+		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		panel.getWidget(22).setVisible(option.isCancelCheckoutOption()); // hide space
+		delete.setVisible(option.isDeleteOption());
+		panel.getWidget(24).setVisible(option.isDeleteOption()); // hide space
+		panel.getWidget(25).setVisible(option.isAddDocumentOption() || option.isCheckoutOption() || 
+									   option.isCheckinOption() || option.isCancelCheckoutOption() || 
+									   option.isDeleteOption()); // hide separator
+		
+		// FOURTH
 		addPropertyGroup.setVisible(option.isAddPropertyGroupOption());
+		panel.getWidget(27).setVisible(option.isAddPropertyGroupOption()); // hide space
 		removePropertyGroup.setVisible(option.isRemovePropertyGroupOption());
+		panel.getWidget(29).setVisible(option.isRemovePropertyGroupOption()); // hide space
+		panel.getWidget(30).setVisible(option.isAddPropertyGroupOption() || option.isRemovePropertyGroupOption()); // hide separator
+		
+		// FIFTH
 		startWorkflow.setVisible(option.isWorkflowOption());
+		panel.getWidget(32).setVisible(option.isWorkflowOption()); // hide space
+		panel.getWidget(33).setVisible(option.isWorkflowOption()); // hide separator
+		
+		// SIXTH
 		addSubscription.setVisible(option.isAddSubscription());
+		panel.getWidget(35).setVisible(option.isAddSubscription()); // hide space
 		removeSubscription.setVisible(option.isRemoveSubscription());
+		panel.getWidget(37).setVisible(option.isRemoveSubscription()); // hide space
+		panel.getWidget(38).setVisible(option.isAddSubscription() || option.isRemoveSubscription()); // hide separator
+		
+		// SEVENTH 
 		home.setVisible(option.isHomeOption());
+		panel.getWidget(40).setVisible(option.isHomeOption()); // hide space
 		refresh.setVisible(option.isRefreshOption());
+		panel.getWidget(42).setVisible(option.isRefreshOption()); // hide space
+		panel.getWidget(43).setVisible(option.isHomeOption() || option.isRefreshOption()); // hide separator
+		
 		scanner.setVisible(option.isScannerOption());
+		panel.getWidget(45).setVisible(option.isScannerOption()); // hide space
 		uploader.setVisible(option.isUploaderOption());
+		panel.getWidget(47).setVisible(option.isUploaderOption()); // hide space
 	}
 	
 	/**
