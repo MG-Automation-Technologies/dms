@@ -27,31 +27,31 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsMailResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardMailResult;
 
 /**
  * @author jllort
  *
  */
 public interface OKMDashboardService extends RemoteService {
-	public List<GWTDashboardStatsDocumentResult> getUserLockedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserCheckedOutDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserLastModifiedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserSubscribedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserLastUploadedDocuments() throws OKMException;
-	public List<GWTDashboardStatsFolderResult> getUserSubscribedFolders() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserLockedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserCheckedOutDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserLastModifiedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserSubscribedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserLastUploadedDocuments() throws OKMException;
+	public List<GWTDashboardFolderResult> getUserSubscribedFolders() throws OKMException;
 	public List<String> getUserSearchs() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> find(String name) throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastMonthTopModifiedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserLastDownloadedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastModifiedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getLastUploadedDocuments() throws OKMException;
-	public List<GWTDashboardStatsDocumentResult> getUserLastImportedMailAttachments() throws OKMException;
-	public List<GWTDashboardStatsMailResult> getUserLastImportedMails() throws OKMException;
+	public List<GWTDashboardDocumentResult> find(String name) throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastMonthTopModifiedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserLastDownloadedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastModifiedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getLastUploadedDocuments() throws OKMException;
+	public List<GWTDashboardDocumentResult> getUserLastImportedMailAttachments() throws OKMException;
+	public List<GWTDashboardMailResult> getUserLastImportedMails() throws OKMException;
 	public void visiteNode(String source, String node, Date date) throws OKMException;
 }
