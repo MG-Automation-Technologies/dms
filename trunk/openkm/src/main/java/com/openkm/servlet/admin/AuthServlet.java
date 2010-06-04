@@ -102,12 +102,12 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userNew(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		log.info("userNew({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("action", WebUtil.getString(request, "action"));
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
 		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
-		log.debug("edit: void");
+		log.debug("userNew: void");
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		String usrId = WebUtil.getString(request, "usrId");
 		
@@ -126,7 +126,7 @@ public class AuthServlet extends BaseServlet {
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
 		sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
 		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
-		log.debug("edit: void");
+		log.debug("userEdit: void");
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userUpdate(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("save({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
 		User usr = new User();
 		usr.setId(WebUtil.getString(request, "usr_id"));
 		usr.setName(WebUtil.getString(request, "usr_name"));
@@ -147,14 +147,14 @@ public class AuthServlet extends BaseServlet {
 		}
 				
 		// Activity log
-		UserActivity.log(session, "USER_SAVE", usr.getId(), usr.toString());
+		UserActivity.log(session, "USER_UPDATE", usr.getId(), usr.toString());
 		
 		AuthDAO.updateUser(usr);
 		if (!usr.getPass().equals("")) {
 			AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
 		}
 		
-		log.debug("save: void");
+		log.debug("userUpdate: void");
 	}
 
 	/**
