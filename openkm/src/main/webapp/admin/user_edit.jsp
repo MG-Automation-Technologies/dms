@@ -1,11 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="com.openkm.dao.bean.User"%>
-<%@ page import="com.openkm.core.DatabaseException"%>
-<%@ page import="java.util.Collection" %>
-<%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,58 +14,85 @@
   <title>User edit</title>
 </head>
 <body>
-<%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-		request.setCharacterEncoding("UTF-8");
-		String id = request.getParameter("id");
-		String action = request.getParameter("action");
-		
-		try {
-			User usr = new User();
-			
-			if ((action.equals("u") || action.equals("d")) && id != null) {
-				id = new String(id.getBytes("ISO-8859-1"), "UTF-8");
-				usr = AuthDAO.findUserByPk(id);
-			}
-			
-			if (action.equals("c")) {
-				out.println("<h1>Create user</h1>");
-			} else if (action.equals("u")) {
-				out.println("<h1>Update user</h1>");
-			} else if (action.equals("d")) {
-				out.println("<h1>Delete user</h1>");
-			}
-			
-			out.println("<form action=\"user_action.jsp\">");
-			out.println("<input type=\"hidden\" name=\"action\" value=\""+action+"\">");
-			out.println("<table class=\"form\" width=\"372px\">");
-			out.println("<tr><td>Id</td><td width=\"100%\"><input class=\":required :only_on_blur\" name=\"usr_id\" value=\""+usr.getId()+"\" "+(action.equals("c")?"":"readonly")+"></td></tr>");
-			out.println("<tr><td>Password</td><td><input class=\""+(action.equals("c")?":required :only_on_blur":"")+"\" type=\"password\" name=\"usr_pass\" id=\"usr_pass\" value=\"\" autocomplete=\"off\"></td></tr>");
-			out.println("<tr><td nowrap>Confirm password</td><td><input class=\":same_as;usr_pass :only_on_blur\" type=\"password\" value=\"\" autocomplete=\"off\"></td></tr>");
-			out.println("<tr><td>Name</td><td><input class=\"\" name=\"usr_name\" value=\""+usr.getName()+"\"></td></tr>");
-			out.println("<tr><td>Mail</td><td><input class=\":email :required :only_on_blur\" name=\"usr_email\" value=\""+usr.getEmail()+"\"></td></tr>");
-			out.println("<tr><td>Active</td><td><input name=\"usr_active\" type=\"checkbox\" "+(usr.isActive()?"checked":"")+"></td></tr>");
-			out.println("<tr><td>Roles</td><td><select multiple name=\"usr_roles\">");
-			
-			Collection<Role> roles = AuthDAO.findAllRoles();
-			for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
-				Role rol = it.next();
-				out.println("<option value=\""+rol.getId()+"\" "+(usr.getRoles().contains(rol.getId())?"selected":"")+">"+rol.getId()+"</option>");
-			}
-			
-			out.println("</select></td></tr>");
-			out.println("<tr><td colspan=\"2\" align=\"right\">");
-			out.println("<input type=\"button\" onclick=\"javascript:window.history.back()\" value=\"Cancel\">");
-			out.println("<input type=\"submit\" value=\"Send\">");
-			out.println("</td></tr>");
-			out.println("</table>");
-			out.println("</form>");
-		} catch (DatabaseException e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
-		}
-	} else {
-		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
-	}
-%>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <form action="user_action.jsp">
+        <input type="hidden" name="action" value=""/>
+        <table class="form" width="372px">
+          <tr>
+            <td>Id</td>
+            <td width="100%">
+              <c:choose>
+                <c:when test="${action != 'userNew'}">
+                  <input class=":required :only_on_blur" name="usr_id" value=""/>
+                </c:when>
+                <c:otherwise>
+                  <input class=":required :only_on_blur" name="usr_id" value="${user.id}" readonly="readonly"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>
+              <c:choose>
+                <c:when test="${action == 'userNew'}">
+                  <input class=":required :only_on_blur" type="password" name="usr_pass" id="usr_pass" value="" autocomplete="off"/>
+                </c:when>
+                <c:otherwise>
+                  <input class="" type="password" name="usr_pass" id="usr_pass" value="" autocomplete="off"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">Confirm password</td>
+            <td><input class=":same_as;usr_pass :only_on_blur" type="password" value="" autocomplete="off"/></td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td><input class="" name="usr_name" value="${user.name}"/></td>
+          </tr>
+          <tr>
+            <td>Mail</td>
+            <td><input class=":email :required :only_on_blur" name="usr_email" value="${user.email}"/></td>
+          </tr>
+          <tr>
+            <td>Active</td>
+            <td>
+              <c:choose>
+                <c:when test="${user.active}">
+                  <input name="usr_active" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="usr_active" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>Roles</td>
+            <td>
+              <select multiple="multiple" name="usr_roles">
+                <c:forEach var="role" items="${user.roles}">
+                  
+                </c:forEach>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="right">
+              <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
+              <input type="submit" value="Send"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 </body>
 </html>

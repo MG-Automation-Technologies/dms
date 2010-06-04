@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,7 +12,7 @@
   <title>User List</title>
 </head>
 <body>
-<c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
       <c:url value="Auth" var="urlRoleList">
@@ -51,7 +50,10 @@
         <tr>
           <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
           <th width="100px">
-            <a href="User?action=edit"><img src="img/action/new.png" alt="New user" title="New user"/></a>
+            <c:url value="Auth" var="urlNew">
+              <c:param name="action" value="userNew"/>
+            </c:url>
+            <a href="${urlNew}"><img src="img/action/new.png" alt="New user" title="New user"/></a>
           </th>
         </tr>
         <c:forEach var="user" items="${users}" varStatus="row">
