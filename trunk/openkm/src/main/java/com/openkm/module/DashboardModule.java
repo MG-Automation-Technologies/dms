@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 
-import com.openkm.bean.DashboardStatsDocumentResult;
-import com.openkm.bean.DashboardStatsFolderResult;
-import com.openkm.bean.DashboardStatsMailResult;
+import com.openkm.bean.DashboardDocumentResult;
+import com.openkm.bean.DashboardFolderResult;
+import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 
@@ -40,7 +40,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLockedDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserLockedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -50,7 +50,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserCheckedOutDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserCheckedOutDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -58,7 +58,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserSubscribedDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserSubscribedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -66,7 +66,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<DashboardStatsFolderResult> getUserSubscribedFolders(String token)
+	public Collection<DashboardFolderResult> getUserSubscribedFolders(String token)
 			throws RepositoryException;
 	
 	/**
@@ -74,7 +74,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastUploadedDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserLastUploadedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -82,7 +82,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastModifiedDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserLastModifiedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -90,7 +90,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastDownloadedDocuments(String token)
+	public Collection<DashboardDocumentResult> getUserLastDownloadedDocuments(String token)
 		throws RepositoryException;
 	
 	/**
@@ -98,7 +98,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsMailResult> getUserLastImportedMails(String token)
+	public Collection<DashboardMailResult> getUserLastImportedMails(String token)
 		throws RepositoryException;
 	
 	/**
@@ -106,7 +106,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getUserLastImportedMailAttachments(String token)
+	public Collection<DashboardDocumentResult> getUserLastImportedMailAttachments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -130,7 +130,7 @@ public interface DashboardModule {
 	 * @throws IOException
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> find(String token, String name)
+	public Collection<DashboardDocumentResult> find(String token, String name)
 			throws IOException, ParseException, RepositoryException;
 		
 	/**
@@ -138,7 +138,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopDownloadedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token)
 			throws RepositoryException;
 
 	/**
@@ -146,7 +146,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopDownloadedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -154,7 +154,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastWeekTopModifiedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastWeekTopModifiedDocuments(String token)
 			throws RepositoryException;
 
 	/**
@@ -162,7 +162,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastMonthTopModifiedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastMonthTopModifiedDocuments(String token)
 			throws RepositoryException;
 
 	/**
@@ -170,7 +170,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastModifiedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastModifiedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
@@ -178,7 +178,7 @@ public interface DashboardModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public Collection<DashboardStatsDocumentResult> getLastUploadedDocuments(String token)
+	public Collection<DashboardDocumentResult> getLastUploadedDocuments(String token)
 			throws RepositoryException;
 
 	/**
