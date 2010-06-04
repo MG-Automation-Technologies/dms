@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -137,8 +137,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * Get last week top downloaded documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastWeekTopDownloadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastWeekTopDownloadedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastWeekTopDownloadedDocuments.setDocuments(result);
 			lastWeekTopDownloadedDocuments.setHeaderResults(result.size());
 			lastWeekTopDownloadedDocuments.unsetRefreshing();
@@ -153,8 +153,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * Get last month top downloaded documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastMonthTopDownloadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastMonthTopDownloadedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastMonthTopDownloadedDocuments.setDocuments(result);
 			lastMonthTopDownloadedDocuments.setHeaderResults(result.size());
 			lastMonthTopDownloadedDocuments.unsetRefreshing();
@@ -169,8 +169,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * Gets last months top modified documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastMonthTopModifiedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastMonthTopModifiedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastMonthTopModifiedDocuments.setDocuments(result);
 			lastMonthTopModifiedDocuments.setHeaderResults(result.size());
 			lastMonthTopModifiedDocuments.unsetRefreshing();
@@ -185,8 +185,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * Gets last week top modified documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastWeekTopModifiedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastWeekTopModifiedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastWeekTopModifiedDocuments.setDocuments(result);
 			lastWeekTopModifiedDocuments.setHeaderResults(result.size());
 			lastWeekTopModifiedDocuments.unsetRefreshing();
@@ -201,8 +201,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * Gets last modified documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastModifiedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastModifiedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastModifiedDocuments.setDocuments(result);
 			lastModifiedDocuments.setHeaderResults(result.size());
 			lastModifiedDocuments.unsetRefreshing();
@@ -218,8 +218,8 @@ public class GeneralDashboard extends Composite {
 	/**
 	 * get last week top uploaded documents
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetLastUploadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetLastUploadedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastUploadedDocuments.setDocuments(result);
 			lastUploadedDocuments.setHeaderResults(result.size());
 			lastUploadedDocuments.unsetRefreshing();

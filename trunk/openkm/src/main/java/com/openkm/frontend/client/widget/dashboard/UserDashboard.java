@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
-import com.openkm.frontend.client.bean.GWTDashboardStatsFolderResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -144,8 +144,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets the locked documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLockedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserLockedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lockedDocuments.setDocuments(result);
 			lockedDocuments.setHeaderResults(result.size());
 			Main.get().mainPanel.bottomPanel.userInfo.setLockedDocuments(result.size());
@@ -161,8 +161,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets the checkout documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserCheckOutDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserCheckOutDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			chechoutDocuments.setDocuments(result);
 			chechoutDocuments.setHeaderResults(result.size());
 			Main.get().mainPanel.bottomPanel.userInfo.setCheckoutDocuments(result.size());
@@ -179,8 +179,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets last modified documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLastModifiedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserLastModifiedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastModifiedDocuments.setDocuments(result);
 			lastModifiedDocuments.setHeaderResults(result.size());
 			lastModifiedDocuments.unsetRefreshing();
@@ -195,8 +195,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Get subscribed documents callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserSubscribedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserSubscribedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			subscribedDocuments.setDocuments(result);
 			subscribedDocuments.setHeaderResults(result.size());
 			tmpSubscriptions = result.size();
@@ -213,8 +213,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets the subscribed folders
 	 */
-	final AsyncCallback<List<GWTDashboardStatsFolderResult>> callbackGetUserSubscribedFolders = new AsyncCallback<List<GWTDashboardStatsFolderResult>>() {
-		public void onSuccess(List<GWTDashboardStatsFolderResult> result){
+	final AsyncCallback<List<GWTDashboardFolderResult>> callbackGetUserSubscribedFolders = new AsyncCallback<List<GWTDashboardFolderResult>>() {
+		public void onSuccess(List<GWTDashboardFolderResult> result){
 			subscribedFolder.setFolders(result);
 			subscribedFolder.setHeaderResults(result.size());
 			tmpSubscriptions += result.size();
@@ -231,8 +231,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets the downloaded documents
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLastDownloadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserLastDownloadedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastDownloadedDocuments.setDocuments(result);
 			lastDownloadedDocuments.setHeaderResults(result.size());
 			lastDownloadedDocuments.unsetRefreshing();
@@ -247,8 +247,8 @@ public class UserDashboard extends Composite {
 	/**
 	 * Gets the last uploaded documents
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackGetUserLastUploadedDocuments = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackGetUserLastUploadedDocuments = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			lastUploadedDocuments.setDocuments(result);
 			lastUploadedDocuments.setHeaderResults(result.size());
 			lastUploadedDocuments.unsetRefreshing();

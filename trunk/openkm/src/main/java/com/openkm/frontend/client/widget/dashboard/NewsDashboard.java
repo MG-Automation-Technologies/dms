@@ -33,7 +33,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTDashboardStatsDocumentResult;
+import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -134,8 +134,8 @@ public class NewsDashboard extends WidgetToFire {
 	/**
 	 * Gets the find search callback
 	 */
-	final AsyncCallback<List<GWTDashboardStatsDocumentResult>> callbackFind = new AsyncCallback<List<GWTDashboardStatsDocumentResult>>() {
-		public void onSuccess(List<GWTDashboardStatsDocumentResult> result){
+	final AsyncCallback<List<GWTDashboardDocumentResult>> callbackFind = new AsyncCallback<List<GWTDashboardDocumentResult>>() {
+		public void onSuccess(List<GWTDashboardDocumentResult> result){
 			DashboardWidget dashboardWidget = hWidgetSearch.get(actualRefreshingKey);
 			dashboardWidget.setDocuments(result);
 			dashboardWidget.setHeaderResults(result.size());
