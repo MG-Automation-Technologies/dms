@@ -67,14 +67,14 @@ public class AuthServlet extends BaseServlet {
 				session = JCRUtils.getSession();
 			}
 			
-			if (action.equals("userEdit")) {
-				edit(session, request, response);
+			if (action.equals("userNew")) {
+				userNew(session, request, response);
 			} else if (action.equals("userUpdate")) {
-				update(session, request, response);
+				userUpdate(session, request, response);
 			}
 			
 			if (action.equals("") || action.equals("userList")) {
-				list(session, request, response);
+				userList(session, request, response);
 			}
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
@@ -96,9 +96,21 @@ public class AuthServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Edit property
+	 * New user
 	 */
-	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userNew(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		sc.setAttribute("roles", AuthDAO.findAllRoles());
+		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+		log.debug("edit: void");
+	}
+	
+	/**
+	 * Edit user
+	 */
+	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
@@ -115,7 +127,7 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Update user
 	 */
-	private void update(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userUpdate(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("save({}, {}, {})", new Object[] { session, request, response });
 		User usr = new User();
@@ -143,7 +155,7 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * List node properties and children
 	 */
-	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void userList(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		String roleFilter = WebUtil.getString(request, "roleFilter");
