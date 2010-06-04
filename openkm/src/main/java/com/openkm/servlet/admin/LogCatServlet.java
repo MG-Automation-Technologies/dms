@@ -51,9 +51,9 @@ public class LogCatServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
 		
-		if (action.equals(WebUtil.VIEW)) {
+		if (action.equals("view")) {
 			view(request, response);
-		} else if (action.equals(WebUtil.LIST) || action.equals("")) {
+		} else if (action.equals("list") || action.equals("")) {
 			list(request, response);
 		} else {
 			ServletContext sc = getServletContext();

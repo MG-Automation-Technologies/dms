@@ -116,14 +116,19 @@ public class RepositoryViewServlet extends BaseServlet {
 				list(session, path, request, response);
 			}
 		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (AccessDeniedException e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (com.openkm.core.RepositoryException e) {
+			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
