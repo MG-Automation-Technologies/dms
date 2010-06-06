@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -132,10 +133,16 @@ public class TrashMenu extends MenuBase {
 		if (purgeFolderOption) {enable(purge);} else {disable(purge);}
 		if (purgeTrashFolderOption) {enable(purgeTrash);} else {disable(purgeTrash);}
 	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		restore.setVisible(option.isRestore());
+		purge.setVisible(option.isPurge());
+		purgeTrash.setVisible(option.isPurgeTrash());
+	}
 
 	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	/* (non-Javadoc)

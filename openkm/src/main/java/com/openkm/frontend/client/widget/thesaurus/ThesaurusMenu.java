@@ -23,6 +23,7 @@ package com.openkm.frontend.client.widget.thesaurus;
 
 import com.google.gwt.user.client.ui.MenuBar;
 
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -44,6 +45,10 @@ public class ThesaurusMenu extends MenuBase {
 		// First initialize language values
 		dirMenu = new MenuBar(true);
 		initWidget(dirMenu);
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
 	}
 	
 	@Override

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -296,6 +297,19 @@ public class TaxonomyMenu extends MenuBase {
 		bookmark.setHTML(Util.menuHTML("img/icon/actions/add_bookmark.gif", Main.i18n("tree.menu.add.bookmark")));
 		home.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("tree.menu.set.home")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("tree.menu.export")));
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		create.setVisible(option.isCreateFolderOption());
+		remove.setVisible(option.isDeleteOption());
+		rename.setVisible(option.isRenameOption());
+		move.setVisible(option.isMoveOption());
+		copy.setVisible(option.isCopyOption());
+		addDocument.setVisible(option.isAddDocumentOption());
+		bookmark.setVisible(option.isAddBookmarkOption());
+		home.setVisible(option.isSetHome());
+		export.setVisible(option.isExport());
 	}
 
 	/* (non-Javadoc)
