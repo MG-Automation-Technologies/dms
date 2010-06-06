@@ -19,12 +19,13 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'userNew'}"><h1>User new</h1></c:when>
+        <c:when test="${action == 'userCreate'}"><h1>User create</h1></c:when>
         <c:when test="${action == 'userUpdate'}"><h1>User update</h1></c:when>
         <c:when test="${action == 'userDelete'}"><h1>User delete</h1></c:when>
       </c:choose>
-      <form action="user_action.jsp">
-        <input type="hidden" name="action" value=""/>
+      <form action="Auth">
+        <input type="hidden" name="action" value="${action}"/>
+        <input type="hidden" name="persist" value="${persist}"/>
         <table class="form" width="372px">
           <tr>
             <td>Id</td>

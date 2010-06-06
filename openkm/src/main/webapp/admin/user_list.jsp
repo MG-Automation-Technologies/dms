@@ -50,15 +50,15 @@
         <tr>
           <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
           <th width="100px">
-            <c:url value="Auth" var="urlNew">
-              <c:param name="action" value="userNew"/>
+            <c:url value="Auth" var="urlCreate">
+              <c:param name="action" value="userCreate"/>
             </c:url>
-            <a href="${urlNew}"><img src="img/action/new.png" alt="New user" title="New user"/></a>
+            <a href="${urlCreate}"><img src="img/action/new.png" alt="New user" title="New user"/></a>
           </th>
         </tr>
         <c:forEach var="user" items="${users}" varStatus="row">
-          <c:url value="Auth" var="urlEdit">
-            <c:param name="action" value="userEdit"/>
+          <c:url value="Auth" var="urlUpdate">
+            <c:param name="action" value="userUpdate"/>
             <c:param name="usrId" value="${user.id}"/>
           </c:url>
           <c:url value="Auth" var="urlDelete">
@@ -91,7 +91,7 @@
               </c:choose>
             </td>
             <td>
-              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+              <a href="${urlUpdate}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
