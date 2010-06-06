@@ -409,9 +409,9 @@ public class CategoriesMenu extends MenuBase {
 		cancelCheckout.setVisible(option.cancelCheckoutOption);
 		lock.setVisible(option.isLockOption());
 		unlock.setVisible(option.isUnLockOption());
-		mediaPlayer.setVisible(option.isMediaPlayer());
-		imageViewer.setVisible(option.isImageViewer());
-		go.setVisible(option.isGotoFolder());
+		mediaPlayer.setVisible(option.isMediaPlayerOption());
+		imageViewer.setVisible(option.isImageViewerOption());
+		go.setVisible(option.isGotoFolderOption());
 	}
 	
 	/**

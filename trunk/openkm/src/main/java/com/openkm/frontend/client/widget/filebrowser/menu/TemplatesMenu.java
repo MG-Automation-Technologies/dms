@@ -438,8 +438,8 @@ public class TemplatesMenu extends MenuBase {
 		unlock.setVisible(option.isUnLockOption());
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
-		export.setVisible(option.isExport());
-		createFromTemplate.setVisible(option.isCreateFromTemplate());
+		export.setVisible(option.isExportOption());
+		createFromTemplate.setVisible(option.isCreateFromTemplateOption());
 	}
 	
 	/**

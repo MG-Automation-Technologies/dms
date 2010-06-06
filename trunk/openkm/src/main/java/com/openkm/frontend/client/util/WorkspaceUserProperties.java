@@ -114,6 +114,12 @@ public class WorkspaceUserProperties {
 				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
+			// Show / hide menus
+			Main.get().mainPanel.topPanel.mainMenu.setEditMenuVisible(workspace.isEditMenuVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isToolsMenuVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isBookmarkMenuVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isHelpMenuVisible());
+			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
 			
@@ -255,5 +261,7 @@ public class WorkspaceUserProperties {
 		Main.get().mainPanel.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.search.searchResult.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.topPanel.mainMenu.setAvailableOption(workspace.getAvailableOption());
 	}
 }
