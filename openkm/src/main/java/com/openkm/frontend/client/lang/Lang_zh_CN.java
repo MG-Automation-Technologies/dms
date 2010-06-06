@@ -62,7 +62,7 @@ public class Lang_zh_CN {
 	    lang.put("startup.loading.personal", "正在加载个人文档");
 	    lang.put("startup.loading.mail", "正在加载邮件信息");
 	    lang.put("startup.loading.templates", "正在加载模板");
-	    lang.put("startup.loading.mail", "Loading e-mails");
+	    lang.put("startup.loading.mail", "正在加载邮件");//Loading e-mails
 	    lang.put("startup.loading.categories", "正在加载自定义分类");//Loading categories
 	    lang.put("startup.loading.thesaurus", "正在加载知识库");//Loading thesaurus
 	    lang.put("startup.loading.trash", "正在加载回收站");
@@ -74,7 +74,7 @@ public class Lang_zh_CN {
 	    lang.put("openkm.update.available", "OpenKM 可用更新");
 	    
 	    // Left Panel
-	    lang.put("leftpanel.label.taxonomy", "分类");
+	    lang.put("leftpanel.label.taxonomy", "公共文档");
 	    lang.put("leftpanel.label.trash", "回收站");
 	    lang.put("leftpanel.label.mail", "电子邮件");//E-mail
 	    lang.put("leftpanel.label.stored.search", "已保存的检索");
@@ -110,7 +110,7 @@ public class Lang_zh_CN {
 	    lang.put("tree.status.refresh.get.keywords", "正在刷新关键字");//Refreshing keywords
 	    lang.put("tree.status.refresh.get.user.home", "正在获得用户根目录");
 	    lang.put("tree.status.refresh.purge.trash", "正在清空回收站");
-	    lang.put("tree.menu.directory.find.folder","Find folder");
+	    lang.put("tree.menu.directory.find.folder","正在查找文件夹...");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "恢复");
@@ -240,8 +240,8 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.label.comment", "评论");
 	    lang.put("fileupload.label.users.to.notify",  "被通知的用户");
 	    lang.put("fileupload.label.users",  "用户");
-	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
-	    lang.put("fileupload.label.groups","Groups");
+	    lang.put("fileupload.label.groups.to.notify","按组通知"); //Groups to notify
+	    lang.put("fileupload.label.groups","用户组");//Groups
 	    lang.put("fileupload.label.must.select.users",  "你必须选择通知的用户");
 	    lang.put("fileupload.label.importZip", "从zip压缩包中导入文档");
 	    lang.put("fileupload.label.notify.comment", "通知消息");
@@ -261,9 +261,9 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.label.error.not.allowed.create.from.template.same.folder", "原文件夹不允许新建文件");
 	    
 	    // Tab properties
-	    lang.put("tab.document.properties", "属性");
-	    lang.put("tab.document.notes", "备注");//Notes
-	    lang.put("tab.document.history", "历史");
+	    lang.put("tab.document.properties", "文档属性");
+	    lang.put("tab.document.notes", "文档备注");//Notes
+	    lang.put("tab.document.history", "文档版本");
 	    lang.put("tab.document.status.history", "正在更新历史");
 	    lang.put("tab.status.security.role", "正在更新安全角色");
 	    lang.put("tab.status.security.user", "正在更新安全用户");
@@ -273,14 +273,14 @@ public class Lang_zh_CN {
 	    lang.put("tab.document.status.get.version.history.size", "刷新文档历史大小");
 	    lang.put("tab.document.status.purge.version.history", "文档历史压缩");
 	    lang.put("tab.document.status.restore.version", "正在恢复文档版本");
-	    lang.put("tab.document.security", "安全");
-	    lang.put("tab.document.preview", "预览");//Preview
-	    lang.put("tab.folder.properties", "属性");
-	    lang.put("tab.folder.security", "安全");
+	    lang.put("tab.document.security", "文档权限");
+	    lang.put("tab.document.preview", "文档预览");//Preview
+	    lang.put("tab.folder.properties", "文件夹属性");
+	    lang.put("tab.folder.security", "文件夹权限");
 	    
 	    // Workspace tabs
-	    lang.put("tab.workspace.desktop", "桌面");
-	    lang.put("tab.workspace.search", "检索");
+	    lang.put("tab.workspace.desktop", "公共桌面");
+	    lang.put("tab.workspace.search", "文档检索");
 	    lang.put("tab.workspace.dashboard", "个人仪表盘");
 	    lang.put("tab.workspace.administration", "管理面板");
 	    
@@ -303,8 +303,8 @@ public class Lang_zh_CN {
 	    lang.put("document.subscribed.no", "否");
 	    lang.put("document.history.size", "历史大小");
 	    lang.put("document.subscribed.users", "已订阅用户");
-	    lang.put("document.url", "URL");
-	    lang.put("document.webdav", "WebDAV");
+	    lang.put("document.url", "文档URL");
+	    lang.put("document.webdav", "文档WebDAV路径");
 	    lang.put("document.add.note", "新增备注");
 	    lang.put("document.keywords.cloud", "关键字云");
 	    lang.put("document.categories", "自定义分类");//Categories
@@ -319,11 +319,11 @@ public class Lang_zh_CN {
 	    lang.put("folder.subscribed.yes", "是");
 	    lang.put("folder.subscribed.no", "否");
 	    lang.put("folder.subscribed.users", "订阅用户");
-	    lang.put("folder.url", "URL");
-	    lang.put("folder.webdav", "WebDAV");
-	    lang.put("folder.number.folders", "Folders");
-	    lang.put("folder.number.documents", "Documents");
-	    lang.put("folder.number.mails", "Mails");
+	    lang.put("folder.url", "文件夹URL");
+	    lang.put("folder.webdav", "文件夹WebDAV路径");
+	    lang.put("folder.number.folders", "文件夹数量");//Folders
+	    lang.put("folder.number.documents", "文档数量");//Documents
+	    lang.put("folder.number.mails", "邮件数量");//Mails
 	    
 	    // Version
 	    lang.put("version.name", "版本");
@@ -338,18 +338,18 @@ public class Lang_zh_CN {
 	    lang.put("security.group.name", "组名");
 	    lang.put("security.group.permission.read", "读");
 	    lang.put("security.group.permission.write", "写");
-	    lang.put("security.group.permission.delete", "Delete");
-	    lang.put("security.group.permission.security", "Security");
+	    lang.put("security.group.permission.delete", "删");
+	    lang.put("security.group.permission.security", "安全");
 	    lang.put("security.user.name", "用户");
 	    lang.put("security.user.permission.read", "读");
 	    lang.put("security.user.permission.write", "写");
-	    lang.put("security.user.permission.delete", "Delete");
-	    lang.put("security.user.permission.security", "Security");
+	    lang.put("security.user.permission.delete", "删");
+	    lang.put("security.user.permission.security", "安全");
 	    lang.put("security.users", "用户");
 	    lang.put("security.groups", "组");
 	    lang.put("security.recursive", "递归修改权限");
-	    lang.put("secutiry.filter.by.users","Users filter");
-	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("secutiry.filter.by.users","用户查询");//Users filter
+	    lang.put("secutiry.filter.by.groups","用户组查询");//Groups filter
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "预览不可用");
@@ -387,7 +387,7 @@ public class Lang_zh_CN {
 	    lang.put("confirm.delete.saved.search", "你真的想删除查询条件吗？");//¿ Do you really want to delete saved search ?
 	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？");//¿ Do you really want to delete user news ?
 	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？");//¿ Do you really want to delete mail ?
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
+	    lang.put("confirm.get.pooled.workflow.task","你真的想接收这个任务吗？");//¿ Do you want to assign this task to you ?
 	    
 	    // Search inputs
 	    lang.put("search.context", "范围");
@@ -435,7 +435,7 @@ public class Lang_zh_CN {
 	    lang.put("search.saved.status.getsearchs", "正在刷新已保存的检索");
         lang.put("search.saved.status.savesearch", "正在更新已保存的检索");
         lang.put("search.saved.status.deletesearch", "正在删除已保存的检索");
-        lang.put("search.saved.status.getusernews", "正在更新游湖信息");
+        lang.put("search.saved.status.getusernews", "正在更新用户信息");
 	    
 	    // Button
 	    lang.put("button.close", "关闭");
@@ -459,8 +459,8 @@ public class Lang_zh_CN {
 	    lang.put("button.copy.clipboard", "复制到剪切板");	//Copy to clipboard
 	    lang.put("button.start", "开始");
 	    lang.put("button.select", "选择");
-	    lang.put("button.test", "Test");
-	    lang.put("button.next", "Next");
+	    lang.put("button.test", "测试");//Test
+	    lang.put("button.next", "下一步");//Next
 	    
 	    // Group
 	    lang.put("group.label", "新增属性组");
@@ -515,23 +515,23 @@ public class Lang_zh_CN {
 	    
 	    // Image viewer
 	    lang.put("image.viewer.label", "图片查看器");
-	    lang.put("image.viewer.zoom.in", "缩小");
-	    lang.put("image.viewer.zoom.out", "放大");
+	    lang.put("image.viewer.zoom.in", "放大");
+	    lang.put("image.viewer.zoom.out", "缩小");
 	    
 	    // Debug console
 	    lang.put("debug.console.label", "调试控制器");
 	    lang.put("debug.enable.disable", "CTRL+Z 切换允许或不允许调试模式");
 
 	    // Dashboard tab
-	    lang.put("dashboard.tab.general", "概括信息");//General
-	    lang.put("dashboard.tab.news", "信息");//News
-	    lang.put("dashboard.tab.user", "用户");//User
+	    lang.put("dashboard.tab.general", "公共信息");//General
+	    lang.put("dashboard.tab.news", "查询信息");//News
+	    lang.put("dashboard.tab.user", "个人用户");//User
 	    lang.put("dashboard.tab.workflow", "工作流");//Workflow
-	    lang.put("dashboard.tab.mail", "邮件");//Mail
-	    lang.put("dashboard.tab.keymap", "关键字地图");//Keyword map
+	    lang.put("dashboard.tab.mail", "邮件信息");//Mail
+	    lang.put("dashboard.tab.keymap", "关键字云");//Keyword map
 
 	    // Dahboard general
-	    lang.put("dashboard.new.items", "New");
+	    lang.put("dashboard.new.items", "新"); //New
 	    lang.put("dashboard.user.locked.documents", "被锁定的文档");//Locked documents
 	    lang.put("dashboard.user.checkout.documents", "检出的文档");//Checkout documents
 	    lang.put("dashboard.user.last.modified.documents", "最近修改过的文档");//Last modified documents
@@ -560,9 +560,9 @@ public class Lang_zh_CN {
 	    lang.put("dashboard.workflow.task.process.name", "名称");
 	    lang.put("dashboard.workflow.task.process.description", "描述");
 	    lang.put("dashboard.workflow.task.process.data", "数据");//Data
-	    lang.put("dashboard.workflow.comments", "Comments");
-	    lang.put("dashboard.workflow.task.process.forms", "Form");
-	    lang.put("dashboard.workflow.add.comment","Add comment");
+	    lang.put("dashboard.workflow.comments", "评论");//Comments
+	    lang.put("dashboard.workflow.task.process.forms", "表单");//Form
+	    lang.put("dashboard.workflow.add.comment","增加评论");//Add comment
 	    lang.put("dashboard.workflow.task.process.definition", "流程定义");//Process definition
 	    lang.put("dashboard.workflow.task.process.path", "路径");//Path
 	    lang.put("dashboard.refreshing", "刷新中");//Refreshing
@@ -593,8 +593,8 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.mail.data", "邮箱账号");//Mail account
 	    lang.put("user.preferences.imap.error", "所有的想都必须在邮件配置中设置");//All fields are obligatory to set the mail configurations
 	    lang.put("user.preferences.imap.password.error.void", "在配置IMAP邮箱的时候，密码不能为空");//Password must not be empty on IMAP mail creation
-	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
-	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
+	    lang.put("user.preferences.imap.test.error","IMAP 配置错误");
+	    lang.put("user.preferences.imap.test.ok","IMAP 配置成功");
 
 	    // Thesaurus
 	    lang.put("thesaurus.directory.select.label", "增加知识库关键字");//Add thesaurus keyword
@@ -606,25 +606,25 @@ public class Lang_zh_CN {
 	    lang.put("categories.folder.error.delete", "无法删除自定义分类，此分类下面还包含文档");//Cannot delete category with documents
 	    
 	    // Wizard
-	    lang.put("wizard.document.uploading", "Document wizard");
+	    lang.put("wizard.document.uploading", "文档向导");//Document wizard
 	    
 	    // User info
-	    lang.put("user.info.chat.connect", "Connect to chat");
-	    lang.put("user.info.chat.disconnect", "Disconnet chat");
-	    lang.put("user.info.chat.new.room", "Net chat room");
-	    lang.put("user.info.locked.actual", "Locked documents");
-	    lang.put("user.info.checkout.actual", "Checkout documents");
-	    lang.put("user.info.subscription.actual", "Actual subscriptions");
-	    lang.put("user.info.news.new", "News");
-	    lang.put("user.info.workflow.pending", "Pending workflows");
-	    lang.put("user.info.user.quota", "Used quota");
+	    lang.put("user.info.chat.connect", "连接聊天");//Connect to chat
+	    lang.put("user.info.chat.disconnect", "退出聊天");
+	    lang.put("user.info.chat.new.room", "新建聊天室");//Net chat room
+	    lang.put("user.info.locked.actual", "锁定的文档");//Locked documents
+	    lang.put("user.info.checkout.actual", "检出的文档");//Checkout documents
+	    lang.put("user.info.subscription.actual", "实际订阅");//Actual subscriptions
+	    lang.put("user.info.news.new", "用户信息");//News
+	    lang.put("user.info.workflow.pending", "挂起的工作流");//Pending workflows
+	    lang.put("user.info.user.quota", "用户配额");//Used quota
 	    
 	    // Users online popup
-	    lang.put("user.online", "Users online");
+	    lang.put("user.online", "在线用户");//Users online
 	    
 	    // Chat room
-	    lang.put("chat.room", "Chat");
-	    lang.put("chat.users.in.room", "Users");
+	    lang.put("chat.room", "聊天室");//Chat
+	    lang.put("chat.users.in.room", "在线人员");//Users
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");
