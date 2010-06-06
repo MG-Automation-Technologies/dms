@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -222,6 +223,14 @@ public class MailMenu extends MenuBase {
 	 */
 	public void hide() {
 		Main.get().mainPanel.browser.fileBrowser.mailMenuPopup.hide();
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		delete.setVisible(option.isDeleteOption());
+		rename.setVisible(option.isRenameOption());
+		move.setVisible(option.isMoveOption());
+		copy.setVisible(option.isCopyOption());		
 	}
 	
 	/* (non-Javadoc)

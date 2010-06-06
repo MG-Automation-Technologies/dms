@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -458,6 +459,23 @@ public class PersonalMenu extends MenuBase {
 		if (exportOption){enable(export);} else {disable(export);}
 		if (mediaPlayerOption){enable(mediaPlayer);} else {disable(mediaPlayer);}
 		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		download.setVisible(option.isDownloadOption());
+		delete.setVisible(option.isDeleteOption());
+		rename.setVisible(option.isRenameOption());
+		checkout.setVisible(option.isCheckoutOption());
+		checkin.setVisible(option.isCheckinOption());
+		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		lock.setVisible(option.isLockOption());
+		unlock.setVisible(option.isUnLockOption());
+		move.setVisible(option.isMoveOption());
+		copy.setVisible(option.isCopyOption());
+		export.setVisible(option.isExport());
+		mediaPlayer.setVisible(option.isMediaPlayer());
+		imageViewer.setVisible(option.isImageViewer());
 	}
 	
 	/**

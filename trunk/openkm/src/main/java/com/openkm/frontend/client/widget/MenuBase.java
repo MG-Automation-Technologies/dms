@@ -24,6 +24,7 @@ package com.openkm.frontend.client.widget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -45,6 +46,7 @@ public abstract class MenuBase extends Composite {
 	public abstract void disableAllMenuOption();
 	public abstract void checkMenuOptionPermissions(GWTDocument doc, GWTFolder folder );
 	public abstract void checkMenuOptionPermissions(GWTMail mail, GWTFolder folder );
+	public abstract void setAvailableOption(GWTAvailableOption option);
 	
 	/**
 	 * Enables menu item
