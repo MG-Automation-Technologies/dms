@@ -76,7 +76,7 @@
 						AuthDAO.grantRole(usr.getId(), it.next().getId());
 					}
 				} else if (action.equals("d")) {
-					AuthDAO.deleteUser(usr);
+					AuthDAO.deleteUser(usr.getId());
 				}
 				
 				// Activity log
