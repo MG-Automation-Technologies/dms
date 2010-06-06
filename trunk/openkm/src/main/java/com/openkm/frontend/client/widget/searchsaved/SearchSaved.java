@@ -30,12 +30,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
-import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * Saved searches 
@@ -115,7 +113,6 @@ public class SearchSaved extends Composite {
 			} else {
 				firstTime=false;
 			}
-			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_USER_VALUES);
 		}
 		
 		public void onFailure(Throwable caught) {
