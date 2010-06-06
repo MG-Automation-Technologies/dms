@@ -51,7 +51,20 @@ public class GWTAvailableOption implements IsSerializable  {
 	public boolean workflowOption = true;
 	public boolean scannerOption = true;
 	public boolean uploaderOption = true;
-	
+	public boolean renameOption = true;
+	public boolean copyOption = true;
+	public boolean moveOption = true;
+	public boolean addBookmarkOption = true;
+	public boolean setHome = true;
+	public boolean export = true;
+	public boolean mediaPlayer = true;
+	public boolean imageViewer = true;
+	public boolean gotoFolder = true;
+	public boolean createFromTemplate = true;
+	public boolean purge = true;
+	public boolean restore = true;
+	public boolean purgeTrash = true;
+
 	public GWTAvailableOption() {
 	}
 
@@ -215,4 +228,107 @@ public class GWTAvailableOption implements IsSerializable  {
 		this.uploaderOption = uploaderOption;
 	}
 	
+	public boolean isRenameOption() {
+		return renameOption;
+	}
+
+	public void setRenameOption(boolean renameOption) {
+		this.renameOption = renameOption;
+	}
+	
+	public boolean isMoveOption() {
+		return moveOption;
+	}
+
+	public void setMoveOption(boolean moveOption) {
+		this.moveOption = moveOption;
+	}
+
+	public boolean isCopyOption() {
+		return copyOption;
+	}
+
+	public void setCopyOption(boolean copyOption) {
+		this.copyOption = copyOption;
+	}
+	
+	public boolean isAddBookmarkOption() {
+		return addBookmarkOption;
+	}
+
+	public void setAddBookmarkOption(boolean addBookmarkOption) {
+		this.addBookmarkOption = addBookmarkOption;
+	}
+	
+	public boolean isSetHome() {
+		return setHome;
+	}
+
+	public void setSetHome(boolean setHome) {
+		this.setHome = setHome;
+	}
+	
+	public boolean isExport() {
+		return export;
+	}
+
+	public void setExport(boolean export) {
+		this.export = export;
+	}
+	
+	public boolean isMediaPlayer() {
+		return mediaPlayer;
+	}
+
+	public void setMediaPlayer(boolean mediaPlayer) {
+		this.mediaPlayer = mediaPlayer;
+	}
+	
+	public boolean isImageViewer() {
+		return imageViewer;
+	}
+
+	public void setImageViewer(boolean imageViewer) {
+		this.imageViewer = imageViewer;
+	}
+	
+	public boolean isGotoFolder() {
+		return gotoFolder;
+	}
+
+	public void setGotoFolder(boolean gotoFolder) {
+		this.gotoFolder = gotoFolder;
+	}
+	
+	public boolean isCreateFromTemplate() {
+		return createFromTemplate;
+	}
+
+	public void setCreateFromTemplate(boolean createFromTemplate) {
+		this.createFromTemplate = createFromTemplate;
+	}
+	
+	public boolean isPurge() {
+		return purge;
+	}
+
+	public void setPurge(boolean purge) {
+		this.purge = purge;
+	}
+
+	public boolean isRestore() {
+		return restore;
+	}
+
+	public void setRestore(boolean restore) {
+		this.restore = restore;
+	}
+	
+	public boolean isPurgeTrash() {
+		return purgeTrash;
+	}
+
+	public void setPurgeTrash(boolean purgeTrash) {
+		this.purgeTrash = purgeTrash;
+	}
 }

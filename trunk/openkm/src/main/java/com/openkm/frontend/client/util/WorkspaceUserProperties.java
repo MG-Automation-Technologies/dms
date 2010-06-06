@@ -31,6 +31,7 @@ import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
 import com.openkm.frontend.client.service.OKMWorkspaceServiceAsync;
+import com.openkm.frontend.client.widget.startup.StartUp;
 
 /**
  * Workspace user properties
@@ -113,7 +114,7 @@ public class WorkspaceUserProperties {
 				Main.get().notifyPopup.enableAdvancedFilter();
 			}
 			
-			// Enabling some actions
+			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
 			
 			// showing stack
@@ -155,6 +156,8 @@ public class WorkspaceUserProperties {
 			if (refreshStack) {
 				Main.get().mainPanel.navigator.refreshView();
 			}
+			
+			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
 			
 			// Getting update messages 
 			getUpdateMessage();
@@ -230,5 +233,27 @@ public class WorkspaceUserProperties {
 	 */
 	public GWTWorkspace getWorkspace() {
 		return workspace;
+	}
+	
+	/**
+	 * setAvailableAction
+	 * 
+	 * Some actions must be enabled at ends because some objects are not created since end startp up
+	 */
+	public void setAvailableAction() {
+		Main.get().mainPanel.navigator.taxonomyTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.categoriesTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.thesaurusTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.templateTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.personalTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.mailTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.navigator.trashTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.taxonomyMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.categoriesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.thesaurusMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.templatesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 	}
 }

@@ -144,7 +144,6 @@ public class Navigator extends ExtendedSizeComposite {
 		stackPanel.showStack(0);
 		stackPanel.setStyleName("okm-StackPanel");
 		//stackPanel.addStyleName("okm-DisableSelect"); // This style causes problem with cursor at renaming folder
-		stackPanel.setFirsTime(false); 
 		
 		initWidget(stackPanel);
 	}
@@ -240,7 +239,7 @@ public class Navigator extends ExtendedSizeComposite {
 	 * refreshContentPanels
 	 */
 	private void refreshStartupContentPanels() {
-		int selected = stackPanel.getStackIndex();
+		//int selected = stackPanel.getStackIndex();
 		
 		while (stackPanel.getWidgetCount() > 0) {
 			stackPanel.remove(0);
@@ -262,7 +261,8 @@ public class Navigator extends ExtendedSizeComposite {
 		}
 		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
 		
-		stackPanel.showStack(selected);
+		//stackPanel.showStack(selected);
+		stackPanel.setStartUpFinished();
 	}
 	
 	/**
