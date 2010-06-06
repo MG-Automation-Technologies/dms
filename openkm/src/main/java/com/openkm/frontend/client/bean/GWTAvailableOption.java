@@ -55,15 +55,28 @@ public class GWTAvailableOption implements IsSerializable  {
 	public boolean copyOption = true;
 	public boolean moveOption = true;
 	public boolean addBookmarkOption = true;
-	public boolean setHome = true;
-	public boolean export = true;
-	public boolean mediaPlayer = true;
-	public boolean imageViewer = true;
-	public boolean gotoFolder = true;
-	public boolean createFromTemplate = true;
-	public boolean purge = true;
-	public boolean restore = true;
-	public boolean purgeTrash = true;
+	public boolean setHomeOption = true;
+	public boolean exportOption = true;
+	public boolean mediaPlayerOption = true;
+	public boolean imageViewerOption = true;
+	public boolean gotoFolderOption = true;
+	public boolean createFromTemplateOption = true;
+	public boolean purgeOption = true;
+	public boolean restoreOption = true;
+	public boolean purgeTrashOption = true;
+	public boolean sendDocumentLinkOption = true;
+	public boolean skinOption = true;
+	public boolean debugOption = true;
+	public boolean administrationOption = true;
+	public boolean manageBookmarkOption = true;
+	public boolean helpOption = true;
+	public boolean documentationOption = true;
+	public boolean bugReportOption = true;
+	public boolean supportRequestOption = true;
+	public boolean publicForumOption = true;
+	public boolean versionChangesOption = true;
+	public boolean projectWebOption = true;
+	public boolean aboutOption = true;
 
 	public GWTAvailableOption() {
 	}
@@ -260,75 +273,179 @@ public class GWTAvailableOption implements IsSerializable  {
 		this.addBookmarkOption = addBookmarkOption;
 	}
 	
-	public boolean isSetHome() {
-		return setHome;
+	public boolean isSetHomeOption() {
+		return setHomeOption;
 	}
 
-	public void setSetHome(boolean setHome) {
-		this.setHome = setHome;
+	public void setSetHomeOption(boolean setHomeOption) {
+		this.setHomeOption = setHomeOption;
 	}
 	
-	public boolean isExport() {
-		return export;
+	public boolean isExportOption() {
+		return exportOption;
 	}
 
-	public void setExport(boolean export) {
-		this.export = export;
+	public void setExportOption(boolean exportOption) {
+		this.exportOption = exportOption;
 	}
 	
-	public boolean isMediaPlayer() {
-		return mediaPlayer;
+	public boolean isMediaPlayerOption() {
+		return mediaPlayerOption;
 	}
 
-	public void setMediaPlayer(boolean mediaPlayer) {
-		this.mediaPlayer = mediaPlayer;
+	public void setMediaPlayerOption(boolean mediaPlayerOption) {
+		this.mediaPlayerOption = mediaPlayerOption;
 	}
 	
-	public boolean isImageViewer() {
-		return imageViewer;
+	public boolean isImageViewerOption() {
+		return imageViewerOption;
 	}
 
-	public void setImageViewer(boolean imageViewer) {
-		this.imageViewer = imageViewer;
+	public void setImageViewerOption(boolean imageViewerOption) {
+		this.imageViewerOption = imageViewerOption;
 	}
 	
-	public boolean isGotoFolder() {
-		return gotoFolder;
+	public boolean isGotoFolderOption() {
+		return gotoFolderOption;
 	}
 
-	public void setGotoFolder(boolean gotoFolder) {
-		this.gotoFolder = gotoFolder;
+	public void setGotoFolderOption(boolean gotoFolderOption) {
+		this.gotoFolderOption = gotoFolderOption;
 	}
 	
-	public boolean isCreateFromTemplate() {
-		return createFromTemplate;
+	public boolean isCreateFromTemplateOption() {
+		return createFromTemplateOption;
 	}
 
-	public void setCreateFromTemplate(boolean createFromTemplate) {
-		this.createFromTemplate = createFromTemplate;
+	public void setCreateFromTemplateOption(boolean createFromTemplateOption) {
+		this.createFromTemplateOption = createFromTemplateOption;
 	}
 	
-	public boolean isPurge() {
-		return purge;
+	public boolean isPurgeOption() {
+		return purgeOption;
 	}
 
-	public void setPurge(boolean purge) {
-		this.purge = purge;
+	public void setPurgeOption(boolean purgeOption) {
+		this.purgeOption = purgeOption;
 	}
 
-	public boolean isRestore() {
-		return restore;
+	public boolean isRestoreOption() {
+		return restoreOption;
 	}
 
-	public void setRestore(boolean restore) {
-		this.restore = restore;
+	public void setRestoreOption(boolean restoreOption) {
+		this.restoreOption = restoreOption;
 	}
 	
-	public boolean isPurgeTrash() {
-		return purgeTrash;
+	public boolean isPurgeTrashOption() {
+		return purgeTrashOption;
 	}
 
-	public void setPurgeTrash(boolean purgeTrash) {
-		this.purgeTrash = purgeTrash;
+	public void setPurgeTrashOption(boolean purgeTrashOption) {
+		this.purgeTrashOption = purgeTrashOption;
+	}
+	
+	public boolean isSendDocumentLinkOption() {
+		return sendDocumentLinkOption;
+	}
+
+	public void setSendDocumentLinkOption(boolean sendDocumentLinkOption) {
+		this.sendDocumentLinkOption = sendDocumentLinkOption;
+	}
+	
+	public boolean isSkinOption() {
+		return skinOption;
+	}
+
+	public void setSkinOption(boolean skinOption) {
+		this.skinOption = skinOption;
+	}
+
+	public boolean isDebugOption() {
+		return debugOption;
+	}
+
+	public void setDebugOption(boolean debugOption) {
+		this.debugOption = debugOption;
+	}
+
+	public boolean isAdministrationOption() {
+		return administrationOption;
+	}
+
+	public void setAdministrationOption(boolean administrationOption) {
+		this.administrationOption = administrationOption;
+	}
+	
+	public boolean isManageBookmarkOption() {
+		return manageBookmarkOption;
+	}
+
+	public void setManageBookmarkOption(boolean manageBookmarkOption) {
+		this.manageBookmarkOption = manageBookmarkOption;
+	}
+	
+	public boolean isHelpOption() {
+		return helpOption;
+	}
+
+	public void setHelpOption(boolean helpOption) {
+		this.helpOption = helpOption;
+	}
+
+	public boolean isDocumentationOption() {
+		return documentationOption;
+	}
+
+	public void setDocumentationOption(boolean documentationOption) {
+		this.documentationOption = documentationOption;
+	}
+
+	public boolean isBugReportOption() {
+		return bugReportOption;
+	}
+
+	public void setBugReportOption(boolean bugReportOption) {
+		this.bugReportOption = bugReportOption;
+	}
+
+	public boolean isSupportRequestOption() {
+		return supportRequestOption;
+	}
+
+	public void setSupportRequestOption(boolean supportRequestOption) {
+		this.supportRequestOption = supportRequestOption;
+	}
+
+	public boolean isPublicForumOption() {
+		return publicForumOption;
+	}
+
+	public void setPublicForumOption(boolean publicForumOption) {
+		this.publicForumOption = publicForumOption;
+	}
+
+	public boolean isVersionChangesOption() {
+		return versionChangesOption;
+	}
+
+	public void setVersionChangesOption(boolean versionChangesOption) {
+		this.versionChangesOption = versionChangesOption;
+	}
+
+	public boolean isProjectWebOption() {
+		return projectWebOption;
+	}
+
+	public void setProjectWebOption(boolean projectWebOption) {
+		this.projectWebOption = projectWebOption;
+	}
+
+	public boolean isAboutOption() {
+		return aboutOption;
+	}
+
+	public void setAboutOption(boolean aboutOption) {
+		this.aboutOption = aboutOption;
 	}
 }
