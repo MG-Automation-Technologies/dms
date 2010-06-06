@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +45,15 @@ public class AuthDAO {
 	 */
 	public static void createUser(User user) throws DatabaseException {
 		log.debug("createUser({})", user);
+		Session session = null;
 		
 		try {
-			HibernateHelper.getSession().save(user);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.save(user);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("createUser: void");
@@ -60,9 +65,11 @@ public class AuthDAO {
 	public static void updateUser(User user) throws DatabaseException {
 		log.debug("updateUser({})", user);
 		String qs = "update User u set u.name= :name, u.email= :email, u.active= :active where u.id= :id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("name", user.getName());
 			q.setString("email", user.getEmail());
 			q.setBoolean("active", user.isActive());
@@ -70,6 +77,8 @@ public class AuthDAO {
 			q.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUser: void");
@@ -82,16 +91,20 @@ public class AuthDAO {
 			DatabaseException {
 		log.debug("updateUserPassword({}, {})", usrId, usrPass);
 		String qs = "update User u set u.pass= :pass where u.id= :id";
+		Session session = null;
 		
 		try {
 			if (usrPass != null && usrPass.trim().length() > 0) {
-				Query q = HibernateHelper.getSession().createQuery(qs);
+				session = HibernateUtil.getSessionFactory().openSession();
+				Query q = session.createQuery(qs);
 				q.setString("pass", SecureStore.md5Encode(usrPass.getBytes()));
 				q.setString("id", usrId);
 				q.executeUpdate();
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUserPassword: void");
@@ -103,16 +116,20 @@ public class AuthDAO {
 	public static void updateUserEmail(String usrId, String usrEmail) throws DatabaseException {
 		log.debug("updateUserEmail({}, {})", usrId, usrEmail);
 		String qs = "update User set u.email= :email where u.id= :id";
+		Session session = null;
 
 		try {
 			if (usrEmail != null && usrEmail.trim().length() > 0) {
-				Query q = HibernateHelper.getSession().createQuery(qs);
+				session = HibernateUtil.getSessionFactory().openSession();
+				Query q = session.createQuery(qs);
 				q.setString("email", usrEmail);
 				q.setString("id", usrId);
 				q.executeUpdate();
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUserEmail: void");
@@ -121,31 +138,28 @@ public class AuthDAO {
 	/**
 	 * Delete user from database
 	 */
-	public static void deleteUser(User user) throws DatabaseException {
-		log.debug("deleteUser({})", user);
-		String qsUser = "delete from User u where u.id=?";
-		String qsRole = "DELETE FROM user_role WHERE ur_user=?";
-		String qsMail = "DELETE FROM mail_accounts WHERE ma_user=?";
-		String qsTwitter = "DELETE FROM twitter_accounts WHERE ta_user=?";
+	public static void deleteUser(String usrId) throws DatabaseException {
+		log.debug("deleteUser({})", usrId);
+		String qsMail = "delete from MailAccount ma where ma.user=:user";
+		String qsTwitter = "delete from TwitterAccount where ta.user=:user";
+		Session session = null;
 		
 		try {
-			Query qUser = HibernateHelper.getSession().createQuery(qsUser);
-			qUser.setString(1, user.getId());
-			qUser.executeUpdate();
-			
-			Query qRole = HibernateHelper.getSession().createQuery(qsRole);
-			qRole.setString(1, user.getId());
-			qRole.executeUpdate();
-			
-			Query qMail = HibernateHelper.getSession().createQuery(qsMail);
-			qMail.setString(1, user.getId());
+			User user = findUserByPk(usrId);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.delete(user);
+						
+			Query qMail = session.createQuery(qsMail);
+			qMail.setString("user", usrId);
 			qMail.executeUpdate();
 			
-			Query qTwitter = HibernateHelper.getSession().createQuery(qsTwitter);
-			qTwitter.setString(1, user.getId());
+			Query qTwitter = session.createQuery(qsTwitter);
+			qTwitter.setString("user", usrId);
 			qTwitter.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteUser: void");
@@ -158,19 +172,23 @@ public class AuthDAO {
 	public static List<User> findAllUsers(boolean filterByActive) throws DatabaseException {
 		log.debug("findAllUsers({})", filterByActive);
 		String qs = "from User u "+(filterByActive?"where u.active=:active":"")+" order by u.id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
 				q.setBoolean("active", true);
 			}
 			
 			List<User> ret = q.list();
-			log.debug("findAllUsers: {}", ret);
+			log.info("findAllUsers: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -180,11 +198,13 @@ public class AuthDAO {
 	@SuppressWarnings("unchecked")
 	public static List<User> findUsersByRole(boolean filterByActive, String rolId) throws DatabaseException {
 		log.info("findUsersByRole({}, {})", filterByActive, rolId);
-		String qs = "select u from User u, Role r where r.id=:rolId and r in elements(u.roles)" + 
+		String qs = "select u from User u, Role r where r.id=:rolId and r in elements(u.roles) " + 
 			(filterByActive?"and u.active=:active":"")+" order by u.id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("rolId", rolId);
 			
 			if (filterByActive) {
@@ -196,6 +216,8 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -205,15 +227,19 @@ public class AuthDAO {
 	public static User findUserByPk(String usrId) throws DatabaseException {
 		log.debug("findUserByPk({})", usrId);
 		String qs = "from User u where u.id=:id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("id", usrId);
 			User ret = (User) q.setMaxResults(1).uniqueResult();
 			log.debug("findUserByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -222,11 +248,15 @@ public class AuthDAO {
 	 */
 	public static void createRole(Role role) throws DatabaseException {
 		log.debug("createRole({})", role);
-	
+		Session session = null;
+		
 		try {
-			HibernateHelper.getSession().save(role);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.save(role);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("createRole: void");
@@ -237,13 +267,17 @@ public class AuthDAO {
 	 */
 	public static void deleteRole(String rolId) throws DatabaseException {
 		log.debug("deleteRole({})", rolId);
+		Session session = null;
 		
 		try {
 			Role role = findRoleByPk(rolId);
-			HibernateHelper.getSession().update(role);
-			HibernateHelper.getSession().delete(role);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.update(role);
+			session.delete(role);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteRole: void");
@@ -256,14 +290,18 @@ public class AuthDAO {
 	public static List<Role> findAllRoles() throws DatabaseException {
 		log.debug("findAllRoles()");
 		String qs = "from Role";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			List<Role> ret = q.list();
 			log.debug("findAllRoles: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -273,15 +311,19 @@ public class AuthDAO {
 	public static Role findRoleByPk(String rolId) throws DatabaseException {
 		log.debug("findRoleByPk({})", rolId);
 		String qs = "from Role r where r.id= :id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("id", rolId);
 			Role ret = (Role) q.setMaxResults(1).uniqueResult();
 			log.debug("findRoleByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -290,14 +332,18 @@ public class AuthDAO {
 	 */
 	public static void grantRole(String usrId, String rolId) throws DatabaseException {
 		log.debug("grantRole({}, {})", usrId, rolId);
-
+		Session session = null;
+		
 		try {
 			User user = findUserByPk(usrId);
 			Role role = findRoleByPk(rolId);
 			user.getRoles().add(role);
-			HibernateHelper.getSession().update(user);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.update(user);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("grantRole: void");
@@ -308,14 +354,18 @@ public class AuthDAO {
 	 */
 	public void revokeRole(String usrId, String rolId) throws DatabaseException {
 		log.debug("revokeRole({}, {})", usrId, rolId);
-
+		Session session = null;
+		
 		try {
 			User user = findUserByPk(usrId);
 			Role role = findRoleByPk(rolId);
 			user.getRoles().remove(role);
-			HibernateHelper.getSession().update(user);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.update(user);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("revokeRole: void");

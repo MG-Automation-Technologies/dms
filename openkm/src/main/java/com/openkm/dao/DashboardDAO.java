@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +45,11 @@ public class DashboardDAO {
 	public Dashboard findByPk(int dsId) throws DatabaseException {
 		log.debug("findByPk({})", dsId);
 		String qs = "from Dashboard db where db.id=:id";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setInteger("id", dsId);
 			List<Dashboard> results = q.list(); // uniqueResult
 			Dashboard ret = null;
@@ -59,6 +62,8 @@ public class DashboardDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -66,10 +71,15 @@ public class DashboardDAO {
 	 * Create dashboard stats
 	 */
 	public static void create(Dashboard dashboardStats) throws DatabaseException {
+		Session session = null;
+		
 		try {
-			HibernateHelper.getSession().save(dashboardStats);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.save(dashboardStats);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -77,12 +87,17 @@ public class DashboardDAO {
 	 * Delete dashboard stats
 	 */
 	public void delete(int dsId) throws DatabaseException {
+		Session session = null;
+		
 		try {
 			Dashboard ds = findByPk(dsId);
-			HibernateHelper.getSession().update(ds);
-			HibernateHelper.getSession().delete(ds);
+			session = HibernateUtil.getSessionFactory().openSession();
+			session.update(ds);
+			session.delete(ds);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -94,9 +109,11 @@ public class DashboardDAO {
 			DatabaseException {
 		log.debug("findByUserSource({}, {})", user, source);
 		String qs = "from Dashboard db where db.user=:user and db.source=:source";
-
+		Session session = null;
+		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			List<Dashboard> ret = q.list();
@@ -104,6 +121,8 @@ public class DashboardDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -113,14 +132,18 @@ public class DashboardDAO {
 	public static void deleteVisitedNodes(String user, String source) throws DatabaseException {
 		log.debug("deleteVisitedNodes({}, {})", user, source);
 		String qs = "delete from Dashboard db where db.user=:user and db.source=:source";
-
+		Session session = null;
+		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			q.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteVisitedNodes: void");
@@ -134,9 +157,11 @@ public class DashboardDAO {
 		log.debug("purgeOldVisitedNode({}, {}, {}, {})", new Object[] { user, source, node, date });
 		String qs = "delete from Dashboard db where db.user=:user and db.source=:source "+
 			"and db.node=:node and db.date=:date";
+		Session session = null;
 		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			q.setString("node", node);
@@ -144,6 +169,8 @@ public class DashboardDAO {
 			q.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("purgeOldVisitedNode: void");
