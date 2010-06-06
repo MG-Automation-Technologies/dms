@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +43,15 @@ public class ActivityDAO  {
 	 * Create activity
 	 */
 	public static void create(Activity activity) throws DatabaseException {
-	    try {
-	    	HibernateHelper.getSession().save(activity);
+	    Session session = null;
+	    
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+	    	session.save(activity);
 	    } catch (HibernateException e) {
 	    	throw new DatabaseException(e.getMessage(), e);
+	    } finally {
+	    	HibernateUtil.close(session);
 	    }
 	}
 	
@@ -60,9 +66,11 @@ public class ActivityDAO  {
 			qs += "and a.user=:user ";
 		if (filter.getAction() != null && !filter.getAction().equals("")) 
 			qs += "and a.action=:action ";
-
+		Session session = null;
+		
 		try {
-			Query q = HibernateHelper.getSession().createQuery(qs);
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
 			q.setCalendar("begin", filter.getBegin());
 			q.setCalendar("end", filter.getEnd());
 						
@@ -76,6 +84,8 @@ public class ActivityDAO  {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -90,17 +100,19 @@ public class ActivityDAO  {
 			"where a.user= :user and a.action= :action and a.item= :item";
 		String qsNoAct = "select max(a.date) from Activity a " +
 			"where (a.action='CREATE_DOCUMENT' or a.action='SET_DOCUMENT_CONTENT') and a.item= :item";
+		Session session = null;
 		
 		try {
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = null;
 			
 			if (action != null) {
-				q = HibernateHelper.getSession().createQuery(qsAct);
+				q = session.createQuery(qsAct);
 				q.setString("user", user);
 				q.setString("action", action);
 				q.setString("item", item);
 			} else {
-				q = HibernateHelper.getSession().createQuery(qsNoAct);
+				q = session.createQuery(qsNoAct);
 				q.setString("item", item);
 			}
 			
@@ -120,6 +132,8 @@ public class ActivityDAO  {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 }
