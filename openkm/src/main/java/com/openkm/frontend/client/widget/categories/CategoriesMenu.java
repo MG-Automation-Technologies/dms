@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -159,6 +160,13 @@ public class CategoriesMenu extends MenuBase {
 			renameOption = false;
 			moveOption	 = false;
 		}
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		create.setVisible(option.isCreateFolderOption());
+		rename.setVisible(option.isRenameOption());
+		move.setVisible(option.isMoveOption());
 	}
 	
 	@Override

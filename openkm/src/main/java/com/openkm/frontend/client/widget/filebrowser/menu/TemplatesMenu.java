@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -423,6 +424,22 @@ public class TemplatesMenu extends MenuBase {
 		if (copyOption){enable(copy);} else {disable(copy);}
 		if (exportOption){enable(export);} else {disable(export);}
 		if (createFromTemplateOption){enable(createFromTemplate);} else {disable(createFromTemplate);}
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		download.setVisible(option.isDownloadOption());
+		delete.setVisible(option.isDeleteOption());
+		rename.setVisible(option.isRenameOption());
+		checkout.setVisible(option.isCheckoutOption());
+		checkin.setVisible(option.isCheckinOption());
+		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		lock.setVisible(option.isLockOption());
+		unlock.setVisible(option.isUnLockOption());
+		move.setVisible(option.isMoveOption());
+		copy.setVisible(option.isCopyOption());
+		export.setVisible(option.isExport());
+		createFromTemplate.setVisible(option.isCreateFromTemplate());
 	}
 	
 	/**

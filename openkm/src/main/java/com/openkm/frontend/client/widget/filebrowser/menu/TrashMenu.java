@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -82,6 +83,12 @@ public class TrashMenu extends MenuBase {
 	public void langRefresh() {
 		restoreItem.setHTML(Util.menuHTML("img/icon/actions/restore.gif", Main.i18n("trash.menu.directory.restore")));
 		purgeItem.setHTML(Util.menuHTML("img/icon/actions/purge.gif", Main.i18n("trash.menu.directory.purge")));
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		restoreItem.setVisible(option.isRestore());
+		purgeItem.setVisible(option.isPurge());
 	}
 	
 	/* (non-Javadoc)
