@@ -61,6 +61,10 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean thesaurusStackVisible = false;
 	private boolean personalStackVisible = false;
 	private boolean mailStackVisible = false;
+	private boolean editMenuVisible = false;
+	private boolean toolsMenuVisible = false;
+	private boolean bookmarkMenuVisible = false;
+	private boolean helpMenuVisible = false;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
@@ -315,5 +319,37 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setAvailableOption(GWTAvailableOption availableOption) {
 		this.availableOption = availableOption;
+	}
+	
+	public boolean isEditMenuVisible() {
+		return editMenuVisible;
+	}
+
+	public void setEditMenuVisible(boolean editMenuVisible) {
+		this.editMenuVisible = editMenuVisible;
+	}
+
+	public boolean isToolsMenuVisible() {
+		return toolsMenuVisible;
+	}
+
+	public void setToolsMenuVisible(boolean toolsMenuVisible) {
+		this.toolsMenuVisible = toolsMenuVisible;
+	}
+
+	public boolean isBookmarkMenuVisible() {
+		return bookmarkMenuVisible;
+	}
+
+	public void setBookmarkMenuVisible(boolean bookmarkMenuVisible) {
+		this.bookmarkMenuVisible = bookmarkMenuVisible;
+	}
+
+	public boolean isHelpMenuVisible() {
+		return helpMenuVisible;
+	}
+
+	public void setHelpMenuVisible(boolean helpMenuVisible) {
+		this.helpMenuVisible = helpMenuVisible;
 	}
 }
