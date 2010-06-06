@@ -473,9 +473,9 @@ public class PersonalMenu extends MenuBase {
 		unlock.setVisible(option.isUnLockOption());
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
-		export.setVisible(option.isExport());
-		mediaPlayer.setVisible(option.isMediaPlayer());
-		imageViewer.setVisible(option.isImageViewer());
+		export.setVisible(option.isExportOption());
+		mediaPlayer.setVisible(option.isMediaPlayerOption());
+		imageViewer.setVisible(option.isImageViewerOption());
 	}
 	
 	/**

@@ -544,10 +544,10 @@ public class TaxonomyMenu extends MenuBase {
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
 		bookmark.setVisible(option.isAddBookmarkOption());
-		home.setVisible(option.isSetHome());
-		export.setVisible(option.isExport());
-		mediaPlayer.setVisible(option.isMediaPlayer());
-		imageViewer.setVisible(option.isImageViewer());
+		home.setVisible(option.isSetHomeOption());
+		export.setVisible(option.isExportOption());
+		mediaPlayer.setVisible(option.isMediaPlayerOption());
+		imageViewer.setVisible(option.isImageViewerOption());
 	}
 	
 	/**

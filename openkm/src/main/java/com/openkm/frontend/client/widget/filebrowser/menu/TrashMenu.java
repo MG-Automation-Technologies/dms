@@ -87,8 +87,8 @@ public class TrashMenu extends MenuBase {
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		restoreItem.setVisible(option.isRestore());
-		purgeItem.setVisible(option.isPurge());
+		restoreItem.setVisible(option.isRestoreOption());
+		purgeItem.setVisible(option.isPurgeOption());
 	}
 	
 	/* (non-Javadoc)

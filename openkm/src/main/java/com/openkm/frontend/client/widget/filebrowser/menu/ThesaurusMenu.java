@@ -409,9 +409,9 @@ public class ThesaurusMenu extends MenuBase {
 		cancelCheckout.setVisible(option.isCancelCheckoutOption());
 		lock.setVisible(option.isLockOption());
 		unlock.setVisible(option.isUnLockOption());
-		mediaPlayer.setVisible(option.isMediaPlayer());
-		imageViewer.setVisible(option.isImageViewer());
-		go.setVisible(option.isGotoFolder());
+		mediaPlayer.setVisible(option.isMediaPlayerOption());
+		imageViewer.setVisible(option.isImageViewerOption());
+		go.setVisible(option.isGotoFolderOption());
 	}
 	
 	/**
