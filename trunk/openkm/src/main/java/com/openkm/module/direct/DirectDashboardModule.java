@@ -58,7 +58,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.DashboardDAO;
-import com.openkm.dao.HibernateHelper;
+import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Dashboard;
 import com.openkm.module.DashboardModule;
@@ -521,9 +521,11 @@ public class DirectDashboardModule implements DashboardModule {
 			throws javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getDocuments({}, {})", session, qs);
 		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		org.hibernate.Session hSession = null;
 		
 		try {
-			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
+			hSession = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Query q = hSession.createQuery(qs);
 			q.setString("user", session.getUserID());
 			q.setMaxResults(MAX_RESULTS);
 			
@@ -541,6 +543,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 		
 		log.debug("getDocuments: {}", al);
@@ -555,9 +559,11 @@ public class DirectDashboardModule implements DashboardModule {
 			throws javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getMails({}, {})", session, qs);
 		ArrayList<DashboardMailResult> al = new ArrayList<DashboardMailResult>();
+		org.hibernate.Session hSession = null;
 		
 		try {
-			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
+			hSession = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Query q = hSession.createQuery(qs);
 			q.setString("user", session.getUserID());
 			q.setMaxResults(MAX_RESULTS);
 			
@@ -575,6 +581,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 		
 		log.debug("getMails: {}", al);
@@ -1081,9 +1089,11 @@ public class DirectDashboardModule implements DashboardModule {
 			throws javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getTopDocuments({}, {}, {})", new Object[] { session, qs, (date!=null?date.getTime():"null") });
 		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		org.hibernate.Session hSession = null;
 		
 		try {
-			org.hibernate.Query q = HibernateHelper.getSession().createQuery(qs);
+			hSession = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Query q = hSession.createQuery(qs);
 			
 			if (date != null) {
 				q.setCalendar("date", date); 
@@ -1110,6 +1120,8 @@ public class DirectDashboardModule implements DashboardModule {
 			return al;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 	}
 	
