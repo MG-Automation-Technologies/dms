@@ -106,6 +106,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setPersonalStackVisible(true);
 		workspace.setMailStackVisible(true);
 		
+		// Menus visibility
+		workspace.setEditMenuVisible(true);
+		workspace.setBookmarkMenuVisible(true);
+		workspace.setToolsMenuVisible(true);
+		workspace.setHelpMenuVisible(true);
+		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();
 		availableOption.setCreateFolderOption(true);
@@ -132,15 +138,29 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setCopyOption(true);
 		availableOption.setMoveOption(true);
 		availableOption.setAddBookmarkOption(true);
-		availableOption.setSetHome(true);
-		availableOption.setExport(true);
-		availableOption.setMediaPlayer(true);
-		availableOption.setImageViewer(true);
-		availableOption.setGotoFolder(true);
-		availableOption.setCreateFromTemplate(true);
-		availableOption.setPurge(true);
-		availableOption.setRestore(true);
-		availableOption.setPurgeTrash(true);
+		
+		availableOption.setSetHomeOption(true);
+		availableOption.setExportOption(true);
+		availableOption.setMediaPlayerOption(true);
+		availableOption.setImageViewerOption(true);
+		availableOption.setGotoFolderOption(true);
+		availableOption.setCreateFromTemplateOption(true);
+		availableOption.setPurgeOption(true);
+		availableOption.setRestoreOption(true);
+		availableOption.setPurgeTrashOption(true);
+		availableOption.setSendDocumentLinkOption(true);
+		availableOption.setSkinOption(true);
+		availableOption.setDebugOption(true);
+		availableOption.setAdministrationOption(true);
+		availableOption.setManageBookmarkOption(true);
+		availableOption.setHelpOption(true);
+		availableOption.setDocumentationOption(true);
+		availableOption.setBugReportOption(true);
+		availableOption.setSupportRequestOption(true);
+		availableOption.setPublicForumOption(true);
+		availableOption.setVersionChangesOption(true);
+		availableOption.setProjectWebOption(true);
+		availableOption.setAboutOption(true);
 		workspace.setAvailableOption(availableOption);
 
 		try {
