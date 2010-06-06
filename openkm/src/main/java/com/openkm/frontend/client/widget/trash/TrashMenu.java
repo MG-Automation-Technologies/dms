@@ -136,9 +136,9 @@ public class TrashMenu extends MenuBase {
 	
 	@Override
 	public void setAvailableOption(GWTAvailableOption option) {
-		restore.setVisible(option.isRestore());
-		purge.setVisible(option.isPurge());
-		purgeTrash.setVisible(option.isPurgeTrash());
+		restore.setVisible(option.isRestoreOption());
+		purge.setVisible(option.isPurgeOption());
+		purgeTrash.setVisible(option.isPurgeTrashOption());
 	}
 
 	public void checkMenuOptionPermissions(GWTFolder folder, GWTFolder folderParent) {

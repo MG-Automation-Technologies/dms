@@ -243,7 +243,7 @@ public class TemplateMenu extends MenuBase {
 		rename.setVisible(option.isRenameOption());
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
-		export.setVisible(option.isExport());
+		export.setVisible(option.isExportOption());
 	}
 
 	/* (non-Javadoc)
