@@ -49,9 +49,11 @@
     Cookie[] cookies = request.getCookies();
     String preset = null;
     
-    for (int i=0; i<cookies.length; i++) {
-    	if (cookies[i].getName().equals("lang")) {
-    		preset = cookies[i].getValue();
+    if (cookies != null) {
+    	for (int i=0; i<cookies.length; i++) {
+    		if (cookies[i].getName().equals("lang")) {
+    			preset = cookies[i].getValue();
+    		}
     	}
     }
     
