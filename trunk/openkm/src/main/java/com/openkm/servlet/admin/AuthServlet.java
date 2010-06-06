@@ -67,15 +67,15 @@ public class AuthServlet extends BaseServlet {
 				session = JCRUtils.getSession();
 			}
 			
-			if (action.equals("userNew")) {
-				userNew(session, request, response);
-			} else if (action.equals("userEdit")) {
-				userEdit(session, request, response);
+			if (action.equals("userCreate")) {
+				userCreate(session, request, response);
 			} else if (action.equals("userUpdate")) {
 				userUpdate(session, request, response);
+			} else if (action.equals("userDelete")) {
+				userDelete(session, request, response);
 			}
 			
-			if (action.equals("") || action.equals("userList")) {
+			if (action.equals("") || WebUtil.getBoolean(request, "persist")) {
 				userList(session, request, response);
 			}
 		} catch (LoginException e) {
@@ -100,58 +100,97 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * New user
 	 */
-	private void userNew(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userCreate(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.info("userNew({}, {}, {})", new Object[] { session, request, response });
-		ServletContext sc = getServletContext();
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
-		sc.setAttribute("roles", AuthDAO.findAllRoles());
-		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
-		log.debug("userNew: void");
+		log.info("userCreate({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtil.getBoolean(request, "persist")) {
+			User usr = new User();
+			usr.setId(WebUtil.getString(request, "usr_id"));
+			usr.setName(WebUtil.getString(request, "usr_name"));
+			usr.setPass(WebUtil.getString(request, "usr_pass"));
+			usr.setEmail(WebUtil.getString(request, "usr_email"));
+			usr.setActive(WebUtil.getBoolean(request, "usr_active"));
+			List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
+			for (String rolId : usrRoles) {
+				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+			}
+			
+			AuthDAO.createUser(usr);
+			
+			// Activity log
+			UserActivity.log(session, "USER_CREATE", usr.getId(), usr.toString());
+		} else {
+			ServletContext sc = getServletContext();
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("roles", AuthDAO.findAllRoles());
+			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("userCreate: void");
 	}
 	
 	/**
 	 * Edit user
 	 */
-	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, DatabaseException {
-		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
-		ServletContext sc = getServletContext();
-		String usrId = WebUtil.getString(request, "usrId");
+	private void userUpdate(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
 		
-		// Activity log
-		UserActivity.log(session, "USER_EDIT", usrId, null);
+		if (WebUtil.getBoolean(request, "persist")) {
+			User usr = new User();
+			usr.setId(WebUtil.getString(request, "usr_id"));
+			usr.setName(WebUtil.getString(request, "usr_name"));
+			usr.setPass(WebUtil.getString(request, "usr_pass"));
+			usr.setEmail(WebUtil.getString(request, "usr_email"));
+			usr.setActive(WebUtil.getBoolean(request, "usr_active"));
+			List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
+			for (String rolId : usrRoles) {
+				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
+			}
+			
+			AuthDAO.updateUser(usr);
+			if (!usr.getPass().equals("")) {
+				AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
+			}
+			
+			// Activity log
+			UserActivity.log(session, "USER_UPDATE", usr.getId(), usr.toString());
+		} else {
+			ServletContext sc = getServletContext();
+			String usrId = WebUtil.getString(request, "usrId");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("roles", AuthDAO.findAllRoles());
+			sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
+			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
+		}
 		
-		sc.setAttribute("action", WebUtil.getString(request, "action"));
-		sc.setAttribute("roles", AuthDAO.findAllRoles());
-		sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
-		sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
-		log.debug("userEdit: void");
+		log.debug("userUpdate: void");
 	}
 	
 	/**
 	 * Update user
 	 */
-	private void userUpdate(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
-		User usr = new User();
-		usr.setId(WebUtil.getString(request, "usr_id"));
-		usr.setName(WebUtil.getString(request, "usr_name"));
-		usr.setPass(WebUtil.getString(request, "usr_pass"));
-		usr.setEmail(WebUtil.getString(request, "usr_email"));
-		usr.setActive(WebUtil.getBoolean(request, "usr_active"));
-		List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
-		for (String rolId : usrRoles) {
-			usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
-		}
-				
-		// Activity log
-		UserActivity.log(session, "USER_UPDATE", usr.getId(), usr.toString());
 		
-		AuthDAO.updateUser(usr);
-		if (!usr.getPass().equals("")) {
-			AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
+		if (WebUtil.getBoolean(request, "persist")) {
+			String usrId = WebUtil.getString(request, "usr_id");
+			AuthDAO.deleteUser(usrId);
+			
+			// Activity log
+			UserActivity.log(session, "USER_DELETE", usrId, null);
+		} else {
+			ServletContext sc = getServletContext();
+			String usrId = WebUtil.getString(request, "usrId");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("roles", AuthDAO.findAllRoles());
+			sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
+			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("userUpdate: void");
