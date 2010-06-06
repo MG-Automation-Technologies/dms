@@ -128,6 +128,19 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setHomeOption(true);
 		availableOption.setScannerOption(true);
 		availableOption.setUploaderOption(true);
+		availableOption.setRenameOption(true);
+		availableOption.setCopyOption(true);
+		availableOption.setMoveOption(true);
+		availableOption.setAddBookmarkOption(true);
+		availableOption.setSetHome(true);
+		availableOption.setExport(true);
+		availableOption.setMediaPlayer(true);
+		availableOption.setImageViewer(true);
+		availableOption.setGotoFolder(true);
+		availableOption.setCreateFromTemplate(true);
+		availableOption.setPurge(true);
+		availableOption.setRestore(true);
+		availableOption.setPurgeTrash(true);
 		workspace.setAvailableOption(availableOption);
 
 		try {
