@@ -22,12 +22,11 @@
 package com.openkm.frontend.client.widget.searchresult;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -162,5 +161,15 @@ public class Menu extends Composite {
 	public void disable(MenuItem menuItem) {
 		menuItem.removeStyleName("okm-MenuItem");
 		menuItem.addStyleName("okm-MenuItem-strike");
+	}
+	
+	/**
+	 * setAvailableOption
+	 * 
+	 * @param option
+	 */
+	public void setAvailableOption(GWTAvailableOption option) {
+		download.setVisible(option.isDownloadOption());
+		go.setVisible(option.isGotoFolderOption());
 	}
 }
