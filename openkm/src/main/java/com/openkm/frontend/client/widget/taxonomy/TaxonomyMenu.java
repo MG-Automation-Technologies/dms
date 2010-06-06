@@ -308,8 +308,8 @@ public class TaxonomyMenu extends MenuBase {
 		copy.setVisible(option.isCopyOption());
 		addDocument.setVisible(option.isAddDocumentOption());
 		bookmark.setVisible(option.isAddBookmarkOption());
-		home.setVisible(option.isSetHome());
-		export.setVisible(option.isExport());
+		home.setVisible(option.isSetHomeOption());
+		export.setVisible(option.isExportOption());
 	}
 
 	/* (non-Javadoc)

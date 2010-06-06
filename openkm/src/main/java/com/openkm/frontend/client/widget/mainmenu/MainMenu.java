@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.lang.Lang;
@@ -459,6 +460,12 @@ public class MainMenu extends Composite {
 		MainMenu.addItem(menuBookmark);
 		MainMenu.addItem(menuHelp);
 		MainMenu.setAutoOpen(false);
+		
+		// By default hide menus
+		menuEdit.setVisible(false);
+		menuTools.setVisible(false);
+		menuBookmark.setVisible(false);
+		menuHelp.setVisible(false);
 		
 		initWidget(MainMenu);
 	}
@@ -1052,4 +1059,91 @@ public class MainMenu extends Composite {
 		new $wnd.changeCss(title);
 	}-*/;
 	
+	
+	/**
+	 * setAvailableOption
+	 * 
+	 * @param option
+	 */
+	public void setAvailableOption(GWTAvailableOption option) {
+		// FILE MENU
+		createDirectory.setVisible(option.isCreateFolderOption());
+		addDocument.setVisible(option.isAddDocumentOption());
+		download.setVisible(option.isDownloadOption());
+		downloadPdf.setVisible(option.isDownloadPdfOption());
+		sendDocumentLink.setVisible(option.isSendDocumentLinkOption());
+		export.setVisible(option.isExportOption());
+		horizontalLineFile1.setVisible(option.isCreateFolderOption() || option.isAddDocumentOption() || option.isDownloadOption() ||
+									   option.isDownloadPdfOption() || option.isSendDocumentLinkOption() || option.isExportOption()); 
+		purgeTrash.setVisible(option.isPurgeTrashOption());
+		horizontalLineFile2.setVisible(option.isPurgeTrashOption());
+		
+		// EDIT MENU
+		lock.setVisible(option.isLockOption());
+		unlock.setVisible(option.isUnLockOption());
+		checkout.setVisible(option.isCheckoutOption());
+		checkin.setVisible(option.isCheckinOption());
+		cancelCheckout.setVisible(option.isCancelCheckoutOption());
+		delete.setVisible(option.isDeleteOption());
+		copy.setVisible(option.isCopyOption());
+		move.setVisible(option.isMoveOption());
+		rename.setVisible(option.isRenameOption());
+		
+		// MENU TOOLS
+		skin.setVisible(option.isSkinOption());
+		debugConsole.setVisible(option.isDebugOption());
+		administration.setVisible(option.isAdministrationOption());
+		
+		// MENU BOOKMARKS
+		home.setVisible(option.isHomeOption());
+		defaultHome.setVisible(option.isAddBookmarkOption());
+		manageBookmark.setVisible(option.isManageBookmarkOption());
+		horizontalLineBookmark1.setVisible(option.isHomeOption() || option.isAddBookmarkOption() || option.isAddBookmarkOption());
+		
+		// MENU HELP
+		help.setVisible(option.isHelpOption());
+		documentation.setVisible(option.isDocumentationOption());
+		bugReport.setVisible(option.isBugReportOption());
+		supportRequest.setVisible(option.isSupportRequestOption());
+		publicForum.setVisible(option.isPublicForumOption());
+		versionChanges.setVisible(option.isVersionChangesOption());
+		projectWeb.setVisible(option.isProjectWebOption());
+		about.setVisible(option.isAboutOption());
+	}
+	
+	/**
+	 * setEditMenuVisible
+	 * 
+	 * @param visible
+	 */
+	public void setEditMenuVisible(boolean visible) {
+		menuEdit.setVisible(visible);
+	}
+	
+	/**
+	 * setToolsMenuVisible
+	 * 
+	 * @param visible
+	 */
+	public void setToolsMenuVisible(boolean visible) {
+		menuTools.setVisible(visible);
+	}
+	
+	/**
+	 * setBookmarkMenuVisible
+	 * 
+	 * @param visible
+	 */
+	public void setBookmarkMenuVisible(boolean visible) {
+		menuBookmark.setVisible(visible);
+	}
+	
+	/**
+	 * setHelpMenuVisible
+	 * 
+	 * @param visible
+	 */
+	public void setHelpMenuVisible(boolean visible) {
+		menuHelp.setVisible(visible);
+	}
 }
