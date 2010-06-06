@@ -86,7 +86,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 		vPanel.setWidth("510px");
 		vPanel.setHeight("220px");
 		
-		for (int i=0; i<StartUp.STARTUP_GET_USER_VALUES; i++) {
+		for (int i=0; i<StartUp.STARTUP_LOADING_HISTORY_SEARCH; i++) {
 			table.setWidget(0, i, new Image(OKMBundleResources.INSTANCE.loadedDisabledIcon()));
 		}
 		

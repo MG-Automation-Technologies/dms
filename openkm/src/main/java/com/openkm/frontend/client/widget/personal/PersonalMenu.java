@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -236,6 +237,16 @@ public class PersonalMenu extends MenuBase {
 		move.setHTML(Util.menuHTML("img/icon/actions/move_folder.gif", Main.i18n("tree.menu.directory.move")));
 		copy.setHTML(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("tree.menu.directory.copy")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("tree.menu.export")));
+	}
+	
+	@Override
+	public void setAvailableOption(GWTAvailableOption option) {
+		create.setVisible(option.isCreateFolderOption());
+		remove.setVisible(option.isDeleteOption());
+		rename.setVisible(option.isRenameOption());
+		move.setVisible(option.isMoveOption());
+		copy.setVisible(option.isCopyOption());
+		export.setVisible(option.isExport());
 	}
 
 	/* (non-Javadoc)

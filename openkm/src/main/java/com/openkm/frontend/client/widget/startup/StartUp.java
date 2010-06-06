@@ -45,30 +45,31 @@ import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 public class StartUp {
 	
 	public static final int STARTUP_STARTING								= 0;
-	public static final int STARTUP_GET_TAXONOMY_ROOT						= 1;
-	public static final int STARTUP_GET_CATEGORIES_ROOT 					= 2;
-	public static final int STARTUP_GET_THESAURUS_ROOT 						= 3;
-	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 4;
-	public static final int STARTUP_GET_PERSONAL 	  						= 5;
-	public static final int STARTUP_GET_MAIL 	  							= 6;
-	public static final int STARTUP_GET_TRASH 	 	  						= 7;
-	public static final int STARTUP_GET_USER_HOME 	  						= 8;
-	public static final int STARTUP_GET_BOOKMARKS							= 9;
-	public static final int STARTUP_LOADING_TAXONOMY						= 10;
-	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 11;
-	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 12;
-	public static final int STARTUP_LOADING_OPEN_PATH						= 13;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 14;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 15;
-	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 16;
-	public static final int STARTUP_LOADING_CATEGORIES						= 17;
-	public static final int STARTUP_LOADING_THESAURUS						= 18;
-	public static final int STARTUP_LOADING_TEMPLATES						= 19;
-	public static final int STARTUP_LOADING_PERSONAL						= 20;
-	public static final int STARTUP_LOADING_MAIL							= 21;	
-	public static final int STARTUP_LOADING_TRASH							= 22;
-	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 23;
-	public static final int STARTUP_GET_USER_VALUES							= 24;
+	public static final int STARTUP_GET_USER_VALUES							= 1;
+	public static final int STARTUP_GET_TAXONOMY_ROOT						= 2;
+	public static final int STARTUP_GET_CATEGORIES_ROOT 					= 3;
+	public static final int STARTUP_GET_THESAURUS_ROOT 						= 4;
+	public static final int STARTUP_GET_TEMPLATE_ROOT 						= 5;
+	public static final int STARTUP_GET_PERSONAL 	  						= 6;
+	public static final int STARTUP_GET_MAIL 	  							= 7;
+	public static final int STARTUP_GET_TRASH 	 	  						= 8;
+	public static final int STARTUP_GET_USER_HOME 	  						= 9;
+	public static final int STARTUP_GET_BOOKMARKS							= 10;
+	public static final int STARTUP_LOADING_TAXONOMY						= 11;
+	public static final int STARTUP_LOADING_TAXONOMY_FOLDERS				= 12;
+	public static final int STARTUP_LOADING_TAXONOMY_EVAL_PARAMS			= 13;
+	public static final int STARTUP_LOADING_OPEN_PATH						= 14;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS	= 15;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS	= 16;
+	public static final int STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS		= 17;
+	public static final int STARTUP_LOADING_CATEGORIES						= 18;
+	public static final int STARTUP_LOADING_THESAURUS						= 19;
+	public static final int STARTUP_LOADING_TEMPLATES						= 20;
+	public static final int STARTUP_LOADING_PERSONAL						= 21;
+	public static final int STARTUP_LOADING_MAIL							= 22;	
+	public static final int STARTUP_LOADING_TRASH							= 23;
+	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 24;
+	
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
@@ -328,8 +329,13 @@ public class StartUp {
 				switch (status) {
 					case STARTUP_STARTING:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.starting.loading"), STARTUP_STARTING);
-						nextStatus(STARTUP_GET_TAXONOMY_ROOT);
+						nextStatus(STARTUP_GET_USER_VALUES);
 						break;
+						
+					case STARTUP_GET_USER_VALUES:
+						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.user.values"), STARTUP_GET_USER_VALUES);
+						Main.get().workspaceUserProperties.init();
+						break;	
 						
 					case STARTUP_GET_TAXONOMY_ROOT:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.taxonomy"), STARTUP_GET_TAXONOMY_ROOT);
@@ -444,16 +450,13 @@ public class StartUp {
 						Main.get().mainPanel.historySearch.searchSaved.init();		// Initialize history saved
 						Main.get().mainPanel.historySearch.userNews.init();
 						Main.get().mainPanel.setVisible(true);
-						break;
-					
-					case STARTUP_GET_USER_VALUES:
-						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.user.values"), STARTUP_GET_USER_VALUES);
-						Main.get().workspaceUserProperties.init();
+						Main.get().workspaceUserProperties.setAvailableAction(); // Some actions ( menus / etc ... ) must be set at ends startup
+						  														 // After init widget methods ares all yet finished
 						enabled = false;
 						if (!error) {
 							Main.get().startUpPopup.hide();
 						} 
-						break;						
+						break;
 				}			
 			}
 		}
@@ -498,6 +501,10 @@ public class StartUp {
 			case STARTUP_STARTING:
 				msg = Main.i18n("startup.starting.loading");
 				break;
+				
+			case STARTUP_GET_USER_VALUES:
+				msg = Main.i18n("startup.loading.user.values");
+				break;	
 				
 			case STARTUP_GET_TAXONOMY_ROOT:
 				msg = Main.i18n("startup.taxonomy");
@@ -590,11 +597,7 @@ public class StartUp {
 			
 			case STARTUP_LOADING_HISTORY_SEARCH:
 				msg = Main.i18n("startup.loading.history.search");
-				break;
-			
-			case STARTUP_GET_USER_VALUES:
-				msg = Main.i18n("startup.loading.user.values");
-				break;				
+				break;			
 		}			
 		
 		return msg;
