@@ -42,7 +42,6 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Lock;
 import com.openkm.bean.Mail;
-import com.openkm.bean.MetaData;
 import com.openkm.bean.Note;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.QueryParams;
@@ -76,7 +75,6 @@ import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTLock;
 import com.openkm.frontend.client.bean.GWTMail;
-import com.openkm.frontend.client.bean.GWTMetaData;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
@@ -385,22 +383,6 @@ public class Util {
 		params.setOperator(gWTParams.getOperator());
 		
 		return params;
-	}
-	
-	/**
-	 * Copy the MetaData data to GWTMetaData
-	 * 
-	 * @param metaData The original MetaData
-	 * @return The gwtMetaData object with data values form the original MetaData
-	 */
-	public static GWTMetaData copy(MetaData metaData) {
-		GWTMetaData gwtMetaData = new GWTMetaData();
-		
-		gwtMetaData.setOrder(metaData.getOrder());
-		gwtMetaData.setType(metaData.getType());
-		gwtMetaData.setValues(metaData.getValues());
-		
-		return gwtMetaData;
 	}
 	
 	/**
