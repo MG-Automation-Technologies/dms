@@ -152,7 +152,7 @@ public class DirectAuthModule implements AuthModule {
 	 * Load user data
 	 */
 	public static void loadUserData(Session session) throws DatabaseException, javax.jcr.RepositoryException {
-		log.info("loadUserData({}) -> {}", session.getUserID(), session);
+		log.debug("loadUserData({}) -> {}", session.getUserID(), session);
 		
 		synchronized (session.getUserID()) {
 			if (!session.itemExists("/"+Repository.TRASH+"/"+session.getUserID())) {
@@ -184,7 +184,7 @@ public class DirectAuthModule implements AuthModule {
 			}
 		}
 		
-		log.info("loadUserData: void");
+		log.debug("loadUserData: void");
 	}
 
 	/**
