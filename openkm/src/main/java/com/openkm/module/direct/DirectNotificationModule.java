@@ -50,6 +50,7 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Notification;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
@@ -66,7 +67,7 @@ public class DirectNotificationModule implements NotificationModule {
 	
 	@Override
 	public synchronized void subscribe(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("subscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
@@ -138,7 +139,7 @@ public class DirectNotificationModule implements NotificationModule {
 	
 	@Override
 	public synchronized void unsubscribe(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("unsubscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
@@ -204,7 +205,7 @@ public class DirectNotificationModule implements NotificationModule {
 	
 	@Override
 	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getSusbcriptions({}, {})", token, nodePath);
 		ArrayList<String> users = new ArrayList<String>();
 		Session session = null;
