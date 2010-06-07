@@ -26,6 +26,7 @@ import java.util.Collection;
 
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -47,8 +48,8 @@ public interface MailModule {
 	 * you can't modify the parent mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Mail create(String token, Mail mail) throws PathNotFoundException,
-			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException;
+	public Mail create(String token, Mail mail) throws PathNotFoundException, ItemExistsException,
+			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created mail.
@@ -60,7 +61,7 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Delete a mail the repository. It is a logical delete,
@@ -74,8 +75,8 @@ public interface MailModule {
 	 * you can't modify the mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void delete(String token, String mailPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Deletes definitively a mail from the repository. It is a physical delete, so
@@ -90,7 +91,7 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void purge(String token, String mailPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Rename a mail in the repository.
@@ -106,9 +107,8 @@ public interface MailModule {
 	 * you can't modify the mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Mail rename(String token, String mailPath, String newName) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException;
+	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Move a mail to another location in the repository.
@@ -124,9 +124,8 @@ public interface MailModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void move(String token, String mailPath, String dstPath) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException;
+	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Copy a mail to another location in the repository.
@@ -142,9 +141,8 @@ public interface MailModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void copy(String token, String mailPath, String dstPath) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException;
+	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException;
 
 	/**
 	 * Retrieve a list of child mails from an existing folder.
@@ -156,7 +154,7 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Test if a mail path is valid.
@@ -168,6 +166,6 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no mail in the repository with this path.
 	 */
-	public boolean isValid(String token, String mailPath) throws 
-		PathNotFoundException, AccessDeniedException, RepositoryException;
+	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 }
