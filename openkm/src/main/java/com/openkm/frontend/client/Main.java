@@ -37,8 +37,8 @@ import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.extension.frontend.client.Customization;
-import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
 import com.openkm.frontend.client.extension.ExtensionManager;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
@@ -142,7 +142,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public GWTFolder templatesRootFolder;
 	public GWTFolder mailRootFolder;
 	public GWTFolder trashRootFolder;
-	public GWTBookmark userHome;
+	public GWTUserConfig userHome;
 	public FolderTree activeFolderTree; // The active folder
 		
 	// The satartUp sequence
@@ -196,7 +196,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		workspaceUserProperties = new WorkspaceUserProperties();
 		
 		// Initialize user home
-		userHome = new GWTBookmark();
+		userHome = new GWTUserConfig();
 
 		// Initialize panels
 		mainPanel = new ExtendedDockPanel();
