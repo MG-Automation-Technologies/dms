@@ -78,24 +78,4 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
-	
-	/**
-	 * Set the user default home node
-	 * 
-	 * @param token The session authorization token
-	 * @param nodePath A node path to be set as user home folder.
-	 * @throws RepositoryException If there is any general repository problem.
-	 */
-	public void setUserHome(String token, String nodePath) throws AccessDeniedException,
-			RepositoryException, DatabaseException;
-	
-	/**
-	 * Get the user default home node
-	 * 
-	 * @param token The session authorization token
-	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
-	 * @throws RepositoryException If there is any general repository problem.
-	 */
-	public Bookmark getUserHome(String token) throws PathNotFoundException,
-			RepositoryException, DatabaseException;
 }
