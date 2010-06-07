@@ -36,6 +36,7 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
@@ -48,7 +49,7 @@ public class DirectScriptingModule implements ScriptingModule {
 
 	@Override
 	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		Node node = null;
 		Node sNode = null;
@@ -103,7 +104,7 @@ public class DirectScriptingModule implements ScriptingModule {
 
 	@Override
 	public void removeScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeScript({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
@@ -159,7 +160,7 @@ public class DirectScriptingModule implements ScriptingModule {
 
 	@Override
 	public String getScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getScript({}, {})", token, nodePath);
 		String code = null;
 		Session session = null;
