@@ -329,7 +329,7 @@ public class DirectMailModule implements MailModule {
 			String name = FileUtils.getName(mailPath);
 			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
 			Node parentNode = folderNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			
 			// Test if already exists a mail with the same name in the trash
 			String destPath = userTrash.getPath()+"/";
