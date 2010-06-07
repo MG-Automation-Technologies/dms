@@ -1,14 +1,15 @@
 package com.openkm.dao.bean;
 
 public class LockToken {
-	private String id;
+	private int id;
 	private String user;
+	private String token;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
@@ -18,5 +19,13 @@ public class LockToken {
 	
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
