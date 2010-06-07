@@ -86,23 +86,4 @@ public class OKMBookmark implements BookmarkModule {
 		log.debug("getAll: {}", col);
 		return col;
 	}
-
-	@Override
-	public void setUserHome(String token, String path) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("setUserHome({})", token);
-		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		bm.setUserHome(token, path);
-		log.debug("setUserHome: void");
-	}
-
-	@Override
-	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getUserHome({})", token);
-		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Bookmark bookmark = bm.getUserHome(token);
-		log.debug("getUserHome: {}", bookmark);
-		return bookmark;
-	}
 }
