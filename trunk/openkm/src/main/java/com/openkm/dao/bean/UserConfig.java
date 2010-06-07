@@ -28,6 +28,7 @@ public class UserConfig {
 	private String user;
 	private String homePath;
 	private String homeType;
+	private String homeUuid;
 	private Set<String> lockTokens = new HashSet<String>();
 
 	public String getUser() {
@@ -44,6 +45,14 @@ public class UserConfig {
 
 	public void setHomePath(String homePath) {
 		this.homePath = homePath;
+	}
+	
+	public String getHomeUuid() {
+		return homeUuid;
+	}
+
+	public void setHomeUuid(String homeUuid) {
+		this.homeUuid = homeUuid;
 	}
 
 	public String getHomeType() {
@@ -68,6 +77,7 @@ public class UserConfig {
 		sb.append("user="); sb.append(user);
 		sb.append(", homePath="); sb.append(homePath);
 		sb.append(", homeType="); sb.append(homeType);
+		sb.append(", homeUuid="); sb.append(homeUuid);
 		sb.append(", lockTokens="); sb.append(lockTokens);
 		sb.append("}");
 		return sb.toString();
