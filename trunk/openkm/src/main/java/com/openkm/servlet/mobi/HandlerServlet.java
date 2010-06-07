@@ -18,6 +18,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMSearch;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -69,6 +70,8 @@ public class HandlerServlet extends HttpServlet {
 		} catch (ParseException e) {
 			sendErrorRedirect(request,response, e);
 		} catch (RepositoryException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
 			sendErrorRedirect(request,response, e);
 		}
 	}
