@@ -1,5 +1,7 @@
 package com.openkm.dao;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -86,6 +88,29 @@ public class QueryParamsDAO {
 			q.setInteger("id", qpId);
 			QueryParams ret = (QueryParams) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find by user
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<QueryParams> findByUser(String user) throws DatabaseException {
+		log.debug("findByUser({})", user);
+		String qs = "from QueryParams qp where qp.user=:user";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("user", user);
+			List<QueryParams> ret = q.list();
+			log.debug("findByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
