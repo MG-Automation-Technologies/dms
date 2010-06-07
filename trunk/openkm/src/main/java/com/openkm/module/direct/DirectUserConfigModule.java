@@ -73,8 +73,12 @@ public class DirectUserConfigModule implements UserConfigModule {
 				UserConfigDAO.create(ret);
 			} else {
 				Node node = session.getNodeByUUID(ret.getHomeUuid());
-				ret.setHomePath(node.getPath());
-				ret.setHomeType(JCRUtils.getNodeType(node));
+				
+				if (!node.getPath().equals(ret.getHomePath())) {
+					ret.setHomePath(node.getPath());
+					ret.setHomeType(JCRUtils.getNodeType(node));
+					UserConfigDAO.update(ret);
+				}
 			}
 			
 			// Activity log
