@@ -130,7 +130,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("rename({})", docPath);
+		log.debug("rename({}, {})", docPath, newName);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
@@ -256,7 +256,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void move(String token, String docPath, String destPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("move({})", docPath);
+		log.debug("move({}, {})", docPath, destPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, destPath);
 		log.debug("move: void");
