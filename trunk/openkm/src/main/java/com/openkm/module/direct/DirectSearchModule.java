@@ -26,27 +26,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.jcr.InvalidItemStateException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
-import javax.jcr.version.VersionException;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.query.QueryImpl;
@@ -60,9 +54,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
 import com.openkm.bean.PropertyGroup;
-import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
-import com.openkm.bean.Repository;
 import com.openkm.bean.ResultSet;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Select;
@@ -70,12 +62,13 @@ import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.DashboardDAO;
+import com.openkm.dao.QueryParamsDAO;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.SearchModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
@@ -173,9 +166,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	/**
-	 * @param params
-	 * @return
-	 * @throws IOException 
+	 * Prepare statement
 	 */
 	public String prepareStatement(QueryParams params) throws IOException, ParseException {
 		log.info("prepareStatement({})", params);
@@ -480,9 +471,9 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void saveSearch(String token, QueryParams params, String name) throws 
-			AccessDeniedException, ItemExistsException, RepositoryException {
-		log.debug("saveSearch({}, {}, {})", new Object[] { token, params, name });
+	public void saveSearch(String token, QueryParams params) throws 
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("saveSearch({}, {}, {})", new Object[] { token, params });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -496,26 +487,15 @@ public class DirectSearchModule implements SearchModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			Node savedSearch = userQuery.addNode(name, QueryParams.TYPE);
-			
-			// Ignore dates if saved seach is dashboard
-			if (params.isDashboard()) {
-				params.setLastModifiedFrom(null);
-				params.setLastModifiedTo(null);
-			}
-			
-			saveSearch(savedSearch, params);
-			userQuery.save();
+			params.setUser(session.getUserID());
+			QueryParamsDAO.create(params);
 			
 			// Activity log
-			UserActivity.log(session, "SAVE_SEARCH", name, params.toString());
-		} catch (javax.jcr.ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			throw new ItemExistsException(e.getMessage(), e);
+			UserActivity.log(session, "SAVE_SEARCH", params.getName(), params.toString());
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -524,42 +504,11 @@ public class DirectSearchModule implements SearchModule {
 		
 		log.debug("saveSearch: void");
 	}
-
-	/**
-	 * Save search parameters
-	 */
-	public void saveSearch(Node savedSearch, QueryParams params)
-			throws ValueFormatException, VersionException, LockException,
-			ConstraintViolationException, javax.jcr.RepositoryException,
-			javax.jcr.AccessDeniedException, javax.jcr.ItemExistsException,
-			InvalidItemStateException, ReferentialIntegrityException,
-			NoSuchNodeTypeException {
-		savedSearch.setProperty(QueryParams.CONTENT, params.getContent());
-		savedSearch.setProperty(QueryParams.NAME, params.getName());
-		savedSearch.setProperty(QueryParams.KEYWORDS, params.getKeywords());
-		savedSearch.setProperty(QueryParams.CATEGORIES, params.getCategories());
-		savedSearch.setProperty(QueryParams.MIME_TYPE, params.getMimeType());
-		savedSearch.setProperty(QueryParams.AUTHOR, params.getAuthor());
-		savedSearch.setProperty(QueryParams.PATH, params.getPath());
-		savedSearch.setProperty(QueryParams.LAST_MODIFIED_FROM, params.getLastModifiedFrom());
-		savedSearch.setProperty(QueryParams.LAST_MODIFIED_TO, params.getLastModifiedTo());
-		savedSearch.setProperty(QueryParams.SUBJECT, params.getSubject());
-		savedSearch.setProperty(QueryParams.FROM, params.getFrom());
-		savedSearch.setProperty(QueryParams.TO, params.getTo());
-		savedSearch.setProperty(QueryParams.DASHBOARD, params.isDashboard());
-		savedSearch.setProperty(QueryParams.DOMAIN, params.getDomain());
-		savedSearch.setProperty(QueryParams.OPERATOR, params.getOperator());
-		HashMap<String, String> hm = params.getProperties();
 		
-		for (Iterator<Entry<String, String>> it = hm.entrySet().iterator(); it.hasNext(); ) {
-			Entry<String, String> entry = it.next();
-			savedSearch.setProperty(entry.getKey().toString(), entry.getValue().toString());
-		}
-	}
-	
 	@Override
-	public QueryParams getSearch(String token, String name) throws PathNotFoundException, RepositoryException {
-		log.debug("getSearch({}, {})", token, name);
+	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getSearch({}, {})", token, qpId);
 		QueryParams qp = new QueryParams();
 		Session session = null;
 		
@@ -570,9 +519,7 @@ public class DirectSearchModule implements SearchModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			Node savedQuery = userQuery.getNode(name);
-			qp = getSearch(savedQuery);
+			qp = QueryParamsDAO.findByPk(qpId);
 			
 			// If this is a dashboard user search, dates are used internally
 			if (qp.isDashboard()) {
@@ -581,7 +528,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_SAVED_SEARCH", name, qp.toString());
+			UserActivity.log(session, "GET_SAVED_SEARCH", Integer.toString(qpId), qp.toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -597,59 +544,9 @@ public class DirectSearchModule implements SearchModule {
 		log.debug("getSearch: {}", qp);
 		return qp;
 	}
-
-	/**
-	 * Get saved search
-	 */
-	public QueryParams getSearch(Node savedQuery) throws javax.jcr.RepositoryException, 
-			ValueFormatException {
-		HashMap<String, String> hm = new HashMap<String, String>();
-		QueryParams qp = new QueryParams();
-		
-		for (PropertyIterator pi = savedQuery.getProperties(); pi.hasNext(); ) {
-			Property p = pi.nextProperty();
-			
-			if (p.getName().equals(QueryParams.CONTENT)) {
-				qp.setContent(p.getString());
-			} else if (p.getName().equals(QueryParams.NAME)) {
-				qp.setName(p.getString());
-			} else if (p.getName().equals(QueryParams.KEYWORDS)) {
-				qp.setKeywords(p.getString());
-			} else if (p.getName().equals(QueryParams.CATEGORIES)) {
-				qp.setCategories(p.getString());
-			} else if (p.getName().equals(QueryParams.MIME_TYPE)) {
-				qp.setMimeType(p.getString());
-			} else if (p.getName().equals(QueryParams.AUTHOR)) {
-				qp.setAuthor(p.getString());
-			} else if (p.getName().equals(QueryParams.PATH)) {
-				qp.setPath(p.getString());
-			} else if (p.getName().equals(QueryParams.LAST_MODIFIED_FROM)) {
-				qp.setLastModifiedFrom(p.getDate());
-			} else if (p.getName().equals(QueryParams.LAST_MODIFIED_TO)) {
-				qp.setLastModifiedTo(p.getDate());
-			} else if (p.getName().equals(QueryParams.SUBJECT)) {
-				qp.setSubject(p.getString());
-			} else if (p.getName().equals(QueryParams.FROM)) {
-				qp.setFrom(p.getString());
-			} else if (p.getName().equals(QueryParams.TO)) {
-				qp.setTo(p.getString());
-			} else if (p.getName().equals(QueryParams.DASHBOARD)) {
-				qp.setDashboard(p.getBoolean());
-			} else if (p.getName().equals(QueryParams.DOMAIN)) {
-				qp.setDomain(p.getLong());
-			} else if (p.getName().equals(QueryParams.OPERATOR)) {
-				qp.setOperator(p.getString());
-			} else if (p.getName().startsWith(PropertyGroup.GROUP_PROPERTY+":")) {
-				hm.put(p.getName(), p.getString());
-			}
-		}
-		
-		qp.setProperties(hm);
-		return qp;
-	}
-
+	
 	@Override
-	public Collection<String> getAllSearchs(String token) throws RepositoryException {
+	public Collection<String> getAllSearchs(String token) throws RepositoryException, DatabaseException {
 		log.debug("getAllSearchs({})", token);
 		Collection<String> ret = new ArrayList<String>();
 		Session session = null;
@@ -661,20 +558,22 @@ public class DirectSearchModule implements SearchModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
+			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
-			for (NodeIterator it = userQuery.getNodes(); it.hasNext(); ) {
-				Node search = it.nextNode();
-				if (!search.getProperty(QueryParams.DASHBOARD).getBoolean()) {
-					ret.add(search.getName());
+			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
+				QueryParams qp = it.next();
+				
+				if (!qp.isDashboard()) {
+					ret.add(qp.getName());
 				}
 			}
 			
 			// Activity log
 			UserActivity.log(session, "GET_ALL_SEARCHS", null, null);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -686,9 +585,9 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, String name) throws AccessDeniedException,
-			PathNotFoundException, RepositoryException {
-		log.debug("deleteSearch({}, {})", token, name);
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException,
+			PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("deleteSearch({}, {})", token, qpId);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -702,19 +601,16 @@ public class DirectSearchModule implements SearchModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
-			Node savedQuery = userQuery.getNode(name);
-			boolean isDashboard = savedQuery.getProperty(QueryParams.DASHBOARD).getBoolean();
-			savedQuery.remove();
-			userQuery.save();
+			QueryParams qp = QueryParamsDAO.findByPk(qpId);
+			QueryParamsDAO.delete(qpId);
 			
 			// Purge visited nodes table
-			if (isDashboard) {
-				DashboardDAO.deleteVisitedNodes(session.getUserID(), name);
+			if (qp.isDashboard()) {
+				DashboardDAO.deleteVisitedNodes(session.getUserID(), qp.getName());
 			}
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_SAVED_SEARCH", name, null);
+			UserActivity.log(session, "DELETE_SAVED_SEARCH", Integer.toString(qpId), null);
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
