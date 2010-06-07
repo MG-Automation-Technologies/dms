@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -58,8 +58,8 @@ public class GWTQueryParams implements IsSerializable {
 
 	private String operator = OPERATOR_AND;
 	
-	private HashMap<String, GWTPropertyParams> properties;
-	private HashMap<String, String> searchProperties;
+	private Map<String, GWTPropertyParams> properties;
+	private Map<String, String> searchProperties;
 	
 	private String grpName;
 
@@ -95,11 +95,11 @@ public class GWTQueryParams implements IsSerializable {
 		this.name = name;
 	}
 	
-	public HashMap<String, GWTPropertyParams> getProperties() {
+	public Map<String, GWTPropertyParams> getProperties() {
 		return properties;
 	}
 	
-	public void setProperties(HashMap<String, GWTPropertyParams> finalProperties) {
+	public void setProperties(Map<String, GWTPropertyParams> finalProperties) {
 		this.properties = finalProperties;
 	}
 
@@ -135,11 +135,11 @@ public class GWTQueryParams implements IsSerializable {
 		this.lastModifiedTo = lastModifiedTo;
 	}
 
-	public HashMap<String, String> getSearchProperties() {
+	public Map<String, String> getSearchProperties() {
 		return searchProperties;
 	}
 
-	public void setSearchProperties(HashMap<String, String> searchProperties) {
+	public void setSearchProperties(Map<String, String> searchProperties) {
 		this.searchProperties = searchProperties;
 	}
 
