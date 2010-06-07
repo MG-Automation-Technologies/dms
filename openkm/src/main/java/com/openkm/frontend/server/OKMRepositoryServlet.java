@@ -79,8 +79,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-				//folder =  OKMRepository.getInstance().getPersonalFolderBase(token);
-				folder =  OKMRepository.getInstance().getPersonalFolder(token);
+				folder = OKMRepository.getInstance().getPersonalFolderBase();
 			} else {
 				folder = OKMRepository.getInstance().getPersonalFolder(token);
 			}
