@@ -61,7 +61,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, VirusDetectedException, ItemExistsException,	PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {})", doc, is);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document newDocument = dm.create(token, doc, is);
@@ -71,7 +71,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public void delete(String token, String docPath) throws LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.delete(token, docPath);
@@ -80,7 +80,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public Document getProperties(String token, String docPath) throws RepositoryException, 
-			PathNotFoundException {
+			PathNotFoundException, DatabaseException {
 		log.debug("getProperties({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = dm.getProperties(token, docPath);
@@ -90,7 +90,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public InputStream getContent(String token, String docPath, boolean checkout) throws PathNotFoundException, 
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("getContent({}, {})", docPath, checkout);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContent(token, docPath, checkout);
@@ -100,7 +100,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public InputStream getContentByVersion(String token, String docPath, String versionId) throws 
-			RepositoryException, PathNotFoundException, IOException {
+			RepositoryException, PathNotFoundException, IOException, DatabaseException {
 		log.debug("getContentByVersion({}, {})", docPath, versionId);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContentByVersion(token, docPath, versionId);
@@ -110,7 +110,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void addNote(String token, String docPath, String text) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addNote({}, {})", docPath, text);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.addNote(token, docPath, text);
@@ -119,7 +119,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Collection<Document> col = dm.getChilds(token, fldPath);
@@ -129,7 +129,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {})", docPath, newName);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
@@ -139,7 +139,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void setProperties(String token, Document doc) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setProperties(token, doc);
@@ -166,7 +166,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public boolean isCheckedOut(String token, String docPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("isCheckedOut({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		boolean checkedOut = dm.isCheckedOut(token, docPath);
@@ -187,7 +187,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public Collection<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getVersionHistory({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Collection<Version> history = dm.getVersionHistory(token, docPath);
@@ -199,7 +199,7 @@ public class OKMDocument implements DocumentModule {
 	public void setContent(String token, String docPath, InputStream is) throws 
 			FileSizeExceededException, VirusDetectedException, VersionException,
 			LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("setContent({}, {})", docPath, is);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setContent(token, docPath, is);
@@ -226,7 +226,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public boolean isLocked(String token, String docPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("isLocked({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		boolean locked = dm.isLocked(token, docPath);
@@ -236,7 +236,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public Lock getLock(String token, String docPath) throws LockException, 
-			PathNotFoundException, RepositoryException {
+			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getLock({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Lock lock = dm.getLock(token, docPath);
@@ -246,7 +246,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void purge(String token, String docPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("purge({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purge(token, docPath);
@@ -255,7 +255,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void move(String token, String docPath, String destPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {})", docPath, destPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, destPath);
@@ -265,7 +265,7 @@ public class OKMDocument implements DocumentModule {
 	@Override
 	public void copy(String token, String docPath, String destPath) throws 
 			ItemExistsException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("copy({}, {})", docPath, destPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.copy(token, docPath, destPath);
@@ -274,7 +274,7 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public void restoreVersion(String token, String docPath, String versionId) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("restoreVersion({}, {})", docPath, versionId);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.restoreVersion(token, docPath, versionId);
@@ -283,7 +283,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void purgeVersionHistory(String token, String docPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("purgeVersionHistory({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purgeVersionHistory(token, docPath);
@@ -292,7 +292,7 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public long getVersionHistorySize(String token, String docPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getVersionHistorySize({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		long size = dm.getVersionHistorySize(token, docPath);
@@ -301,7 +301,8 @@ public class OKMDocument implements DocumentModule {
 	}
 
 	@Override
-	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException {
 		log.debug("isValid({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		boolean valid = dm.isValid(token, docPath);
@@ -310,7 +311,8 @@ public class OKMDocument implements DocumentModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException, 
+			DatabaseException {
 		log.debug("getPath({})", uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		String path = dm.getPath(token, uuid);
