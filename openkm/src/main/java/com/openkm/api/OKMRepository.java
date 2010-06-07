@@ -43,70 +43,97 @@ public class OKMRepository implements RepositoryModule {
 	
 	@Override
 	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getRootFolder("+token+")");
+		log.debug("getRootFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder rootFolder = rm.getRootFolder(token);
-		log.debug("getRootFolder: "+rootFolder);
+		log.debug("getRootFolder: {}", rootFolder);
 		return rootFolder;
 	}
 
 	@Override
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getTrashFolder("+token+")");
+		log.debug("getTrashFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder trashFolder = rm.getTrashFolder(token);
-		log.debug("getTrashFolder: "+trashFolder);
+		log.debug("getTrashFolder: {}", trashFolder);
 		return trashFolder;
 	}
 
 	@Override
+	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException {
+		log.debug("getTrashFolderBase()");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder trashFolder = rm.getTrashFolderBase();
+		log.debug("getTrashFolderBase: {}", trashFolder);
+		return trashFolder;
+	}
+	
+	@Override
 	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getTemplatesFolder("+token+")");
+		log.debug("getTemplatesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder templatesFolder = rm.getTemplatesFolder(token);
-		log.debug("getTemplatesFolder: "+templatesFolder);
+		log.debug("getTemplatesFolder: {}", templatesFolder);
 		return templatesFolder;
 	}
 
 	@Override
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getPersonalFolder("+token+")");
+		log.debug("getPersonalFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolder(token);
-		log.debug("getPersonalFolder: "+personalFolder);
+		log.debug("getPersonalFolder: {}", personalFolder);
+		return personalFolder;
+	}
+	
+	@Override
+	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException {
+		log.debug("getPersonalFolderBase()");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder personalFolder = rm.getPersonalFolderBase();
+		log.debug("getPersonalFolderBase: {}", personalFolder);
 		return personalFolder;
 	}
 
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getMailFolder("+token+")");
+		log.debug("getMailFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolder(token);
-		log.debug("getMailFolder: "+mailFolder);
+		log.debug("getMailFolder: {}", mailFolder);
+		return mailFolder;
+	}
+	
+	@Override
+	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException {
+		log.debug("getMailFolderBase()");
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		Folder mailFolder = rm.getMailFolderBase();
+		log.debug("getMailFolderBase: {}", mailFolder);
 		return mailFolder;
 	}
 
 	@Override
 	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getThesaurusFolder("+token+")");
+		log.debug("getThesaurusFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder thesaurusFolder = rm.getThesaurusFolder(token);
-		log.debug("getThesaurusFolder: "+thesaurusFolder);
+		log.debug("getThesaurusFolder: {}", thesaurusFolder);
 		return thesaurusFolder;
 	}
 
 	@Override
 	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getCategoriesFolder("+token+")");
+		log.debug("getCategoriesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder categoriesFolder = rm.getCategoriesFolder(token);
-		log.debug("getCategoriesFolder: "+categoriesFolder);
+		log.debug("getCategoriesFolder: {}", categoriesFolder);
 		return categoriesFolder;
 	}
 	
 	@Override
 	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
-		log.debug("purgeTrash("+token+")");
+		log.debug("purgeTrash()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		rm.purgeTrash(token);
 		log.debug("purgeTrash: void");
@@ -114,37 +141,37 @@ public class OKMRepository implements RepositoryModule {
 
 	@Override
 	public String getUpdateMessage(String token) throws RepositoryException {
-		log.debug("getUpdateMessage("+token+")");
+		log.debug("getUpdateMessage()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		String updateMessage = rm.getUpdateMessage(token);
-		log.debug("getUpdateMessage: "+updateMessage);
+		log.debug("getUpdateMessage: {}", updateMessage);
 		return updateMessage;
 	}
 
 	@Override
 	public String getUuid(String token) throws RepositoryException {
-		log.debug("getUuid("+token+")");
+		log.debug("getUuid()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		String uuid = rm.getUuid(token);
-		log.debug("getUuid: "+uuid);
+		log.debug("getUuid: {}", uuid);
 		return uuid;
 	}
 
 	@Override
 	public boolean hasNode(String token, String path) throws RepositoryException {
-		log.debug("hasNode("+token+" , "+path+")");
+		log.debug("hasNode({})", path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		boolean ret = rm.hasNode(token, path);
-		log.debug("hasNode: "+ret);
+		log.debug("hasNode: {}", ret);
 		return ret;
 	}
 
 	@Override
 	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
-		log.debug("getPath("+token+" , "+uuid+")");
+		log.debug("getPath({})", uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		String ret = rm.getPath(token, uuid);
-		log.debug("getPath: "+ret);
+		log.debug("getPath: {}", ret);
 		return ret;
 	}
 }
