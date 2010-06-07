@@ -43,6 +43,7 @@ import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DataStoreGarbageCollector;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.core.SessionManager;
@@ -222,9 +223,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         	try {
         		new DirectAuthModule().logout(token);
 			} catch (AccessDeniedException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			} catch (RepositoryException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
+			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
 			}
         }
         
