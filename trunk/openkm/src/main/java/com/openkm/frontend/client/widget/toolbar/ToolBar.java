@@ -594,15 +594,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void executeGoToUserHome() {		
 		// First must validate path is correct
-		if (Main.get().userHome!=null && !Main.get().userHome.getPath().equals("")) {
-			if (Main.get().userHome.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+		if (Main.get().userHome!=null && !Main.get().userHome.getHomePath().equals("")) {
+			if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 				endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-				documentService.isValid( Main.get().userHome.getPath() ,callbackIsValidDocument);
-			} else if (Main.get().userHome.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
+				documentService.isValid( Main.get().userHome.getHomePath() ,callbackIsValidDocument);
+			} else if (Main.get().userHome.getHomeType().equals(Bookmark.BOOKMARK_FOLDER)) {
 				ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 				endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-				folderService.isValid(Main.get().userHome.getPath(), callbackIsValidFolder);
+				folderService.isValid(Main.get().userHome.getHomePath(), callbackIsValidFolder);
 			}
 		}
 		fireEvent(HasToolBarEvent.EXECUTE_GO_HOME);
@@ -2321,8 +2321,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		public void onSuccess(Boolean result){
 			if (result.booleanValue()) {
 				// Opens folder passed by parameter
-				String path = Main.get().userHome.getPath().substring(0,Main.get().userHome.getPath().lastIndexOf("/"));
-				Main.get().activeFolderTree.openAllPathFolder(path,Main.get().userHome.getPath());
+				String path = Main.get().userHome.getHomePath().substring(0,Main.get().userHome.getHomePath().lastIndexOf("/"));
+				Main.get().activeFolderTree.openAllPathFolder(path,Main.get().userHome.getHomePath());
 			}
 		}
 
@@ -2338,7 +2338,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		public void onSuccess(Boolean result){			
 			if (result.booleanValue()) {
 				// Opens document passed by parameter
-				Main.get().activeFolderTree.openAllPathFolder(Main.get().userHome.getPath(),"");
+				Main.get().activeFolderTree.openAllPathFolder(Main.get().userHome.getHomePath(),"");
 			}
 		}
 
@@ -2383,14 +2383,16 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	/**
 	 * Sets the user home
 	 * 
-	 * @param name String The name
-	 * @param path String The path
-	 * @param type String the type
+	 * @param user
+	 * @param Uuid
+	 * @param path
+	 * @param type
 	 */
-	public void setUserHome(String name, String path, String type){
-		Main.get().userHome.setName(name);
-		Main.get().userHome.setPath(path);
-		Main.get().userHome.setType(type);
+	public void setUserHome(String user, String Uuid, String path, String type){
+		Main.get().userHome.setHomeUuid(Uuid);
+		Main.get().userHome.setUser(user);
+		Main.get().userHome.setHomePath(path);
+		Main.get().userHome.setHomeType(type);
 		fireEvent(HasToolBarEvent.EXECUTE_SET_USER_HOME);
 	}
 
