@@ -346,9 +346,9 @@ public class MailUtils {
 	 * Add attachments to an imported mail.
 	 */
 	private static void addAttachments(String token, com.openkm.bean.Mail mail, Part p) throws 
-			MessagingException, IOException, UnsupportedMimeTypeException,
-			FileSizeExceededException, VirusDetectedException, ItemExistsException,
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+			MessagingException, IOException, UnsupportedMimeTypeException, FileSizeExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		if (p.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart)p.getContent();
 			int count = mp.getCount();
