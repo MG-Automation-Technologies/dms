@@ -90,7 +90,7 @@ public class HandlerServlet extends HttpServlet {
 	 * List contents
 	 */
 	private void browse(HttpServletRequest request, HttpServletResponse response) throws 
-			PathNotFoundException, RepositoryException, IOException, ServletException {
+			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
 		log.info("browse({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String token = (String) request.getSession().getAttribute("token");
@@ -113,7 +113,7 @@ public class HandlerServlet extends HttpServlet {
 	 * Folder properties
 	 */
 	private void fldProperties(HttpServletRequest request, HttpServletResponse response) throws
-			PathNotFoundException, RepositoryException, IOException, ServletException {
+			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
 		log.info("fldProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String token = (String) request.getSession().getAttribute("token");
@@ -172,7 +172,7 @@ public class HandlerServlet extends HttpServlet {
 	 * Logout
 	 */
 	private void logout(HttpServletRequest request, HttpServletResponse response) throws 
-			AccessDeniedException, RepositoryException, IOException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.info("logout({}, {})", request, response);
 		HttpSession session = request.getSession();
 		String token = (String) session.getAttribute("token");
