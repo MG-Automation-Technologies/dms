@@ -71,6 +71,31 @@ public class UserConfigDAO {
 		
 		log.debug("delete: void");
 	}
+	
+	/**
+	 * Set user home
+	 */
+	public static void setHome(UserConfig uc) throws DatabaseException {
+		log.debug("setHome({})", uc);
+		Session session = null;
+		String qs = "update UserConfig uc set uc.homePath=:path, uc.homeUuid=:uuid, " +
+			"uc.homeType=:type where uc.user=:user";
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("path", uc.getHomePath());
+			q.setString("uuid", uc.getHomeUuid());
+			q.setString("type", uc.getHomeType());
+			q.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("setHome: void");
+	}
 
 	/**
 	 * Find by pk
