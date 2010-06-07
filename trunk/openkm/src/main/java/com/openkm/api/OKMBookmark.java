@@ -26,11 +26,10 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Bookmark;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.Bookmark;
 import com.openkm.module.BookmarkModule;
 import com.openkm.module.ModuleManager;
 
@@ -50,47 +49,45 @@ public class OKMBookmark implements BookmarkModule {
 
 	@Override
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
-			PathNotFoundException, ItemExistsException, RepositoryException {
-		log.debug("add(" + token + ", " + nodePath + ", " + name + ")");
+			PathNotFoundException, RepositoryException {
+		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.add(token, nodePath, name);
-		log.debug("add: "+bookmark);
+		log.debug("add: {}", bookmark);
 		return bookmark;
 	}
 
 	@Override
-	public void remove(String token, String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException {
-		log.debug("remove(" + token + ", " + name + ")");
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException {
+		log.debug("remove({}, {})", token, bmId);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		bm.remove(token, name);
+		bm.remove(token, bmId);
 		log.debug("remove: void");
 	}
 	
 	@Override
-	public Bookmark rename(String token, String name, String newName) throws 
-			AccessDeniedException, PathNotFoundException, ItemExistsException,
+	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
 			RepositoryException {
-		log.debug("rename(" + token + ", " + name + ", " + newName + ")");
+		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Bookmark bookmark= bm.rename(token, name, newName);
-		log.debug("rename: "+bookmark);
+		Bookmark bookmark= bm.rename(token, bmId, newName);
+		log.debug("rename: {}", bookmark);
 		return bookmark;
 	}
 
 	@Override
 	public Collection<Bookmark> getAll(String token) throws RepositoryException {
-		log.debug("getAll(" + token + ")");
+		log.debug("getAll({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Collection<Bookmark> col = bm.getAll(token);
-		log.debug("getAll: " + col);
+		log.debug("getAll: {}", col);
 		return col;
 	}
 
 	@Override
 	public void setUserHome(String token, String path) throws AccessDeniedException,
 			RepositoryException {
-		log.debug("setUserHome(" + token + ")");
+		log.debug("setUserHome({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		bm.setUserHome(token, path);
 		log.debug("setUserHome: void");
@@ -98,10 +95,10 @@ public class OKMBookmark implements BookmarkModule {
 
 	@Override
 	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getUserHome(" + token + ")");
+		log.debug("getUserHome({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.getUserHome(token);
-		log.debug("getUserHome: " + bookmark);
+		log.debug("getUserHome: {}", bookmark);
 		return bookmark;
 	}
 }
