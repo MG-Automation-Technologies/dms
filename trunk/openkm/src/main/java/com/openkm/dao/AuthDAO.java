@@ -142,6 +142,8 @@ public class AuthDAO {
 		log.debug("deleteUser({})", usrId);
 		String qsMail = "delete from MailAccount ma where ma.user=:user";
 		String qsTwitter = "delete from TwitterAccount where ta.user=:user";
+		String qsBookmark = "delete from Bookmark bm where bm.user=:user";
+		String qsConfig = "delete from UserConfig uc where uc.user=:user";
 		Session session = null;
 		
 		try {
@@ -156,6 +158,14 @@ public class AuthDAO {
 			Query qTwitter = session.createQuery(qsTwitter);
 			qTwitter.setString("user", usrId);
 			qTwitter.executeUpdate();
+			
+			Query qBookmark = session.createQuery(qsBookmark);
+			qBookmark.setString("user", usrId);
+			qBookmark.executeUpdate();
+			
+			Query qConfig = session.createQuery(qsConfig);
+			qConfig.setString("user", usrId);
+			qConfig.executeUpdate();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
@@ -272,7 +282,6 @@ public class AuthDAO {
 		try {
 			Role role = findRoleByPk(rolId);
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.update(role);
 			session.delete(role);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

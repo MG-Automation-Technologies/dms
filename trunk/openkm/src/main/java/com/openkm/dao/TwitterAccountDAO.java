@@ -64,7 +64,6 @@ public class TwitterAccountDAO {
 		try {
 			TwitterAccount ta = findByPk(taId);
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.update(ta);
 			session.delete(ta);
 		} catch(HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -82,8 +81,8 @@ public class TwitterAccountDAO {
 	public static List<TwitterAccount> findByUser(String user, boolean filterByActive) throws 
 			DatabaseException {
 		log.debug("findByUser({})", user);
-		String qs = "from TwitterAccount ta where ta.user= :user " + 
-			(filterByActive?"and ta.active= :active":"") + " order by ta.id";
+		String qs = "from TwitterAccount ta where ta.user=:user " + 
+			(filterByActive?"and ta.active=:active":"") + " order by ta.id";
 		Session session = null;
 		
 		try {
@@ -113,7 +112,7 @@ public class TwitterAccountDAO {
 			DatabaseException {
 		log.debug("findAll()");
 		String qs = "from TwitterAccount ta " + 
-			(filterByActive?"where ta.active= :active":"") + " order by ta.id";
+			(filterByActive?"where ta.active=:active":"") + " order by ta.id";
 		Session session = null;
 		
 		try {
@@ -137,23 +136,16 @@ public class TwitterAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	@SuppressWarnings("unchecked")
 	public static TwitterAccount findByPk(int taId) throws DatabaseException {
 		log.debug("findByPk({})", taId);
-		String qs = "from TwitterAccount ta where ta.id= :id";
+		String qs = "from TwitterAccount ta where ta.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setEntity("id", taId);
-			List<TwitterAccount> results = q.list();
-			TwitterAccount ret = null;
-			
-			if (results.size() == 0) {
-				ret = results.get(0); 
-			}
-			
+			q.setInteger("id", taId);
+			TwitterAccount ret = (TwitterAccount) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
