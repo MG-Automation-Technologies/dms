@@ -30,8 +30,6 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Document;
-import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -39,9 +37,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.BookmarkDAO;
-import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.Bookmark;
-import com.openkm.dao.bean.UserConfig;
 import com.openkm.module.BookmarkModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -79,7 +75,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			newBookmark.setName(name);
 			newBookmark.setPath(nodePath);
 			newBookmark.setUuid(node.getUUID());
-			newBookmark.setType(getNodeType(node));
+			newBookmark.setType(JCRUtils.getNodeType(node));
 			BookmarkDAO.create(newBookmark);
 			
 			// Activity log
@@ -198,93 +194,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 		}
 
 		log.debug("getAll: {}", ret);
-		return ret;
-	}
-
-	@Override
-	public void setUserHome(String token, String nodePath) throws AccessDeniedException, 
-			RepositoryException, DatabaseException {
-		log.debug("setUserHome({}, {})", token, nodePath);
-		Session session = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
-			Node rootNode = session.getRootNode();
-			Node node = rootNode.getNode(nodePath.substring(1));
-			UserConfig uc = new UserConfig();
-			uc.setHomePath(nodePath);
-			uc.setHomeUuid(node.getUUID());
-			uc.setHomeType(getNodeType(node));
-			UserConfigDAO.setHome(uc);
-			
-			// Activity log
-			UserActivity.log(session, "BOOKMARK_SET_USER_HOME", null, nodePath);
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
-		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
-		}
-
-		log.debug("setUserHome: void");
-	}
-
-	@Override
-	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getUserHome({})", token);
-		Bookmark ret = new Bookmark();
-		Session session = null;
-		
-		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
-			UserConfigDAO.findByPk(session.getUserID());
-			
-			// Activity log
-			UserActivity.log(session, "BOOKMARK_GET_USER_HOME", null, ret.getPath());
-		} catch (javax.jcr.RepositoryException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
-		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
-		}
-
-		log.debug("getUserHome: {}", ret);
-		return ret;
-	}
-
-	/**
-	 * Get node type
-	 */
-	private String getNodeType(Node node) throws javax.jcr.RepositoryException  {
-		String ret = "unknown";
-
-		if (node.isNodeType(Document.TYPE)) {
-			ret = Document.TYPE;
-		} else if (node.isNodeType(Folder.TYPE)) {
-			ret = Folder.TYPE;
-		}
-
 		return ret;
 	}
 }
