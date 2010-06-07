@@ -1451,7 +1451,7 @@ public class FolderTree extends Composite implements OriginPanel {
 	 */
 	public void setHome() {
 		GWTFolder folder = (GWTFolder) actualItem.getUserObject();
-		Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(folder.getPath(), false);
+		Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(folder.getUuid(), folder.getPath(), false);
 	}
 
 	/**

@@ -1535,9 +1535,9 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void setHome(){
 		if (isDocumentSelected()) {
-			Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(getDocument().getPath(), true);
+			Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(getDocument().getUuid(), getDocument().getPath(), true);
 		} else if (isFolderSelected()) {
-			Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(getFolder().getPath(), false);
+			Main.get().mainPanel.topPanel.mainMenu.bookmark.confirmSetHome(getFolder().getUuid(), getFolder().getPath(), false);
 		}
 	}
 	
