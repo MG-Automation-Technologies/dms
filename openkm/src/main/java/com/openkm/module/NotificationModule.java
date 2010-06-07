@@ -22,6 +22,8 @@
 package com.openkm.module;
 
 import java.util.Collection;
+
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.AccessDeniedException;
@@ -37,8 +39,8 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void subscribe(String token, String nodePath) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void subscribe(String token, String nodePath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove an user subscription from a node.
@@ -49,8 +51,8 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void unsubscribe(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void unsubscribe(String token, String nodePath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get user subscriptions from am item (document or folder).
@@ -63,7 +65,7 @@ public interface NotificationModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Send a notification message to an user list.
