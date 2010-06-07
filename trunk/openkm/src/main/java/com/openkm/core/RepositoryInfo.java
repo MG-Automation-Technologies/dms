@@ -46,6 +46,8 @@ public class RepositoryInfo extends TimerTask {
 			documentsSizeByContext = okmStats.getDocumentsSizeByContext(systemToken);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
 		}
 
 		log.debug("*** End repository info ***");
