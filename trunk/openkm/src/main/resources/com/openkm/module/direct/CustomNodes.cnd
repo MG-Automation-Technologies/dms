@@ -37,9 +37,6 @@
 - okm:author (string) mandatory
 - okm:name (string) mandatory
 - okm:language (string)
-- okm:compactable (boolean) = false autocreated mandatory
-- okm:training (boolean) = false autocreated mandatory
-- okm:encrypted (boolean) = false autocreated mandatory
 - okm:keywords (string) multiple mandatory
 - okm:categories (reference) multiple mandatory
 + okm:content (okm:resource) primary mandatory
@@ -62,38 +59,6 @@
 - okm:content (string) mandatory
 - okm:mimeType (string) mandatory
 + * (okm:document)
-
-[okm:userConfig] > nt:hierarchyNode, mix:accessControlled
-- okm:lockTokens (string) = '' multiple autocreated
-- okm:homePath (path) mandatory
-- okm:homeType (string) mandatory
-
-[okm:query] > nt:unstructured
-- okm:content (string)
-- okm:name (string)
-- okm:keywords (string)
-- okm:categories (string)
-- okm:mimeType (string)
-- okm:author (string)
-- okm:lastModifiedFrom (date)
-- okm:lastModifiedTo (date)
-- okm:subject (string)
-- okm:to (string)
-- okm:from (string)
-- okm:domain (long)
-- okm:operator (string)
-- okm:path (string)
-- okm:dashboard (boolean)
-
-[okm:queries] > nt:hierarchyNode, mix:accessControlled
-+ * (okm:query)
-
-[okm:bookmark]
-- okm:nodePath (path) mandatory
-- okm:nodeType (string) mandatory
-
-[okm:bookmarks] > nt:hierarchyNode, mix:accessControlled
-+ * (okm:bookmark)
 
 [okm:sysConfig]
 - okm:uuid (string)
