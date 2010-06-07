@@ -71,6 +71,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
@@ -89,7 +90,8 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void send(Collection<String> toAddress, String subject, String text) throws MessagingException {
+	public static void send(Collection<String> toAddress, String subject, String text) throws 
+			MessagingException {
 		send(null, toAddress, subject, text);
 	}
 
@@ -102,7 +104,8 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void send(String fromAddress, Collection<String> toAddress, String subject, String text) throws MessagingException {
+	public static void send(String fromAddress, Collection<String> toAddress, String subject, String text)
+			throws MessagingException {
 		log.debug("send({}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text });
 		Session mailSession = null;
 
@@ -164,11 +167,11 @@ public class MailUtils {
 	}
 	
 	/**
-	 * 
+	 * Import messages 
 	 */
 	public static void importMessages(String token, String uid, String host, String user, String password,
 			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.info("importMessages({}, {}, {}, {}, {}, {})", 
 				new Object[] { token, uid, host, user, password, imapFolder });
 		Properties props = System.getProperties();
