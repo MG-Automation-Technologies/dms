@@ -46,49 +46,38 @@ public class OKMNotification implements NotificationModule {
 		return instance;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void subscribe(String token, String nodePath) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("subscribe("+token+", "+nodePath+")");
+		log.debug("subscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.subscribe(token, nodePath);
 		log.debug("subscribe: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void unsubscribe(String token, String nodePath) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("unsubscribe("+token+", "+nodePath+")");
+		log.debug("unsubscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.unsubscribe(token, nodePath);
 		log.debug("unsubscribe: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("getSubscriptors("+token+", "+nodePath+")");
+		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		Collection<String> users = nm.getSubscriptors(token, nodePath);
-		log.debug("getSubscriptors: "+users);
+		log.debug("getSubscriptors: {}", users);
 		return users;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
-	 */
 	@Override
-	public void notify(String token, String nodePath, Collection<String> users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify("+token+", "+nodePath+", "+users+", "+message+")");
+	public void notify(String token, String nodePath, Collection<String> users, String message) throws
+			PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.notify(token, nodePath, users, message);
 		log.debug("notify: void");
