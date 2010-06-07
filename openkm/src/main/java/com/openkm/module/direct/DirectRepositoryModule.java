@@ -275,22 +275,30 @@ public class DirectRepositoryModule implements RepositoryModule {
 				log.info("Create okm:root");
 				Node okmRoot = createBase(session, root, Repository.ROOT);
 				okmRootPath = okmRoot.getPath();
-				
-				// Create okm:trash
-				log.info("Create okm:trash");
-				createBase(session, root, Repository.TRASH);
-				
-				// Create okm:templates
-				log.info("Create okm:templates");
-				createBase(session, root, Repository.TEMPLATES);
-				
+
 				// Create okm:thesaurus
 				log.info("Create okm:thesaurus");
 				createBase(session, root, Repository.THESAURUS);
-				
+
 				// Create okm:categories
 				log.info("Create okm:categories");
 				createBase(session, root, Repository.CATEGORIES);
+
+				// Create okm:templates
+				log.info("Create okm:templates");
+				createBase(session, root, Repository.TEMPLATES);
+
+				// Create okm:personal
+				log.info("Create okm:personal");
+				createBase(session, root, Repository.PERSONAL);
+				
+				// Create okm:mail
+				log.info("Create okm:mail");
+				createBase(session, root, Repository.MAIL);
+
+				// Create okm:trash
+				log.info("Create okm:trash");
+				createBase(session, root, Repository.TRASH);
 				
 				// Create okm:config
 				log.info("Create okm:config");

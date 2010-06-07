@@ -150,22 +150,24 @@ public class DirectAuthModule implements AuthModule {
 	
 	/**
 	 * Load user data
-	 * @throws javax.jcr.RepositoryException 
 	 */
 	public static void loadUserData(Session session) throws DatabaseException, javax.jcr.RepositoryException {
 		log.debug("loadUserData({}) -> {}", session.getUserID(), session);
 		Node root = session.getRootNode();
 		
 		if (!session.itemExists("/"+Repository.TRASH+"/"+session.getUserID())) {
-			createBase(session, root, "/"+Repository.TRASH+"/"+session.getUserID());
+			log.info("Create okm:trash/{}", session.getUserID());
+			createBase(session, root, Repository.TRASH+"/"+session.getUserID());
 		}
 		
 		if (!session.itemExists("/"+Repository.PERSONAL+"/"+session.getUserID())) {
-			createBase(session, root, "/"+Repository.PERSONAL+"/"+session.getUserID());
+			log.info("Create okm:personal/{}", session.getUserID());
+			createBase(session, root, Repository.PERSONAL+"/"+session.getUserID());
 		}
 		
 		if (!session.itemExists("/"+Repository.MAIL+"/"+session.getUserID())) {
-			createBase(session, root, "/"+Repository.MAIL+"/"+session.getUserID());
+			log.info("Create okm:mail/{}", session.getUserID());
+			createBase(session, root, Repository.MAIL+"/"+session.getUserID());
 		}
 		
 		root.save();
@@ -175,8 +177,6 @@ public class DirectAuthModule implements AuthModule {
 			LockToken lt = it.next();
 			session.addLockToken(lt.getToken());
 		}
-		
-		log.debug("** User Home already created **");
 	}
 
 	/**
