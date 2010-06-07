@@ -33,7 +33,6 @@ public class Repository implements Serializable {
 	public static final String OKM = "okm";
 	public static final String OKM_URI = "http://www.openkm.org/1.0";
 	public static final String ROOT = "okm:root";
-	public static final String HOME = "okm:home";
 	public static final String TRASH = "okm:trash";
 	public static final String TEMPLATES = "okm:templates";
 	public static final String THESAURUS = "okm:thesaurus";
