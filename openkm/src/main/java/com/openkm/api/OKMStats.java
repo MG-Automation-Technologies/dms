@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.StatsInfo;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.StatsModule;
@@ -44,7 +45,7 @@ public class OKMStats implements StatsModule {
 	}
 
 	@Override
-	public StatsInfo getDocumentsByContext(String token) throws RepositoryException {
+	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
 		StatsInfo stats = sm.getDocumentsByContext(token);
@@ -53,7 +54,7 @@ public class OKMStats implements StatsModule {
 	}
 
 	@Override
-	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
+	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsSizeByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
 		StatsInfo stats = sm.getDocumentsSizeByContext(token);
@@ -62,7 +63,7 @@ public class OKMStats implements StatsModule {
 	}
 
 	@Override
-	public StatsInfo getFoldersByContext(String token) throws RepositoryException {
+	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getFoldersByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
 		StatsInfo stats = sm.getFoldersByContext(token);
