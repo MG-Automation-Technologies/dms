@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -451,8 +452,8 @@ public class Util {
 		} 
 		
 		// Sets group name for each property param
-		HashMap<String, GWTPropertyParams> finalProperties = new HashMap<String, GWTPropertyParams> ();
-		HashMap<String, String> properties = params.getProperties();
+		Map<String, GWTPropertyParams> finalProperties = new HashMap<String, GWTPropertyParams> ();
+		Map<String, String> properties = params.getProperties();
 		Collection<String> colKeys = properties.keySet();
 		
 		for (Iterator<String> itKeys = colKeys.iterator(); itKeys.hasNext(); ){

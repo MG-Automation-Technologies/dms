@@ -96,18 +96,18 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		log.debug("saveSearch({}, {}, {})", new Object[] { params, type, name });
 		String token = getToken();
 		
-		try {
-			OKMSearch.getInstance().saveSearch(token, Util.copy(params), name);
-		} catch (ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_ItemExists), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-		}
+//		try {
+//			//OKMSearch.getInstance().saveSearch(token, Util.copy(params), name);
+//		} catch (ItemExistsException e) {
+//			log.warn(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_ItemExists), e.getMessage());
+//		} catch (RepositoryException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+//		}
 		
 		log.debug("saveSearch: void");
 	}
@@ -118,22 +118,22 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		GWTQueryParams gwtQueryParams = new GWTQueryParams();
 		String token = getToken();
 		
-		try {
-			QueryParams results = OKMSearch.getInstance().getSearch(token, name);
-			gwtQueryParams = Util.copy(results, token);
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-		}
+//		try {
+//			QueryParams results = OKMSearch.getInstance().getSearch(token, name);
+//			gwtQueryParams = Util.copy(results, token);
+//		} catch (PathNotFoundException e) {
+//			log.warn(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+//		} catch (RepositoryException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+//		} catch (IOException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+//		}
 
 		log.debug("getSearch: {}", gwtQueryParams);
 		return gwtQueryParams;
@@ -144,18 +144,18 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		log.debug("deleteSearch()");
 		String token = getToken();
 		
-		try {
-			OKMSearch.getInstance().deleteSearch(token,name);
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-		}
+//		try {
+//			OKMSearch.getInstance().deleteSearch(token,name);
+//		} catch (PathNotFoundException e) {
+//			log.warn(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+//		} catch (RepositoryException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+//		}
 		
 		log.debug("deleteSearch: void");
 	}
