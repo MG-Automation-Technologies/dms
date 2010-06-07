@@ -34,8 +34,8 @@ import com.openkm.frontend.client.bean.GWTBookmark;
 public interface OKMBookmarkServiceAsync {
 	public void getAll(AsyncCallback<List<GWTBookmark>> callback);
 	public void add(String nodePath, String name, AsyncCallback<GWTBookmark> callback);
-	public void remove(String name, AsyncCallback<?> callback);
+	public void remove(int bmId, AsyncCallback<?> callback);
+	public void rename(int bmId, String newName, AsyncCallback<GWTBookmark> callback);
 	public void setUserHome(String name, AsyncCallback<?> callback);
 	public void getUserHome(AsyncCallback<GWTBookmark> callback);
-	public void rename(String name, String newName, AsyncCallback<GWTBookmark> callback); 
 }
