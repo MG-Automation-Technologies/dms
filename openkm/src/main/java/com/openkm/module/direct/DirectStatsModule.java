@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.StatsModule;
@@ -55,7 +56,7 @@ public class DirectStatsModule implements StatsModule {
 	private static String TRASH_FOLDERS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:folder)";
 	
 	@Override
-	public StatsInfo getDocumentsByContext(String token) throws RepositoryException {
+	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
@@ -108,7 +109,7 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getFoldersByContext(String token) throws RepositoryException {
+	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getFoldersByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
@@ -171,7 +172,7 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException {
+	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsSizeByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
