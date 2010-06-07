@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
@@ -47,7 +48,7 @@ public class OKMScripting implements ScriptingModule {
 
 	@Override
 	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		sm.setScript(token, nodePath, code);
@@ -56,7 +57,7 @@ public class OKMScripting implements ScriptingModule {
 
 	@Override
 	public void removeScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		sm.removeScript(token, nodePath);
@@ -65,7 +66,7 @@ public class OKMScripting implements ScriptingModule {
 
 	@Override
 	public String getScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
 		String code = sm.getScript(token, nodePath);
