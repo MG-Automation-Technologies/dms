@@ -21,20 +21,11 @@
 
 package com.openkm.dao.bean;
 
-public class TwitterAccount {
-	private int id = 0;
-	private String user = "";
-	private String twitterUser = "";
-	private boolean active = false;
-	
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
+public class UserConfig {
+	private String user;
+	private String homePath;
+	private String homeType;
+
 	public String getUser() {
 		return user;
 	}
@@ -42,30 +33,29 @@ public class TwitterAccount {
 	public void setUser(String user) {
 		this.user = user;
 	}
+
+	public String getHomePath() {
+		return homePath;
+	}
+
+	public void setHomePath(String homePath) {
+		this.homePath = homePath;
+	}
+
+	public String getHomeType() {
+		return homeType;
+	}
+
+	public void setHomeType(String homeType) {
+		this.homeType = homeType;
+	}
 	
-	public String getTwitterUser() {
-		return twitterUser;
-	}
-
-	public void setTwitterUser(String twitterUser) {
-		this.twitterUser = twitterUser;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("id="); sb.append(id);
-		sb.append(", user="); sb.append(user);
-		sb.append(", twitterUser="); sb.append(twitterUser);
-		sb.append(", active="); sb.append(active);
+		sb.append("user="); sb.append(user);
+		sb.append(", homePath="); sb.append(homePath);
+		sb.append(", homeType="); sb.append(homeType);
 		sb.append("}");
 		return sb.toString();
 	}
