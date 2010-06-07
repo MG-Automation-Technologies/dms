@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
@@ -51,7 +52,7 @@ public class RepositoryImporter {
 	 */
 	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, 
 			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, 
-			AccessDeniedException, RepositoryException, IOException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("importDocuments({}, {}, {}, {})", new Object[] { token, fs, fldPath, deco });
 		ImpExpStats stats;
 		
@@ -79,6 +80,9 @@ public class RepositoryImporter {
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw e;
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw e;
 		}
 				
 		log.debug("importDocuments: {}", stats);
@@ -90,7 +94,7 @@ public class RepositoryImporter {
 	 */
 	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, 
 			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
-			AccessDeniedException, ItemExistsException, RepositoryException, IOException {
+			AccessDeniedException, ItemExistsException, RepositoryException, IOException, DatabaseException {
 		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
