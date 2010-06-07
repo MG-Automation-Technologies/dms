@@ -21,7 +21,10 @@
 
 package com.openkm.dao.bean;
 
-public class Bookmark {
+import java.io.Serializable;
+
+public class Bookmark implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String user;
 	private String name;

@@ -1,6 +1,9 @@
 package com.openkm.dao.bean;
 
-public class QueryProperty {
+import java.io.Serializable;
+
+public class QueryProperty implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String property;
 	private String value;

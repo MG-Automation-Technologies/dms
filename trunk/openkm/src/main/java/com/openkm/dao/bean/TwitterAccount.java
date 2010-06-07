@@ -21,7 +21,10 @@
 
 package com.openkm.dao.bean;
 
-public class TwitterAccount {
+import java.io.Serializable;
+
+public class TwitterAccount implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id = 0;
 	private String user = "";
 	private String twitterUser = "";

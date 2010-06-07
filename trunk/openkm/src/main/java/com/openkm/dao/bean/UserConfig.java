@@ -21,10 +21,12 @@
 
 package com.openkm.dao.bean;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UserConfig {
+public class UserConfig implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String user;
 	private String homePath;
 	private String homeType;
