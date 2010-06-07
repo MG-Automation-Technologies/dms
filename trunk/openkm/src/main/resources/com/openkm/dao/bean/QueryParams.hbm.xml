@@ -4,9 +4,10 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.QueryParams" table="OKM_QUERY_PARAMS">
     <id name="id" column="QP_ID"><generator class="native"/></id>
+    <property name="user" column="QP_USER" not-null="true"/>
     <property name="name" column="QP_NAME" not-null="true"/>
     <property name="keywords" column="QP_KEYWORDS"/>
-    <property name="category" column="QP_CATEGORY"/>
+    <property name="categories" column="QP_CATEGORIES"/>
     <property name="content" column="QP_CONTENT"/>
     <property name="mimeType" column="QP_MIME_TYPE"/>
     <property name="author" column="QP_AUTHOR"/>
