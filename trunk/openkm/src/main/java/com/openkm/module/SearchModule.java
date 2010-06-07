@@ -26,14 +26,14 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.ItemExistsException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 
 public interface SearchModule {
 
@@ -134,7 +134,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public void saveSearch(String token, QueryParams params, String name) throws AccessDeniedException,
-			ItemExistsException, RepositoryException;
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Get a saved search.
@@ -153,7 +153,7 @@ public interface SearchModule {
 	 * @return A collection with the names of the saved search.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<String> getAllSearchs(String token) throws RepositoryException;
+	public Collection<String> getAllSearchs(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Delete a saved search.
