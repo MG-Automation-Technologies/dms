@@ -108,7 +108,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	DirectRepositoryModule.initialize();
         	log.info("*** Repository initialized ***");
         } catch (Exception e) {
-        	throw new ServletException(e.getMessage());
+        	throw new ServletException(e.getMessage(), e);
         }
         
         // Deserialize
