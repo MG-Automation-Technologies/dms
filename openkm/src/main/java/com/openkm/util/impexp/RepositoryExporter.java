@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.DocumentModule;
@@ -56,10 +57,10 @@ public class RepositoryExporter {
 	 * @param fsPath
 	 * @throws RepositoryException
 	 */
-	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out, InfoDecorator deco)
-			throws PathNotFoundException, AccessDeniedException, 
+	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out, 
+			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException {
-		log.debug("exportDocuments(" + fldPath + "," + fs + ", " + out + ", " + deco + ")");
+		log.debug("exportDocuments({}, {}, {}, {})", new Object[] { fldPath, fs, out, deco });
 		ImpExpStats stats;
 		
 		try {
@@ -86,27 +87,17 @@ public class RepositoryExporter {
 			throw e;
 		}
 
-		log.debug("exportDocuments: "+stats);
+		log.debug("exportDocuments: {}", stats);
 		return stats;
 	}
 
 	/**
 	 * Performs a recursive repository content export with metadata
-	 * 
-	 * @param folderNode
-	 * @param fsPath
-	 * @throws FileNotFoundException
-	 * @throws ValueFormatException
-	 * @throws PathNotFoundException
-	 * @throws IllegalStateException
-	 * @throws javax.jcr.RepositoryException
-	 * @throws IOException
-	 * @throws RepositoryException
 	 */
-	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs,  Writer out, InfoDecorator deco)
-			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException {
-		log.debug("exportDocumentsHelper(" + token + ", " + fldPath + ", " + fs + ", " + out + ", " + deco + ")");
+	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs,  Writer out,
+			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
+		log.debug("exportDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		String path = null;
 		
@@ -150,7 +141,7 @@ public class RepositoryExporter {
 			stats.setOk(stats.isOk() && tmp.isOk());
 		}
 
-		log.debug("exportDocumentsHelper: "+stats);
+		log.debug("exportDocumentsHelper: {}", stats);
 		return stats;
 	}
 }
