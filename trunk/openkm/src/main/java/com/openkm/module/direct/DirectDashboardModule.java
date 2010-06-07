@@ -590,7 +590,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public long getUserDocumentsSize(String token) throws RepositoryException {
+	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
 		log.info("getUserDocumentsSize({})", token);
 		long size = 0;
 		
@@ -607,7 +607,7 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeLive(String token) throws RepositoryException {
+	private long getUserDocumentsSizeLive(String token) throws RepositoryException, DatabaseException {
 		log.info("getUserDocumentsSizeLive({})", token);
 		long size = 0;
 		Session session = null;
@@ -646,7 +646,7 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeCached(String token) throws RepositoryException {
+	private long getUserDocumentsSizeCached(String token) throws RepositoryException, DatabaseException {
 		log.info("getUserDocumentsSizeCached({})", token);
 		Session session = null;
 		UserItems usrItems = null;
