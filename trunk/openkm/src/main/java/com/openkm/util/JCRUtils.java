@@ -57,15 +57,17 @@ import com.openkm.api.OKMFolder;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
-import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.dao.LockTokenDAO;
+import com.openkm.dao.bean.LockToken;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 
@@ -222,66 +224,28 @@ public class JCRUtils {
 	/**
 	 * Add lock token to user data
 	 */
-	public static void addLockToken(Session session, Node node) throws javax.jcr.PathNotFoundException, 
+	public static void addLockToken(Session session, Node node) throws DatabaseException,
 			javax.jcr.RepositoryException {
 		log.debug("addLockToken({}, {})", session, node);
-		Node userConfig = session.getRootNode().getNode(Repository.USER_CONFIG+"/"+session.getUserID());
-		String lockToken = getLockToken(node.getUUID());
-		
-		synchronized (userConfig) {
-			Value[] property = userConfig.getProperty(Repository.LOCK_TOKENS).getValues();
-			Value[] newProperty = new Value[property.length+1];
-			boolean alreadyAdded = false;
-			
-			for (int i=0; i<property.length; i++) {
-				newProperty[i] = property[i];
-				
-				if (property[i].equals(lockToken)) {
-					alreadyAdded = true;
-				}
-			}
-			
-			if (!alreadyAdded) {
-				newProperty[newProperty.length-1] = session.getValueFactory().createValue(lockToken);
-				userConfig.setProperty(Repository.LOCK_TOKENS, newProperty);
-				userConfig.save();
-			}
-		}
-		
+		LockToken lt = new LockToken();
+		lt.setUser(session.getUserID());
+		lt.setToken(getLockToken(node.getUUID()));
+		LockTokenDAO.add(lt);
 		log.debug("addLockToken: void");
 	}
 
 	/**
 	 * Remove lock token from user data
 	 */
-	public static void removeLockToken(Session session, Node node)  throws javax.jcr.PathNotFoundException, 
+	public static void removeLockToken(Session session, Node node) throws DatabaseException, 
 			javax.jcr.RepositoryException {
 		log.debug("removeLockToken({}, {})", session, node);
-		Node userConfig = session.getRootNode().getNode(Repository.USER_CONFIG+"/"+session.getUserID());
-		String lockToken = getLockToken(node.getUUID());
-		boolean removed = false;
-		
-		synchronized (userConfig) {
-			Value[] property = userConfig.getProperty(Repository.LOCK_TOKENS).getValues();
-			ArrayList<Value> newProperty = new ArrayList<Value>();
-			
-			for (int i=0; i<property.length; i++) {
-				if (!property[i].getString().equals(lockToken)) {
-					newProperty.add(property[i]);
-				} else {
-					removed = true;
-				}
-			}
-			
-			if (removed) {
-				userConfig.setProperty(Repository.LOCK_TOKENS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
-				userConfig.save();
-			}
-		}
-		
+		LockToken lt = new LockToken();
+		lt.setUser(session.getUserID());
+		lt.setToken(getLockToken(node.getUUID()));
+		LockTokenDAO.remove(lt);
 		log.debug("removeLockToken: void");
-	}	
-
+	}
 	
 	/**
 	 * Obtain lock token from node id
