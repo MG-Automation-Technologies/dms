@@ -49,6 +49,7 @@ import com.openkm.api.OKMRepository;
 import com.openkm.bean.Document;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -240,10 +241,10 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	}
 	
 	/**
-	 * Generate a zip file from a repository folder path  
+	 * Generate a zip file from a repository folder path   
 	 */
 	private void exportZip(String token, String path, OutputStream os) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, ArchiveException, IOException  {
+			AccessDeniedException, RepositoryException, ArchiveException, IOException, DatabaseException  {
 		log.debug("exportZip({}, {}, {})", new Object[]{ token, path, os });
 		ZipArchiveOutputStream zos = null;
 		File tmp = null;
