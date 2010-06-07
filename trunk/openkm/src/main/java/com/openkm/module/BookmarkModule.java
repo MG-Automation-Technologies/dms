@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -42,7 +43,7 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException;
+			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created folder.
@@ -52,7 +53,8 @@ public interface BookmarkModule {
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException;
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Rename a previous stored bookmark.
@@ -66,7 +68,7 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Retrive an user bookmark collection.
@@ -75,7 +77,7 @@ public interface BookmarkModule {
 	 * @return All the user bookmarks
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Bookmark> getAll(String token) throws RepositoryException;
+	public Collection<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Set the user default home node
@@ -85,7 +87,7 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void setUserHome(String token, String nodePath) throws AccessDeniedException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the user default home node
@@ -95,5 +97,5 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark getUserHome(String token) throws PathNotFoundException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 }
