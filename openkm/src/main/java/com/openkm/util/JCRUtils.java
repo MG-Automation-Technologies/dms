@@ -76,12 +76,12 @@ public class JCRUtils {
 	private static int total = 0;
 	
 	/**
-	 * 
+	 * Import folder
 	 */
 	public static void importFolder(String token, String root, File directory,
 			String[] extensions) throws RepositoryException, AccessDeniedException, 
 			ItemExistsException, PathNotFoundException, UnsupportedMimeTypeException,
-			FileSizeExceededException, VirusDetectedException, IOException {
+			FileSizeExceededException, VirusDetectedException, IOException, DatabaseException {
 		log.debug("importFolder("+token+", "+root+", "+directory+")");
 		Folder fld = new Folder();
 		fld.setPath(root+"/"+directory.getName());
@@ -336,7 +336,8 @@ public class JCRUtils {
 	/**
 	 * Get JCR Session
 	 */
-	public static Session getSession() throws javax.jcr.LoginException, javax.jcr.RepositoryException {
+	public static Session getSession() throws javax.jcr.LoginException, javax.jcr.RepositoryException,
+			DatabaseException {
 		Object obj = null;
 		
 		try {
