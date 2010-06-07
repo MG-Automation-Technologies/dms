@@ -31,10 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMBookmark;
-import com.openkm.bean.Bookmark;
-import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.Bookmark;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.config.ErrorCode;
@@ -91,9 +90,6 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		
 		try {
 			return Util.copy(OKMBookmark.getInstance().add(token, nodePath, name));
-		} catch (ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_ItemExists), e.getMessage());
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -107,15 +103,12 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	}
 	
 	@Override
-	public void remove(String name) throws OKMException {
-		log.debug("remove({})", name);
+	public void remove(int bmId) throws OKMException {
+		log.debug("remove({})", bmId);
 		String token = getToken();
 		
 		try {
-			OKMBookmark.getInstance().remove(token, name);
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+			OKMBookmark.getInstance().remove(token, bmId);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -165,18 +158,12 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	}
 	
 	@Override
-	public GWTBookmark rename(String name, String newName) throws OKMException {
-		log.debug("rename({}, {})", name, newName);
+	public GWTBookmark rename(int bmId, String newName) throws OKMException {
+		log.debug("rename({}, {})", bmId, newName);
 		String token = getToken();
 		
 		try {
-			return Util.copy(OKMBookmark.getInstance().rename(token, name, newName));
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_ItemExists), e.getMessage());
+			return Util.copy(OKMBookmark.getInstance().rename(token, bmId, newName));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
