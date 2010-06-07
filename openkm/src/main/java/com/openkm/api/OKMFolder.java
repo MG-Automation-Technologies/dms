@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -53,7 +54,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public Folder create(String token, Folder fldPath) throws PathNotFoundException, 
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("create({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFld = fm.create(token, fldPath);
@@ -63,7 +64,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getProperties({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = fm.getProperties(token, fldPath);
@@ -73,7 +74,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public void delete(String token, String fldPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.delete(token, fldPath);
@@ -82,7 +83,7 @@ public class OKMFolder implements FolderModule {
 
 	@Override
 	public void purge(String token, String fldPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("purge({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.purge(token, fldPath);
@@ -91,7 +92,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {})", fldPath, newName);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder renamedFolder = fm.rename(token, fldPath, newName);
@@ -101,7 +102,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {})", fldPath, dstPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.move(token, fldPath, dstPath);
@@ -110,7 +111,7 @@ public class OKMFolder implements FolderModule {
 
 	@Override
 	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("copy({}, {})", fldPath, dstPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.copy(token, fldPath, dstPath);
@@ -119,7 +120,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Collection<Folder> childs = fm.getChilds(token, fldPath);
@@ -129,7 +130,7 @@ public class OKMFolder implements FolderModule {
 
 	@Override
 	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException {
+			RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("getContentInfo({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		ContentInfo contentInfo = fm.getContentInfo(token, fldPath);
@@ -139,7 +140,7 @@ public class OKMFolder implements FolderModule {
 	
 	@Override
 	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("isValid({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		boolean valid = fm.isValid(token, fldPath);
