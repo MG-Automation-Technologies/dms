@@ -54,27 +54,27 @@ public class OKMMail implements MailModule {
 	@Override
 	public Mail create(String token, Mail mail) throws PathNotFoundException, 
 			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException {
-		log.debug("create("+token+", " + mail + ")");
+		log.debug("create({})", mail);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail newMail = mm.create(token, mail);
-		log.debug("create: "+ newMail);
+		log.debug("create: {}", newMail);
 		return newMail;
 	}
 	
 	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
 			RepositoryException {
-		log.debug("getProperties("+token+", " + mailPath + ")");
+		log.debug("getProperties({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail mail = mm.getProperties(token, mailPath);
-		log.debug("getProperties: "+mail);
+		log.debug("getProperties: {}", mail);
 		return mail;
 	}
 	
 	@Override
 	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("delete("+token+", " + mailPath + ")");
+		log.debug("delete({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.delete(token, mailPath);
 		log.debug("delete: void");
@@ -83,7 +83,7 @@ public class OKMMail implements MailModule {
 	@Override
 	public void purge(String token, String mailPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
-		log.debug("purge("+token+", " + mailPath + ")");
+		log.debug("purge({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.purge(token, mailPath);
 		log.debug("purge: void");
@@ -92,17 +92,17 @@ public class OKMMail implements MailModule {
 	@Override
 	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("rename("+token+", " + mailPath + ")");
+		log.debug("rename({}, {})", mailPath,  newName);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail renamedMail = mm.rename(token, mailPath, newName);
-		log.debug("rename: "+renamedMail);
+		log.debug("rename: {}", renamedMail);
 		return renamedMail;
 	}
 	
 	@Override
 	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException {
-		log.debug("move("+token+", " + mailPath + ", " + dstPath + ")");
+		log.debug("move({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.move(token, mailPath, dstPath);
 		log.debug("move: void");
@@ -111,7 +111,7 @@ public class OKMMail implements MailModule {
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
-		log.debug("copy("+token+", " + mailPath + ", " + dstPath + ")");
+		log.debug("copy({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.copy(token, mailPath, dstPath);
 		log.debug("copy: void");
@@ -120,20 +120,20 @@ public class OKMMail implements MailModule {
 	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException {
-		log.debug("getChilds(" + token + ", " + fldPath + ")");
+		log.debug("getChilds({})", fldPath);
 		MailModule mm = ModuleManager.getMailModule();
 		Collection<Mail> childs = mm.getChilds(token, fldPath);
-		log.debug("getChilds: "+childs);
+		log.debug("getChilds: {}", childs);
 		return childs;
 	}
 	
 	@Override
 	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException {
-		log.debug("isValid("+token+", "+mailPath+")");
+		log.debug("isValid({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		boolean valid = mm.isValid(token, mailPath);
-		log.debug("isValid: "+valid);
+		log.debug("isValid: {}", valid);
 		return valid;
 	}
 }
