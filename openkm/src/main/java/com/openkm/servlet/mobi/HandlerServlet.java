@@ -154,7 +154,7 @@ public class HandlerServlet extends HttpServlet {
 	 */
 	private void search(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, ParseException, RepositoryException, IOException, 
-			ServletException {
+			ServletException, DatabaseException {
 		log.info("search({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String token = (String) request.getSession().getAttribute("token");
