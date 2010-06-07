@@ -220,20 +220,20 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
-		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
-				docList.add(Util.copy(it.next()));
-			}
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
-		}
+//		try {
+//			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
+//				docList.add(Util.copy(it.next()));
+//			}
+//		} catch (IOException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
+//		} catch (ParseException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
+//		} catch (RepositoryException e) {
+//			log.error(e.getMessage(), e);
+//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+//		}
 		
 		log.debug("find: {}", docList);
 		return docList;
