@@ -21,23 +21,22 @@
 
 package com.openkm.dao.bean;
 
-public class MailAccount {
-	private int id = -1;
-	private String user = "";
-	private String mailHost = "";
-	private String mailFolder = "";
-	private String mailUser = "";
-	private String mailPassword = "";
-	private boolean active = false;
+public class Bookmark {
+	private int id;
+	private String user;
+	private String name;
+	private String path;
+	private String uuid;
+	private String type;
 	
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getUser() {
 		return user;
 	}
@@ -45,45 +44,37 @@ public class MailAccount {
 	public void setUser(String user) {
 		this.user = user;
 	}
-
-	public String getMailHost() {
-		return mailHost;
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setMailHost(String mailHost) {
-		this.mailHost = mailHost;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getMailFolder() {
-		return mailFolder;
+	public String getPath() {
+		return path;
 	}
 
-	public void setMailFolder(String mailFolder) {
-		this.mailFolder = mailFolder;
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 	
-	public String getMailUser() {
-		return mailUser;
+	public String getType() {
+		return type;
 	}
 
-	public void setMailUser(String mailUser) {
-		this.mailUser = mailUser;
-	}
-	
-	public String getMailPassword() {
-		return mailPassword;
-	}
-
-	public void setMailPassword(String mailPassword) {
-		this.mailPassword = mailPassword;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String toString() {
@@ -91,11 +82,10 @@ public class MailAccount {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", user="); sb.append(user);
-		sb.append(", mailHost="); sb.append(mailHost);
-		sb.append(", mailFolder="); sb.append(mailFolder);
-		sb.append(", mailUser="); sb.append(mailUser);
-		sb.append(", mailPassword="); sb.append(mailPassword);
-		sb.append(", active="); sb.append(active);
+		sb.append(", name="); sb.append(name);
+		sb.append(", path="); sb.append(path);
+		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", type="); sb.append(type);
 		sb.append("}");
 		return sb.toString();
 	}
