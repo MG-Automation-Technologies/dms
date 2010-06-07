@@ -62,6 +62,7 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.SessionManager;
 import com.openkm.util.FormatUtil;
@@ -128,6 +129,9 @@ public class RepositoryViewServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (com.openkm.core.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -309,11 +313,13 @@ public class RepositoryViewServlet extends BaseServlet {
 			try {
 				ci = OKMFolder.getInstance().getContentInfo(null, node.getPath());
 			} catch (AccessDeniedException e) {
-				e.printStackTrace();
+				log.warn(e.getMessage(), e);
 			} catch (com.openkm.core.RepositoryException e) {
-				e.printStackTrace();
+				log.warn(e.getMessage(), e);
 			} catch (PathNotFoundException e) {
-				e.printStackTrace();
+				log.warn(e.getMessage(), e);
+			} catch (DatabaseException e) {
+				log.warn(e.getMessage(), e);
 			}
 		}
 
