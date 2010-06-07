@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Property;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -49,7 +50,7 @@ public class DirectPropertyModule implements PropertyModule {
 	@Override
 	public void addCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
 		Session session = null;
@@ -128,7 +129,7 @@ public class DirectPropertyModule implements PropertyModule {
 	@Override
 	public void removeCategory(String token, String nodePath, String category)
 			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
 		Session session = null;
@@ -205,7 +206,7 @@ public class DirectPropertyModule implements PropertyModule {
 	@Override
 	public void addKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
 		Session session = null;
@@ -283,7 +284,7 @@ public class DirectPropertyModule implements PropertyModule {
 	@Override
 	public void removeKeyword(String token, String nodePath, String keyword)
 			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
 		Session session = null;
