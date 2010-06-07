@@ -70,7 +70,6 @@ public class DirectUserConfigModule implements UserConfigModule {
 				ret.setHomeUuid(okmRoot.getUUID());
 				ret.setHomeType(Folder.TYPE);
 				ret.setUser(session.getUserID());
-				
 				UserConfigDAO.create(ret);
 			} else {
 				Node node = session.getNodeByUUID(ret.getHomeUuid());
