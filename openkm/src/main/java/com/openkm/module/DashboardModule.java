@@ -28,6 +28,7 @@ import java.util.Collection;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 
@@ -35,157 +36,113 @@ public interface DashboardModule {
 
 	/**
 	 * Get list of locked documents by user
-	 * 
-	 * @param token
-	 * @return
-	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Collection<DashboardDocumentResult> getUserLockedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * Get list of cheked-out documents by user
-	 * 
-	 * @param token
-	 * @return
-	 * @throws RepositoryException If there is any general repository problem or the query fails.
+	 * Get list of checked-out documents by user
 	 */
 	public Collection<DashboardDocumentResult> getUserCheckedOutDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException If there is any general repository problem or the query fails.
+	 * Get user subscribed documents
 	 */
 	public Collection<DashboardDocumentResult> getUserSubscribedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException If there is any general repository problem or the query fails.
+	 * Get user subscribed folders
 	 */
 	public Collection<DashboardFolderResult> getUserSubscribedFolders(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException 
+	 * Get user last uploaded documents 
 	 */
 	public Collection<DashboardDocumentResult> getUserLastUploadedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException 
+	 * Get user last modified documents 
 	 */
 	public Collection<DashboardDocumentResult> getUserLastModifiedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get user last downloaded documents
 	 */
 	public Collection<DashboardDocumentResult> getUserLastDownloadedDocuments(String token)
 		throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get user last imported mails
 	 */
 	public Collection<DashboardMailResult> getUserLastImportedMails(String token)
 		throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get user last imported mail attachments
 	 */
 	public Collection<DashboardDocumentResult> getUserLastImportedMailAttachments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get user documents size
 	 */
 	public long getUserDocumentsSize(String token) throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get user searchs
 	 */
-	public Collection<String> getUserSearchs(String token) throws RepositoryException;
+	public Collection<String> getUserSearchs(String token) throws RepositoryException, 
+			DatabaseException;
 	
 	/**
-	 * @param token
-	 * @param name
-	 * @return
-	 * @throws IOException
-	 * @throws RepositoryException
+	 * Find
 	 */
 	public Collection<DashboardDocumentResult> find(String token, String name)
 			throws IOException, ParseException, RepositoryException;
 		
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get last week top downloaded documents
 	 */
 	public Collection<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token)
 			throws RepositoryException;
 
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get last month downloaded documents
 	 */
 	public Collection<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get last week top modified documents
 	 */
 	public Collection<DashboardDocumentResult> getLastWeekTopModifiedDocuments(String token)
 			throws RepositoryException;
 
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get las month top modified documentd
 	 */
 	public Collection<DashboardDocumentResult> getLastMonthTopModifiedDocuments(String token)
 			throws RepositoryException;
 
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get last modified documents
 	 */
 	public Collection<DashboardDocumentResult> getLastModifiedDocuments(String token)
 			throws RepositoryException;
 	
 	/**
-	 * @param token
-	 * @return
-	 * @throws RepositoryException
+	 * Get last uploaded documents
 	 */
 	public Collection<DashboardDocumentResult> getLastUploadedDocuments(String token)
 			throws RepositoryException;
 
 	/**
-	 * @param token
-	 * @param node
-	 * @param source
-	 * @throws RepositoryException
+	 * Visite node
 	 */
 	public void visiteNode(String token, String source, String node, Calendar date)
 			throws RepositoryException;
