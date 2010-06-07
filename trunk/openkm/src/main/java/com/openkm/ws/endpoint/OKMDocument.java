@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
@@ -173,7 +174,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#checkout(java.lang.String, java.lang.String)
 	 */
 	public void checkout(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("checkout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.checkout(token, docPath);
@@ -184,7 +185,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#checkout(java.lang.String, java.lang.String)
 	 */
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("cancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.cancelCheckout(token, docPath);
@@ -196,7 +197,7 @@ public class OKMDocument {
 	 */
 	public Version checkin(String token, String docPath, String comment) throws LockException, 
 			VersionException, PathNotFoundException, AccessDeniedException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Version version = dm.checkin(token, docPath, comment);
@@ -237,7 +238,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#lock(java.lang.String, java.lang.String)
 	 */
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
@@ -248,7 +249,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#unlock(java.lang.String, java.lang.String)
 	 */
 	public void unlock(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("unlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.unlock(token, docPath);
