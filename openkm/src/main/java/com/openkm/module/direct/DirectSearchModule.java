@@ -79,7 +79,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
-			ParseException, RepositoryException {
+			ParseException, RepositoryException, DatabaseException {
 		log.debug("findByContent({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
@@ -92,7 +92,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("findByName({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
@@ -105,7 +105,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
-			ParseException,	RepositoryException {
+			ParseException,	RepositoryException, DatabaseException {
 		log.debug("findByKeywords({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
@@ -118,7 +118,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, 
-			ParseException, RepositoryException {
+			ParseException, RepositoryException, DatabaseException {
 		log.debug("find({}, {})", token, params);
 		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: {}", ret);
@@ -127,7 +127,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-			throws IOException, ParseException, RepositoryException {
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("findPaginated({}, {})", token, params);
 		String query = prepareStatement(params);
 		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
@@ -369,16 +369,19 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByStatement(String token, String statement, String type) throws RepositoryException {
+	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
+			throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({}, {})", token, statement);
-		Collection<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, Config.MAX_SEARCH_RESULTS).getResults();
+		Collection<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, 
+				Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("findByStatement: {}", ret);
 		return ret;
 	}
 	
 
 	@Override
-	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, int limit) throws RepositoryException {
+	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, 
+			int limit) throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({}, {}, {}, {}, {})", new Object[] { token, statement, type, offset, limit });
 		ResultSet rs = new ResultSet();
 		Session session = null;
@@ -631,7 +634,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.info("getKeywordMap({}, {})", token, filter);
 		Map<String, Integer> cloud = null;
 		
@@ -649,7 +652,7 @@ public class DirectSearchModule implements SearchModule {
 	 * Get keyword map
 	 */
 	private Map<String, Integer> getKeywordMapLive(String token, Collection<String> filter) throws 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.info("getKeywordMapLive({}, {})", token, filter);
 		String statement = "/jcr:root//element(*,okm:document)";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
@@ -703,7 +706,7 @@ public class DirectSearchModule implements SearchModule {
 	 * Get keyword map
 	 */
 	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.info("getKeywordMapCached({}, {})", token, filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		Session session = null;
@@ -745,7 +748,7 @@ public class DirectSearchModule implements SearchModule {
 
 	@Override
 	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.info("getCategorizedDocuments({}, {})", token, categoryId);
 		ArrayList<Document> documents = new ArrayList<Document>();
 		Session session = null;
