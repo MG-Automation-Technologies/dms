@@ -21,10 +21,14 @@
 
 package com.openkm.dao.bean;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserConfig {
 	private String user;
 	private String homePath;
 	private String homeType;
+	private Set<String> lockTokens = new HashSet<String>();
 
 	public String getUser() {
 		return user;
@@ -50,12 +54,21 @@ public class UserConfig {
 		this.homeType = homeType;
 	}
 	
+	public Set<String> getLockTokens() {
+		return lockTokens;
+	}
+
+	public void setLockTokens(Set<String> lockTokens) {
+		this.lockTokens = lockTokens;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("user="); sb.append(user);
 		sb.append(", homePath="); sb.append(homePath);
 		sb.append(", homeType="); sb.append(homeType);
+		sb.append(", lockTokens="); sb.append(lockTokens);
 		sb.append("}");
 		return sb.toString();
 	}
