@@ -38,6 +38,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -136,6 +137,9 @@ public class BenchmarkServlet extends BaseServlet {
 		} catch (RepositoryException e) {
 			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
 			out.flush();
+		} catch (DatabaseException e) {
+			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
+			out.flush();
 		}
 		
 		out.println("<hr/>");
@@ -202,6 +206,9 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 		} catch (RepositoryException e) {
 			out.println("<div class=\"warn\">RepositoryException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (DatabaseException e) {
+			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
 				
