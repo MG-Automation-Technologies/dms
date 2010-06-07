@@ -22,6 +22,7 @@
 package com.openkm.module;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -43,7 +44,8 @@ public interface PropertyModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void addCategory(String token, String nodePath, String category) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException;
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException, 
+			DatabaseException;
 
 	/**
 	 * Remove a category from a node.
@@ -59,7 +61,8 @@ public interface PropertyModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void removeCategory(String token, String nodePath, String category) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException;
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Add a keyword to a node.
@@ -75,7 +78,8 @@ public interface PropertyModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void addKeyword(String token, String nodePath, String keyword) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException;
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Remove a keyword from a node.
@@ -91,5 +95,6 @@ public interface PropertyModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException;
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException, 
+			DatabaseException;
 }
