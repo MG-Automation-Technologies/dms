@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -48,7 +49,8 @@ public class OKMProperty implements PropertyModule {
 
 	@Override
 	public void addCategory(String token, String nodePath, String category)	throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("addCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.addCategory(token, nodePath, category);
@@ -57,7 +59,8 @@ public class OKMProperty implements PropertyModule {
 
 	@Override
 	public void removeCategory(String token, String nodePath, String category) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("removeCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.removeCategory(token, nodePath, category);
@@ -66,7 +69,8 @@ public class OKMProperty implements PropertyModule {
 
 	@Override
 	public void addKeyword(String token, String nodePath, String keyword) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("addKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.addKeyword(token, nodePath, keyword);
@@ -75,7 +79,8 @@ public class OKMProperty implements PropertyModule {
 
 	@Override
 	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("removeKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.removeKeyword(token, nodePath, keyword);
