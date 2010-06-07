@@ -28,15 +28,15 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
-import com.openkm.frontend.client.service.OKMBookmarkService;
-import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
 import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
+import com.openkm.frontend.client.service.OKMUserConfigService;
+import com.openkm.frontend.client.service.OKMUserConfigServiceAsync;
 
 /**
  * @author jllort
@@ -70,10 +70,9 @@ public class StartUp {
 	public static final int STARTUP_LOADING_TRASH							= 23;
 	public static final int STARTUP_LOADING_HISTORY_SEARCH					= 24;
 	
-	
-	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
 	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT.create(OKMUserConfigService.class);
 	
 	private boolean enabled = true;
 	private boolean error = false;
@@ -166,8 +165,8 @@ public class StartUp {
 	/**
 	 * Callback get user home
 	 */
-	final AsyncCallback<GWTBookmark> callbackGetUserHome = new AsyncCallback<GWTBookmark>() {
-		public void onSuccess(GWTBookmark result) {
+	final AsyncCallback<GWTUserConfig> callbackGetUserHome = new AsyncCallback<GWTUserConfig>() {
+		public void onSuccess(GWTUserConfig result) {
 			Main.get().userHome = result;
 			nextStatus(STARTUP_GET_BOOKMARKS);
 		}
@@ -254,9 +253,9 @@ public class StartUp {
 	 * 
 	 */
 	public void getUserHome() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
-		bookmarkService.getUserHome(callbackGetUserHome);
+		ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
+		endPoint.setServiceEntryPoint(Config.OKMUserConfigService);			
+		userConfigService.getUserHome(callbackGetUserHome);
 	}
 	
 	/**
