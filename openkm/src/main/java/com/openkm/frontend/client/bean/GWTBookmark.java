@@ -28,12 +28,21 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTBookmark implements IsSerializable {
-		
+	private int id = 0;
 	private String name = "";
 	private String path = "";
+	private String uuid = "";
 	private String type = "";
 	
-	public GWTBookmark(){
+	public GWTBookmark() {
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -50,6 +59,14 @@ public class GWTBookmark implements IsSerializable {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public String getType() {
