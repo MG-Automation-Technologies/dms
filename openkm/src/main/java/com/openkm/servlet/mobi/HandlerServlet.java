@@ -133,7 +133,7 @@ public class HandlerServlet extends HttpServlet {
 	 * Document properties
 	 */
 	private void docProperties(HttpServletRequest request, HttpServletResponse response) throws
-			PathNotFoundException, RepositoryException, IOException, ServletException {
+			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
 		log.info("docProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String token = (String) request.getSession().getAttribute("token");
