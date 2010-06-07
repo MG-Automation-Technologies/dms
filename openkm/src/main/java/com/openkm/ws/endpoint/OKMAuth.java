@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserAlreadyLoggerException;
@@ -60,7 +61,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
 	 */
 	public String login(String user, String pass) throws AccessDeniedException,
-			UserAlreadyLoggerException, RepositoryException {
+			UserAlreadyLoggerException, RepositoryException, DatabaseException {
 		log.debug("login({}, {})", user, pass);
 		AuthModule am = ModuleManager.getAuthModule();
 		String token = am.login(user, pass);
@@ -71,7 +72,7 @@ public class OKMAuth {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
 	 */
-	public void logout(String token) throws AccessDeniedException, RepositoryException {
+	public void logout(String token) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("logout({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		am.logout(token); 
@@ -82,7 +83,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#getGrantedRoles(java.lang.String, java.lang.String)
 	 */
 	public BytePairArray getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedRoles(token, nodePath);
@@ -108,7 +109,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#getGrantedUsers(java.lang.String, java.lang.String)
 	 */
 	public BytePairArray getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedUsers(token, nodePath);
@@ -160,7 +161,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#grantRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
 	 */
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantRole(token, nodePath, role, permissions, recursive); 
@@ -171,7 +172,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#grantUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
 	 */
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantUser(token, nodePath, user, permissions, recursive); 
@@ -182,7 +183,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#revokeRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
 	 */
 	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeRole(token, nodePath, user, permissions, recursive); 
@@ -193,7 +194,7 @@ public class OKMAuth {
 	 * @see com.openkm.module.AuthModule#revokeUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
 	 */
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeUser(token, nodePath, user, permissions, recursive); 
