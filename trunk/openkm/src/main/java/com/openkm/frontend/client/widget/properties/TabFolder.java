@@ -62,6 +62,8 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	private VerticalPanel panel;
 	private List<TabFolderExtension> widgetExtensionList;
 	private List<FolderHandlerExtension> folderHandlerExtensionList;
+	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
+	private int selectedTab = 0; 
 	private int height = 0;
 	private int width = 0;
 	
@@ -80,7 +82,9 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				if (event.getSelectedItem().intValue()==1) {
+				int tabIndex = event.getSelectedItem().intValue();
+				selectedTab = tabIndex;
+				if (tabIndex==1) {
 					security.fillWidth(); // Always when shows fires fill width
 				}
 				fireEvent(HasFolderEvent.TAB_CHANGED);
@@ -164,7 +168,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void langRefresh() {
 		TabBar tabBar = tabPanel.getTabBar();
-		int selected = tabBar.getSelectedTab();
+		selectedTab = tabBar.getSelectedTab();
 		
 		while (tabPanel.getWidgetCount() > 0) {
 			tabPanel.remove(0);
@@ -179,7 +183,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			tabPanel.add(extension, extension.getTabText());
 		}
 		
-		tabPanel.selectTab(selected);
+		tabPanel.selectTab(selectedTab);
 		
 		folder.langRefresh();
 		security.langRefresh();
@@ -217,12 +221,19 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * @param visible The visible value
 	 */
 	public void setVisibleButtons(boolean visible) {
+		this.visibleButton = visible;
 		security.setVisibleButtons(visible);
 		
-		// Setting visible to extensions
-		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setVisibleButtons(visible);
-		}
+		fireEvent(HasFolderEvent.SET_VISIBLE_BUTTON);
+	}
+	
+	/**
+	 * isVisibleButton
+	 * 
+	 * @return
+	 */
+	public boolean isVisibleButton() {
+		return visibleButton;
 	}
 	
 	/**
@@ -232,6 +243,24 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+	}
+	
+	/**
+	 * getSelectedTab
+	 * 
+	 * @return
+	 */
+	public int getSelectedTab() {
+		return selectedTab;
+	}
+	
+	/**
+	 * getFolder
+	 * 
+	 * @return
+	 */
+	public GWTFolder getFolder() {
+		return folder.get();
 	}
 	
 	/**

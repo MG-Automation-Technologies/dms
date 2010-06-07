@@ -120,6 +120,15 @@ public class Folder extends Composite {
 	}
 	
 	/**
+	 * get
+	 * 
+	 * @return
+	 */
+	public GWTFolder get() {
+		return folder;
+	}
+	
+	/**
 	 * Sets the folder values
 	 * 
 	 * @param folder The folder object

@@ -69,7 +69,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public Notes notes;
 	private Preview preview;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
-								 // have the same numeber of tabs ( document group properties are variable ) 
+								 // have the same number of tabs ( document group properties are variable ) 
 	private boolean visibleButton = true; // Sets visibleButtons enabled to default view 
 	private List<TabDocumentExtension> widgetExtensionList;
 	private List<DocumentHandlerExtension> docHandlerExtensionList;
@@ -269,11 +269,11 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	}
 	
 	/**
-	 * getVisibleButton
+	 * isVisibleButton
 	 * 
 	 * @return
 	 */
-	public boolean getVisibleButton() {
+	public boolean isVisibleButton() {
 		return visibleButton;
 	}
 	
