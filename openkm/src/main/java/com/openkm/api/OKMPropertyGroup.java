@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -56,9 +57,9 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 	
 	@Override
-	public void addGroup(String token, String docPath, String grpName)
-			throws NoSuchGroupException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.addGroup(token, docPath, grpName);
@@ -66,9 +67,9 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public void removeGroup(String token, String docPath, String grpName)
-			throws AccessDeniedException, NoSuchGroupException, LockException,
-			PathNotFoundException, RepositoryException {
+	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException,
+			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.removeGroup(token, docPath, grpName);
@@ -76,8 +77,8 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<PropertyGroup> getGroups(String token, String docPath)
-			throws IOException, ParseException, PathNotFoundException, RepositoryException {
+	public Collection<PropertyGroup> getGroups(String token, String docPath) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getGroups({}, {})", token, docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		Collection<PropertyGroup> ret = cm.getGroups(token, docPath);
@@ -87,7 +88,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 
 	@Override
 	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getAllGroups({})", token);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		Collection<PropertyGroup> ret = cm.getAllGroups(token);
@@ -97,7 +98,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 
 	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
-			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
+			throws NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		HashMap<String, String[]> ret = cm.getProperties(token, docPath, grpName);
@@ -108,7 +109,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	@Override
 	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.setProperties(token, docPath, grpName, properties);
@@ -117,7 +118,7 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 
 	@Override
 	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
-			IOException, RepositoryException {
+			IOException, RepositoryException, DatabaseException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		Collection<FormElement> ret = cm.getPropertyGroupForm(token, grpName);

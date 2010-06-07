@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -52,8 +53,8 @@ public class OKMMail implements MailModule {
 	}
 	
 	@Override
-	public Mail create(String token, Mail mail) throws PathNotFoundException, 
-			ItemExistsException, VirusDetectedException, AccessDeniedException, RepositoryException {
+	public Mail create(String token, Mail mail) throws PathNotFoundException, ItemExistsException, 
+			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("create({})", mail);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail newMail = mm.create(token, mail);
@@ -63,7 +64,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getProperties({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail mail = mm.getProperties(token, mailPath);
@@ -73,7 +74,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.delete(token, mailPath);
@@ -82,7 +83,7 @@ public class OKMMail implements MailModule {
 
 	@Override
 	public void purge(String token, String mailPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("purge({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.purge(token, mailPath);
@@ -91,7 +92,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {})", mailPath,  newName);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail renamedMail = mm.rename(token, mailPath, newName);
@@ -101,7 +102,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException {
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.move(token, mailPath, dstPath);
@@ -110,7 +111,7 @@ public class OKMMail implements MailModule {
 
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException {
+			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("copy({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.copy(token, mailPath, dstPath);
@@ -119,7 +120,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		MailModule mm = ModuleManager.getMailModule();
 		Collection<Mail> childs = mm.getChilds(token, fldPath);
@@ -129,7 +130,7 @@ public class OKMMail implements MailModule {
 	
 	@Override
 	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("isValid({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		boolean valid = mm.isValid(token, mailPath);
