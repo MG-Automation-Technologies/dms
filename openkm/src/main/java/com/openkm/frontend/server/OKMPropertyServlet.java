@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMProperty;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -69,6 +70,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		log.debug("addCategory: void");
 	}
@@ -94,6 +98,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		log.debug("removeCategory: void");
 	}
@@ -119,6 +126,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		log.debug("addKeyword: void");
 	}
@@ -144,6 +154,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		log.debug("addKeyword: void");
 	}
