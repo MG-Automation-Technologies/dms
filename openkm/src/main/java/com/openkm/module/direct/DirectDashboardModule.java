@@ -47,8 +47,6 @@ import com.openkm.bean.DashboardMailResult;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
-import com.openkm.bean.QueryParams;
-import com.openkm.bean.Repository;
 import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
@@ -59,8 +57,10 @@ import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.HibernateUtil;
+import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Dashboard;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.DashboardModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -236,9 +236,9 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Execute query with documents
 	 */
-	private ArrayList<DashboardDocumentResult> executeQueryDocument(Session session, String qs,
+	private List<DashboardDocumentResult> executeQueryDocument(Session session, String qs,
 			String action, int maxResults) throws javax.jcr.RepositoryException, DatabaseException {
-		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
 		Query query = queryManager.createQuery(qs, "xpath");
@@ -673,7 +673,7 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<String> getUserSearchs(String token) throws RepositoryException {
+	public List<String> getUserSearchs(String token) throws RepositoryException, DatabaseException {
 		log.debug("getUserSearchs({})", token);
 		List<String> ret = new ArrayList<String>();
 		Session session = null;
@@ -685,20 +685,21 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
+			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
-			for (NodeIterator it = userQuery.getNodes(); it.hasNext(); ) {
-				Node search = it.nextNode();
-				if (search.getProperty(QueryParams.DASHBOARD).getBoolean()) {
-					ret.add(search.getName());
+			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
+				QueryParams qp = it.next();
+				if (qp.isDashboard()) {
+					ret.add(qp.getName());
 				}
 			}
 			
 			// Activity log
 			UserActivity.log(session, "GET_ALL_DASHBOARD_SEARCHS", null, null);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -710,10 +711,10 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> find(String token, String name) 
-			throws IOException, ParseException, RepositoryException {
-		log.debug("find({}, {})", token, name);
-		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+	public List<DashboardDocumentResult> find(String token, int qpId) throws IOException,
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("find({}, {})", token, qpId);
+		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		Session session = null;
 		
 		try {
@@ -723,7 +724,7 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JCRUtils.getSession();
 			}
 			
-			al = find(session, name);
+			al = find(session, qpId);
 		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
@@ -741,53 +742,47 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public ArrayList<DashboardDocumentResult> find(Session session, String name) throws 
+	public List<DashboardDocumentResult> find(Session session, int qpId) throws 
 			javax.jcr.RepositoryException, DatabaseException, ParseException, IOException {
-		log.debug("find({}, {})", session, name);
-		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		log.debug("find({}, {})", session, qpId);
+		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		DirectSearchModule directSearch = new DirectSearchModule();
-		Node userQuery = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+QueryParams.LIST);
 		
-		synchronized (userQuery) {
-			Node savedQuery = userQuery.getNode(name);
+		// Get the saved query params
+		QueryParams params = QueryParamsDAO.findByPk(qpId);
+		log.debug("PARAMS: {}", params.toString());
 			
-			// Get the saved query params
-			QueryParams params = directSearch.getSearch(savedQuery);
-			log.debug("PARAMS: {}", params.toString());
-			
-			// Set query date (first time)
-			if (params.getLastModifiedTo() == null) {
-				Calendar firstExecution = Calendar.getInstance();
-				firstExecution.add(Calendar.MONTH, -1);
-				params.setLastModifiedTo(firstExecution);
-			}
-			
-			Calendar lastExecution = resetHours(params.getLastModifiedTo());
-			Calendar actualDate = resetHours(Calendar.getInstance());
-			log.debug("lastExecution -> {}", lastExecution.getTime());
-			log.debug("actualDate -> {}", actualDate.getTime());
-			
-			if (lastExecution.before(actualDate)) {
-				params.setLastModifiedFrom(params.getLastModifiedTo());
-			}
-			
-			params.setLastModifiedTo(Calendar.getInstance());
-			
-			// Prepare statement
-			log.debug("PARAMS {}", params);
-			String qs = directSearch.prepareStatement(params);
-			log.debug("STATEMENT {}", qs);
-			
-			// Execute query
-			al = executeQueryDocument(session, qs, null, MAX_RESULTS);
-			
-			// Update query params
-			directSearch.saveSearch(savedQuery, params);
-			userQuery.save();
+		// Set query date (first time)
+		if (params.getLastModifiedTo() == null) {
+			Calendar firstExecution = Calendar.getInstance();
+			firstExecution.add(Calendar.MONTH, -1);
+			params.setLastModifiedTo(firstExecution);
 		}
-	
+			
+		Calendar lastExecution = resetHours(params.getLastModifiedTo());
+		Calendar actualDate = resetHours(Calendar.getInstance());
+		log.debug("lastExecution -> {}", lastExecution.getTime());
+		log.debug("actualDate -> {}", actualDate.getTime());
+		
+		if (lastExecution.before(actualDate)) {
+			params.setLastModifiedFrom(params.getLastModifiedTo());
+		}
+		
+		params.setLastModifiedTo(Calendar.getInstance());
+		
+		// Prepare statement
+		log.debug("PARAMS {}", params);
+		String qs = directSearch.prepareStatement(params);
+		log.debug("STATEMENT {}", qs);
+		
+		// Execute query
+		al = executeQueryDocument(session, qs, null, MAX_RESULTS);
+		
+		// Update query params
+		QueryParamsDAO.update(params);
+			
 		// Check for already visited results
-		checkVisitedDocuments(session.getUserID(), name, al);
+		checkVisitedDocuments(session.getUserID(), Integer.toString(params.getId()), al);
 		log.debug("find: {}", al);
 		return al;
 	}
