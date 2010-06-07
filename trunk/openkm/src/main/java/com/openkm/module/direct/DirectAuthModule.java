@@ -152,43 +152,51 @@ public class DirectAuthModule implements AuthModule {
 	 * Load user data
 	 */
 	public static void loadUserData(Session session) throws DatabaseException, javax.jcr.RepositoryException {
-		log.debug("loadUserData({}) -> {}", session.getUserID(), session);
-		Node root = session.getRootNode();
+		log.info("loadUserData({}) -> {}", session.getUserID(), session);
 		
-		if (!session.itemExists("/"+Repository.TRASH+"/"+session.getUserID())) {
-			log.info("Create okm:trash/{}", session.getUserID());
-			createBase(session, root, Repository.TRASH+"/"+session.getUserID());
+		synchronized (session.getUserID()) {
+			if (!session.itemExists("/"+Repository.TRASH+"/"+session.getUserID())) {
+				log.info("Create okm:trash/{}", session.getUserID());
+				Node okmTrash = session.getRootNode().getNode(Repository.TRASH);
+				createBase(session, okmTrash);
+				okmTrash.save();
+			}
+			
+			if (!session.itemExists("/"+Repository.PERSONAL+"/"+session.getUserID())) {
+				log.info("Create okm:personal/{}", session.getUserID());
+				Node okmPersonal = session.getRootNode().getNode(Repository.PERSONAL);
+				createBase(session, okmPersonal);
+				okmPersonal.save();
+			}
+			
+			if (!session.itemExists("/"+Repository.MAIL+"/"+session.getUserID())) {
+				log.info("Create okm:mail/{}", session.getUserID());
+				Node okmMail = session.getRootNode().getNode(Repository.MAIL);
+				createBase(session, okmMail);
+				okmMail.save();
+			}
+			
+			List<LockToken> ltList = LockTokenDAO.findByUser(session.getUserID());
+			
+			for (Iterator<LockToken> it = ltList.iterator(); it.hasNext(); ) {
+				LockToken lt = it.next();
+				session.addLockToken(lt.getToken());
+			}
 		}
 		
-		if (!session.itemExists("/"+Repository.PERSONAL+"/"+session.getUserID())) {
-			log.info("Create okm:personal/{}", session.getUserID());
-			createBase(session, root, Repository.PERSONAL+"/"+session.getUserID());
-		}
-		
-		if (!session.itemExists("/"+Repository.MAIL+"/"+session.getUserID())) {
-			log.info("Create okm:mail/{}", session.getUserID());
-			createBase(session, root, Repository.MAIL+"/"+session.getUserID());
-		}
-		
-		root.save();
-		List<LockToken> ltList = LockTokenDAO.findByUser(session.getUserID());
-		
-		for (Iterator<LockToken> it = ltList.iterator(); it.hasNext(); ) {
-			LockToken lt = it.next();
-			session.addLockToken(lt.getToken());
-		}
+		log.info("loadUserData: void");
 	}
 
 	/**
 	 * Create base node
 	 */
-	private static Node createBase(Session session, Node root, String name) throws 
+	private static Node createBase(Session session, Node root) throws 
 			javax.jcr.RepositoryException {
-		Node base = root.addNode(name, Folder.TYPE);
+		Node base = root.addNode(session.getUserID(), Folder.TYPE);
 
 		// Add basic properties
 		base.setProperty(Folder.AUTHOR, session.getUserID());
-		base.setProperty(Folder.NAME, name);
+		base.setProperty(Folder.NAME, session.getUserID());
 
 		// Auth info
 		base.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
