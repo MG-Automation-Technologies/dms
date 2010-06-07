@@ -59,6 +59,8 @@ public class Watchdog extends TimerTask {
 					log.error(e.getMessage(), e);
 				} catch (RepositoryException e) {
 					log.error(e.getMessage(), e);
+				} catch (DatabaseException e) {
+					log.error(e.getMessage(), e);
 				}
 			}
 		}
