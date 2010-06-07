@@ -36,10 +36,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
 import com.openkm.ws.util.DocumentArray;
