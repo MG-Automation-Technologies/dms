@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.openkm.dao.bean.LockToken" table="OKM_LOCK_TOKEN">
+    <composite-id>
+      <key-property name="user" column="LT_USER"/> 
+      <key-property name="token" column="LT_TOKEN"/>
+    </composite-id>
+  </class>
+</hibernate-mapping>
