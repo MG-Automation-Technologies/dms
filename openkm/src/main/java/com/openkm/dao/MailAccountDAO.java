@@ -40,9 +40,9 @@ public class MailAccountDAO {
 	 */
 	public static void update(MailAccount ma) throws DatabaseException {
 		log.debug("update({})", ma);
-		String qs = "update MailAccount ma set ma.user= :user, ma.mailHost= :mailHost, " +
-			"ma.mailUser= :mailUser, ma.mailFolder= :mailFolder, ma.active= :active " +
-			"where ma.id= :id";
+		String qs = "update MailAccount ma set ma.user=:user, ma.mailHost=:mailHost, " +
+			"ma.mailUser=:mailUser, ma.mailFolder=:mailFolder, ma.active=:active " +
+			"where ma.id=:id";
 		Session session = null;
 		
 		try {
@@ -69,7 +69,7 @@ public class MailAccountDAO {
 	 */
 	public static void updatePassword(MailAccount ma) throws DatabaseException {
 		log.debug("updatePassword({})", ma);
-		String qs = "update MailAccount ma set ma.mailPassword= :mailPassword where ma.id= :id";
+		String qs = "update MailAccount ma set ma.mailPassword=:mailPassword where ma.id=:id";
 		Session session = null;
 		
 		try {
@@ -97,7 +97,6 @@ public class MailAccountDAO {
 		try {
 			MailAccount ma = findByPk(maId);
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.update(ma);
 			session.delete(ma);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -114,8 +113,8 @@ public class MailAccountDAO {
 	@SuppressWarnings("unchecked")
 	public static List<MailAccount> findByUser(String usrId, boolean filterByActive) throws DatabaseException {
 		log.debug("findByUser({}, {})", usrId, filterByActive);
-		String qs = "from MailAccount ma where ma.user= :user " +
-			(filterByActive?"and ma.active= :active":"") + " order by ma.id";
+		String qs = "from MailAccount ma where ma.user=:user " +
+			(filterByActive?"and ma.active=:active":"") + " order by ma.id";
 		Session session = null;
 		
 		try {
@@ -143,7 +142,7 @@ public class MailAccountDAO {
 	@SuppressWarnings("unchecked")
 	public static List<MailAccount> findAll(boolean filterByActive) throws DatabaseException {
 		log.debug("findAll({})", filterByActive);
-		String qs = "from MailAccount ma " + (filterByActive?"where ma.active= :active":"") +
+		String qs = "from MailAccount ma " + (filterByActive?"where ma.active=:active":"") +
 			" order by ma.id";
 		Session session = null;
 		
@@ -168,23 +167,16 @@ public class MailAccountDAO {
 	/**
 	 * Find by pk
 	 */
-	@SuppressWarnings("unchecked")
 	public static MailAccount findByPk(int maId) throws DatabaseException {
 		log.debug("findByPk({})", maId);
-		String qs = "from MailAccount ma where ma.id= :id";
+		String qs = "from MailAccount ma where ma.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
-			q.setEntity("id", maId);
-			List<MailAccount> results = q.list();
-			MailAccount ret = null;
-			
-			if (results.size() == 0) {
-				ret = results.get(0); 
-			}
-			
+			q.setInteger("id", maId);
+			MailAccount ret = (MailAccount) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {

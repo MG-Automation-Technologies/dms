@@ -92,7 +92,6 @@ public class DashboardDAO {
 		try {
 			Dashboard ds = findByPk(dsId);
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.update(ds);
 			session.delete(ds);
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
