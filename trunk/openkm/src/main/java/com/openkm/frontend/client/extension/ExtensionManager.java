@@ -29,6 +29,7 @@ import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtensi
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
+import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
@@ -52,7 +53,9 @@ public class ExtensionManager {
 				addTabFolder((TabFolderExtension) obj);
 			} else if (obj instanceof ToolBarButtonExtension) {
 				addToolBarButton((ToolBarButtonExtension) obj);
-			} 
+			} else if (obj instanceof MenuItemExtension) {
+				addMenu((MenuItemExtension) obj);
+			}
 			
 			// Registering handlers
 			if (obj instanceof DocumentHandlerExtension) {
@@ -131,5 +134,14 @@ public class ExtensionManager {
 	 */
 	private static void addTabFolder(TabFolderExtension extension) {
 		Main.get().mainPanel.browser.tabMultiple.tabFolder.addFolderExtension(extension);
+	}
+	
+	/**
+	 * addMenu
+	 * 
+	 * @param extension
+	 */
+	private static void addMenu(MenuItemExtension extension) {
+		Main.get().mainPanel.topPanel.mainMenu.addMenu(extension);
 	}
 }

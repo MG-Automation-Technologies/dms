@@ -82,6 +82,7 @@ public class ErrorCode {
 	public static final String CAUSE_SQLException 				= "021";
 	public static final String CAUSE_Configuration 				= "022";
 	public static final String CAUSE_QuotaExceed 				= "023";
+	public static final String CAUSE_DatabaseException			= "024";
 
 	/**
 	 * Gets the error

@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.extension;
 
-import com.openkm.frontend.client.bean.GWTDocument;
 
 /**
  * HasDocumentExtension
@@ -32,9 +31,5 @@ import com.openkm.frontend.client.bean.GWTDocument;
 public interface HasDocumentExtension {
 	
 	public abstract String getTabText();
-	
-	public abstract void set(GWTDocument doc);
-	
-	public abstract void setVisibleButtons(boolean visible);
 	
 }
