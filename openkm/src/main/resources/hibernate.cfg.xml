@@ -209,6 +209,7 @@
     <mapping resource="com/openkm/dao/bean/Role.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Bookmark.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Activity.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/LockToken.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserConfig.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
