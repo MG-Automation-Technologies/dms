@@ -28,6 +28,7 @@ import com.openkm.api.OKMNotification;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
@@ -206,7 +207,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	 */
 	private String importZip(String token, String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("importZip({}, {}, {})", new Object[] { token, path, is });
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
