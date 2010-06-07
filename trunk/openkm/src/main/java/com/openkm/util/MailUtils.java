@@ -387,7 +387,7 @@ public class MailUtils {
 	 * 
 	 */
 	public static String getUserMailPath(String uid) {
-		return "/"+Repository.HOME+"/"+uid+"/"+Repository.MAIL;
+		return "/"+Repository.MAIL+"/"+uid;
 	}
 	
 	/**
