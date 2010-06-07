@@ -28,6 +28,7 @@ import com.openkm.api.OKMRepository;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -283,6 +284,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryServlet, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		return path;
 	}
