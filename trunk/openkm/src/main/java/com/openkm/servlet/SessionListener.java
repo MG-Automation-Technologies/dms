@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.SessionInfo;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.module.direct.DirectAuthModule;
@@ -71,6 +72,8 @@ public class SessionListener implements HttpSessionListener {
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		}
 	}
