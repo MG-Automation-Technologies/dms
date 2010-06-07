@@ -29,6 +29,7 @@ import java.util.Map;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -54,7 +55,7 @@ public interface PropertyGroupModule {
 	 */
 	public void addGroup(String token, String docPath, String grpName) throws 
 		NoSuchGroupException, LockException, PathNotFoundException, 
-		AccessDeniedException, RepositoryException;
+		AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Removes a property group from a document.
@@ -70,7 +71,7 @@ public interface PropertyGroupModule {
 	 */
 	public void removeGroup(String token, String docPath, String grpName) throws 
 			AccessDeniedException, NoSuchGroupException, LockException, PathNotFoundException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Get groups assigned to a document.
@@ -82,7 +83,7 @@ public interface PropertyGroupModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<PropertyGroup> getGroups(String token, String docPath) throws 
-		IOException, ParseException, PathNotFoundException, RepositoryException;
+		IOException, ParseException, PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
 	 * Get all groups defined in the system.
@@ -91,7 +92,7 @@ public interface PropertyGroupModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
-		RepositoryException;
+		RepositoryException, DatabaseException;
 
 	/**
 	 * Get all properties defined in a document by group.
@@ -105,7 +106,7 @@ public interface PropertyGroupModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) throws 
-		NoSuchGroupException, PathNotFoundException, RepositoryException;
+		NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Set group properties to a document.
@@ -123,9 +124,9 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties) throws 
-		NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-		AccessDeniedException, RepositoryException;
+	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
+		throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
+		AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Get all possible values which can have a property.
@@ -136,5 +137,5 @@ public interface PropertyGroupModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
-		IOException, RepositoryException;
+		IOException, RepositoryException, DatabaseException;
 }
