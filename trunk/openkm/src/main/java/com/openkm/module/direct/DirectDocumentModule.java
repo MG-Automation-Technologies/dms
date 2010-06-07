@@ -69,6 +69,7 @@ import com.openkm.bean.kea.Term;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
@@ -471,7 +472,7 @@ public class DirectDocumentModule implements DocumentModule {
 			String name = FileUtils.getName(docPath);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node parentNode = documentNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 
 			if (documentNode.isLocked()) {
 				throw new LockException("Can't delete a locked node");
@@ -976,7 +977,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void checkout(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("checkout({}, {})", token, docPath);
 		Transaction t = null;
 		XASession session = null;
@@ -1027,6 +1028,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -1038,7 +1043,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("cancelCheckout({}, {})", token, docPath);
 		Transaction t = null;
 		XASession session = null;
@@ -1090,6 +1095,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -1134,7 +1143,8 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, LockException, VersionException {
+			RepositoryException, PathNotFoundException, LockException, VersionException,
+			DatabaseException {
 		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		Version version = new Version();
 		Node contentNode = null;
@@ -1220,6 +1230,10 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -1296,7 +1310,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void lock(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("lock({}, {})", token, docPath);
 		Session session = null;
 		
@@ -1335,6 +1349,9 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -1346,7 +1363,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void unlock(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("unlock({}, {}", token, docPath);
 		Session session = null;
 		
@@ -1385,6 +1402,9 @@ public class DirectDocumentModule implements DocumentModule {
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
