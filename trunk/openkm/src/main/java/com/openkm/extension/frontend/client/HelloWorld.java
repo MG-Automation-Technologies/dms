@@ -28,7 +28,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
 import com.openkm.frontend.client.extension.comunicator.TabDocumentComunicator;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
@@ -71,17 +70,6 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 	@Override
 	public String getTabText() {
 		return "Hello tab";
-	}
-
-	@Override
-	public void set(GWTDocument doc) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setVisibleButtons(boolean visible) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
