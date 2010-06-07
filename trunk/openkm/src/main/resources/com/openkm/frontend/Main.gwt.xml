@@ -49,5 +49,6 @@
   <servlet path="/OpenKM/OKMGeneralServlet" class="com.openkm.frontend.server.OKMGeneralServlet"/>
   <servlet path="/OpenKM/OKMPropertyServlet" class="com.openkm.frontend.server.OKMPropertyServlet"/>
   <servlet path="/OpenKM/OKMChatServlet" class="com.openkm.frontend.server.OKMChatServlet"/>
+  <servlet path="/OpenKM/OKMUserCopyServlet" class="com.openkm.frontend.server.OKMUserCopyServlet"/>
 
 </module>
