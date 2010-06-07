@@ -38,6 +38,7 @@ import com.openkm.api.OKMAuth;
 import com.openkm.bean.Permission;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
@@ -474,6 +475,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
