@@ -33,12 +33,10 @@ import com.openkm.frontend.client.bean.GWTBookmark;
  *
  */
 public interface OKMBookmarkService extends RemoteService {
-	
 	public List<GWTBookmark> getAll() throws OKMException;
-	
 	public GWTBookmark add(String nodePath, String name) throws OKMException;
-	public void remove(String name) throws OKMException;
+	public void remove(int bmId) throws OKMException;
+	public GWTBookmark rename(int bmId, String newName) throws OKMException;
 	public void setUserHome(String name) throws OKMException;
 	public GWTBookmark getUserHome() throws OKMException;
-	public GWTBookmark rename(String name, String newName) throws OKMException;
 }
