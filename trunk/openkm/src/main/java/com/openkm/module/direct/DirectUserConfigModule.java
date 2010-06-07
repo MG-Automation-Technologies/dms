@@ -6,6 +6,8 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -31,7 +33,6 @@ public class DirectUserConfigModule implements UserConfigModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			
 			Node rootNode = session.getRootNode();
 			Node node = rootNode.getNode(nodePath.substring(1));
 			UserConfig uc = new UserConfig();
@@ -61,7 +62,21 @@ public class DirectUserConfigModule implements UserConfigModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			UserConfigDAO.findByPk(session.getUserID());
+			ret = UserConfigDAO.findByPk(session.getUserID());
+			
+			if (ret.getHomeUuid() == null) {
+				Node okmRoot = session.getRootNode().getNode(Repository.ROOT);
+				ret.setHomePath(okmRoot.getPath());
+				ret.setHomeUuid(okmRoot.getUUID());
+				ret.setHomeType(Folder.TYPE);
+				ret.setUser(session.getUserID());
+				
+				UserConfigDAO.create(ret);
+			} else {
+				Node node = session.getNodeByUUID(ret.getHomeUuid());
+				ret.setHomePath(node.getPath());
+				ret.setHomeType(JCRUtils.getNodeType(node));
+			}
 			
 			// Activity log
 			UserActivity.log(session, "USER_CONFIG_GET_CONFIG", null, null);
