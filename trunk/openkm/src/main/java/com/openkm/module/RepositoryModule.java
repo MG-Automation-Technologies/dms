@@ -47,6 +47,8 @@ public interface RepositoryModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException;
+	
+	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the template folder of the repository.
@@ -67,6 +69,8 @@ public interface RepositoryModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException;
+	
+	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the personal mails folder of the repository.
@@ -77,6 +81,8 @@ public interface RepositoryModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException;
+	
+	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the thesaurus folder of the repository.
