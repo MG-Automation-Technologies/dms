@@ -37,6 +37,7 @@ import com.openkm.api.OKMSearch;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
@@ -285,6 +286,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} 
 		
 		log.debug("getKeywordMap: {}", keyList);
