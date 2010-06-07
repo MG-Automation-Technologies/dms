@@ -91,7 +91,7 @@ public interface DashboardModule {
 	/**
 	 * Get user documents size
 	 */
-	public long getUserDocumentsSize(String token) throws RepositoryException;
+	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get user searchs
