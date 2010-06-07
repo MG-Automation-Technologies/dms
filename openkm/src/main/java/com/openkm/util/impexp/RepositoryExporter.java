@@ -52,14 +52,10 @@ public class RepositoryExporter {
 
 	/**
 	 * Performs a recursive repository content export with metadata
-	 * 
-	 * @param repoPath
-	 * @param fsPath
-	 * @throws RepositoryException
 	 */
 	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out, 
 			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("exportDocuments({}, {}, {}, {})", new Object[] { fldPath, fs, out, deco });
 		ImpExpStats stats;
 		
@@ -83,6 +79,9 @@ public class RepositoryExporter {
 			log.error(e.getMessage(), e);
 			throw e;
 		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
