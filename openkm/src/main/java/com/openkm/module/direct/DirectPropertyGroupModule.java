@@ -44,6 +44,7 @@ import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -61,7 +62,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -117,7 +118,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException,
-			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException {
+			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
@@ -165,7 +166,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public Collection<PropertyGroup> getGroups(String token, String docPath) throws IOException,
-			ParseException, PathNotFoundException, RepositoryException {
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
@@ -211,7 +212,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getAllGroups({})", token);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
@@ -255,7 +256,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
-			throws NoSuchGroupException, PathNotFoundException, RepositoryException {
+			throws NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {})", token, grpName);
 		HashMap<String, String[]> ret = new HashMap<String, String[]>();
 		Session session = null;
@@ -321,7 +322,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	@Override
 	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
 			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
 		Node documentNode = null;
 		Session session = null;
@@ -387,7 +388,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 
 	@Override
 	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
-			ParseException, RepositoryException {
+			ParseException, RepositoryException, DatabaseException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		Collection<FormElement> ret = new ArrayList<FormElement>();
 		Session session = null;
