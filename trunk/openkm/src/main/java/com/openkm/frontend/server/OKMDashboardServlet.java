@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.server;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -37,7 +36,6 @@ import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
