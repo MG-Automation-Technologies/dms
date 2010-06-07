@@ -31,6 +31,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -208,5 +211,27 @@ public class StatsGraphServlet extends BaseServlet {
 		}
 		
 		return ChartFactory.createPieChart(title, dataset, true, false, false);
+	}
+	
+	/**
+	 * Convert a piechartdata to xml
+	 * 
+	 * @author puspendu.banerjee@gmail.com 
+	 */
+	public String repoStatsXML(final String title, final DefaultPieDataset dataset) throws 
+			IOException, ServletException {
+		Document document = DocumentHelper.createDocument();
+		Element root = document.addElement("RepoStats");
+		root.addElement("Title").addCDATA(title);
+		Element dataSetElement =root.addElement("DataSet");
+		
+		for (int i=0; i<dataset.getItemCount(); i++) {
+			Element itemElement= dataSetElement.addElement("Item");
+			itemElement.addElement("name").addCDATA(dataset.getKey(i).toString());
+			itemElement.addAttribute("percent", dataset.getValue(i).toString());
+			dataSetElement.add(itemElement);
+		}
+		
+		return document.asXML();
 	}
 }
