@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Folder;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.AccessDeniedException;
@@ -42,7 +43,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getRootFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder rootFolder = rm.getRootFolder(token);
@@ -51,7 +53,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getTrashFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder trashFolder = rm.getTrashFolder(token);
@@ -60,7 +63,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException {
+	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getTrashFolderBase()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder trashFolder = rm.getTrashFolderBase();
@@ -69,7 +73,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getTemplatesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder templatesFolder = rm.getTemplatesFolder(token);
@@ -78,7 +83,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPersonalFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolder(token);
@@ -87,7 +93,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException {
+	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPersonalFolderBase()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder personalFolder = rm.getPersonalFolderBase();
@@ -96,7 +103,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException, 
+			DatabaseException {
 		log.debug("getMailFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolder(token);
@@ -105,7 +113,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException {
+	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getMailFolderBase()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder mailFolder = rm.getMailFolderBase();
@@ -114,7 +123,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getThesaurusFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder thesaurusFolder = rm.getThesaurusFolder(token);
@@ -123,7 +133,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getCategoriesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		Folder categoriesFolder = rm.getCategoriesFolder(token);
@@ -132,7 +143,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("purgeTrash()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		rm.purgeTrash(token);
@@ -158,7 +170,7 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public boolean hasNode(String token, String path) throws RepositoryException {
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
 		log.debug("hasNode({})", path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		boolean ret = rm.hasNode(token, path);
@@ -167,7 +179,8 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPath({})", uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		String ret = rm.getPath(token, uuid);
