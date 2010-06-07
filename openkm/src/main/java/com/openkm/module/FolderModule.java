@@ -26,6 +26,7 @@ import java.util.Collection;
 
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.LockException;
@@ -48,7 +49,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder create(String token, Folder fld) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException;
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created folder.
@@ -60,7 +61,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder getProperties(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Delete a folder the repository. It is a logical delete,
@@ -75,7 +76,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void delete(String token, String fldPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Deletes definitively a folder from the repository. It is a phisical delete, so
@@ -90,7 +91,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void purge(String token, String fldPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Rename a folder in the repository.
@@ -108,7 +109,7 @@ public interface FolderModule {
 	 */
 	public Folder rename(String token, String fldPath, String newName) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Move a folder to another location in the repository.
@@ -126,7 +127,7 @@ public interface FolderModule {
 	 */
 	public void move(String token, String fldPath, String dstPath) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Copy a folder to another location in the repository.
@@ -144,7 +145,7 @@ public interface FolderModule {
 	 */
 	public void copy(String token, String fldPath, String dstPath) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException;
+			RepositoryException, IOException, DatabaseException;
 
 	/**
 	 * Retrieve a list of child folders from an existing one.
@@ -156,7 +157,7 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Retrive the content info of the folder: number of folders, number of documents, and total size.
@@ -170,7 +171,7 @@ public interface FolderModule {
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
 	public ContentInfo getContentInfo(String token, String fldPath) throws 
-		AccessDeniedException, RepositoryException, PathNotFoundException;
+		AccessDeniedException, RepositoryException, PathNotFoundException, DatabaseException;
 	
 	/**
 	 * Test if a folder path is valid.
@@ -184,5 +185,5 @@ public interface FolderModule {
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
 	public boolean isValid(String token, String fldPath) throws 
-		PathNotFoundException, AccessDeniedException, RepositoryException;
+		PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 }
