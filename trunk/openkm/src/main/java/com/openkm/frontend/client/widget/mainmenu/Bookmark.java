@@ -41,6 +41,8 @@ import com.openkm.frontend.client.service.OKMDocumentService;
 import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
 import com.openkm.frontend.client.service.OKMFolderService;
 import com.openkm.frontend.client.service.OKMFolderServiceAsync;
+import com.openkm.frontend.client.service.OKMUserConfigService;
+import com.openkm.frontend.client.service.OKMUserConfigServiceAsync;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
@@ -56,11 +58,13 @@ public class Bookmark {
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
 	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
 	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT.create(OKMUserConfigService.class);
 	
 	public static final String BOOKMARK_DOCUMENT	= "okm:document";
 	public static final String BOOKMARK_FOLDER 		= "okm:folder";
 	
 	private List<MenuItem> bookmarks = new ArrayList<MenuItem>();
+	private String uuid = "";
 	private String nodePath = "";
 	private boolean document = false;
 	private boolean bookmarkEnabled = true;
@@ -178,10 +182,11 @@ public class Bookmark {
 	 */
 	final AsyncCallback<Object> callbackSetUserHome = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
+			String user = Main.get().workspaceUserProperties.getUser();
 			if (document) {
-				Main.get().mainPanel.topPanel.toolBar.setUserHome("",nodePath,BOOKMARK_DOCUMENT);
+				Main.get().mainPanel.topPanel.toolBar.setUserHome(user, uuid, nodePath,BOOKMARK_DOCUMENT);
 			} else {
-				Main.get().mainPanel.topPanel.toolBar.setUserHome("",nodePath,BOOKMARK_FOLDER);
+				Main.get().mainPanel.topPanel.toolBar.setUserHome(user, uuid, nodePath,BOOKMARK_FOLDER);
 			}
 		}
 
@@ -271,9 +276,9 @@ public class Bookmark {
 	 */
 	public void setUserHome() {
 		if (nodePath!=null && !nodePath.equals("")) { 
-			ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-			endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
-			bookmarkService.setUserHome(nodePath, callbackSetUserHome);
+			ServiceDefTarget endPoint = (ServiceDefTarget) userConfigService;
+			endPoint.setServiceEntryPoint(Config.OKMUserConfigService);			
+			userConfigService.setUserHome(nodePath, callbackSetUserHome);
 		}
 	}
 	
@@ -283,7 +288,8 @@ public class Bookmark {
 	 * @param nodePath String The node path
 	 * @param document boolean is document
 	 */
-	public void confirmSetHome(String nodePath, boolean document) {
+	public void confirmSetHome(String uuid, String nodePath, boolean document) {
+		this.uuid = uuid;
 		this.nodePath = nodePath;
 		this.document = document;
 		Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_SET_DEFAULT_HOME);
