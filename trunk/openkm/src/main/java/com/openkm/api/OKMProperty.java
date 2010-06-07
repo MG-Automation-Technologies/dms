@@ -46,53 +46,37 @@ public class OKMProperty implements PropertyModule {
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#addCategory(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void addCategory(String token, String nodePath, String category)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
-		log.debug("addCategory("+token+", "+nodePath+")");
+	public void addCategory(String token, String nodePath, String category)	throws VersionException, 
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("addCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.addCategory(token, nodePath, category);
 		log.debug("addCategory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#removeCategory(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void removeCategory(String token, String nodePath, String category)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
-		log.debug("removeCategory("+token+", "+nodePath+")");
+	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("removeCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.removeCategory(token, nodePath, category);
 		log.debug("removeCategory: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#addKeyword(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void addKeyword(String token, String nodePath, String keyword)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
-		log.debug("addKeyword("+token+", "+nodePath+")");
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException, 
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("addKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.addKeyword(token, nodePath, keyword);
 		log.debug("addKeyword: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyModule#removeKeyword(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public void removeKeyword(String token, String nodePath, String keyword)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException {
-		log.debug("removeKeyword("+token+", "+nodePath+")");
+	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("removeKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
 		pm.removeKeyword(token, nodePath, keyword);
 		log.debug("removeKeyword: void");
