@@ -39,15 +39,16 @@ public interface HasDocumentEvent {
 	 */
 	public static class DocumentEventConstant {
 		
-		static final int EVENT_DOCUMENT_CHANGED	= 1;
-		static final int EVENT_KEYWORD_ADDED  	= 2;
-		static final int EVENT_KEYWORD_REMOVED  = 3;
-		static final int EVENT_CATEGORY_ADDED 	= 4;
-		static final int EVENT_CATEGORY_REMOVED = 5;
-		static final int EVENT_PANEL_RESIZED   	= 6;
-		static final int EVENT_TAB_CHANGED    	= 7;
-		static final int EVENT_SECURITY_CHANGED = 8;
-		static final int EVENT_NOTE_ADDED 		= 9;
+		static final int EVENT_DOCUMENT_CHANGED		= 1;
+		static final int EVENT_KEYWORD_ADDED  		= 2;
+		static final int EVENT_KEYWORD_REMOVED 		= 3;
+		static final int EVENT_CATEGORY_ADDED 		= 4;
+		static final int EVENT_CATEGORY_REMOVED 	= 5;
+		static final int EVENT_PANEL_RESIZED   		= 6;
+		static final int EVENT_TAB_CHANGED    		= 7;
+		static final int EVENT_SECURITY_CHANGED 	= 8;
+		static final int EVENT_NOTE_ADDED 			= 9;
+		static final int EVENT_SET_VISIBLE_BUTTONS	= 10;
 		
 		private int type = 0;
 		
@@ -74,6 +75,7 @@ public interface HasDocumentEvent {
 	DocumentEventConstant TAB_CHANGED = new DocumentEventConstant(DocumentEventConstant.EVENT_TAB_CHANGED);
 	DocumentEventConstant SECURITY_CHANGED = new DocumentEventConstant(DocumentEventConstant.EVENT_SECURITY_CHANGED);
 	DocumentEventConstant NOTE_ADDED = new DocumentEventConstant(DocumentEventConstant.EVENT_NOTE_ADDED);
+	DocumentEventConstant SET_VISIBLE_BUTTONS = new DocumentEventConstant(DocumentEventConstant.EVENT_SET_VISIBLE_BUTTONS);
 	
 	/**
 	 * @param event

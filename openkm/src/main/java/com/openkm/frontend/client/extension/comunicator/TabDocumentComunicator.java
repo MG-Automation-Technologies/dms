@@ -107,4 +107,13 @@ public class TabDocumentComunicator {
 	public static Collection<GWTNote> getNotes() {
 		return Main.get().mainPanel.browser.tabMultiple.tabDocument.notes.getNotes();
 	}
+	
+	/**
+	 * getVisibleButton
+	 * 
+	 * @return
+	 */
+	public boolean getVisibleButton() {
+		return Main.get().mainPanel.browser.tabMultiple.tabDocument.getVisibleButton();
+	}
 }
