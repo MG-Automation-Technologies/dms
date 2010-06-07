@@ -22,6 +22,7 @@
 package com.openkm.module;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 
@@ -37,8 +38,8 @@ public interface ScriptingModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void setScript(String token, String nodePath, String code) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove script from node.
@@ -49,8 +50,8 @@ public interface ScriptingModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void removeScript(String token, String nodePath)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void removeScript(String token, String nodePath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get node script (document or folder).
@@ -63,5 +64,5 @@ public interface ScriptingModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public String getScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 }
