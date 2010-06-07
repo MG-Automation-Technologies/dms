@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.QueryResult;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.QueryParams;
@@ -65,7 +66,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
 	public QueryResultArray findByContent(String token, String words) throws IOException, ParseException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("findByContent({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -79,7 +80,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
 	public QueryResultArray findByName(String token, String words) throws IOException, ParseException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("findByName({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -93,7 +94,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
 	public QueryResultArray findByKeywords(String token, String words) throws IOException, ParseException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({}, {})", token, words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -107,7 +108,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#findByStatement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public QueryResultArray findByStatement(String token, String statement, String type)
-			throws RepositoryException {
+			throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({} ,{})", token, statement);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -121,7 +122,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
 	 */
 	public QueryResultArray find(String token, QueryParams params) throws IOException, ParseException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("find({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
@@ -135,7 +136,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#getKeywordMap(java.lang.String, java.util.Collection)
 	 */
 	public IntegerPairArray getKeywordMap(String token, StringArray filter) 
-			throws RepositoryException {
+			throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMap({})", token);
 		SearchModule sm = ModuleManager.getSearchModule();
 		ArrayList<String> alFilter = new ArrayList<String>();
@@ -168,7 +169,7 @@ public class OKMSearch {
 	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
 	 */
 	public DocumentArray getCategorizedDocuments(String token, String categoryId)
-			throws RepositoryException {
+			throws RepositoryException, DatabaseException {
 		log.debug("getCategorizedDocuments({})", token);
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<Document> col = sm.getCategorizedDocuments(token, categoryId);
