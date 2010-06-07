@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
@@ -49,7 +50,7 @@ public class OKMBookmark implements BookmarkModule {
 
 	@Override
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
-			PathNotFoundException, RepositoryException {
+			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.add(token, nodePath, name);
@@ -58,7 +59,8 @@ public class OKMBookmark implements BookmarkModule {
 	}
 
 	@Override
-	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException {
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("remove({}, {})", token, bmId);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		bm.remove(token, bmId);
@@ -67,7 +69,7 @@ public class OKMBookmark implements BookmarkModule {
 	
 	@Override
 	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark= bm.rename(token, bmId, newName);
@@ -76,7 +78,8 @@ public class OKMBookmark implements BookmarkModule {
 	}
 
 	@Override
-	public Collection<Bookmark> getAll(String token) throws RepositoryException {
+	public Collection<Bookmark> getAll(String token) throws RepositoryException,
+			DatabaseException {
 		log.debug("getAll({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Collection<Bookmark> col = bm.getAll(token);
@@ -86,7 +89,7 @@ public class OKMBookmark implements BookmarkModule {
 
 	@Override
 	public void setUserHome(String token, String path) throws AccessDeniedException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("setUserHome({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		bm.setUserHome(token, path);
@@ -94,7 +97,8 @@ public class OKMBookmark implements BookmarkModule {
 	}
 
 	@Override
-	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
+	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getUserHome({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.getUserHome(token);
