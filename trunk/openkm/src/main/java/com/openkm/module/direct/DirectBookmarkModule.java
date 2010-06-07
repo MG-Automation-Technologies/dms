@@ -25,22 +25,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Bookmark;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
-import com.openkm.core.ItemExistsException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
+import com.openkm.dao.BookmarkDAO;
+import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.Bookmark;
 import com.openkm.module.BookmarkModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -51,7 +52,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	
 	@Override
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
-			PathNotFoundException, ItemExistsException, RepositoryException {
+			PathNotFoundException, RepositoryException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
 		Session session = null;
@@ -68,30 +69,24 @@ public class DirectBookmarkModule implements BookmarkModule {
 			}
 			
 			Node rootNode = session.getRootNode();
-			Node userBookmarkList = rootNode.getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 			Node node = rootNode.getNode(nodePath.substring(1));
-
+			
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 
-			Node bookmark = userBookmarkList.addNode(name, Bookmark.TYPE);
-			bookmark.setProperty(Bookmark.NODE_PATH, nodePath);
-			bookmark.setProperty(Bookmark.NODE_TYPE, getNodeType(node));
-			userBookmarkList.save();
-
-			// Set returned bookmark properties
-			newBookmark = getProperties(session, bookmark.getPath());
+			newBookmark = new Bookmark();
+			newBookmark.setUser(session.getUserID());
+			newBookmark.setName(name);
+			newBookmark.setPath(nodePath);
+			newBookmark.setUuid(node.getUUID());
+			newBookmark.setType(getNodeType(node));
+			BookmarkDAO.create(newBookmark);
 			
 			// Activity log
 			UserActivity.log(session, "BOOKMARK_ADD", name, nodePath);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			throw new ItemExistsException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -104,9 +99,8 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public void remove(String token, String name) throws AccessDeniedException, PathNotFoundException,
-			RepositoryException {
-		log.debug("remove({}, {})", token, name);
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException {
+		log.debug("remove({}, {})", token, bmId);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -119,23 +113,14 @@ public class DirectBookmarkModule implements BookmarkModule {
 			} else {
 				session = JCRUtils.getSession();
 			}
-			
-			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
 
-			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
-
-			Node savedBookmark = userBookmarkList.getNode(name);
-			savedBookmark.remove();
-			userBookmarkList.save();
+			BookmarkDAO.delete(bmId);
 			
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_REMOVE", name, null);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new PathNotFoundException(e.getMessage(), e);
+			UserActivity.log(session, "BOOKMARK_REMOVE", Integer.toString(bmId), null);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -147,9 +132,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public Bookmark rename(String token, String name, String newName) throws AccessDeniedException,
-			PathNotFoundException, ItemExistsException, RepositoryException {
-		log.debug("rename:({}, {}, {})", new Object[] { token, name, newName });
+	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
+			RepositoryException {
+		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		Bookmark renamedBookmark = null;
 		Session session = null;
 		
@@ -164,41 +149,15 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
-
-			// Escape dangerous chars in name
-			name = FileUtils.escape(name);
-			newName = FileUtils.escape(newName);
-
-			String oldPath = userBookmarkList.getPath()+"/"+name;
-
-			if (newName != null && !newName.equals("") && !newName.equals(name)) {
-				String newPath = userBookmarkList.getPath()+"/"+newName;
-				session.move(oldPath, newPath);
-
-				// Publish changes
-				session.save();
-
-				// Set returned bookmark properties
-				renamedBookmark = getProperties(session, newPath);
-			} else {
-				// Don't change anything
-				renamedBookmark = getProperties(session, oldPath);
-			}
-			
+			Bookmark bm = BookmarkDAO.findByPk(bmId);
+			bm.setName(newName);
+			BookmarkDAO.update(bm);
+						
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_RENAME", name, newName);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(session);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.ItemExistsException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(session);
-			throw new ItemExistsException(e.getMessage(), e);
+			UserActivity.log(session, "BOOKMARK_RENAME", Integer.toString(bmId), newName);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(session);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -223,18 +182,13 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userBookmarkList = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Bookmark.LIST);
-
-			for (NodeIterator it = userBookmarkList.getNodes(); it.hasNext(); ) {
-				Node bm = it.nextNode();
-				Bookmark bookmark = getProperties(session, bm.getPath());
-				ret.add(bookmark);
-			}
-			
+			BookmarkDAO.findByUser(session.getUserID());
+						
 			// Activity log
 			UserActivity.log(session, "BOOKMARK_GET_ALL", null, null);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -266,9 +220,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 			
 			Node rootNode = session.getRootNode();
 			userConfig = rootNode.getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
-			Node node = rootNode.getNode(nodePath.substring(1));
-			userConfig.setProperty(Bookmark.HOME_PATH, nodePath);
-			userConfig.setProperty(Bookmark.HOME_TYPE, getNodeType(node));
+			//Node node = rootNode.getNode(nodePath.substring(1));
+			//userConfig.setProperty(Bookmark.HOME_PATH, nodePath);
+			//userConfig.setProperty(Bookmark.HOME_TYPE, getNodeType(node));
 			
 			// Activity log
 			UserActivity.log(session, "BOOKMARK_SET_USER_HOME", null, nodePath);
@@ -298,16 +252,13 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JCRUtils.getSession();
 			}
 			
-			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+
-					session.getUserID()+"/"+Repository.USER_CONFIG);
-			ret.setName(Bookmark.HOME_PATH);
-			ret.setPath(userConfig.getProperty(Bookmark.HOME_PATH).getString());
-			ret.setType(userConfig.getProperty(Bookmark.HOME_TYPE).getString());
+			UserConfigDAO.findByPk(session.getUserID());
 			
 			// Activity log
 			UserActivity.log(session, "BOOKMARK_GET_USER_HOME", null, ret.getPath());
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
@@ -317,27 +268,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 
 		log.debug("getUserHome: {}", ret);
 		return ret;
-	}
-
-	/**
-	 * Get bookmark info
-	 */
-	private Bookmark getProperties(Session session, String nodePath) throws
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
-		log.debug("getBookmark({}, {})", session, nodePath);
-		Bookmark bm = new Bookmark();
-		Node bookmark = session.getRootNode().getNode(nodePath.substring(1));
-
-		// Properties
-		bm.setName(bookmark.getName());
-		bm.setPath(bookmark.getProperty(Bookmark.NODE_PATH).getString());
-		bm.setType(bookmark.getProperty(Bookmark.NODE_TYPE).getString());
-
-		// Unescape dangerous chars in name
-		bm.setName(bm.getName());
-
-		log.debug("getBookmark: {}", bm);
-		return bm;
 	}
 
 	/**
