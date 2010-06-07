@@ -102,8 +102,8 @@ public interface DashboardModule {
 	/**
 	 * Find
 	 */
-	public Collection<DashboardDocumentResult> find(String token, String name)
-			throws IOException, ParseException, RepositoryException;
+	public Collection<DashboardDocumentResult> find(String token, int pqId)	throws IOException,
+			ParseException, RepositoryException, DatabaseException;
 		
 	/**
 	 * Get last week top downloaded documents
