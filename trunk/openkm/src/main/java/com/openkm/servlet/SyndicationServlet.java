@@ -126,8 +126,8 @@ public class SyndicationServlet extends HttpServlet {
 				feed = getFeedDocuments(new DirectDashboardModule().getLastUploadedDocuments(session));
 				feed.setTitle("OpenKM: last uploaded documents");
 			} else if (action != null && action.startsWith("/news_")) {
-				String name = action.substring(6);
-				feed = getFeedDocuments(new DirectDashboardModule().find(session, name));
+				String qp = action.substring(6);
+				feed = getFeedDocuments(new DirectDashboardModule().find(session, Integer.parseInt(qp)));
 				feed.setTitle("OpenKM: "+action);
 			}
 			
@@ -169,9 +169,8 @@ public class SyndicationServlet extends HttpServlet {
 	/**
 	 * Get JCR session
 	 */
-	private synchronized Session getSession(HttpServletRequest request)
-			throws LoginException, javax.jcr.RepositoryException,
-			ServletException {
+	private synchronized Session getSession(HttpServletRequest request)	throws LoginException,
+			javax.jcr.RepositoryException, ServletException {
 		Credentials creds = cp.getCredentials(request);
 		Repository rep = DirectRepositoryModule.getRepository();
 
