@@ -109,11 +109,11 @@ public class TabDocumentComunicator {
 	}
 	
 	/**
-	 * getVisibleButton
+	 * isVisibleButton
 	 * 
 	 * @return
 	 */
-	public boolean getVisibleButton() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.getVisibleButton();
+	public boolean isVisibleButton() {
+		return Main.get().mainPanel.browser.tabMultiple.tabDocument.isVisibleButton();
 	}
 }
