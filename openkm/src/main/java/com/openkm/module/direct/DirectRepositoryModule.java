@@ -294,7 +294,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				
 				// Create okm:config
 				log.info("Create okm:config");
-				Node okmConfig = createBase(session, root, Repository.SYS_CONFIG);
+				Node okmConfig = root.addNode(Repository.SYS_CONFIG, Repository.SYS_CONFIG_TYPE);
 
 				// Generate installation UUID
 				String uuid = UUIDGenerator.generate(okmConfig);
