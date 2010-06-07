@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.DashboardModule;
@@ -151,7 +152,7 @@ public class OKMDashboard implements DashboardModule {
 
 	@Override
 	public Collection<String> getUserSearchs(String token)
-			throws RepositoryException {
+			throws RepositoryException, DatabaseException {
 		log.debug("getUserSearchs(" + token + ")");
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		Collection<String> searchs = dm.getUserSearchs(token);
