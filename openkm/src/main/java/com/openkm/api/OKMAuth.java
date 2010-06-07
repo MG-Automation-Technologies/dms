@@ -43,9 +43,6 @@ public class OKMAuth implements AuthModule {
 		return instance;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String login(String user, String pass) throws UserAlreadyLoggerException, 
 			AccessDeniedException, RepositoryException {
@@ -56,9 +53,6 @@ public class OKMAuth implements AuthModule {
 		return token;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#login()
-	 */
 	@Override
 	public String login() throws UserAlreadyLoggerException, AccessDeniedException, 
 			RepositoryException {
@@ -69,9 +63,6 @@ public class OKMAuth implements AuthModule {
 		return token;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
-	 */
 	@Override
 	public void logout(String token) throws AccessDeniedException, RepositoryException {
 		log.debug("logout("+token+")");
@@ -80,9 +71,6 @@ public class OKMAuth implements AuthModule {
 		log.debug("logout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
 	@Override
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -92,9 +80,6 @@ public class OKMAuth implements AuthModule {
 		log.debug("grantUser: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
 	@Override
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -104,9 +89,6 @@ public class OKMAuth implements AuthModule {
 		log.debug("revokeUser: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedUsers(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
@@ -117,9 +99,6 @@ public class OKMAuth implements AuthModule {
 		return grantedUsers;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
 	@Override
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -129,9 +108,6 @@ public class OKMAuth implements AuthModule {
 		log.debug("grantRole: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
 	@Override
 	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
 			throws PathNotFoundException, AccessDeniedException, RepositoryException {
@@ -141,9 +117,6 @@ public class OKMAuth implements AuthModule {
 		log.debug("revokeRole: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedRoles(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException {
