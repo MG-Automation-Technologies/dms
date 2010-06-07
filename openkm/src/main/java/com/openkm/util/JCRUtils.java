@@ -56,6 +56,7 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Mail;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -224,7 +225,7 @@ public class JCRUtils {
 	public static void addLockToken(Session session, Node node) throws javax.jcr.PathNotFoundException, 
 			javax.jcr.RepositoryException {
 		log.debug("addLockToken({}, {})", session, node);
-		Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
+		Node userConfig = session.getRootNode().getNode(Repository.USER_CONFIG+"/"+session.getUserID());
 		String lockToken = getLockToken(node.getUUID());
 		
 		synchronized (userConfig) {
@@ -256,7 +257,7 @@ public class JCRUtils {
 	public static void removeLockToken(Session session, Node node)  throws javax.jcr.PathNotFoundException, 
 			javax.jcr.RepositoryException {
 		log.debug("removeLockToken({}, {})", session, node);
-		Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
+		Node userConfig = session.getRootNode().getNode(Repository.USER_CONFIG+"/"+session.getUserID());
 		String lockToken = getLockToken(node.getUUID());
 		boolean removed = false;
 		
@@ -407,5 +408,22 @@ public class JCRUtils {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Get node type
+	 */
+	public static String getNodeType(Node node) throws javax.jcr.RepositoryException  {
+		String ret = "unknown";
+
+		if (node.isNodeType(Document.TYPE)) {
+			ret = Document.TYPE;
+		} else if (node.isNodeType(Folder.TYPE)) {
+			ret = Folder.TYPE;
+		} else if (node.isNodeType(Mail.TYPE)) {
+			ret = Mail.TYPE;
+		}
+
+		return ret;
 	}
 }
