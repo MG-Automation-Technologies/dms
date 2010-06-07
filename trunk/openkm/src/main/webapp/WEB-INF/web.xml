@@ -125,6 +125,10 @@
   	<servlet-name>OKMChatServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMChatServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>OKMUserCopyServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.OKMUserCopyServlet</servlet-class>
+  </servlet>
   
   <!-- Mobile servlets -->
   <servlet>
@@ -310,6 +314,10 @@
   <servlet-mapping>
     <servlet-name>OKMChatServlet</servlet-name>
     <url-pattern>/OKMChatServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMUserCopyServlet</servlet-name>
+    <url-pattern>/OKMUserCopyServlet</url-pattern>
   </servlet-mapping>
   
   <!-- Mobile Servlets Mappings -->
