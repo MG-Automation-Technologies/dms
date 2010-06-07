@@ -23,7 +23,7 @@ package com.openkm.module;
 
 import java.util.Collection;
 
-import com.openkm.bean.Bookmark;
+import com.openkm.dao.bean.Bookmark;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
@@ -42,7 +42,7 @@ public interface BookmarkModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
-			PathNotFoundException, ItemExistsException, RepositoryException;
+			PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtains properties from a previously created folder.
@@ -52,8 +52,7 @@ public interface BookmarkModule {
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void remove(String token, String name) throws AccessDeniedException, PathNotFoundException, 
-			RepositoryException;
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException;
 	
 	/**
 	 * Rename a previous stored bookmark.
@@ -66,8 +65,8 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark rename(String token, String name, String newName) throws AccessDeniedException,
-			PathNotFoundException, ItemExistsException, RepositoryException;
+	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
+			RepositoryException;
 	
 	/**
 	 * Retrive an user bookmark collection.
