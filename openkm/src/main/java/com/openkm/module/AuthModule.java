@@ -24,6 +24,7 @@ package com.openkm.module;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.AccessDeniedException;
@@ -43,7 +44,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
 	public String login(String user, String pass) throws UserAlreadyLoggerException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException, DatabaseException;
 
 	/**
 	 * Logins into the repository and gets a token with user info for future API
@@ -54,7 +55,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
 	public String login() throws UserAlreadyLoggerException, AccessDeniedException, 
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Log out from the repository. Invalidates the authorization token.
@@ -64,7 +65,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is an error accessing to repository.
 	 */
 	public void logout(String token) throws AccessDeniedException,
-			RepositoryException;
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Add user permissions to a node.
@@ -80,7 +81,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Revoke user permissions from a node.
@@ -96,7 +97,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get user permissions from am item (document or folder).
@@ -109,7 +110,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Grant role permissions for a node.
@@ -125,7 +126,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Revoke role permissions from a node.
@@ -140,7 +141,8 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive) 
+		throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get roles permissions from am item (document or folder).
@@ -153,7 +155,7 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Retrieves a list of repository users
