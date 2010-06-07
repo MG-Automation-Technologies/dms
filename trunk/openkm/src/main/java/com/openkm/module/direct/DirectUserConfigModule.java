@@ -64,7 +64,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 			session = JCRUtils.getSession();
 			ret = UserConfigDAO.findByPk(session.getUserID());
 			
-			if (ret.getHomeUuid() == null) {
+			if (ret == null || ret.getHomeUuid() == null) {
 				Node okmRoot = session.getRootNode().getNode(Repository.ROOT);
 				ret.setHomePath(okmRoot.getPath());
 				ret.setHomeUuid(okmRoot.getUUID());
