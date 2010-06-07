@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
 import javax.jcr.NamespaceException;
 import javax.jcr.NamespaceRegistry;
@@ -39,6 +40,10 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.version.VersionException;
 import javax.naming.NamingException;
 
 import org.apache.commons.io.FileUtils;
@@ -64,6 +69,7 @@ import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -150,9 +156,11 @@ public class DirectRepositoryModule implements RepositoryModule {
 			try {
 				new DirectAuthModule().logout(token);
 			} catch (AccessDeniedException e) {
-				e.printStackTrace();
+				log.warn(e.getMessage(), e);
 			} catch (RepositoryException e) {
-				e.printStackTrace();
+				log.warn(e.getMessage(), e);
+			} catch (DatabaseException e) {
+				log.warn(e.getMessage(), e);
 			}
 		} else {
 			if (systemSession != null && systemSession.isLive()) {
@@ -204,7 +212,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public synchronized static String initialize() throws javax.jcr.RepositoryException, 
-			FileNotFoundException, InvalidNodeTypeDefException, ParseException {
+			FileNotFoundException, InvalidNodeTypeDefException, ParseException, DatabaseException {
 		log.debug("initialize()");
 				
 		// Initializes Repository and SystemSession
@@ -260,103 +268,33 @@ public class DirectRepositoryModule implements RepositoryModule {
 					log.debug(msg);
 					throw new javax.jcr.RepositoryException(msg);
 				}
-								
-				// Create root base node
-				log.info("Create root base node");
+				
 				Node root = session.getRootNode();
-				Node okmRoot = root.addNode(Repository.ROOT, Folder.TYPE);
 				
-				// Add basic properties
-				okmRoot.setProperty(Folder.AUTHOR, session.getUserID());
-				okmRoot.setProperty(Folder.NAME, Repository.ROOT);
-				
-				// Auth info
-				okmRoot.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
-				okmRoot.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
-				okmRoot.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmRoot.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				okmRoot.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-				okmRoot.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmRoot.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmRoot.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
-
+				// Create okm:root
+				log.info("Create okm:root");
+				Node okmRoot = createBase(session, root, Repository.ROOT);
 				okmRootPath = okmRoot.getPath();
 				
-				// Create user home base node
-				log.info("Create user home base node");
-				Node okmHome = root.addNode(Repository.HOME, Folder.TYPE);
-
-				// Add basic properties
-				okmHome.setProperty(Folder.AUTHOR, session.getUserID());
-				okmHome.setProperty(Folder.NAME, Repository.HOME);
-
-				// Auth info
-				okmHome.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
-				okmHome.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
-				okmHome.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmHome.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				okmHome.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-				okmHome.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmHome.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmHome.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+				// Create okm:trash
+				log.info("Create okm:trash");
+				createBase(session, root, Repository.TRASH);
 				
-				// Create template base node
-				log.info("Create template base node");
-				Node okmTemplate = root.addNode(Repository.TEMPLATES, Folder.TYPE);
-
-				// Add basic properties
-				okmTemplate.setProperty(Folder.AUTHOR, session.getUserID());
-				okmTemplate.setProperty(Folder.NAME, Repository.TEMPLATES);
-
-				// Auth info
-				okmTemplate.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
-				okmTemplate.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
-				okmTemplate.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmTemplate.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				okmTemplate.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-				okmTemplate.setProperty(Permission.ROLES_WRITE, new String[] {});
-				okmTemplate.setProperty(Permission.ROLES_DELETE, new String[] {});
-				okmTemplate.setProperty(Permission.ROLES_SECURITY, new String[] {});
+				// Create okm:templates
+				log.info("Create okm:templates");
+				createBase(session, root, Repository.TEMPLATES);
 				
-				// Create thesaurus base node
-				log.info("Create thesaurus base node");
-				Node okmThesaurus = root.addNode(Repository.THESAURUS, Folder.TYPE);
-
-				// Add basic properties
-				okmThesaurus.setProperty(Folder.AUTHOR, session.getUserID());
-				okmThesaurus.setProperty(Folder.NAME, Repository.HOME);
-
-				// Auth info
-				okmThesaurus.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
-				okmThesaurus.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
-				okmThesaurus.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmThesaurus.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				okmThesaurus.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-				okmThesaurus.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmThesaurus.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmThesaurus.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+				// Create okm:thesaurus
+				log.info("Create okm:thesaurus");
+				createBase(session, root, Repository.THESAURUS);
 				
-				// Create categories base node
-				log.info("Create categories base node");
-				Node okmCategories = root.addNode(Repository.CATEGORIES, Folder.TYPE);
-
-				// Add basic properties
-				okmCategories.setProperty(Folder.AUTHOR, session.getUserID());
-				okmCategories.setProperty(Folder.NAME, Repository.HOME);
-
-				// Auth info
-				okmCategories.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
-				okmCategories.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
-				okmCategories.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
-				okmCategories.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
-				okmCategories.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
-				okmCategories.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmCategories.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
-				okmCategories.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+				// Create okm:categories
+				log.info("Create okm:categories");
+				createBase(session, root, Repository.CATEGORIES);
 				
-				// Create config base node
-				log.info("Create config node");
-				Node okmConfig = root.addNode(Repository.SYS_CONFIG, Repository.SYS_CONFIG_TYPE);
+				// Create okm:config
+				log.info("Create okm:config");
+				Node okmConfig = createBase(session, root, Repository.SYS_CONFIG);
 
 				// Generate installation UUID
 				String uuid = UUIDGenerator.generate(okmConfig);
@@ -403,6 +341,31 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		return okmRootPath;
 	}
+	
+	/**
+	 * Create base node
+	 */
+	private static Node createBase(Session session, Node root, String name) throws ItemExistsException,
+			javax.jcr.PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException,
+			ConstraintViolationException, javax.jcr.RepositoryException {
+		Node base = root.addNode(name, Folder.TYPE);
+
+		// Add basic properties
+		base.setProperty(Folder.AUTHOR, session.getUserID());
+		base.setProperty(Folder.NAME, name);
+
+		// Auth info
+		base.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
+		base.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
+		
+		return base;
+	}
 
 	/**
 	 * Remove a repository from disk.
@@ -432,7 +395,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException, 
+			DatabaseException {
 		log.debug("getRootFolder({})", token);
 		Folder rootFolder = new Folder();
 		Session session = null;
@@ -465,7 +429,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException, 
+			DatabaseException {
 		log.debug("getTrashFolder({})", token);
 		Folder trashFolder = new Folder();
 		Session session = null;
@@ -477,7 +442,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JCRUtils.getSession();
 			}
 			
-			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH+"/"+session.getUserID());
 			
 			// Activity log
 			UserActivity.log(session, "GET_TRASH_FOLDER", null, trashFolder.getPath());
@@ -498,7 +463,34 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getTrashFolderBase({})");
+		Folder trashFolder = new Folder();
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH);
+			
+			// Activity log
+			UserActivity.log(session, "GET_TRASH_FOLDER_BASE", null, trashFolder.getPath());
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		log.debug("getTrashFolderBase: {}", trashFolder);
+		return trashFolder;
+	}
+	
+	@Override
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException, 
+			DatabaseException {
 		log.debug("getTemplatesFolder({})", token);
 		Folder templatesFolder = new Folder();
 		Session session = null;
@@ -531,7 +523,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPersonalFolder({})", token);
 		Folder personalFolder = new Folder();
 		Session session = null;
@@ -543,7 +536,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JCRUtils.getSession();
 			}
 			
-			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.HOME+"/"+session.getUserID()+"/"+Repository.PERSONAL);
+			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL+"/"+session.getUserID());
 			
 			// Activity log
 			UserActivity.log(session, "GET_PERSONAL_FOLDER", null, personalFolder.getPath());
@@ -564,22 +557,18 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getPersonalFolderBase({})", token);
-		Folder personalFolderBase = new Folder();
+	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPersonalFolderBase({})");
+		Folder personalFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
-			personalFolderBase = new DirectFolderModule().getProperties(session, "/"+Repository.HOME);
+			session = JCRUtils.getSession();
+			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL);
 			
 			// Activity log
-			UserActivity.log(session, "GET_PERSONAL_FOLDER_BASE", null, personalFolderBase.getPath());
+			UserActivity.log(session, "GET_PERSONAL_FOLDER_BASE", null, personalFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -587,17 +576,16 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
-		log.debug("getPersonalFolderBase: {}", personalFolderBase);
-		return personalFolderBase;
+		log.debug("getPersonalFolderBase: {}", personalFolder);
+		return personalFolder;
 	}
 	
 	@Override
-	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getMailFolder({})", token);
 		Folder mailFolder = new Folder();
 		Session session = null;
@@ -631,7 +619,34 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getMailFolderBase({})");
+		Folder mailFolder = new Folder();
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			mailFolder = new DirectFolderModule().getProperties(session, "/"+Repository.MAIL);
+			
+			// Activity log
+			UserActivity.log(session, "GET_MAIL_FOLDER_BASE", null, mailFolder.getPath());
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		log.debug("getMailFolderBase: {}", mailFolder);
+		return mailFolder;
+	}
+	
+	@Override
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getThesaurusFolder({})", token);
 		Folder thesaurusFolder = new Folder();
 		Session session = null;
@@ -664,7 +679,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException {
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getCategoriesFolder({})", token);
 		Folder categoriesFolder = new Folder();
 		Session session = null;
@@ -751,7 +767,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException {
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("purgeTrash({})", token);
 		Node userTrash = null;
 		Session session = null;
@@ -767,7 +784,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				session = JCRUtils.getSession();
 			}
 			
-			userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
 			for (NodeIterator it = userTrash.getNodes(); it.hasNext(); ) {
@@ -835,7 +852,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public boolean hasNode(String token, String path) throws RepositoryException {
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
 		log.debug("hasNode({}, {})", token, path);
 		boolean ret = false;
 		Session session = null;
@@ -862,7 +879,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException {
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getPath({}, {})", token, uuid);
 		String ret;
 		Session session = null;

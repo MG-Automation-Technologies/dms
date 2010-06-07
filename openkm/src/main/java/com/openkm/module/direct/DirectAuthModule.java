@@ -25,22 +25,16 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.version.VersionException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.Subject;
@@ -48,17 +42,18 @@ import javax.security.auth.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.Bookmark;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
-import com.openkm.bean.QueryParams;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.SessionManager;
 import com.openkm.core.UserAlreadyLoggerException;
+import com.openkm.dao.LockTokenDAO;
+import com.openkm.dao.bean.LockToken;
 import com.openkm.module.AuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
@@ -73,7 +68,7 @@ public class DirectAuthModule implements AuthModule {
 	@Override
 	@SuppressWarnings("unchecked")
 	public synchronized String login(String user, String pass) throws AccessDeniedException,
-			UserAlreadyLoggerException, RepositoryException {
+			UserAlreadyLoggerException, RepositoryException, DatabaseException {
 		log.debug("login({}, {})", user, pass);
 		String token = null;
 
@@ -155,159 +150,62 @@ public class DirectAuthModule implements AuthModule {
 	
 	/**
 	 * Load user data
+	 * @throws javax.jcr.RepositoryException 
 	 */
-	public static void loadUserData(Session session) throws javax.jcr.RepositoryException,
-			javax.jcr.PathNotFoundException, ValueFormatException, javax.jcr.AccessDeniedException,
-			ItemExistsException, ConstraintViolationException, InvalidItemStateException,
-			ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException {
+	public static void loadUserData(Session session) throws DatabaseException, javax.jcr.RepositoryException {
 		log.debug("loadUserData({}) -> {}", session.getUserID(), session);
-		if (session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
-			log.debug("** User Home already created **");
-			Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
-			Property lockTokensProperty = userConfig.getProperty(Repository.LOCK_TOKENS);
-			Value[] lockTokensValues = lockTokensProperty.getValues();
-
-			// Reload previous session lockTokens
-			log.debug("{} # lockTokensValues.length: {}", session.getUserID(), lockTokensValues.length);
-			for (int i=0; i<lockTokensValues.length; i++) {
-				String lockToken = lockTokensValues[i].getString();
-
-				if (lockToken.length() > 1) {
-					log.info(session.getUserID()+" # lockToken added: "+lockToken);
-					session.addLockToken(lockToken);
-				}
-			}
-
-			userConfig.save();
-		} else { // Create user space filesystem
-			// Create user home
-			synchronized (session.getUserID()) {
-				if (!session.itemExists("/"+Repository.HOME+"/"+session.getUserID())) {
-					Node okmHome = session.getRootNode().getNode(Repository.HOME);
-					createUserHome(okmHome, session.getUserID());
-					log.info("** SAVING... **");
-					okmHome.save();
-					log.info("** SAVED **");
-				}
-			}
+		Node root = session.getRootNode();
+		
+		if (!session.itemExists("/"+Repository.TRASH+"/"+session.getUserID())) {
+			createBase(session, root, "/"+Repository.TRASH+"/"+session.getUserID());
 		}
+		
+		if (!session.itemExists("/"+Repository.PERSONAL+"/"+session.getUserID())) {
+			createBase(session, root, "/"+Repository.PERSONAL+"/"+session.getUserID());
+		}
+		
+		if (!session.itemExists("/"+Repository.MAIL+"/"+session.getUserID())) {
+			createBase(session, root, "/"+Repository.MAIL+"/"+session.getUserID());
+		}
+		
+		root.save();
+		List<LockToken> ltList = LockTokenDAO.findByUser(session.getUserID());
+		
+		for (Iterator<LockToken> it = ltList.iterator(); it.hasNext(); ) {
+			LockToken lt = it.next();
+			session.addLockToken(lt.getToken());
+		}
+		
+		log.debug("** User Home already created **");
 	}
 
 	/**
-	 * Create user home
+	 * Create base node
 	 */
-	public static void createUserHome(Node okmHome, String userId) throws ItemExistsException,
-			javax.jcr.PathNotFoundException, NoSuchNodeTypeException, LockException, 
-			VersionException, ConstraintViolationException, javax.jcr.RepositoryException,
-			ValueFormatException, javax.jcr.AccessDeniedException, InvalidItemStateException, 
-			ReferentialIntegrityException {
-		log.info("** Create user '{}' home '{}' **", userId, okmHome.getPath()+"/"+userId);
-		Node userHome = okmHome.addNode(userId, Folder.TYPE);
-		userHome.setProperty(Folder.AUTHOR, userId);
-		userHome.setProperty(Folder.NAME, userId);
+	private static Node createBase(Session session, Node root, String name) throws 
+			javax.jcr.RepositoryException {
+		Node base = root.addNode(name, Folder.TYPE);
+
+		// Add basic properties
+		base.setProperty(Folder.AUTHOR, session.getUserID());
+		base.setProperty(Folder.NAME, name);
 
 		// Auth info
-		userHome.setProperty(Permission.USERS_READ, new String[] { userId });
-		userHome.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userHome.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userHome.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userHome.setProperty(Permission.ROLES_READ, new String[] {});
-		userHome.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userHome.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userHome.setProperty(Permission.ROLES_SECURITY, new String[] {});
+		base.setProperty(Permission.USERS_READ, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_WRITE, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_DELETE, new String[] { session.getUserID() });
+		base.setProperty(Permission.USERS_SECURITY, new String[] { session.getUserID() });
+		base.setProperty(Permission.ROLES_READ, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_WRITE, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_DELETE, new String[] { Config.DEFAULT_USER_ROLE });
+		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 		
-		log.info("** Create user '{}' trash '{}' **", userId, userHome.getPath()+"/"+Repository.TRASH);
-		Node userTrash = userHome.addNode(Repository.TRASH, Folder.TYPE);
-		userTrash.setProperty(Folder.AUTHOR,  userId);
-		userTrash.setProperty(Folder.NAME, Repository.TRASH);
-
-		// Auth info
-		userTrash.setProperty(Permission.USERS_READ, new String[] { userId });
-		userTrash.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userTrash.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userTrash.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userTrash.setProperty(Permission.ROLES_READ, new String[] {});
-		userTrash.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userTrash.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userTrash.setProperty(Permission.ROLES_SECURITY, new String[] {});
-		
-		log.info("** Create user '{}' config '{}' **", userId, userHome.getPath()+"/"+Repository.USER_CONFIG);
-		Node userConfig = userHome.addNode(Repository.USER_CONFIG, Repository.USER_CONFIG_TYPE);
-		userConfig.setProperty(Bookmark.HOME_PATH, "/"+Repository.ROOT);
-		userConfig.setProperty(Bookmark.HOME_TYPE, Folder.TYPE);
-
-		// Auth info
-		userConfig.setProperty(Permission.USERS_READ, new String[] { userId });
-		userConfig.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userConfig.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userConfig.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userConfig.setProperty(Permission.ROLES_READ, new String[] {});
-		userConfig.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userConfig.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userConfig.setProperty(Permission.ROLES_SECURITY, new String[] {});
-
-		log.info("** Create user '{}' personal documents '{}' **", userId, userHome.getPath()+"/"+Repository.PERSONAL);
-		Node userDocuments = userHome.addNode(Repository.PERSONAL, Folder.TYPE);
-		userDocuments.setProperty(Folder.AUTHOR, userId);
-		userDocuments.setProperty(Folder.NAME, Repository.PERSONAL);
-
-		// Auth info
-		userDocuments.setProperty(Permission.USERS_READ, new String[] { userId });
-		userDocuments.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userDocuments.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userDocuments.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userDocuments.setProperty(Permission.ROLES_READ, new String[] {});
-		userDocuments.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userDocuments.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userDocuments.setProperty(Permission.ROLES_SECURITY, new String[] {});
-
-		log.info("** Create user '{}' mail '{}' **", userId, userHome.getPath()+"/"+Repository.MAIL);
-		Node userMail = userHome.addNode(Repository.MAIL, Folder.TYPE);
-		userMail.setProperty(Folder.AUTHOR, userId);
-		userMail.setProperty(Folder.NAME, Repository.MAIL);
-
-		// Auth info
-		userMail.setProperty(Permission.USERS_READ, new String[] { userId });
-		userMail.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userMail.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userMail.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userMail.setProperty(Permission.ROLES_READ, new String[] {});
-		userMail.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userMail.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userMail.setProperty(Permission.ROLES_SECURITY, new String[] {});
-
-		log.info("** Create user '{}' query '{}' **", userId, userHome.getPath()+"/"+QueryParams.LIST);
-		Node userQuery = userHome.addNode(QueryParams.LIST, QueryParams.LIST_TYPE);
-
-		// Auth info
-		userQuery.setProperty(Permission.USERS_READ, new String[] { userId });
-		userQuery.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userQuery.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userQuery.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userQuery.setProperty(Permission.ROLES_READ, new String[] {});
-		userQuery.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userQuery.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userQuery.setProperty(Permission.ROLES_SECURITY, new String[] {});
-
-		log.info("** Create user '{}' bookmark '{}' **", userId, userHome.getPath()+"/"+Bookmark.LIST);
-		Node userBookmark = userHome.addNode(Bookmark.LIST, Bookmark.LIST_TYPE);
-
-		// Auth info
-		userBookmark.setProperty(Permission.USERS_READ, new String[] { userId });
-		userBookmark.setProperty(Permission.USERS_WRITE, new String[] { userId });
-		userBookmark.setProperty(Permission.USERS_DELETE, new String[] { userId });
-		userBookmark.setProperty(Permission.USERS_SECURITY, new String[] { userId });
-		userBookmark.setProperty(Permission.ROLES_READ, new String[] {});
-		userBookmark.setProperty(Permission.ROLES_WRITE, new String[] {});
-		userBookmark.setProperty(Permission.ROLES_DELETE, new String[] {});
-		userBookmark.setProperty(Permission.ROLES_SECURITY, new String[] {});
-		
-		// Save
-		okmHome.save();
+		return base;
 	}
 
 	@Override
-	public String login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
+	public String login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException,
+			DatabaseException {
 		log.debug("login()");
 		String token = login(null, null);
 		log.debug("login: {}", token);
@@ -315,10 +213,11 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public synchronized void logout(String token) throws AccessDeniedException, RepositoryException {
+	public synchronized void logout(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("logout({})", token);
 		Session session = null;
-			
+		
 		try {
 			if (Config.SESSION_MANAGER) {
 				session = SessionManager.getInstance().get(token);
@@ -328,17 +227,6 @@ public class DirectAuthModule implements AuthModule {
 			
 			if (Config.SESSION_MANAGER) {
 				if (session.isLive()) {
-					Node userConfig = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
-					Property lockTokens = userConfig.getProperty(Repository.LOCK_TOKENS);
-					String[] sessionLockTokens = session.getLockTokens();
-					lockTokens.setValue(sessionLockTokens);
-					userConfig.save();
-					
-					log.info(session.getUserID()+" # sessionLockTokens.length: "+sessionLockTokens.length);
-					for (int i=0; i<sessionLockTokens.length; i++) {
-						log.info(session.getUserID()+" # sessionLockTokens saved: "+sessionLockTokens[i]);
-					}
-					
 					// Activity log
 					UserActivity.log(session, "LOGOUT", null, null);
 					
@@ -368,7 +256,8 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public void grantUser(String token, String nodePath, String user, int permissions,
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, permissions, recursive });
 		Node node = null;
 		Session session = null;
@@ -472,7 +361,8 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public void revokeUser(String token, String nodePath, String user, int permissions,
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		Node node = null;
 		Session session = null;
@@ -573,7 +463,8 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public void grantRole(String token, String nodePath, String role, int permissions, 
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
 		Session session = null;
@@ -677,7 +568,8 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public void revokeRole(String token, String nodePath, String role, int permissions, 
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		Node node = null;
 		Session session = null;
@@ -778,7 +670,7 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
 		Session session = null;
@@ -791,7 +683,6 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
-
 			Value[] usersRead = node.getProperty(Permission.USERS_READ).getValues();
 
 			for (int i=0; i<usersRead.length; i++) {
@@ -851,7 +742,7 @@ public class DirectAuthModule implements AuthModule {
 
 	@Override
 	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		HashMap<String, Byte> roles = new HashMap<String, Byte>();
 		Session session = null;
@@ -864,7 +755,6 @@ public class DirectAuthModule implements AuthModule {
 			}
 			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
-
 			Value[] rolesRead = node.getProperty(Permission.ROLES_READ).getValues();
 
 			for (int i=0; i<rolesRead.length; i++) {
@@ -925,7 +815,7 @@ public class DirectAuthModule implements AuthModule {
 	/**
 	 *  View user session info
 	 */
-	public void view(String token) throws RepositoryException {
+	public void view(String token) throws RepositoryException, DatabaseException {
 		Session session = null;
 		
 		try {
