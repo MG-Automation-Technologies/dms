@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
-import com.openkm.bean.Bookmark;
+import com.openkm.dao.bean.Bookmark;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
@@ -307,12 +307,14 @@ public class Util {
 	 * the original Bookmark.
 	 */
 	public static GWTBookmark copy(Bookmark bookmark) {
-		log.debug("copy("+bookmark+")");
+		log.debug("copy({})", bookmark);
 		GWTBookmark gWTBookmark = new GWTBookmark();
 		
 		if (bookmark != null) {
+			gWTBookmark.setId(bookmark.getId());
 			gWTBookmark.setName(bookmark.getName());
 			gWTBookmark.setPath(bookmark.getPath());
+			gWTBookmark.setUuid(bookmark.getUuid());
 			gWTBookmark.setType(bookmark.getType());
 		}
 		
@@ -327,10 +329,10 @@ public class Util {
 	 * @return The parent item path.
 	 */
 	public static String getParent(String path) {
-		log.debug("getParent("+path+")");
+		log.debug("getParent({})", path);
 		int lastSlash = path.lastIndexOf('/');
 		String ret = (lastSlash > 0)?path.substring(0, lastSlash):"";
-		log.debug("getParent: "+ret);
+		log.debug("getParent: {}", ret);
 		return ret;	
 	}
 
@@ -341,9 +343,9 @@ public class Util {
 	 * @return The name of the item.
 	 */
 	public static String getName(String path) {
-		log.debug("getName("+path+")");
+		log.debug("getName({})", path);
 		String ret = path.substring(path.lastIndexOf('/')+1);
-		log.debug("getName: "+ret);
+		log.debug("getName: {}", ret);
 		return ret;
 	}
 	
