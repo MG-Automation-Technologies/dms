@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
@@ -55,7 +56,7 @@ public class OKMNotification {
 	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
 	 */
 	public void subscribe(String token, String nodePath) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("subscribe({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.subscribe(token, nodePath);
@@ -66,7 +67,7 @@ public class OKMNotification {
 	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
 	 */
 	public void unsubscribe(String token, String nodePath) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("unsubscribe({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.unsubscribe(token, nodePath);
@@ -77,7 +78,7 @@ public class OKMNotification {
 	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
 	 */
 	public StringArray getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getSubscriptors({}, {})", token, nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		StringArray sa = new StringArray();
