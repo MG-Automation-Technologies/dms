@@ -34,6 +34,7 @@ import com.openkm.api.OKMMail;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -83,6 +84,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getChilds: {}", mailList);
@@ -108,6 +112,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("delete: void");
