@@ -67,16 +67,6 @@ public interface RepositoryModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException;
-	
-	/**
-	 * Obtain the personal documents folder of the repository.
-	 * 
-	 * @param token The session authorization token.
-	 * @return A folder object with the user documents folder node properties.
-	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
-	 * @throws RepositoryException If there is any general repository problem.
-	 */
-	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException;
 
 	/**
 	 * Obtain the personal mails folder of the repository.
