@@ -142,7 +142,7 @@ public class OKMDashboard implements DashboardModule {
 	}
 
 	@Override
-	public long getUserDocumentsSize(String token) throws RepositoryException {
+	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
 		log.debug("getUserDocumentsSize()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		long size = dm.getUserDocumentsSize(token);
