@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.SessionManager;
 import com.openkm.dao.LegacyDAO;
 import com.openkm.util.JCRUtils;
@@ -110,6 +111,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 		} catch (RepositoryException e) {
 			sendErrorRedirect(request,response, e);
 		} catch (SQLException e) {
+			sendErrorRedirect(request,response, e);
+		} catch (DatabaseException e) {
 			sendErrorRedirect(request,response, e);
 		} finally {
 			if (!Config.SESSION_MANAGER) {
