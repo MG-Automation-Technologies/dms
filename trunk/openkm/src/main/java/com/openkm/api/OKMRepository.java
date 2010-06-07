@@ -76,15 +76,6 @@ public class OKMRepository implements RepositoryModule {
 		log.debug("getPersonalFolder: "+personalFolder);
 		return personalFolder;
 	}
-	
-	@Override
-	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException {
-		log.debug("getPersonalFolderBase("+token+")");
-		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder personalFolderBase = rm.getPersonalFolderBase(token);
-		log.debug("getPersonalFolderBase: "+personalFolderBase);
-		return personalFolderBase;
-	}
 
 	@Override
 	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException {

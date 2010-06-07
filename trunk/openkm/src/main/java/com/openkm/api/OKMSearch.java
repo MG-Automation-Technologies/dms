@@ -29,14 +29,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.ItemExistsException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
 
@@ -125,26 +125,27 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void saveSearch(String token, QueryParams params, String name)
-			throws AccessDeniedException, ItemExistsException, RepositoryException {
-		log.debug("saveSearch(" + token + ", " + params + ", " + name + ")");
+	public void saveSearch(String token, QueryParams params) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("saveSearch(" + token + ", " + params + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
-		sm.saveSearch(token, params, name);
+		sm.saveSearch(token, params);
 		log.debug("saveSearch: void");
 	}
 
 	@Override
-	public QueryParams getSearch(String token, String name) throws PathNotFoundException,
-			RepositoryException {
-		log.debug("getSearch(" + token + ", " + name + ")");
+	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getSearch(" + token + ", " + qpId + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryParams qp = sm.getSearch(token, name);
+		QueryParams qp = sm.getSearch(token, qpId);
 		log.debug("getSearch: " + qp);
 		return qp;
 	}
 
 	@Override
-	public Collection<String> getAllSearchs(String token) throws RepositoryException {
+	public Collection<String> getAllSearchs(String token) throws RepositoryException, 
+			DatabaseException {
 		log.debug("getAllSearchs(" + token + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
 		Collection<String> col = sm.getAllSearchs(token);
@@ -153,11 +154,11 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException {
-		log.debug("deleteSearch(" + token + ", " + name + ")");
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, 
+			PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("deleteSearch(" + token + ", " + qpId + ")");
 		SearchModule sm = ModuleManager.getSearchModule();
-		sm.deleteSearch(token, name);
+		sm.deleteSearch(token, qpId);
 		log.debug("deleteSearch: void");
 	}
 
