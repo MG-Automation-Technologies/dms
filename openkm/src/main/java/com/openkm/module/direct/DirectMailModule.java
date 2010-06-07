@@ -49,6 +49,7 @@ import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -198,8 +199,8 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public Mail create(String token, Mail mail) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, VirusDetectedException {
+	public Mail create(String token, Mail mail) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, VirusDetectedException,	DatabaseException {
 		log.debug("create({}, {})", token, mail);
 		Mail newMail = null;
 		Transaction t = null;
@@ -277,7 +278,7 @@ public class DirectMailModule implements MailModule {
 
 	@Override
 	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {})", token, mailPath);
 		Mail mail = null;
 		Session session = null;
@@ -311,7 +312,7 @@ public class DirectMailModule implements MailModule {
 
 	@Override
 	public void delete(String token, String mailPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("delete({}, {})", token, mailPath);
 		Session session = null;
 		
@@ -370,7 +371,7 @@ public class DirectMailModule implements MailModule {
 	
 	@Override
 	public void purge(String token, String mailPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException {
+			RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("purge({}, {})", token, mailPath);
 		Node parentNode = null;
 		Session session = null;
@@ -419,7 +420,7 @@ public class DirectMailModule implements MailModule {
 
 	@Override
 	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, ItemExistsException {
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, mailPath, newName });
 		Mail renamedMail = null;
 		Session session = null;
@@ -489,7 +490,7 @@ public class DirectMailModule implements MailModule {
 	
 	@Override
 	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, ItemExistsException {
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("move({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Session session = null;
 		
@@ -573,7 +574,7 @@ public class DirectMailModule implements MailModule {
 
 	@Override
 	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, IOException {
+			RepositoryException, PathNotFoundException, ItemExistsException, IOException, DatabaseException {
 		log.debug("copy({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Transaction t = null;
 		XASession session = null;
@@ -635,7 +636,8 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
+	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("findChilds({}, {})", token, fldPath);
 		ArrayList<Mail> childs = new ArrayList<Mail>();
 		Session session = null;
@@ -676,8 +678,8 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public boolean isValid(String token, String mailPath) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, mailPath);
 		boolean valid = false;
 		Session session = null;
