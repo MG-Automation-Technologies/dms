@@ -161,11 +161,11 @@ public class OKMDashboard implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardDocumentResult> find(String token, String name)
-			throws IOException, ParseException, RepositoryException {
+	public Collection<DashboardDocumentResult> find(String token, int qpId)
+			throws IOException, ParseException, RepositoryException, DatabaseException {
 		log.debug("find(" + token + ")");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		Collection<DashboardDocumentResult> documents = dm.find(token, name);
+		Collection<DashboardDocumentResult> documents = dm.find(token, qpId);
 		log.debug("find: "+documents);
 		return documents;
 	}
