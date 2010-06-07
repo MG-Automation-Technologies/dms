@@ -29,6 +29,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
@@ -1145,5 +1146,14 @@ public class MainMenu extends Composite {
 	 */
 	public void setHelpMenuVisible(boolean visible) {
 		menuHelp.setVisible(visible);
+	}
+	
+	/**
+	 * addMenu
+	 * 
+	 * @param extension
+	 */
+	public void addMenu(MenuItemExtension extension) {
+		MainMenu.addItem(extension);
 	}
 }
