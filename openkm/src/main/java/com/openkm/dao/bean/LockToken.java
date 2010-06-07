@@ -1,6 +1,9 @@
 package com.openkm.dao.bean;
 
-public class LockToken {
+import java.io.Serializable;
+
+public class LockToken implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String user;
 	private String token;
 	

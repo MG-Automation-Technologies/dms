@@ -1,10 +1,13 @@
 package com.openkm.dao.bean;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryParams {
+public class QueryParams implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public static final int DOCUMENT = 1;
 	public static final int FOLDER = 2;
 	public static final int MAIL = 4;
@@ -13,9 +16,10 @@ public class QueryParams {
 	public static final String OR = "or";
 	
 	private int id;
+	private String user;
 	private String name;
 	private String keywords;
-	private String category;
+	private String categories;
 	private String content;
 	private String mimeType;
 	private String author;
@@ -38,6 +42,14 @@ public class QueryParams {
 		this.id = id;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -54,12 +66,12 @@ public class QueryParams {
 		this.keywords = keywords;
 	}
 	
-	public String getCategory() {
-		return category;
+	public String getCategories() {
+		return categories;
 	}
 	
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategories(String categories) {
+		this.categories = categories;
 	}
 	
 	public String getContent() {

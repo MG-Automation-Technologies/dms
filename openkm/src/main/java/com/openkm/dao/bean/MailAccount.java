@@ -21,7 +21,10 @@
 
 package com.openkm.dao.bean;
 
-public class MailAccount {
+import java.io.Serializable;
+
+public class MailAccount implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int id = -1;
 	private String user = "";
 	private String mailHost = "";

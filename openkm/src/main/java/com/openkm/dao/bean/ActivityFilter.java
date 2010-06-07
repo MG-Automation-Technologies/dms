@@ -21,9 +21,11 @@
 
 package com.openkm.dao.bean;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class ActivityFilter {
+public class ActivityFilter implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Calendar begin;
 	private Calendar end;
 	private String user;
