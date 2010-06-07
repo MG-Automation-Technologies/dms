@@ -36,6 +36,7 @@ import com.openkm.api.OKMDashboard;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -201,10 +202,13 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 			for (Iterator<String> it = OKMDashboard.getInstance().getUserSearchs(token).iterator(); it.hasNext(); ) {
 				searchList.add(it.next());
 			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
-		}
+		} 
 		
 		log.debug("getUserSearchs: {}", searchList);
 		return searchList;

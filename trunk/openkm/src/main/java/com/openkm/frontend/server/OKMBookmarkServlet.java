@@ -131,49 +131,6 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	}
 	
 	@Override
-	public void setUserHome(String name) throws OKMException {
-		log.debug("setUserHome({})", name);
-		String token = getToken();
-		
-		try {
-			OKMBookmark.getInstance().setUserHome(token, name);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_General), e.getMessage());
-		}
-		
-		log.debug("setUserHome: void");
-	}
-	
-	@Override
-	public GWTBookmark getUserHome() throws OKMException {
-		log.debug("getUserHome()");
-		String token = getToken();
-		
-		try {
-			return Util.copy(OKMBookmark.getInstance().getUserHome(token));
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_General), e.getMessage());
-		}
-	}
-	
-	@Override
 	public GWTBookmark rename(int bmId, String newName) throws OKMException {
 		log.debug("rename({}, {})", bmId, newName);
 		String token = getToken();

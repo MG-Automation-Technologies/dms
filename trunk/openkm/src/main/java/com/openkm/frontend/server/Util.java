@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
@@ -44,7 +45,7 @@ import com.openkm.bean.Lock;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Note;
 import com.openkm.bean.PropertyGroup;
-import com.openkm.bean.QueryParams;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.bean.form.Button;
@@ -88,6 +89,7 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTToken;
 import com.openkm.frontend.client.bean.GWTTransition;
+import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 
@@ -815,7 +817,7 @@ public class Util {
 	}
 	
 	/**
-	 * Copy the Document data to GWTPropertyGroup data.
+	 * Copy the PropertyGroup data to GWTPropertyGroup data.
 	 * 
 	 * @param doc The original PropertyGroup object.
 	 * @return A GWTPropertyGroup object with the data from 
@@ -828,5 +830,23 @@ public class Util {
 		gWTPropertyGroup.setName(property.getName());
 		
 		return gWTPropertyGroup;
+	}
+	
+	/**
+	 * Copy the UserConfig data to GWTUserConfig data.
+	 * 
+	 * @param doc The original UserConfig object.
+	 * @return A GWTUserConfig object with the data from 
+	 * the original UserConfig.
+	 */
+	public static GWTUserConfig copy(UserConfig userCopy) {
+		GWTUserConfig gWTUserConfig = new GWTUserConfig();
+		
+		gWTUserConfig.setHomePath(userCopy.getHomePath());
+		gWTUserConfig.setHomeType(userCopy.getHomeType());
+		gWTUserConfig.setHomeUuid(userCopy.getHomeUuid());
+		gWTUserConfig.setUser(userCopy.getUser());
+		
+		return gWTUserConfig;
 	}
 }

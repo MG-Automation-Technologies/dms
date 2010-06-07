@@ -36,7 +36,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
 import com.openkm.api.OKMSearch;
 import com.openkm.bean.Document;
-import com.openkm.bean.QueryParams;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
