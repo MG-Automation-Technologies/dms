@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.openkm.dao.bean.QueryParams" table="OKM_QUERY_PARAMS">
+    <id name="id" column="QP_ID"><generator class="native"/></id>
+    <property name="name" column="QP_NAME" not-null="true"/>
+    <property name="keywords" column="QP_KEYWORDS"/>
+    <property name="category" column="QP_CATEGORY"/>
+    <property name="content" column="QP_CONTENT"/>
+    <property name="mimeType" column="QP_MIME_TYPE"/>
+    <property name="author" column="QP_AUTHOR"/>
+    <property name="path" column="QP_PATH"/>
+    <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
+    <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
+    <map name="properties" table="OKM_PROPERTY">
+      <key column="QPP_ID"/>
+      <index column="QPP_NAME" type="string"/>
+      <element column="QPP_VALUE" type="string"/>
+    </map>
+  </class>
+</hibernate-mapping>
