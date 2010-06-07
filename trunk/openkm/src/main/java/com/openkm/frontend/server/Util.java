@@ -62,6 +62,7 @@ import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
 import com.openkm.bean.workflow.Transition;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -425,7 +426,8 @@ public class Util {
 	 * @throws PathNotFoundException 
 	 * @throws ParseException 
 	 */
-	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, IOException, PathNotFoundException, ParseException {
+	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, 
+			IOException, PathNotFoundException, ParseException, DatabaseException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
 		gWTParams.setContent(params.getContent());
