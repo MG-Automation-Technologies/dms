@@ -46,7 +46,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<QueryResult> findByContent(String token, String expression) throws IOException,
-			ParseException,	RepositoryException;
+			ParseException,	RepositoryException, DatabaseException;
 
 	/**
 	 * Search for documents by document name.
@@ -57,7 +57,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<QueryResult> findByName(String token, String expression) throws IOException,
-			ParseException,	RepositoryException;
+			ParseException,	RepositoryException, DatabaseException;
 
 	/**
 	 * Search for documents using it associated keywords.
@@ -68,7 +68,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Collection<QueryResult> findByKeywords(String token, String expression) throws IOException,
-			ParseException,	RepositoryException;
+			ParseException,	RepositoryException, DatabaseException;
 
 	/**
 	 * Performs a complex search by content, name and keywords (between others).
@@ -80,7 +80,7 @@ public interface SearchModule {
 	 * @throws IOException If something fails when parsing metadata.
 	 */
 	public Collection<QueryResult> find(String token, QueryParams params) throws IOException,
-			ParseException, RepositoryException;
+			ParseException, RepositoryException, DatabaseException;
 
 	/**
 	 * Performs a complex search by content, name and keywords. 
@@ -95,7 +95,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-		throws IOException, ParseException, RepositoryException;
+		throws IOException, ParseException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -107,7 +107,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
-			throws RepositoryException;
+			throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -123,7 +123,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, 
-			int limit) throws RepositoryException;
+			int limit) throws RepositoryException, DatabaseException;
 
 	/**
 	 * Save a search for future use.
@@ -176,7 +176,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) 
-			throws RepositoryException;
+			throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get the documents within a category
@@ -187,5 +187,5 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	public Collection<Document> getCategorizedDocuments(String token, String categoryId) 
-			throws RepositoryException;
+			throws RepositoryException, DatabaseException;
 }
