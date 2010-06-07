@@ -44,6 +44,7 @@ import com.openkm.api.OKMFolder;
 import com.openkm.bean.Folder;
 import com.openkm.bean.kea.Term;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.kea.RDFREpository;
@@ -104,6 +105,8 @@ public class KEATree {
 				log.error("access denied", e);
 			} catch (com.openkm.core.RepositoryException e) {
 				log.error("openkm repository exception", e);
+			} catch (DatabaseException e) {
+				log.error("database error", e);
 			}
 		}
 	}
