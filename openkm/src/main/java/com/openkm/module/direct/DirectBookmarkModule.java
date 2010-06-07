@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
-import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -42,6 +41,7 @@ import com.openkm.core.SessionManager;
 import com.openkm.dao.BookmarkDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.module.BookmarkModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -52,7 +52,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	
 	@Override
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException {
+			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
 		Session session = null;
@@ -87,7 +87,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -99,7 +99,8 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException {
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("remove({}, {})", token, bmId);
 		Session session = null;
 		
@@ -121,7 +122,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -133,7 +134,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 
 	@Override
 	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		Bookmark renamedBookmark = null;
 		Session session = null;
@@ -158,7 +159,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -170,7 +171,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public Collection<Bookmark> getAll(String token) throws RepositoryException {
+	public Collection<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
 		log.debug("getAll({})", token);
 		Collection<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
@@ -189,7 +190,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -202,9 +203,8 @@ public class DirectBookmarkModule implements BookmarkModule {
 
 	@Override
 	public void setUserHome(String token, String nodePath) throws AccessDeniedException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("setUserHome({}, {})", token, nodePath);
-		Node userConfig = null;
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -219,17 +219,19 @@ public class DirectBookmarkModule implements BookmarkModule {
 			}
 			
 			Node rootNode = session.getRootNode();
-			userConfig = rootNode.getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.USER_CONFIG);
-			//Node node = rootNode.getNode(nodePath.substring(1));
-			//userConfig.setProperty(Bookmark.HOME_PATH, nodePath);
-			//userConfig.setProperty(Bookmark.HOME_TYPE, getNodeType(node));
+			Node node = rootNode.getNode(nodePath.substring(1));
+			UserConfig uc = new UserConfig();
+			uc.setHomePath(nodePath);
+			uc.setHomeUuid(node.getUUID());
+			uc.setHomeType(getNodeType(node));
+			UserConfigDAO.setHome(uc);
 			
 			// Activity log
 			UserActivity.log(session, "BOOKMARK_SET_USER_HOME", null, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(userConfig);
 			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
@@ -240,7 +242,8 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException {
+	public Bookmark getUserHome(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getUserHome({})", token);
 		Bookmark ret = new Bookmark();
 		Session session = null;
@@ -259,7 +262,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		} finally {
 			if (!Config.SESSION_MANAGER) {
 				JCRUtils.logout(session);
