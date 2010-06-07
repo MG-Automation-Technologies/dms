@@ -70,7 +70,8 @@ public class OKMDocument {
 	 */
 	public Document create(String token, Document doc, byte[] content) throws IOException,
 			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException,
-			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException {
+			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("create({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -84,7 +85,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#delete(java.lang.String, java.lang.String)
 	 */
 	public void delete(String token, String docPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, LockException {
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
 		log.debug("delete({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.delete(token, docPath);
@@ -95,7 +96,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getProperties(java.lang.String, java.lang.String)
 	 */
 	public Document getProperties(String token, String docPath) throws RepositoryException, 
-			PathNotFoundException {
+			PathNotFoundException, DatabaseException {
 		log.debug("getProperties({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = dm.getProperties(token, docPath);
@@ -107,7 +108,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getContent(java.lang.String, java.lang.String, boolean)
 	 */
 	public byte[] getContent(String token, String docPath, boolean checkout) throws RepositoryException, 
-			IOException, PathNotFoundException {
+			IOException, PathNotFoundException, DatabaseException {
 		log.debug("getContent({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContent(token, docPath, checkout);
@@ -122,7 +123,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getContentByVersion(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public byte[] getContentByVersion(String token, String docPath, String versionId) 
-			throws RepositoryException, IOException, PathNotFoundException {
+			throws RepositoryException, IOException, PathNotFoundException, DatabaseException {
 		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		InputStream is = dm.getContentByVersion(token, docPath, versionId); 
@@ -137,7 +138,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getChilds(java.lang.String, java.lang.String)
 	 */
 	public DocumentArray getChilds(String token, String fldId) throws RepositoryException,
-			PathNotFoundException {
+			PathNotFoundException, DatabaseException {
 		log.debug("getChilds({}, {})", token, fldId);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		DocumentArray da = new DocumentArray();
@@ -151,7 +152,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public Document rename(String token, String docPath, String newName) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, ItemExistsException {
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document renamedDocument = dm.rename(token, docPath, newName);
@@ -163,7 +164,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#setProperties(java.lang.String, com.openkm.bean.Document)
 	 */
 	public void setProperties(String token, Document doc) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, VersionException, LockException {
+			RepositoryException, PathNotFoundException, VersionException, LockException, DatabaseException {
 		log.debug("setProperties({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setProperties(token, doc);
@@ -209,7 +210,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getVersionHistory(java.lang.String, java.lang.String)
 	 */
 	public VersionArray getVersionHistory(String token, String docPath) throws 
-			PathNotFoundException, RepositoryException {
+			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		VersionArray va = new VersionArray();
@@ -225,7 +226,7 @@ public class OKMDocument {
 	public void setContent(String token, String docPath, byte[] content) throws
 			FileSizeExceededException, VirusDetectedException, VersionException,
 			LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, IOException {
+			RepositoryException, IOException, DatabaseException {
 		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, content });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -260,7 +261,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#purge(java.lang.String, java.lang.String)
 	 */
 	public void purge(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException {
+			RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("purge({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purge(token, docPath);
@@ -272,7 +273,7 @@ public class OKMDocument {
 	 */
 	public void move(String token, String docPath, String fldPath) throws LockException, 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("move({}, {}, {})", new Object[] { token, docPath, fldPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.move(token, docPath, fldPath);
@@ -283,7 +284,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#restoreVersion(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void restoreVersion(String token, String docPath, String versionId)
-			throws AccessDeniedException, RepositoryException, PathNotFoundException {
+			throws AccessDeniedException, RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.restoreVersion(token, docPath, versionId);
@@ -294,7 +295,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#purgeVersionHistory(java.lang.String, java.lang.String)
 	 */
 	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException {
+			RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("purgeVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.purgeVersionHistory(token, docPath);
@@ -305,7 +306,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#getVersionSize(java.lang.String, java.lang.String)
 	 */
 	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
-			PathNotFoundException {
+			PathNotFoundException, DatabaseException {
 		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		long size = dm.getVersionHistorySize(token, docPath);
@@ -317,7 +318,7 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#isValid(java.lang.String, java.lang.String)
 	 */
 	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException {
+			RepositoryException, DatabaseException {
 		log.debug("isValid({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		boolean valid = dm.isValid(token, docPath);
@@ -328,7 +329,7 @@ public class OKMDocument {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.DocumentModule#getPath(java.lang.String, java.lang.String)
 	 */
-	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException {
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getPath({}, {})", token, uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		String path = dm.getPath(token, uuid);
