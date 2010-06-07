@@ -29,6 +29,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
@@ -219,7 +220,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void checkout(String token, String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Cancel a previous checked out state in a document.
@@ -233,7 +234,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void cancelCheckout(String token, String docPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Test if a node has been already checked out.
@@ -262,7 +263,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Version checkin(String token, String docPath, String comment) throws LockException, 
-			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException;
+			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Get the document version history.
@@ -288,7 +290,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void lock(String token, String docPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Unlock a document, so will be editable for other users.
@@ -302,7 +304,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void unlock(String token, String docPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Tell if a document is locked.
