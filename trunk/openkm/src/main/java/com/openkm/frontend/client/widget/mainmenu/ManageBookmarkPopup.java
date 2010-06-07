@@ -92,11 +92,11 @@ public class ManageBookmarkPopup extends DialogBox {
 			public void onKeyPress(KeyPressEvent event) {
 				if ((char)KeyCodes.KEY_ENTER == event.getCharCode() ) {
 					if (textBox.getText().length()>0) {
-						rename(table.getText(selectedRow,1),textBox.getText());
+						rename(Integer.parseInt(table.getText(selectedRow,2)),textBox.getText());
 					}
 					
 				} else if ((char)KeyCodes.KEY_ESCAPE == event.getCharCode() ) {
-					tableBookmark.setHTML(0,1,table.getText(selectedRow,1));
+					tableBookmark.setHTML(0,1,table.getText(selectedRow,2));
 					deleteButton.setEnabled(true);
 					updateButton.setEnabled(true);
 				}	
@@ -117,7 +117,7 @@ public class ManageBookmarkPopup extends DialogBox {
 			@Override
 			public void onClick(ClickEvent event) {
 					if (selectedRow>=0) {
-						remove(table.getText(selectedRow,1));
+						remove(Integer.parseInt(table.getText(selectedRow,2)));
 					}
 				}
 			}
@@ -161,6 +161,8 @@ public class ManageBookmarkPopup extends DialogBox {
 					if (bookmarkMap.containsKey(table.getText(row,1))) {
 						GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(row,1));
 						tableBookmark.setHTML(0,1,bookmark.getName());
+						tableBookmark.setHTML(0,2,bookmark.getUuid());
+						tableBookmark.getFlexCellFormatter().setVisible(0, 2, false);
 						tableBookmark.setHTML(1,1,bookmark.getPath());
 						if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
 							tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
@@ -246,7 +248,7 @@ public class ManageBookmarkPopup extends DialogBox {
 			
 			for (Iterator<GWTBookmark> it = result.iterator(); it.hasNext();) {
 				GWTBookmark bookmark = (GWTBookmark) it.next();	
-				bookmarkMap.put(bookmark.getName(),bookmark);
+				bookmarkMap.put(bookmark.getUuid(),bookmark);
 				
 				String icon = "";
 				if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
@@ -291,7 +293,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	final AsyncCallback<Object> callbackRemove = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			if (selectedRow>=0) {
-				bookmarkMap.remove(table.getText(selectedRow,1));
+				bookmarkMap.remove(table.getText(selectedRow,2));
 				table.removeRow(selectedRow);
 				if (table.getRowCount()>0) {
 					if (selectedRow!=0) {
@@ -319,9 +321,7 @@ public class ManageBookmarkPopup extends DialogBox {
 	final AsyncCallback<GWTBookmark> callbackRename = new AsyncCallback<GWTBookmark>() {
 		public void onSuccess(GWTBookmark result) {
 			if (selectedRow>=0) {
-				//String newName = textBox.getText();
-				//GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(selectedRow,1));
-				bookmarkMap.remove(table.getText(selectedRow,1));
+				bookmarkMap.remove(table.getText(selectedRow,2));
 				result.setName(result.getName());
 				bookmarkMap.put(result.getName(),result);
 				tableBookmark.setHTML(0,1,result.getName());
@@ -351,21 +351,24 @@ public class ManageBookmarkPopup extends DialogBox {
 	/**
 	 * Remove bookmark 
 	 * 
+	 * @param id
 	 */
-	private void remove(String name) {
+	private void remove(int id) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
 		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
-		bookmarkService.remove(name, callbackRemove);
+		bookmarkService.remove(id, callbackRemove);
 	}
 	
 	/**
 	 * Rename bookmark 
 	 * 
+	 * @param id
+	 * @param newName
 	 */
-	private void rename(String name, String newName) {
+	private void rename(int id, String newName) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
-		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);			
-		bookmarkService.rename(name, newName, callbackRename);
+		endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+		bookmarkService.rename(id, newName, callbackRename);
 	}
 	
 	/**
