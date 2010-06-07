@@ -64,7 +64,6 @@ import com.openkm.core.SessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
-import com.openkm.util.Transaction;
 import com.openkm.util.UserActivity;
 
 public class DirectFolderModule implements FolderModule {
@@ -300,7 +299,7 @@ public class DirectFolderModule implements FolderModule {
 			String name = FileUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
-			Node userTrash = session.getRootNode().getNode(Repository.HOME+"/"+session.getUserID()+"/"+Repository.TRASH);
+			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 						
 			if (hasLockedNodes(folderNode)) {
 				throw new LockException("Can't delete a folder with child locked nodes");
