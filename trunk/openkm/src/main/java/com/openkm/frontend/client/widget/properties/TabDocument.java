@@ -181,10 +181,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		security.GetGrants();
 		preview.setPreviewAvailable(doc.isConvertibleToSwf());
 		
-		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().set(doc);
-		}
-		
 		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
 		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
 			(doc.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY && 
@@ -269,9 +265,16 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		version.setVisibleButtons(visible);
 		security.setVisibleButtons(visible);
 		
-		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
-			it.next().setVisible(visible);
-		}
+		fireEvent(HasDocumentEvent.SET_VISIBLE_BUTTONS);
+	}
+	
+	/**
+	 * getVisibleButton
+	 * 
+	 * @return
+	 */
+	public boolean getVisibleButton() {
+		return visibleButton;
 	}
 	
 	/**
