@@ -51,7 +51,7 @@
 			}
 			
 			// Activity log
-			UserActivity.log(jcrSession, "USER_MAIL_ACTION", ma.toString(), action);
+			UserActivity.log(jcrSession.getUserID(), "USER_MAIL_ACTION", ma.toString(), action);
 			
 			response.sendRedirect("mail_list.jsp?user="+ma.getUser());
 		} catch (DatabaseException e) {

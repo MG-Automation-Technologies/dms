@@ -45,7 +45,7 @@
 			}
 			
 			// Activity log
-			UserActivity.log(jcrSession, "USER_TWITTER_ACTION", ta.toString(), action);
+			UserActivity.log(jcrSession.getUserID(), "USER_TWITTER_ACTION", ta.toString(), action);
 			
 			response.sendRedirect("twitter_list.jsp?user="+ta.getUser());
 		} catch (DatabaseException e) {

@@ -14,7 +14,7 @@
   &nbsp;
   <a target="frame" href="RepositoryView"><img src="img/toolbar/view.png" title="Repository view"></a>
   &nbsp;
-  <a target="frame" href="property_group.jsp"><img src="img/toolbar/properties.png" title="Property groups"></a>
+  <a target="frame" href="PropertyGroups"><img src="img/toolbar/properties.png" title="Property groups"></a>
   &nbsp;
   <a target="frame" href="logged_users.jsp"><img src="img/toolbar/logged.png" title="Logged users"></a>
   &nbsp;
