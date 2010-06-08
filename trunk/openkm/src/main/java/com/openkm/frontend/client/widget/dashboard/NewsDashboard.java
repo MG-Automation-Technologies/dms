@@ -23,6 +23,7 @@ package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -34,6 +35,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMDashboardService;
 import com.openkm.frontend.client.service.OKMDashboardServiceAsync;
@@ -52,12 +54,12 @@ public class NewsDashboard extends WidgetToFire {
 	
 	private HorizontalPanel hPanel;
 	private Map<String,DashboardWidget> hWidgetSearch= new HashMap<String,DashboardWidget>();
-	private List<String> keyMap = new ArrayList<String>();
+	private Map<String, GWTQueryParams> keyMap = new HashMap<String, GWTQueryParams>();
 	private VerticalPanel vPanelLeft;
 	private VerticalPanel vPanelRight;
 	private int columnWidth = 0;
 	private int actualSearchRefreshing = 0;
-	private String actualRefreshingKey = "";
+	private int actualRefreshingKey = 0;
 	private boolean refreshFind = true;
 	private int newsDocuments = 0;
 
@@ -80,11 +82,10 @@ public class NewsDashboard extends WidgetToFire {
 	/**
 	 * Gets all search callback
 	 */
-	final AsyncCallback<List<String>> callbackGetUserSearchs = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){			
+	final AsyncCallback<List<GWTQueryParams>> callbackGetUserSearchs = new AsyncCallback<List<GWTQueryParams>>() {
+		public void onSuccess(List<GWTQueryParams> result){			
 			// Drops widget panel , prevent user deletes query
-			List<String> keysToRemoveList = new ArrayList<String>();
-			for (ListIterator<String> it = keyMap.listIterator(); it.hasNext();) {
+			for (Iterator<String> it = keyMap.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
 				
 				if(!result.contains(key)) {
@@ -94,18 +95,17 @@ public class NewsDashboard extends WidgetToFire {
 					} else if (dashboardWidget.getParent().equals(vPanelRight)) {
 						vPanelRight.remove(dashboardWidget);
 					}
-					keysToRemoveList.add(key);
+					keyMap.remove(key);
 				}
 			}
-			keyMap.removeAll(keysToRemoveList);
 			
 			// Adds new widget
-			for (ListIterator<String> it= result.listIterator(); it.hasNext();) {
-				String key = it.next();
-				if (!keyMap.contains(key)) {
-					keyMap.add(key);
-					DashboardWidget dashboardWidget = new DashboardWidget(key, key, "img/icon/news.gif", true, 
-							"news_"+key);
+			for (ListIterator<GWTQueryParams> it= result.listIterator(); it.hasNext();) {
+				GWTQueryParams params = it.next();
+				String key = ""+params.getId();
+				if (!keyMap.keySet().contains(key)) {
+					keyMap.put(key, params);
+					DashboardWidget dashboardWidget = new DashboardWidget(key, key, "img/icon/news.gif", true, "news_"+key);
 					dashboardWidget.setWidgetToFire(Main.get().mainPanel.dashboard.newsDashboard);
 					hWidgetSearch.put(key, dashboardWidget);
 					dashboardWidget.setWidth(columnWidth);
@@ -173,8 +173,9 @@ public class NewsDashboard extends WidgetToFire {
 	 * refreshAllSearchs
 	 */
 	private void find(int value) {
-		if (keyMap.size()>value) {
-			actualRefreshingKey = keyMap.get(value);
+		if (keyMap.keySet().size()>value) {
+			List<String> keySet = new ArrayList<String>(keyMap.keySet());
+			actualRefreshingKey = Integer.parseInt(keySet.get(value));
 			if (!firstTime) {
 				hWidgetSearch.get(actualRefreshingKey).setRefreshing();
 			}
@@ -206,8 +207,8 @@ public class NewsDashboard extends WidgetToFire {
 	 * Refreshing language
 	 */
 	public void langRefresh() {
-		for (ListIterator<String> it = keyMap.listIterator(); it.hasNext();) {
-			DashboardWidget dashboardWidget = hWidgetSearch.get(it.next());
+		for (Iterator<String> it = keyMap.keySet().iterator(); it.hasNext();) {
+			DashboardWidget dashboardWidget = hWidgetSearch.get(""+it.next());
 			dashboardWidget.langRefresh();
 		}
 	}

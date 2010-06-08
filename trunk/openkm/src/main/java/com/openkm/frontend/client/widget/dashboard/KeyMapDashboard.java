@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -575,7 +574,7 @@ public class KeyMapDashboard extends Composite {
 	/**
 	 * getKeywordMap
 	 */
-	public void getKeywordMap(Collection<String> filter) {
+	public void getKeywordMap(List<String> filter) {
 		// Only make call when collection is not empty, other case there's no filtering by keyword and
 		// result it'll be inconsistent
 		if (!filter.isEmpty()) {
@@ -721,7 +720,7 @@ public class KeyMapDashboard extends Composite {
 	 * 
 	 * @return
 	 */
-	public Collection<String> getFiltering() {
+	public List<String> getFiltering() {
 		List<String> filtering = new ArrayList<String>();
 		
 		for (Iterator<String> it = selectedKeyMap.keySet().iterator(); it.hasNext();) {

@@ -423,8 +423,8 @@ public class WorkflowFormPanel extends Composite {
 	/**
 	 * Get process definitions callback
 	 */
-	final AsyncCallback<Map<String, Collection<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, Collection<GWTFormElement>>>() {
-		public void onSuccess(Map<String, Collection<GWTFormElement>> result) {
+	final AsyncCallback<Map<String, List<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, List<GWTFormElement>>>() {
+		public void onSuccess(Map<String, List<GWTFormElement>> result) {
 			formFieldList = new ArrayList<GWTFormElement>();
 			if (result.containsKey(taskInstance.getName())) {
 				formFieldList = result.get(taskInstance.getName());
