@@ -22,7 +22,6 @@
 package com.openkm.module;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -177,7 +176,7 @@ public interface SearchModule {
 	 * @return The keyword map.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) 
+	public Map<String, Integer> getKeywordMap(String token, List<String> filter) 
 			throws RepositoryException, DatabaseException;
 	
 	/**

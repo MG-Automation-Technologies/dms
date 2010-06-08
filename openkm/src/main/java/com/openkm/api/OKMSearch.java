@@ -22,7 +22,6 @@
 package com.openkm.api;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -165,7 +164,7 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) 
+	public Map<String, Integer> getKeywordMap(String token, List<String> filter) 
 			throws RepositoryException, DatabaseException {
 		log.debug("getKeywordMap()");
 		SearchModule sm = ModuleManager.getSearchModule();

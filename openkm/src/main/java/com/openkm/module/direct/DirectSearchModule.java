@@ -637,7 +637,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, Collection<String> filter) throws 
+	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws 
 			RepositoryException, DatabaseException {
 		log.info("getKeywordMap({}, {})", token, filter);
 		Map<String, Integer> cloud = null;
