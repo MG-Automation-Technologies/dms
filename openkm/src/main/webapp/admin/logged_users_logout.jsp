@@ -10,7 +10,7 @@
 			token = new String(token.getBytes("ISO-8859-1"));
 			
 			try {
-				new DirectAuthModule().logout(token);
+				new DirectAuthModule().logout();
 				response.sendRedirect("logged_users.jsp");
 			} catch (Exception e) {
 				e.printStackTrace(response.getWriter());

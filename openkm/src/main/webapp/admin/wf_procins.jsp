@@ -125,7 +125,7 @@
 					out.print("<input type=\"hidden\" name=\"tid\" value=\""+ti.getId()+"\">");
 					out.print("<select name=\"actor\" onchange=\"document.getElementById('setActor').submit()\">");
 					out.print("<option>-</option>");
-					Collection<String> colU = OKMAuth.getInstance().getUsers(token);
+					Collection<String> colU = OKMAuth.getInstance().getUsers();
 					
 					for (Iterator<String> itU = colU.iterator(); itU.hasNext(); ) {
 						String user = itU.next();
