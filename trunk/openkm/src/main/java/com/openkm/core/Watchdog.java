@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.SessionInfo;
 import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.UserActivity;
 
 public class Watchdog extends TimerTask {
 	private static Logger log = LoggerFactory.getLogger(Watchdog.class);
@@ -54,7 +53,7 @@ public class Watchdog extends TimerTask {
 					// Activity log
 					Session system = DirectRepositoryModule.getSystemSession();
 					//UserActivity.log(session.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
-					new DirectAuthModule().logout(token);
+					new DirectAuthModule().logout();
 				} catch (AccessDeniedException e) {
 					log.error(e.getMessage(), e);
 				} catch (RepositoryException e) {

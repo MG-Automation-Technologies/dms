@@ -42,7 +42,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMAuthService;
@@ -71,7 +70,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("logout()");
 		
 		try {
-			OKMAuth.getInstance().logout(getToken());
+			OKMAuth.getInstance().logout();
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
@@ -95,11 +94,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public Map<String, Byte> getGrantedRoles(String nodePath) throws OKMException {
 		log.debug("getGrantedRoles({})", nodePath);
-		
-		String token = getToken();
 		Map<String, Byte> hm = new HashMap<String, Byte>();
+		
 		try {
-			hm = OKMAuth.getInstance().getGrantedRoles(token, nodePath);
+			hm = OKMAuth.getInstance().getGrantedRoles(nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -118,18 +116,16 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		}
 		
 		log.debug("getGrantedRoles: {}", hm);
-		
 		return hm;
 	}
 	
 	@Override
 	public Map<String, Byte> getGrantedUsers(String nodePath) throws OKMException {
 		log.debug("getGrantedUsers({})", nodePath);
-		String token = getToken();
 		Map<String, Byte> hm = new HashMap<String, Byte>();
 		
 		try {
-			hm = OKMAuth.getInstance().getGrantedUsers(token, nodePath);
+			hm = OKMAuth.getInstance().getGrantedUsers(nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -146,7 +142,6 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_General), e.getMessage());
 		}
-
 		
 		log.debug("getGrantedUsers: {}", hm);
 		return hm;
@@ -156,7 +151,6 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public String getRemoteUser() {
 		log.debug("getRemoteUser()");
 		String user = getThreadLocalRequest().getRemoteUser();
-		
 		log.debug("getRemoteUser: {}", user);
 		return user;
 	}
@@ -165,11 +159,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException {
 		log.debug("getUngrantedUsers({})", nodePath);
 		List<String> userList = new ArrayList<String>(); 
-		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers(token);
-			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(token, nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getUsers();
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(nodePath).keySet();
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -205,11 +198,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException {
 		log.debug("getUngrantedRoles({})", nodePath);
 		List<String> roleList = new ArrayList<String>(); 
-		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles(token);
-			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(token, nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getRoles();
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(nodePath).keySet();
 			
 			//Not add rols that are granted
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
@@ -247,11 +239,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getFilteredUngrantedUsers(String nodePath, String filter) throws OKMException {
 		log.debug("getFilteredUngrantedUsers({})", nodePath);
 		List<String> userList = new ArrayList<String>(); 
-		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers(token);
-			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(token, nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getUsers();
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(nodePath).keySet();
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -287,11 +278,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getFilteredUngrantedRoles(String nodePath, String filter) throws OKMException {
 		log.debug("getFilteredUngrantedRoles({})", nodePath);
 		List<String> roleList = new ArrayList<String>(); 
-		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles(token);
-			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(token, nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getRoles();
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(nodePath).keySet();
 			
 			//Not add rols that are granted
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
@@ -329,10 +319,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException {
 		log.debug("grantUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
-		String token = getToken();
-		
+	
 		try {
-			OKMAuth.getInstance().grantUser(token, path, user, permissions, recursive);
+			OKMAuth.getInstance().grantUser(path, user, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -356,13 +345,12 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException {
 		log.debug("revokeUser({}, {}, {})", new Object[] { path, user, recursive });
-		String token = getToken();
 		OKMAuth oKMAuth = OKMAuth.getInstance();
 		
 		try {
-			oKMAuth.revokeUser(token, path, user, Permission.READ, recursive);
-			oKMAuth.revokeUser(token, path, user, Permission.WRITE, recursive);
-			//oKMAuth.revokeUser(token, path, user, Permission.REMOVE);
+			oKMAuth.revokeUser(path, user, Permission.READ, recursive);
+			oKMAuth.revokeUser(path, user, Permission.WRITE, recursive);
+			//oKMAuth.revokeUser(path, user, Permission.REMOVE);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -386,10 +374,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException {
 		log.debug("revokeUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
-		String token = getToken();
 		
 		try {
-			OKMAuth.getInstance().revokeUser(token, path, user, permissions, recursive);
+			OKMAuth.getInstance().revokeUser(path, user, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -413,10 +400,9 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void grantRole(String path, String role, int permissions, boolean recursive) throws OKMException  {
 		log.debug("grantRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
-		String token = getToken();
-		
+	
 		try {
-			OKMAuth.getInstance().grantRole(token, path, role, permissions, recursive);
+			OKMAuth.getInstance().grantRole(path, role, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -440,14 +426,13 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeRole(String path, String role, boolean recursive) throws OKMException {
 		log.debug("revokeRole({}, {}, {})", new Object[] { path, role, recursive });
-		String token = getToken();
 		OKMAuth oKMAuth = OKMAuth.getInstance();
 		
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
-				oKMAuth.revokeRole(token, path, role, Permission.READ, recursive);
-				oKMAuth.revokeRole(token, path, role, Permission.WRITE, recursive);
-				//oKMAuth.revokeRole(token, path, user, Permission.REMOVE);
+				oKMAuth.revokeRole(path, role, Permission.READ, recursive);
+				oKMAuth.revokeRole(path, role, Permission.WRITE, recursive);
+				//oKMAuth.revokeRole(path, user, Permission.REMOVE);
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -472,11 +457,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException {
 		log.debug("revokeRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
-		String token = getToken();
 		
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
-				OKMAuth.getInstance().revokeRole(token, path, role, permissions, recursive);
+				OKMAuth.getInstance().revokeRole(path, role, permissions, recursive);
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -501,15 +485,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void keepAlive() throws OKMException {
 		log.debug("keepAlive()");
-		String token = getToken();
 		Session session = null;
 						
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "KEEP_ALIVE", null, null);
@@ -520,9 +499,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 				
 		log.debug("keepAlive: void");
@@ -531,11 +508,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getAllUsers() throws OKMException {
 		log.debug("getAllUsers()");
-		String token = getToken();
 		List<String> userList = new ArrayList<String>();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers(token);
+			Collection<String> col = OKMAuth.getInstance().getUsers();
+			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
 				userList.add(user);
@@ -557,11 +534,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getAllRoles() throws OKMException {
 		log.debug("getAllRoles()");
-		String token = getToken();
 		List<String> roleList = new ArrayList<String>();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles(token);
+			Collection<String> col = OKMAuth.getInstance().getRoles();
+			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String rol = it.next();
 				if (!rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE)) {
@@ -585,11 +562,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getFilteredAllUsers(String filter) throws OKMException {
 		log.debug("getFilteredAllUsers()");
-		String token = getToken();
 		List<String> userList = new ArrayList<String>();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers(token);
+			Collection<String> col = OKMAuth.getInstance().getUsers();
+			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
 				if (user.toLowerCase().startsWith(filter.toLowerCase())) {
@@ -613,11 +590,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getFilteredAllRoles(String filter) throws OKMException {
 		log.debug("getFilteredAllRoles()");
-		String token = getToken();
 		List<String> roleList = new ArrayList<String>();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles(token);
+			Collection<String> col = OKMAuth.getInstance().getRoles();
+			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String rol = it.next();
 				if (!rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE) &&

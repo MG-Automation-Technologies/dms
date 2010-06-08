@@ -31,63 +31,62 @@ import com.openkm.principal.PrincipalAdapterException;
 
 public class EJBAuthModule implements com.openkm.module.AuthModule {
 
-	public String login(String user, String pass) throws AccessDeniedException,
-			UserAlreadyLoggerException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void logout(String token) throws AccessDeniedException,
+	public void login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
 			RepositoryException {
 		// TODO Auto-generated method stub
 	}
 
-	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws AccessDeniedException, RepositoryException {
+	public void login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
+		// TODO Auto-generated method stub
+	}
+
+	public void logout() throws AccessDeniedException, RepositoryException {
+		// TODO Auto-generated method stub
+	}
+
+	public HashMap<String, Byte> getGrantedUsers(String nodePath) throws AccessDeniedException,
+			RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws AccessDeniedException, RepositoryException {
+	public HashMap<String, Byte> getGrantedRoles(String nodePath) throws AccessDeniedException,
+			RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive) throws AccessDeniedException, RepositoryException {
+	public void grantUser(String nodePath, String user, int permissions, boolean recursive)
+			throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive) throws AccessDeniedException, RepositoryException {
+	public void revokeUser(String nodePath, String user, int permissions, boolean recursive)
+			throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive) throws AccessDeniedException, RepositoryException {
+	public void grantRole(String nodePath, String role, int permissions, boolean recursive)
+			throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive) throws AccessDeniedException, RepositoryException {
+	public void revokeRole(String nodePath, String user, int permissions, boolean recursive)
+			throws AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public List<String> getUsers(String token) throws PrincipalAdapterException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<String> getRoles(String token) throws PrincipalAdapterException {
+	public List<String> getUsers() throws PrincipalAdapterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
+	public List<String> getRoles() throws PrincipalAdapterException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		// TODO Auto-generated method stub
 		return null;
 	}

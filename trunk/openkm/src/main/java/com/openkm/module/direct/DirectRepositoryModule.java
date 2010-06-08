@@ -154,7 +154,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.info("*** Logout (system): "+token+" ***");
 			
 			try {
-				new DirectAuthModule().logout(token);
+				new DirectAuthModule().logout();
 			} catch (AccessDeniedException e) {
 				log.warn(e.getMessage(), e);
 			} catch (RepositoryException e) {

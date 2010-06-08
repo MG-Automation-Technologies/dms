@@ -17,12 +17,10 @@ import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMSearch;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UserAlreadyLoggerException;
 
 /**
  * Servlet implementation class HandlerServlet
@@ -40,16 +38,8 @@ public class HandlerServlet extends HttpServlet {
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action")!=null?request.getParameter("action"):"";
-		HttpSession session = request.getSession();
 		 
 		try {
-			if (Config.SESSION_MANAGER) {
-				if (session.getAttribute("token") == null) {
-					String token = OKMAuth.getInstance().login();
-					session.setAttribute("token", token);
-				}
-			}
-			
 			if (action.equals("") || action.equals("browse")) {
 				browse(request, response);
 			} else if (action.equals("fldprop")) {
@@ -61,8 +51,6 @@ public class HandlerServlet extends HttpServlet {
 			} else if (action.equals("logout")) {
 				logout(request, response);
 			}
-		} catch (UserAlreadyLoggerException e) {
-			sendErrorRedirect(request,response, e);
 		} catch (AccessDeniedException e) {
 			sendErrorRedirect(request,response, e);
 		} catch (PathNotFoundException e) {
@@ -175,9 +163,7 @@ public class HandlerServlet extends HttpServlet {
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.info("logout({}, {})", request, response);
 		HttpSession session = request.getSession();
-		String token = (String) session.getAttribute("token");
-		OKMAuth okmAuth = OKMAuth.getInstance();
-		okmAuth.logout(token);
+		OKMAuth.getInstance().logout();
 		session.invalidate();
 		response.sendRedirect(request.getContextPath());
 	}

@@ -43,7 +43,7 @@ public class UserMailImporter extends TimerTask {
 		String systemToken = SessionManager.getInstance().getSystemToken();
         
 		try {
-			Collection<String> users = OKMAuth.getInstance().getUsers(systemToken);
+			Collection<String> users = OKMAuth.getInstance().getUsers();
 						
 			for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
 				String uid = usrIt.next();
