@@ -38,13 +38,17 @@ public class LockTokenDAO {
 	/**
 	 * Remove
 	 */
-	public static void remove(LockToken lt) throws DatabaseException {
-		log.debug("remove({})", lt);
+	public static void remove(String user, String token) throws DatabaseException {
+		log.debug("remove({})", user, token);
+		String qs = "delete from LockToken lt where lt.user=:user and lt.token=:token";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.delete(lt);
+			Query q = session.createQuery(qs);
+			q.setString("user", user);
+			q.setString("token", token);
+			q.executeUpdate();
 		} catch(HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
