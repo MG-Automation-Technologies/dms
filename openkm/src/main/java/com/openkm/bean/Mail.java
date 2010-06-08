@@ -23,7 +23,7 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author pavila
@@ -59,7 +59,7 @@ public class Mail implements Serializable {
 	private String content;
 	private String mimeType;
 	private long size;
-	private Collection<Document> attachments;
+	private List<Document> attachments;
 
 	public String getPath() {
 		return path;
@@ -173,11 +173,11 @@ public class Mail implements Serializable {
 		this.size = size;
 	}
 	
-	public Collection<Document> getAttachments() {
+	public List<Document> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(Collection<Document> attachments) {
+	public void setAttachments(List<Document> attachments) {
 		this.attachments = attachments;
 	}
 

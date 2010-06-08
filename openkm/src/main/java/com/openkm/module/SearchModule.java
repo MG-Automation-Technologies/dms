@@ -133,7 +133,7 @@ public interface SearchModule {
 	 * @param name The name of the query to be saved.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public void saveSearch(String token, QueryParams params) throws AccessDeniedException,
+	public int saveSearch(String token, QueryParams params) throws AccessDeniedException,
 			RepositoryException, DatabaseException;
 	
 	/**

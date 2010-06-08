@@ -24,7 +24,7 @@ package com.openkm.core;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.jcr.Item;
 import javax.jcr.Node;
@@ -108,7 +108,7 @@ public class OKMEventListener implements EventListener {
 							}
 						}
 						
-						Collection<String> emails = new ArrayList<String>();
+						List<String> emails = new ArrayList<String>();
 						String body = 
 							"URL: " + Config.APPLICATION_URL+"?nodePath=" + URLEncoder.encode(evn.getPath(), "UTF-8") + "\n" +
 							"File: " + evn.getPath() + "\n" +

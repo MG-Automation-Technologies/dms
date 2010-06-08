@@ -23,7 +23,7 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author pavila
@@ -56,10 +56,10 @@ public class Document implements Serializable {
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
-	private Collection<String> subscriptors;
-	private Collection<String> keywords;
-	private Collection<Folder> categories;
-	private Collection<Note> notes;
+	private List<String> subscriptors;
+	private List<String> keywords;
+	private List<Folder> categories;
+	private List<Note> notes;
 
 	public Lock getLockInfo() {
 		return lockInfo;
@@ -101,11 +101,11 @@ public class Document implements Serializable {
 		this.created = created;
 	}
 
-	public Collection<String> getKeywords() {
+	public List<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(Collection<String> keywords) {
+	public void setKeywords(List<String> keywords) {
 		this.keywords = keywords;
 	}
 
@@ -165,19 +165,19 @@ public class Document implements Serializable {
 		this.subscribed = subscribed;
 	}
 
-	public Collection<String> getSubscriptors() {
+	public List<String> getSubscriptors() {
 		return subscriptors;
 	}
 
-	public void setSubscriptors(Collection<String> subscriptors) {
+	public void setSubscriptors(List<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 	
-	public Collection<Folder> getCategories() {
+	public List<Folder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Collection<Folder> categories) {
+	public void setCategories(List<Folder> categories) {
 		this.categories = categories;
 	}
 	
@@ -205,11 +205,11 @@ public class Document implements Serializable {
 		this.convertibleToSwf = convertibleToSwf;
 	}
 	
-	public Collection<Note> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Collection<Note> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
 	
