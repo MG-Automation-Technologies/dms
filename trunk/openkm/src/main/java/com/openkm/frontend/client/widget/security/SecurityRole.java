@@ -23,9 +23,9 @@ package com.openkm.frontend.client.widget.security;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTPermission;
 import com.openkm.frontend.client.config.Config;
@@ -169,8 +168,8 @@ public class SecurityRole extends Composite implements HasWidgets {
 	/**
 	 * Call back get granted roles
 	 */
-	final AsyncCallback<HashMap<String, Byte>> callbackGetGrantedRoles = new AsyncCallback<HashMap<String, Byte>>() {
-		public void onSuccess(HashMap<String, Byte> result) {
+	final AsyncCallback<Map<String, Byte>> callbackGetGrantedRoles = new AsyncCallback<Map<String, Byte>>() {
+		public void onSuccess(Map<String, Byte> result) {
 			List<String> rolesList = new ArrayList<String>();
 			
 			// Ordering grant roles to list
