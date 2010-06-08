@@ -22,8 +22,7 @@
 package com.openkm.api;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -77,31 +76,31 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<PropertyGroup> getGroups(String token, String docPath) throws IOException,
+	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException,
 			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getGroups({}, {})", token, docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Collection<PropertyGroup> ret = cm.getGroups(token, docPath);
+		List<PropertyGroup> ret = cm.getGroups(token, docPath);
 		log.debug("getGroups: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("getAllGroups({})", token);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Collection<PropertyGroup> ret = cm.getAllGroups(token);
+		List<PropertyGroup> ret = cm.getAllGroups(token);
 		log.debug("getAllGroups: "+ret);
 		return ret;
 	}
 
 	@Override
-	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) 
+	public Map<String, String[]> getProperties(String token, String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		HashMap<String, String[]> ret = cm.getProperties(token, docPath, grpName);
+		Map<String, String[]> ret = cm.getProperties(token, docPath, grpName);
 		log.debug("getProperties: {}", ret);
 		return ret;
 	}
@@ -117,11 +116,11 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
 			IOException, RepositoryException, DatabaseException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Collection<FormElement> ret = cm.getPropertyGroupForm(token, grpName);
+		List<FormElement> ret = cm.getPropertyGroupForm(token, grpName);
 		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
