@@ -363,6 +363,7 @@ public class Util {
 		QueryParams params = new QueryParams();
 		
 		params.setId(gWTParams.getId());
+		params.setQueryName(gWTParams.getQueryName());
 		params.setContent(gWTParams.getContent());
 		params.setKeywords(gWTParams.getKeywords());
 		params.setMimeType(gWTParams.getMimeType());
@@ -432,6 +433,7 @@ public class Util {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
 		gWTParams.setId(params.getId());
+		gWTParams.setQueryName(params.getQueryName());
 		gWTParams.setContent(params.getContent());
 		gWTParams.setKeywords(params.getKeywords());
 		gWTParams.setMimeType(params.getMimeType());
