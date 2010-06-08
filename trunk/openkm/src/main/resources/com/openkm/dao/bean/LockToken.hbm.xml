@@ -5,6 +5,6 @@
   <class name="com.openkm.dao.bean.LockToken" table="OKM_LOCK_TOKEN">
     <id name="id" column="LT_ID"><generator class="native"/></id>
     <property name="user" column="LT_USER" not-null="true"/>
-    <property name="token" column="LT_TOKEN" not-null="true"/>
+    <property name="token" column="LT_TOKEN" not-null="true" unique="true"/>
   </class>
 </hibernate-mapping>
