@@ -655,7 +655,7 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapLive(String token, Collection<String> filter) throws 
+	private Map<String, Integer> getKeywordMapLive(String token, List<String> filter) throws 
 			RepositoryException, DatabaseException {
 		log.info("getKeywordMapLive({}, {})", token, filter);
 		String statement = "/jcr:root//element(*,okm:document)";

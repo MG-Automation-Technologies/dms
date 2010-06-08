@@ -29,10 +29,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
@@ -236,12 +236,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public Map<String, Collection<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
+	public Map<String, List<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
 			throws ParseException, RepositoryException {
 		log.debug("getProcessDefinitionForms({}, {})", token, processDefinitionId);
 		//long begin = Calendar.getInstance().getTimeInMillis();
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
+		Map<String, List<FormElement>> forms = new HashMap<String, List<FormElement>>();
 		InputStream is = null;
 		Session session = null;
 		
@@ -410,11 +410,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
+	public List<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
 			throws RepositoryException {
 		log.debug("findProcessInstances({}, {})", token, processDefinitionId);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		ArrayList<ProcessInstance> al = new ArrayList<ProcessInstance>();
+		List<ProcessInstance> al = new ArrayList<ProcessInstance>();
 		Session session = null;
 		
 		try {
@@ -448,10 +448,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException {
+	public List<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException {
 		log.debug("findAllProcessDefinitions({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
 		try {
@@ -485,11 +485,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findLatestProcessDefinitions(String token)	throws 
+	public List<ProcessDefinition> findLatestProcessDefinitions(String token)	throws 
 			RepositoryException {
 		log.debug("findLatestProcessDefinitions({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
 		try {
@@ -523,11 +523,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws
+	public List<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws
 			RepositoryException {
 		log.debug("findAllProcessDefinitionVersions({}, {})", token, name);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		ArrayList<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
 		Session session = null;
 		
 		try {
@@ -726,10 +726,10 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<TaskInstance> findUserTaskInstances(String token) throws RepositoryException {
+	public List<TaskInstance> findUserTaskInstances(String token) throws RepositoryException {
 		log.debug("findUserTaskInstances({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		List<TaskInstance> al = new ArrayList<TaskInstance>();
 		Session session = null;
 		
 		try {
@@ -767,7 +767,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException {
+	public List<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException {
 		log.debug("findPooledTaskInstances({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
@@ -808,7 +808,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<TaskInstance> findTaskInstances(String token, long processInstanceId) throws
+	public List<TaskInstance> findTaskInstances(String token, long processInstanceId) throws
 			RepositoryException {
 		log.debug("findTaskInstances({})", token);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
