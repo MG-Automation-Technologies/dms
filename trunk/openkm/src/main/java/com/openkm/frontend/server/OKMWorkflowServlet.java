@@ -22,7 +22,6 @@
 package com.openkm.frontend.server;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -137,18 +136,18 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	}
 	
 	@Override
-	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
+	public Map<String, List<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
 		log.debug("getProcessDefinitionForms()");
-		Map<String, Collection<GWTFormElement>> formElementList = new HashMap<String, Collection<GWTFormElement>>();
+		Map<String, List<GWTFormElement>> formElementList = new HashMap<String, List<GWTFormElement>>();
 		String token = getToken();
 		
 		try {
-			Map<String, Collection<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(token, new Double(id).longValue());
+			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(token, new Double(id).longValue());
 			
 			for (Iterator<String> it= list.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
-				Collection<FormElement> col = list.get(key);
-				Collection<GWTFormElement> gwtCol = new ArrayList<GWTFormElement>();
+				List<FormElement> col = list.get(key);
+				List<GWTFormElement> gwtCol = new ArrayList<GWTFormElement>();
 				for (Iterator<FormElement> itf= col.iterator(); itf.hasNext();) {
 					gwtCol.add(Util.copy(itf.next()));
 				}

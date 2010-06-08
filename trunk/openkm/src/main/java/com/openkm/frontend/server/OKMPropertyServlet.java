@@ -73,7 +73,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		}
+		} 
 		log.debug("addCategory: void");
 	}
 	
