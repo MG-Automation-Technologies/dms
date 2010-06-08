@@ -21,8 +21,8 @@
 
 package com.openkm.module.ejb;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.RepositoryException;
@@ -76,17 +76,17 @@ public class EJBAuthModule implements com.openkm.module.AuthModule {
 		
 	}
 
-	public Collection<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<String> getMails(String token, Collection<String> users)
+	public List<String> getMails(String token, List<String> users)
 			throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;

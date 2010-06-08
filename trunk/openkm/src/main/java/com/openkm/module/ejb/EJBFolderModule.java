@@ -21,14 +21,14 @@
 
 package com.openkm.module.ejb;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.ItemExistsException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.LockException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 
 public class EJBFolderModule implements com.openkm.module.FolderModule {
@@ -68,7 +68,7 @@ public class EJBFolderModule implements com.openkm.module.FolderModule {
 		
 	}
 
-	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
+	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
