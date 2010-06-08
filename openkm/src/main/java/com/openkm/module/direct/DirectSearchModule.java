@@ -401,7 +401,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "FIND", type, statement);
+			UserActivity.log(session.getUserID(), "FIND", type, statement);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -494,7 +494,7 @@ public class DirectSearchModule implements SearchModule {
 			id = QueryParamsDAO.create(params);
 			
 			// Activity log
-			UserActivity.log(session, "SAVE_SEARCH", params.getName(), params.toString());
+			UserActivity.log(session.getUserID(), "SAVE_SEARCH", params.getName(), params.toString());
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
@@ -533,7 +533,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_SAVED_SEARCH", Integer.toString(qpId), qp.toString());
+			UserActivity.log(session.getUserID(), "GET_SAVED_SEARCH", Integer.toString(qpId), qp.toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -578,7 +578,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_ALL_SEARCHS", null, null);
+			UserActivity.log(session.getUserID(), "GET_ALL_SEARCHS", null, null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
@@ -619,7 +619,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_SAVED_SEARCH", Integer.toString(qpId), null);
+			UserActivity.log(session.getUserID(), "DELETE_SAVED_SEARCH", Integer.toString(qpId), null);
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);

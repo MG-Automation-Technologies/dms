@@ -419,7 +419,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			rootFolder = new DirectFolderModule().getProperties(session, "/"+Repository.ROOT);
 			
 			// Activity log
-			UserActivity.log(session, "GET_ROOT_FOLDER", null, rootFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_ROOT_FOLDER", null, rootFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -453,7 +453,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH+"/"+session.getUserID());
 			
 			// Activity log
-			UserActivity.log(session, "GET_TRASH_FOLDER", null, trashFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER", null, trashFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -481,7 +481,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH);
 			
 			// Activity log
-			UserActivity.log(session, "GET_TRASH_FOLDER_BASE", null, trashFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TRASH_FOLDER_BASE", null, trashFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -513,7 +513,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			templatesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TEMPLATES);
 			
 			// Activity log
-			UserActivity.log(session, "GET_TEMPLATES_FOLDER", null, templatesFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_TEMPLATES_FOLDER", null, templatesFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -547,7 +547,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL+"/"+session.getUserID());
 			
 			// Activity log
-			UserActivity.log(session, "GET_PERSONAL_FOLDER", null, personalFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER", null, personalFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -576,7 +576,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL);
 			
 			// Activity log
-			UserActivity.log(session, "GET_PERSONAL_FOLDER_BASE", null, personalFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_PERSONAL_FOLDER_BASE", null, personalFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -609,7 +609,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
 			// Activity log
-			UserActivity.log(session, "GET_MAIL_FOLDER", null, mailFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER", null, mailFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -637,7 +637,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			mailFolder = new DirectFolderModule().getProperties(session, "/"+Repository.MAIL);
 			
 			// Activity log
-			UserActivity.log(session, "GET_MAIL_FOLDER_BASE", null, mailFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_MAIL_FOLDER_BASE", null, mailFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -669,7 +669,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			thesaurusFolder = new DirectFolderModule().getProperties(session, "/"+Repository.THESAURUS);
 			
 			// Activity log
-			UserActivity.log(session, "GET_THESAURUS_FOLDER", null, thesaurusFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_THESAURUS_FOLDER", null, thesaurusFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -703,7 +703,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			categoriesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.CATEGORIES);
 			
 			// Activity log
-			UserActivity.log(session, "GET_CATEGORIES_FOLDER", null, categoriesFolder.getPath());
+			UserActivity.log(session.getUserID(), "GET_CATEGORIES_FOLDER", null, categoriesFolder.getPath());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -831,7 +831,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "PURGE_TRASH", null, null);
+			UserActivity.log(session.getUserID(), "PURGE_TRASH", null, null);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(userTrash);

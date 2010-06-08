@@ -96,7 +96,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session, "ADD_CATEGORY", nodePath, category);
+			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, category);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -173,7 +173,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session, "REMOVE_CATEGORY", nodePath, category);
+			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, category);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -251,7 +251,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_KEYWORD");
 
 			// Activity log
-			UserActivity.log(session, "ADD_KEYWORD", nodePath, keyword);
+			UserActivity.log(session.getUserID(), "ADD_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -328,7 +328,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_KEYWORD");
 
 			// Activity log
-			UserActivity.log(session, "REMOVE_KEYWORD", nodePath, keyword);
+			UserActivity.log(session.getUserID(), "REMOVE_KEYWORD", nodePath, keyword);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);

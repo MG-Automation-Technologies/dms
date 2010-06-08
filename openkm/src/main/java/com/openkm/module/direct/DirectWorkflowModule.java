@@ -93,7 +93,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.deployProcessDefinition(processDefinition);
 			
 			// Activity log
-			UserActivity.log(session, "REGISTER_PROCESS_DEFINITION", null, null);
+			UserActivity.log(session.getUserID(), "REGISTER_PROCESS_DEFINITION", null, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -129,7 +129,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_PROCESS_DEFINITION", ""+processDefinitionId, null);
+			UserActivity.log(session.getUserID(), "DELETE_PROCESS_DEFINITION", ""+processDefinitionId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -163,7 +163,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo = WorkflowUtils.copy(pd);
 			
 			// Activity log
-			UserActivity.log(session, "GET_PROCESS_DEFINITION", ""+processDefinitionId, null);
+			UserActivity.log(session.getUserID(), "GET_PROCESS_DEFINITION", ""+processDefinitionId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -220,7 +220,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			baos.close();
 
 			// Activity log
-			UserActivity.log(session, "GET_PROCESS_DEFINITION_IMAGE", ""+processDefinitionId, null);
+			UserActivity.log(session.getUserID(), "GET_PROCESS_DEFINITION_IMAGE", ""+processDefinitionId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -263,7 +263,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
+			UserActivity.log(session.getUserID(), "GET_PROCESS_DEFINITION_FORMS", processDefinitionId+"", null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -316,7 +316,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo = WorkflowUtils.copy(pi);
 			
 			// Activity log
-			UserActivity.log(session, "RUN_PROCESS_DEFINITION", ""+processDefinitionId, variables.toString());
+			UserActivity.log(session.getUserID(), "RUN_PROCESS_DEFINITION", ""+processDefinitionId, variables.toString());
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -360,7 +360,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo = WorkflowUtils.copy(pi);
 			
 			// Activity log
-			UserActivity.log(session, "SEND_PROCESS_INSTANCE_SIGNAL", ""+processInstanceId, transitionName);
+			UserActivity.log(session.getUserID(), "SEND_PROCESS_INSTANCE_SIGNAL", ""+processInstanceId, transitionName);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -394,7 +394,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_PROCESS_INSTANCE", ""+processInstanceId, null);
+			UserActivity.log(session.getUserID(), "DELETE_PROCESS_INSTANCE", ""+processInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -431,7 +431,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "FIND_PROCESS_INSTANCES", ""+processDefinitionId, null);
+			UserActivity.log(session.getUserID(), "FIND_PROCESS_INSTANCES", ""+processDefinitionId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -468,7 +468,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "FIND_ALL_PROCESS_DEFINITIONS", null, null);
+			UserActivity.log(session.getUserID(), "FIND_ALL_PROCESS_DEFINITIONS", null, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -506,7 +506,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "FIND_LATEST_PROCESS_DEFINITIONS", null, null);
+			UserActivity.log(session.getUserID(), "FIND_LATEST_PROCESS_DEFINITIONS", null, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -544,7 +544,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "FIND_ALL_PROCESS_DEFINITION_VERSIONS", name, null);
+			UserActivity.log(session.getUserID(), "FIND_ALL_PROCESS_DEFINITION_VERSIONS", name, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -579,7 +579,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo = WorkflowUtils.copy(pi);
 			
 			// Activity log
-			UserActivity.log(session, "GET_PROCESS_INSTANCE", ""+processInstanceId, null);
+			UserActivity.log(session.getUserID(), "GET_PROCESS_INSTANCE", ""+processInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -612,7 +612,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "SUSPEND_PROCESS_INSTANCE", ""+processInstanceId, null);
+			UserActivity.log(session.getUserID(), "SUSPEND_PROCESS_INSTANCE", ""+processInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -644,7 +644,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "RESUME_PROCESS_INSTANCE", ""+processInstanceId, null);
+			UserActivity.log(session.getUserID(), "RESUME_PROCESS_INSTANCE", ""+processInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -677,7 +677,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "ADD_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name+", "+value);
+			UserActivity.log(session.getUserID(), "ADD_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name+", "+value);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -710,7 +710,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "REMOVE_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name);
+			UserActivity.log(session.getUserID(), "REMOVE_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -750,7 +750,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			Collections.sort(al);
 			
 			// Activity log
-			UserActivity.log(session, "FIND_USER_TASK_INSTANCES", null, null);
+			UserActivity.log(session.getUserID(), "FIND_USER_TASK_INSTANCES", null, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -791,7 +791,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			Collections.sort(al);
 			
 			// Activity log
-			UserActivity.log(session, "FIND_POOLED_TASK_INSTANCES", null, null);
+			UserActivity.log(session.getUserID(), "FIND_POOLED_TASK_INSTANCES", null, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -835,7 +835,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			Collections.sort(al);
 			
 			// Activity log
-			UserActivity.log(session, "FIND_TASK_INSTANCES", ""+processInstanceId, null);
+			UserActivity.log(session.getUserID(), "FIND_TASK_INSTANCES", ""+processInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -875,7 +875,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "SET_TASK_INSTANCE_VALUES", ""+taskInstanceId, transitionName);
+			UserActivity.log(session.getUserID(), "SET_TASK_INSTANCE_VALUES", ""+taskInstanceId, transitionName);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -909,7 +909,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "ADD_TASK_INSTANCE_COMMENT", ""+taskInstanceId, message);
+			UserActivity.log(session.getUserID(), "ADD_TASK_INSTANCE_COMMENT", ""+taskInstanceId, message);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -943,7 +943,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo = WorkflowUtils.copy(ti);
 						
 			// Activity log
-			UserActivity.log(session, "GET_TASK_INSTANCE", ""+taskInstanceId, null);
+			UserActivity.log(session.getUserID(), "GET_TASK_INSTANCE", ""+taskInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -977,7 +977,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "SET_TASK_INSTANCE_ACTOR_ID", ""+taskInstanceId, actorId);
+			UserActivity.log(session.getUserID(), "SET_TASK_INSTANCE_ACTOR_ID", ""+taskInstanceId, actorId);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1011,7 +1011,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "ADD_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name+", "+value);
+			UserActivity.log(session.getUserID(), "ADD_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name+", "+value);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1044,7 +1044,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "REMOVE_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name);
+			UserActivity.log(session.getUserID(), "REMOVE_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1077,7 +1077,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "START_TASK_INSTANCE", ""+taskInstanceId, null);
+			UserActivity.log(session.getUserID(), "START_TASK_INSTANCE", ""+taskInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1117,7 +1117,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "END_TASK_INSTANCE", ""+taskInstanceId, null);
+			UserActivity.log(session.getUserID(), "END_TASK_INSTANCE", ""+taskInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1150,7 +1150,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "SUSPEND_TASK_INSTANCE", ""+taskInstanceId, null);
+			UserActivity.log(session.getUserID(), "SUSPEND_TASK_INSTANCE", ""+taskInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1183,7 +1183,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "RESUME_TASK_INSTANCE", ""+taskInstanceId, null);
+			UserActivity.log(session.getUserID(), "RESUME_TASK_INSTANCE", ""+taskInstanceId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1216,7 +1216,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo.setProcessInstance(WorkflowUtils.copy(t.getProcessInstance())); // Avoid recursion
 			
 			// Activity log
-			UserActivity.log(session, "GET_TOKEN", ""+tokenId, null);
+			UserActivity.log(session.getUserID(), "GET_TOKEN", ""+tokenId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1250,7 +1250,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "ADD_TOKEN_COMMENT", ""+tokenId, message);
+			UserActivity.log(session.getUserID(), "ADD_TOKEN_COMMENT", ""+tokenId, message);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1282,7 +1282,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "SUSPEND_TOKEN", ""+tokenId, null);
+			UserActivity.log(session.getUserID(), "SUSPEND_TOKEN", ""+tokenId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1314,7 +1314,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "RESUME_TOKEN", ""+tokenId, null);
+			UserActivity.log(session.getUserID(), "RESUME_TOKEN", ""+tokenId, null);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1356,7 +1356,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			vo.setProcessInstance(WorkflowUtils.copy(t.getProcessInstance())); // Avoid recursion
 			
 			// Activity log
-			UserActivity.log(session, "SEND_TOKEN_SIGNAL", ""+tokenId, transitionName);
+			UserActivity.log(session.getUserID(), "SEND_TOKEN_SIGNAL", ""+tokenId, transitionName);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {
@@ -1391,7 +1391,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session, "SEND_TOKEN_NODE", ""+tokenId, nodeName);
+			UserActivity.log(session.getUserID(), "SEND_TOKEN_NODE", ""+tokenId, nodeName);
 		} catch (Exception e) {
 			throw new RepositoryException(e);
 		} finally {

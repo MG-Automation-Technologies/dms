@@ -116,7 +116,7 @@ public class DirectNotificationModule implements NotificationModule {
 			sNode.save();
 			
 			// Activity log
-			UserActivity.log(session, "SUBSCRIBE_USER", nodePath, null);
+			UserActivity.log(session.getUserID(), "SUBSCRIBE_USER", nodePath, null);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);
@@ -182,7 +182,7 @@ public class DirectNotificationModule implements NotificationModule {
 			sNode.save();
 
 			// Activity log
-			UserActivity.log(session, "UNSUBSCRIBE_USER", nodePath, null);
+			UserActivity.log(session.getUserID(), "UNSUBSCRIBE_USER", nodePath, null);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(sNode);

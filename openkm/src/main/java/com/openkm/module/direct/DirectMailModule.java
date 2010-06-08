@@ -246,7 +246,7 @@ public class DirectMailModule implements MailModule {
 			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
 
 			// Activity log
-			UserActivity.log(session, "CREATE_MAIL", mail.getPath(), null);
+			UserActivity.log(session.getUserID(), "CREATE_MAIL", mail.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -293,7 +293,7 @@ public class DirectMailModule implements MailModule {
 			mail = getProperties(session, mailPath);
 			
 			// Activity log
-			UserActivity.log(session, "GET_MAIL_PROPERTIES", mailPath, null);
+			UserActivity.log(session.getUserID(), "GET_MAIL_PROPERTIES", mailPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -347,7 +347,7 @@ public class DirectMailModule implements MailModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_MAIL");
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_MAIL", mailPath, null);
+			UserActivity.log(session.getUserID(), "DELETE_MAIL", mailPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -396,7 +396,7 @@ public class DirectMailModule implements MailModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_MAIL");
 
 			// Activity log
-			UserActivity.log(session, "PURGE_MAIL", mailPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_MAIL", mailPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -461,7 +461,7 @@ public class DirectMailModule implements MailModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "RENAME_MAIL", mailPath, newName);
+			UserActivity.log(session.getUserID(), "RENAME_MAIL", mailPath, newName);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -510,7 +510,7 @@ public class DirectMailModule implements MailModule {
 			session.save();
 			
 			// Activity log
-			UserActivity.log(session, "MOVE_MAIL", mailPath, dstPath);
+			UserActivity.log(session.getUserID(), "MOVE_MAIL", mailPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -605,7 +605,7 @@ public class DirectMailModule implements MailModule {
 			DirectNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
 			
 			// Activity log
-			UserActivity.log(session, "COPY_MAIL", mailPath, dstPath);
+			UserActivity.log(session.getUserID(), "COPY_MAIL", mailPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -660,7 +660,7 @@ public class DirectMailModule implements MailModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "GET_CHILD_MAILS", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_CHILD_MAILS", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
