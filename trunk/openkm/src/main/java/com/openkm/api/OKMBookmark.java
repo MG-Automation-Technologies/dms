@@ -21,7 +21,7 @@
 
 package com.openkm.api;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,11 +78,11 @@ public class OKMBookmark implements BookmarkModule {
 	}
 
 	@Override
-	public Collection<Bookmark> getAll(String token) throws RepositoryException,
+	public List<Bookmark> getAll(String token) throws RepositoryException,
 			DatabaseException {
 		log.debug("getAll({})", token);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Collection<Bookmark> col = bm.getAll(token);
+		List<Bookmark> col = bm.getAll(token);
 		log.debug("getAll: {}", col);
 		return col;
 	}

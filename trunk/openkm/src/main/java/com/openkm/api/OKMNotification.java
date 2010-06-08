@@ -21,7 +21,7 @@
 
 package com.openkm.api;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,17 +66,17 @@ public class OKMNotification implements NotificationModule {
 	}
 
 	@Override
-	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		Collection<String> users = nm.getSubscriptors(token, nodePath);
+		List<String> users = nm.getSubscriptors(token, nodePath);
 		log.debug("getSubscriptors: {}", users);
 		return users;
 	}
 
 	@Override
-	public void notify(String token, String nodePath, Collection<String> users, String message) throws
+	public void notify(String token, String nodePath, List<String> users, String message) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();

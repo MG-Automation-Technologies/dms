@@ -22,7 +22,7 @@
 package com.openkm.api;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,11 +119,11 @@ public class OKMMail implements MailModule {
 	}
 	
 	@Override
-	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
+	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		MailModule mm = ModuleManager.getMailModule();
-		Collection<Mail> childs = mm.getChilds(token, fldPath);
+		List<Mail> childs = mm.getChilds(token, fldPath);
 		log.debug("getChilds: {}", childs);
 		return childs;
 	}

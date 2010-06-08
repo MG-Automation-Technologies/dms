@@ -22,7 +22,7 @@
 package com.openkm.api;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,11 +119,11 @@ public class OKMFolder implements FolderModule {
 	}
 	
 	@Override
-	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
+	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Collection<Folder> childs = fm.getChilds(token, fldPath);
+		List<Folder> childs = fm.getChilds(token, fldPath);
 		log.debug("getChilds: {}", childs);
 		return childs;
 	}
