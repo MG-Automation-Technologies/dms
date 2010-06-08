@@ -16,6 +16,7 @@ public class QueryParams implements Serializable {
 	public static final String OR = "or";
 	
 	private int id;
+	private String queryName;
 	private String user;
 	private String name;
 	private String keywords;
@@ -40,6 +41,14 @@ public class QueryParams implements Serializable {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getQueryName() {
+		return queryName;
+	}
+	
+	public void setQueryName(String queryName) {
+		this.queryName = queryName;
 	}
 	
 	public String getUser() {
