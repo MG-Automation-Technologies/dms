@@ -34,6 +34,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.module.AuthModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.principal.PrincipalAdapterException;
 
 public class OKMAuth implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);
@@ -131,7 +132,7 @@ public class OKMAuth implements AuthModule {
 	}
 
 	@Override
-	public List<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		AuthModule am = ModuleManager.getAuthModule();
 		List<String> users = am.getUsers(token);
@@ -140,7 +141,7 @@ public class OKMAuth implements AuthModule {
 	}
 
 	@Override
-	public List<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		AuthModule am = ModuleManager.getAuthModule();
 		List<String> roles = am.getRoles(token);
@@ -149,7 +150,7 @@ public class OKMAuth implements AuthModule {
 	}
 
 	@Override
-	public List<String> getMails(String token, List<String> users) throws RepositoryException {
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails({})", users);
 		AuthModule am = ModuleManager.getAuthModule();
 		List<String> mails = am.getMails(token, users);

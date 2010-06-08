@@ -40,6 +40,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.module.AuthModule;
 import com.openkm.module.ModuleManager;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.ws.util.BytePair;
 import com.openkm.ws.util.BytePairArray;
 import com.openkm.ws.util.StringArray;
@@ -134,7 +135,7 @@ public class OKMAuth {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.AuthModule#getRoles(java.lang.String)
 	 */
-	public StringArray getRoles(String token) throws RepositoryException {
+	public StringArray getRoles(String token) throws PrincipalAdapterException {
 		log.debug("getRoles({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();
@@ -147,7 +148,7 @@ public class OKMAuth {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.AuthModule#getUsers(java.lang.String)
 	 */
-	public StringArray getUsers(String token) throws RepositoryException {
+	public StringArray getUsers(String token) throws PrincipalAdapterException {
 		log.debug("getUsers({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();

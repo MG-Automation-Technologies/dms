@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.MailUtils;
 
 public class UserMailImporter extends TimerTask {
@@ -64,6 +65,8 @@ public class UserMailImporter extends TimerTask {
 		} catch (VirusDetectedException e) {
 			log.error(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
+			log.error(e.getMessage(), e);
+		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 		}
 	}

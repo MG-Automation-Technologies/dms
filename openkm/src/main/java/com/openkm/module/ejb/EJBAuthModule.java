@@ -27,6 +27,7 @@ import java.util.List;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserAlreadyLoggerException;
+import com.openkm.principal.PrincipalAdapterException;
 
 public class EJBAuthModule implements com.openkm.module.AuthModule {
 
@@ -76,18 +77,17 @@ public class EJBAuthModule implements com.openkm.module.AuthModule {
 		
 	}
 
-	public List<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws PrincipalAdapterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws PrincipalAdapterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<String> getMails(String token, List<String> users)
-			throws RepositoryException {
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
