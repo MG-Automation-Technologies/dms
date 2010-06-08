@@ -53,7 +53,7 @@ public class Watchdog extends TimerTask {
 				try {
 					// Activity log
 					Session system = DirectRepositoryModule.getSystemSession();
-					UserActivity.log(system, "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
+					//UserActivity.log(session.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
 					new DirectAuthModule().logout(token);
 				} catch (AccessDeniedException e) {
 					log.error(e.getMessage(), e);
