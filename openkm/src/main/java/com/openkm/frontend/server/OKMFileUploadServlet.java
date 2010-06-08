@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -162,7 +161,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 
 				// If the document have been added to the repository, perform user notification
 				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
-					Collection<String> col = Arrays.asList(users.split(","));
+					List<String> col = Arrays.asList(users.split(","));
 					OKMNotification.getInstance().notify(token, uploadedDocPath, col, message);
 				}
 			}
@@ -184,6 +183,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository));
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DatabaseException));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException));

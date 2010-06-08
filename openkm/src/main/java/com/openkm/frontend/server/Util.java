@@ -137,7 +137,7 @@ public class Util {
 			}
 		}
 		
-		Collection<GWTFolder> categories = new ArrayList<GWTFolder>();
+		List<GWTFolder> categories = new ArrayList<GWTFolder>();
 		for (Iterator<Folder> it = doc.getCategories().iterator(); it.hasNext();) {
 			categories.add(copy(it.next()));
 		}
@@ -173,7 +173,7 @@ public class Util {
 		doc.setSubscribed(gWTDoc.isSubscribed());
 		doc.setSubscriptors(gWTDoc.getSubscriptors());
 		
-		Collection <Folder> categories = new ArrayList<Folder>();
+		List <Folder> categories = new ArrayList<Folder>();
 		for (Iterator<GWTFolder> it = gWTDoc.getCategories().iterator(); it.hasNext();){
 			categories.add(copy(it.next()));
 		}
@@ -362,6 +362,7 @@ public class Util {
 	public static QueryParams copy(GWTQueryParams gWTParams) {
 		QueryParams params = new QueryParams();
 		
+		params.setId(gWTParams.getId());
 		params.setContent(gWTParams.getContent());
 		params.setKeywords(gWTParams.getKeywords());
 		params.setMimeType(gWTParams.getMimeType());
@@ -430,6 +431,7 @@ public class Util {
 			IOException, PathNotFoundException, ParseException, DatabaseException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		
+		gWTParams.setId(params.getId());
 		gWTParams.setContent(params.getContent());
 		gWTParams.setKeywords(params.getKeywords());
 		gWTParams.setMimeType(params.getMimeType());
@@ -583,7 +585,7 @@ public class Util {
 			gWTTaskInstance.setStart(taskInstance.getStart().getTime());
 		}
 		
-		gWTTaskInstance.setComments(copy(taskInstance.getComments()));
+		gWTTaskInstance.setComments(copyComments(taskInstance.getComments()));
 		
 		return gWTTaskInstance;
 	}
@@ -744,7 +746,7 @@ public class Util {
 	 * @param Comment the original data
 	 * @return The GWTTaskInstanceComment object with data values from original TaskInstanceComment
 	 */
-	public static List<GWTComment> copy(List<Comment> list) {
+	public static List<GWTComment> copyComments(List<Comment> list) {
 		List<GWTComment> al = new ArrayList<GWTComment>();
 		GWTComment gWTComment;
 		
@@ -766,8 +768,8 @@ public class Util {
 	 * @param Note the original data
 	 * @return The GWTNote object with data values from original Note
 	 */
-	public static Collection<GWTNote> copy(Collection<Note> commentList) {
-		Collection<GWTNote> gWTCommentList = new ArrayList<GWTNote>();
+	public static List<GWTNote> copy(List<Note> commentList) {
+		List<GWTNote> gWTCommentList = new ArrayList<GWTNote>();
 		
 		for (Iterator<Note> it = commentList.iterator(); it.hasNext();) {
 			Note documentComment = it.next();

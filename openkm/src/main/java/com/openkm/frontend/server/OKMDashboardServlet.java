@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.server;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -36,11 +37,15 @@ import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMDashboardService;
 
@@ -74,6 +79,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLockedDocuments: {}", lockList);
@@ -96,6 +104,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserCheckedOutDocuments: {}", chekoutList);
@@ -118,6 +129,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLastModifiedDocuments: {}", lastModifiedList);
@@ -140,6 +154,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserSubscribedDocuments: {}", subscribedList);
@@ -162,6 +179,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLastUploadedDocuments: {}", lastUploadedList);
@@ -184,6 +204,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserSubscribedFolders: {}", subscribedList);
@@ -191,15 +214,24 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<String> getUserSearchs() throws OKMException {
+	public List<GWTQueryParams> getUserSearchs() throws OKMException {
 		log.debug("getUserSearchs()");
-		List<String> searchList = new ArrayList<String>();
+		List<GWTQueryParams> searchList = new ArrayList<GWTQueryParams>();
 		String token = getToken();
 		
 		try {
-			for (Iterator<String> it = OKMDashboard.getInstance().getUserSearchs(token).iterator(); it.hasNext(); ) {
-				searchList.add(it.next());
+			for (Iterator<QueryParams> it = OKMDashboard.getInstance().getUserSearchs(token).iterator(); it.hasNext(); ) {
+				searchList.add(Util.copy(it.next(), token));
 			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
@@ -213,25 +245,28 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 	}
 	
 	@Override
-	public List<GWTDashboardDocumentResult> find(String name) throws OKMException {
-		log.debug("find({})", name);
+	public List<GWTDashboardDocumentResult> find(int id) throws OKMException {
+		log.debug("find({})", id);
 		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
 		String token = getToken();
 		
-//		try {
-//			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(token, name).iterator(); it.hasNext(); ) {
-//				docList.add(Util.copy(it.next()));
-//			}
-//		} catch (IOException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
-//		} catch (ParseException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
-//		} catch (RepositoryException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
-//		}
+		try {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(token, id).iterator(); it.hasNext(); ) {
+				docList.add(Util.copy(it.next()));
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_IOException), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_ParseException), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		}
 		
 		log.debug("find: {}", docList);
 		return docList;
@@ -250,6 +285,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastWeekTopDownloadedDocuments: {}", docList);
@@ -269,6 +307,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastMonthTopDownloadedDocuments: {}", docList);
@@ -288,6 +329,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastWeekTopModifiedDocuments: {}", docList);
@@ -307,6 +351,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastMonthTopModifiedDocuments: {}", docList);
@@ -326,6 +373,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLastDownloadedDocuments: {}", docList);
@@ -345,6 +395,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastModifiedDocuments: {}", docList);
@@ -364,6 +417,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getLastWeekTopUploadedDocuments: {}", docList);
@@ -383,6 +439,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLastImportedMailAttachments: {}", docList);
@@ -402,6 +461,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("getUserLastImportedMails: {}", mailList);
@@ -421,6 +483,9 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		}
 		
 		log.debug("visiteNode: void");

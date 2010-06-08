@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.server;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,14 +33,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMSearch;
-import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.ItemExistsException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -66,23 +64,22 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	private static final long serialVersionUID = 8673521252684830906L;
 	
 	@Override
-	public List<String> getAllSearchs() throws OKMException {
+	public List<GWTQueryParams> getAllSearchs() throws OKMException {
 		log.debug("getAllSearchs()");
-		List<String> resultList = new ArrayList<String>(); 
+		List<GWTQueryParams> resultList = new ArrayList<GWTQueryParams>(); 
 		String token = getToken();
 		
 		try {
-			Collection<String> col = OKMSearch.getInstance().getAllSearchs(token);
 			
-			for (Iterator<String> it = col.iterator(); it.hasNext();) {		
-				String search = it.next();
-				log.debug("search: {}", search);
-				
-				resultList.add(search);
+			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs(token).iterator(); it.hasNext();) {		
+				resultList.add(Util.copy(it.next(),token));
 			}
 		}  catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
@@ -93,70 +90,45 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	}
 	
 	@Override
-	public void saveSearch(GWTQueryParams params, String type, String name) throws OKMException {
-		log.debug("saveSearch({}, {}, {})", new Object[] { params, type, name });
+	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException {
+		log.debug("saveSearch({}, {}, {})", new Object[] { params, type });
 		String token = getToken();
 		
-//		try {
-//			//OKMSearch.getInstance().saveSearch(token, Util.copy(params), name);
-//		} catch (ItemExistsException e) {
-//			log.warn(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_ItemExists), e.getMessage());
-//		} catch (RepositoryException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-//		} catch (Exception e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-//		}
-		
-		log.debug("saveSearch: void");
+		try {
+			return OKMSearch.getInstance().saveSearch(token, Util.copy(params));
+			
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+		}
 	}
 	
 	@Override
-	public GWTQueryParams getSearch (String name) throws OKMException {
-		log.debug("getSearch({})", name);
-		GWTQueryParams gwtQueryParams = new GWTQueryParams();
-		String token = getToken();
-		
-//		try {
-//			QueryParams results = OKMSearch.getInstance().getSearch(token, name);
-//			gwtQueryParams = Util.copy(results, token);
-//		} catch (PathNotFoundException e) {
-//			log.warn(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-//		} catch (RepositoryException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-//		} catch (IOException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_IOException), e.getMessage());
-//		} catch (Exception e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-//		}
-
-		log.debug("getSearch: {}", gwtQueryParams);
-		return gwtQueryParams;
-	}
-	
-	@Override
-	public void deleteSearch(String name) throws OKMException {
+	public void deleteSearch(int id) throws OKMException {
 		log.debug("deleteSearch()");
 		String token = getToken();
 		
-//		try {
-//			OKMSearch.getInstance().deleteSearch(token,name);
-//		} catch (PathNotFoundException e) {
-//			log.warn(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-//		} catch (RepositoryException e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
-//		} catch (Exception e) {
-//			log.error(e.getMessage(), e);
-//			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
-//		}
+		try {
+			OKMSearch.getInstance().deleteSearch(token,id);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
+		}
 		
 		log.debug("deleteSearch: void");
 	}
@@ -189,6 +161,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
@@ -226,6 +201,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
@@ -236,7 +214,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	}
 	
 	@Override
-	public List<GWTKeyword> getKeywordMap(Collection<String> filter) throws OKMException {
+	public List<GWTKeyword> getKeywordMap(List<String> filter) throws OKMException {
 		log.debug("getKeywordMap()");
 		List<GWTKeyword> keyList = new ArrayList<GWTKeyword>();
 		String token = getToken();
@@ -289,6 +267,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_General), e.getMessage());
 		} 
 		
 		log.debug("getKeywordMap: {}", keyList);

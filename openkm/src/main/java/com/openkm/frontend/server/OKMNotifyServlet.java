@@ -22,13 +22,14 @@
 package com.openkm.frontend.server;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMNotification;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
@@ -65,6 +66,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		} catch (RepositoryException e) { 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) { 
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_General), e.getMessage());
@@ -89,6 +93,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		} catch (RepositoryException e) { 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) { 
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_General), e.getMessage());
@@ -103,7 +110,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		String token = getToken();
 		
 		try {
-			Collection<String> col = Arrays.asList(users.split(","));
+			List<String> col = Arrays.asList(users.split(","));
 			OKMNotification.getInstance().notify(token, docPath, col, message);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);

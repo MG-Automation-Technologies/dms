@@ -188,6 +188,9 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_IOException), e.getMessage()));
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_DatabaseException), e.getMessage()));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_General), e.getMessage()));
