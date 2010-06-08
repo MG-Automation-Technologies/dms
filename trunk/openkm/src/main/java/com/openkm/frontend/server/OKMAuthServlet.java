@@ -512,7 +512,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			}
 			
 			// Activity log
-			UserActivity.log(session, "KEEP_ALIVE", null, null);
+			UserActivity.log(session.getUserID(), "KEEP_ALIVE", null, null);
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
