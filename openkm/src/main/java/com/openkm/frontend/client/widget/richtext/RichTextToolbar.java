@@ -113,47 +113,47 @@ public class RichTextToolbar extends Composite {
 	public void onClick(ClickEvent event) {
 		Widget sender = (Widget) event.getSource();
 		if (sender == bold) {
-	        basic.toggleBold();
+	        formater.toggleBold();
 	      } else if (sender == italic) {
-	        basic.toggleItalic();
+	        formater.toggleItalic();
 	      } else if (sender == underline) {
-	        basic.toggleUnderline();
+	        formater.toggleUnderline();
 	      } else if (sender == subscript) {
-	        basic.toggleSubscript();
+	        formater.toggleSubscript();
 	      } else if (sender == superscript) {
-	        basic.toggleSuperscript();
+	        formater.toggleSuperscript();
 	      } else if (sender == strikethrough) {
-	        extended.toggleStrikethrough();
+	    	formater.toggleStrikethrough();
 	      } else if (sender == indent) {
-	        extended.rightIndent();
+	    	formater.rightIndent();
 	      } else if (sender == outdent) {
-	        extended.leftIndent();
+	        formater.leftIndent();
 	      } else if (sender == justifyLeft) {
-	        basic.setJustification(RichTextArea.Justification.LEFT);
+	        formater.setJustification(RichTextArea.Justification.LEFT);
 	      } else if (sender == justifyCenter) {
-	        basic.setJustification(RichTextArea.Justification.CENTER);
+	        formater.setJustification(RichTextArea.Justification.CENTER);
 	      } else if (sender == justifyRight) {
-	        basic.setJustification(RichTextArea.Justification.RIGHT);
+	        formater.setJustification(RichTextArea.Justification.RIGHT);
 	      } else if (sender == insertImage) {
 	        String url = Window.prompt("Enter an image URL:", "http://");
 	        if (url != null) {
-	          extended.insertImage(url);
+	          formater.insertImage(url);
 	        }
 	      } else if (sender == createLink) {
 	        String url = Window.prompt("Enter a link URL:", "http://");
 	        if (url != null) {
-	          extended.createLink(url);
+	          formater.createLink(url);
 	        }
 	      } else if (sender == removeLink) {
-	        extended.removeLink();
+	        formater.removeLink();
 	      } else if (sender == hr) {
-	        extended.insertHorizontalRule();
+	        formater.insertHorizontalRule();
 	      } else if (sender == ol) {
-	        extended.insertOrderedList();
+	        formater.insertOrderedList();
 	      } else if (sender == ul) {
-	        extended.insertUnorderedList();
+	        formater.insertUnorderedList();
 	      } else if (sender == removeFormat) {
-	        extended.removeFormat();
+	        formater.removeFormat();
 	      } else if (sender == richText) {
 	        // We use the RichTextArea's onKeyUp event to update the toolbar status.
 	        // This will catch any cases where the user moves the cursur using the
@@ -168,16 +168,16 @@ public class RichTextToolbar extends Composite {
 	public void onChange(ChangeEvent event) {
 		Widget sender = (Widget) event.getSource();
 		if (sender == backColors) {
-	        basic.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
+	        formater.setBackColor(backColors.getValue(backColors.getSelectedIndex()));
 	        backColors.setSelectedIndex(0);
 	      } else if (sender == foreColors) {
-	        basic.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
+	        formater.setForeColor(foreColors.getValue(foreColors.getSelectedIndex()));
 	        foreColors.setSelectedIndex(0);
 	      } else if (sender == fonts) {
-	        basic.setFontName(fonts.getValue(fonts.getSelectedIndex()));
+	        formater.setFontName(fonts.getValue(fonts.getSelectedIndex()));
 	        fonts.setSelectedIndex(0);
 	      } else if (sender == fontSizes) {
-	        basic.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
+	        formater.setFontSize(fontSizesConstants[fontSizes.getSelectedIndex() - 1]);
 	        fontSizes.setSelectedIndex(0);
 	      }
 	}
@@ -193,8 +193,7 @@ public class RichTextToolbar extends Composite {
   private Images images = (Images) GWT.create(Images.class);
 
   private RichTextArea richText;
-  private RichTextArea.BasicFormatter basic;
-  private RichTextArea.ExtendedFormatter extended;
+  private RichTextArea.Formatter formater;
 
   private VerticalPanel outer = new VerticalPanel();
   private HorizontalPanel topPanel = new HorizontalPanel();
@@ -230,8 +229,7 @@ public class RichTextToolbar extends Composite {
    */
   public RichTextToolbar(RichTextArea richText) {
     this.richText = richText;
-    this.basic = richText.getBasicFormatter();
-    this.extended = richText.getExtendedFormatter();
+    this.formater = richText.getFormatter();
 
     outer.add(topPanel);
     outer.add(bottomPanel);
@@ -242,7 +240,7 @@ public class RichTextToolbar extends Composite {
     setStyleName("gwt-RichTextToolbar");
     richText.addStyleName("hasRichTextToolbar");
 
-    if (basic != null) {
+    if (formater != null) {
       topPanel.add(bold = createToggleButton(images.bold(), "Negrita"));
       topPanel.add(italic = createToggleButton(images.italic(), "Italica"));
       topPanel.add(underline = createToggleButton(images.underline(), "Subrayado"));
@@ -251,9 +249,6 @@ public class RichTextToolbar extends Composite {
       topPanel.add(justifyLeft = createPushButton(images.justifyLeft(), "Izquierda"));
       topPanel.add(justifyCenter = createPushButton(images.justifyCenter(),"Centro"));
       topPanel.add(justifyRight = createPushButton(images.justifyRight(),"Derecha"));
-    }
-
-    if (extended != null) {
       topPanel.add(strikethrough = createToggleButton(images.strikeThrough(), "Marcar"));
       topPanel.add(indent = createPushButton(images.indent(), "Identar"));
       topPanel.add(outdent = createPushButton(images.outdent(), "Desidentar"));
@@ -264,9 +259,6 @@ public class RichTextToolbar extends Composite {
       topPanel.add(createLink = createPushButton(images.createLink(), "Crear enlace"));
       topPanel.add(removeLink = createPushButton(images.removeLink(), "Eliminar enlace"));
       topPanel.add(removeFormat = createPushButton(images.removeFormat(),"Eliminar formato"));
-    }
-
-    if (basic != null) {
       bottomPanel.add(backColors = createColorList("Background"));
       bottomPanel.add(foreColors = createColorList("Foreground"));
       bottomPanel.add(fonts = createFontList());
@@ -344,16 +336,13 @@ public class RichTextToolbar extends Composite {
    * Updates the status of all the stateful buttons.
    */
   private void updateStatus() {
-    if (basic != null) {
-      bold.setDown(basic.isBold());
-      italic.setDown(basic.isItalic());
-      underline.setDown(basic.isUnderlined());
-      subscript.setDown(basic.isSubscript());
-      superscript.setDown(basic.isSuperscript());
-    }
-
-    if (extended != null) {
-      strikethrough.setDown(extended.isStrikethrough());
+    if (formater != null) {
+      bold.setDown(formater.isBold());
+      italic.setDown(formater.isItalic());
+      underline.setDown(formater.isUnderlined());
+      subscript.setDown(formater.isSubscript());
+      superscript.setDown(formater.isSuperscript());
+      strikethrough.setDown(formater.isStrikethrough());
     }
   }
 }
