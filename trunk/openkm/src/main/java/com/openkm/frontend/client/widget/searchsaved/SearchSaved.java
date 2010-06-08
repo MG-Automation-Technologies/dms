@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.widget.searchsaved;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -49,11 +51,14 @@ public class SearchSaved extends Composite {
 	public MenuPopup menuPopup;
 	private Status status;
 	private boolean firstTime = true;
+	private List<GWTQueryParams> savedSearches;
+	private int searchIdToDelete = 0;
 	
 	/**
 	 * SearchSaved
 	 */
 	public SearchSaved() {
+		savedSearches = new ArrayList<GWTQueryParams>();
 		table = new ExtendedFlexTable();
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-SearchSaved-MenuPopup");
@@ -99,13 +104,12 @@ public class SearchSaved extends Composite {
 	/**
 	 * Call Back get search 
 	 */
-	final AsyncCallback<List<String>> callbackGetSearchs = new AsyncCallback<List<String>>() {
-		public void onSuccess(List<String> result){
-			List<String> documentList = result;		
-			
+	final AsyncCallback<List<GWTQueryParams>> callbackGetSearchs = new AsyncCallback<List<GWTQueryParams>>() {
+		public void onSuccess(List<GWTQueryParams> result){
+			savedSearches = result;
 			table.removeAllRows();
 			
-			for (Iterator<String> it = documentList.iterator(); it.hasNext();){
+			for (Iterator<GWTQueryParams> it = result.iterator(); it.hasNext();){
 				addRow(it.next());
 			}
 			if (!firstTime) {
@@ -133,6 +137,16 @@ public class SearchSaved extends Composite {
 		public void onSuccess(Object result) {
 			table.removeRow(getSelectedRow());
 			table.selectPrevRow();
+			
+			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
+				GWTQueryParams params = it.next();
+				if (params.getId() == searchIdToDelete) {
+					savedSearches.remove(params);
+					searchIdToDelete = 0;
+					break;
+				}
+			}
+			
 			status.unsetFlag_deleteSearch();
 		}
 		
@@ -141,24 +155,36 @@ public class SearchSaved extends Composite {
 			Main.get().showError("DeleteSearch", caught);
 		}
 	};
+	
+	/**
+	 * addNewSavedSearch
+	 * 
+	 * @param search
+	 */
+	public void addNewSavedSearch(GWTQueryParams search) {
+		savedSearches.add(search);
+		addRow(search);
+	}
 		
 	/**
 	 * Adds a new row
 	 * 
 	 * @param search The search value
 	 */
-	public void addRow(String search) {
+	private void addRow(GWTQueryParams search) {
 		int rows = table.getRowCount();
 		
-		table.setHTML(rows, 0, search);
-		table.setHTML(rows, 1, "");
+		table.setHTML(rows, 0, search.getName());
+		table.setHTML(rows, 1, ""+search.getId());
+		table.setHTML(rows, 2, "");
+		table.getCellFormatter().setVisible(rows, 1, false);
 		
 		// The hidden column extends table to 100% width
 		CellFormatter cellFormatter = table.getCellFormatter();
-		cellFormatter.setWidth(rows, 1, "100%");
+		cellFormatter.setWidth(rows, 2, "100%");
 		
 		table.getRowFormatter().setStyleName(rows, "okm-SearchSaved");
-		setRowWordWarp(rows, 2, false);
+		setRowWordWarp(rows, 3, false);
 	}
 	
 	/**
@@ -194,8 +220,14 @@ public class SearchSaved extends Composite {
 	 */
 	public void getSearch() {
 		if (getSelectedRow() >= 0) {
-			String name = table.getText(getSelectedRow(), 0);
-			Main.get().mainPanel.search.searchResult.getSearch(name);
+			int id = Integer.parseInt(table.getText(getSelectedRow(), 1));
+			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
+				GWTQueryParams params = it.next();
+				if (params.getId()==id) {
+					Main.get().mainPanel.search.searchResult.getSearch(params);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -205,10 +237,10 @@ public class SearchSaved extends Composite {
 	public void deleteSearch() {
 		if (getSelectedRow() >= 0) {
 			status.setFlag_deleteSearch();
-			String name = table.getText(getSelectedRow(),0);
+			searchIdToDelete = Integer.parseInt(table.getText(getSelectedRow(),1));
 			ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 			endPoint.setServiceEntryPoint(Config.OKMSearchService);
-			searchService.deleteSearch(name, callbackDeleteSearch);
+			searchService.deleteSearch(searchIdToDelete, callbackDeleteSearch);
 		}
 	}
 	
