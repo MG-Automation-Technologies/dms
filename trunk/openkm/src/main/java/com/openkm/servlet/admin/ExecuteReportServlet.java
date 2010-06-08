@@ -61,6 +61,7 @@ import com.openkm.dao.LegacyDAO;
 import com.openkm.dao.bean.User;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.ReportUtil;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
@@ -146,6 +147,9 @@ public class ExecuteReportServlet extends BaseServlet {
 			Map<String, String> parameters = new HashMap<String, String>();
 			String host = com.openkm.core.Config.APPLICATION_URL;
 			parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
+			
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_EXECUTE_REPORT", jasperFile, null);
 			
 			if (con != null) {
 				ReportUtil.generateReport(response.getOutputStream(), jasperFile, parameters, type, con);

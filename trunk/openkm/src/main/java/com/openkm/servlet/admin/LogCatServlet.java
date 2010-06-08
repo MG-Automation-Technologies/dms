@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
 import com.openkm.util.FormatUtil;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
@@ -70,6 +71,10 @@ public class LogCatServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		sc.setAttribute("files", FileUtils.listFiles(logFolder, null, false));
 		sc.getRequestDispatcher("/admin/logcat.jsp").forward(request, response);
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_LOGCAT_LIST", logFolder.getPath(), null);
+		
 		log.debug("list: void");
 	}
 	
@@ -91,6 +96,10 @@ public class LogCatServlet extends BaseServlet {
 		sc.setAttribute("str", str);
 		sc.setAttribute("messages", FormatUtil.parseLog(lf, begin, end, str));
 		sc.getRequestDispatcher("/admin/logcat_view.jsp").forward(request, response);
+		
+		// Activity log
+		UserActivity.log(request.getRemoteUser(), "ADMIN_LOGCAT_VIEW", file, str);
+		
 		log.debug("view: void");
 	}
 }
