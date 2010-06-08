@@ -1,4 +1,3 @@
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
@@ -20,34 +19,51 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client;
+package com.openkm.frontend.client.extension.event;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
- * Customization
+ * HasNavigatorEvent
+ * 
  * 
  * @author jllort
  *
  */
-public class Customization {
+
+public interface HasNavigatorEvent {
 	
 	/**
-	 * getExtensionWidgets
+	 * NavigatorEventConstant
 	 * 
-	 * @return
+	 * @author jllort
+	 *
 	 */
-	public static List<Object> getExtensionWidgets() {
-		List<Object> extensions = new ArrayList<Object>();
+	public static class NavigatorEventConstant {
 		
-		// add here your widget extensions
-//		extensions.add(new HelloWorld());
-//		extensions.add(new ToolBarButtonExample().getButton());
-//		extensions.add(new TabFolderExample());
-//		extensions.add(new MainMenuExample().getNewMenu());
-//		extensions.add(new HandlersTest());
+		static final int EVENT_STACK_CHANGED = 1;
 		
-		return extensions;
+		private int type = 0;
+		
+		/**
+		 * ToolBarEventConstant
+		 * 
+		 * @param type
+		 */
+		private NavigatorEventConstant(int type) {
+			this.type = type;
+		}
+		
+		public int getType(){
+			return type;
+		}
 	}
+	
+	NavigatorEventConstant STACK_CHANGED = new NavigatorEventConstant(NavigatorEventConstant.EVENT_STACK_CHANGED);
+	
+	/**
+	 * @param event
+	 */
+	void fireEvent(NavigatorEventConstant event);
+	
 }
