@@ -21,13 +21,20 @@
 
 package com.openkm.frontend.client.panel.left;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.StackPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.event.HasNavigatorEvent;
+import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasNavigatorHandlerExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 import com.openkm.frontend.client.panel.PanelDefinition;
 
-public class ExtendedStackPanel extends StackPanel {
+public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent, HasNavigatorHandlerExtension {
 	
 	private boolean startupFinished		= false; // to indicate process starting up has finished
 	private boolean categoriesVisible	= false;
@@ -35,8 +42,13 @@ public class ExtendedStackPanel extends StackPanel {
 	private boolean personalVisible 	= false;
 	private boolean mailVisible			= false;
 	private int hiddenStacks = 4;
-	
 	private int stackIndex = 0;
+	private List<NavigatorHandlerExtension> navHandlerExtensionList;
+	
+	public ExtendedStackPanel() {
+		super();
+		navHandlerExtensionList = new ArrayList<NavigatorHandlerExtension>();
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.StackPanel#showStack(int)
@@ -150,6 +162,7 @@ public class ExtendedStackPanel extends StackPanel {
 					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(true);
 					break;
 			}
+			fireEvent(HasNavigatorEvent.STACK_CHANGED);
 		}
 	}
 	
@@ -297,5 +310,17 @@ public class ExtendedStackPanel extends StackPanel {
 	 */
 	public int getHiddenStacks() {
 		return hiddenStacks;
+	}
+	
+	@Override
+	public void addNavigatorHandlerExtension(NavigatorHandlerExtension handlerExtension) {
+		navHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(NavigatorEventConstant event) {
+		for (Iterator<NavigatorHandlerExtension> it = navHandlerExtensionList.iterator(); it.hasNext();) {
+			it.next().onChange(event);
+		}
 	}
 }
