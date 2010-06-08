@@ -23,7 +23,7 @@ package com.openkm.module.ejb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.List;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
@@ -80,7 +80,7 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 		
 	}
 
-	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -105,7 +105,7 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 		return null;
 	}
 
-	public Collection<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException, RepositoryException {
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
