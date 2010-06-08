@@ -23,6 +23,7 @@ package com.openkm.api;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -55,41 +56,41 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
+	public List<QueryResult> findByContent(String token, String words) throws IOException, 
 			ParseException,	RepositoryException, DatabaseException {
 		log.debug("findByContent({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<QueryResult> col = sm.findByContent(token, words);
+		List<QueryResult> col = sm.findByContent(token, words);
 		log.debug("findByContent: {}", col);
 		return col;
 	}
 
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException,
+	public List<QueryResult> findByName(String token, String words) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
 		log.debug("findByName({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<QueryResult> col = sm.findByName(token, words);
+		List<QueryResult> col = sm.findByName(token, words);
 		log.debug("findByName: {}", col);
 		return col;
 	}
 
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
+	public List<QueryResult> findByKeywords(String token, String words) throws IOException, 
 			ParseException, RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<QueryResult> col = sm.findByKeywords(token, words);
+		List<QueryResult> col = sm.findByKeywords(token, words);
 		log.debug("findByKeywords: {}", col);
 		return col;
 	}
 
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
+	public List<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
 		log.debug("find({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<QueryResult> col = sm.find(token, params);
+		List<QueryResult> col = sm.find(token, params);
 		log.debug("find: {}", col);
 		return col;
 	}
@@ -105,11 +106,11 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
+	public List<QueryResult> findByStatement(String token, String statement, String type) 
 			throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({}, {})", statement, type);
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<QueryResult> col = sm.findByStatement(token, statement, type);
+		List<QueryResult> col = sm.findByStatement(token, statement, type);
 		log.debug("findByKeywords: {}", col);
 		return col;
 	}
@@ -134,6 +135,7 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("getSearch({})", qpId);
@@ -144,11 +146,11 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<String> getAllSearchs(String token) throws RepositoryException, 
+	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, 
 			DatabaseException {
 		log.debug("getAllSearchs()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<String> col = sm.getAllSearchs(token);
+		List<QueryParams> col = sm.getAllSearchs(token);
 		log.debug("getAllSearchs: {}", col);
 		return col;
 	}
@@ -173,11 +175,11 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public Collection<Document> getCategorizedDocuments(String token, String categoryId)
+	public List<Document> getCategorizedDocuments(String token, String categoryId)
 			throws RepositoryException, DatabaseException {
 		log.debug("getCategorizedDocuments()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<Document> col = sm.getCategorizedDocuments(token, categoryId);
+		List<Document> col = sm.getCategorizedDocuments(token, categoryId);
 		log.debug("getCategorizedDocuments: {}", col);
 		return col;
 	}
