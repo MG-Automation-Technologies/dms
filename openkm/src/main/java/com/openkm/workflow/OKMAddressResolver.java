@@ -22,8 +22,8 @@
 package com.openkm.workflow;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jbpm.mail.AddressResolver;
 import org.slf4j.Logger;
@@ -41,9 +41,9 @@ public class OKMAddressResolver implements AddressResolver {
 		String email = null;
 		
 		try {
-			Collection<String> users = new ArrayList<String>();
+			List<String> users = new ArrayList<String>();
 			users.add(actorId);
-			Collection<String> emails = new DirectAuthModule().getMails(null, users);
+			List<String> emails = new DirectAuthModule().getMails(null, users);
 			
 			for (Iterator<String> it = emails.iterator(); it.hasNext(); ) {
 				email = it.next();
