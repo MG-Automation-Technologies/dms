@@ -29,8 +29,8 @@ import org.jbpm.mail.AddressResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.RepositoryException;
 import com.openkm.module.direct.DirectAuthModule;
+import com.openkm.principal.PrincipalAdapterException;
 
 public class OKMAddressResolver implements AddressResolver {
 	private static Logger log = LoggerFactory.getLogger(OKMAddressResolver.class);
@@ -48,7 +48,7 @@ public class OKMAddressResolver implements AddressResolver {
 			for (Iterator<String> it = emails.iterator(); it.hasNext(); ) {
 				email = it.next();
 			}
-		} catch (RepositoryException e) {
+		} catch (PrincipalAdapterException e) {
 			log.warn(e.getMessage());
 		}
 		

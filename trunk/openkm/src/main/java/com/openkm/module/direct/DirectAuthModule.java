@@ -863,7 +863,7 @@ public class DirectAuthModule implements AuthModule {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	private PrincipalAdapter getPrincipalAdapter() throws RepositoryException {
+	private PrincipalAdapter getPrincipalAdapter() throws PrincipalAdapterException {
 		if (principalAdapter == null) {
 			try {
 				log.info("PrincipalAdapter: {}", Config.PRINCIPAL_ADAPTER);
@@ -871,13 +871,13 @@ public class DirectAuthModule implements AuthModule {
 				principalAdapter = (PrincipalAdapter) object;
 			} catch (ClassNotFoundException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw new PrincipalAdapterException(e.getMessage(), e);
 			} catch (InstantiationException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw new PrincipalAdapterException(e.getMessage(), e);
 			} catch (IllegalAccessException e) {
 				log.error(e.getMessage(), e);
-				throw new RepositoryException(e.getMessage(), e);
+				throw new PrincipalAdapterException(e.getMessage(), e);
 			}
 		}
 
@@ -885,7 +885,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public List<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws PrincipalAdapterException {
 		log.debug("getUsers({})", token);
 		List<String> list = null;
 
@@ -894,7 +894,7 @@ public class DirectAuthModule implements AuthModule {
 			list = principalAdapter.getUsers();
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		}
 
 		log.debug("getUsers: {}", list);
@@ -902,7 +902,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public List<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws PrincipalAdapterException {
 		log.debug("getRoles({})", token);
 		List<String> list = null;
 
@@ -911,7 +911,7 @@ public class DirectAuthModule implements AuthModule {
 			list = principalAdapter.getRoles();
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		}
 
 		log.debug("getRoles: {}", list);
@@ -922,7 +922,7 @@ public class DirectAuthModule implements AuthModule {
 	 * Get mail user list from user list. 
 	 */
 	@Override
-	public List<String> getMails(String token, List<String> users) throws RepositoryException {
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails({})", token);
 		List<String> list = null;
 
@@ -931,7 +931,7 @@ public class DirectAuthModule implements AuthModule {
 			list = principalAdapter.getMails(users);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
+			throw e;
 		}
 
 		log.debug("getMails: {}", list);

@@ -29,6 +29,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserAlreadyLoggerException;
+import com.openkm.principal.PrincipalAdapterException;
 
 public interface AuthModule {
 
@@ -164,7 +165,7 @@ public interface AuthModule {
 	 * @return A collection of repository users.
 	 * @throws RepositoryException If there is any error retrieving the users list.
 	 */
-	public List<String> getUsers(String token) throws RepositoryException;
+	public List<String> getUsers(String token) throws PrincipalAdapterException;
 	
 	/**
 	 * Retrieves a list of repository roles.
@@ -173,7 +174,7 @@ public interface AuthModule {
 	 * @return A collection of repository roles.
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
-	public List<String> getRoles(String token) throws RepositoryException;
+	public List<String> getRoles(String token) throws PrincipalAdapterException;
 	
 	/**
 	 * Retrieves the user mails from an user list.
@@ -183,5 +184,5 @@ public interface AuthModule {
 	 * @return A collection of user mails.
 	 * @throws RepositoryException If there is any error retrieving the mail list.
 	 */
-	public List<String> getMails(String token, List<String> users) throws RepositoryException;
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException;
 }
