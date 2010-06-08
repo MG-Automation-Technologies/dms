@@ -35,31 +35,27 @@ public interface BookmarkModule {
 	/**
 	 * Create a new folder in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath A node path to be bookmarked.
 	 * @thows PathNotFoundException If there is no node with this nodePath.
 	 * @throws ItemExistsException If there is already a bookmark in the
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException, DatabaseException;
+	public Bookmark add(String nodePath, String name) throws AccessDeniedException,	PathNotFoundException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created folder.
 	 * 
-	 * @param token The session authorization token.
-	 * @param name The bookamark name to be deleted. 
+	 * @param name The bookmark name to be deleted. 
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
-			DatabaseException;
+	public void remove(int bmId) throws AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Rename a previous stored bookmark.
 	 * 
-	 * @param token The session authorization token.
 	 * @param name The actual bookmark name.
 	 * @param newName The new bookmark name.
 	 * @thows PathNotFoundException If there is no node with this name.
@@ -67,15 +63,14 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public Bookmark rename(int bmId, String newName) throws AccessDeniedException, RepositoryException, 
+			DatabaseException;
 	
 	/**
 	 * Retrive an user bookmark collection.
 	 * 
-	 * @param token The session authorization token
 	 * @return All the user bookmarks
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
+	public List<Bookmark> getAll() throws RepositoryException, DatabaseException;
 }
