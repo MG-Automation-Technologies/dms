@@ -240,10 +240,7 @@ public class JCRUtils {
 	public static void removeLockToken(Session session, Node node) throws DatabaseException, 
 			javax.jcr.RepositoryException {
 		log.debug("removeLockToken({}, {})", session, node);
-		LockToken lt = new LockToken();
-		lt.setUser(session.getUserID());
-		lt.setToken(getLockToken(node.getUUID()));
-		LockTokenDAO.remove(lt);
+		LockTokenDAO.remove(session.getUserID(), getLockToken(node.getUUID()));
 		log.debug("removeLockToken: void");
 	}
 	
