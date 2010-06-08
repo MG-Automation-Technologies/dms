@@ -226,7 +226,7 @@ public class DirectFolderModule implements FolderModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "CREATE_FOLDER");
 
 			// Activity log
-			UserActivity.log(session, "CREATE_FOLDER", fld.getPath(), null);
+			UserActivity.log(session.getUserID(), "CREATE_FOLDER", fld.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -269,7 +269,7 @@ public class DirectFolderModule implements FolderModule {
 			fld = getProperties(session, fldPath);
 			
 			// Activity log
-			UserActivity.log(session, "GET_FOLDER_PROPERTIES", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_FOLDER_PROPERTIES", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -327,7 +327,7 @@ public class DirectFolderModule implements FolderModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "DELETE_FOLDER");
 			
 			// Activity log
-			UserActivity.log(session, "DELETE_FOLDER", fldPath, null);
+			UserActivity.log(session.getUserID(), "DELETE_FOLDER", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -444,7 +444,7 @@ public class DirectFolderModule implements FolderModule {
 			DirectScriptingModule.checkScripts(session, parentNode, folderNode, "PURGE_FOLDER");
 
 			// Activity log
-			UserActivity.log(session, "PURGE_FOLDER", fldPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_FOLDER", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -545,7 +545,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "RENAME_FOLDER", fldPath, newName);
+			UserActivity.log(session.getUserID(), "RENAME_FOLDER", fldPath, newName);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -594,7 +594,7 @@ public class DirectFolderModule implements FolderModule {
 			session.save();
 			
 			// Activity log
-			UserActivity.log(session, "MOVE_FOLDER", fldPath, dstPath);
+			UserActivity.log(session.getUserID(), "MOVE_FOLDER", fldPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -653,7 +653,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.commit();
 			
 			// Activity log
-			UserActivity.log(session, "COPY_FOLDER", fldPath, dstPath);
+			UserActivity.log(session.getUserID(), "COPY_FOLDER", fldPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			//t.rollback();
@@ -735,7 +735,7 @@ public class DirectFolderModule implements FolderModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "GET_CHILD_FOLDERS", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_CHILD_FOLDERS", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -770,7 +770,7 @@ public class DirectFolderModule implements FolderModule {
 			contentInfo = getContentInfoHelper(folderNode);
 			
 			// Activity log
-			UserActivity.log(session, "GET_FOLDER_CONTENT_INFO", fldPath, contentInfo.toString());
+			UserActivity.log(session.getUserID(), "GET_FOLDER_CONTENT_INFO", fldPath, contentInfo.toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

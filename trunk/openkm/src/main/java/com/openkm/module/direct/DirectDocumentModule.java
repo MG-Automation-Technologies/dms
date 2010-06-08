@@ -413,7 +413,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "CREATE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
+			UserActivity.log(session.getUserID(), "CREATE_DOCUMENT", doc.getPath(), mimeType+", "+size);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -495,7 +495,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "DELETE_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "DELETE_DOCUMENT", docPath, null);
+			UserActivity.log(session.getUserID(), "DELETE_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -534,7 +534,7 @@ public class DirectDocumentModule implements DocumentModule {
 			doc = getProperties(session, docPath);
 
 			// Activity log
-			UserActivity.log(session, "GET_DOCUMENT_PROPERTIES", docPath, doc.getKeywords().toString());
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_PROPERTIES", docPath, doc.getKeywords().toString());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -583,7 +583,7 @@ public class DirectDocumentModule implements DocumentModule {
 			is = getContent(session, documentNode);
 
 			// Activity log
-			UserActivity.log(session, (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), docPath, ""+is.available());
+			UserActivity.log(session.getUserID(), (checkout?"GET_DOCUMENT_CONTENT_CHECKOUT":"GET_DOCUMENT_CONTENT"), docPath, ""+is.available());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -625,7 +625,7 @@ public class DirectDocumentModule implements DocumentModule {
 			is = frozenNode.getProperty(JcrConstants.JCR_DATA).getStream();
 
 			// Activity log
-			UserActivity.log(session, "GET_DOCUMENT_CONTENT_BY_VERSION", docPath, versionId+", "+is.available());
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_CONTENT_BY_VERSION", docPath, versionId+", "+is.available());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -702,7 +702,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_CONTENT");
 
 			// Activity log
-			UserActivity.log(session, "SET_DOCUMENT_CONTENT", docPath, ""+size);
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_CONTENT", docPath, ""+size);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
@@ -770,7 +770,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
-			UserActivity.log(session, "ADD_DOCUMENT_NOTE", docPath, text);
+			UserActivity.log(session.getUserID(), "ADD_DOCUMENT_NOTE", docPath, text);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(notesNode);
@@ -822,7 +822,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "GET_CHILD_DOCUMENTS", fldPath, null);
+			UserActivity.log(session.getUserID(), "GET_CHILD_DOCUMENTS", fldPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -882,7 +882,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "RENAME_DOCUMENT", docPath, newName);
+			UserActivity.log(session.getUserID(), "RENAME_DOCUMENT", docPath, newName);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -939,7 +939,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "SET_DOCUMENT_PROPERTIES");
 
 			// Activity log
-			UserActivity.log(session, "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_PROPERTIES", doc.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -1005,7 +1005,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKOUT_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "CHECKOUT_DOCUMENT", docPath, lck.getLockToken());
+			UserActivity.log(session.getUserID(), "CHECKOUT_DOCUMENT", docPath, lck.getLockToken());
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -1072,7 +1072,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CANCEL_CHECKOUT_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "CANCEL_CHECKOUT_DOCUMENT", docPath, null);
+			UserActivity.log(session.getUserID(), "CANCEL_CHECKOUT_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -1203,7 +1203,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "CHECKIN_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "CHECKIN_DOCUMENT", docPath, comment);
+			UserActivity.log(session.getUserID(), "CHECKIN_DOCUMENT", docPath, comment);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			t.rollback();
@@ -1285,7 +1285,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Collections.reverse(history);
 
 			// Activity log
-			UserActivity.log(session, "GET_DOCUMENT_VERSION_HISTORY", docPath, null);
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_VERSION_HISTORY", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);
@@ -1330,7 +1330,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "LOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "LOCK_DOCUMENT", docPath, lck.getLockToken());
+			UserActivity.log(session.getUserID(), "LOCK_DOCUMENT", docPath, lck.getLockToken());
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1383,7 +1383,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "UNLOCK_DOCUMENT");
 
 			// Activity log
-			UserActivity.log(session, "UNLOCK_DOCUMENT", docPath, null);
+			UserActivity.log(session.getUserID(), "UNLOCK_DOCUMENT", docPath, null);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
 			throw new LockException(e.getMessage(), e);
@@ -1530,7 +1530,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectScriptingModule.checkScripts(session, parentNode, documentNode, "PURGE_DOCUMENT");
 			
 			// Activity log
-			UserActivity.log(session, "PURGE_DOCUMENT", docPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_DOCUMENT", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(parentNode);
@@ -1631,7 +1631,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session.save();
 
 			// Activity log
-			UserActivity.log(session, "MOVE_DOCUMENT", docPath, dstPath);
+			UserActivity.log(session.getUserID(), "MOVE_DOCUMENT", docPath, dstPath);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(session);
@@ -1684,7 +1684,7 @@ public class DirectDocumentModule implements DocumentModule {
 			DirectNotificationModule.checkSubscriptions(dstFolderNode, session.getUserID(), "COPY", null);
 
 			// Activity log
-			UserActivity.log(session, "COPY_DOCUMENT", docPath, dstPath);
+			UserActivity.log(session.getUserID(), "COPY_DOCUMENT", docPath, dstPath);
 		} catch (javax.jcr.ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(dstFolderNode);
@@ -1757,7 +1757,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "RESTORE_VERSION", docPath, versionId);
+			UserActivity.log(session.getUserID(), "RESTORE_VERSION", docPath, versionId);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(contentNode);
@@ -1815,7 +1815,7 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 
 			// Activity log
-			UserActivity.log(session, "PURGE_VERSION_HISTORY", docPath, null);
+			UserActivity.log(session.getUserID(), "PURGE_VERSION_HISTORY", docPath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new PathNotFoundException(e.getMessage(), e);

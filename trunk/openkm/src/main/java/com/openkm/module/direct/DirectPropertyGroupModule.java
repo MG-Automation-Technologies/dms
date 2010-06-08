@@ -87,7 +87,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "ADD_PROPERTY_GROUP", docPath, grpName);
+			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", docPath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -143,7 +143,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "REMOVE_PROPERTY_GROUP", docPath, grpName);
+			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", docPath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			throw new NoSuchGroupException(e.getMessage(), e);
@@ -303,7 +303,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+ret);
+			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+ret);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			throw new NoSuchGroupException(e.getMessage(), e);
@@ -357,7 +357,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			documentNode.save();
 			
 			// Activity log
-			UserActivity.log(session, "SET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+properties);
+			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+properties);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);

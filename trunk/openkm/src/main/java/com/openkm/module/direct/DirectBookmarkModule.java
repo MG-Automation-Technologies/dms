@@ -79,7 +79,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.create(newBookmark);
 			
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_ADD", name, nodePath);
+			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
@@ -114,7 +114,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.delete(bmId);
 			
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_REMOVE", Integer.toString(bmId), null);
+			UserActivity.log(session.getUserID(), "BOOKMARK_REMOVE", Integer.toString(bmId), null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
@@ -151,7 +151,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.update(bm);
 						
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_RENAME", Integer.toString(bmId), newName);
+			UserActivity.log(session.getUserID(), "BOOKMARK_RENAME", Integer.toString(bmId), newName);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
@@ -182,7 +182,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			BookmarkDAO.findByUser(session.getUserID());
 						
 			// Activity log
-			UserActivity.log(session, "BOOKMARK_GET_ALL", null, null);
+			UserActivity.log(session.getUserID(), "BOOKMARK_GET_ALL", null, null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {

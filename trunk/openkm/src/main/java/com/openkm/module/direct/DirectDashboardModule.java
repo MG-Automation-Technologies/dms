@@ -693,7 +693,7 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_DASHBOARD_USER_SEARCHS", null, null);
+			UserActivity.log(session.getUserID(), "GET_DASHBOARD_USER_SEARCHS", null, null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
