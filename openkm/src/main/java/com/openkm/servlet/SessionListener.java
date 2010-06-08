@@ -65,7 +65,7 @@ public class SessionListener implements HttpSessionListener {
 				if (si != null) {
 					// Activity log
 					Session system = DirectRepositoryModule.getSystemSession();
-					UserActivity.log(system, "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
+					UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
 					new DirectAuthModule().logout(token);
 				}
 			}
