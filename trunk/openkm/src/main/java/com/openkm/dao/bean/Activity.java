@@ -29,7 +29,6 @@ public class Activity implements Serializable {
 	private int id;
 	private Calendar date;
 	private String user;
-	private String token;
 	private String action;
 	private String item;
 	private String params;
@@ -66,14 +65,6 @@ public class Activity implements Serializable {
 		this.params = params;
 	}
 	
-	public String getToken() {
-		return token;
-	}
-	
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
 	public String getUser() {
 		return user;
 	}
@@ -95,7 +86,6 @@ public class Activity implements Serializable {
 		sb.append("{");
 		sb.append("date="); sb.append(date==null?null:date.getTime());
 		sb.append(", user="); sb.append(user);
-		sb.append(", token="); sb.append(token);
 		sb.append(", action="); sb.append(action);
 		sb.append(", item="); sb.append(item);
 		sb.append(", params="); sb.append(params);
