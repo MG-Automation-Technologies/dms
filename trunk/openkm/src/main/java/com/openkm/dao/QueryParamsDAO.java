@@ -25,9 +25,9 @@ public class QueryParamsDAO {
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			QueryParams created = (QueryParams) session.save(qp);
-			log.debug("create: {}", created.getId());
-			return created.getId();
+			Integer id = (Integer) session.save(qp);
+			log.debug("create: {}", id);
+			return id.intValue();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
