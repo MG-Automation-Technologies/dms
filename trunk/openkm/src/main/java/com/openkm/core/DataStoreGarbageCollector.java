@@ -25,6 +25,7 @@ import com.openkm.module.direct.DirectRepositoryModule;
 public class DataStoreGarbageCollector extends TimerTask implements ScanEventListener {
 	private static Logger log = LoggerFactory.getLogger(DataStoreGarbageCollector.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 		log.info("*** Begin datastore garbage collector ***");
