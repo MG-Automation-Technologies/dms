@@ -23,7 +23,6 @@ package com.openkm.module;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 import com.openkm.bean.DashboardDocumentResult;
@@ -116,7 +115,7 @@ public interface DashboardModule {
 	/**
 	 * Get last month downloaded documents
 	 */
-	public Collection<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token) throws 
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token) throws 
 			RepositoryException, DatabaseException;
 	
 	/**
