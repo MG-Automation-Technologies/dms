@@ -21,7 +21,7 @@
 
 package com.openkm.principal;
 
-import java.util.Collection;
+import java.util.List;
 
 
 public interface PrincipalAdapter {
@@ -32,7 +32,7 @@ public interface PrincipalAdapter {
 	 * @return A Collection with all the users.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
-	public Collection<String> getUsers() throws PrincipalAdapterException;
+	public List<String> getUsers() throws PrincipalAdapterException;
 	
 	/**
 	 * Method to retrieve all roles from a authentication source.
@@ -40,7 +40,7 @@ public interface PrincipalAdapter {
 	 * @return A Collection with all the roles.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
-	public Collection<String> getRoles() throws PrincipalAdapterException;
+	public List<String> getRoles() throws PrincipalAdapterException;
 	
 	/**
 	 * Method to retrieve the mail from a list of users.
@@ -49,5 +49,5 @@ public interface PrincipalAdapter {
 	 * @return A list of user emails.
 	 * @throws PrincipalAdapterException If any error occurs.
 	 */
-	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException;
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException;
 }
