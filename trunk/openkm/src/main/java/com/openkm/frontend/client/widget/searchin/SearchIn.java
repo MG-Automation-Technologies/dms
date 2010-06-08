@@ -356,8 +356,9 @@ public class SearchIn extends Composite {
 				params.setMimeType(mimeTypes.getValue(mimeTypes.getSelectedIndex()));
 				
 				if (!searchSavedName.getText().equals("")) {
+					params.setQueryName(searchSavedName.getText());
 					userNews = params.isDashboard();
-					saveSearch(params,"sql", searchSavedName.getText());
+					saveSearch(params,"sql");
 				}
 			}
 		});
@@ -1331,11 +1332,10 @@ public class SearchIn extends Composite {
 	/**
 	 * Save a search
 	 */
-	public void saveSearch(GWTQueryParams params, String type, String name) {
+	public void saveSearch(GWTQueryParams params, String type) {
 		status.setFlag_saveSearch();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 		endPoint.setServiceEntryPoint(Config.OKMSearchService);
-		params.setName(name);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 		
