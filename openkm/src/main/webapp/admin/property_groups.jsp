@@ -41,7 +41,7 @@
         </c:forEach>
       </table>
       <br/>
-      <center><h2>Register property group</h2></center>
+      <h2 align="center">Register property group</h2>
       <form action="PropertyGroups">
         <table class="form" align="center">
           <tr><td>Property Group definition path <input type="text" size="50" name="pgPath" value=""/></td></tr>
