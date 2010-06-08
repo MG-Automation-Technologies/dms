@@ -40,6 +40,7 @@ public class GWTQueryParams implements IsSerializable {
 	public static final String OPERATOR_AND = "and";
 	public static final String OPERATOR_OR = "or";
  
+	private int id;
 	private String name;
 	private String keywords;
 	private String content;
@@ -230,5 +231,13 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setCategoryPath(String categoryPath) {
 		this.categoryPath = categoryPath;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
