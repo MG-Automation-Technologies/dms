@@ -37,27 +37,19 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMDownloadService			= "004";
 	public static final String ORIGIN_OKMUploadService				= "005";
 	public static final String ORIGIN_OKMHttpServlet				= "006";
-	public static final String ORIGIN_OKMAuthServlet				= "007";
+	public static final String ORIGIN_OKMAuthService				= "007";
 	public static final String ORIGIN_OKMSearchService				= "008";
 	public static final String ORIGIN_OKMPropertyGroupService		= "009";
 	public static final String ORIGIN_OKMNotifyService 				= "010";
 	public static final String ORIGIN_OKMBookmarkService 			= "011";
-	public static final String ORIGIN_OKMRepositoryServlet			= "012";
-	public static final String ORIGIN_OKMGeneralUtilsServletAdmin	= "013";
-	public static final String ORIGIN_OKMAuthServletAdmin			= "014";
-	public static final String ORIGIN_OKMSearchServiceAdmin			= "015";
-	public static final String ORIGIN_OKMRemoteServiceAdmin			= "016";
-	public static final String ORIGIN_OKMPropertyGroupServiceAdmin	= "017";
-	public static final String ORIGIN_OKMRepositoryServletAdmin		= "018";
-	public static final String ORIGIN_OKMFolderServiceAdmin			= "019";
-	public static final String ORIGIN_OKMDashboardService 			= "020";
-	public static final String ORIGIN_OKMWorkspaceService 			= "021";
-	public static final String ORIGIN_OKMWorkflowService 			= "022";
-	public static final String ORIGIN_OKMWorkflowUploadServiceAdmin	= "023";
-	public static final String ORIGIN_OKMMailService	 			= "024";
-	public static final String ORIGIN_OKMPropertyService	 		= "025";
-	public static final String ORIGIN_OKMBrowser 					= "026";
-	public static final String ORIGIN_OKMUserCopyService 			= "027";
+	public static final String ORIGIN_OKMRepositoryService			= "012";
+	public static final String ORIGIN_OKMDashboardService 			= "013";
+	public static final String ORIGIN_OKMWorkspaceService 			= "014";
+	public static final String ORIGIN_OKMWorkflowService 			= "015";
+	public static final String ORIGIN_OKMMailService	 			= "016";
+	public static final String ORIGIN_OKMPropertyService	 		= "017";
+	public static final String ORIGIN_OKMBrowser 					= "018";
+	public static final String ORIGIN_OKMUserCopyService 			= "019";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -84,6 +76,7 @@ public class ErrorCode {
 	public static final String CAUSE_Configuration 				= "022";
 	public static final String CAUSE_QuotaExceed 				= "023";
 	public static final String CAUSE_DatabaseException			= "024";
+	public static final String CAUSE_PrincipalAdapterException	= "025";
 
 	/**
 	 * Gets the error
