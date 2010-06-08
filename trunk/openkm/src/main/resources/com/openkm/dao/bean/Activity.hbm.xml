@@ -6,7 +6,6 @@
     <id name="id" column="ID"><generator class="native"/></id>
     <property name="date" column="ACT_DATE" not-null="true"/>
     <property name="user" column="ACT_USER" not-null="true"/>
-    <property name="token" column="ACT_TOKEN"/>
     <property name="action" column="ACT_ACTION" not-null="true"/>
     <property name="item" column="ACT_ITEM"/>
     <property name="params" column="ACT_PARAMS"/>
