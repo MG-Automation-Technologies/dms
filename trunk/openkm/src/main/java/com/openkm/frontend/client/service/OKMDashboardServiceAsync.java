@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 
 /**
  * @author jllort
@@ -41,8 +42,8 @@ public interface OKMDashboardServiceAsync {
 	public void getUserSubscribedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
 	public void getUserLastUploadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
 	public void getUserSubscribedFolders(AsyncCallback<List<GWTDashboardFolderResult>> callback);
-	public void getUserSearchs(AsyncCallback<List<String>> callback);
-	public void find(String name, AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
+	public void getUserSearchs(AsyncCallback<List<GWTQueryParams>> callback);
+	public void find(int id, AsyncCallback<List<GWTDashboardDocumentResult>> callback); 
 	public void getLastWeekTopDownloadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
 	public void getLastMonthTopDownloadedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);
 	public void getLastWeekTopModifiedDocuments(AsyncCallback<List<GWTDashboardDocumentResult>> callback);

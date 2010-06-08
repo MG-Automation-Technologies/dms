@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public interface OKMWorkflowServiceAsync {
 	public void findLatestProcessDefinitions(AsyncCallback<List<GWTProcessDefinition>> callback);
 	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables, AsyncCallback<?> callback);
 	public void findUserTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);
-	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, Collection<GWTFormElement>>> callback);
+	public void getProcessDefinitionForms(double id, AsyncCallback<Map<String, List<GWTFormElement>>> callback);
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values, AsyncCallback<?> callback );
 	public void addComment(double tokenId, String message, AsyncCallback<?> callback);
 	public void findPooledTaskInstances(AsyncCallback<List<GWTTaskInstance>> callback);

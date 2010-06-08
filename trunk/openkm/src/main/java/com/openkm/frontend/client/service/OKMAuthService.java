@@ -21,11 +21,10 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import com.openkm.frontend.client.OKMException;
 
 /**
@@ -34,8 +33,8 @@ import com.openkm.frontend.client.OKMException;
  */
 public interface OKMAuthService extends RemoteService {
 	public void logout() throws OKMException;
-	public HashMap<String, Byte> getGrantedUsers(String nodePath) throws OKMException;
-	public HashMap<String, Byte> getGrantedRoles(String nodePath) throws OKMException;
+	public Map<String, Byte> getGrantedUsers(String nodePath) throws OKMException;
+	public Map<String, Byte> getGrantedRoles(String nodePath) throws OKMException;
 	public String getRemoteUser();
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException;
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException;

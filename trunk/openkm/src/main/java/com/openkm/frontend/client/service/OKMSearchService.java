@@ -21,11 +21,9 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
@@ -39,17 +37,15 @@ import com.openkm.frontend.client.bean.GWTResultSet;
  */
 public interface OKMSearchService extends RemoteService {
 		
-	public List<String> getAllSearchs() throws OKMException; 
+	public List<GWTQueryParams> getAllSearchs() throws OKMException; 
 	
-	public void saveSearch(GWTQueryParams params, String type, String name) throws OKMException;
+	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException;
 	
-	public GWTQueryParams getSearch(String name) throws OKMException; 
-	
-	public void deleteSearch(String name) throws OKMException;
+	public void deleteSearch(int id) throws OKMException;
 	
 	public GWTResultSet findPaginated(GWTQueryParams params, int offset, int limit)  throws OKMException;
 	
-	public List<GWTKeyword> getKeywordMap(Collection<String> filter) throws OKMException;
+	public List<GWTKeyword> getKeywordMap(List<String> filter) throws OKMException;
 	
 	public GWTResultSet find(GWTQueryParams params)  throws OKMException;
 }
