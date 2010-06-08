@@ -92,14 +92,13 @@ public class ActivityDAO  {
 	/**
 	 * Get activity date
 	 */
-	@SuppressWarnings("unchecked")
 	public static Calendar getActivityDate(String user, String action, String item) throws 
 			DatabaseException {
 		log.debug("getActivityDate({}, {}, {})", new Object[] { user, action, item });
 		String qsAct = "select max(a.date) from Activity a " +
-			"where a.user= :user and a.action= :action and a.item= :item";
+			"where a.user=:user and a.action=:action and a.item=:item";
 		String qsNoAct = "select max(a.date) from Activity a " +
-			"where (a.action='CREATE_DOCUMENT' or a.action='SET_DOCUMENT_CONTENT') and a.item= :item";
+			"where (a.action='CREATE_DOCUMENT' or a.action='SET_DOCUMENT_CONTENT') and a.item=:item";
 		Session session = null;
 		
 		try {
@@ -116,16 +115,11 @@ public class ActivityDAO  {
 				q.setString("item", item);
 			}
 			
-			List<Activity> results = q.list();
-			Calendar ret = null;
+			Calendar ret = (Calendar) q.setMaxResults(1).uniqueResult();
 			
-			if (results.size() == 1) {
-				if (results.get(0).getDate() != null) {
-					ret = results.get(0).getDate();
-				} else {
-					// May be the document has been moved or renamed? 
-					ret = Calendar.getInstance();
-				}
+			if (ret == null) {
+				// May be the document has been moved or renamed? 
+				ret = Calendar.getInstance();
 			}
 			
 			log.debug("getActivityDate: {}", ret);
