@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -204,10 +205,10 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getSusbcriptions({}, {})", token, nodePath);
-		ArrayList<String> users = new ArrayList<String>();
+		List<String> users = new ArrayList<String>();
 		Session session = null;
 		
 		try {
@@ -243,7 +244,7 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public void notify(String token, String nodePath, Collection<String> users, String message) throws
+	public void notify(String token, String nodePath, List<String> users, String message) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
 		Session session = null;
@@ -257,7 +258,7 @@ public class DirectNotificationModule implements NotificationModule {
 				}
 				
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
-				Collection<String> emails = new DirectAuthModule().getMails(null, users);
+				List<String> emails = new DirectAuthModule().getMails(null, users);
 				
 				// Get session user email address
 				ArrayList<String> dummy = new ArrayList<String>();
@@ -314,7 +315,7 @@ public class DirectNotificationModule implements NotificationModule {
 	 */
 	public static void checkSubscriptions(Node node, String user, String eventType, String comment) {
 		log.debug("checkSubscriptions({}, {}, {}, {})", new Object[] { node, user, eventType, comment });
-		Collection<String> users = null;
+		List<String> users = null;
 		
 		try {
 			users = checkSubscriptionsHelper(node);
@@ -327,7 +328,7 @@ public class DirectNotificationModule implements NotificationModule {
 		 */
 		try {
 			if (users != null && !users.isEmpty()) {
-				Collection<String> emails = new DirectAuthModule().getMails(null, users);
+				List<String> emails = new DirectAuthModule().getMails(null, users);
 					
 				if (!emails.isEmpty()) {
 					if (comment == null) { comment = ""; }
@@ -426,7 +427,7 @@ public class DirectNotificationModule implements NotificationModule {
 	/**
 	 * Check for subscriptions recursively
 	 */
-	private static Collection<String> checkSubscriptionsHelper(Node node) throws 
+	private static List<String> checkSubscriptionsHelper(Node node) throws 
 			javax.jcr.RepositoryException {
 		log.debug("checkSubscriptionsHelper: {}", node.getPath());
 		ArrayList<String> al = new ArrayList<String>();
@@ -441,7 +442,7 @@ public class DirectNotificationModule implements NotificationModule {
 			}
 			
 			// An user shouldn't be notified twice
-			Collection<String> tmp = checkSubscriptionsHelper(node.getParent());
+			List<String> tmp = checkSubscriptionsHelper(node.getParent());
 			for (Iterator<String> it = tmp.iterator(); it.hasNext(); ) {
 				String usr = it.next();
 				if (!al.contains(usr)) {
