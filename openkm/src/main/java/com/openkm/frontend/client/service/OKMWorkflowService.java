@@ -21,12 +21,10 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
-
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
@@ -40,7 +38,7 @@ public interface OKMWorkflowService extends RemoteService {
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException;
 	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException;
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException;
-	public Map<String, Collection<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException;
+	public Map<String, List<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException;
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException;
 	public void addComment(double tokenId, String message) throws OKMException;
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException;

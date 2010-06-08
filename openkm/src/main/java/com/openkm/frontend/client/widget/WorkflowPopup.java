@@ -285,8 +285,8 @@ public class WorkflowPopup extends DialogBox {
 	/**
 	 * Get process definitions callback
 	 */
-	final AsyncCallback<Map<String, Collection<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, Collection<GWTFormElement>>>() {
-		public void onSuccess(Map<String, Collection<GWTFormElement>> result) {
+	final AsyncCallback<Map<String, List<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, List<GWTFormElement>>>() {
+		public void onSuccess(Map<String, List<GWTFormElement>> result) {
 			// Initial task is always called start
 			formFieldList = result.get(Main.get().workspaceUserProperties.getWorkspace().getWorkflowRunConfigForm());
 			if (formFieldList!=null) {

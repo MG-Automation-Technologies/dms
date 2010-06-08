@@ -30,6 +30,7 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
 import com.openkm.frontend.client.bean.GWTDashboardMailResult;
+import com.openkm.frontend.client.bean.GWTQueryParams;
 
 /**
  * @author jllort
@@ -42,8 +43,8 @@ public interface OKMDashboardService extends RemoteService {
 	public List<GWTDashboardDocumentResult> getUserSubscribedDocuments() throws OKMException;
 	public List<GWTDashboardDocumentResult> getUserLastUploadedDocuments() throws OKMException;
 	public List<GWTDashboardFolderResult> getUserSubscribedFolders() throws OKMException;
-	public List<String> getUserSearchs() throws OKMException;
-	public List<GWTDashboardDocumentResult> find(String name) throws OKMException;
+	public List<GWTQueryParams> getUserSearchs() throws OKMException;
+	public List<GWTDashboardDocumentResult> find(int id) throws OKMException;
 	public List<GWTDashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws OKMException;
 	public List<GWTDashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws OKMException;
 	public List<GWTDashboardDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException;

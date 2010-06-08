@@ -21,8 +21,8 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -32,8 +32,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface OKMAuthServiceAsync {
 	public void logout(AsyncCallback<?> callback);
-	public void getGrantedUsers(String nodePath, AsyncCallback<HashMap<String, Byte>> callback);
-	public void getGrantedRoles(String nodePath, AsyncCallback<HashMap<String, Byte>> callback);
+	public void getGrantedUsers(String nodePath, AsyncCallback<Map<String, Byte>> callback);
+	public void getGrantedRoles(String nodePath, AsyncCallback<Map<String, Byte>> callback);
 	public void getRemoteUser(AsyncCallback<String> callback);
 	public void getUngrantedUsers(String nodePath, AsyncCallback<List<String>> callback);
 	public void getUngrantedRoles(String nodePath, AsyncCallback<List<String>> callback);

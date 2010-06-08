@@ -21,11 +21,9 @@
 
 package com.openkm.frontend.client.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTResultSet;
@@ -35,11 +33,10 @@ import com.openkm.frontend.client.bean.GWTResultSet;
  *
  */
 public interface OKMSearchServiceAsync {
-	public void getAllSearchs(AsyncCallback<List<String>> callback);
-	public void saveSearch(GWTQueryParams params, String type, String name, AsyncCallback<?> callback);
-	public void getSearch(String name,AsyncCallback<GWTQueryParams> callback);
-	public void deleteSearch(String name, AsyncCallback<?> callback);
+	public void getAllSearchs(AsyncCallback<List<GWTQueryParams>> callback);
+	public void saveSearch(GWTQueryParams params, String type, AsyncCallback<Integer> callback);
+	public void deleteSearch(int id, AsyncCallback<?> callback);
 	public void findPaginated(GWTQueryParams params, int offset, int limit, AsyncCallback<GWTResultSet> callback); 
-	public void getKeywordMap(Collection<String> filter, AsyncCallback<List<GWTKeyword>> callback);
+	public void getKeywordMap(List<String> filter, AsyncCallback<List<GWTKeyword>> callback);
 	public void find(GWTQueryParams params, AsyncCallback<GWTResultSet> callback); 
 }
