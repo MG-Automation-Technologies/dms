@@ -16,30 +16,33 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Property groups</h1>
-      <table class="results" width="80%">
         <c:if test="${empty pGroups}">
-          <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
-          <tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
+          <table class="results" width="80%">
+            <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
+            <tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
+          </table>
         </c:if>
         <c:forEach var="pGroup" items="${pGroups}">
-          <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
-          <tr class="fuzzy">
-            <td colspan="3" align="center"><b>${pGroup.key.label}</b></td>
-            <td colspan="4" align="center"><b>${pGroup.key.name}</b></td>
-          </tr>
-          <tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
-          <c:forEach var="pgForm" items="${pGroup.value}" varStatus="row">
-            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${pgForm.label}</td>
-              <td>${pgForm.name}</td>
-              <td>${pgForm.width}</td>
-              <td>${pgForm.height}</td>
-              <td>${pgForm.field}</td>
-              <td>${pgForm.others}</td>
+          <table class="results" width="80%">
+            <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
+            <tr class="fuzzy">
+              <td colspan="3" align="center"><b>${pGroup.key.label}</b></td>
+              <td colspan="4" align="center"><b>${pGroup.key.name}</b></td>
             </tr>
-          </c:forEach>
+            <tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
+            <c:forEach var="pgForm" items="${pGroup.value}" varStatus="row">
+              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+                <td>${pgForm.label}</td>
+                <td>${pgForm.name}</td>
+                <td>${pgForm.width}</td>
+                <td>${pgForm.height}</td>
+                <td>${pgForm.field}</td>
+                <td>${pgForm.others}</td>
+              </tr>
+            </c:forEach>
+          </table>
+          <br/>
         </c:forEach>
-      </table>
       <br/>
       <h2 style="text-align: center;">Register property group</h2>
       <form action="PropertyGroups">

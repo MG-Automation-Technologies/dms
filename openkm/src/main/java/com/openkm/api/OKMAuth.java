@@ -47,113 +47,110 @@ public class OKMAuth implements AuthModule {
 	}
 	
 	@Override
-	public String login(String user, String pass) throws UserAlreadyLoggerException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void login(String user, String pass) throws UserAlreadyLoggerException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("login({}, {})", user, pass);
 		AuthModule am = ModuleManager.getAuthModule();
-		String token = am.login(user, pass);
-		log.debug("login: {}", token);
-		return token;
+		am.login(user, pass);
+		log.debug("login: void");
 	}
 
 	@Override
-	public String login() throws UserAlreadyLoggerException, AccessDeniedException, 
-			RepositoryException, DatabaseException {
+	public void login() throws UserAlreadyLoggerException, AccessDeniedException, RepositoryException, 
+			DatabaseException {
 		log.debug("login()");
 		AuthModule am = ModuleManager.getAuthModule();
-		String token = am.login();
-		log.debug("login: {}", token);
-		return token;
+		am.login();
+		log.debug("login: void");
 	}
 
 	@Override
-	public void logout(String token) throws AccessDeniedException, RepositoryException, 
-			DatabaseException {
+	public void logout() throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("logout()");
 		AuthModule am = ModuleManager.getAuthModule();
-		am.logout(token);
+		am.logout();
 		log.debug("logout: void");
 	}
 
 	@Override
-	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void grantUser(String nodePath, String user, int permissions, boolean recursive) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantUser({}, {}, {})", new Object[] { nodePath, user, permissions });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.grantUser(token, nodePath, user, permissions, recursive);
+		am.grantUser(nodePath, user, permissions, recursive);
 		log.debug("grantUser: void");
 	}
 
 	@Override
-	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void revokeUser(String nodePath, String user, int permissions, boolean recursive) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeUser({}, {}, {})", new Object[] { nodePath, user, permissions });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeUser(token, nodePath, user, permissions, recursive);
+		am.revokeUser(nodePath, user, permissions, recursive);
 		log.debug("revokeUser: void");
 	}
 
 	@Override
-	public Map<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedUsers(String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		Map<String, Byte> grantedUsers = am.getGrantedUsers(token, nodePath);
+		Map<String, Byte> grantedUsers = am.getGrantedUsers(nodePath);
 		log.debug("getGrantedUsers: {}", grantedUsers);
 		return grantedUsers;
 	}
 
 	@Override
-	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void grantRole(String nodePath, String role, int permissions, boolean recursive) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantRole({}, {}, {})", new Object[] { nodePath, role, permissions });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.grantRole(token, nodePath, role, permissions, recursive);
+		am.grantRole(nodePath, role, permissions, recursive);
 		log.debug("grantRole: void");
 	}
 
 	@Override
-	public void revokeRole(String token, String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void revokeRole(String nodePath, String user, int permissions, boolean recursive) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeRole({}, {}, {})", new Object[] { nodePath, user, permissions });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeRole(token, nodePath, user, permissions, recursive);
+		am.revokeRole(nodePath, user, permissions, recursive);
 		log.debug("revokeRole: void");
 	}
 
 	@Override
-	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedRoles(String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		Map<String, Byte> grantedRoles = am.getGrantedRoles(token, nodePath);
+		Map<String, Byte> grantedRoles = am.getGrantedRoles(nodePath);
 		log.debug("getGrantedRoles: {}", grantedRoles);
 		return grantedRoles;
 	}
 
 	@Override
-	public List<String> getUsers(String token) throws PrincipalAdapterException {
+	public List<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> users = am.getUsers(token);
+		List<String> users = am.getUsers();
 		log.debug("getUsers: {}", users);
 		return users;
 	}
 
 	@Override
-	public List<String> getRoles(String token) throws PrincipalAdapterException {
+	public List<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> roles = am.getRoles(token);
+		List<String> roles = am.getRoles();
 		log.debug("getRoles: {}", roles);
 		return roles;
 	}
 
 	@Override
-	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails({})", users);
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> mails = am.getMails(token, users);
+		List<String> mails = am.getMails(users);
 		log.debug("getMails: {}", mails);
 		return mails;
 	}

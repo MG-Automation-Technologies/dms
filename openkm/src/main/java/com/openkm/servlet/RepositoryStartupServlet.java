@@ -221,7 +221,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.info("*** Logout: "+token+" ***");
         	
         	try {
-        		new DirectAuthModule().logout(token);
+        		new DirectAuthModule().logout();
 			} catch (AccessDeniedException e) {
 				log.error(e.getMessage(), e);
 			} catch (RepositoryException e) {

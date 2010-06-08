@@ -258,12 +258,12 @@ public class DirectNotificationModule implements NotificationModule {
 				}
 				
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
-				List<String> emails = new DirectAuthModule().getMails(null, users);
+				List<String> emails = new DirectAuthModule().getMails(users);
 				
 				// Get session user email address
 				ArrayList<String> dummy = new ArrayList<String>();
 				dummy.add(session.getUserID());
-				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(null, dummy);
+				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(dummy);
 				
 				if (!emails.isEmpty() && !from.isEmpty()) {
 					StringWriter swSubject = new StringWriter();
@@ -328,7 +328,7 @@ public class DirectNotificationModule implements NotificationModule {
 		 */
 		try {
 			if (users != null && !users.isEmpty()) {
-				List<String> emails = new DirectAuthModule().getMails(null, users);
+				List<String> emails = new DirectAuthModule().getMails(users);
 					
 				if (!emails.isEmpty()) {
 					if (comment == null) { comment = ""; }
