@@ -21,8 +21,8 @@
 
 package com.openkm.frontend.client.bean;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -55,10 +55,10 @@ public class GWTDocument implements IsSerializable {
 	private boolean isAttachment = false;
 	private boolean hasNotes = false;
 
-	private Collection<String> subscriptors;
-	private Collection<GWTNote> notes;
-	private Collection<GWTFolder> categories;
-	private Collection<String> keywords;
+	private List<String> subscriptors;
+	private List<GWTNote> notes;
+	private List<GWTFolder> categories;
+	private List<String> keywords;
 
 	/**
 	 * @return Returns the subscribed.
@@ -122,11 +122,11 @@ public class GWTDocument implements IsSerializable {
 		this.created = created;
 	}
 
-	public Collection<String> getKeywords() {
+	public List<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(Collection<String> keywords) {
+	public void setKeywords(List<String> keywords) {
 		this.keywords = keywords;
 	}
 
@@ -213,14 +213,14 @@ public class GWTDocument implements IsSerializable {
 	/**
 	 * @return Returns the subscriptors.
 	 */
-	public Collection<String> getSubscriptors() {
+	public List<String> getSubscriptors() {
 		return subscriptors;
 	}
 
 	/**
 	 * @param subscriptors The subscriptors to set.
 	 */
-	public void setSubscriptors(Collection<String> subscriptors) {
+	public void setSubscriptors(List<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 
@@ -232,11 +232,11 @@ public class GWTDocument implements IsSerializable {
 		this.uuid = uuid;
 	}
 
-	public Collection<GWTNote> getNotes() {
+	public List<GWTNote> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Collection<GWTNote> notes) {
+	public void setNotes(List<GWTNote> notes) {
 		this.notes = notes;
 	}
 
@@ -256,11 +256,11 @@ public class GWTDocument implements IsSerializable {
 		this.hasNotes = hasNotes;
 	}
 	
-	public Collection<GWTFolder> getCategories() {
+	public List<GWTFolder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Collection<GWTFolder> categories) {
+	public void setCategories(List<GWTFolder> categories) {
 		this.categories = categories;
 	}
 }
