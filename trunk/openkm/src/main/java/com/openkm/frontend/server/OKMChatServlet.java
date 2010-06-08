@@ -106,19 +106,19 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     @Override
     public List<String> getPendingMessage(String room) {
     	String user = getThreadLocalRequest().getRemoteUser();
-    	int countCycle = 0;
 		List<String> pendingMessages = new ArrayList<String>();
+		int countCycle = 0;
 		
 		// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
     	do  {
-    		pendingMessages = messageUserRoomAction(room,user,"",ACTION_GET_PENDING_USER_ROOM_MESSAGE); 
+    		pendingMessages = messageUserRoomAction(room, user, "", ACTION_GET_PENDING_USER_ROOM_MESSAGE); 
 			countCycle++;
     		try {
 				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			} 
+			}
     	} while (pendingMessages.isEmpty() && (countCycle<100) && usersLogged.contains(user));
     	
     	return pendingMessages;
@@ -127,8 +127,8 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     @Override
     public List<String> getPendingChatRoomUser() {
     	String user = getThreadLocalRequest().getRemoteUser();
-    	int countCycle = 0;
     	List<String> pendingRooms = new ArrayList<String>();
+    	int countCycle = 0;
     	
     	// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
@@ -140,7 +140,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 
-    	} while (pendingRooms.isEmpty() && (countCycle<100) && usersLogged.contains(user));
+    	} while (pendingRooms.isEmpty() && (countCycle<100) && user != null && usersLogged.contains(user));
     	
     	return pendingRooms;
     }
