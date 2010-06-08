@@ -163,7 +163,12 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			folder = OKMRepository.getInstance().getTrashFolder(token);
+			// Administrators user can see all user homes
+			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+				folder = OKMRepository.getInstance().getTrashFolderBase();
+			} else {
+				folder = OKMRepository.getInstance().getTrashFolder(token);
+			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -219,7 +224,12 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			folder =  OKMRepository.getInstance().getMailFolder(token);
+			// Administrators user can see all user homes
+			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
+				folder = OKMRepository.getInstance().getMailFolderBase();
+			} else {
+				folder = OKMRepository.getInstance().getMailFolder(token);
+			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
