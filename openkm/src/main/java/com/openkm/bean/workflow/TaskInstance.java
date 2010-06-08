@@ -23,7 +23,6 @@ package com.openkm.bean.workflow;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +50,7 @@ public class TaskInstance implements Serializable, Comparable<TaskInstance> {
 	private boolean startTaskInstance;
 	private List<Comment> comments;
 	private Token token;
-	private Collection<Transition> availableTransitions;
+	private List<Transition> availableTransitions;
 	private Map<String, Object> variables;
 	private ProcessInstance processInstance;
 
@@ -195,11 +194,11 @@ public class TaskInstance implements Serializable, Comparable<TaskInstance> {
 		this.variables = variables;
 	}
 	
-	public Collection<Transition> getAvailableTransitions() {
+	public List<Transition> getAvailableTransitions() {
 		return availableTransitions;
 	}
 
-	public void setAvailableTransitions(Collection<Transition> availableTransitions) {
+	public void setAvailableTransitions(List<Transition> availableTransitions) {
 		this.availableTransitions = availableTransitions;
 	}
 	

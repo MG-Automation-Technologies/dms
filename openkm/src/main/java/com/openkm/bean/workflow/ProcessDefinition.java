@@ -22,7 +22,7 @@
 package com.openkm.bean.workflow;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author pavila
@@ -35,7 +35,7 @@ public class ProcessDefinition implements Serializable {
 	private String name;
 	private String description;
 	private int version;
-	private Collection<String> nodes;
+	private List<String> nodes;
 
 	public String getName() {
 		return name;
@@ -69,11 +69,11 @@ public class ProcessDefinition implements Serializable {
 		this.description = description;
 	}
 
-	public Collection<String> getNodes() {
+	public List<String> getNodes() {
 		return nodes;
 	}
 
-	public void setNodes(Collection<String> nodes) {
+	public void setNodes(List<String> nodes) {
 		this.nodes = nodes;
 	}
 	

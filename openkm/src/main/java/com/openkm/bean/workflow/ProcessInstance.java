@@ -23,7 +23,7 @@ package com.openkm.bean.workflow;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 
@@ -43,7 +43,7 @@ public class ProcessInstance implements Serializable {
 	private boolean suspended;
 	private Token rootToken;
 	private Map<String, Object> variables;
-	private Collection<Token> allTokens;
+	private List<Token> allTokens;
 	private ProcessDefinition processDefinition;
 	
 	public ProcessInstance() {
@@ -89,11 +89,11 @@ public class ProcessInstance implements Serializable {
 		this.variables = variables;
 	}
 
-	public void setAllTokens(Collection<Token> allTokens) {
+	public void setAllTokens(List<Token> allTokens) {
 		this.allTokens = allTokens;
 	}
 	
-	public Collection<Token> getAllTokens() {
+	public List<Token> getAllTokens() {
 		return allTokens;
 	}
 
