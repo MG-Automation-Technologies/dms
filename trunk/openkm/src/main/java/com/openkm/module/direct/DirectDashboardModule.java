@@ -70,7 +70,8 @@ public class DirectDashboardModule implements DashboardModule {
 	private static final int MAX_RESULTS = 20;
 
 	@Override
-	public List<DashboardDocumentResult> getUserLockedDocuments(String token) throws RepositoryException {
+	public List<DashboardDocumentResult> getUserLockedDocuments(String token) throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLockedDocuments({})", token);
 		Session session = null;
 		
@@ -84,8 +85,6 @@ public class DirectDashboardModule implements DashboardModule {
 			List<DashboardDocumentResult> al = getUserLockedDocuments(session);
 			log.debug("getUserLockedDocuments: {}", al);
 			return al;
-		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
@@ -111,7 +110,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException {
+	public List<DashboardDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException, 
+			DatabaseException {
 		log.debug("getUserCheckedOutDocuments({})", token);
 		Session session = null;
 		
@@ -125,8 +125,6 @@ public class DirectDashboardModule implements DashboardModule {
 			List<DashboardDocumentResult> al = getUserCheckedOutDocuments(session);
 			log.debug("getUserCheckedOutDocuments: {}", al);
 			return al;
-		} catch (DatabaseException e) {
-			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
