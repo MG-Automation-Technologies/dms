@@ -14,7 +14,7 @@
 <%@ page import="com.openkm.bean.form.Button"%>
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="java.util.Collection"%>
+<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -92,8 +92,8 @@
 			out.print("<td>"+(ti.getCreate()!=null?ti.getCreate().getTime():"")+"</td>");
 			out.println("</table>");
 			
-			Map<String, Collection<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, ti.getProcessInstance().getProcessDefinition().getId());
-			Collection<FormElement> form = forms.get(ti.getName());
+			Map<String, List<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, ti.getProcessInstance().getProcessDefinition().getId());
+			List<FormElement> form = forms.get(ti.getName());
 			out.println("<h2>Task Form</h2>");
 			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>");
@@ -138,7 +138,7 @@
 			
 			out.println("</table>");
 			
-			Collection<Comment> colC = ti.getComments();
+			List<Comment> colC = ti.getComments();
 			out.println("<h2>Comments</h2>");
 			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>Actor ID</th><th>Time</th><th>Comment</th></tr>");
@@ -203,7 +203,7 @@
 			out.println("</table>");
 			out.println("</form>");
 			
-			Collection<Transition> colT = ti.getAvailableTransitions();
+			List<Transition> colT = ti.getAvailableTransitions();
 			out.println("<h2>Transitions</h2>");
 			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>ID</th><th>Name</th><th>Target Node</th><th width=\"25px\">Actions</th></tr>");
