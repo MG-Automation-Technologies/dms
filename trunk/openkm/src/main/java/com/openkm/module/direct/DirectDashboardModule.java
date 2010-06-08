@@ -673,9 +673,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<String> getUserSearchs(String token) throws RepositoryException, DatabaseException {
+	public List<QueryParams> getUserSearchs(String token) throws RepositoryException, DatabaseException {
 		log.debug("getUserSearchs({})", token);
-		List<String> ret = new ArrayList<String>();
+		List<QueryParams> ret = new ArrayList<QueryParams>();
 		Session session = null;
 		
 		try {
@@ -690,12 +690,12 @@ public class DirectDashboardModule implements DashboardModule {
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
 				QueryParams qp = it.next();
 				if (qp.isDashboard()) {
-					ret.add(qp.getName());
+					ret.add(qp);
 				}
 			}
 			
 			// Activity log
-			UserActivity.log(session, "GET_ALL_DASHBOARD_SEARCHS", null, null);
+			UserActivity.log(session, "GET_DASHBOARD_USER_SEARCHS", null, null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
