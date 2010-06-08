@@ -45,7 +45,7 @@
 		out.println("<option value=\"\" ></option>");
 		out.println("<option value=\""+Config.SYSTEM_USER+"\" "+(Config.SYSTEM_USER.equals(user)?"selected":"")+">"+Config.SYSTEM_USER+"</option>");
 		
-		Collection<String> users = new DirectAuthModule().getUsers(Config.SYSTEM_USER);
+		Collection<String> users = new DirectAuthModule().getUsers();
 		
 		for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
 			String lUser = it.next();
