@@ -22,7 +22,7 @@
 package com.openkm.module;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import com.openkm.bean.Mail;
 import com.openkm.core.AccessDeniedException;
@@ -153,7 +153,7 @@ public interface MailModule {
 	 * @throws PathNotFoundException If there is no folder in the repository in this path
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, 
+	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException, DatabaseException;
 
 	/**

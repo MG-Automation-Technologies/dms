@@ -23,7 +23,6 @@ package com.openkm.api;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -182,11 +181,11 @@ public class OKMDashboard implements DashboardModule {
 	}
 
 	@Override
-	public Collection<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token)	throws 
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token)	throws 
 			RepositoryException, DatabaseException {
 		log.debug("getLastMonthTopDownloadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		Collection<DashboardDocumentResult> result = dm.getLastMonthTopDownloadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastMonthTopDownloadedDocuments(token);
 		log.debug("getLastMonthTopDownloadedDocuments: {}", result);
 		return result;
 	}

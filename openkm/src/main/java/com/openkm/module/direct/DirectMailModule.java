@@ -24,7 +24,7 @@ package com.openkm.module.direct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -636,10 +636,10 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public Collection<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
+	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("findChilds({}, {})", token, fldPath);
-		ArrayList<Mail> childs = new ArrayList<Mail>();
+		List<Mail> childs = new ArrayList<Mail>();
 		Session session = null;
 		
 		try {

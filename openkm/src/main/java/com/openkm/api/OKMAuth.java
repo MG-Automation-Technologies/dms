@@ -21,15 +21,16 @@
 
 package com.openkm.api;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.module.AuthModule;
 import com.openkm.module.ModuleManager;
@@ -92,11 +93,11 @@ public class OKMAuth implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		HashMap<String, Byte> grantedUsers = am.getGrantedUsers(token, nodePath);
+		Map<String, Byte> grantedUsers = am.getGrantedUsers(token, nodePath);
 		log.debug("getGrantedUsers: {}", grantedUsers);
 		return grantedUsers;
 	}
@@ -120,38 +121,38 @@ public class OKMAuth implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		HashMap<String, Byte> grantedRoles = am.getGrantedRoles(token, nodePath);
+		Map<String, Byte> grantedRoles = am.getGrantedRoles(token, nodePath);
 		log.debug("getGrantedRoles: {}", grantedRoles);
 		return grantedRoles;
 	}
 
 	@Override
-	public Collection<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws RepositoryException {
 		log.debug("getUsers()");
 		AuthModule am = ModuleManager.getAuthModule();
-		Collection<String> users = am.getUsers(token);
+		List<String> users = am.getUsers(token);
 		log.debug("getUsers: {}", users);
 		return users;
 	}
 
 	@Override
-	public Collection<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws RepositoryException {
 		log.debug("getRoles()");
 		AuthModule am = ModuleManager.getAuthModule();
-		Collection<String> roles = am.getRoles(token);
+		List<String> roles = am.getRoles(token);
 		log.debug("getRoles: {}", roles);
 		return roles;
 	}
 
 	@Override
-	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException {
+	public List<String> getMails(String token, List<String> users) throws RepositoryException {
 		log.debug("getMails({})", users);
 		AuthModule am = ModuleManager.getAuthModule();
-		Collection<String> mails = am.getMails(token, users);
+		List<String> mails = am.getMails(token, users);
 		log.debug("getMails: {}", mails);
 		return mails;
 	}

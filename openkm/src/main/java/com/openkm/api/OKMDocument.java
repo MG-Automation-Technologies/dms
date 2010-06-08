@@ -23,7 +23,7 @@ package com.openkm.api;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,11 +118,11 @@ public class OKMDocument implements DocumentModule {
 	}
 	
 	@Override
-	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Collection<Document> col = dm.getChilds(token, fldPath);
+		List<Document> col = dm.getChilds(token, fldPath);
 		log.debug("getChilds: {}", col);
 		return col;
 	}
@@ -186,11 +186,11 @@ public class OKMDocument implements DocumentModule {
 	}
 
 	@Override
-	public Collection<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException, 
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException, 
 			RepositoryException, DatabaseException {
 		log.debug("getVersionHistory({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Collection<Version> history = dm.getVersionHistory(token, docPath);
+		List<Version> history = dm.getVersionHistory(token, docPath);
 		log.debug("getVersionHistory: {}", history);
 		return history;
 	}
