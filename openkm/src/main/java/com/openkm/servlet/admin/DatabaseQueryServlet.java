@@ -30,9 +30,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.LoginException;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.LegacyDAO;
-import com.openkm.util.JCRUtils;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
@@ -61,19 +56,11 @@ public class DatabaseQueryServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		ServletContext sc = getServletContext();
 		String qs = WebUtil.getString(request, "qs");
-		String token = (String) request.getSession().getAttribute("token");
-		Session session = null;
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
 			if (!qs.equals("")) {
 				con = LegacyDAO.getConnection();
 				stmt = con.createStatement();
@@ -105,19 +92,13 @@ public class DatabaseQueryServlet extends BaseServlet {
 				sc.setAttribute("qs", qs);
 			}
 			
+			// Activity log
+			UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
+			
 			sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
-		} catch (LoginException e) {
-			sendErrorRedirect(request,response, e);
-		} catch (RepositoryException e) {
-			sendErrorRedirect(request,response, e);
 		} catch (SQLException e) {
 			sendErrorRedirect(request,response, e);
-		} catch (DatabaseException e) {
-			sendErrorRedirect(request,response, e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
 			LegacyDAO.close(rs);
 			LegacyDAO.close(stmt);
 			LegacyDAO.close(con);

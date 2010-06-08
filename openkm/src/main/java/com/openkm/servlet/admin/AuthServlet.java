@@ -119,7 +119,7 @@ public class AuthServlet extends BaseServlet {
 			AuthDAO.createUser(usr);
 			
 			// Activity log
-			UserActivity.log(session, "USER_CREATE", usr.getId(), usr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_CREATE", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
@@ -156,7 +156,7 @@ public class AuthServlet extends BaseServlet {
 			}
 			
 			// Activity log
-			UserActivity.log(session, "USER_UPDATE", usr.getId(), usr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_UPDATE", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
 			String usrId = WebUtil.getString(request, "usrId");
@@ -182,7 +182,7 @@ public class AuthServlet extends BaseServlet {
 			AuthDAO.deleteUser(usrId);
 			
 			// Activity log
-			UserActivity.log(session, "USER_DELETE", usrId, null);
+			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
 		} else {
 			ServletContext sc = getServletContext();
 			String usrId = WebUtil.getString(request, "usrId");
@@ -206,7 +206,7 @@ public class AuthServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		
 		// Activity log
-		UserActivity.log(session, "USER_LIST", null, null);
+		UserActivity.log(session.getUserID(), "ADMIN_USER_LIST", null, null);
 		
 		if (roleFilter.equals("")) {
 			sc.setAttribute("users", AuthDAO.findAllUsers(false));
