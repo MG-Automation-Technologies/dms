@@ -23,13 +23,12 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class ResultSet implements Serializable {
-
-	private static final long serialVersionUID = 4271429027270168691L;
+	private static final long serialVersionUID = 1L;
 	private long total;
-	private Collection<QueryResult> results = new ArrayList<QueryResult>();
+	private List<QueryResult> results = new ArrayList<QueryResult>();
 
 	public long getTotal() {
 		return total;
@@ -39,11 +38,11 @@ public class ResultSet implements Serializable {
 		this.total = total;
 	}
 
-	public Collection<QueryResult> getResults() {
+	public List<QueryResult> getResults() {
 		return results;
 	}
 
-	public void setResults(Collection<QueryResult> results) {
+	public void setResults(List<QueryResult> results) {
 		this.results = results;
 	}
 

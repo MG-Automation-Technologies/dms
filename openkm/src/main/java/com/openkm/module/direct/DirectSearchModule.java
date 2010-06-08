@@ -78,49 +78,49 @@ public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
 
 	@Override
-	public Collection<QueryResult> findByContent(String token, String words) throws IOException, 
+	public List<QueryResult> findByContent(String token, String words) throws IOException, 
 			ParseException, RepositoryException, DatabaseException {
 		log.debug("findByContent({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
 		params.setContent(words);
-		Collection<QueryResult> ret = find(token, params);
+		List<QueryResult> ret = find(token, params);
 
 		log.debug("findByContent: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
+	public List<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("findByName({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
 		params.setName(words);
-		Collection<QueryResult> ret = find(token, params);
+		List<QueryResult> ret = find(token, params);
 		
 		log.debug("findByName: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<QueryResult> findByKeywords(String token, String words) throws IOException, 
+	public List<QueryResult> findByKeywords(String token, String words) throws IOException, 
 			ParseException,	RepositoryException, DatabaseException {
 		log.debug("findByKeywords({}, {})", token, words);
 
 		QueryParams params = new QueryParams();
 		params.setKeywords(words);
-		Collection<QueryResult> ret = find(token, params);
+		List<QueryResult> ret = find(token, params);
 		
 		log.debug("findByKeywords: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException, 
+	public List<QueryResult> find(String token, QueryParams params) throws IOException, 
 			ParseException, RepositoryException, DatabaseException {
 		log.debug("find({}, {})", token, params);
-		Collection<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
+		List<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: {}", ret);
 		return ret;
 	}
@@ -369,10 +369,10 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
+	public List<QueryResult> findByStatement(String token, String statement, String type) 
 			throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({}, {})", token, statement);
-		Collection<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, 
+		List<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, 
 				Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("findByStatement: {}", ret);
 		return ret;
@@ -416,8 +416,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	/**
-	 * @param session
-	 * @param query
+	 * Execute query
 	 */
 	private ResultSet executeQuery(Session session, Query query, int offset, int limit) throws RepositoryException {
 		log.debug("executeQuery({}, {}, {}, {})", new Object[] { session, query, offset, limit });
@@ -509,6 +508,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 		
 	@Override
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("getSearch({}, {})", token, qpId);
@@ -549,9 +549,9 @@ public class DirectSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public Collection<String> getAllSearchs(String token) throws RepositoryException, DatabaseException {
+	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, DatabaseException {
 		log.debug("getAllSearchs({})", token);
-		Collection<String> ret = new ArrayList<String>();
+		List<QueryParams> ret = new ArrayList<QueryParams>();
 		Session session = null;
 		
 		try {
@@ -566,9 +566,13 @@ public class DirectSearchModule implements SearchModule {
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
 				QueryParams qp = it.next();
 				
-				if (!qp.isDashboard()) {
-					ret.add(qp.getName());
+				// If this is a dashboard user search, dates are used internally
+				if (qp.isDashboard()) {
+					qp.setLastModifiedFrom(null);
+					qp.setLastModifiedTo(null);
 				}
+
+				ret.add(qp);
 			}
 			
 			// Activity log
@@ -747,10 +751,10 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public Collection<Document> getCategorizedDocuments(String token, String categoryId) throws 
+	public List<Document> getCategorizedDocuments(String token, String categoryId) throws 
 			RepositoryException, DatabaseException {
 		log.info("getCategorizedDocuments({}, {})", token, categoryId);
-		ArrayList<Document> documents = new ArrayList<Document>();
+		List<Document> documents = new ArrayList<Document>();
 		Session session = null;
 		
 		try {

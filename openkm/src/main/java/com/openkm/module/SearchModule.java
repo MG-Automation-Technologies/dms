@@ -23,6 +23,7 @@ package com.openkm.module;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.openkm.bean.Document;
@@ -45,7 +46,7 @@ public interface SearchModule {
 	 * @return A collection of document which content matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByContent(String token, String expression) throws IOException,
+	public List<QueryResult> findByContent(String token, String expression) throws IOException,
 			ParseException,	RepositoryException, DatabaseException;
 
 	/**
@@ -56,7 +57,7 @@ public interface SearchModule {
 	 * @return A collection of document which name matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByName(String token, String expression) throws IOException,
+	public List<QueryResult> findByName(String token, String expression) throws IOException,
 			ParseException,	RepositoryException, DatabaseException;
 
 	/**
@@ -67,7 +68,7 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<QueryResult> findByKeywords(String token, String expression) throws IOException,
+	public List<QueryResult> findByKeywords(String token, String expression) throws IOException,
 			ParseException,	RepositoryException, DatabaseException;
 
 	/**
@@ -79,7 +80,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException If something fails when parsing metadata.
 	 */
-	public Collection<QueryResult> find(String token, QueryParams params) throws IOException,
+	public List<QueryResult> find(String token, QueryParams params) throws IOException,
 			ParseException, RepositoryException, DatabaseException;
 
 	/**
@@ -106,7 +107,7 @@ public interface SearchModule {
 	 * @return A collection of document from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<QueryResult> findByStatement(String token, String statement, String type) 
+	public List<QueryResult> findByStatement(String token, String statement, String type) 
 			throws RepositoryException, DatabaseException;
 	
 	/**
@@ -144,6 +145,7 @@ public interface SearchModule {
 	 * @return The saved search query params.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
+	@Deprecated
 	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
 			DatabaseException;
 	
@@ -154,7 +156,7 @@ public interface SearchModule {
 	 * @return A collection with the names of the saved search.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<String> getAllSearchs(String token) throws RepositoryException, DatabaseException;
+	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Delete a saved search.
@@ -186,6 +188,6 @@ public interface SearchModule {
 	 * @return A Collection of documents in the category
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Collection<Document> getCategorizedDocuments(String token, String categoryId) 
+	public List<Document> getCategorizedDocuments(String token, String categoryId) 
 			throws RepositoryException, DatabaseException;
 }
