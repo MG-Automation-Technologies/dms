@@ -320,12 +320,11 @@ public class SearchResult extends Composite {
 	/**
 	 * Get the saved search
 	 * 
-	 * @param name The name of the search
+	 * @param params
 	 */
-	public void getSearch(String name) {
-		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
-		endPoint.setServiceEntryPoint(Config.OKMSearchService);
-		searchService.getSearch(name, callbackGetSearch);
+	public void getSearch(GWTQueryParams params) {
+		Main.get().mainPanel.search.searchIn.setSavedSearch(params);
+		removeAllRows();
 	}
 	
 	/**

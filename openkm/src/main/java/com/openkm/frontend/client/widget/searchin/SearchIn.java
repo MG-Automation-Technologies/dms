@@ -1306,14 +1306,15 @@ public class SearchIn extends Composite {
 	/**
 	 * Call Back save search 
 	 */
-	final AsyncCallback<Object> callbackSaveSearch = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
+	final AsyncCallback<Integer> callbackSaveSearch = new AsyncCallback<Integer>() {
+		public void onSuccess(Integer result) {
+			params.setId(result.intValue());
 			if (userNews) {
-				Main.get().mainPanel.historySearch.userNews.addRow(searchSavedName.getText());
+				Main.get().mainPanel.historySearch.userNews.addRow(params);
 				Main.get().mainPanel.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
-				Main.get().mainPanel.historySearch.searchSaved.addRow(searchSavedName.getText());
+				Main.get().mainPanel.historySearch.searchSaved.addNewSavedSearch(params);
 				Main.get().mainPanel.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
 			}
 			
@@ -1334,7 +1335,8 @@ public class SearchIn extends Composite {
 		status.setFlag_saveSearch();
 		ServiceDefTarget endPoint = (ServiceDefTarget) searchService;
 		endPoint.setServiceEntryPoint(Config.OKMSearchService);
-		searchService.saveSearch(params, type, name, callbackSaveSearch);
+		params.setName(name);
+		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
 		
 	/**
