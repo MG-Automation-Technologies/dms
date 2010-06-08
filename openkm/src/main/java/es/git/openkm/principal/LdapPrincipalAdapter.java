@@ -48,11 +48,7 @@ import es.git.openkm.core.Config;
 public class LdapPrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(LdapPrincipalAdapter.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see es.git.openkm.principal.PrincipalAdapter#getUsers()
-	 */
+	@Override
 	public Collection<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		ArrayList<String> list = new ArrayList<String>();
@@ -72,15 +68,11 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 
-		log.debug("getUsers: " + list);
+		log.debug("getUsers: {}", list);
 		return list;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see es.git.openkm.principal.PrincipalAdapter#getRoles()
-	 */
+	@Override
 	public Collection<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		ArrayList<String> list = new ArrayList<String>();
@@ -96,18 +88,13 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 
-		log.debug("getRoles: " + list);
+		log.debug("getRoles: {}", list);
 		return list;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see es.git.openkm.principal.PrincipalAdapter#getMails(java.util.Collection)
-	 */
-	public Collection<String> getMails(Collection<String> users)
-			throws PrincipalAdapterException {
-		log.debug("getMails()");
+	@Override
+	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException {
+		log.debug("getMails({})", users);
 		ArrayList<String> list = new ArrayList<String>();
 		
 		for (Iterator<String> it = users.iterator(); it.hasNext();) {
@@ -121,17 +108,15 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 			}
 		}
 
-		log.debug("getMails: " + list);
+		log.debug("getMails: {}", list);
 		return list;
 	}
 	
 	/**
-	 * @param searchBase
-	 * @param searchFilter
-	 * @param attribute
-	 * @return
+	 * Centralize LDAP search
 	 */
 	private ArrayList<String> ldapSearch(String searchBase, String searchFilter, String attribute) {
+		log.debug("ldapSearch({}, {}, {})", new Object[] { searchBase, searchFilter, attribute });
 		ArrayList<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
 
@@ -153,7 +138,6 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 
 			while (results.hasMore()) {
 				SearchResult searchResult = (SearchResult) results.next();
-				System.out.println(">>>" + searchResult.getName());
 				Attributes attributes = searchResult.getAttributes();
 				Attribute attrib = attributes.get(attribute);
 				
@@ -167,7 +151,8 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
-
+		
+		log.debug("ldapSearch: {}", al);
 		return al;
 	}
 }
