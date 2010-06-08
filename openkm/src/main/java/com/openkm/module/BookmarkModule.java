@@ -21,14 +21,14 @@
 
 package com.openkm.module;
 
-import java.util.Collection;
+import java.util.List;
 
-import com.openkm.dao.bean.Bookmark;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.Bookmark;
 
 public interface BookmarkModule {
 
@@ -77,5 +77,5 @@ public interface BookmarkModule {
 	 * @return All the user bookmarks
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
+	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
 }

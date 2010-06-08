@@ -22,16 +22,16 @@
 package com.openkm.module;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
 
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.LockException;
+import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.AccessDeniedException;
 
 public interface FolderModule {
 
@@ -156,7 +156,7 @@ public interface FolderModule {
 	 * @throws PathNotFoundException If there is no folder in the repository in this path
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
+	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException, DatabaseException;
 
 	/**

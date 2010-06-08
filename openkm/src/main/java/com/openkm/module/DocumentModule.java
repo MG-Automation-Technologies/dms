@@ -23,7 +23,7 @@ package com.openkm.module;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.List;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
@@ -204,7 +204,7 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no folder in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException, 
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException, DatabaseException;
 	
 	/**
@@ -275,7 +275,7 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no document in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<Version> getVersionHistory(String token, String docPath) throws 
+	public List<Version> getVersionHistory(String token, String docPath) throws 
 			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**

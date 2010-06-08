@@ -21,12 +21,12 @@
 
 package com.openkm.module;
 
-import java.util.Collection;
+import java.util.List;
 
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.AccessDeniedException;
 
 public interface NotificationModule {
 
@@ -64,7 +64,7 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public Collection<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -78,6 +78,6 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void notify(String token, String nodePath, Collection<String> users, String message) 
+	public void notify(String token, String nodePath, List<String> users, String message) 
 			throws PathNotFoundException, AccessDeniedException, RepositoryException;
 }

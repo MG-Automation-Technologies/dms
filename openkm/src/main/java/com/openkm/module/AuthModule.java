@@ -21,13 +21,13 @@
 
 package com.openkm.module;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.core.UserAlreadyLoggerException;
 
 public interface AuthModule {
@@ -109,7 +109,7 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -154,7 +154,7 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
+	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
@@ -164,7 +164,7 @@ public interface AuthModule {
 	 * @return A collection of repository users.
 	 * @throws RepositoryException If there is any error retrieving the users list.
 	 */
-	public Collection<String> getUsers(String token) throws RepositoryException;
+	public List<String> getUsers(String token) throws RepositoryException;
 	
 	/**
 	 * Retrieves a list of repository roles.
@@ -173,7 +173,7 @@ public interface AuthModule {
 	 * @return A collection of repository roles.
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
-	public Collection<String> getRoles(String token) throws RepositoryException;
+	public List<String> getRoles(String token) throws RepositoryException;
 	
 	/**
 	 * Retrieves the user mails from an user list.
@@ -183,5 +183,5 @@ public interface AuthModule {
 	 * @return A collection of user mails.
 	 * @throws RepositoryException If there is any error retrieving the mail list.
 	 */
-	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException;
+	public List<String> getMails(String token, List<String> users) throws RepositoryException;
 }
