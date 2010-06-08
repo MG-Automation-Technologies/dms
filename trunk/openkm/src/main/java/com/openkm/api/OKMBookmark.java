@@ -49,40 +49,38 @@ public class OKMBookmark implements BookmarkModule {
 	}
 
 	@Override
-	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
-			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
+	public Bookmark add(String nodePath, String name) throws AccessDeniedException, PathNotFoundException, 
+			RepositoryException, DatabaseException {
+		log.debug("add({}, {})", nodePath, name);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Bookmark bookmark = bm.add(token, nodePath, name);
+		Bookmark bookmark = bm.add(nodePath, name);
 		log.debug("add: {}", bookmark);
 		return bookmark;
 	}
 
 	@Override
-	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("remove({}, {})", token, bmId);
+	public void remove(int bmId) throws AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("remove({})", bmId);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		bm.remove(token, bmId);
+		bm.remove(bmId);
 		log.debug("remove: void");
 	}
 	
 	@Override
-	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
+	public Bookmark rename(int bmId, String newName) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("rename({}, {})", bmId, newName);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Bookmark bookmark= bm.rename(token, bmId, newName);
+		Bookmark bookmark= bm.rename(bmId, newName);
 		log.debug("rename: {}", bookmark);
 		return bookmark;
 	}
 
 	@Override
-	public List<Bookmark> getAll(String token) throws RepositoryException,
-			DatabaseException {
-		log.debug("getAll({})", token);
+	public List<Bookmark> getAll() throws RepositoryException, DatabaseException {
+		log.debug("getAll()");
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		List<Bookmark> col = bm.getAll(token);
+		List<Bookmark> col = bm.getAll();
 		log.debug("getAll: {}", col);
 		return col;
 	}

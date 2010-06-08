@@ -59,10 +59,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	public List<GWTBookmark> getAll() throws OKMException {
 		log.debug("getAll()");
 		List<GWTBookmark> bookmarkList = new ArrayList<GWTBookmark>(); 
-		String token = getToken();
 		
 		try {
-			Collection<Bookmark> col = OKMBookmark.getInstance().getAll(token);
+			Collection<Bookmark> col = OKMBookmark.getInstance().getAll();
 			
 			for (Iterator<Bookmark> it = col.iterator(); it.hasNext();) {		
 				Bookmark bookmark = it.next();
@@ -90,10 +89,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public GWTBookmark add(String nodePath, String name) throws OKMException {
 		log.debug("add({}, {})", nodePath, name);
-		String token = getToken();
 		
 		try {
-			return Util.copy(OKMBookmark.getInstance().add(token, nodePath, name));
+			return Util.copy(OKMBookmark.getInstance().add(nodePath, name));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -112,10 +110,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public void remove(int bmId) throws OKMException {
 		log.debug("remove({})", bmId);
-		String token = getToken();
 		
 		try {
-			OKMBookmark.getInstance().remove(token, bmId);
+			OKMBookmark.getInstance().remove(bmId);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -133,10 +130,9 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public GWTBookmark rename(int bmId, String newName) throws OKMException {
 		log.debug("rename({}, {})", bmId, newName);
-		String token = getToken();
 		
 		try {
-			return Util.copy(OKMBookmark.getInstance().rename(token, bmId, newName));
+			return Util.copy(OKMBookmark.getInstance().rename(bmId, newName));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
