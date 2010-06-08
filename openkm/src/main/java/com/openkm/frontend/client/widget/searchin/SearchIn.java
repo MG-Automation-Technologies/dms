@@ -356,6 +356,7 @@ public class SearchIn extends Composite {
 				params.setMimeType(mimeTypes.getValue(mimeTypes.getSelectedIndex()));
 				
 				if (!searchSavedName.getText().equals("")) {
+					saveSearchButton.setEnabled(false);
 					params.setQueryName(searchSavedName.getText());
 					userNews = params.isDashboard();
 					saveSearch(params,"sql");
