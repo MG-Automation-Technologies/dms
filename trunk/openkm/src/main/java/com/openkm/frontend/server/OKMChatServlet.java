@@ -140,7 +140,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} 
-    	} while (pendingRooms.isEmpty() && (countCycle<100) && user != null && usersLogged.contains(user));
+    	} while (pendingRooms.isEmpty() && (countCycle<100) && usersLogged.contains(user));
     	
     	return pendingRooms;
     }
