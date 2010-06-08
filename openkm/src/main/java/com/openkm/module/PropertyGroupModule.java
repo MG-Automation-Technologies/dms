@@ -22,8 +22,7 @@
 package com.openkm.module;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.openkm.bean.PropertyGroup;
@@ -82,7 +81,7 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<PropertyGroup> getGroups(String token, String docPath) throws 
+	public List<PropertyGroup> getGroups(String token, String docPath) throws 
 		IOException, ParseException, PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
@@ -91,7 +90,7 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
 		RepositoryException, DatabaseException;
 
 	/**
@@ -105,7 +104,7 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public HashMap<String, String[]> getProperties(String token, String docPath, String grpName) throws 
+	public Map<String, String[]> getProperties(String token, String docPath, String grpName) throws 
 		NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
@@ -136,6 +135,6 @@ public interface PropertyGroupModule {
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
 		IOException, RepositoryException, DatabaseException;
 }

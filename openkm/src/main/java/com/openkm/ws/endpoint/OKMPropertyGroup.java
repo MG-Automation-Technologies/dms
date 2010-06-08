@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jws.WebService;
@@ -122,7 +123,7 @@ public class OKMPropertyGroup {
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {}, {})", new String[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		HashMap<String, String[]> hm = cm.getProperties(token, docPath, grpName);
+		Map<String, String[]> hm = cm.getProperties(token, docPath, grpName);
 		Set<String> keys = hm.keySet();
 		StringArrayPair[] tmp = new StringArrayPair[keys.size()];
 		int i=0;

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -165,7 +166,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<PropertyGroup> getGroups(String token, String docPath) throws IOException,
+	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException,
 			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
@@ -211,7 +212,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("getAllGroups({})", token);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
@@ -387,10 +388,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public Collection<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
 			ParseException, RepositoryException, DatabaseException {
 		log.debug("getPropertyGroupForm({}, {})", token, grpName);
-		Collection<FormElement> ret = new ArrayList<FormElement>();
+		List<FormElement> ret = new ArrayList<FormElement>();
 		Session session = null;
 		
 		try {
