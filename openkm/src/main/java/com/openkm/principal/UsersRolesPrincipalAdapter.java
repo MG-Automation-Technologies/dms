@@ -25,9 +25,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -40,9 +40,9 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(UsersRolesPrincipalAdapter.class);
 		
 	@Override
-	public Collection<String> getUsers() throws PrincipalAdapterException {
+	public List<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		Properties prop = new Properties();
 				
 		try {
@@ -65,9 +65,9 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getRoles() throws PrincipalAdapterException {
+	public List<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		Properties prop = new Properties();
 		
 		try {
@@ -93,9 +93,9 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException {
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		Properties prop = new Properties();
 		
 		try {

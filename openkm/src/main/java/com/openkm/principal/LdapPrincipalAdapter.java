@@ -23,9 +23,9 @@ package com.openkm.principal;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -51,10 +51,10 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(LdapPrincipalAdapter.class);
 
 	@Override
-	public Collection<String> getUsers() throws PrincipalAdapterException {
+	public List<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
-		ArrayList<String> list = new ArrayList<String>();
-		ArrayList<String> ldap = ldapSearch(
+		List<String> list = new ArrayList<String>();
+		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
@@ -78,10 +78,10 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getRoles() throws PrincipalAdapterException {
+	public List<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
-		ArrayList<String> list = new ArrayList<String>();
-		ArrayList<String> ldap = ldapSearch(
+		List<String> list = new ArrayList<String>();
+		List<String> ldap = ldapSearch(
 				Config.PRINCIPAL_LDAP_SERVER,
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
@@ -101,14 +101,13 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getMails(Collection<String> users)
-			throws PrincipalAdapterException {
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		
 		for (Iterator<String> it = users.iterator(); it.hasNext();) {
 			String user = it.next();
-			ArrayList<String> ldap = ldapSearch(
+			List<String> ldap = ldapSearch(
 					Config.PRINCIPAL_LDAP_SERVER,
 					Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 					Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
@@ -127,11 +126,11 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 	/**
 	 * LDAP Search
 	 */
-	public ArrayList<String> ldapSearch(String url, String principal, String credentials, 
+	public List<String> ldapSearch(String url, String principal, String credentials, 
 			String searchBase, String searchFilter, String attribute) {
 		log.debug("ldapSearch({}, {}, {}, {}, {}, {})", new Object[] {
 				url, principal, credentials, searchBase, searchFilter, attribute } );
-		ArrayList<String> al = new ArrayList<String>();
+		List<String> al = new ArrayList<String>();
 		Hashtable<String, String> env = new Hashtable<String, String>();
 
 		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");

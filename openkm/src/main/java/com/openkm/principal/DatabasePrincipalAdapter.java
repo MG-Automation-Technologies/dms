@@ -22,8 +22,8 @@
 package com.openkm.principal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +38,12 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	private static Logger log = LoggerFactory.getLogger(DatabasePrincipalAdapter.class);
 	
 	@Override
-	public Collection<String> getUsers() throws PrincipalAdapterException {
+	public List<String> getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 
 		try {
-			Collection<User> col = AuthDAO.findAllUsers(Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
+			List<User> col = AuthDAO.findAllUsers(Config.PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS);
 			
 			for (Iterator<User> it = col.iterator(); it.hasNext(); ) {
 				User dbUser = it.next();
@@ -58,12 +58,12 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getRoles() throws PrincipalAdapterException {
+	public List<String> getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 				
 		try {
-			Collection<Role> col = AuthDAO.findAllRoles();
+			List<Role> col = AuthDAO.findAllRoles();
 			
 			for (Iterator<Role> it = col.iterator(); it.hasNext(); ) {
 				Role dbRole = it.next();
@@ -78,9 +78,9 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 	}
 
 	@Override
-	public Collection<String> getMails(Collection<String> users) throws PrincipalAdapterException {
+	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 
 		try {
 			for (Iterator<String> it = users.iterator(); it.hasNext(); ) {
