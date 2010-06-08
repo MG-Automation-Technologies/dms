@@ -41,6 +41,7 @@ public class GWTQueryParams implements IsSerializable {
 	public static final String OPERATOR_OR = "or";
  
 	private int id;
+	private String queryName;
 	private String name;
 	private String keywords;
 	private String content;
@@ -239,5 +240,13 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getQueryName() {
+		return queryName;
+	}
+
+	public void setQueryName(String queryName) {
+		this.queryName = queryName;
 	}
 }

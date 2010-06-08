@@ -174,7 +174,7 @@ public class SearchSaved extends Composite {
 	private void addRow(GWTQueryParams search) {
 		int rows = table.getRowCount();
 		
-		table.setHTML(rows, 0, search.getName());
+		table.setHTML(rows, 0, search.getQueryName());
 		table.setHTML(rows, 1, ""+search.getId());
 		table.setHTML(rows, 2, "");
 		table.getCellFormatter().setVisible(rows, 1, false);
