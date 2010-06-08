@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -44,10 +45,10 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static Map<String, Collection<FormElement>> parseWorkflowForms(InputStream is) throws ParseException {
+	public static Map<String, List<FormElement>> parseWorkflowForms(InputStream is) throws ParseException {
 		log.debug("parseWorkflowForms({})", is);
 		// long begin = Calendar.getInstance().getTimeInMillis();
-		Map<String, Collection<FormElement>> forms = new HashMap<String, Collection<FormElement>>();
+		Map<String, List<FormElement>> forms = new HashMap<String, List<FormElement>>();
 
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

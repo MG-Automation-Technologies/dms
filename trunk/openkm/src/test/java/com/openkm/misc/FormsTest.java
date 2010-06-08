@@ -3,6 +3,7 @@ package com.openkm.misc;
 import java.io.FileInputStream;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -38,13 +39,13 @@ public class FormsTest extends TestCase {
 	public void testWorkflow() throws Exception {
 		log.debug("testWorkflow()");
 		FileInputStream fis = new FileInputStream(BASE_DIR + "/forms.xml");
-		Map<String, Collection<FormElement>> forms = FormUtils.parseWorkflowForms(fis);
+		Map<String, List<FormElement>> forms = FormUtils.parseWorkflowForms(fis);
 		assertFalse(forms.isEmpty());
 		fis.close();
 
-		Collection<FormElement> formStart = forms.get("start");
+		List<FormElement> formStart = forms.get("start");
 		assertNotNull(formStart);
-		Collection<FormElement> formUserInfo = forms.get("user_info");
+		List<FormElement> formUserInfo = forms.get("user_info");
 		assertNotNull(formUserInfo);
 		
 		Iterator<FormElement> formStartIt = formStart.iterator();
