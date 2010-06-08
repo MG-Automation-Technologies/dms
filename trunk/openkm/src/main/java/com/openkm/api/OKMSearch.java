@@ -125,12 +125,13 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public void saveSearch(String token, QueryParams params) throws AccessDeniedException,
+	public int saveSearch(String token, QueryParams params) throws AccessDeniedException,
 			RepositoryException, DatabaseException {
 		log.debug("saveSearch({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		sm.saveSearch(token, params);
-		log.debug("saveSearch: void");
+		int id = sm.saveSearch(token, params);
+		log.debug("saveSearch: {}", id);
+		return id;
 	}
 
 	@Override

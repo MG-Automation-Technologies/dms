@@ -19,20 +19,20 @@ public class QueryParamsDAO {
 	/**
 	 * Create
 	 */
-	public static void create(QueryParams qp) throws DatabaseException {
+	public static int create(QueryParams qp) throws DatabaseException {
 		log.debug("create({})", qp);
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			session.save(qp);
+			QueryParams created = (QueryParams) session.save(qp);
+			log.debug("create: {}", created.getId());
+			return created.getId();
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
 		}
-		
-		log.debug("create: void");
 	}
 	
 	/**

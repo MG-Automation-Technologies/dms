@@ -473,10 +473,11 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void saveSearch(String token, QueryParams params) throws 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public int saveSearch(String token, QueryParams params) throws AccessDeniedException, 
+			RepositoryException, DatabaseException {
 		log.debug("saveSearch({}, {}, {})", new Object[] { token, params });
 		Session session = null;
+		int id = 0;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -490,7 +491,7 @@ public class DirectSearchModule implements SearchModule {
 			}
 			
 			params.setUser(session.getUserID());
-			QueryParamsDAO.create(params);
+			id = QueryParamsDAO.create(params);
 			
 			// Activity log
 			UserActivity.log(session, "SAVE_SEARCH", params.getName(), params.toString());
@@ -504,7 +505,8 @@ public class DirectSearchModule implements SearchModule {
 			}
 		}
 		
-		log.debug("saveSearch: void");
+		log.debug("saveSearch: {}", id);
+		return id;
 	}
 		
 	@Override

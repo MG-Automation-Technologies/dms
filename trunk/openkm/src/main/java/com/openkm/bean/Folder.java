@@ -23,7 +23,7 @@ package com.openkm.bean;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author pavila
@@ -43,7 +43,7 @@ public class Folder implements Serializable {
 	private byte permissions;
 	private String uuid;
 	private boolean subscribed;
-	private Collection<String> subscriptors;
+	private List<String> subscriptors;
 	
 	public boolean getHasChilds() {
 		return hasChilds;
@@ -93,11 +93,11 @@ public class Folder implements Serializable {
 		this.subscribed = subscribed;
 	}
 
-	public Collection<String> getSubscriptors() {
+	public List<String> getSubscriptors() {
 		return subscriptors;
 	}
 
-	public void setSubscriptors(Collection<String> subscriptors) {
+	public void setSubscriptors(List<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 
