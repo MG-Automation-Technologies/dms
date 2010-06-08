@@ -23,13 +23,10 @@ package com.openkm.util;
 
 import java.util.Calendar;
 
-import javax.jcr.Session;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.bean.Activity;
 
@@ -43,16 +40,13 @@ public class UserActivity {
 	/**
 	 * Log activity
 	 */
-	public static void log(Session session, String action, String item, String params) {
-		String token = SessionManager.getInstance().getTokenByUserId(session.getUserID());
-
+	public static void log(String user, String action, String item, String params) {
 		try {
 			Activity vo = new Activity();
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(new java.util.Date());
 			vo.setDate(cal);
-			vo.setUser(session.getUserID());
-			vo.setToken(token);
+			vo.setUser(user);
 			vo.setAction(action);
 			vo.setItem(item);
 			vo.setParams(params);
