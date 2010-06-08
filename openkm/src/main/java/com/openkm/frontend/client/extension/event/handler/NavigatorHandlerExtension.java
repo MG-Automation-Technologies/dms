@@ -1,4 +1,3 @@
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
@@ -20,34 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client;
+package com.openkm.frontend.client.extension.event.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.openkm.frontend.client.extension.event.HasNavigatorEvent.NavigatorEventConstant;
 
 /**
- * Customization
+ * NavigatorHandlerExtension
  * 
  * @author jllort
  *
  */
-public class Customization {
+public interface NavigatorHandlerExtension {
 	
-	/**
-	 * getExtensionWidgets
-	 * 
-	 * @return
-	 */
-	public static List<Object> getExtensionWidgets() {
-		List<Object> extensions = new ArrayList<Object>();
-		
-		// add here your widget extensions
-//		extensions.add(new HelloWorld());
-//		extensions.add(new ToolBarButtonExample().getButton());
-//		extensions.add(new TabFolderExample());
-//		extensions.add(new MainMenuExample().getNewMenu());
-//		extensions.add(new HandlersTest());
-		
-		return extensions;
-	}
+	public abstract void onChange(NavigatorEventConstant event);
+	
 }
