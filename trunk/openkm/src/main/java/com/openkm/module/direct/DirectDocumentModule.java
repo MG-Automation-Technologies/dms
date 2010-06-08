@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map.Entry;
 
@@ -796,10 +797,10 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Collection<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("getChilds({}, {})", token, fldPath);
-		ArrayList<Document> childs = new ArrayList<Document>();
+		List<Document> childs = new ArrayList<Document>();
 		Session session = null;
 		
 		try {
@@ -1238,10 +1239,10 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Collection<Version> getVersionHistory(String token, String docPath) throws
+	public List<Version> getVersionHistory(String token, String docPath) throws
 			PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getVersionHistory({}, {})", token, docPath);
-		ArrayList<Version> history = new ArrayList<Version>();
+		List<Version> history = new ArrayList<Version>();
 		Session session = null;
 		
 		try {

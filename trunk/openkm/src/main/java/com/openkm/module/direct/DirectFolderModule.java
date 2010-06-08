@@ -23,9 +23,9 @@ package com.openkm.module.direct;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.jcr.Node;
@@ -711,10 +711,10 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Collection<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
+	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
 			RepositoryException, DatabaseException {
 		log.debug("findChilds({}, {})", token, fldPath);
-		ArrayList<Folder> childs = new ArrayList<Folder>();
+		List<Folder> childs = new ArrayList<Folder>();
 		Session session = null;
 		
 		try {

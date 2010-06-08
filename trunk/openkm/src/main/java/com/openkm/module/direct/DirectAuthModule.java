@@ -23,10 +23,10 @@ package com.openkm.module.direct;
 
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.LoginException;
 import javax.jcr.Node;
@@ -434,7 +434,7 @@ public class DirectAuthModule implements AuthModule {
 	private void revokeUser(Node node, String user, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualUsers = node.getProperty(property).getValues();
-		ArrayList<String> newUsers = new ArrayList<String>();
+		List<String> newUsers = new ArrayList<String>();
 
 		for (int i=0; i<actualUsers.length; i++) {
 			if (!actualUsers[i].getString().equals(user)) {
@@ -536,7 +536,7 @@ public class DirectAuthModule implements AuthModule {
 	private void grantRole(Node node, String role, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualRoles = node.getProperty(property).getValues();
-		ArrayList<String> newRoles = new ArrayList<String>();
+		List<String> newRoles = new ArrayList<String>();
 
 		for (int i=0; i<actualRoles.length; i++) {
 			newRoles.add(actualRoles[i].getString());
@@ -641,7 +641,7 @@ public class DirectAuthModule implements AuthModule {
 	private void revokeRole(Node node, String role, String property) throws ValueFormatException,
 			PathNotFoundException, javax.jcr.RepositoryException {
 		Value[] actualRoles = node.getProperty(property).getValues();
-		ArrayList<String> newRoles = new ArrayList<String>();
+		List<String> newRoles = new ArrayList<String>();
 
 		for (int i=0; i<actualRoles.length; i++) {
 			if (!actualRoles[i].getString().equals(role)) {
@@ -749,10 +749,10 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({}, {})", token, nodePath);
-		HashMap<String, Byte> roles = new HashMap<String, Byte>();
+		Map<String, Byte> roles = new HashMap<String, Byte>();
 		Session session = null;
 		
 		try {
@@ -885,9 +885,9 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public Collection<String> getUsers(String token) throws RepositoryException {
+	public List<String> getUsers(String token) throws RepositoryException {
 		log.debug("getUsers({})", token);
-		Collection<String> list = null;
+		List<String> list = null;
 
 		try {
 			PrincipalAdapter principalAdapter = getPrincipalAdapter();
@@ -902,9 +902,9 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public Collection<String> getRoles(String token) throws RepositoryException {
+	public List<String> getRoles(String token) throws RepositoryException {
 		log.debug("getRoles({})", token);
-		Collection<String> list = null;
+		List<String> list = null;
 
 		try {
 			PrincipalAdapter principalAdapter = getPrincipalAdapter();
@@ -922,9 +922,9 @@ public class DirectAuthModule implements AuthModule {
 	 * Get mail user list from user list. 
 	 */
 	@Override
-	public Collection<String> getMails(String token, Collection<String> users) throws RepositoryException {
+	public List<String> getMails(String token, List<String> users) throws RepositoryException {
 		log.debug("getMails({})", token);
-		Collection<String> list = null;
+		List<String> list = null;
 
 		try {
 			PrincipalAdapter principalAdapter = getPrincipalAdapter();

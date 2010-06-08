@@ -22,7 +22,7 @@
 package com.openkm.module.direct;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -167,9 +167,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public Collection<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
+	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
 		log.debug("getAll({})", token);
-		Collection<Bookmark> ret = new ArrayList<Bookmark>();
+		List<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
 		
 		try {
