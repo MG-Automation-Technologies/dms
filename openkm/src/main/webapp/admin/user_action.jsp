@@ -80,7 +80,7 @@
 				}
 				
 				// Activity log
-				UserActivity.log(jcrSession, "USER_ACTION", usr.toString(), action);
+				UserActivity.log(jcrSession.getUserID(), "USER_ACTION", usr.toString(), action);
 				
 				response.sendRedirect("user_list.jsp");
 			} catch (DatabaseException e) {

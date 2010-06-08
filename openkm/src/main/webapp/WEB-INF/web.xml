@@ -183,6 +183,10 @@
     <servlet-name>AuthServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.AuthServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>PropertyGroupsServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.PropertyGroupsServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -372,6 +376,10 @@
   <servlet-mapping>
     <servlet-name>AuthServlet</servlet-name>
     <url-pattern>/admin/Auth</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PropertyGroupsServlet</servlet-name>
+    <url-pattern>/admin/PropertyGroups</url-pattern>
   </servlet-mapping>
   
   <!-- WebServices Servlet Mappings -->

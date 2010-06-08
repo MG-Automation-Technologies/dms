@@ -43,7 +43,7 @@
 			}
 			
 			// Activity log
-			UserActivity.log(jcrSession, "ROLE_ACTION", rol.toString(), action);
+			UserActivity.log(jcrSession.getUserID(), "ROLE_ACTION", rol.toString(), action);
 			
 			response.sendRedirect("role_list.jsp");
 		} catch (DatabaseException e) {

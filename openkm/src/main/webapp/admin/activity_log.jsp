@@ -87,7 +87,7 @@
 		if (date_begin != null && !date_begin.equals("") && date_end != null && !date_end.equals("")) {
 			try {
 				out.println("<table class=\"results\" width=\"100%\">");
-				out.println("<tr><th>Date</th><th>User</th><th>Token</th><th>Action</th><th>Item</th><th>Params</th></tr>");
+				out.println("<tr><th>Date</th><th>User</th><th>Action</th><th>Item</th><th>Params</th></tr>");
 			
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				ActivityFilter filter = new ActivityFilter();
@@ -104,8 +104,8 @@
 				int i = 0;
 				for (Iterator<Activity> it = al.iterator(); it.hasNext(); ) {
 					Activity vo = it.next();
-					out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+vo.getDate().getTime()+"</td><td>"+vo.getUser()+"</td><td>"+
-							vo.getToken()+"</td><td>"+vo.getAction()+"</td><td>"+
+					out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+vo.getDate().getTime()+"</td><td>"+vo.getUser()+
+							"</td><td>"+vo.getAction()+"</td><td>"+
 							vo.getItem()+"</td><td>"+vo.getParams()+"</td></tr>");
 				}
 				
