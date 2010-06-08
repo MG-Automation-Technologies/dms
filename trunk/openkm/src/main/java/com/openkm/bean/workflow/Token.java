@@ -23,7 +23,6 @@ package com.openkm.bean.workflow;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -37,7 +36,7 @@ public class Token implements Serializable {
 	private String node;
 	private Calendar start;
 	private Calendar end;
-	private Collection<Transition> availableTransitions;
+	private List<Transition> availableTransitions;
 	private List<Comment> comments;
 	private ProcessInstance processInstance;
 
@@ -105,11 +104,11 @@ public class Token implements Serializable {
 		this.end = end;
 	}
 
-	public Collection<Transition> getAvailableTransitions() {
+	public List<Transition> getAvailableTransitions() {
 		return availableTransitions;
 	}
 
-	public void setAvailableTransitions(Collection<Transition> availableTransitions) {
+	public void setAvailableTransitions(List<Transition> availableTransitions) {
 		this.availableTransitions = availableTransitions;
 	}
 

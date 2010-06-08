@@ -1,23 +1,23 @@
 package com.openkm.bean.form;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class Select extends FormElement {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
-	private Collection<Option> options = new ArrayList<Option>();
+	private List<Option> options = new ArrayList<Option>();
 	private String type = TYPE_SIMPLE;
 	
 	public Select() {
 		super.width = "150px";
 	}
 
-	public Collection<Option> getOptions() {
+	public List<Option> getOptions() {
 		return options;
 	}
 
-	public void setOptions(Collection<Option> options) {
+	public void setOptions(List<Option> options) {
 		this.options = options;
 	}
 
