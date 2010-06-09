@@ -67,10 +67,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public List<GWTPropertyGroup> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
-		String token = getToken();
 
 		try {
-			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups();
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
@@ -97,10 +96,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException {
 		log.debug("getAllGroups({})", docPath);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
-		String token = getToken();
 
 		try {
-			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups();
 			List<GWTPropertyGroup> actualGroupsList = getGroups(docPath);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
@@ -146,10 +144,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void addGroup(String docPath, String grpName) throws OKMException {
 		log.debug("addGroup({}, {})", docPath, grpName);
-		String token = getToken();
 		
 		try {
-			OKMPropertyGroup.getInstance().addGroup(token, docPath, grpName);
+			OKMPropertyGroup.getInstance().addGroup(docPath, grpName);
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
@@ -180,10 +177,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException {
 		log.debug("getGroups({})", docPath);
 		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
-		String token = getToken();
 
 		try {
-			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(token, docPath);
+			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(docPath);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
@@ -212,12 +208,10 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException {
 		log.debug("getProperties({}, {})", docPath, grpName);
-		String token = getToken();
 		Map<String, String[]> properties = new HashMap<String, String[]>();
 
 		try {
-			properties = OKMPropertyGroup.getInstance().getProperties(token, docPath, grpName);
-			
+			properties = OKMPropertyGroup.getInstance().getProperties(docPath, grpName);
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
@@ -242,17 +236,15 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException {
 		log.debug("getMetaData({})", grpName);
-		String token = getToken();
 		Collection<FormElement> properties = new ArrayList<FormElement>();
 		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
 
 		try {
-			properties = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, grpName);
+			properties = OKMPropertyGroup.getInstance().getPropertyGroupForm(grpName);
 			
 			for (Iterator<FormElement> it = properties.iterator(); it.hasNext(); ) {
 				gwtProperties.add(Util.copy(it.next()));
 			}
-			
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_IOException), e.getMessage());
@@ -274,10 +266,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException {
 		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
-		String token = getToken();
 		
 		try {
-			OKMPropertyGroup.getInstance().setProperties(token, docPath, grpName, properties);
+			OKMPropertyGroup.getInstance().setProperties(docPath, grpName, properties);
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchProperty), e.getMessage());
@@ -310,10 +301,9 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void removeGroup(String docPath, String grpName) throws OKMException  {
 		log.debug("removeGroup({}, {})", docPath, grpName);
-		String token = getToken();
 		
 		try {
-			OKMPropertyGroup.getInstance().removeGroup(token, docPath, grpName);
+			OKMPropertyGroup.getInstance().removeGroup(docPath, grpName);
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());

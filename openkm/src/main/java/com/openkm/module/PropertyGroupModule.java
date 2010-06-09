@@ -41,7 +41,6 @@ public interface PropertyGroupModule {
 	/**
 	 * Add a property group to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param docPath The path that identifies an unique document.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
@@ -52,14 +51,12 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addGroup(String token, String docPath, String grpName) throws 
-		NoSuchGroupException, LockException, PathNotFoundException, 
-		AccessDeniedException, RepositoryException, DatabaseException;
+	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Removes a property group from a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param docPath The path that identifies an unique document.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
@@ -68,35 +65,32 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeGroup(String token, String docPath, String grpName) throws 
-			AccessDeniedException, NoSuchGroupException, LockException, PathNotFoundException,
-			RepositoryException, DatabaseException;
+	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
+			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Get groups assigned to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param docPath The path that identifies an unique document.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<PropertyGroup> getGroups(String token, String docPath) throws 
-		IOException, ParseException, PathNotFoundException, RepositoryException, DatabaseException;
+	public List<PropertyGroup> getGroups(String docPath) throws IOException, ParseException,
+			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
 	 * Get all groups defined in the system.
 	 * 
-	 * @param token The session authorization token.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException, 
-		RepositoryException, DatabaseException;
+	public List<PropertyGroup> getAllGroups() throws IOException, ParseException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Get all properties defined in a document by group.
 	 * 
-	 * @param token The session authorization token.
 	 * @param docPath The path that identifies an unique document.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
@@ -104,13 +98,12 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Map<String, String[]> getProperties(String token, String docPath, String grpName) throws 
-		NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException;
+	public Map<String, String[]> getProperties(String docPath, String grpName) throws NoSuchGroupException,
+			PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Set group properties to a document.
 	 * 
-	 * @param token The session authorization token.
 	 * @param docPath The path that identifies an unique document.
 	 * @param grpName The group name previously registered in the system.
 	 * @param propName The category property name.
@@ -123,18 +116,17 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String token, String docPath, String grpName, Map<String, String[]> properties)
-		throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-		AccessDeniedException, RepositoryException, DatabaseException;
+	public void setProperties(String docPath, String grpName, Map<String, String[]> properties)
+			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Get all possible values which can have a property.
 	 *  
-	 * @param token The session authorization token.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
-		IOException, RepositoryException, DatabaseException;
+	public List<FormElement> getPropertyGroupForm(String grpName) throws ParseException, IOException, 
+			RepositoryException, DatabaseException;
 }
