@@ -319,9 +319,7 @@ public class DirectPropertyModule implements PropertyModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("removeKeyword: void");

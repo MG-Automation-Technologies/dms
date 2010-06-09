@@ -148,24 +148,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	public synchronized static void shutdown() {
 		log.debug("shutdownRepository()");
 		
-		if (Config.SESSION_MANAGER) {
-			// Preserve system user config
-			String token = SessionManager.getInstance().getSystemToken();
-			log.info("*** Logout (system): "+token+" ***");
-			
-			try {
-				new DirectAuthModule().logout();
-			} catch (AccessDeniedException e) {
-				log.warn(e.getMessage(), e);
-			} catch (RepositoryException e) {
-				log.warn(e.getMessage(), e);
-			} catch (DatabaseException e) {
-				log.warn(e.getMessage(), e);
-			}
-		} else {
-			if (systemSession != null && systemSession.isLive()) {
-				systemSession.logout();
-			}
+		if (systemSession != null && systemSession.isLive()) {
+			systemSession.logout();
 		}
 		
 		systemSession = null;
@@ -525,9 +509,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getPersonalFolder: {}", personalFolder);
@@ -633,9 +615,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getThesaurusFolder: {}", thesaurusFolder);
@@ -661,9 +641,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getCategoriesFolder: {}", categoriesFolder);
@@ -814,9 +792,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("hasNode: {}", ret);
