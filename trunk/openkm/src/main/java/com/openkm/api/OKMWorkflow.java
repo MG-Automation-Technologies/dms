@@ -33,8 +33,10 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.WorkflowException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.WorkflowModule;
 
@@ -53,326 +55,339 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public void registerProcessDefinition(String token, ZipInputStream is) throws ParseException, 
-			RepositoryException {
+	public void registerProcessDefinition(ZipInputStream is) throws ParseException, RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("registerProcessDefinition({})", is);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.registerProcessDefinition(token, is);
+		wm.registerProcessDefinition(is);
 		log.debug("registerProcessDefinition: void");
 	}
 
 	@Override
-	public void deleteProcessDefinition(String token, long processDefinitionId) throws RepositoryException {
+	public void deleteProcessDefinition(long processDefinitionId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({})", processDefinitionId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteProcessDefinition(token, processDefinitionId);
+		wm.deleteProcessDefinition(processDefinitionId);
 		log.debug("deleteProcessDefinition: void");
 	}
 
 	@Override
-	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId) throws 
-			RepositoryException {
+	public ProcessDefinition getProcessDefinition(long processDefinitionId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("getProcessDefinition({})", processDefinitionId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessDefinition result = wm.getProcessDefinition(token, processDefinitionId);
+		ProcessDefinition result = wm.getProcessDefinition(processDefinitionId);
 		log.debug("getProcessDefinition: {}", result);
 		return result;
 	}
 
 	@Override
-	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node) throws 
-			RepositoryException {
+	public byte[] getProcessDefinitionImage(long processDefinitionId, String node) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("getProcessDefinitionImage({})", processDefinitionId, node);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		byte[] result = wm.getProcessDefinitionImage(token, processDefinitionId, node);
+		byte[] result = wm.getProcessDefinitionImage(processDefinitionId, node);
 		log.debug("getProcessDefinitionImage: {}", result);
 		return result;
 	}
 	
 	@Override
-	public Map<String, List<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
-			throws ParseException, RepositoryException {
+	public Map<String, List<FormElement>> getProcessDefinitionForms(long processDefinitionId) throws 
+			ParseException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("getProcessDefinitionForms({})", processDefinitionId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Map<String, List<FormElement>> result = wm.getProcessDefinitionForms(token, processDefinitionId);
+		Map<String, List<FormElement>> result = wm.getProcessDefinitionForms(processDefinitionId);
 		log.debug("getProcessDefinitionForms: "+result);
 		return result;
 	}
 
 	@Override
-	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, 
-			Map<String, Object> variables) throws RepositoryException {
+	public ProcessInstance runProcessDefinition(long processDefinitionId, Map<String, Object> variables)
+			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("runProcessDefinition({})", processDefinitionId, variables);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.runProcessDefinition(token, processDefinitionId, variables);
+		ProcessInstance result = wm.runProcessDefinition(processDefinitionId, variables);
 		log.debug("runProcessDefinition: {}", result);
 		return result;
 	}
 
 	@Override
-	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, String transitionName)
-			throws RepositoryException {
+	public ProcessInstance sendProcessInstanceSignal(long processInstanceId, String transitionName) throws
+			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("sendProcessInstanceSignal({})", processInstanceId, transitionName);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.sendProcessInstanceSignal(token, processInstanceId, transitionName);
+		ProcessInstance result = wm.sendProcessInstanceSignal(processInstanceId, transitionName);
 		log.debug("sendProcessInstanceSignal: {}", result);
 		return result;
 	}
 
 	@Override
-	public void deleteProcessInstance(String token, long processInstanceId) throws RepositoryException {
+	public void deleteProcessInstance(long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("deleteProcessInstance({})", processInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteProcessInstance(token, processInstanceId);
+		wm.deleteProcessInstance(processInstanceId);
 		log.debug("deleteProcessInstance: void");
 	}
 
 	@Override
-	public List<ProcessInstance> findProcessInstances(String token, long processDefinitionId)
-			throws RepositoryException {
-		log.debug("findProcessInstances({})", token, processDefinitionId);
+	public List<ProcessInstance> findProcessInstances(long processDefinitionId) throws RepositoryException,
+			DatabaseException, WorkflowException {
+		log.debug("findProcessInstances({})", processDefinitionId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessInstance> result = wm.findProcessInstances(token, processDefinitionId);
+		List<ProcessInstance> result = wm.findProcessInstances(processDefinitionId);
 		log.debug("findProcessInstances: {}", result);
 		return result;
 	}
 	
 	@Override
-	public List<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException {
+	public List<ProcessDefinition> findAllProcessDefinitions() throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("findAllProcessDefinitions()");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> result = wm.findAllProcessDefinitions(token);
+		List<ProcessDefinition> result = wm.findAllProcessDefinitions();
 		log.debug("findAllProcessDefinitions: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<ProcessDefinition> findLatestProcessDefinitions(String token) throws 
-			RepositoryException {
+	public List<ProcessDefinition> findLatestProcessDefinitions() throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("findLatestProcessDefinitions()");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> result = wm.findLatestProcessDefinitions(token);
+		List<ProcessDefinition> result = wm.findLatestProcessDefinitions();
 		log.debug("findLatestProcessDefinitions: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws 
-			RepositoryException {
+	public List<ProcessDefinition> findAllProcessDefinitionVersions(String name) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("findAllProcessDefinitionVersions({})", name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> result = wm.findAllProcessDefinitionVersions(token, name);
+		List<ProcessDefinition> result = wm.findAllProcessDefinitionVersions(name);
 		log.debug("findAllProcessDefinitionVersions: {}", result);
 		return result;
 	}
 
 	@Override
-	public ProcessInstance getProcessInstance(String token, long processInstanceId) throws 
-			RepositoryException {
+	public ProcessInstance getProcessInstance(long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("getProcessInstance({})", processInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.getProcessInstance(token, processInstanceId);
+		ProcessInstance result = wm.getProcessInstance(processInstanceId);
 		log.debug("getProcessInstance: {}", result);
 		return result;
 	}
 
 	@Override
-	public void suspendProcessInstance(String token, long processInstanceId) throws RepositoryException {
+	public void suspendProcessInstance(long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("suspendProcessInstance({})", processInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendProcessInstance(token, processInstanceId);
+		wm.suspendProcessInstance(processInstanceId);
 		log.debug("suspendProcessInstance: void");
 	}
 
 	@Override
-	public void resumeProcessInstance(String token, long processInstanceId) throws RepositoryException {
+	public void resumeProcessInstance(long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("resumeProcessInstance({})", processInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeProcessInstance(token, processInstanceId);
+		wm.resumeProcessInstance(processInstanceId);
 		log.debug("resumeProcessInstance: void");
 	}
 
 	@Override
-	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value)
-			throws RepositoryException {
+	public void addProcessInstanceVariable(long processInstanceId, String name, Object value) throws
+			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("addProcessInstanceVariable({}, {}, {})", new Object[] { processInstanceId, name, value });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addProcessInstanceVariable(token, processInstanceId, name, value);
+		wm.addProcessInstanceVariable(processInstanceId, name, value);
 		log.debug("addProcessInstanceVariable: void");
 	}
 
 	@Override
-	public void removeProcessInstanceVariable(String token, long processInstanceId, String name) throws 
-			RepositoryException {
+	public void removeProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("removeProcessInstanceVariable({}, {})", processInstanceId, name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.removeProcessInstanceVariable(token, processInstanceId, name);
+		wm.removeProcessInstanceVariable(processInstanceId, name);
 		log.debug("removeProcessInstanceVariable: void");
 	}
 
 	@Override
-	public List<TaskInstance> findUserTaskInstances(String token) throws RepositoryException {
+	public List<TaskInstance> findUserTaskInstances() throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("findUserTaskInstances()");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> result = wm.findUserTaskInstances(token);
+		List<TaskInstance> result = wm.findUserTaskInstances();
 		log.debug("findUserTaskInstances: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException {
+	public List<TaskInstance> findPooledTaskInstances() throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("findPooledTaskInstances()");
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> result = wm.findPooledTaskInstances(token);
+		List<TaskInstance> result = wm.findPooledTaskInstances();
 		log.debug("findPooledTaskInstances: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<TaskInstance> findTaskInstances(String token, long processInstanceId) throws 
-			RepositoryException {
+	public List<TaskInstance> findTaskInstances(long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("findTaskInstances({})", processInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> result = wm.findTaskInstances(token, processInstanceId);
+		List<TaskInstance> result = wm.findTaskInstances(processInstanceId);
 		log.debug("findTaskInstances: {}", result);
 		return result;
 	}
 
 	@Override
-	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
-			Map<String, Object> values) throws RepositoryException {
+	public void setTaskInstanceValues(long taskInstanceId, String transitionName, Map<String, Object> values)
+			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("setTaskInstanceValues({}, {}, {})", new Object[] { taskInstanceId, transitionName, values });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.setTaskInstanceValues(token, taskInstanceId, transitionName, values);
+		wm.setTaskInstanceValues(taskInstanceId, transitionName, values);
 		log.debug("setTaskInstanceValues: void");
 	}
 
 	@Override
-	public void addTaskInstanceComment(String token, long taskInstanceId, String message) throws 
-			RepositoryException {
+	public void addTaskInstanceComment(long taskInstanceId, String message) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("addTaskInstanceComment({}, {})", taskInstanceId, message);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTaskInstanceComment(token, taskInstanceId, message);
+		wm.addTaskInstanceComment(taskInstanceId, message);
 		log.debug("addTaskInstanceComment: void");
 	}
 
 	@Override
-	public TaskInstance getTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+	public TaskInstance getTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("getTaskInstance({})", taskInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		TaskInstance result = wm.getTaskInstance(token, taskInstanceId);
+		TaskInstance result = wm.getTaskInstance(taskInstanceId);
 		log.debug("getTaskInstance: {}", result);
 		return result;
 	}
 
 	@Override
-	public void setTaskInstanceActorId(String token, long taskInstanceId, String actorId) throws 
-			RepositoryException {
+	public void setTaskInstanceActorId(long taskInstanceId, String actorId) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("setTaskInstanceActorId({})", taskInstanceId, actorId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.setTaskInstanceActorId(token, taskInstanceId, actorId);
+		wm.setTaskInstanceActorId(taskInstanceId, actorId);
 		log.debug("setTaskInstanceActorId: void");
 	}
 
 	@Override
-	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, Object value)
-			throws RepositoryException {
+	public void addTaskInstanceVariable(long taskInstanceId, String name, Object value) throws 
+			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("addTaskInstanceVariable({}, {}, {})", new Object[] { taskInstanceId, name, value });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTaskInstanceVariable(token, taskInstanceId, name, value);
+		wm.addTaskInstanceVariable(taskInstanceId, name, value);
 		log.debug("addTaskInstanceVariable: void");
 	}
 
 	@Override
-	public void removeTaskInstanceVariable(String token, long taskInstanceId, String name) throws 
-			RepositoryException {
+	public void removeTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("removeTaskInstanceVariable({}, {})", taskInstanceId, name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.removeTaskInstanceVariable(token, taskInstanceId, name);
+		wm.removeTaskInstanceVariable(taskInstanceId, name);
 		log.debug("removeTaskInstanceVariable: void");
 	}
 
 	@Override
-	public void startTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+	public void startTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("startTaskInstance({})", taskInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.startTaskInstance(token, taskInstanceId);
+		wm.startTaskInstance(taskInstanceId);
 		log.debug("startTaskInstance: void");
 	}
 
 	@Override
-	public void endTaskInstance(String token, long taskInstanceId, String transitionName) throws 
-			RepositoryException {
+	public void endTaskInstance(long taskInstanceId, String transitionName) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("endTaskInstance({})", taskInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.endTaskInstance(token, taskInstanceId, transitionName);
+		wm.endTaskInstance(taskInstanceId, transitionName);
 		log.debug("endTaskInstance: void");
 	}
 
 	@Override
-	public void suspendTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+	public void suspendTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("suspendTaskInstance({})", taskInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendTaskInstance(token, taskInstanceId);
+		wm.suspendTaskInstance(taskInstanceId);
 		log.debug("suspendTaskInstance: void");
 	}
 
 	@Override
-	public void resumeTaskInstance(String token, long taskInstanceId) throws RepositoryException {
+	public void resumeTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("resumeTaskInstance({})", taskInstanceId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeTaskInstance(token, taskInstanceId);
+		wm.resumeTaskInstance(taskInstanceId);
 		log.debug("resumeTaskInstance: void");
 	}
 
 	@Override
-	public Token getToken(String token, long tokenId) throws RepositoryException {
+	public Token getToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("getToken({})", tokenId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Token result = wm.getToken(token, tokenId);
+		Token result = wm.getToken(tokenId);
 		log.debug("getToken: "+result);
 		return result;
 	}
 
 	@Override
-	public void addTokenComment(String token, long tokenId, String message) throws RepositoryException {
+	public void addTokenComment(long tokenId, String message) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("addTokenComment({}, {})", tokenId, message);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTokenComment(token, tokenId, message);
+		wm.addTokenComment(tokenId, message);
 		log.debug("addTokenComment: void");
 	}
 
 	@Override
-	public void suspendToken(String token, long tokenId) throws RepositoryException {
+	public void suspendToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("suspendToken({})", tokenId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendToken(token, tokenId);
+		wm.suspendToken(tokenId);
 		log.debug("suspendToken: void");
 	}
 
 	@Override
-	public void resumeToken(String token, long tokenId) throws RepositoryException {
+	public void resumeToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("resumeToken({})", tokenId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeToken(token, tokenId);
+		wm.resumeToken(tokenId);
 		log.debug("resumeToken: void");
 	}
 
 	@Override
-	public Token sendTokenSignal(String token, long tokenId, String transitionName) throws 
-			RepositoryException {
+	public Token sendTokenSignal(long tokenId, String transitionName) throws RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("sendTokenSignal({}, {})", tokenId, transitionName);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Token result = wm.sendTokenSignal(token, tokenId, transitionName);
+		Token result = wm.sendTokenSignal(tokenId, transitionName);
 		log.debug("sendTokenSignal: {}", result);
 		return result;
 	}
 
 	@Override
-	public void setTokenNode(String token, long tokenId, String nodeName) throws RepositoryException {
+	public void setTokenNode(long tokenId, String nodeName) throws RepositoryException, DatabaseException,
+			WorkflowException {
 		log.debug("setTokenNode({})", tokenId, nodeName);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.setTokenNode(token, tokenId, nodeName);
+		wm.setTokenNode(tokenId, nodeName);
 		log.debug("setTokenNode: void");
 	}
 }

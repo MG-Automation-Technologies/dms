@@ -77,6 +77,7 @@ public class ErrorCode {
 	public static final String CAUSE_QuotaExceed 				= "023";
 	public static final String CAUSE_DatabaseException			= "024";
 	public static final String CAUSE_PrincipalAdapterException	= "025";
+	public static final String CAUSE_WorkflowException			= "026";
 
 	/**
 	 * Gets the error

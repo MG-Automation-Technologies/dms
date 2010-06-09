@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMWorkflow;
-import com.openkm.core.RepositoryException;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.WorkflowException;
 
 /**
  * Workflow graphic servlet
@@ -22,7 +23,6 @@ public class WorkflowGraphServlet extends BaseServlet {
 		
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
-		String token = (String) req.getSession().getAttribute("token");
 		long id = Long.parseLong(req.getParameter("id"));
 		String node = req.getParameter("node");
 		ServletOutputStream sos = resp.getOutputStream();
@@ -33,7 +33,7 @@ public class WorkflowGraphServlet extends BaseServlet {
 		
 		try {
 			// Get image
-			byte[] data = OKMWorkflow.getInstance().getProcessDefinitionImage(token, id, node);
+			byte[] data = OKMWorkflow.getInstance().getProcessDefinitionImage(id, node);
 						
 			if (data != null) {
 				// Disable browser cache
@@ -50,8 +50,10 @@ public class WorkflowGraphServlet extends BaseServlet {
 				resp.setContentType("text/plain");
 				sos.write("Null process definition image".getBytes());
 			}
-		} catch (RepositoryException e) {
-			e.printStackTrace();
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		} catch (Exception e) {
