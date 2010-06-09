@@ -14,14 +14,14 @@
 	if (action != null && !action.equals("")) {
 		if (action.equals("start") && id != null && !id.equals("")) {
 			HashMap<String, Object> variables = new HashMap<String, Object>();
-			ProcessInstance pi = OKMWorkflow.getInstance().runProcessDefinition(token, Long.parseLong(id), variables);
+			ProcessInstance pi = OKMWorkflow.getInstance().runProcessDefinition(Long.parseLong(id), variables);
 			response.sendRedirect("wf_procins.jsp?id="+pi.getId());
 		} else if (action.equals("delete") && id != null && !id.equals("")) {
-			OKMWorkflow.getInstance().deleteProcessDefinition(token, Long.parseLong(id));
+			OKMWorkflow.getInstance().deleteProcessDefinition(Long.parseLong(id));
 			response.sendRedirect("wf_processes.jsp");
 		}
 	} else {
-		pageContext.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions(token));
+		pageContext.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions());
 	}
 	
 	pageContext.setAttribute("mimeAccept", Config.mimeAccept);
