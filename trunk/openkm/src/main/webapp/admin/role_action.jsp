@@ -1,4 +1,3 @@
-<%@ page import="com.openkm.core.SessionManager"%>
 <%@ page import="com.openkm.util.UserActivity"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.dao.AuthDAO"%>
@@ -23,12 +22,7 @@
 		Session jcrSession = null;
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				jcrSession = SessionManager.getInstance().get(token);
-			} else {
-				jcrSession = JCRUtils.getSession();
-			}
-			
+			jcrSession = JCRUtils.getSession();
 			request.setCharacterEncoding("UTF-8");
 			String action = request.getParameter("action");
 			String rol_id = request.getParameter("rol_id") != null?request.getParameter("rol_id"):"";
@@ -49,9 +43,7 @@
 		} catch (DatabaseException e) {
 			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(jcrSession);
-			}
+			JCRUtils.logout(jcrSession);
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
