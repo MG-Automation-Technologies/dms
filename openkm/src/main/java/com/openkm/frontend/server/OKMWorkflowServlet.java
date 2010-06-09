@@ -35,8 +35,10 @@ import com.openkm.bean.form.FormElement;
 import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.WorkflowException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTProcessDefinition;
@@ -62,16 +64,20 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException {
 		log.debug("findLatestProcessDefinitions()");
 		List<GWTProcessDefinition> processDefinitionList = new ArrayList<GWTProcessDefinition>();
-		String token = getToken();
 		
 		try {
-			for (Iterator<ProcessDefinition> it = OKMWorkflow.getInstance().findLatestProcessDefinitions(token).iterator(); it.hasNext();) {
+			for (Iterator<ProcessDefinition> it = OKMWorkflow.getInstance().findLatestProcessDefinitions().iterator(); it.hasNext();) {
 				processDefinitionList.add(Util.copy(it.next()));
 			}
-
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("findLatestProcessDefinitions: {}", processDefinitionList);
@@ -82,16 +88,20 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException  {
 		log.debug("runProcessDefinition()");
 		variables.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, UUID);
-		String token = getToken();
 		
 		try {
-			OKMWorkflow.getInstance().runProcessDefinition(token, new Double(id).longValue(), variables);
-
+			OKMWorkflow.getInstance().runProcessDefinition(new Double(id).longValue(), variables);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
-		
+				
 		log.debug("runProcessDefinition: void");
 	}
 	
@@ -99,16 +109,20 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException {
 		log.debug("findUserTaskInstances()");
 		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
-		String token = getToken();
 		
 		try {
-			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances(token).iterator(); it.hasNext();) {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances().iterator(); it.hasNext();) {
 				taskInstances.add(Util.copy(it.next()));
 			}
-			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("findUserTaskInstances: {}", taskInstances);
@@ -119,16 +133,20 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException {
 		log.debug("findPooledTaskInstances()");
 		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
-		String token = getToken();
 		
 		try {
-			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances(token).iterator(); it.hasNext();) {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances().iterator(); it.hasNext();) {
 				taskInstances.add(Util.copy(it.next()));
 			}
-			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("findPooledTaskInstances: {}", taskInstances);
@@ -139,10 +157,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public Map<String, List<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
 		log.debug("getProcessDefinitionForms()");
 		Map<String, List<GWTFormElement>> formElementList = new HashMap<String, List<GWTFormElement>>();
-		String token = getToken();
 		
 		try {
-			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(token, new Double(id).longValue());
+			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(new Double(id).longValue());
 			
 			for (Iterator<String> it= list.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
@@ -159,8 +176,13 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
-
 		
 		log.debug("getProcessDefinitionForms: {}", formElementList);
 		return formElementList;
@@ -169,13 +191,18 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
-		String token = getToken();
 	
 		try {
-			OKMWorkflow.getInstance().setTaskInstanceValues(token, new Double(id).longValue(), transitionName, values);
+			OKMWorkflow.getInstance().setTaskInstanceValues(new Double(id).longValue(), transitionName, values);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("setTaskInstanceValues: void");
@@ -184,13 +211,18 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void addComment(double tokenId, String message) throws OKMException {
 		log.debug("addComment({}, {})", tokenId, message);
-		String token = getToken();
 
 		try {
-			OKMWorkflow.getInstance().addTokenComment(token, new Double(tokenId).longValue(), message);
+			OKMWorkflow.getInstance().addTokenComment(new Double(tokenId).longValue(), message);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("addComment: void");
@@ -199,13 +231,18 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void setTaskInstanceActorId(double id) throws OKMException {
 		log.debug("setTaskInstanceActorId({})", id);
-		String token = getToken();
 	
 		try {
-			OKMWorkflow.getInstance().setTaskInstanceActorId(token, new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
+			OKMWorkflow.getInstance().setTaskInstanceActorId(new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
 		}
 		
 		log.debug("setTaskInstanceActorId: void");

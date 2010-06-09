@@ -22,8 +22,9 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMWorkflow;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
-import com.openkm.core.RepositoryException;
+import com.openkm.core.WorkflowException;
 
 /**
  * Register workflow Servlet
@@ -35,7 +36,6 @@ public class RegisterWorkflowServlet extends BaseServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
 			ServletException, IOException {
-		String token = (String) request.getSession().getAttribute("token");
 		String fileName = null;
 		byte[] content = null;
 		PrintWriter out = null;
@@ -66,7 +66,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					log.info("Upload file: {}", fileName);
 					InputStream is = new ByteArrayInputStream(content);
 					ZipInputStream zis = new ZipInputStream(is);
-					OKMWorkflow.getInstance().registerProcessDefinition(token, zis);
+					OKMWorkflow.getInstance().registerProcessDefinition(zis);
 					zis.close();
 					is.close();
 				}
@@ -76,7 +76,10 @@ public class RegisterWorkflowServlet extends BaseServlet {
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
-		} catch (RepositoryException e) {
+		} catch (WorkflowException e) {
+			log.error(e.getMessage(), e);
+			throw new ServletException(e.getMessage());
+		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage());
 		} catch (IOException e) {
