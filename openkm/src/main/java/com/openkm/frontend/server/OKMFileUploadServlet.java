@@ -153,7 +153,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					log.info("Folder create: {}", path);
 					Folder fld = new Folder();
 					fld.setPath(path+"/"+folder);
-					OKMFolder.getInstance().create(token, fld);
+					OKMFolder.getInstance().create(fld);
 					out.print(returnOKMessage);
 				}
 				

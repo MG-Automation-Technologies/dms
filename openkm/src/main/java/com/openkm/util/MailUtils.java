@@ -218,7 +218,7 @@ public class MailUtils {
 					if (!okmRepository.hasNode(token, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(token, fld);
+						okmFolder.create(fld);
 					}
 					
 					path += "/"+(receivedDate.get(Calendar.MONTH)+1);
@@ -226,7 +226,7 @@ public class MailUtils {
 					if (!okmRepository.hasNode(token, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(token, fld);
+						okmFolder.create(fld);
 					}
 					
 					path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
@@ -234,7 +234,7 @@ public class MailUtils {
 					if (!okmRepository.hasNode(token, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(token, fld);
+						okmFolder.create(fld);
 					}
 					
 					com.openkm.bean.Mail mail = new com.openkm.bean.Mail();

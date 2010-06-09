@@ -21,11 +21,13 @@
 
 package com.openkm.module.ejb;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.openkm.bean.ContentInfo;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
@@ -33,54 +35,69 @@ import com.openkm.core.RepositoryException;
 
 public class EJBFolderModule implements com.openkm.module.FolderModule {
 
-	public Folder create(String token, Folder fld) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
+	@Override
+	public void copy(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Folder create(Folder fld) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, RepositoryException {
+	@Override
+	public void delete(String fldPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<Folder> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void delete(String token, String fldPath) throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void purge(String token, String fldPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
+	@Override
+	public ContentInfo getContentInfo(String fldPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void copy(String token, String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, RepositoryException {
+	@Override
+	public Folder getProperties(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException, RepositoryException, PathNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException, RepositoryException {
+	@Override
+	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
+	public void move(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void purge(String fldPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Folder rename(String fldPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -311,7 +311,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		
 		if (request.getSession().getAttribute("stats") != null && node.isNodeType(Folder.TYPE)) {
 			try {
-				ci = OKMFolder.getInstance().getContentInfo(null, node.getPath());
+				ci = OKMFolder.getInstance().getContentInfo(node.getPath());
 			} catch (AccessDeniedException e) {
 				log.warn(e.getMessage(), e);
 			} catch (com.openkm.core.RepositoryException e) {

@@ -61,7 +61,6 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.module.FolderModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -190,9 +189,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder create(String token, Folder fld) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("create({}, {})", token, fld);
+	public Folder create(Folder fld) throws AccessDeniedException, RepositoryException, 
+			PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("create({})", fld);
 		Folder newFolder = null;
 		Node parentNode = null;
 		Session session = null;
@@ -202,12 +201,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String parent = FileUtils.getParent(fld.getPath());
 			String name = FileUtils.getName(fld.getPath());
 			parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -243,9 +237,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("create: {}", newFolder);
@@ -253,19 +245,14 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder getProperties(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException {
-		log.debug("getProperties({}, {})", token, fldPath);
+	public Folder getProperties(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getProperties({})", fldPath);
 		Folder fld = null;
 		Session session = null;
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);				
-			} else {
-				session = JCRUtils.getSession();
-			}
-
+			session = JCRUtils.getSession();
 			fld = getProperties(session, fldPath);
 			
 			// Activity log
@@ -287,18 +274,13 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void delete(String token, String fldPath) throws AccessDeniedException, RepositoryException, 
+	public void delete(String fldPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("delete({}, {})", token, fldPath);
+		log.debug("delete({})", fldPath);
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);	
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String name = FileUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
@@ -404,9 +386,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void purge(String token, String fldPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("purge({}, {})", token, fldPath);
+	public void purge(String fldPath) throws AccessDeniedException, RepositoryException, 
+			PathNotFoundException, DatabaseException {
+		log.debug("purge({})", fldPath);
 		Node parentNode = null;
 		Session session = null;
 		
@@ -415,12 +397,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null; 
 			
@@ -458,9 +435,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("purge: void");
@@ -503,9 +478,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[] { token, fldPath, newName });
+	public Folder rename(String fldPath, String newName) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("rename({}, {})", fldPath, newName);
 		Folder renamedFolder = null;
 		Session session = null;
 		
@@ -514,12 +489,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String parent = FileUtils.getParent(fldPath);
 			String name = FileUtils.getName(fldPath);
 							
@@ -563,9 +533,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("rename: {}", renamedFolder);
@@ -573,9 +541,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
+	public void move(String fldPath, String dstPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("move({}, {})", fldPath, dstPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -583,12 +551,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String name = FileUtils.getName(fldPath);
 			session.move(fldPath, dstPath+"/"+name);
 			session.save();
@@ -612,18 +575,16 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("move: void");	
 	}
 	
 	@Override
-	public void copy(String token, String fldPath, String dstPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, IOException, DatabaseException {
-		log.debug("copy({}, {}, {})", new Object[] { token, fldPath, dstPath });
+	public void copy(String fldPath, String dstPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, IOException, DatabaseException {
+		log.debug("copy({}, {})", fldPath, dstPath);
 		//Transaction t = null;
 		XASession session = null;
 		
@@ -632,12 +593,7 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = (XASession) SessionManager.getInstance().get(token);
-			} else {
-				session = (XASession) JCRUtils.getSession();
-			}
-			
+			session = (XASession) JCRUtils.getSession();
 			String name = FileUtils.getName(fldPath);
 			//t = new Transaction(session);
 			//t.start();
@@ -675,9 +631,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.rollback();
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("copy: void");
@@ -711,19 +665,14 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException {
-		log.debug("findChilds({}, {})", token, fldPath);
+	public List<Folder> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("findChilds({})", fldPath);
 		List<Folder> childs = new ArrayList<Folder>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -753,19 +702,14 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("getContentInfo({}, {})", token, fldPath);
+	public ContentInfo getContentInfo(String fldPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("getContentInfo({})", fldPath);
 		ContentInfo contentInfo = new ContentInfo();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			contentInfo = getContentInfoHelper(folderNode);
 			
@@ -834,19 +778,14 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("isValid({}, {})", token, fldPath);
+	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException {
+		log.debug("isValid({})", fldPath);
 		boolean valid = false;
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node node = session.getRootNode().getNode(fldPath.substring(1));
 			
 			if (node.isNodeType(Folder.TYPE)) {
