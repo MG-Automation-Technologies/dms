@@ -30,14 +30,8 @@ import javax.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.SessionInfo;
-import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
-import com.openkm.module.direct.DirectAuthModule;
-import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 
 /**
@@ -56,25 +50,21 @@ public class SessionListener implements HttpSessionListener {
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		log.debug("Session destroyed on {} with id {}", new Date(), se.getSession().getId());
+		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				String token = (String) se.getSession().getAttribute("token");
-				SessionInfo si = SessionManager.getInstance().getInfo(token);
-				
-				if (si != null) {
-					// Activity log
-					Session system = DirectRepositoryModule.getSystemSession();
-					UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
-					new DirectAuthModule().logout();
-				}
+			session = JCRUtils.getSession();
+			
+			if (session != null) {
+				// Activity log
+				UserActivity.log(session.getUserID(), "SESSION_EXPIRATION", se.getSession().getId(), null);
 			}
-		} catch (AccessDeniedException e) {
-			log.error(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.warn(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
+			log.warn(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
 		}
 	}
 }
