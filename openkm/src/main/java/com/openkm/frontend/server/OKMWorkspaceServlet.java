@@ -68,7 +68,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		}
 		
 		workspace.setUser(getThreadLocalRequest().getRemoteUser());
-		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		workspace.setAppVersion(WarUtils.getAppVersion().toString());
 		workspace.setWorkflowRunConfigForm(Config.WORKFLOW_RUN_CONFIG_FORM);
 		workspace.setWorkflowProcessIntanceVariableUUID(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
@@ -111,6 +110,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setBookmarkMenuVisible(true);
 		workspace.setToolsMenuVisible(true);
 		workspace.setHelpMenuVisible(true);
+		
+		// Tab visibility
+		workspace.setDesktopTabVisible(false);
+		workspace.setSearchTabVisible(true);
+		workspace.setDashboardTabVisible(false);
+		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();

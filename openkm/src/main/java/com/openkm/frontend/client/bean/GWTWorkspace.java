@@ -65,6 +65,9 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean toolsMenuVisible = false;
 	private boolean bookmarkMenuVisible = false;
 	private boolean helpMenuVisible = false;
+	private boolean desktopTabVisible = false;
+	private boolean searchTabVisible = false;
+	private boolean dashboardTabVisible = false;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
@@ -351,5 +354,29 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setHelpMenuVisible(boolean helpMenuVisible) {
 		this.helpMenuVisible = helpMenuVisible;
+	}
+	
+	public boolean isDesktopTabVisible() {
+		return desktopTabVisible;
+	}
+
+	public void setDesktopTabVisible(boolean desktopTabVisible) {
+		this.desktopTabVisible = desktopTabVisible;
+	}
+
+	public boolean isSearchTabVisible() {
+		return searchTabVisible;
+	}
+
+	public void setSearchTabVisible(boolean searchTabVisible) {
+		this.searchTabVisible = searchTabVisible;
+	}
+
+	public boolean isDashboardTabVisible() {
+		return dashboardTabVisible;
+	}
+
+	public void setDashboardTabVisible(boolean dashboardTabVisible) {
+		this.dashboardTabVisible = dashboardTabVisible;
 	}
 }

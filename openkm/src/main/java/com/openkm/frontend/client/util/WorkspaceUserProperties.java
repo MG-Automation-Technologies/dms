@@ -97,12 +97,6 @@ public class WorkspaceUserProperties {
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
 			
-			// Show administration menu on admin user
-			if (result.isAdmin()) {
-				Main.get().mainPanel.topPanel.mainMenu.administration.setVisible(true);
-				Main.get().mainPanel.topPanel.tabWorkspace.enableAdministration();
-			}
-			
 			// Starting schedulers
 			Main.get().startUp.startKeepAlive(workspace.getKeepAliveSchedule());
 			Main.get().mainPanel.dashboard.startRefreshingDashboard(workspace.getDashboardSchedule());
@@ -122,6 +116,30 @@ public class WorkspaceUserProperties {
 			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
+			
+			// Showing tabs
+			boolean refreshTab = false;
+			if (workspace.isDesktopTabVisible()) {
+				Main.get().mainPanel.topPanel.tabWorkspace.showDesktop();
+				refreshTab = true;
+			}
+			if (workspace.isSearchTabVisible()) {
+				Main.get().mainPanel.topPanel.tabWorkspace.showSearh();
+				refreshTab = true;
+			}
+			if (workspace.isDashboardTabVisible()) {
+				Main.get().mainPanel.topPanel.tabWorkspace.showDashboard();
+				refreshTab = true;
+			}
+			if (result.isAdmin()) {
+				Main.get().mainPanel.topPanel.mainMenu.administration.setVisible(true);
+				Main.get().mainPanel.topPanel.tabWorkspace.showAdministration();
+				refreshTab = true;
+			}
+			if (refreshTab) {
+				Main.get().mainPanel.topPanel.tabWorkspace.init();
+			}
+			
 			
 			// showing stack
 			boolean refreshStack = false;
