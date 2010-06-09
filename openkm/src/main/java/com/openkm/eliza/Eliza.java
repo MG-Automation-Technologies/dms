@@ -57,14 +57,13 @@ public class Eliza {
 	}
 
 	public String getResponse(String userInput) {
-		// Clean the user-input.
 		String cleanedInput = cleanInput(userInput);
-		// Convert to upper-case.
 		String upperInput = userInput.toUpperCase();
 		String retVal;
-		if (upperInput.equals(previousInput))
+		
+		if (upperInput.equals(previousInput)) {
 			retVal = getRepeatString();
-		else {
+		} else {
 			previousInput = upperInput;
 			retVal = cleanOutput(elizaComments.getAnswer(cleanedInput));
 		}
