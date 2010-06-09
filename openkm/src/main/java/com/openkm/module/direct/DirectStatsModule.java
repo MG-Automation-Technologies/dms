@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.StatsModule;
@@ -94,7 +93,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
+			if (session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
@@ -143,7 +142,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
+			if (session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
@@ -202,7 +201,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER && session != DirectRepositoryModule.getSystemSession()) {
+			if (session != DirectRepositoryModule.getSystemSession()) {
 				JCRUtils.logout(session);
 			}
 		}
