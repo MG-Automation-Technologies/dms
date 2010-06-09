@@ -33,17 +33,17 @@
 				} else {
 					transition = null;
 				}
-				OKMWorkflow.getInstance().sendTokenSignal(token, Long.parseLong(id), transition);
+				OKMWorkflow.getInstance().sendTokenSignal(Long.parseLong(id), transition);
 				response.sendRedirect("wf_token.jsp?id="+id);
 			} else if (action.equals("move") && id != null && !id.equals("") && node != null && !node.equals("")) {
 				node = new String(node.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().setTokenNode(token, Long.parseLong(id), node);
+				OKMWorkflow.getInstance().setTokenNode(Long.parseLong(id), node);
 				response.sendRedirect("wf_token.jsp?id="+id);
 			} else {
 				response.sendRedirect("wf_token.jsp?id="+id);
 			}
 		} else {
-			Token t = OKMWorkflow.getInstance().getToken(token, Long.parseLong(id));
+			Token t = OKMWorkflow.getInstance().getToken(Long.parseLong(id));
 			ProcessInstance pi = t.getProcessInstance();
 			ProcessDefinition pd = pi.getProcessDefinition();
 			out.println("<table>");
