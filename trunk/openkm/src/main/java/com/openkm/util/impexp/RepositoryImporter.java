@@ -50,15 +50,15 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository.
 	 */
-	public static ImpExpStats importDocuments(String token, File fs, String fldPath, Writer out, 
-			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, 
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		log.debug("importDocuments({}, {}, {}, {})", new Object[] { token, fs, fldPath, deco });
+	public static ImpExpStats importDocuments(File fs, String fldPath, Writer out, InfoDecorator deco) 
+			throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("importDocuments({}, {}, {})", new Object[] { fs, fldPath, deco });
 		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
-				stats = importDocumentsHelper(token, fs, fldPath, out, deco);
+				stats = importDocumentsHelper(fs, fldPath, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -92,10 +92,10 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository (recursive).
 	 */
-	private static ImpExpStats importDocumentsHelper(String token, File fs, String fldPath, 
-			Writer out, InfoDecorator deco) throws FileNotFoundException, PathNotFoundException,
-			AccessDeniedException, ItemExistsException, RepositoryException, IOException, DatabaseException {
-		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fs, fldPath, out, deco });
+	private static ImpExpStats importDocumentsHelper(File fs, String fldPath, Writer out, InfoDecorator deco)
+			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, ItemExistsException,
+			RepositoryException, IOException, DatabaseException {
+		log.debug("importDocumentsHelper({}, {}, {}, {})", new Object[] { fs, fldPath, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
 		
@@ -106,7 +106,7 @@ public class RepositoryImporter {
 				
 				try {
 					ModuleManager.getFolderModule().create(fld);
-					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
+					ImpExpStats tmp = importDocumentsHelper(files[i], fld.getPath(), out, deco);
 					
 					// Stats
 					stats.setOk(stats.isOk() && tmp.isOk());
