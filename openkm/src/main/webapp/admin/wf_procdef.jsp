@@ -23,21 +23,21 @@
 	
 	if (action != null && !action.equals("")) {
 		if (action.equals("resume") && id != null && !id.equals("") && iid != null && !iid.equals("")) {
-			OKMWorkflow.getInstance().resumeProcessInstance(token, Long.parseLong(iid));
+			OKMWorkflow.getInstance().resumeProcessInstance(Long.parseLong(iid));
 			response.sendRedirect("wf_procdef.jsp?id="+id);
 		} else if (action.equals("suspend") && id != null && !id.equals("") && iid != null && !iid.equals("")) {
-			OKMWorkflow.getInstance().suspendProcessInstance(token, Long.parseLong(iid));
+			OKMWorkflow.getInstance().suspendProcessInstance(Long.parseLong(iid));
 			response.sendRedirect("wf_procdef.jsp?id="+id);
 		} else if (action.equals("end") && id != null && !id.equals("") && iid != null && !iid.equals("")) {
 			response.sendRedirect("wf_procdef.jsp?id="+id);
 		} else if (action.equals("delete") && id != null && !id.equals("") && iid != null && !iid.equals("")) {
-			OKMWorkflow.getInstance().deleteProcessInstance(token, Long.parseLong(iid));
+			OKMWorkflow.getInstance().deleteProcessInstance(Long.parseLong(iid));
 			response.sendRedirect("wf_procdef.jsp?id="+id);
 		}
 	} else {
-		pageContext.setAttribute("pd", OKMWorkflow.getInstance().getProcessDefinition(token, Long.parseLong(id)));
-		pageContext.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(token, Long.parseLong(id)));
-		pageContext.setAttribute("processDefinitionForms", OKMWorkflow.getInstance().getProcessDefinitionForms(token, Long.parseLong(id)));
+		pageContext.setAttribute("pd", OKMWorkflow.getInstance().getProcessDefinition(Long.parseLong(id)));
+		pageContext.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(Long.parseLong(id)));
+		pageContext.setAttribute("processDefinitionForms", OKMWorkflow.getInstance().getProcessDefinitionForms(Long.parseLong(id)));
 	}
 	
 	pageContext.setAttribute("mimeAccept", Config.mimeAccept);
