@@ -54,7 +54,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.TwitterAccountDAO;
 import com.openkm.dao.bean.TwitterAccount;
 import com.openkm.module.NotificationModule;
@@ -67,9 +66,9 @@ public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
 	
 	@Override
-	public synchronized void subscribe(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("subscribe({}, {})", token, nodePath);
+	public synchronized void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("subscribe({})", nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -79,12 +78,7 @@ public class DirectNotificationModule implements NotificationModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -130,18 +124,16 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("subscribe: void");
 	}
 	
 	@Override
-	public synchronized void unsubscribe(String token, String nodePath) throws PathNotFoundException,
+	public synchronized void unsubscribe(String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("unsubscribe({}, {})", token, nodePath);
+		log.debug("unsubscribe({})", nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -151,12 +143,7 @@ public class DirectNotificationModule implements NotificationModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -196,28 +183,21 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("unsubscribe: void");
 	}
 	
 	@Override
-	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getSusbcriptions({}, {})", token, nodePath);
+	public List<String> getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("getSusbcriptions({})", nodePath);
 		List<String> users = new ArrayList<String>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 			
 			if (node.isNodeType(Notification.TYPE)) {
@@ -244,20 +224,15 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public void notify(String token, String nodePath, List<String> users, String message) throws
-			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
+	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		Session session = null;
 		
 		if (!users.isEmpty()) {
 			try {
-				if (Config.SESSION_MANAGER) {
-					session = SessionManager.getInstance().get(token);
-				} else {
-					session = JCRUtils.getSession();
-				}
-				
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
+				session = JCRUtils.getSession();
 				List<String> emails = new DirectAuthModule().getMails(users);
 				
 				// Get session user email address
@@ -297,9 +272,7 @@ public class DirectNotificationModule implements NotificationModule {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				if (!Config.SESSION_MANAGER) {
-					JCRUtils.logout(session);
-				}
+				JCRUtils.logout(session);
 			}
 		}
 
