@@ -85,7 +85,7 @@ public class JCRUtils {
 		log.debug("importFolder("+token+", "+root+", "+directory+")");
 		Folder fld = new Folder();
 		fld.setPath(root+"/"+directory.getName());
-		Folder newFolder = OKMFolder.getInstance().create(token, fld);
+		Folder newFolder = OKMFolder.getInstance().create(fld);
 		log.info("Create folder '" + directory.getName() + 
 				"' in '" + root + " -> " + newFolder.getPath()+"'");
 		File[] files = directory.listFiles();

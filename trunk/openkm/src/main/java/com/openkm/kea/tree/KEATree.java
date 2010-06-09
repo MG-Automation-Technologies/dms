@@ -65,14 +65,14 @@ public class KEATree {
 	 * @throws IOException
 	 * @throws IOException
 	 */
-	public static void generateTree(String token, int levelToDraw, String parentPath,
-			Vector<String> parentUIDs, Writer out) throws IOException {
-		gnerateTreeHelper(null, 0, token, levelToDraw, parentPath, parentUIDs, out);
+	public static void generateTree(int levelToDraw, String parentPath, Vector<String> parentUIDs,
+			Writer out) throws IOException {
+		gnerateTreeHelper(null, 0, levelToDraw, parentPath, parentUIDs, out);
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void gnerateTreeHelper(String termID, int level, String token, int levelToDraw,
-			String parentPath, Vector<String> parentUIDs, Writer out) throws IOException {
+	private static void gnerateTreeHelper(String termID, int level, int levelToDraw, String parentPath,
+			Vector<String> parentUIDs, Writer out) throws IOException {
 		List<Term> lisTerms = getParentTerms(termID);
 		if (level <= levelToDraw) {
 			out.write("Founded " + lisTerms.size() + " terms in level " + level + "<br>");
@@ -89,13 +89,13 @@ public class KEATree {
 				path += "/" + term.getText();
 				Folder folder = new Folder();
 				folder.setPath(path);
-				OKMFolder.getInstance().create(token, folder);
+				OKMFolder.getInstance().create(folder);
 				// To solve infinite loop (nodes must not be in a infinite
 				// cycle)
 				if (!newParentUIDs.contains(term.getUid())) {
 					newParentUIDs.add(term.getUid());
 					// Recursive generation
-					gnerateTreeHelper(term.getUid(), level + 1, token, levelToDraw, path, newParentUIDs, out);
+					gnerateTreeHelper(term.getUid(), level + 1, levelToDraw, path, newParentUIDs, out);
 				}
 			} catch (PathNotFoundException e) {
 				log.error("path not found", e);

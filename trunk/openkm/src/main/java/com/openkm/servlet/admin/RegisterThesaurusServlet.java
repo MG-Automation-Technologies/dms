@@ -40,7 +40,6 @@ public class RegisterThesaurusServlet extends BaseServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
-		String token = (String) request.getSession().getAttribute("token");
 		int level = (request.getParameter("level") != null && !request.getParameter("level").equals("")) ? Integer
 				.parseInt(request.getParameter("level"))
 				: 0;
@@ -61,7 +60,7 @@ public class RegisterThesaurusServlet extends BaseServlet {
 			out.write("It'll be displayed creation information while creating nodes until level "
 					+ (level + 1) + ", please be patient because tree deep level could be big.<br><br>");
 			out.flush();
-			KEATree.generateTree(token, level, "/okm:thesaurus", new Vector<String>(), out);
+			KEATree.generateTree(level, "/okm:thesaurus", new Vector<String>(), out);
 			out.write("<br><b>Finished thesaurus creation.</b><br>");
 		} else {
 			out.write("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");

@@ -81,7 +81,6 @@ public class HandlerServlet extends HttpServlet {
 			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
 		log.info("browse({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String token = (String) request.getSession().getAttribute("token");
 		String userId = request.getRemoteUser();
 		String path = request.getParameter("path");
 		
@@ -90,8 +89,8 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(token, path));
-		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(token, path));
+		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(path));
+		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(null, path));
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/browse.jsp").forward(request, response);
@@ -104,7 +103,6 @@ public class HandlerServlet extends HttpServlet {
 			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
 		log.info("fldProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String token = (String) request.getSession().getAttribute("token");
 		String path = request.getParameter("path");
 		
 		if (path == null || path.equals("")) {
@@ -112,7 +110,7 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(token, path));
+		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(path));
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/fld-properties.jsp").forward(request, response);
 	}

@@ -105,7 +105,7 @@ public class RepositoryImporter {
 				fld.setPath(fldPath + "/" + files[i].getName());
 				
 				try {
-					ModuleManager.getFolderModule().create(token, fld);
+					ModuleManager.getFolderModule().create(fld);
 					ImpExpStats tmp = importDocumentsHelper(token, files[i], fld.getPath(), out, deco);
 					
 					// Stats

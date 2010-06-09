@@ -76,7 +76,7 @@ public class Populate {
 							//log.info("Create folder: {}", path);
 							Folder fld = new Folder();
 							fld.setPath(path);
-							okmFolder.create(token, fld);
+							okmFolder.create(fld);
 						}
 					}
 					

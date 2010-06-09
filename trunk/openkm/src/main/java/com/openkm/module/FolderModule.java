@@ -38,7 +38,6 @@ public interface FolderModule {
 	/**
 	 * Create a new folder in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fld A folder object with the new folder properties.
 	 * @return A folder object with the new created folder properties.
 	 * @throws PathNotFoundException If the parent folder doesn't exist.
@@ -48,26 +47,24 @@ public interface FolderModule {
 	 * you can't modify the parent folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder create(String token, Folder fld) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
+	public Folder create(Folder fld) throws PathNotFoundException, ItemExistsException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created folder.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder. 
 	 * @return A folder object with the selected folder properties.
 	 * @throws PathNotFoundException If the indicated folder doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getProperties(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException;
+	public Folder getProperties(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Delete a folder the repository. It is a logical delete,
 	 * so really is moved to the user trash and can be restored.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.  
 	 * @throws LockException Can't delete a folder with locked documents.
 	 * @throws PathNotFoundException If there is no folder in the repository in this path.
@@ -75,14 +72,13 @@ public interface FolderModule {
 	 * you can't modify the folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void delete(String token, String fldPath) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void delete(String fldPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Deletes definitively a folder from the repository. It is a phisical delete, so
 	 * the folder can't be restored.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.  
 	 * @throws LockException Can't delete a folder with locked documents.
 	 * @throws PathNotFoundException If there is no folder in the repository in this path.
@@ -90,13 +86,12 @@ public interface FolderModule {
 	 * you can't modify the folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void purge(String token, String fldPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void purge(String fldPath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Rename a folder in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.  
 	 * @param newName The new folder name.
 	 * @return A folder object with the new folder properties.
@@ -107,14 +102,12 @@ public interface FolderModule {
 	 * you can't modify the folder because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder rename(String token, String fldPath, String newName) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, DatabaseException;
+	public Folder rename(String fldPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Move a folder to another location in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.
 	 * @param dstPath The path of the destination folder.
 	 * @throws PathNotFoundException If the dstPath does not exists.
@@ -125,14 +118,12 @@ public interface FolderModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void move(String token, String fldPath, String dstPath) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, DatabaseException;
+	public void move(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Copy a folder to another location in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.
 	 * @param dstPath The path of the destination folder.
 	 * @throws PathNotFoundException If the dstPath does not exists.
@@ -143,26 +134,23 @@ public interface FolderModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void copy(String token, String fldPath, String dstPath) throws 
-			PathNotFoundException, ItemExistsException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException;
+	public void copy(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, IOException, DatabaseException;
 
 	/**
 	 * Retrieve a list of child folders from an existing one.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.
 	 * @return A Collection with the child folders.
 	 * @throws PathNotFoundException If there is no folder in the repository in this path
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException;
+	public List<Folder> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Retrive the content info of the folder: number of folders, number of documents, and total size.
 	 * 
-	 * @param token The session authorization token
 	 * @param fldPath The path that identifies an unique folder.
 	 * @return A ContentInfo with the number of folder, number of documents and total size.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -170,13 +158,12 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public ContentInfo getContentInfo(String token, String fldPath) throws 
-		AccessDeniedException, RepositoryException, PathNotFoundException, DatabaseException;
+	public ContentInfo getContentInfo(String fldPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException;
 	
 	/**
 	 * Test if a folder path is valid.
 	 * 
-	 * @param token String with user authorization info.
 	 * @param fldPath The path that identifies an unique folder.
 	 * @return True if is a valid folder path, otherwise false.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -184,6 +171,6 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public boolean isValid(String token, String fldPath) throws 
-		PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 }

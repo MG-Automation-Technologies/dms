@@ -57,11 +57,11 @@ public class OKMFolder {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#create(java.lang.String, com.openkm.bean.Folder)
 	 */
-	public Folder create(String token, Folder fld) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("create({}, {})", token, fld);
+	public Folder create(Folder fld) throws AccessDeniedException, RepositoryException, 
+			PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("create({})", fld);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder newFolder = fm.create(token, fld);
+		Folder newFolder = fm.create(fld);
 		log.debug("create: {}", newFolder);
 		return newFolder;
 	}
@@ -69,11 +69,11 @@ public class OKMFolder {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#getProperties(java.lang.String, java.lang.String)
 	 */
-	public Folder getProperties(String token, String fldPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("getProperties({}, {})", token, fldPath);
+	public Folder getProperties(String fldPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("getProperties({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder fld = fm.getProperties(token, fldPath);
+		Folder fld = fm.getProperties(fldPath);
 		log.debug("getProperties: {}", fld);
 		return fld;
 	}
@@ -81,22 +81,22 @@ public class OKMFolder {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
 	 */
-	public void delete(String token, String fldPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("delete({}, {})", token, fldPath);
+	public void delete(String fldPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("delete({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		fm.delete(token, fldPath);
+		fm.delete(fldPath);
 		log.debug("delete: void");
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public Folder rename(String token, String fldPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {})", token, fldPath);
+	public Folder rename(String fldPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("rename({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder renamedFolder = fm.rename(token, fldPath, newName);
+		Folder renamedFolder = fm.rename(fldPath, newName);
 		log.debug("rename: {}", renamedFolder);
 		return renamedFolder;
 	}
@@ -104,23 +104,23 @@ public class OKMFolder {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void move(String token, String fldPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
+	public void move(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("move({}, {})", fldPath, dstPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		fm.move(token, fldPath, dstPath);
+		fm.move(fldPath, dstPath);
 		log.debug("move: void");
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
 	 */
-	public FolderArray getChilds(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
-		log.debug("getChilds({}, {})", token, fldPath);
+	public FolderArray getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getChilds({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		FolderArray fa = new FolderArray();
-		Collection<Folder> col = fm.getChilds(token, fldPath);
+		Collection<Folder> col = fm.getChilds(fldPath);
 		fa.setValue((Folder []) col.toArray(new Folder[col.size()]));
 		log.debug("getChilds: {}", fa);
 		return fa;
@@ -129,11 +129,11 @@ public class OKMFolder {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
 	 */
-	public boolean isValid(String token, String fldPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("isValid({} {})", token, fldPath);
+	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("isValid({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		boolean valid = fm.isValid(token, fldPath);
+		boolean valid = fm.isValid(fldPath);
 		log.debug("isValid: {}", valid);
 		return valid;
 	}

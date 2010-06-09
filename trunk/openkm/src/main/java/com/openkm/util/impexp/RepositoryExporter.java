@@ -129,7 +129,7 @@ public class RepositoryExporter {
 		}
 
 		FolderModule fm = ModuleManager.getFolderModule();
-		for (Iterator<Folder> it = fm.getChilds(token, fldPath).iterator(); it.hasNext();) {
+		for (Iterator<Folder> it = fm.getChilds(fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
 			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, out, deco);
 			

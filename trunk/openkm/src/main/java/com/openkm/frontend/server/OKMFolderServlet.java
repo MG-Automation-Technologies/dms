@@ -61,13 +61,12 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public GWTFolder create(String fldPath, String fldPathParent) throws OKMException {
 		log.debug("create({}, {})", fldPath, fldPathParent);
-		String token = getToken();
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder = new Folder();
 		folder.setPath(fldPathParent+"/"+fldPath);
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().create(token, folder));
+			gWTFolder = Util.copy(OKMFolder.getInstance().create(folder));
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -95,10 +94,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void delete(String fldPath) throws OKMException {
 		log.debug("delete({})", fldPath);
-		String token = getToken();
 		
 		try {
-			OKMFolder.getInstance().delete(token, fldPath);
+			OKMFolder.getInstance().delete(fldPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -126,11 +124,10 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	public List<GWTFolder> getChilds(String fldPath) throws OKMException {
 		log.debug("getFolderChilds({})", fldPath);
 		List<GWTFolder> folderList = new ArrayList<GWTFolder>(); 
-		String token = getToken();
 		
 		try {
 			log.debug("ParentFolder: {}", fldPath);
-			Collection<Folder> col = OKMFolder.getInstance().getChilds(token, fldPath);
+			Collection<Folder> col = OKMFolder.getInstance().getChilds(fldPath);
 			for (Iterator<Folder> it = col.iterator(); it.hasNext();){				
 				Folder folder = it.next();
 				GWTFolder gWTFolder = Util.copy(folder);
@@ -159,11 +156,10 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public GWTFolder rename(String fldId, String newName)  throws OKMException  {
 		log.debug("rename({}, {})", fldId, newName);
-		String token = getToken();
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().rename(token, fldId, newName));
+			gWTFolder = Util.copy(OKMFolder.getInstance().rename(fldId, newName));
 		} catch (ItemExistsException e){
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -191,10 +187,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void move(String fldPath, String dstPath) throws OKMException {
 		log.debug("move({}, {})", fldPath, dstPath);
-		String token = getToken();
 		
 		try {
-			OKMFolder.getInstance().move(token, fldPath, dstPath);
+			OKMFolder.getInstance().move(fldPath, dstPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -221,10 +216,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void purge(String fldPath) throws OKMException {
 		log.debug("purge({})", fldPath);
-		String token = getToken();
 		
 		try {
-			OKMFolder.getInstance().purge(token, fldPath);
+			OKMFolder.getInstance().purge(fldPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -248,11 +242,10 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public GWTFolder getProperties(String fldPath) throws OKMException {
 		log.debug("getProperties({})", fldPath);
-		String token = getToken();
 		GWTFolder gWTFolder = new GWTFolder();
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().getProperties(token, fldPath));
+			gWTFolder = Util.copy(OKMFolder.getInstance().getProperties(fldPath));
 		} catch (PathNotFoundException e ){
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -274,10 +267,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void copy(String fldPath, String dstPath) throws OKMException {
 		log.debug("copy({}, {})", fldPath, dstPath);
-		String token = getToken();
-		
+	
 		try {
-			OKMFolder.getInstance().copy(token, fldPath, dstPath);
+			OKMFolder.getInstance().copy(fldPath, dstPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -304,10 +296,9 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public Boolean isValid(String fldPath) throws OKMException {
 		log.debug("isValid({})", fldPath);
-		String token = getToken();
-		
+	
 		try {
-			return Boolean.valueOf(OKMFolder.getInstance().isValid(token, fldPath));
+			return Boolean.valueOf(OKMFolder.getInstance().isValid(fldPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
