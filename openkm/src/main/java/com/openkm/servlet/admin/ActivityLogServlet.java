@@ -86,8 +86,14 @@ public class ActivityLogServlet extends BaseServlet {
 				
 				// Activity log
 				UserActivity.log(request.getRemoteUser(), "ADMIN_ACTIVITY_LOG", null, null);
+			} else {
+				sc.setAttribute("results", null);
 			}
 			
+			sc.setAttribute("dbeginFilter", dbegin);
+			sc.setAttribute("dendFilter", dend);
+			sc.setAttribute("userFilter", user);
+			sc.setAttribute("actionFilter", action);
 			sc.setAttribute("actions", actions);
 			sc.setAttribute("users", OKMAuth.getInstance().getUsers());
 			sc.getRequestDispatcher("/admin/activity_log.jsp").forward(request, response);

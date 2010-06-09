@@ -26,7 +26,7 @@
   &nbsp;
   <a target="frame" href="report.jsp"><img src="img/toolbar/report.png" title="Reports"></a>
   &nbsp;
-  <a target="frame" href="activity_log.jsp"><img src="img/toolbar/activity.png" title="Activity log"></a>
+  <a target="frame" href="ActivityLog"><img src="img/toolbar/activity.png" title="Activity log"></a>
   &nbsp;
   <a target="frame" href="wf_processes.jsp"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
