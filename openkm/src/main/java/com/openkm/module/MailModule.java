@@ -38,7 +38,6 @@ public interface MailModule {
 	/**
 	 * Create a new mail in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mail A mail object with the new mail properties.
 	 * @return A mail object with the new created mail properties.
 	 * @throws PathNotFoundException If the parent mail doesn't exist.
@@ -48,26 +47,24 @@ public interface MailModule {
 	 * you can't modify the parent mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Mail create(String token, Mail mail) throws PathNotFoundException, ItemExistsException,
-			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException;
+	public Mail create(Mail mail) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created mail.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail. 
 	 * @return A mail object with the selected mail properties.
 	 * @throws PathNotFoundException If the indicated mail doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Mail getProperties(String token, String mailPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException;
+	public Mail getProperties(String mailPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Delete a mail the repository. It is a logical delete,
 	 * so really is moved to the user trash and can be restored.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail.  
 	 * @throws LockException Can't delete a mail with locked documents.
 	 * @throws PathNotFoundException If there is no mail in the repository in this path.
@@ -75,14 +72,13 @@ public interface MailModule {
 	 * you can't modify the mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void delete(String mailPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Deletes definitively a mail from the repository. It is a physical delete, so
 	 * the mail can't be restored.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail.  
 	 * @throws LockException Can't delete a mail with locked documents.
 	 * @throws PathNotFoundException If there is no mail in the repository in this path.
@@ -90,13 +86,12 @@ public interface MailModule {
 	 * you can't modify the mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void purge(String token, String mailPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void purge(String mailPath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Rename a mail in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail.  
 	 * @param newName The new mail name.
 	 * @return A mail object with the new mail properties.
@@ -107,13 +102,12 @@ public interface MailModule {
 	 * you can't modify the mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
+	public Mail rename(String mailPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Move a mail to another location in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail.
 	 * @param dstPath The path of the destination mail.
 	 * @throws PathNotFoundException If the dstPath does not exists.
@@ -124,13 +118,12 @@ public interface MailModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void move(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Copy a mail to another location in the repository.
 	 * 
-	 * @param token The session authorization token.
 	 * @param mailPath The path that identifies an unique mail.
 	 * @param dstPath The path of the destination mail.
 	 * @throws PathNotFoundException If the dstPath does not exists.
@@ -141,31 +134,29 @@ public interface MailModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException;
+	public void copy(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, IOException, DatabaseException;
 
 	/**
 	 * Retrieve a list of child mails from an existing folder.
 	 * 
-	 * @param token The session authorization token.
 	 * @param fldPath The path that identifies an unique folder.
 	 * @return A Collection with the child folders.
 	 * @throws PathNotFoundException If there is no folder in the repository in this path
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException;
+	public List<Mail> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Test if a mail path is valid.
 	 * 
-	 * @param token String with user authorization info.
 	 * @param mailPath The path that identifies an unique mail.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this mail because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no mail in the repository with this path.
 	 */
-	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public boolean isValid(String mailPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 }

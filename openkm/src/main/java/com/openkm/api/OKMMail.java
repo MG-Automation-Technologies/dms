@@ -53,87 +53,87 @@ public class OKMMail implements MailModule {
 	}
 	
 	@Override
-	public Mail create(String token, Mail mail) throws PathNotFoundException, ItemExistsException, 
-			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException {
+	public Mail create(Mail mail) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("create({})", mail);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail newMail = mm.create(token, mail);
+		Mail newMail = mm.create(mail);
 		log.debug("create: {}", newMail);
 		return newMail;
 	}
 	
 	@Override
-	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException {
+	public Mail getProperties(String mailPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getProperties({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail mail = mm.getProperties(token, mailPath);
+		Mail mail = mm.getProperties(mailPath);
 		log.debug("getProperties: {}", mail);
 		return mail;
 	}
 	
 	@Override
-	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void delete(String mailPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("delete({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.delete(token, mailPath);
+		mm.delete(mailPath);
 		log.debug("delete: void");
 	}
 
 	@Override
-	public void purge(String token, String mailPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void purge(String mailPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("purge({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.purge(token, mailPath);
+		mm.purge(mailPath);
 		log.debug("purge: void");
 	}
 	
 	@Override
-	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+	public Mail rename(String mailPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {})", mailPath,  newName);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail renamedMail = mm.rename(token, mailPath, newName);
+		Mail renamedMail = mm.rename(mailPath, newName);
 		log.debug("rename: {}", renamedMail);
 		return renamedMail;
 	}
 	
 	@Override
-	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void move(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.move(token, mailPath, dstPath);
+		mm.move(mailPath, dstPath);
 		log.debug("move: void");
 	}
 
 	@Override
-	public void copy(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
+	public void copy(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("copy({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.copy(token, mailPath, dstPath);
+		mm.copy(mailPath, dstPath);
 		log.debug("copy: void");
 	}
 	
 	@Override
-	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public List<Mail> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		MailModule mm = ModuleManager.getMailModule();
-		List<Mail> childs = mm.getChilds(token, fldPath);
+		List<Mail> childs = mm.getChilds(fldPath);
 		log.debug("getChilds: {}", childs);
 		return childs;
 	}
 	
 	@Override
-	public boolean isValid(String token, String mailPath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public boolean isValid(String mailPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("isValid({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		boolean valid = mm.isValid(token, mailPath);
+		boolean valid = mm.isValid(mailPath);
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
