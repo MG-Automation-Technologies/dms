@@ -48,42 +48,38 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@Override
-	public void addCategory(String token, String nodePath, String category)	throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void addCategory(String nodePath, String category)	throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addCategory(token, nodePath, category);
+		pm.addCategory(nodePath, category);
 		log.debug("addCategory: void");
 	}
 
 	@Override
-	public void removeCategory(String token, String nodePath, String category) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void removeCategory(String nodePath, String category) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeCategory({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeCategory(token, nodePath, category);
+		pm.removeCategory(nodePath, category);
 		log.debug("removeCategory: void");
 	}
 
 	@Override
-	public void addKeyword(String token, String nodePath, String keyword) throws VersionException, 
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void addKeyword(String nodePath, String keyword) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addKeyword(token, nodePath, keyword);
+		pm.addKeyword(nodePath, keyword);
 		log.debug("addKeyword: void");
 	}
 
 	@Override
-	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void removeKeyword(String nodePath, String keyword) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("removeKeyword({})", nodePath);
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeKeyword(token, nodePath, keyword);
+		pm.removeKeyword(nodePath, keyword);
 		log.debug("removeKeyword: void");
 	}
 }

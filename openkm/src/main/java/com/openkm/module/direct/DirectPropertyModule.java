@@ -38,7 +38,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.core.VersionException;
 import com.openkm.module.PropertyModule;
 import com.openkm.util.JCRUtils;
@@ -48,10 +47,9 @@ public class DirectPropertyModule implements PropertyModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyModule.class);
 
 	@Override
-	public void addCategory(String token, String nodePath, String category)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
+	public void addCategory(String nodePath, String category) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addCategory({}, {})", nodePath, category);
 		Node documentNode = null;
 		Session session = null;
 		
@@ -60,12 +58,7 @@ public class DirectPropertyModule implements PropertyModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
@@ -118,19 +111,16 @@ public class DirectPropertyModule implements PropertyModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("addCategory: void");
 	}
 
 	@Override
-	public void removeCategory(String token, String nodePath, String category)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
+	public void removeCategory(String nodePath, String category) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeCategory({}, {})", nodePath, category);
 		Node documentNode = null;
 		Session session = null;
 		
@@ -139,12 +129,7 @@ public class DirectPropertyModule implements PropertyModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			boolean removed = false;
 			
@@ -195,19 +180,16 @@ public class DirectPropertyModule implements PropertyModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("removeCategory: void");
 	}
 
 	@Override
-	public void addKeyword(String token, String nodePath, String keyword)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
+	public void addKeyword(String nodePath, String keyword) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addKeyword({}, {})", nodePath, keyword);
 		Node documentNode = null;
 		Session session = null;
 		
@@ -216,12 +198,7 @@ public class DirectPropertyModule implements PropertyModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
@@ -273,19 +250,16 @@ public class DirectPropertyModule implements PropertyModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("addKeyword: void");
 	}
 
 	@Override
-	public void removeKeyword(String token, String nodePath, String keyword)
-			throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
+	public void removeKeyword(String nodePath, String keyword) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeKeyword({}, {})", nodePath, keyword);
 		Node documentNode = null;
 		Session session = null;
 		
@@ -294,12 +268,7 @@ public class DirectPropertyModule implements PropertyModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			boolean removed = false;
 			

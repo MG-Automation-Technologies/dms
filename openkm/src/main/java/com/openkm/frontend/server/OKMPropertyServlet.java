@@ -52,9 +52,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void addCategory(String nodePath, String category) throws OKMException {
 		log.debug("addCategory({}, {})", nodePath, category);
-		String token = getToken();
+
 		try {
-			OKMProperty.getInstance().addCategory(token, nodePath, category);
+			OKMProperty.getInstance().addCategory(nodePath, category);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -80,9 +80,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void removeCategory(String nodePath, String category) throws OKMException {
 		log.debug("removeCategory({}, {})", nodePath, category);
-		String token = getToken();
+
 		try {
-			OKMProperty.getInstance().removeCategory(token, nodePath, category);
+			OKMProperty.getInstance().removeCategory(nodePath, category);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -108,9 +108,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void addKeyword(String nodePath, String keyword) throws OKMException {
 		log.debug("addKeyword({}, {})", nodePath, keyword);
-		String token = getToken();
+
 		try {
-			OKMProperty.getInstance().addKeyword(token, nodePath, keyword);
+			OKMProperty.getInstance().addKeyword(nodePath, keyword);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -136,9 +136,9 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void removeKeyword(String nodePath, String keyword) throws OKMException {
 		log.debug("removeKeyword({}, {})", nodePath, keyword);
-		String token = getToken();
+
 		try {
-			OKMProperty.getInstance().removeKeyword(token, nodePath, keyword);
+			OKMProperty.getInstance().removeKeyword(nodePath, keyword);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
