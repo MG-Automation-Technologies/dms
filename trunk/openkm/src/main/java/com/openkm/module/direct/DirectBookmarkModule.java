@@ -76,8 +76,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 			UserActivity.log(session.getUserID(), "BOOKMARK_ADD", name, nodePath);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
 		} finally {
 			JCRUtils.logout(session);
 		}
@@ -103,8 +101,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 			UserActivity.log(session.getUserID(), "BOOKMARK_REMOVE", Integer.toString(bmId), null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
 		} finally {
 			JCRUtils.logout(session);
 		}
@@ -133,8 +129,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 			UserActivity.log(session.getUserID(), "BOOKMARK_RENAME", Integer.toString(bmId), newName);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
 		} finally {
 			JCRUtils.logout(session);
 		}
@@ -157,8 +151,6 @@ public class DirectBookmarkModule implements BookmarkModule {
 			UserActivity.log(session.getUserID(), "BOOKMARK_GET_ALL", null, null);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw e;
 		} finally {
 			JCRUtils.logout(session);
 		}
