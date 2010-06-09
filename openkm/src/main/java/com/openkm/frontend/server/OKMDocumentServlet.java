@@ -36,7 +36,6 @@ import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
 import com.openkm.api.OKMSearch;
 import com.openkm.bean.Document;
-import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
@@ -45,6 +44,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTVersion;
@@ -99,7 +99,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				}
 			} else {
 				log.debug("ParentFolder: {}", fldPath);
-				Collection<Document> col = OKMDocument.getInstance().getChilds(token, fldPath);
+				Collection<Document> col = OKMDocument.getInstance().getChilds(fldPath);
 				
 				for (Iterator<Document> it = col.iterator(); it.hasNext();) {		
 					Document doc = it.next();
@@ -132,10 +132,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	public List<GWTVersion> getVersionHistory (String docPath) throws OKMException {
 		log.debug("getVersionHistory({})", docPath);
 		List<GWTVersion> versionList = new ArrayList<GWTVersion>(); 
-		String token = getToken();
-		
+	
 		try {
-			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(token, docPath);
+			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(docPath);
 			
 			for (Iterator<Version> it = col.iterator(); it.hasNext();){		
 				Version version = it.next();
@@ -164,10 +163,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void delete(String docPath) throws OKMException {
 		log.debug("delete({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().delete(token, docPath);
+			OKMDocument.getInstance().delete(docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -194,10 +192,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void checkout(String docPath) throws OKMException {
 		log.debug("checkout({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().checkout(token, docPath);
+			OKMDocument.getInstance().checkout(docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -224,10 +221,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void cancelCheckout(String docPath) throws OKMException {
 		log.debug("cancelCheckout({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().cancelCheckout(token, docPath);
+			OKMDocument.getInstance().cancelCheckout(docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -254,10 +250,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void lock(String docPath) throws OKMException {
 		log.debug("lock({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().lock(token, docPath);
+			OKMDocument.getInstance().lock(docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -284,10 +279,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void unlock(String docPath) throws OKMException {
 		log.debug("lock({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().unlock(token, docPath);
+			OKMDocument.getInstance().unlock(docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_UnLock), e.getMessage());
@@ -314,11 +308,10 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public GWTDocument rename(String docPath, String newName) throws OKMException {
 		log.debug("rename({}, {})", docPath, newName);
-		String token = getToken();		
 		GWTDocument gWTDocument = new GWTDocument();
 		
 		try {
-			gWTDocument = Util.copy(OKMDocument.getInstance().rename(token, docPath, newName));
+			gWTDocument = Util.copy(OKMDocument.getInstance().rename(docPath, newName));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -346,10 +339,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void move(String docPath, String destPath) throws OKMException {
 		log.debug("move({}, {})", docPath, destPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().move(token,docPath,destPath);
+			OKMDocument.getInstance().move(docPath, destPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -376,10 +368,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void purge(String docPath) throws OKMException {
 		log.debug("purge({})", docPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().purge(token,docPath);
+			OKMDocument.getInstance().purge(docPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -403,10 +394,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void restoreVersion(String docPath, String versionId) throws OKMException {
 		log.debug("restoreVersion({}, {})", docPath, versionId);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().restoreVersion(token, docPath, versionId);
+			OKMDocument.getInstance().restoreVersion(docPath, versionId);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -430,11 +420,10 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public GWTDocument get(String docPath) throws OKMException {
 		log.debug("get({})", docPath);
-		String token = getToken();
 		GWTDocument gWTDocument = new GWTDocument();
 		
 		try {
-			gWTDocument = Util.copy(OKMDocument.getInstance().getProperties(token, docPath));
+			gWTDocument = Util.copy(OKMDocument.getInstance().getProperties(docPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -453,10 +442,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void copy(String docPath, String fldPath) throws OKMException {
 		log.debug("copy({}, {})", docPath, fldPath);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().copy(token, docPath, fldPath);
+			OKMDocument.getInstance().copy(docPath, fldPath);
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -486,10 +474,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public Boolean isValid(String docPath) throws OKMException {
 		log.debug("isValid({})", docPath);
-		String token = getToken();
 		
 		try {
-			return new Boolean(OKMDocument.getInstance().isValid(token, docPath));
+			return new Boolean(OKMDocument.getInstance().isValid(docPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -511,10 +498,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public Long getVersionHistorySize(String docPath) throws OKMException {
 		log.debug("getVersionHistorySize({})", docPath);
-		String token = getToken();
 	
 		try {
-			return new Long(OKMDocument.getInstance().getVersionHistorySize(token, docPath));			
+			return new Long(OKMDocument.getInstance().getVersionHistorySize(docPath));			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -530,10 +516,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void purgeVersionHistory(String docPath) throws OKMException {
 		log.debug("purgeVersionHistory({})", docPath);
-		String token = getToken();
 	
 		try {
-			OKMDocument.getInstance().purgeVersionHistory(token, docPath);			
+			OKMDocument.getInstance().purgeVersionHistory(docPath);			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -557,10 +542,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void addNote(String docPath, String text) throws OKMException {
 		log.debug("addNote({}, {})", docPath, text);
-		String token = getToken();
 		
 		try {
-			OKMDocument.getInstance().addNote(token, docPath, text);
+			OKMDocument.getInstance().addNote(docPath, text);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

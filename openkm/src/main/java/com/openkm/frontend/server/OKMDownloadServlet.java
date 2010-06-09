@@ -111,15 +111,15 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 				is = new FileInputStream(tmp);
 			} else {
 				OKMDocument okmDoc = OKMDocument.getInstance();
-				doc = okmDoc.getProperties(token, path);
+				doc = okmDoc.getProperties(path);
 				pdfCache = new File(Config.PDF_CACHE+File.separator+doc.getUuid()+".pdf");
 				swfCache = new File(Config.SWF_CACHE+File.separator+doc.getUuid()+".swf");
 				
 				if (!toSwf || toSwf && !Config.SYSTEM_PDF2SWF.equals("") && !swfCache.exists() || !toPdf || toPdf && !pdfCache.exists()) {
 					if (ver != null && !ver.equals("")) {
-						is = okmDoc.getContentByVersion(token, path, ver);
+						is = okmDoc.getContentByVersion(path, ver);
 					} else {
-						is = okmDoc.getContent(token, path, checkout != null);
+						is = okmDoc.getContent(path, checkout != null);
 					}
 				}
 			}

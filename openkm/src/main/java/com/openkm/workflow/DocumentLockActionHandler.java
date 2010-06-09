@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMDocument;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
-import com.openkm.core.SessionManager;
 
 /**
  * @author pavila
@@ -45,19 +44,13 @@ public class DocumentLockActionHandler implements ActionHandler {
 	public DocumentLockActionHandler() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jbpm.graph.def.ActionHandler#execute(org.jbpm.graph.exe.ExecutionContext)
-	 */
+	@Override
 	public void execute(ExecutionContext ctx) throws Exception {
 		String path = (String)ctx.getContextInstance().getVariable("path");
 		log.info("Path: "+path);
-		String token = SessionManager.getInstance().getSystemToken();
-		log.info("Token: "+token);
 		
 		try {
-			OKMDocument.getInstance().lock(token, path);
+			OKMDocument.getInstance().lock(path);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage());
 		} catch (LockException e) {

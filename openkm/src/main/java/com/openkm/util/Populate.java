@@ -109,7 +109,7 @@ public class Populate {
 										log.info("Create document: {}", docPath);
 										Document doc = new Document();
 										doc.setPath(docPath);
-										okmDocument.create(token, doc, in);
+										okmDocument.create(doc, in);
 									} finally {
 										in.close();
 									}
