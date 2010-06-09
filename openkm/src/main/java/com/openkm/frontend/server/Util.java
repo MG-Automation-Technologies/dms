@@ -467,13 +467,13 @@ public class Util {
 			boolean found = false;
 			
 			// Obtain all group names
-			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups(token);
+			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups();
 			Iterator<PropertyGroup> itGroup = colGroups.iterator();
 			while (itGroup.hasNext() && !found) {
 				PropertyGroup group = itGroup.next();
 				
 				// Obtain all metadata values
-				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(token, group.getName());
+				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(group.getName());
 				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
 					FormElement formElement = it.next();
 					if (formElement.getName().equals(key)) {
