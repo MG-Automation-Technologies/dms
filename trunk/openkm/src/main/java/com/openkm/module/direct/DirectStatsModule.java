@@ -39,7 +39,6 @@ import com.openkm.bean.StatsInfo;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.module.StatsModule;
 import com.openkm.util.JCRUtils;
 
@@ -50,28 +49,24 @@ public class DirectStatsModule implements StatsModule {
 	private static String TAXONOMY_FOLDERS = "/jcr:root/okm:root//element(*,okm:folder)";
 	private static String TEMPLATES_DOCUMENTS = "/jcr:root/okm:templates//element(*,okm:document)";
 	private static String TEMPLATES_FOLDERS = "/jcr:root/okm:templates//element(*,okm:folder)";
-	private static String PERSONAL_DOCUMENTS = "/jcr:root/okm:home/*/okm:personal//element(*,okm:document)";
-	private static String PERSONAL_FOLDERS = "/jcr:root/okm:home/*/okm:personal//element(*,okm:folder)";
-	private static String TRASH_DOCUMENTS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:document)";
-	private static String TRASH_FOLDERS = "/jcr:root/okm:home/*/okm:trash//element(*,okm:folder)";
+	private static String PERSONAL_DOCUMENTS = "/jcr:root/okm:personal//element(*,okm:document)";
+	private static String PERSONAL_FOLDERS = "/jcr:root/okm:personal//element(*,okm:folder)";
+	private static String TRASH_DOCUMENTS = "/jcr:root/okm:trash//element(*,okm:document)";
+	private static String TRASH_FOLDERS = "/jcr:root/okm:trash//element(*,okm:folder)";
 	
 	@Override
-	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException {
-		log.debug("getDocumentsByContext({})", token);
+	public StatsInfo getDocumentsByContext() throws RepositoryException, DatabaseException {
+		log.debug("getDocumentsByContext()");
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				try {
-					session = JCRUtils.getSession();
-				} catch (LoginException e) {
-					session = DirectRepositoryModule.getSystemSession();
-				}
+			try {
+				session = JCRUtils.getSession();
+			} catch (LoginException e) {
+				session = DirectRepositoryModule.getSystemSession();
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -109,22 +104,18 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException {
-		log.debug("getFoldersByContext({})", token);
+	public StatsInfo getFoldersByContext() throws RepositoryException, DatabaseException {
+		log.debug("getFoldersByContext()");
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				try {
-					session = JCRUtils.getSession();
-				} catch (LoginException e) {
-					session = DirectRepositoryModule.getSystemSession();
-				}
+			try {
+				session = JCRUtils.getSession();
+			} catch (LoginException e) {
+				session = DirectRepositoryModule.getSystemSession();
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -172,22 +163,18 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException {
-		log.debug("getDocumentsSizeByContext({})", token);
+	public StatsInfo getDocumentsSizeByContext() throws RepositoryException, DatabaseException {
+		log.debug("getDocumentsSizeByContext()");
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				try {
-					session = JCRUtils.getSession();
-				} catch (LoginException e) {
-					session = DirectRepositoryModule.getSystemSession();
-				}
+			try {
+				session = JCRUtils.getSession();
+			} catch (LoginException e) {
+				session = DirectRepositoryModule.getSystemSession();
 			}
 			
 			Workspace workspace = session.getWorkspace();

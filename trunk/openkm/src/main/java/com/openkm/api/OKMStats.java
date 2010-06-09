@@ -45,28 +45,28 @@ public class OKMStats implements StatsModule {
 	}
 
 	@Override
-	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException {
+	public StatsInfo getDocumentsByContext() throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
-		StatsInfo stats = sm.getDocumentsByContext(token);
+		StatsInfo stats = sm.getDocumentsByContext();
 		log.debug("getDocumentsByContext: {}", stats);
 		return stats;
 	}
 
 	@Override
-	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException {
+	public StatsInfo getDocumentsSizeByContext() throws RepositoryException, DatabaseException {
 		log.debug("getDocumentsSizeByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
-		StatsInfo stats = sm.getDocumentsSizeByContext(token);
+		StatsInfo stats = sm.getDocumentsSizeByContext();
 		log.debug("getDocumentsSizeByContext: {}", stats);
 		return stats;
 	}
 
 	@Override
-	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException {
+	public StatsInfo getFoldersByContext() throws RepositoryException, DatabaseException {
 		log.debug("getFoldersByContext()");
 		StatsModule sm = ModuleManager.getStatsModule();
-		StatsInfo stats = sm.getFoldersByContext(token);
+		StatsInfo stats = sm.getFoldersByContext();
 		log.debug("getFoldersByContext: {}", stats);
 		return stats;
 	}
