@@ -33,44 +33,40 @@ public interface NotificationModule {
 	/**
 	 * Add user subscription to a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void subscribe(String token, String nodePath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove an user subscription from a node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void unsubscribe(String token, String nodePath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void unsubscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get user subscriptions from am item (document or folder).
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @return A Collection of subscribed users.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public List<String> getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Send a notification message to an user list.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @param users Array of users to notify.
 	 * @param message An String with the notification message.
@@ -78,6 +74,6 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void notify(String token, String nodePath, List<String> users, String message) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException;
 }

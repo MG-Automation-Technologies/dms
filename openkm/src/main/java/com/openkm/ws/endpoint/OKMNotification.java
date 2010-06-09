@@ -55,34 +55,34 @@ public class OKMNotification {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
 	 */
-	public void subscribe(String token, String nodePath) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("subscribe({}, {})", token, nodePath);
+	public void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("subscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.subscribe(token, nodePath);
+		nm.subscribe(nodePath);
 		log.debug("subscribe: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
 	 */
-	public void unsubscribe(String token, String nodePath) 
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("unsubscribe({}, {})", token, nodePath);
+	public void unsubscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("unsubscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.unsubscribe(token, nodePath);
+		nm.unsubscribe(nodePath);
 		log.debug("unsubscribe: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
 	 */
-	public StringArray getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getSubscriptors({}, {})", token, nodePath);
+	public StringArray getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		StringArray sa = new StringArray();
-		Collection<String> col = nm.getSubscriptors(token, nodePath);
+		Collection<String> col = nm.getSubscriptors(nodePath);
 		sa.setValue(col.toArray(new String[col.size()]));
 		log.debug("getSubscriptors: {}", sa);
 		return sa;
@@ -91,10 +91,11 @@ public class OKMNotification {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
 	 */
-	public void notify(String token, String nodePath, StringArray users, String message) throws PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
+	public void notify(String nodePath, StringArray users, String message) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.notify(token, nodePath, Arrays.asList(users.getValue()), message);
+		nm.notify(nodePath, Arrays.asList(users.getValue()), message);
 		log.debug("notify: void");
 	}
 }

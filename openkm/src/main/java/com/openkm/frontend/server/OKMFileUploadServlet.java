@@ -162,7 +162,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 				// If the document have been added to the repository, perform user notification
 				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
 					List<String> col = Arrays.asList(users.split(","));
-					OKMNotification.getInstance().notify(token, uploadedDocPath, col, message);
+					OKMNotification.getInstance().notify(uploadedDocPath, col, message);
 				}
 			}
 		} catch (AccessDeniedException e) {

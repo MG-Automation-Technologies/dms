@@ -48,39 +48,39 @@ public class OKMNotification implements NotificationModule {
 	}
 	
 	@Override
-	public void subscribe(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("subscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.subscribe(token, nodePath);
+		nm.subscribe(nodePath);
 		log.debug("subscribe: void");
 	}
 
 	@Override
-	public void unsubscribe(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void unsubscribe(String nodePath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException {
 		log.debug("unsubscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.unsubscribe(token, nodePath);
+		nm.unsubscribe(nodePath);
 		log.debug("unsubscribe: void");
 	}
 
 	@Override
-	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public List<String> getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		List<String> users = nm.getSubscriptors(token, nodePath);
+		List<String> users = nm.getSubscriptors(nodePath);
 		log.debug("getSubscriptors: {}", users);
 		return users;
 	}
 
 	@Override
-	public void notify(String token, String nodePath, List<String> users, String message) throws
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.notify(token, nodePath, users, message);
+		nm.notify(nodePath, users, message);
 		log.debug("notify: void");
 	}
 }

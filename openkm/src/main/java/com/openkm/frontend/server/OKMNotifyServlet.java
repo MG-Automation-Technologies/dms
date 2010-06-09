@@ -53,10 +53,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void subscribe(String nodePath) throws OKMException  {
 		log.debug("subscribe({})", nodePath);
-		String token = getToken();
 		
 		try {
-			OKMNotification.getInstance().subscribe(token, nodePath);
+			OKMNotification.getInstance().subscribe(nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -80,10 +79,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void unsubscribe(String nodePath) throws OKMException {
 		log.debug("subscribe({})", nodePath);
-		String token = getToken();
-		
+	
 		try {
-			OKMNotification.getInstance().unsubscribe(token, nodePath);
+			OKMNotification.getInstance().unsubscribe(nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -107,11 +105,10 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void notify(String docPath, String users, String roles, String message) throws OKMException {
 		log.debug("notify({}, {}, {})", new Object[] { docPath, users, roles, message });
-		String token = getToken();
 		
 		try {
 			List<String> col = Arrays.asList(users.split(","));
-			OKMNotification.getInstance().notify(token, docPath, col, message);
+			OKMNotification.getInstance().notify(docPath, col, message);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
