@@ -1,6 +1,5 @@
 <%@ page import="java.io.File" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager" %>
 <%@ page import="com.openkm.bean.ContentInfo" %>
 <%@ page import="com.openkm.api.OKMFolder" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
@@ -51,12 +50,10 @@
 
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
-				SessionManager sm = SessionManager.getInstance();
-				String token = sm.getTokenByUserId(Config.SYSTEM_USER);
 				out.println("<hr/>");
 				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(repoPath);
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator((int)cInfo.getDocuments()));
+				ImpExpStats stats = RepositoryExporter.exportDocuments(repoPath, new File(fsPath), out, new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Folder '"+repoPath+"' exported to '"+new File(fsPath).getAbsolutePath()+"'</div>");
