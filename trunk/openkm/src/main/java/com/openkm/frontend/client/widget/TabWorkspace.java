@@ -25,7 +25,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
@@ -38,21 +37,20 @@ import com.openkm.frontend.client.panel.ExtendedDockPanel;
 public class TabWorkspace extends Composite {
 	
 	public TabBar tabBar;
-	private boolean enableAdminitration = false;
+	private boolean desktopVisible		= false;
+	private boolean searchVisible 		= false;
+	private boolean dashboardVisible 	= false;
+	private boolean adminitrationVisible = false;
 
 	/**
 	 * Tab Workspace
 	 */
 	public TabWorkspace() {
 		tabBar = new TabBar();
-		tabBar.addTab(Main.i18n("tab.workspace.desktop"));
-		tabBar.addTab(Main.i18n("tab.workspace.search"));
-		tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
-		tabBar.selectTab(0);
 		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				switch (event.getSelectedItem().intValue() ) {
+				switch (indexCorrectedChangeViewIndex(event.getSelectedItem().intValue())) {
 					case ExtendedDockPanel.DESKTOP :
 						Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
 						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
@@ -86,19 +84,19 @@ public class TabWorkspace extends Composite {
 			tabBar.selectTab(0);
 			tabBar.removeTab(0);
 		}
-		
-		tabBar.addTab(Main.i18n("tab.workspace.desktop"));
-		tabBar.addTab(Main.i18n("tab.workspace.search"));
-		tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
-		if (enableAdminitration) {
+		if (desktopVisible) {
+			tabBar.addTab(Main.i18n("tab.workspace.desktop"));
+		}
+		if (searchVisible) {
+			tabBar.addTab(Main.i18n("tab.workspace.search"));
+		}
+		if (dashboardVisible) {
+			tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
+		}
+		if (adminitrationVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.administration"));
 		}
 		tabBar.selectTab(selected);
-	}
-	
-	public void enableAdministration() {
-		enableAdminitration = true;
-		langRefresh();
 	}
 	
 	/**
@@ -107,7 +105,7 @@ public class TabWorkspace extends Composite {
 	 * @return The selected workspace
 	 */
 	public int getSelectedWorkspace() {
-		return tabBar.getSelectedTab();
+		return indexCorrectedChangeViewIndex(tabBar.getSelectedTab());
 	}
 	
 	/**
@@ -136,6 +134,79 @@ public class TabWorkspace extends Composite {
 				tabBar.selectTab(ExtendedDockPanel.ADMINISTRATION);
 				Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
 				break;
+		}
+	}
+	
+	/**
+	 * indexCorrectedChangeViewIndex
+	 * 
+	 * Return index correction made depending visible panels
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public int indexCorrectedChangeViewIndex(int index) {
+		int corrected = index;
+		if (!desktopVisible && corrected>=ExtendedDockPanel.DESKTOP) {
+			corrected++;
+		}
+		if (!searchVisible && corrected>=ExtendedDockPanel.SEARCH) {
+			corrected++;
+		}
+		if (!dashboardVisible && corrected>=ExtendedDockPanel.DASHBOARD) {
+			corrected++;
+		}
+		return corrected;
+	}
+	
+	/**
+	 * showDesktop
+	 */
+	public void showDesktop() {
+		tabBar.addTab(Main.i18n("tab.workspace.desktop"));
+		desktopVisible = true;
+		
+	}
+	
+	/**
+	 * showSearh
+	 */
+	public void showSearh() {
+		tabBar.addTab(Main.i18n("tab.workspace.search"));
+		searchVisible = true;
+	}
+	
+	/**
+	 * showDashboard
+	 */
+	public void showDashboard() {
+		tabBar.addTab(Main.i18n("tab.workspace.dashboard"));
+		dashboardVisible = true;
+	}
+	
+	/**
+	 * showAdministration
+	 */
+	public void showAdministration() {
+		tabBar.addTab(Main.i18n("tab.workspace.administration"));
+		adminitrationVisible = true;
+	}
+	
+	/**
+	 * isDesktopVisible
+	 * 
+	 * @return
+	 */
+	public boolean isDesktopVisible() {
+		return desktopVisible;
+	}
+	
+	/**
+	 * init
+	 */
+	public void init() {
+		if (tabBar.getTabCount()>0) {
+			tabBar.selectTab(0);
 		}
 	}
 }
