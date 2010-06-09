@@ -269,7 +269,7 @@
 				String key_value = FormatUtil.formatObject(vars.get(key));
 				
 				if (key.equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
-					key_value = OKMDocument.getInstance().getPath(token, vars.get(key).toString());
+					key_value = OKMDocument.getInstance().getPath(vars.get(key).toString());
 					key = Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH;
 				}
 				

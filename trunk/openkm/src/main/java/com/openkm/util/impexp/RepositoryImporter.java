@@ -127,7 +127,7 @@ public class RepositoryImporter {
 				boolean docOk = true;
 				
 				try {
-					ModuleManager.getDocumentModule().create(token, doc, fisContent);
+					ModuleManager.getDocumentModule().create(doc, fisContent);
 					
 					// Stats
 					stats.setSize(stats.getSize() + size);

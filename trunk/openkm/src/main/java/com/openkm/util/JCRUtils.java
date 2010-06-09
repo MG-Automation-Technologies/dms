@@ -115,7 +115,7 @@ public class JCRUtils {
 					cal.setTimeInMillis(files[i].lastModified());
 					doc.setKeywords(Arrays.asList(new String[]{"Automatically imported"}));
 					doc.setPath(newFolder.getPath()+"/"+files[i].getName());
-					OKMDocument.getInstance().create(token, doc, fis);
+					OKMDocument.getInstance().create(doc, fis);
 					fis.close();
 				}
 			}

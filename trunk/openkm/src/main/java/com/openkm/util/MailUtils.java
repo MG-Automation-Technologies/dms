@@ -363,7 +363,7 @@ public class MailUtils {
 					attachment.setMimeType(mimeType);
 					attachment.setPath(mail.getPath()+"/"+bp.getFileName());
 					InputStream is = bp.getInputStream();
-					okmDocument.create(token, attachment, is);
+					okmDocument.create(attachment, is);
 					is.close();
 				}
 			}
