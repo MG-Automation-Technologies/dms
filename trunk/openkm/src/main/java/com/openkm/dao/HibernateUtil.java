@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
+
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
  * JBPM Integration => org.jbpm.db.JbpmSessionFactory
@@ -16,11 +18,10 @@ import org.slf4j.LoggerFactory;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static final SessionFactory sessionFactory;
-	private static final boolean SHOW_SQL = true;
 
 	static {
 		try {
-			if (SHOW_SQL) {
+			if (Config.SHOW_SQL) {
 				sessionFactory = new Configuration().configure().setProperty("hibernate.show_sql", "true")
 						.buildSessionFactory();
 			} else {
