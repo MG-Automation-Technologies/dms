@@ -220,9 +220,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getAllGroups: {}", ret);
