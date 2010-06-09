@@ -126,6 +126,7 @@ public class OKMAccessManager implements AccessManager {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isGranted(ItemId id, int permissions)
 			throws ItemNotFoundException, RepositoryException {
 		if (DEBUG) log.debug("isGranted("+ subject.getPrincipals()+ ", "+ id+ ", "
