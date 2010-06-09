@@ -53,11 +53,10 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public String getUpdateMessage() throws OKMException {
 		log.debug("getUpdateMessage()");
-		String token = getToken();
 		String msg = "";
 
 		try {
-			msg = OKMRepository.getInstance().getUpdateMessage(token);
+			msg = OKMRepository.getInstance().getUpdateMessage();
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -73,16 +72,15 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getPersonalFolder() throws OKMException {
 		log.debug("getPersonalFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 				folder = OKMRepository.getInstance().getPersonalFolderBase();
 			} else {
-				folder = OKMRepository.getInstance().getPersonalFolder(token);
+				folder = OKMRepository.getInstance().getPersonalFolder();
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -106,12 +104,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getTemplatesFolder() throws OKMException {
 		log.debug("getTemplateFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
-			folder =  OKMRepository.getInstance().getTemplatesFolder(token);
+			folder =  OKMRepository.getInstance().getTemplatesFolder();
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -134,10 +131,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public void purgeTrash() throws OKMException {
 		log.debug("purgeTrash()");
-		String token = getToken();
 		
 		try {
-			OKMRepository.getInstance().purgeTrash(token);
+			OKMRepository.getInstance().purgeTrash();
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
@@ -158,16 +154,15 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getTrashFolder() throws OKMException {
 		log.debug("getTrashFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 				folder = OKMRepository.getInstance().getTrashFolderBase();
 			} else {
-				folder = OKMRepository.getInstance().getTrashFolder(token);
+				folder = OKMRepository.getInstance().getTrashFolder();
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -191,12 +186,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getRootFolder() throws OKMException {
 		log.debug("getRootFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
-			folder = OKMRepository.getInstance().getRootFolder(token);
+			folder = OKMRepository.getInstance().getRootFolder();
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -219,16 +213,15 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getMailFolder() throws OKMException {
 		log.debug("getMailFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 				folder = OKMRepository.getInstance().getMailFolderBase();
 			} else {
-				folder = OKMRepository.getInstance().getMailFolder(token);
+				folder = OKMRepository.getInstance().getMailFolder();
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -252,12 +245,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getThesaurusFolder() throws OKMException {
 		log.debug("getThesaurusFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
-			folder =  OKMRepository.getInstance().getThesaurusFolder(token);
+			folder = OKMRepository.getInstance().getThesaurusFolder();
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -280,12 +272,11 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTFolder getCategoriesFolder() throws OKMException {
 		log.debug("getCategoriesFolder()");
-		String token = getToken();
-		Folder folder;
 		GWTFolder gWTFolder = new GWTFolder();
+		Folder folder;
 		
 		try {
-			folder =  OKMRepository.getInstance().getCategoriesFolder(token);
+			folder = OKMRepository.getInstance().getCategoriesFolder();
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -308,10 +299,10 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public String getPathByUUID(String uuid) throws OKMException {
 		log.debug("getPathByUUID()");
-		String token = getToken();
 		String path = "";
+		
 		try {
-			path = OKMRepository.getInstance().getPath(token, uuid);
+			path = OKMRepository.getInstance().getPath(uuid);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -321,7 +312,8 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		} 
+		}
+		
 		return path;
 	}
 }
