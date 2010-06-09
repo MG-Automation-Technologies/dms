@@ -55,8 +55,8 @@ public class Config {
 	// Multihost
 	public static final String INSTALL = "";
 	
-	// Session management
-	public static final boolean SESSION_MANAGER = false;
+	// Show hibernate queries
+	public static final boolean SHOW_SQL = false;
 	
 	// Configuration files
 	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
