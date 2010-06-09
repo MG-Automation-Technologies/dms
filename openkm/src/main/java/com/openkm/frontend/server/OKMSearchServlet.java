@@ -67,12 +67,10 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	public List<GWTQueryParams> getAllSearchs() throws OKMException {
 		log.debug("getAllSearchs()");
 		List<GWTQueryParams> resultList = new ArrayList<GWTQueryParams>(); 
-		String token = getToken();
 		
 		try {
-			
-			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs(token).iterator(); it.hasNext();) {		
-				resultList.add(Util.copy(it.next(),token));
+			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs().iterator(); it.hasNext();) {		
+				resultList.add(Util.copy(it.next()));
 			}
 		}  catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -92,11 +90,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException {
 		log.debug("saveSearch({}, {}, {})", new Object[] { params, type });
-		String token = getToken();
 		
 		try {
-			return OKMSearch.getInstance().saveSearch(token, Util.copy(params));
-			
+			return OKMSearch.getInstance().saveSearch(Util.copy(params));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -112,10 +108,9 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public void deleteSearch(int id) throws OKMException {
 		log.debug("deleteSearch()");
-		String token = getToken();
 		
 		try {
-			OKMSearch.getInstance().deleteSearch(token,id);
+			OKMSearch.getInstance().deleteSearch(id);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -137,14 +132,13 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	public GWTResultSet findPaginated(GWTQueryParams params, int offset, int limit) throws OKMException {
 		log.debug("findPaginated({}, {}, {})", new Object[] { params, offset, limit });
 		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
-		String token = getToken();
-		ResultSet results;
 		GWTResultSet gwtResultSet = new GWTResultSet();
 		QueryParams queryParams = new QueryParams();
+		ResultSet results;
 		
 		try {
 			queryParams = Util.copy(params);
-			results = OKMSearch.getInstance().findPaginated(token, queryParams, offset, limit);
+			results = OKMSearch.getInstance().findPaginated(queryParams, offset, limit);
 			
 			for (Iterator<QueryResult> it = results.getResults().iterator(); it.hasNext();) {		
 				QueryResult queryResult = it.next();
@@ -175,16 +169,15 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	
 	@Override
 	public GWTResultSet find(GWTQueryParams params) throws OKMException {
-		log.debug("find()");
+		log.debug("find({})", params);
 		List<GWTQueryResult> resultList = new ArrayList<GWTQueryResult>(); 
-		String token = getToken();
-		Collection<QueryResult> results;
 		GWTResultSet gwtResultSet = new GWTResultSet();
 		QueryParams queryParams = new QueryParams();
+		Collection<QueryResult> results;
 		
 		try {
 			queryParams = Util.copy(params);
-			results = OKMSearch.getInstance().find(token, queryParams);
+			results = OKMSearch.getInstance().find(queryParams);
 			
 			for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
 				QueryResult queryResult = it.next();
@@ -216,14 +209,13 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public List<GWTKeyword> getKeywordMap(List<String> filter) throws OKMException {
 		log.debug("getKeywordMap()");
-		List<GWTKeyword> keyList = new ArrayList<GWTKeyword>();
-		String token = getToken();
-		int countTop10 = 0;
-		int maxValues[] = new int[10];
 		List<GWTKeyword> selectedTop10 = new ArrayList<GWTKeyword>();
+		List<GWTKeyword> keyList = new ArrayList<GWTKeyword>();
+		int maxValues[] = new int[10];
+		int countTop10 = 0;
 		
 		try {
-			Map<String, Integer> keyMap = OKMSearch.getInstance().getKeywordMap(token, filter);
+			Map<String, Integer> keyMap = OKMSearch.getInstance().getKeywordMap(filter);
 			for (Iterator<String> it = keyMap.keySet().iterator(); it.hasNext();)  {
 				String key = it.next();
 				GWTKeyword keyword = new GWTKeyword();

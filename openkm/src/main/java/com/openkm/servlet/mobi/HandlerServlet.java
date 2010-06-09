@@ -142,12 +142,11 @@ public class HandlerServlet extends HttpServlet {
 			ServletException, DatabaseException {
 		log.info("search({}, {})", request, response);
 		ServletContext sc = getServletContext();
-		String token = (String) request.getSession().getAttribute("token");
 		String query = request.getParameter("query");
 						
 		if (query != null && !query.equals("")) {
 			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(token, query));	
+			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(query));	
 		}
 
 		sc.getRequestDispatcher("/mobi/search.jsp").forward(request, response);
