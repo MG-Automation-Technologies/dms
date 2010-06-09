@@ -54,7 +54,7 @@
 				SessionManager sm = SessionManager.getInstance();
 				String token = sm.getTokenByUserId(Config.SYSTEM_USER);
 				out.println("<hr/>");
-				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
+				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(repoPath);
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(token, repoPath, new File(fsPath), out, new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
