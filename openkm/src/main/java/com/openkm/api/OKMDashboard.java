@@ -53,189 +53,189 @@ public class OKMDashboard implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException,
+	public List<DashboardDocumentResult> getUserCheckedOutDocuments() throws RepositoryException,
 			DatabaseException {
 		log.debug("getUserCheckedOutDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserCheckedOutDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserCheckedOutDocuments();
 		log.debug("getUserCheckedOutDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastModifiedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getUserLastModifiedDocuments() throws RepositoryException, 
+			DatabaseException {
 		log.debug("getUserLastModifiedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserLastModifiedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserLastModifiedDocuments();
 		log.debug("getUserLastModifiedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLockedDocuments(String token) throws RepositoryException, 
+	public List<DashboardDocumentResult> getUserLockedDocuments() throws RepositoryException, 
 			DatabaseException {
 		log.debug("getUserLockedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserLockedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserLockedDocuments();
 		log.debug("getUserLockedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException,
+	public List<DashboardDocumentResult> getUserSubscribedDocuments() throws RepositoryException,
 			DatabaseException {
 		log.debug("getUserSubscribedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserSubscribedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserSubscribedDocuments();
 		log.debug("getUserSubscribedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardFolderResult> getUserSubscribedFolders(String token) throws RepositoryException,
+	public List<DashboardFolderResult> getUserSubscribedFolders() throws RepositoryException,
 			DatabaseException {
 		log.debug("getUserSubscribedFolders()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardFolderResult> result = dm.getUserSubscribedFolders(token);
+		List<DashboardFolderResult> result = dm.getUserSubscribedFolders();
 		log.debug("getUserSubscribedFolders: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastUploadedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getUserLastUploadedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLastUploadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserLastUploadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserLastUploadedDocuments();
 		log.debug("getUserLastUploadedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastDownloadedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getUserLastDownloadedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLastDownloadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserLastDownloadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getUserLastDownloadedDocuments();
 		log.debug("getUserLastDownloadedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardMailResult> getUserLastImportedMails(String token) throws RepositoryException,
+	public List<DashboardMailResult> getUserLastImportedMails() throws RepositoryException,
 			DatabaseException {
 		log.debug("getUserLastImportedMails()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardMailResult> result = dm.getUserLastImportedMails(token);
+		List<DashboardMailResult> result = dm.getUserLastImportedMails();
 		log.debug("getUserLastImportedMails: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastImportedMailAttachments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getUserLastImportedMailAttachments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getUserLastImportedMailAttachments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getUserLastImportedMailAttachments(token);
+		List<DashboardDocumentResult> result = dm.getUserLastImportedMailAttachments();
 		log.debug("getUserLastImportedMailAttachments: {}", result);
 		return result;
 	}
 
 	@Override
-	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
+	public long getUserDocumentsSize() throws RepositoryException, DatabaseException {
 		log.debug("getUserDocumentsSize()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		long size = dm.getUserDocumentsSize(token);
+		long size = dm.getUserDocumentsSize();
 		log.debug("getUserDocumentsSize: {}", size);
 		return size;
 	}
 
 	@Override
-	public List<QueryParams> getUserSearchs(String token) throws RepositoryException, DatabaseException {
+	public List<QueryParams> getUserSearchs() throws RepositoryException, DatabaseException {
 		log.debug("getUserSearchs()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<QueryParams> searchs = dm.getUserSearchs(token);
+		List<QueryParams> searchs = dm.getUserSearchs();
 		log.debug("getUserSearchs: {}", searchs);
 		return searchs;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> find(String token, int qpId) throws IOException, ParseException,
+	public List<DashboardDocumentResult> find(int qpId) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("find({})", qpId);
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> documents = dm.find(token, qpId);
+		List<DashboardDocumentResult> documents = dm.find(qpId);
 		log.debug("find: {}", documents);
 		return documents;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getLastWeekTopDownloadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastWeekTopDownloadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastWeekTopDownloadedDocuments();
 		log.debug("getLastWeekTopDownloadedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token)	throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getLastMonthTopDownloadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastMonthTopDownloadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastMonthTopDownloadedDocuments();
 		log.debug("getLastMonthTopDownloadedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getLastWeekTopModifiedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastWeekTopModifiedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastWeekTopModifiedDocuments();
 		log.debug("getLastWeekTopModifiedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments(String token) throws 
-			RepositoryException, DatabaseException {
+	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments() throws RepositoryException,
+			DatabaseException {
 		log.debug("getLastMonthTopModifiedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastMonthTopModifiedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastMonthTopModifiedDocuments();
 		log.debug("getLastMonthTopModifiedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastModifiedDocuments(String token) throws RepositoryException,
+	public List<DashboardDocumentResult> getLastModifiedDocuments() throws RepositoryException,
 			DatabaseException {
 		log.debug("getLastModifiedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastModifiedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastModifiedDocuments();
 		log.debug("getLastModifiedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastUploadedDocuments(String token) throws RepositoryException,
+	public List<DashboardDocumentResult> getLastUploadedDocuments() throws RepositoryException,
 			DatabaseException {
 		log.debug("getLastUploadedDocuments()");
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		List<DashboardDocumentResult> result = dm.getLastUploadedDocuments(token);
+		List<DashboardDocumentResult> result = dm.getLastUploadedDocuments();
 		log.debug("getLastUploadedDocuments: {}", result);
 		return result;
 	}
 
 	@Override
-	public void visiteNode(String token, String source, String node, Calendar date) throws 
-			RepositoryException, DatabaseException {
-		log.debug("visiteNode()");
+	public void visiteNode(String source, String node, Calendar date) throws RepositoryException,
+			DatabaseException {
+		log.debug("visiteNode({}, {}, {})", new Object[] { source, node, date });
 		DashboardModule dm = ModuleManager.getDashboardModule();
-		dm.visiteNode(token, source, node, date);
+		dm.visiteNode(source, node, date);
 		log.debug("visiteNode: void");
 	}	
 }

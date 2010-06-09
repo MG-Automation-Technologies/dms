@@ -53,7 +53,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.ActivityDAO;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.HibernateUtil;
@@ -70,27 +69,20 @@ public class DirectDashboardModule implements DashboardModule {
 	private static final int MAX_RESULTS = 20;
 
 	@Override
-	public List<DashboardDocumentResult> getUserLockedDocuments(String token) throws RepositoryException,
+	public List<DashboardDocumentResult> getUserLockedDocuments() throws RepositoryException,
 			DatabaseException {
-		log.debug("getUserLockedDocuments({})", token);
+		log.debug("getUserLockedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserLockedDocuments(session);
 			log.debug("getUserLockedDocuments: {}", al);
 			return al;
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -110,27 +102,20 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException, 
+	public List<DashboardDocumentResult> getUserCheckedOutDocuments() throws RepositoryException, 
 			DatabaseException {
-		log.debug("getUserCheckedOutDocuments({})", token);
+		log.debug("getUserCheckedOutDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserCheckedOutDocuments(session);
 			log.debug("getUserCheckedOutDocuments: {}", al);
 			return al;
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -150,17 +135,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
-		log.debug("getUserSubscribedDocuments({})", token);
+	public List<DashboardDocumentResult> getUserSubscribedDocuments() throws RepositoryException {
+		log.debug("getUserSubscribedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserSubscribedDocuments(session);
 			log.debug("getUserSubscribedDocuments: {}", al);
 			return al;
@@ -169,9 +149,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -191,17 +169,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
-		log.debug("getUserSubscribedFolders({})", token);
+	public List<DashboardFolderResult> getUserSubscribedFolders() throws RepositoryException {
+		log.debug("getUserSubscribedFolders()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardFolderResult> al = getUserSubscribedFolders(session);
 			log.debug("getUserSubscribedFolders: {}", al);
 			return al;
@@ -210,9 +183,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -296,17 +267,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getUserLastUploadedDocuments(String token) throws RepositoryException {
-		log.debug("getUserLastUploadedDocuments({})", token);
+	public List<DashboardDocumentResult> getUserLastUploadedDocuments() throws RepositoryException {
+		log.debug("getUserLastUploadedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserLastUploadedDocuments(session);
 			log.debug("getUserLastUploadedDocuments: {}", al);
 			return al;
@@ -315,9 +281,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -338,17 +302,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastModifiedDocuments(String token) throws RepositoryException {
-		log.debug("getUserLastModifiedDocuments({})", token);
+	public List<DashboardDocumentResult> getUserLastModifiedDocuments() throws RepositoryException {
+		log.debug("getUserLastModifiedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserLastModifiedDocuments(session);
 			log.debug("getUserLastModifiedDocuments: {}", al);
 			return al;
@@ -357,9 +316,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -381,18 +338,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastDownloadedDocuments(String token)
-			throws RepositoryException {
-		log.debug("getUserLastDownloadedDocuments({})", token);
+	public List<DashboardDocumentResult> getUserLastDownloadedDocuments() throws RepositoryException {
+		log.debug("getUserLastDownloadedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserLastDownloadedDocuments(session);
 			log.debug("getUserLastDownloadedDocuments: {}", al);
 			return al;
@@ -401,9 +352,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -425,18 +374,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardMailResult> getUserLastImportedMails(String token) 
-			throws RepositoryException {
-		log.debug("getUserLastImportedMails({})", token);
+	public List<DashboardMailResult> getUserLastImportedMails() throws RepositoryException {
+		log.debug("getUserLastImportedMails()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardMailResult> al = getUserLastImportedMails(session);
 			log.debug("getUserLastImportedMails: {}", al);
 			return al;
@@ -468,18 +411,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastImportedMailAttachments(String token) 
-			throws RepositoryException {
-		log.debug("getUserLastImportedMailAttachments({})", token);
+	public List<DashboardDocumentResult> getUserLastImportedMailAttachments() throws RepositoryException {
+		log.debug("getUserLastImportedMailAttachments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getUserLastImportedMailAttachments(session);
 			log.debug("getUserLastImportedMailAttachments: {}", al);
 			return al;
@@ -588,14 +525,14 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSize({})", token);
+	public long getUserDocumentsSize() throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSize()");
 		long size = 0;
 		
 		if (Config.USER_SIZE_CACHE) {
-			size = getUserDocumentsSizeCached(token);
+			size = getUserDocumentsSizeCached();
 		} else {
-			size = getUserDocumentsSizeLive(token);
+			size = getUserDocumentsSizeLive();
 		}
 
 		log.info("getUserDocumentsSize: {}", size);
@@ -605,18 +542,13 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeLive(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeLive({})", token);
+	private long getUserDocumentsSizeLive() throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSizeLive()");
 		long size = 0;
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
@@ -632,9 +564,7 @@ public class DirectDashboardModule implements DashboardModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.info("getUserDocumentsSizeLive: {}", size);
@@ -644,18 +574,13 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeCached(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeCached({})", token);
+	private long getUserDocumentsSizeCached() throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSizeCached()");
 		Session session = null;
 		UserItems usrItems = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			usrItems = UserItemsManager.get(session.getUserID());
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -671,18 +596,13 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<QueryParams> getUserSearchs(String token) throws RepositoryException, DatabaseException {
-		log.debug("getUserSearchs({})", token);
+	public List<QueryParams> getUserSearchs() throws RepositoryException, DatabaseException {
+		log.debug("getUserSearchs()");
 		List<QueryParams> ret = new ArrayList<QueryParams>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
@@ -699,9 +619,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getUserSearchs: {}", ret);
@@ -709,19 +627,14 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> find(String token, int qpId) throws IOException,
-			ParseException, RepositoryException, DatabaseException {
-		log.debug("find({}, {})", token, qpId);
+	public List<DashboardDocumentResult> find(int qpId) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
+		log.debug("find({})", qpId);
 		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			al = find(session, qpId);
 		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -798,18 +711,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token) 
-			throws RepositoryException {
-		log.debug("getLastWeekTopDownloadedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws RepositoryException {
+		log.debug("getLastWeekTopDownloadedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastWeekTopDownloadedDocuments(session);
 			log.debug("getLastWeekTopDownloadedDocuments: {}", al);
 			return al;
@@ -818,9 +725,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -844,18 +749,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token) 
-			throws RepositoryException {
-		log.debug("getLastMonthTopDownloadedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws RepositoryException {
+		log.debug("getLastMonthTopDownloadedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastMonthTopDownloadedDocuments(session);
 			log.debug("getLastMonthTopDownloadedDocuments: {}", al);
 			return al;
@@ -864,9 +763,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -890,18 +787,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments(String token) 
-			throws RepositoryException {
-		log.debug("getLastWeekTopModifiedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments() throws RepositoryException {
+		log.debug("getLastWeekTopModifiedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastWeekTopModifiedDocuments(session);
 			log.debug("getLastWeekTopModifiedDocuments: {}", al);
 			return al;
@@ -912,9 +803,7 @@ public class DirectDashboardModule implements DashboardModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -938,18 +827,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments(String token) 
-			throws RepositoryException {
-		log.debug("getLastMonthTopModifiedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments() throws RepositoryException {
+		log.debug("getLastMonthTopModifiedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastMonthTopModifiedDocuments(session);
 			log.debug("getLastMonthTopModifiedDocuments: {}", al);
 			return al;
@@ -984,18 +867,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastModifiedDocuments(String token)
-			throws RepositoryException {
-		log.debug("getLastModifiedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastModifiedDocuments() throws RepositoryException {
+		log.debug("getLastModifiedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastModifiedDocuments(session);
 			log.debug("getLastModifiedDocuments: {}", al);
 			return al;
@@ -1030,18 +907,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastUploadedDocuments(String token) 
-			throws RepositoryException {
-		log.debug("getLastUploadedDocuments({})", token);
+	public List<DashboardDocumentResult> getLastUploadedDocuments() throws RepositoryException {
+		log.debug("getLastUploadedDocuments()");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<DashboardDocumentResult> al = getLastUploadedDocuments(session);
 			log.debug("getLastUploadedDocuments: {}", al);
 			return al;
@@ -1050,9 +921,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
@@ -1119,18 +988,12 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public void visiteNode(String token, String source, String node, Calendar date)
-			throws RepositoryException {
-		log.info("visiteNode({}, {}, {}, {})", new Object[] { token, source, node, (date==null?null:date.getTime()) });
+	public void visiteNode(String source, String node, Calendar date) throws RepositoryException {
+		log.info("visiteNode({}, {}, {})", new Object[] { source, node, (date==null?null:date.getTime()) });
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Dashboard vo = new Dashboard();
 			vo.setUser(session.getUserID());
 			vo.setSource(source);
@@ -1142,9 +1005,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("visiteNode: void");
