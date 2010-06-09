@@ -21,18 +21,10 @@
 
 package com.openkm.frontend.server;
 
-import java.util.Enumeration;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.openkm.core.Config;
-import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.config.ErrorCode;
 
 /**
  * Extends the RemoteServiceServlet to obtain token auth on development and production
@@ -42,51 +34,7 @@ import com.openkm.frontend.client.config.ErrorCode;
  *
  */
 public class OKMHttpServlet extends HttpServlet {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(OKMHttpServlet.class);
-	private static final long serialVersionUID = 1801666502721600473L;
-	
-	/**
-	 * @return The server token
-	 */
-	@SuppressWarnings("unchecked")
-	public String getToken(HttpServletRequest req) throws OKMException {
-		log.debug("getToken({})", req);
-		String token = "";
-		
-		if (Config.SESSION_MANAGER) {
-			try {
-				token = (String) req.getSession().getAttribute("token");
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMHttpServlet, ErrorCode.CAUSE_General), e.getMessage());
-			}
-			
-			if (token == null) {
-				log.warn("** Session token is NULL **");
-				log.warn("** ContextPath = "+req.getContextPath()+" **");
-				log.warn("** PathInfo = "+req.getPathInfo()+" **");
-				log.warn("** RemoteAddr = "+req.getRemoteAddr()+" **");
-				Cookie[] cookies = req.getCookies();
-				
-				for (int i=0; i<cookies.length; i++) {
-					log.warn("** COOKIE Name = "+cookies[i].getName()+", Value="+cookies[i].getValue()+", Path="+cookies[i].getPath()+", Domain="+cookies[i].getDomain()+" **");
-				}
-				
-				for (Enumeration<String> enu = req.getParameterNames(); enu.hasMoreElements(); ) {
-					String param = enu.nextElement();
-					log.warn("** PARAMETER "+param+" = "+req.getParameter(param)+" **");
-				}
-				
-				for (Enumeration<String> enu = req.getHeaderNames(); enu.hasMoreElements(); ) {
-					String header = enu.nextElement();
-					log.warn("** HEADER "+header+" = "+req.getHeader(header)+" **");
-				}
-				
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRemoteService, ErrorCode.CAUSE_SessionLost), "Session lost");
-			}
-		}
-		
-		log.debug("getToken: {}", token);
-		return token;
-	}
+	private static final long serialVersionUID = 1801666502721600473L;	
 }
