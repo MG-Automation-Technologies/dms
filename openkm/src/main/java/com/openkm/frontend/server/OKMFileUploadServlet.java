@@ -81,7 +81,6 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-			String token = getToken(request);
 			response.setContentType("text/plain");
 			out = response.getWriter();	
 			log.info("isMultipart: {}", isMultipart);
@@ -124,7 +123,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
 							log.info("Import zip file '{}' into '{}'", fileName, path);
-							String erroMsg = importZip(token, path, is);
+							String erroMsg = importZip(path, is);
 							log.warn("erroMsg: {}", erroMsg);
 							
 							if (erroMsg == null) {
@@ -207,10 +206,10 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 	 * @param path Where import into the repository.
 	 * @param zip The zip file to import.
 	 */
-	private String importZip(String token, String path, InputStream is) throws 
+	private String importZip(String path, InputStream is) throws 
 			PathNotFoundException, ItemExistsException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
-		log.debug("importZip({}, {}, {})", new Object[] { token, path, is });
+		log.debug("importZip({}, {})", path, is);
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
         String errorMsg = null;
@@ -228,7 +227,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(token, tmpOut, path, out, new TextInfoDecorator(tmpOut));
+			ImpExpStats stats = RepositoryImporter.importDocuments(tmpOut, path, out, new TextInfoDecorator(tmpOut));
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}

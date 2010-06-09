@@ -72,12 +72,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setWorkflowRunConfigForm(Config.WORKFLOW_RUN_CONFIG_FORM);
 		workspace.setWorkflowProcessIntanceVariableUUID(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID);
 		workspace.setWorkflowProcessIntanceVariablePath(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH);
-
-		if (Config.SESSION_MANAGER) {
-			workspace.setToken((String)getThreadLocalRequest().getSession().getAttribute("token"));
-		} else {
-			workspace.setToken(getThreadLocalRequest().getSession().getId());
-		}
+		workspace.setToken(getThreadLocalRequest().getSession().getId());
 		
 		// Is a wizard to uploading documents
 		workspace.setWizardPropertyGroups(Config.WIZARD_PROPERTY_GROUPS.length>0);

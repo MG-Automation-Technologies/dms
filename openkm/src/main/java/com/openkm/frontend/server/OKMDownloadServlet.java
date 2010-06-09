@@ -77,7 +77,6 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			throws ServletException, IOException {
 		log.debug("service({}, {})", req, resp);
 		req.setCharacterEncoding("UTF-8");
-		String token;
 		String id = req.getParameter("id");
 		String path = id != null?new String(id.getBytes("ISO-8859-1"), "UTF-8"):null;
 		String uuid = req.getParameter("uuid");
@@ -92,7 +91,6 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		InputStream is = null;
 		
 		try {
-			token = getToken(req);
 			File pdfCache = null;
 			File swfCache = null;
 			
@@ -105,7 +103,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			// Get document
 			if (export) {
 				FileOutputStream os = new FileOutputStream(tmp);
-				exportZip(token, path, os);
+				exportZip(path, os);
 				os.flush();
 				os.close();
 				is = new FileInputStream(tmp);
@@ -182,9 +180,6 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		} catch (RepositoryException e) {
 			log.warn(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_Repository), e.getMessage()));
-		} catch (OKMException e) {
-			log.warn(e.getMessage(), e);
-			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_OKMGeneral), e.getMessage()));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_IOException), e.getMessage()));
@@ -246,9 +241,9 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	/**
 	 * Generate a zip file from a repository folder path   
 	 */
-	private void exportZip(String token, String path, OutputStream os) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, ArchiveException, IOException, DatabaseException  {
-		log.debug("exportZip({}, {}, {})", new Object[]{ token, path, os });
+	private void exportZip(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, ArchiveException, IOException, DatabaseException  {
+		log.debug("exportZip({}, {})", path, os);
 		ZipArchiveOutputStream zos = null;
 		File tmp = null;
 		
@@ -257,7 +252,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(token, path, tmp, out, new HTMLInfoDecorator(0));
+			RepositoryExporter.exportDocuments(path, tmp, out, new HTMLInfoDecorator(0));
 			out.close();
 			
 			// Zip files
