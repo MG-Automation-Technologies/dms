@@ -37,46 +37,46 @@
 		
 		if (action != null && !action.equals("")) {
 			if (action.equals("resumeTask") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().resumeTaskInstance(token, Long.parseLong(tid));
+				OKMWorkflow.getInstance().resumeTaskInstance(Long.parseLong(tid));
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("suspendTask") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().suspendTaskInstance(token, Long.parseLong(tid));
+				OKMWorkflow.getInstance().suspendTaskInstance(Long.parseLong(tid));
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("start") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().startTaskInstance(token, Long.parseLong(tid));
+				OKMWorkflow.getInstance().startTaskInstance(Long.parseLong(tid));
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("end") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().endTaskInstance(token, Long.parseLong(tid), null);
+				OKMWorkflow.getInstance().endTaskInstance(Long.parseLong(tid), null);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("addComment") && id != null && !id.equals("") && tid != null && !tid.equals("") && message != null && !message.equals("")) {
 				message = new String(message.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().addTokenComment(token, Long.parseLong(tid), message);
+				OKMWorkflow.getInstance().addTokenComment(Long.parseLong(tid), message);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("removeVar") && id != null && !id.equals("") && name != null && !name.equals("")) {
 				name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().removeProcessInstanceVariable(token, Long.parseLong(id), name);
+				OKMWorkflow.getInstance().removeProcessInstanceVariable(Long.parseLong(id), name);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("addVar") && id != null && !id.equals("") && name != null && !name.equals("") && value != null && !value.equals("")) {
 				name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
 				value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().addProcessInstanceVariable(token, Long.parseLong(id), name, value);
+				OKMWorkflow.getInstance().addProcessInstanceVariable(Long.parseLong(id), name, value);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("resumeToken") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().resumeToken(token, Long.parseLong(tid));
+				OKMWorkflow.getInstance().resumeToken(Long.parseLong(tid));
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("suspendToken") && id != null && !id.equals("") && tid != null && !tid.equals("")) {
-				OKMWorkflow.getInstance().suspendToken(token, Long.parseLong(tid));
+				OKMWorkflow.getInstance().suspendToken(Long.parseLong(tid));
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else if (action.equals("setActor") && id != null && !id.equals("") && tid != null && !tid.equals("") && actor != null && !actor.equals("")) {
 				actor = new String(actor.getBytes("ISO-8859-1"), "UTF-8");
 				if (actor.equals("-")) actor = null;
-				OKMWorkflow.getInstance().setTaskInstanceActorId(token, Long.parseLong(tid), actor);
+				OKMWorkflow.getInstance().setTaskInstanceActorId(Long.parseLong(tid), actor);
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			} else {
 				response.sendRedirect("wf_procins.jsp?id="+id);
 			}
 		} else {
-			ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(token, Long.parseLong(id));
+			ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(Long.parseLong(id));
 			out.println("<table>");
 			out.println("<tr>");
 			out.println("<td><h1>Process Instance</h1></td><td>");
@@ -102,7 +102,7 @@
 			out.println("<td>"+(pi.getStart()!=null?pi.getStart().getTime():"")+"</td><td>"+(pi.getEnd()!=null?pi.getEnd().getTime():"")+"</td></tr>");
 			out.println("</table>");
 
-			Collection<TaskInstance> colTi = OKMWorkflow.getInstance().findTaskInstances(token, Long.parseLong(id));
+			Collection<TaskInstance> colTi = OKMWorkflow.getInstance().findTaskInstances(Long.parseLong(id));
 			out.println("<h2>Tasks Instances</h2>");
 			out.println("<table class=\"results\" width=\"90%\">");
 			out.println("<tr><th>ID</th><th>Name</th><th>Pooled Actors</th><th>Assigned To</th><th>Status</th><th>Start Date</th><th>End Date</th><th width=\"75px\">Actions</th></tr>");
