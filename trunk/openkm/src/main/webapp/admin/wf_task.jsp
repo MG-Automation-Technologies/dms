@@ -39,26 +39,26 @@
 		if (action != null && !action.equals("")) {
 			if (action.equals("addComment") && id != null && !id.equals("") && message != null && !message.equals("")) {
 				message = new String(message.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().addTaskInstanceComment(token, Long.parseLong(id), message);
+				OKMWorkflow.getInstance().addTaskInstanceComment(Long.parseLong(id), message);
 				response.sendRedirect("wf_task.jsp?id="+id);
 			} else if (action.equals("removeVar") && id != null && !id.equals("") && name != null && !name.equals("")) {
 				name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().removeTaskInstanceVariable(token, Long.parseLong(id), name);
+				OKMWorkflow.getInstance().removeTaskInstanceVariable(Long.parseLong(id), name);
 				response.sendRedirect("wf_task.jsp?id="+id);
 			} else if (action.equals("addVar") && id != null && !id.equals("") && name != null && !name.equals("") && value != null && !value.equals("")) {
 				name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
 				value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().addTaskInstanceVariable(token, Long.parseLong(id), name, value);
+				OKMWorkflow.getInstance().addTaskInstanceVariable(Long.parseLong(id), name, value);
 				response.sendRedirect("wf_task.jsp?id="+id);
 			} else if (action.equals("endTask") && id != null && !id.equals("") && name != null && !name.equals("")) {
 				name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
-				OKMWorkflow.getInstance().endTaskInstance(token, Long.parseLong(id), name);
+				OKMWorkflow.getInstance().endTaskInstance(Long.parseLong(id), name);
 				response.sendRedirect("wf_task.jsp?id="+id);
 			} else {
 				response.sendRedirect("wf_task.jsp?id="+id);
 			}
 		} else {
-			TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(token, Long.parseLong(id));
+			TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(Long.parseLong(id));
 			ProcessInstance pi = ti.getProcessInstance();
 			ProcessDefinition pd = pi.getProcessDefinition();
 			out.println("<table>");
@@ -92,7 +92,7 @@
 			out.print("<td>"+(ti.getCreate()!=null?ti.getCreate().getTime():"")+"</td>");
 			out.println("</table>");
 			
-			Map<String, List<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(token, ti.getProcessInstance().getProcessDefinition().getId());
+			Map<String, List<FormElement>> forms = OKMWorkflow.getInstance().getProcessDefinitionForms(ti.getProcessInstance().getProcessDefinition().getId());
 			List<FormElement> form = forms.get(ti.getName());
 			out.println("<h2>Task Form</h2>");
 			out.println("<table class=\"results\" width=\"90%\">");
