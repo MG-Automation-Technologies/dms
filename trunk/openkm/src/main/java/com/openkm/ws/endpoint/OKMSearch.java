@@ -65,12 +65,12 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByContent(String token, String words) throws IOException, ParseException, 
+	public QueryResultArray findByContent(String words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
-		log.debug("findByContent({}, {})", token, words);
+		log.debug("findByContent({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByContent(token, words);
+		Collection<QueryResult> col = sm.findByContent(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByContent: {}", qra);
 		return qra;
@@ -79,12 +79,12 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByName(String token, String words) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
-		log.debug("findByName({}, {})", token, words);
+	public QueryResultArray findByName(String words) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
+		log.debug("findByName({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByName(token, words);
+		Collection<QueryResult> col = sm.findByName(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByName: {}", qra);
 		return qra;
@@ -93,12 +93,12 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(String token, String words) throws IOException, ParseException,
+	public QueryResultArray findByKeywords(String words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
-		log.debug("findByKeywords({}, {})", token, words);
+		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByKeywords(token, words);
+		Collection<QueryResult> col = sm.findByKeywords(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByKeywords: {}", qra);
 		return qra;
@@ -107,12 +107,12 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByStatement(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByStatement(String token, String statement, String type)
-			throws RepositoryException, DatabaseException {
-		log.debug("findByStatement({} ,{})", token, statement);
+	public QueryResultArray findByStatement(String statement, String type) throws RepositoryException,
+			DatabaseException {
+		log.debug("findByStatement({})", statement);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByStatement(token, statement, type);
+		Collection<QueryResult> col = sm.findByStatement(statement, type);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByStatement: {}", qra);
 		return qra;
@@ -121,12 +121,12 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
 	 */
-	public QueryResultArray find(String token, QueryParams params) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
-		log.debug("find({}, {})", token, params);
+	public QueryResultArray find(QueryParams params) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
+		log.debug("find({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.find(token, params);
+		Collection<QueryResult> col = sm.find(params);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("find: {}", qra);
 		return qra;
@@ -135,9 +135,8 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#getKeywordMap(java.lang.String, java.util.Collection)
 	 */
-	public IntegerPairArray getKeywordMap(String token, StringArray filter) 
-			throws RepositoryException, DatabaseException {
-		log.debug("getKeywordMap({})", token);
+	public IntegerPairArray getKeywordMap(StringArray filter) throws RepositoryException, DatabaseException {
+		log.debug("getKeywordMap()");
 		SearchModule sm = ModuleManager.getSearchModule();
 		ArrayList<String> alFilter = new ArrayList<String>();
 		String[] values = filter.getValue();
@@ -146,7 +145,7 @@ public class OKMSearch {
 			alFilter.add(values[i]);
 		}
 		
-		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
+		Map<String, Integer> map = sm.getKeywordMap(alFilter);
 		Set<String> keys = map.keySet();
 		IntegerPair[] tmp = new IntegerPair[keys.size()];
 		int i=0;
@@ -168,11 +167,11 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
 	 */
-	public DocumentArray getCategorizedDocuments(String token, String categoryId)
-			throws RepositoryException, DatabaseException {
-		log.debug("getCategorizedDocuments({})", token);
+	public DocumentArray getCategorizedDocuments(String categoryId) throws RepositoryException,
+			DatabaseException {
+		log.debug("getCategorizedDocuments()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<Document> col = sm.getCategorizedDocuments(token, categoryId);
+		Collection<Document> col = sm.getCategorizedDocuments(categoryId);
 		DocumentArray da = new DocumentArray();
 		da.setValue((Document[]) col.toArray(new Document[col.size()]));
 		log.debug("getCategorizedDocuments: {}", da);

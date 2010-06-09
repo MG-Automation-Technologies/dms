@@ -214,7 +214,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		
 		try {
 			for (Iterator<QueryParams> it = OKMDashboard.getInstance().getUserSearchs().iterator(); it.hasNext(); ) {
-				searchList.add(Util.copy(it.next(), null));
+				searchList.add(Util.copy(it.next()));
 			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);

@@ -70,7 +70,6 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	public List<GWTDocument> getChilds(String fldPath) throws OKMException {
 		log.debug("getDocumentChilds({})", fldPath);
 		List<GWTDocument> docList = new ArrayList<GWTDocument>(); 
-		String token = getToken();
 		
 		try {
 			if (fldPath == null) {
@@ -81,7 +80,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			if (fldPath.startsWith("/okm:thesaurus")){
 				QueryParams queryParams = new QueryParams();
 				queryParams.setKeywords(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
-				Collection<QueryResult> results = OKMSearch.getInstance().find(token, queryParams);
+				Collection<QueryResult> results = OKMSearch.getInstance().find(queryParams);
 				for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
 					QueryResult queryResult = it.next();
 					if (queryResult.getDocument()!=null) {
@@ -91,8 +90,8 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				}
 			} else if (fldPath.startsWith("/okm:categories")){
 				//TODO: Possible optimization getting folder really could not be needed we've got UUID in GWT UI
-				String Uuid = OKMFolder.getInstance().getProperties(fldPath).getUuid();
-				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(token, Uuid);
+				String uuid = OKMFolder.getInstance().getProperties(fldPath).getUuid();
+				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(uuid);
 				for (Iterator<Document> it = results.iterator(); it.hasNext();) {		
 					GWTDocument docClient = Util.copy(it.next());
 					docList.add(docClient);

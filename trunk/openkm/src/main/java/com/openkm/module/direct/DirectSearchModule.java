@@ -65,7 +65,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
@@ -78,59 +77,53 @@ public class DirectSearchModule implements SearchModule {
 	private static Logger log = LoggerFactory.getLogger(DirectSearchModule.class);
 
 	@Override
-	public List<QueryResult> findByContent(String token, String words) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
-		log.debug("findByContent({}, {})", token, words);
-
+	public List<QueryResult> findByContent(String words) throws IOException, ParseException, 
+			RepositoryException, DatabaseException {
+		log.debug("findByContent({})", words);
 		QueryParams params = new QueryParams();
 		params.setContent(words);
-		List<QueryResult> ret = find(token, params);
-
+		List<QueryResult> ret = find(params);
 		log.debug("findByContent: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public List<QueryResult> findByName(String token, String words) throws IOException, ParseException, 
+	public List<QueryResult> findByName(String words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
-		log.debug("findByName({}, {})", token, words);
-
+		log.debug("findByName({})", words);
 		QueryParams params = new QueryParams();
 		params.setName(words);
-		List<QueryResult> ret = find(token, params);
-		
+		List<QueryResult> ret = find(params);
 		log.debug("findByName: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public List<QueryResult> findByKeywords(String token, String words) throws IOException, 
-			ParseException,	RepositoryException, DatabaseException {
-		log.debug("findByKeywords({}, {})", token, words);
-
+	public List<QueryResult> findByKeywords(String words) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
+		log.debug("findByKeywords({})", words);
 		QueryParams params = new QueryParams();
 		params.setKeywords(words);
-		List<QueryResult> ret = find(token, params);
-		
+		List<QueryResult> ret = find(params);
 		log.debug("findByKeywords: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public List<QueryResult> find(String token, QueryParams params) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
-		log.debug("find({}, {})", token, params);
-		List<QueryResult> ret = findPaginated(token, params, 0, Config.MAX_SEARCH_RESULTS).getResults();
+	public List<QueryResult> find(QueryParams params) throws IOException, ParseException, 
+			RepositoryException, DatabaseException {
+		log.debug("find({})", params);
+		List<QueryResult> ret = findPaginated(params, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("find: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-			throws IOException, ParseException, RepositoryException, DatabaseException {
-		log.debug("findPaginated({}, {})", token, params);
+	public ResultSet findPaginated(QueryParams params, int offset, int limit) throws IOException,
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("findPaginated({})", params);
 		String query = prepareStatement(params);
-		ResultSet rs = findByStatementPaginated(token, query, "xpath", offset, limit);
+		ResultSet rs = findByStatementPaginated(query, "xpath", offset, limit);
 		log.debug("findPaginated: {}", rs);
 		return rs;
 	}
@@ -369,29 +362,24 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public List<QueryResult> findByStatement(String token, String statement, String type) 
-			throws RepositoryException, DatabaseException {
-		log.debug("findByStatement({}, {})", token, statement);
-		List<QueryResult> ret = findByStatementPaginated(token, statement, type, 0, 
-				Config.MAX_SEARCH_RESULTS).getResults();
+	public List<QueryResult> findByStatement(String statement, String type) throws RepositoryException,
+			DatabaseException {
+		log.debug("findByStatement({})", statement);
+		List<QueryResult> ret = findByStatementPaginated(statement, type, 0, Config.MAX_SEARCH_RESULTS).getResults();
 		log.debug("findByStatement: {}", ret);
 		return ret;
 	}
 	
 
 	@Override
-	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, 
-			int limit) throws RepositoryException, DatabaseException {
-		log.debug("findByStatement({}, {}, {}, {}, {})", new Object[] { token, statement, type, offset, limit });
+	public ResultSet findByStatementPaginated(String statement, String type, int offset, int limit) throws 
+			RepositoryException, DatabaseException {
+		log.debug("findByStatement({}, {}, {}, {})", new Object[] { statement, type, offset, limit });
 		ResultSet rs = new ResultSet();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 
 			if (statement != null && !statement.equals("")) {
 				Workspace workspace = session.getWorkspace();
@@ -406,9 +394,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("findByStatement: {}", rs);
@@ -418,7 +404,8 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Execute query
 	 */
-	private ResultSet executeQuery(Session session, Query query, int offset, int limit) throws RepositoryException {
+	private ResultSet executeQuery(Session session, Query query, int offset, int limit) throws 
+			RepositoryException {
 		log.debug("executeQuery({}, {}, {}, {})", new Object[] { session, query, offset, limit });
 		ResultSet rs = new ResultSet();
 		ArrayList<QueryResult> al = new ArrayList<QueryResult>();
@@ -473,9 +460,9 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public int saveSearch(String token, QueryParams params) throws AccessDeniedException, 
-			RepositoryException, DatabaseException {
-		log.debug("saveSearch({}, {}, {})", new Object[] { token, params });
+	public int saveSearch(QueryParams params) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("saveSearch({})", params);
 		Session session = null;
 		int id = 0;
 		
@@ -484,12 +471,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			params.setUser(session.getUserID());
 			id = QueryParamsDAO.create(params);
 			
@@ -500,9 +482,7 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("saveSearch: {}", id);
@@ -511,19 +491,14 @@ public class DirectSearchModule implements SearchModule {
 		
 	@Override
 	@Deprecated
-	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException,
+	public QueryParams getSearch(int qpId) throws PathNotFoundException, RepositoryException, 
 			DatabaseException {
-		log.debug("getSearch({}, {})", token, qpId);
+		log.debug("getSearch({})", qpId);
 		QueryParams qp = new QueryParams();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			qp = QueryParamsDAO.findByPk(qpId);
 			
 			// If this is a dashboard user search, dates are used internally
@@ -541,9 +516,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getSearch: {}", qp);
@@ -551,18 +524,13 @@ public class DirectSearchModule implements SearchModule {
 	}
 	
 	@Override
-	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, DatabaseException {
-		log.debug("getAllSearchs({})", token);
+	public List<QueryParams> getAllSearchs() throws RepositoryException, DatabaseException {
+		log.debug("getAllSearchs()");
 		List<QueryParams> ret = new ArrayList<QueryParams>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
@@ -584,9 +552,7 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getAllSearchs: {}", ret);
@@ -594,9 +560,9 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException,
-			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("deleteSearch({}, {})", token, qpId);
+	public void deleteSearch(int qpId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("deleteSearch({})", qpId);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -604,12 +570,7 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			QueryParams qp = QueryParamsDAO.findByPk(qpId);
 			QueryParamsDAO.delete(qpId);
 			
@@ -639,15 +600,15 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws 
-			RepositoryException, DatabaseException {
-		log.info("getKeywordMap({}, {})", token, filter);
+	public Map<String, Integer> getKeywordMap(List<String> filter) throws RepositoryException,
+			DatabaseException {
+		log.info("getKeywordMap({})", filter);
 		Map<String, Integer> cloud = null;
 		
 		if (Config.USER_KEYWORDS_CACHE) {
-			cloud = getKeywordMapCached(token, filter);
+			cloud = getKeywordMapCached(filter);
 		} else {
-			cloud = getKeywordMapLive(token, filter);
+			cloud = getKeywordMapLive(filter);
 		}
 		
 		log.info("getKeywordMap: {}", cloud);
@@ -657,20 +618,15 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapLive(String token, List<String> filter) throws 
-			RepositoryException, DatabaseException {
-		log.info("getKeywordMapLive({}, {})", token, filter);
+	private Map<String, Integer> getKeywordMapLive(List<String> filter) throws RepositoryException,
+			DatabaseException {
+		log.info("getKeywordMapLive({})", filter);
 		String statement = "/jcr:root//element(*,okm:document)";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
 			Query query = queryManager.createQuery(statement, Query.XPATH);
@@ -699,9 +655,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.info("getKeywordMapLive: {}", cloud);
@@ -711,19 +665,14 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapCached(String token, Collection<String> filter) throws 
-			RepositoryException, DatabaseException {
-		log.info("getKeywordMapCached({}, {})", token, filter);
+	private Map<String, Integer> getKeywordMapCached(Collection<String> filter) throws RepositoryException,
+			DatabaseException {
+		log.info("getKeywordMapCached({})", filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			HashMap<String, ArrayList<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
 						
 			for (Iterator<ArrayList<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
@@ -753,19 +702,14 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public List<Document> getCategorizedDocuments(String token, String categoryId) throws 
-			RepositoryException, DatabaseException {
-		log.info("getCategorizedDocuments({}, {})", token, categoryId);
+	public List<Document> getCategorizedDocuments(String categoryId) throws RepositoryException,
+			DatabaseException {
+		log.info("getCategorizedDocuments({})", categoryId);
 		List<Document> documents = new ArrayList<Document>();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token); 
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			Node category = session.getNodeByUUID(categoryId);
 			
 			for (PropertyIterator it = category.getReferences(); it.hasNext(); ) {

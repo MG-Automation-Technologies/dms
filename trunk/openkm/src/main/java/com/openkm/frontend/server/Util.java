@@ -428,7 +428,7 @@ public class Util {
 	 * @throws PathNotFoundException 
 	 * @throws ParseException 
 	 */
-	public static GWTQueryParams copy(QueryParams params, String token) throws RepositoryException, 
+	public static GWTQueryParams copy(QueryParams params) throws RepositoryException, 
 			IOException, PathNotFoundException, ParseException, DatabaseException {
 		GWTQueryParams gWTParams = new GWTQueryParams();
 		

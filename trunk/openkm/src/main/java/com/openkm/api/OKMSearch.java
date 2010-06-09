@@ -55,131 +55,130 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public List<QueryResult> findByContent(String token, String words) throws IOException, 
-			ParseException,	RepositoryException, DatabaseException {
+	public List<QueryResult> findByContent(String words) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
 		log.debug("findByContent({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByContent(token, words);
+		List<QueryResult> col = sm.findByContent(words);
 		log.debug("findByContent: {}", col);
 		return col;
 	}
 
 	@Override
-	public List<QueryResult> findByName(String token, String words) throws IOException, ParseException,
+	public List<QueryResult> findByName(String words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("findByName({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByName(token, words);
+		List<QueryResult> col = sm.findByName(words);
 		log.debug("findByName: {}", col);
 		return col;
 	}
 
 	@Override
-	public List<QueryResult> findByKeywords(String token, String words) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
+	public List<QueryResult> findByKeywords(String words) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByKeywords(token, words);
+		List<QueryResult> col = sm.findByKeywords(words);
 		log.debug("findByKeywords: {}", col);
 		return col;
 	}
 
 	@Override
-	public List<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
+	public List<QueryResult> find(QueryParams params) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("find({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.find(token, params);
+		List<QueryResult> col = sm.find(params);
 		log.debug("find: {}", col);
 		return col;
 	}
 
 	@Override
-	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) 
-			throws IOException, ParseException, RepositoryException, DatabaseException {
-		log.debug("findPaginated({})", params);
+	public ResultSet findPaginated(QueryParams params, int offset, int limit) throws IOException,
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("findPaginated({}, {}, {})", new Object[] { params, offset, limit });
 		SearchModule sm = ModuleManager.getSearchModule();
-		ResultSet rs = sm.findPaginated(token, params, offset, limit);
+		ResultSet rs = sm.findPaginated(params, offset, limit);
 		log.debug("findPaginated: {}", rs);
 		return rs;
 	}
 
 	@Override
-	public List<QueryResult> findByStatement(String token, String statement, String type) 
-			throws RepositoryException, DatabaseException {
+	public List<QueryResult> findByStatement(String statement, String type) throws RepositoryException,
+			DatabaseException {
 		log.debug("findByStatement({}, {})", statement, type);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByStatement(token, statement, type);
+		List<QueryResult> col = sm.findByStatement(statement, type);
 		log.debug("findByKeywords: {}", col);
 		return col;
 	}
 
 	@Override
-	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset, 
-			int limit) throws RepositoryException, DatabaseException {
-		log.debug("findByStatement({}, {})", statement, type);
+	public ResultSet findByStatementPaginated(String statement, String type, int offset, int limit) throws
+			RepositoryException, DatabaseException {
+		log.debug("findByStatement({}, {}, {}, {})", new Object[] { statement, type, offset, limit });
 		SearchModule sm = ModuleManager.getSearchModule();
-		ResultSet rs = sm.findByStatementPaginated(token, statement, type, offset, limit);
+		ResultSet rs = sm.findByStatementPaginated(statement, type, offset, limit);
 		log.debug("findByKeywords: {}", rs);
 		return rs;
 	}
 
 	@Override
-	public int saveSearch(String token, QueryParams params) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
+	public int saveSearch(QueryParams params) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
 		log.debug("saveSearch({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		int id = sm.saveSearch(token, params);
+		int id = sm.saveSearch(params);
 		log.debug("saveSearch: {}", id);
 		return id;
 	}
 
 	@Override
 	@Deprecated
-	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
+	public QueryParams getSearch(int qpId) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("getSearch({})", qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryParams qp = sm.getSearch(token, qpId);
+		QueryParams qp = sm.getSearch(qpId);
 		log.debug("getSearch: {}", qp);
 		return qp;
 	}
 
 	@Override
-	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, 
-			DatabaseException {
+	public List<QueryParams> getAllSearchs() throws RepositoryException, DatabaseException {
 		log.debug("getAllSearchs()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryParams> col = sm.getAllSearchs(token);
+		List<QueryParams> col = sm.getAllSearchs();
 		log.debug("getAllSearchs: {}", col);
 		return col;
 	}
 
 	@Override
-	public void deleteSearch(String token, int qpId) throws AccessDeniedException, 
-			PathNotFoundException, RepositoryException, DatabaseException {
+	public void deleteSearch(int qpId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("deleteSearch({})", qpId);
 		SearchModule sm = ModuleManager.getSearchModule();
-		sm.deleteSearch(token, qpId);
+		sm.deleteSearch(qpId);
 		log.debug("deleteSearch: void");
 	}
 
 	@Override
-	public Map<String, Integer> getKeywordMap(String token, List<String> filter) 
-			throws RepositoryException, DatabaseException {
+	public Map<String, Integer> getKeywordMap(List<String> filter) throws RepositoryException,
+			DatabaseException {
 		log.debug("getKeywordMap()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		Map<String, Integer> kmap = sm.getKeywordMap(token, filter);
+		Map<String, Integer> kmap = sm.getKeywordMap(filter);
 		log.debug("getKeywordMap: {}", kmap);
 		return kmap;
 	}
 
 	@Override
-	public List<Document> getCategorizedDocuments(String token, String categoryId)
-			throws RepositoryException, DatabaseException {
+	public List<Document> getCategorizedDocuments(String categoryId) throws RepositoryException,
+			DatabaseException {
 		log.debug("getCategorizedDocuments()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<Document> col = sm.getCategorizedDocuments(token, categoryId);
+		List<Document> col = sm.getCategorizedDocuments(categoryId);
 		log.debug("getCategorizedDocuments: {}", col);
 		return col;
 	}
