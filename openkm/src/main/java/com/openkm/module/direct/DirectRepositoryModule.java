@@ -403,19 +403,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException, 
-			DatabaseException {
-		log.debug("getRootFolder({})", token);
+	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getRootFolder()");
 		Folder rootFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			rootFolder = new DirectFolderModule().getProperties(session, "/"+Repository.ROOT);
 			
 			// Activity log
@@ -427,9 +421,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getRootFolder: {}", rootFolder);
@@ -437,19 +429,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException, 
-			DatabaseException {
-		log.debug("getTrashFolder({})", token);
+	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getTrashFolder()");
 		Folder trashFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH+"/"+session.getUserID());
 			
 			// Activity log
@@ -461,9 +447,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getTrashFolder: {}", trashFolder);
@@ -497,19 +481,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException, 
-			DatabaseException {
-		log.debug("getTemplatesFolder({})", token);
+	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getTemplatesFolder()");
 		Folder templatesFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			templatesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TEMPLATES);
 			
 			// Activity log
@@ -521,9 +499,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getTemplatesFolder: {}", templatesFolder);
@@ -531,19 +507,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getPersonalFolder({})", token);
+	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getPersonalFolder()");
 		Folder personalFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL+"/"+session.getUserID());
 			
 			// Activity log
@@ -592,19 +562,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getMailFolder({})", token);
+	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getMailFolder()");
 		Folder mailFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			String mailPath = MailUtils.getUserMailPath(session.getUserID());
 			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
@@ -617,9 +581,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("getMailFolder: {}", mailFolder);
@@ -653,19 +615,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getThesaurusFolder({})", token);
+	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getThesaurusFolder()");
 		Folder thesaurusFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			thesaurusFolder = new DirectFolderModule().getProperties(session, "/"+Repository.THESAURUS);
 			
 			// Activity log
@@ -687,19 +643,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getCategoriesFolder({})", token);
+	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getCategoriesFolder()");
 		Folder categoriesFolder = new Folder();
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			categoriesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.CATEGORIES);
 			
 			// Activity log
@@ -775,9 +725,8 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("purgeTrash({})", token);
+	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("purgeTrash()");
 		Node userTrash = null;
 		Session session = null;
 		
@@ -786,12 +735,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
@@ -841,37 +785,30 @@ public class DirectRepositoryModule implements RepositoryModule {
 			JCRUtils.discardsPendingChanges(userTrash);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 		
 		log.debug("purgeTrash: void");
 	}
 	
 	@Override
-	public String getUpdateMessage(String token) throws RepositoryException {
+	public String getUpdateMessage() throws RepositoryException {
 		return Repository.getUpdateMsg();
 	}
 
 	@Override
-	public String getUuid(String token) throws RepositoryException {
+	public String getUuid() throws RepositoryException {
 		return Repository.getUuid();
 	}
 	
 	@Override
-	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
-		log.debug("hasNode({}, {})", token, path);
+	public boolean hasNode(String path) throws RepositoryException, DatabaseException {
+		log.debug("hasNode({})", path);
 		boolean ret = false;
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			ret = session.getRootNode().hasNode(path.substring(1));
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -887,19 +824,13 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getPath({}, {})", token, uuid);
+	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("getPath({})", uuid);
 		String ret;
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
-			
+			session = JCRUtils.getSession();
 			ret = session.getNodeByUUID(uuid).getPath();
 		} catch (javax.jcr.ItemNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -908,9 +839,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("getPath: {}", ret);

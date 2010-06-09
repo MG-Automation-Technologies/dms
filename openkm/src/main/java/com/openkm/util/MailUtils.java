@@ -183,7 +183,7 @@ public class MailUtils {
 			OKMMail okmMail = OKMMail.getInstance();
 			String mailPath = getUserMailPath(uid);
 			
-			if (okmRepository.hasNode(token, mailPath)) {
+			if (okmRepository.hasNode(mailPath)) {
 				// Open connection
 				Store store = session.getStore("imaps");
 				store.connect(host, user, password);
@@ -215,7 +215,7 @@ public class MailUtils {
 					log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
 					String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
 					
-					if (!okmRepository.hasNode(token, path)) {
+					if (!okmRepository.hasNode(path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
 						okmFolder.create(fld);
@@ -223,7 +223,7 @@ public class MailUtils {
 					
 					path += "/"+(receivedDate.get(Calendar.MONTH)+1);
 					
-					if (!okmRepository.hasNode(token, path)) {
+					if (!okmRepository.hasNode(path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
 						okmFolder.create(fld);
@@ -231,7 +231,7 @@ public class MailUtils {
 					
 					path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
 					
-					if (!okmRepository.hasNode(token, path)) {
+					if (!okmRepository.hasNode(path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
 						okmFolder.create(fld);
@@ -267,7 +267,7 @@ public class MailUtils {
 					String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
 					log.info("newMailPath: {}", newMailPath);
 					
-					if (!okmRepository.hasNode(token, newMailPath)) {
+					if (!okmRepository.hasNode(newMailPath)) {
 						okmMail.create(mail);
 						try {
 							addAttachments(token, mail, msg);

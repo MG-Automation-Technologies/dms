@@ -449,7 +449,7 @@ public class Util {
 		gWTParams.setCategoyUuid(params.getCategories());
 		
 		if (params.getCategories() != null && !params.getCategories().equals("")) {
-			gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(token, params.getCategories()));
+			gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(params.getCategories()));
 		}
 		
 		if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {

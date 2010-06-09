@@ -65,7 +65,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		
 		try {
 			if (fldPath == null) {
-				fldPath = OKMRepository.getInstance().getMailFolder(null).getPath();
+				fldPath = OKMRepository.getInstance().getMailFolder().getPath();
 			} 
 			
 			log.debug("ParentFolder: {}", fldPath);

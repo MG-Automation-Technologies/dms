@@ -67,36 +67,35 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#addGroup(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
-			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addGroup({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.addGroup(token, docPath, grpName);
+		cm.addGroup(docPath, grpName);
 		log.debug("addGroup: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#removeGroup(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException,
+	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("removeGroup({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.removeGroup(token, docPath, grpName);
+		cm.removeGroup(docPath, grpName);
 		log.debug("removeGroup: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#getGroups(java.lang.String, java.lang.String)
 	 */
-	public PropertyGroupArray getGroups(String token, String docPath) throws IOException, ParseException,
+	public PropertyGroupArray getGroups(String docPath) throws IOException, ParseException,
 			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getGroups({}, {})", token, docPath);
+		log.debug("getGroups({})", docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		PropertyGroupArray sa = new PropertyGroupArray();
-		Collection<PropertyGroup> col = cm.getGroups(token, docPath);
+		Collection<PropertyGroup> col = cm.getGroups(docPath);
 		sa.setValue((PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]));
 		log.debug("getGroups: {}", sa);
 		return sa;
@@ -105,12 +104,12 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#getAllGroups(java.lang.String)
 	 */
-	public PropertyGroupArray getAllGroups(String token) throws IOException, ParseException, 
-			RepositoryException, DatabaseException {
-		log.debug("getAllGroups({})", token);
+	public PropertyGroupArray getAllGroups() throws IOException, ParseException, RepositoryException,
+			DatabaseException {
+		log.debug("getAllGroups()");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		PropertyGroupArray sa = new PropertyGroupArray();
-		Collection<PropertyGroup> col = cm.getAllGroups(token);
+		Collection<PropertyGroup> col = cm.getAllGroups();
 		sa.setValue((PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]));
 		log.debug("getAllGroups: {} ", sa);
 		return sa;
@@ -119,11 +118,11 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#getProperties(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public StringArrayPairArray getProperties(String token, String docPath, String grpName) 
+	public StringArrayPairArray getProperties(String docPath, String grpName) 
 			throws NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getProperties({}, {}, {})", new String[] { token, docPath, grpName });
+		log.debug("getProperties({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Map<String, String[]> hm = cm.getProperties(token, docPath, grpName);
+		Map<String, String[]> hm = cm.getProperties(docPath, grpName);
 		Set<String> keys = hm.keySet();
 		StringArrayPair[] tmp = new StringArrayPair[keys.size()];
 		int i=0;
@@ -148,10 +147,10 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public void setProperties(String token, String docPath, String grpName, StringArrayPairArray properties)
-			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
+	public void setProperties(String docPath, String grpName, StringArrayPairArray properties) throws
+			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {}, {})", new Object[] { token, docPath, properties });
+		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		HashMap<String, String[]> uh = new HashMap<String, String[]>();
 		StringArrayPair[] spa = properties.getValue();
@@ -162,7 +161,7 @@ public class OKMPropertyGroup {
 			uh.put(key, value.getValue());
 		}
 		
-		cm.setProperties(token, docPath, grpName, uh);
+		cm.setProperties(docPath, grpName, uh);
 		log.debug("setProperties: void");
 	}
 }
