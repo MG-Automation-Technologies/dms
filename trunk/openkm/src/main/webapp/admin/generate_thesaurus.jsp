@@ -64,7 +64,7 @@
 					out.println("<hr/>");
 					int level = Integer.parseInt(strLevel);
 					long begin = System.currentTimeMillis();
-					KEATree.generateTree(token, level, "/"+Repository.THESAURUS, new Vector<String>(), out);
+					KEATree.generateTree(level, "/"+Repository.THESAURUS, new Vector<String>(), out);
 					long end = System.currentTimeMillis();
 					out.println("<hr/>");
 					out.println("<div class=\"ok\">Level '"+level+"'</div>");
