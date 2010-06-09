@@ -39,7 +39,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.module.ScriptingModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -48,9 +47,9 @@ public class DirectScriptingModule implements ScriptingModule {
 	private static Logger log = LoggerFactory.getLogger(DirectScriptingModule.class);
 
 	@Override
-	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
+	public void setScript(String nodePath, String code) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
+		log.debug("setScript({}, {})", nodePath, code);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -60,11 +59,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -94,18 +89,16 @@ public class DirectScriptingModule implements ScriptingModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("setScript: void");
 	}
 
 	@Override
-	public void removeScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeScript({}, {})", token, nodePath);
+	public void removeScript(String nodePath) throws PathNotFoundException, AccessDeniedException, 
+			RepositoryException, DatabaseException {
+		log.debug("removeScript({})", nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -115,11 +108,7 @@ public class DirectScriptingModule implements ScriptingModule {
 		}
 
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -150,27 +139,21 @@ public class DirectScriptingModule implements ScriptingModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("removeScript: void");
 	}
 
 	@Override
-	public String getScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getScript({}, {})", token, nodePath);
+	public String getScript(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("getScript({})", nodePath);
 		String code = null;
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Node node = session.getRootNode().getNode(nodePath.substring(1));
@@ -188,9 +171,7 @@ public class DirectScriptingModule implements ScriptingModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("getScript: {}", code);
