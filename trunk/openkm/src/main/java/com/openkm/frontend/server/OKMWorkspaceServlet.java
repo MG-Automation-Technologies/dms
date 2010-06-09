@@ -205,11 +205,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	
 	@Override
 	public Double getUserDocumentsSize() throws OKMException {
-		String token = getToken();
 		Double docSize = new Double(0);
 		
 		try {
-			docSize = new Double(OKMDashboard.getInstance().getUserDocumentsSize(token));
+			docSize = new Double(OKMDashboard.getInstance().getUserDocumentsSize());
 			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
