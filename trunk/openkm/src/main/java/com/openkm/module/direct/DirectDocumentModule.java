@@ -947,9 +947,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.rollback();
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("checkout: void");
@@ -1128,9 +1126,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.rollback();
 			throw e;
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 
 		log.debug("checkin: "+version);
