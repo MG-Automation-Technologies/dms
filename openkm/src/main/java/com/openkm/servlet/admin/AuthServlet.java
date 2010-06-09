@@ -36,9 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.SessionManager;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.bean.User;
 import com.openkm.util.JCRUtils;
@@ -57,15 +55,10 @@ public class AuthServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
-		String token = (String) request.getSession().getAttribute("token");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 			
 			if (action.equals("userCreate")) {
 				userCreate(session, request, response);
@@ -91,9 +84,7 @@ public class AuthServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
