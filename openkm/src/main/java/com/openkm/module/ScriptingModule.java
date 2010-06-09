@@ -31,38 +31,35 @@ public interface ScriptingModule {
 	/**
 	 * Add script to node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @param code Script BeanShell code.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void setScript(String nodePath, String code) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove script from node.
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void removeScript(String token, String nodePath) throws PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void removeScript(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get node script (document or folder).
 	 * 
-	 * @param token The session authorization token.
 	 * @param nodePath The complete path to the node.
 	 * @return A hashmap with pairs of user / permissions.
 	 * @throws PathNotFoundException If the node defined by nodePath do not exists.
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public String getScript(String token, String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public String getScript(String nodePath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException;
 }

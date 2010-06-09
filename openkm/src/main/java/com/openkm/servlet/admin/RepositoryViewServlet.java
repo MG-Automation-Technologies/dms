@@ -64,7 +64,6 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
-import com.openkm.core.SessionManager;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -85,15 +84,10 @@ public class RepositoryViewServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
 		String path = WebUtil.getString(request, "path");
-		String token = (String) request.getSession().getAttribute("token");
 		Session session = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				session = SessionManager.getInstance().get(token);
-			} else {
-				session = JCRUtils.getSession();
-			}
+			session = JCRUtils.getSession();
 			
 			if (action.equals("unlock")) {
 				unlock(session, path, request, response);
@@ -108,9 +102,9 @@ public class RepositoryViewServlet extends BaseServlet {
 			} else if (action.equals("save")) {
 				save(session, path, request, response);
 			} else if (action.equals("set_script")) {
-				OKMScripting.getInstance().setScript(token, path, Config.DEFAULT_SCRIPT);
+				OKMScripting.getInstance().setScript(path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
-				OKMScripting.getInstance().removeScript(token, path);
+				OKMScripting.getInstance().removeScript(path);
 			}
 			
 			if (!action.equals("edit")) {
@@ -135,9 +129,7 @@ public class RepositoryViewServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(session);
-			}
+			JCRUtils.logout(session);
 		}
 	}
 	
