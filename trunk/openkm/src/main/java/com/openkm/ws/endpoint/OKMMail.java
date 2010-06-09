@@ -58,11 +58,11 @@ public class OKMMail {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#create(java.lang.String, com.openkm.bean.Mail)
 	 */
-	public Mail create(String token, Mail mail) throws PathNotFoundException, ItemExistsException, 
-			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("create({}, {})", token, mail);
+	public Mail create(Mail mail) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("create({})", mail);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail newMail = mm.create(token, mail);
+		Mail newMail = mm.create(mail);
 		log.debug("create: {}", newMail);
 		return newMail;
 	}
@@ -70,11 +70,11 @@ public class OKMMail {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#getProperties(java.lang.String, java.lang.String)
 	 */
-	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
-			RepositoryException, DatabaseException {
-		log.debug("getProperties({}, {})", token, mailPath);
+	public Mail getProperties(String mailPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getProperties({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail mail = mm.getProperties(token, mailPath);
+		Mail mail = mm.getProperties(mailPath);
 		log.debug("getProperties: {}", mail);
 		return mail;
 	}
@@ -82,22 +82,22 @@ public class OKMMail {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#delete(java.lang.String, java.lang.String)
 	 */
-	public void delete(String token, String mailPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("delete({}, {})", token, mailPath);
+	public void delete(String mailPath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("delete({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.delete(token, mailPath);
+		mm.delete(mailPath);
 		log.debug("delete: void");
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#rename(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public Mail rename(String token, String mailPath, String newName) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {})", token, mailPath);
+	public Mail rename(String mailPath, String newName) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("rename({}, {})", mailPath, newName);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail renamedMail = mm.rename(token, mailPath, newName);
+		Mail renamedMail = mm.rename(mailPath, newName);
 		log.debug("rename: {}");
 		return renamedMail;
 	}
@@ -105,23 +105,23 @@ public class OKMMail {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#move(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void move(String token, String mailPath, String dstPath) throws PathNotFoundException,
-			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {}, {})", new Object[] { token, mailPath, dstPath });
+	public void move(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("move({}, {})", mailPath, dstPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.move(token, mailPath, dstPath);
+		mm.move(mailPath, dstPath);
 		log.debug("move: void");
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.openkm.module.MailModule#getChilds(java.lang.String, java.lang.String)
 	 */
-	public MailArray getChilds(String token, String mailPath) throws PathNotFoundException,
-			RepositoryException, DatabaseException {
-		log.debug("getChilds({}, {})", token, mailPath);
+	public MailArray getChilds(String mailPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getChilds({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		MailArray ma = new MailArray();
-		Collection<Mail> col = mm.getChilds(token, mailPath);
+		Collection<Mail> col = mm.getChilds(mailPath);
 		ma.setValue((Mail []) col.toArray(new Mail[col.size()]));
 		log.debug("getChilds: {}", ma);
 		return ma;

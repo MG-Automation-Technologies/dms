@@ -62,15 +62,14 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	public List<GWTMail> getChilds(String fldPath) throws OKMException {
 		log.debug("getChilds({})", fldPath);
 		List<GWTMail> mailList = new ArrayList<GWTMail>(); 
-		String token = getToken();
 		
 		try {
 			if (fldPath == null) {
-				fldPath = OKMRepository.getInstance().getMailFolder(token).getPath();
+				fldPath = OKMRepository.getInstance().getMailFolder(null).getPath();
 			} 
 			
 			log.debug("ParentFolder: {}", fldPath);
-			Collection<Mail> col = OKMMail.getInstance().getChilds(token, fldPath);
+			Collection<Mail> col = OKMMail.getInstance().getChilds(fldPath);
 			
 			for (Iterator<Mail> it = col.iterator(); it.hasNext();) {		
 				Mail mail = it.next();
@@ -99,10 +98,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void delete(String mailPath) throws OKMException {
 		log.debug("delete({})", mailPath);
-		String token = getToken();
 		
 		try {
-			OKMMail.getInstance().delete(token, mailPath);
+			OKMMail.getInstance().delete(mailPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -129,10 +127,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void move(String mailPath, String destPath) throws OKMException {
 		log.debug("move({}, {})", mailPath, destPath);
-		String token = getToken();
 		
 		try {
-			OKMMail.getInstance().move(token,mailPath,destPath);
+			OKMMail.getInstance().move(mailPath, destPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -159,10 +156,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void purge(String mailPath) throws OKMException {
 		log.debug("purge({})", mailPath);
-		String token = getToken();
 		
 		try {
-			OKMMail.getInstance().purge(token,mailPath);
+			OKMMail.getInstance().purge(mailPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -186,10 +182,9 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void copy(String mailPath, String fldPath) throws OKMException {
 		log.debug("copy({}, {})", mailPath, fldPath);
-		String token = getToken();
 		
 		try {
-			OKMMail.getInstance().copy(token, mailPath, fldPath);
+			OKMMail.getInstance().copy(mailPath, fldPath);
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -219,11 +214,10 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public GWTMail getProperties(String mailPath) throws OKMException {
 		log.debug("getProperties({})", mailPath);
-		String token = getToken();
 		GWTMail mailClient = new GWTMail();
 		
 		try {
-			mailClient = Util.copy(OKMMail.getInstance().getProperties(token, mailPath));
+			mailClient = Util.copy(OKMMail.getInstance().getProperties(mailPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

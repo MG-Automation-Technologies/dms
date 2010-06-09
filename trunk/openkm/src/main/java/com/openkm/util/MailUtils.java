@@ -268,7 +268,7 @@ public class MailUtils {
 					log.info("newMailPath: {}", newMailPath);
 					
 					if (!okmRepository.hasNode(token, newMailPath)) {
-						okmMail.create(token, mail);
+						okmMail.create(mail);
 						try {
 							addAttachments(token, mail, msg);
 						} catch (UnsupportedMimeTypeException e) {
