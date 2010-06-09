@@ -53,16 +53,16 @@ public class RepositoryExporter {
 	/**
 	 * Performs a recursive repository content export with metadata
 	 */
-	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, Writer out, 
-			InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
+	public static ImpExpStats exportDocuments(String fldPath, File fs, Writer out, InfoDecorator deco) 
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException {
 		log.debug("exportDocuments({}, {}, {}, {})", new Object[] { fldPath, fs, out, deco });
 		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
 				firstTime = true;
-				stats = exportDocumentsHelper(token, fldPath, fs, out, deco);
+				stats = exportDocumentsHelper(fldPath, fs, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -93,10 +93,10 @@ public class RepositoryExporter {
 	/**
 	 * Performs a recursive repository content export with metadata
 	 */
-	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs,  Writer out,
-			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, IOException, DatabaseException {
-		log.debug("exportDocumentsHelper({}, {}, {}, {}, {})", new Object[] { token, fldPath, fs, out, deco });
+	private static ImpExpStats exportDocumentsHelper(String fldPath, File fs,  Writer out, InfoDecorator deco)
+			throws FileNotFoundException, PathNotFoundException, AccessDeniedException,	RepositoryException,
+			IOException, DatabaseException {
+		log.debug("exportDocumentsHelper({}, {}, {}, {})", new Object[] { fldPath, fs, out, deco });
 		ImpExpStats stats = new ImpExpStats();
 		String path = null;
 		
@@ -131,7 +131,7 @@ public class RepositoryExporter {
 		FolderModule fm = ModuleManager.getFolderModule();
 		for (Iterator<Folder> it = fm.getChilds(fldPath).iterator(); it.hasNext();) {
 			Folder fldChild = it.next();
-			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, out, deco);
+			ImpExpStats tmp = exportDocumentsHelper(fldChild.getPath(), fsPath, out, deco);
 			
 			// Stats
 			stats.setSize(stats.getSize() + tmp.getSize());
