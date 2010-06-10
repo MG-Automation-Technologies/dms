@@ -43,7 +43,7 @@ public class TrashTree extends FolderTree {
 		
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextTrash(folderRoot.getPath());
-		Main.get().mainPanel.search.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TRASH);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TRASH);
 		
 		rootItem = actualItem; // Save rootItem
 		actualItem.setUserObject(folderRoot);

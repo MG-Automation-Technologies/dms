@@ -135,7 +135,7 @@ public class KeywordsWidget extends Composite {
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.WIZARD);
+				Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.WIZARD);
 			}
 		});
 		
