@@ -106,7 +106,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 			public void onKeyUp(KeyUpEvent event) {
 				if (keyword.getText().length()>=3) {
 					GWTQueryParams gwtParams = new GWTQueryParams();
-					int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
+					int actualView = Main.get().mainPanel.desktop.navigator.stackPanel.getStackIndex();
 					switch (actualView){
 						case PanelDefinition.NAVIGATOR_TAXONOMY:
 							gwtParams.setPath(Main.get().taxonomyRootFolder.getPath());
