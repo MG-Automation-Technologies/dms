@@ -165,8 +165,8 @@ public class FileUpload extends DialogBox {
 	 */
 	public void hide() {
 		if (doAction == FancyFileUpload.ACTION_UPDATE) {
-			GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.table.getDocument();
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDocument();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
 		}
 		super.hide();
 	}

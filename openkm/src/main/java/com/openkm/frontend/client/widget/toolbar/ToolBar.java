@@ -177,7 +177,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute unlock
 	 */
 	public void executeLock() {
-		Main.get().mainPanel.browser.fileBrowser.lock();
+		Main.get().mainPanel.desktop.browser.fileBrowser.lock();
 		fireEvent(HasToolBarEvent.EXECUTE_LOCK);
 	}
 	
@@ -197,7 +197,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute lock
 	 */
 	public void executeUnlock() {
-		Main.get().mainPanel.browser.fileBrowser.unlock();
+		Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
 		fireEvent(HasToolBarEvent.EXECUTE_UNLOCK);
 	}
 	
@@ -244,8 +244,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Executes delete option
 	 */
 	public void executeDelete() {
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.confirmDelete();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.confirmDelete();
 		}
@@ -256,8 +256,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Executes delete option
 	 */
 	public void executeCopy() {
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.copy();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.copy();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.copy();
 		}
@@ -268,8 +268,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Executes move option
 	 */
 	public void executeMove() {
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.move();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.move();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.move();
 		}
@@ -280,8 +280,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Executes rename option
 	 */
 	public void executeRename() {
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.rename();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.rename();
 		}
@@ -309,7 +309,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute check out
 	 */
 	public void executeCheckout() {
-		Main.get().mainPanel.browser.fileBrowser.checkout();
+		Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
 		fireEvent(HasToolBarEvent.EXECUTE_CHECKOUT);
 	}
 	
@@ -329,7 +329,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute checkin
 	 */
 	public void exectuteCheckin() {
-		Main.get().fileUpload.setPath(Main.get().mainPanel.browser.fileBrowser.getPath());
+		Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
 		Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
 		Main.get().fileUpload.showPopup(false,false);
 		fireEvent(HasToolBarEvent.EXECUTE_CHECKIN);
@@ -351,7 +351,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Cancel the check out
 	 */
 	public void executeCancelCheckout() {
-		Main.get().mainPanel.browser.fileBrowser.cancelCheckout();
+		Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
 		fireEvent(HasToolBarEvent.EXECUTE_CANCEL_CHECKOUT);
 	}
 	
@@ -383,7 +383,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Download document
 	 */
 	public void executeDownload() {
-		Main.get().mainPanel.browser.fileBrowser.table.downloadDocument(false);
+		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_DOCUMENT);
 	}
 
@@ -391,7 +391,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Download document as PDF
 	 */
 	public void executeDownloadPdf() {
-		Main.get().mainPanel.browser.fileBrowser.table.downloadDocumentPdf();
+		Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocumentPdf();
 		fireEvent(HasToolBarEvent.EXECUTE_DOWNLOAD_PDF_DOCUMENT);
 	}
 
@@ -472,8 +472,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute add subscription
 	 */
 	public void executeAddSubscription(){
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.addSubscription();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.addSubscription();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.addSubscription();
 		}
@@ -496,8 +496,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute remove property group
 	 */
 	public void executeRemoveSubscription(){
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.removeSubscription();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.removeSubscription();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.removeSubscription();
 		}
@@ -550,7 +550,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public void executeRefresh() {
 		switch (Main.get().mainPanel.topPanel.tabWorkspace.getSelectedWorkspace()) {
 			case ExtendedDockPanel.DESKTOP :
-				int actualView = Main.get().mainPanel.navigator.stackPanel.getStackIndex();
+				int actualView = Main.get().mainPanel.desktop.navigator.stackPanel.getStackIndex();
 				switch (actualView){
 					case PanelDefinition.NAVIGATOR_TAXONOMY:
 					case PanelDefinition.NAVIGATOR_CATEGORIES:
@@ -612,8 +612,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Execute add export
 	 */
 	public void executeExport(){
-		if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-			Main.get().mainPanel.browser.fileBrowser.exportFolderToFile();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.exportFolderToFile();
 		} else if (Main.get().activeFolderTree.isPanelSelected()) {
 			Main.get().activeFolderTree.exportFolderToFile();
 		}
@@ -902,10 +902,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				}
 				
 				// Enable scanner button
-				if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
-					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-					Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
 					enableScanner();
 					enableUploader();
 				}
@@ -918,10 +918,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Except taxonomy and thesaurus stack panels always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -930,11 +930,11 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			}
 			
 			// Disables add document, delete and create directory from thesaurus view
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_CATEGORIES ) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_CATEGORIES ) {
 				disableAddDocument();
 				disableAddSubscription();
-				if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_THESAURUS) {
 					disableCreateDirectory();
 					disableDelete();
 				}
@@ -997,8 +997,8 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			if (((doc.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE) && 
 				((folder.getPermissions() & GWTPermission.DELETE) == GWTPermission.DELETE ) &&
 				!doc.isCheckedOut() && !doc.isLocked() &&
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				enableDelete();
 			} else {
 				disableDelete();
@@ -1021,26 +1021,26 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					
 					// In thesaurus and categories view must not evaluate write folder permissions
 					if ((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ||
-						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
-						 Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+						 Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
+						 Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 						enableRename();
 						enableCopy();
 						enableMove();
 						enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 						enableWorkflow();
-						if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
-							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES &&
-							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
-							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
-							Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
+						if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TEMPLATES &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_PERSONAL &&
+							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
+							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
 							getAllGroups(); // Evaluates enable or disable property group buttons
 						}
 						// Enable scanner button
-						if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
-							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-							Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
+						if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
 							enableScanner();
 							enableUploader();
 						}
@@ -1099,19 +1099,19 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			} 
 			
 			// Only on taxonomy, categories, and thesaurus enables to send document link by mail 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				enableSendDocumentLink();
 			} else {
 				disableSendDocumentLink();
 			}
 			
 			// Excepts on taxonomy, categories and thesaurus panel always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -1133,7 +1133,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			Main.get().mainPanel.topPanel.mainMenu.setOptions(toolBarOption);
 			
 			// Sets the visible values to note tab
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.setVisibleAddNote(toolBarOption.addNoteOption);
 			
 			// Checking extension button 
 			for (Iterator<ToolBarButtonExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -1190,23 +1190,23 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				enableMove();
 				enableRemovePropertyGroup(); // Always enable it ( not controls button, only boolean value )
 				// On mail panel is not able to uploading files
-				if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL ) {
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL ) {
 					enableAddDocument();
 				} 		
 			} 
 			
 			// Onnly on taxonomy enables to send document link by mail 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY) {
 				enableSendDocumentLink();
 			} else {
 				disableSendDocumentLink();
 			}
 			
 			// Excepts on taxonomy and thesaurus panel always disabling 
-			if (Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
-				Main.get().mainPanel.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH || 
+				Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_MAIL) {
 				disableAddPropertyGroup();
 				disableRemovePropertyGroup();
 				disableFiredRemovePropertyGroup();
@@ -2372,7 +2372,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	

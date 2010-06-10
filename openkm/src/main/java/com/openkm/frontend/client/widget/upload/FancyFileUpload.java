@@ -372,7 +372,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 			getAllUsers();
 			
 			// On on root stack panel enabled must be enabled notify to user option
-			if (Main.get().mainPanel.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TAXONOMY) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TAXONOMY) {
 				hNotifyPanel.setVisible(false);
 			} else {
 				hNotifyPanel.setVisible(true);
@@ -409,7 +409,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 		if (importZip.getValue()) {
 			Main.get().activeFolderTree.refresh(true);
 		} else {
-			Main.get().mainPanel.browser.fileBrowser.refresh(Main.get().activeFolderTree.getActualPath());
+			Main.get().mainPanel.desktop.browser.fileBrowser.refresh(Main.get().activeFolderTree.getActualPath());
 		}
 	}
 
@@ -617,7 +617,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 					
 					// By default selected row after uploading is uploaded file
 					if (!docPath.equals("")) {
-						Main.get().mainPanel.browser.fileBrowser.mantainSelectedRowByPath(docPath);
+						Main.get().mainPanel.desktop.browser.fileBrowser.mantainSelectedRowByPath(docPath);
 					}
 					
 					uploadItem.setLoaded();

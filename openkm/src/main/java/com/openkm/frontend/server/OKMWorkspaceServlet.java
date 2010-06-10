@@ -107,9 +107,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setHelpMenuVisible(true);
 		
 		// Tab visibility
-		workspace.setDesktopTabVisible(false);
+		workspace.setDesktopTabVisible(true);
 		workspace.setSearchTabVisible(true);
-		workspace.setDashboardTabVisible(false);
+		workspace.setDashboardTabVisible(true);
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Available options
