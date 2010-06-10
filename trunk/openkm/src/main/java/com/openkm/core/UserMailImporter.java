@@ -40,7 +40,6 @@ public class UserMailImporter extends TimerTask {
 
 	public void run() {
 		log.info("*** UserMailImporter activated ***");
-		String systemToken = SessionManager.getInstance().getSystemToken();
         
 		try {
 			Collection<String> users = OKMAuth.getInstance().getUsers();
@@ -51,7 +50,7 @@ public class UserMailImporter extends TimerTask {
 				
 				for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
 					MailAccount ma = maIt.next();
-					MailUtils.importMessages(systemToken, uid, ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
+					MailUtils.importMessages(uid, ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
 				}
 			}
 		} catch (RepositoryException e) {
