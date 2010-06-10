@@ -28,43 +28,19 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.principal.PrincipalAdapterException;
 
 public interface AuthModule {
 
 	/**
-	 * Logins into the repository and gets a token with user info for future API
-	 * invocations.
-	 * 
-	 * @param user User name for login.
-	 * @param pass Password for login.
-	 * @return A token with authorization info for next API invocations.
-	 * @throws AccessDeniedException If authorization fails.
-	 * @throws UserAlreadyLoggerException If the user is already logged into the system.  
-	 * @throws RepositoryException If there is an error accessing to repository.
+	 * Logins into the repository.
 	 */
-	public void login(String user, String pass) throws UserAlreadyLoggerException,
-			AccessDeniedException, RepositoryException, DatabaseException, DatabaseException;
+	public void login() throws RepositoryException, DatabaseException;
 
 	/**
-	 * Logins into the repository and gets a token with user info for future API
-	 * invocations.
-	 * 
-	 * @return A token with authorization info for next API invocations.
-	 * @throws AccessDeniedException If authorization fails.
-	 * @throws RepositoryException If there is an error accessing to repository.
+	 * Log out from the repository.
 	 */
-	public void login() throws UserAlreadyLoggerException, AccessDeniedException, 
-			RepositoryException, DatabaseException;
-
-	/**
-	 * Log out from the repository. Invalidates the authorization token.
-	 * 
-	 * @throws AccessDeniedException If authorization fails.
-	 * @throws RepositoryException If there is an error accessing to repository.
-	 */
-	public void logout() throws AccessDeniedException, RepositoryException, DatabaseException;
+	public void logout() throws RepositoryException, DatabaseException;
 
 	/**
 	 * Add user permissions to a node.
