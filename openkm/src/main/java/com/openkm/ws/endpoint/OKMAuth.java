@@ -37,7 +37,6 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.module.AuthModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
@@ -61,21 +60,20 @@ public class OKMAuth {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
 	 */
-	public void login(String user, String pass) throws AccessDeniedException,
-			UserAlreadyLoggerException, RepositoryException, DatabaseException {
-		log.debug("login({}, {})", user, pass);
+	public void login() throws RepositoryException, DatabaseException {
+		log.debug("login()");
 		AuthModule am = ModuleManager.getAuthModule();
-		am.login(user, pass);
+		am.login();
 		log.debug("login: void");
 	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
 	 */
-	public void logout() throws AccessDeniedException, RepositoryException, DatabaseException {
+	public void logout() throws RepositoryException, DatabaseException {
 		log.debug("logout()");
 		AuthModule am = ModuleManager.getAuthModule();
-		am.logout(); 
+		am.logout();
 		log.debug("logout: void");
 	}
 
