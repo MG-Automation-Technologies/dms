@@ -25,22 +25,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.openkm.core.AccessDeniedException;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.principal.PrincipalAdapterException;
 
 public class EJBAuthModule implements com.openkm.module.AuthModule {
 
-	public void login(String user, String pass) throws AccessDeniedException, UserAlreadyLoggerException,
-			RepositoryException {
+	public void login() throws RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 	}
 
-	public void login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException {
-		// TODO Auto-generated method stub
-	}
-
-	public void logout() throws AccessDeniedException, RepositoryException {
+	public void logout() throws RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 	}
 
