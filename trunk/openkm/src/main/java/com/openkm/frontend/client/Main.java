@@ -67,8 +67,6 @@ import com.openkm.frontend.client.widget.chat.OnlineUsersPopup;
 import com.openkm.frontend.client.widget.findfolder.FindFolderSelectPopup;
 import com.openkm.frontend.client.widget.foldertree.FolderTree;
 import com.openkm.frontend.client.widget.notify.NotifyPopup;
-import com.openkm.frontend.client.widget.resize.HorizontalBarSplitter;
-import com.openkm.frontend.client.widget.resize.VerticalBarSplitter;
 import com.openkm.frontend.client.widget.security.SecurityPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 import com.openkm.frontend.client.widget.startup.StartUpPopup;
@@ -117,8 +115,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
 	public OnlineUsersPopup onlineUsersPopup;
-	public VerticalBarSplitter verticalBarSplitter;
-	public HorizontalBarSplitter horizontalBarSplitter;
 	
 	// User workspace properties
 	public WorkspaceUserProperties workspaceUserProperties;
@@ -295,8 +291,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		onlineUsersPopup.setHeight("350px");
 		onlineUsersPopup.setStyleName("okm-Popup");
 		onlineUsersPopup.addStyleName("okm-DisableSelect");
-		verticalBarSplitter = new VerticalBarSplitter();
-		horizontalBarSplitter = new HorizontalBarSplitter();
 
 		// Get grid of scrollbars, and clear out the window's built-in margin,
 	    // because we want to take advantage of the entire client area.
@@ -305,8 +299,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	    
 	    RootPanel.get().add(mainPanel);
 	    RootPanel.get().add(dragable);
-	    RootPanel.get().add(verticalBarSplitter);
-	    RootPanel.get().add(horizontalBarSplitter);
 	    
 	    Window.addWindowClosingHandler(new ClosingHandler() {
 			@Override
@@ -317,7 +309,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		
 		// Sets the active folder tree, it'll be used to store the active folder 
 		// every time switching stack panel
-		activeFolderTree = mainPanel.navigator.taxonomyTree;
+		activeFolderTree = mainPanel.desktop.navigator.taxonomyTree;
 		
 		// Start extensions
 		ExtensionManager.start(Customization.getExtensionWidgets());
@@ -341,11 +333,11 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		this.lang = lang;
 		hI18n = Lang.getLang(lang);
 		fireEvent(HasLanguageEvent.LANGUAGE_CHANGED);
-		mainPanel.navigator.langRefresh();
+		mainPanel.desktop.navigator.langRefresh();
 		mainPanel.topPanel.langRefresh();
-		mainPanel.browser.langRefresh();
-		mainPanel.historySearch.langRefresh();
-		mainPanel.search.langRefresh();
+		mainPanel.desktop.browser.langRefresh();
+		mainPanel.search.historySearch.langRefresh();
+		mainPanel.search.searchBrowser.langRefresh();
 		mainPanel.bottomPanel.langRefresh();
 		mainPanel.dashboard.langRefresh();
 		fileUpload.langRefresh();
@@ -368,12 +360,12 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		wizardPopup.langRefresh();
 		onlineUsersPopup.langRefresh();
 		// Refreshing all menus on tabs not only the active
-		mainPanel.navigator.taxonomyTree.langRefresh();
-		mainPanel.navigator.thesaurusTree.langRefresh();
-		mainPanel.navigator.personalTree.langRefresh();
-		mainPanel.navigator.templateTree.langRefresh();
-		mainPanel.navigator.trashTree.langRefresh();
-		mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
+		mainPanel.desktop.navigator.taxonomyTree.langRefresh();
+		mainPanel.desktop.navigator.thesaurusTree.langRefresh();
+		mainPanel.desktop.navigator.personalTree.langRefresh();
+		mainPanel.desktop.navigator.templateTree.langRefresh();
+		mainPanel.desktop.navigator.trashTree.langRefresh();
+		mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
 	}
 	
 	/**

@@ -39,7 +39,7 @@ public class NavigatorComunicator {
 	 * @return The stack index value
 	 */
 	public static int getStackIndex() {
-		return Main.get().mainPanel.navigator.getStackIndex();
+		return Main.get().mainPanel.desktop.navigator.getStackIndex();
 	}
 	
 }
