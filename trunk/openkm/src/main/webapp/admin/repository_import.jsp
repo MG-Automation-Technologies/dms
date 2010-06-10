@@ -57,7 +57,7 @@
 				File dir = new File(fsPath);
 				int docs = FileUtils.listFiles(dir, null, true).size();
 				long begin = System.currentTimeMillis();
-				ImpExpStats stats = RepositoryImporter.importDocuments(token, dir, repoPath, out, new HTMLInfoDecorator(docs));
+				ImpExpStats stats = RepositoryImporter.importDocuments(dir, repoPath, out, new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
 				out.println("<hr/>");
 				out.println("<div class=\"ok\">Filesystem '"+new File(fsPath).getAbsolutePath()+"' imported into '"+repoPath+"'</div>");
