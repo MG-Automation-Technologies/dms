@@ -23,7 +23,6 @@ package com.openkm.cache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.jcr.Node;
@@ -38,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.util.Serializer;
 
 public class UserKeywordsManager {
@@ -74,9 +72,9 @@ public class UserKeywordsManager {
 	 * 
 	 */
 	public static synchronized void update(String doc, String keywords) {
-		SessionManager sm = SessionManager.getInstance();
-		ArrayList<String> docKeywords = splitKeywords(keywords);
+		//ArrayList<String> docKeywords = splitKeywords(keywords);
 		
+		/*
 		for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
 			String uid = sm.getInfo(it.next()).getSession().getUserID();
 			HashMap<String, ArrayList<String>> userDocKeywords = userDocKeywordsMgr.get(uid);
@@ -85,6 +83,7 @@ public class UserKeywordsManager {
 				userDocKeywords.put(doc, docKeywords);
 			}
 		}
+		*/
 	}
 	
 	/**
