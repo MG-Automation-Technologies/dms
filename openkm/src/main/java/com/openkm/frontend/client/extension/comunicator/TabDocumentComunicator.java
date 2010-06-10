@@ -42,7 +42,7 @@ public class TabDocumentComunicator {
 	 * @return
 	 */
 	public static int getSelectedTab() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.getSelectedTab();
+		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.getSelectedTab();
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class TabDocumentComunicator {
 	 * @return
 	 */
 	public static GWTDocument getDocument() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.getDocument();
+		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.getDocument();
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class TabDocumentComunicator {
 	 * @param keyword
 	 */
 	public static void addKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeyword(keyword);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.addKeyword(keyword);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class TabDocumentComunicator {
 	 * @param keyword
 	 */
 	public static void removeKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeKey(keyword);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class TabDocumentComunicator {
 	 * @param keyword
 	 */
 	public static void addCategory(GWTFolder category) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(category);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.addCategory(category);
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class TabDocumentComunicator {
 	 * @param keyword
 	 */
 	public static void removeCategory(String UUID) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeCategory(UUID);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeCategory(UUID);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class TabDocumentComunicator {
 	 * @return
 	 */
 	public static Collection<String> getKeywords() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.document.getKeywords();
+		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.getKeywords();
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class TabDocumentComunicator {
 	 * @return
 	 */
 	public static Collection<GWTNote> getNotes() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.notes.getNotes();
+		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.notes.getNotes();
 	}
 	
 	/**
@@ -114,6 +114,6 @@ public class TabDocumentComunicator {
 	 * @return
 	 */
 	public boolean isVisibleButton() {
-		return Main.get().mainPanel.browser.tabMultiple.tabDocument.isVisibleButton();
+		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.isVisibleButton();
 	}
 }

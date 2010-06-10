@@ -83,7 +83,7 @@ public class ExtensionManager {
 	 * @param extension
 	 */
 	private static void addTabDocument(TabDocumentExtension extension) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.addDocumentExtension(extension);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addDocumentExtension(extension);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class ExtensionManager {
 	 * @param handlerExtension
 	 */
 	private static void addDocumentHandlerExtension(DocumentHandlerExtension handlerExtension) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.addDocumentHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addDocumentHandlerExtension(handlerExtension);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class ExtensionManager {
 	 * @param handlerExtension
 	 */
 	private static void addFolderHandlerExtension(FolderHandlerExtension handlerExtension) {
-		Main.get().mainPanel.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
 	}
 	
 	/**
@@ -137,7 +137,7 @@ public class ExtensionManager {
 	 * @param handlerExtension
 	 */
 	private static void addNavigatorHandlerExtension(NavigatorHandlerExtension handlerExtension) {
-		Main.get().mainPanel.navigator.stackPanel.addNavigatorHandlerExtension(handlerExtension);
+		Main.get().mainPanel.desktop.navigator.stackPanel.addNavigatorHandlerExtension(handlerExtension);
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public class ExtensionManager {
 	 * @param extension
 	 */
 	private static void addTabFolder(TabFolderExtension extension) {
-		Main.get().mainPanel.browser.tabMultiple.tabFolder.addFolderExtension(extension);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderExtension(extension);
 	}
 	
 	/**
