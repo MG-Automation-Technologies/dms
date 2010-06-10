@@ -120,7 +120,7 @@ public class CategoriesMenu extends MenuBase {
 	Command downloadFile = new Command() {
 		public void execute() {		
 			if (downloadOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.downloadDocument(false);
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
 				hide();
 			}
 		}
@@ -130,7 +130,7 @@ public class CategoriesMenu extends MenuBase {
 	Command checkoutFile = new Command() {
 		public void execute() {
 			if (checkoutOption) {
-				Main.get().mainPanel.browser.fileBrowser.checkout();
+				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
 				hide();
 			}
 		}
@@ -140,7 +140,7 @@ public class CategoriesMenu extends MenuBase {
 	Command checkinFile = new Command() {
 		public void execute() {
 			if (checkinOption) {
-				Main.get().fileUpload.setPath(Main.get().mainPanel.browser.fileBrowser.getPath());
+				Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
 				Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
 				Main.get().fileUpload.showPopup(false,false);
 				hide();
@@ -152,7 +152,7 @@ public class CategoriesMenu extends MenuBase {
 	Command cancelCheckinFile = new Command() {
 		public void execute() {
 			if (cancelCheckoutOption) {
-				Main.get().mainPanel.browser.fileBrowser.cancelCheckout();
+				Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
 				hide();
 			}
 		}
@@ -162,7 +162,7 @@ public class CategoriesMenu extends MenuBase {
 	Command lockFile = new Command() {
 		public void execute() {
 			if (lockOption) {
-				Main.get().mainPanel.browser.fileBrowser.lock();
+				Main.get().mainPanel.desktop.browser.fileBrowser.lock();
 				hide();
 			}
 		}
@@ -172,7 +172,7 @@ public class CategoriesMenu extends MenuBase {
 	Command unlockFile = new Command() {
 		public void execute() {
 			if (unlockOption) {
-				Main.get().mainPanel.browser.fileBrowser.unlock();
+				Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
 				hide();
 			}
 		}
@@ -182,7 +182,7 @@ public class CategoriesMenu extends MenuBase {
 	Command deleteFile = new Command() {
 		public void execute() {
 			if (deleteOption) {
-				Main.get().mainPanel.browser.fileBrowser.confirmDelete();
+				Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 				hide();
 			}
 		}
@@ -192,7 +192,7 @@ public class CategoriesMenu extends MenuBase {
 	Command renameFile = new Command() {
 		public void execute() {
 			if (renameOption) {
-				Main.get().mainPanel.browser.fileBrowser.rename();
+				Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 				hide();
 			}
 		}
@@ -212,7 +212,7 @@ public class CategoriesMenu extends MenuBase {
 	Command mediaPlayerFile = new Command() {
 		public void execute() {		
 			if (mediaPlayerOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.mediaPlayerDocument();
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.mediaPlayerDocument();
 				hide();
 			}
 		}
@@ -222,7 +222,7 @@ public class CategoriesMenu extends MenuBase {
 	Command imageViewerFile = new Command() {
 		public void execute() {		
 			if (imageViewerOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.imageViewerDocument();
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
 				hide();
 			}
 		}
@@ -234,8 +234,8 @@ public class CategoriesMenu extends MenuBase {
 			if (goOption) {
 				String docPath = "";
 				String path = "";
-				if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()) {
-					docPath = Main.get().mainPanel.browser.fileBrowser.getDocument().getPath();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+					docPath = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath();
 					path = docPath.substring(0,docPath.lastIndexOf("/"));
 				}
 				CommonUI.openAllFolderPath(path, docPath);
@@ -418,7 +418,7 @@ public class CategoriesMenu extends MenuBase {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.browser.fileBrowser.thesaurusMenuPopup.hide();
+		Main.get().mainPanel.desktop.browser.fileBrowser.thesaurusMenuPopup.hide();
 	}
 	
 	/* (non-Javadoc)

@@ -55,9 +55,9 @@ public class FileTextBox extends Composite {
 					switch(action) {
 						case ACTION_RENAME:
 							if (textBox.getText().length() > 0) {
-								Main.get().mainPanel.browser.fileBrowser.rename(textBox.getText());
+								Main.get().mainPanel.desktop.browser.fileBrowser.rename(textBox.getText());
 							} else {
-								Main.get().mainPanel.browser.fileBrowser.hideRename();
+								Main.get().mainPanel.desktop.browser.fileBrowser.hideRename();
 							}
 							break;
 					}
@@ -67,7 +67,7 @@ public class FileTextBox extends Composite {
 				case (char)KeyCodes.KEY_ESCAPE: 
 					switch(action) {
 						case ACTION_RENAME:
-							Main.get().mainPanel.browser.fileBrowser.hideRename();
+							Main.get().mainPanel.desktop.browser.fileBrowser.hideRename();
 							break;
 					}
 					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications

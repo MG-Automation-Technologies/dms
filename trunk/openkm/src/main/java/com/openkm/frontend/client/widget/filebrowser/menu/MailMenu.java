@@ -83,7 +83,7 @@ public class MailMenu extends MenuBase {
 	Command deleteFile = new Command() {
 		public void execute() {
 			if (deleteOption) {
-				Main.get().mainPanel.browser.fileBrowser.confirmDelete();
+				Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 				hide();
 			}
 		}
@@ -93,7 +93,7 @@ public class MailMenu extends MenuBase {
 	Command renameFile = new Command() {
 		public void execute() {
 			if (renameOption) {
-				Main.get().mainPanel.browser.fileBrowser.rename();
+				Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 				hide();
 			}
 		}
@@ -103,7 +103,7 @@ public class MailMenu extends MenuBase {
 	Command moveFile = new Command() {
 		public void execute() {
 			if (moveOption) {
-				Main.get().mainPanel.browser.fileBrowser.move();
+				Main.get().mainPanel.desktop.browser.fileBrowser.move();
 				hide();
 			}
 		}
@@ -113,7 +113,7 @@ public class MailMenu extends MenuBase {
 	Command copyFile = new Command() {
 		public void execute() {
 			if (copyOption) {
-				Main.get().mainPanel.browser.fileBrowser.copy();
+				Main.get().mainPanel.desktop.browser.fileBrowser.copy();
 				hide();
 			}
 		}
@@ -222,7 +222,7 @@ public class MailMenu extends MenuBase {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.browser.fileBrowser.mailMenuPopup.hide();
+		Main.get().mainPanel.desktop.browser.fileBrowser.mailMenuPopup.hide();
 	}
 	
 	@Override
