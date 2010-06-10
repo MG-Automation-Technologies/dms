@@ -73,7 +73,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.SessionManager;
 import com.openkm.module.RepositoryModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
@@ -206,7 +205,6 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		// Store system session token 
 		DirectAuthModule.loadUserData(systemSession);
-		SessionManager.getInstance().putSystem(systemSession);
 		log.debug("*** System user created "+systemSession.getUserID());				
 				
 		log.debug("initialize: {}", okmRootPath);
