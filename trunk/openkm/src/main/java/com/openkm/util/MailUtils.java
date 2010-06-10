@@ -169,11 +169,10 @@ public class MailUtils {
 	/**
 	 * Import messages 
 	 */
-	public static void importMessages(String token, String uid, String host, String user, String password,
+	public static void importMessages(String uid, String host, String user, String password,
 			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("importMessages({}, {}, {}, {}, {}, {})", 
-				new Object[] { token, uid, host, user, password, imapFolder });
+		log.info("importMessages({}, {}, {}, {}, {})", new Object[] { uid, host, user, password, imapFolder });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		
@@ -270,7 +269,7 @@ public class MailUtils {
 					if (!okmRepository.hasNode(newMailPath)) {
 						okmMail.create(mail);
 						try {
-							addAttachments(token, mail, msg);
+							addAttachments(mail, msg);
 						} catch (UnsupportedMimeTypeException e) {
 							e.printStackTrace();
 						} catch (FileSizeExceededException e) {
@@ -345,7 +344,7 @@ public class MailUtils {
 	/**
 	 * Add attachments to an imported mail.
 	 */
-	private static void addAttachments(String token, com.openkm.bean.Mail mail, Part p) throws 
+	private static void addAttachments(com.openkm.bean.Mail mail, Part p) throws 
 			MessagingException, IOException, UnsupportedMimeTypeException, FileSizeExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
