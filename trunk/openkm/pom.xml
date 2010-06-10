@@ -477,6 +477,7 @@
         <configuration>
           <source>${java.compiler}</source>
           <target>${java.compiler}</target>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
