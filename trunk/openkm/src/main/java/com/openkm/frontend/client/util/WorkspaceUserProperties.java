@@ -144,41 +144,41 @@ public class WorkspaceUserProperties {
 			// showing stack
 			boolean refreshStack = false;
 			if (workspace.isCategoriesStackVisible()) {
-				Main.get().mainPanel.navigator.showCategories();
+				Main.get().mainPanel.desktop.navigator.showCategories();
 				refreshStack = true;
 			}
 			if (workspace.isThesaurusStackVisible()) {
-				Main.get().mainPanel.navigator.showThesaurus();
+				Main.get().mainPanel.desktop.navigator.showThesaurus();
 				refreshStack = true;
 			}
 			if (workspace.isPersonalStackVisible()) {
-				Main.get().mainPanel.navigator.showPersonal();
-				Main.get().mainPanel.navigator.taxonomyTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.categoriesTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.thesaurusTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.personalTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.templateTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showPersonal();
-				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.showPersonal();
+				Main.get().mainPanel.desktop.navigator.taxonomyTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.categoriesTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.thesaurusTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.personalTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.templateTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.mailTree.folderSelectPopup.showPersonal();
+				Main.get().mainPanel.desktop.navigator.trashTree.folderSelectPopup.showPersonal();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showPersonal();
-				Main.get().mainPanel.search.searchIn.showPersonal();
+				Main.get().mainPanel.search.searchBrowser.searchIn.showPersonal();
 				refreshStack = true;
 			}
 			if (workspace.isMailStackVisible()) {
-				Main.get().mainPanel.navigator.showMail();
-				Main.get().mainPanel.navigator.taxonomyTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.categoriesTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.thesaurusTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.personalTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.templateTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.mailTree.folderSelectPopup.showMail();
-				Main.get().mainPanel.navigator.trashTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.showMail();
+				Main.get().mainPanel.desktop.navigator.taxonomyTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.categoriesTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.thesaurusTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.personalTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.templateTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.mailTree.folderSelectPopup.showMail();
+				Main.get().mainPanel.desktop.navigator.trashTree.folderSelectPopup.showMail();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showMail();
-				Main.get().mainPanel.search.searchIn.showMail();
+				Main.get().mainPanel.search.searchBrowser.searchIn.showMail();
 				refreshStack = true;
 			}
 			if (refreshStack) {
-				Main.get().mainPanel.navigator.refreshView();
+				Main.get().mainPanel.desktop.navigator.refreshView();
 			}
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
@@ -265,21 +265,21 @@ public class WorkspaceUserProperties {
 	 * Some actions must be enabled at ends because some objects are not created since end startp up
 	 */
 	public void setAvailableAction() {
-		Main.get().mainPanel.navigator.taxonomyTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.categoriesTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.thesaurusTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.templateTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.personalTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.mailTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.navigator.trashTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.taxonomyMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.categoriesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.thesaurusMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.templatesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
-		Main.get().mainPanel.search.searchResult.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.taxonomyTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.categoriesTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.thesaurusTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.templateTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.personalTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.mailTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.navigator.trashTree.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.taxonomyMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.categoriesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.thesaurusMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.templatesMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.personalMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.mailMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.menu.setAvailableOption(workspace.getAvailableOption());
+		Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.setAvailableOption(workspace.getAvailableOption());
 		Main.get().mainPanel.topPanel.mainMenu.setAvailableOption(workspace.getAvailableOption());
 	}
 }
