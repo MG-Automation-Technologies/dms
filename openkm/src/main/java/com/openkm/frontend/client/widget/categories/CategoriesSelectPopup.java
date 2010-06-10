@@ -108,7 +108,7 @@ public class CategoriesSelectPopup extends DialogBox  {
 	 * Executes the action
 	 */
 	public void executeAction(GWTFolder category) {
-		Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addCategory(category);
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.addCategory(category);
 	}
 	
 	/**

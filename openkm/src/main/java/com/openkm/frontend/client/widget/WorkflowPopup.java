@@ -270,15 +270,15 @@ public class WorkflowPopup extends DialogBox {
 			}
 		}
 		
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
 		workflowService.runProcessDefinition(gwtDocument.getUuid(), new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
 				                             values, callbackRunProcessDefinition);
 		hide();
-		if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
-			GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
+			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
 		}
 	}
 	

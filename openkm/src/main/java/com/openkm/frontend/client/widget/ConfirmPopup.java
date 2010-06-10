@@ -124,16 +124,16 @@ public class ConfirmPopup extends DialogBox {
 		switch (action) {
 		
 			case CONFIRM_DELETE_FOLDER :
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.delete();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.delete();
 				} else if (Main.get().activeFolderTree.isPanelSelected()) {
 					Main.get().activeFolderTree.delete();
 				}
 				break;
 				
 			case CONFIRM_DELETE_DOCUMENT :
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.delete();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.delete();
 				}
 				break;
 				
@@ -144,40 +144,40 @@ public class ConfirmPopup extends DialogBox {
 				}
 				
 				//Ensures that trash view is enabled
-				if (Main.get().mainPanel.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
-					Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
+				if (Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TRASH, false);
 				}
 				
 				Main.get().activeFolderTree.purgeTrash();
 				break;
 			
 			case CONFIRM_PURGE_FOLDER:
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.purge();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.purge();
 				} else if (Main.get().activeFolderTree.isPanelSelected()) {
 					Main.get().activeFolderTree.purge();
 				}
 				break;
 				
 			case CONFIRM_PURGE_DOCUMENT:
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.purge();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.purge();
 				}
 				break;
 			
 			case CONFIRM_DELETE_DOCUMENT_PROPERTY_GROUP:
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.removePropertyGroup();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.removePropertyGroup();
 				// Always if a property group is deleted add property button on tool bar must be enabled, we execute to ensure this
 				Main.get().mainPanel.topPanel.toolBar.enableAddPropertyGroup();
 				break;
 				
 			case CONFIRM_PURGE_VERSION_HISTORY_DOCUMENT:
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.version.purgeVersionHistory();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.version.purgeVersionHistory();
 				break;
 			
 			case CONFIRM_RESTORE_HISTORY_DOCUMENT:
 				if (object!=null && object instanceof String ) {
-					Main.get().mainPanel.browser.tabMultiple.tabDocument.version.restoreVersion((String) object);
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.version.restoreVersion((String) object);
 				}
 				break;
 			
@@ -186,22 +186,22 @@ public class ConfirmPopup extends DialogBox {
 				break;
 				
 			case CONFIRM_DELETE_SAVED_SEARCH:
-				Main.get().mainPanel.historySearch.searchSaved.deleteSearch();
+				Main.get().mainPanel.search.historySearch.searchSaved.deleteSearch();
 				break;
 				
 			case CONFIRM_DELETE_USER_NEWS:
-				Main.get().mainPanel.historySearch.userNews.deleteSearch();
+				Main.get().mainPanel.search.historySearch.userNews.deleteSearch();
 				break;
 			
 			case CONFIRM_DELETE_MAIL :
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.delete();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.delete();
 				}
 				break;
 			
 			case CONFIRM_PURGE_MAIL:
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.purge();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.purge();
 				}
 				break;
 				
