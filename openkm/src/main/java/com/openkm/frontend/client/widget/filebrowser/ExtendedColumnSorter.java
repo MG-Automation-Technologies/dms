@@ -61,10 +61,10 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		// Get the primary column, sort order, number of rows, number of columns
 		int column = sortList.getPrimaryColumn();
 	    boolean ascending = sortList.isPrimaryAscending();
-	    int rows = Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getRowCount();
-	    int columns = Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getColumnCount();
-	    int selectedRow = Main.get().mainPanel.browser.fileBrowser.table.getSelectedRow();
-	    Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.browser.fileBrowser.table.data);
+	    int rows = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getRowCount();
+	    int columns = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getColumnCount();
+	    int selectedRow = Main.get().mainPanel.desktop.browser.fileBrowser.table.getSelectedRow();
+	    Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.desktop.browser.fileBrowser.table.data);
 	    
 	    List<String[]> elementList = new ArrayList<String[]>(); 					// List with all data
 	    List<GWTObjectToOrder> elementToOrder = new ArrayList<GWTObjectToOrder>(); 	// List with column data, and actual position
@@ -74,7 +74,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    	String[] rowI= new String[columns];
 	    	GWTObjectToOrder rowToOrder = new GWTObjectToOrder();
 	    	for (int x=0; x<columns; x++) {
-	    		rowI[x] = Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getHTML(i, x);
+	    		rowI[x] = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getHTML(i, x);
 	    	}
 	    	elementList.add(i,rowI);
 	    	
@@ -168,13 +168,13 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	 */
 	private void applySort(List<String[]>  elementList, List<GWTObjectToOrder> elementToOrder) {
 		// Removing all values
-		while (Main.get().mainPanel.browser.fileBrowser.table.getDataTable().getRowCount()>0 ){
-			Main.get().mainPanel.browser.fileBrowser.table.getDataTable().removeRow(0);
+		while (Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().getRowCount()>0 ){
+			Main.get().mainPanel.desktop.browser.fileBrowser.table.getDataTable().removeRow(0);
 		}
 		
 		// Data map
-		Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.browser.fileBrowser.table.data);
-		Main.get().mainPanel.browser.fileBrowser.table.reset();
+		Map<Integer,Object> data = new HashMap<Integer,Object>(Main.get().mainPanel.desktop.browser.fileBrowser.table.data);
+		Main.get().mainPanel.desktop.browser.fileBrowser.table.reset();
 		
 		int column = 0;
 		for (Iterator<GWTObjectToOrder> it =  elementToOrder.iterator(); it.hasNext();) {
@@ -182,16 +182,16 @@ public class ExtendedColumnSorter extends ColumnSorter {
     		String[] row = elementList.get(Integer.parseInt(orderedColumn.getDataId()));
     		
     		if (data.get(Integer.parseInt(row[7])) instanceof GWTFolder) {
-    			Main.get().mainPanel.browser.fileBrowser.table.addRow((GWTFolder) data.get(Integer.parseInt(row[7])));
+    			Main.get().mainPanel.desktop.browser.fileBrowser.table.addRow((GWTFolder) data.get(Integer.parseInt(row[7])));
     		} else if (data.get(Integer.parseInt(row[7])) instanceof GWTMail) {
-    			Main.get().mainPanel.browser.fileBrowser.table.addRow((GWTMail) data.get(Integer.parseInt(row[7])));
+    			Main.get().mainPanel.desktop.browser.fileBrowser.table.addRow((GWTMail) data.get(Integer.parseInt(row[7])));
     		} else if (data.get(Integer.parseInt(row[7])) instanceof GWTDocument) {
-    			Main.get().mainPanel.browser.fileBrowser.table.addRow((GWTDocument) data.get(Integer.parseInt(row[7])));
+    			Main.get().mainPanel.desktop.browser.fileBrowser.table.addRow((GWTDocument) data.get(Integer.parseInt(row[7])));
     		}
     		
     		// Sets selectedRow
     		if (!selectedRowDataID.equals("") && selectedRowDataID.equals(row[7])) {
-    			Main.get().mainPanel.browser.fileBrowser.table.setSelectedRow(column);
+    			Main.get().mainPanel.desktop.browser.fileBrowser.table.setSelectedRow(column);
     			selectedRowDataID = "";
     		}
     		

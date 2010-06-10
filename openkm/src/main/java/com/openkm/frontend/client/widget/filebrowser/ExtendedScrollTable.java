@@ -341,14 +341,14 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 				
 				// Only for right mouuse button
 				if (!headerFired && type==EVENT_ONMOUSEDOWN_RIGHT) {
-					Main.get().mainPanel.browser.fileBrowser.showMenu();
+					Main.get().mainPanel.desktop.browser.fileBrowser.showMenu();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 				}
 				
 				if (dataTable.getEventTargetCell(event)!=null) {
 					// Mark panel as selected and disables tree navigator panel
-					if (getSelectedRow()>=0 && !Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-						Main.get().mainPanel.browser.fileBrowser.setSelectedPanel(true);
+					if (getSelectedRow()>=0 && !Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+						Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedPanel(true);
 					} 
 					
 					// And row must be other than the selected one
@@ -358,7 +358,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						switch (rowAction) {
 							case ACTION_RENAMING :
 								if (getSelectedRow() != selectedRow) {
-									Main.get().mainPanel.browser.fileBrowser.hideRename(selectedRow);
+									Main.get().mainPanel.desktop.browser.fileBrowser.hideRename(selectedRow);
 								}
 								break;
 						}
@@ -366,22 +366,22 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						selectedRow = getSelectedRow();
 						
 						if (isFolderSelected()) {				
-							Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
+							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabFolder();
 							GWTFolder folder = getFolder();
-							Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(folder);
+							Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
 							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
 									 														 Main.get().activeFolderTree.getFolder(),
 																							 FILE_BROWSER);
 						} else if (isMailSelected()) {				
-							Main.get().mainPanel.browser.tabMultiple.enableTabMail();
+							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 							GWTMail mail = getMail();
-							Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+							Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
 							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
 									 														 Main.get().activeFolderTree.getFolder());
 						} else {
-							Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
+							Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 							GWTDocument doc = getDocument();
-							Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+							Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
 							Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 						}
 					} 
@@ -397,26 +397,26 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 				
 				if (!headerFired && getSelectedRow() >= 0) {
 					if (isFolderSelected()) {
-						Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
+						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabFolder();
 						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
-							Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(getFolder());
+							Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(getFolder());
 						}
 						Main.get().activeFolderTree.setActiveNode(getFolder().getPath(),true);
 					} else if (isMailSelected()) {				
-						Main.get().mainPanel.browser.tabMultiple.enableTabMail();
+						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
 						GWTMail mail = getMail();
 						if (getSelectedRow() != selectedRow) { // Must not refresh properties on double click if row is yet selected
-							Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+							Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
 						}
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,
 								 														 Main.get().activeFolderTree.getFolder());
 					} else {
-						Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
+						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
 						GWTDocument doc = getDocument();
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 						// We come here before executing click ( click is always executed ) 
 						if (enableOpen) {
-							if (Main.get().mainPanel.browser.tabMultiple.status.isPanelRefreshing()) {
+							if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
 								refreshDownloadTimer();
 							} else {
 								// We doing and extra time, because when Status unsetGroup is fired in TabDocument needs some extra time to finishing method
@@ -440,8 +440,8 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		            int noAction = FileBrowser.ACTION_NONE;
 		            
 		            // On trash drag is disabled
-					if (isSelectedRow() && Main.get().mainPanel.browser.fileBrowser.fileBrowserAction==noAction &&
-						Main.get().mainPanel.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH ){					
+					if (isSelectedRow() && Main.get().mainPanel.desktop.browser.fileBrowser.fileBrowserAction==noAction &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH ){					
 						Main.get().dragable.show(dataTable.getHTML(getSelectedRow(),1)+dataTable.getHTML(getSelectedRow(),2), OriginPanel.FILE_BROWSER);
 					}
 					unsetDraged(); 
@@ -961,7 +961,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			@Override
 			public void run() {
 				// While status is visible must continue evaluating
-				if (Main.get().mainPanel.browser.tabMultiple.status.isPanelRefreshing()) {
+				if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
 					timer.schedule(500);
 				} else {
 					timer.cancel();

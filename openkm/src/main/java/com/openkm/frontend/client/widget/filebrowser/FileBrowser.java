@@ -310,7 +310,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void refresh(String fldId) {
 		Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_FOLDERS);
-		Main.get().mainPanel.browser.tabMultiple.tabFolder.resetNumericFolderValues();
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.resetNumericFolderValues();
 		numberOfFolders = 0;
 		numberOfDocuments = 0;
 		numberOfMails = 0;
@@ -354,7 +354,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void addFolder(GWTFolder folder){
 		table.addRow(folder);
-		Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderChilds();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
 	}
 	
 	/**
@@ -382,7 +382,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		public void onSuccess(List<GWTFolder> result) {
 			List<GWTFolder> folderList = result;
 			numberOfFolders = folderList.size();
-			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfFolders(numberOfFolders);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfFolders(numberOfFolders);
 			removeAllRows();
 			
 			for (Iterator<GWTFolder> it = folderList.iterator(); it.hasNext();) {
@@ -390,13 +390,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 				addRow(folder);
 			}
 			
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_DOCUMENTS);
 			getDocumentChilds(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderChilds();
 			Main.get().showError("GetFolderChilds", caught);
 		}
 	};
@@ -408,18 +408,18 @@ public class FileBrowser extends Composite implements OriginPanel {
 		public void onSuccess(List<GWTDocument> result){
 			List<GWTDocument> documentList = result;	
 			numberOfDocuments = result.size();
-			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfDocuments(numberOfDocuments);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfDocuments(numberOfDocuments);
 			
 			for (Iterator<GWTDocument> it = documentList.iterator(); it.hasNext();){
 				GWTDocument doc = it.next();
 				addRow(doc);
 			}
 			
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_TAXONOMY_FILEBROWSER_MAILS);
-			if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-				Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				getMailChilds(fldId);
 			} else {
 				selectSelectedRowInTable();
@@ -428,7 +428,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentChilds();
 			Main.get().showError("GetDocumentChilds", caught);
 		}
 	};
@@ -440,7 +440,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		public void onSuccess(List<GWTMail> result){
 			List<GWTMail> mailList = result;	
 			numberOfMails = result.size();
-			Main.get().mainPanel.browser.tabMultiple.tabFolder.setNumberOfMails(numberOfMails);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setNumberOfMails(numberOfMails);
 			
 			for (Iterator<GWTMail> it = mailList.iterator(); it.hasNext();) {
 				addRow(it.next());
@@ -455,12 +455,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 				createdFromTemplate = false;
 			}
 			
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_CATEGORIES);
 			pendingCheckoutFile();
 		}
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailChilds();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().showError("GetMailChilds", caught);
 		}
 	};
@@ -486,22 +486,22 @@ public class FileBrowser extends Composite implements OriginPanel {
 			GWTDocument doc = table.getDocument();
 			if (doc != null) {
 				// Every time refreshing document properties can be changed ( multi user activity for example )
-				Main.get().mainPanel.browser.tabMultiple.enableTabDocument();
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+				Main.get().mainPanel.desktop.browser.tabMultiple.enableTabDocument();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
 				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 			} else {
 				GWTMail mail = table.getMail();
 				if (mail!=null) {
 					// Every time refreshing document properties can be changed ( multi user activity for example )
-					Main.get().mainPanel.browser.tabMultiple.enableTabMail();
-					Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(mail);
+					Main.get().mainPanel.desktop.browser.tabMultiple.enableTabMail();
+					Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(mail);
 					Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(mail,Main.get().activeFolderTree.getFolder());
 				} else {
 				GWTFolder folder = table.getFolder();
 					if (folder != null) {
 						// Every time refreshing folder properties can be changed ( multi user activity for example )
-						Main.get().mainPanel.browser.tabMultiple.enableTabFolder();
-						Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(folder);
+						Main.get().mainPanel.desktop.browser.tabMultiple.enableTabFolder();
+						Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(folder);
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(folder,
 																						 Main.get().activeFolderTree.getFolder(),
 																						 FILE_BROWSER);
@@ -523,12 +523,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentDelete();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentDelete();
 			Main.get().showError("DeleteDocument", caught);
 		}
 	};
@@ -543,12 +543,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailDelete();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailDelete();
 			Main.get().showError("DeleteMail", caught);
 		}
 	};
@@ -563,12 +563,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
 			Main.get().workspaceUserProperties.getUserDocumentsSize();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentPurge();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentPurge();
 			Main.get().showError("PurgeDocument", caught);
 		}
 	};
@@ -583,12 +583,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
 			Main.get().workspaceUserProperties.getUserDocumentsSize();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailPurge();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailPurge();
 			Main.get().showError("PurgeMail", caught);
 		}
 	};
@@ -604,12 +604,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			table.delete();
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderDelete();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderDelete();
 			Main.get().showError("DeleteFolder", caught);
 		}
 	};
@@ -626,12 +626,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 			//table.decrementHiddenIndexValues(row);
 			mantainSelectedRow();
 			Main.get().workspaceUserProperties.getUserDocumentsSize();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderPurge();
 			refresh(fldId);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderPurge();
 			Main.get().showError("PurgeFolder", caught);
 		}
 	};
@@ -643,7 +643,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		public void onSuccess(Object result) {	
 			mantainSelectedRow();
 			pendingChekoutFile = true; // Sets that there's a pending checkout file to be donwloaded
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
 			Main.get().mainPanel.dashboard.userDashboard.setPendingCheckoutDocumentFlag(); // Marks flag to ensure all rpc calls has finished before downloading document
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
 			pendingChekoutFile = true;
@@ -652,7 +652,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
 			Main.get().showError("CheckOut", caught);
 		}
 	};
@@ -663,13 +663,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackCancelCheckOut = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
 			refresh(fldId);
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
 			Main.get().showError("CancelCheckOut", caught);
 		}
 	};
@@ -680,13 +680,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackLock = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagLock();
 			refresh(fldId);
 			Main.get().mainPanel.dashboard.userDashboard.getUserLockedDocuments();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagLock();
 			Main.get().showError("Lock", caught);
 		}
 	};
@@ -697,13 +697,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackUnLock = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
 			mantainSelectedRow();
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagUnLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagUnLock();
 			refresh(fldId);
 			Main.get().mainPanel.dashboard.userDashboard.getUserLockedDocuments();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagUnLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagUnLock();
 			Main.get().showError("UnLock", caught);
 		}
 	};
@@ -714,7 +714,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<GWTDocument> callbackDocumentRename = new AsyncCallback<GWTDocument>() {
 		public void onSuccess(GWTDocument result) {
 			GWTDocument doc = result;
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentRename();
 			dataTable.setHTML(table.getSelectedRow(), 2, doc.getName());
 			
 			if (table.getDocument() != null) {
@@ -727,7 +727,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagDocumentRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagDocumentRename();
 			Main.get().showError("DocumentRename", caught);
 		}
 	};
@@ -738,7 +738,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<GWTFolder> callbackFolderRename = new AsyncCallback<GWTFolder>() {
 		public void onSuccess(GWTFolder result) {
 			GWTFolder folder = result;
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderRename();
 			dataTable.setHTML(table.getSelectedRow(), 2, folder.getName());
 			table.setFolder(folder);
 			mantainSelectedRow();
@@ -748,7 +748,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagFolderRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagFolderRename();
 			Main.get().showError("FolderRename", caught);
 		}
 	};
@@ -761,16 +761,16 @@ public class FileBrowser extends Composite implements OriginPanel {
 			if (fileBrowserAction == ACTION_SECURITY_REFRESH_FOLDER) {
 				GWTFolder gWTFolder = result;
 				table.setFolder(gWTFolder);
-				Main.get().mainPanel.browser.tabMultiple.tabFolder.setProperties(gWTFolder);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.setProperties(gWTFolder);
 				Main.get().activeFolderTree.refreshChildValues(gWTFolder);
-				Main.get().mainPanel.browser.fileBrowser.status.unsetFlagGetFolder();
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagGetFolder();
 				fileBrowserAction = ACTION_NONE;
 			}
 		}
 
 		public void onFailure(Throwable caught) {
 			fileBrowserAction = ACTION_NONE; // Ensures on error folder action be restores
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagGetFolder();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagGetFolder();
 			Main.get().showError("Get", caught);
 		}
 	};
@@ -783,17 +783,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 			if (fileBrowserAction == ACTION_SECURITY_REFRESH_DOCUMENT) {
 				GWTDocument gWTDocument = result;
 				table.setDocument(gWTDocument);
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(gWTDocument);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(gWTDocument);
 				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(gWTDocument,
 																				 Main.get().activeFolderTree.getFolder());
-				Main.get().mainPanel.browser.fileBrowser.status.unsetFlagGetDocument();
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagGetDocument();
 				fileBrowserAction = ACTION_NONE;
 			}
 		}
 
 		public void onFailure(Throwable caught) {
 			fileBrowserAction = ACTION_NONE; // Ensures on error folder action be restores
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagGetDocument();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagGetDocument();
 			Main.get().showError("Get", caught);
 		}
 	};
@@ -806,17 +806,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 			if (fileBrowserAction == ACTION_SECURITY_REFRESH_MAIL) {
 				GWTMail gWTMail = result;
 				table.setMail(gWTMail);
-				Main.get().mainPanel.browser.tabMultiple.tabMail.setProperties(gWTMail);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.setProperties(gWTMail);
 				Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(gWTMail,
 																				 Main.get().activeFolderTree.getFolder());
-				Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailProperties();
+				Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailProperties();
 				fileBrowserAction = ACTION_NONE;
 			}
 		}
 
 		public void onFailure(Throwable caught) {
 			fileBrowserAction = ACTION_NONE; // Ensures on error folder action be restores
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagMailProperties();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailProperties();
 			Main.get().showError("Get", caught);
 		}
 	};
@@ -836,11 +836,11 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 			mantainSelectedRow();
 			refresh(fldId);
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagAddSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagAddSubscription();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagAddSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagAddSubscription();
 			Main.get().showError("AddSubcription", caught);
 		}
 	};
@@ -860,11 +860,11 @@ public class FileBrowser extends Composite implements OriginPanel {
 			}
 			mantainSelectedRow();
 			refresh(fldId);
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagRemoveSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagRemoveSubscription();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.fileBrowser.status.unsetFlagRemoveSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagRemoveSubscription();
 			Main.get().showError("RemoveSubcription", caught);
 		}
 	};
@@ -876,11 +876,11 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	public void getFolderChilds(String fldId) {
 		// In thesaurus and categories view must not be showed folders only documents
-		if (Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
-			Main.get().mainPanel.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
+		if (Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderChilds();		
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderChilds();		
 			folderService.getChilds(fldId, callbackGetFolderChilds);
 		} else {
 			removeAllRows();
@@ -896,7 +896,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public void getDocumentChilds(String fldId) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagDocumentChilds();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagDocumentChilds();
 		documentService.getChilds(fldId, callbackGetDocumentChilds);
 	}
 	
@@ -908,7 +908,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	public void getMailChilds(String fldId) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
 		endPoint.setServiceEntryPoint(Config.OKMMailService);
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagMailChilds();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagMailChilds();
 		mailService.getChilds(fldId, callbackGetMailChilds);
 	}
 	
@@ -918,7 +918,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private void refreshFolderValues() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagGetFolder();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagGetFolder();
 		folderService.getProperties(((GWTFolder)table.getFolder()).getPath() ,callbackGetFolder);
 	}
 	
@@ -928,7 +928,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private void refreshDocumentValues() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagGetDocument();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagGetDocument();
 		documentService.get( ((GWTDocument) table.getDocument()).getPath() ,callbackGetDocument);
 	}
 	
@@ -938,7 +938,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private void refreshMailValues() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
 		endPoint.setServiceEntryPoint(Config.OKMMailService);
-		Main.get().mainPanel.browser.fileBrowser.status.setFlagMailProperties();
+		Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagMailProperties();
 		mailService.getProperties(((GWTMail) table.getMail()).getPath() ,callbackGetMailProperties);
 	}
 	
@@ -1023,19 +1023,19 @@ public class FileBrowser extends Composite implements OriginPanel {
 			Log.debug("FileBroser delete:" + table.getDocument().getPath());
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagDocumentDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagDocumentDelete();
 			documentService.delete(table.getDocument().getPath(), callbackDeleteDocument);
 		} else if (table.isFolderSelected() && table.getFolder() != null) {
 			Log.debug("FileBroser delete:" + table.getFolder().getPath());
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(Config.OKMFolderService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderDelete();
 			folderService.delete(table.getFolder().getPath(), callbackDeleteFolder);
 		} if (table.isMailSelected() && table.getMail() != null) {
 			Log.debug("FileBroser delete:" + table.getMail().getPath());
 			ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
 			endPoint.setServiceEntryPoint(Config.OKMMailService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagMailDelete();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagMailDelete();
 			mailService.delete(table.getMail().getPath(), callbackDeleteMail);
 		} 
 	}
@@ -1047,12 +1047,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
 			endPoint.setServiceEntryPoint(Config.OKMNotifyService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagAddSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagAddSubscription();
 			notifyService.subscribe(table.getDocument().getPath(),callbackAddSubscription);
 		} else if (table.isFolderSelected() && table.getFolder() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
 			endPoint.setServiceEntryPoint(Config.OKMNotifyService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagAddSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagAddSubscription();
 			notifyService.subscribe(table.getFolder().getPath(),callbackAddSubscription);
 		}
 	}
@@ -1064,12 +1064,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
 			endPoint.setServiceEntryPoint(Config.OKMNotifyService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagRemoveSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagRemoveSubscription();
 			notifyService.unsubscribe(table.getDocument().getPath(),callbackRemoveSubscription);
 		} else if (table.isFolderSelected() && table.getFolder() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
 			endPoint.setServiceEntryPoint(Config.OKMNotifyService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagRemoveSubscription();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagRemoveSubscription();
 			notifyService.unsubscribe(table.getFolder().getPath(),callbackRemoveSubscription);
 		}
 	}
@@ -1188,17 +1188,17 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagDocumentPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagDocumentPurge();
 			documentService.purge(table.getDocument().getPath(), callbackPurgeDocument);
 		} else if (table.isFolderSelected() && table.getFolder() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(Config.OKMFolderService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderPurge();
 			folderService.purge(table.getFolder().getPath(), callbackPurgeFolder);
 		} else if (table.isMailSelected() && table.getMail() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
 			endPoint.setServiceEntryPoint(Config.OKMMailService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagMailPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagMailPurge();
 			mailService.purge(table.getMail().getPath(), callbackPurgeMail);
 		} 
 	}
@@ -1210,7 +1210,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
 			documentService.checkout(table.getDocument().getPath(), callbackCheckOut);
 		}
 	}
@@ -1222,7 +1222,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagCheckout();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
 			documentService.cancelCheckout(table.getDocument().getPath(), callbackCancelCheckOut);
 		}
 	}
@@ -1234,7 +1234,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagLock();
 			documentService.lock(table.getDocument().getPath(), callbackLock);
 		}
 	}
@@ -1246,7 +1246,7 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagUnLock();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagUnLock();
 			documentService.unlock(table.getDocument().getPath(), callbackUnLock);
 		}
 	}
@@ -1259,12 +1259,12 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (table.isDocumentSelected() && table.getDocument() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagDocumentRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagDocumentRename();
 			documentService.rename(table.getDocument().getPath(),newName, callbackDocumentRename);
 		} else if (table.isFolderSelected() && table.getFolder() != null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 			endPoint.setServiceEntryPoint(Config.OKMFolderService);
-			Main.get().mainPanel.browser.fileBrowser.status.setFlagFolderRename();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagFolderRename();
 			folderService.rename(table.getFolder().getPath(),newName, callbackFolderRename);
 		}
 	}
@@ -1442,31 +1442,31 @@ public class FileBrowser extends Composite implements OriginPanel {
 		switch (view) {
 			case PanelDefinition.NAVIGATOR_TAXONOMY:
 				if (viewValues.containsKey("view_root:selectedRowId")){
-					Main.get().mainPanel.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_root:selectedRowId"));
+					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_root:selectedRowId"));
 				} 
 				break;
 				
 			case PanelDefinition.NAVIGATOR_TRASH:
 				if (viewValues.containsKey("view_trash:selectedRowId")){
-					Main.get().mainPanel.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_trash:selectedRowId"));
+					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_trash:selectedRowId"));
 				} 
 				break;
 			
 			case PanelDefinition.NAVIGATOR_TEMPLATES:
 				if (viewValues.containsKey("view_templates:selectedRowId")){
-					Main.get().mainPanel.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_templates:selectedRowId"));
+					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_templates:selectedRowId"));
 				} 
 				break;
 			
 			case PanelDefinition.NAVIGATOR_PERSONAL:
 				if (viewValues.containsKey("view_my_documents:selectedRowId")){
-					Main.get().mainPanel.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_my_documents:selectedRowId"));
+					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_my_documents:selectedRowId"));
 				} 
 				break;
 			
 			case PanelDefinition.NAVIGATOR_MAIL:
 				if (viewValues.containsKey("view_mail:selectedRowId")){
-					Main.get().mainPanel.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_mail:selectedRowId"));
+					Main.get().mainPanel.desktop.browser.fileBrowser.setSelectedRowId((String) viewValues.get("view_mail:selectedRowId"));
 				} 
 				break;
 		} 

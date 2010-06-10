@@ -63,16 +63,16 @@ public class TrashMenu extends MenuBase {
 	// Command menu to restore Directory or Document
 	Command restore = new Command() {
 		public void execute() {
-			Main.get().mainPanel.browser.fileBrowser.trashMenuPopup.hide();
-			Main.get().mainPanel.browser.fileBrowser.restore();
+			Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
+			Main.get().mainPanel.desktop.browser.fileBrowser.restore();
 		}
 	};
 	
 	// Command menu to remove a Directory or Document
 	Command purge = new Command() {
 		public void execute() {
-			Main.get().mainPanel.browser.fileBrowser.trashMenuPopup.hide();
-			Main.get().mainPanel.browser.fileBrowser.confirmPurge();
+			Main.get().mainPanel.desktop.browser.fileBrowser.trashMenuPopup.hide();
+			Main.get().mainPanel.desktop.browser.fileBrowser.confirmPurge();
 		}
 	};
 	

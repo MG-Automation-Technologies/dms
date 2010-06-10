@@ -138,7 +138,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command downloadFile = new Command() {
 		public void execute() {		
 			if (downloadOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.downloadDocument(false);
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.downloadDocument(false);
 				hide();
 			}
 		}
@@ -148,7 +148,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command checkoutFile = new Command() {
 		public void execute() {
 			if (checkoutOption) {
-				Main.get().mainPanel.browser.fileBrowser.checkout();
+				Main.get().mainPanel.desktop.browser.fileBrowser.checkout();
 				hide();
 			}
 		}
@@ -158,7 +158,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command checkinFile = new Command() {
 		public void execute() {
 			if (checkinOption) {
-				Main.get().fileUpload.setPath(Main.get().mainPanel.browser.fileBrowser.getPath());
+				Main.get().fileUpload.setPath(Main.get().mainPanel.desktop.browser.fileBrowser.getPath());
 				Main.get().fileUpload.setAction(FancyFileUpload.ACTION_UPDATE);
 				Main.get().fileUpload.showPopup(false,false);
 				hide();
@@ -170,7 +170,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command cancelCheckinFile = new Command() {
 		public void execute() {
 			if (cancelCheckoutOption) {
-				Main.get().mainPanel.browser.fileBrowser.cancelCheckout();
+				Main.get().mainPanel.desktop.browser.fileBrowser.cancelCheckout();
 				hide();
 			}
 		}
@@ -180,7 +180,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command lockFile = new Command() {
 		public void execute() {
 			if (lockOption) {
-				Main.get().mainPanel.browser.fileBrowser.lock();
+				Main.get().mainPanel.desktop.browser.fileBrowser.lock();
 				hide();
 			}
 		}
@@ -190,7 +190,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command unlockFile = new Command() {
 		public void execute() {
 			if (unlockOption) {
-				Main.get().mainPanel.browser.fileBrowser.unlock();
+				Main.get().mainPanel.desktop.browser.fileBrowser.unlock();
 				hide();
 			}
 		}
@@ -200,7 +200,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command deleteFile = new Command() {
 		public void execute() {
 			if (deleteOption) {
-				Main.get().mainPanel.browser.fileBrowser.confirmDelete();
+				Main.get().mainPanel.desktop.browser.fileBrowser.confirmDelete();
 				hide();
 			}
 		}
@@ -210,7 +210,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command renameFile = new Command() {
 		public void execute() {
 			if (renameOption) {
-				Main.get().mainPanel.browser.fileBrowser.rename();
+				Main.get().mainPanel.desktop.browser.fileBrowser.rename();
 				hide();
 			}
 		}
@@ -220,7 +220,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command moveFile = new Command() {
 		public void execute() {
 			if (moveOption) {
-				Main.get().mainPanel.browser.fileBrowser.move();
+				Main.get().mainPanel.desktop.browser.fileBrowser.move();
 				hide();
 			}
 		}
@@ -230,7 +230,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command copyFile = new Command() {
 		public void execute() {
 			if (copyOption) {
-				Main.get().mainPanel.browser.fileBrowser.copy();
+				Main.get().mainPanel.desktop.browser.fileBrowser.copy();
 				hide();
 			}
 		}
@@ -250,11 +250,11 @@ public class TaxonomyMenu extends MenuBase {
 	Command addBookmark = new Command() {
 		public void execute() {
 			if (addBookmarkOption) {
-				if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()) {
-					String path = Main.get().mainPanel.browser.fileBrowser.getDocument().getPath();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+					String path = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath();
 					Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path, path.substring(path.lastIndexOf("/")+1));
-				} else if (Main.get().mainPanel.browser.fileBrowser.isFolderSelected()) {
-					String path = Main.get().mainPanel.browser.fileBrowser.getFolder().getPath();
+				} else if (Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
+					String path = Main.get().mainPanel.desktop.browser.fileBrowser.getFolder().getPath();
 					Main.get().mainPanel.topPanel.mainMenu.bookmarkPopup.show(path, path.substring(path.lastIndexOf("/")+1));
 				}
 				
@@ -267,7 +267,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command setHome = new Command() {
 		public void execute() {
 			if (setHomeOption) {
-				Main.get().mainPanel.browser.fileBrowser.setHome();
+				Main.get().mainPanel.desktop.browser.fileBrowser.setHome();
 				hide();
 			}
 		}
@@ -277,7 +277,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command exportToFile = new Command() {
 		public void execute() {
 			if (exportOption) {				
-				Main.get().mainPanel.browser.fileBrowser.exportFolderToFile();
+				Main.get().mainPanel.desktop.browser.fileBrowser.exportFolderToFile();
 				hide();
 			}
 		}
@@ -287,7 +287,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command mediaPlayerFile = new Command() {
 		public void execute() {		
 			if (mediaPlayerOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.mediaPlayerDocument();
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.mediaPlayerDocument();
 				hide();
 			}
 		}
@@ -297,7 +297,7 @@ public class TaxonomyMenu extends MenuBase {
 	Command imageViewerFile = new Command() {
 		public void execute() {		
 			if (imageViewerOption) {
-				Main.get().mainPanel.browser.fileBrowser.table.imageViewerDocument();
+				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
 				hide();
 			}
 		}
@@ -554,7 +554,7 @@ public class TaxonomyMenu extends MenuBase {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.browser.fileBrowser.taxonomyMenuPopup.hide();
+		Main.get().mainPanel.desktop.browser.fileBrowser.taxonomyMenuPopup.hide();
 	}
 	
 	/* (non-Javadoc)
