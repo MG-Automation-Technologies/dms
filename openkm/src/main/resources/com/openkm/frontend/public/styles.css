@@ -1266,6 +1266,33 @@ iframe {
 	horizontal-align: 50%;
 	border-left: 1px solid #A5A596;
 	border-right: 1px solid #A5A596;
+	width:10px;
+}
+
+.okm-HorizontalSplitPanel .hsplitter { 
+	background-image: url(img/separator_points.gif);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	cursor: col-resize;
+	font-family: "Small Fonts";
+	font-size: 4px;
+	background-color: #E5E5E1;
+	horizontal-align: 50%;
+    border: 0px; 
+	width:10px;
+}
+
+/* Vertical split panel */
+.vsplitter { 
+	background-image: url(img/horizontal_separator_points.gif);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	cursor: row-resize;
+	font-family: "Small Fonts";
+	font-size: 4px;
+	background-color: #E5E5E1;
+	height:10px;
+	vertical-align: 50%;
 }
 
 /* KeyMapControl panel */
