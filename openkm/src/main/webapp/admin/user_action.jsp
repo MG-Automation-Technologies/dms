@@ -30,12 +30,7 @@
 		Session jcrSession = null;
 		
 		try {
-			if (Config.SESSION_MANAGER) {
-				jcrSession = SessionManager.getInstance().get(token);
-			} else {
-				jcrSession = JCRUtils.getSession(); 
-			}
-		
+			jcrSession = JCRUtils.getSession();
 			request.setCharacterEncoding("UTF-8");
 			String action = request.getParameter("action");
 			String usr_id = request.getParameter("usr_id") != null?request.getParameter("usr_id"):"";
@@ -87,9 +82,7 @@
 				out.println("<div class=\"error\">"+e.getMessage()+"</div>");
 			}
 		} finally {
-			if (!Config.SESSION_MANAGER) {
-				JCRUtils.logout(jcrSession);
-			}
+			JCRUtils.logout(jcrSession);
 		}
 	} else {
 		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
