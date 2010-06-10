@@ -296,7 +296,7 @@ public class SearchIn extends Composite {
 				from.setText("");
 				to.setText("");
 				subject.setText("");
-				Main.get().mainPanel.search.searchResult.removeAllRows();
+				Main.get().mainPanel.search.searchBrowser.searchResult.removeAllRows();
 			}
 		});
 		
@@ -979,7 +979,7 @@ public class SearchIn extends Composite {
 					@Override
 					public void onClick(ClickEvent event) {
 						Widget sender = (Widget) event.getSource();
-						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						Main.get().mainPanel.search.searchBrowser.searchIn.removeProperty(sender,propertyName);
 						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 					}
 				});
@@ -1027,7 +1027,7 @@ public class SearchIn extends Composite {
 					@Override
 					public void onClick(ClickEvent event) {
 						Widget sender = (Widget) event.getSource();
-						Main.get().mainPanel.search.searchIn.removeProperty(sender,propertyName);
+						Main.get().mainPanel.search.searchBrowser.searchIn.removeProperty(sender,propertyName);
 						groupPopup.enableAddGroupButton(); // Enables or disables button ( depends exist some item on list to be added )
 					}
 				});
@@ -1298,11 +1298,7 @@ public class SearchIn extends Composite {
 	 * @param resize Boolean value indicates resize to advanced mode or not
 	 */
 	private void resizeScreenToAdvancedMode(boolean resize) {
-		if (resize) {
-			Main.get().mainPanel.horizontalResize(378);
-		} else {
-			Main.get().mainPanel.horizontalResize(294);
-		}
+		Main.get().mainPanel.search.searchBrowser.resizeToAdvancedView(resize);
 	}
 	
 	/**
@@ -1312,12 +1308,12 @@ public class SearchIn extends Composite {
 		public void onSuccess(Integer result) {
 			params.setId(result.intValue());
 			if (userNews) {
-				Main.get().mainPanel.historySearch.userNews.addRow(params);
-				Main.get().mainPanel.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_USER_NEWS);
+				Main.get().mainPanel.search.historySearch.userNews.addRow(params);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_USER_NEWS);
 				Main.get().mainPanel.dashboard.newsDashboard.getUserSearchs(true);
 			} else {
-				Main.get().mainPanel.historySearch.searchSaved.addNewSavedSearch(params);
-				Main.get().mainPanel.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
+				Main.get().mainPanel.search.historySearch.searchSaved.addNewSavedSearch(params);
+				Main.get().mainPanel.search.historySearch.stackPanel.showStack(PanelDefinition.SEARCH_SAVED);
 			}
 			
 			searchSavedName.setText(""); // Clean name atfer saved

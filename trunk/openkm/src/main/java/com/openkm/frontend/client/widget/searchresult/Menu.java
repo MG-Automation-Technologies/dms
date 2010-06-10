@@ -69,7 +69,7 @@ public class Menu extends Composite {
 	Command downloadFile = new Command() {
 		public void execute() {
 			if (downloadOption) {
-				Main.get().mainPanel.search.searchResult.downloadDocument();
+				Main.get().mainPanel.search.searchBrowser.searchResult.downloadDocument();
 			}
 			hide();
 		}
@@ -79,7 +79,7 @@ public class Menu extends Composite {
 	Command goDirectory = new Command() {
 		public void execute() {
 			if (goOption) {
-				Main.get().mainPanel.search.searchResult.openAllFolderPath();
+				Main.get().mainPanel.search.searchBrowser.searchResult.openAllFolderPath();
 			}
 			hide();
 		}
@@ -97,7 +97,7 @@ public class Menu extends Composite {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.search.searchResult.menuPopup.hide();
+		Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.hide();
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class Menu extends Composite {
 	public void evaluateMenuOptions() {
 		if (downloadOption){enable(download);} else {disable(download);}
 		if (goOption){enable(go);} else {disable(go);}
-		if (Main.get().mainPanel.search.searchResult.table.isFolderSelected() ) {
+		if (Main.get().mainPanel.search.searchBrowser.searchResult.table.isFolderSelected() ) {
 			go.setHTML(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")));
 		} else {
 			go.setHTML(Util.menuHTML("img/icon/actions/goto_document.gif", Main.i18n("search.result.menu.go.document")));

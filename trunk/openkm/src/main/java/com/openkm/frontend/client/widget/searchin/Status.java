@@ -28,6 +28,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.panel.center.Search;
+import com.openkm.frontend.client.panel.center.SearchBrowser;
+import com.openkm.frontend.client.panel.top.TopPanel;
 
 /**
  * Status
@@ -77,9 +81,9 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_saveSearch) {
-			int left = ((Main.get().mainPanel.center.getWidth()-200)/2) + Main.get().mainPanel.left.getWidth() + 10;
-			int top =  ((Main.get().mainPanel.browser.bottomHeight-40)/2) + Main.get().mainPanel.center.getY() + 
-						 Main.get().mainPanel.browser.topHeight + 10;
+			int left = ((Main.get().mainPanel.search.getRight()-200)/2) + Main.get().mainPanel.search.getLeft() + Search.SPLITTER_WIDTH +
+			   		   ExtendedDockPanel.VERTICAL_BORDER_PANEL_WIDTH;;
+			int top =  ((Main.get().mainPanel.search.searchBrowser.topHeight-40)/2) + TopPanel.PANEL_HEIGHT + SearchBrowser.SPLITTER_HEIGHT;
 			setPopupPosition(left,top);
 			show();
 		} else {

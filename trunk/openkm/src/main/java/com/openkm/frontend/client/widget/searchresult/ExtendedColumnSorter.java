@@ -59,10 +59,10 @@ public class ExtendedColumnSorter extends ColumnSorter {
 		// Get the primary column, sort order, number of rows, number of columns
 		int column = sortList.getPrimaryColumn();
 	    boolean ascending = sortList.isPrimaryAscending();
-	    int rows = Main.get().mainPanel.search.searchResult.table.getDataTable().getRowCount();
-	    int columns = Main.get().mainPanel.search.searchResult.table.getDataTable().getColumnCount();
-	    int selectedRow = Main.get().mainPanel.search.searchResult.table.getSelectedRow();
-	    Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchResult.table.data);
+	    int rows = Main.get().mainPanel.search.searchBrowser.searchResult.table.getDataTable().getRowCount();
+	    int columns = Main.get().mainPanel.search.searchBrowser.searchResult.table.getDataTable().getColumnCount();
+	    int selectedRow = Main.get().mainPanel.search.searchBrowser.searchResult.table.getSelectedRow();
+	    Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchBrowser.searchResult.table.data);
 	    
 	    List<String[]> elementList = new ArrayList<String[]>(); 					// List with all data
 	    List<GWTObjectToOrder> elementToOrder = new ArrayList<GWTObjectToOrder>(); 	// List with column data, and actual position
@@ -72,7 +72,7 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	    	String[] rowI= new String[columns];
 	    	GWTObjectToOrder rowToOrder = new GWTObjectToOrder();
 	    	for (int x=0; x<columns; x++) {
-	    		rowI[x] = Main.get().mainPanel.search.searchResult.table.getDataTable().getHTML(i, x);
+	    		rowI[x] = Main.get().mainPanel.search.searchBrowser.searchResult.table.getDataTable().getHTML(i, x);
 	    	}
 	    	elementList.add(i,rowI);
 	    	
@@ -162,24 +162,24 @@ public class ExtendedColumnSorter extends ColumnSorter {
 	 */
 	private void applySort(List<String[]>  elementList, List<GWTObjectToOrder> elementToOrder) {
 		// Removing all values
-		while (Main.get().mainPanel.search.searchResult.table.getDataTable().getRowCount()>0 ){
-			Main.get().mainPanel.search.searchResult.table.getDataTable().removeRow(0);
+		while (Main.get().mainPanel.search.searchBrowser.searchResult.table.getDataTable().getRowCount()>0 ){
+			Main.get().mainPanel.search.searchBrowser.searchResult.table.getDataTable().removeRow(0);
 		}
 		
 		// Data map
-		Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchResult.table.data);
-		Main.get().mainPanel.search.searchResult.table.reset();
+		Map<Integer,GWTQueryResult> data = new HashMap<Integer,GWTQueryResult>(Main.get().mainPanel.search.searchBrowser.searchResult.table.data);
+		Main.get().mainPanel.search.searchBrowser.searchResult.table.reset();
 		
 		int column = 0;
 		for (Iterator<GWTObjectToOrder> it =  elementToOrder.iterator(); it.hasNext();) {
 			GWTObjectToOrder orderedColumn = it.next();
     		String[] row = elementList.get(Integer.parseInt(orderedColumn.getDataId()));
     		
-    		Main.get().mainPanel.search.searchResult.table.addRow((GWTQueryResult) data.get(Integer.parseInt(row[7])));
+    		Main.get().mainPanel.search.searchBrowser.searchResult.table.addRow((GWTQueryResult) data.get(Integer.parseInt(row[7])));
     		
     		// Sets selectedRow
     		if (!selectedRowDataID.equals("") && selectedRowDataID.equals(row[7])) {
-    			Main.get().mainPanel.search.searchResult.table.setSelectedRow(column);
+    			Main.get().mainPanel.search.searchBrowser.searchResult.table.setSelectedRow(column);
     			selectedRowDataID = "";
     		}
     		
