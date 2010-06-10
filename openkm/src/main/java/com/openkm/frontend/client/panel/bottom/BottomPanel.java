@@ -42,6 +42,8 @@ import com.openkm.frontend.client.widget.UserInfo;
  */
 public class BottomPanel extends ExtendedSizeComposite {
 	
+	public static final int PANEL_HEIGHT = 25;
+	
 	private HorizontalPanel panel;
 	private Label statusMsg;
 	private SimplePanel spLeft;

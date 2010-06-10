@@ -28,7 +28,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.openkm.frontend.client.panel.ExtendedComposite;
-import com.openkm.frontend.client.panel.left.HistorySearch;
+import com.openkm.frontend.client.panel.left.Navigator;
 
 /**
  * Administration
@@ -36,30 +36,30 @@ import com.openkm.frontend.client.panel.left.HistorySearch;
  * @author jllort
  *
  */
-public class Search extends ExtendedComposite {
+public class Desktop extends ExtendedComposite {
 	
 	private final static int PANEL_LEFT_WIDTH 	= 225;
 	public final static int SPLITTER_WIDTH 	= 10;
 	
 	private HorizontalSplitPanelExtended horizontalSplitPanel;
-	public HistorySearch historySearch;
-	public SearchBrowser searchBrowser;
+	public Navigator navigator;
+	public Browser browser;
 	private boolean isResizeInProgress = false;
 	private int width = 0;
-	private int height = 0;
+	private int height = 0; 
 	private int left = 0;
 	private int right = 0;
-
+	
 	/**
 	 * Desktop
 	 */
-	public Search() {
+	public Desktop() {
 		horizontalSplitPanel = new HorizontalSplitPanelExtended();
-		historySearch = new HistorySearch();
-		searchBrowser = new SearchBrowser();
+		navigator = new Navigator();
+		browser = new Browser();
 		
-		horizontalSplitPanel.getSplitPanel().setLeftWidget(historySearch);
-		horizontalSplitPanel.getSplitPanel().setRightWidget(searchBrowser);
+		horizontalSplitPanel.getSplitPanel().setLeftWidget(navigator);
+		horizontalSplitPanel.getSplitPanel().setRightWidget(browser);
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+PANEL_LEFT_WIDTH);
 		
 		horizontalSplitPanel.addMouseMoveHandler(new MouseMoveHandler() {
@@ -93,13 +93,13 @@ public class Search extends ExtendedComposite {
 	 * @param height The max height of the widget
 	 */
 	public void setSize(int width, int height) {
-		left = PANEL_LEFT_WIDTH;
-		right = width-(PANEL_LEFT_WIDTH+SPLITTER_WIDTH);
 		this.width = width;
 		this.height = height;
+		left = PANEL_LEFT_WIDTH;
+		right = width-(PANEL_LEFT_WIDTH+SPLITTER_WIDTH);
 		horizontalSplitPanel.setPixelSize(width, height);
-		historySearch.setSize(left, height);
-		searchBrowser.setSize(right, height);
+		navigator.setSize(left, height);
+		browser.setSize(right, height);
 	}
 	
 	/**
@@ -114,7 +114,10 @@ public class Search extends ExtendedComposite {
 					resizePanels(); // Always making resize
 					if (isResizeInProgress) {
 						onSplitResize();
-					} 
+					} else {
+						// On finishing in good idea to fill width column tables
+						browser.fileBrowser.table.fillWidth();
+					}
 				}
 			}.schedule(resizeUpdatePeriod);
 		}
@@ -128,8 +131,6 @@ public class Search extends ExtendedComposite {
 	 */
 	private void resizePanels() {
 		int total = 0;
-		left = 0;
-		right = 0;
 		String value = DOM.getStyleAttribute (horizontalSplitPanel.getSplitPanel().getElement(), "width");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		total = Integer.parseInt(value);
@@ -139,8 +140,8 @@ public class Search extends ExtendedComposite {
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		right = total - Integer.parseInt(value);
-		historySearch.setSize(left, height);
-		searchBrowser.setWidth(right);
+		navigator.setSize(left, height);
+		browser.setWidth(right);
 	}
 	
 	/**
