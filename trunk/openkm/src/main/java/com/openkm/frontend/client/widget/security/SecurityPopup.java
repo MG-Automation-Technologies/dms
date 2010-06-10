@@ -195,7 +195,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	 * @see com.google.gwt.event.dom.client.ClickHandler#onClick(com.google.gwt.event.dom.client.ClickEvent)
 	 */
 	public void onClick(ClickEvent event) {
-		Main.get().mainPanel.browser.tabMultiple.securityRefresh();
+		Main.get().mainPanel.desktop.browser.tabMultiple.securityRefresh();
 		super.hide();
 	}
 	

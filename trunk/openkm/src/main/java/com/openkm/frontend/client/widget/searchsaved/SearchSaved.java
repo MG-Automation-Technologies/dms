@@ -224,7 +224,7 @@ public class SearchSaved extends Composite {
 			for (Iterator<GWTQueryParams> it = savedSearches.iterator(); it.hasNext();) {
 				GWTQueryParams params = it.next();
 				if (params.getId()==id) {
-					Main.get().mainPanel.search.searchResult.getSearch(params);
+					Main.get().mainPanel.search.searchBrowser.searchResult.getSearch(params);
 					break;
 				}
 			}

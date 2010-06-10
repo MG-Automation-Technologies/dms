@@ -88,13 +88,13 @@ public class ExtendedFlexTable extends FlexTable {
 				// Two time entry onCellClicked before entry on onBrowserEvent and disbles the
 				// Tree onCellClicked that produces inconsistence error refreshing
 				DOM.eventCancelBubble(event, true);
-				Main.get().mainPanel.historySearch.searchSaved.getSearch();
+				Main.get().mainPanel.search.historySearch.searchSaved.getSearch();
 	
 			} else if (DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
 				switch (DOM.eventGetButton(event)) {
 				case Event.BUTTON_RIGHT:
 					markSelectedRow(selectedRow);
-					Main.get().mainPanel.historySearch.searchSaved.showMenu();
+					Main.get().mainPanel.search.historySearch.searchSaved.showMenu();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 					break;
 				default:
@@ -150,15 +150,15 @@ public class ExtendedFlexTable extends FlexTable {
 	public void setSelectedPanel(boolean selected) {
 		// Case panel is not still selected and must enable this and disable result search panel
 		if (!isPanelSelected() && selected) {
-			Main.get().mainPanel.search.searchResult.setSelectedPanel(false);
+			Main.get().mainPanel.search.searchBrowser.searchResult.setSelectedPanel(false);
 		}
 		
 		if (selected){
-			Main.get().mainPanel.historySearch.scrollSearchSavedPanel.addStyleName("okm-PanelSelected");
-			Main.get().mainPanel.historySearch.scrollUserNewsSavedPanel.addStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.historySearch.scrollSearchSavedPanel.addStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.historySearch.scrollUserNewsSavedPanel.addStyleName("okm-PanelSelected");
 		} else {
-			Main.get().mainPanel.historySearch.scrollSearchSavedPanel.removeStyleName("okm-PanelSelected");
-			Main.get().mainPanel.historySearch.scrollUserNewsSavedPanel.removeStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.historySearch.scrollSearchSavedPanel.removeStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.historySearch.scrollUserNewsSavedPanel.removeStyleName("okm-PanelSelected");
 		}
 		panelSelected = selected;
 	}

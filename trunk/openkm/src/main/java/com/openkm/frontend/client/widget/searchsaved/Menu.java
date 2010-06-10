@@ -63,7 +63,7 @@ public class Menu extends Composite {
 	// Command menu to save file
 	Command runSearch = new Command() {
 		public void execute() {
-			Main.get().mainPanel.historySearch.searchSaved.getSearch();
+			Main.get().mainPanel.search.historySearch.searchSaved.getSearch();
 			hide();
 		}
 	};
@@ -89,6 +89,6 @@ public class Menu extends Composite {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.historySearch.searchSaved.menuPopup.hide();
+		Main.get().mainPanel.search.historySearch.searchSaved.menuPopup.hide();
 	}
 }
