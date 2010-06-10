@@ -48,7 +48,7 @@ public class MailTree extends FolderTree {
 
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextMail(folderRoot.getPath());
-		Main.get().mainPanel.search.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_MAIL);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_MAIL);
 		
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			

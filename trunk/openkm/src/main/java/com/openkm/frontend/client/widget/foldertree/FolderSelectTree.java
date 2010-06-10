@@ -112,7 +112,7 @@ public class FolderSelectTree extends Composite {
 			actualItem.getChild(0).remove();
 		}
 		
-		int mainPanelView = Main.get().mainPanel.navigator.getStackIndex();
+		int mainPanelView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		
 		switch (mainPanelView){
 			case PanelDefinition.NAVIGATOR_TAXONOMY :

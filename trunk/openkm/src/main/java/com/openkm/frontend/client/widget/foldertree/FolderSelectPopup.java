@@ -400,7 +400,7 @@ public class FolderSelectPopup extends DialogBox  {
 					break;
 					
 				case ENTRYPOINT_BROWSER:
-					Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+					Main.get().mainPanel.desktop.browser.fileBrowser.deleteMovedOrMoved();
 					break;
 				
 				case ENTRYPOINT_KEYBOARD:
@@ -414,33 +414,33 @@ public class FolderSelectPopup extends DialogBox  {
 						
 						switch(originPanel) {
 							case PanelDefinition.NAVIGATOR_TAXONOMY:
-								Main.get().mainPanel.navigator.taxonomyTree.evaluesFolderIcon(parentItem);
-								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 																									 // has been moved and on restore
 																									 // view ( refreshing ) needs new path
 								break;
 							case PanelDefinition.NAVIGATOR_PERSONAL:
-								Main.get().mainPanel.navigator.personalTree.evaluesFolderIcon(parentItem);
-								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								Main.get().mainPanel.desktop.navigator.personalTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 								break;
 							case PanelDefinition.NAVIGATOR_TEMPLATES:
-								Main.get().mainPanel.navigator.templateTree.evaluesFolderIcon(parentItem);
-								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								Main.get().mainPanel.desktop.navigator.templateTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 								break;
 							case PanelDefinition.NAVIGATOR_MAIL:
-								Main.get().mainPanel.navigator.mailTree.evaluesFolderIcon(parentItem);
-								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								Main.get().mainPanel.desktop.navigator.mailTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 							
 								break;
 							case PanelDefinition.NAVIGATOR_CATEGORIES:
-								Main.get().mainPanel.navigator.mailTree.evaluesFolderIcon(parentItem);
-								Main.get().mainPanel.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
+								Main.get().mainPanel.desktop.navigator.mailTree.evaluesFolderIcon(parentItem);
+								Main.get().mainPanel.desktop.navigator.taxonomyTree.actualItem = parentItem; // Changes the actualItem because
 								 																	 // has been moved and on restore
 								 																	 // view ( refreshing ) needs new path
 								break;
@@ -504,20 +504,20 @@ public class FolderSelectPopup extends DialogBox  {
 			String path = folderSelectTree.getActualPath();
 			switch (Integer.parseInt(contextListBox.getValue(contextListBox.getSelectedIndex()))) {
 				case PanelDefinition.NAVIGATOR_TAXONOMY:
-					Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
-					Main.get().mainPanel.browser.fileBrowser.setFlagCreatedFromTemplate();
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_TAXONOMY, false);
+					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
 					
 				case PanelDefinition.NAVIGATOR_PERSONAL:
-					Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
-					Main.get().mainPanel.browser.fileBrowser.setFlagCreatedFromTemplate();
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_PERSONAL, false);
+					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
 					
 				case PanelDefinition.NAVIGATOR_MAIL:
-					Main.get().mainPanel.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
-					Main.get().mainPanel.browser.fileBrowser.setFlagCreatedFromTemplate();
+					Main.get().mainPanel.desktop.navigator.stackPanel.showStack(PanelDefinition.NAVIGATOR_MAIL, false);
+					Main.get().mainPanel.desktop.browser.fileBrowser.setFlagCreatedFromTemplate();
 					Main.get().activeFolderTree.openAllPathFolder(path,docPath);
 					break;
 					
@@ -544,7 +544,7 @@ public class FolderSelectPopup extends DialogBox  {
 					Main.get().activeFolderTree.deleteMovedOrRestored();
 					break;
 				case ENTRYPOINT_BROWSER:
-					Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+					Main.get().mainPanel.desktop.browser.fileBrowser.deleteMovedOrMoved();
 					break;
 			}
 			// Refreshing users repository size

@@ -166,8 +166,8 @@ public class NotifyPopup extends DialogBox  {
 	 * executeSendDocumentLink
 	 */
 	public void executeSendDocumentLink() {
-		if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()) {
-			doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+			doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 			super.center();
 		} 
 	}

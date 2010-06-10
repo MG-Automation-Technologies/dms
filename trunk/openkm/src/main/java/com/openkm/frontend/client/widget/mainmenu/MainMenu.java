@@ -1017,8 +1017,8 @@ public class MainMenu extends Composite {
 	Command setDefaultHome = new Command() {
 		public void execute() {
 			if (mainMenuOption.homeOption) {
-				if (Main.get().mainPanel.browser.fileBrowser.isPanelSelected()) {
-					Main.get().mainPanel.browser.fileBrowser.setHome();
+				if (Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.setHome();
 				} else if (Main.get().activeFolderTree.isPanelSelected()) {
 					Main.get().activeFolderTree.setHome();
 				}
