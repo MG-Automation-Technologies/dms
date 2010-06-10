@@ -49,7 +49,7 @@ public class TaxonomyTree extends FolderTree {
 		
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextTaxonomy(folderRoot.getPath());
-		Main.get().mainPanel.search.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TAXONOMY);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TAXONOMY);
 		
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			

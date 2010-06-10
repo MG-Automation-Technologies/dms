@@ -48,7 +48,7 @@ public class TemplateTree extends FolderTree {
 		
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextTemplates(folderRoot.getPath());
-		Main.get().mainPanel.search.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TEMPLATES);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_TEMPLATES);
 		
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			
