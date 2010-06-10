@@ -76,16 +76,16 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_getChilds || flag_root ) {
-			int left = ((Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getOffsetWidth()-200)/2) +
-						 Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getAbsoluteLeft();
-			int top = ((Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getOffsetHeight()-40)/2) + 
-			            Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.getAbsoluteTop();
+			int left = ((Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.getOffsetWidth()-200)/2) +
+						 Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.getAbsoluteLeft();
+			int top = ((Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.getOffsetHeight()-40)/2) + 
+			            Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	

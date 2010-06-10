@@ -75,9 +75,9 @@ public class FolderSelectTree extends Composite {
 				
 				// Enables or disables move buttom ( evalues security to move to folder with permissions )
 				if (rootItem.equals(item)) {
-					Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.enable(false);
+					Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.enable(false);
 				} else {
-					Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.enable(true);
+					Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.enable(true);
 				}
 				
 				// Case that not refreshing tree and file browser ( right click )
@@ -158,11 +158,11 @@ public class FolderSelectTree extends Composite {
 			
 			actualItem.setState(true);
 			evaluesFolderIcon(actualItem);
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagChilds();
 			Main.get().showError("GetChilds", caught);
 		}
 	};
@@ -180,12 +180,12 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
 			getChilds(result.getPath());
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
+			Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.unsetFlagRoot();
 			Main.get().showError("GetTCategories", caught);
 		}
 	};
@@ -198,7 +198,7 @@ public class FolderSelectTree extends Composite {
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-		Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
+		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -208,7 +208,7 @@ public class FolderSelectTree extends Composite {
 	public void getCategories() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
+		Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.status.setFlagRoot();
 		repositoryService.getCategoriesFolder(callbackGetCategoriesFolder);
 	}
 	

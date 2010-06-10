@@ -166,7 +166,7 @@ public class Dragable extends Composite implements OriginPanel {
 	    					clickedTreeItem = Main.get().activeFolderTree.elementClicked(DOM.eventGetTarget((Event)event.getNativeEvent()));
 	    					TreeItem actualTreeItem = Main.get().activeFolderTree.getActualItem();
 	    					
-	        				if (clickedTreeItem!=null && Main.get().mainPanel.browser.fileBrowser.isSelectedRow() &&
+	        				if (clickedTreeItem!=null && Main.get().mainPanel.desktop.browser.fileBrowser.isSelectedRow() &&
 	        					(((GWTFolder)clickedTreeItem.getUserObject()).getPermissions()& GWTPermission.WRITE) == GWTPermission.WRITE ){
 	        					
 	        					final String dstPath = ((GWTFolder) clickedTreeItem.getUserObject()).getPath(); // Destination path
@@ -179,9 +179,9 @@ public class Dragable extends Composite implements OriginPanel {
 	        							DOM.setElementProperty(lastSelectElement,"className","gwt-TreeItem");
 	        						}
 	        						
-		        					if (Main.get().mainPanel.browser.fileBrowser.isFolderSelected()) {
+		        					if (Main.get().mainPanel.desktop.browser.fileBrowser.isFolderSelected()) {
 		        						
-		        						final GWTFolder gwtFolder= Main.get().mainPanel.browser.fileBrowser.getFolder();  // The dragged folder
+		        						final GWTFolder gwtFolder= Main.get().mainPanel.desktop.browser.fileBrowser.getFolder();  // The dragged folder
 		            					String fldPath = gwtFolder.getPath(); // Folder actual path
 		                            	
 		                            	// Destination path must not containt actual folder path, because folder can't be moved to his subfolders
@@ -217,7 +217,7 @@ public class Dragable extends Composite implements OriginPanel {
 						                                movedTreeItem.setState(false);
 					                                    
 					                                    // Refresh file browser
-					        							Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+					        							Main.get().mainPanel.desktop.browser.fileBrowser.deleteMovedOrMoved();
 				                            		}
 			
 				                            		public void onFailure(Throwable caught) {
@@ -230,9 +230,9 @@ public class Dragable extends Composite implements OriginPanel {
 		                                    
 		        							
 		                            	} 
-		        					} else if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()){
+		        					} else if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()){
 		                        		
-		                        		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument(); // The dragged document
+		                        		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument(); // The dragged document
 		                        		
 		                        		// Move the document
 		                        		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
@@ -240,11 +240,11 @@ public class Dragable extends Composite implements OriginPanel {
 		    							documentService.move( gwtDocument.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
-		    							Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+		    							Main.get().mainPanel.desktop.browser.fileBrowser.deleteMovedOrMoved();
 		    							
-		                        	} else if (Main.get().mainPanel.browser.fileBrowser.isMailSelected()){
+		                        	} else if (Main.get().mainPanel.desktop.browser.fileBrowser.isMailSelected()){
 		                        		
-		                        		GWTMail gwtMail = Main.get().mainPanel.browser.fileBrowser.getMail(); // The dragged document
+		                        		GWTMail gwtMail = Main.get().mainPanel.desktop.browser.fileBrowser.getMail(); // The dragged document
 		                        		
 		                        		// Move the document
 		                        		ServiceDefTarget endPoint = (ServiceDefTarget) mailService;
@@ -252,7 +252,7 @@ public class Dragable extends Composite implements OriginPanel {
 		    							mailService.move( gwtMail.getPath(),dstPath, callbackMove);
 		    							
 		    							// refresh file browser
-		    							Main.get().mainPanel.browser.fileBrowser.deleteMovedOrMoved();
+		    							Main.get().mainPanel.desktop.browser.fileBrowser.deleteMovedOrMoved();
 		                        	} 
 	        					}
 	        				}
@@ -264,7 +264,7 @@ public class Dragable extends Composite implements OriginPanel {
 	            dropEnabled = false;	// Sets always dragged to false
 	            
         		// Always we destroy possible timers to automatic up / down scroll
-        		Main.get().mainPanel.navigator.scrollTaxonomyPanel.destroyTimer();
+        		Main.get().mainPanel.desktop.navigator.scrollTaxonomyPanel.destroyTimer();
 				
 			}
 		});
@@ -315,7 +315,7 @@ public class Dragable extends Composite implements OriginPanel {
                     } 
                     
                     // Action depends dragables destinations widgets
-         			Main.get().mainPanel.navigator.scrollTaxonomyPanel.ScrollOnDragDrop(posX + 1, posY);
+         			Main.get().mainPanel.desktop.navigator.scrollTaxonomyPanel.ScrollOnDragDrop(posX + 1, posY);
                 }
 			}
 		});

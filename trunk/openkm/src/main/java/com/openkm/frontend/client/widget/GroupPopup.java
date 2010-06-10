@@ -150,9 +150,9 @@ public class GroupPopup extends DialogBox {
 	 */
 	final AsyncCallback<Object> callbackAddGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected() ){
-				GWTDocument doc = Main.get().mainPanel.browser.fileBrowser.getDocument();
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.setProperties(doc);
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
+				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
 			}
 			// Case there's only two items (white and other) and this is added, then
 			// there's no item to be added and must disable addPropertyGroup
@@ -202,7 +202,7 @@ public class GroupPopup extends DialogBox {
 	 * Gets all property groups
 	 */
 	private void getAllGroups() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
@@ -216,8 +216,8 @@ public class GroupPopup extends DialogBox {
 	private void addGroup() {
 		if (listBox.getSelectedIndex()>0) {
 			String grpName = listBox.getValue(listBox.getSelectedIndex());
-			if (Main.get().mainPanel.browser.fileBrowser.isDocumentSelected()) {
-				GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+				GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 				ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 				endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 				propertyGroupService.addGroup(gwtDocument.getPath(), grpName, callbackAddGroup);
