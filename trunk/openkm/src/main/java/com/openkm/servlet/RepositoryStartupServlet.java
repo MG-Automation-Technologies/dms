@@ -23,7 +23,6 @@ package com.openkm.servlet;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Timer;
 
@@ -40,18 +39,12 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.cache.UserItemsManager;
 import com.openkm.cache.UserKeywordsManager;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DataStoreGarbageCollector;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.RepositoryException;
 import com.openkm.core.RepositoryInfo;
-import com.openkm.core.SessionManager;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
-import com.openkm.core.Watchdog;
 import com.openkm.kea.RDFREpository;
-import com.openkm.module.direct.DirectAuthModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
 import com.openkm.util.WarUtils;
@@ -68,7 +61,6 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
 	private static final long serialVersionUID = 207151527252937549L;
 	private Timer timer;
-	private Watchdog wd;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
 	private UserMailImporter umi;
@@ -120,9 +112,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         
         // Test for datastore
-        SessionManager sm = SessionManager.getInstance();
-		String sysToken = sm.getSystemToken();
-		SessionImpl si = (SessionImpl)sm.get(sysToken);
+		SessionImpl si = (SessionImpl) DirectRepositoryModule.getSystemSession();
         
 		if (((RepositoryImpl)si.getRepository()).getDataStore() == null) {
         	hasConfiguredDataStore = false;
@@ -137,11 +127,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** Initializing workflow engine... ***");
         JbpmConfiguration.getInstance().createJbpmContext().getGraphSession();
         JbpmConfiguration.getInstance().getJobExecutor().start();//startJobExecutor();
-        
-        log.info("*** Activating watchdog ***");
-        wd = new Watchdog();
-        timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
-        
+                
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
         	 ui = new UpdateInfo();
@@ -201,10 +187,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         else log.info("*** Shutting down update info... ***");
         ui.cancel();
         
-        if (log == null) log("*** Shutting down watchdog... ***");
-        else log.info("*** Shutting down watchdog... ***");
-        wd.cancel();
-        
         timer.cancel();
         
         if (log == null) log("*** Shutting down workflow engine... ***");
@@ -214,22 +196,8 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (log == null) log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");
         
-        // Preserve user config
-        SessionManager sessionManager = SessionManager.getInstance();
-        for (Iterator<String> it = sessionManager.getTokens().iterator(); it.hasNext(); ) {
-        	String token = it.next();
-        	log.info("*** Logout: "+token+" ***");
-        	
-        	try {
-        		new DirectAuthModule().logout();
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-			}
-        }
+        // Close active session
+        // TODO Close active sessions
         
         // Serialize
         log.info("*** Cache serialization ***");
