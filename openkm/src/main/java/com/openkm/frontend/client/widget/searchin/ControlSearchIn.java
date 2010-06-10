@@ -64,7 +64,7 @@ public class ControlSearchIn extends Composite {
 			public void onClick(ClickEvent event) {
 				if (previousEnabled) {
 					offset -= limit; 
-					Main.get().mainPanel.search.searchResult.findPaginated(gwtParams, offset, limit);
+					Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
 				}
 			}
 		});
@@ -74,7 +74,7 @@ public class ControlSearchIn extends Composite {
 			public void onClick(ClickEvent event) {
 				if (nextEnabled) {
 					offset += limit; 
-					Main.get().mainPanel.search.searchResult.findPaginated(gwtParams, offset, limit);
+					Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
 				}
 			}
 		});
@@ -100,7 +100,7 @@ public class ControlSearchIn extends Composite {
 		this.gwtParams = gwtParams;
 		this.limit = limit;
 		offset = 0;
-		Main.get().mainPanel.search.searchResult.findPaginated(gwtParams, offset, limit);
+		Main.get().mainPanel.search.searchBrowser.searchResult.findPaginated(gwtParams, offset, limit);
 	}
 	
 	/**

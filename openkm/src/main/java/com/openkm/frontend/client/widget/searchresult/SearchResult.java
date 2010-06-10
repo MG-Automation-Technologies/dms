@@ -281,7 +281,7 @@ public class SearchResult extends Composite {
 	final AsyncCallback<GWTResultSet> callbackFindPaginated = new AsyncCallback<GWTResultSet>() {
 		public void onSuccess(GWTResultSet result){
 			GWTResultSet resultSet = result;	
-			Main.get().mainPanel.search.searchIn.controlSearch.refreshControl(resultSet.getTotal());
+			Main.get().mainPanel.search.searchBrowser.searchIn.controlSearch.refreshControl(resultSet.getTotal());
 			
 			removeAllRows();
 			int size = 0;
@@ -308,7 +308,7 @@ public class SearchResult extends Composite {
 	final AsyncCallback<GWTQueryParams> callbackGetSearch = new AsyncCallback<GWTQueryParams>() {
 		public void onSuccess(GWTQueryParams result){
 			GWTQueryParams gWTParams = result;	
-			Main.get().mainPanel.search.searchIn.setSavedSearch(gWTParams);
+			Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(gWTParams);
 			removeAllRows();
 		}
 		
@@ -323,7 +323,7 @@ public class SearchResult extends Composite {
 	 * @param params
 	 */
 	public void getSearch(GWTQueryParams params) {
-		Main.get().mainPanel.search.searchIn.setSavedSearch(params);
+		Main.get().mainPanel.search.searchBrowser.searchIn.setSavedSearch(params);
 		removeAllRows();
 	}
 	

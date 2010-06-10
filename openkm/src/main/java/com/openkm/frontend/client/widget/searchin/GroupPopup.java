@@ -101,7 +101,7 @@ public class GroupPopup extends DialogBox {
 					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
 						GWTFormElement formElement = it.next();
 						if (formElement.getName().endsWith(propertyName)) {
-							Main.get().mainPanel.search.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
+							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
 						}
 					}
 				}
@@ -204,7 +204,7 @@ public class GroupPopup extends DialogBox {
 			propertyLabel.setVisible(true);
 			propertyListBox.addItem("",""); // First item is always blank
 			
-			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
 
 			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
 				GWTFormElement formElement = it.next();
@@ -226,7 +226,7 @@ public class GroupPopup extends DialogBox {
 		public void onSuccess(Collection<GWTFormElement> result){
 			hMetaData = result;
 			
-			Collection<String> actualProperties = Main.get().mainPanel.search.searchIn.getActualProperties();
+			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
 			boolean found = false;
 			
 			for (Iterator<GWTFormElement> it = result.iterator(); it.hasNext();) {
@@ -329,9 +329,9 @@ public class GroupPopup extends DialogBox {
 		} else {
 			// Validate button 
 			if (groupListBox.getItemCount()>1) {
-				Main.get().mainPanel.search.searchIn.addGroup.setEnabled(true);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(true);
 			} else {
-				Main.get().mainPanel.search.searchIn.addGroup.setEnabled(false);
+				Main.get().mainPanel.search.searchBrowser.searchIn.addGroup.setEnabled(false);
 			}
 			validate = -1; // Resets values
 		}

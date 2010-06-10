@@ -103,7 +103,7 @@ public class ExtendedScrollTable extends ScrollTable {
 			// Tree onCellClicked that produces inconsistence error refreshing
 			DOM.eventCancelBubble(event, true);
 			if (isDocumentSelected() || isAttachmentSelected()) {
-				Main.get().mainPanel.search.searchResult.downloadDocument();
+				Main.get().mainPanel.search.searchBrowser.searchResult.downloadDocument();
 			}
 
 		} else if (DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
@@ -111,14 +111,14 @@ public class ExtendedScrollTable extends ScrollTable {
 			case Event.BUTTON_RIGHT:
 				if (!headerFired) {
 					if (isDocumentSelected() || isAttachmentSelected()) {
-						Main.get().mainPanel.search.searchResult.menuPopup.menu.checkMenuOptionPermissions(getDocument());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getDocument());
 					} else if (isFolderSelected()) {
-						Main.get().mainPanel.search.searchResult.menuPopup.menu.checkMenuOptionPermissions(getFolder());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getFolder());
 					} else if (isMailSelected()) {
-						Main.get().mainPanel.search.searchResult.menuPopup.menu.checkMenuOptionPermissions(getMail());
+						Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.checkMenuOptionPermissions(getMail());
 					}
-					Main.get().mainPanel.search.searchResult.menuPopup.menu.evaluateMenuOptions();
-					Main.get().mainPanel.search.searchResult.showMenu();
+					Main.get().mainPanel.search.searchBrowser.searchResult.menuPopup.menu.evaluateMenuOptions();
+					Main.get().mainPanel.search.searchBrowser.searchResult.showMenu();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 				}
 				break;
@@ -137,11 +137,11 @@ public class ExtendedScrollTable extends ScrollTable {
 	 */
 	public void setSelectedPanel(boolean selected) {
 		if (selected){
-			Main.get().mainPanel.search.searchResult.addStyleName("okm-PanelSelected");
-			Main.get().mainPanel.historySearch.searchSaved.setSelectedPanel(false);
-			Main.get().mainPanel.historySearch.userNews.setSelectedPanel(false);
+			Main.get().mainPanel.search.searchBrowser.searchResult.addStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.historySearch.searchSaved.setSelectedPanel(false);
+			Main.get().mainPanel.search.historySearch.userNews.setSelectedPanel(false);
 		} else {
-			Main.get().mainPanel.search.searchResult.removeStyleName("okm-PanelSelected");
+			Main.get().mainPanel.search.searchBrowser.searchResult.removeStyleName("okm-PanelSelected");
 		}
 		panelSelected = selected;
 	}
