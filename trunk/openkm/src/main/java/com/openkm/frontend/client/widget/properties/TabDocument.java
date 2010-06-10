@@ -165,10 +165,10 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public void setProperties(GWTDocument doc) {	
 		// We must declare status here due pending downloading ( fired by status )
-		Main.get().mainPanel.browser.tabMultiple.status.setUserSecurity();
-		Main.get().mainPanel.browser.tabMultiple.status.setRoleSecurity();
-		Main.get().mainPanel.browser.tabMultiple.status.setVersionHistory();
-		Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setUserSecurity();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setVersionHistory();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
 		
 		this.doc = doc;
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
@@ -208,7 +208,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public void securityRefresh() {
 		fireEvent(HasDocumentEvent.SECURITY_CHANGED);
-		Main.get().mainPanel.browser.fileBrowser.securityRefresh();
+		Main.get().mainPanel.desktop.browser.fileBrowser.securityRefresh();
 	}
 	
 	/**
@@ -298,11 +298,11 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				tabPanel.selectTab(selectedTab); // Always enable selected tab because on document change tab group are removed
 												 // and on remove loses selectedTab
 			}
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
 			Main.get().showError("GetAllGroups", caught);
 		}
 	};
@@ -311,7 +311,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 * Gets all property groups assigned to document
 	 */
 	private void getGroups(String docPath) {
-		Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
 		propertyGroupService.getGroups(docPath, callbackGetGroups);

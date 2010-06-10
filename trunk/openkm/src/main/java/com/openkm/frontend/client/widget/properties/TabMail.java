@@ -117,7 +117,7 @@ public class TabMail extends Composite {
 	 * Refresh security values
 	 */
 	public void securityRefresh() {
-		Main.get().mainPanel.browser.fileBrowser.securityRefresh();
+		Main.get().mainPanel.desktop.browser.fileBrowser.securityRefresh();
 	}
 	
 	/**

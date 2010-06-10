@@ -156,7 +156,7 @@ public class PropertyGroup extends Composite {
 	 * Gets all group properties 
 	 */
 	private void getProperties() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			propertyGroupWidget.getProperties();
 		}
@@ -166,7 +166,7 @@ public class PropertyGroup extends Composite {
 	 * Remove the document property group
 	 */
 	public void removeGroup() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			propertyGroupWidget.removeGroup();
 		}
@@ -176,9 +176,9 @@ public class PropertyGroup extends Composite {
 	 * set document property group
 	 */
 	public void setProperties() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setGroupProperties();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setGroupProperties();
 			propertyGroupWidget.setProperties();
 		}
 	}
@@ -187,7 +187,7 @@ public class PropertyGroup extends Composite {
 	 * edit document property group
 	 */
 	public void edit() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			propertyGroupWidget.edit();
 		}
@@ -197,7 +197,7 @@ public class PropertyGroup extends Composite {
 	 * edit document property group
 	 */
 	public void cancelEdit() {
-		GWTDocument gwtDocument = Main.get().mainPanel.browser.fileBrowser.getDocument();
+		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		if (gwtDocument!= null) {
 			propertyGroupWidget.cancelEdit();
 		}
@@ -242,7 +242,7 @@ public class PropertyGroup extends Composite {
 		
 		@Override
 		public void finishedSetProperties() {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGroupProperties();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGroupProperties();
 		}
 		
 		/**

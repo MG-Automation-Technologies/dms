@@ -153,7 +153,7 @@ public class Document extends Composite {
 		thesaurusImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.DOCUMENT_PROPERTIES);
+				Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.show(ThesaurusSelectPopup.DOCUMENT_PROPERTIES);
 			}
 		});
 		
@@ -216,7 +216,7 @@ public class Document extends Composite {
 		categoriesImage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.navigator.categoriesTree.categoriesSelectPopup.show();
+				Main.get().mainPanel.desktop.navigator.categoriesTree.categoriesSelectPopup.show();
 			}
 		});
 		
@@ -386,7 +386,7 @@ public class Document extends Composite {
 		drawTagCloud(doc.getKeywords());
 		
 		// Some preoperties only must be visible on taxonomy or trash view
-		int actualView = Main.get().mainPanel.navigator.getStackIndex();
+		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		if (actualView==PanelDefinition.NAVIGATOR_TAXONOMY || actualView==PanelDefinition.NAVIGATOR_TRASH ||
 			actualView==PanelDefinition.NAVIGATOR_THESAURUS || actualView==PanelDefinition.NAVIGATOR_CATEGORIES){
 			tableProperties.getCellFormatter().setVisible(7,0,true);
@@ -469,11 +469,11 @@ public class Document extends Composite {
 	final AsyncCallback<Long> callbackGetVersionHistorySize = new AsyncCallback<Long>() {
 		public void onSuccess(Long result) {	
 			tableProperties.setHTML(10, 1, Util.formatSize(result.longValue()));
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGetVersionHistorySize();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGetVersionHistorySize();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetGetVersionHistorySize();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetGetVersionHistorySize();
 			Main.get().showError("GetVersionHistorySize", caught);
 		}
 	};
@@ -484,9 +484,9 @@ public class Document extends Composite {
 	final AsyncCallback<Object> callbackAddKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			if (keyWordsListPending.isEmpty()) {
-				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
 				drawTagCloud(document.getKeywords());
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_ADDED);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_ADDED);
 			} else {
 				addPendingKeyWordsList();
 			}
@@ -495,7 +495,7 @@ public class Document extends Composite {
 
 		public void onFailure(Throwable caught) {
 			if (keyWordsListPending.isEmpty()) {
-				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
 				drawTagCloud(document.getKeywords());
 			} else {
 				addPendingKeyWordsList();
@@ -509,12 +509,12 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRemoveKeywords = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_REMOVED);
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.KEYWORD_REMOVED);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
 			Main.get().showError("RemoveKeyword", caught);
 		}
 	};
@@ -524,12 +524,12 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackAddCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_ADDED);
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetCategories();
 			Main.get().showError("AddCategory", caught);
 		}
 	};
@@ -539,12 +539,12 @@ public class Document extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRemoveCategory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
-			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_REMOVED);
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.CATEGORY_REMOVED);
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetCategories();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetCategories();
 			Main.get().showError("RemoveCategory", caught);
 		}
 	};
@@ -553,7 +553,7 @@ public class Document extends Composite {
 	 * getVersionHistorySize document
 	 */
 	public void getVersionHistorySize() {
-		Main.get().mainPanel.browser.tabMultiple.status.setGetVersionHistorySize();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setGetVersionHistorySize();
 		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 		documentService.getVersionHistorySize(document.getPath(), callbackGetVersionHistorySize);
@@ -572,7 +572,7 @@ public class Document extends Composite {
 	 * removeKeyword document
 	 */
 	public void removeKeyword(String keyword) {
-		Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeKeyword(document.getPath(), keyword, callbackRemoveKeywords);
@@ -585,7 +585,7 @@ public class Document extends Composite {
 		if (!existCategory(category.getUuid())) {
 			document.getCategories().add(category);
 			drawCategory(category,remove);
-			Main.get().mainPanel.browser.tabMultiple.status.setCategories();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 			propertyService.addCategory(document.getPath(), category.getUuid(), callbackAddCategory);
@@ -596,7 +596,7 @@ public class Document extends Composite {
 	 * removeCategory document
 	 */
 	public void removeCategory(String UUID) {
-		Main.get().mainPanel.browser.tabMultiple.status.setCategories();
+		Main.get().mainPanel.desktop.browser.tabMultiple.status.setCategories();
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyService);
 		propertyService.removeCategory(document.getPath(), UUID, callbackRemoveCategory);
@@ -626,11 +626,11 @@ public class Document extends Composite {
 			removeKeyword(keyword);
 			Main.get().mainPanel.dashboard.keyMapDashboard.decreaseKeywordRate(keyword);
 			drawTagCloud(document.getKeywords());
-			if (Main.get().mainPanel.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
+			if (Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS) {
 				GWTFolder folder = ((GWTFolder) Main.get().activeFolderTree.actualItem.getUserObject());
 				// When remove the keyword for which are browsing must refreshing filebrowser view
 				if (folder.getPath().substring(folder.getPath().lastIndexOf("/")+1).replace(" ", "_").equals(keyword)) {
-					Main.get().mainPanel.browser.fileBrowser.refresh(folder.getPath());	
+					Main.get().mainPanel.desktop.browser.fileBrowser.refresh(folder.getPath());	
 				}
 			}
 		}
@@ -651,7 +651,7 @@ public class Document extends Composite {
 	 */
 	public void addPendingKeyWordsList() {
 		if (!keyWordsListPending.isEmpty()) {
-			Main.get().mainPanel.browser.tabMultiple.status.setKeywords();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setKeywords();
 			String keyword = keyWordsListPending.remove(0);
 			if (!keywordMap.containsKey(keyword) && keyword.length()>0) {
 				for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext();) {
@@ -668,7 +668,7 @@ public class Document extends Composite {
 				addKeyword(keyword);
 				Main.get().mainPanel.dashboard.keyMapDashboard.increaseKeywordRate(keyword);
 			} else if (keyWordsListPending.isEmpty()) {
-				Main.get().mainPanel.browser.tabMultiple.status.unsetKeywords();
+				Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetKeywords();
 				drawTagCloud(document.getKeywords());
 			}	
 		}
@@ -690,7 +690,7 @@ public class Document extends Composite {
 		delete.addClickHandler(new ClickHandler() { 
 			@Override
 			public void onClick(ClickEvent event) {
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.removeKey(keyword);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.removeKey(keyword);
 				hKeyPanel.remove(externalPanel);
 			}
 		});

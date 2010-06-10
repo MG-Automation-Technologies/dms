@@ -253,7 +253,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			Button restoreButton = new Button(Main.i18n("button.restore"), new ClickHandler() { 
 				@Override
 				public void onClick(ClickEvent event) {
-					List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
+					List<String> versions = Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.version.versions; 
 					String ver = (String) versions.get(rows);
 					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_RESTORE_HISTORY_DOCUMENT);
 					Main.get().confirmPopup.setValue(ver);
@@ -279,7 +279,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 			@Override
 			public void onClick(ClickEvent event) {
 				String path = doc.getPath();
-				List<String> versions = Main.get().mainPanel.browser.tabMultiple.tabDocument.version.versions; 
+				List<String> versions = Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.version.versions; 
 				String ver = (String) versions.get(rows);
 				Util.downloadFile(path, "ver=" + ver);
 			}
@@ -314,11 +314,11 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 				addRow(version);
 			}
 			
-			Main.get().mainPanel.browser.tabMultiple.status.unsetVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetVersionHistory();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetVersionHistory();
 			Main.get().showError("GetVersionHistory", caught);
 		}
 	};
@@ -328,12 +328,12 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	final AsyncCallback<Object> callbackRestoreVersion = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetRestoreVersion();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetRestoreVersion();
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetRestoreVersion();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetRestoreVersion();
 			Main.get().showError("GetVersionHistory", caught);
 		}
 	};
@@ -343,13 +343,13 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	final AsyncCallback<Object> callbackPurgeVersionHistory = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetPurgeVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetPurgeVersionHistory();
 			Main.get().mainPanel.topPanel.toolBar.executeRefresh();
 			Main.get().workspaceUserProperties.getUserDocumentsSize();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetPurgeVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetPurgeVersionHistory();
 			Main.get().showError("urgeVersionHistory", caught);
 		}
 	};
@@ -359,7 +359,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	public void getVersionHistory() {
 		if (doc != null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.getVersionHistory(doc.getPath(), callbackGetVersionHistory);
@@ -371,7 +371,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	public void restoreVersion(String versionId) {
 		if (doc != null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setRestoreVersion();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRestoreVersion();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.restoreVersion(doc.getPath(), versionId, callbackRestoreVersion);
@@ -383,7 +383,7 @@ public class VersionScrollTable extends Composite implements ClickHandler  {
 	 */
 	public void purgeVersionHistory() {
 		if (doc != null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setPurgeVersionHistory();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setPurgeVersionHistory();
 			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);	
 			documentService.purgeVersionHistory(doc.getPath(), callbackPurgeVersionHistory);

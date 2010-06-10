@@ -62,7 +62,7 @@ public class Menu extends Composite {
 	// Command menu to download attachement file
 	Command downloadFile = new Command() {
 		public void execute() {		
-			Main.get().mainPanel.browser.tabMultiple.tabMail.mail.downloadAttachment();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.downloadAttachment();
 			hide();
 		}
 	};
@@ -70,7 +70,7 @@ public class Menu extends Composite {
 	// Command menu to refresh actual Directory
 	Command copyAttachment = new Command() {
 		public void execute() {
-			Main.get().mainPanel.browser.tabMultiple.tabMail.mail.copyAttachment();
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.copyAttachment();
 			hide();
 		}
 	};
@@ -87,6 +87,6 @@ public class Menu extends Composite {
 	 * Hide popup menu
 	 */
 	public void hide() {
-		Main.get().mainPanel.browser.tabMultiple.tabMail.mail.menuPopup.hide();
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.menuPopup.hide();
 	}
 }
