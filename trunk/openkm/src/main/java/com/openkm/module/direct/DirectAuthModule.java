@@ -21,7 +21,6 @@
 
 package com.openkm.module.direct;
 
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,12 +31,8 @@ import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.security.auth.Subject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +45,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UserAlreadyLoggerException;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.bean.LockToken;
 import com.openkm.module.AuthModule;
@@ -62,70 +56,41 @@ import com.openkm.util.UserActivity;
 public class DirectAuthModule implements AuthModule {
 	private static Logger log = LoggerFactory.getLogger(DirectAuthModule.class);
 	private static PrincipalAdapter principalAdapter = null;
-	
+
 	@Override
-	@SuppressWarnings("unchecked")
-	public synchronized void login(String user, String pass) throws AccessDeniedException,
-			UserAlreadyLoggerException, RepositoryException, DatabaseException {
-		log.debug("login({}, {})", user, pass);
-
+	public void login() throws RepositoryException, DatabaseException {
+		Session session = null;
+		
 		try {
-			final javax.jcr.Repository r = DirectRepositoryModule.getRepository();
-			Session session = null;
-			
-			if (Config.SESSION_MANAGER) {
-				// If user and pass are null, there is an external authentication system
-				// using JAAS.
-				if (user != null && pass != null) {
-					session = r.login(new SimpleCredentials(user, pass.toCharArray()));
-				} else {
-					InitialContext ctx = new InitialContext();
-					Subject subject = (Subject) ctx.lookup("java:comp/env/security/subject");
-					log.info("Principals: {}", subject.getPrincipals());
-
-					Object obj = Subject.doAs(subject, new PrivilegedAction() {
-						public Object run() {
-							Session s = null;
-							
-							try {
-								s = r.login();
-							} catch (LoginException e) {
-								return e;
-							} catch (javax.jcr.RepositoryException e) {
-								return new LoginException(e);
-							}
-							
-							return s;
-						}
-					});
-					
-					try {
-						session = (Session) obj;
-					} catch (ClassCastException cce) {
-						throw (LoginException) obj;
-					}
-				}
-				
-				// Add generated session to pool
-				loadUserData(session);
-			}
+			session = JCRUtils.getSession();
 			
 			// Activity log
-			if (session != null) {
-				UserActivity.log(session.getUserID(), "LOGIN", null, null);
-			}
+			UserActivity.log(session.getUserID(), "LOGIN", null, null);
 		} catch (LoginException e) {
-			log.error(e.getMessage(), e);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (NamingException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
 		}
+	}
 
-		log.debug("login: void");
+	@Override
+	public void logout() throws RepositoryException, DatabaseException {
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "LOGOUT", null, null);
+		} catch (LoginException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
 	}
 	
 	/**
@@ -189,40 +154,6 @@ public class DirectAuthModule implements AuthModule {
 		base.setProperty(Permission.ROLES_SECURITY, new String[] { Config.DEFAULT_USER_ROLE });
 		
 		return base;
-	}
-
-	@Override
-	public void login() throws AccessDeniedException, UserAlreadyLoggerException, RepositoryException,
-			DatabaseException {
-		log.debug("login()");
-		login(null, null);
-		log.debug("login: void");
-	}
-
-	@Override
-	public synchronized void logout() throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("logout()");
-		Session session = null;
-		
-		try {
-			session = JCRUtils.getSession();
-
-			// Activity log
-			if (session != null && session.isLive()) {
-				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
-			}			
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			JCRUtils.logout(session);
-		}
-		
-		log.debug("logout: void");
 	}
 
 	@Override
