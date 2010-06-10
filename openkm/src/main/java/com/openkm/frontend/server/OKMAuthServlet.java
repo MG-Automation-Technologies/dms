@@ -68,26 +68,16 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void logout() throws OKMException {
 		log.debug("logout()");
-		
 		try {
 			OKMAuth.getInstance().logout();
-		} catch (AccessDeniedException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+			getThreadLocalRequest().getSession().invalidate();
 		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
+			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_General), e.getMessage());
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_DatabaseException), e.getMessage());		} finally {
 		}
-
-		getThreadLocalRequest().getSession().invalidate();			
-		
-		log.info("***** LOGOUT ****");
 		log.debug("logout: void");
 	}
 	
