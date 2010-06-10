@@ -41,6 +41,8 @@ import com.openkm.frontend.client.widget.toolbar.ToolBar;
  */
 public class TopPanel extends ExtendedSizeComposite {
 	
+	public static final int PANEL_HEIGHT = 57;
+	
 	private VerticalPanel panel;
 	private HorizontalPanel toolsPanel;
 	private HorizontalPanel horizontalPanel;
@@ -99,8 +101,8 @@ public class TopPanel extends ExtendedSizeComposite {
 		
 		leftLabel.setStyleName("okm-TopPanel-Border");
 		rightLabel.setStyleName("okm-TopPanel-Border");
-		leftLabel.setSize("10px", "100%");
-		rightLabel.setSize("10px","100%");
+		leftLabel.setSize("10px", ""+PANEL_HEIGHT);
+		rightLabel.setSize("10px",""+PANEL_HEIGHT);
 		
 		horizontalPanel.add(leftLabel);
 		horizontalPanel.add(panel);

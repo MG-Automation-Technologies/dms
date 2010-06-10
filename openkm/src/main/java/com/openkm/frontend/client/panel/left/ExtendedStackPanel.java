@@ -93,73 +93,73 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 			
 			switch (indexCorrectedChangeViewIndex(index)) {
 				case PanelDefinition.NAVIGATOR_TAXONOMY:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.taxonomyTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.taxonomyTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TAXONOMY,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(true);
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
 					break;
 					
 				case PanelDefinition.NAVIGATOR_TRASH:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.trashTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TRASH);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.trashTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TRASH);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TRASH,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(false);
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(false);
 					break;
 					
 				case PanelDefinition.NAVIGATOR_CATEGORIES:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.categoriesTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.categoriesTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_CATEGORIES,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
 					break;
 					
 				case PanelDefinition.NAVIGATOR_THESAURUS:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.thesaurusTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_THESAURUS);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.thesaurusTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_THESAURUS);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_THESAURUS,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
 					break;
 				
 				case PanelDefinition.NAVIGATOR_TEMPLATES:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.templateTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TEMPLATES);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.templateTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TEMPLATES);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TEMPLATES,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(true);
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
 					break;
 				
 				case PanelDefinition.NAVIGATOR_PERSONAL:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.personalTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_PERSONAL);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.personalTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_PERSONAL);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_PERSONAL,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(true);
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
 					break;
 				
 				case PanelDefinition.NAVIGATOR_MAIL:
-					Main.get().activeFolderTree = Main.get().mainPanel.navigator.mailTree;
-					Main.get().mainPanel.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_MAIL);
+					Main.get().activeFolderTree = Main.get().mainPanel.desktop.navigator.mailTree;
+					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_MAIL);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_MAIL,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.browser.tabMultiple.setVisibleButtons(true);
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
 					break;
 			}
 			fireEvent(HasNavigatorEvent.STACK_CHANGED);
