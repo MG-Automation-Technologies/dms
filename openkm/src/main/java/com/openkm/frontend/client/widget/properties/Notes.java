@@ -245,10 +245,10 @@ public class Notes extends Composite {
 			document.getNotes().add(note);
 			// If is added first note must adding some icon on filebrowser
 			if (!document.isHasNotes()) {
-				Main.get().mainPanel.browser.fileBrowser.addNoteIconToSelectedRow();
+				Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
 				document.setHasNotes(true);
 			}
-			Main.get().mainPanel.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {

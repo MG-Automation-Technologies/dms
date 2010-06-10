@@ -155,8 +155,8 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		// Determines if folder security changed is tree or filebrowser, if filebrowser has no selectedRow then
 		// must refresh tree node selected to reflect security changes ( icon color )
 		// this remote methods also refresh properties (remote call to setProperties ).
-		if (Main.get().mainPanel.browser.fileBrowser.isSelectedRow()) {
-			Main.get().mainPanel.browser.fileBrowser.securityRefresh();
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isSelectedRow()) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.securityRefresh();
 		} else {
 			Main.get().activeFolderTree.securityRefresh();
 		}

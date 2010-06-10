@@ -181,7 +181,7 @@ public class Folder extends Composite {
 		}
 		
 		// Some preoperties only must be visible on taxonomy or trash view
-		int actualView = Main.get().mainPanel.navigator.getStackIndex();
+		int actualView = Main.get().mainPanel.desktop.navigator.getStackIndex();
 		switch(actualView) {
 			case PanelDefinition.NAVIGATOR_TAXONOMY:   // Some preperties only must be visible on taxonomy or trash view
 			case PanelDefinition.NAVIGATOR_TRASH:

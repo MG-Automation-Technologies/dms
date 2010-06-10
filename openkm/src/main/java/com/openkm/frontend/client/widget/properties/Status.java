@@ -28,6 +28,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.panel.center.Desktop;
+import com.openkm.frontend.client.panel.top.TopPanel;
 
 /**
  * Status
@@ -98,15 +101,16 @@ public class Status extends PopupPanel {
 		if (flag_versionHistory || flag_UserSecurity || flag_RoleSecurity || flag_groupProperties 
 			|| flag_getVersionHistorySize || flag_keywords || flag_purgeVersionHistory || flag_restoreVersion 
 			|| flag_Categories) {
-			int left = ((Main.get().mainPanel.center.getWidth()-220)/2) + Main.get().mainPanel.left.getWidth() + 10;
-			int top =  ((Main.get().mainPanel.browser.bottomHeight-40)/2) + Main.get().mainPanel.center.getY() + 
-						 Main.get().mainPanel.browser.topHeight + 10;
+			int left = ((Main.get().mainPanel.desktop.getRight()-220)/2) + Main.get().mainPanel.desktop.getLeft() + 
+					   ExtendedDockPanel.VERTICAL_BORDER_PANEL_WIDTH + Desktop.SPLITTER_WIDTH;
+			int top =  ((Main.get().mainPanel.desktop.browser.bottomHeight-40)/2) + TopPanel.PANEL_HEIGHT + 
+						 Main.get().mainPanel.desktop.browser.topHeight + 10;
 			setPopupPosition(left, top);
-			Main.get().mainPanel.browser.tabMultiple.setStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.browser.tabMultiple.setStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.browser.tabMultiple.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.browser.tabMultiple.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	

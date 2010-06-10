@@ -326,11 +326,11 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 				addUserRow(userName, permission);
 			}
 			
-			Main.get().mainPanel.browser.tabMultiple.status.unsetUserSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetUserSecurity();
 		}
 
 		public void onFailure(Throwable caught){
-			Main.get().mainPanel.browser.tabMultiple.status.unsetUserSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetUserSecurity();
 			Main.get().showError("GetGrantedUsers", caught);
 		}
 	};
@@ -354,11 +354,11 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 				addRolRow(groupName, permission);
 			}
 			
-			Main.get().mainPanel.browser.tabMultiple.status.unsetRoleSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetRoleSecurity();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.browser.tabMultiple.status.unsetRoleSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.unsetRoleSecurity();
 			Main.get().showError("GetGrantedRoles", caught);
 		}
 	};
@@ -368,7 +368,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	 */
 	private void getGrantedUsers() {
 		if (path != null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setUserSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setUserSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedUsers(path, callbackGetGrantedUsers);
@@ -381,7 +381,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler  {
 	private void getGrantedRoles() {
 		removeAllRows();
 		if (path != null) {
-			Main.get().mainPanel.browser.tabMultiple.status.setRoleSecurity();
+			Main.get().mainPanel.desktop.browser.tabMultiple.status.setRoleSecurity();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.getGrantedRoles(path, callbackGetGrantedRoles);

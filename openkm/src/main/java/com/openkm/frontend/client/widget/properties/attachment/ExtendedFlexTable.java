@@ -89,13 +89,13 @@ public class ExtendedFlexTable extends FlexTable {
 				// Two time entry onCellClicked before entry on onBrowserEvent and disbles the
 				// Tree onCellClicked that produces inconsistence error refreshing
 				DOM.eventCancelBubble(event, true);
-				Main.get().mainPanel.browser.tabMultiple.tabMail.mail.downloadAttachment();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.downloadAttachment();
 			} else if (DOM.eventGetType(event) == Event.ONMOUSEDOWN) {
 				switch (DOM.eventGetButton(event)) {
 				case Event.BUTTON_RIGHT:
 					markSelectedRow(selectedRow);
-		        	Main.get().mainPanel.browser.tabMultiple.tabMail.mail.menuPopup.setPopupPosition(mouseX, mouseY);
-		        	Main.get().mainPanel.browser.tabMultiple.tabMail.mail.menuPopup.show();
+		        	Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.menuPopup.setPopupPosition(mouseX, mouseY);
+		        	Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.mail.menuPopup.show();
 					DOM.eventPreventDefault(event); // Prevent to fire event to browser
 					break;
 				default:
