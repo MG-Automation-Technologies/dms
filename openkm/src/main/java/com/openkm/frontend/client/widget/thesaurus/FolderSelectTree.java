@@ -88,9 +88,9 @@ public class FolderSelectTree extends Composite {
 				
 				// Enables or disables move buttom ( evalues security to move to folder with permissions )
 				if (rootItem.equals(actualItem)) {
-					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(false);
+					Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.enable(false);
 				} else {
-					Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.enable(true);
+					Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.enable(true);
 				}
 				
 				if (refresh) {
@@ -164,11 +164,11 @@ public class FolderSelectTree extends Composite {
 			
 			actualItem.setState(true);
 			evaluesFolderIcon(actualItem);
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagChilds();
 			Main.get().showError("GetChilds", caught);
 		}
 	};
@@ -186,12 +186,12 @@ public class FolderSelectTree extends Composite {
 			actualItem.setState(true);
 			actualItem.setSelected(true);
 			
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
 			getChilds(result.getPath());			
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.unsetFlagRoot();
 			Main.get().showError("GetThesaurusFolder", caught);
 		}
 	};
@@ -204,7 +204,7 @@ public class FolderSelectTree extends Composite {
 	public void getChilds(String path) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
 		endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-		Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagChilds();
+		Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagChilds();
 		folderService.getChilds(path, callbackGetChilds);
 	}	
 	
@@ -214,7 +214,7 @@ public class FolderSelectTree extends Composite {
 	public void getThesaurus() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
 		endPoint.setServiceEntryPoint(Config.OKMRepositoryService);	
-		Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagRoot();
+		Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.status.setFlagRoot();
 		repositoryService.getThesaurusFolder(callbackGetThesaurusFolder);
 	}
 	

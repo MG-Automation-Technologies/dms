@@ -208,8 +208,8 @@ public class ThesaurusSelectPopup extends DialogBox  {
 		String keyword = actualPath.substring(actualPath.lastIndexOf("/")+1).replace(" ", "_");
 		switch (selectedFrom) {
 			case DOCUMENT_PROPERTIES:
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addKeywordToPendinList(keyword);
-				Main.get().mainPanel.browser.tabMultiple.tabDocument.document.addPendingKeyWordsList();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.addKeywordToPendinList(keyword);
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.document.addPendingKeyWordsList();
 				break;
 			case WIZARD:
 				Main.get().wizardPopup.keywordsWidget.addKeywordToPendinList(keyword);

@@ -52,7 +52,7 @@ public class ThesaurusTree extends FolderTree {
 		
 		// Sets the context on list context search values
 		Main.get().repositoryContext.setContextPersonal(folderRoot.getPath());
-		//Main.get().mainPanel.search.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_THESAURUS);
+		//Main.get().mainPanel.search.searchBrowser.searchIn.setContextValue(folderRoot.getPath(),PanelDefinition.NAVIGATOR_THESAURUS);
 		
 		actualItem.setUserObject(folderRoot);
 		evaluesFolderIcon(actualItem);			

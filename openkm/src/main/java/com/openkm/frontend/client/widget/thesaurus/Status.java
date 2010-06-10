@@ -77,18 +77,18 @@ public class Status extends PopupPanel {
 	 */
 	public void refresh() {
 		if (flag_getChilds || flag_root || flag_keywords ) {
-			int left = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-200)/2) +
-						 Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteLeft();
-			int top = ((Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-40)/2) + 
-			            Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteTop();
+			int left = ((Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetWidth()-200)/2) +
+						 Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteLeft();
+			int top = ((Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.getOffsetHeight()-40)/2) + 
+			            Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.getAbsoluteTop();
 			setPopupPosition(left,top);
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.addStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.addStyleName("okm-PanelRefreshing");
 			super.show();
 		} else {
 			super.hide();
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
-			Main.get().mainPanel.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.scrollDirectoryPanel.removeStyleName("okm-PanelRefreshing");
+			Main.get().mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.scrollKeywordPanel.removeStyleName("okm-PanelRefreshing");
 		}
 	}
 	

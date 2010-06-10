@@ -93,7 +93,7 @@ public class StartUp {
 		public void onSuccess(GWTFolder result) {
 			//Only executes on initalization and evalues root Node permissions
 			Main.get().taxonomyRootFolder = result;
-			Main.get().mainPanel.browser.fileBrowser.table.fillWidth(); // Sets de columns size
+			Main.get().mainPanel.desktop.browser.fileBrowser.table.fillWidth(); // Sets de columns size
 			nextStatus(STARTUP_GET_CATEGORIES_ROOT);
 		}
 
@@ -379,12 +379,12 @@ public class StartUp {
 					case STARTUP_GET_BOOKMARKS:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.bookmarks"), STARTUP_GET_BOOKMARKS);
 						Main.get().mainPanel.topPanel.mainMenu.bookmark.getAll(); 	// Initialize bookmarks
-						Main.get().mainPanel.browser.tabMultiple.init();			// Initialize tab multiple
+						Main.get().mainPanel.desktop.browser.tabMultiple.init();			// Initialize tab multiple
 						break;
 					
 					case STARTUP_LOADING_TAXONOMY:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.taxonomy"), STARTUP_LOADING_TAXONOMY);
-						Main.get().mainPanel.navigator.taxonomyTree.init();			// Initialize folder tree
+						Main.get().mainPanel.desktop.navigator.taxonomyTree.init();			// Initialize folder tree
 						break;
 					
 					case STARTUP_LOADING_TAXONOMY_FOLDERS:
@@ -416,38 +416,38 @@ public class StartUp {
 						
 					case STARTUP_LOADING_CATEGORIES:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.categories"), STARTUP_LOADING_CATEGORIES);
-						Main.get().mainPanel.navigator.categoriesTree.init();	  	// Initialize thesaurus
+						Main.get().mainPanel.desktop.navigator.categoriesTree.init();	  	// Initialize thesaurus
 						break;
 						
 					case STARTUP_LOADING_THESAURUS:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.thesaurus"), STARTUP_LOADING_THESAURUS);
-						Main.get().mainPanel.navigator.thesaurusTree.init();	  	// Initialize thesaurus
+						Main.get().mainPanel.desktop.navigator.thesaurusTree.init();	  	// Initialize thesaurus
 						break;
 						
 					case STARTUP_LOADING_TEMPLATES:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.templates"), STARTUP_LOADING_TEMPLATES);
-						Main.get().mainPanel.navigator.templateTree.init();	   		// Initialize templates
+						Main.get().mainPanel.desktop.navigator.templateTree.init();	   		// Initialize templates
 						break;
 					
 					case STARTUP_LOADING_PERSONAL:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.personal"), STARTUP_LOADING_PERSONAL);
-						Main.get().mainPanel.navigator.personalTree.init();			// Initialize my documents
+						Main.get().mainPanel.desktop.navigator.personalTree.init();			// Initialize my documents
 						break;
 
 					case STARTUP_LOADING_MAIL:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.mail"), STARTUP_LOADING_MAIL);
-						Main.get().mainPanel.navigator.mailTree.init();				// Initialize mail
+						Main.get().mainPanel.desktop.navigator.mailTree.init();				// Initialize mail
 						break;
 
 					case STARTUP_LOADING_TRASH:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.trash"), STARTUP_LOADING_TRASH);
-						Main.get().mainPanel.navigator.trashTree.init();			// Initialize trash folder
+						Main.get().mainPanel.desktop.navigator.trashTree.init();			// Initialize trash folder
 						break;
 					
 					case STARTUP_LOADING_HISTORY_SEARCH:
 						Main.get().startUpPopup.addStatus(Main.i18n("startup.loading.history.search"), STARTUP_LOADING_HISTORY_SEARCH);
-						Main.get().mainPanel.historySearch.searchSaved.init();		// Initialize history saved
-						Main.get().mainPanel.historySearch.userNews.init();
+						Main.get().mainPanel.search.historySearch.searchSaved.init();		// Initialize history saved
+						Main.get().mainPanel.search.historySearch.userNews.init();
 						Main.get().mainPanel.setVisible(true);
 						Main.get().workspaceUserProperties.setAvailableAction(); // Some actions ( menus / etc ... ) must be set at ends startup
 						  														 // After init widget methods ares all yet finished
