@@ -108,8 +108,21 @@ public class ExtendedDockPanel extends Composite {
 		
 		// Initialize dockPanel size
 		dockPanel.setSize(""+Window.getClientWidth(), ""+Window.getClientHeight());
-		// Initializes coordenates panels values and sets workspace panels size using coordenates panels values
-		init();		
+
+		// The active panel must be the last on initalization because establishes coordenates
+		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
+		
+		int centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
+		int centerHeight = Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
+		
+		topPanel.setWidth(""+Window.getClientWidth());
+		desktop.setSize(centerWidth, centerHeight);
+		search.setSize(centerWidth, centerHeight);
+		dashboard.setSize(centerWidth, centerHeight);
+		administration.setSize(centerWidth, centerHeight);
+		
+		actualView = DESKTOP;	
 		
 		// Creates the dockPanel
 		dockPanel.add(topPanel, DockPanel.NORTH);
@@ -128,29 +141,9 @@ public class ExtendedDockPanel extends Composite {
 	/* (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#setSize(java.lang.String, java.lang.String)
 	 */
-	public void setSize(String width, String height) {
-		dockPanel.setSize(width, height);
-	}
-	
-	/**
-	 * Initializes worskpaces coordenades, and sizes
-	 */
-	public void init() {
-		
-		// The active panel must be the last on initalization because establishes coordenates
-		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
-		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
-		
-		int centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
-		int centerHeight = Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
-		
-		desktop.setSize(centerWidth, centerHeight);
-		search.setSize(centerWidth, centerHeight);
-		dashboard.setSize(centerWidth, centerHeight);
-		administration.setSize(centerWidth, centerHeight);
-		
-		actualView = DESKTOP;
-	}
+//	public void setSize(String width, String height) {
+//		dockPanel.setSize(width, height);
+//	}
 	
 	public void setView(int workspace) {
 		disableView();

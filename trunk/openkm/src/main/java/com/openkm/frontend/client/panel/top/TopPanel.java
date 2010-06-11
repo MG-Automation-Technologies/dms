@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.panel.ExtendedSizeComposite;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.TabWorkspace;
 import com.openkm.frontend.client.widget.mainmenu.MainMenu;
 import com.openkm.frontend.client.widget.toolbar.ToolBar;
@@ -41,7 +41,7 @@ import com.openkm.frontend.client.widget.toolbar.ToolBar;
  */
 public class TopPanel extends ExtendedSizeComposite {
 	
-	public static final int PANEL_HEIGHT = 57;
+	public static final int PANEL_HEIGHT = 55 + (Util.getUserAgent().equals("gecko")?2:0);
 	
 	private VerticalPanel panel;
 	private HorizontalPanel toolsPanel;
@@ -101,8 +101,8 @@ public class TopPanel extends ExtendedSizeComposite {
 		
 		leftLabel.setStyleName("okm-TopPanel-Border");
 		rightLabel.setStyleName("okm-TopPanel-Border");
-		leftLabel.setSize("10px", ""+PANEL_HEIGHT);
-		rightLabel.setSize("10px",""+PANEL_HEIGHT);
+		leftLabel.setPixelSize(10, PANEL_HEIGHT);
+		rightLabel.setPixelSize(10, PANEL_HEIGHT);
 		
 		horizontalPanel.add(leftLabel);
 		horizontalPanel.add(panel);
@@ -113,16 +113,6 @@ public class TopPanel extends ExtendedSizeComposite {
 		horizontalPanel.setCellWidth(rightLabel, "10px");
 		
 		initWidget(horizontalPanel);
-	}
-	
-	/**
-	 * Sets the size
-	 * 
-	 * @param width the width size
-	 * @param height the height size
-	 */
-	public void setSize(int width, int height) {
-		horizontalPanel.setSize(""+width, ""+height);
 	}
 	
 	/**

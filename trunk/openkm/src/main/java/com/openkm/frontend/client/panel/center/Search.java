@@ -27,7 +27,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
-import com.openkm.frontend.client.panel.ExtendedComposite;
+import com.google.gwt.user.client.ui.Composite;
 import com.openkm.frontend.client.panel.left.HistorySearch;
 
 /**
@@ -36,7 +36,7 @@ import com.openkm.frontend.client.panel.left.HistorySearch;
  * @author jllort
  *
  */
-public class Search extends ExtendedComposite {
+public class Search extends Composite {
 	
 	private final static int PANEL_LEFT_WIDTH 	= 225;
 	public final static int SPLITTER_WIDTH 	= 10;
