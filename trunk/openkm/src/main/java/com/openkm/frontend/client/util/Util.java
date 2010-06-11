@@ -23,21 +23,9 @@ package com.openkm.frontend.client.util;
 
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.bean.Coordenates;
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 
 public class Util {
-	
-	/**
-	 * Set size to panel object
-	 * 
-	 * @param panel The panel to set size
-	 * @param coord The coordenates of the panel on browser
-	 */
-	public static void setSize(ExtendedSizeComposite panel, Coordenates coord) {
-		panel.setSize(coord.getWidth(),coord.getHeight());
-	}
 	
 	/**
 	 * Generates HTML for item with an attached icon.
