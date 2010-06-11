@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.panel.center;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -29,6 +30,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.openkm.frontend.client.panel.left.Navigator;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * Administration
@@ -49,6 +51,7 @@ public class Desktop extends Composite {
 	private int height = 0; 
 	private int left = 0;
 	private int right = 0;
+	private int startingLeft = 0;
 	
 	/**
 	 * Desktop
@@ -67,6 +70,8 @@ public class Desktop extends Composite {
 			public void onMouseMove(MouseMoveEvent event) {
 				if (horizontalSplitPanel.getSplitPanel().isResizing()) {
 					if (!isResizeInProgress) {
+						startingLeft = left;
+						Log.debug("browser detected: " + Util.getUserAgent());
 						isResizeInProgress = true;
 						onSplitResize();
 					}
@@ -117,6 +122,17 @@ public class Desktop extends Composite {
 					} else {
 						// On finishing in good idea to fill width column tables
 						browser.fileBrowser.table.fillWidth();
+						if (Util.getUserAgent().equals("chrome")) {
+							new Timer() {
+
+								@Override
+								public void run() {
+									Log.debug("realizamos resize final: ");
+									resizePanels();
+								}
+								
+							}.schedule(1000);
+						}
 					}
 				}
 			}.schedule(resizeUpdatePeriod);
@@ -140,8 +156,25 @@ public class Desktop extends Composite {
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		right = total - Integer.parseInt(value);
+		
+		if (Util.getUserAgent().equals("chrome")) {
+			if (startingLeft>left) {
+				Log.debug("chrome - rectification izquierda");
+				navigator.setSize(left-15, height-15);
+				browser.setWidth(right);
+			} else {
+				Log.debug("chrome - rectification derecha");
+				navigator.setSize(left, height);
+				browser.setWidth(right-15);
+			}
+		} else {
+			navigator.setSize(left, height);
+			browser.setWidth(right);
+		}
+		
 		navigator.setSize(left, height);
 		browser.setWidth(right);
+		Log.debug("chrome - left:"+left + " right;" + right + " width:"+width + " total:"+total);
 	}
 	
 	/**
