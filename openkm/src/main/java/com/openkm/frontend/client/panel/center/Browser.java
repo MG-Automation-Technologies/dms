@@ -27,8 +27,8 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.panel.ExtendedComposite;
 import com.openkm.frontend.client.widget.filebrowser.FileBrowser;
 import com.openkm.frontend.client.widget.properties.TabMultiple;
 
@@ -38,7 +38,7 @@ import com.openkm.frontend.client.widget.properties.TabMultiple;
  * @author jllort
  *
  */
-public class Browser extends ExtendedComposite {
+public class Browser extends Composite {
 	
 	private final static int SPLITTER_HEIGHT = 10;
 	

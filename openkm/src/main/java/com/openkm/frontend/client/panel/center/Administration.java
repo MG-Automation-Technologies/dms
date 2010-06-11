@@ -22,10 +22,9 @@
 package com.openkm.frontend.client.panel.center;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Frame;
-
 import com.openkm.frontend.client.config.Config;
-import com.openkm.frontend.client.panel.ExtendedComposite;
 
 /**
  * Administration
@@ -33,7 +32,7 @@ import com.openkm.frontend.client.panel.ExtendedComposite;
  * @author jllort
  *
  */
-public class Administration extends ExtendedComposite {
+public class Administration extends Composite {
 	
 	private Frame iframe;
 	

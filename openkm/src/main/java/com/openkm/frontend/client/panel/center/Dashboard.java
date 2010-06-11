@@ -22,11 +22,10 @@
 package com.openkm.frontend.client.panel.center;
 
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-import com.openkm.frontend.client.panel.ExtendedComposite;
 import com.openkm.frontend.client.widget.dashboard.GeneralDashboard;
 import com.openkm.frontend.client.widget.dashboard.HorizontalToolBar;
 import com.openkm.frontend.client.widget.dashboard.KeyMapDashboard;
@@ -41,7 +40,7 @@ import com.openkm.frontend.client.widget.dashboard.WorkflowDashboard;
  * @author jllort
  *
  */
-public class Dashboard extends ExtendedComposite {
+public class Dashboard extends Composite {
 	
 	public static final int DASHBOARD_USER 		= 1;
 	public static final int DASHBOARD_MAIL 		= 2;
