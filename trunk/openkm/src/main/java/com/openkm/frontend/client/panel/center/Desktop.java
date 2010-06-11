@@ -118,7 +118,7 @@ public class Desktop extends Composite {
 					} else {
 						// On finishing in good idea to fill width column tables
 						browser.fileBrowser.table.fillWidth();
-						// Finish resize with chrome
+						// Solve some problems with chrome
 						if (Util.getUserAgent().equals("chrome")) {
 							new Timer() {
 								@Override
@@ -126,7 +126,7 @@ public class Desktop extends Composite {
 									resizePanels();
 								}
 								
-							}.schedule(1000);
+							}.schedule(250);
 						}
 					}
 				}
@@ -152,6 +152,7 @@ public class Desktop extends Composite {
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		right = total - Integer.parseInt(value);
 		
+		// Solve some problems with chrome
 		if (Util.getUserAgent().equals("chrome")) {
 			navigator.setSize(left-15, height-15);
 			browser.setWidth(right-15);
@@ -167,6 +168,17 @@ public class Desktop extends Composite {
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
 		browser.refreshSpliterAfterAdded();
+		
+		// Solve some problems with chrome
+		if (Util.getUserAgent().equals("chrome")) {
+			new Timer() {
+				@Override
+				public void run() {
+					resizePanels();
+				}
+				
+			}.schedule(250);
+		}
 	}
 	
 	/**
