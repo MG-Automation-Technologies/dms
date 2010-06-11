@@ -21,11 +21,10 @@
 
 package com.openkm.frontend.client.panel.left;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.StackPanel;
-
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.searchsaved.SearchSaved;
 import com.openkm.frontend.client.widget.searchuser.UserNews;
@@ -36,7 +35,7 @@ import com.openkm.frontend.client.widget.searchuser.UserNews;
  * @author jllort
  * 
  */
-public class HistorySearch extends ExtendedSizeComposite {
+public class HistorySearch extends Composite {
 
 	// Constants defining the current view
 	public static final int NUMBER_OF_STACKS = 2;

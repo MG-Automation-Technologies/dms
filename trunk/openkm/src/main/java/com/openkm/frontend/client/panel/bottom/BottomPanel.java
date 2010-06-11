@@ -25,13 +25,13 @@ import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.widget.UserInfo;
 
 /**
@@ -40,7 +40,7 @@ import com.openkm.frontend.client.widget.UserInfo;
  * @author jllort
  *
  */
-public class BottomPanel extends ExtendedSizeComposite {
+public class BottomPanel extends Composite {
 	
 	public static final int PANEL_HEIGHT = 25;
 	
