@@ -21,10 +21,10 @@
 
 package com.openkm.frontend.client.panel.left;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.panel.ExtendedSizeComposite;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.categories.CategoriesTree;
@@ -42,7 +42,7 @@ import com.openkm.frontend.client.widget.trash.TrashTree;
  * @author jllort
  *
  */
-public class Navigator extends ExtendedSizeComposite {
+public class Navigator extends Composite {
 
 	public ExtendedStackPanel stackPanel;
 	public ExtendedScrollPanel scrollTaxonomyPanel;

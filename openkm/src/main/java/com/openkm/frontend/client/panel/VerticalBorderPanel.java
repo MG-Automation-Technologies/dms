@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.panel;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 
 /**
@@ -29,7 +30,7 @@ import com.google.gwt.user.client.ui.Label;
  * @author jllort
  *
  */
-public class VerticalBorderPanel extends ExtendedSizeComposite {
+public class VerticalBorderPanel extends Composite {
 	
 	private Label leftBar;
 	

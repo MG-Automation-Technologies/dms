@@ -21,13 +21,14 @@
 
 package com.openkm.frontend.client.panel.top;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.panel.ExtendedSizeComposite;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.TabWorkspace;
 import com.openkm.frontend.client.widget.mainmenu.MainMenu;
@@ -39,7 +40,7 @@ import com.openkm.frontend.client.widget.toolbar.ToolBar;
  * @author jllort
  *
  */
-public class TopPanel extends ExtendedSizeComposite {
+public class TopPanel extends Composite {
 	
 	public static final int PANEL_HEIGHT = 55 + (Util.getUserAgent().equals("gecko")?2:0);
 	
@@ -85,7 +86,7 @@ public class TopPanel extends ExtendedSizeComposite {
 		SimplePanel separator = new SimplePanel();
 		separator.setWidth("100%");
 		horizontalPanelMenu.add(separator);
-		Image logo = new Image("img/logon_openkm_tiny.gif");
+		Image logo = new Image(OKMBundleResources.INSTANCE.logoOpenKM());
 		horizontalPanelMenu.add(logo);
 		horizontalPanelMenu.setCellHorizontalAlignment(logo, HasAlignment.ALIGN_RIGHT);
 		horizontalPanelMenu.setCellVerticalAlignment(logo, HasAlignment.ALIGN_MIDDLE);
