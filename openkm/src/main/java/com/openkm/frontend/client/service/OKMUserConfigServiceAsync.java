@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 
 /**
