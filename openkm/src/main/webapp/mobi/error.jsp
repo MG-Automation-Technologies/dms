@@ -3,7 +3,6 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="com.openkm.core.Config"%>
 <%@page import="com.openkm.core.SessionManager"%>
-<%@page import="com.openkm.core.UserAlreadyLoggerException"%>
 <%@page import="com.openkm.bean.SessionInfo"%>
 <%
   String msg = "Unknown error";
