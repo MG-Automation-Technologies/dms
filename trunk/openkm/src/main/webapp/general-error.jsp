@@ -1,7 +1,6 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="com.openkm.core.SessionManager" %>
-<%@ page import="com.openkm.core.UserAlreadyLoggerException" %>
 <%@ page import="com.openkm.bean.SessionInfo" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page isErrorPage="true" %>
