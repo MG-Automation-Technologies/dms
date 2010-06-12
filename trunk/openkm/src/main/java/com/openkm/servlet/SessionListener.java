@@ -55,8 +55,6 @@ public class SessionListener implements HttpSessionListener {
 		// Activity log
 		if (si != null) {
 			UserActivity.log(si.getUser(), "SESSION_DESTROYED", si.getId(), null);
-		} else {
-			UserActivity.log(null, "SESSION_DESTROYED", null, null);
 		}
 	}
 }
