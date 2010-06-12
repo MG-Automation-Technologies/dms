@@ -11,20 +11,6 @@
   
   if (exception != null) {
     msg = exception.getMessage();
-    //exception.printStackTrace();
-
-    if (exception instanceof UserAlreadyLoggerException) {
-      SessionManager sm = SessionManager.getInstance();
-      String token = sm.getTokenByUserId(request.getRemoteUser());
-      if (token != null) {
-        SessionInfo si = sm.getInfo(token);
-        logged = "<i>Session inactive from</i> "+si.getAccess().getTime()+"<br/>";
-        Calendar expiration = (Calendar) si.getAccess().clone();
-        expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
-        logged +="<i>Session will expire at</i> "+expiration.getTime()+"<br/>";
-        session.invalidate();
-      }
-    }
   }
 %>
 <?xml version="1.0" encoding="UTF-8" ?>

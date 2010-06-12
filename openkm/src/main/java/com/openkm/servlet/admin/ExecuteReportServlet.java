@@ -83,6 +83,7 @@ public class ExecuteReportServlet extends BaseServlet {
 		log.debug("doGet >>>");
 		Collection col = null;
 		Connection con = null;
+		updateSessionManager(request);
 		
 		// Setting default report type
 		int type = ReportUtil.REPORT_PDF_OUTPUT;

@@ -24,48 +24,71 @@ package com.openkm.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import javax.jcr.Session;
-
 public class SessionInfo implements Serializable {
-	private static final long serialVersionUID = 8655072216466952885L;
-	
-	public static final String CREATION = "creation";
-	public static final String ACCESS = "access";
-	
+	private static final long serialVersionUID = 1L;
+	private String user;
+	private String ip;
+	private String host;
+	private String id;
 	private Calendar creation;
-	private Calendar access;
-	private Session session;
-	
-	public Calendar getAccess() {
-		return access;
+	private Calendar lastAccessed;
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 	
-	public void setAccess(Calendar access) {
-		this.access = access;
+	public String getHost() {
+		return host;
 	}
 	
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public Calendar getCreation() {
 		return creation;
 	}
-	
+
 	public void setCreation(Calendar creation) {
 		this.creation = creation;
 	}
 	
-	public javax.jcr.Session getSession() {
-		return session;
+	public Calendar getLastAccessed() {
+		return lastAccessed;
 	}
-	
-	public void setSession(javax.jcr.Session session) {
-		this.session = session;
+
+	public void setLastAccessed(Calendar lastAccessed) {
+		this.lastAccessed = lastAccessed;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("session="); sb.append(session);
+		sb.append("user="); sb.append(user);
+		sb.append(", ip="); sb.append(ip);
+		sb.append(", id="); sb.append(id);
 		sb.append(", creation="); sb.append(creation==null?null:creation.getTime());
-		sb.append(", access="); sb.append(access==null?null:access.getTime());
+		sb.append(", lastAccessed="); sb.append(lastAccessed==null?null:lastAccessed.getTime());
 		sb.append("}");
 		return sb.toString();
 	}

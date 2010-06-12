@@ -24,10 +24,8 @@ package com.openkm.frontend.server;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.openkm.core.SessionManager;
 
 /**
  * Extends the RemoteServiceServlet to obtain token auth on development and production
@@ -37,13 +35,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  *
  */
 public class OKMRemoteServiceServlet extends RemoteServiceServlet {
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(OKMRemoteServiceServlet.class);
-	private static final long serialVersionUID = 1801666502721600473L;
-	public static String sessionToken = null;
+	private static final long serialVersionUID = 1L;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+	}
+	
+	public void updateSessionManager() {
+		SessionManager.getInstance().update(getThreadLocalRequest().getSession().getId());
 	}
 }

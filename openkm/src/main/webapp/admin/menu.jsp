@@ -16,7 +16,7 @@
   &nbsp;
   <a target="frame" href="PropertyGroups"><img src="img/toolbar/properties.png" title="Property groups"></a>
   &nbsp;
-  <a target="frame" href="logged_users.jsp"><img src="img/toolbar/logged.png" title="Logged users"></a>
+  <a target="frame" href="LoggedUsers"><img src="img/toolbar/logged.png" title="Logged users"></a>
   &nbsp;
 <% if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) { %>
   <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>

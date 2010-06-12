@@ -64,6 +64,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder = new Folder();
 		folder.setPath(fldPathParent+"/"+fldPath);
+		updateSessionManager();
 		
 		try {
 			gWTFolder = Util.copy(OKMFolder.getInstance().create(folder));
@@ -94,6 +95,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void delete(String fldPath) throws OKMException {
 		log.debug("delete({})", fldPath);
+		updateSessionManager();
 		
 		try {
 			OKMFolder.getInstance().delete(fldPath);
@@ -123,7 +125,8 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public List<GWTFolder> getChilds(String fldPath) throws OKMException {
 		log.debug("getFolderChilds({})", fldPath);
-		List<GWTFolder> folderList = new ArrayList<GWTFolder>(); 
+		List<GWTFolder> folderList = new ArrayList<GWTFolder>();
+		updateSessionManager();
 		
 		try {
 			log.debug("ParentFolder: {}", fldPath);
@@ -157,6 +160,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	public GWTFolder rename(String fldId, String newName)  throws OKMException  {
 		log.debug("rename({}, {})", fldId, newName);
 		GWTFolder gWTFolder = new GWTFolder();
+		updateSessionManager();
 		
 		try {
 			gWTFolder = Util.copy(OKMFolder.getInstance().rename(fldId, newName));
@@ -187,6 +191,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void move(String fldPath, String dstPath) throws OKMException {
 		log.debug("move({}, {})", fldPath, dstPath);
+		updateSessionManager();
 		
 		try {
 			OKMFolder.getInstance().move(fldPath, dstPath);
@@ -216,6 +221,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void purge(String fldPath) throws OKMException {
 		log.debug("purge({})", fldPath);
+		updateSessionManager();
 		
 		try {
 			OKMFolder.getInstance().purge(fldPath);
@@ -243,6 +249,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	public GWTFolder getProperties(String fldPath) throws OKMException {
 		log.debug("getProperties({})", fldPath);
 		GWTFolder gWTFolder = new GWTFolder();
+		updateSessionManager();
 		
 		try {
 			gWTFolder = Util.copy(OKMFolder.getInstance().getProperties(fldPath));
@@ -267,6 +274,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public void copy(String fldPath, String dstPath) throws OKMException {
 		log.debug("copy({}, {})", fldPath, dstPath);
+		updateSessionManager();
 	
 		try {
 			OKMFolder.getInstance().copy(fldPath, dstPath);
@@ -296,6 +304,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 	@Override
 	public Boolean isValid(String fldPath) throws OKMException {
 		log.debug("isValid({})", fldPath);
+		updateSessionManager();
 	
 		try {
 			return Boolean.valueOf(OKMFolder.getInstance().isValid(fldPath));

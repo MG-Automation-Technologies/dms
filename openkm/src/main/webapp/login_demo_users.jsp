@@ -8,8 +8,6 @@
 <%@ page import="java.util.Iterator" %>
 <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
 <%
-  List<String> users = new ArrayList<String>();
-  boolean userAvailable = false;
   out.println("<tr><td class=\"demo_alert\">");
   out.println("This demo is available for testing purposes.<br>");
   out.println("These documents can be removed at any time, <br>");
@@ -20,18 +18,16 @@
 
   SessionManager sm = SessionManager.getInstance();
 
-  if (sm.getTokens().isEmpty()) {
+  if (sm.getSessions().isEmpty()) {
     out.print("<b>No users logged, all demo users are available.</b>");
   } else {
     out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
     out.println("<tr><th>User</th><th>Login</th><th>Last action</th></tr>");
-    for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
-      String token = it.next();
-      SessionInfo si = sm.getInfo(token);
-      out.print("<tr><td>"+si.getSession().getUserID()+"</td><td>"+
+    for (Iterator<SessionInfo> it = sm.getSessions().iterator(); it.hasNext(); ) {
+      SessionInfo si = it.next();
+      out.print("<tr><td>"+si.getUser()+"</td><td>"+
         FormatUtil.formatDate(si.getCreation())+"</td><td>"+
-        FormatUtil.formatDate(si.getAccess())+"</td</tr>");
-      users.add(si.getSession().getUserID());
+        FormatUtil.formatDate(si.getLastAccessed())+"</td</tr>");
     }
     out.println("</table>");
   }
@@ -40,24 +36,13 @@
   out.println("<tr><td class=\"demo_title\">- AVAILABLE DEMO USERS -</td></tr>");
   out.println("<tr><td><b>If you need you own user, please <a href=\"http://www.openkm.com/Contact/\">contact us</a>.</b></td></tr>");
   out.println("<tr><td>");
-
-  String availables = "<table class=\"demo_list\" align=\"center\">";
-  availables += "<tr><th>User</th><th>Password</th></tr>";
+  out.println("<table class=\"demo_list\" align=\"center\">");
+  out.println("<tr><th>User</th><th>Password</th></tr>");
   for (int i=0; i<10; i++) {
     String userID = "user" + i;
-    if (!users.contains(userID) && !users.equals("system")){
-      availables += "<tr><td>" + userID + "</td><td>pass" + i +"</td></tr>";
-      userAvailable = true;
-    }
+    out.println("<tr><td>" + userID + "</td><td>pass" + i +"</td></tr>");
   }
-  availables += "</table>";
-
-  if (!userAvailable) {
-    out.println("At this moment all users are logged, please be patient");
-  } else {
-    out.println(availables);
-  }
-
+  out.println("</table>");
   out.println("</td></tr>");
   %>
 </table>

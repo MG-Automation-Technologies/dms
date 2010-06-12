@@ -59,6 +59,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		updateSessionManager(request);
 		
 		try {
 			if (!qs.equals("")) {

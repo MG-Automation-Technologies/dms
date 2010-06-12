@@ -59,8 +59,6 @@
 		try {
 			if (!Config.KEA_THESAURUS_OWL_FILE.equals("")) {
 				if (strLevel != null && !strLevel.equals("")) {
-					SessionManager sm = SessionManager.getInstance();
-					String token = sm.getTokenByUserId(Config.SYSTEM_USER);
 					out.println("<hr/>");
 					int level = Integer.parseInt(strLevel);
 					long begin = System.currentTimeMillis();

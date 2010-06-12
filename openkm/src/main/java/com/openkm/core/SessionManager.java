@@ -23,162 +23,102 @@ package com.openkm.core;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
+import java.util.List;
 
-import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.SessionInfo;
-import com.openkm.util.UUIDGenerator;
 
 /**
- *
- * 
  * @author pavila
  */
 public class SessionManager {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(SessionManager.class);
-	private static final boolean DEBUG = false;
-	private static SessionManager instance;
-	private static String systemToken;
-	private HashMap<String, SessionInfo> sessions = new HashMap<String, SessionInfo>();
+	private static SessionManager instance = new SessionManager();
+	private List<SessionInfo> sessions = new ArrayList<SessionInfo>();
 
 	/**
+	 * Prevents class instantiation
+	 */
+	private SessionManager() {
+	}
+	
+	/**
 	 * Instantiate a SessionManager.
-	 * 
-	 * @return
 	 */
 	public static SessionManager getInstance() {
-		if (DEBUG) log.debug("getInstance()");
-		if (instance == null) {
-			instance = new SessionManager();
-		}
-		
-		if (DEBUG) log.debug("getInstance: "+instance);
 		return instance;
 	}
 	
 	/**
-	 * @return
+	 * Add a new session
 	 */
-	public String getSystemToken() {
-		return systemToken;
-	}
-	
-	/**
-	 * @param systemSession
-	 */
-	public void putSystem(Session systemSession) {
-		systemToken = UUIDGenerator.generate(this);
-		put(systemToken, systemSession);
-	}
-	
-	/**
-	 * Put a new Session in the HashMap.
-	 * 
-	 * @param token
-	 * @param session
-	 */
-	public void put(String token, Session session) {
-		if (DEBUG) log.debug("put("+token+" ,"+session+")");
+	public synchronized void add(HttpServletRequest request) {
 		SessionInfo si = new SessionInfo();
-		si.setSession(session);
-		si.setCreation(Calendar.getInstance());
-		si.setAccess(Calendar.getInstance());
-		sessions.put(token, si);
-		if (DEBUG) log.debug("put: void");
+		HttpSession s = request.getSession();
+		
+		si.setUser(request.getRemoteUser());
+		si.setIp(request.getRemoteAddr());
+		si.setHost(request.getRemoteHost());
+		si.setId(s.getId());
+		Calendar creation = Calendar.getInstance();
+		creation.setTimeInMillis(s.getCreationTime());
+		si.setCreation(creation);
+		Calendar lastAccessed = Calendar.getInstance();
+		lastAccessed.setTimeInMillis(s.getLastAccessedTime());
+		si.setLastAccessed(lastAccessed);
+		
+		s.setAttribute("user", request.getRemoteUser());
+		sessions.add(si);
 	}
 	
 	/**
-	 * Obtains a previous stored Session in the HashMap.
-	 * 
-	 * @param token
-	 * @return
+	 * Update session last accessed time
 	 */
-	public Session get(String token) {
-		if (DEBUG) log.debug("get("+token+")");
-		SessionInfo si = (SessionInfo) sessions.get(token);
-		Session session = null;
-		
-		if (si != null) {
-			si.setAccess(Calendar.getInstance());
-			session = si.getSession();
-		}
-		
-		if (DEBUG) log.debug("get: "+session);
-		return session;
-	}
-
-	/**
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public SessionInfo getInfo(String token) {
-		if (DEBUG) log.debug("get("+token+")");
-		SessionInfo si = (SessionInfo) sessions.get(token);
-		if (DEBUG) log.debug("get: "+si);
-		return si;
-	}
-	
-	/**
-	 * Remove a previous stored Session from the HashMap
-	 * 
-	 * @param token
-	 */
-	public void remove(String token) {
-		if (DEBUG) log.debug("remove("+token+")");
-		sessions.remove(token);
-		if (DEBUG) log.debug("remove: void");
-	}
-	
-	/**
-	 * Return all active tokens
-	 */
-	public Collection<String> getTokens() {
-		if (DEBUG) log.debug("getActiveTokens()");
-		ArrayList<String> list = new ArrayList<String>();
-		
-		for (Iterator<String> it = sessions.keySet().iterator(); it.hasNext(); ) {
-			String token = it.next();
-			
-			if (!systemToken.equals(token)) {
-				list.add(token);
+	public synchronized void update(String id) {
+		for (SessionInfo si : sessions) {
+			if (si.getId().equals(id)) {
+				si.setLastAccessed(Calendar.getInstance());
 			}
 		}
-		
-		if (DEBUG) log.debug("getActiveTokens: "+list);
-		return list;
 	}
-
+	
 	/**
-	 * Get session using user id.
-	 * 
-	 * @param token
+	 * Remove a session
 	 */
-	public String getTokenByUserId(String userId) {
-		if (DEBUG) log.debug("getTokenByUserId("+userId+")");
-		String token = null;
-		
-		for (Iterator<Entry<String, SessionInfo>> it = sessions.entrySet().iterator(); it.hasNext(); ) {
-			Entry<String, SessionInfo> entry = it.next();
-			Session session = ((SessionInfo) entry.getValue()).getSession();
+	public synchronized void remove(String id) {
+		for (Iterator<SessionInfo> it  = sessions.iterator(); it.hasNext(); ) {
+			SessionInfo si = it.next();
 			
-			if (userId.equals(session.getUserID())) {
-				token = (String) entry.getKey();
+			if (si.getId().equals(id)) {
+				it.remove();
+				break;
 			}
 		}
-		
-		if (DEBUG) log.debug("getTokenByUserId: "+token);
-		return token;
 	}
-
-	public String toString() {
-		return sessions.toString();
+	
+	/**
+	 * Return a session info
+	 */
+	public SessionInfo getSession(String id) {
+		for (SessionInfo si : sessions) {
+			if (si.getId().equals(id)) {
+				return si;
+			}
+		}
+		return null;
+	}
+		
+	/**
+	 * Return all active sessions
+	 */
+	public List<SessionInfo> getSessions() {
+		return sessions;
 	}
 }

@@ -46,6 +46,7 @@ public class RepositoryBackupServlet extends BaseServlet {
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
 		File backup = null;
+		updateSessionManager(request);
 		
 		try {
 			backup = JCRUtils.hotBackup();

@@ -51,6 +51,7 @@ public class LogCatServlet extends BaseServlet {
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
+		updateSessionManager(request);
 		
 		if (action.equals("view")) {
 			view(request, response);

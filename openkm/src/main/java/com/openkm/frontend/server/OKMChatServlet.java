@@ -91,6 +91,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     @Override
     public String createNewChatRoom(String user) {
+    	updateSessionManager();
     	String room = UUIDGenerator.generate(""); // Used to unique identifying room
     	String actualUser = getThreadLocalRequest().getRemoteUser();
     	// Add users to rooms
@@ -108,6 +109,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	String user = getThreadLocalRequest().getRemoteUser();
 		List<String> pendingMessages = new ArrayList<String>();
 		int countCycle = 0;
+		updateSessionManager();
 		
 		// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
@@ -129,6 +131,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     	String user = getThreadLocalRequest().getRemoteUser();
     	List<String> pendingRooms = new ArrayList<String>();
     	int countCycle = 0;
+    	updateSessionManager();
     	
     	// 10 * Delay = 1000 = 1 second ( we want a 10 seconds waiting mantaining RPC comunication) that's 10*10=100 cycles
     	// With it mechanism
@@ -147,12 +150,14 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     @Override
     public void addMessageToRoom(String room, String msg) {
+    	updateSessionManager();
     	String user = getThreadLocalRequest().getRemoteUser();
     	messageUserRoomAction(room, user, msg, ACTION_ADD_USER_MESSAGE_TO_ROOM);
     }
     
     @Override
     public void closeRoom(String room) {
+    	updateSessionManager();
     	String user = getThreadLocalRequest().getRemoteUser();
     	usersRoomAction(room, user, ACTION_REMOVE_USER_ROOM);
     	messageUserRoomAction(room, user, "", ACTION_REMOVE_USER_MESSAGE_ROOM);
@@ -161,6 +166,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     @Override
     public void addUserToChatRoom(String room, String user) {
+    	updateSessionManager();
     	usersRoomAction(room, user, ACTION_ADD_ROOM_TO_USER);
     	pendingRoomAction(room, user, ACTION_ADD_PENDING_ROOM_TO_USER);
     	messageUserRoomAction(room, user, "", ACTION_CREATE_MESSAGE_USER_ROOM);
@@ -168,21 +174,23 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     @Override
     public String usersInRoom(String room) {
+    	updateSessionManager();
     	return String.valueOf(messageUserRoomAction(room, "", "", ACTION_GET_USERS_IN_MESSAGE_ROOM).size());
     }
     
     @Override
     public List<String> getUsersInRoom(String room) {
+    	updateSessionManager();
     	return messageUserRoomAction(room, "", "", ACTION_GET_USERS_IN_MESSAGE_ROOM);
     }
 
     /**
      * Synchronized users logged actions
-     * 
-     * @param action
      */
     private synchronized void usersLoggedAction(int action) {
     	String user = getThreadLocalRequest().getRemoteUser();
+    	updateSessionManager();
+    	
     	switch (action) {
     		case ACTION_LOGIN:
     	    	if (!usersLogged.contains(user)) {
@@ -216,12 +224,10 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * Synchronized users room actions
-     * 
-     * @param room
-     * @param user
-     * @param action
      */
     private synchronized void usersRoomAction(String room, String user, int action) {
+    	updateSessionManager();
+    	
     	switch (action) {
     		case ACTION_ADD_ROOM_TO_USER:
     			if (!usersRooms.keySet().contains(user)) {
@@ -249,13 +255,10 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * Synchronized pending room actions
-     * 
-     * @param room
-     * @param user
-     * @param action
-     * @return
      */
     private synchronized List<String> pendingRoomAction(String room, String user, int action) {
+    	updateSessionManager();
+    	
     	switch(action) {
     		case ACTION_ADD_PENDING_ROOM_TO_USER:
     			if (!pendingUsersRooms.keySet().contains(user)) {
@@ -286,14 +289,10 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     
     /**
      * Synchronized message user room actions
-     * 
-     * @param room
-     * @param user
-     * @param msg
-     * @param action
-     * @return
      */
     private synchronized List<String> messageUserRoomAction(String room, String user, String msg, int action) {
+    	updateSessionManager();
+    	
     	switch(action) {
     		case ACTION_GET_PENDING_USER_ROOM_MESSAGE:
     	    	if (msgUsersRooms.containsKey(room) && msgUsersRooms.get(room).containsKey(user)) {

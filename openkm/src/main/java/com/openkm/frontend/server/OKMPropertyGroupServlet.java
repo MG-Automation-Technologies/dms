@@ -66,7 +66,8 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public List<GWTPropertyGroup> getAllGroups() throws OKMException {
 		log.debug("getAllGroups()");
-		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
+		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>();
+		updateSessionManager();
 
 		try {
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups();
@@ -95,7 +96,8 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public List<GWTPropertyGroup> getAllGroups(String docPath) throws OKMException {
 		log.debug("getAllGroups({})", docPath);
-		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
+		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>();
+		updateSessionManager();
 
 		try {
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups();
@@ -144,6 +146,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void addGroup(String docPath, String grpName) throws OKMException {
 		log.debug("addGroup({}, {})", docPath, grpName);
+		updateSessionManager();
 		
 		try {
 			OKMPropertyGroup.getInstance().addGroup(docPath, grpName);
@@ -176,7 +179,8 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public List<GWTPropertyGroup> getGroups(String docPath) throws OKMException {
 		log.debug("getGroups({})", docPath);
-		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>(); 
+		List<GWTPropertyGroup> groupList = new ArrayList<GWTPropertyGroup>();
+		updateSessionManager();
 
 		try {
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(docPath);
@@ -209,6 +213,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException {
 		log.debug("getProperties({}, {})", docPath, grpName);
 		Map<String, String[]> properties = new HashMap<String, String[]>();
+		updateSessionManager();
 
 		try {
 			properties = OKMPropertyGroup.getInstance().getProperties(docPath, grpName);
@@ -238,6 +243,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		log.debug("getMetaData({})", grpName);
 		Collection<FormElement> properties = new ArrayList<FormElement>();
 		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
+		updateSessionManager();
 
 		try {
 			properties = OKMPropertyGroup.getInstance().getPropertyGroupForm(grpName);
@@ -266,6 +272,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException {
 		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
+		updateSessionManager();
 		
 		try {
 			OKMPropertyGroup.getInstance().setProperties(docPath, grpName, properties);
@@ -301,6 +308,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	@Override
 	public void removeGroup(String docPath, String grpName) throws OKMException  {
 		log.debug("removeGroup({}, {})", docPath, grpName);
+		updateSessionManager();
 		
 		try {
 			OKMPropertyGroup.getInstance().removeGroup(docPath, grpName);
@@ -331,6 +339,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException {
 		List<GWTPropertyGroup> allPropertyGroupList = getAllGroups();
 		List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
+		updateSessionManager();
 		
 		for (int i=0; i<Config.WIZARD_PROPERTY_GROUPS.length; i++) {
 			String propertyGroup = Config.WIZARD_PROPERTY_GROUPS[i];

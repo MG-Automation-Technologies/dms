@@ -30,17 +30,6 @@
         <td colspan="2" align="center" style="padding-top: 25px;">
         <% if (exception != null) { %>
         	<h2><%=exception.getMessage()%></h2>
-        	<% if (exception instanceof UserAlreadyLoggerException) { %>
-        	  <% SessionManager sm = SessionManager.getInstance(); %>
-        	  <% String token = sm.getTokenByUserId(request.getRemoteUser()); %>
-        	  <% if (token != null) { %>
-        	    <% SessionInfo si = sm.getInfo(token);  %>
-        	    <%="<i>Session inactive from</i> "+FormatUtil.formatDate(si.getAccess())+"<br/>" %>
-        	    <% Calendar expiration = (Calendar) si.getAccess().clone(); %>
-        	    <% expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION); %>
-        	    <%="<i>Session will expire at</i> "+FormatUtil.formatDate(expiration)+"<br/>" %>
-        	  <% } %>
-        	<% } %>
         <% } else { %>
         	<h2>Unknown error</h2>
         <% } %>

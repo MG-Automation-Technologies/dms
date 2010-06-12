@@ -68,6 +68,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void logout() throws OKMException {
 		log.debug("logout()");
+		updateSessionManager();
 		try {
 			OKMAuth.getInstance().logout();
 			getThreadLocalRequest().getSession().invalidate();
@@ -85,6 +86,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public Map<String, Byte> getGrantedRoles(String nodePath) throws OKMException {
 		log.debug("getGrantedRoles({})", nodePath);
 		Map<String, Byte> hm = new HashMap<String, Byte>();
+		updateSessionManager();
 		
 		try {
 			hm = OKMAuth.getInstance().getGrantedRoles(nodePath);
@@ -113,6 +115,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public Map<String, Byte> getGrantedUsers(String nodePath) throws OKMException {
 		log.debug("getGrantedUsers({})", nodePath);
 		Map<String, Byte> hm = new HashMap<String, Byte>();
+		updateSessionManager();
 		
 		try {
 			hm = OKMAuth.getInstance().getGrantedUsers(nodePath);
@@ -148,7 +151,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getUngrantedUsers(String nodePath) throws OKMException {
 		log.debug("getUngrantedUsers({})", nodePath);
-		List<String> userList = new ArrayList<String>(); 
+		List<String> userList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getUsers();
@@ -187,7 +191,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getUngrantedRoles(String nodePath) throws OKMException {
 		log.debug("getUngrantedRoles({})", nodePath);
-		List<String> roleList = new ArrayList<String>(); 
+		List<String> roleList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getRoles();
@@ -228,7 +233,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getFilteredUngrantedUsers(String nodePath, String filter) throws OKMException {
 		log.debug("getFilteredUngrantedUsers({})", nodePath);
-		List<String> userList = new ArrayList<String>(); 
+		List<String> userList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getUsers();
@@ -267,7 +273,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public List<String> getFilteredUngrantedRoles(String nodePath, String filter) throws OKMException {
 		log.debug("getFilteredUngrantedRoles({})", nodePath);
-		List<String> roleList = new ArrayList<String>(); 
+		List<String> roleList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getRoles();
@@ -309,7 +316,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void grantUser(String path, String user, int permissions, boolean recursive) throws OKMException {
 		log.debug("grantUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
-	
+		updateSessionManager();
+		
 		try {
 			OKMAuth.getInstance().grantUser(path, user, permissions, recursive);
 		} catch (PathNotFoundException e) {
@@ -335,9 +343,10 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeUser(String path, String user, boolean recursive) throws OKMException {
 		log.debug("revokeUser({}, {}, {})", new Object[] { path, user, recursive });
-		OKMAuth oKMAuth = OKMAuth.getInstance();
+		updateSessionManager();
 		
 		try {
+			OKMAuth oKMAuth = OKMAuth.getInstance();
 			oKMAuth.revokeUser(path, user, Permission.READ, recursive);
 			oKMAuth.revokeUser(path, user, Permission.WRITE, recursive);
 			//oKMAuth.revokeUser(path, user, Permission.REMOVE);
@@ -364,6 +373,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeUser(String path, String user, int permissions, boolean recursive) throws OKMException {
 		log.debug("revokeUser({}, {}, {}, {})", new Object[] { path, user, permissions, recursive });
+		updateSessionManager();
 		
 		try {
 			OKMAuth.getInstance().revokeUser(path, user, permissions, recursive);
@@ -390,7 +400,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void grantRole(String path, String role, int permissions, boolean recursive) throws OKMException  {
 		log.debug("grantRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
-	
+		updateSessionManager();
+		
 		try {
 			OKMAuth.getInstance().grantRole(path, role, permissions, recursive);
 		} catch (PathNotFoundException e) {
@@ -416,10 +427,11 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeRole(String path, String role, boolean recursive) throws OKMException {
 		log.debug("revokeRole({}, {}, {})", new Object[] { path, role, recursive });
-		OKMAuth oKMAuth = OKMAuth.getInstance();
+		updateSessionManager();
 		
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
+				OKMAuth oKMAuth = OKMAuth.getInstance();
 				oKMAuth.revokeRole(path, role, Permission.READ, recursive);
 				oKMAuth.revokeRole(path, role, Permission.WRITE, recursive);
 				//oKMAuth.revokeRole(path, user, Permission.REMOVE);
@@ -447,6 +459,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void revokeRole(String path, String role, int permissions, boolean recursive) throws OKMException {
 		log.debug("revokeRole({}, {}, {}, {})", new Object[] { path, role, permissions, recursive });
+		updateSessionManager();
 		
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
@@ -475,6 +488,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	@Override
 	public void keepAlive() throws OKMException {
 		log.debug("keepAlive()");
+		updateSessionManager();
 		Session session = null;
 						
 		try {
@@ -499,6 +513,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getAllUsers() throws OKMException {
 		log.debug("getAllUsers()");
 		List<String> userList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getUsers();
@@ -525,6 +540,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getAllRoles() throws OKMException {
 		log.debug("getAllRoles()");
 		List<String> roleList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getRoles();
@@ -553,6 +569,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getFilteredAllUsers(String filter) throws OKMException {
 		log.debug("getFilteredAllUsers()");
 		List<String> userList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getUsers();
@@ -581,6 +598,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	public List<String> getFilteredAllRoles(String filter) throws OKMException {
 		log.debug("getFilteredAllRoles()");
 		List<String> roleList = new ArrayList<String>();
+		updateSessionManager();
 		
 		try {
 			Collection<String> col = OKMAuth.getInstance().getRoles();

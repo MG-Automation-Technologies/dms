@@ -49,6 +49,7 @@ public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public void setUserHome(String path) throws OKMException {
 		log.debug("setUserHome({})", path);
+		updateSessionManager();
 		
 		try {
 			OKMUserConfig.getInstance().setHome(path);
@@ -69,6 +70,7 @@ public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public GWTUserConfig getUserHome() throws OKMException {
 		log.debug("getUserHome()");
+		updateSessionManager();
 		
 		try {
 			return Util.copy(OKMUserConfig.getInstance().getConfig());
