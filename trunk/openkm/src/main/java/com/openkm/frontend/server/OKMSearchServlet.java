@@ -66,7 +66,8 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public List<GWTQueryParams> getAllSearchs() throws OKMException {
 		log.debug("getAllSearchs()");
-		List<GWTQueryParams> resultList = new ArrayList<GWTQueryParams>(); 
+		List<GWTQueryParams> resultList = new ArrayList<GWTQueryParams>();
+		updateSessionManager();
 		
 		try {
 			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs().iterator(); it.hasNext();) {		
@@ -90,6 +91,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public Integer saveSearch(GWTQueryParams params, String type) throws OKMException {
 		log.debug("saveSearch({}, {}, {})", new Object[] { params, type });
+		updateSessionManager();
 		
 		try {
 			return OKMSearch.getInstance().saveSearch(Util.copy(params));
@@ -108,6 +110,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 	@Override
 	public void deleteSearch(int id) throws OKMException {
 		log.debug("deleteSearch()");
+		updateSessionManager();
 		
 		try {
 			OKMSearch.getInstance().deleteSearch(id);
@@ -135,6 +138,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		GWTResultSet gwtResultSet = new GWTResultSet();
 		QueryParams queryParams = new QueryParams();
 		ResultSet results;
+		updateSessionManager();
 		
 		try {
 			queryParams = Util.copy(params);
@@ -174,6 +178,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		GWTResultSet gwtResultSet = new GWTResultSet();
 		QueryParams queryParams = new QueryParams();
 		Collection<QueryResult> results;
+		updateSessionManager();
 		
 		try {
 			queryParams = Util.copy(params);
@@ -213,6 +218,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		List<GWTKeyword> keyList = new ArrayList<GWTKeyword>();
 		int maxValues[] = new int[10];
 		int countTop10 = 0;
+		updateSessionManager();
 		
 		try {
 			Map<String, Integer> keyMap = OKMSearch.getInstance().getKeywordMap(filter);

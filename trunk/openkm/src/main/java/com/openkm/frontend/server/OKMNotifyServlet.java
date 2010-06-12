@@ -53,6 +53,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void subscribe(String nodePath) throws OKMException  {
 		log.debug("subscribe({})", nodePath);
+		updateSessionManager();
 		
 		try {
 			OKMNotification.getInstance().subscribe(nodePath);
@@ -79,7 +80,8 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void unsubscribe(String nodePath) throws OKMException {
 		log.debug("subscribe({})", nodePath);
-	
+		updateSessionManager();
+		
 		try {
 			OKMNotification.getInstance().unsubscribe(nodePath);
 		} catch (PathNotFoundException e) {
@@ -105,6 +107,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 	@Override
 	public void notify(String docPath, String users, String roles, String message) throws OKMException {
 		log.debug("notify({}, {}, {})", new Object[] { docPath, users, roles, message });
+		updateSessionManager();
 		
 		try {
 			List<String> col = Arrays.asList(users.split(","));

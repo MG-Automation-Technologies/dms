@@ -54,6 +54,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	public String getUpdateMessage() throws OKMException {
 		log.debug("getUpdateMessage()");
 		String msg = "";
+		updateSessionManager();
 
 		try {
 			msg = OKMRepository.getInstance().getUpdateMessage();
@@ -74,6 +75,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getPersonalFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			// Administrators user can see all user homes
@@ -106,6 +108,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getTemplateFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			folder =  OKMRepository.getInstance().getTemplatesFolder();
@@ -131,6 +134,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public void purgeTrash() throws OKMException {
 		log.debug("purgeTrash()");
+		updateSessionManager();
 		
 		try {
 			OKMRepository.getInstance().purgeTrash();
@@ -156,6 +160,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getTrashFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			// Administrators user can see all user homes
@@ -188,6 +193,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getRootFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			folder = OKMRepository.getInstance().getRootFolder();
@@ -215,6 +221,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getMailFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			// Administrators user can see all user homes
@@ -247,6 +254,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getThesaurusFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			folder = OKMRepository.getInstance().getThesaurusFolder();
@@ -274,6 +282,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		log.debug("getCategoriesFolder()");
 		GWTFolder gWTFolder = new GWTFolder();
 		Folder folder;
+		updateSessionManager();
 		
 		try {
 			folder = OKMRepository.getInstance().getCategoriesFolder();
@@ -300,6 +309,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 	public String getPathByUUID(String uuid) throws OKMException {
 		log.debug("getPathByUUID()");
 		String path = "";
+		updateSessionManager();
 		
 		try {
 			path = OKMRepository.getInstance().getPath(uuid);

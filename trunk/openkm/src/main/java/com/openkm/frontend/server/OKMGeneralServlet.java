@@ -49,7 +49,8 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	@Override
 	public GWTFileUploadingStatus getFileUploadStatus() {
 		log.debug("getFileUploadStatus()");
-		GWTFileUploadingStatus fus = new GWTFileUploadingStatus(); 
+		GWTFileUploadingStatus fus = new GWTFileUploadingStatus();
+		updateSessionManager();
 		
 		if (getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS)!=null) {
 			FileUploadListener listener = (FileUploadListener)getThreadLocalRequest().getSession().getAttribute(OKMFileUploadServlet.FILE_UPLOAD_STATUS);
@@ -70,6 +71,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder) {
 		log.debug("testImapConnection({}, {}, {}, {})", new Object[] { host, user, password, imapFolder });
 		GWTTestImap test = new GWTTestImap();
+		updateSessionManager();
 		
 		try {
 			test.setError(false);

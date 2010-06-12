@@ -73,22 +73,23 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	private static Logger log = LoggerFactory.getLogger(OKMDownloadServlet.class);
 	private static final long serialVersionUID = -1575303169358903617L;
 
-	protected void service(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		log.debug("service({}, {})", req, resp);
-		req.setCharacterEncoding("UTF-8");
-		String id = req.getParameter("id");
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
+		log.debug("service({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String id = request.getParameter("id");
 		String path = id != null?new String(id.getBytes("ISO-8859-1"), "UTF-8"):null;
-		String uuid = req.getParameter("uuid");
-		String checkout = req.getParameter("checkout");
-		String ver = req.getParameter("ver");
-		boolean export = req.getParameter("export") != null;
-		boolean toPdf = req.getParameter("toPdf") != null;
-		boolean toSwf = req.getParameter("toSwf") != null;
-		boolean inline = req.getParameter("inline") != null;
+		String uuid = request.getParameter("uuid");
+		String checkout = request.getParameter("checkout");
+		String ver = request.getParameter("ver");
+		boolean export = request.getParameter("export") != null;
+		boolean toPdf = request.getParameter("toPdf") != null;
+		boolean toSwf = request.getParameter("toSwf") != null;
+		boolean inline = request.getParameter("inline") != null;
 		File tmp = File.createTempFile("okm", ".tmp");
 		Document doc = null;
 		InputStream is = null;
+		updateSessionManager(request);
 		
 		try {
 			File pdfCache = null;
@@ -125,7 +126,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			// Send document
 			if (export) {
 				String fileName = FileUtils.getName(path)+".zip";
-				sendFile(req, resp, fileName, "application/zip", inline, is);
+				sendFile(request, response, fileName, "application/zip", inline, is);
 				is.close();
 				tmp.delete();
 			} else if (doc != null) {
@@ -170,7 +171,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				sendFile(req, resp, fileName, doc.getMimeType(), inline, is);
+				sendFile(request, response, fileName, doc.getMimeType(), inline, is);
 				is.close();
 				tmp.delete();
 			}

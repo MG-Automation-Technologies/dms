@@ -58,7 +58,8 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public List<GWTBookmark> getAll() throws OKMException {
 		log.debug("getAll()");
-		List<GWTBookmark> bookmarkList = new ArrayList<GWTBookmark>(); 
+		List<GWTBookmark> bookmarkList = new ArrayList<GWTBookmark>();
+		updateSessionManager();
 		
 		try {
 			Collection<Bookmark> col = OKMBookmark.getInstance().getAll();
@@ -89,6 +90,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public GWTBookmark add(String nodePath, String name) throws OKMException {
 		log.debug("add({}, {})", nodePath, name);
+		updateSessionManager();
 		
 		try {
 			return Util.copy(OKMBookmark.getInstance().add(nodePath, name));
@@ -110,6 +112,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public void remove(int bmId) throws OKMException {
 		log.debug("remove({})", bmId);
+		updateSessionManager();
 		
 		try {
 			OKMBookmark.getInstance().remove(bmId);
@@ -130,6 +133,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 	@Override
 	public GWTBookmark rename(int bmId, String newName) throws OKMException {
 		log.debug("rename({}, {})", bmId, newName);
+		updateSessionManager();
 		
 		try {
 			return Util.copy(OKMBookmark.getInstance().rename(bmId, newName));

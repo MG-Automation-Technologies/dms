@@ -78,7 +78,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		String folder = null;
 		PrintWriter out = null;
 		String uploadedDocPath = null;
-
+		updateSessionManager(request);
+		
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 			response.setContentType("text/plain");

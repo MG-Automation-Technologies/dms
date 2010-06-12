@@ -51,8 +51,6 @@
 
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
-				SessionManager sm = SessionManager.getInstance();
-				String token = sm.getTokenByUserId(Config.SYSTEM_USER);
 				out.println("<hr/>");
 				File dir = new File(fsPath);
 				int docs = FileUtils.listFiles(dir, null, true).size();

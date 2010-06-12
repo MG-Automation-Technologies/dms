@@ -62,6 +62,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	@Override
 	public GWTWorkspace getUserWorkspace() throws OKMException {
 		GWTWorkspace workspace = new GWTWorkspace();
+		updateSessionManager();
 		
 		if ( Config.APPLICATION_URL!= null && Config.APPLICATION_URL.indexOf("/OpenKM")>0) {
 			workspace.setApplicationURL(Config.APPLICATION_URL);
@@ -201,6 +202,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	@Override
 	public Double getUserDocumentsSize() throws OKMException {
 		Double docSize = new Double(0);
+		updateSessionManager();
 		
 		try {
 			docSize = new Double(OKMDashboard.getInstance().getUserDocumentsSize());
@@ -218,6 +220,8 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	
 	@Override
 	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException {
+		updateSessionManager();
+		
 		// For updating user
 		User user = new User();
 		user.setId(workspace.getUser());
@@ -260,6 +264,8 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	
 	@Override
 	public void deleteMailAccount(int id)  throws OKMException {
+		updateSessionManager();
+		
 		// Disable user configuration modification in demo
 		if (!Config.SYSTEM_DEMO) {
 			try {
@@ -273,6 +279,8 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 	@Override
 	public String isValidPassword(String password) throws OKMException {
 		String msg = "";
+		updateSessionManager();
+		
 		try {
 			PasswordValidator passwordValidator = ValidatorFactory.getPasswordValidator();
 			try {
@@ -284,6 +292,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		}
+		
 		return msg;
 	}
 }

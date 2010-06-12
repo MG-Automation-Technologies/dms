@@ -22,19 +22,17 @@
 package com.openkm.frontend.server;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.openkm.core.SessionManager;
 
 /**
- * Extends the RemoteServiceServlet to obtain token auth on development and production
- * environments. Config.GWTDS determines the environment development and production values.
- * 
  * @author jllort
- *
  */
 public class OKMHttpServlet extends HttpServlet {
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(OKMHttpServlet.class);
-	private static final long serialVersionUID = 1801666502721600473L;	
+	private static final long serialVersionUID = 1L;
+
+	public void updateSessionManager(HttpServletRequest request) {
+		SessionManager.getInstance().update(request.getSession().getId());
+	}
 }

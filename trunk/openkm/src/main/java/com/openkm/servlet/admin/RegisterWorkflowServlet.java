@@ -39,6 +39,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 		String fileName = null;
 		byte[] content = null;
 		PrintWriter out = null;
+		updateSessionManager(request);
 
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);

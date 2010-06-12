@@ -43,6 +43,7 @@ public class RegisterThesaurusServlet extends BaseServlet {
 		int level = (request.getParameter("level") != null && !request.getParameter("level").equals("")) ? Integer
 				.parseInt(request.getParameter("level"))
 				: 0;
+		updateSessionManager(request);
 		Writer out = response.getWriter();
 		response.setContentType("text/html");
 		out.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");

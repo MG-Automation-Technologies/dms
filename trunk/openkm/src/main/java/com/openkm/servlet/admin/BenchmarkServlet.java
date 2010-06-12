@@ -60,6 +60,7 @@ public class BenchmarkServlet extends BaseServlet {
 			ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action")!=null?request.getParameter("action"):"";
+		updateSessionManager(request);
 				
 		if (action.equals("load")) {
 			load(request, response);

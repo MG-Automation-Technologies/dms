@@ -85,6 +85,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		String action = WebUtil.getString(request, "action");
 		String path = WebUtil.getString(request, "path");
 		Session session = null;
+		updateSessionManager(request);
 		
 		try {
 			session = JCRUtils.getSession();

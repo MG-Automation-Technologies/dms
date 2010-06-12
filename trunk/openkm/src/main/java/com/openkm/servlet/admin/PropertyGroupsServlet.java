@@ -70,6 +70,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String pgPath = WebUtil.getString(request, "pgPath");
 		Session session = null;
+		updateSessionManager(request);
 		
 		try {
 			session = JCRUtils.getSession();

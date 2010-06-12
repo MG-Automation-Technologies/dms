@@ -21,12 +21,14 @@ public class WorkflowGraphServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(WorkflowGraphServlet.class);
 		
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		long id = Long.parseLong(req.getParameter("id"));
-		String node = req.getParameter("node");
-		ServletOutputStream sos = resp.getOutputStream();
-
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
+		request.setCharacterEncoding("UTF-8");
+		long id = Long.parseLong(request.getParameter("id"));
+		String node = request.getParameter("node");
+		ServletOutputStream sos = response.getOutputStream();
+		updateSessionManager(request);
+		
 		if (node != null && !node.equals("")) {
 			node = new String(node.getBytes("ISO-8859-1"), "UTF-8");
 		}
@@ -37,17 +39,17 @@ public class WorkflowGraphServlet extends BaseServlet {
 						
 			if (data != null) {
 				// Disable browser cache
-				resp.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
-				resp.setHeader("Cache-Control", "max-age=0, must-revalidate");
-				resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
-				resp.setHeader("Pragma", "no-cache");
+				response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+				response.setHeader("Cache-Control", "max-age=0, must-revalidate");
+				response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+				response.setHeader("Pragma", "no-cache");
 				
 				// Send data
-				resp.setContentType("image/jpeg");
-				resp.setContentLength(data.length);
+				response.setContentType("image/jpeg");
+				response.setContentLength(data.length);
 				sos.write(data);
 			} else {
-				resp.setContentType("text/plain");
+				response.setContentType("text/plain");
 				sos.write("Null process definition image".getBytes());
 			}
 		} catch (WorkflowException e) {

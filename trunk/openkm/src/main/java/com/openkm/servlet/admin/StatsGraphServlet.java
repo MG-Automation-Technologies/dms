@@ -67,7 +67,8 @@ public class StatsGraphServlet extends BaseServlet {
 			ServletException {
 		String type = request.getParameter("t");
 		JFreeChart chart = null;
-
+		updateSessionManager(request);
+		
 		try {
 			response.setContentType("image/png");
 			OutputStream out = response.getOutputStream();

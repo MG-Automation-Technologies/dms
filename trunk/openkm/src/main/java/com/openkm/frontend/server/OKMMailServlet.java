@@ -61,7 +61,8 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public List<GWTMail> getChilds(String fldPath) throws OKMException {
 		log.debug("getChilds({})", fldPath);
-		List<GWTMail> mailList = new ArrayList<GWTMail>(); 
+		List<GWTMail> mailList = new ArrayList<GWTMail>();
+		updateSessionManager();
 		
 		try {
 			if (fldPath == null) {
@@ -98,6 +99,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void delete(String mailPath) throws OKMException {
 		log.debug("delete({})", mailPath);
+		updateSessionManager();
 		
 		try {
 			OKMMail.getInstance().delete(mailPath);
@@ -127,6 +129,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void move(String mailPath, String destPath) throws OKMException {
 		log.debug("move({}, {})", mailPath, destPath);
+		updateSessionManager();
 		
 		try {
 			OKMMail.getInstance().move(mailPath, destPath);
@@ -156,6 +159,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void purge(String mailPath) throws OKMException {
 		log.debug("purge({})", mailPath);
+		updateSessionManager();
 		
 		try {
 			OKMMail.getInstance().purge(mailPath);
@@ -182,6 +186,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	@Override
 	public void copy(String mailPath, String fldPath) throws OKMException {
 		log.debug("copy({}, {})", mailPath, fldPath);
+		updateSessionManager();
 		
 		try {
 			OKMMail.getInstance().copy(mailPath, fldPath);
@@ -215,6 +220,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 	public GWTMail getProperties(String mailPath) throws OKMException {
 		log.debug("getProperties({})", mailPath);
 		GWTMail mailClient = new GWTMail();
+		updateSessionManager();
 		
 		try {
 			mailClient = Util.copy(OKMMail.getInstance().getProperties(mailPath));

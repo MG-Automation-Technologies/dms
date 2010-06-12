@@ -19,13 +19,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.servlet;
+package com.openkm.servlet.admin;
 
-import java.util.Date;
+import java.io.IOException;
+import java.util.List;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,28 +37,24 @@ import com.openkm.core.SessionManager;
 import com.openkm.util.UserActivity;
 
 /**
- * Session Listener
+ * Logged users servlet
  */
-public class SessionListener implements HttpSessionListener {
-	private static Logger log = LoggerFactory.getLogger(SessionListener.class);
+public class LoggedUsersServlet extends BaseServlet {
+	private static final long serialVersionUID = 1L;
+	private static Logger log = LoggerFactory.getLogger(LoggedUsersServlet.class);
 	
-	@Override
-	public void sessionCreated(HttpSessionEvent se) {
-		log.info("New session created on {} with id {}", new Date(), se.getSession().getId());
-	}
-
-	@Override
-	public void sessionDestroyed(HttpSessionEvent se) {
-		log.info("Session destroyed on {} with id {}", new Date(), se.getSession().getId());
-		HttpSession session = se.getSession();
-		SessionInfo si = SessionManager.getInstance().getSession(session.getId());
-		SessionManager.getInstance().remove(session.getId());
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doGet({}, {})", request, response);
+		ServletContext sc = getServletContext();
+		request.setCharacterEncoding("UTF-8");
+		updateSessionManager(request);
+		
+		List<SessionInfo> sessions = SessionManager.getInstance().getSessions();
+		sc.setAttribute("sessions", sessions);
+		sc.getRequestDispatcher("/admin/logged_users.jsp").forward(request, response);
 		
 		// Activity log
-		if (si != null) {
-			UserActivity.log(si.getUser(), "SESSION_DESTROYED", si.getId(), null);
-		} else {
-			UserActivity.log(null, "SESSION_DESTROYED", null, null);
-		}
+		UserActivity.log(request.getRemoteUser(), "ADMIN_LOGGED_USERS", null, null);
 	}
 }

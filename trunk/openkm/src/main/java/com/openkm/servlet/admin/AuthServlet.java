@@ -56,6 +56,7 @@ public class AuthServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		String action = WebUtil.getString(request, "action");
 		Session session = null;
+		updateSessionManager(request);
 		
 		try {
 			session = JCRUtils.getSession();

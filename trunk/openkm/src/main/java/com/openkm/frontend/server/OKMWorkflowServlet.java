@@ -64,6 +64,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException {
 		log.debug("findLatestProcessDefinitions()");
 		List<GWTProcessDefinition> processDefinitionList = new ArrayList<GWTProcessDefinition>();
+		updateSessionManager();
 		
 		try {
 			for (Iterator<ProcessDefinition> it = OKMWorkflow.getInstance().findLatestProcessDefinitions().iterator(); it.hasNext();) {
@@ -88,6 +89,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException  {
 		log.debug("runProcessDefinition()");
 		variables.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, UUID);
+		updateSessionManager();
 		
 		try {
 			OKMWorkflow.getInstance().runProcessDefinition(new Double(id).longValue(), variables);
@@ -109,6 +111,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException {
 		log.debug("findUserTaskInstances()");
 		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
+		updateSessionManager();
 		
 		try {
 			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances().iterator(); it.hasNext();) {
@@ -133,6 +136,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException {
 		log.debug("findPooledTaskInstances()");
 		List<GWTTaskInstance> taskInstances = new ArrayList<GWTTaskInstance>();
+		updateSessionManager();
 		
 		try {
 			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances().iterator(); it.hasNext();) {
@@ -157,6 +161,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	public Map<String, List<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException {
 		log.debug("getProcessDefinitionForms()");
 		Map<String, List<GWTFormElement>> formElementList = new HashMap<String, List<GWTFormElement>>();
+		updateSessionManager();
 		
 		try {
 			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(new Double(id).longValue());
@@ -191,7 +196,8 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException {
 		log.debug("setTaskInstanceValues()");
-	
+		updateSessionManager();
+		
 		try {
 			OKMWorkflow.getInstance().setTaskInstanceValues(new Double(id).longValue(), transitionName, values);
 		} catch (RepositoryException e) {
@@ -211,6 +217,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void addComment(double tokenId, String message) throws OKMException {
 		log.debug("addComment({}, {})", tokenId, message);
+		updateSessionManager();
 
 		try {
 			OKMWorkflow.getInstance().addTokenComment(new Double(tokenId).longValue(), message);
@@ -231,7 +238,8 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	@Override
 	public void setTaskInstanceActorId(double id) throws OKMException {
 		log.debug("setTaskInstanceActorId({})", id);
-	
+		updateSessionManager();
+		
 		try {
 			OKMWorkflow.getInstance().setTaskInstanceActorId(new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
 		} catch (RepositoryException e) {
@@ -247,5 +255,4 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		
 		log.debug("setTaskInstanceActorId: void");
 	}
-	
 }

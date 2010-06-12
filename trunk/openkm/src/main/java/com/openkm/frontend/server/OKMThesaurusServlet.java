@@ -54,6 +54,7 @@ public class OKMThesaurusServlet extends OKMRemoteServiceServlet implements OKMT
 		List<String> keywords = RDFREpository.getInstance().getKeywords();
 		int index = -1;
 		int size = keywords.size();
+		updateSessionManager();
 		
 		// Keywords list is an ordered list
 		String value = (String) CollectionUtils.find(keywords, new Predicate() {

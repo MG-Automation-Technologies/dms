@@ -69,7 +69,8 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public List<GWTDocument> getChilds(String fldPath) throws OKMException {
 		log.debug("getDocumentChilds({})", fldPath);
-		List<GWTDocument> docList = new ArrayList<GWTDocument>(); 
+		List<GWTDocument> docList = new ArrayList<GWTDocument>();
+		updateSessionManager();
 		
 		try {
 			if (fldPath == null) {
@@ -130,7 +131,8 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public List<GWTVersion> getVersionHistory (String docPath) throws OKMException {
 		log.debug("getVersionHistory({})", docPath);
-		List<GWTVersion> versionList = new ArrayList<GWTVersion>(); 
+		List<GWTVersion> versionList = new ArrayList<GWTVersion>();
+		updateSessionManager();
 	
 		try {
 			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(docPath);
@@ -162,6 +164,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void delete(String docPath) throws OKMException {
 		log.debug("delete({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().delete(docPath);
@@ -191,6 +194,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void checkout(String docPath) throws OKMException {
 		log.debug("checkout({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().checkout(docPath);
@@ -220,6 +224,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void cancelCheckout(String docPath) throws OKMException {
 		log.debug("cancelCheckout({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().cancelCheckout(docPath);
@@ -249,6 +254,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void lock(String docPath) throws OKMException {
 		log.debug("lock({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().lock(docPath);
@@ -278,6 +284,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void unlock(String docPath) throws OKMException {
 		log.debug("lock({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().unlock(docPath);
@@ -308,6 +315,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	public GWTDocument rename(String docPath, String newName) throws OKMException {
 		log.debug("rename({}, {})", docPath, newName);
 		GWTDocument gWTDocument = new GWTDocument();
+		updateSessionManager();
 		
 		try {
 			gWTDocument = Util.copy(OKMDocument.getInstance().rename(docPath, newName));
@@ -338,6 +346,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void move(String docPath, String destPath) throws OKMException {
 		log.debug("move({}, {})", docPath, destPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().move(docPath, destPath);
@@ -367,6 +376,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void purge(String docPath) throws OKMException {
 		log.debug("purge({})", docPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().purge(docPath);
@@ -393,6 +403,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void restoreVersion(String docPath, String versionId) throws OKMException {
 		log.debug("restoreVersion({}, {})", docPath, versionId);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().restoreVersion(docPath, versionId);
@@ -420,6 +431,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	public GWTDocument get(String docPath) throws OKMException {
 		log.debug("get({})", docPath);
 		GWTDocument gWTDocument = new GWTDocument();
+		updateSessionManager();
 		
 		try {
 			gWTDocument = Util.copy(OKMDocument.getInstance().getProperties(docPath));
@@ -441,6 +453,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void copy(String docPath, String fldPath) throws OKMException {
 		log.debug("copy({}, {})", docPath, fldPath);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().copy(docPath, fldPath);
@@ -473,6 +486,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public Boolean isValid(String docPath) throws OKMException {
 		log.debug("isValid({})", docPath);
+		updateSessionManager();
 		
 		try {
 			return new Boolean(OKMDocument.getInstance().isValid(docPath));
@@ -497,6 +511,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public Long getVersionHistorySize(String docPath) throws OKMException {
 		log.debug("getVersionHistorySize({})", docPath);
+		updateSessionManager();
 	
 		try {
 			return new Long(OKMDocument.getInstance().getVersionHistorySize(docPath));			
@@ -515,6 +530,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void purgeVersionHistory(String docPath) throws OKMException {
 		log.debug("purgeVersionHistory({})", docPath);
+		updateSessionManager();
 	
 		try {
 			OKMDocument.getInstance().purgeVersionHistory(docPath);			
@@ -541,6 +557,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 	@Override
 	public void addNote(String docPath, String text) throws OKMException {
 		log.debug("addNote({}, {})", docPath, text);
+		updateSessionManager();
 		
 		try {
 			OKMDocument.getInstance().addNote(docPath, text);

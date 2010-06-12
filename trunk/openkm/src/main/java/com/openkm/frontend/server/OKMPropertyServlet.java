@@ -52,6 +52,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void addCategory(String nodePath, String category) throws OKMException {
 		log.debug("addCategory({}, {})", nodePath, category);
+		updateSessionManager();
 
 		try {
 			OKMProperty.getInstance().addCategory(nodePath, category);
@@ -80,6 +81,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void removeCategory(String nodePath, String category) throws OKMException {
 		log.debug("removeCategory({}, {})", nodePath, category);
+		updateSessionManager();
 
 		try {
 			OKMProperty.getInstance().removeCategory(nodePath, category);
@@ -108,6 +110,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void addKeyword(String nodePath, String keyword) throws OKMException {
 		log.debug("addKeyword({}, {})", nodePath, keyword);
+		updateSessionManager();
 
 		try {
 			OKMProperty.getInstance().addKeyword(nodePath, keyword);
@@ -136,6 +139,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 	@Override
 	public void removeKeyword(String nodePath, String keyword) throws OKMException {
 		log.debug("removeKeyword({}, {})", nodePath, keyword);
+		updateSessionManager();
 
 		try {
 			OKMProperty.getInstance().removeKeyword(nodePath, keyword);
