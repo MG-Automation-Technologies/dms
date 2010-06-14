@@ -61,6 +61,7 @@ public class ExtendedDockPanel extends Composite {
 	public static final int SEARCH 			= 1;
 	public static final int DASHBOARD		= 2;
 	public static final int ADMINISTRATION	= 3;
+	public static final int EXTENSIONS 		= 4;
 	
 	public DockPanel dockPanel;
 	
@@ -79,6 +80,9 @@ public class ExtendedDockPanel extends Composite {
 	
 	private HandlerRegistration handlerRegistration = null;
 	private FolderSelectPopup folderSelectPopup;
+	
+	int centerWidth = 0;
+	int centerHeight = 0;
 	
 	/**
 	 * Extended dock panel
@@ -113,8 +117,8 @@ public class ExtendedDockPanel extends Composite {
 		leftBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
 		rightBorderPanel.setSize(VERTICAL_BORDER_PANEL_WIDTH, Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT));
 		
-		int centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
-		int centerHeight = Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
+		centerWidth = Window.getClientWidth()-(2*VERTICAL_BORDER_PANEL_WIDTH);
+		centerHeight = Window.getClientHeight()-(TopPanel.PANEL_HEIGHT + BottomPanel.PANEL_HEIGHT);
 		
 		topPanel.setWidth(""+Window.getClientWidth());
 		desktop.setSize(centerWidth, centerHeight);
@@ -137,14 +141,13 @@ public class ExtendedDockPanel extends Composite {
 		//dockPanel.setVisible(false);
 		initWidget(dockPanel);
 	}
+
 	
-	/* (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.UIObject#setSize(java.lang.String, java.lang.String)
+	/**
+	 * setView
+	 * 
+	 * @param workspace
 	 */
-//	public void setSize(String width, String height) {
-//		dockPanel.setSize(width, height);
-//	}
-	
 	public void setView(int workspace) {
 		disableView();
 		switch (workspace) {
@@ -168,6 +171,10 @@ public class ExtendedDockPanel extends Composite {
 				Main.get().mainPanel.topPanel.toolBar.changeView(0, ADMINISTRATION);
 				actualView = workspace;
 				break;
+			
+			default:
+				Main.get().mainPanel.topPanel.toolBar.changeView(0, EXTENSIONS);
+				actualView = workspace;
 		}
 		enableView();
 	}
@@ -188,6 +195,10 @@ public class ExtendedDockPanel extends Composite {
 			
 			case ADMINISTRATION:
 				dockPanel.remove(administration);
+				break;
+			
+			default:
+				dockPanel.remove(topPanel.tabWorkspace.getWidgetExtensionByIndex(actualView));
 				break;
 		}
 	}
@@ -211,13 +222,25 @@ public class ExtendedDockPanel extends Composite {
 			case ADMINISTRATION :
 				dockPanel.add(administration,DockPanel.CENTER);
 				break;
+			
+			default:
+				dockPanel.add(topPanel.tabWorkspace.getWidgetExtensionByIndex(actualView),DockPanel.CENTER);
+				break;
 		}
 	}	
 	
+	/**
+	 * getActualView
+	 * 
+	 * @return
+	 */
 	public int getActualView(){
 		return actualView;
 	}
 	
+	/**
+	 * enableKeyShorcuts
+	 */
 	public void enableKeyShorcuts() {
 		Log.debug("ExtendedDockPanel enableKeyShorcuts");
 		dockPanel.sinkEvents(Event.KEYEVENTS);
@@ -465,5 +488,23 @@ public class ExtendedDockPanel extends Composite {
 		if (handlerRegistration!=null) {
 			handlerRegistration.removeHandler();
 		}
+	}
+	
+	/**
+	 * getCenterWidth
+	 * 
+	 * @return
+	 */
+	public int getCenterWidth() {
+		return centerWidth;
+	}
+
+	/**
+	 * getCenterHeight
+	 * 
+	 * @return
+	 */
+	public int getCenterHeight() {
+		return centerHeight;
 	}
 }

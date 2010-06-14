@@ -136,6 +136,7 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.topPanel.tabWorkspace.showAdministration();
 				refreshTab = true;
 			}
+			refreshTab = Main.get().mainPanel.topPanel.tabWorkspace.showExtensionTabs() || refreshTab;
 			if (refreshTab) {
 				Main.get().mainPanel.topPanel.tabWorkspace.init();
 			}
