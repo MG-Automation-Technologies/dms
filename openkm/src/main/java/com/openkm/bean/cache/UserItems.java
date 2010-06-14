@@ -3,8 +3,7 @@ package com.openkm.bean.cache;
 import java.io.Serializable;
 
 public class UserItems implements Serializable {
-	private static final long serialVersionUID = 7194648651169891142L;
-	
+	private static final long serialVersionUID = 1L;
 	private long folders;
 	private long documents;
 	private long size;
