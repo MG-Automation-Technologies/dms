@@ -19,39 +19,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+package com.openkm.frontend.client.extension.event.hashandler;
 
-package com.openkm.extension.frontend.client;
-
-import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.extension.event.HasNavigatorEvent.NavigatorEventConstant;
-import com.openkm.frontend.client.extension.event.HasWorkspaceEvent.WorkspaceEventConstant;
-import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 
+
 /**
- * HandlersTest
+ * HasNavigatorHandlerExtension
  * 
  * @author jllort
  *
  */
-//public class HandlersTest implements NavigatorHandlerExtension {
-//
-//	@Override
-//	public void onChange(NavigatorEventConstant event) {
-//		Window.alert("navigator event fired");
-//	}
-//}
-
-/**
- * HandlersTest
- * 
- * @author jllort
- *
- */
-public class HandlersTest implements WorkspaceHandlerExtension {
-
-	@Override
-	public void onChange(WorkspaceEventConstant event) {
-		Window.alert("workspace event fired");
-	}
+public interface HasWorkspaceHandlerExtension {
+	
+	void addNWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension);
+	
 }

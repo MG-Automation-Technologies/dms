@@ -31,6 +31,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.event.HasWorkspaceEvent;
+import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasWorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
@@ -40,7 +43,7 @@ import com.openkm.frontend.client.panel.ExtendedDockPanel;
  * @author jllort
  *
  */
-public class TabWorkspace extends Composite {
+public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWorkspaceHandlerExtension {
 	
 	private static final int NUMBER_OF_TABS = 4;
 	
@@ -50,12 +53,14 @@ public class TabWorkspace extends Composite {
 	private boolean dashboardVisible 	= false;
 	private boolean adminitrationVisible = false;
 	private List<TabWorkspaceExtension> widgetExtensionList;
+	private List<WorkspaceHandlerExtension> workHandlerExtensionList;
 
 	/**
 	 * Tab Workspace
 	 */
 	public TabWorkspace() {
 		widgetExtensionList = new ArrayList<TabWorkspaceExtension>();
+		workHandlerExtensionList = new ArrayList<WorkspaceHandlerExtension>();
 		tabBar = new TabBar();
 		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
@@ -83,6 +88,7 @@ public class TabWorkspace extends Composite {
 						Main.get().mainPanel.setView(index);
 						break;
 				}
+				fireEvent(HasWorkspaceEvent.STACK_CHANGED);
 			}
 		});
 		
@@ -258,5 +264,17 @@ public class TabWorkspace extends Composite {
 	 */
 	public Widget getWidgetExtensionByIndex(int index) {
 		return (Widget) widgetExtensionList.get(index - NUMBER_OF_TABS);
+	}
+	
+	@Override
+	public void addNWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
+		workHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(WorkspaceEventConstant event) {
+		for (Iterator<WorkspaceHandlerExtension> it = workHandlerExtensionList.iterator(); it.hasNext();) {
+			it.next().onChange(event);
+		}
 	}
 }

@@ -19,39 +19,52 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+package com.openkm.frontend.client.extension.event;
 
-package com.openkm.extension.frontend.client;
 
-import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.extension.event.HasNavigatorEvent.NavigatorEventConstant;
-import com.openkm.frontend.client.extension.event.HasWorkspaceEvent.WorkspaceEventConstant;
-import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
-import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
+
 
 /**
- * HandlersTest
+ * HasWorkspaceEvent
+ * 
  * 
  * @author jllort
  *
  */
-//public class HandlersTest implements NavigatorHandlerExtension {
-//
-//	@Override
-//	public void onChange(NavigatorEventConstant event) {
-//		Window.alert("navigator event fired");
-//	}
-//}
 
-/**
- * HandlersTest
- * 
- * @author jllort
- *
- */
-public class HandlersTest implements WorkspaceHandlerExtension {
-
-	@Override
-	public void onChange(WorkspaceEventConstant event) {
-		Window.alert("workspace event fired");
+public interface HasWorkspaceEvent {
+	
+	/**
+	 * NavigatorEventConstant
+	 * 
+	 * @author jllort
+	 *
+	 */
+	public static class WorkspaceEventConstant {
+		
+		static final int EVENT_STACK_CHANGED = 1;
+		
+		private int type = 0;
+		
+		/**
+		 * ToolBarEventConstant
+		 * 
+		 * @param type
+		 */
+		private WorkspaceEventConstant(int type) {
+			this.type = type;
+		}
+		
+		public int getType(){
+			return type;
+		}
 	}
+	
+	WorkspaceEventConstant STACK_CHANGED = new WorkspaceEventConstant(WorkspaceEventConstant.EVENT_STACK_CHANGED);
+	
+	/**
+	 * @param event
+	 */
+	void fireEvent(WorkspaceEventConstant event);
+	
 }
