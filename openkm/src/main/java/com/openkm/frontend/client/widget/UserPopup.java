@@ -87,8 +87,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 	private HTML imapError;
 	private HTML imapTestError;
 	private HTML imapTestOK;
-//	private GroupBoxPanel userGroupBoxPanel;
-//	private GroupBoxPanel mailGroupBoxPanel;
+	private GroupBoxPanel userGroupBoxPanel;
+	private GroupBoxPanel mailGroupBoxPanel;
 	
 	/**
 	 * User popup
@@ -104,13 +104,13 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userFlexTable = new FlexTable();
 		mailFlexTable = new FlexTable();
 		
-//		userGroupBoxPanel = new GroupBoxPanel();
-//		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
-//		userGroupBoxPanel.add(userFlexTable);
-//		
-//		mailGroupBoxPanel = new GroupBoxPanel();
-//		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
-//		mailGroupBoxPanel.add(mailFlexTable);
+		userGroupBoxPanel = new GroupBoxPanel();
+		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
+		userGroupBoxPanel.add(userFlexTable);
+		
+		mailGroupBoxPanel = new GroupBoxPanel();
+		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
+		mailGroupBoxPanel.add(mailFlexTable);
 		
 		userName = new HTML(Main.i18n("user.preferences.user"));
 		userPassword = new HTML(Main.i18n("user.preferences.password"));
@@ -291,16 +291,16 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		userMailText.setWidth("275");
 		hostText.setWidth("275");
-//		userGroupBoxPanel.setWidth("370px");
-//		mailGroupBoxPanel.setWidth("370px");
+		userGroupBoxPanel.setWidth("370px");
+		mailGroupBoxPanel.setWidth("370px");
 		
 		vPanel.setWidth("410px");
 		vPanel.setHeight("195px");
 		
 		vPanel.add(new HTML("<br>"));
-//		vPanel.add(userGroupBoxPanel);
-//		vPanel.add(new HTML("<br>"));
-//		vPanel.add(mailGroupBoxPanel);
+		vPanel.add(userGroupBoxPanel);
+		vPanel.add(new HTML("<br>"));
+		vPanel.add(mailGroupBoxPanel);
 		vPanel.add(passwordError);
 		vPanel.add(passwordValidationError);
 		vPanel.add(imapPassordError);
@@ -311,8 +311,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<br>"));
 		
-//		vPanel.setCellHorizontalAlignment(userGroupBoxPanel, HasAlignment.ALIGN_CENTER);
-//		vPanel.setCellHorizontalAlignment(mailGroupBoxPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(userGroupBoxPanel, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(mailGroupBoxPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(passwordError, HasAlignment.ALIGN_CENTER);
 		vPanel.setCellHorizontalAlignment(passwordValidationError, HasAlignment.ALIGN_CENTER);
@@ -381,8 +381,8 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		cancel.setText(Main.i18n("button.cancel"));
 		delete.setText(Main.i18n("button.delete"));
 		test.setText(Main.i18n("button.test"));
-//		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
-//		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
+		userGroupBoxPanel.setCaption(Main.i18n("user.preferences.user.data"));
+		mailGroupBoxPanel.setCaption(Main.i18n("user.preferences.mail.data"));
 	}
 	
 	/**
