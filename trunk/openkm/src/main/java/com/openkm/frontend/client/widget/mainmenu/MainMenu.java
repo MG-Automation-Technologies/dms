@@ -1153,7 +1153,7 @@ public class MainMenu extends Composite {
 	 * 
 	 * @param extension
 	 */
-	public void addMenu(MenuItemExtension extension) {
+	public void addMenuExtension(MenuItemExtension extension) {
 		MainMenu.addItem(extension);
 	}
 }
