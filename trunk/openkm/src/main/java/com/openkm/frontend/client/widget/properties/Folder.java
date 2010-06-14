@@ -144,10 +144,12 @@ public class Folder extends Composite {
 		
 		// Webdav
 		String webdavUrl = Main.get().workspaceUserProperties.getApplicationURL();
-		int idx = webdavUrl.lastIndexOf('/');
-		webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
-		tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
-		Util.createFolderWebDavClipboardButton(webdavUrl);
+		if (webdavUrl.lastIndexOf('/')>0) {
+			int idx = webdavUrl.lastIndexOf('/');
+			webdavUrl = webdavUrl.substring(0, webdavUrl.lastIndexOf('/', idx-1)) + "/repository/default" + folder.getPath();
+			tableProperties.setWidget(9, 1, new HTML("<div id=\"folderwebdavclipboardcontainer\"></div>\n"));
+			Util.createFolderWebDavClipboardButton(webdavUrl);
+		}
 		
 		tableProperties.setHTML(0, 1, folder.getUuid());
 		tableProperties.setHTML(1, 1, folder.getName());

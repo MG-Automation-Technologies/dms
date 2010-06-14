@@ -101,7 +101,6 @@ public class HistorySearch extends Composite {
 	public void setSize(int width, int height) {
 		stackPanel.setSize("" + width, "" + height);
 		// Substract 2 pixels for borders on stackPanel
-		scrollSearchSavedPanel.setSize("" + (width - 2), ""
-				+ (height - 2 - (NUMBER_OF_STACKS * STACK_HEIGHT)));
+		scrollSearchSavedPanel.setSize("" + (width - 2), ""+ (height - 2 - (NUMBER_OF_STACKS * STACK_HEIGHT)));
 	}
 }

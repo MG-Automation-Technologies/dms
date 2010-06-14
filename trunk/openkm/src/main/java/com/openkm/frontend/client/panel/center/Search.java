@@ -29,6 +29,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.openkm.frontend.client.panel.left.HistorySearch;
+import com.openkm.frontend.client.util.Util;
 
 /**
  * Administration
@@ -93,6 +94,8 @@ public class Search extends Composite {
 	 * @param height The max height of the widget
 	 */
 	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
 		left = PANEL_LEFT_WIDTH;
 		right = width-(PANEL_LEFT_WIDTH+SPLITTER_WIDTH);
 		this.width = width;
@@ -114,7 +117,15 @@ public class Search extends Composite {
 					resizePanels(); // Always making resize
 					if (isResizeInProgress) {
 						onSplitResize();
-					} 
+					} else if (Util.getUserAgent().equals("chrome")) {
+							new Timer() {
+								@Override
+								public void run() {
+									resizePanels();
+								}
+								
+							}.schedule(250);
+						}
 				}
 			}.schedule(resizeUpdatePeriod);
 		}
@@ -139,6 +150,15 @@ public class Search extends Composite {
 		value = DOM.getStyleAttribute (DOM.getChild(DOM.getChild(horizontalSplitPanel.getSplitPanel().getElement(),0), 2), "left");
 		if (value.contains("px")) { value = value.substring(0,value.indexOf("px")); }
 		right = total - Integer.parseInt(value);
+		
+		// Solve some problems with chrome
+		if (Util.getUserAgent().equals("chrome")) {
+			if (left-15>0 && height-15>0 && right-15>0) {
+				historySearch.setSize(left-15, height-15);
+				searchBrowser.setWidth(right-15);
+			}
+		} 
+		
 		historySearch.setSize(left, height);
 		searchBrowser.setWidth(right);
 	}
@@ -148,6 +168,18 @@ public class Search extends Composite {
 	 */
 	public void refreshSpliterAfterAdded() {
 		horizontalSplitPanel.getSplitPanel().setSplitPosition(""+left);
+		searchBrowser.refreshSpliterAfterAdded();
+		
+		// Solve some problems with chrome
+		if (Util.getUserAgent().equals("chrome")) {
+			new Timer() {
+				@Override
+				public void run() {
+					resizePanels();
+				}
+				
+			}.schedule(250);
+		}
 	}
 	
 	/**

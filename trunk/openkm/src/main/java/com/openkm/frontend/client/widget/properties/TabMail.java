@@ -167,5 +167,6 @@ public class TabMail extends Composite {
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		security.fillWidth();
 	}
 }

@@ -154,8 +154,10 @@ public class Desktop extends Composite {
 		
 		// Solve some problems with chrome
 		if (Util.getUserAgent().equals("chrome")) {
-			navigator.setSize(left-15, height-15);
-			browser.setWidth(right-15);
+			if (left-15>0 && height-15>0 && right-15>0) {
+				navigator.setSize(left-15, height-15);
+				browser.setWidth(right-15);
+			}
 		} 
 		
 		navigator.setSize(left, height);
