@@ -243,6 +243,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		security.fillWidth();
 	}
 	
 	/**

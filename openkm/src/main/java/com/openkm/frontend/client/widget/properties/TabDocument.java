@@ -364,6 +364,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}	
 		version.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
+		version.fillWidth();
+		security.fillWidth();
 	}
 	
 	/**
