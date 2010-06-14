@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.jcr.Node;
@@ -99,7 +101,7 @@ public class DirectSearchModule implements SearchModule {
 	}
 
 	@Override
-	public List<QueryResult> findByKeywords(String words) throws IOException, ParseException,
+	public List<QueryResult> findByKeywords(Set<String> words) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		QueryParams params = new QueryParams();
@@ -168,8 +170,8 @@ public class DirectSearchModule implements SearchModule {
 		// Clean params
 		params.setName(params.getName() != null?params.getName().trim():""); 
 		params.setContent(params.getContent() != null?params.getContent().trim():"");
-		params.setKeywords(params.getKeywords() != null?params.getKeywords().trim():"");
-		params.setCategories(params.getCategories() != null?params.getCategories().trim():"");
+		params.setKeywords(params.getKeywords() != null?params.getKeywords():new HashSet<String>());
+		params.setCategories(params.getCategories() != null?params.getCategories():new HashSet<String>());
 		params.setMimeType(params.getMimeType() != null?params.getMimeType().trim():"");
 		params.setAuthor(params.getAuthor() != null?params.getAuthor().trim():"");
 		params.setPath(params.getPath() != null?params.getPath().trim():"");
@@ -189,11 +191,9 @@ public class DirectSearchModule implements SearchModule {
 		if (!params.getName().equals("")) {
 			params.setName(escapeContains(params.getName()));
 		}
+		
 		if (!params.getContent().equals("")) {
 			params.setContent(escapeContains(params.getContent()));
-		}
-		if (!params.getKeywords().equals("")) {
-			params.setKeywords(escapeContains(params.getKeywords()));
 		}
 		
 		if (!params.getContent().equals("") || !params.getName().equals("") ||
@@ -222,19 +222,17 @@ public class DirectSearchModule implements SearchModule {
 					sb.append("jcr:contains(@okm:name,'" + params.getName() + "')");
 				}
 				
-				if (!params.getKeywords().equals("")) {
-					String keywords[] = params.getKeywords().split("\\s+");
-					for (int i=0; i<keywords.length; i++) {
+				if (!params.getKeywords().isEmpty()) {
+					for (Iterator<String> it = params.getKeywords().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:keywords = '" + keywords[i] + "'");
+						sb.append("@okm:keywords = '" + escapeContains(it.next()) + "'");
 					}
 				}
 				
-				if (!params.getCategories().equals("")) {
-					String categories[] = params.getCategories().split("\\s+");
-					for (int i=0; i<categories.length; i++) {
+				if (!params.getCategories().isEmpty()) {
+					for (Iterator<String> it = params.getCategories().iterator(); it.hasNext(); ) {
 						sb.append(" "+params.getOperator()+" ");
-						sb.append("@okm:categories = '" + categories[i] + "'");
+						sb.append("@okm:categories = '" + it.next() + "'");
 					}
 				}
 
@@ -462,7 +460,7 @@ public class DirectSearchModule implements SearchModule {
 	@Override
 	public int saveSearch(QueryParams params) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("saveSearch({})", params);
+		log.info("saveSearch({})", params);
 		Session session = null;
 		int id = 0;
 		

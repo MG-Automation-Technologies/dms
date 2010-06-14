@@ -22,7 +22,7 @@
 [okm:resource] > nt:resource, mix:versionable
 - okm:size (long) mandatory
 - okm:author (string) mandatory
-- okm:text (string) = '' autocreated mandatory
+- okm:text (string)
 - okm:versionComment (string) copy
 
 [okm:note]

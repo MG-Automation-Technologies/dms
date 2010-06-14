@@ -152,23 +152,6 @@ public class GWTQueryParams implements IsSerializable {
 	public void setDashboard(boolean isDashboard) {
 		this.isDashboard = isDashboard;
 	}
-	
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append("name="); sb.append(name);
-		sb.append(", keywords="); sb.append(keywords);
-		sb.append(", content="); sb.append(content);
-		sb.append(", path="); sb.append(path);
-		sb.append(", mimeType="); sb.append(mimeType);
-		sb.append(", author="); sb.append(author);
-		sb.append(", isDashboard="+isDashboard);
-		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
-		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
-		sb.append(", properties="); sb.append(properties);
-		sb.append("]");
-		return sb.toString();
-	}
 
 	public String getPath() {
 		return path;
@@ -222,7 +205,7 @@ public class GWTQueryParams implements IsSerializable {
 		return categoryUuid;
 	}
 
-	public void setCategoyUuid(String uuid) {
+	public void setCategoryUuid(String uuid) {
 		this.categoryUuid = uuid;
 	}
 	
@@ -248,5 +231,22 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		sb.append("name="); sb.append(name);
+		sb.append(", keywords="); sb.append(keywords);
+		sb.append(", content="); sb.append(content);
+		sb.append(", path="); sb.append(path);
+		sb.append(", mimeType="); sb.append(mimeType);
+		sb.append(", author="); sb.append(author);
+		sb.append(", isDashboard="+isDashboard);
+		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
+		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
+		sb.append(", properties="); sb.append(properties);
+		sb.append("]");
+		return sb.toString();
 	}
 }

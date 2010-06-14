@@ -24,6 +24,7 @@ package com.openkm.api;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +76,7 @@ public class OKMSearch implements SearchModule {
 	}
 
 	@Override
-	public List<QueryResult> findByKeywords(String words) throws IOException, ParseException,
+	public List<QueryResult> findByKeywords(Set<String> words) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();

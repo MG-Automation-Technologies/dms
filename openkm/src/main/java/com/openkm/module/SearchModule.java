@@ -24,6 +24,7 @@ package com.openkm.module;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.QueryResult;
@@ -64,7 +65,7 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<QueryResult> findByKeywords(String expression) throws IOException, ParseException,
+	public List<QueryResult> findByKeywords(Set<String> expression) throws IOException, ParseException,
 			RepositoryException, DatabaseException;
 
 	/**

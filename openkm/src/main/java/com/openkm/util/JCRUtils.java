@@ -22,13 +22,10 @@
 package com.openkm.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.jcr.Node;
@@ -52,20 +49,12 @@ import org.apache.jackrabbit.core.security.principal.PrincipalImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.api.OKMDocument;
-import com.openkm.api.OKMFolder;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
-import com.openkm.core.FileSizeExceededException;
-import com.openkm.core.ItemExistsException;
-import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.UnsupportedMimeTypeException;
-import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.bean.LockToken;
 import com.openkm.module.direct.DirectAuthModule;
@@ -73,54 +62,6 @@ import com.openkm.module.direct.DirectRepositoryModule;
 
 public class JCRUtils {
 	private static Logger log = LoggerFactory.getLogger(JCRUtils.class);
-	private static int total = 0;
-	
-	/**
-	 * Import folder
-	 */
-	public static void importFolder(String token, String root, File directory,
-			String[] extensions) throws RepositoryException, AccessDeniedException, 
-			ItemExistsException, PathNotFoundException, UnsupportedMimeTypeException,
-			FileSizeExceededException, VirusDetectedException, IOException, DatabaseException {
-		log.debug("importFolder("+token+", "+root+", "+directory+")");
-		Folder fld = new Folder();
-		fld.setPath(root+"/"+directory.getName());
-		Folder newFolder = OKMFolder.getInstance().create(fld);
-		log.info("Create folder '" + directory.getName() + 
-				"' in '" + root + " -> " + newFolder.getPath()+"'");
-		File[] files = directory.listFiles();
-
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				importFolder(token, newFolder.getPath(), files[i], extensions);
-			} else {
-				boolean extOk = false;
-
-				if (extensions != null) {
-					for (int j = 0; j < extensions.length; j++) {
-						if (files[i].getName().endsWith(extensions[j])) {
-							extOk = true;
-						}
-					}
-				} else {
-					extOk = true;
-				}
-				
-				if (extOk) {
-					log.info((total++)+": Import document '" + files[i] + "' in '"
-						+ newFolder.getPath() + "'");
-					Document doc = new Document();
-					FileInputStream fis = new FileInputStream(files[i].getAbsolutePath());
-					Calendar cal = Calendar.getInstance();
-					cal.setTimeInMillis(files[i].lastModified());
-					doc.setKeywords(Arrays.asList(new String[]{"Automatically imported"}));
-					doc.setPath(newFolder.getPath()+"/"+files[i].getName());
-					OKMDocument.getInstance().create(doc, fis);
-					fis.close();
-				}
-			}
-		}
-	}
 
 	/**
 	 * 
