@@ -313,7 +313,7 @@ public class SearchIn extends Composite {
 				}
 				
 				if (!categoryUuid.equals("")) {
-					params.setCategoyUuid(categoryUuid);
+					params.setCategoryUuid(categoryUuid);
 					params.setCategoryPath(categoryPath.getText().substring(16)); // removes /okm:category 
 				}
 				
@@ -878,7 +878,7 @@ public class SearchIn extends Composite {
 			gwtParams.setPath(context.getValue(context.getSelectedIndex()));
 		}
 		if (!categoryUuid.equals("")) {
-			gwtParams.setCategoyUuid(categoryUuid);
+			gwtParams.setCategoryUuid(categoryUuid);
 		}
 		gwtParams.setKeywords(keywords.getText());
 		gwtParams.setMimeType("");

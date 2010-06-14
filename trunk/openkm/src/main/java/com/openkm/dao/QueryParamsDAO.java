@@ -1,10 +1,13 @@
 package com.openkm.dao;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +25,32 @@ public class QueryParamsDAO {
 	public static int create(QueryParams qp) throws DatabaseException {
 		log.debug("create({})", qp);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(qp);
+			QueryParams qpTmp = (QueryParams) session.load(QueryParams.class, id);
+
+			for (String keyword : qp.getKeywords()) {
+				qpTmp.getKeywords().add(keyword);	
+			}
+			
+			for (String category : qp.getCategories()) {
+				qpTmp.getCategories().add(category);	
+			}
+			
+			for (Iterator<Entry<String, String>> it = qp.getProperties().entrySet().iterator(); it.hasNext(); ) {
+				Entry<String, String> entry = it.next();
+				qpTmp.getProperties().put(entry.getKey(), entry.getValue());
+			}
+			
+			tx.commit();
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -41,11 +63,15 @@ public class QueryParamsDAO {
 	public static void update(QueryParams qp) throws DatabaseException {
 		log.debug("update({})", qp);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.update(qp);
+			tx.commit();
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -60,12 +86,16 @@ public class QueryParamsDAO {
 	public static void delete(int qpId) throws DatabaseException {
 		log.debug("delete({})", qpId);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			QueryParams qp = findByPk(qpId);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
 			session.delete(qp);
+			tx.commit();
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);

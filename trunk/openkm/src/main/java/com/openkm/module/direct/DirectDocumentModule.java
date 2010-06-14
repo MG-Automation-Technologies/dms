@@ -31,9 +31,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.jcr.Node;
@@ -167,13 +169,13 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		// Get user subscription
-		ArrayList<String> subscriptorList = new ArrayList<String>();
+		Set<String> subscriptorSet = new HashSet<String>();
 
 		if (documentNode.isNodeType(Notification.TYPE)) {
 			Value[] subscriptors = documentNode.getProperty(Notification.SUBSCRIPTORS).getValues();
 
 			for (int i=0; i<subscriptors.length; i++) {
-				subscriptorList.add(subscriptors[i].getString());
+				subscriptorSet.add(subscriptors[i].getString());
 
 				if (session.getUserID().equals(subscriptors[i].getString())) {
 					doc.setSubscribed(true);
@@ -181,28 +183,28 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 		}
 
-		doc.setSubscriptors(subscriptorList);
+		doc.setSubscriptors(subscriptorSet);
 		
 		// Get document keywords
-		ArrayList<String> keywordsList = new ArrayList<String>();
+		Set<String> keywordsSet = new HashSet<String>();
 		Value[] keywords = documentNode.getProperty(Property.KEYWORDS).getValues();
 
 		for (int i=0; i<keywords.length; i++) {
-			keywordsList.add(keywords[i].getString());
+			keywordsSet.add(keywords[i].getString());
 		}
 
-		doc.setKeywords(keywordsList);
+		doc.setKeywords(keywordsSet);
 		
 		// Get document categories
-		ArrayList<Folder> categoriesList = new ArrayList<Folder>();
+		Set<Folder> categoriesSet = new HashSet<Folder>();
 		Value[] categories = documentNode.getProperty(Property.CATEGORIES).getValues();
 
 		for (int i=0; i<categories.length; i++) {
 			Node node = session.getNodeByUUID(categories[i].getString());
-			categoriesList.add(new DirectFolderModule().getProperties(session, node.getPath()));
+			categoriesSet.add(new DirectFolderModule().getProperties(session, node.getPath()));
 		}
 
-		doc.setCategories(categoriesList);
+		doc.setCategories(categoriesSet);
 		
 		DocConverter convert = DocConverter.getInstance();
 		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));

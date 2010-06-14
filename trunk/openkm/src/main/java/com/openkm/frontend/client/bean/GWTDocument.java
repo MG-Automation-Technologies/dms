@@ -23,6 +23,7 @@ package com.openkm.frontend.client.bean;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -55,10 +56,10 @@ public class GWTDocument implements IsSerializable {
 	private boolean isAttachment = false;
 	private boolean hasNotes = false;
 
-	private List<String> subscriptors;
+	private Set<String> subscriptors;
 	private List<GWTNote> notes;
-	private List<GWTFolder> categories;
-	private List<String> keywords;
+	private Set<GWTFolder> categories;
+	private Set<String> keywords;
 
 	/**
 	 * @return Returns the subscribed.
@@ -122,11 +123,11 @@ public class GWTDocument implements IsSerializable {
 		this.created = created;
 	}
 
-	public List<String> getKeywords() {
+	public Set<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(List<String> keywords) {
+	public void setKeywords(Set<String> keywords) {
 		this.keywords = keywords;
 	}
 
@@ -213,14 +214,14 @@ public class GWTDocument implements IsSerializable {
 	/**
 	 * @return Returns the subscriptors.
 	 */
-	public List<String> getSubscriptors() {
+	public Set<String> getSubscriptors() {
 		return subscriptors;
 	}
 
 	/**
 	 * @param subscriptors The subscriptors to set.
 	 */
-	public void setSubscriptors(List<String> subscriptors) {
+	public void setSubscriptors(Set<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 
@@ -256,11 +257,11 @@ public class GWTDocument implements IsSerializable {
 		this.hasNotes = hasNotes;
 	}
 	
-	public List<GWTFolder> getCategories() {
+	public Set<GWTFolder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(List<GWTFolder> categories) {
+	public void setCategories(Set<GWTFolder> categories) {
 		this.categories = categories;
 	}
 }

@@ -3,7 +3,9 @@ package com.openkm.dao.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class QueryParams implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,8 +21,8 @@ public class QueryParams implements Serializable {
 	private String queryName;
 	private String user;
 	private String name;
-	private String keywords;
-	private String categories;
+	private Set<String> keywords = new HashSet<String>();
+	private Set<String> categories = new HashSet<String>();
 	private String content;
 	private String mimeType;
 	private String author;
@@ -67,19 +69,19 @@ public class QueryParams implements Serializable {
 		this.name = name;
 	}
 	
-	public String getKeywords() {
+	public Set<String> getKeywords() {
 		return keywords;
 	}
 	
-	public void setKeywords(String keywords) {
+	public void setKeywords(Set<String> keywords) {
 		this.keywords = keywords;
 	}
 	
-	public String getCategories() {
+	public Set<String> getCategories() {
 		return categories;
 	}
 	
-	public void setCategories(String categories) {
+	public void setCategories(Set<String> categories) {
 		this.categories = categories;
 	}
 	
@@ -185,5 +187,25 @@ public class QueryParams implements Serializable {
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("id="); sb.append(id);
+		sb.append(", queryName="); sb.append(queryName);
+		sb.append(", user="); sb.append(user);
+		sb.append(", name="); sb.append(name);
+		sb.append(", keywords="); sb.append(keywords);
+		sb.append(", categories="); sb.append(categories);
+		sb.append(", content="); sb.append(content);
+		sb.append(", mimeType="); sb.append(mimeType);
+		sb.append(", author="); sb.append(author);
+		sb.append(", path="); sb.append(path);
+		sb.append(", dashboard="); sb.append(dashboard);
+		sb.append(", domain="); sb.append(domain);
+		sb.append(", operator="); sb.append(operator);
+		sb.append("}");
+		return sb.toString();
 	}
 }

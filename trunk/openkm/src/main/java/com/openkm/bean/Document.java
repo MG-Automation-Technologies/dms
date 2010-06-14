@@ -22,8 +22,11 @@
 package com.openkm.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author pavila
@@ -56,10 +59,10 @@ public class Document implements Serializable {
 	private boolean subscribed;
 	private boolean convertibleToPdf;
 	private boolean convertibleToSwf;
-	private List<String> subscriptors;
-	private List<String> keywords;
-	private List<Folder> categories;
-	private List<Note> notes;
+	private Set<String> subscriptors = new HashSet<String>();
+	private Set<String> keywords = new HashSet<String>();
+	private Set<Folder> categories = new HashSet<Folder>();
+	private List<Note> notes = new ArrayList<Note>();
 
 	public Lock getLockInfo() {
 		return lockInfo;
@@ -101,11 +104,11 @@ public class Document implements Serializable {
 		this.created = created;
 	}
 
-	public List<String> getKeywords() {
+	public Set<String> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(List<String> keywords) {
+	public void setKeywords(Set<String> keywords) {
 		this.keywords = keywords;
 	}
 
@@ -165,19 +168,19 @@ public class Document implements Serializable {
 		this.subscribed = subscribed;
 	}
 
-	public List<String> getSubscriptors() {
+	public Set<String> getSubscriptors() {
 		return subscriptors;
 	}
 
-	public void setSubscriptors(List<String> subscriptors) {
+	public void setSubscriptors(Set<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 	
-	public List<Folder> getCategories() {
+	public Set<Folder> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(List<Folder> categories) {
+	public void setCategories(Set<Folder> categories) {
 		this.categories = categories;
 	}
 	

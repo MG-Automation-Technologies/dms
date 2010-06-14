@@ -93,7 +93,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(String words) throws IOException, ParseException, 
+	public QueryResultArray findByKeywords(Set<String> words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();

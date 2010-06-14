@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +82,9 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 			// Case thesaurus view must search documents in keywords 
 			if (fldPath.startsWith("/okm:thesaurus")){
 				QueryParams queryParams = new QueryParams();
-				queryParams.setKeywords(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
+				Set<String> keywords = new HashSet<String>();
+				keywords.add(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
+				queryParams.setKeywords(keywords);
 				Collection<QueryResult> results = OKMSearch.getInstance().find(queryParams);
 				for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
 					QueryResult queryResult = it.next();

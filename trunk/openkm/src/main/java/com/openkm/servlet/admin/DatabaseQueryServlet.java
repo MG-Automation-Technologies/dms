@@ -35,10 +35,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.Config;
+import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.LegacyDAO;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
@@ -59,11 +61,13 @@ public class DatabaseQueryServlet extends BaseServlet {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		Session session = null;
 		updateSessionManager(request);
 		
 		try {
 			if (!qs.equals("")) {
-				con = LegacyDAO.getConnection();
+				session = HibernateUtil.getSessionFactory().openSession();
+				con = session.connection();
 				stmt = con.createStatement();
 				
 				if (qs.toUpperCase().startsWith("SELECT")) {
@@ -103,6 +107,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 			LegacyDAO.close(rs);
 			LegacyDAO.close(stmt);
 			LegacyDAO.close(con);
+			HibernateUtil.close(session);
 		}
 	}
 }

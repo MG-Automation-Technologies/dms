@@ -26,9 +26,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +139,7 @@ public class Util {
 			}
 		}
 		
-		List<GWTFolder> categories = new ArrayList<GWTFolder>();
+		Set<GWTFolder> categories = new HashSet<GWTFolder>();
 		for (Iterator<Folder> it = doc.getCategories().iterator(); it.hasNext();) {
 			categories.add(copy(it.next()));
 		}
@@ -173,7 +175,7 @@ public class Util {
 		doc.setSubscribed(gWTDoc.isSubscribed());
 		doc.setSubscriptors(gWTDoc.getSubscriptors());
 		
-		List <Folder> categories = new ArrayList<Folder>();
+		Set <Folder> categories = new HashSet<Folder>();
 		for (Iterator<GWTFolder> it = gWTDoc.getCategories().iterator(); it.hasNext();){
 			categories.add(copy(it.next()));
 		}
@@ -365,12 +367,25 @@ public class Util {
 		params.setId(gWTParams.getId());
 		params.setQueryName(gWTParams.getQueryName());
 		params.setContent(gWTParams.getContent());
-		params.setKeywords(gWTParams.getKeywords());
+		String keywords = gWTParams.getKeywords().trim();
+		Set<String> tmpKwd = new HashSet<String>();
+		if (!keywords.equals("")) {
+			String kw[] = keywords.split(" ");
+			for (int i=0; i<kw.length; i++) {
+				tmpKwd.add(kw[i]);
+			}
+		}
+		params.setKeywords(tmpKwd);
 		params.setMimeType(gWTParams.getMimeType());
 		params.setName(gWTParams.getName());
 		params.setProperties(gWTParams.getSearchProperties());
 		params.setPath(gWTParams.getPath());
-		params.setCategories(gWTParams.getCategoryUuid());
+		String categories = gWTParams.getCategoryUuid().trim();
+		Set<String> tmpCat = new HashSet<String>();
+		if (!categories.equals("")) {
+			tmpCat.add(categories);
+		}
+		params.setCategories(tmpCat);
 		params.setAuthor(gWTParams.getAuthor());
 		Calendar lastModifiedFrom = Calendar.getInstance();
 		Calendar lastModifiedTo = Calendar.getInstance();
@@ -435,7 +450,11 @@ public class Util {
 		gWTParams.setId(params.getId());
 		gWTParams.setQueryName(params.getQueryName());
 		gWTParams.setContent(params.getContent());
-		gWTParams.setKeywords(params.getKeywords());
+		String tmp = "";
+		for (Iterator<String> itKwd = params.getKeywords().iterator(); itKwd.hasNext(); ) {
+			tmp += itKwd.next() + " "; 
+		}
+		gWTParams.setKeywords(tmp);
 		gWTParams.setMimeType(params.getMimeType());
 		gWTParams.setName(params.getName());
 		gWTParams.setPath(params.getPath());
@@ -446,10 +465,16 @@ public class Util {
 		gWTParams.setFrom(params.getFrom());
 		gWTParams.setTo(params.getTo());
 		gWTParams.setOperator(params.getOperator());
-		gWTParams.setCategoyUuid(params.getCategories());
+		Iterator<String> itCat = params.getCategories().iterator();
+		if (itCat.hasNext()) {
+			gWTParams.setCategoryUuid(itCat.next());
+		}
 		
-		if (params.getCategories() != null && !params.getCategories().equals("")) {
-			gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(params.getCategories()));
+		if (params.getCategories() != null && !params.getCategories().isEmpty()) {
+			itCat = params.getCategories().iterator();
+			if (itCat.hasNext()) {
+				gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(itCat.next()));
+			}
 		}
 		
 		if (params.getLastModifiedFrom() != null && params.getLastModifiedTo() != null) {
