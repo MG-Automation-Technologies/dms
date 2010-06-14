@@ -21,11 +21,17 @@
 
 package com.openkm.frontend.client.widget;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
 
 /**
@@ -36,21 +42,26 @@ import com.openkm.frontend.client.panel.ExtendedDockPanel;
  */
 public class TabWorkspace extends Composite {
 	
+	private static final int NUMBER_OF_TABS = 4;
+	
 	public TabBar tabBar;
 	private boolean desktopVisible		= false;
 	private boolean searchVisible 		= false;
 	private boolean dashboardVisible 	= false;
 	private boolean adminitrationVisible = false;
+	private List<TabWorkspaceExtension> widgetExtensionList;
 
 	/**
 	 * Tab Workspace
 	 */
 	public TabWorkspace() {
+		widgetExtensionList = new ArrayList<TabWorkspaceExtension>();
 		tabBar = new TabBar();
 		tabBar.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				switch (indexCorrectedChangeViewIndex(event.getSelectedItem().intValue())) {
+				int index = indexCorrectedChangeViewIndex(event.getSelectedItem().intValue());
+				switch (index) {
 					case ExtendedDockPanel.DESKTOP :
 						Main.get().mainPanel.setView(ExtendedDockPanel.DESKTOP);
 						Main.get().activeFolderTree.centerActulItemOnScroll(); // Center the actual item every time
@@ -66,6 +77,10 @@ public class TabWorkspace extends Composite {
 					
 					case ExtendedDockPanel.ADMINISTRATION :
 						Main.get().mainPanel.setView(ExtendedDockPanel.ADMINISTRATION);
+						break;
+					
+					default :
+						Main.get().mainPanel.setView(index);
 						break;
 				}
 			}
@@ -96,6 +111,11 @@ public class TabWorkspace extends Composite {
 		if (adminitrationVisible) {
 			tabBar.addTab(Main.i18n("tab.workspace.administration"));
 		}
+		
+		for (Iterator<TabWorkspaceExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			tabBar.addTab(it.next().getTabText());
+		}
+		
 		tabBar.selectTab(selected);
 	}
 	
@@ -193,6 +213,16 @@ public class TabWorkspace extends Composite {
 	}
 	
 	/**
+	 * showExtensionTabs
+	 */
+	public boolean showExtensionTabs() {
+		for (Iterator<TabWorkspaceExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			tabBar.addTab(it.next().getTabText());
+		}
+		return !widgetExtensionList.isEmpty();
+	}
+	
+	/**
 	 * isDesktopVisible
 	 * 
 	 * @return
@@ -208,5 +238,25 @@ public class TabWorkspace extends Composite {
 		if (tabBar.getTabCount()>0) {
 			tabBar.selectTab(0);
 		}
+	}
+	
+	/**
+	 * addWorkspaceExtension
+	 * 
+	 * @param extension
+	 */
+	public void addWorkspaceExtension(TabWorkspaceExtension extension) {
+		widgetExtensionList.add(extension);
+		extension.setPixelSize(Main.get().mainPanel.getCenterWidth(), Main.get().mainPanel.getCenterHeight());
+	}
+	
+	/**
+	 * getWidgetExtensionByIndex
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public Widget getWidgetExtensionByIndex(int index) {
+		return (Widget) widgetExtensionList.get(index - NUMBER_OF_TABS);
 	}
 }
