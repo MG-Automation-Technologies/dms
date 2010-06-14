@@ -30,6 +30,7 @@ import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
@@ -76,6 +77,9 @@ public class ExtensionManager {
 			}
 			if (obj instanceof NavigatorHandlerExtension) {
 				addNavigatorHandlerExtension((NavigatorHandlerExtension) obj);
+			}
+			if (obj instanceof WorkspaceHandlerExtension) {
+				addWorkspaceHandlerExtension((WorkspaceHandlerExtension) obj);
 			}
 		}
 	}
@@ -170,5 +174,14 @@ public class ExtensionManager {
 	 */
 	private static void addNavigatorHandlerExtension(NavigatorHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.navigator.stackPanel.addNavigatorHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addWorkspaceHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
+		Main.get().mainPanel.topPanel.tabWorkspace.addNWorkspaceHandlerExtension(handlerExtension);
 	}
 }
