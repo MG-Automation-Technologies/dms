@@ -33,6 +33,7 @@ import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtensio
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
@@ -49,13 +50,15 @@ public class ExtensionManager {
 			Object obj = it.next();
 			// Registering widgets
 			if (obj instanceof TabDocumentExtension) {
-				addTabDocument((TabDocumentExtension) obj);
+				addTabDocumentExtension((TabDocumentExtension) obj);
 			} else if (obj instanceof TabFolderExtension) {
-				addTabFolder((TabFolderExtension) obj);
+				addTabFolderExtension((TabFolderExtension) obj);
 			} else if (obj instanceof ToolBarButtonExtension) {
-				addToolBarButton((ToolBarButtonExtension) obj);
+				addToolBarButtonExtension((ToolBarButtonExtension) obj);
 			} else if (obj instanceof MenuItemExtension) {
-				addMenu((MenuItemExtension) obj);
+				addMenuExtension((MenuItemExtension) obj);
+			} else if (obj instanceof TabWorkspaceExtension) {
+				addWorkspaceExtension((TabWorkspaceExtension) obj);
 			}
 			
 			// Registering handlers
@@ -78,12 +81,48 @@ public class ExtensionManager {
 	}
 	
 	/**
-	 * addTabDocument
+	 * addTabDocumentExtension
 	 * 
 	 * @param extension
 	 */
-	private static void addTabDocument(TabDocumentExtension extension) {
+	private static void addTabDocumentExtension(TabDocumentExtension extension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addDocumentExtension(extension);
+	}
+	
+	/**
+	 * addTabFolderExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addTabFolderExtension(TabFolderExtension extension) {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderExtension(extension);
+	}
+	
+	/**
+	 * addMenu
+	 * 
+	 * @param extension
+	 */
+	private static void addMenuExtension(MenuItemExtension extension) {
+		Main.get().mainPanel.topPanel.mainMenu.addMenuExtension(extension);
+	}
+	
+	/**
+	 * addToolBarButtonExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addToolBarButtonExtension(ToolBarButtonExtension extension) {
+		Main.get().mainPanel.topPanel.toolBar.addToolBarButtonExtension(extension);
+	}
+	
+	/**
+	 * addWorkspaceExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addWorkspaceExtension(TabWorkspaceExtension extension) {
+		Main.get().mainPanel.topPanel.tabWorkspace.addWorkspaceExtension(extension);
 	}
 	
 	/**
@@ -104,14 +143,7 @@ public class ExtensionManager {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
 	}
 	
-	/**
-	 * addToolBarButton
-	 * 
-	 * @param extension
-	 */
-	private static void addToolBarButton(ToolBarButtonExtension extension) {
-		Main.get().mainPanel.topPanel.toolBar.addToolBarButton(extension);
-	}
+	
 	
 	/**
 	 * addToolBarHandlerExtension
@@ -138,23 +170,5 @@ public class ExtensionManager {
 	 */
 	private static void addNavigatorHandlerExtension(NavigatorHandlerExtension handlerExtension) {
 		Main.get().mainPanel.desktop.navigator.stackPanel.addNavigatorHandlerExtension(handlerExtension);
-	}
-	
-	/**
-	 * addTabFolder
-	 * 
-	 * @param extension
-	 */
-	private static void addTabFolder(TabFolderExtension extension) {
-		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderExtension(extension);
-	}
-	
-	/**
-	 * addMenu
-	 * 
-	 * @param extension
-	 */
-	private static void addMenu(MenuItemExtension extension) {
-		Main.get().mainPanel.topPanel.mainMenu.addMenu(extension);
 	}
 }
