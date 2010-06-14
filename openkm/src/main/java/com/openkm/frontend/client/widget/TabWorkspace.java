@@ -247,6 +247,15 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	}
 	
 	/**
+	 * getSelectedTab
+	 * 
+	 * @return
+	 */
+	public int getSelectedTab() {
+		return tabBar.getSelectedTab();
+	}
+	
+	/**
 	 * addWorkspaceExtension
 	 * 
 	 * @param extension
