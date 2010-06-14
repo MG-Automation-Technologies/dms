@@ -2088,6 +2088,42 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	}
 	
 	/**
+	 * Gets the defatul Tool Bar object values for extensions
+	 * 
+	 * @return The default toolBarOption for search
+	 */
+	public ToolBarOption getDefaultExtensionsToolBar() {
+		ToolBarOption tmpToolBarOption = new ToolBarOption();
+		tmpToolBarOption.createFolderOption				= false;
+		tmpToolBarOption.findFolderOption				= false;
+		tmpToolBarOption.addDocumentOption 				= false;
+		tmpToolBarOption.checkoutOption 				= false;
+		tmpToolBarOption.checkinOption 					= false;
+		tmpToolBarOption.cancelCheckoutOption 			= false;
+		tmpToolBarOption.lockOption						= false;
+		tmpToolBarOption.unLockOption 					= false;
+		tmpToolBarOption.downloadOption					= false;
+		tmpToolBarOption.downloadPdfOption				= false;
+		tmpToolBarOption.deleteOption					= false;
+		tmpToolBarOption.addPropertyGroupOption 		= false;
+		tmpToolBarOption.removePropertyGroupOption  	= false;
+		tmpToolBarOption.addSubscription  				= false;
+		tmpToolBarOption.removeSubscription 		 	= false;
+		tmpToolBarOption.firedRemovePropertyGroupOption = false;
+		tmpToolBarOption.homeOption						= false;
+		tmpToolBarOption.refreshOption					= false;
+		tmpToolBarOption.renameOption 					= false;
+		tmpToolBarOption.copyOption 					= false;
+		tmpToolBarOption.moveOption 					= false;
+		tmpToolBarOption.exportOption					= false;
+		tmpToolBarOption.workflowOption					= false;
+		tmpToolBarOption.addNoteOption					= false;
+		tmpToolBarOption.scannerOption					= false;
+		tmpToolBarOption.uploaderOption					= false;
+		return tmpToolBarOption;
+	}
+	
+	/**
 	 * Evalues show Icons based on toolBarOption values
 	 * 
 	 */
@@ -2212,6 +2248,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			case ExtendedDockPanel.ADMINISTRATION:
 				viewValues.put("view_administration:option", toolBarOption);
 				break;
+				
+			case ExtendedDockPanel.EXTENSIONS:
+				viewValues.put("view_extension:option", toolBarOption);
+				break;
 		}
 		
 		// Evaluates new desktop view to restore values 
@@ -2295,6 +2335,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					toolBarOption = (ToolBarOption) viewValues.get("view_administration:option");
 				} else {
 					toolBarOption = getDefaultAdministrationToolBar();
+				}
+				toolBarEnabled = false;
+				break;
+				
+			case ExtendedDockPanel.EXTENSIONS:
+				if (viewValues.containsKey("view_extension:option")){
+					toolBarOption = (ToolBarOption) viewValues.get("view_extension:option");
+				} else {
+					toolBarOption = getDefaultExtensionsToolBar();
 				}
 				toolBarEnabled = false;
 				break;
@@ -2545,7 +2594,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 * 
 	 * @param extension
 	 */
-	public void addToolBarButton(ToolBarButtonExtension extension) {
+	public void addToolBarButtonExtension(ToolBarButtonExtension extension) {
 		extension.addMouseOverHandler(mouseOverHandler);
 		extension.addMouseOutHandler(mouseOutHandler);
 		extension.setStyleName("okm-ToolBar-button");
