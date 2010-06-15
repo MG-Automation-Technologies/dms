@@ -128,18 +128,18 @@ public class MailAccountServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
+			String password = WebUtil.getString(request, "ma_mpassword");
 			MailAccount ma = new MailAccount();
 			ma.setId(WebUtil.getInt(request, "ma_id"));
 			ma.setUser(WebUtil.getString(request, "ma_user"));
 			ma.setMailUser(WebUtil.getString(request, "ma_muser"));
-			ma.setMailPassword(WebUtil.getString(request, "ma_mpass"));
 			ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
 			ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
 			ma.setActive(WebUtil.getBoolean(request, "ma_active"));
 			MailAccountDAO.update(ma);
 			
-			if (!ma.getMailPassword().equals("")) {
-				MailAccountDAO.updatePassword(ma.getId(), ma.getMailPassword());
+			if (!password.equals("")) {
+				MailAccountDAO.updatePassword(ma.getId(), password);
 			}
 			
 			// Activity log
