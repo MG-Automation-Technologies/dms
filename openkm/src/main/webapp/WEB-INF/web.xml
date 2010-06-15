@@ -475,6 +475,7 @@
       
       <!-- Servlets -->
 	  <url-pattern>/RepositoryStartupServlet</url-pattern>
+	  <url-pattern>/TextToSpeechServlet</url-pattern>
 	  <url-pattern>/Test</url-pattern>
 	  <url-pattern>/OKM*</url-pattern>
     </web-resource-collection>
