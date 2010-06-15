@@ -27,6 +27,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +45,15 @@ public class ActivityDAO  {
 	 */
 	public static void create(Activity activity) throws DatabaseException {
 	    Session session = null;
+	    Transaction tx = null;
 	    
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 	    	session.save(activity);
+	    	tx.commit();
 	    } catch (HibernateException e) {
+	    	HibernateUtil.rollback(tx);
 	    	throw new DatabaseException(e.getMessage(), e);
 	    } finally {
 	    	HibernateUtil.close(session);
