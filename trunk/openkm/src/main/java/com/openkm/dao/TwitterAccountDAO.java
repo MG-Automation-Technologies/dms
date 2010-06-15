@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,15 @@ public class TwitterAccountDAO {
 	public static void create(TwitterAccount ta) throws DatabaseException {
 		log.debug("create({})", ta);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(ta);
+			tx.commit();
 		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -41,11 +46,15 @@ public class TwitterAccountDAO {
 	public static void update(TwitterAccount ta) throws DatabaseException {
 		log.debug("update({})", ta);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.update(ta);
+			tx.commit();
 		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -60,12 +69,16 @@ public class TwitterAccountDAO {
 	public static void delete(int taId) throws DatabaseException {
 		log.debug("delete({})", taId);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			TwitterAccount ta = findByPk(taId);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			TwitterAccount ta = (TwitterAccount) session.load(TwitterAccount.class, taId);
 			session.delete(ta);
+			tx.commit();
 		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
