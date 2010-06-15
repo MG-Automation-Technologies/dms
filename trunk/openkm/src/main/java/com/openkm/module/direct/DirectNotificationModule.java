@@ -261,7 +261,7 @@ public class DirectNotificationModule implements NotificationModule {
 						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
 					}
 
-					MailUtils.send((String) from.get(0), emails, swSubject.toString(), swBody.toString());
+					MailUtils.sendMessage((String) from.get(0), emails, swSubject.toString(), swBody.toString());
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -326,7 +326,7 @@ public class DirectNotificationModule implements NotificationModule {
 						Velocity.evaluate(context, swBody, "SubscriptionMessageBody", Config.SUBSCRIPTION_MESSAGE_BODY);
 					}
 					
-					MailUtils.send(emails, swSubject.toString(), swBody.toString());
+					MailUtils.sendMessage(emails, swSubject.toString(), swBody.toString());
 				}
 			}
 		} catch (UnsupportedEncodingException e) {

@@ -21,17 +21,22 @@
 
 package com.openkm.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
@@ -58,10 +63,9 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.mail.imap.IMAPFolder;
 
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
@@ -78,6 +82,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VirusDetectedException;
+import com.sun.mail.imap.IMAPFolder;
 
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
@@ -90,9 +95,56 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void send(Collection<String> toAddress, String subject, String text) throws 
+	public static void sendMessage(List<String> toAddress, String subject, String text) throws 
 			MessagingException {
-		send(null, toAddress, subject, text);
+		try {
+			send(null, toAddress, subject, text, null);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Send mail without FROM addresses.
+	 * 
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void sendMessage(String fromAddress, List<String> toAddress, String subject, String text) throws 
+			MessagingException {
+		try {
+			send(fromAddress, toAddress, subject, text, null);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Send document to non-registered OpenKM users
+	 * 
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void sendDocument(String fromAddress, List<String> toAddress, String subject, String text, 
+			String docPath) throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		send(fromAddress, toAddress, subject, text, docPath);
 	}
 
 	/**
@@ -104,9 +156,10 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void send(String fromAddress, Collection<String> toAddress, String subject, String text)
-			throws MessagingException {
-		log.debug("send({}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text });
+	private static void send(String fromAddress, List<String> toAddress, String subject, String text, 
+			String docPath)	throws MessagingException, PathNotFoundException, RepositoryException,
+			IOException, DatabaseException {
+		log.debug("send({}, {}, {}, {}, {})", new Object[] { fromAddress, toAddress, subject, text, docPath });
 		Session mailSession = null;
 
 		try {
@@ -141,7 +194,13 @@ public class MailUtils {
 		
 		// Build a multiparted mail with HTML and text content for better SPAM behaviour
 		MimeMultipart content = new MimeMultipart("alternative");
-		
+
+		// Text part
+		MimeBodyPart textPart = new MimeBodyPart();
+		textPart.setText(text.replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
+		textPart.setHeader("Content-Type", "text/plain");
+		content.addBodyPart(textPart);
+
 		// HTML Part
 		MimeBodyPart htmlPart = new MimeBodyPart();
 		StringBuilder htmlContent = new StringBuilder();
@@ -153,19 +212,37 @@ public class MailUtils {
 		htmlContent.append("\n</body>\n</html>");
 		htmlPart.setContent(htmlContent.toString(), "text/html; charset=UTF-8");
 		htmlPart.setHeader("Content-Type", "text/html");
-		
-		// Text part
-		MimeBodyPart textPart = new MimeBodyPart();
-		textPart.setText(text.replaceAll("<br/?>", "\n").replaceAll("<[^>]*>", ""));
-		textPart.setHeader("Content-Type", "text/plain");
-		
-        content.addBodyPart(textPart);
-        content.addBodyPart(htmlPart);
+		content.addBodyPart(htmlPart);
+
+		if (docPath != null) {
+			InputStream is = null;
+			FileOutputStream fos = null;
+			String docName = FileUtils.getName(docPath);
+				
+			try {
+				is = OKMDocument.getInstance().getContent(docPath, false);
+				File tmp = File.createTempFile("okm", ".tmp");
+				fos = new FileOutputStream(tmp);
+				IOUtils.copy(is, fos);
+				fos.flush();
+				
+				// Document attachment part
+				MimeBodyPart docPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(tmp.getPath());
+				docPart.setDataHandler(new DataHandler(source));
+				docPart.setFileName(docName);
+				content.addBodyPart(docPart);
+			} finally {
+				IOUtils.closeQuietly(is);
+				IOUtils.closeQuietly(fos);
+			}
+		}
+        
         m.setContent(content);		
 		Transport.send(m);
-		log.debug("send: void");		
+		log.debug("send: void");
 	}
-	
+		
 	/**
 	 * Import messages 
 	 */
