@@ -44,7 +44,7 @@ public class MailAccountDAO {
 	 * Update
 	 */
 	public static void update(MailAccount ma) throws DatabaseException {
-		log.info("update({})", ma);
+		log.debug("update({})", ma);
 		String qs = "select ma.mailPassword from MailAccount ma where ma.id=:id";
 		Session session = null;
 		Transaction tx = null;
@@ -72,7 +72,7 @@ public class MailAccountDAO {
 	 * Update password
 	 */
 	public static void updatePassword(int maId, String mailPassword) throws DatabaseException {
-		log.debug("updatePassword({})", maId, mailPassword);
+		log.debug("updatePassword({}, {})", maId, mailPassword);
 		String qs = "update MailAccount ma set ma.mailPassword=:mailPassword where ma.id=:id";
 		Session session = null;
 		Transaction tx = null;
