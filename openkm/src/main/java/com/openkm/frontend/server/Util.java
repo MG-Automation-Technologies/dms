@@ -378,7 +378,14 @@ public class Util {
 		params.setKeywords(tmpKwd);
 		params.setMimeType(gWTParams.getMimeType());
 		params.setName(gWTParams.getName());
-		params.setProperties(gWTParams.getSearchProperties());
+		
+		Map<String, String> properties = new HashMap<String, String>();
+		for (Iterator<String> it = gWTParams.getProperties().keySet().iterator(); it.hasNext();) {
+			String key = it.next();
+			properties.put(key, gWTParams.getProperties().get(key).getValue());
+		}
+		params.setProperties(properties);
+		
 		params.setPath(gWTParams.getPath());
 		String categories = gWTParams.getCategoryUuid().trim();
 		Set<String> tmpCat = new HashSet<String>();
@@ -418,7 +425,7 @@ public class Util {
 		GWTQueryResult gwtQueryResult = new GWTQueryResult();
 		
 		if (queryResult.getDocument()!=null) {
-			gwtQueryResult.setDocument(copy(queryResult.getDocument()));
+			gwtQueryResult.setDocument(copy(queryResult.getDocument())); 
 			gwtQueryResult.getDocument().setAttachment(false);
 		} else if (queryResult.getFolder()!=null) {
 			gwtQueryResult.setFolder(copy(queryResult.getFolder()));
@@ -506,7 +513,7 @@ public class Util {
 						GWTPropertyParams gWTPropertyParams = new GWTPropertyParams();
 						gWTPropertyParams.setGrpName(group.getName());
 						gWTPropertyParams.setGrpLabel(group.getLabel());
-						gWTPropertyParams.setMetaData(Util.copy(formElement));
+						gWTPropertyParams.setFormElement(Util.copy(formElement));
 						gWTPropertyParams.setValue(properties.get(key));
 						finalProperties.put(key,gWTPropertyParams);
 						break;

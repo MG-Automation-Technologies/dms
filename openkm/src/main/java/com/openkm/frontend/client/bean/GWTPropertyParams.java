@@ -34,7 +34,7 @@ public class GWTPropertyParams implements IsSerializable {
 	private String grpName;
 	private String grpLabel;
 	
-	private GWTFormElement metaData;
+	private GWTFormElement formElement;
 	private String value;
 	
 	public GWTPropertyParams() {
@@ -48,12 +48,12 @@ public class GWTPropertyParams implements IsSerializable {
 		this.grpName = grpName;
 	}
  
-	public GWTFormElement getMetaData() {
-		return metaData;
+	public GWTFormElement getFormElement() {
+		return formElement;
 	}
  
-	public void setMetaData(GWTFormElement metaData) {
-		this.metaData = metaData;
+	public void setFormElement(GWTFormElement formElement) {
+		this.formElement = formElement;
 	}
 
 	public String getValue() {

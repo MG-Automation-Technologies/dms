@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -60,8 +61,7 @@ public class GWTQueryParams implements IsSerializable {
 
 	private String operator = OPERATOR_AND;
 	
-	private Map<String, GWTPropertyParams> properties;
-	private Map<String, String> searchProperties;
+	private Map<String, GWTPropertyParams> properties = new HashMap<String, GWTPropertyParams>();
 	
 	private String grpName;
 
@@ -135,14 +135,6 @@ public class GWTQueryParams implements IsSerializable {
 
 	public void setLastModifiedTo(Date lastModifiedTo) {
 		this.lastModifiedTo = lastModifiedTo;
-	}
-
-	public Map<String, String> getSearchProperties() {
-		return searchProperties;
-	}
-
-	public void setSearchProperties(Map<String, String> searchProperties) {
-		this.searchProperties = searchProperties;
 	}
 
 	public boolean isDashboard() {

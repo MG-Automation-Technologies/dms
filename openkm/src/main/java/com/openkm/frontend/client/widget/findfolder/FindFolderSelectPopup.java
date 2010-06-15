@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.bean.GWTQueryParams;
 import com.openkm.frontend.client.bean.GWTQueryResult;
 import com.openkm.frontend.client.bean.GWTResultSet;
@@ -142,7 +143,7 @@ public class FindFolderSelectPopup extends DialogBox  {
 					gwtParams.setLastModifiedFrom(null);
 					gwtParams.setLastModifiedTo(null);
 					gwtParams.setDomain(GWTQueryParams.FOLDER);
-					gwtParams.setSearchProperties(new HashMap<String, String>());
+					gwtParams.setProperties(new HashMap<String, GWTPropertyParams>());
 					find(gwtParams);
 				} else {
 					removeAllRows();
