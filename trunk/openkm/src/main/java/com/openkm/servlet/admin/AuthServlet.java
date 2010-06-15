@@ -132,20 +132,22 @@ public class AuthServlet extends BaseServlet {
 		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
+			String password = WebUtil.getString(request, "usr_password");
 			User usr = new User();
 			usr.setId(WebUtil.getString(request, "usr_id"));
 			usr.setName(WebUtil.getString(request, "usr_name"));
-			usr.setPassword(WebUtil.getString(request, "usr_password"));
 			usr.setEmail(WebUtil.getString(request, "usr_email"));
 			usr.setActive(WebUtil.getBoolean(request, "usr_active"));
 			List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
+			
 			for (String rolId : usrRoles) {
 				usr.getRoles().add(AuthDAO.findRoleByPk(rolId));
 			}
 			
 			AuthDAO.updateUser(usr);
-			if (!usr.getPassword().equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), usr.getPassword());
+			
+			if (!password.equals("")) {
+				AuthDAO.updateUserPassword(usr.getId(), password);
 			}
 			
 			// Activity log
