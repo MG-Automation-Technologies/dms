@@ -69,7 +69,7 @@ public class AuthDAO {
 	 */
 	public static void updateUser(User user) throws DatabaseException {
 		log.debug("updateUser({})", user);
-		String qs = "update User u set u.name= :name, u.email= :email, u.active= :active where u.id= :id";
+		String qs = "select u.pass from User u where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -77,11 +77,10 @@ public class AuthDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
-			q.setString("name", user.getName());
-			q.setString("email", user.getEmail());
-			q.setBoolean("active", user.isActive());
-			q.setString("id", user.getId());
-			q.executeUpdate();
+			q.setParameter("id", user.getId());
+			String pass = (String) q.setMaxResults(1).uniqueResult();
+			user.setPass(pass);
+			session.update(user);
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -99,7 +98,7 @@ public class AuthDAO {
 	public static void updateUserPassword(String usrId, String usrPass) throws NoSuchAlgorithmException,
 			DatabaseException {
 		log.debug("updateUserPassword({}, {})", usrId, usrPass);
-		String qs = "update User u set u.pass= :pass where u.id= :id";
+		String qs = "update User u set u.pass=:pass where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -128,7 +127,7 @@ public class AuthDAO {
 	 */
 	public static void updateUserEmail(String usrId, String usrEmail) throws DatabaseException {
 		log.debug("updateUserEmail({}, {})", usrId, usrEmail);
-		String qs = "update User set u.email= :email where u.id= :id";
+		String qs = "update User set u.email=:email where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -348,7 +347,7 @@ public class AuthDAO {
 	 */
 	public static Role findRoleByPk(String rolId) throws DatabaseException {
 		log.debug("findRoleByPk({})", rolId);
-		String qs = "from Role r where r.id= :id";
+		String qs = "from Role r where r.id=:id";
 		Session session = null;
 		
 		try {
