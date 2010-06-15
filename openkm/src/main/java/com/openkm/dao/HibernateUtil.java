@@ -2,6 +2,7 @@ package com.openkm.dao;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -52,6 +53,15 @@ public class HibernateUtil {
 	public static void close(Session session) {
 		if (session != null && session.isOpen()) {
 			session.close();
+		}
+	}
+	
+	/**
+	 * Rollback transaction
+	 */
+	public static void rollback(Transaction tx) {
+		if (tx != null && tx.isActive()) {
+			tx.rollback();
 		}
 	}
 }
