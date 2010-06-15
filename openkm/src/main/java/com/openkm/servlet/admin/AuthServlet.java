@@ -129,7 +129,7 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userEdit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
 			User usr = new User();
@@ -160,7 +160,7 @@ public class AuthServlet extends BaseServlet {
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("userUpdate: void");
+		log.debug("userEdit: void");
 	}
 	
 	/**
@@ -168,7 +168,7 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userDelete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
 			String usrId = WebUtil.getString(request, "usr_id");
@@ -186,7 +186,7 @@ public class AuthServlet extends BaseServlet {
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
-		log.debug("userUpdate: void");
+		log.debug("userDelete: void");
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class AuthServlet extends BaseServlet {
 	 */
 	private void userList(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[] { session, request, response });
+		log.debug("userList({}, {}, {})", new Object[] { session, request, response });
 		String roleFilter = WebUtil.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
 		
@@ -210,6 +210,6 @@ public class AuthServlet extends BaseServlet {
 		
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
 		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
-		log.debug("list: void");
+		log.debug("userList: void");
 	}
 }
