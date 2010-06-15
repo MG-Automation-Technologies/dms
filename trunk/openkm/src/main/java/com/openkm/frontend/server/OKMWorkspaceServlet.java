@@ -114,10 +114,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Dashboard visibility
-		workspace.setDashboardUserVisible(false);
-		workspace.setDashboardMailVisible(false);
-		workspace.setDashboardNewsVisible(false);
-		workspace.setDashboardGeneralVisible(false);
+		workspace.setDashboardUserVisible(true);
+		workspace.setDashboardMailVisible(true);
+		workspace.setDashboardNewsVisible(true);
+		workspace.setDashboardGeneralVisible(true);
 		workspace.setDashboardWorkflowVisible(true);
 		workspace.setDashboardKeywordsVisible(true);
 		
