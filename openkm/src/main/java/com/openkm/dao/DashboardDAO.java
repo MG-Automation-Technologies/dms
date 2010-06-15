@@ -27,6 +27,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +73,15 @@ public class DashboardDAO {
 	 */
 	public static void create(Dashboard dashboardStats) throws DatabaseException {
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(dashboardStats);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -88,12 +93,16 @@ public class DashboardDAO {
 	 */
 	public void delete(int dsId) throws DatabaseException {
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			Dashboard ds = findByPk(dsId);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Dashboard ds = (Dashboard) session.load(Dashboard.class, dsId);
 			session.delete(ds);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -132,14 +141,18 @@ public class DashboardDAO {
 		log.debug("deleteVisitedNodes({}, {})", user, source);
 		String qs = "delete from Dashboard db where db.user=:user and db.source=:source";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			q.executeUpdate();
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -157,16 +170,20 @@ public class DashboardDAO {
 		String qs = "delete from Dashboard db where db.user=:user and db.source=:source "+
 			"and db.node=:node and db.date=:date";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			q.setString("node", node);
 			q.setCalendar("date", date);
 			q.executeUpdate();
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
