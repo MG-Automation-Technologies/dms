@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,15 @@ public class MailAccountDAO {
 	public static void create(MailAccount ma) throws DatabaseException {
 		log.debug("create({})", ma);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(ma);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -44,9 +49,11 @@ public class MailAccountDAO {
 			"ma.mailUser=:mailUser, ma.mailFolder=:mailFolder, ma.active=:active " +
 			"where ma.id=:id";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", ma.getUser());
 			q.setString("mailHost", ma.getMailHost());
@@ -55,7 +62,9 @@ public class MailAccountDAO {
 			q.setBoolean("active", ma.isActive());
 			q.setInteger("id", ma.getId());
 			q.executeUpdate();
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -71,14 +80,18 @@ public class MailAccountDAO {
 		log.debug("updatePassword({})", ma);
 		String qs = "update MailAccount ma set ma.mailPassword=:mailPassword where ma.id=:id";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("mailPassword", ma.getMailPassword());
 			q.setInteger("id", ma.getId());
 			q.executeUpdate();
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -93,12 +106,16 @@ public class MailAccountDAO {
 	public static void delete(int maId) throws DatabaseException {
 		log.debug("delete({})", maId);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			MailAccount ma = findByPk(maId);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			MailAccount ma = (MailAccount) session.load(MailAccount.class, maId);
 			session.delete(ma);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
