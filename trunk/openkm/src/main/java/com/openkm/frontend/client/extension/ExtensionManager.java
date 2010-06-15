@@ -35,6 +35,7 @@ import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
 import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
 
 /**
@@ -60,6 +61,8 @@ public class ExtensionManager {
 				addMenuExtension((MenuItemExtension) obj);
 			} else if (obj instanceof TabWorkspaceExtension) {
 				addWorkspaceExtension((TabWorkspaceExtension) obj);
+			} else if (obj instanceof ToolBarBoxExtension) {
+				addToolBarBoxExtension((ToolBarBoxExtension) obj);
 			}
 			
 			// Registering handlers
@@ -127,6 +130,15 @@ public class ExtensionManager {
 	 */
 	private static void addWorkspaceExtension(TabWorkspaceExtension extension) {
 		Main.get().mainPanel.topPanel.tabWorkspace.addWorkspaceExtension(extension);
+	}
+	
+	/**
+	 * addToolBarBoxExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addToolBarBoxExtension(ToolBarBoxExtension extension) {
+		Main.get().mainPanel.dashboard.addToolBarBoxExtension(extension);
 	}
 	
 	/**
