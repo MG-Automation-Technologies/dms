@@ -29,7 +29,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id = "";
 	private String name = "";
-	private String pass = "";
+	private String password = "";
 	private String email = "";
 	private boolean active = false;
 	private Set<Role> roles = new HashSet<Role>();
@@ -50,12 +50,12 @@ public class User implements Serializable {
 		this.name = name;
 	}
 	
-	public String getPass() {
-		return pass;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -87,7 +87,7 @@ public class User implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
-		sb.append(", pass="); sb.append(pass);
+		sb.append(", password="); sb.append(password);
 		sb.append(", email="); sb.append(email);
 		sb.append(", active="); sb.append(active);
 		sb.append(", roles="); sb.append(roles);
