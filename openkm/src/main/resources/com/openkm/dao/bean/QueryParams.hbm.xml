@@ -7,6 +7,13 @@
     <property name="queryName" column="QP_QUERY_NAME" not-null="true"/>
     <property name="user" column="QP_USER" not-null="true"/>
     <property name="name" column="QP_NAME" not-null="true"/>
+    <property name="content" column="QP_CONTENT"/>
+    <property name="mimeType" column="QP_MIME_TYPE"/>
+    <property name="author" column="QP_AUTHOR"/>
+    <property name="path" column="QP_PATH"/>
+    <property name="dashboard" column="QP_DASHBOARD"/>
+    <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
+    <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
     <set name="keywords" table="OKM_QUERY_PARAMS_KEYWORD" lazy="false">
       <key column="QPK_ID"/>
       <element column="QPK_NAME" type="string"/>
@@ -15,12 +22,6 @@
       <key column="QPC_ID"/>
       <element column="QPC_NAME" type="string"/>
     </set>
-    <property name="content" column="QP_CONTENT"/>
-    <property name="mimeType" column="QP_MIME_TYPE"/>
-    <property name="author" column="QP_AUTHOR"/>
-    <property name="path" column="QP_PATH"/>
-    <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
-    <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
     <map name="properties" table="OKM_QUERY_PARAMS_PROPERTY" lazy="false">
       <key column="QPP_ID"/>
       <index column="QPP_NAME" type="string"/>
