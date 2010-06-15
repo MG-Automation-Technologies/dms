@@ -3,6 +3,7 @@ package com.openkm.dao;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +21,15 @@ public class UserConfigDAO {
 	public static void create(UserConfig uc) throws DatabaseException {
 		log.debug("create({})", uc);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(uc);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -39,11 +44,15 @@ public class UserConfigDAO {
 	public static void update(UserConfig uc) throws DatabaseException {
 		log.debug("update({})", uc);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.update(uc);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -58,12 +67,16 @@ public class UserConfigDAO {
 	public static void delete(String user) throws DatabaseException {
 		log.debug("delete({})", user);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			UserConfig uc = findByPk(user);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			UserConfig uc = (UserConfig) session.load(UserConfig.class, user);
 			session.delete(uc);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -77,18 +90,22 @@ public class UserConfigDAO {
 	 */
 	public static void setHome(UserConfig uc) throws DatabaseException {
 		log.debug("setHome({})", uc);
-		Session session = null;
 		String qs = "update UserConfig uc set uc.homePath=:path, uc.homeUuid=:uuid, " +
 			"uc.homeType=:type where uc.user=:user";
+		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("path", uc.getHomePath());
 			q.setString("uuid", uc.getHomeUuid());
 			q.setString("type", uc.getHomeType());
 			q.executeUpdate();
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
