@@ -52,9 +52,13 @@ public class AuthDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			user.setPass(SecureStore.md5Encode(user.getPass().getBytes()));
 			session.save(user);
 			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (NoSuchAlgorithmException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
