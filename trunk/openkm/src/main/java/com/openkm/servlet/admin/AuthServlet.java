@@ -100,7 +100,7 @@ public class AuthServlet extends BaseServlet {
 			User usr = new User();
 			usr.setId(WebUtil.getString(request, "usr_id"));
 			usr.setName(WebUtil.getString(request, "usr_name"));
-			usr.setPass(WebUtil.getString(request, "usr_pass"));
+			usr.setPassword(WebUtil.getString(request, "usr_password"));
 			usr.setEmail(WebUtil.getString(request, "usr_email"));
 			usr.setActive(WebUtil.getBoolean(request, "usr_active"));
 			List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
@@ -135,7 +135,7 @@ public class AuthServlet extends BaseServlet {
 			User usr = new User();
 			usr.setId(WebUtil.getString(request, "usr_id"));
 			usr.setName(WebUtil.getString(request, "usr_name"));
-			usr.setPass(WebUtil.getString(request, "usr_pass"));
+			usr.setPassword(WebUtil.getString(request, "usr_password"));
 			usr.setEmail(WebUtil.getString(request, "usr_email"));
 			usr.setActive(WebUtil.getBoolean(request, "usr_active"));
 			List<String> usrRoles = WebUtil.getStringList(request, "usr_roles");
@@ -144,15 +144,15 @@ public class AuthServlet extends BaseServlet {
 			}
 			
 			AuthDAO.updateUser(usr);
-			if (!usr.getPass().equals("")) {
-				AuthDAO.updateUserPassword(usr.getId(), usr.getPass());
+			if (!usr.getPassword().equals("")) {
+				AuthDAO.updateUserPassword(usr.getId(), usr.getPassword());
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_USER_UPDATE", usr.getId(), usr.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_EDIT", usr.getId(), usr.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			String usrId = WebUtil.getString(request, "usrId");
+			String usrId = WebUtil.getString(request, "usr_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
@@ -178,7 +178,7 @@ public class AuthServlet extends BaseServlet {
 			UserActivity.log(session.getUserID(), "ADMIN_USER_DELETE", usrId, null);
 		} else {
 			ServletContext sc = getServletContext();
-			String usrId = WebUtil.getString(request, "usrId");
+			String usrId = WebUtil.getString(request, "usr_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
@@ -197,9 +197,6 @@ public class AuthServlet extends BaseServlet {
 		log.debug("userList({}, {}, {})", new Object[] { session, request, response });
 		String roleFilter = WebUtil.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
-		
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_USER_LIST", null, null);
 		
 		if (roleFilter.equals("")) {
 			sc.setAttribute("users", AuthDAO.findAllUsers(false));
