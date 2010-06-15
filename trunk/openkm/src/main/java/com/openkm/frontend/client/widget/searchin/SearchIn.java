@@ -1185,7 +1185,6 @@ public class SearchIn extends Composite {
 		resizeScreenToAdvancedMode(advancedSearchFlag);
 		advancedSearch.setValue(advancedSearchFlag);
 		searchButton.setEnabled(true);
-		saveSearchButton.setEnabled(true);
 		executeSearch();
 	}
 	

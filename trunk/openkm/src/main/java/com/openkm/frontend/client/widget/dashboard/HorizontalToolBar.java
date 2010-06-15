@@ -21,32 +21,23 @@
 
 package com.openkm.frontend.client.widget.dashboard;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.panel.center.Dashboard;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
@@ -57,6 +48,7 @@ import com.openkm.frontend.client.util.OKMBundleResources;
  *
  */
 public class HorizontalToolBar extends Composite {
+	
 	private HorizontalPanel hPanel;
 	private ToolBarBox user;
 	private ToolBarBox mail;
@@ -65,11 +57,28 @@ public class HorizontalToolBar extends Composite {
 	private ToolBarBox workflow;
 	private ToolBarBox keywordMap;
 	private Widget enabledWidget;
+	private List<ToolBarBoxExtension> widgetExtensionList;
+
+	MouseOverHandler mouseOverHandler = new MouseOverHandler() {
+		@Override
+		public void onMouseOver(MouseOverEvent event) {
+			Widget sender = (Widget) event.getSource();
+			sender.addStyleName("okm-ToolBar-BigTMP-selected");
+		}
+	};
+	MouseOutHandler mouseOutHandler = new MouseOutHandler(){
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			Widget sender = (Widget) event.getSource();
+			sender.removeStyleName("okm-ToolBar-BigTMP-selected");
+		}
+	};
 	
 	/**
 	 * HorizontalToolBar
 	 */
 	public HorizontalToolBar() {
+		widgetExtensionList = new ArrayList<ToolBarBoxExtension>();
 		hPanel = new HorizontalPanel();
 		user = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.userIcon()), Main.i18n("dashboard.tab.user"));
 		mail = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.mailIcon()), Main.i18n("dashboard.tab.mail"));
@@ -79,102 +88,19 @@ public class HorizontalToolBar extends Composite {
 		keywordMap = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.keywordMapIcon()), Main.i18n("dashboard.tab.keymap"));
 		
 		enabledWidget = user; // Setting the enabled widget
-		
-		user.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		user.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		mail.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		mail.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		news.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		news.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
 
-		general.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		general.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		workflow.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		workflow.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		keywordMap.addMouseOverHandler(new MouseOverHandler(){
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.addStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
-		
-		keywordMap.addMouseOutHandler(new MouseOutHandler(){
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				Widget sender = (Widget) event.getSource();
-				sender.removeStyleName("okm-ToolBar-BigTMP-selected");
-			}
-		});
+		user.addMouseOverHandler(mouseOverHandler);
+		user.addMouseOutHandler(mouseOutHandler);
+		mail.addMouseOverHandler(mouseOverHandler);
+		mail.addMouseOutHandler(mouseOutHandler);
+		news.addMouseOverHandler(mouseOverHandler);
+		news.addMouseOutHandler(mouseOutHandler);
+		general.addMouseOverHandler(mouseOverHandler);
+		general.addMouseOutHandler(mouseOutHandler);
+		workflow.addMouseOverHandler(mouseOverHandler);
+		workflow.addMouseOutHandler(mouseOutHandler);
+		keywordMap.addMouseOverHandler(mouseOverHandler);
+		keywordMap.addMouseOutHandler(mouseOutHandler);
 		
 		user.addClickHandler(new ClickHandler(){
 			@Override
@@ -242,22 +168,6 @@ public class HorizontalToolBar extends Composite {
 			}
 		});
 		
-		hPanel.add(user);
-		hPanel.add(mail);
-		hPanel.add(news);
-		hPanel.add(general);
-		hPanel.add(workflow);
-		hPanel.add(keywordMap);
-		HTML space = new HTML("&nbsp;");
-		hPanel.add(space);
-		
-		hPanel.setCellWidth(user, "80");
-		hPanel.setCellWidth(mail, "80");
-		hPanel.setCellWidth(news, "80");
-		hPanel.setCellWidth(general, "80");
-		hPanel.setCellWidth(workflow, "80");
-		hPanel.setCellWidth(keywordMap, "80");
-		
 		user.setStyleName("okm-ToolBar-Big-selected");
 		hPanel.setStyleName("okm-ToolBar");
 		hPanel.addStyleName("okm-ToolBar-Border");
@@ -276,121 +186,6 @@ public class HorizontalToolBar extends Composite {
 		general.setLabelText(Main.i18n("dashboard.tab.general"));
 		workflow.setLabelText(Main.i18n("dashboard.tab.workflow"));
 		keywordMap.setLabelText(Main.i18n("dashboard.tab.keymap"));
-	}
-	
-	/**
-	 * ToolBarBox
-	 * 
-	 * @author jllort
-	 *
-	 */
-	private class ToolBarBox extends HorizontalPanel implements HasClickHandlers, HasAllMouseHandlers {
-		
-		private VerticalPanel vPanel;
-		private Image image;
-		private HTML html;
-		
-		/**
-		 * ToolBarBox
-		 * 
-		 * @param url
-		 * @param text
-		 */
-		public ToolBarBox(Image img, String text) {
-			super();
-			sinkEvents(Event.ONCLICK | Event.MOUSEEVENTS);
-			
-			vPanel = new VerticalPanel();
-			HTML space1 = new HTML("&nbsp;");
-			HTML space2 = new HTML("&nbsp;");
-			image = img;
-			html = new HTML(text);
-			html.setText(text);
-			html.setTitle(text);
-			image.setTitle(text);
-			
-			vPanel.add(image);
-			vPanel.add(html);
-			
-			add(space1);
-			add(vPanel);
-			add(space2);
-			
-			vPanel.setCellHorizontalAlignment(html, HasAlignment.ALIGN_CENTER);
-			vPanel.setCellHorizontalAlignment(image, HasAlignment.ALIGN_CENTER);
-			
-			setCellVerticalAlignment(vPanel, HasAlignment.ALIGN_MIDDLE);
-			setCellHorizontalAlignment(vPanel, HasAlignment.ALIGN_CENTER);
-			
-			setCellWidth(space1, "15");
-			setCellWidth(space2, "15");
-			
-			html.setStyleName("okm-noWrap");
-			
-			setHeight("59");
-			setWidth("100%");
-		}
-		
-		/**
-		 * setLabelText
-		 * 
-		 * @param text
-		 */
-		public void setLabelText(String text) {
-			html.setText(text);
-			html.setTitle(text);
-			image.setTitle(text);
-		}
-		
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasClickHandlers#addClickHandler(com.google.gwt.event.dom.client.ClickHandler)
-		 */
-		@Override
-		public HandlerRegistration addClickHandler(ClickHandler handler) {
-			return addHandler(handler, ClickEvent.getType());
-		}
-		
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseDownHandlers#addMouseDownHandler(com.google.gwt.event.dom.client.MouseDownHandler)
-		 */
-		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-		    return addDomHandler(handler, MouseDownEvent.getType());
-		}
-		  
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseMoveHandlers#addMouseMoveHandler(com.google.gwt.event.dom.client.MouseMoveHandler)
-		 */
-		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-			return addDomHandler(handler, MouseMoveEvent.getType());
-		}
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseOutHandlers#addMouseOutHandler(com.google.gwt.event.dom.client.MouseOutHandler)
-		 */
-		public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-		    return addDomHandler(handler, MouseOutEvent.getType());
-		}
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseOverHandlers#addMouseOverHandler(com.google.gwt.event.dom.client.MouseOverHandler)
-		 */
-		public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-		    return addDomHandler(handler, MouseOverEvent.getType());
-		}
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseUpHandlers#addMouseUpHandler(com.google.gwt.event.dom.client.MouseUpHandler)
-		 */
-		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-		    return addDomHandler(handler, MouseUpEvent.getType());
-		}
-
-		/* (non-Javadoc)
-		 * @see com.google.gwt.event.dom.client.HasMouseWheelHandlers#addMouseWheelHandler(com.google.gwt.event.dom.client.MouseWheelHandler)
-		 */
-		public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
-		    return addDomHandler(handler, MouseWheelEvent.getType());
-		}
 	}
 	
 	/**
@@ -421,5 +216,103 @@ public class HorizontalToolBar extends Composite {
 		workflow.setStyleName("okm-ToolBar-Big-selected");
 		enabledWidget = news;
 		Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_WORKFLOW);
+	}
+	
+	/**
+	 * showUser
+	 */
+	public void showUser() {
+		hPanel.add(user);
+		hPanel.setCellWidth(user, "80");
+	}
+	
+	/**
+	 * showMail
+	 */
+	public void showMail() {
+		hPanel.add(mail);
+		hPanel.setCellWidth(mail, "80");
+	}
+	
+	/**
+	 * showNews
+	 */
+	public void showNews() {
+		hPanel.add(news);
+		hPanel.setCellWidth(news, "80");
+	}
+	
+	/**
+	 * showGeneral
+	 */
+	public void showGeneral() {
+		hPanel.add(general);
+		hPanel.setCellWidth(general, "80");
+	}
+	
+	/**
+	 * showWorkflow
+	 */
+	public void showWorkflow() {
+		hPanel.add(workflow);
+		hPanel.setCellWidth(workflow, "80");
+	}
+	
+	/**
+	 * showKeywords
+	 */
+	public void showKeywords() {
+		hPanel.add(keywordMap);
+		hPanel.setCellWidth(keywordMap, "80");
+	}
+	
+	/**
+	 * selectedExtension
+	 * 
+	 * @return
+	 */
+	public int getSelectedExtension() {
+		int count = 0;
+		for (Iterator<ToolBarBoxExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			if (it.next().equals(enabledWidget)) {
+				return count;
+			}
+			count++;
+		}
+		return 0;
+	}
+	
+	/**
+	 * init
+	 */
+	public void init() {
+		for (Iterator<ToolBarBoxExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			ToolBarBoxExtension extension = it.next();
+			hPanel.add(extension);
+			hPanel.setCellWidth(extension, "80");
+			extension.addMouseOverHandler(mouseOverHandler);
+			extension.addMouseOutHandler(mouseOutHandler);
+			extension.addClickHandler(new ClickHandler(){
+				@Override
+				public void onClick(ClickEvent event) {
+					Widget sender = (Widget) event.getSource();
+					enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
+					sender.setStyleName("okm-ToolBar-Big-selected");
+					enabledWidget = sender;
+					Main.get().mainPanel.dashboard.changeView(Dashboard.DASHBOARD_EXTENSION);
+				}
+			});
+		}
+		HTML space = new HTML("&nbsp;");
+		hPanel.add(space);
+	}
+	
+	/**
+	 * addToolBarBoxExtension
+	 * 
+	 * @param extension
+	 */
+	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
+		widgetExtensionList.add(extension);
 	}
 }
