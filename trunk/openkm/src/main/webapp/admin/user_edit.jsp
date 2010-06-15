@@ -19,9 +19,9 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <c:choose>
-        <c:when test="${action == 'userCreate'}"><h1>User create</h1></c:when>
-        <c:when test="${action == 'userEdit'}"><h1>User edit</h1></c:when>
-        <c:when test="${action == 'userDelete'}"><h1>User delete</h1></c:when>
+        <c:when test="${action == 'userCreate'}"><h1>Create user</h1></c:when>
+        <c:when test="${action == 'userEdit'}"><h1>Edit user</h1></c:when>
+        <c:when test="${action == 'userDelete'}"><h1>Delete user</h1></c:when>
       </c:choose>
       <form action="Auth">
         <input type="hidden" name="action" value="${action}"/>
@@ -45,17 +45,17 @@
             <td>
               <c:choose>
                 <c:when test="${action == 'userCreate'}">
-                  <input class=":required :only_on_blur" type="password" name="usr_pass" id="usr_pass" value="" autocomplete="off"/>
+                  <input class=":required :only_on_blur" type="password" name="usr_password" id="usr_password" value="" autocomplete="off"/>
                 </c:when>
                 <c:otherwise>
-                  <input class="" type="password" name="usr_pass" id="usr_pass" value="" autocomplete="off"/>
+                  <input class="" type="password" name="usr_password" id="usr_password" value="" autocomplete="off"/>
                 </c:otherwise>
               </c:choose>
             </td>
           </tr>
           <tr>
             <td nowrap="nowrap">Confirm password</td>
-            <td><input class=":same_as;usr_pass :only_on_blur" type="password" value="" autocomplete="off"/></td>
+            <td><input class=":same_as;usr_password :only_on_blur" type="password" value="" autocomplete="off"/></td>
           </tr>
           <tr>
             <td>Name</td>
