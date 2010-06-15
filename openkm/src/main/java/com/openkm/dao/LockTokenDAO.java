@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,15 @@ public class LockTokenDAO {
 	public static void add(LockToken lt) throws DatabaseException {
 		log.debug("add({})", lt);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(lt);
+			tx.commit();
 		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -42,14 +47,18 @@ public class LockTokenDAO {
 		log.debug("remove({})", user, token);
 		String qs = "delete from LockToken lt where lt.user=:user and lt.token=:token";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("token", token);
 			q.executeUpdate();
+			tx.commit();
 		} catch(HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
