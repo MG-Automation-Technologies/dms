@@ -52,7 +52,7 @@ public class AuthDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			user.setPass(SecureStore.md5Encode(user.getPass().getBytes()));
+			user.setPassword(SecureStore.md5Encode(user.getPassword().getBytes()));
 			session.save(user);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -73,7 +73,7 @@ public class AuthDAO {
 	 */
 	public static void updateUser(User user) throws DatabaseException {
 		log.debug("updateUser({})", user);
-		String qs = "select u.pass from User u where u.id=:id";
+		String qs = "select u.password from User u where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -82,8 +82,8 @@ public class AuthDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setParameter("id", user.getId());
-			String pass = (String) q.setMaxResults(1).uniqueResult();
-			user.setPass(pass);
+			String password = (String) q.setMaxResults(1).uniqueResult();
+			user.setPassword(password);
 			session.update(user);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -99,18 +99,18 @@ public class AuthDAO {
 	/**
 	 * Update user password in database 
 	 */
-	public static void updateUserPassword(String usrId, String usrPass) throws DatabaseException {
-		log.debug("updateUserPassword({}, {})", usrId, usrPass);
-		String qs = "update User u set u.pass=:pass where u.id=:id";
+	public static void updateUserPassword(String usrId, String usrPassword) throws DatabaseException {
+		log.debug("updateUserPassword({}, {})", usrId, usrPassword);
+		String qs = "update User u set u.password=:password where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
-			if (usrPass != null && usrPass.trim().length() > 0) {
+			if (usrPassword != null && usrPassword.trim().length() > 0) {
 				session = HibernateUtil.getSessionFactory().openSession();
 				tx = session.beginTransaction();
 				Query q = session.createQuery(qs);
-				q.setString("pass", SecureStore.md5Encode(usrPass.getBytes()));
+				q.setString("password", SecureStore.md5Encode(usrPassword.getBytes()));
 				q.setString("id", usrId);
 				q.executeUpdate();
 				tx.commit();
@@ -219,7 +219,7 @@ public class AuthDAO {
 			}
 			
 			List<User> ret = q.list();
-			log.info("findAllUsers: {}", ret);
+			log.debug("findAllUsers: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
@@ -233,7 +233,7 @@ public class AuthDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<User> findUsersByRole(boolean filterByActive, String rolId) throws DatabaseException {
-		log.info("findUsersByRole({}, {})", filterByActive, rolId);
+		log.debug("findUsersByRole({}, {})", filterByActive, rolId);
 		String qs = "select u from User u, Role r where r.id=:rolId and r in elements(u.roles) " + 
 			(filterByActive?"and u.active=:active":"")+" order by u.id";
 		Session session = null;
@@ -248,7 +248,7 @@ public class AuthDAO {
 			}
 			
 			List<User> ret = q.list();
-			log.info("findUsersByRole: {}", ret);
+			log.debug("findUsersByRole: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

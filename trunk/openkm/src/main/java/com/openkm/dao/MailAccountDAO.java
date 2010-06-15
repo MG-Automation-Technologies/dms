@@ -45,9 +45,7 @@ public class MailAccountDAO {
 	 */
 	public static void update(MailAccount ma) throws DatabaseException {
 		log.debug("update({})", ma);
-		String qs = "update MailAccount ma set ma.user=:user, ma.mailHost=:mailHost, " +
-			"ma.mailUser=:mailUser, ma.mailFolder=:mailFolder, ma.active=:active " +
-			"where ma.id=:id";
+		String qs = "select ma.pass from MailAccount ma where ma.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -55,13 +53,10 @@ public class MailAccountDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
-			q.setString("user", ma.getUser());
-			q.setString("mailHost", ma.getMailHost());
-			q.setString("mailUser", ma.getMailUser());
-			q.setString("mailFolder", ma.getMailFolder());
-			q.setBoolean("active", ma.isActive());
-			q.setInteger("id", ma.getId());
-			q.executeUpdate();
+			q.setParameter("id", ma.getId());
+			String pass = (String) q.setMaxResults(1).uniqueResult();
+			ma.setMailPassword(pass);
+			session.update(ma);
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -76,20 +71,22 @@ public class MailAccountDAO {
 	/**
 	 * Update password
 	 */
-	public static void updatePassword(MailAccount ma) throws DatabaseException {
-		log.debug("updatePassword({})", ma);
+	public static void updatePassword(int maId, String mailPassword) throws DatabaseException {
+		log.debug("updatePassword({})", maId, mailPassword);
 		String qs = "update MailAccount ma set ma.mailPassword=:mailPassword where ma.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setString("mailPassword", ma.getMailPassword());
-			q.setInteger("id", ma.getId());
-			q.executeUpdate();
-			tx.commit();
+			if (mailPassword != null && mailPassword.trim().length() > 0) {
+				session = HibernateUtil.getSessionFactory().openSession();
+				tx = session.beginTransaction();
+				Query q = session.createQuery(qs);
+				q.setString("mailPassword", mailPassword);
+				q.setInteger("id", maId);
+				q.executeUpdate();
+				tx.commit();
+			}
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -144,7 +141,7 @@ public class MailAccountDAO {
 			}
 			
 			List<MailAccount> ret = q.list();
-			log.debug("findByUser: {}", ret);
+			log.info("findByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
