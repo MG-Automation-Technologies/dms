@@ -99,8 +99,7 @@ public class AuthDAO {
 	/**
 	 * Update user password in database 
 	 */
-	public static void updateUserPassword(String usrId, String usrPass) throws NoSuchAlgorithmException,
-			DatabaseException {
+	public static void updateUserPassword(String usrId, String usrPass) throws DatabaseException {
 		log.debug("updateUserPassword({}, {})", usrId, usrPass);
 		String qs = "update User u set u.pass=:pass where u.id=:id";
 		Session session = null;
@@ -117,6 +116,9 @@ public class AuthDAO {
 				tx.commit();
 			}
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (NoSuchAlgorithmException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
