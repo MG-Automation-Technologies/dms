@@ -50,7 +50,7 @@ public class QueryParamsDAO {
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -71,7 +71,7 @@ public class QueryParamsDAO {
 			session.update(qp);
 			tx.commit();
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -95,7 +95,7 @@ public class QueryParamsDAO {
 			session.delete(qp);
 			tx.commit();
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
