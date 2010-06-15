@@ -5,7 +5,7 @@
   <class name="com.openkm.dao.bean.User" table="OKM_USER">
     <id name="id" column="USR_ID"><generator class="assigned"/></id>
     <property name="name" column="USR_NAME" not-null="true"/>
-    <property name="pass" column="USR_PASS" not-null="true"/>
+    <property name="password" column="USR_PASSWORD" not-null="true"/>
     <property name="email" column="USR_EMAIL" not-null="true"/>
     <property name="active" column="USR_ACTIVE" not-null="true"/>
     <set name="roles" table="OKM_USER_ROLE" cascade="all">
