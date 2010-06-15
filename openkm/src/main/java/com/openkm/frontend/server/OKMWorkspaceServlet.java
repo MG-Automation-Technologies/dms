@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.server;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -263,8 +262,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 					MailAccountDAO.create(mailAccount);
 				}
 			} catch (DatabaseException e) {
-				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
-			} catch (NoSuchAlgorithmException e) {
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
 		}
