@@ -50,7 +50,7 @@
     <gwt.version>2.0.3</gwt.version>
 
     <!-- Using this Jackrabbit version -->
-    <jcr.version>1.6.1</jcr.version>
+    <jcr.version>1.6.2</jcr.version>
 
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
@@ -215,6 +215,11 @@
           <groupId>poi</groupId>
           <artifactId>poi</artifactId>
         </exclusion>
+        <!-- https://issues.apache.org/jira/browse/JCR-2656 -->
+        <exclusion>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derby</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -226,6 +231,12 @@
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-jcr-server</artifactId>
       <version>${jcr.version}</version>
+    </dependency>
+    <!-- https://issues.apache.org/jira/browse/JCR-2656 -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.5.3.0</version>
     </dependency>
 
     <!-- Twitter4j -->
@@ -420,7 +431,7 @@
         <executions>
           <execution>
             <goals>
-              <goal>compile</goal>
+              <!-- <goal>compile</goal> -->
               <!-- <goal>generateAsync</goal> -->
               <!-- <goal>test</goal> -->
             </goals>

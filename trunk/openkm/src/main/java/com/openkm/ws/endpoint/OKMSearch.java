@@ -24,6 +24,7 @@ package com.openkm.ws.endpoint;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -93,7 +94,7 @@ public class OKMSearch {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
 	 */
-	public QueryResultArray findByKeywords(Set<String> words) throws IOException, ParseException, 
+	public QueryResultArray findByKeywords(HashSet<String> words) throws IOException, ParseException, 
 			RepositoryException, DatabaseException {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();

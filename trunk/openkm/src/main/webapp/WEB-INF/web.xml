@@ -129,17 +129,19 @@
   	<servlet-name>OKMUserConfigServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMUserConfigServlet</servlet-class>
   </servlet>
-  
-  <!-- Mobile servlets -->
+    
+  <!-- Misc servlets -->
   <servlet>
   	<servlet-name>HandlerServlet</servlet-name>
   	<servlet-class>com.openkm.servlet.mobi.HandlerServlet</servlet-class>
   </servlet>
-  
-  <!-- Syndication servlet -->
   <servlet>
     <servlet-name>SyndicationServlet</servlet-name>
     <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>TextToSpeechServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.TextToSpeechServlet</servlet-class>
   </servlet>
   
   <!-- Admin servlets -->
@@ -332,16 +334,18 @@
     <url-pattern>/OKMUserConfigServlet</url-pattern>
   </servlet-mapping>
   
-  <!-- Mobile Servlets Mappings -->
+  <!-- Misc servlets mappings -->
   <servlet-mapping>
   	<servlet-name>HandlerServlet</servlet-name>
   	<url-pattern>/mobi/Handler</url-pattern>
   </servlet-mapping>
-  
-  <!-- Syndication servlet -->
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TextToSpeechServlet</servlet-name>
+    <url-pattern>/TextToSpeech</url-pattern>
   </servlet-mapping>
   
   <!-- Admin Servlet Mappings -->
