@@ -1,12 +1,7 @@
-<%@ page import="com.openkm.core.Config"%>
-<%@ page import="com.openkm.util.WebUtil"%>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.MailAccount"%>
-<%@ page import="com.openkm.dao.MailAccountDAO"%>
-<%@ page import="com.openkm.core.DatabaseException"%>
-<%@ page import="java.util.Collection"%>
-<%@ page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,41 +12,58 @@
   <title>Mail accounts</title>
 </head>
 <body>
-<%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-		request.setCharacterEncoding("UTF-8");
-		String user = WebUtil.getString(request, "user");
-		out.println("<h1>Mail accounts <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
-				
-		try {
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>OKM user</th><th>Mail host</th><th>Mail user</th><th>Mail password</th>");
-			out.println("<th>Mail folder</th><th>Active</th>");
-			out.println("<th width=\"25px\"><a href=\"mail_edit.jsp?action=c&user="+user+"\"><img src=\"img/action/new.png\" alt=\"New account\" title=\"New account\"/></a></th></tr>");
-			Collection<MailAccount> mailAccounts = null;
-			
-			if (user != null && !user.equals("")) {
-				mailAccounts = MailAccountDAO.findByUser(user, false);
-			} else {
-				mailAccounts = MailAccountDAO.findAll(false);
-			}
-			
-			int i = 0;
-			for (Iterator<MailAccount> it = mailAccounts.iterator(); it.hasNext(); ) {
-				MailAccount ma = it.next();
-				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+ma.getUser()+"</td><td>"+ma.getMailHost()+"</td><td>"+ma.getMailUser()+"</td>"+
-						"<td>"+ma.getMailPassword()+"</td><td>"+ma.getMailFolder()+"</td><td>"+ma.isActive()+"</td>"+
-						"<td><a href=\"mail_edit.jsp?action=u&id="+ma.getId()+"\"><img src=\"img/action/edit.png\" alt=\"Edit\" title=\"Edit\"/></a>"+
-						" &nbsp; <a href=\"mail_edit.jsp?action=d&id="+ma.getId()+"\"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a></td></tr>");
-			}
-				
-			out.println("</table>");
-		} catch (DatabaseException e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"<div>");
-		}
-	} else {
-		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
-	}
-%>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <c:url value="Auth" var="urlUserList">
+      </c:url>
+      <h1>Mail accounts <span style="font-size: 10px;">(<a href="${urlUserList}">Users</a>)</span></h1>
+      <table class="results" width="70%">
+        <tr>
+          <th>Mail host</th><th>Mail user</th><th>Mail password</th>
+          <th>Mail folder</th><th>Active</th>
+          <th width="50px">
+            <c:url value="MailAccount" var="urlCreate">
+              <c:param name="action" value="create"/>
+              <c:param name="ma_user" value="${ma_user}"/>
+            </c:url>
+            <a href="${urlCreate}"><img src="img/action/new.png" alt="New account" title="New account"/></a>
+          </th>
+          <c:forEach var="ma" items="${mailAccounts}" varStatus="row">
+            <c:url value="MailAccount" var="urlEdit">
+              <c:param name="action" value="edit"/>
+              <c:param name="ma_id" value="${ma.id}"/>
+            </c:url>
+            <c:url value="MailAccount" var="urlDelete">
+              <c:param name="action" value="delete"/>
+              <c:param name="ma_id" value="${ma.id}"/>
+            </c:url>
+            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+              <td>${ma.mailHost}</td><td>${ma.mailUser}</td><td>${ma.mailPassword}</td>
+              <td>${ma.mailFolder}</td>
+              <td align="center">
+                <c:choose>
+                  <c:when test="${ma.active}">
+                    <img src="img/true.png" alt="Active" title="Active"/>
+                  </c:when>
+                  <c:otherwise>
+                    <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                  </c:otherwise>
+                </c:choose>
+              </td>
+              <td>
+                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                &nbsp;
+                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+            </td>
+            </tr>
+          </c:forEach>
+        </tr>
+      </table>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 </body>
 </html>

@@ -59,19 +59,17 @@
         <c:forEach var="user" items="${users}" varStatus="row">
           <c:url value="Auth" var="urlEdit">
             <c:param name="action" value="userEdit"/>
-            <c:param name="usrId" value="${user.id}"/>
+            <c:param name="usr_id" value="${user.id}"/>
           </c:url>
           <c:url value="Auth" var="urlDelete">
             <c:param name="action" value="userDelete"/>
-            <c:param name="usrId" value="${user.id}"/>
+            <c:param name="usr_id" value="${user.id}"/>
           </c:url>
-          <c:url value="Auth" var="urlMail">
-            <c:param name="action" value="mail"/>
-            <c:param name="usrId" value="${user.id}"/>
+          <c:url value="MailAccount" var="urlMail">
+            <c:param name="ma_user" value="${user.id}"/>
           </c:url>
-          <c:url value="Auth" var="urlTwitter">
-            <c:param name="action" value="twitter"/>
-            <c:param name="usrId" value="${user.id}"/>
+          <c:url value="TwitterAccount" var="urlTwitter">
+            <c:param name="ta_user" value="${user.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
