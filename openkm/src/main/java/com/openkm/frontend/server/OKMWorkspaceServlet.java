@@ -182,7 +182,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				user.setName("");
 				user.setEmail("");
 				user.setActive(true);
-				user.setPass("");
+				user.setPassword("");
 			}
 			
 			for (Iterator<MailAccount> it = MailAccountDAO.findByUser(getThreadLocalRequest().getRemoteUser(), true).iterator(); it.hasNext();) {
@@ -232,7 +232,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// For updating user
 		User user = new User();
 		user.setId(workspace.getUser());
-		user.setPass(workspace.getPassword());
+		user.setPassword(workspace.getPassword());
 		user.setEmail(workspace.getEmail());
 		
 		// For updating imap mail
@@ -256,7 +256,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				
 				if (MailAccountDAO.findByUser(workspace.getUser(), false).size() > 0) {
 					MailAccountDAO.update(mailAccount);
-					if (!mailAccount.getMailPassword().equals("")) MailAccountDAO.updatePassword(mailAccount);
+					
+					if (!mailAccount.getMailPassword().equals("")) {
+						MailAccountDAO.updatePassword(mailAccount.getId(), mailAccount.getMailPassword());
+					}
 				} else if (mailAccount.getMailHost().length()>0 && mailAccount.getMailFolder().length()>0 && mailAccount.getMailUser().length()>0 &&
 						   !mailAccount.getMailPassword().equals("")) {
 					MailAccountDAO.create(mailAccount);
