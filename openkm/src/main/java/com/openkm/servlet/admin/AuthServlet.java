@@ -63,8 +63,8 @@ public class AuthServlet extends BaseServlet {
 			
 			if (action.equals("userCreate")) {
 				userCreate(session, request, response);
-			} else if (action.equals("userUpdate")) {
-				userUpdate(session, request, response);
+			} else if (action.equals("userEdit")) {
+				userEdit(session, request, response);
 			} else if (action.equals("userDelete")) {
 				userDelete(session, request, response);
 			}
@@ -117,6 +117,7 @@ public class AuthServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
+			sc.setAttribute("usr", null);
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
@@ -126,7 +127,7 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Edit user
 	 */
-	private void userUpdate(Session session, HttpServletRequest request, HttpServletResponse response) 
+	private void userEdit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("userUpdate({}, {}, {})", new Object[] { session, request, response });
 		
@@ -155,7 +156,7 @@ public class AuthServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
+			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
@@ -181,7 +182,7 @@ public class AuthServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
-			sc.setAttribute("user", AuthDAO.findUserByPk(usrId));
+			sc.setAttribute("usr", AuthDAO.findUserByPk(usrId));
 			sc.getRequestDispatcher("/admin/user_edit.jsp").forward(request, response);
 		}
 		
