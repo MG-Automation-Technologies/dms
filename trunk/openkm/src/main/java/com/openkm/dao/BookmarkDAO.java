@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +23,15 @@ public class BookmarkDAO {
 	public static void create(Bookmark bm) throws DatabaseException {
 		log.debug("create({})", bm);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.save(bm);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -41,11 +46,15 @@ public class BookmarkDAO {
 	public static void update(Bookmark bm) throws DatabaseException {
 		log.debug("update({})", bm);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			session.update(bm);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -60,12 +69,16 @@ public class BookmarkDAO {
 	public static void delete(int bmId) throws DatabaseException {
 		log.debug("delete({})", bmId);
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
-			Bookmark bm = findByPk(bmId);
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Bookmark bm = (Bookmark) session.load(Bookmark.class, bmId);
 			session.delete(bm);
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
