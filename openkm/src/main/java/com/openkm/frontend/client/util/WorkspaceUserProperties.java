@@ -182,6 +182,27 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.navigator.refreshView();
 			}
 			
+			// Show / hide dashboard tools
+			if (workspace.isDashboardUserVisible()) {
+				Main.get().mainPanel.dashboard.showUser();
+			}
+			if (workspace.isDashboardMailVisible()) {
+				Main.get().mainPanel.dashboard.showMail();
+			}
+			if (workspace.isDashboardNewsVisible()) {
+				Main.get().mainPanel.dashboard.showNews();
+			}
+			if (workspace.isDashboardGeneralVisible()) {
+				Main.get().mainPanel.dashboard.showGeneral();
+			}
+			if (workspace.isDashboardWorkflowVisible()) {
+				Main.get().mainPanel.dashboard.showWorkflow();
+			}
+			if (workspace.isDashboardKeywordsVisible()) {
+				Main.get().mainPanel.dashboard.showKeywords();
+			}
+			Main.get().mainPanel.dashboard.init();
+			
 			Main.get().startUp.nextStatus(StartUp.STARTUP_GET_TAXONOMY_ROOT);
 			
 			// Getting update messages 

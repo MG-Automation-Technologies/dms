@@ -19,25 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client.util;
+package com.openkm.frontend.client.extension;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
- * OKMExtensionBundleResources
+ * HasWidget
  * 
  * @author jllort
  *
  */
-public interface OKMExtensionBundleResources extends ClientBundle {
+public interface HasWidget {
 	
-	public static final OKMExtensionBundleResources INSTANCE =  GWT.create(OKMExtensionBundleResources.class);
+	public abstract Widget getWidget();
 	
-	@Source("com/openkm/extension/frontend/public/img/box.png")
-	public ImageResource box();
-	
-	@Source("com/openkm/extension/frontend/public/img/general.png")
-	public ImageResource general();
 }

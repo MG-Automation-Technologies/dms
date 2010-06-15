@@ -19,25 +19,27 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client.util;
+package com.openkm.frontend.client.extension.widget;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Image;
+import com.openkm.frontend.client.extension.HasWidget;
+import com.openkm.frontend.client.widget.dashboard.ToolBarBox;
 
 /**
- * OKMExtensionBundleResources
+ * ToolBarBoxExtension
  * 
  * @author jllort
  *
  */
-public interface OKMExtensionBundleResources extends ClientBundle {
-	
-	public static final OKMExtensionBundleResources INSTANCE =  GWT.create(OKMExtensionBundleResources.class);
-	
-	@Source("com/openkm/extension/frontend/public/img/box.png")
-	public ImageResource box();
-	
-	@Source("com/openkm/extension/frontend/public/img/general.png")
-	public ImageResource general();
+public abstract class ToolBarBoxExtension extends ToolBarBox implements HasWidget {
+
+	/**
+	 * ToolBarBoxExtension
+	 * 
+	 * @param img
+	 * @param text
+	 */
+	public ToolBarBoxExtension(Image img, String text) {
+		super(img, text);
+	}
 }

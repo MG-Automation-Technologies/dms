@@ -68,6 +68,12 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean desktopTabVisible = false;
 	private boolean searchTabVisible = false;
 	private boolean dashboardTabVisible = false;
+	private boolean dashboardUserVisible = false;
+	private boolean dashboardMailVisible = false;
+	private boolean dashboardNewsVisible = false;
+	private boolean dashboardGeneralVisible = false;
+	private boolean dashboardWorkflowVisible = false;
+	private boolean dashboardKeywordsVisible = false;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
@@ -378,5 +384,53 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setDashboardTabVisible(boolean dashboardTabVisible) {
 		this.dashboardTabVisible = dashboardTabVisible;
+	}
+	
+	public boolean isDashboardUserVisible() {
+		return dashboardUserVisible;
+	}
+
+	public void setDashboardUserVisible(boolean dashboardUserVisible) {
+		this.dashboardUserVisible = dashboardUserVisible;
+	}
+
+	public boolean isDashboardMailVisible() {
+		return dashboardMailVisible;
+	}
+
+	public void setDashboardMailVisible(boolean dashboardMailVisible) {
+		this.dashboardMailVisible = dashboardMailVisible;
+	}
+
+	public boolean isDashboardNewsVisible() {
+		return dashboardNewsVisible;
+	}
+
+	public void setDashboardNewsVisible(boolean dashboardNewsVisible) {
+		this.dashboardNewsVisible = dashboardNewsVisible;
+	}
+
+	public boolean isDashboardGeneralVisible() {
+		return dashboardGeneralVisible;
+	}
+
+	public void setDashboardGeneralVisible(boolean dashboardGeneralVisible) {
+		this.dashboardGeneralVisible = dashboardGeneralVisible;
+	}
+
+	public boolean isDashboardWorkflowVisible() {
+		return dashboardWorkflowVisible;
+	}
+
+	public void setDashboardWorkflowVisible(boolean dashboardWorkflowVisible) {
+		this.dashboardWorkflowVisible = dashboardWorkflowVisible;
+	}
+
+	public boolean isDashboardKeywordsVisible() {
+		return dashboardKeywordsVisible;
+	}
+
+	public void setDashboardKeywordsVisible(boolean dashboardKeywordsVisible) {
+		this.dashboardKeywordsVisible = dashboardKeywordsVisible;
 	}
 }
