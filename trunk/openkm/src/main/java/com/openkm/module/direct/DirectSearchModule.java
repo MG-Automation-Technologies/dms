@@ -534,13 +534,9 @@ public class DirectSearchModule implements SearchModule {
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
 				QueryParams qp = it.next();
 				
-				// If this is a dashboard user search, dates are used internally
-				if (qp.isDashboard()) {
-					qp.setLastModifiedFrom(null);
-					qp.setLastModifiedTo(null);
+				if (!qp.isDashboard()) {
+					ret.add(qp);	
 				}
-
-				ret.add(qp);
 			}
 			
 			// Activity log

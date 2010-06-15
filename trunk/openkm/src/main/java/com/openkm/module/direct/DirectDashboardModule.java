@@ -601,7 +601,11 @@ public class DirectDashboardModule implements DashboardModule {
 			
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
 				QueryParams qp = it.next();
+				
+				// If this is a dashboard user search, dates are used internally
 				if (qp.isDashboard()) {
+					qp.setLastModifiedFrom(null);
+					qp.setLastModifiedTo(null);
 					ret.add(qp);
 				}
 			}
