@@ -44,8 +44,8 @@ public class MailAccountDAO {
 	 * Update
 	 */
 	public static void update(MailAccount ma) throws DatabaseException {
-		log.debug("update({})", ma);
-		String qs = "select ma.pass from MailAccount ma where ma.id=:id";
+		log.info("update({})", ma);
+		String qs = "select ma.mailPassword from MailAccount ma where ma.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -141,7 +141,7 @@ public class MailAccountDAO {
 			}
 			
 			List<MailAccount> ret = q.list();
-			log.info("findByUser: {}", ret);
+			log.debug("findByUser: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

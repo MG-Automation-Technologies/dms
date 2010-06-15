@@ -39,7 +39,7 @@
           </tr>
           <tr>
             <td nowrap="nowrap">Mail password</td>
-            <td><input class=":required :only_on_blur" type="password" name="ma_mpass" value="${ma.mailPassword}" autocomplete="off"/></td>
+            <td><input class=":required :only_on_blur" name="ma_mpassword" value="${ma.mailPassword}"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Mail folder</td>
