@@ -20,7 +20,7 @@
     <c:when test="${isAdmin}">
       <c:choose>
         <c:when test="${action == 'userCreate'}"><h1>User create</h1></c:when>
-        <c:when test="${action == 'userUpdate'}"><h1>User update</h1></c:when>
+        <c:when test="${action == 'userEdit'}"><h1>User edit</h1></c:when>
         <c:when test="${action == 'userDelete'}"><h1>User delete</h1></c:when>
       </c:choose>
       <form action="Auth">
@@ -31,8 +31,8 @@
             <td>Id</td>
             <td width="100%">
               <c:choose>
-                <c:when test="${action != 'userNew'}">
-                  <input class=":required :only_on_blur" name="usr_id" value="${user.id}" readonly="readonly"/>
+                <c:when test="${action != 'userCreate'}">
+                  <input class=":required :only_on_blur" name="usr_id" value="${usr.id}" readonly="readonly"/>
                 </c:when>
                 <c:otherwise>
                   <input class=":required :only_on_blur" name="usr_id" value=""/>
@@ -44,7 +44,7 @@
             <td>Password</td>
             <td>
               <c:choose>
-                <c:when test="${action == 'userNew'}">
+                <c:when test="${action == 'userCreate'}">
                   <input class=":required :only_on_blur" type="password" name="usr_pass" id="usr_pass" value="" autocomplete="off"/>
                 </c:when>
                 <c:otherwise>
@@ -59,17 +59,17 @@
           </tr>
           <tr>
             <td>Name</td>
-            <td><input class="" name="usr_name" value="${user.name}"/></td>
+            <td><input class="" name="usr_name" value="${usr.name}"/></td>
           </tr>
           <tr>
             <td>Mail</td>
-            <td><input class=":email :required :only_on_blur" name="usr_email" value="${user.email}"/></td>
+            <td><input class=":email :required :only_on_blur" name="usr_email" value="${usr.email}"/></td>
           </tr>
           <tr>
             <td>Active</td>
             <td>
               <c:choose>
-                <c:when test="${user.active}">
+                <c:when test="${usr.active}">
                   <input name="usr_active" type="checkbox" checked="checked"/>
                 </c:when>
                 <c:otherwise>
@@ -84,7 +84,7 @@
               <select multiple="multiple" name="usr_roles">
                 <c:forEach var="role" items="${roles}">
                   <c:choose>
-                    <c:when test="${fn:contains(user.roles, role)}">
+                    <c:when test="${fn:contains(usr.roles, role)}">
                       <option value="${role.id}" selected="selected">${role.id}</option>
                     </c:when>
                     <c:otherwise>

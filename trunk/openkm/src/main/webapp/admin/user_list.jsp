@@ -57,8 +57,8 @@
           </th>
         </tr>
         <c:forEach var="user" items="${users}" varStatus="row">
-          <c:url value="Auth" var="urlUpdate">
-            <c:param name="action" value="userUpdate"/>
+          <c:url value="Auth" var="urlEdit">
+            <c:param name="action" value="userEdit"/>
             <c:param name="usrId" value="${user.id}"/>
           </c:url>
           <c:url value="Auth" var="urlDelete">
@@ -91,7 +91,7 @@
               </c:choose>
             </td>
             <td>
-              <a href="${urlUpdate}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
