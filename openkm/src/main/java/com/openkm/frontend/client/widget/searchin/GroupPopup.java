@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
+import com.openkm.frontend.client.bean.GWTPropertyParams;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -101,7 +102,11 @@ public class GroupPopup extends DialogBox {
 					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
 						GWTFormElement formElement = it.next();
 						if (formElement.getName().endsWith(propertyName)) {
-							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(grpName, grpLabel, propertyName, formElement, "");
+							GWTPropertyParams param = new GWTPropertyParams();
+							param.setGrpName(grpName);
+							param.setGrpLabel(grpLabel);
+							param.setFormElement(formElement);
+							Main.get().mainPanel.search.searchBrowser.searchIn.addProperty(param);
 						}
 					}
 				}
