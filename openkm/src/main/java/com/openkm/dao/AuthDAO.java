@@ -166,6 +166,7 @@ public class AuthDAO {
 		String qsTwitter = "delete from TwitterAccount where ta.user=:user";
 		String qsBookmark = "delete from Bookmark bm where bm.user=:user";
 		String qsConfig = "delete from UserConfig uc where uc.user=:user";
+		String qsItems = "delete from UserItems ui where ui.user=:user";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -190,6 +191,11 @@ public class AuthDAO {
 			Query qConfig = session.createQuery(qsConfig);
 			qConfig.setString("user", usrId);
 			qConfig.executeUpdate();
+			
+			Query qItems = session.createQuery(qsItems);
+			qItems.setString("user", usrId);
+			qItems.executeUpdate();
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -229,11 +235,11 @@ public class AuthDAO {
 	}
 
 	/**
-	 * Get all users in database
+	 * Get all users within a role
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<User> findUsersByRole(boolean filterByActive, String rolId) throws DatabaseException {
-		log.debug("findUsersByRole({}, {})", filterByActive, rolId);
+	public static List<User> findUsersByRole(String rolId, boolean filterByActive) throws DatabaseException {
+		log.debug("findUsersByRole({}, {})", rolId, filterByActive);
 		String qs = "select u from User u, Role r where r.id=:rolId and r in elements(u.roles) " + 
 			(filterByActive?"and u.active=:active":"")+" order by u.id";
 		Session session = null;

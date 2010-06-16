@@ -44,7 +44,7 @@ public class LockTokenDAO {
 	 * Remove
 	 */
 	public static void remove(String user, String token) throws DatabaseException {
-		log.debug("remove({})", user, token);
+		log.debug("remove({}, {})", user, token);
 		String qs = "delete from LockToken lt where lt.user=:user and lt.token=:token";
 		Session session = null;
 		Transaction tx = null;
