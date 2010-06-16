@@ -130,4 +130,25 @@ public class UserDocumentKeywordsDAO {
 			HibernateUtil.close(session);
 		}
 	}
+	
+	/**
+	 * Empty database
+	 */
+	public static void clean() throws DatabaseException {
+		log.debug("clean()");
+		String qs = "delete from UserDocumentKeywords";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.executeUpdate();
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("clean: void");
+	}
 }

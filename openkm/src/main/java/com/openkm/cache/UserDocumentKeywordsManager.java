@@ -137,6 +137,8 @@ public class UserDocumentKeywordsManager {
 	 * 
 	 */
 	public static synchronized void serialize() throws DatabaseException {
+		UserDocumentKeywordsDAO.clean();
+		
 		for (String user : userDocumentKeywordsMgr.keySet()) {
 			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user).values()) {
 				UserDocumentKeywordsDAO.update(udk);
