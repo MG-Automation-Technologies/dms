@@ -93,6 +93,8 @@ public class Config {
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = "principal.ldap.role.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE = "principal.ldap.role.attribute";
 	
+	public static final String PROPERTY_PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER = "principal.ldap.user.role.search.filter";
+	
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE = "principal.ldap.mail.search.base";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = "principal.ldap.mail.search.filter";
 	public static final String PROPERTY_PRINCIPAL_LDAP_MAIL_ATTRIBUTE = "principal.ldap.mail.attribute";
@@ -206,6 +208,8 @@ public class Config {
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_BASE = ""; // ou=groups,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_FILTER = ""; // (&(objectClass=posixGroup)(cn=*)(|(description=*OpenKM*)(cn=users)))
 	public static String PRINCIPAL_LDAP_ROLE_ATTRIBUTE = ""; // cn
+	
+	public static String PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER = ""; // (&(objectClass=group)(cn={0}))
 	
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_BASE = ""; // uid={0},ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_MAIL_SEARCH_FILTER = ""; // (&(objectClass=inetOrgPerson)(mail=*))
@@ -428,6 +432,9 @@ public class Config {
 			values.put(PROPERTY_PRINCIPAL_LDAP_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_ROLE_SEARCH_FILTER);
 			PRINCIPAL_LDAP_ROLE_ATTRIBUTE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
 			values.put(PROPERTY_PRINCIPAL_LDAP_ROLE_ATTRIBUTE, PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
+			
+			PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER = config.getProperty(PROPERTY_PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER);
+			values.put(PROPERTY_PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER, PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER);
 			
 			PRINCIPAL_LDAP_MAIL_SEARCH_BASE = config.getProperty(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);
 			values.put(PROPERTY_PRINCIPAL_LDAP_MAIL_SEARCH_BASE, PRINCIPAL_LDAP_MAIL_SEARCH_BASE);

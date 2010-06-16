@@ -110,7 +110,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
 				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
 				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
-				Config.PRINCIPAL_LDAP_USER_SEARCH_FILTER,
+				MessageFormat.format(Config.PRINCIPAL_LDAP_USER_ROLE_SEARCH_FILTER, role),
 				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
