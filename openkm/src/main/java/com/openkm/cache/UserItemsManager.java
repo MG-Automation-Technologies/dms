@@ -1,6 +1,7 @@
 package com.openkm.cache;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -21,7 +22,7 @@ import com.openkm.dao.bean.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
-	private static HashMap<String, UserItems> userItemsMgr;
+	private static Map<String, UserItems> userItemsMgr;
 	
 	/**
 	 * 
@@ -102,7 +103,7 @@ public class UserItemsManager {
 	 * TODO: Not fully implemented
 	 */
 	public static synchronized void refreshUserItems(Session session) throws RepositoryException {
-		log.info("refreshUserItems("+session+")");
+		log.info("refreshUserItems({})", session);
 		
 		try {
 			String statement = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";

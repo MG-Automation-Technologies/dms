@@ -23,6 +23,9 @@ package com.openkm.cache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.jcr.Node;
@@ -37,21 +40,22 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.UserItemsDAO;
 import com.openkm.util.Serializer;
 
 public class UserKeywordsManager {
 	private static Logger log = LoggerFactory.getLogger(UserKeywordsManager.class);
 	private static final String FILEALIZATION = "UserKeywordsManager";
-	private static HashMap<String, HashMap<String, ArrayList<String>>> userDocKeywordsMgr;
+	private static Map<String, Map<String, Set<String>>> userDocKeywordsMgr;
 
 	/**
 	 * 
 	 */
-	public static HashMap<String, ArrayList<String>> get(String uid) throws RepositoryException {
-		HashMap<String, ArrayList<String>> userDocKeywords = userDocKeywordsMgr.get(uid); 
+	public static Map<String, Set<String>> get(String uid) throws RepositoryException {
+		Map<String, Set<String>> userDocKeywords = userDocKeywordsMgr.get(uid); 
 		
 		if (userDocKeywords == null) {
-			userDocKeywords = new HashMap<String, ArrayList<String>>();
+			userDocKeywords = new HashMap<String, Set<String>>();
 		}
 		
 		return userDocKeywords;
@@ -62,7 +66,7 @@ public class UserKeywordsManager {
 	 */
 	public static synchronized void put(String uid, String doc, String keywords) {
 		if (userDocKeywordsMgr.get(uid) == null) {
-			userDocKeywordsMgr.put(uid, new HashMap<String, ArrayList<String>>());
+			userDocKeywordsMgr.put(uid, new HashMap<String, Set<String>>());
 		}
 		
 		userDocKeywordsMgr.get(uid).put(doc, splitKeywords(keywords));
@@ -90,7 +94,7 @@ public class UserKeywordsManager {
 	 * TODO: Not fully implemented
 	 */
 	public static synchronized void refreshUserDocKeywords(Session session) throws RepositoryException {
-		log.info("refreshUserDocKeywords("+session+")");
+		log.info("refreshUserDocKeywords({})", session);
 		String statement = "/jcr:root/okm:root/element(*,okm:document)";
 		
 		try {
@@ -98,7 +102,7 @@ public class UserKeywordsManager {
 			QueryManager queryManager = workspace.getQueryManager();
 			Query query = queryManager.createQuery(statement, Query.XPATH);
 			javax.jcr.query.QueryResult qResult = query.execute();
-			HashMap<String, ArrayList<String>> userDocKeywords = new HashMap<String, ArrayList<String>>();
+			Map<String, Set<String>> userDocKeywords = new HashMap<String, Set<String>>();
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node docNode = nit.nextNode();
@@ -119,7 +123,9 @@ public class UserKeywordsManager {
 	 * 
 	 */
 	public static synchronized void serialize() {
-		Serializer.write(FILEALIZATION, userDocKeywordsMgr);
+		//for (String user : userItemsMgr.keySet()) {
+			//UserKeywordsDAO.update(userItemsMgr.get(user));
+		//}
 	}
 	
 	/**
@@ -127,18 +133,18 @@ public class UserKeywordsManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public static synchronized void deserialize() {
-		userDocKeywordsMgr = new HashMap<String, HashMap<String, ArrayList<String>>>();
+		userDocKeywordsMgr = new HashMap<String, Map<String, Set<String>>>();
 		Object obj = Serializer.read(FILEALIZATION);
 		if (obj != null) {
-			userDocKeywordsMgr = (HashMap<String, HashMap<String, ArrayList<String>>>) obj;
+			userDocKeywordsMgr = (HashMap<String, Map<String, Set<String>>>) obj;
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	private static ArrayList<String> splitKeywords(String keywords) {
-		ArrayList<String> docKeywords = new ArrayList<String>();
+	private static Set<String> splitKeywords(String keywords) {
+		Set<String> docKeywords = new HashSet<String>();
 		
 		for (StringTokenizer st = new StringTokenizer(keywords); st.hasMoreTokens(); ) {
 			String keyword = st.nextToken();

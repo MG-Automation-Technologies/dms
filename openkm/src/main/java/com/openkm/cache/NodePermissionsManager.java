@@ -1,6 +1,7 @@
 package com.openkm.cache;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jackrabbit.core.NodeId;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ public class NodePermissionsManager {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(NodePermissionsManager.class);
 	private static final String FILEALIZATION = "NodePermissionsManager";
-	private static HashMap<NodeId, NodePermissions> nodePermissionsMgr;
+	private static Map<NodeId, NodePermissions> nodePermissionsMgr;
 	
 	static {
 		deserialize();
