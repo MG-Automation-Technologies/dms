@@ -74,6 +74,6 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException;
+	public void notify(String nodePath, List<String> users, String message, boolean attachment) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException;
 }
