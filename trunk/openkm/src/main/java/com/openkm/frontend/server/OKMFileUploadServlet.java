@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMNotification;
@@ -73,6 +74,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		boolean notify = false;
 		boolean importZip = false;
 		String users = null;
+		String roles = null;
 		String message = null;
 		String comment = null;
 		String folder = null;
@@ -108,6 +110,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						if (item.getFieldName().equals("path")) { path = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("action")) { action = Integer.parseInt(item.getString("UTF-8")); }
 						if (item.getFieldName().equals("users")) { users = item.getString("UTF-8"); }
+						if (item.getFieldName().equals("roles")) { roles = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("notify")) { notify = true; } 
 						if (item.getFieldName().equals("importZip")) { importZip = true; }
 						if (item.getFieldName().equals("message")) { message = item.getString("UTF-8"); }
@@ -161,8 +164,20 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 
 				// If the document have been added to the repository, perform user notification
 				if ((action == FancyFileUpload.ACTION_INSERT || action == FancyFileUpload.ACTION_UPDATE) & notify) {
-					List<String> col = Arrays.asList(users.split(","));
-					OKMNotification.getInstance().notify(uploadedDocPath, col, message);
+					List<String> userNames = Arrays.asList(users.split(","));
+					List<String> roleNames = Arrays.asList(roles.split(","));
+					
+					for (String role : roleNames) {
+						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(role);
+						
+						for (String user : usersInRole) {
+							if (!userNames.contains(user)) {
+								userNames.add(user);
+							}
+						}
+					}
+					
+					OKMNotification.getInstance().notify(uploadedDocPath, userNames, message);
 				}
 			}
 		} catch (AccessDeniedException e) {
