@@ -1,6 +1,7 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserDocumentKeywords implements Serializable {
@@ -8,7 +9,7 @@ public class UserDocumentKeywords implements Serializable {
 	private int id;
 	private String user;
 	private String document;
-	private Set<String> keywords;
+	private Set<String> keywords = new HashSet<String>();
 	
 	public int getId() {
 		return id;
@@ -38,7 +39,7 @@ public class UserDocumentKeywords implements Serializable {
 		return keywords;
 	}
 	
-	public void setKeuwords(Set<String> keywords) {
+	public void setKeywords(Set<String> keywords) {
 		this.keywords = keywords;
 	}
 	
