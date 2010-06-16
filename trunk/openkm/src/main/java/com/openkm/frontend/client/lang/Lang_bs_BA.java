@@ -350,6 +350,7 @@ public class Lang_bs_BA {
 	    lang.put("security.recursive", "Rekurzivne promjene dozvola");
 	    lang.put("secutiry.filter.by.users","Users filter");
 	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("security.status.updating","Updating security");
 	    
 
 	    // Preview

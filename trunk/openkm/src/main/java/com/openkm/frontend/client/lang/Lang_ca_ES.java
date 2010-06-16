@@ -351,6 +351,7 @@ public class Lang_ca_ES {
 	    lang.put("security.recursive", "Aplica canvis de forma recursiva");
 	    lang.put("secutiry.filter.by.users","Filtre d'usuaris");
 	    lang.put("secutiry.filter.by.groups","Filtre de grups");
+	    lang.put("security.status.updating","Actualitzant la seguretat");
 	    
 
 	    // Preview

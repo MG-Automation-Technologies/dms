@@ -351,6 +351,7 @@ public class Lang_ja_JP {
 		lang.put("security.recursive", "アクセス許可を再帰的に子フォルダ適用する");
 		lang.put("secutiry.filter.by.users","Users filter");
 	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("security.status.updating","Updating security");
 		
 		// Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

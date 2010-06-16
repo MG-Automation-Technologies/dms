@@ -351,6 +351,7 @@ public class Lang_sr_BA {
 	    lang.put("security.recursive", "Rekurzivna izmjena privilegija");
 	    lang.put("secutiry.filter.by.users","Users filter");
 	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("security.status.updating","Updating security");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

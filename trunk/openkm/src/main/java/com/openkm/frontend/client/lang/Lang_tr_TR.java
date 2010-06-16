@@ -351,6 +351,7 @@ public class Lang_tr_TR {
 	    lang.put("security.recursive", "Deðiþimlere Ýzin Ver");
 	    lang.put("secutiry.filter.by.users","Users filter");
 	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("security.status.updating","Updating security");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");
