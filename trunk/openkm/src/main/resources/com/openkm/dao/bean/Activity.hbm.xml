@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Activity" table="OKM_ACTIVITY">
-    <id name="id" column="ID"><generator class="native"/></id>
+    <id name="id" column="ACT_ID"><generator class="native"/></id>
     <property name="date" column="ACT_DATE" not-null="true"/>
     <property name="user" column="ACT_USER" not-null="true"/>
     <property name="action" column="ACT_ACTION" not-null="true"/>
