@@ -1,10 +1,7 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.Role"%>
-<%@ page import="com.openkm.core.DatabaseException"%>
-<%@ page import="java.util.Collection" %>
-<%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -15,32 +12,55 @@
   <title>Role list</title>
 </head>
 <body>
-<%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-		request.setCharacterEncoding("UTF-8");
-		
-		out.println("<h1>Roles <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
-		
-		try {
-			out.println("<table class=\"results\" width=\"30%\">");
-			out.println("<tr><th>Id</th><th width=\"25px\"><a href=\"role_edit.jsp?action=c\"><img src=\"img/action/new.png\" alt=\"New role\" title=\"New role\"/></a></th></tr>");
-			Collection<Role> roles = AuthDAO.findAllRoles();
-			
-			int i = 0;
-			for (Iterator<Role> it = roles.iterator(); it.hasNext(); ) {
-				Role rol = it.next();
-				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+rol.getId()+"</td>"+
-						"<td><a href=\"role_edit.jsp?action=d&id="+rol.getId()+"\""+"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a>"+
-						"</td></tr>");
-			}
-				
-			out.println("</table>");
-		} catch (DatabaseException e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
-		}
-	} else {
-		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
-	}
-%>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <c:url value="Auth" var="urlUserList">
+      </c:url>
+      <h1>Role list <span style="font-size: 10px;">(<a href="${urlUserList}">Users</a>)</span></h1>
+      <table class="results" width="40%">
+        <tr>
+          <th>Id</th><th width="25px">Active</th>
+          <th width="50px">
+            <c:url value="Auth" var="urlCreate">
+              <c:param name="action" value="roleCreate"/>
+            </c:url>
+            <a href="${urlCreate}"><img src="img/action/new.png" alt="New role" title="New role"/></a>
+          </th>
+        </tr>
+        <c:forEach var="role" items="${roles}" varStatus="row">
+          <c:url value="Auth" var="urlEdit">
+            <c:param name="action" value="roleEdit"/>
+            <c:param name="rol_id" value="${role.id}"/>
+          </c:url>
+          <c:url value="Auth" var="urlDelete">
+            <c:param name="action" value="roleDelete"/>
+            <c:param name="rol_id" value="${role.id}"/>
+          </c:url>
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+            <td>${role.id}</td>
+            <td align="center">
+              <c:choose>
+                <c:when test="${role.active}">
+                  <img src="img/true.png" alt="Active" title="Active"/>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+            <td>
+              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+              &nbsp;
+              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+            </td>
+          </tr>
+        </c:forEach>
+      </table>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 </body>
 </html>
