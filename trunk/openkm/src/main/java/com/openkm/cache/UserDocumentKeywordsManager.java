@@ -64,6 +64,7 @@ public class UserDocumentKeywordsManager {
 	 * Add keyword
 	 */
 	public static synchronized void add(String user, String nodePath, String keyword) {
+		log.info("add({}, {}, {})", new Object[] {user, nodePath, keyword });
 		Map<String, UserDocumentKeywords> usrDocs = get(user);
 		UserDocumentKeywords udk = usrDocs.get(nodePath);
 		
@@ -72,6 +73,7 @@ public class UserDocumentKeywordsManager {
 			udk.setUser(user);
 			udk.setDocument(nodePath);
 			usrDocs.put(nodePath, udk);
+			userDocumentKeywordsMgr.put(user, usrDocs);
 		}
 		
 		udk.getKeywords().add(keyword);
@@ -89,6 +91,7 @@ public class UserDocumentKeywordsManager {
 			udk.setUser(user);
 			udk.setDocument(nodePath);
 			usrDocs.put(nodePath, udk);
+			userDocumentKeywordsMgr.put(user, usrDocs);
 		}
 
 		udk.getKeywords().remove(keyword);
@@ -140,8 +143,10 @@ public class UserDocumentKeywordsManager {
 		UserDocumentKeywordsDAO.clean();
 		
 		for (String user : userDocumentKeywordsMgr.keySet()) {
+			log.info("User: {}", user);
 			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user).values()) {
-				UserDocumentKeywordsDAO.update(udk);
+				log.info("Document: {}", udk);
+				UserDocumentKeywordsDAO.create(udk);
 			}
 		}
 	}
