@@ -128,6 +128,7 @@ public class Lang_ro_RO {
 			lang.put("general.menu.file.download.document", "Descarcare document");
 			lang.put("general.menu.file.download.document.pdf", "Descarcare document ca fisier PDF");
 			lang.put("general.menu.file.send.link", "Transmitere legatura catre document");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Blocare");
 			lang.put("general.menu.file.unlock", "Deblocare");
 			lang.put("general.menu.file.add.document", "Adaugare document");
@@ -480,6 +481,7 @@ public class Lang_ro_RO {
 
 	    // Notify
 	    lang.put("notify.label", "Se transmite legatura catre document");
+	    lang.put("notify.label.attachment", "Send document attachment");
 
 	    // Status
 	    lang.put("status.document.copied", "Document marcat pentru copiere");

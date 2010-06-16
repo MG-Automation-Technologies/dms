@@ -127,6 +127,7 @@ public class Lang_mk_MK {
 			lang.put("general.menu.file.download.document", "Симни документ");
 			lang.put("general.menu.file.download.document.pdf", "Симни документ како PDF");
 			lang.put("general.menu.file.send.link", "Испрати врска до документот");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Заклучи");
 			lang.put("general.menu.file.unlock", "Отклучи");
 			lang.put("general.menu.file.add.document", "Додади документ");
@@ -479,6 +480,7 @@ public class Lang_mk_MK {
 	    
 	    // Notify
 	    lang.put("notify.label", "Испраќам врска од документот");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Документот е означен за копирање");

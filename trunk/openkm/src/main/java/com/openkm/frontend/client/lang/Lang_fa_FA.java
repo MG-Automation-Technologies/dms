@@ -127,6 +127,7 @@ public class Lang_fa_FA {
 			lang.put("general.menu.file.download.document", "Download document");
 			lang.put("general.menu.file.download.document.pdf", "Download document as PDF");
 			lang.put("general.menu.file.send.link", "Send document link");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "قفل");
 			lang.put("general.menu.file.unlock", "کلید");
 			lang.put("general.menu.file.add.document", "ایجاد سند");
@@ -479,6 +480,7 @@ public class Lang_fa_FA {
 	    
 	    // Notify
 	    lang.put("notify.label", "Sending document link");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Document marked to copy");

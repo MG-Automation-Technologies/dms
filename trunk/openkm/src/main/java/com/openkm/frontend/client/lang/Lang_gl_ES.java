@@ -127,6 +127,7 @@ public class Lang_gl_ES {
 			lang.put("general.menu.file.download.document", "Descargar documento");
 			lang.put("general.menu.file.download.document.pdf", "Descargar documento como PDF");
 			lang.put("general.menu.file.send.link", "Enviar ligazon do documento");
+			lang.put("general.menu.file.send.attachment", "Enviar documento adjunto");
 			lang.put("general.menu.file.lock", "Bloquear");
 			lang.put("general.menu.file.unlock", "Desbloquear");
 			lang.put("general.menu.file.add.document", "Engadir documento");
@@ -479,6 +480,7 @@ public class Lang_gl_ES {
 	    
 	    // Notify
 	    lang.put("notify.label", "Enviar ligazon do documento");
+	    lang.put("notify.label.attachment", "Enviar documento adjunto");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Documento marcado para copiar");

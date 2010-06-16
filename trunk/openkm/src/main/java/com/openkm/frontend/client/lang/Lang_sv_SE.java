@@ -127,6 +127,7 @@ public class Lang_sv_SE {
 			lang.put("general.menu.file.download.document", "Ladda ned dokument");
 			lang.put("general.menu.file.download.document.pdf", "Download document as PDF");
 			lang.put("general.menu.file.send.link", "Skicka dokumentlänk");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Lås");
 			lang.put("general.menu.file.unlock", "Lås upp");
 			lang.put("general.menu.file.add.document", "Lägg till dokument");
@@ -479,6 +480,7 @@ public class Lang_sv_SE {
 	    
 	    // Notify
 	    lang.put("notify.label", "Skickar dokumentlänk");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokument markerad som 'kopiera'");

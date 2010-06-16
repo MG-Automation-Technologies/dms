@@ -127,6 +127,7 @@ public class Lang_ar_PS {
 			lang.put("general.menu.file.download.document", "تحميل المستند");
 			lang.put("general.menu.file.download.document.pdf", "PDFتحميل المستند");
 			lang.put("general.menu.file.send.link", "أرسل وصلة المستند");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "قفل");
 			lang.put("general.menu.file.unlock", "فتح القفل");
 			lang.put("general.menu.file.add.document", "اضافة مستند");
@@ -479,6 +480,7 @@ public class Lang_ar_PS {
 	    
 	    // Notify
 	    lang.put("notify.label", "تم ارسال رابط المستند");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "المستند جهز للنسخ");

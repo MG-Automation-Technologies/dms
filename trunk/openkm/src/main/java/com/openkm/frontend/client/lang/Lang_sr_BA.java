@@ -127,6 +127,7 @@ public class Lang_sr_BA {
 			lang.put("general.menu.file.download.document", "Preuzmi dokument");
 			lang.put("general.menu.file.download.document.pdf", "Download document as PDF");
 			lang.put("general.menu.file.send.link", "Pošalji link");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Zaključaj");
 			lang.put("general.menu.file.unlock", "Otključaj");
 			lang.put("general.menu.file.add.document", "Dodaj dokument");
@@ -479,6 +480,7 @@ public class Lang_sr_BA {
 	    
 	    // Notify
 	    lang.put("notify.label", "Slanje linka dokumenta"); 
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokument označen za kopiranje");

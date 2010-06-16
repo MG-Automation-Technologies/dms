@@ -127,6 +127,7 @@ public class Lang_ca_ES {
 	    	lang.put("general.menu.file.download.document", "Descarrega document");
 	    	lang.put("general.menu.file.download.document.pdf", "Descarrega document com PDF");
 	    	lang.put("general.menu.file.send.link", "Enviar enllaç del document");
+	    	lang.put("general.menu.file.send.attachment", "Enviar documento adjunto");
 	    	lang.put("general.menu.file.lock", "Bloqueja");
 	    	lang.put("general.menu.file.unlock", "Desbloqueja");
 	    	lang.put("general.menu.file.add.document", "Afegeix un fitxer");
@@ -480,6 +481,7 @@ public class Lang_ca_ES {
 	    
 	    // Notify
 	    lang.put("notify.label", "Enviar enllaç del document");
+	    lang.put("notify.label.attachment", "Enviar el document adjunt");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Document marcat per a copiar");

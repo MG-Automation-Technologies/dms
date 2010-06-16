@@ -127,6 +127,7 @@ public class Lang_zh_TW {
 			lang.put("general.menu.file.download.document", "下載文件");
 			lang.put("general.menu.file.download.document.pdf", "以PDF格式下載文件");
 			lang.put("general.menu.file.send.link", "文件通知");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "鎖定");
 			lang.put("general.menu.file.unlock", "解除鎖定");
 			lang.put("general.menu.file.add.document", "新增文件");
@@ -478,6 +479,7 @@ public class Lang_zh_TW {
 	    
 	    // Notify
 		lang.put("notify.label", "文件通知");
+		lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "文件已被複製");
