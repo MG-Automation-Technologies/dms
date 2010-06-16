@@ -85,4 +85,10 @@ public class EJBAuthModule implements com.openkm.module.AuthModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
