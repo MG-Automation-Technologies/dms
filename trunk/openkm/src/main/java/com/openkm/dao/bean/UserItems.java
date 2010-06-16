@@ -1,12 +1,22 @@
-package com.openkm.bean.cache;
+package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
 public class UserItems implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private String user;
 	private long folders;
 	private long documents;
+	private long mails;
 	private long size;
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
 	
 	public long getFolders() {
 		return folders;
@@ -23,6 +33,14 @@ public class UserItems implements Serializable {
 	public void setDocuments(long document) {
 		this.documents = document;
 	}
+	
+	public long getMails() {
+		return mails;
+	}
+
+	public void setMails(int mails) {
+		this.mails = mails;
+	}
 
 	public long getSize() {
 		return size;
@@ -34,11 +52,13 @@ public class UserItems implements Serializable {
 	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append("size="); sb.append(size);
+		sb.append("{");
+		sb.append("user="); sb.append(user);
 		sb.append(", documents="); sb.append(documents);
+		sb.append(", mails="); sb.append(mails);
 		sb.append(", folders="); sb.append(folders);
-		sb.append("]");
+		sb.append(", size="); sb.append(size);
+		sb.append("}");
 		return sb.toString();
 	}
 }
