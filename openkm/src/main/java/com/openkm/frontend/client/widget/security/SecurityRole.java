@@ -214,9 +214,11 @@ public class SecurityRole extends Composite implements HasWidgets {
 			assignedRole.addRow(tmpRole, new Byte(GWTPermission.READ));
 			unassignedRole.removeSelectedRow();
 			tmpRole = "";
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("AddRole", caught);
 		}
 	};
@@ -230,9 +232,11 @@ public class SecurityRole extends Composite implements HasWidgets {
 			unassignedRole.selectLastRow();
 			assignedRole.removeSelectedRow();
 			tmpRole = "";
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("RevokeRole", caught);
 		}
 	};
@@ -279,6 +283,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	 */
 	public void addRole(String role, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.grantRole(path, role, permissions, recursive, callbackAddRole);
@@ -292,6 +297,7 @@ public class SecurityRole extends Composite implements HasWidgets {
 	 */
 	public void revokeRole(String role, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeRole(path, role, recursive, callbackRevokeRole);

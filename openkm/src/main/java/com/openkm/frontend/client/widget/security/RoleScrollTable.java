@@ -376,6 +376,7 @@ public class RoleScrollTable extends Composite {
 	 */
 	final AsyncCallback<Object> callbackGrantRole = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -393,7 +394,7 @@ public class RoleScrollTable extends Composite {
 					((CheckBox) dataTable.getWidget(rowIndex, 4)).setValue(false);
 					break;
 			}
-			
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("GrantRole", caught);
 		}
 	};
@@ -414,6 +415,7 @@ public class RoleScrollTable extends Composite {
 					removeSelectedRow();
 				}
 			}
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -431,7 +433,7 @@ public class RoleScrollTable extends Composite {
 					((CheckBox) dataTable.getWidget(rowIndex, 4)).setValue(true);
 					break;
 			}
-			
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("RevokeRole", caught);
 		}
 	};
@@ -444,6 +446,7 @@ public class RoleScrollTable extends Composite {
 	 */
 	public void grant(String role, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);
 			authService.grantRole(path, role, permissions, recursive, callbackGrantRole);
@@ -458,6 +461,7 @@ public class RoleScrollTable extends Composite {
 	 */
 	public void revoke(String role, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeRole(path, role, permissions, recursive, callbackRevokeRole);

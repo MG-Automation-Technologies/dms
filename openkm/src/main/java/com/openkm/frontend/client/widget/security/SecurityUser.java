@@ -215,9 +215,11 @@ public class SecurityUser extends Composite implements HasWidgets {
 			assignedUser.addRow(tmpUser, new Byte(GWTPermission.READ));
 			unassignedUser.removeSelectedRow();
 			tmpUser = "";
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("AddUser", caught);
 		}
 	};
@@ -231,9 +233,11 @@ public class SecurityUser extends Composite implements HasWidgets {
 			unassignedUser.selectLastRow();
 			assignedUser.removeSelectedRow();
 			tmpUser = "";
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("RevokeUser", caught);
 		}
 	};
@@ -280,6 +284,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 */
 	public void addUser(String user, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackAddUser);
@@ -293,6 +298,7 @@ public class SecurityUser extends Composite implements HasWidgets {
 	 */
 	public void removeUser(String user, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeUser(path, user, recursive, callbackRevokeUser);

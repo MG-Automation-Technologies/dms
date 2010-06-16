@@ -54,6 +54,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 	private static final int TAB_USERS 	= 0;
 	private static final int TAB_GROUPS = 1;
 	
+	public Status status;
 	private VerticalPanel vPanel;
 	private TabPanel tabPanel;
 	public SecurityUser securityUser;
@@ -76,6 +77,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		// Establishes auto-close when click outside
 		super(false,true);
 		
+		status = new Status();
 		vPanel = new VerticalPanel();
 		securityUser = new SecurityUser();
 		securityRole = new SecurityRole();
@@ -186,6 +188,7 @@ public class SecurityPopup extends DialogBox implements ClickHandler {
 		
 		button.setStyleName("okm-Button");
 		filter.setStyleName("okm-Input");
+		status.setStyleName("okm-StatusPopup");
 
 		super.hide();
 		setWidget(vPanel);
