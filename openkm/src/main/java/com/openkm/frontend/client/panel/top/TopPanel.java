@@ -113,6 +113,8 @@ public class TopPanel extends Composite {
 		horizontalPanel.setCellWidth(panel, "100%");
 		horizontalPanel.setCellWidth(rightLabel, "10px");
 		
+		horizontalPanel.setHeight(""+PANEL_HEIGHT);
+		
 		initWidget(horizontalPanel);
 	}
 	
