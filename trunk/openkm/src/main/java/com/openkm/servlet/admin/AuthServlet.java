@@ -215,7 +215,7 @@ public class AuthServlet extends BaseServlet {
 			sc.setAttribute("users", AuthDAO.findAllUsers(false));
 		} else {
 			sc.setAttribute("roleFilter", roleFilter);
-			sc.setAttribute("users", AuthDAO.findUsersByRole(false, roleFilter));
+			sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
 		}
 		
 		sc.setAttribute("roles", AuthDAO.findAllRoles());
