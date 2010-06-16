@@ -43,6 +43,7 @@ public class ToolBarOption {
 	public boolean renameOption;
 	public boolean copyOption;
 	public boolean sendDocumentLinkOption;
+	public boolean sendDocumentAttachmentOption;
 	public boolean moveOption;
 	public boolean exportOption;
 	public boolean workflowOption;

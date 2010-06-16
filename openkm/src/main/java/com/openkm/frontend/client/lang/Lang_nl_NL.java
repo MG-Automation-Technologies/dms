@@ -128,6 +128,7 @@ public class Lang_nl_NL {
 		lang.put("general.menu.file.download.document", "Download document");
 		lang.put("general.menu.file.download.document.pdf", "Download document als PDF");
 		lang.put("general.menu.file.send.link", "Verstuur document link");
+		lang.put("general.menu.file.send.attachment", "Send document attachment");
 		lang.put("general.menu.file.lock", "Bescherm");
 		lang.put("general.menu.file.unlock", "Vrijgeven");
 		lang.put("general.menu.file.add.document", "Bestand toevoegen");
@@ -480,6 +481,7 @@ public class Lang_nl_NL {
 	    
 	    // Notify
 	    lang.put("notify.label", "Document link versturen");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Document gemarkeerd voor kopieren");

@@ -127,6 +127,7 @@ public class Lang_co_ES {
 			lang.put("general.menu.file.download.document", "Descargar documento");
 			lang.put("general.menu.file.download.document.pdf", "Descargar documento como PDF");
 			lang.put("general.menu.file.send.link", "Enviar enlace del documento");
+			lang.put("general.menu.file.send.attachment", "Enviar documento adjunto");
 			lang.put("general.menu.file.lock", "Bloquear");
 			lang.put("general.menu.file.unlock", "Desbloquear");
 			lang.put("general.menu.file.add.document", "Añadir documento");
@@ -479,6 +480,7 @@ public class Lang_co_ES {
 	    
 	    // Notify
 	    lang.put("notify.label", "Enviar enlace del documento");
+	    lang.put("notify.label.attachment", "Enviar el documento adjunto");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Documento marcado para copiar");

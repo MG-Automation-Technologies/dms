@@ -127,6 +127,7 @@ public class Lang_zh_CN {
 			lang.put("general.menu.file.download.document", "下载文档");
 			lang.put("general.menu.file.download.document.pdf", "下载保存为pdf");
 			lang.put("general.menu.file.send.link", "发送文档链接");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "上锁");
 			lang.put("general.menu.file.unlock", "解锁");
 			lang.put("general.menu.file.add.document", "新增文档");
@@ -478,6 +479,7 @@ public class Lang_zh_CN {
 	    
 	    // Notify
 	    lang.put("notify.label", "正在发送文档链接");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "文档已标记复制");

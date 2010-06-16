@@ -127,6 +127,7 @@ public class Lang_cs_CZ {
 			lang.put("general.menu.file.download.document", "Stáhnout dokument");
 			lang.put("general.menu.file.download.document.pdf", "Stáhnout dokument jako PDF");
 			lang.put("general.menu.file.send.link", "Poslat odkaz na soubor");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Uzamknout");
 			lang.put("general.menu.file.unlock", "Odemknout");
 			lang.put("general.menu.file.add.document", "Přidat dokument");
@@ -479,6 +480,7 @@ public class Lang_cs_CZ {
 	    
 	    // Notify
 	    lang.put("notify.label", "Odesílá se odkaz na soubor");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokument označen ke zkopírování");

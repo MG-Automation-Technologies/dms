@@ -127,6 +127,7 @@ public class Lang_ja_JP {
 		lang.put("general.menu.file.download.document", "文書のダウンロード");
 		lang.put("general.menu.file.download.document.pdf", "文書をPDFしダウンロード");
 		lang.put("general.menu.file.send.link", "文書へのリンクを送る");
+		lang.put("general.menu.file.send.attachment", "Send document attachment");
 		lang.put("general.menu.file.lock", "ロックする");
 		lang.put("general.menu.file.unlock", "ロック解除");
 		lang.put("general.menu.file.add.document", "文書の追加");
@@ -479,6 +480,7 @@ public class Lang_ja_JP {
 		
 		// Notify
 		lang.put("notify.label", "文書リンクの送信中");
+		lang.put("notify.label.attachment", "Send document attachment");
 		
 		// Status
 		lang.put("status.document.copied", "Document marked to copy");

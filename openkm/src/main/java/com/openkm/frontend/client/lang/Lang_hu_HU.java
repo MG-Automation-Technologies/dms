@@ -127,6 +127,7 @@ public class Lang_hu_HU {
 			lang.put("general.menu.file.download.document", "Dokumentum letöltése");
 			lang.put("general.menu.file.download.document.pdf", "Dokumentum letöltése PDF-ként");
 			lang.put("general.menu.file.send.link", "Hivatkozás küldése");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Zárolás");
 			lang.put("general.menu.file.unlock", "Feloldás");
 			lang.put("general.menu.file.add.document", "Dokumentum feltöltése");
@@ -479,6 +480,7 @@ public class Lang_hu_HU {
 	    
 	    // Notify
 	    lang.put("notify.label", "Hivakozás küldése");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokumentum másolásra kijelölve");

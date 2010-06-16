@@ -127,6 +127,7 @@ public class Lang_el_GR {
 			lang.put("general.menu.file.download.document", "Κατεβάστε το έγγραφο");
 			lang.put("general.menu.file.download.document.pdf", "Κατεβάστε το έγγραφο ως PDF");
 			lang.put("general.menu.file.send.link", "Αποστολή σύνδεσμου εγγράφου ");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Κλείδωμα");
 			lang.put("general.menu.file.unlock", "Ξεκλείδωμα");
 			lang.put("general.menu.file.add.document", "Προσθήκη έγγραφου");
@@ -479,6 +480,7 @@ public class Lang_el_GR {
 	    
 	    // Notify
 	    lang.put("notify.label", "Αποστολή σύνδεσμου εγγράφου");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Έγγραφο με σήμανση για αντιγραφή");

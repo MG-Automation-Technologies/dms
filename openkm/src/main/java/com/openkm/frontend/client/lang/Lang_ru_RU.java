@@ -132,6 +132,7 @@ public class Lang_ru_RU {
 			lang.put("general.menu.file.download.document", "Загрузить документ");
 			lang.put("general.menu.file.download.document.pdf", "Загрузить документ как PDF");
 			lang.put("general.menu.file.send.link", "Отправить ссылку на документ");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Блокировать");
 			lang.put("general.menu.file.unlock", "Разблокировать");
 			lang.put("general.menu.file.add.document", "Добавить документ");
@@ -484,6 +485,7 @@ public class Lang_ru_RU {
 	    
 	    // Notify
 	    lang.put("notify.label", "Отсылаю ссылку на документ");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Документ помечен для копирования");

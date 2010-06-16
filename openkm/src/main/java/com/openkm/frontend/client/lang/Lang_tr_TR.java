@@ -127,6 +127,7 @@ public class Lang_tr_TR {
 			lang.put("general.menu.file.create.directory", "Klasör Oluþtur");
 			lang.put("general.menu.file.download.document", "Doküman Yükle");
 			lang.put("general.menu.file.send.link", "Doküman Linki Gönder");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Kilitle");
 			lang.put("general.menu.file.unlock", "Kilidi Aç");
 			lang.put("general.menu.file.add.document", "Doküman Ekle");
@@ -479,6 +480,7 @@ public class Lang_tr_TR {
 	    
 	    // Notify
 	    lang.put("notify.label", "Dokuman Baðlantýsý Yollanýyor");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Ýþaretli Dokümaný Kopyala ");

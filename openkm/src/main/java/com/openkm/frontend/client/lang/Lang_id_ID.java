@@ -127,6 +127,7 @@ public class Lang_id_ID {
 			lang.put("general.menu.file.download.document", "Download dokumen");
 			lang.put("general.menu.file.download.document.pdf", "Download dokumen sebagai PDF");
 			lang.put("general.menu.file.send.link", "Kirim link dokumen");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Kunci");
 			lang.put("general.menu.file.unlock", "Buka kunci");
 			lang.put("general.menu.file.add.document", "Tambah dokumen");
@@ -479,6 +480,7 @@ public class Lang_id_ID {
 	    
 	    // Notify
 	    lang.put("notify.label", "Kirim link dokumen");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokumen dimark untuk di-copy");

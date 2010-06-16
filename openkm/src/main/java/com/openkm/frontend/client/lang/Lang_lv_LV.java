@@ -127,6 +127,7 @@ public class Lang_lv_LV {
 			lang.put("general.menu.file.download.document", "Lejupielādēt dokumentu");
 			lang.put("general.menu.file.download.document.pdf", "Lejupielādēt dokumentu kā PDF");
 			lang.put("general.menu.file.send.link", "Sūtīt dokumenta saiti");
+			lang.put("general.menu.file.send.attachment", "Send document attachment");
 			lang.put("general.menu.file.lock", "Slēgt");
 			lang.put("general.menu.file.unlock", "Atslēgt");
 			lang.put("general.menu.file.add.document", "Pievienot dokumentu");
@@ -479,6 +480,7 @@ public class Lang_lv_LV {
 	    
 	    // Notify
 	    lang.put("notify.label", "Sūta dokumenta saiti");
+	    lang.put("notify.label.attachment", "Send document attachment");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokuments atzīmēts kopēšanai");
