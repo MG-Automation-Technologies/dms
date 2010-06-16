@@ -756,6 +756,23 @@ public class DirectAuthModule implements AuthModule {
 		log.debug("getRoles: {}", list);
 		return list;
 	}
+	
+	@Override
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
+		log.debug("getUsersByRole({})", role);
+		List<String> list = null;
+
+		try {
+			PrincipalAdapter principalAdapter = getPrincipalAdapter();
+			list = principalAdapter.getUsersByRole(role);
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		}
+
+		log.debug("getUsersByRole: {}", list);
+		return list;
+	}
 
 	/**
 	 * Get mail user list from user list. 

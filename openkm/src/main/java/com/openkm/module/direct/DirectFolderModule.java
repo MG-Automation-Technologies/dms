@@ -52,7 +52,6 @@ import com.openkm.bean.Mail;
 import com.openkm.bean.Notification;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
-import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -61,6 +60,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.UserItems;
 import com.openkm.module.FolderModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -410,7 +410,7 @@ public class DirectFolderModule implements FolderModule {
 				UserItems userItems = entry.getValue();
 				UserItemsManager.decSize(uid, userItems.getSize());
 				UserItemsManager.decDocuments(uid, userItems.getDocuments());
-				UserItemsManager.decFolders(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getFolders());
 			}
 			
 			// Check scripting

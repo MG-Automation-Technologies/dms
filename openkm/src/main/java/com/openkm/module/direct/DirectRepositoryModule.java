@@ -65,7 +65,6 @@ import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.Repository;
-import com.openkm.bean.cache.UserItems;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
@@ -73,6 +72,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.UserItems;
 import com.openkm.module.RepositoryModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
@@ -747,7 +747,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 				UserItems userItems = entry.getValue();
 				UserItemsManager.decSize(uid, userItems.getSize());
 				UserItemsManager.decDocuments(uid, userItems.getDocuments());
-				UserItemsManager.decFolders(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getFolders());
 			}
 			
 			// Activity log
