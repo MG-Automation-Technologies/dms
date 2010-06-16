@@ -32,9 +32,8 @@ import com.openkm.frontend.client.OKMException;
  *
  */
 public interface OKMNotifyService extends RemoteService {
-	
 	public void subscribe( String nodePath ) throws OKMException;
 	public void unsubscribe( String nodePath ) throws OKMException;
-	public void notify(String docPath, String users, String roles, String message) throws OKMException;
-	public void notifyAttachment(String docPath, String users, String roles, String message) throws OKMException;
+	public void notify(String docPath, String users, String roles, String message, boolean attachment) 
+		throws OKMException;
 }
