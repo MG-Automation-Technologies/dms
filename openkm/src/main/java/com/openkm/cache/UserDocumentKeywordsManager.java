@@ -21,16 +21,15 @@
 
 package com.openkm.cache;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.Workspace;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -39,55 +38,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.UserItemsDAO;
-import com.openkm.util.Serializer;
+import com.openkm.dao.UserDocumentKeywordsDAO;
+import com.openkm.dao.bean.UserDocumentKeywords;
 
-public class UserKeywordsManager {
-	private static Logger log = LoggerFactory.getLogger(UserKeywordsManager.class);
-	private static final String FILEALIZATION = "UserKeywordsManager";
-	private static Map<String, Map<String, Set<String>>> userDocKeywordsMgr;
+public class UserDocumentKeywordsManager {
+	private static Logger log = LoggerFactory.getLogger(UserDocumentKeywordsManager.class);
+	private static Map<String, Set<UserDocumentKeywords>> userDocumentKeywordsMgr;
 
 	/**
 	 * 
 	 */
-	public static Map<String, Set<String>> get(String uid) throws RepositoryException {
-		Map<String, Set<String>> userDocKeywords = userDocKeywordsMgr.get(uid); 
+	public static Set<UserDocumentKeywords> get(String uid) throws RepositoryException {
+		Set<UserDocumentKeywords> userDocKeywords = userDocumentKeywordsMgr.get(uid);
 		
 		if (userDocKeywords == null) {
-			userDocKeywords = new HashMap<String, Set<String>>();
+			userDocKeywords = new HashSet<UserDocumentKeywords>();
 		}
 		
 		return userDocKeywords;
-	}
-	
-	/**
-	 * 
-	 */
-	public static synchronized void put(String uid, String doc, String keywords) {
-		if (userDocKeywordsMgr.get(uid) == null) {
-			userDocKeywordsMgr.put(uid, new HashMap<String, Set<String>>());
-		}
-		
-		userDocKeywordsMgr.get(uid).put(doc, splitKeywords(keywords));
-	}
-	
-	/**
-	 * 
-	 */
-	public static synchronized void update(String doc, String keywords) {
-		//ArrayList<String> docKeywords = splitKeywords(keywords);
-		
-		/*
-		for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
-			String uid = sm.getInfo(it.next()).getSession().getUserID();
-			HashMap<String, ArrayList<String>> userDocKeywords = userDocKeywordsMgr.get(uid);
-			
-			if (userDocKeywords != null) {
-				userDocKeywords.put(doc, docKeywords);
-			}
-		}
-		*/
 	}
 	
 	/**
@@ -106,11 +76,17 @@ public class UserKeywordsManager {
 			
 			for (NodeIterator nit = qResult.getNodes(); nit.hasNext(); ) {
 				Node docNode = nit.nextNode();
-				String keywords = docNode.getProperty(Property.KEYWORDS).getString();
-				userDocKeywords.put(docNode.getUUID(), splitKeywords(keywords));
+				Value[] keywords = docNode.getProperty(Property.KEYWORDS).getValues();
+				Set<String> keywordSet = new HashSet<String>();
+				
+				for (int i=0; i<keywords.length; i++) {
+					keywordSet.add(keywords[i].getString());
+				}
+				
+				userDocKeywords.put(docNode.getUUID(), keywordSet);
 			}
 			
-			userDocKeywordsMgr.put(session.getUserID(), userDocKeywords);
+			//userDocumentKeywordsMgr.put(session.getUserID(), userDocKeywords);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
@@ -122,35 +98,28 @@ public class UserKeywordsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void serialize() {
-		//for (String user : userItemsMgr.keySet()) {
-			//UserKeywordsDAO.update(userItemsMgr.get(user));
-		//}
-	}
-	
-	/**
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	public static synchronized void deserialize() {
-		userDocKeywordsMgr = new HashMap<String, Map<String, Set<String>>>();
-		Object obj = Serializer.read(FILEALIZATION);
-		if (obj != null) {
-			userDocKeywordsMgr = (HashMap<String, Map<String, Set<String>>>) obj;
+	public static synchronized void serialize() throws DatabaseException {
+		for (String user : userDocumentKeywordsMgr.keySet()) {
+			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user)) {
+				UserDocumentKeywordsDAO.update(udk);
+			}
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	private static Set<String> splitKeywords(String keywords) {
-		Set<String> docKeywords = new HashSet<String>();
+	public static synchronized void deserialize() throws DatabaseException {
+		userDocumentKeywordsMgr = new HashMap<String, Set<UserDocumentKeywords>>();
 		
-		for (StringTokenizer st = new StringTokenizer(keywords); st.hasMoreTokens(); ) {
-			String keyword = st.nextToken();
-			docKeywords.add(keyword);
+		for (String user : UserDocumentKeywordsDAO.findUsers()) {
+			Set<UserDocumentKeywords> udkSet = new HashSet<UserDocumentKeywords>();
+			
+			for (UserDocumentKeywords udk: UserDocumentKeywordsDAO.findByUser(user)) {
+				udkSet.add(udk);
+			}
+			
+			userDocumentKeywordsMgr.put(user, udkSet);
 		}
-		
-		return docKeywords;
 	}
 }
