@@ -14,13 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.cache.UserItems;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
-import com.openkm.util.Serializer;
+import com.openkm.dao.UserItemsDAO;
+import com.openkm.dao.bean.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);
-	private static final String FILEALIZATION = "UserItemsManager";
 	private static HashMap<String, UserItems> userItemsMgr;
 	
 	/**
@@ -31,6 +31,7 @@ public class UserItemsManager {
 		
 		if (userItems == null) {
 			userItems = new UserItems();
+			userItems.setUser(uid);
 		}
 		
 		return userItems;
@@ -130,19 +131,20 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void serialize() {
-		Serializer.write(FILEALIZATION, userItemsMgr);
+	public static synchronized void serialize() throws DatabaseException {
+		for (String user : userItemsMgr.keySet()) {
+			UserItemsDAO.update(userItemsMgr.get(user));
+		}
 	}
 	
 	/**
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
-	public static synchronized void deserialize() {
+	public static synchronized void deserialize() throws DatabaseException {
 		userItemsMgr = new HashMap<String, UserItems>();
-		Object obj = Serializer.read(FILEALIZATION);
-		if (obj != null) {
-			userItemsMgr = (HashMap<String, UserItems>) obj;
+		
+		for (UserItems ui : UserItemsDAO.findAll()) {
+			userItemsMgr.put(ui.getUser(), ui);
 		}
 	}
 }
