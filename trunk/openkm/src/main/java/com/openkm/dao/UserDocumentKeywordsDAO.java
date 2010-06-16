@@ -44,7 +44,7 @@ public class UserDocumentKeywordsDAO {
 	/**
 	 * Update user items
 	 */
-	public static void update(UserDocumentKeywords udk) throws DatabaseException {
+	public static void create(UserDocumentKeywords udk) throws DatabaseException {
 		log.debug("update({})", udk);
 		Session session = null;
 		Transaction tx = null;
@@ -52,7 +52,7 @@ public class UserDocumentKeywordsDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.saveOrUpdate(udk);
+			session.save(udk);
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -134,16 +134,23 @@ public class UserDocumentKeywordsDAO {
 	/**
 	 * Empty database
 	 */
+	@SuppressWarnings("unchecked")
 	public static void clean() throws DatabaseException {
 		log.debug("clean()");
-		String qs = "delete from UserDocumentKeywords";
+		String qs = "from UserDocumentKeywords";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			Query q = session.createQuery(qs);
-			q.executeUpdate();
+			tx = session.beginTransaction();
+			List<UserDocumentKeywords> ret = session.createQuery(qs).list();
+			for (UserDocumentKeywords udk : ret) {
+				session.delete(udk);
+			}
+			tx.commit();
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
