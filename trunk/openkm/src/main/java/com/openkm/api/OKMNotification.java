@@ -76,11 +76,11 @@ public class OKMNotification implements NotificationModule {
 	}
 
 	@Override
-	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
-		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
+	public void notify(String nodePath, List<String> users, String message, boolean attachment) throws
+			PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {}, {})", new Object[] { nodePath, users, message, attachment });
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.notify(nodePath, users, message);
+		nm.notify(nodePath, users, message, attachment);
 		log.debug("notify: void");
 	}
 }
