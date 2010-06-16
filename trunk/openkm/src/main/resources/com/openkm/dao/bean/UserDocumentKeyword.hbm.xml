@@ -7,7 +7,7 @@
     <property name="user" column="UD_USER" not-null="true"/>
     <property name="document" column="UD_DOCUMENT" not-null="true"/>
     <set name="keywords" table="OKM_USER_DOCUMENT_KEYWORD" lazy="false">
-      <key column="UDK_ID"/>
+      <key column="UDK_ID" not-null="true"/>
       <element column="UDK_NAME" type="string"/>
     </set>
   </class>
