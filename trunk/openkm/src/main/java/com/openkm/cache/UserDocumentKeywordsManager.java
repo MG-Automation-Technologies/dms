@@ -92,6 +92,10 @@ public class UserDocumentKeywordsManager {
 		}
 
 		udk.getKeywords().remove(keyword);
+		
+		if (udk.getKeywords().isEmpty()) {
+			usrDocs.remove(nodePath);
+		}
 	}
 	
 	/**
