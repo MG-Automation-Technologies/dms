@@ -66,7 +66,6 @@ import com.openkm.bean.Permission;
 import com.openkm.bean.Property;
 import com.openkm.bean.Repository;
 import com.openkm.bean.Version;
-import com.openkm.bean.cache.UserItems;
 import com.openkm.bean.kea.MetadataDTO;
 import com.openkm.bean.kea.Term;
 import com.openkm.cache.UserItemsManager;
@@ -82,6 +81,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
+import com.openkm.dao.bean.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -300,7 +300,7 @@ public class DirectDocumentModule implements DocumentModule {
 			UserItemsManager.incDocuments(session.getUserID(), 1);
 		}
 		
-		return documentNode; 
+		return documentNode;
 	}
 	
 	@Override
@@ -1380,7 +1380,7 @@ public class DirectDocumentModule implements DocumentModule {
 				UserItems userItems = entry.getValue();
 				UserItemsManager.decSize(uid, userItems.getSize());
 				UserItemsManager.decDocuments(uid, userItems.getDocuments());
-				UserItemsManager.decFolders(uid, userItems.getDocuments());
+				UserItemsManager.decFolders(uid, userItems.getFolders());
 			}
 			
 			// Check scripting
