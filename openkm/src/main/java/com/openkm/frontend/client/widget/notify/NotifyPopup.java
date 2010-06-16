@@ -47,6 +47,10 @@ import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
  */
 public class NotifyPopup extends DialogBox  {
 	
+	private static final int NONE 					= -1;
+	public static final int NOTIFY_WITH_LINK 		= 0;
+	public static final int NOTIFY_WITH_ATTACHMENT = 1;
+	
 	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
 	
 	private VerticalPanel vPanel;
@@ -61,6 +65,7 @@ public class NotifyPopup extends DialogBox  {
 	private String users;
 	private String roles;
 	private GWTDocument doc;
+	private int type = NONE;
 	
 	public NotifyPopup() {
 		// Establishes auto-close when click outside
@@ -87,7 +92,7 @@ public class NotifyPopup extends DialogBox  {
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
-				reset();
+				reset(NONE);
 			}
 		});
 		
@@ -101,7 +106,7 @@ public class NotifyPopup extends DialogBox  {
 					errorNotify.setVisible(false);
 					sendLinkNotification();
 					hide();
-					reset();
+					reset(NONE);
 				} else {
 					errorNotify.setVisible(true);
 				}
@@ -154,7 +159,14 @@ public class NotifyPopup extends DialogBox  {
 	 * Refreshing lang
 	 */
 	public void langRefresh(){
-		setText(Main.i18n("notify.label"));
+		switch(type) {
+			case NOTIFY_WITH_LINK:
+				setText(Main.i18n("notify.label"));
+				break;
+			case NOTIFY_WITH_ATTACHMENT:
+				setText(Main.i18n("notify.label.attachment"));
+				break;
+		}
 		closeButton.setHTML(Main.i18n("button.close")); 
 		sendButton.setHTML(Main.i18n("fileupload.send"));
 		commentTXT = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + Main.i18n("fileupload.label.notify.comment"));
@@ -163,10 +175,13 @@ public class NotifyPopup extends DialogBox  {
 	}
 	
 	/**
-	 * executeSendDocumentLink
+	 * executeSendDocument
+	 * 
+	 * @param type
 	 */
-	public void executeSendDocumentLink() {
+	public void executeSendDocument(int type) {
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+			reset(type);
 			doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 			super.center();
 		} 
@@ -183,6 +198,18 @@ public class NotifyPopup extends DialogBox  {
 			Main.get().showError("notify", caught);
 		}
 	};	
+	
+	/**
+	 * Call back send link notification
+	 */
+	final AsyncCallback<Object> callbackNotifyAttachment = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().showError("notifyAttachment", caught);
+		}
+	};	
 
 	/**
 	 * Sens the link notification
@@ -190,13 +217,29 @@ public class NotifyPopup extends DialogBox  {
 	private void sendLinkNotification() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) notifyService;
 		endPoint.setServiceEntryPoint(Config.OKMNotifyService);	
-		notifyService.notify(doc.getPath(), users, roles, message.getText() ,callbackNotify);
+		switch(type) {
+			case NOTIFY_WITH_LINK:
+				notifyService.notify(doc.getPath(), users, roles, message.getText() ,callbackNotify);
+				break;
+			case NOTIFY_WITH_ATTACHMENT:
+				notifyService.notifyAttachment(doc.getPath(), users, roles, message.getText() ,callbackNotifyAttachment);
+				break;
+		}
 	}
 	
 	/**
 	 * Reste values
 	 */
-	private void reset() {
+	private void reset(int type) {
+		this.type = type;
+		switch(type) {
+			case NOTIFY_WITH_LINK:
+				setText(Main.i18n("notify.label"));
+				break;
+			case NOTIFY_WITH_ATTACHMENT:
+				setText(Main.i18n("notify.label.attachment"));
+				break;
+		}
 		users = "";
 		roles = "";
 		message.setText("");

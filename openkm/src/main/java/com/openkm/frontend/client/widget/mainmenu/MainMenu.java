@@ -33,6 +33,7 @@ import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.ConfirmPopup;
+import com.openkm.frontend.client.widget.notify.NotifyPopup;
 
 /**
  * Main menu
@@ -64,6 +65,7 @@ public class MainMenu extends Composite {
 			private MenuItem download;
 			private MenuItem downloadPdf;
 			private MenuItem sendDocumentLink;
+			private MenuItem sendDocumentAttachment;
 			private MenuItem export;
 			private MenuItem horizontalLineFile1;
 			private MenuItem purgeTrash;
@@ -173,6 +175,8 @@ public class MainMenu extends Composite {
 				downloadPdf.addStyleName("okm-MainMenuItem");
 				sendDocumentLink = new MenuItem(Util.menuHTML("img/icon/actions/send_document_link.gif", Main.i18n("general.menu.file.send.link")), true, sendDocumentLinkOKM);
 				sendDocumentLink.addStyleName("okm-MainMenuItem");
+				sendDocumentAttachment = new MenuItem(Util.menuHTML("img/icon/actions/send_document_attachment.gif", Main.i18n("general.menu.file.send.attachment")), true, sendDocumentAttachmentOKM);
+				sendDocumentAttachment.addStyleName("okm-MainMenuItem");
 				export = new MenuItem(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")), true, exportToFile);
 				export.addStyleName("okm-MainMenuItem");
 				horizontalLineFile1 = new MenuItem("", true, nullExecute);
@@ -195,6 +199,7 @@ public class MainMenu extends Composite {
 			subMenuFile.addItem(download);
 			subMenuFile.addItem(downloadPdf);
 			subMenuFile.addItem(sendDocumentLink);
+			subMenuFile.addItem(sendDocumentAttachment);
 			subMenuFile.addItem(export);
 			subMenuFile.addItem(horizontalLineFile1);
 			subMenuFile.addItem(purgeTrash);
@@ -480,6 +485,7 @@ public class MainMenu extends Composite {
 			download.setHTML(Util.menuHTML("img/icon/actions/download.gif", Main.i18n("general.menu.file.download.document")));
 			downloadPdf.setHTML(Util.menuHTML("img/icon/actions/download_pdf.gif", Main.i18n("general.menu.file.download.document.pdf")));
 			sendDocumentLink.setHTML(Util.menuHTML("img/icon/actions/send_document_link.gif", Main.i18n("general.menu.file.send.link")));
+			sendDocumentAttachment.setHTML(Util.menuHTML("img/icon/actions/send_document_attachment.gif", Main.i18n("general.menu.file.send.attachment")));
 			export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
 			lock.setHTML(Util.menuHTML("img/icon/actions/lock.gif", Main.i18n("general.menu.file.lock")));
 			unlock.setHTML(Util.menuHTML("img/icon/actions/unlock.gif", Main.i18n("general.menu.file.unlock")));
@@ -547,6 +553,7 @@ public class MainMenu extends Composite {
 		if (mainMenuOption.downloadOption) { enable(download); } else { disable(download); }
 		if (mainMenuOption.downloadPdfOption) { enable(downloadPdf); } else { disable(downloadPdf); }
 		if (mainMenuOption.sendDocumentLinkOption) { enable(sendDocumentLink); } else { disable(sendDocumentLink); }
+		if (mainMenuOption.sendDocumentAttachmentOption) { enable(sendDocumentAttachment); } else { disable(sendDocumentAttachment); }
 		if (mainMenuOption.exportOption) { enable(export); } else { disable(export); }
 		if (mainMenuOption.lockOption) { enable(lock); } else {	disable(lock); }
 		if (mainMenuOption.unLockOption) { enable(unlock); } else { disable(unlock); }
@@ -829,7 +836,16 @@ public class MainMenu extends Composite {
 	Command sendDocumentLinkOKM = new Command() {
 		public void execute() {
 			if (mainMenuOption.sendDocumentLinkOption) {
-				Main.get().notifyPopup.executeSendDocumentLink();
+				Main.get().notifyPopup.executeSendDocument(NotifyPopup.NOTIFY_WITH_LINK);
+			}
+		}
+	};
+	
+	// Command menu to send document attachment
+	Command sendDocumentAttachmentOKM = new Command() {
+		public void execute() {
+			if (mainMenuOption.sendDocumentAttachmentOption) {
+				Main.get().notifyPopup.executeSendDocument(NotifyPopup.NOTIFY_WITH_ATTACHMENT);
 			}
 		}
 	};
