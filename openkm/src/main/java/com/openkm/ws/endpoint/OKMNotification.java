@@ -91,11 +91,11 @@ public class OKMNotification {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
 	 */
-	public void notify(String nodePath, StringArray users, String message) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+	public void notify(String nodePath, StringArray users, String message, boolean attachment) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.notify(nodePath, Arrays.asList(users.getValue()), message);
+		nm.notify(nodePath, Arrays.asList(users.getValue()), message, attachment);
 		log.debug("notify: void");
 	}
 }
