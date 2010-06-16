@@ -177,7 +177,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						}
 					}
 					
-					OKMNotification.getInstance().notify(uploadedDocPath, userNames, message);
+					OKMNotification.getInstance().notify(uploadedDocPath, userNames, message, false);
 				}
 			}
 		} catch (AccessDeniedException e) {
