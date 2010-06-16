@@ -376,6 +376,7 @@ public class UserScrollTable extends Composite {
 	 */
 	final AsyncCallback<Object> callbackGrantUser = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -394,6 +395,7 @@ public class UserScrollTable extends Composite {
 					break;
 			}
 			
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("GrantUser", caught);
 		}
 	};
@@ -415,6 +417,7 @@ public class UserScrollTable extends Composite {
 					removeSelectedRow();
 				}
 			}
+			Main.get().securityPopup.status.unsetFlag_update();
 		}
 
 		public void onFailure(Throwable caught) {
@@ -432,7 +435,7 @@ public class UserScrollTable extends Composite {
 					((CheckBox) dataTable.getWidget(rowIndex, 4)).setValue(true);
 					break;
 			}
-			
+			Main.get().securityPopup.status.unsetFlag_update();
 			Main.get().showError("RevokeUser", caught);
 		}
 	};
@@ -445,6 +448,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void grant(String user, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.grantUser(path, user, permissions, recursive, callbackGrantUser);
@@ -459,6 +463,7 @@ public class UserScrollTable extends Composite {
 	 */
 	public void revoke(String user, int permissions, boolean recursive) {
 		if (path != null) {
+			Main.get().securityPopup.status.setFlag_update();
 			ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 			endPoint.setServiceEntryPoint(Config.OKMAuthService);	
 			authService.revokeUser(path, user, permissions, recursive, callbackRevokeUser);
