@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.cache.UserItemsManager;
-import com.openkm.cache.UserKeywordsManager;
+import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
@@ -108,7 +108,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	log.info("*** Cache deserialization ***");
         	UserItemsManager.deserialize();
-        	UserKeywordsManager.deserialize();
+        	UserDocumentKeywordsManager.deserialize();
         } catch (DatabaseException e) {
         	log.warn(e.getMessage(), e);
         }
@@ -207,7 +207,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	log.info("*** Cache serialization ***");
         	UserItemsManager.serialize();
-        	UserKeywordsManager.serialize();
+        	UserDocumentKeywordsManager.serialize();
         } catch (DatabaseException e) {
         	log.warn(e.getMessage(), e);
         }
