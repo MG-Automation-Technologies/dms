@@ -842,6 +842,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			disableDownload();
 			disableDownloadPdf();
 			disableSendDocumentLink();
+			disableSendDocumentAttachment();
 			disableCheckout();
 			disableLock();
 			disableCheckin();
@@ -1103,8 +1104,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_THESAURUS ||
 				Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_CATEGORIES) {
 				enableSendDocumentLink();
+				enableSendDocumentAttachment();
 			} else {
 				disableSendDocumentLink();
+				disableSendDocumentAttachment();
 			}
 			
 			// Excepts on taxonomy, categories and thesaurus panel always disabling 
@@ -1198,8 +1201,10 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			// Onnly on taxonomy enables to send document link by mail 
 			if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY) {
 				enableSendDocumentLink();
+				enableSendDocumentAttachment();
 			} else {
 				disableSendDocumentLink();
+				disableSendDocumentAttachment();
 			}
 			
 			// Excepts on taxonomy and thesaurus panel always disabling 
@@ -1430,6 +1435,20 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	 */
 	public void enableSendDocumentLink(){
 		toolBarOption.sendDocumentLinkOption = true;
+	}
+	
+	/**
+	 * Disables send document attachment button
+	 */
+	public void disableSendDocumentAttachment() {
+		toolBarOption.sendDocumentAttachmentOption = false;
+	}
+	
+	/**
+	 * Enables send document attachment button
+	 */
+	public void enableSendDocumentAttachment(){
+		toolBarOption.sendDocumentAttachmentOption = true;
 	}
 	
 	/**
