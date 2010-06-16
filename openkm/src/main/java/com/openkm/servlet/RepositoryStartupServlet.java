@@ -41,6 +41,7 @@ import com.openkm.cache.UserItemsManager;
 import com.openkm.cache.UserKeywordsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DataStoreGarbageCollector;
+import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
@@ -104,12 +105,15 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         // Deserialize
-        log.info("*** Cache deserialization ***");
-        UserItemsManager.deserialize();
-        UserKeywordsManager.deserialize();
+        try {
+        	log.info("*** Cache deserialization ***");
+        	UserItemsManager.deserialize();
+        	UserKeywordsManager.deserialize();
+        } catch (DatabaseException e) {
+        	log.warn(e.getMessage(), e);
+        }
         
         log.info("*** User database initialized ***");
-        
         
         // Test for datastore
 		SessionImpl si = (SessionImpl) DirectRepositoryModule.getSystemSession();
@@ -200,9 +204,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         // TODO Close active sessions
         
         // Serialize
-        log.info("*** Cache serialization ***");
-        UserItemsManager.serialize();
-        UserKeywordsManager.serialize();
+        try {
+        	log.info("*** Cache serialization ***");
+        	UserItemsManager.serialize();
+        	UserKeywordsManager.serialize();
+        } catch (DatabaseException e) {
+        	log.warn(e.getMessage(), e);
+        }
         
         // Preserve system user config
         DirectRepositoryModule.shutdown();
