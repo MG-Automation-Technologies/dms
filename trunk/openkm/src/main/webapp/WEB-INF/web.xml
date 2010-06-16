@@ -201,7 +201,11 @@
     <servlet-name>MailAccountServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.MailAccountServlet</servlet-class>
   </servlet>
-
+  <servlet>
+    <servlet-name>TwitterAccountServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.TwitterAccountServlet</servlet-class>
+  </servlet>
+  
   <!-- WebServices -->
   <servlet>
     <servlet-name>OKMDocument</servlet-name>
@@ -408,6 +412,10 @@
   <servlet-mapping>
     <servlet-name>MailAccountServlet</servlet-name>
     <url-pattern>/admin/MailAccount</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TwitterAccountServlet</servlet-name>
+    <url-pattern>/admin/TwitterAccount</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->

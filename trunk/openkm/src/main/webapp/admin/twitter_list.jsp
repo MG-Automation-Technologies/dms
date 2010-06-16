@@ -1,12 +1,7 @@
-<%@ page import="com.openkm.core.Config"%>
-<%@ page import="com.openkm.util.WebUtil"%>
-<%@ page import="com.openkm.dao.AuthDAO"%>
-<%@ page import="com.openkm.dao.bean.TwitterAccount"%>
-<%@ page import="com.openkm.dao.TwitterAccountDAO"%>
-<%@ page import="com.openkm.core.DatabaseException"%>
-<%@ page import="java.util.Collection"%>
-<%@ page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -17,39 +12,56 @@
   <title>Twitter accounts</title>
 </head>
 <body>
-<%
-	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-		request.setCharacterEncoding("UTF-8");
-		String user = WebUtil.getString(request, "user");
-		out.println("<h1>Twitter accounts <span style=\"font-size: 10px;\">(<a href=\"user_list.jsp\">Users</a>)</font></h1>");
-				
-		try {
-			out.println("<table class=\"results\" width=\"80%\">");
-			out.println("<tr><th>OKM user</th><th>Twitter user</th><th>Active</th>");
-			out.println("<th width=\"25px\"><a href=\"twitter_edit.jsp?action=c&user="+user+"\"><img src=\"img/action/new.png\" alt=\"New account\" title=\"New account\"/></a></th></tr>");
-			Collection<TwitterAccount> twitterAccounts = null;
-			
-			if (user != null && !user.equals("")) {
-				twitterAccounts = TwitterAccountDAO.findByUser(user, false);
-			} else {
-				twitterAccounts = TwitterAccountDAO.findAll(false);
-			}
-			
-			int i = 0;
-			for (Iterator<TwitterAccount> it = twitterAccounts.iterator(); it.hasNext(); ) {
-				TwitterAccount ta = it.next();
-				out.println("<tr class=\""+(i++%2==0?"odd":"even")+"\"><td>"+ta.getUser()+"</td><td>"+ta.getTwitterUser()+"</td><td>"+ta.isActive()+"</td>"+
-						"<td><a href=\"twitter_edit.jsp?action=u&id="+ta.getId()+"\""+"><img src=\"img/action/edit.png\" alt=\"Edit\" title=\"Edit\"/></a>"+
-						" &nbsp; <a href=\"twitter_edit.jsp?action=d&id="+ta.getId()+"\""+"><img src=\"img/action/delete.png\" alt=\"Delete\" title=\"Delete\"/></a></td></tr>");
-			}
-				
-			out.println("</table>");
-		} catch (DatabaseException e) {
-			out.println("<div class=\"error\">"+e.getMessage()+"</div>");
-		}
-	} else {
-		out.println("<div class=\"error\"><h3>Only admin users allowed</h3></div>");
-	}
-%>
+  <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+      <c:url value="Auth" var="urlUserList">
+      </c:url>
+      <h1>Twitter accounts <span style="font-size: 10px;">(<a href="${urlUserList}">Users</a>)</span></h1>
+      <table class="results" width="60%">
+        <tr>
+          <th>Twitter user</th><th>Active</th>
+          <th width="50px">
+            <c:url value="TwitterAccount" var="urlCreate">
+              <c:param name="action" value="create"/>
+              <c:param name="ta_user" value="${ta_user}"/>
+            </c:url>
+            <a href="${urlCreate}"><img src="img/action/new.png" alt="New account" title="New account"/></a>
+          </th>
+        </tr>
+        <c:forEach var="ta" items="${twitterAccounts}" varStatus="row">
+          <c:url value="TwitterAccount" var="urlEdit">
+            <c:param name="action" value="edit"/>
+            <c:param name="ta_id" value="${ta.id}"/>
+          </c:url>
+          <c:url value="TwitterAccount" var="urlDelete">
+            <c:param name="action" value="delete"/>
+            <c:param name="ta_id" value="${ta.id}"/>
+          </c:url>
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+            <td>${ta.twitterUser}</td>
+            <td align="center">
+              <c:choose>
+                <c:when test="${ta.active}">
+                  <img src="img/true.png" alt="Active" title="Active"/>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+            <td>
+              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+              &nbsp;
+              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+            </td>
+          </tr>
+        </c:forEach>
+      </table>
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 </body>
 </html>
