@@ -301,6 +301,29 @@ public class AuthDAO {
 		
 		log.debug("createRole: void");
 	}
+	
+	/**
+	 * Update role in database
+	 */
+	public static void updateRole(Role role) throws DatabaseException {
+		log.debug("updateRole({})", role);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(role);
+			tx.commit();
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateRole: void");
+	}
 
 	/**
 	 * Delete role from database
