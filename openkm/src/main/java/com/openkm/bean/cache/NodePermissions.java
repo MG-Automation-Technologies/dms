@@ -1,81 +1,80 @@
 package com.openkm.bean.cache;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Set;
 
 public class NodePermissions implements Serializable {
 	private static final long serialVersionUID = -895133213627179445L;
+	private Set<String> usersRead;
+	private Set<String> usersWrite;
+	private Set<String> usersDelete;
+	private Set<String> usersSecurity;
+	private Set<String> rolesRead;
+	private Set<String> rolesWrite;
+	private Set<String> rolesDelete;
+	private Set<String> rolesSecurity;
 	
-	private HashSet<String> usersRead;
-	private HashSet<String> usersWrite;
-	private HashSet<String> usersDelete;
-	private HashSet<String> usersSecurity;
-	private HashSet<String> rolesRead;
-	private HashSet<String> rolesWrite;
-	private HashSet<String> rolesDelete;
-	private HashSet<String> rolesSecurity;
-	
-	public HashSet<String> getUsersRead() {
+	public Set<String> getUsersRead() {
 		return usersRead;
 	}
 	
-	public void setUsersRead(HashSet<String> usersRead) {
+	public void setUsersRead(Set<String> usersRead) {
 		this.usersRead = usersRead;
 	}
 	
-	public HashSet<String> getUsersWrite() {
+	public Set<String> getUsersWrite() {
 		return usersWrite;
 	}
 	
-	public void setUsersWrite(HashSet<String> usersWrite) {
+	public void setUsersWrite(Set<String> usersWrite) {
 		this.usersWrite = usersWrite;
 	}
 	
-	public HashSet<String> getRolesRead() {
+	public Set<String> getRolesRead() {
 		return rolesRead;
 	}
 	
-	public void setRolesRead(HashSet<String> rolesRead) {
+	public void setRolesRead(Set<String> rolesRead) {
 		this.rolesRead = rolesRead;
 	}
 	
-	public HashSet<String> getRolesWrite() {
+	public Set<String> getRolesWrite() {
 		return rolesWrite;
 	}
 	
-	public void setRolesWrite(HashSet<String> rolesWrite) {
+	public void setRolesWrite(Set<String> rolesWrite) {
 		this.rolesWrite = rolesWrite;
 	}
 
-	public HashSet<String> getUsersDelete() {
+	public Set<String> getUsersDelete() {
 		return usersDelete;
 	}
 
-	public void setUsersDelete(HashSet<String> usersDelete) {
+	public void setUsersDelete(Set<String> usersDelete) {
 		this.usersDelete = usersDelete;
 	}
 
-	public HashSet<String> getRolesDelete() {
+	public Set<String> getRolesDelete() {
 		return rolesDelete;
 	}
 
-	public void setRolesDelete(HashSet<String> rolesDelete) {
+	public void setRolesDelete(Set<String> rolesDelete) {
 		this.rolesDelete = rolesDelete;
 	}
 
-	public HashSet<String> getUsersSecurity() {
+	public Set<String> getUsersSecurity() {
 		return usersSecurity;
 	}
 
-	public void setUsersSecurity(HashSet<String> usersSecurity) {
+	public void setUsersSecurity(Set<String> usersSecurity) {
 		this.usersSecurity = usersSecurity;
 	}
 
-	public HashSet<String> getRolesSecurity() {
+	public Set<String> getRolesSecurity() {
 		return rolesSecurity;
 	}
 
-	public void setRolesSecurity(HashSet<String> rolesSecurity) {
+	public void setRolesSecurity(Set<String> rolesSecurity) {
 		this.rolesSecurity = rolesSecurity;
 	}
 }
