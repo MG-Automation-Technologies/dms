@@ -666,7 +666,7 @@ public class DirectSearchModule implements SearchModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			Set<UserDocumentKeywords> userDocKeywords = UserDocumentKeywordsManager.get(session.getUserID());
+			Collection<UserDocumentKeywords> userDocKeywords = UserDocumentKeywordsManager.get(session.getUserID()).values();
 						
 			for (Iterator<UserDocumentKeywords> kwIt = userDocKeywords.iterator(); kwIt.hasNext(); ) {
 				Set<String> docKeywords = kwIt.next().getKeywords();

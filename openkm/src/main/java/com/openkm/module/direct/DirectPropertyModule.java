@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Property;
+import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -221,6 +222,11 @@ public class DirectPropertyModule implements PropertyModule {
 				}
 			}
 			
+			// Update cache
+			if (Config.USER_KEYWORDS_CACHE) {
+				UserDocumentKeywordsManager.add(session.getUserID(), nodePath, keyword);
+			}
+			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_KEYWORD", null);
 
@@ -288,6 +294,11 @@ public class DirectPropertyModule implements PropertyModule {
 					documentNode.setProperty(Property.KEYWORDS, (Value[])newProperty.toArray(new Value[newProperty.size()]));
 					documentNode.save();
 				}
+			}
+			
+			// Update cache
+			if (Config.USER_KEYWORDS_CACHE) {
+				UserDocumentKeywordsManager.remove(session.getUserID(), nodePath, keyword);
 			}
 			
 			// Check subscriptions
