@@ -43,6 +43,14 @@ public interface PrincipalAdapter {
 	public List<String> getRoles() throws PrincipalAdapterException;
 	
 	/**
+	 * Method to retrieve all users from a role.
+	 * 
+	 * @return A Collection with all the roles of the user.
+	 * @throws PrincipalAdapterException If any error occurs.
+	 */
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException;
+	
+	/**
 	 * Method to retrieve the mail from a list of users.
 	 * 
 	 * @param users A list of users.

@@ -91,6 +91,11 @@ public class UsersRolesPrincipalAdapter implements PrincipalAdapter {
 		log.debug("getRoles: {}", list);
 		return list;
 	}
+	
+	@Override
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
+		throw new UnsupportedOperationException("Not implemented");
+	}
 
 	@Override
 	public List<String> getMails(List<String> users) throws PrincipalAdapterException {

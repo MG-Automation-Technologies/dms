@@ -64,6 +64,7 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		
 		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
 			String user = it.next();
+			
 			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
 				if (Config.SYSTEM_LOGIN_LOWERCASE) {
 					user = user.toLowerCase();
@@ -97,6 +98,34 @@ public class LdapPrincipalAdapter implements PrincipalAdapter {
 		}
 
 		log.debug("getRoles: {}", list);
+		return list;
+	}
+	
+	@Override
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
+		log.debug("getUsersByRole()");
+		List<String> list = new ArrayList<String>();
+		List<String> ldap = ldapSearch(
+				Config.PRINCIPAL_LDAP_SERVER,
+				Config.PRINCIPAL_LDAP_SECURITY_PRINCIPAL,
+				Config.PRINCIPAL_LDAP_SECURITY_CREDENTIALS,
+				Config.PRINCIPAL_LDAP_USER_SEARCH_BASE, 
+				Config.PRINCIPAL_LDAP_USER_SEARCH_FILTER,
+				Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
+		
+		for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
+			String user = it.next();
+			
+			if (!Config.ADMIN_USER.equals(user) && !Config.SYSTEM_USER.equals(user)) {
+				if (Config.SYSTEM_LOGIN_LOWERCASE) {
+					user = user.toLowerCase();
+				}
+				
+				list.add(role);
+			}
+		}
+
+		log.debug("getUsersByRole: {}", list);
 		return list;
 	}
 
