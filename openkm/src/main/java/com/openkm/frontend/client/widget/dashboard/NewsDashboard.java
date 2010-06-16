@@ -59,7 +59,7 @@ public class NewsDashboard extends WidgetToFire {
 	private VerticalPanel vPanelRight;
 	private int columnWidth = 0;
 	private int actualSearchRefreshing = 0;
-	private int actualRefreshingKey = 0;
+	private String actualRefreshingKey = "0";
 	private boolean refreshFind = true;
 	private int newsDocuments = 0;
 
@@ -86,16 +86,27 @@ public class NewsDashboard extends WidgetToFire {
 		public void onSuccess(List<GWTQueryParams> result){			
 			// Drops widget panel , prevent user deletes query
 			for (Iterator<String> it = keyMap.keySet().iterator(); it.hasNext();) {
-				String key = it.next();
+				int key = Integer.parseInt(it.next());
+				boolean found = false;
 				
-				if(!result.contains(key)) {
+				// looking for key
+				for (Iterator<GWTQueryParams> itx = result.iterator(); itx.hasNext();) {
+					GWTQueryParams params = itx.next();
+					if (params.getId()==key) {
+						found = true;
+						break;
+					}
+				}
+				
+				// if has been removed must remove from list
+				if(!found) {
 					DashboardWidget dashboardWidget = hWidgetSearch.get(key);
 					if (dashboardWidget.getParent().equals(vPanelLeft)) {
 						vPanelLeft.remove(dashboardWidget);
 					} else if (dashboardWidget.getParent().equals(vPanelRight)) {
 						vPanelRight.remove(dashboardWidget);
 					}
-					keyMap.remove(key);
+					keyMap.remove(""+key);
 				}
 			}
 			
@@ -105,7 +116,7 @@ public class NewsDashboard extends WidgetToFire {
 				String key = ""+params.getId();
 				if (!keyMap.keySet().contains(key)) {
 					keyMap.put(key, params);
-					DashboardWidget dashboardWidget = new DashboardWidget(key, key, "img/icon/news.gif", true, "news_"+key);
+					DashboardWidget dashboardWidget = new DashboardWidget(key, params.getQueryName(), "img/icon/news.gif", true, "news_"+key);
 					dashboardWidget.setWidgetToFire(Main.get().mainPanel.dashboard.newsDashboard);
 					hWidgetSearch.put(key, dashboardWidget);
 					dashboardWidget.setWidth(columnWidth);
@@ -175,13 +186,13 @@ public class NewsDashboard extends WidgetToFire {
 	private void find(int value) {
 		if (keyMap.keySet().size()>value) {
 			List<String> keySet = new ArrayList<String>(keyMap.keySet());
-			actualRefreshingKey = Integer.parseInt(keySet.get(value));
+			actualRefreshingKey = keySet.get(value);
 			if (!firstTime) {
 				hWidgetSearch.get(actualRefreshingKey).setRefreshing();
 			}
 			ServiceDefTarget endPoint = (ServiceDefTarget) dashboardService;
 			endPoint.setServiceEntryPoint(Config.OKMDashboardService);	
-			dashboardService.find(actualRefreshingKey, callbackFind);
+			dashboardService.find(Integer.parseInt(actualRefreshingKey), callbackFind);
 		} else {
 			Main.get().mainPanel.bottomPanel.userInfo.setNewsDocuments(newsDocuments);
 			firstTime = false;
