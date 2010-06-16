@@ -66,15 +66,31 @@ public class UserDocumentKeywordsManager {
 	public static synchronized void add(String user, String nodePath, String keyword) {
 		Map<String, UserDocumentKeywords> usrDocs = get(user);
 		UserDocumentKeywords udk = usrDocs.get(nodePath);
+		
+		if (udk == null) {
+			udk = new UserDocumentKeywords();
+			udk.setUser(user);
+			udk.setDocument(nodePath);
+			usrDocs.put(nodePath, udk);
+		}
+		
 		udk.getKeywords().add(keyword);
 	}
-
+	
 	/**
 	 * Remove keyword
 	 */
 	public static synchronized void remove(String user, String nodePath, String keyword) {
 		Map<String, UserDocumentKeywords> usrDocs = get(user);
 		UserDocumentKeywords udk = usrDocs.get(nodePath);
+		
+		if (udk == null) {
+			udk = new UserDocumentKeywords();
+			udk.setUser(user);
+			udk.setDocument(nodePath);
+			usrDocs.put(nodePath, udk);
+		}
+
 		udk.getKeywords().remove(keyword);
 	}
 	
