@@ -198,18 +198,6 @@ public class NotifyPopup extends DialogBox  {
 			Main.get().showError("notify", caught);
 		}
 	};	
-	
-	/**
-	 * Call back send link notification
-	 */
-	final AsyncCallback<Object> callbackNotifyAttachment = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("notifyAttachment", caught);
-		}
-	};	
 
 	/**
 	 * Sens the link notification
@@ -219,10 +207,10 @@ public class NotifyPopup extends DialogBox  {
 		endPoint.setServiceEntryPoint(Config.OKMNotifyService);	
 		switch(type) {
 			case NOTIFY_WITH_LINK:
-				notifyService.notify(doc.getPath(), users, roles, message.getText() ,callbackNotify);
+				notifyService.notify(doc.getPath(), users, roles, message.getText(), false, callbackNotify);
 				break;
 			case NOTIFY_WITH_ATTACHMENT:
-				notifyService.notifyAttachment(doc.getPath(), users, roles, message.getText() ,callbackNotifyAttachment);
+				notifyService.notify(doc.getPath(), users, roles, message.getText(), true, callbackNotify);
 				break;
 		}
 	}
