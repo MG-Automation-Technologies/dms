@@ -29,36 +29,36 @@
             </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New account" title="New account"/></a>
           </th>
-          <c:forEach var="ma" items="${mailAccounts}" varStatus="row">
-            <c:url value="MailAccount" var="urlEdit">
-              <c:param name="action" value="edit"/>
-              <c:param name="ma_id" value="${ma.id}"/>
-            </c:url>
-            <c:url value="MailAccount" var="urlDelete">
-              <c:param name="action" value="delete"/>
-              <c:param name="ma_id" value="${ma.id}"/>
-            </c:url>
-            <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-              <td>${ma.mailHost}</td><td>${ma.mailUser}</td><td>${ma.mailPassword}</td>
-              <td>${ma.mailFolder}</td>
-              <td align="center">
-                <c:choose>
-                  <c:when test="${ma.active}">
-                    <img src="img/true.png" alt="Active" title="Active"/>
-                  </c:when>
-                  <c:otherwise>
-                    <img src="img/false.png" alt="Inactive" title="Inactive"/>
-                  </c:otherwise>
-                </c:choose>
-              </td>
-              <td>
-                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-                &nbsp;
-                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-            </td>
-            </tr>
-          </c:forEach>
         </tr>
+        <c:forEach var="ma" items="${mailAccounts}" varStatus="row">
+          <c:url value="MailAccount" var="urlEdit">
+            <c:param name="action" value="edit"/>
+            <c:param name="ma_id" value="${ma.id}"/>
+          </c:url>
+          <c:url value="MailAccount" var="urlDelete">
+            <c:param name="action" value="delete"/>
+            <c:param name="ma_id" value="${ma.id}"/>
+          </c:url>
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+            <td>${ma.mailHost}</td><td>${ma.mailUser}</td><td>${ma.mailPassword}</td>
+            <td>${ma.mailFolder}</td>
+            <td align="center">
+              <c:choose>
+                <c:when test="${ma.active}">
+                  <img src="img/true.png" alt="Active" title="Active"/>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+            <td>
+              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+              &nbsp;
+              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+            </td>
+          </tr>
+        </c:forEach>
       </table>
     </c:when>
     <c:otherwise>
