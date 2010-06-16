@@ -142,4 +142,41 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		
 		log.debug("notify: void");
 	}
+
+	@Override
+	public void notifyAttachment(String docPath, String users, String roles, String message) throws OKMException {
+		log.debug("notifyAttachment({}, {}, {})", new Object[] { docPath, users, roles, message });
+		updateSessionManager();
+		
+		try {
+			List<String> userNames = Arrays.asList(users.split(","));
+			List<String> roleNames = Arrays.asList(roles.split(","));
+			
+			for (String role : roleNames) {
+				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(role);
+				
+				for (String user : usersInRole) {
+					if (!userNames.contains(user)) {
+						userNames.add(user);
+					}
+				}
+			}
+			
+			OKMNotification.getInstance().notify(docPath, userNames, message);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (AccessDeniedException e) { 
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) { 
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
+		}
+		
+		log.debug("notifyAttachment: void");
+	}
 }
