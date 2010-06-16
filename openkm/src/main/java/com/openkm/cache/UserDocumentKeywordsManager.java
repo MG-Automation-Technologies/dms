@@ -45,19 +45,37 @@ import com.openkm.dao.bean.UserDocumentKeywords;
 
 public class UserDocumentKeywordsManager {
 	private static Logger log = LoggerFactory.getLogger(UserDocumentKeywordsManager.class);
-	private static Map<String, Set<UserDocumentKeywords>> userDocumentKeywordsMgr;
+	private static Map<String, Map<String, UserDocumentKeywords>> userDocumentKeywordsMgr;
 
 	/**
 	 * 
 	 */
-	public static Set<UserDocumentKeywords> get(String uid) throws RepositoryException {
-		Set<UserDocumentKeywords> userDocKeywords = userDocumentKeywordsMgr.get(uid);
+	public static Map<String, UserDocumentKeywords> get(String uid) {
+		Map<String, UserDocumentKeywords> userDocKeywords = userDocumentKeywordsMgr.get(uid);
 		
 		if (userDocKeywords == null) {
-			userDocKeywords = new HashSet<UserDocumentKeywords>();
+			userDocKeywords = new HashMap<String, UserDocumentKeywords>();
 		}
 		
 		return userDocKeywords;
+	}
+	
+	/**
+	 * Add keyword
+	 */
+	public static synchronized void add(String user, String nodePath, String keyword) {
+		Map<String, UserDocumentKeywords> usrDocs = get(user);
+		UserDocumentKeywords udk = usrDocs.get(nodePath);
+		udk.getKeywords().add(keyword);
+	}
+
+	/**
+	 * Remove keyword
+	 */
+	public static synchronized void remove(String user, String nodePath, String keyword) {
+		Map<String, UserDocumentKeywords> usrDocs = get(user);
+		UserDocumentKeywords udk = usrDocs.get(nodePath);
+		udk.getKeywords().remove(keyword);
 	}
 	
 	/**
@@ -100,7 +118,7 @@ public class UserDocumentKeywordsManager {
 	 */
 	public static synchronized void serialize() throws DatabaseException {
 		for (String user : userDocumentKeywordsMgr.keySet()) {
-			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user)) {
+			for (UserDocumentKeywords udk : userDocumentKeywordsMgr.get(user).values()) {
 				UserDocumentKeywordsDAO.update(udk);
 			}
 		}
@@ -110,16 +128,16 @@ public class UserDocumentKeywordsManager {
 	 * 
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
-		userDocumentKeywordsMgr = new HashMap<String, Set<UserDocumentKeywords>>();
+		userDocumentKeywordsMgr = new HashMap<String, Map<String, UserDocumentKeywords>>();
 		
 		for (String user : UserDocumentKeywordsDAO.findUsers()) {
-			Set<UserDocumentKeywords> udkSet = new HashSet<UserDocumentKeywords>();
+			Map<String, UserDocumentKeywords> udkMap = new HashMap<String, UserDocumentKeywords>();
 			
 			for (UserDocumentKeywords udk: UserDocumentKeywordsDAO.findByUser(user)) {
-				udkSet.add(udk);
+				udkMap.put(udk.getDocument(), udk);
 			}
 			
-			userDocumentKeywordsMgr.put(user, udkSet);
+			userDocumentKeywordsMgr.put(user, udkMap);
 		}
 	}
 }
