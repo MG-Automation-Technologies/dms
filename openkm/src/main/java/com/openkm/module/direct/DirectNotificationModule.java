@@ -222,8 +222,8 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public void notify(String nodePath, List<String> users, String message) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException {
+	public void notify(String nodePath, List<String> users, String message, boolean attachment) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		Session session = null;
 		
@@ -260,8 +260,12 @@ public class DirectNotificationModule implements NotificationModule {
 					} else {
 						Velocity.evaluate(context, swBody, "NotificationMessageBody", Config.NOTIFICATION_MESSAGE_BODY);	
 					}
-
-					MailUtils.sendMessage((String) from.get(0), emails, swSubject.toString(), swBody.toString());
+					
+					if (attachment) {
+						MailUtils.sendDocument((String) from.get(0), emails, swSubject.toString(), swBody.toString(), nodePath);
+					} else {
+						MailUtils.sendMessage((String) from.get(0), emails, swSubject.toString(), swBody.toString());
+					}
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -276,7 +280,7 @@ public class DirectNotificationModule implements NotificationModule {
 
 		log.debug("notify: void");
 	}
-		
+	
 	/**
 	 * Check for user subscriptions and send an notification
 	 * 
