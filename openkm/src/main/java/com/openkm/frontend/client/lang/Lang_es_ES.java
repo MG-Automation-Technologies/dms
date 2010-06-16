@@ -351,6 +351,7 @@ public class Lang_es_ES {
 	    lang.put("security.recursive", "Aplicar cambios de forma recursiva");
 	    lang.put("secutiry.filter.by.users","Filtro de usuarios");
 	    lang.put("secutiry.filter.by.groups","Filtro de grupos");
+	    lang.put("security.status.updating","Actualizando la seguridad");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Previsualización no disponible");

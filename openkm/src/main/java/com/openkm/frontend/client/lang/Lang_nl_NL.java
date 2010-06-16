@@ -352,6 +352,7 @@ public class Lang_nl_NL {
 	    lang.put("security.recursive", "Overerfbare rechten");
 	    lang.put("secutiry.filter.by.users","Users filter");
 	    lang.put("secutiry.filter.by.groups","Groups filter");
+	    lang.put("security.status.updating","Updating security");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "Preview unavailable");

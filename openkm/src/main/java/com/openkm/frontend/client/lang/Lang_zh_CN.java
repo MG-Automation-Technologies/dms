@@ -351,6 +351,7 @@ public class Lang_zh_CN {
 	    lang.put("security.recursive", "递归修改权限");
 	    lang.put("secutiry.filter.by.users","用户查询");//Users filter
 	    lang.put("secutiry.filter.by.groups","用户组查询");//Groups filter
+	    lang.put("security.status.updating","Updating security");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "预览不可用");
