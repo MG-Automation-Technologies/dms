@@ -141,7 +141,15 @@ public interface AuthModule {
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
 	public List<String> getRoles() throws PrincipalAdapterException;
-	
+
+	/**
+	 * Retrieves a list of users by role.
+	 * 
+	 * @return A collection of repository users.
+	 * @throws RepositoryException If there is any error retrieving the roles list.
+	 */
+	public List<String> getUsersByRole(String role) throws PrincipalAdapterException;
+
 	/**
 	 * Retrieves the user mails from an user list.
 	 * 

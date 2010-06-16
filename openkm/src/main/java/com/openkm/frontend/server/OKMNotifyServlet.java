@@ -27,6 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMNotification;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -35,6 +36,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMNotifyService;
+import com.openkm.principal.PrincipalAdapterException;
 
 /**
  * Servlet Class
@@ -110,8 +112,20 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		updateSessionManager();
 		
 		try {
-			List<String> col = Arrays.asList(users.split(","));
-			OKMNotification.getInstance().notify(docPath, col, message);
+			List<String> userNames = Arrays.asList(users.split(","));
+			List<String> roleNames = Arrays.asList(roles.split(","));
+			
+			for (String role : roleNames) {
+				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(role);
+				
+				for (String user : usersInRole) {
+					if (!userNames.contains(user)) {
+						userNames.add(user);
+					}
+				}
+			}
+			
+			OKMNotification.getInstance().notify(docPath, userNames, message);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -121,6 +135,9 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		} catch (RepositoryException e) { 
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
 		}
 		
 		log.debug("notify: void");
