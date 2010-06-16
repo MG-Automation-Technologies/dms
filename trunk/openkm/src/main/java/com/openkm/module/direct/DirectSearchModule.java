@@ -665,10 +665,10 @@ public class DirectSearchModule implements SearchModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			HashMap<String, ArrayList<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
+			Map<String, Set<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
 						
-			for (Iterator<ArrayList<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
-				ArrayList<String> docKeywords = kwIt.next();
+			for (Iterator<Set<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
+				Set<String> docKeywords = kwIt.next();
 				
 				if (filter != null && docKeywords.containsAll(filter)) {
 					for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
