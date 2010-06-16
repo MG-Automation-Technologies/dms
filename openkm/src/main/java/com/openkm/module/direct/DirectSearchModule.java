@@ -60,7 +60,7 @@ import com.openkm.bean.QueryResult;
 import com.openkm.bean.ResultSet;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Select;
-import com.openkm.cache.UserKeywordsManager;
+import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -70,6 +70,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
+import com.openkm.dao.bean.UserDocumentKeywords;
 import com.openkm.module.SearchModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;
@@ -665,10 +666,10 @@ public class DirectSearchModule implements SearchModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			Map<String, Set<String>> userDocKeywords = UserKeywordsManager.get(session.getUserID());
+			Set<UserDocumentKeywords> userDocKeywords = UserDocumentKeywordsManager.get(session.getUserID());
 						
-			for (Iterator<Set<String>> kwIt = userDocKeywords.values().iterator(); kwIt.hasNext(); ) {
-				Set<String> docKeywords = kwIt.next();
+			for (Iterator<UserDocumentKeywords> kwIt = userDocKeywords.iterator(); kwIt.hasNext(); ) {
+				Set<String> docKeywords = kwIt.next().getKeywords();
 				
 				if (filter != null && docKeywords.containsAll(filter)) {
 					for (Iterator<String> itDocKeywords = docKeywords.iterator(); itDocKeywords.hasNext(); ) {
