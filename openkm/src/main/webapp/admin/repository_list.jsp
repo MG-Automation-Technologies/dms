@@ -88,7 +88,7 @@
         <h2>Mixin</h2>
         <ul>
           <c:forEach var="mixin" items="${node.mixinNodeTypes}">
-            <li>${mixin.name}</li>
+            <li>${fn:toUpperCase(mixin.name)}</li>
           </c:forEach>
         </ul>
       </c:if>
