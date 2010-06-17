@@ -165,7 +165,7 @@ public class DirectSearchModule implements SearchModule {
 	 * Prepare statement
 	 */
 	public String prepareStatement(QueryParams params) throws IOException, ParseException {
-		log.info("prepareStatement({})", params);
+		log.debug("prepareStatement({})", params);
 		StringBuffer sb = new StringBuffer();
 		
 		// Clean params
@@ -186,7 +186,7 @@ public class DirectSearchModule implements SearchModule {
 		boolean folder = (params.getDomain() & QueryParams.FOLDER) != 0;
 		boolean mail = (params.getDomain() & QueryParams.MAIL) != 0;
 		
-		log.info("doc="+document+", fld="+folder+", mail="+mail);
+		log.debug("doc={}, fld={}, mail={}", new Object[] { document, folder, mail });
 
 		// Escape
 		if (!params.getName().equals("")) {
@@ -356,7 +356,7 @@ public class DirectSearchModule implements SearchModule {
 			sb.append("] order by @jcr:score descending");
 		}
 		
-		log.info("prepareStatement: {}", sb.toString());
+		log.debug("prepareStatement: {}", sb.toString());
 		return sb.toString();
 	}
 
@@ -461,7 +461,7 @@ public class DirectSearchModule implements SearchModule {
 	@Override
 	public int saveSearch(QueryParams params) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.info("saveSearch({})", params);
+		log.debug("saveSearch({})", params);
 		Session session = null;
 		int id = 0;
 		
@@ -595,7 +595,7 @@ public class DirectSearchModule implements SearchModule {
 	@Override
 	public Map<String, Integer> getKeywordMap(List<String> filter) throws RepositoryException,
 			DatabaseException {
-		log.info("getKeywordMap({})", filter);
+		log.debug("getKeywordMap({})", filter);
 		Map<String, Integer> cloud = null;
 		
 		if (Config.USER_KEYWORDS_CACHE) {
@@ -604,7 +604,7 @@ public class DirectSearchModule implements SearchModule {
 			cloud = getKeywordMapLive(filter);
 		}
 		
-		log.info("getKeywordMap: {}", cloud);
+		log.debug("getKeywordMap: {}", cloud);
 		return cloud;
 	}
 	
@@ -613,7 +613,7 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	private Map<String, Integer> getKeywordMapLive(List<String> filter) throws RepositoryException,
 			DatabaseException {
-		log.info("getKeywordMapLive({})", filter);
+		log.debug("getKeywordMapLive({})", filter);
 		String statement = "/jcr:root//element(*,okm:document)";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
 		Session session = null;
@@ -651,7 +651,7 @@ public class DirectSearchModule implements SearchModule {
 			JCRUtils.logout(session);
 		}
 
-		log.info("getKeywordMapLive: {}", cloud);
+		log.debug("getKeywordMapLive: {}", cloud);
 		return cloud;
 	}
 
@@ -660,7 +660,7 @@ public class DirectSearchModule implements SearchModule {
 	 */
 	private Map<String, Integer> getKeywordMapCached(Collection<String> filter) throws RepositoryException,
 			DatabaseException {
-		log.info("getKeywordMapCached({})", filter);
+		log.debug("getKeywordMapCached({})", filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		Session session = null;
 		
@@ -688,14 +688,14 @@ public class DirectSearchModule implements SearchModule {
 			JCRUtils.logout(session);
 		}
 		
-		log.info("getKeywordMapCached: {}", keywordMap);
+		log.debug("getKeywordMapCached: {}", keywordMap);
 		return keywordMap;
 	}
 
 	@Override
 	public List<Document> getCategorizedDocuments(String categoryId) throws RepositoryException,
 			DatabaseException {
-		log.info("getCategorizedDocuments({})", categoryId);
+		log.debug("getCategorizedDocuments({})", categoryId);
 		List<Document> documents = new ArrayList<Document>();
 		Session session = null;
 		
@@ -719,7 +719,7 @@ public class DirectSearchModule implements SearchModule {
 			JCRUtils.logout(session);
 		}
 		
-		log.info("getCategorizedDocuments: {}", documents);
+		log.debug("getCategorizedDocuments: {}", documents);
 		return documents;
 	}
 }
