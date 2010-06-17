@@ -139,7 +139,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	 */
 	private void unlock(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Lock lock = node.getLock();
 		
@@ -162,7 +162,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	 */
 	private void checkin(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("checkin({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("checkin({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		node.checkin();
 
@@ -176,7 +176,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	 */
 	private void removeContent(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 						
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
@@ -195,7 +195,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	 */
 	private String removeCurrent(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("removeCurrent({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
 		Node parent = node.getParent();
 		String parentPath = parent.getPath();
@@ -276,7 +276,7 @@ public class RepositoryViewServlet extends BaseServlet {
 	 */
 	private void list(Session session, String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
-		log.info("list({}, {}, {}, {})", new Object[] { session, path, request, response });
+		log.debug("list({}, {}, {}, {})", new Object[] { session, path, request, response });
 		String stats = WebUtil.getString(request, "stats");
 		String uuid = WebUtil.getString(request, "uuid");
 		ServletContext sc = getServletContext();
