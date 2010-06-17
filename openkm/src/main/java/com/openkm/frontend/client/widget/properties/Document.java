@@ -226,10 +226,17 @@ public class Document extends Composite {
 		
 		vPanel2.add(subcribedUsersText);
 		vPanel2.add(tableSubscribedUsers);
+		HTML space2 = new HTML("");
+		vPanel2.add(space2);
 		vPanel2.add(keywordsCloudText);
 		vPanel2.add(keywordsCloud);
+		HTML space3 = new HTML("");
+		vPanel2.add(space3);
 		vPanel2.add(hPanelCategories);
 		vPanel2.add(tableSubscribedCategories);
+		
+		vPanel2.setCellHeight(space2, "10");
+		vPanel2.setCellHeight(space3, "10");
 		
 		table.setWidget(0, 0, tableProperties);
 		table.setHTML(0, 1, "");
