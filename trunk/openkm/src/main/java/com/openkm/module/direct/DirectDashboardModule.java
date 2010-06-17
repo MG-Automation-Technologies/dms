@@ -291,7 +291,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getUserLastUploadedDocuments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastUploadedDocuments({})", session);
-		String qs = "from Activity a where a.action='CREATE_DOCUMENT' and a.user= :user " +
+		String qs = "select a.item, a.date from Activity a " +
+			"where a.action='CREATE_DOCUMENT' and a.user= :user " +
 			"order by a.date desc";
 		List<DashboardDocumentResult> al = getDocuments(session, qs);
 			
@@ -433,7 +434,8 @@ public class DirectDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> getUserLastImportedMailAttachments(Session session) throws
 			javax.jcr.RepositoryException, DatabaseException {
 		log.debug("getUserLastImportedMailAttachments({})", session);
-		String qs = "from Activity a where a.action='CREATE_MAIL_ATTACHMENT' and a.user= :user " +
+		String qs = "select a.item, a.date from Activity a " +
+			"where a.action='CREATE_MAIL_ATTACHMENT' and a.user= :user " +
 			"order by a.date desc";
 		List<DashboardDocumentResult> al = getDocuments(session, qs);
 		
@@ -460,14 +462,16 @@ public class DirectDashboardModule implements DashboardModule {
 			q.setString("user", session.getUserID());
 			q.setMaxResults(MAX_RESULTS);
 			
-			for (Iterator<Activity> it = q.list().iterator(); it.hasNext(); ) {
-				Activity act = it.next();
+			for (Iterator<Object[]> it = q.list().iterator(); it.hasNext(); ) {
+				Object[] actData = it.next();
+				String actItem = (String) actData[0];
+				Calendar actDate = (Calendar) actData[1];
 				
-				if (session.getRootNode().hasNode(act.getItem().substring(1))) {
-					Document doc = new DirectDocumentModule().getProperties(session, act.getItem());
+				if (session.getRootNode().hasNode(actItem.substring(1))) {
+					Document doc = new DirectDocumentModule().getProperties(session, actItem);
 					DashboardDocumentResult vo = new DashboardDocumentResult();
 					vo.setDocument(doc);
-					vo.setDate(act.getDate());
+					vo.setDate(actDate);
 					vo.setVisited(false);
 					al.add(vo);
 				}
