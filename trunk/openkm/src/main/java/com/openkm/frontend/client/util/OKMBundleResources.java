@@ -271,4 +271,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/logon_openkm_tiny.gif")
 	public ImageResource logoOpenKM();
+	
+	@Source("com/openkm/frontend/public/img/icon/search/calendar.gif")
+	public ImageResource calendar();
 }

@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -41,6 +44,7 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -56,6 +60,8 @@ import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 
 /**
  * PropertyGroupWidget
@@ -184,12 +190,39 @@ public class PropertyGroupWidget extends Composite {
 					rows++;
 					
 				} else if (gwtMetadata instanceof GWTInput) {
-					TextBox textBox = new TextBox(); // Create a widget for this property
+					HorizontalPanel hPanel = new HorizontalPanel();
+					final TextBox textBox = new TextBox(); // Create a widget for this property
+					hPanel.add(textBox);
 					textBox.setText(hProperties.get(propertyName)[0]);
 					textBox.setStyleName("okm-Input");
-					hWidgetProperties.put(propertyName,textBox);
+					hWidgetProperties.put(propertyName,hPanel);
 					table.setHTML(rows, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 					table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
+					if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
+						final PopupPanel calendarPopup = new PopupPanel(true);
+						final CalendarWidget calendar = new CalendarWidget();
+						calendar.addChangeHandler(new ChangeHandler(){
+							@Override
+							public void onChange(ChangeEvent event) {
+								calendarPopup.hide();
+								DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
+								textBox.setText(dtf.format(calendar.getDate()));
+							}
+						});
+						calendarPopup.add(calendar);
+						final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
+						calendarIcon.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent event) {
+								calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+								calendarPopup.show();
+							}
+						});
+						hPanel.add(new HTML("&nbsp;"));
+						hPanel.add(calendarIcon);
+						textBox.setEnabled(false);
+					}
+					
 					table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
 					table.getCellFormatter().setWidth(rows, 1, "100%");
 					rows++;
@@ -247,7 +280,7 @@ public class PropertyGroupWidget extends Composite {
 									final HTML htmlValue = new HTML(listMulti.getValue(listMulti.getSelectedIndex()));
 									int rowTableMulti  = tableMulti.getRowCount();
 									
-									Image removeImage = new Image("img/icon/actions/delete.gif");
+									Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 									removeImage.addClickHandler(new ClickHandler() { 
 										@Override
 										public void onClick(ClickEvent event) {
@@ -326,7 +359,7 @@ public class PropertyGroupWidget extends Composite {
 										int rowTableMulti = tableMulti.getRowCount();
 										HTML htmlValue = new HTML(option.getValue());
 										
-										Image removeImage = new Image("img/icon/actions/delete.gif");
+										Image removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 										removeImage.addClickHandler(new ClickHandler() { 
 											@Override
 											public void onClick(ClickEvent event) {
@@ -447,9 +480,10 @@ public class PropertyGroupWidget extends Composite {
 				rows++;
 				
 			} else if (gwtMetadata instanceof GWTInput) {
-				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+				TextBox textBox = (TextBox) hPanel.getWidget(0);
 				textBox.setText(hProperties.get(propertyName)[0]);
-				table.setWidget(rows, 1,textBox);
+				table.setWidget(rows, 1,hPanel);
 				rows++;
 				
 			} else if (gwtMetadata instanceof GWTSelect) {
@@ -510,7 +544,8 @@ public class PropertyGroupWidget extends Composite {
 				textArea.setReadOnly(true);
 
 			} else if (gwtMetadata instanceof GWTInput) {
-				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+				TextBox textBox = (TextBox) hPanel.getWidget(0);
 				hSaveProperties.put(propertyName, new String[] {textBox.getText()});
 				hProperties.put(propertyName, new String[] {textBox.getText()});
 				if (textBox.getText()!=null && !textBox.getText().equals("")) {
@@ -592,8 +627,8 @@ public class PropertyGroupWidget extends Composite {
 					listMulti.setVisible(false);
 					addButton.setVisible(false);
 				}
-				rows ++;
 			}
+			rows ++;
 		}
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
@@ -620,7 +655,8 @@ public class PropertyGroupWidget extends Composite {
 				rows++;
 				
 			} else if (gwtMetadata instanceof GWTInput) {
-				TextBox textBox = (TextBox) hWidgetProperties.get(propertyName);
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+				TextBox textBox = (TextBox) hPanel.getWidget(0);
 				textBox.setText("");
 				table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
 				rows++;
