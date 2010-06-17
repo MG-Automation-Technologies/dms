@@ -85,7 +85,7 @@ public class OKMChatServlet extends OKMRemoteServiceServlet implements OKMChatSe
     }
     
     @Override
-    public List<String> getLogedUsers() {
+    public List<String> getLoggedUsers() {
     	return usersLogged;
     }
     
