@@ -163,7 +163,7 @@ public class AuthDAO {
 	public static void deleteUser(String usrId) throws DatabaseException {
 		log.debug("deleteUser({})", usrId);
 		String qsMail = "delete from MailAccount ma where ma.user=:user";
-		String qsTwitter = "delete from TwitterAccount where ta.user=:user";
+		String qsTwitter = "delete from TwitterAccount ta where ta.user=:user";
 		String qsBookmark = "delete from Bookmark bm where bm.user=:user";
 		String qsConfig = "delete from UserConfig uc where uc.user=:user";
 		String qsItems = "delete from UserItems ui where ui.user=:user";
