@@ -96,7 +96,7 @@ public class FormUtils {
 	 */
 	public static synchronized Map<PropertyGroup, Collection<FormElement>> parsePropertyGroupsForms() 
 			throws IOException,	ParseException {
-		log.info("parseMetadataForms()");
+		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
 			String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
@@ -144,7 +144,7 @@ public class FormUtils {
 			}
 		}
 
-		log.info("parseMetadataForms: {}", pGroups);
+		log.debug("parseMetadataForms: {}", pGroups);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
 		return pGroups;
 	}
