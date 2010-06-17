@@ -985,7 +985,7 @@ public class DirectDashboardModule implements DashboardModule {
 	
 	@Override
 	public void visiteNode(String source, String node, Calendar date) throws RepositoryException {
-		log.info("visiteNode({}, {}, {})", new Object[] { source, node, (date==null?null:date.getTime()) });
+		log.debug("visiteNode({}, {}, {})", new Object[] { source, node, (date==null?null:date.getTime()) });
 		Session session = null;
 		
 		try {
