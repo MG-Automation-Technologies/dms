@@ -32,7 +32,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface OKMChatServiceAsync {
 	public void login(AsyncCallback<?> callback);
 	public void logout(AsyncCallback<?> callback);
-	public void getLogedUsers(AsyncCallback<List<String>> callback);
+	public void getLoggedUsers(AsyncCallback<List<String>> callback);
 	public void createNewChatRoom(String user,AsyncCallback<String> callback);
 	public void getPendingChatRoomUser(AsyncCallback<List<String>> callback);
 	public void getPendingMessage(String room, AsyncCallback<List<String>> callback);

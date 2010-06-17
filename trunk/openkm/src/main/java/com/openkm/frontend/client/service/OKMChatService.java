@@ -32,7 +32,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 public interface OKMChatService extends RemoteService {
 	public void login();
 	public void logout();
-	public List<String> getLogedUsers();
+	public List<String> getLoggedUsers();
 	public String createNewChatRoom(String user);
 	public List<String> getPendingChatRoomUser();
 	public List<String> getPendingMessage(String room);
