@@ -71,14 +71,25 @@ public class DashboardDAO {
 	/**
 	 * Create dashboard stats
 	 */
-	public static void create(Dashboard dashboardStats) throws DatabaseException {
+	public static void createIfNew(Dashboard db) throws DatabaseException {
+		String qs = "from Dashboard db where db.user=:user and db.source=:source " +
+			"and db.node=:node and db.date=:date";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			session.save(dashboardStats);
+			Query q = session.createQuery(qs);
+			q.setString("user", db.getUser());
+			q.setString("source", db.getSource());
+			q.setString("node", db.getNode());
+			q.setCalendar("date", db.getDate());
+			
+			if (q.list().isEmpty()) {
+				session.save(db);
+			}
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
