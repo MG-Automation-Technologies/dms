@@ -70,6 +70,7 @@ import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.widget.eastereggs.FuturamaWalking;
 import com.openkm.frontend.client.widget.searchsaved.Status;
 
@@ -194,8 +195,8 @@ public class SearchIn extends Composite {
 		dateRange = new HorizontalPanel();
 		calendar = new CalendarWidget();
 		calendarPopup = new PopupPanel(true);
-		startCalendarIcon = new Image("img/icon/search/calendar.gif");
-		endCalendarIcon =  new Image("img/icon/search/calendar.gif");
+		startCalendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
+		endCalendarIcon =  new Image(OKMBundleResources.INSTANCE.calendar());
 		dateBetween = new HTML("&nbsp;&nbsp;"+Main.i18n("search.date.and")+"&nbsp;&nbsp;");
 		dashboard = new CheckBox();
 		status = new Status();
