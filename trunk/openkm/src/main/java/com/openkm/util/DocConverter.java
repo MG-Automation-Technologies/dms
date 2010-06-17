@@ -238,9 +238,11 @@ public class DocConverter {
 	 * Convert PDF to SWF (for document preview feature).
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
-		log.info("** Convert from PDF to SWF **");
+		log.debug("** Convert from PDF to SWF **");
+		String cmd = Config.SYSTEM_PDF2SWF+" "+input.getPath()+" -o "+output.getPath();
+		
 		try {
-			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath());
+			ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
 			Process process = pb.start();
 			process.waitFor();
 			String info = IOUtils.toString(process.getInputStream());
@@ -251,6 +253,7 @@ public class DocConverter {
 				log.warn(info);
 			}
 		} catch (Exception e) {
+			log.error(cmd);
 			log.error("Error in PDF to SWF conversion", e);
 			output.delete();
 			throw new IOException("Error in PDF to SWF conversion", e);
