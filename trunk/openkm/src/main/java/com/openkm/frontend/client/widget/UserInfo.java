@@ -399,7 +399,7 @@ public class UserInfo extends Composite {
 		if (chatConnected) {
 			ServiceDefTarget endPoint = (ServiceDefTarget) chatService;
 			endPoint.setServiceEntryPoint(Config.OKMChatService);
-			chatService.getLogedUsers(new AsyncCallback<List<String>>() {
+			chatService.getLoggedUsers(new AsyncCallback<List<String>>() {
 				@Override
 				public void onSuccess(List<String> result) {
 					connectUsersList = result;
@@ -415,7 +415,7 @@ public class UserInfo extends Composite {
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Main.get().showError("GetLogedUsers", caught);
+					Main.get().showError("GetLoggedUsers", caught);
 				}
 			});
 		}
@@ -451,7 +451,7 @@ public class UserInfo extends Composite {
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Main.get().showError("GetLogedUsers", caught);
+					Main.get().showError("GetLoggedUsers", caught);
 				}
 			});
 		}
