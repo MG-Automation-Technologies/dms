@@ -995,7 +995,7 @@ public class DirectDashboardModule implements DashboardModule {
 			vo.setSource(source);
 			vo.setNode(node);
 			vo.setDate(date);
-			DashboardDAO.create(vo);
+			DashboardDAO.createIfNew(vo);
 		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
