@@ -159,7 +159,15 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 						is = new FileInputStream(swfCache);
 					} else {
 						try {
-							converter.pdf2swf(pdfCache, swfCache);
+							if (doc.getMimeType().equals(DocConverter.PDF)) {
+								FileOutputStream os = new FileOutputStream(tmp);
+								IOUtils.copy(is, os);
+								os.flush();
+								os.close();
+								converter.pdf2swf(tmp, swfCache);
+							} else {
+								converter.pdf2swf(pdfCache, swfCache);
+							}
 							is = new FileInputStream(swfCache);
 						} catch (Exception e) {
 							log.error(e.getMessage(), e);
@@ -173,7 +181,6 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 				
 				sendFile(request, response, fileName, doc.getMimeType(), inline, is);
 				is.close();
-				tmp.delete();
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -190,6 +197,8 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new ServletException(new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDownloadService, ErrorCode.CAUSE_General), e.getMessage()));
+		} finally {
+			org.apache.commons.io.FileUtils.deleteQuietly(tmp);
 		}
 		
 		log.debug("service: void");
