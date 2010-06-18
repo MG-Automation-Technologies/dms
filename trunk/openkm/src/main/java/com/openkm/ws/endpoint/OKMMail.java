@@ -21,7 +21,7 @@
 
 package com.openkm.ws.endpoint;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -121,7 +121,7 @@ public class OKMMail {
 		log.debug("getChilds({})", mailPath);
 		MailModule mm = ModuleManager.getMailModule();
 		MailArray ma = new MailArray();
-		Collection<Mail> col = mm.getChilds(mailPath);
+		List<Mail> col = mm.getChilds(mailPath);
 		ma.setValue((Mail []) col.toArray(new Mail[col.size()]));
 		log.debug("getChilds: {}", ma);
 		return ma;
