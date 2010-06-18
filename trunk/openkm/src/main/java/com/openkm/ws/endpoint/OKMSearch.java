@@ -23,9 +23,9 @@ package com.openkm.ws.endpoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,7 +71,7 @@ public class OKMSearch {
 		log.debug("findByContent({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByContent(words);
+		List<QueryResult> col = sm.findByContent(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByContent: {}", qra);
 		return qra;
@@ -85,7 +85,7 @@ public class OKMSearch {
 		log.debug("findByName({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByName(words);
+		List<QueryResult> col = sm.findByName(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByName: {}", qra);
 		return qra;
@@ -99,7 +99,7 @@ public class OKMSearch {
 		log.debug("findByKeywords({})", words);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByKeywords(words);
+		List<QueryResult> col = sm.findByKeywords(words);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByKeywords: {}", qra);
 		return qra;
@@ -113,7 +113,7 @@ public class OKMSearch {
 		log.debug("findByStatement({})", statement);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.findByStatement(statement, type);
+		List<QueryResult> col = sm.findByStatement(statement, type);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("findByStatement: {}", qra);
 		return qra;
@@ -127,7 +127,7 @@ public class OKMSearch {
 		log.debug("find({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
 		QueryResultArray qra = new QueryResultArray();
-		Collection<QueryResult> col = sm.find(params);
+		List<QueryResult> col = sm.find(params);
 		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
 		log.debug("find: {}", qra);
 		return qra;
@@ -172,7 +172,7 @@ public class OKMSearch {
 			DatabaseException {
 		log.debug("getCategorizedDocuments()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		Collection<Document> col = sm.getCategorizedDocuments(categoryId);
+		List<Document> col = sm.getCategorizedDocuments(categoryId);
 		DocumentArray da = new DocumentArray();
 		da.setValue((Document[]) col.toArray(new Document[col.size()]));
 		log.debug("getCategorizedDocuments: {}", da);
