@@ -178,24 +178,18 @@ public class PropertyGroupsServlet extends BaseServlet {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Type:</i> ");
 			sb.append(input.getType());
-			sb.append("<br/><i>Value:</i> ");
-			sb.append(input.getValue());
 			drawValidators(sb, input.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof CheckBox) {
 			CheckBox checkBox = new CheckBox();
 			ret.put("field", "CheckBox");
 			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Value:</i> ");
-			sb.append(checkBox.getValue());
 			drawValidators(sb, checkBox.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof TextArea) {
 			TextArea textArea = (TextArea) fe;
 			ret.put("field", "TextArea");
 			StringBuilder sb = new StringBuilder();
-			sb.append("<i>Value:</i> ");
-			sb.append(textArea.getValue());
 			drawValidators(sb, textArea.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof Select) {
