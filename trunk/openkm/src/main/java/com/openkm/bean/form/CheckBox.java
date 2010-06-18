@@ -3,20 +3,15 @@ package com.openkm.bean.form;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextArea extends FormElement {
+public class CheckBox extends FormElement {
 	private List<Validator> validators = new ArrayList<Validator>();
-	private String value = "";
-	
-	public TextArea() {
-		width = "300px";
-		height = "100px";
-	}
-	
-	public String getValue() {
+	private boolean value = false;
+
+	public boolean getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(boolean value) {
 		this.value = value;
 	}
 	
@@ -35,7 +30,7 @@ public class TextArea extends FormElement {
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);
+		sb.append(", height="); sb.append(height);		
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();

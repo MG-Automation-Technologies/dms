@@ -1,11 +1,15 @@
 package com.openkm.bean.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Input extends FormElement {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
+	private List<Validator> validators = new ArrayList<Validator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
-
+	
 	public String getType() {
 		return type;
 	}
@@ -22,6 +26,14 @@ public class Input extends FormElement {
 		this.value = value;
 	}
 	
+	public List<Validator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<Validator> validators) {
+		this.validators = validators;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -31,6 +43,7 @@ public class Input extends FormElement {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);		
 		sb.append(", type="); sb.append(type);
+		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
 	}

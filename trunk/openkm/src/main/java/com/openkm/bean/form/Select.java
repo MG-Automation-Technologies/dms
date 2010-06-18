@@ -6,6 +6,7 @@ import java.util.List;
 public class Select extends FormElement {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
+	private List<Validator> validators = new ArrayList<Validator>();
 	private List<Option> options = new ArrayList<Option>();
 	private String type = TYPE_SIMPLE;
 	
@@ -29,6 +30,14 @@ public class Select extends FormElement {
 		this.type = type;
 	}
 	
+	public List<Validator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<Validator> validators) {
+		this.validators = validators;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -38,6 +47,7 @@ public class Select extends FormElement {
 		sb.append(", height="); sb.append(height);
 		sb.append(", type="); sb.append(type);
 		sb.append(", options="); sb.append(options);
+		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
 	}
