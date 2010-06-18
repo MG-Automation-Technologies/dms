@@ -21,11 +21,15 @@
 
 package com.openkm.frontend.client.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class GWTInput extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
+	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
 
@@ -45,6 +49,14 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		this.value = value;
 	}
 	
+	public List<GWTValidator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<GWTValidator> validators) {
+		this.validators = validators;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -54,6 +66,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
 		sb.append(", type="); sb.append(type);
+		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
 	}

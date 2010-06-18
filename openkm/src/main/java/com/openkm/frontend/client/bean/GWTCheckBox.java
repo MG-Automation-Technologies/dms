@@ -26,15 +26,21 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTTextArea extends GWTFormElement implements IsSerializable {
+/**
+ * GWTCheckBox
+ * 
+ * @author jllort
+ *
+ */
+public class GWTCheckBox extends GWTFormElement implements IsSerializable {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private String value = "";
-	
-	public String getValue() {
+	private boolean value = false;
+
+	public boolean getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(boolean value) {
 		this.value = value;
 	}
 	
@@ -53,7 +59,7 @@ public class GWTTextArea extends GWTFormElement implements IsSerializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);
+		sb.append(", height="); sb.append(height);		
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
