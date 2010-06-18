@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT property-groups (property-group+)>
 
-<!ELEMENT property-group (input|textarea|select)*>
+<!ELEMENT property-group (input|checkbox|textarea|select)*>
 <!ATTLIST property-group
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
 >
 
-<!ELEMENT input EMPTY>
+<!ELEMENT input (validator*)>
 <!ATTLIST input
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -17,7 +17,16 @@
 	height CDATA #IMPLIED
 >
 
-<!ELEMENT textarea EMPTY>
+<!ELEMENT checkbox (validator*)>
+<!ATTLIST checkbox
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	value (true|false) "false"
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+>
+
+<!ELEMENT textarea (validator*)>
 <!ATTLIST textarea 
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -26,7 +35,7 @@
 	height CDATA #IMPLIED
 >
 
-<!ELEMENT select (option+)>
+<!ELEMENT select (option+, validator*)>
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -40,4 +49,10 @@
 	label CDATA #REQUIRED
 	value CDATA #REQUIRED
 	selected (true|false) "false"
+>
+
+<!ELEMENT validator EMPTY>
+<!ATTLIST validator
+	type CDATA #REQUIRED
+	parameter CDATA #IMPLIED
 >
