@@ -98,8 +98,8 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Map<String, String[]> getProperties(String docPath, String grpName) throws NoSuchGroupException,
-			PathNotFoundException, RepositoryException, DatabaseException;
+	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
+			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Set group properties to a document.
