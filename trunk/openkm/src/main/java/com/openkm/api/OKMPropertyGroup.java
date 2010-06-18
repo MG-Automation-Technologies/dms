@@ -95,11 +95,12 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public Map<String, String[]> getProperties(String docPath, String grpName) throws NoSuchGroupException,
-			PathNotFoundException, RepositoryException, DatabaseException {
+	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
+			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, 
+			DatabaseException {
 		log.debug("getProperties({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		Map<String, String[]> ret = cm.getProperties(docPath, grpName);
+		List<FormElement> ret = cm.getProperties(docPath, grpName);
 		log.debug("getProperties: {}", ret);
 		return ret;
 	}
