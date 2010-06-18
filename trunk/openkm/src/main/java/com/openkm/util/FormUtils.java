@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +39,7 @@ import com.openkm.core.ParseException;
 
 public class FormUtils {
 	private static Logger log = LoggerFactory.getLogger(FormUtils.class);
-	private static Map<PropertyGroup, Collection<FormElement>> pGroups = null;
+	private static Map<PropertyGroup, List<FormElement>> pGroups = null;
 
 	/**
 	 * Parse form.xml definitions
@@ -96,14 +95,14 @@ public class FormUtils {
 	 * 
 	 * @return A Map with all the forms and its form elements.
 	 */
-	public static synchronized Map<PropertyGroup, Collection<FormElement>> parsePropertyGroupsForms() 
+	public static synchronized Map<PropertyGroup, List<FormElement>> parsePropertyGroupsForms() 
 			throws IOException,	ParseException {
 		log.debug("parseMetadataForms()");
 		// long begin = Calendar.getInstance().getTimeInMillis();
 		if (pGroups == null) {
 			String pgFile = Config.HOME_DIR + File.separator +"PropertyGroups" + Config.INSTALL + ".xml";
 			log.debug("PropertyGroupForms: {}", pgFile);
-			pGroups = new HashMap<PropertyGroup, Collection<FormElement>>();
+			pGroups = new HashMap<PropertyGroup, List<FormElement>>();
 			FileInputStream fis = null;
 			
 			try {
@@ -145,12 +144,24 @@ public class FormUtils {
 				IOUtils.closeQuietly(fis);
 			}
 		}
-
+		
 		log.debug("parseMetadataForms: {}", pGroups);
 		// log.info("Time: "+(Calendar.getInstance().getTimeInMillis()-begin)+" ms");
-		return pGroups;
+		return clonedPropertyGroups();
 	}
 	
+	/**
+	 * Clone to be modified
+	 */
+	@SuppressWarnings("unchecked")
+	private static Map<PropertyGroup, List<FormElement>> clonedPropertyGroups() throws IOException {
+		try {
+			return (Map<PropertyGroup, List<FormElement>>) Serializer.read(Serializer.write(pGroups));
+		} catch (ClassNotFoundException e) {
+			throw new IOException("ClassNotFoundException", e);
+		}
+	}
+
 	/**
 	 * Force PropertyGroups.xml re-read in the next petition.
 	 */
@@ -161,9 +172,9 @@ public class FormUtils {
 	/**
 	 * Retrieve the form elements from a PropertyGroup definition. 
 	 */
-	public static Collection<FormElement> getPropertyGroupForms(Map<PropertyGroup, Collection<FormElement>> formsElements, String groupName) {
-		for (Iterator<Entry<PropertyGroup, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
-			Entry<PropertyGroup, Collection<FormElement>> entry = it1.next();
+	public static List<FormElement> getPropertyGroupForms(Map<PropertyGroup, List<FormElement>> formsElements, String groupName) {
+		for (Iterator<Entry<PropertyGroup, List<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
+			Entry<PropertyGroup, List<FormElement>> entry = it1.next();
 			if (entry.getKey().getName().equals(groupName)) {
 				return entry.getValue();
 			}
@@ -175,9 +186,9 @@ public class FormUtils {
 	/**
 	 * Retrieve the form element from a PropertyGroups definition. 
 	 */
-	public static FormElement getFormElement(Map<PropertyGroup, Collection<FormElement>> formsElements, String propertyName) {
-		for (Iterator<Entry<PropertyGroup, Collection<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
-			Entry<PropertyGroup, Collection<FormElement>> entry = it1.next();
+	public static FormElement getFormElement(Map<PropertyGroup, List<FormElement>> formsElements, String propertyName) {
+		for (Iterator<Entry<PropertyGroup, List<FormElement>>> it1 = formsElements.entrySet().iterator(); it1.hasNext(); ) {
+			Entry<PropertyGroup, List<FormElement>> entry = it1.next();
 			for (Iterator<FormElement> it2 = entry.getValue().iterator(); it2.hasNext(); ) {
 				FormElement fe = it2.next();
 				if (fe.getName().equals(propertyName)) {
