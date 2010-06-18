@@ -1,7 +1,6 @@
 package com.openkm.misc;
 
 import java.io.FileInputStream;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -114,12 +113,12 @@ public class FormsTest extends TestCase {
 	}
 	
 	public void testPropertyGroups() throws Exception {
-		Map<PropertyGroup, Collection<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms();
+		Map<PropertyGroup, List<FormElement>> pgForms = FormUtils.parsePropertyGroupsForms();
 		assertFalse(pgForms.isEmpty());
 		
-		Collection<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");
+		List<FormElement> consulting = FormUtils.getPropertyGroupForms(pgForms, "okg:consulting");
 		assertNotNull(consulting);
-		Collection<FormElement> technology = FormUtils.getPropertyGroupForms(pgForms, "okg:technology");
+		List<FormElement> technology = FormUtils.getPropertyGroupForms(pgForms, "okg:technology");
 		assertNotNull(technology);
 		
 		Iterator<FormElement> consultingIt = consulting.iterator();
