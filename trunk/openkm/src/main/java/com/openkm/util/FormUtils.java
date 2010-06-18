@@ -28,11 +28,13 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
+import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
+import com.openkm.bean.form.Validator;
 import com.openkm.core.Config;
 import com.openkm.core.ParseException;
 
@@ -69,7 +71,7 @@ public class FormUtils {
 					if (nForm.getNodeType() == Node.ELEMENT_NODE) {
 						String taskName = nForm.getAttributes().getNamedItem("task").getNodeValue();
 						NodeList nlField = nForm.getChildNodes();
-						ArrayList<FormElement> fe = parseField(nlField);
+						List<FormElement> fe = parseField(nlField);
 						forms.put(taskName, fe);
 					}
 				}
@@ -125,7 +127,7 @@ public class FormUtils {
 							String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
 							String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
 							NodeList nlField = nForm.getChildNodes();
-							ArrayList<FormElement> fe = parseField(nlField);
+							List<FormElement> fe = parseField(nlField);
 							PropertyGroup pg = new PropertyGroup();
 							pg.setLabel(pgLabel);
 							pg.setName(pgName);
@@ -190,8 +192,8 @@ public class FormUtils {
 	/**
 	 * Parse individual form fields 
 	 */
-	private static ArrayList<FormElement> parseField(NodeList nlField) {
-		ArrayList<FormElement> fe = new ArrayList<FormElement>();
+	private static List<FormElement> parseField(NodeList nlField) {
+		List<FormElement> fe = new ArrayList<FormElement>();
 		
 		for (int j = 0; j < nlField.getLength(); j++) {
 			Node nField = nlField.item(j);
@@ -213,23 +215,35 @@ public class FormUtils {
 					if (item != null) input.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) input.setHeight(item.getNodeValue());
+					input.setValidators(parseValidators(nField));
 					fe.add(input);
+				} else if (fieldComponent.equals("checkbox")) {
+					CheckBox checkBox = new CheckBox();
+					Node item = nField.getAttributes().getNamedItem("label");
+					if (item != null) checkBox.setLabel(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("name");
+					if (item != null) checkBox.setName(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("value");
+					if (item != null) checkBox.setValue(Boolean.parseBoolean(item.getNodeValue()));
+					item = nField.getAttributes().getNamedItem("width");
+					if (item != null) checkBox.setWidth(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("height");
+					if (item != null) checkBox.setHeight(item.getNodeValue());
+					checkBox.setValidators(parseValidators(nField));
+					fe.add(checkBox);
 				} else if (fieldComponent.equals("textarea")) {
 					TextArea textArea = new TextArea();
 					Node item = nField.getAttributes().getNamedItem("label");
 					if (item != null) textArea.setLabel(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("name");
 					if (item != null) textArea.setName(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("cols");
-					if (item != null) textArea.setWidth(item.getNodeValue());
-					item = nField.getAttributes().getNamedItem("rows");
-					if (item != null) textArea.setHeight(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("value");
 					if (item != null) textArea.setValue(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("width");
 					if (item != null) textArea.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) textArea.setHeight(item.getNodeValue());
+					textArea.setValidators(parseValidators(nField));
 					fe.add(textArea);
 				} else if (fieldComponent.equals("button")) {
 					Button button = new Button();
@@ -277,14 +291,37 @@ public class FormUtils {
 							}
 						}
 					}
-				
+					
 					select.setOptions(options);
+					select.setValidators(parseValidators(nField));
 					fe.add(select);
 				}
 			}
 		}
 		
 		return fe;
+	}
+	
+	private static List<Validator> parseValidators(Node nField) {
+		List<Validator> validators = new ArrayList<Validator>();
+		NodeList nlValidators = nField.getChildNodes();
+		
+		for (int k = 0; k < nlValidators.getLength(); k++) {
+			Node nValidator = nlValidators.item(k);
+			
+			if (nValidator.getNodeType() == Node.ELEMENT_NODE) {
+				if (nValidator.getNodeName().equals("validator")) {
+					Validator validator = new Validator();
+					Node item = nValidator.getAttributes().getNamedItem("type");
+					if (item != null) validator.setType(item.getNodeValue());
+					item = nValidator.getAttributes().getNamedItem("parameter");
+					if (item != null) validator.setParameter(item.getNodeValue());
+					validators.add(validator);
+				}
+			}
+		}
+		
+		return validators;
 	}
 	
 	/**
