@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.List;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -142,7 +142,7 @@ public class OKMDocument {
 		log.debug("getChilds({})", fldId);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		DocumentArray da = new DocumentArray();
-		Collection<Document> col = dm.getChilds(fldId);
+		List<Document> col = dm.getChilds(fldId);
 		da.setValue((Document[]) col.toArray(new Document[col.size()]));
 		log.debug("getChilds: {}", da);
 		return da;
@@ -213,7 +213,7 @@ public class OKMDocument {
 		log.debug("getVersionHistory({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		VersionArray va = new VersionArray();
-		Collection<Version> col = dm.getVersionHistory(docPath);
+		List<Version> col = dm.getVersionHistory(docPath);
 		va.setValue((Version[]) col.toArray(new Version[col.size()]));
 		log.debug("getVersionHistory: {}", va);
 		return va;
