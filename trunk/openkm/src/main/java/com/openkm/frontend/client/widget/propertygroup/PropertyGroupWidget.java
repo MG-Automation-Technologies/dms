@@ -37,6 +37,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -52,6 +53,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
@@ -227,6 +229,21 @@ public class PropertyGroupWidget extends Composite {
 					table.getCellFormatter().setWidth(rows, 1, "100%");
 					rows++;
 						
+				} else if (gwtMetadata instanceof GWTCheckBox) {
+					CheckBox checkBox = new CheckBox();
+					checkBox.setValue(((GWTCheckBox)gwtMetadata).getValue());
+					hWidgetProperties.put(propertyName,checkBox);
+					table.setHTML(rows, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
+					if (checkBox.getValue()) {
+						table.setWidget(rows, 1, new Image(OKMBundleResources.INSTANCE.yes()));
+					} else {
+						table.setWidget(rows, 1, new Image(OKMBundleResources.INSTANCE.no()));
+					}
+					table.getCellFormatter().setVerticalAlignment(rows,0,VerticalPanel.ALIGN_TOP);
+					table.getCellFormatter().setWidth(rows, 1, "100%");
+					setRowWordWarp(rows, 2, true);
+					rows++;
+					
 				} else if (gwtMetadata instanceof GWTSelect) {
 					final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 					if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
@@ -486,6 +503,11 @@ public class PropertyGroupWidget extends Composite {
 				table.setWidget(rows, 1,hPanel);
 				rows++;
 				
+			} else if (gwtMetadata instanceof GWTCheckBox) {
+				CheckBox checkBox = (CheckBox) hWidgetProperties.get(propertyName);
+				table.setWidget(rows, 1, checkBox);
+				rows++;
+				
 			} else if (gwtMetadata instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
@@ -555,6 +577,15 @@ public class PropertyGroupWidget extends Composite {
 				}
 				// Resets values
 				textBox.setText("");
+				
+			} else if (gwtMetadata instanceof GWTCheckBox) {	
+				CheckBox checkbox = (CheckBox) hWidgetProperties.get(propertyName);
+				hSaveProperties.put(propertyName, new String[] {checkbox.getValue()?"true":"false"});
+				if (checkbox.getValue()) {
+					table.setWidget(rows, 1, new Image(OKMBundleResources.INSTANCE.yes()));
+				} else {
+					table.setWidget(rows, 1, new Image(OKMBundleResources.INSTANCE.no()));
+				}
 					
 			} else if (gwtMetadata instanceof GWTSelect) {
 				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
@@ -660,7 +691,11 @@ public class PropertyGroupWidget extends Composite {
 				textBox.setText("");
 				table.setHTML(rows, 1, hProperties.get(propertyName)[0]);
 				rows++;
-
+			
+			} else if (gwtMetadata instanceof GWTCheckBox) {
+				CheckBox checkbox = (CheckBox) hWidgetProperties.get(propertyName);
+				rows++;
+				
 			} else if (gwtMetadata instanceof GWTSelect) {
 				final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
