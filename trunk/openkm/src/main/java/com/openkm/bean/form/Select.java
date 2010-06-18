@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Select extends FormElement {
+	private static final long serialVersionUID = 1L;
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
 	private List<Validator> validators = new ArrayList<Validator>();

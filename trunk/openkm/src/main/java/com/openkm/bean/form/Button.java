@@ -1,6 +1,7 @@
 package com.openkm.bean.form;
 
 public class Button extends FormElement {
+	private static final long serialVersionUID = 1L;
 	public static final String TYPE_SUBMIT = "submit";
 	public static final String TYPE_TRANSITION = "transition";
 	private String type = TYPE_SUBMIT;

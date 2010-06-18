@@ -1,6 +1,9 @@
 package com.openkm.bean.form;
 
-public class Validator {
+import java.io.Serializable;
+
+public class Validator implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String type = "";
 	private String parameter = "";
 	

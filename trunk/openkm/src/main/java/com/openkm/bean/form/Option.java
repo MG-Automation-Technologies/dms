@@ -1,6 +1,9 @@
 package com.openkm.bean.form;
 
-public class Option {
+import java.io.Serializable;
+
+public class Option implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String label = "";
 	private String value = "";
 	private boolean selected = false;
