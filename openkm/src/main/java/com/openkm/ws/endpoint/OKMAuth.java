@@ -21,8 +21,8 @@
 
 package com.openkm.ws.endpoint;
 
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -136,7 +136,7 @@ public class OKMAuth {
 		log.debug("getRoles()");
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();
-		Collection<String> col = am.getRoles();
+		List<String> col = am.getRoles();
 		sa.setValue((String[]) col.toArray(new String[col.size()])); 
 		log.debug("getRoles: {}", sa);
 		return sa;
@@ -149,7 +149,7 @@ public class OKMAuth {
 		log.debug("getUsers()");
 		AuthModule am = ModuleManager.getAuthModule();
 		StringArray sa = new StringArray();
-		Collection<String> col = am.getUsers();
+		List<String> col = am.getUsers();
 		sa.setValue((String[]) col.toArray(new String[col.size()])); 
 		log.debug("getUsers: {]", sa);
 		return sa;
