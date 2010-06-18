@@ -21,41 +21,41 @@
 
 package com.openkm.frontend.client.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GWTTextArea extends GWTFormElement implements IsSerializable {
-	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private String value = "";
+/**
+ * GWTValidator
+ * 
+ * @author jllort
+ *
+ */
+public class GWTValidator  implements IsSerializable  {
+	private String type = "";
+	private String parameter = "";
 	
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public String getType() {
+		return type;
 	}
 	
-	public List<GWTValidator> getValidators() {
-		return validators;
+	public void setType(String type) {
+		this.type = type;
 	}
-
-	public void setValidators(List<GWTValidator> validators) {
-		this.validators = validators;
+	
+	public String getParameter() {
+		return parameter;
+	}
+	
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("label="); sb.append(label);
-		sb.append(", name="); sb.append(name);
-		sb.append(", value="); sb.append(value);
-		sb.append(", width="); sb.append(width);
-		sb.append(", height="); sb.append(height);
-		sb.append(", validators="); sb.append(validators);
+		sb.append("type="); sb.append(type);
+		sb.append(", parameter="); sb.append(parameter);
 		sb.append("}");
 		return sb.toString();
 	}
 }
+

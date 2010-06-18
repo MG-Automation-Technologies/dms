@@ -25,11 +25,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GWTSelect extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
 	private Collection<GWTOption> options = new ArrayList<GWTOption>();
+	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String type = TYPE_SIMPLE;
 	private String value = "";
 
@@ -57,6 +59,14 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 		this.value = value;
 	}
 	
+	public List<GWTValidator> getValidators() {
+		return validators;
+	}
+
+	public void setValidators(List<GWTValidator> validators) {
+		this.validators = validators;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -66,6 +76,7 @@ public class GWTSelect extends GWTFormElement implements IsSerializable {
 		sb.append(", height="); sb.append(height);
 		sb.append(", type="); sb.append(type);
 		sb.append(", options="); sb.append(options);
+		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
 	}
