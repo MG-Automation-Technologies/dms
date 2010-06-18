@@ -228,6 +228,9 @@ public class PropertyGroupsServlet extends BaseServlet {
 		return ret;
 	}
 	
+	/**
+	 * Draw validation configuration
+	 */
 	private void drawValidators(StringBuilder sb, List<Validator> validators) {
 		if (!validators.isEmpty()) {
 			sb.append("<br/><i>Validators:</i><ul>");
