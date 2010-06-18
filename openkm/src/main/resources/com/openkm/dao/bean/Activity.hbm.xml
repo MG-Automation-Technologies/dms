@@ -7,7 +7,7 @@
     <property name="date" column="ACT_DATE" not-null="true"/>
     <property name="user" column="ACT_USER" not-null="true"/>
     <property name="action" column="ACT_ACTION" not-null="true"/>
-    <property name="item" column="ACT_ITEM"/>
-    <property name="params" column="ACT_PARAMS"/>
+    <property name="item" column="ACT_ITEM" length="512"/>
+    <property name="params" column="ACT_PARAMS" length="1024"/>
   </class>
 </hibernate-mapping>
