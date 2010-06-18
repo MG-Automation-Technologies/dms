@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Input extends FormElement {
+	private static final long serialVersionUID = 1L;
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	private List<Validator> validators = new ArrayList<Validator>();

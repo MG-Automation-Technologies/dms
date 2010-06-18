@@ -1,7 +1,9 @@
 package com.openkm.bean.form;
 
+import java.io.Serializable;
 
-public class FormElement {
+public class FormElement implements Serializable {
+	private static final long serialVersionUID = 1L;
 	protected String label = "";
 	protected String name = "";
 	protected String width = "100px";

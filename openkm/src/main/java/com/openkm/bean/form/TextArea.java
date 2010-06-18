@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextArea extends FormElement {
+	private static final long serialVersionUID = 1L;
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String value = "";
 	
