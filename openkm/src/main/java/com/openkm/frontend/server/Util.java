@@ -52,11 +52,13 @@ import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.bean.form.Button;
+import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
+import com.openkm.bean.form.Validator;
 import com.openkm.bean.workflow.Comment;
 import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
@@ -70,6 +72,7 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
+import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTComment;
 import com.openkm.frontend.client.bean.GWTDashboardDocumentResult;
 import com.openkm.frontend.client.bean.GWTDashboardFolderResult;
@@ -94,6 +97,7 @@ import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.bean.GWTToken;
 import com.openkm.frontend.client.bean.GWTTransition;
 import com.openkm.frontend.client.bean.GWTUserConfig;
+import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
 
@@ -714,6 +718,23 @@ public class Util {
 	}
 	
 	/**
+	 * Copy to Validator data to GWTValidator
+	 * @param Validator the original data
+	 * @return The GWTValidator object with data values from original Validator
+	 */
+	public static List<GWTValidator> copyValidators(List<Validator> validators) {
+		List<GWTValidator> gwtValidatorsList = new ArrayList<GWTValidator>();
+		for (Iterator<Validator> it = validators.iterator(); it.hasNext();) {
+			Validator validator = it.next();
+			GWTValidator valid = new GWTValidator();
+			valid.setParameter(validator.getParameter());
+			valid.setType(validator.getType());
+		}
+		
+		return gwtValidatorsList;
+	}
+	
+	/**
 	 * Copy to FormElement data to GWTFormElemen
 	 * @param FormElement the original data
 	 * @return The GWTFormElement object with data values from original FormElement
@@ -736,7 +757,15 @@ public class Util {
 			gWTInput.setName(((Input) formElement).getName());
 			gWTInput.setValue(((Input) formElement).getValue());
 			gWTInput.setType(((Input) formElement).getType());
+			gWTInput.setValidators(copyValidators(((Input) formElement).getValidators()));
 			return gWTInput;
+		} else if (formElement instanceof CheckBox) {
+			GWTCheckBox gWTCheckbox = new GWTCheckBox();
+			gWTCheckbox.setLabel(formElement.getLabel());
+			gWTCheckbox.setName(((CheckBox) formElement).getName());
+			gWTCheckbox.setValue(((CheckBox) formElement).getValue());
+			gWTCheckbox.setValidators(copyValidators(((CheckBox) formElement).getValidators()));
+			return gWTCheckbox;
 		} else if (formElement instanceof Select) {
 			GWTSelect gWTselect = new GWTSelect();
 			gWTselect.setLabel(formElement.getLabel());
@@ -749,6 +778,7 @@ public class Util {
 				options.add(copy(it.next()));
 			}
 			gWTselect.setOptions(options);
+			gWTselect.setValidators(copyValidators(((Select) formElement).getValidators()));
 			return gWTselect;
 		} else if (formElement instanceof TextArea) {
 			GWTTextArea gWTTextArea= new GWTTextArea();
@@ -757,6 +787,7 @@ public class Util {
 			gWTTextArea.setHeight(formElement.getHeight());
 			gWTTextArea.setName(((TextArea) formElement).getName());
 			gWTTextArea.setValue(((TextArea) formElement).getValue());
+			gWTTextArea.setValidators(copyValidators(((TextArea) formElement).getValidators()));
 			return gWTTextArea;
 		} else {
 			return new GWTFormElement();

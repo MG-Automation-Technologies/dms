@@ -274,4 +274,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/search/calendar.gif")
 	public ImageResource calendar();
+	
+	@Source("com/openkm/frontend/public/img/icon/security/yes.gif")
+	public ImageResource yes();
+	
+	@Source("com/openkm/frontend/public/img/icon/security/no.gif")
+	public ImageResource no();
 }
