@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT workflow-forms (workflow-form+)>
 
-<!ELEMENT workflow-form (input|textarea|select|button)*>
+<!ELEMENT workflow-form (input|checkbox|textarea|select|button)*>
 <!ATTLIST workflow-form
 	task CDATA #REQUIRED
 >
 
-<!ELEMENT input EMPTY>
+<!ELEMENT input (validator*)>
 <!ATTLIST input
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -16,7 +16,16 @@
 	height CDATA #IMPLIED
 >
 
-<!ELEMENT textarea EMPTY>
+<!ELEMENT checkbox (validator*)>
+<!ATTLIST checkbox
+	label CDATA #REQUIRED
+	name CDATA #REQUIRED
+	value (true|false) "false"
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED
+>
+
+<!ELEMENT textarea (validator*)>
 <!ATTLIST textarea 
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -25,7 +34,7 @@
 	height CDATA #IMPLIED
 >
 
-<!ELEMENT select (option+)>
+<!ELEMENT select (option+, validator*)>
 <!ATTLIST select
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
@@ -39,6 +48,12 @@
 	label CDATA #REQUIRED
 	value CDATA #REQUIRED
 	selected (true|false) "false"
+>
+
+<!ELEMENT validator EMPTY>
+<!ATTLIST validator
+	type CDATA #REQUIRED
+	parameter CDATA #IMPLIED
 >
 
 <!ELEMENT button EMPTY>
