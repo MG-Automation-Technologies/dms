@@ -1,5 +1,6 @@
 package com.openkm.bean.form;
 
+
 public class FormElement {
 	protected String label = "";
 	protected String name = "";
