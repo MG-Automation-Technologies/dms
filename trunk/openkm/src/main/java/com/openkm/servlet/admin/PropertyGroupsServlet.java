@@ -49,6 +49,7 @@ import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
+import com.openkm.bean.form.Validator;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
@@ -179,6 +180,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			sb.append(input.getType());
 			sb.append("<br/><i>Value:</i> ");
 			sb.append(input.getValue());
+			drawValidators(sb, input.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof CheckBox) {
 			CheckBox checkBox = new CheckBox();
@@ -186,6 +188,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Value:</i> ");
 			sb.append(checkBox.getValue());
+			drawValidators(sb, checkBox.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof TextArea) {
 			TextArea textArea = (TextArea) fe;
@@ -193,6 +196,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Value:</i> ");
 			sb.append(textArea.getValue());
+			drawValidators(sb, textArea.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof Select) {
 			Select select = (Select) fe;
@@ -200,8 +204,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<i>Type:</i> ");
 			sb.append(select.getType());
-			sb.append(", ");
-			sb.append("<i>Options:</i><ul>");
+			sb.append("<br/><i>Options:</i><ul>");
 			for (Iterator<Option> itOpt = select.getOptions().iterator(); itOpt.hasNext(); ) {
 				Option opt = itOpt.next();
 				sb.append("<li><i>Label:</i> ");
@@ -211,6 +214,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 				sb.append("</li>");
 			}
 			sb.append("</ul>");
+			drawValidators(sb, select.getValidators());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof Button) {
 			Button button = (Button) fe;
@@ -222,5 +226,20 @@ public class PropertyGroupsServlet extends BaseServlet {
 		}
 		
 		return ret;
+	}
+	
+	private void drawValidators(StringBuilder sb, List<Validator> validators) {
+		if (!validators.isEmpty()) {
+			sb.append("<br/><i>Validators:</i><ul>");
+			for (Iterator<Validator> it = validators.iterator(); it.hasNext(); ) {
+				Validator v = it.next();
+				sb.append("<li><i>Type:</i> ");
+				sb.append(v.getType());
+				sb.append(", <i>Parameter:</i> ");
+				sb.append(v.getParameter());
+				sb.append("</li>");
+			}
+			sb.append("</ul>");
+		}
 	}
 }
