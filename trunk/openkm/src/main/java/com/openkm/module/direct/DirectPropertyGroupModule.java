@@ -23,8 +23,6 @@ package com.openkm.module.direct;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +40,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.PropertyGroup;
+import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
+import com.openkm.bean.form.Input;
+import com.openkm.bean.form.Option;
+import com.openkm.bean.form.Select;
+import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -162,7 +165,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			session = JCRUtils.getSession();
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
-			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			// Only return registered property definitions
 			for (int i=0; i<nt.length; i++) {
@@ -200,7 +203,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		try {
 			session = JCRUtils.getSession();
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
-			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
 			// Only return registered property definitions
 			for (NodeTypeIterator nti = ntm.getMixinNodeTypes(); nti.hasNext();) {
@@ -228,49 +231,65 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public HashMap<String, String[]> getProperties(String docPath, String grpName) throws 
-			NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
+	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
+			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({})", grpName);
-		HashMap<String, String[]> ret = new HashMap<String, String[]>();
 		Session session = null;
 		
 		try {
 			session = JCRUtils.getSession();
+			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
+			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-			
-			for (int i=0; i<pd.length; i++) {
-				try {
-					Property prop = documentNode.getProperty(pd[i].getName());
+						
+			for (FormElement fe : pgf) {
+				for (int i=0; i < pd.length; i++) {
+					// Only return registered property definitions
+					if (fe.getName().equals(pd[i].getName())) {
+						try {
+							Property prop = documentNode.getProperty(pd[i].getName());
 		 					
-					if (pd[i].isMultiple()) {
-						Value[] values = prop.getValues();
-						String[] sValues = null;
-						
-						if (values.length == 1 && values[0].getString().length() == 0) {
-							sValues = new String[0];
-						} else {
-							sValues = new String[values.length];
-							
-							for (int j=0; j<values.length; j++) {
-								sValues[j] = values[j].getString();
+							if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
+									&& pd[i].isMultiple()) {
+								Value[] values = prop.getValues();
+
+								for (int j=0; j<values.length; j++) {
+									for (Option opt : ((Select) fe).getOptions()) {
+										if (opt.getValue().equals(values[j].getString())) {
+											opt.setSelected(true);
+										}
+									}
+								}						
+							} else if (!pd[i].isMultiple()) {
+								Value value = prop.getValue();
+								
+								if (fe instanceof Input) {
+									((Input) fe).setValue(value.getString());
+								} else if (fe instanceof CheckBox) {
+									((CheckBox) fe).setValue(Boolean.parseBoolean(value.getString()));
+								} else if (fe instanceof TextArea) {
+									((TextArea) fe).setValue(value.getString());
+								} else {
+									throw new ParseException("Unknown property definition: " + pd[i].getName());
+								}
+							} else {
+								throw new ParseException("Inconsistent property definition: " + pd[i].getName());
 							}
+						} catch (javax.jcr.PathNotFoundException e) {
+							throw new RepositoryException("Requested property not found: "+e.getMessage());
 						}
-						
-						ret.put(pd[i].getName(), sValues);
-					} else {
-						Value value = prop.getValue();
-						ret.put(pd[i].getName(), new String[]{ value.getString() });
 					}
-				} catch (javax.jcr.PathNotFoundException e) {
-					log.debug("Requested property not found: "+e.getMessage());
 				}
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+ret);
+			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+pgf);
+			
+			log.debug("getProperties: {}", pgf);
+			return pgf;
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			throw new NoSuchGroupException(e.getMessage(), e);
@@ -280,9 +299,6 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		} finally {
 			JCRUtils.logout(session);
 		}
-		
-		log.debug("getProperties: {}", ret);
-		return ret;
 	}
 
 	@Override
@@ -357,8 +373,8 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-			Map<PropertyGroup, Collection<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
-			Collection<FormElement> tmp = FormUtils.getPropertyGroupForms(pgf, grpName);
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+			List<FormElement> tmp = FormUtils.getPropertyGroupForms(pgf, grpName);
 			
 			// Only return registered property definitions
 			for (FormElement fe : tmp) {
