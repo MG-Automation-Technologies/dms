@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE workflow-forms PUBLIC "-//OpenKM//DTD Workflow Forms 1.0//EN"
-                                "http://www.openkm.com/dtd/workflow-forms-1.0.dtd">
+<!DOCTYPE workflow-forms PUBLIC "-//OpenKM//DTD Workflow Forms 1.1//EN"
+                                "http://www.openkm.com/dtd/workflow-forms-1.1.dtd">
 <workflow-forms>
   <workflow-form task="start">
   	<input label="Quantity" name="quantity" value="10"/>
