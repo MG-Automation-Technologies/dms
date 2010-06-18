@@ -21,6 +21,8 @@
 
 package com.openkm.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -62,6 +64,26 @@ public class Serializer {
 	/**
 	 * @param obj
 	 */
+	public static byte[] write(Object obj) throws IOException {
+		ByteArrayOutputStream baos = null;
+		ObjectOutputStream oos = null;
+		
+		try {
+			baos = new ByteArrayOutputStream(); 
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(obj);
+			oos.flush();
+			baos.flush();
+			return baos.toByteArray();
+		} finally {
+			IOUtils.closeQuietly(oos);
+			IOUtils.closeQuietly(baos);
+		}
+	}
+	
+	/**
+	 * @param obj
+	 */
 	public static Object read(String filename) {
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
@@ -83,5 +105,22 @@ public class Serializer {
 		}
 		
 		return obj;
+	}
+	
+	/**
+	 * @param obj
+	 */
+	public static Object read(byte[] data) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream bais = null;
+		ObjectInputStream ois = null;
+		
+		try {
+			bais = new ByteArrayInputStream(data);
+			ois = new ObjectInputStream(bais);
+			return ois.readObject();
+		} finally {
+			IOUtils.closeQuietly(ois);
+			IOUtils.closeQuietly(bais);
+		}
 	}
 }
