@@ -28,8 +28,7 @@ import java.io.Serializable;
  *
  */
 public class PropertyGroup implements Serializable {
-	private static final long serialVersionUID = -1042616668984180283L;
-	
+	private static final long serialVersionUID = 1L;
 	public static final String GROUP = "okg";
 	public static final String GROUP_URI = "http://www.openkm.org/group/1.0";
 	public static final String GROUP_PROPERTY = "okp";
