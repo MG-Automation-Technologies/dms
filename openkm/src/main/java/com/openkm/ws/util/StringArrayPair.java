@@ -24,7 +24,7 @@ package com.openkm.ws.util;
 import java.io.Serializable;
 
 public class StringArrayPair implements Serializable {
-	private static final long serialVersionUID = 2170151436725306362L;
+	private static final long serialVersionUID = 1L;
 	private String key = null;
 	private StringArray value = null;
 

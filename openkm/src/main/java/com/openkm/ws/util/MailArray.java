@@ -26,7 +26,7 @@ import java.io.Serializable;
 import com.openkm.bean.Mail;
 
 public class MailArray implements Serializable {
-	private static final long serialVersionUID = 6819191616430431359L;
+	private static final long serialVersionUID = 1L;
 	private Mail[] insMailArray = null;
 
 	public MailArray() {

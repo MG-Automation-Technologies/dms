@@ -26,7 +26,7 @@ import java.io.Serializable;
 import com.openkm.bean.PropertyGroup;
 
 public class PropertyGroupArray implements Serializable {
-	private static final long serialVersionUID = -5692124727804140629L;
+	private static final long serialVersionUID = 1L;
 	private PropertyGroup[] insPropertyGroupArray = null;
 
 	public PropertyGroupArray() {

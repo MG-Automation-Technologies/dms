@@ -26,7 +26,7 @@ import java.io.Serializable;
 import com.openkm.bean.Version;
 
 public class VersionArray implements Serializable {
-	private static final long serialVersionUID = -8428076773467988331L;
+	private static final long serialVersionUID = 1L;
 	private Version[] insVersionArray = null;
 
 	public VersionArray() {

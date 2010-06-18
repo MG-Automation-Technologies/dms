@@ -23,20 +23,20 @@ package com.openkm.ws.util;
 
 import java.io.Serializable;
 
-import com.openkm.bean.QueryResult;
+import com.openkm.bean.form.FormElement;
 
-public class QueryResultArray implements Serializable {
+public class FormElementArray implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private QueryResult[] insQueryResultArray = null;
+	private FormElement[] insFormElementArray = null;
 
-	public QueryResultArray() {
+	public FormElementArray() {
 	}
 
-	public QueryResult[] getValue() {
-		return insQueryResultArray;
+	public FormElement[] getValue() {
+		return insFormElementArray;
 	}
 
-	public void setValue(QueryResult[] value) {
-		insQueryResultArray = value;
+	public void setValue(FormElement[] value) {
+		insFormElementArray = value;
 	}
 }
