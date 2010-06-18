@@ -22,7 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -82,7 +82,7 @@ public class OKMNotification {
 		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		StringArray sa = new StringArray();
-		Collection<String> col = nm.getSubscriptors(nodePath);
+		List<String> col = nm.getSubscriptors(nodePath);
 		sa.setValue(col.toArray(new String[col.size()]));
 		log.debug("getSubscriptors: {}", sa);
 		return sa;

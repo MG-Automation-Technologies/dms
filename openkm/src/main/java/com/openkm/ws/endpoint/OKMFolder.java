@@ -21,7 +21,6 @@
 
 package com.openkm.ws.endpoint;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.jws.WebService;
