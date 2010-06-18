@@ -905,8 +905,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				// Enable scanner button
 				if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
 					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
+					Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL ) {
 					enableScanner();
 					enableUploader();
 				}
@@ -1005,6 +1004,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				disableDelete();
 			}
 			
+			// Enable scanner button
+			if (((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ) && 
+				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL) ) {
+				enableScanner();
+				enableUploader();
+			}
+			
 			if ((doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) {
 				if (!doc.isCheckedOut() && !doc.isLocked()) {
 					enableCheckout();
@@ -1036,14 +1044,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_TRASH && 
 							Main.get().mainPanel.desktop.navigator.getStackIndex()!= PanelDefinition.NAVIGATOR_MAIL) {
 							getAllGroups(); // Evaluates enable or disable property group buttons
-						}
-						// Enable scanner button
-						if (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
-							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
-							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL || 
-							Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TRASH ) {
-							enableScanner();
-							enableUploader();
 						}
 					} else {
 						disableAddPropertyGroup();
@@ -1184,6 +1184,15 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				enableDelete();
 			} else {
 				disableDelete();
+			}
+			
+			// Enable scanner button
+			if (((folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE ) && 
+				 (Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TAXONOMY ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_TEMPLATES ||
+				  Main.get().mainPanel.desktop.navigator.getStackIndex()== PanelDefinition.NAVIGATOR_PERSONAL) ) {
+				enableScanner();
+				enableUploader();
 			}
 			
 			if (((mail.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE) && 
