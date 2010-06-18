@@ -26,7 +26,7 @@ import java.io.Serializable;
 import com.openkm.bean.Folder;
 
 public class FolderArray implements Serializable {
-	private static final long serialVersionUID = 6859091616430431859L;
+	private static final long serialVersionUID = 1L;
 	private Folder[] insFolderArray = null;
 
 	public FolderArray() {

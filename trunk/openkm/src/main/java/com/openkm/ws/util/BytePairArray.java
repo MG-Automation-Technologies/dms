@@ -24,7 +24,7 @@ package com.openkm.ws.util;
 import java.io.Serializable;
 
 public class BytePairArray implements Serializable {
-	private static final long serialVersionUID = -4074136617191025245L;
+	private static final long serialVersionUID = 1L;
 	private BytePair[] insPairArray = null;
 
 	public BytePairArray() {

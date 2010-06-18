@@ -26,7 +26,7 @@ import java.io.Serializable;
 import com.openkm.bean.Document;
 
 public class DocumentArray implements Serializable {
-	private static final long serialVersionUID = -871042643132423370L;
+	private static final long serialVersionUID = 1L;
 	private Document[] insDocumentArray = null;
 
 	public DocumentArray() {
