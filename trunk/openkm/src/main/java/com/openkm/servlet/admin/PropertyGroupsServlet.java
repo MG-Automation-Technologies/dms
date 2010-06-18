@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.Button;
+import com.openkm.bean.form.CheckBox;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.form.Input;
 import com.openkm.bean.form.Option;
@@ -178,6 +179,13 @@ public class PropertyGroupsServlet extends BaseServlet {
 			sb.append(input.getType());
 			sb.append("<br/><i>Value:</i> ");
 			sb.append(input.getValue());
+			ret.put("others", sb.toString());
+		} else if (fe instanceof CheckBox) {
+			CheckBox checkBox = new CheckBox();
+			ret.put("field", "CheckBox");
+			StringBuilder sb = new StringBuilder();
+			sb.append("<i>Value:</i> ");
+			sb.append(checkBox.getValue());
 			ret.put("others", sb.toString());
 		} else if (fe instanceof TextArea) {
 			TextArea textArea = (TextArea) fe;
