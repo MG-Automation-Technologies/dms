@@ -23,7 +23,6 @@ package com.openkm.api;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,9 +105,9 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 
 	@Override
-	public void setProperties(String docPath, String grpName, Map<String, String[]> properties)
-			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws 
+			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {})", docPath, properties);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
 		cm.setProperties(docPath, grpName, properties);
