@@ -23,7 +23,6 @@ package com.openkm.module;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
@@ -116,8 +115,8 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String docPath, String grpName, Map<String, String[]> properties)
-			throws NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
+	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws IOException,
+			ParseException, NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
