@@ -272,6 +272,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 									((CheckBox) fe).setValue(Boolean.parseBoolean(value.getString()));
 								} else if (fe instanceof TextArea) {
 									((TextArea) fe).setValue(value.getString());
+								} else if (fe instanceof Select) {
+									for (Option opt : ((Select) fe).getOptions()) {
+										if (opt.getValue().equals(value.getString())) {
+											opt.setSelected(true);
+										}
+									}
 								} else {
 									throw new ParseException("Unknown property definition: " + pd[i].getName());
 								}
@@ -302,9 +308,9 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws
-			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws 
+			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
 		Node documentNode = null;
 		Session session = null;
@@ -315,17 +321,55 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		
 		try {
 			session = JCRUtils.getSession();
+			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
+			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
-				for (int i=0; i<pd.length; i++) {
-					if (pd[i].isMultiple()) {
-						documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName()));
-					} else {
-						documentNode.setProperty(pd[i].getName(), properties.get(pd[i].getName())[0]);	
+				for (FormElement fe : pgf) {
+					for (int i=0; i < pd.length; i++) {
+						// Only return registered property definitions
+						if (fe.getName().equals(pd[i].getName())) {
+							try {
+								Property prop = documentNode.getProperty(pd[i].getName());
+			 					
+								if (fe instanceof Select && ((Select) fe).getType().equals(Select.TYPE_MULTIPLE) 
+										&& pd[i].isMultiple()) {
+									List<String> tmp = new ArrayList<String>();
+									
+									for (Option opt : ((Select) fe).getOptions()) {
+										if (opt.isSelected()) {
+											tmp.add(opt.getValue());
+										}
+									}
+									
+									prop.setValue(tmp.toArray(new String[tmp.size()]));
+								} else if (!pd[i].isMultiple()) {
+									if (fe instanceof Input) {
+										prop.setValue(((Input) fe).getValue());
+									} else if (fe instanceof CheckBox) {
+										prop.setValue(Boolean.toString(((CheckBox) fe).getValue()));
+									} else if (fe instanceof TextArea) {
+										prop.setValue(((TextArea) fe).getValue());
+									} else if (fe instanceof Select) {
+										for (Option opt : ((Select) fe).getOptions()) {
+											if (opt.isSelected()) {
+												prop.setValue(opt.getValue());
+											}
+										}
+									} else {
+										throw new ParseException("Unknown property definition: " + pd[i].getName());
+									}
+								} else {
+									throw new ParseException("Inconsistent property definition: " + pd[i].getName());
+								}
+							} catch (javax.jcr.PathNotFoundException e) {
+								throw new RepositoryException("Requested property not found: "+e.getMessage());
+							}
+						}
 					}
 				}
 			}
