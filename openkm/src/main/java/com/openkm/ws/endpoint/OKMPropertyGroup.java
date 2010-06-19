@@ -22,7 +22,7 @@
 package com.openkm.ws.endpoint;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -46,9 +46,6 @@ import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
 import com.openkm.ws.util.FormElementArray;
 import com.openkm.ws.util.PropertyGroupArray;
-import com.openkm.ws.util.StringArray;
-import com.openkm.ws.util.StringArrayPair;
-import com.openkm.ws.util.StringArrayPairArray;
 
 /**
  * Servlet Class
@@ -117,7 +114,7 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#getProperties(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public FormElementArray getProperties(String docPath, String grpName) throws  IOException, 
+	public FormElementArray getProperties(String docPath, String grpName) throws IOException, 
 			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, 
 			DatabaseException {
 		log.debug("getProperties({}, {})", docPath, grpName);
@@ -132,21 +129,13 @@ public class OKMPropertyGroup {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public void setProperties(String docPath, String grpName, StringArrayPairArray properties) throws
-			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public void setProperties(String docPath, String grpName, FormElementArray properties) throws 
+			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		HashMap<String, String[]> uh = new HashMap<String, String[]>();
-		StringArrayPair[] spa = properties.getValue();
-		
-		for (int i=0; i<spa.length; i++) {
-			String key = spa[i].getKey();
-			StringArray value = spa[i].getValue();
-			uh.put(key, value.getValue());
-		}
-		
-		cm.setProperties(docPath, grpName, uh);
+		FormElement[] fes = properties.getValue();
+		cm.setProperties(docPath, grpName, Arrays.asList(fes));
 		log.debug("setProperties: void");
 	}
 }
