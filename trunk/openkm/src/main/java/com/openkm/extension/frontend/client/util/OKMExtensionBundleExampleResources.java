@@ -26,14 +26,14 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
- * OKMExtensionBundleResources
+ * OKMExtensionBundleExampleResources
  * 
  * @author jllort
  *
  */
-public interface OKMExtensionBundleResources extends ClientBundle {
+public interface OKMExtensionBundleExampleResources extends ClientBundle {
 	
-	public static final OKMExtensionBundleResources INSTANCE =  GWT.create(OKMExtensionBundleResources.class);
+	public static final OKMExtensionBundleExampleResources INSTANCE =  GWT.create(OKMExtensionBundleExampleResources.class);
 	
 	@Source("com/openkm/extension/frontend/public/img/box.png")
 	public ImageResource box();

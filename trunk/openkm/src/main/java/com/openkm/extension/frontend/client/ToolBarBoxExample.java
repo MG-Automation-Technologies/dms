@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.openkm.extension.frontend.client.util.OKMExtensionBundleResources;
+import com.openkm.extension.frontend.client.util.OKMExtensionBundleExampleResources;
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 
 /**
@@ -44,7 +44,7 @@ public class ToolBarBoxExample  {
 	 * ToolBarBoxExample
 	 */
 	public ToolBarBoxExample() {
-		toolBarBoxExtension = new ToolBarBoxExtension(new Image(OKMExtensionBundleResources.INSTANCE.general()), "new toolbar") {
+		toolBarBoxExtension = new ToolBarBoxExtension(new Image(OKMExtensionBundleExampleResources.INSTANCE.general()), "new toolbar") {
 			@Override
 			public Widget getWidget() {
 				return hPanel;
