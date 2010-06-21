@@ -103,7 +103,7 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public ProcessInstance runProcessDefinition(long processDefinitionId, Map<String, Object> variables)
+	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables)
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("runProcessDefinition({})", processDefinitionId, variables);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
@@ -248,7 +248,7 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public void setTaskInstanceValues(long taskInstanceId, String transitionName, Map<String, Object> values)
+	public void setTaskInstanceValues(long taskInstanceId, String transitionName, List<FormElement> values)
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("setTaskInstanceValues({}, {}, {})", new Object[] { taskInstanceId, transitionName, values });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
