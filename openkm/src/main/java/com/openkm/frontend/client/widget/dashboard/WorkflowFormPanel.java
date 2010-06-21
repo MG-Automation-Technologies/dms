@@ -509,6 +509,7 @@ public class WorkflowFormPanel extends Composite {
 				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
 				textBox.setValue(gWTInput.getValue());
+				textBox.setWidth(gWTInput.getWidth());
 				
 				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
@@ -616,9 +617,10 @@ public class WorkflowFormPanel extends Composite {
 				listBox.addItem("",""); // Always we set and empty value
 				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
-				formTable.setWidget(row, 1, listBox);
-				
-				if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
+				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+					formTable.setWidget(row, 1, listBox);
+					widget = listBox;
+				} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					formTable.setWidget(row, 2, addButton);
 					row++; // Incrementing row
 					formTable.setHTML(row, 0, "");
@@ -627,9 +629,7 @@ public class WorkflowFormPanel extends Composite {
 					tableMulti.setWidget(0,0,name);
 					name.setVisible(false);
 					widget = tableMulti;
-				} else {
-					widget = listBox;
-				}
+				} 
 				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					final GWTOption option = itx.next();
@@ -639,7 +639,7 @@ public class WorkflowFormPanel extends Composite {
 						if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 							listBox.addItem(option.getLabel(), value);
 							listBox.setSelectedIndex(listBox.getItemCount()-1);
-						} else {
+						} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 							// Case select multiple
 							int rowTableMulti = tableMulti.getRowCount();
 							HTML htmlLabel = new HTML(option.getLabel());
@@ -758,7 +758,7 @@ public class WorkflowFormPanel extends Composite {
 								}
 							}
 						}
-					} else {
+					} else if (select.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 						FlexTable tableMulti = (FlexTable) widget;
 						for (int i=1; i<tableMulti.getRowCount(); i++) {
 							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
