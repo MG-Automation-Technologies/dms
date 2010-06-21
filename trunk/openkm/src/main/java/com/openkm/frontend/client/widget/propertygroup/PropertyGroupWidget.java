@@ -24,7 +24,6 @@ package com.openkm.frontend.client.widget.propertygroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,11 +77,10 @@ public class PropertyGroupWidget extends Composite {
 	private FlexTable table;
 	private String grpName;
 	private String docPath;
-	private Map<String, GWTFormElement> hMetaData = new LinkedHashMap<String, GWTFormElement>();
+	private List<GWTFormElement> formElementList = new ArrayList<GWTFormElement>();
 	private Map<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
-	
 	
 	/**
 	 * PropertyGroup
@@ -150,7 +148,7 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetProperties = new AsyncCallback<List<GWTFormElement>>() {
 		public void onSuccess(List<GWTFormElement> result){
-			hMetaData = new LinkedHashMap<String, GWTFormElement>();;
+			formElementList = result;
 			hWidgetProperties.clear();
 			int rows = 1;
 
@@ -208,30 +206,29 @@ public class PropertyGroupWidget extends Composite {
 	public void edit(){
 		int rows = 1;
 
-		for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
-			String propertyName = it.next();
-			GWTFormElement gwtMetadata = hMetaData.get(propertyName);
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
+			GWTFormElement formField = it.next();
 			
-			if (gwtMetadata instanceof GWTTextArea) {
-				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
+			if (formField instanceof GWTTextArea) {
+				TextArea textArea = (TextArea) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, textArea);
 				
-			} else if (gwtMetadata instanceof GWTInput) {
-				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+			} else if (formField instanceof GWTInput) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, hPanel);
 				
-			} else if (gwtMetadata instanceof GWTCheckBox) {
-				CheckBox checkBox = (CheckBox) hWidgetProperties.get(propertyName);
+			} else if (formField instanceof GWTCheckBox) {
+				CheckBox checkBox = (CheckBox) hWidgetProperties.get(formField.getName());
 				table.setWidget(rows, 1, checkBox);
 				
-			} else if (gwtMetadata instanceof GWTSelect) {
-				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+			} else if (formField instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) formField;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-					ListBox listBox = (ListBox) hWidgetProperties.get(propertyName);
+					ListBox listBox = (ListBox) hWidgetProperties.get(formField.getName());
 					table.setWidget(rows, 1, listBox);
 					
 				} else {
-					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 					ListBox listMulti = (ListBox) hPanel.getWidget(2);
 					Button addButton = (Button) hPanel.getWidget(4);
@@ -259,27 +256,26 @@ public class PropertyGroupWidget extends Composite {
 	public void setProperties() {
 		int rows = 1;
 		
-		for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
-			String propertyName = it.next();
-			GWTFormElement gwtMetadata = hMetaData.get(propertyName);
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
+			GWTFormElement formElement = it.next();
 			
-			if (gwtMetadata instanceof GWTTextArea) {
-				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
-				((GWTTextArea) gwtMetadata).setValue(textArea.getText());
+			if (formElement instanceof GWTTextArea) {
+				TextArea textArea = (TextArea) hWidgetProperties.get(formElement.getName());
+				((GWTTextArea) formElement).setValue(textArea.getText());
 
-			} else if (gwtMetadata instanceof GWTInput) {
-				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+			} else if (formElement instanceof GWTInput) {
+				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				TextBox textBox = (TextBox) hPanel.getWidget(0);
-				((GWTInput) gwtMetadata).setValue(textBox.getText());
+				((GWTInput) formElement).setValue(textBox.getText());
 
-			} else if (gwtMetadata instanceof GWTCheckBox) {	
-				CheckBox checkbox = (CheckBox) hWidgetProperties.get(propertyName);
-				((GWTCheckBox) gwtMetadata).setValue(checkbox.getValue());
+			} else if (formElement instanceof GWTCheckBox) {	
+				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
+				((GWTCheckBox) formElement).setValue(checkbox.getValue());
 					
-			} else if (gwtMetadata instanceof GWTSelect) {
-				GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
+			} else if (formElement instanceof GWTSelect) {
+				GWTSelect gwtSelect = (GWTSelect) formElement;
 				if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-					ListBox listBox = (ListBox) hWidgetProperties.get(propertyName);
+					ListBox listBox = (ListBox) hWidgetProperties.get(formElement.getName());
 					String selectedValue = "";
 					if (listBox.getSelectedIndex()>0) {
 						selectedValue = listBox.getValue(listBox.getSelectedIndex());
@@ -294,7 +290,7 @@ public class PropertyGroupWidget extends Composite {
 					}
 					
 				} else {
-					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
+					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);		
 					
 					// Disables all options
@@ -317,13 +313,13 @@ public class PropertyGroupWidget extends Composite {
 				}
 			}
 			
-			drawFormElement(rows, gwtMetadata);
+			drawFormElement(rows, formElement);
 			rows ++;
 		}
 
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.setProperties(docPath, grpName, new ArrayList<GWTFormElement>(hMetaData.values()), callbackSetProperties);
+		propertyGroupService.setProperties(docPath, grpName, formElementList, callbackSetProperties);
 	}
 	
 	
@@ -332,8 +328,8 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	public void cancelEdit() {
 		int rows = 1;
-		for (Iterator<String> it = hMetaData.keySet().iterator(); it.hasNext();) {
-			drawFormElement(rows, hMetaData.get(it.next()));
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
+			drawFormElement(rows, it.next());
 			rows++;
 		}
 	}
@@ -348,7 +344,6 @@ public class PropertyGroupWidget extends Composite {
 		final String propertyName = gwtMetadata.getName();
 		
 		if (gwtMetadata instanceof GWTTextArea) {
-			hMetaData.put(propertyName, ((GWTTextArea) gwtMetadata));
 			TextArea textArea = new TextArea();
 			textArea.setStyleName("okm-Input");
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
@@ -363,7 +358,6 @@ public class PropertyGroupWidget extends Composite {
 			setRowWordWarp(row, 2, true);
 			
 		} else if (gwtMetadata instanceof GWTInput) {
-			hMetaData.put(propertyName, ((GWTInput) gwtMetadata));
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
 			hPanel.add(textBox);
@@ -402,7 +396,6 @@ public class PropertyGroupWidget extends Composite {
 			table.getCellFormatter().setWidth(row, 1, "100%");
 				
 		} else if (gwtMetadata instanceof GWTCheckBox) {
-			hMetaData.put(propertyName, ((GWTCheckBox) gwtMetadata));
 			CheckBox checkBox = new CheckBox();
 			checkBox.setValue(((GWTCheckBox)gwtMetadata).getValue());
 			hWidgetProperties.put(propertyName,checkBox);
@@ -417,7 +410,6 @@ public class PropertyGroupWidget extends Composite {
 			setRowWordWarp(row, 2, true);
 			
 		} else if (gwtMetadata instanceof GWTSelect) {
-			hMetaData.put(propertyName, ((GWTSelect) gwtMetadata));
 			final GWTSelect gwtSelect = (GWTSelect) gwtMetadata;
 			if (gwtSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 				String selectedLabel = "";

@@ -93,7 +93,7 @@ public class WorkflowFormPanel extends Composite {
 	private FlexTable table;
 	private FlexTable parameterTable;
 	private FlexTable formTable;
-	private List<GWTFormElement> formFieldList = new ArrayList<GWTFormElement>();
+	private List<GWTFormElement> formElementList = new ArrayList<GWTFormElement>();
 	private Button submitForm;
 	private Map<String, Widget> formWidgetList = new HashMap<String, Widget>();
 	private TitleWidget taskTittle;
@@ -416,7 +416,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(14, 1, "");
 		table.setHTML(15, 1, "");
 		formWidgetList = new HashMap<String, Widget>(); // Init new form widget list
-		formFieldList = new ArrayList<GWTFormElement>();
+		formElementList = new ArrayList<GWTFormElement>();
 		documentLink = null;
 		textArea.setText("");
 		removeAllParametersTableRows();
@@ -429,9 +429,9 @@ public class WorkflowFormPanel extends Composite {
 	 */
 	final AsyncCallback<Map<String, List<GWTFormElement>>> callbackGetProcessDefinitionForms = new AsyncCallback<Map<String, List<GWTFormElement>>>() {
 		public void onSuccess(Map<String, List<GWTFormElement>> result) {
-			formFieldList = new ArrayList<GWTFormElement>();
+			formElementList = new ArrayList<GWTFormElement>();
 			if (result.containsKey(taskInstance.getName())) {
-				formFieldList = result.get(taskInstance.getName());
+				formElementList = result.get(taskInstance.getName());
 				drawForm();
 			}
 		}
@@ -464,7 +464,7 @@ public class WorkflowFormPanel extends Composite {
 		removeAllFormTableRows();
 		
 		// Adds submit button
-		if (formFieldList.size()>0) {
+		if (formElementList.size()>0) {
 			HTML space = new HTML("&nbsp;");
 			hPanel.add(submitForm);
 			hPanel.add(space);
@@ -472,7 +472,7 @@ public class WorkflowFormPanel extends Composite {
 		}
 		
 		// Sets form fields
-		for (Iterator<GWTFormElement> it = formFieldList.iterator(); it.hasNext(); ) {
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext(); ) {
 			final GWTFormElement formField = it.next();
 			int row = formTable.getRowCount();
 			
@@ -700,7 +700,7 @@ public class WorkflowFormPanel extends Composite {
 		}
 		
 		// Adds submit button
-		if (formFieldList.size()>0) {
+		if (formElementList.size()>0) {
 			int row = formTable.getRowCount();
 			formTable.setWidget(row, 0, hPanel);
 			formTable.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -729,7 +729,7 @@ public class WorkflowFormPanel extends Composite {
 	 * @param transitionName
 	 */
 	private void setTaskInstanceValues(double id, String transitionName) {
-		for (Iterator<GWTFormElement> it = formFieldList.iterator(); it.hasNext();) {
+		for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
 			GWTFormElement formElement = it.next();
 			if (formWidgetList.containsKey(formElement.getName())) {
 				Widget widget = formWidgetList.get(formElement.getName());
@@ -775,7 +775,7 @@ public class WorkflowFormPanel extends Composite {
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
-		workflowService.setTaskInstanceValues(id, transitionName, formFieldList, callbackSetTaskInstanceValues);
+		workflowService.setTaskInstanceValues(id, transitionName, formElementList, callbackSetTaskInstanceValues);
 	}
 	
 	/**

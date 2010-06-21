@@ -66,7 +66,7 @@ public class GroupPopup extends DialogBox {
 	private Button addButton;
 	private ListBox groupListBox;
 	private ListBox propertyListBox;
-	private Collection<GWTFormElement> hMetaData = new ArrayList<GWTFormElement>();
+	private List<GWTFormElement> formElementList = new ArrayList<GWTFormElement>();
 	private FlexTable table;
 	private Label groupLabel;
 	private Label propertyLabel;
@@ -99,7 +99,7 @@ public class GroupPopup extends DialogBox {
 					String grpName = groupListBox.getValue(groupListBox.getSelectedIndex());
 					String grpLabel = groupListBox.getItemText(groupListBox.getSelectedIndex());
 					String propertyName = propertyListBox.getValue(propertyListBox.getSelectedIndex());
-					for (Iterator<GWTFormElement> it = hMetaData.iterator(); it.hasNext();) {
+					for (Iterator<GWTFormElement> it = formElementList.iterator(); it.hasNext();) {
 						GWTFormElement formElement = it.next();
 						if (formElement.getName().endsWith(propertyName)) {
 							GWTPropertyParams param = new GWTPropertyParams();
@@ -203,7 +203,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetPropertyGroupForm = new AsyncCallback<List<GWTFormElement>>() {
 		public void onSuccess(List<GWTFormElement> result){
-			hMetaData = result;
+			formElementList = result;
 			propertyListBox.clear();
 			propertyListBox.setVisible(true);
 			propertyLabel.setVisible(true);
@@ -229,7 +229,7 @@ public class GroupPopup extends DialogBox {
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetPropertyGroupFormDataToValidate = new AsyncCallback<List<GWTFormElement>>() {
 		public void onSuccess(List<GWTFormElement> result){
-			hMetaData = result;
+			formElementList = result;
 			
 			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
 			boolean found = false;
