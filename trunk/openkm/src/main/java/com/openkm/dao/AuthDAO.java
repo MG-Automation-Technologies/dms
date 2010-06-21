@@ -269,7 +269,7 @@ public class AuthDAO {
 	@SuppressWarnings("unchecked")
 	public static List<Role> findRolesByUser(String usrId, boolean filterByActive) throws DatabaseException {
 		log.debug("findRolesByUser({}, {})", usrId, filterByActive);
-		String qs = "select r from User u, Role r where u.id=:usrId and r in elements(r.roles) " + 
+		String qs = "select r from User u, Role r where u.id=:usrId and r in elements(u.roles) " + 
 			(filterByActive?"and r.active=:active":"")+" order by r.id";
 		Session session = null;
 		
