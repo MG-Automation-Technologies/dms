@@ -321,15 +321,13 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		
 		try {
 			session = JCRUtils.getSession();
-			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
-			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
-				for (FormElement fe : pgf) {
+				for (FormElement fe : properties) {
 					for (int i=0; i < pd.length; i++) {
 						// Only return registered property definitions
 						if (fe.getName().equals(pd[i].getName())) {
