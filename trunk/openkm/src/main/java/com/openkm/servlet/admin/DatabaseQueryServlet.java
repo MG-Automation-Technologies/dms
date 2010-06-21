@@ -70,7 +70,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				
 				if (method.equals("jdbc")) {
 					executeJdbc(session, qs, request, response);
-				} else {
+				} else if (method.equals("hibernate")) {
 					executeHibernate(session, qs, request, response);
 				}
 				
@@ -78,6 +78,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 				UserActivity.log(request.getRemoteUser(), "ADMIN_DATABASE_QUERY", null, qs);
 			} else {
 				ServletContext sc = getServletContext();
+				sc.setAttribute("qs", qs);
 				sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 			}
 		} catch (SQLException e) {
@@ -131,6 +132,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("qs", qs);
+		sc.setAttribute("method", "hibernate");
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 	
@@ -179,6 +181,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("qs", qs);
+		sc.setAttribute("method", "jdbc");
 		sc.getRequestDispatcher("/admin/database_query.jsp").forward(request, response);
 	}
 }

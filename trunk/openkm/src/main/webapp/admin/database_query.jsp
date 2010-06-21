@@ -22,14 +22,21 @@
           <tr>
             <td align="right">
               <select name="method">
+                <option></option>
                 <c:choose>
                   <c:when test="${method == 'jdbc'}">
                     <option value="jdbc" selected="selected">JDBC</option>
-                    <option value="hibernate">Hibernate</option>
                   </c:when>
                   <c:otherwise>
                     <option value="jdbc">JDBC</option>
+                  </c:otherwise>
+                </c:choose>
+                <c:choose>
+                  <c:when test="${method == 'hibernate'}">
                     <option value="hibernate" selected="selected">Hibernate</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="hibernate">Hibernate</option>
                   </c:otherwise>
                 </c:choose>
               </select>

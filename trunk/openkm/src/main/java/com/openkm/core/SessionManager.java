@@ -62,20 +62,29 @@ public class SessionManager {
 	public synchronized void add(HttpServletRequest request) {
 		SessionInfo si = new SessionInfo();
 		HttpSession s = request.getSession();
+		boolean add = true;
 		
-		si.setUser(request.getRemoteUser());
-		si.setIp(request.getRemoteAddr());
-		si.setHost(request.getRemoteHost());
-		si.setId(s.getId());
-		Calendar creation = Calendar.getInstance();
-		creation.setTimeInMillis(s.getCreationTime());
-		si.setCreation(creation);
-		Calendar lastAccessed = Calendar.getInstance();
-		lastAccessed.setTimeInMillis(s.getLastAccessedTime());
-		si.setLastAccessed(lastAccessed);
+		for (SessionInfo rsi : sessions) {
+			if (rsi.getId().equals(s.getId())) {
+				add = false;
+			}
+		}
 		
-		s.setAttribute("user", request.getRemoteUser());
-		sessions.add(si);
+		if (add) {
+			si.setUser(request.getRemoteUser());
+			si.setIp(request.getRemoteAddr());
+			si.setHost(request.getRemoteHost());
+			si.setId(s.getId());
+			Calendar creation = Calendar.getInstance();
+			creation.setTimeInMillis(s.getCreationTime());
+			si.setCreation(creation);
+			Calendar lastAccessed = Calendar.getInstance();
+			lastAccessed.setTimeInMillis(s.getLastAccessedTime());
+			si.setLastAccessed(lastAccessed);
+			
+			s.setAttribute("user", request.getRemoteUser());
+			sessions.add(si);
+		}
 	}
 	
 	/**
