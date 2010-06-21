@@ -23,7 +23,6 @@ package com.openkm.module.direct;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +44,6 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.LockTokenDAO;
-import com.openkm.dao.bean.LockToken;
 import com.openkm.module.AuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
@@ -119,13 +116,6 @@ public class DirectAuthModule implements AuthModule {
 				Node okmMail = session.getRootNode().getNode(Repository.MAIL);
 				createBase(session, okmMail);
 				okmMail.save();
-			}
-			
-			List<LockToken> ltList = LockTokenDAO.findByUser(session.getUserID());
-			
-			for (Iterator<LockToken> it = ltList.iterator(); it.hasNext(); ) {
-				LockToken lt = it.next();
-				session.addLockToken(lt.getToken());
 			}
 		}
 		

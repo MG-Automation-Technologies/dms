@@ -970,7 +970,8 @@ public class DirectDocumentModule implements DocumentModule {
 			session = (XASession) JCRUtils.getSession();
 			t = new Transaction(session);
 			t.start();
-
+			
+			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			contentNode.restore(contentNode.getBaseVersion(), true);
@@ -1058,10 +1059,11 @@ public class DirectDocumentModule implements DocumentModule {
 			session = (XASession) JCRUtils.getSession();
 			t = new Transaction(session);
 			t.start();
-
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
+				JCRUtils.loadLockTokens(session);
 				contentNode = documentNode.getNode(Document.CONTENT);
 
 				// Set version author
@@ -1250,6 +1252,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		try {
 			session = JCRUtils.getSession();
+			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			documentNode.unlock();
 			JCRUtils.removeLockToken(session, documentNode);
