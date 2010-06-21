@@ -34,7 +34,6 @@ import com.openkm.api.OKMWorkflow;
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.TaskInstance;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
@@ -86,13 +85,16 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	}
 	
 	@Override
-	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException  {
+	public void runProcessDefinition(String UUID, double id, List<GWTFormElement> formElements) throws OKMException  {
 		log.debug("runProcessDefinition()");
-		variables.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, UUID);
 		updateSessionManager();
 		
 		try {
-			OKMWorkflow.getInstance().runProcessDefinition(new Double(id).longValue(), variables);
+			List<FormElement> formElementList = new ArrayList<FormElement>();
+			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
+				formElementList.add(Util.copy(it.next()));
+			}
+			OKMWorkflow.getInstance().runProcessDefinition(new Double(id).longValue(), UUID, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -194,12 +196,16 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 	}
 	
 	@Override
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException {
+	public void setTaskInstanceValues(double id, String transitionName, List<GWTFormElement> formElements) throws OKMException {
 		log.debug("setTaskInstanceValues()");
 		updateSessionManager();
 		
 		try {
-			OKMWorkflow.getInstance().setTaskInstanceValues(new Double(id).longValue(), transitionName, values);
+			List<FormElement> formElementList = new ArrayList<FormElement>();
+			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
+				formElementList.add(Util.copy(it.next()));
+			}
+			OKMWorkflow.getInstance().setTaskInstanceValues(new Double(id).longValue(), transitionName, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());

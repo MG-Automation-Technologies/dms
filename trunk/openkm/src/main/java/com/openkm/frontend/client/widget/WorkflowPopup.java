@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,10 +32,12 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -44,12 +45,13 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
@@ -60,6 +62,8 @@ import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 
 /**
  * WorkflowPopup popup
@@ -76,8 +80,8 @@ public class WorkflowPopup extends DialogBox {
 	private Button button;
 	private Button addButton;
 	private ListBox listBox;
-	private Collection<GWTFormElement> formFieldList;
-	private List<FormWidget> formWidgetList;
+	private List<GWTFormElement> formFieldList;
+	private Map<String, Widget> formWidgetList;
 	private FlexTable formTable;
 	private boolean drawed = false;
 	
@@ -88,7 +92,7 @@ public class WorkflowPopup extends DialogBox {
 		// Establishes auto-close when click outside
 		super(false,true);
 		formFieldList = new ArrayList<GWTFormElement>();
-		formWidgetList = new ArrayList<FormWidget>();
+		formWidgetList = new HashMap<String, Widget>();
 
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
@@ -225,7 +229,7 @@ public class WorkflowPopup extends DialogBox {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
 		workflowService.findLatestProcessDefinitions(callbackFindLatestProcessDefinitions);
-	}
+	}	
 	
 	/**
 	 * Run process definition
@@ -236,7 +240,7 @@ public class WorkflowPopup extends DialogBox {
 				runProcessDefinitionWithValues();
 			} else {
 				formFieldList = new ArrayList<GWTFormElement>();
-				formWidgetList = new ArrayList<FormWidget>();
+				formWidgetList = new HashMap<String, Widget>();
 				getProcessDefinitionForms(new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue());
 			}
 		}
@@ -246,27 +250,47 @@ public class WorkflowPopup extends DialogBox {
 	 * runProcessDefinition with values
 	 */
 	private void runProcessDefinitionWithValues() {
-		// Always trying to capture values
-		Map<String, Object> values = new HashMap<String, Object>();
-		for (Iterator<FormWidget> it = formWidgetList.iterator(); it.hasNext();) {
-			FormWidget fw = it.next();
-			if (fw.getWidget() instanceof TextBox) {
-				TextBox textBox = (TextBox) fw.getWidget();
-				values.put(textBox.getName(), textBox.getValue());
-			} else if (fw.getWidget() instanceof TextArea) {
-				TextArea textArea = (TextArea) fw.getWidget();
-				values.put(textArea.getName(), textArea.getValue());
-			} else if (fw.getWidget() instanceof ListBox) {
-				ListBox listBox = (ListBox) fw.getWidget();
-				values.put(listBox.getName(), listBox.getValue(listBox.getSelectedIndex()));
-			} else if (fw.getWidget() instanceof FlexTable ) {
-				FlexTable tableMulti = (FlexTable) fw.getWidget();
-				String name = ((HTML) tableMulti.getWidget(0,0)).getText();
-				Collection<String> tableValues = new ArrayList<String>();
-				for (int i=1; i<tableMulti.getRowCount(); i++) {
-					tableValues.add(((HTML) tableMulti.getWidget(i,0)).getText()); // Value is in first table column
-				}
-				values.put(name, tableValues.toArray());
+		for (Iterator<GWTFormElement> it = formFieldList.iterator(); it.hasNext();) {
+			GWTFormElement formElement = it.next();
+			if (formWidgetList.containsKey(formElement.getName())) {
+				Widget widget = formWidgetList.get(formElement.getName());
+				if (formElement instanceof GWTInput) {
+					((GWTInput)formElement).setValue(((TextBox)((HorizontalPanel) widget).getWidget(0)).getValue());
+					
+				} else if (formElement instanceof GWTCheckBox) {
+					((GWTCheckBox) formElement).setValue(((CheckBox) widget).getValue());
+					
+				} else if (formElement instanceof GWTTextArea) {
+					((GWTTextArea) formElement).setValue(((TextArea) widget).getValue());
+					
+				} else if (formElement instanceof GWTSelect) {
+					GWTSelect select = (GWTSelect) formElement; 
+					// Disables all options
+					for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+						itx.next().setSelected(false);
+					}
+					if (select.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+						ListBox listBox = (ListBox) widget;
+						if (listBox.getSelectedIndex()>=0) {
+							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+								GWTOption option = itx.next();
+								if (option.getValue().equals(listBox.getValue(listBox.getSelectedIndex()))) {
+									option.setSelected(true);
+								}
+							}
+						}
+					} else {
+						FlexTable tableMulti = (FlexTable) widget;
+						for (int i=1; i<tableMulti.getRowCount(); i++) {
+							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+								GWTOption option = itx.next();
+								if (option.getValue().equals(((HTML) tableMulti.getWidget(i,0)).getText())) {
+									option.setSelected(true);
+								}
+							}
+						}
+					}
+				} 
 			}
 		}
 		
@@ -274,7 +298,7 @@ public class WorkflowPopup extends DialogBox {
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
 		workflowService.runProcessDefinition(gwtDocument.getUuid(), new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
-				                             values, callbackRunProcessDefinition);
+											 formFieldList, callbackRunProcessDefinition);
 		hide();
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
 			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
@@ -317,7 +341,7 @@ public class WorkflowPopup extends DialogBox {
 	 */
 	private void drawForm() {
 		HorizontalPanel hPanel = new HorizontalPanel();
-		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
+		formWidgetList = new HashMap<String, Widget>(); // Init new form widget list
 		
 		// Deletes all table rows
 		while (formTable.getRowCount()>0) {
@@ -336,22 +360,55 @@ public class WorkflowPopup extends DialogBox {
 			int row = formTable.getRowCount();
 			
 			// Prepares to save widget list values
-			FormWidget fw = new FormWidget();
 			Widget widget = null;
 			
 			if (formField instanceof GWTInput) {
 				GWTInput gWTInput = (GWTInput) formField;
-				TextBox textBox = new TextBox();
+				HorizontalPanel hInputPanel = new HorizontalPanel();
+				final TextBox textBox = new TextBox();
+				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
 				textBox.setValue(gWTInput.getValue());
+				
+				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
+					final PopupPanel calendarPopup = new PopupPanel(true);
+					final CalendarWidget calendar = new CalendarWidget();
+					calendar.addChangeHandler(new ChangeHandler(){
+						@Override
+						public void onChange(ChangeEvent event) {
+							calendarPopup.hide();
+							DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
+							textBox.setText(dtf.format(calendar.getDate()));
+						}
+					});
+					calendarPopup.add(calendar);
+					final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
+					calendarIcon.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+							calendarPopup.show();
+						}
+					});
+					hPanel.add(new HTML("&nbsp;"));
+					hPanel.add(calendarIcon);
 					textBox.setEnabled(false);
 				}
+				
 				textBox.setWidth(gWTInput.getWidth());
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
-				formTable.setWidget(row, 1, textBox);
+				formTable.setWidget(row, 1, hInputPanel);
 				widget = textBox;
+				
+			} else if (formField instanceof GWTCheckBox) {
+				GWTCheckBox gWTCheckBox = (GWTCheckBox) formField;
+				CheckBox checkBox = new CheckBox();
+				checkBox.setValue(gWTCheckBox.getValue());
+				formTable.setHTML(row, 0, "<b>" + gWTCheckBox.getLabel() + "</b>");
+				formTable.setWidget(row, 1, checkBox);
+				widget = checkBox;
 				
 			} else if (formField instanceof GWTSelect) {
 				final int rowButton = row;
@@ -398,14 +455,14 @@ public class WorkflowPopup extends DialogBox {
 								}
 							});
 							
-							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
-							tableMulti.setWidget(rowTableMulti, 1, htmlLabel);
-							tableMulti.setWidget(rowTableMulti, 2, removeImage);
-							setRowWordWarp(tableMulti, rowTableMulti, 3, true);
+							tableMulti.setWidget(rowTableMulti,0,htmlValue);
+							tableMulti.setWidget(rowTableMulti,1,htmlLabel);
+							tableMulti.setWidget(rowTableMulti,2,removeImage);
+							setRowWordWarp(tableMulti,rowTableMulti, 3, true);
 							htmlValue.setVisible(false);
 							
 							listBox.removeItem(listBox.getSelectedIndex());
-							if (listBox.getItemCount() <=1 ) {
+							if (listBox.getItemCount()<=1) {
 								listBox.setVisible(false);
 								addButton.setVisible(false);
 							}
@@ -416,11 +473,11 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setName(gWTSelect.getName());
 				listBox.setWidth(gWTSelect.getWidth());
 				listBox.setStyleName("okm-Select");
-				listBox.addItem("", ""); // Always we set and empty value
+				listBox.addItem("",""); // Always we set and empty value
 				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				formTable.setWidget(row, 1, listBox);
-
+				
 				if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					formTable.setWidget(row, 2, addButton);
 					row++; // Incrementing row
@@ -430,14 +487,56 @@ public class WorkflowPopup extends DialogBox {
 					tableMulti.setWidget(0,0,name);
 					name.setVisible(false);
 					widget = tableMulti;
-					
 				} else {
-					for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
-						GWTOption option = itx.next();
-						listBox.addItem(option.getLabel(), option.getValue());
-					}
-					
 					widget = listBox;
+				}
+				
+				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
+					final GWTOption option = itx.next();
+					String value = option.getValue();
+					
+					if (option.isSelected()) {
+						if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+							listBox.addItem(option.getLabel(), value);
+							listBox.setSelectedIndex(listBox.getItemCount()-1);
+						} else {
+							// Case select multiple
+							int rowTableMulti = tableMulti.getRowCount();
+							HTML htmlLabel = new HTML(option.getLabel());
+							HTML htmlValue = new HTML(option.getValue());
+							
+							Image removeImage = new Image("img/icon/actions/delete.gif");
+							removeImage.addClickHandler(new ClickHandler() { 
+								@Override
+								public void onClick(ClickEvent event) {
+									Widget sender = (Widget) event.getSource();
+									
+									// Looking for row to delete 
+									for (int i=0; i<tableMulti.getRowCount(); i++){
+										if (tableMulti.getWidget(i, 1).equals(sender)) {
+											tableMulti.removeRow(i);
+										}
+									}
+									
+									listBox.addItem(option.getLabel(), option.getValue());
+									listBox.setVisible(true);
+									addButton.setVisible(true);
+								}
+							});
+							
+							tableMulti.setWidget(rowTableMulti, 0, htmlValue);
+							tableMulti.setWidget(rowTableMulti, 1, htmlLabel);
+							tableMulti.setWidget(rowTableMulti, 2, removeImage);
+							setRowWordWarp(tableMulti, rowTableMulti, 3, true);
+							htmlValue.setVisible(false);
+						}
+					}
+				}
+				
+				// Shows or hides listbox and addbutton depending list count 
+				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE) && listBox.getItemCount()==0 ) {
+					listBox.setVisible(false);
+					addButton.setVisible(false);
 				}
 				
 			} else if (formField instanceof GWTTextArea) {
@@ -446,6 +545,7 @@ public class WorkflowPopup extends DialogBox {
 				textArea.setName(gWTTextArea.getName());
 				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
 				textArea.setValue(gWTTextArea.getValue());
+				
 				textArea.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
 				formTable.setWidget(row, 1, textArea);
@@ -455,8 +555,7 @@ public class WorkflowPopup extends DialogBox {
 			
 			// Saves widget
 			if (widget!=null) {
-				fw.setWidget(widget);
-				formWidgetList.add(fw);
+				formWidgetList.put(formField.getName(), widget);
 			}
 		}
 		
@@ -481,31 +580,6 @@ public class WorkflowPopup extends DialogBox {
 	private void setRowWordWarp(FlexTable table, int row, int columns, boolean warp) {
 		for (int i=0; i<columns; i++){
 			table.getCellFormatter().setWordWrap(row, i, false);
-		}
-	}
-	
-	/**
-	 * FormWidget
-	 * 
-	 * @author jllort
-	 *
-	 */
-	class FormWidget {
-		
-		private Widget widget;
-		
-		/**
-		 * FormWidget
-		 */
-		public FormWidget() {
-		}
-
-		public Widget getWidget() {
-			return widget;
-		}
-
-		public void setWidget(Widget widget) {
-			this.widget = widget;
 		}
 	}
 }

@@ -36,10 +36,10 @@ import com.openkm.frontend.client.bean.GWTTaskInstance;
  */
 public interface OKMWorkflowService extends RemoteService {
 	public List<GWTProcessDefinition> findLatestProcessDefinitions() throws OKMException;
-	public void runProcessDefinition(String UUID, double id, Map<String,Object> variables) throws OKMException;
+	public void runProcessDefinition(String UUID, double id, List<GWTFormElement> formElements) throws OKMException;
 	public List<GWTTaskInstance> findUserTaskInstances() throws OKMException;
 	public Map<String, List<GWTFormElement>> getProcessDefinitionForms(double id) throws OKMException;
-	public void setTaskInstanceValues(double id, String transitionName, Map<String, Object> values ) throws OKMException;
+	public void setTaskInstanceValues(double id, String transitionName, List<GWTFormElement> formElements ) throws OKMException;
 	public void addComment(double tokenId, String message) throws OKMException;
 	public List<GWTTaskInstance> findPooledTaskInstances() throws OKMException;
 	public void setTaskInstanceActorId(double id) throws OKMException;

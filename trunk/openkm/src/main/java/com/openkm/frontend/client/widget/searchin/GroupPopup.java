@@ -199,10 +199,10 @@ public class GroupPopup extends DialogBox {
 	};
 	
 	/**
-	 * Gets asyncronous to get metada group properties
+	 * Gets asyncronous to get property group form properties
 	 */
-	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaData = new AsyncCallback<Collection<GWTFormElement>>() {
-		public void onSuccess(Collection<GWTFormElement> result){
+	final AsyncCallback<List<GWTFormElement>> callbackGetPropertyGroupForm = new AsyncCallback<List<GWTFormElement>>() {
+		public void onSuccess(List<GWTFormElement> result){
 			hMetaData = result;
 			propertyListBox.clear();
 			propertyListBox.setVisible(true);
@@ -225,10 +225,10 @@ public class GroupPopup extends DialogBox {
 	};
 	
 	/**
-	 * Gets asyncronous to get metada group properties and validate is there's one not assigned
+	 * Gets asyncronous to get property group form properties and validate is there's one not assigned
 	 */
-	final AsyncCallback<Collection<GWTFormElement>> callbackGetMetaDataToValidate = new AsyncCallback<Collection<GWTFormElement>>() {
-		public void onSuccess(Collection<GWTFormElement> result){
+	final AsyncCallback<List<GWTFormElement>> callbackGetPropertyGroupFormDataToValidate = new AsyncCallback<List<GWTFormElement>>() {
+		public void onSuccess(List<GWTFormElement> result){
 			hMetaData = result;
 			
 			Collection<String> actualProperties = Main.get().mainPanel.search.searchBrowser.searchIn.getActualProperties();
@@ -310,7 +310,7 @@ public class GroupPopup extends DialogBox {
 	private void getMetaData() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.getMetaData(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetMetaData);
+		propertyGroupService.getPropertyGroupForm(groupListBox.getValue(groupListBox.getSelectedIndex()), callbackGetPropertyGroupForm);
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public class GroupPopup extends DialogBox {
 			String value = groupListBox.getValue(validate);
 			ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
 			endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-			propertyGroupService.getMetaData(value, callbackGetMetaDataToValidate);
+			propertyGroupService.getPropertyGroupForm(value, callbackGetPropertyGroupFormDataToValidate);
 		} else {
 			// Validate button 
 			if (groupListBox.getItemCount()>1) {

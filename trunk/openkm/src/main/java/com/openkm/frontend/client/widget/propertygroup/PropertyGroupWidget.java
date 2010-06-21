@@ -88,7 +88,7 @@ public class PropertyGroupWidget extends Composite {
 	 * 
 	 * @param docPath The document path
 	 * @param grpName The group name
-	 * @param widget Widget at firs row
+	 * @param widget Widget at first row
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 */
 	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
@@ -347,14 +347,11 @@ public class PropertyGroupWidget extends Composite {
 		
 		if (gwtMetadata instanceof GWTTextArea) {
 			hMetaData.put(propertyName, ((GWTTextArea) gwtMetadata));
-			TextArea textArea = new TextArea(); // Create a widget for this property
-			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
-			textArea.setStyleName("okm-Input");
-			textArea.setSize("400","60");
-			textArea.setReadOnly(true);
-			hWidgetProperties.put(propertyName,textArea);
+			HTML text = new HTML(); // Create a widget for this property
+			text.setText(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
+			hWidgetProperties.put(propertyName,text);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
-			table.setWidget(row, 1, textArea);
+			table.setWidget(row, 1, text);
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
 			table.getCellFormatter().setWidth(row, 1, "100%");
 			setRowWordWarp(row, 2, true);
