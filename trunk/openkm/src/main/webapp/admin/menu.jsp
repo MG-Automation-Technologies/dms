@@ -28,7 +28,7 @@
   &nbsp;
   <a target="frame" href="ActivityLog"><img src="img/toolbar/activity.png" title="Activity log"></a>
   &nbsp;
-  <a target="frame" href="wf_processes.jsp"><img src="img/toolbar/workflow.png" title="Workflow"></a>
+  <a target="frame" href="Workflow"><img src="img/toolbar/workflow.png" title="Workflow"></a>
   &nbsp;
   <a target="frame" href="generate_thesaurus.jsp"><img src="img/toolbar/thesaurus.png" title="Generate thesaurus"></a>
   &nbsp;
