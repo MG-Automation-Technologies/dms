@@ -349,7 +349,7 @@ public class PropertyGroupWidget extends Composite {
 			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
 			textArea.setSize(gwtMetadata.getWidth(), gwtMetadata.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
-			text.setText(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
+			text.setHTML(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
 			hWidgetProperties.put(propertyName,textArea);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
