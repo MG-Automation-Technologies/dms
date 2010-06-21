@@ -103,11 +103,11 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables)
-			throws RepositoryException, DatabaseException, WorkflowException {
+	public ProcessInstance runProcessDefinition(long processDefinitionId, String uuid, 
+			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("runProcessDefinition({})", processDefinitionId, variables);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.runProcessDefinition(processDefinitionId, variables);
+		ProcessInstance result = wm.runProcessDefinition(processDefinitionId, uuid, variables);
 		log.debug("runProcessDefinition: {}", result);
 		return result;
 	}

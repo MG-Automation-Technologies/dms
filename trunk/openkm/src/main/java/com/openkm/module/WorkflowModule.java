@@ -70,8 +70,8 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
-	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables) 
-			throws RepositoryException, DatabaseException, WorkflowException;
+	public ProcessInstance runProcessDefinition(long processDefinitionId, String uuid, 
+			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
