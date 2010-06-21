@@ -38,6 +38,30 @@
       <table class="results" width="90%">
         <tr><th>Instance ID</th><th>Key</th><th>Status</th><th>Start Date</th><th>End Date</th><th width="100px">Actions</th></tr>
         <c:forEach var="pi" items="${processInstances}" varStatus="row">
+          <c:url value="Workflow" var="urlProcessInstanceView">
+            <c:param name="action" value="processInstanceView"/>
+            <c:param name="iid" value="${pi.id}"/>
+          </c:url>
+          <c:url value="Workflow" var="urlProcessInstanceDelete">
+            <c:param name="action" value="processInstanceDelete"/>
+            <c:param name="id" value="${pd.id}"/>
+            <c:param name="iid" value="${pi.id}"/>
+          </c:url>
+          <c:url value="Workflow" var="urlProcessInstanceEnd">
+            <c:param name="action" value="processInstanceEnd"/>
+            <c:param name="id" value="${pd.id}"/>
+            <c:param name="iid" value="${pi.id}"/>
+          </c:url>
+          <c:url value="Workflow" var="urlProcessInstanceResume">
+            <c:param name="action" value="processInstanceResume"/>
+            <c:param name="id" value="${pd.id}"/>
+            <c:param name="iid" value="${pi.id}"/>
+          </c:url>
+          <c:url value="Workflow" var="urlProcessInstanceSuspend">
+            <c:param name="action" value="processInstanceSuspend"/>
+            <c:param name="id" value="${pd.id}"/>
+            <c:param name="iid" value="${pi.id}"/>
+          </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${pi.id}</td>
             <td>${pi.key}</td>
@@ -54,24 +78,24 @@
             <td><fmt:formatDate value="${pi.start.time}" type="both"/></td>
             <td><fmt:formatDate value="${pi.end.time}" type="both"/></td>
             <td>
-              <a href="wf_procins.jsp?id=${pi.id}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
+              <a href="${urlProcessInstanceView}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
               &nbsp;
-              <a href="wf_procdef.jsp?action=delete&id=${pd.id}&iid=${pi.id}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              <a href="${urlProcessInstanceDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               <c:if test="${pi.end == null}">
                 &nbsp;
-                <a href="wf_procdef.jsp?action=end&id=${pd.id}&iid=${pi.id}"><img src="img/action/end.png" alt="End" title="End"/></a>
+                <a href="${urlProcessInstanceEnd}"><img src="img/action/end.png" alt="End" title="End"/></a>
               </c:if>
               &nbsp;
               <c:choose>
                 <c:when test="${pi.suspended}">
-                  <a href="wf_procdef.jsp?action=resume&id=${pd.id}&iid=${pi.id}"><img src="img/action/resume.png" alt="Resume" title="Resume"/></a>
+                  <a href="${urlProcessInstanceResume}"><img src="img/action/resume.png" alt="Resume" title="Resume"/></a>
                 </c:when>
                 <c:otherwise>
-                  <a href="wf_procdef.jsp?action=suspend&id=${pd.id}&iid=${pi.id}"><img src="img/action/suspend.png" alt="Suspend" title="Suspend"/></a>
+                  <a href="${urlProcessInstanceSuspend}"><img src="img/action/suspend.png" alt="Suspend" title="Suspend"/></a>
                 </c:otherwise>
               </c:choose>
             </td>
-          </tr>	
+          </tr>
         </c:forEach>
       </table>
       <h2>Forms</h2>
