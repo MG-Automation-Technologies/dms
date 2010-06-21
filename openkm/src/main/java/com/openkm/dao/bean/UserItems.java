@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class UserItems implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String user;
-	private long folders;
-	private long documents;
-	private long mails;
+	private int folders;
+	private int documents;
+	private int mails;
 	private long size;
 	
 	public String getUser() {
@@ -18,27 +18,27 @@ public class UserItems implements Serializable {
 		this.user = user;
 	}
 	
-	public long getFolders() {
+	public int getFolders() {
 		return folders;
 	}
 	
-	public void setFolders(long folders) {
+	public void setFolders(int folders) {
 		this.folders = folders;
 	}
 	
-	public long getDocuments() {
+	public int getDocuments() {
 		return documents;
 	}
 	
-	public void setDocuments(long document) {
+	public void setDocuments(int document) {
 		this.documents = document;
 	}
 	
-	public long getMails() {
+	public int getMails() {
 		return mails;
 	}
 
-	public void setMails(long mails) {
+	public void setMails(int mails) {
 		this.mails = mails;
 	}
 
