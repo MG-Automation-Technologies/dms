@@ -26,7 +26,16 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTOption implements IsSerializable {
 	private String label = "";
 	private String value = "";
+	private boolean selected = false;
 	
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
 	public String getLabel() {
 		return label;
 	}
@@ -48,6 +57,7 @@ public class GWTOption implements IsSerializable {
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", value="); sb.append(value);
+		sb.append(", seected="); sb.append(selected);
 		sb.append("}");
 		return sb.toString();
 	}
