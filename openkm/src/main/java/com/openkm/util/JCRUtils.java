@@ -73,7 +73,7 @@ public class JCRUtils {
 			// Admin and System user is not propagated across the child nodes
 			if (!values[i].getString().equals(Config.SYSTEM_USER) && 
 					!values[i].getString().equals(Config.ADMIN_USER)) {
-				list.add(values[i].getString()); 
+				list.add(values[i].getString());
 			}
 		}
 		
