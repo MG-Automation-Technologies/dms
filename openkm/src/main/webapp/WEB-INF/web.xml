@@ -205,7 +205,11 @@
     <servlet-name>TwitterAccountServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.TwitterAccountServlet</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>WorkflowServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.WorkflowServlet</servlet-class>
+  </servlet>
+    
   <!-- WebServices -->
   <servlet>
     <servlet-name>OKMDocument</servlet-name>
@@ -249,7 +253,7 @@
     <servlet-name>Test</servlet-name>
     <servlet-class>com.openkm.servlet.TestServlet</servlet-class>
   </servlet>
-    
+
   <!-- Frontend Servlet Mappings -->
   <!-- 
   <servlet-mapping>
@@ -416,6 +420,10 @@
   <servlet-mapping>
     <servlet-name>TwitterAccountServlet</servlet-name>
     <url-pattern>/admin/TwitterAccount</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>WorkflowServlet</servlet-name>
+    <url-pattern>/admin/Workflow</url-pattern>
   </servlet-mapping>
 
   <!-- WebServices Servlet Mappings -->
