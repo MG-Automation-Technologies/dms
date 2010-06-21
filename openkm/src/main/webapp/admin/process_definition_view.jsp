@@ -29,7 +29,7 @@
       </table>
       <table class="results" width="90%">
         <tr><th>Process ID</th><th>Name</th><th>Description</th><th>Version</th></tr>
-        <tr class="odd">
+        <tr class="even">
           <td>${processDefinition.id}</td><td>${processDefinition.name}</td>
           <td>${processDefinition.description}</td><td>${processDefinition.version}</td>
         </tr>
