@@ -38,7 +38,7 @@ public class UserItems implements Serializable {
 		return mails;
 	}
 
-	public void setMails(int mails) {
+	public void setMails(long mails) {
 		this.mails = mails;
 	}
 
