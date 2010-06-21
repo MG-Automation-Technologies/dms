@@ -264,6 +264,35 @@ public class AuthDAO {
 	}
 	
 	/**
+	 * Get all users within a role
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Role> findRolesByUser(String usrId, boolean filterByActive) throws DatabaseException {
+		log.debug("findRolesByUser({}, {})", usrId, filterByActive);
+		String qs = "select r from User u, Role r where u.id=:usrId and r in elements(r.roles) " + 
+			(filterByActive?"and r.active=:active":"")+" order by r.id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setString("usrId", usrId);
+			
+			if (filterByActive) {
+				q.setBoolean("active", true);
+			}
+			
+			List<Role> ret = q.list();
+			log.debug("findRolesByUser: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
 	 * Get user from database
 	 */
 	public static User findUserByPk(String usrId) throws DatabaseException {
