@@ -72,10 +72,20 @@ public class WorkflowServlet extends BaseServlet {
 		try {
 			session = JCRUtils.getSession();
 			
-			if (action.equals("deleteProcessDefinition")) {
-				deleteProcessDefinition(session, request, response);
-			} else if (action.equals("viewProcessDefinition")) {
-				viewProcessDefinition(session, request, response);
+			if (action.equals("processDefinitionDelete")) {
+				processDefinitionDelete(session, request, response);
+			} else if (action.equals("processDefinitionView")) {
+				processDefinitionView(session, request, response);
+			} else if (action.equals("processInstanceView")) {
+				processInstanceView(session, request, response);
+			} else if (action.equals("processInstanceDelete")) {
+				processInstanceDelete(session, request, response);
+			} else if (action.equals("processInstanceEnd")) {
+				processInstanceEnd(session, request, response);
+			} else if (action.equals("processInstanceResume")) {
+				processInstanceResume(session, request, response);
+			} else if (action.equals("processInstanceSuspend")) {
+				processInstanceSuspend(session, request, response);
 			}
 			
 			if (action.equals("") || action.equals("deleteProcessDefinition")) {
@@ -119,7 +129,7 @@ public class WorkflowServlet extends BaseServlet {
 	/**
 	 * Delete a process definition
 	 */
-	private void deleteProcessDefinition(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void processDefinitionDelete(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
@@ -133,7 +143,7 @@ public class WorkflowServlet extends BaseServlet {
 	/**
 	 * View process definition
 	 */
-	private void viewProcessDefinition(Session session, HttpServletRequest request, HttpServletResponse response)
+	private void processDefinitionView(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException,
 			ParseException {
 		log.debug("viewProcessDefinition({}, {}, {})", new Object[] { session, request, response });
@@ -158,6 +168,70 @@ public class WorkflowServlet extends BaseServlet {
 		sc.setAttribute("processDefinitionForms", pdf);
 		sc.getRequestDispatcher("/admin/process_definition_view.jsp").forward(request, response);
 		log.debug("viewProcessDefinition: void");		
+	}
+	
+	/**
+	 * View process instance
+	 */
+	private void processInstanceView(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		
+	}
+	
+	/**
+	 * Delete process instance
+	 */
+	private void processInstanceDelete(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceDelete({}, {}, {})", new Object[] { session, request, response });
+		long id = WebUtil.getLong(request, "id");
+		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_DELETE", null, null);
+		log.debug("processInstanceDelete: void");
+	}
+	
+	/**
+	 * End process instance
+	 */
+	private void processInstanceEnd(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceEnd({}, {}, {})", new Object[] { session, request, response });
+		long id = WebUtil.getLong(request, "id");
+		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_END", null, null);
+		log.debug("processInstanceEnd: void");
+	}
+	
+	/**
+	 * Resume process instance
+	 */
+	private void processInstanceResume(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceResume({}, {}, {})", new Object[] { session, request, response });
+		long id = WebUtil.getLong(request, "id");
+		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_RESUME", null, null);
+		log.debug("processInstanceResume: void");
+	}
+	
+	/**
+	 * Suspend process instance
+	 */
+	private void processInstanceSuspend(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceSuspend({}, {}, {})", new Object[] { session, request, response });
+		long id = WebUtil.getLong(request, "id");
+		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_SUSPEND", null, null);
+		log.debug("processInstanceSuspend: void");
 	}
 	
 	/**
