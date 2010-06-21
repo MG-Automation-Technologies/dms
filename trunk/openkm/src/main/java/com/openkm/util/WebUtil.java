@@ -137,6 +137,26 @@ public class WebUtil {
 		}
 		return intValue;
 	}
+
+	/**
+	 * Extrae un parámetro de tipo long del request. 
+	 * Si el parámetro no existe o no es valido devuelve 0.
+	 * @param request Petición de la que extraer el parámetro.
+	 * @param name Nombre del parámetro
+	 * @return El valor int del parámetro o 0 si no existe o no es valido.
+	 */
+	public static final long getLong(HttpServletRequest request, String name) {
+		String strValue = request.getParameter(name);
+		long longValue = 0;
+		if (strValue != null && !EMPTY_STRING.equals(strValue)) {
+			try {
+				longValue = Long.parseLong(strValue);
+			} catch (Throwable t) {
+				// Ignore
+			}
+		}
+		return longValue;
+	}
 	
 	/**
 	 * Extrae un parámetro de tipo booleano del request. 
