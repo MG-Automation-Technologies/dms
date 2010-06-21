@@ -297,7 +297,7 @@ public class JCRUtils {
 				}
 			});
 		} catch (NamingException e) {
-			e.printStackTrace();
+			throw new javax.jcr.LoginException(e.getMessage());
 		}
 		
 		if (obj instanceof javax.jcr.LoginException) {
