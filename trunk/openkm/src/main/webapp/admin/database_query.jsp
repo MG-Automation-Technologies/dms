@@ -19,7 +19,23 @@
       <form action="DatabaseQuery">
         <table class="form">
           <tr><td><textarea cols="75" rows="5" name="qs">${qs}</textarea></td></tr>
-          <tr><td align="right"><input type="submit" value="Send"/></td></tr>
+          <tr>
+            <td align="right">
+              <select name="method">
+                <c:choose>
+                  <c:when test="${method == 'jdbc'}">
+                    <option value="jdbc" selected="selected">JDBC</option>
+                    <option value="hibernate">Hibernate</option>
+                  </c:when>
+                  <c:otherwise>
+                    <option value="jdbc">JDBC</option>
+                    <option value="hibernate" selected="selected">Hibernate</option>
+                  </c:otherwise>
+                </c:choose>
+              </select>
+              <input type="submit" value="Send"/>
+            </td>
+          </tr>
         </table>
       </form>
       <br/>
