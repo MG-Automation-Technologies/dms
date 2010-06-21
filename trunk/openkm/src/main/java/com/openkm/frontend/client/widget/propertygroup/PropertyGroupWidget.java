@@ -227,7 +227,7 @@ public class PropertyGroupWidget extends Composite {
 					ListBox listBox = (ListBox) hWidgetProperties.get(formField.getName());
 					table.setWidget(rows, 1, listBox);
 					
-				} else {
+				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formField.getName());
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);
 					ListBox listMulti = (ListBox) hPanel.getWidget(2);
@@ -289,7 +289,7 @@ public class PropertyGroupWidget extends Composite {
 						}
 					}
 					
-				} else {
+				} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 					FlexTable tableMulti = (FlexTable) hPanel.getWidget(0);		
 					
@@ -433,7 +433,7 @@ public class PropertyGroupWidget extends Composite {
 				table.getCellFormatter().setWidth(row, 1, "100%");
 				setRowWordWarp(row, 2, true);
 				
-			} else {
+			} else if (gwtSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 				final HorizontalPanel hPanel = new HorizontalPanel();
 				ListBox listMulti = new ListBox();
 				listMulti.setStyleName("okm-Select");

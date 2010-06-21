@@ -369,6 +369,7 @@ public class WorkflowPopup extends DialogBox {
 				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
 				textBox.setValue(gWTInput.getValue());
+				textBox.setWidth(gWTInput.getWidth());
 				
 				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
@@ -475,15 +476,15 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("",""); // Always we set and empty value
 				
+				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
-					formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 					formTable.setWidget(row, 1, listBox);
 					widget = listBox;
 				} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
-					formTable.setHTML(row, 0, "");
 					formTable.setWidget(row, 1, tableMulti);
 					formTable.setWidget(row, 2, addButton);
 					row++; // Incrementing row
+					formTable.setHTML(row, 0, "");
 					
 					HTML name = new HTML(gWTSelect.getName()); // First table name it'll be the value name
 					tableMulti.setWidget(0,0,name);
