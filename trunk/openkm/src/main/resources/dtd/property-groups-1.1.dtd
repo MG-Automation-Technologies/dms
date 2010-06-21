@@ -45,6 +45,7 @@
 <!ATTLIST option
 	label CDATA #REQUIRED
 	value CDATA #REQUIRED
+	selected (true|false) "false"
 >
 
 <!ELEMENT validator EMPTY>
