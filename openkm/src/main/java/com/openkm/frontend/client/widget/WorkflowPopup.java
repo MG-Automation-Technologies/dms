@@ -348,7 +348,7 @@ public class WorkflowPopup extends DialogBox {
 			formTable.removeRow(0);
 		}
 		
-		// Adds submit button
+		// Show form / hide list
 		if (formFieldList.size()>0) {
 			formTable.setVisible(true);
 			listBox.setVisible(false);
@@ -475,21 +475,21 @@ public class WorkflowPopup extends DialogBox {
 				listBox.setStyleName("okm-Select");
 				listBox.addItem("",""); // Always we set and empty value
 				
-				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
-				formTable.setWidget(row, 1, listBox);
-				
-				if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
-					formTable.setWidget(row, 2, addButton);
-					row++; // Incrementing row
+				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+					formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
+					formTable.setWidget(row, 1, listBox);
+					widget = listBox;
+				} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
 					formTable.setHTML(row, 0, "");
 					formTable.setWidget(row, 1, tableMulti);
+					formTable.setWidget(row, 2, addButton);
+					row++; // Incrementing row
+					
 					HTML name = new HTML(gWTSelect.getName()); // First table name it'll be the value name
 					tableMulti.setWidget(0,0,name);
 					name.setVisible(false);
 					widget = tableMulti;
-				} else {
-					widget = listBox;
-				}
+				} 
 				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					final GWTOption option = itx.next();
@@ -499,7 +499,8 @@ public class WorkflowPopup extends DialogBox {
 						if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 							listBox.addItem(option.getLabel(), value);
 							listBox.setSelectedIndex(listBox.getItemCount()-1);
-						} else {
+							
+						} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) { 
 							// Case select multiple
 							int rowTableMulti = tableMulti.getRowCount();
 							HTML htmlLabel = new HTML(option.getLabel());
