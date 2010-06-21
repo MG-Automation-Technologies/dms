@@ -133,7 +133,7 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		OKMWorkflow.getInstance().deleteProcessDefinition(id);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_DEFINITION_DELETE", null, null);
@@ -167,7 +167,7 @@ public class WorkflowServlet extends BaseServlet {
 		sc.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(id));
 		sc.setAttribute("processDefinitionForms", pdf);
 		sc.getRequestDispatcher("/admin/process_definition_view.jsp").forward(request, response);
-		log.debug("viewProcessDefinition: void");		
+		log.debug("viewProcessDefinition: void");
 	}
 	
 	/**
@@ -185,7 +185,8 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceDelete({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		long iid = WebUtil.getLong(request, "iid");
+		OKMWorkflow.getInstance().deleteProcessInstance(iid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_DELETE", null, null);
@@ -199,7 +200,8 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceEnd({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		long iid = WebUtil.getLong(request, "iid");
+		
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_END", null, null);
@@ -213,7 +215,8 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceResume({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		long iid = WebUtil.getLong(request, "iid");
+		OKMWorkflow.getInstance().resumeProcessInstance(iid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_RESUME", null, null);
@@ -227,7 +230,8 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceSuspend({}, {}, {})", new Object[] { session, request, response });
 		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);		
+		long iid = WebUtil.getLong(request, "iid");
+		OKMWorkflow.getInstance().suspendProcessInstance(iid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_SUSPEND", null, null);
