@@ -205,6 +205,8 @@ public class QueryParams implements Serializable {
 		sb.append(", dashboard="); sb.append(dashboard);
 		sb.append(", domain="); sb.append(domain);
 		sb.append(", operator="); sb.append(operator);
+		sb.append(", lastModifiedFrom="); sb.append(lastModifiedFrom==null?null:lastModifiedFrom.getTime());
+		sb.append(", lastModifiedTo="); sb.append(lastModifiedTo==null?null:lastModifiedTo.getTime());
 		sb.append("}");
 		return sb.toString();
 	}
