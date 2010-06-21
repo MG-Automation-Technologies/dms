@@ -662,14 +662,14 @@ public class DirectDashboardModule implements DashboardModule {
 		// Get the saved query params
 		QueryParams params = QueryParamsDAO.findByPk(qpId);
 		log.debug("PARAMS: {}", params.toString());
-			
+		
 		// Set query date (first time)
 		if (params.getLastModifiedTo() == null) {
 			Calendar firstExecution = Calendar.getInstance();
 			firstExecution.add(Calendar.MONTH, -1);
 			params.setLastModifiedTo(firstExecution);
 		}
-			
+		
 		Calendar lastExecution = resetHours(params.getLastModifiedTo());
 		Calendar actualDate = resetHours(Calendar.getInstance());
 		log.debug("lastExecution -> {}", lastExecution.getTime());
