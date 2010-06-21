@@ -22,10 +22,7 @@
 package com.openkm.principal;
 
 public class PrincipalAdapterException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2571810121169161793L;
+	private static final long serialVersionUID = 1L;
 
 	public PrincipalAdapterException() {
 		super();

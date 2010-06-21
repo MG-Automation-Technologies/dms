@@ -96,6 +96,26 @@ public class DatabasePrincipalAdapter implements PrincipalAdapter {
 		log.debug("getUsersByRole: {}", list);
 		return list;
 	}
+	
+	@Override
+	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
+		log.debug("getRolesByUser({})", user);
+		List<String> list = new ArrayList<String>();
+				
+		try {
+			List<Role> col = AuthDAO.findRolesByUser(user, true);
+			
+			for (Iterator<Role> it = col.iterator(); it.hasNext(); ) {
+				Role dbRole = it.next();
+				list.add(dbRole.getId());
+			}
+		} catch (DatabaseException e) {
+			throw new PrincipalAdapterException(e.getMessage(), e);
+		}
+		
+		log.debug("getRolesByUser: {}", list);
+		return list;
+	}
 
 	@Override
 	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
