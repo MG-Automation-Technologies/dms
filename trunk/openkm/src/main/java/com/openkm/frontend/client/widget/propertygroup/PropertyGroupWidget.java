@@ -24,6 +24,7 @@ package com.openkm.frontend.client.widget.propertygroup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class PropertyGroupWidget extends Composite {
 	private FlexTable table;
 	private String grpName;
 	private String docPath;
-	private Map<String, GWTFormElement> hMetaData = new HashMap<String, GWTFormElement>();
+	private Map<String, GWTFormElement> hMetaData = new LinkedHashMap<String, GWTFormElement>();
 	private Map<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
@@ -149,7 +150,7 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	final AsyncCallback<List<GWTFormElement>> callbackGetProperties = new AsyncCallback<List<GWTFormElement>>() {
 		public void onSuccess(List<GWTFormElement> result){
-			hMetaData = new HashMap<String, GWTFormElement>();;
+			hMetaData = new LinkedHashMap<String, GWTFormElement>();;
 			hWidgetProperties.clear();
 			int rows = 1;
 
@@ -213,7 +214,7 @@ public class PropertyGroupWidget extends Composite {
 			
 			if (gwtMetadata instanceof GWTTextArea) {
 				TextArea textArea = (TextArea) hWidgetProperties.get(propertyName);
-				textArea.setReadOnly(false);
+				table.setWidget(rows, 1, textArea);
 				
 			} else if (gwtMetadata instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(propertyName);
@@ -245,6 +246,7 @@ public class PropertyGroupWidget extends Composite {
 					for (int i=0; i<tableMulti.getRowCount(); i++) {
 						((Image) tableMulti.getWidget(i,1)).setVisible(true);
 					}
+					table.setWidget(rows, 1, hPanel);
 				}
 			}
 			rows++;
@@ -347,9 +349,13 @@ public class PropertyGroupWidget extends Composite {
 		
 		if (gwtMetadata instanceof GWTTextArea) {
 			hMetaData.put(propertyName, ((GWTTextArea) gwtMetadata));
+			TextArea textArea = new TextArea();
+			textArea.setStyleName("okm-Input");
+			textArea.setText(((GWTTextArea) gwtMetadata).getValue());
+			textArea.setSize(gwtMetadata.getWidth(), gwtMetadata.getHeight());
 			HTML text = new HTML(); // Create a widget for this property
 			text.setText(((GWTTextArea) gwtMetadata).getValue().replaceAll("\n", "<br>"));
-			hWidgetProperties.put(propertyName,text);
+			hWidgetProperties.put(propertyName,textArea);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
 			table.setWidget(row, 1, text);
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
@@ -362,6 +368,7 @@ public class PropertyGroupWidget extends Composite {
 			final TextBox textBox = new TextBox(); // Create a widget for this property
 			hPanel.add(textBox);
 			textBox.setText(((GWTInput) gwtMetadata).getValue());
+			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
