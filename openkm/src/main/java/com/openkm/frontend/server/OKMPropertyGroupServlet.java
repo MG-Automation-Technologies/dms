@@ -239,10 +239,10 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	}
 	
 	@Override
-	public Collection<GWTFormElement> getMetaData(String grpName) throws OKMException {
-		log.debug("getMetaData({})", grpName);
-		Collection<FormElement> properties = new ArrayList<FormElement>();
-		Collection<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
+	public List<GWTFormElement> getPropertyGroupForm(String grpName) throws OKMException {
+		log.debug("getPropertyGroupForm({})", grpName);
+		List<FormElement> properties = new ArrayList<FormElement>();
+		List<GWTFormElement> gwtProperties = new ArrayList<GWTFormElement>();
 		updateSessionManager();
 
 		try {
@@ -265,7 +265,7 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
-		log.debug("getMetaData: {}", gwtProperties);
+		log.debug("getPropertyGroupForm: {}", gwtProperties);
 		return gwtProperties;
 	}
 	

@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -49,12 +51,14 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTButton;
+import com.openkm.frontend.client.bean.GWTCheckBox;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
@@ -70,6 +74,8 @@ import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
+import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 
 /**
  * WorkflowFormPanel
@@ -87,9 +93,9 @@ public class WorkflowFormPanel extends Composite {
 	private FlexTable table;
 	private FlexTable parameterTable;
 	private FlexTable formTable;
-	private Collection<GWTFormElement> formFieldList = new ArrayList<GWTFormElement>();
+	private List<GWTFormElement> formFieldList = new ArrayList<GWTFormElement>();
 	private Button submitForm;
-	private List<FormWidget> formWidgetList = new ArrayList<FormWidget>();
+	private Map<String, Widget> formWidgetList = new HashMap<String, Widget>();
 	private TitleWidget taskTittle;
 	private TitleWidget processInstanceTittle;
 	private TitleWidget processDefinitionTittle;
@@ -409,7 +415,7 @@ public class WorkflowFormPanel extends Composite {
 		table.setHTML(13, 1, "");
 		table.setHTML(14, 1, "");
 		table.setHTML(15, 1, "");
-		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
+		formWidgetList = new HashMap<String, Widget>(); // Init new form widget list
 		formFieldList = new ArrayList<GWTFormElement>();
 		documentLink = null;
 		textArea.setText("");
@@ -452,7 +458,7 @@ public class WorkflowFormPanel extends Composite {
 	private void drawForm() {
 		submitForm.setVisible(true); // always set form visible
 		HorizontalPanel hPanel = new HorizontalPanel();
-		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
+		formWidgetList = new HashMap<String, Widget>(); // Init new form widget list
 		
 		// Deletes all table rows
 		removeAllFormTableRows();
@@ -471,7 +477,6 @@ public class WorkflowFormPanel extends Composite {
 			int row = formTable.getRowCount();
 			
 			// Prepares to save widget list values
-			FormWidget fw = new FormWidget();
 			Widget widget = null;
 			
 			if (formField instanceof GWTButton) {
@@ -499,20 +504,51 @@ public class WorkflowFormPanel extends Composite {
 				
 			} else if (formField instanceof GWTInput) {
 				GWTInput gWTInput = (GWTInput) formField;
-				TextBox textBox = new TextBox();
+				HorizontalPanel hInputPanel = new HorizontalPanel();
+				final TextBox textBox = new TextBox();
+				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
 				textBox.setValue(gWTInput.getValue());
 				
 				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
+					final PopupPanel calendarPopup = new PopupPanel(true);
+					final CalendarWidget calendar = new CalendarWidget();
+					calendar.addChangeHandler(new ChangeHandler(){
+						@Override
+						public void onChange(ChangeEvent event) {
+							calendarPopup.hide();
+							DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
+							textBox.setText(dtf.format(calendar.getDate()));
+						}
+					});
+					calendarPopup.add(calendar);
+					final Image calendarIcon = new Image(OKMBundleResources.INSTANCE.calendar());
+					calendarIcon.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							calendarPopup.setPopupPosition(calendarIcon.getAbsoluteLeft(), calendarIcon.getAbsoluteTop()-2);
+							calendarPopup.show();
+						}
+					});
+					hPanel.add(new HTML("&nbsp;"));
+					hPanel.add(calendarIcon);
 					textBox.setEnabled(false);
 				}
 				
 				textBox.setWidth(gWTInput.getWidth());
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
-				formTable.setWidget(row, 1, textBox);
+				formTable.setWidget(row, 1, hInputPanel);
 				widget = textBox;
+				
+			} else if (formField instanceof GWTCheckBox) {
+				GWTCheckBox gWTCheckBox = (GWTCheckBox) formField;
+				CheckBox checkBox = new CheckBox();
+				checkBox.setValue(gWTCheckBox.getValue());
+				formTable.setHTML(row, 0, "<b>" + gWTCheckBox.getLabel() + "</b>");
+				formTable.setWidget(row, 1, checkBox);
+				widget = checkBox;
 				
 			} else if (formField instanceof GWTSelect) {
 				final int rowButton = row;
@@ -659,8 +695,7 @@ public class WorkflowFormPanel extends Composite {
 			
 			// Saves widget
 			if (widget!=null) {
-				fw.setWidget(widget);
-				formWidgetList.add(fw);
+				formWidgetList.put(formField.getName(), widget);
 			}
 		}
 		
@@ -694,58 +729,53 @@ public class WorkflowFormPanel extends Composite {
 	 * @param transitionName
 	 */
 	private void setTaskInstanceValues(double id, String transitionName) {
-		// Init values hashmap
-		Map<String, Object> values = new HashMap<String, Object>();
-		for (Iterator<FormWidget> it = formWidgetList.iterator(); it.hasNext();) {
-			FormWidget fw = it.next();
-			if (fw.getWidget() instanceof TextBox) {
-				TextBox textBox = (TextBox) fw.getWidget();
-				values.put(textBox.getName(), textBox.getValue());
-			} else if (fw.getWidget() instanceof TextArea) {
-				TextArea textArea = (TextArea) fw.getWidget();
-				values.put(textArea.getName(), textArea.getValue());
-			} else if (fw.getWidget() instanceof ListBox) {
-				ListBox listBox = (ListBox) fw.getWidget();
-				values.put(listBox.getName(), listBox.getValue(listBox.getSelectedIndex()));
-			} else if (fw.getWidget() instanceof FlexTable ) {
-				FlexTable tableMulti = (FlexTable) fw.getWidget();
-				String name = ((HTML) tableMulti.getWidget(0,0)).getText();
-				Collection<String> tableValues = new ArrayList<String>();
-				for (int i=1; i<tableMulti.getRowCount(); i++) {
-					tableValues.add(((HTML) tableMulti.getWidget(i,0)).getText()); // Value is in first table column
-				}
-				values.put(name, tableValues.toArray());
+		for (Iterator<GWTFormElement> it = formFieldList.iterator(); it.hasNext();) {
+			GWTFormElement formElement = it.next();
+			if (formWidgetList.containsKey(formElement.getName())) {
+				Widget widget = formWidgetList.get(formElement.getName());
+				if (formElement instanceof GWTInput) {
+					((GWTInput)formElement).setValue(((TextBox)((HorizontalPanel) widget).getWidget(0)).getValue());
+					
+				} else if (formElement instanceof GWTCheckBox) {
+					((GWTCheckBox) formElement).setValue(((CheckBox) widget).getValue());
+					
+				} else if (formElement instanceof GWTTextArea) {
+					((GWTTextArea) formElement).setValue(((TextArea) widget).getValue());
+					
+				} else if (formElement instanceof GWTSelect) {
+					GWTSelect select = (GWTSelect) formElement; 
+					// Disables all options
+					for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+						itx.next().setSelected(false);
+					}
+					if (select.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+						ListBox listBox = (ListBox) widget;
+						if (listBox.getSelectedIndex()>=0) {
+							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+								GWTOption option = itx.next();
+								if (option.getValue().equals(listBox.getValue(listBox.getSelectedIndex()))) {
+									option.setSelected(true);
+								}
+							}
+						}
+					} else {
+						FlexTable tableMulti = (FlexTable) widget;
+						for (int i=1; i<tableMulti.getRowCount(); i++) {
+							for (Iterator<GWTOption> itx = select.getOptions().iterator(); itx.hasNext();)  {
+								GWTOption option = itx.next();
+								if (option.getValue().equals(((HTML) tableMulti.getWidget(i,0)).getText())) {
+									option.setSelected(true);
+								}
+							}
+						}
+					}
+				} 
 			}
 		}
 		
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
 		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);		
-		workflowService.setTaskInstanceValues(id, transitionName, values, callbackSetTaskInstanceValues);
-	}
-	
-	/**
-	 * FormWidget
-	 * 
-	 * @author jllort
-	 *
-	 */
-	class FormWidget {
-		
-		private Widget widget;
-		
-		/**
-		 * FormWidget
-		 */
-		public FormWidget() {
-		}
-
-		public Widget getWidget() {
-			return widget;
-		}
-
-		public void setWidget(Widget widget) {
-			this.widget = widget;
-		}
+		workflowService.setTaskInstanceValues(id, transitionName, formFieldList, callbackSetTaskInstanceValues);
 	}
 	
 	/**
