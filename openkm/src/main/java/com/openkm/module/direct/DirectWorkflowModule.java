@@ -255,8 +255,8 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables)
-			throws RepositoryException, DatabaseException, WorkflowException {
+	public ProcessInstance runProcessDefinition(long processDefinitionId, String uuid, 
+			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("runProcessDefinition({}, {})", processDefinitionId, variables);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
