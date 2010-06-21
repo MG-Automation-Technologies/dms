@@ -23,7 +23,6 @@ package com.openkm.frontend.client.service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.openkm.frontend.client.bean.GWTFormElement;
@@ -38,9 +37,9 @@ public interface OKMPropertyGroupServiceAsync {
 	public void getAllGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
 	public void addGroup(String docPath, String grpName, AsyncCallback<?> callback);
 	public void getGroups(String docPath, AsyncCallback<List<GWTPropertyGroup>> callback);
-	public void getProperties(String docPath, String grpName, AsyncCallback<Map<String, String[]>> callback);
+	public void getProperties(String docPath, String grpName, AsyncCallback<List<GWTFormElement>> callback);
 	public void getMetaData(String grpName, AsyncCallback<Collection<GWTFormElement>> callback);
-	public void setProperties(String docPath, String grpName, Map<String, String[]> properties, AsyncCallback<?> callback);
+	public void setProperties(String docPath, String grpName, List<GWTFormElement> formProperties, AsyncCallback<?> callback);
 	public void removeGroup( String docPath, String grpName, AsyncCallback<?> callback);
 	public void getPropertyGroupWizard(AsyncCallback<List<GWTPropertyGroup>> callback);
 }

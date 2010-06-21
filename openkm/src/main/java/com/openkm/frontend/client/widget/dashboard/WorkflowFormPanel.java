@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.dashboard;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,7 +81,6 @@ public class WorkflowFormPanel extends Composite {
 	
 	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
-	private final String VARIABLE_KEY_ID = "$";
 	
 	private VerticalPanel vPanel;
 	private GWTTaskInstance taskInstance;
@@ -452,7 +450,6 @@ public class WorkflowFormPanel extends Composite {
 	 * drawForm
 	 */
 	private void drawForm() {
-		Map<String, Object> variables = taskInstance.getProcessInstance().getVariables();
 		submitForm.setVisible(true); // always set form visible
 		HorizontalPanel hPanel = new HorizontalPanel();
 		formWidgetList = new ArrayList<FormWidget>(); // Init new form widget list
@@ -504,13 +501,7 @@ public class WorkflowFormPanel extends Composite {
 				GWTInput gWTInput = (GWTInput) formField;
 				TextBox textBox = new TextBox();
 				textBox.setName(gWTInput.getName());
-				
-				// Initializing input value from variable
-				if (gWTInput.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTInput.getValue().substring(1))) {
-					textBox.setValue((String) variables.get(gWTInput.getValue().substring(1)));
-				} else {
-					textBox.setValue(gWTInput.getValue());
-				}
+				textBox.setValue(gWTInput.getValue());
 				
 				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
@@ -604,20 +595,11 @@ public class WorkflowFormPanel extends Composite {
 					widget = listBox;
 				}
 				
-				String selectedValues[] = {};
-				// Initialize select value
-				if (gWTSelect.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTSelect.getValue().substring(1))) {
-					selectedValues = (String[]) variables.get(gWTSelect.getValue().substring(1));
-				} else {
-					selectedValues = new String[] {gWTSelect.getValue()};
-				}
-				Arrays.sort(selectedValues);
-				
 				for (Iterator<GWTOption> itx = gWTSelect.getOptions().iterator(); itx.hasNext(); ) {
 					final GWTOption option = itx.next();
 					String value = option.getValue();
 					
-					if (Arrays.binarySearch(selectedValues, value)>=0 ) {
+					if (option.isSelected()) {
 						if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
 							listBox.addItem(option.getLabel(), value);
 							listBox.setSelectedIndex(listBox.getItemCount()-1);
@@ -666,13 +648,7 @@ public class WorkflowFormPanel extends Composite {
 				TextArea textArea = new TextArea();
 				textArea.setName(gWTTextArea.getName());
 				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
-				
-				// Initialize textarea value
-				if (gWTTextArea.getValue().startsWith(VARIABLE_KEY_ID) && variables.containsKey(gWTTextArea.getValue().substring(1))) {
-					textArea.setValue((String) variables.get(gWTTextArea.getValue().substring(1)));
-				} else {
-					textArea.setValue(gWTTextArea.getValue());
-				}
+				textArea.setValue(gWTTextArea.getValue());
 				
 				textArea.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
