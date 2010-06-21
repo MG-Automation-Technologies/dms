@@ -64,7 +64,7 @@ import com.sun.syndication.io.SyndFeedOutput;
  * Syndication Servlet
  */
 public class SyndicationServlet extends HttpServlet {
-	private static Logger log = LoggerFactory.getLogger(TestServlet.class);
+	private static Logger log = LoggerFactory.getLogger(SyndicationServlet.class);
 	private static final long serialVersionUID = 1L;
 	private static final String FEED_TYPE = "rss_2.0"; // atom_0.3
 	private CredentialsProvider cp = new BasicCredentialsProvider(null);
@@ -76,7 +76,7 @@ public class SyndicationServlet extends HttpServlet {
 			throws IOException, ServletException {
 		String action = request.getPathInfo();
 		Session session = null;
-		log.info("action: {}", action);
+		log.debug("action: {}", action);
 		
 		try {
 			session = getSession(request);
