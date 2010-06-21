@@ -47,6 +47,8 @@ import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
 import com.openkm.core.Config;
+import com.openkm.dao.QueryParamsDAO;
+import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.direct.DirectDashboardModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -126,9 +128,11 @@ public class SyndicationServlet extends HttpServlet {
 				feed = getFeedDocuments(new DirectDashboardModule().getLastUploadedDocuments(session));
 				feed.setTitle("OpenKM: last uploaded documents");
 			} else if (action != null && action.startsWith("/news_")) {
-				String qp = action.substring(6);
-				feed = getFeedDocuments(new DirectDashboardModule().find(session, Integer.parseInt(qp)));
-				feed.setTitle("OpenKM: "+action);
+				String qpStr = action.substring(6);
+				int qpId = Integer.parseInt(qpStr);
+				QueryParams qp = QueryParamsDAO.findByPk(qpId);
+				feed = getFeedDocuments(new DirectDashboardModule().find(session, qpId));
+				feed.setTitle("OpenKM: " + qp.getQueryName());
 			}
 			
 			if (feed != null) {
