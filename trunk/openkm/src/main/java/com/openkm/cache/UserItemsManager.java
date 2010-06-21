@@ -42,7 +42,7 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void incDocuments(String uid, long value) {
+	public static synchronized void incDocuments(String uid, int value) {
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() + value);
 	}
@@ -50,7 +50,7 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void decDocuments(String uid, long value) {
+	public static synchronized void decDocuments(String uid, int value) {
 		UserItems userItems = get(uid);
 		userItems.setDocuments(userItems.getDocuments() - value);
 	}
@@ -58,7 +58,7 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void incFolders(String uid, long value) {
+	public static synchronized void incFolders(String uid, int value) {
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() + value);
 	}
@@ -66,7 +66,7 @@ public class UserItemsManager {
 	/**
 	 * 
 	 */
-	public static synchronized void decFolders(String uid, long value) {
+	public static synchronized void decFolders(String uid, int value) {
 		UserItems userItems = get(uid);
 		userItems.setFolders(userItems.getFolders() - value);
 	}
