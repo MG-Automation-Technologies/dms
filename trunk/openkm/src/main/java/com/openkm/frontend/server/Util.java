@@ -37,8 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
-import com.openkm.dao.bean.Bookmark;
-import com.openkm.dao.bean.UserConfig;
 import com.openkm.bean.DashboardDocumentResult;
 import com.openkm.bean.DashboardFolderResult;
 import com.openkm.bean.DashboardMailResult;
@@ -48,7 +46,6 @@ import com.openkm.bean.Lock;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Note;
 import com.openkm.bean.PropertyGroup;
-import com.openkm.dao.bean.QueryParams;
 import com.openkm.bean.QueryResult;
 import com.openkm.bean.Version;
 import com.openkm.bean.form.Button;
@@ -70,6 +67,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.dao.bean.Bookmark;
+import com.openkm.dao.bean.QueryParams;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
 import com.openkm.frontend.client.bean.GWTCheckBox;
@@ -773,7 +773,7 @@ public class Util {
 			gWTselect.setHeight(formElement.getHeight());
 			gWTselect.setName(((Select) formElement).getName());
 			gWTselect.setType(((Select) formElement).getType());
-			Collection<GWTOption> options = new ArrayList<GWTOption>();
+			List<GWTOption> options = new ArrayList<GWTOption>();
 			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
 			}
@@ -795,6 +795,63 @@ public class Util {
 	}
 	
 	/**
+	 * Copy to GWTFormElement data to FormElement
+	 * @param GWTFormElement the original data
+	 * @return The FormElement object with data values from original GWTFormElement
+	 */
+	public static FormElement copy(GWTFormElement formElement) {
+		if (formElement instanceof GWTButton) {
+			Button button = new Button();
+			button.setName(((GWTButton) formElement).getName());
+			button.setValue(((GWTButton) formElement).getValue());
+			button.setType(((GWTButton) formElement).getType());
+			return button;
+		} else if (formElement instanceof GWTInput) {
+			Input input = new Input();
+			input.setName(((GWTInput) formElement).getName());
+			input.setValue(((GWTInput) formElement).getValue());
+			input.setType(((GWTInput) formElement).getType());
+			return input;
+		} else if (formElement instanceof GWTCheckBox) {
+			CheckBox checkbox = new CheckBox();
+			checkbox.setLabel(formElement.getLabel());
+			checkbox.setName(((GWTCheckBox) formElement).getName());
+			checkbox.setValue(((GWTCheckBox) formElement).getValue());
+			return checkbox;
+		} else if (formElement instanceof GWTSelect) {
+			Select gWTselect = new Select();
+			gWTselect.setName(((GWTSelect) formElement).getName());
+			gWTselect.setType(((GWTSelect) formElement).getType());
+			List<Option> options = new ArrayList<Option>();
+			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
+				options.add(copy(it.next()));
+			}
+			gWTselect.setOptions(options);
+			return gWTselect;
+		} else if (formElement instanceof GWTTextArea) {
+			TextArea gWTTextArea= new TextArea();
+			gWTTextArea.setName(((GWTTextArea) formElement).getName());
+			gWTTextArea.setValue(((GWTTextArea) formElement).getValue());
+			return gWTTextArea;
+		} else {
+			return new FormElement();
+		}
+	}
+	
+	/**
+	 * Copy to GWTOption data to  Option
+	 * @param GWTOption the original data
+	 * @return The Option object with data values from original GWTOption
+	 */
+	public static Option copy(GWTOption gWTOption) {
+		Option option = new Option();
+		option.setLabel(gWTOption.getLabel());
+		option.setValue(gWTOption.getValue());
+		option.setSelected(gWTOption.isSelected());
+		return option;
+	}
+	
+	/**
 	 * Copy to Option data to  GWTOption
 	 * @param Option the original data
 	 * @return The GWTOption object with data values from original Option
@@ -803,6 +860,7 @@ public class Util {
 		GWTOption gWTOption = new GWTOption();
 		gWTOption.setLabel(option.getLabel());
 		gWTOption.setValue(option.getValue());
+		gWTOption.setSelected(option.isSelected());
 		return gWTOption;
 	}
 	

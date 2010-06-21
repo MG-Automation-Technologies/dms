@@ -24,10 +24,8 @@ package com.openkm.frontend.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,13 +208,15 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	}
 	
 	@Override
-	public Map<String, String[]> getProperties(String docPath, String grpName) throws OKMException {
+	public List<GWTFormElement> getProperties(String docPath, String grpName) throws OKMException {
 		log.debug("getProperties({}, {})", docPath, grpName);
-		Map<String, String[]> properties = new HashMap<String, String[]>();
+		List<GWTFormElement> properties = new ArrayList<GWTFormElement>();
 		updateSessionManager();
 
 		try {
-			properties = OKMPropertyGroup.getInstance().getProperties(docPath, grpName);
+			for (Iterator<FormElement> it = OKMPropertyGroup.getInstance().getProperties(docPath, grpName).iterator(); it.hasNext();) {
+				properties.add(Util.copy(it.next()));
+			}
 		} catch (NoSuchGroupException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyGroupService, ErrorCode.CAUSE_NoSuchGroup), e.getMessage());
@@ -270,11 +270,15 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 	}
 	
 	@Override
-	public void setProperties(String docPath, String grpName, Map<String, String[]> properties) throws OKMException {
-		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
+	public void setProperties(String docPath, String grpName, List<GWTFormElement> formProperties) throws OKMException {
+		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, formProperties });
 		updateSessionManager();
 		
 		try {
+			List<FormElement> properties = new ArrayList<FormElement>();
+			for (Iterator<GWTFormElement> it = formProperties.iterator(); it.hasNext(); ) {
+				properties.add(Util.copy(it.next()));
+			}
 			OKMPropertyGroup.getInstance().setProperties(docPath, grpName, properties);
 		} catch (NoSuchPropertyException e) {
 			log.error(e.getMessage(), e);
