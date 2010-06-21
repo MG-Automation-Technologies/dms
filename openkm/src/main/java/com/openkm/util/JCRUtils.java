@@ -27,6 +27,8 @@ import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -159,6 +161,19 @@ public class JCRUtils {
 	public static void logout(Session session) {
 		if (session != null && session.isLive()) {
 			session.logout();
+		}
+	}
+	
+	/**
+	 * Load lock tokens from database
+	 */
+	public static void loadLockTokens(Session session) throws DatabaseException,
+			javax.jcr.RepositoryException {
+		List<LockToken> ltList = LockTokenDAO.findByUser(session.getUserID());
+		
+		for (Iterator<LockToken> it = ltList.iterator(); it.hasNext(); ) {
+			LockToken lt = it.next();
+			session.addLockToken(lt.getToken());
 		}
 	}
 	
