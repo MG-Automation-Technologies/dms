@@ -56,6 +56,7 @@ import com.openkm.bean.workflow.ProcessDefinition;
 import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
@@ -266,7 +267,8 @@ public class DirectWorkflowModule implements WorkflowModule {
 			session = JCRUtils.getSession();
 			jbpmContext.setActorId(session.getUserID());
 			GraphSession graphSession = jbpmContext.getGraphSession();
-			Map<String, FormElement> hm = new HashMap<String, FormElement>();
+			Map<String, Object> hm = new HashMap<String, Object>();
+			hm.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, uuid);
 			
 			for (FormElement fe : variables) {
 				hm.put(fe.getName(), fe);
