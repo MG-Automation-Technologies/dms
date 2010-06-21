@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
-import com.openkm.extension.frontend.client.util.OKMExtensionBundleResources;
+import com.openkm.extension.frontend.client.util.OKMExtensionBundleExampleResources;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
@@ -51,7 +51,7 @@ public class ToolBarButtonExample  {
 	String lang = "en-GB";
 
 	public ToolBarButtonExample() {
-		button = new ToolBarButton(new Image(OKMExtensionBundleResources.INSTANCE.box()), title, new ClickHandler() {
+		button = new ToolBarButton(new Image(OKMExtensionBundleExampleResources.INSTANCE.box()), title, new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				Window.alert("make some operation");
