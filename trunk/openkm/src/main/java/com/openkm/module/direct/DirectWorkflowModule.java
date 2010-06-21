@@ -255,7 +255,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public ProcessInstance runProcessDefinition(long processDefinitionId, Map<String, Object> variables)
+	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables)
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("runProcessDefinition({}, {})", processDefinitionId, variables);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -266,8 +266,14 @@ public class DirectWorkflowModule implements WorkflowModule {
 			session = JCRUtils.getSession();
 			jbpmContext.setActorId(session.getUserID());
 			GraphSession graphSession = jbpmContext.getGraphSession();
+			Map<String, FormElement> hm = new HashMap<String, FormElement>();
+			
+			for (FormElement fe : variables) {
+				hm.put(fe.getName(), fe);
+			}
+			
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
-			org.jbpm.graph.exe.ProcessInstance pi = pd.createProcessInstance(variables);
+			org.jbpm.graph.exe.ProcessInstance pi = pd.createProcessInstance(hm);
 			org.jbpm.taskmgmt.exe.TaskMgmtInstance tmi = pi.getTaskMgmtInstance();
 			
 			// http://www.jboss.com/index.html?module=bb&op=viewtopic&t=100779
@@ -738,7 +744,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void setTaskInstanceValues(long taskInstanceId, String transitionName, Map<String, Object> values)
+	public void setTaskInstanceValues(long taskInstanceId, String transitionName, List<FormElement> values)
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.info("setTaskInstanceValues({}, {}, {})", new Object[] { taskInstanceId, transitionName, values });
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
@@ -747,8 +753,14 @@ public class DirectWorkflowModule implements WorkflowModule {
 		try {
 			session = JCRUtils.getSession();
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
+			Map<String, FormElement> hm = new HashMap<String, FormElement>();
+			
+			for (FormElement fe : values) {
+				hm.put(fe.getName(), fe);
+			}
+			
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
-			ti.setVariables(values);
+			ti.setVariables(hm);
 			
 			if (transitionName != null && !transitionName.equals("")) {
 				ti.end(transitionName);

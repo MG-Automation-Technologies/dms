@@ -70,7 +70,7 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
-	public ProcessInstance runProcessDefinition(long processDefinitionId, Map<String, Object> variables) 
+	public ProcessInstance runProcessDefinition(long processDefinitionId, List<FormElement> variables) 
 			throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
@@ -161,7 +161,7 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
-	public void setTaskInstanceValues(long taskInstanceId, String transitionName, Map<String, Object> values)
+	public void setTaskInstanceValues(long taskInstanceId, String transitionName, List<FormElement> values)
 			throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
