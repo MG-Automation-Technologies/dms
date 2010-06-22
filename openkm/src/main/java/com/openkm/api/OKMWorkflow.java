@@ -121,6 +121,15 @@ public class OKMWorkflow implements WorkflowModule {
 		log.debug("sendProcessInstanceSignal: {}", result);
 		return result;
 	}
+	
+	@Override
+	public void endProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("endProcessInstance({})", processInstanceId);
+		WorkflowModule wm = ModuleManager.getWorkflowModule();
+		wm.endProcessInstance(processInstanceId);
+		log.debug("endProcessInstance: void");
+	}
 
 	@Override
 	public void deleteProcessInstance(long processInstanceId) throws RepositoryException,
