@@ -316,6 +316,7 @@ public class WorkflowPopup extends DialogBox {
 			if (formFieldList!=null) {
 				drawForm();
 			} else {
+				formFieldList = new ArrayList<GWTFormElement>();
 				runProcessDefinitionWithValues();
 			}
 		}
