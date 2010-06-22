@@ -255,6 +255,7 @@ public class WorkflowPopup extends DialogBox {
 			if (formWidgetList.containsKey(formElement.getName())) {
 				Widget widget = formWidgetList.get(formElement.getName());
 				if (formElement instanceof GWTInput) {
+					// Date is set in drawform click handler, here only capture text
 					((GWTInput)formElement).setValue(((TextBox)((HorizontalPanel) widget).getWidget(0)).getValue());
 					
 				} else if (formElement instanceof GWTCheckBox) {
@@ -364,12 +365,19 @@ public class WorkflowPopup extends DialogBox {
 			Widget widget = null;
 			
 			if (formField instanceof GWTInput) {
-				GWTInput gWTInput = (GWTInput) formField;
+				final GWTInput gWTInput = (GWTInput) formField;
 				HorizontalPanel hInputPanel = new HorizontalPanel();
 				final TextBox textBox = new TextBox();
 				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
-				textBox.setValue(gWTInput.getValue());
+				if (gWTInput.getType().equals(GWTInput.TYPE_TEXT))  {
+					textBox.setValue(gWTInput.getValue());
+				} else if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
+					if (gWTInput.getDate()!=null) {
+						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
+						textBox.setText(dtf.format(gWTInput.getDate()));
+					}
+				}
 				textBox.setWidth(gWTInput.getWidth());
 				
 				// Case input is date must disable input
@@ -382,6 +390,7 @@ public class WorkflowPopup extends DialogBox {
 							calendarPopup.hide();
 							DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 							textBox.setText(dtf.format(calendar.getDate()));
+							gWTInput.setDate(calendar.getDate());
 						}
 					});
 					calendarPopup.add(calendar);
