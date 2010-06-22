@@ -394,9 +394,17 @@ public class OKMWorkflow implements WorkflowModule {
 	@Override
 	public void setTokenNode(long tokenId, String nodeName) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("setTokenNode({})", tokenId, nodeName);
+		log.debug("setTokenNode({}, {})", tokenId, nodeName);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		wm.setTokenNode(tokenId, nodeName);
 		log.debug("setTokenNode: void");
+	}
+
+	@Override
+	public void endToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("endToken({})", tokenId);
+		WorkflowModule wm = ModuleManager.getWorkflowModule();
+		wm.endToken(tokenId);
+		log.debug("endToken: void");
 	}
 }
