@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -765,7 +766,13 @@ public class Util {
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
 			gWTInput.setName(((Input) formElement).getName());
-			gWTInput.setValue(((Input) formElement).getValue());
+			if (((Input) formElement).getType().equals(Input.TYPE_TEXT)) {
+				gWTInput.setValue(((Input) formElement).getValue());
+			} else if (((Input) formElement).getType().equals(Input.TYPE_DATE)) {
+				if (!((Input) formElement).getValue().equals("")) {
+					gWTInput.setDate(ISO8601.parse(((Input) formElement).getValue()).getTime());
+				}
+			}
 			gWTInput.setType(((Input) formElement).getType());
 			gWTInput.setValidators(copyValidators(((Input) formElement).getValidators()));
 			return gWTInput;
@@ -819,7 +826,15 @@ public class Util {
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();
 			input.setName(((GWTInput) formElement).getName());
-			input.setValue(((GWTInput) formElement).getValue());
+			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT)) {
+				input.setValue(((GWTInput) formElement).getValue());
+			} else if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
+				if (((GWTInput) formElement).getDate()!=null) {
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(((GWTInput) formElement).getDate());
+					input.setValue(ISO8601.format(cal));
+				}
+			}
 			input.setType(((GWTInput) formElement).getType());
 			return input;
 		} else if (formElement instanceof GWTCheckBox) {
