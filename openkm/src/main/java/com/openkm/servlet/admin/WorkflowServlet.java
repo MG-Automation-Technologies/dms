@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
@@ -38,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMAuth;
+import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMWorkflow;
 import com.openkm.bean.form.Button;
 import com.openkm.bean.form.CheckBox;
@@ -47,11 +49,15 @@ import com.openkm.bean.form.Option;
 import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
+import com.openkm.bean.workflow.ProcessInstance;
+import com.openkm.core.AccessDeniedException;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
 import com.openkm.principal.PrincipalAdapterException;
+import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
@@ -96,6 +102,14 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("taskInstanceSetActor")) {
 				taskInstanceSetActor(session, request, response);
 				processDefinitionView(session, request, response);
+			} else if (action.equals("tokenView")) {
+				tokenView(session, request, response);
+			} else if (action.equals("tokenEnd")) {
+				tokenEnd(session, request, response);
+				processInstanceView(session, request, response);
+			} else if (action.equals("tokenSuspend")) {
+				tokenSuspend(session, request, response);
+				processInstanceView(session, request, response);
 			} else {
 				processDefinitionList(session, request, response);
 			}
@@ -120,15 +134,12 @@ public class WorkflowServlet extends BaseServlet {
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
+		} catch (AccessDeniedException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
 		} finally {
 			JCRUtils.logout(session);
 		}
-	}
-
-	private void taskInstanceSetActor(Session session, HttpServletRequest request,
-			HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
@@ -191,12 +202,24 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceView(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException,
-			PrincipalAdapterException {
+			PrincipalAdapterException, AccessDeniedException {
 		log.debug("processInstanceView({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long piid = WebUtil.getLong(request, "piid");
-		sc.setAttribute("piid", piid);
-		sc.setAttribute("processIntance", OKMWorkflow.getInstance().getProcessInstance(piid));
+		ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(piid);
+		Map<String, String> vars = new HashMap<String, String>();
+		
+		for (Entry<String, Object> entry : pi.getVariables().entrySet()) {
+			if (entry.getKey().equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
+				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, 
+						OKMDocument.getInstance().getPath(entry.getValue().toString()));
+			} else {
+				vars.put(entry.getKey(), FormatUtil.formatObject(entry.getValue()));
+			}
+		}
+		
+		sc.setAttribute("variables", vars);
+		sc.setAttribute("processInstance", pi);
 		sc.setAttribute("taskInstances", OKMWorkflow.getInstance().findTaskInstances(piid));
 		sc.setAttribute("users", OKMAuth.getInstance().getUsers());
 		sc.getRequestDispatcher("/admin/process_instance_view.jsp").forward(request, response);
@@ -258,7 +281,63 @@ public class WorkflowServlet extends BaseServlet {
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_SUSPEND", Long.toString(piid), null);
 		log.debug("processInstanceSuspend: void");
 	}
-	
+
+	/**
+	 * Set task instance actor
+	 */
+	private void taskInstanceSetActor(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("taskInstanceSetActor({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		String actor = WebUtil.getString(request, "actor");
+		OKMWorkflow.getInstance().setTaskInstanceActorId(tiid, actor);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_SET_ACTOR", Long.toString(tiid), actor);
+		log.debug("taskInstanceSetActor: void");
+	}
+
+	/**
+	 * Suspend token
+	 */
+	private void tokenSuspend(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("tokenSuspend({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		OKMWorkflow.getInstance().suspendToken(tid);
+
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SUSPEND", Long.toString(tid), null);
+		log.debug("tokenSuspend: void");
+	}
+
+	/**
+	 * End token
+	 */
+	private void tokenEnd(Session session, HttpServletRequest request, HttpServletResponse response) throws 
+			ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("tokenEnd({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		OKMWorkflow.getInstance().endToken(tid);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_END", Long.toString(tid), null);
+		log.debug("tokenEnd: void");
+	}
+
+	/**
+	 * View token
+	 */
+	private void tokenView(Session session, HttpServletRequest request, HttpServletResponse response) throws
+			ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("tokenView({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_VIEW", Long.toString(tid), null);
+		log.debug("tokenView: void");
+	}
+
 	/**
 	 * Get form element type
 	 */
