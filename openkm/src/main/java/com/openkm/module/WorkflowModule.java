@@ -256,4 +256,9 @@ public interface WorkflowModule {
 	 */
 	public void setTokenNode(long tokenId, String nodeName) throws RepositoryException, DatabaseException,
 			WorkflowException;
+	
+	/**
+	 * 
+	 */
+	public void endToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException;
 }
