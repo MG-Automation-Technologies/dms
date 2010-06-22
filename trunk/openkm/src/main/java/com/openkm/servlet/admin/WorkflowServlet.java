@@ -179,7 +179,6 @@ public class WorkflowServlet extends BaseServlet {
 			pdf.put(key, value);
 		}
 		
-		sc.setAttribute("pdid", pdid);
 		sc.setAttribute("processDefinition", OKMWorkflow.getInstance().getProcessDefinition(pdid));
 		sc.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(pdid));
 		sc.setAttribute("processDefinitionForms", pdf);
@@ -225,6 +224,7 @@ public class WorkflowServlet extends BaseServlet {
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceEnd({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
+		OKMWorkflow.getInstance().endProcessInstance(piid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_END", Long.toString(piid), null);
