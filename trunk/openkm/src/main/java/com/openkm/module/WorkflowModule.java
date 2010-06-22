@@ -82,6 +82,12 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
+	public void endProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException;
+	
+	/**
+	 * 
+	 */
 	public void deleteProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
 			WorkflowException;
 
