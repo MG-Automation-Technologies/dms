@@ -266,7 +266,7 @@ public class PropertyGroupWidget extends Composite {
 			} else if (formElement instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				TextBox textBox = (TextBox) hPanel.getWidget(0);
-				((GWTInput) formElement).setValue(textBox.getText());
+				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
 
 			} else if (formElement instanceof GWTCheckBox) {	
 				CheckBox checkbox = (CheckBox) hWidgetProperties.get(formElement.getName());
@@ -340,7 +340,7 @@ public class PropertyGroupWidget extends Composite {
 	 * @param row
 	 * @param gwtMetadata
 	 */
-	private void drawFormElement(int row, GWTFormElement gwtMetadata) {
+	private void drawFormElement(int row, final GWTFormElement gwtMetadata) {
 		final String propertyName = gwtMetadata.getName();
 		
 		if (gwtMetadata instanceof GWTTextArea) {
@@ -361,12 +361,22 @@ public class PropertyGroupWidget extends Composite {
 			HorizontalPanel hPanel = new HorizontalPanel();
 			final TextBox textBox = new TextBox(); // Create a widget for this property
 			hPanel.add(textBox);
-			textBox.setText(((GWTInput) gwtMetadata).getValue());
+			String value = "";
+			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT)) {
+				textBox.setText(((GWTInput) gwtMetadata).getValue());
+				value = ((GWTInput) gwtMetadata).getValue();
+			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
+				if (((GWTInput) gwtMetadata).getDate()!=null) {
+					DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
+					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
+					value = dtf.format(((GWTInput) gwtMetadata).getDate());
+				}
+			}
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
 			hWidgetProperties.put(propertyName,hPanel);
 			table.setHTML(row, 0, "<b>" + gwtMetadata.getLabel() + "</b>");
-			table.setHTML(row, 1, ((GWTInput) gwtMetadata).getValue());
+			table.setHTML(row, 1, value);
 			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
 				final PopupPanel calendarPopup = new PopupPanel(true);
 				final CalendarWidget calendar = new CalendarWidget();
@@ -376,6 +386,7 @@ public class PropertyGroupWidget extends Composite {
 						calendarPopup.hide();
 						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 						textBox.setText(dtf.format(calendar.getDate()));
+						((GWTInput) gwtMetadata).setDate(calendar.getDate());
 					}
 				});
 				calendarPopup.add(calendar);
