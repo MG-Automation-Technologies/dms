@@ -29,13 +29,17 @@
       </table>
       <c:url value="Workflow" var="urlProcessDefinitionView">
         <c:param name="action" value="processDefinitionView"/>
-        <c:param name="id" value="${processInstance.processDefinition.id}"/>
+        <c:param name="pdid" value="${processInstance.processDefinition.id}"/>
       </c:url>
       <table class="results" width="90%">
         <tr><th>Instance ID</th><th>Key</th><th>Process</th><th>Status</th><th>Start Date</th><th>End Date</th></tr>
         <tr class="even">
           <td>${processInstance.id}</td><td>${processInstance.key}</td>
-          <td><a href="${urlProcessDefinitionView}">${processInstance.name} v${processInstance.version}</a></td>
+          <td>
+            <a href="${urlProcessDefinitionView}">
+              ${processInstance.processDefinition.name} v${processInstance.processDefinition.version}
+            </a>
+          </td>
           <td>
             <b>
               <c:choose>
@@ -120,7 +124,7 @@
                 &nbsp;
                 <a href=${urlTaskInstanceSuspend}"><img src="img/action/suspend.png" alt="Suspend" title="Suspend"/></a>
               </c:if>
-              <c:if test="${ti.suspended() && ti.end == null}">
+              <c:if test="${ti.suspended && ti.end == null}">
                 &nbsp;
                 <a href="${urlTaskInstanceResume}"><img src="img/action/resume.png" alt="Resume" title="Resume"/></a>
               </c:if>
