@@ -15,25 +15,34 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="Workflow" var="urlList">
+      <c:url value="Workflow" var="urlProcessDefinitionList">
+        <c:param name="action" value="processDefinitionList"/>
       </c:url>
       <table>
         <tr>
           <td><h1>Process Definitions</h1></td>
-          <td> &nbsp; <a href="${urlList}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
+          <td> &nbsp; <a href="${urlProcessDefinitionList}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
         </tr>
       </table>
       <table class="results" width="90%">
         <tr><th>Process ID</th><th>Process Name</th><th>Version</th><th width="50px">Actions</th></tr>
         <c:forEach var="pd" items="${processDefinitions}" varStatus="row">
+          <c:url value="Workflow" var="urlProcessDefinitionView">
+            <c:param name="action" value="processDefinitionView"/>
+            <c:param name="pdid" value="${pd.id}"/>
+          </c:url>
+          <c:url value="Workflow" var="urlProcessDefinitionDelete">
+            <c:param name="action" value="processDefinitionDelete"/>
+            <c:param name="pdid" value="${pd.id}"/>
+          </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${pd.id}</td>
             <td>${pd.name}</td>
             <td>${pd.version}</td>
             <td>
-              <a href="Workflow?action=viewProcessDefinition&id=${pd.id}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
+              <a href="${urlProcessDefinitionView}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
               &nbsp;
-              <a href="Workflow?action=deleteProcessDefinition&id=${pd.id}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              <a href="${urlProcessDefinitionDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
             </td>
           </tr>
         </c:forEach>

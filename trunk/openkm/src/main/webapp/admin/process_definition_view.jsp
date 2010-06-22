@@ -16,14 +16,14 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="Workflow" var="urlViewProcessDefinition">
-        <c:param name="action" value="viewProcessDefinition"/>
-        <c:param name="id" value="${id}"/>
+      <c:url value="Workflow" var="urlProcessDefinitionView">
+        <c:param name="action" value="processDefinitionView"/>
+        <c:param name="pdid" value="${pdid}"/>
       </c:url>
       <table>
         <tr>
           <td><h1>Process Definition</h1></td>
-          <td> &nbsp; <a href="${urlViewProcessDefinition}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
+          <td> &nbsp; <a href="${urlProcessDefinitionView}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
           <td> &nbsp; <a href="javascript:history.back(1)"><img src="img/action/back.png" alt="Back" title="Back"/></a></td>
         </tr>
       </table>
@@ -40,27 +40,27 @@
         <c:forEach var="pi" items="${processInstances}" varStatus="row">
           <c:url value="Workflow" var="urlProcessInstanceView">
             <c:param name="action" value="processInstanceView"/>
-            <c:param name="iid" value="${pi.id}"/>
+            <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceDelete">
             <c:param name="action" value="processInstanceDelete"/>
-            <c:param name="id" value="${pd.id}"/>
-            <c:param name="iid" value="${pi.id}"/>
+            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceEnd">
             <c:param name="action" value="processInstanceEnd"/>
-            <c:param name="id" value="${pd.id}"/>
-            <c:param name="iid" value="${pi.id}"/>
+            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceResume">
             <c:param name="action" value="processInstanceResume"/>
-            <c:param name="id" value="${pd.id}"/>
-            <c:param name="iid" value="${pi.id}"/>
+            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceSuspend">
             <c:param name="action" value="processInstanceSuspend"/>
-            <c:param name="id" value="${pd.id}"/>
-            <c:param name="iid" value="${pi.id}"/>
+            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${pi.id}</td>
@@ -71,7 +71,7 @@
                   <c:when test="${pi.end != null && pi.suspended}">Ended (was suspended)</c:when>
                   <c:when test="${pi.end != null && !pi.suspended}">Ended</c:when>
                   <c:when test="${pi.end == null && pi.suspended}">Suspended</c:when>
-                  <c:when test="${pi.end == null && !pi.suspended}">Running</c:when>  
+                  <c:when test="${pi.end == null && !pi.suspended}">Running</c:when>
                 </c:choose>
               </b>
             </td>
@@ -123,7 +123,10 @@
         </c:forEach>
       </table>
       <h2>Process Image</h2>
-      <center><img src="WorkflowGraph?id=${processDefinition.id}"/></center>
+      <c:url value="WorkflowGraph" var="urlWorkflowGraph">
+        <c:param name="id" value="${processDefinition.id}"/>
+      </c:url>
+      <center><img src="${urlWorkflowGraph}"/></center>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
