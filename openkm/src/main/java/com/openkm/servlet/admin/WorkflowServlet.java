@@ -149,8 +149,8 @@ public class WorkflowServlet extends BaseServlet {
 	private void processDefinitionDelete(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({}, {}, {})", new Object[] { session, request, response });
-		long id = WebUtil.getLong(request, "id");
-		OKMWorkflow.getInstance().deleteProcessDefinition(id);
+		long pdid = WebUtil.getLong(request, "pdid");
+		OKMWorkflow.getInstance().deleteProcessDefinition(pdid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_DEFINITION_DELETE", null, null);
