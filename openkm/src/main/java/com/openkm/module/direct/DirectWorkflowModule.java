@@ -344,6 +344,33 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
+	public void endProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("endProcessInstance({})", processInstanceId);
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			GraphSession graphSession = jbpmContext.getGraphSession();
+			graphSession.getProcessInstance(processInstanceId).end();
+			jbpmContext.getSession().flush();
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "END_PROCESS_INSTANCE", ""+processInstanceId, null);
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (JbpmException e) {
+			throw new WorkflowException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+			jbpmContext.close();
+		}
+		
+		log.debug("endProcessInstance: void");
+	}
+	
+	@Override
 	public void deleteProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
 			WorkflowException {
 		log.debug("deleteProcessInstance({})", processInstanceId);
