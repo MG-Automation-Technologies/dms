@@ -1239,4 +1239,29 @@ public class DirectWorkflowModule implements WorkflowModule {
 		
 		log.debug("setTokenNode: void");
 	}
+	
+	@Override
+	public void endToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("endToken({})", tokenId);
+		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			jbpmContext.getToken(tokenId).end();
+			jbpmContext.getSession().flush();
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "END_TOKEN", ""+tokenId, null);
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (JbpmException e) {
+			throw new WorkflowException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+			jbpmContext.close();
+		}
+		
+		log.debug("endToken: void");
+	}
 }
