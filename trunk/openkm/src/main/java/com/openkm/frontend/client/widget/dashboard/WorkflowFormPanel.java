@@ -326,58 +326,60 @@ public class WorkflowFormPanel extends Composite {
 		// Print variables
 		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
-			final String value = (String) processInstance.getVariables().get(key);
-			int row = parameterTable.getRowCount();
-			
-			// Special case path
-			if (key.equals(Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariableUUID())) {
-				final int documentRow = row;
-				parameterTable.setHTML(documentRow, 0, "<b>"+ 
-						               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
-						               "</b>");
+			if (processInstance.getVariables().get(key) instanceof String) {
+				final String value = (String) processInstance.getVariables().get(key);
+				int row = parameterTable.getRowCount();
 				
-				ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
-				endPoint.setServiceEntryPoint(Config.OKMRepositoryService);		
-				repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
-					@Override
-					public void onSuccess(final String docPath) {
-						Anchor link = new Anchor();
-						link.setText(docPath);
-						table.setWidget(10, 1, link);
-						link.addClickHandler(new ClickHandler() { 
-							@Override
-							public void onClick(ClickEvent event) {
-								String path = docPath.substring(0,docPath.lastIndexOf("/"));
-								CommonUI.openAllFolderPath(path, docPath);	
-							}
-						});
-						link.setStyleName("okm-Hyperlink");
-						
-						// Clones link
-						documentLink = new Anchor();
-						documentLink.setText(docPath);
-						documentLink.addClickHandler(new ClickHandler() { 
-							@Override
-							public void onClick(ClickEvent event) {
-								String path = docPath.substring(0,docPath.lastIndexOf("/"));
-								CommonUI.openAllFolderPath(path, docPath);	
-							}
-						});
-						documentLink.setStyleName("okm-Hyperlink");
-						parameterTable.setWidget(documentRow, 1, documentLink);
-					}
+				// Special case path
+				if (key.equals(Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariableUUID())) {
+					final int documentRow = row;
+					parameterTable.setHTML(documentRow, 0, "<b>"+ 
+							               Main.get().workspaceUserProperties.getWorkspace().getWorkflowProcessIntanceVariablePath() + 
+							               "</b>");
 					
-					@Override
-					public void onFailure(Throwable caught) {
-						Main.get().showError("getPathByUUID", caught);
-					}
-				});
-				
-				
-			}  else {
-				
-				parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
-				parameterTable.setHTML(row, 1, value);
+					ServiceDefTarget endPoint = (ServiceDefTarget) repositoryService;
+					endPoint.setServiceEntryPoint(Config.OKMRepositoryService);		
+					repositoryService.getPathByUUID(value, new AsyncCallback<String>() {
+						@Override
+						public void onSuccess(final String docPath) {
+							Anchor link = new Anchor();
+							link.setText(docPath);
+							table.setWidget(10, 1, link);
+							link.addClickHandler(new ClickHandler() { 
+								@Override
+								public void onClick(ClickEvent event) {
+									String path = docPath.substring(0,docPath.lastIndexOf("/"));
+									CommonUI.openAllFolderPath(path, docPath);	
+								}
+							});
+							link.setStyleName("okm-Hyperlink");
+							
+							// Clones link
+							documentLink = new Anchor();
+							documentLink.setText(docPath);
+							documentLink.addClickHandler(new ClickHandler() { 
+								@Override
+								public void onClick(ClickEvent event) {
+									String path = docPath.substring(0,docPath.lastIndexOf("/"));
+									CommonUI.openAllFolderPath(path, docPath);	
+								}
+							});
+							documentLink.setStyleName("okm-Hyperlink");
+							parameterTable.setWidget(documentRow, 1, documentLink);
+						}
+						
+						@Override
+						public void onFailure(Throwable caught) {
+							Main.get().showError("getPathByUUID", caught);
+						}
+					});
+					
+					
+				}  else {
+					
+					parameterTable.setHTML(row, 0, "<b>" + key + "</b>");
+					parameterTable.setHTML(row, 1, value);
+				}
 			}
 		}
 		

@@ -640,7 +640,17 @@ public class Util {
 		gWTProcessInstance.setId(processInstance.getId());
 		gWTProcessInstance.setProcessDefinition(copy(processInstance.getProcessDefinition()));
 		gWTProcessInstance.setSuspended(processInstance.isSuspended());
-		gWTProcessInstance.setVariables(processInstance.getVariables());
+		Map<String, Object> variables = new HashMap<String, Object>();
+		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext();) {
+			String key = it.next();
+			Object obj = processInstance.getVariables().get(key);
+			if (obj instanceof FormElement ) {
+				variables.put(key, copy((FormElement) obj));
+			} else {
+				variables.put(key, obj);
+			}	
+		}
+		gWTProcessInstance.setVariables(variables);
 		gWTProcessInstance.setVersion(processInstance.getVersion());
 		gWTProcessInstance.setStart(processInstance.getStart().getTime());
 		gWTProcessInstance.setKey(processInstance.getKey());
