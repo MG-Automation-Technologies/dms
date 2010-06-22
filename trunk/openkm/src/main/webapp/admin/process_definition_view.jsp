@@ -18,7 +18,7 @@
     <c:when test="${isAdmin}">
       <c:url value="Workflow" var="urlProcessDefinitionView">
         <c:param name="action" value="processDefinitionView"/>
-        <c:param name="pdid" value="${pdid}"/>
+        <c:param name="pdid" value="${processDefinition.id}"/>
       </c:url>
       <table>
         <tr>
@@ -44,22 +44,22 @@
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceDelete">
             <c:param name="action" value="processInstanceDelete"/>
-            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="pdid" value="${processDefinition.id}"/>
             <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceEnd">
             <c:param name="action" value="processInstanceEnd"/>
-            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="pdid" value="${processDefinition.id}"/>
             <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceResume">
             <c:param name="action" value="processInstanceResume"/>
-            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="pdid" value="${processDefinition.id}"/>
             <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlProcessInstanceSuspend">
             <c:param name="action" value="processInstanceSuspend"/>
-            <c:param name="pdid" value="${pd.id}"/>
+            <c:param name="pdid" value="${processDefinition.id}"/>
             <c:param name="piid" value="${pi.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
