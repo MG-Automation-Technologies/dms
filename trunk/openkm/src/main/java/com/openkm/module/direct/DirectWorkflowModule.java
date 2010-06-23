@@ -636,9 +636,9 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void removeProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
+	public void deleteProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException {
-		log.debug("removeProcessInstanceVariable({}, {})", processInstanceId, name);
+		log.debug("deleteProcessInstanceVariable({}, {})", processInstanceId, name);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
@@ -649,7 +649,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name);
+			UserActivity.log(session.getUserID(), "DELETE_PROCESS_INSTANCE_VARIABLE", ""+processInstanceId, name);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (JbpmException e) {
@@ -659,7 +659,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.debug("removeProcessInstanceVariable: void");
+		log.debug("deleteProcessInstanceVariable: void");
 	}
 
 	@Override
@@ -924,9 +924,9 @@ public class DirectWorkflowModule implements WorkflowModule {
 	}
 
 	@Override
-	public void removeTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
+	public void deleteTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException {
-		log.debug("removeTaskInstanceVariable({}, {})", taskInstanceId, name);
+		log.debug("deleteTaskInstanceVariable({}, {})", taskInstanceId, name);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
 		Session session = null;
 		
@@ -937,7 +937,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.getSession().flush();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name);
+			UserActivity.log(session.getUserID(), "DELETE_TASK_INSTANCE_VARIABLE", ""+taskInstanceId, name);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (JbpmException e) {
@@ -947,7 +947,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			jbpmContext.close();
 		}
 		
-		log.debug("removeTaskInstanceVariable: void");
+		log.debug("deleteTaskInstanceVariable: void");
 	}
 
 	@Override

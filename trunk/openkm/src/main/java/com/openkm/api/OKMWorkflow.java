@@ -218,12 +218,12 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public void removeProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
+	public void deleteProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException {
-		log.debug("removeProcessInstanceVariable({}, {})", processInstanceId, name);
+		log.debug("deleteProcessInstanceVariable({}, {})", processInstanceId, name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.removeProcessInstanceVariable(processInstanceId, name);
-		log.debug("removeProcessInstanceVariable: void");
+		wm.deleteProcessInstanceVariable(processInstanceId, name);
+		log.debug("deleteProcessInstanceVariable: void");
 	}
 
 	@Override
@@ -303,12 +303,12 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public void removeTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
+	public void deleteTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException {
-		log.debug("removeTaskInstanceVariable({}, {})", taskInstanceId, name);
+		log.debug("deleteTaskInstanceVariable({}, {})", taskInstanceId, name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.removeTaskInstanceVariable(taskInstanceId, name);
-		log.debug("removeTaskInstanceVariable: void");
+		wm.deleteTaskInstanceVariable(taskInstanceId, name);
+		log.debug("deleteTaskInstanceVariable: void");
 	}
 
 	@Override
