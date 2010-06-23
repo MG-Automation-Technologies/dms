@@ -64,17 +64,17 @@
           </c:url>
           <c:url value="Workflow" var="urlTaskInstanceSuspend">
             <c:param name="action" value="taskInstanceSuspend"/>
-            <c:param name="piid" value="${pi.id}"/>
+            <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="tiid" value="${ti.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlTaskInstanceStart">
             <c:param name="action" value="taskInstanceStart"/>
-            <c:param name="piid" value="${pi.id}"/>
+            <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="tiid" value="${ti.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlTaskInstanceEnd">
             <c:param name="action" value="taskInstanceEnd"/>
-            <c:param name="piid" value="${pi.id}"/>
+            <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="tiid" value="${ti.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
@@ -122,7 +122,7 @@
               <a href="${urlTaskInstanceView}"><img src="img/action/examine.png" alt="Examine" title="Examine"/></a>
               <c:if test="${!ti.suspended && ti.end == null}">
                 &nbsp;
-                <a href=${urlTaskInstanceSuspend}"><img src="img/action/suspend.png" alt="Suspend" title="Suspend"/></a>
+                <a href="${urlTaskInstanceSuspend}"><img src="img/action/suspend.png" alt="Suspend" title="Suspend"/></a>
               </c:if>
               <c:if test="${ti.suspended && ti.end == null}">
                 &nbsp;
