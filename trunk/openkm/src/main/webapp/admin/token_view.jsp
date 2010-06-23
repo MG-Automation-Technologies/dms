@@ -71,7 +71,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${tr.id}</td><td>${tr.name}</td><td>${tr.to}</td>
             <td>
-              <c:if test="${!token.suspended">
+              <c:if test="${!token.suspended}">
                 <a href="${urlTokenSignal}"><img src="img/action/signal.png" alt="Signal" title="Signal"/></a>
               </c:if>
             </td>
@@ -95,13 +95,19 @@
               </c:choose>
             </td>
             <td>
-              <c:if test="${!token.suspended && token.node == node">
+              <c:if test="${!token.suspended && !token.node == node}">
                 <a href="${urlTokenSetNode}"><img src="img/action/move.png" alt="Move to this node" title="Move to this node"/></a>
               </c:if>
             </td>
           </tr>
         </c:forEach>
       </table>
+      <h2>Process Image</h2>
+      <c:url value="WorkflowGraph" var="urlWorkflowGraph">
+        <c:param name="id" value="${token.processInstance.processDefinition.id}"/>
+        <c:param name="node" value="${token.node}"/>
+      </c:url>
+      <center><img src="${urlWorkflowGraph}"/></center>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
