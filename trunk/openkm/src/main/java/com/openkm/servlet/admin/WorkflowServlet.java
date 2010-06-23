@@ -101,7 +101,10 @@ public class WorkflowServlet extends BaseServlet {
 				processDefinitionView(session, request, response);
 			} else if (action.equals("processInstanceVariableDelete")) {
 				processInstanceVariableDelete(session, request, response);
-				processDefinitionView(session, request, response);
+				processInstanceView(session, request, response);
+			} else if (action.equals("processInstanceVariableAdd")) {
+				processInstanceVariableAdd(session, request, response);
+				processInstanceView(session, request, response);
 			} else if (action.equals("taskInstanceSetActor")) {
 				taskInstanceSetActor(session, request, response);
 				processInstanceView(session, request, response);
@@ -317,6 +320,23 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("processInstanceVariableDelete: void");
 	}
 
+	/**
+	 * Add process instance variable
+	 */
+	private void processInstanceVariableAdd(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceVariableAdd({}, {}, {})", new Object[] { session, request, response });
+		long piid = WebUtil.getLong(request, "piid");
+		String name = WebUtil.getString(request, "name");
+		String value= WebUtil.getString(request, "value");
+		OKMWorkflow.getInstance().addProcessInstanceVariable(piid, name, value);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_VARIABLE_ADD", Long.toString(piid), 
+				name + "=" + value);
+		log.debug("processInstanceVariableAdd: void");
+	}
+	
 	/**
 	 * Set task instance actor
 	 */
