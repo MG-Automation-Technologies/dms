@@ -85,7 +85,7 @@
                 <c:otherwise>
                   <form id="setActor" action="Workflow">
                     <input type="hidden" name="action" value="taskInstanceSetActor"/>
-                    <input type="hidden" name="pdid" value="${processInstance.processDefinition.id}"/>
+                    <input type="hidden" name="piid" value="${processInstance.id}"/>
                     <input type="hidden" name="tiid" value="${ti.id}"/>
                     <select name="actor" onchange="document.getElementById('setActor').submit()">
                       <option>-</option>
@@ -143,15 +143,15 @@
       <h2>Comments</h2>
       <table class="results" width="90%">
         <tr><th>Actor ID</th><th>Time</th><th>Comment</th></tr>
-        <c:forEach var="cmt" items="${processIntance.rootToken.comments}" varStatus="row">
+        <c:forEach var="cmt" items="${processInstance.rootToken.comments}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${cmt.actorId}</td><td><fmt:formatDate value="${cmt.time.time}" type="both"/></td><td>cmt.message</td>
+            <td>${cmt.actorId}</td><td><fmt:formatDate value="${cmt.time.time}" type="both"/></td><td>${cmt.message}</td>
           </tr>
         </c:forEach>
       </table>
       <br/>
       <form action="Workflow">
-        <input type="hidden" name="action" value="processInstanceAddComment"/>
+        <input type="hidden" name="action" value="tokenAddComment"/>
         <input type="hidden" name="piid" value="${processInstance.id}"/>
         <input type="hidden" name="tid" value="${processInstance.rootToken.id}"/>
         <table class="form">
@@ -162,7 +162,7 @@
       <h2>Tokens</h2>
       <table class="results" width="90%">
         <tr><th>Token ID</th><th>Parent</th><th>Node</th><th>Status</th><th>Start Date</th><th>End Date</th><th width="75px">Actions</th></tr>
-        <c:forEach var="tk" items="${processIntance.allTokens}" varStatus="row">
+        <c:forEach var="tk" items="${processInstance.allTokens}" varStatus="row">
           <c:url value="Workflow" var="urlTokenView">
             <c:param name="action" value="tokenView"/>
             <c:param name="pdid" value="${processInstance.processDefinition.id}"/>
@@ -240,7 +240,7 @@
         </c:forEach>
       </table>
       <br/>
-      <form action="wf_procins.jsp">
+      <form action="Workflow">
         <input type="hidden" name="action" value="addVar"/>
         <input type="hidden" name="id" value=""/>
         <table class="form">
