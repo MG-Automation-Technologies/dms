@@ -130,6 +130,9 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("tokenSuspend")) {
 				tokenSuspend(session, request, response);
 				processInstanceView(session, request, response);
+			} else if (action.equals("tokenResume")) {
+				tokenResume(session, request, response);
+				processInstanceView(session, request, response);
 			} else if (action.equals("tokenAddComment")) {
 				tokenAddComment(session, request, response);
 				processInstanceView(session, request, response);
@@ -432,6 +435,20 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SUSPEND", Long.toString(tid), null);
 		log.debug("tokenSuspend: void");
+	}
+	
+	/**
+	 * Resume token
+	 */
+	private void tokenResume(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("tokenResume({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		OKMWorkflow.getInstance().resumeToken(tid);
+
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_RESUME", Long.toString(tid), null);
+		log.debug("tokenResume: void");
 	}
 
 	/**
