@@ -143,7 +143,7 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
-	public void removeProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
+	public void deleteProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
@@ -197,7 +197,7 @@ public interface WorkflowModule {
 	/**
 	 * 
 	 */
-	public void removeTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
+	public void deleteTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**

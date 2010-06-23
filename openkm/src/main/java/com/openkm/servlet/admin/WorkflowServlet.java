@@ -99,6 +99,9 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("processInstanceSuspend")) {
 				processInstanceSuspend(session, request, response);
 				processDefinitionView(session, request, response);
+			} else if (action.equals("processInstanceVariableDelete")) {
+				processInstanceVariableDelete(session, request, response);
+				processDefinitionView(session, request, response);
 			} else if (action.equals("taskInstanceSetActor")) {
 				taskInstanceSetActor(session, request, response);
 				processInstanceView(session, request, response);
@@ -297,6 +300,21 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_SUSPEND", Long.toString(piid), null);
 		log.debug("processInstanceSuspend: void");
+	}
+	
+	/**
+	 * Delete process instance variable
+	 */
+	private void processInstanceVariableDelete(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("processInstanceVariableDelete({}, {}, {})", new Object[] { session, request, response });
+		long piid = WebUtil.getLong(request, "piid");
+		String name = WebUtil.getString(request, "name");
+		OKMWorkflow.getInstance().deleteProcessInstanceVariable(piid, name);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_VARIABLE_DELETE", Long.toString(piid), null);
+		log.debug("processInstanceVariableDelete: void");
 	}
 
 	/**
