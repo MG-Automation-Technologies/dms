@@ -170,8 +170,6 @@
         <c:forEach var="tk" items="${processInstance.allTokens}" varStatus="row">
           <c:url value="Workflow" var="urlTokenView">
             <c:param name="action" value="tokenView"/>
-            <c:param name="pdid" value="${processInstance.processDefinition.id}"/>
-            <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="tid" value="${tk.id}"/>
           </c:url>
           <c:url value="Workflow" var="urlTokenEnd">
