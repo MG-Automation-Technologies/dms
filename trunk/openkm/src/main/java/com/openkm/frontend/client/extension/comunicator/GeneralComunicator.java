@@ -23,6 +23,7 @@ package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
+import com.openkm.frontend.client.util.Util;
 
 
 /**
@@ -45,7 +46,7 @@ public class GeneralComunicator {
 	 * 
 	 * @return
 	 */
-	public ToolBarOption getToolBarOption() {
+	public static ToolBarOption getToolBarOption() {
 		return Main.get().mainPanel.topPanel.toolBar.getToolBarOption();
 	}
 	
@@ -54,8 +55,28 @@ public class GeneralComunicator {
 	 * 
 	 * @return
 	 */
-	public String getLang() {
+	public static String getLang() {
 		return Main.get().getLang();
+	}
+	
+	/**
+	 * Download Document
+	 * 
+	 * @param checkout
+	 */
+	public static void downloadDocument(boolean checkout) {
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), (checkout?"checkout":""));
+		}
+	}
+	
+	/**
+	 * Download document as PDF
+	 */
+	public static void downloadDocumentPdf() {
+		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected()) {
+			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), "toPdf");
+		}
 	}
 
 }
