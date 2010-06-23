@@ -95,7 +95,7 @@
               </c:choose>
             </td>
             <td>
-              <c:if test="${!token.suspended && !token.node == node}">
+              <c:if test="${!token.suspended && token.node != node}">
                 <a href="${urlTokenSetNode}"><img src="img/action/move.png" alt="Move to this node" title="Move to this node"/></a>
               </c:if>
             </td>
