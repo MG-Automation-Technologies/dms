@@ -194,6 +194,6 @@ public class ExtensionManager {
 	 * @param handlerExtension
 	 */
 	private static void addWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
-		Main.get().mainPanel.topPanel.tabWorkspace.addNWorkspaceHandlerExtension(handlerExtension);
+		Main.get().mainPanel.topPanel.tabWorkspace.addWorkspaceHandlerExtension(handlerExtension);
 	}
 }

@@ -276,7 +276,7 @@ public class TabWorkspace extends Composite implements HasWorkspaceEvent, HasWor
 	}
 	
 	@Override
-	public void addNWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
+	public void addWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
 		workHandlerExtensionList.add(handlerExtension);
 	}
 

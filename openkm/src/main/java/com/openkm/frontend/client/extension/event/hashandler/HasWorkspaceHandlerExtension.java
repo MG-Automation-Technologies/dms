@@ -32,6 +32,6 @@ import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtens
  */
 public interface HasWorkspaceHandlerExtension {
 	
-	void addNWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension);
+	void addWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension);
 	
 }
