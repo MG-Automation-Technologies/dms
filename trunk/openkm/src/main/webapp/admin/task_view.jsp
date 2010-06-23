@@ -1,21 +1,8 @@
-<%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.api.OKMWorkflow"%>
-<%@ page import="com.openkm.util.FormatUtil"%>
-<%@ page import="com.openkm.bean.workflow.ProcessDefinition"%>
-<%@ page import="com.openkm.bean.workflow.ProcessInstance"%>
-<%@ page import="com.openkm.bean.workflow.TaskInstance"%>
-<%@ page import="com.openkm.bean.workflow.Transition"%>
-<%@ page import="com.openkm.bean.workflow.Comment"%>
-<%@ page import="com.openkm.bean.form.FormElement"%>
-<%@ page import="com.openkm.bean.form.Input"%>
-<%@ page import="com.openkm.bean.form.TextArea"%>
-<%@ page import="com.openkm.bean.form.Select"%>
-<%@ page import="com.openkm.bean.form.Option"%>
-<%@ page import="com.openkm.bean.form.Button"%>
-<%@ page import="java.util.Map"%>
-<%@ page import="java.util.Iterator"%>
-<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.openkm.core.Config" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -26,6 +13,14 @@
   <title>Workflow Tasks</title>
 </head>
 <body>
+   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <c:choose>
+    <c:when test="${isAdmin}">
+    </c:when>
+    <c:otherwise>
+      <div class="error"><h3>Only admin users allowed</h3></div>
+    </c:otherwise>
+  </c:choose>
 <%
 	if (request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
 		request.setCharacterEncoding("UTF-8");

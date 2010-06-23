@@ -43,10 +43,10 @@
           <td>
             <b>
               <c:choose>
-                <c:when test="${pi.end != null && pi.suspended}">Ended (was suspended)</c:when>
-                <c:when test="${pi.end != null && !pi.suspended}">Ended</c:when>
-                <c:when test="${pi.end == null && pi.suspended}">Suspended</c:when>
-                <c:when test="${pi.end == null && !pi.suspended}">Running</c:when>
+                <c:when test="${processInstance.end != null && processInstance.suspended}">Ended (was suspended)</c:when>
+                <c:when test="${processInstance.end != null && !processInstance.suspended}">Ended</c:when>
+                <c:when test="${processInstance.end == null && processInstance.suspended}">Suspended</c:when>
+                <c:when test="${processInstance.end == null && !processInstance.suspended}">Running</c:when>
               </c:choose>
             </b>
           </td>
