@@ -133,6 +133,12 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("tokenAddComment")) {
 				tokenAddComment(session, request, response);
 				processInstanceView(session, request, response);
+			} else if (action.equals("tokenSignal")) {
+				tokenSignal(session, request, response);
+				tokenView(session, request, response);
+			} else if (action.equals("tokenSetNode")) {
+				tokenSetNode(session, request, response);
+				tokenView(session, request, response);
 			} else {
 				processDefinitionList(session, request, response);
 			}
@@ -458,6 +464,36 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_ADD_COMMENT", Long.toString(tid), null);
 		log.debug("processInstanceAddComment: void");
+	}
+	
+	/**
+	 * Set token node
+	 */
+	private void tokenSetNode(Session session, HttpServletRequest request, HttpServletResponse response)
+			throws DatabaseException, WorkflowException, RepositoryException {
+		log.debug("tokenSetNode({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		String node = WebUtil.getString(request, "node");
+		OKMWorkflow.getInstance().setTokenNode(tid, node);
+				
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SET_NODE", Long.toString(tid), node);
+		log.debug("tokenSetNode: void");
+	}
+	
+	/**
+	 * Send token signal
+	 */
+	private void tokenSignal(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws DatabaseException, WorkflowException, RepositoryException {
+		log.debug("tokenSignal({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		String transition = WebUtil.getString(request, "transition");
+		OKMWorkflow.getInstance().sendTokenSignal(tid, transition);
+				
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SIGNAL", Long.toString(tid), transition);
+		log.debug("tokenSignal: void");
 	}
 
 	/**
