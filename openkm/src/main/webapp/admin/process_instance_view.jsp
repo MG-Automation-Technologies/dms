@@ -246,8 +246,8 @@
       </table>
       <br/>
       <form action="Workflow">
-        <input type="hidden" name="action" value="addVar"/>
-        <input type="hidden" name="id" value=""/>
+        <input type="hidden" name="action" value="processInstanceVariableAdd"/>
+        <input type="hidden" name="piid" value="${processInstance.id}"/>
         <table class="form">
           <tr>
             <td>Name <input type="text" name="name"/></td>
