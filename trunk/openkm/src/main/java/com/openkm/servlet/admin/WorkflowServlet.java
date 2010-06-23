@@ -101,7 +101,7 @@ public class WorkflowServlet extends BaseServlet {
 				processDefinitionView(session, request, response);
 			} else if (action.equals("taskInstanceSetActor")) {
 				taskInstanceSetActor(session, request, response);
-				processDefinitionView(session, request, response);
+				processInstanceView(session, request, response);
 			} else if (action.equals("tokenView")) {
 				tokenView(session, request, response);
 			} else if (action.equals("tokenEnd")) {
@@ -109,6 +109,9 @@ public class WorkflowServlet extends BaseServlet {
 				processInstanceView(session, request, response);
 			} else if (action.equals("tokenSuspend")) {
 				tokenSuspend(session, request, response);
+				processInstanceView(session, request, response);
+			} else if (action.equals("tokenAddComment")) {
+				tokenAddComment(session, request, response);
 				processInstanceView(session, request, response);
 			} else {
 				processDefinitionList(session, request, response);
@@ -271,8 +274,9 @@ public class WorkflowServlet extends BaseServlet {
 	/**
 	 * Suspend process instance
 	 */
-	private void processInstanceSuspend(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
+	private void processInstanceSuspend(Session session, HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException, RepositoryException, 
+			DatabaseException, WorkflowException {
 		log.debug("processInstanceSuspend({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
 		OKMWorkflow.getInstance().suspendProcessInstance(piid);
@@ -323,6 +327,25 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_END", Long.toString(tid), null);
 		log.debug("tokenEnd: void");
+	}
+	
+	/**
+	 * Add comment to token
+	 */
+	private void tokenAddComment(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException, DatabaseException,
+			WorkflowException, RepositoryException {
+		log.debug("processInstanceAddComment({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		String message = WebUtil.getString(request, "message");
+		
+		if (!message.equals("")) {
+			OKMWorkflow.getInstance().addTokenComment(tid, message);
+		}
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_ADD_COMMENT", Long.toString(tid), null);
+		log.debug("processInstanceAddComment: void");
 	}
 
 	/**
