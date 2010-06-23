@@ -519,10 +519,10 @@ public class WorkflowServlet extends BaseServlet {
 	private void tokenView(Session session, HttpServletRequest request, HttpServletResponse response) throws
 			ServletException, IOException, RepositoryException, DatabaseException, WorkflowException {
 		log.debug("tokenView({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
 		long tid = WebUtil.getLong(request, "tid");
-		
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_VIEW", Long.toString(tid), null);
+		sc.setAttribute("token", OKMWorkflow.getInstance().getToken(tid));
+		sc.getRequestDispatcher("/admin/token_view.jsp").forward(request, response);
 		log.debug("tokenView: void");
 	}
 
