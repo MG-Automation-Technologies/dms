@@ -67,6 +67,11 @@
             <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="tiid" value="${ti.id}"/>
           </c:url>
+          <c:url value="Workflow" var="urlTaskInstanceResume">
+            <c:param name="action" value="taskInstanceResume"/>
+            <c:param name="piid" value="${processInstance.id}"/>
+            <c:param name="tiid" value="${ti.id}"/>
+          </c:url>
           <c:url value="Workflow" var="urlTaskInstanceStart">
             <c:param name="action" value="taskInstanceStart"/>
             <c:param name="piid" value="${processInstance.id}"/>

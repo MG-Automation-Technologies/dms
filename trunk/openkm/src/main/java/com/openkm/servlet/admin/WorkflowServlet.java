@@ -105,8 +105,14 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("taskInstanceSuspend")) {
 				taskInstanceSuspend(session, request, response);
 				processInstanceView(session, request, response);
+			} else if (action.equals("taskInstanceResume")) {
+				taskInstanceResume(session, request, response);
+				processInstanceView(session, request, response);
 			} else if (action.equals("taskInstanceStart")) {
 				taskInstanceStart(session, request, response);
+				processInstanceView(session, request, response);
+			} else if (action.equals("taskInstanceEnd")) {
+				taskInstanceEnd(session, request, response);
 				processInstanceView(session, request, response);
 			} else if (action.equals("taskInstanceView")) {
 				taskInstanceView(session, request, response);
@@ -321,12 +327,25 @@ public class WorkflowServlet extends BaseServlet {
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("taskInstanceStart({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
-		String actor = WebUtil.getString(request, "actor");
-		OKMWorkflow.getInstance().setTaskInstanceActorId(tiid, actor);
+		OKMWorkflow.getInstance().startTaskInstance(tiid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_START", Long.toString(tiid), null);
 		log.debug("taskInstanceStart: void");
+	}
+	
+	/**
+	 * End task instance
+	 */
+	private void taskInstanceEnd(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("taskInstanceEnd({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		OKMWorkflow.getInstance().endTaskInstance(tiid, null);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_END", Long.toString(tiid), null);
+		log.debug("taskInstanceEnd: void");
 	}
 
 	/**
@@ -342,7 +361,21 @@ public class WorkflowServlet extends BaseServlet {
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_SUSPEND", Long.toString(tiid), null);
 		log.debug("taskInstanceSuspend: void");
 	}
-
+	
+	/**
+	 * Resume task instance
+	 */
+	private void taskInstanceResume(Session session, HttpServletRequest request, 
+			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("taskInstanceResume({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		OKMWorkflow.getInstance().resumeTaskInstance(tiid);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_RESUME", Long.toString(tiid), null);
+		log.debug("taskInstanceResume: void");
+	}
+	
 	/**
 	 * Suspend token
 	 */
