@@ -45,8 +45,15 @@ public class Customization {
 //		extensions.add(new HelloWorld());
 //		extensions.add(new ToolBarButtonExample().getButton());
 //		extensions.add(new TabFolderExample());
+//		extensions.add(new TabWorkspaceExample());
 //		extensions.add(new MainMenuExample().getNewMenu());
 //		extensions.add(new HandlersTest());
+//		extensions.add(new ToolBarBoxExample().getToolBarBox());
+		
+// 	    OPENKM PROPIETARY EXTENSIONS		
+//		extensions.add(new DownloadButton().getButton());
+//		extensions.add(new DownloadPdfButton().getButton());
+//		extensions.addAll(new Stapling().getExtensions());
 		
 		return extensions;
 	}
