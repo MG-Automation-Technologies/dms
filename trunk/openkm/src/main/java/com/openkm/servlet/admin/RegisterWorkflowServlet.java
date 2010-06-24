@@ -64,7 +64,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 
 				if (fileName != null && !fileName.equals("")) {
 					fileName = FilenameUtils.getName(fileName);
-					log.info("Upload file: {}", fileName);
+					log.debug("Upload file: {}", fileName);
 					InputStream is = new ByteArrayInputStream(content);
 					ZipInputStream zis = new ZipInputStream(is);
 					OKMWorkflow.getInstance().registerProcessDefinition(zis);
@@ -72,7 +72,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					is.close();
 				}
 				
-				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/wf_processes.jsp");
+				response.sendRedirect("/OpenKM"+Config.INSTALL+"/admin/Workflow");
 			}
 		} catch (ParseException e) {
 			log.error(e.getMessage(), e);

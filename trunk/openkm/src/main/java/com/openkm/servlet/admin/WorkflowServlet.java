@@ -50,6 +50,7 @@ import com.openkm.bean.form.Select;
 import com.openkm.bean.form.TextArea;
 import com.openkm.bean.form.Validator;
 import com.openkm.bean.workflow.ProcessInstance;
+import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -119,8 +120,21 @@ public class WorkflowServlet extends BaseServlet {
 				processInstanceView(session, request, response);
 			} else if (action.equals("taskInstanceEnd")) {
 				taskInstanceEnd(session, request, response);
-				processInstanceView(session, request, response);
+				if (request.getParameter("transition") == null) {
+					processInstanceView(session, request, response);
+				} else {
+					taskInstanceView(session, request, response);
+				}
 			} else if (action.equals("taskInstanceView")) {
+				taskInstanceView(session, request, response);
+			} else if (action.equals("taskInstanceAddComment")) {
+				taskInstanceAddComment(session, request, response);
+				taskInstanceView(session, request, response);
+			} else if (action.equals("taskInstanceVariableDelete")) {
+				taskInstanceVariableDelete(session, request, response);
+				taskInstanceView(session, request, response);
+			} else if (action.equals("taskInstanceVariableAdd")) {
+				taskInstanceVariableAdd(session, request, response);
 				taskInstanceView(session, request, response);
 			} else if (action.equals("tokenView")) {
 				tokenView(session, request, response);
@@ -133,8 +147,8 @@ public class WorkflowServlet extends BaseServlet {
 			} else if (action.equals("tokenResume")) {
 				tokenResume(session, request, response);
 				processInstanceView(session, request, response);
-			} else if (action.equals("tokenAddComment")) {
-				tokenAddComment(session, request, response);
+			} else if (action.equals("processInstanceAddComment")) {
+				processInstanceAddComment(session, request, response);
 				processInstanceView(session, request, response);
 			} else if (action.equals("tokenSignal")) {
 				tokenSignal(session, request, response);
@@ -315,6 +329,24 @@ public class WorkflowServlet extends BaseServlet {
 	}
 	
 	/**
+	 * Add comment to process instance
+	 */
+	private void processInstanceAddComment(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws DatabaseException, WorkflowException, RepositoryException {
+		log.debug("processInstanceAddComment({}, {}, {})", new Object[] { session, request, response });
+		long tid = WebUtil.getLong(request, "tid");
+		String message = WebUtil.getString(request, "message");
+		
+		if (!message.equals("")) {
+			OKMWorkflow.getInstance().addTokenComment(tid, message);
+		}
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_ADD_COMMENT", Long.toString(tid), null);
+		log.debug("processInstanceAddComment: void");
+	}
+	
+	/**
 	 * Delete process instance variable
 	 */
 	private void processInstanceVariableDelete(Session session, HttpServletRequest request,
@@ -364,7 +396,35 @@ public class WorkflowServlet extends BaseServlet {
 	/**
 	 * View task instance
 	 */
-	private void taskInstanceView(Session session, HttpServletRequest request, HttpServletResponse response) {
+	private void taskInstanceView(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException,
+			ParseException, AccessDeniedException {
+		log.debug("taskInstanceView({}, {}, {})", new Object[] { session, request, response });
+		ServletContext sc = getServletContext();
+		long tiid = WebUtil.getLong(request, "tiid");
+		TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(tiid);
+		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(ti.getProcessInstance().getProcessDefinition().getId());
+		List<Map<String, String>> pdf = new ArrayList<Map<String,String>>();
+		Map<String, String> vars = new HashMap<String, String>();
+		
+		for (FormElement fe : procDefForms.get(ti.getName())) {
+			pdf.add(getMap(fe));
+		}
+		
+		for (Entry<String, Object> entry : ti.getVariables().entrySet()) {
+			vars.put(entry.getKey(), FormatUtil.formatObject(entry.getValue()));
+			
+			if (entry.getKey().equals(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID)) {
+				vars.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH, 
+						OKMDocument.getInstance().getPath(entry.getValue().toString()));
+			} 
+		}
+		
+		sc.setAttribute("variables", vars);
+		sc.setAttribute("taskInstance", ti);
+		sc.setAttribute("taskInstanceForm", pdf);
+		sc.getRequestDispatcher("/admin/task_instance_view.jsp").forward(request, response);
+		log.debug("taskInstanceView: void");
 	}
 
 	/**
@@ -388,7 +448,8 @@ public class WorkflowServlet extends BaseServlet {
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("taskInstanceEnd({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
-		OKMWorkflow.getInstance().endTaskInstance(tiid, null);
+		String transition = WebUtil.getString(request, "transition", null);
+		OKMWorkflow.getInstance().endTaskInstance(tiid, transition);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_END", Long.toString(tiid), null);
@@ -407,6 +468,56 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_SUSPEND", Long.toString(tiid), null);
 		log.debug("taskInstanceSuspend: void");
+	}
+	
+	/**
+	 * Add comment to task instance
+	 */
+	private void taskInstanceAddComment(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws DatabaseException, WorkflowException, RepositoryException {
+		log.debug("processInstanceAddComment({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		String message = WebUtil.getString(request, "message");
+		
+		if (!message.equals("")) {
+			OKMWorkflow.getInstance().addTaskInstanceComment(tiid, message);
+		}
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_ADD_COMMENT", Long.toString(tiid), null);
+		log.debug("processInstanceAddComment: void");
+	}
+	
+	/**
+	 * Delete task instance variable
+	 */
+	private void taskInstanceVariableDelete(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("taskInstanceVariableDelete({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		String name = WebUtil.getString(request, "name");
+		OKMWorkflow.getInstance().deleteTaskInstanceVariable(tiid, name);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_VARIABLE_DELETE", Long.toString(tiid), null);
+		log.debug("taskInstanceVariableDelete: void");
+	}
+
+	/**
+	 * Add task instance variable
+	 */
+	private void taskInstanceVariableAdd(Session session, HttpServletRequest request,
+			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
+		log.debug("taskInstanceVariableAdd({}, {}, {})", new Object[] { session, request, response });
+		long tiid = WebUtil.getLong(request, "tiid");
+		String name = WebUtil.getString(request, "name");
+		String value= WebUtil.getString(request, "value");
+		OKMWorkflow.getInstance().addTaskInstanceVariable(tiid, name, value);
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_VARIABLE_ADD", Long.toString(tiid), 
+				name + "=" + value);
+		log.debug("taskInstanceVariableAdd: void");
 	}
 	
 	/**
@@ -463,24 +574,6 @@ public class WorkflowServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_END", Long.toString(tid), null);
 		log.debug("tokenEnd: void");
-	}
-	
-	/**
-	 * Add comment to token
-	 */
-	private void tokenAddComment(Session session, HttpServletRequest request,
-			HttpServletResponse response) throws DatabaseException, WorkflowException, RepositoryException {
-		log.debug("processInstanceAddComment({}, {}, {})", new Object[] { session, request, response });
-		long tid = WebUtil.getLong(request, "tid");
-		String message = WebUtil.getString(request, "message");
-		
-		if (!message.equals("")) {
-			OKMWorkflow.getInstance().addTokenComment(tid, message);
-		}
-		
-		// Activity log
-		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_ADD_COMMENT", Long.toString(tid), null);
-		log.debug("processInstanceAddComment: void");
 	}
 	
 	/**
