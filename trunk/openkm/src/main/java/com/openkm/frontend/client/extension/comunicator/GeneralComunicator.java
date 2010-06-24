@@ -78,5 +78,33 @@ public class GeneralComunicator {
 			Util.downloadFile(Main.get().mainPanel.desktop.browser.fileBrowser.getDocument().getPath(), "toPdf");
 		}
 	}
+	
+	/**
+	 * Sets the status
+	 * 
+	 * @param msg
+	 */
+	public static void setStatus(String msg) {
+		Main.get().mainPanel.bottomPanel.setStatus(msg);
+	}
+	
+	/**
+	 * Sets the status
+	 * 
+	 */
+	public static void resetStatus() {
+		Main.get().mainPanel.bottomPanel.resetStatus();
+	}
+	
+	/**
+	 * showError
+	 * 
+	 * @param callback
+	 * @param caught
+	 */
+	public static void showError(String callback, Throwable caught) {
+		Main.get().showError(callback, caught);
+	}
+	
 
 }
