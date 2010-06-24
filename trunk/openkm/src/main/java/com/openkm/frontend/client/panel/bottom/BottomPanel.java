@@ -105,6 +105,25 @@ public class BottomPanel extends Composite {
 	 * @param key The status value
 	 * @param error Is error or not
 	 */
+	public void setStatus(String msg) {
+		aditionalErrorMsg = "";
+		
+		// Always we ensure remove status here might be disabled to prevent removing new status data
+		if (removeStatus!=null) {
+			removeStatus.cancel();
+			removeStatus = null;
+		}
+		
+		statusMsg.removeStyleName("okm-Input-Error");
+		statusMsg.setText(msg);
+	}
+	
+	/**
+	 * Sets the status
+	 * 
+	 * @param key The status value
+	 * @param error Is error or not
+	 */
 	public void setStatus(String key, boolean error) {
 		this.key = key;
 		aditionalErrorMsg = "";
