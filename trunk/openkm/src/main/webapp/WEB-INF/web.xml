@@ -209,6 +209,12 @@
     <servlet-name>WorkflowServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.WorkflowServlet</servlet-class>
   </servlet>
+  
+  <!-- Extension Servlets 
+  <servlet>
+    <servlet-name>StaplingServlet</servlet-name>
+    <servlet-class>com.openkm.extension.frontend.server.StaplingServlet</servlet-class>
+  </servlet> -->
     
   <!-- WebServices -->
   <servlet>
@@ -425,6 +431,12 @@
     <servlet-name>WorkflowServlet</servlet-name>
     <url-pattern>/admin/Workflow</url-pattern>
   </servlet-mapping>
+  
+  <!-- Extension Servlet Mappings 
+  <servlet-mapping>
+    <servlet-name>StaplingServlet</servlet-name>
+    <url-pattern>/extension/Stapling</url-pattern>
+  </servlet-mapping> -->
 
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
