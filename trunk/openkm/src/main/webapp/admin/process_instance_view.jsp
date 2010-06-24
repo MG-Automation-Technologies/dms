@@ -10,7 +10,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
-  <title>Workflow Process Instances Browser</title>
+  <title>Workflow Process Instances View</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
@@ -43,7 +43,7 @@
           <td>
             <b>
               <c:choose>
-                <c:when test="${processInstance.end != null && processInstance.suspended}">Ended (was suspended)</c:when>
+                <c:when test="${processInstance.end != null && processInstance.suspended}">Ended (suspended)</c:when>
                 <c:when test="${processInstance.end != null && !processInstance.suspended}">Ended</c:when>
                 <c:when test="${processInstance.end == null && processInstance.suspended}">Suspended</c:when>
                 <c:when test="${processInstance.end == null && !processInstance.suspended}">Running</c:when>
@@ -112,7 +112,7 @@
             <td>
               <b>
                 <c:choose>
-                  <c:when test="${ti.end != null && ti.suspended}">Ended (was suspended)</c:when>
+                  <c:when test="${ti.end != null && ti.suspended}">Ended (suspended)</c:when>
                   <c:when test="${ti.end != null && !ti.suspended}">Ended</c:when>
                   <c:when test="${ti.end == null && ti.start == null && !ti.suspended}">Not Started</c:when>
                   <c:when test="${ti.end == null && ti.start == null && ti.suspended}">Not Started (suspended)</c:when>
@@ -156,7 +156,7 @@
       </table>
       <br/>
       <form action="Workflow">
-        <input type="hidden" name="action" value="tokenAddComment"/>
+        <input type="hidden" name="action" value="processInstanceAddComment"/>
         <input type="hidden" name="piid" value="${processInstance.id}"/>
         <input type="hidden" name="tid" value="${processInstance.rootToken.id}"/>
         <table class="form">
@@ -195,7 +195,7 @@
             <td>
               <b>
                 <c:choose>
-                  <c:when test="${tk.end != null && tk.suspended}">Ended (was suspended)</c:when>
+                  <c:when test="${tk.end != null && tk.suspended}">Ended (suspended)</c:when>
                   <c:when test="${tk.end != null && !tk.suspended}">Ended</c:when>
                   <c:when test="${tk.end == null && tk.suspended}">Suspended</c:when>
                   <c:when test="${tk.end == null && !tk.suspended}">Running</c:when>
@@ -230,7 +230,6 @@
         <c:forEach var="var" items="${variables}" varStatus="row">
           <c:url value="Workflow" var="urlProcessInstanceVariableDelete">
             <c:param name="action" value="processInstanceVariableDelete"/>
-            <c:param name="pdid" value="${processInstance.processDefinition.id}"/>
             <c:param name="piid" value="${processInstance.id}"/>
             <c:param name="name" value="${var.key}"/>
           </c:url>
