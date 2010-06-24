@@ -68,7 +68,7 @@
             <td>
               <b>
                 <c:choose>
-                  <c:when test="${pi.end != null && pi.suspended}">Ended (was suspended)</c:when>
+                  <c:when test="${pi.end != null && pi.suspended}">Ended (suspended)</c:when>
                   <c:when test="${pi.end != null && !pi.suspended}">Ended</c:when>
                   <c:when test="${pi.end == null && pi.suspended}">Suspended</c:when>
                   <c:when test="${pi.end == null && !pi.suspended}">Running</c:when>
@@ -114,7 +114,7 @@
                     <td>${fe.width}</td>
                     <td>${fe.height}</td>
                     <td>${fe.field}</td>
-                    <td>${de.others}</td>
+                    <td>${fe.others}</td>
                   </tr>
                 </c:forEach>
               </table>

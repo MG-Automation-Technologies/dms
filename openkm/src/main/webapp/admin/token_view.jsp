@@ -48,7 +48,7 @@
           <td>
             <b>
               <c:choose>
-                <c:when test="${token.end != null && token.suspended}">Ended (was suspended)</c:when>
+                <c:when test="${token.end != null && token.suspended}">Ended (suspended)</c:when>
                 <c:when test="${token.end != null && !token.suspended}">Ended</c:when>
                 <c:when test="${token.end == null && token.suspended}">Suspended</c:when>
                 <c:when test="${token.end == null && !token.suspended}">Running</c:when>
