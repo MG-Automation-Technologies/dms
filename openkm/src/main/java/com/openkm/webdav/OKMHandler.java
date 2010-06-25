@@ -70,6 +70,8 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Permission;
 import com.openkm.core.Config;
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.MimeTypeDAO;
 import com.openkm.util.JCRUtils;
 
 public class OKMHandler implements IOHandler, PropertyHandler {
@@ -167,25 +169,31 @@ public class OKMHandler implements IOHandler, PropertyHandler {
         	log.debug("MimeType: {}", mimeType);
         	log.debug("Size: {}", context.getContentLength());
         	
+        	
         	// Restrict for MIME
-        	if (Config.RESTRICT_FILE_MIME && !Config.mimeAccept.contains(mimeType)) {
+        	try {
+        		if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
+        			return false;
+        		}
+        	} catch (DatabaseException e) {
+        		log.error(e.getMessage(), e);
         		return false;
         	}
-        	
-        	// Restrict for extension
-        	StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
-        	while (st.hasMoreTokens()) {
-        		String wc = st.nextToken();
-        		String re = wildcard2regexp(wc);
         		
-        		if (Pattern.matches(re, context.getSystemId())) {
+       		// Restrict for extension
+       		StringTokenizer st = new StringTokenizer(Config.RESTRICT_FILE_EXTENSION, ",");
+       		while (st.hasMoreTokens()) {
+       			String wc = st.nextToken();
+       			String re = wildcard2regexp(wc);
+       			
+       			if (Pattern.matches(re, context.getSystemId())) {
         			log.debug("Filename BAD -> {} ({})", re, wc);
         			return false;
         		} else {
         			log.debug("Filename GOOD -> {} ({})", re, wc);
         		}
         	}
-
+        		
         	// Restrict for size
         	if (context.getContentLength() > Config.MAX_FILE_SIZE) {
         		return false;
