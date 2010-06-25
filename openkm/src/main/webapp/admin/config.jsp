@@ -4,7 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <%
-	pageContext.setAttribute("mimeAccept", Config.mimeAccept);
 	pageContext.setAttribute("configValues", Config.values);
 %>
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -35,16 +34,6 @@
                 <c:otherwise>${value.value}</c:otherwise>
               </c:choose>
             </td>
-          </tr>
-        </c:forEach>
-      </table>
-      <h2>MIME types</h2>
-      <table class="results" width="100%">
-        <tr><th>Icon</th><th>MIME</th></tr>
-        <c:forEach var="mime" items="${mimeAccept}" varStatus="row">
-          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td align="center"><img src="../com.openkm.frontend.Main/img/icon/mime/${mime}.gif"/></td>
-            <td>${mime}</td>
           </tr>
         </c:forEach>
       </table>

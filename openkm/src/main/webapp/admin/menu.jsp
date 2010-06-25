@@ -6,6 +6,8 @@
   &nbsp;
   <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
   &nbsp;
+  <a target="frame" href="MimeType"><img src="img/toolbar/mime.png" title="Mime types"></a>
+  &nbsp;
   <a target="frame" href="stats.jsp"><img src="img/toolbar/stats.png" title="Statistics"></a>
   &nbsp;
   <a target="frame" href="scripting.jsp"><img src="img/toolbar/scripting.png" title="Scripting"></a>
