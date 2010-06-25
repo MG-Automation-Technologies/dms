@@ -42,7 +42,7 @@
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${mt.name}</td>
-            <td><img src="${urlIcon}"/></td>
+            <td align="center"><img src="${urlIcon}"/></td>
             <td>${mt.extensions}</td>
             <td align="center">
               <c:choose>
