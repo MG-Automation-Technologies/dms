@@ -103,7 +103,7 @@ public class Util {
 	 * @return the html image of mime-type file
 	 */
 	public static String mimeImageHTML(String mime) {
-		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\"img/icon/mime/"+mime+".gif\"'>";
+		return "<img align=\"absmidle\" style=\"margin-right:4px\" src=\"/OpenKM"+Config.INSTALL+"/mime/"+mime+"\"'>";
 	}
 	
 	/**
