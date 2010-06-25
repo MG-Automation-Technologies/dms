@@ -81,6 +81,7 @@ import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
+import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
@@ -324,8 +325,8 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		// Add to kea - must have the same extension
 		int idx = name.lastIndexOf('.');
-		String fileExtention = idx>0?name.substring(idx):".tmp";
-		File tmpKea = File.createTempFile("kea", fileExtention);
+		String fileExtension = idx>0?name.substring(idx):".tmp";
+		File tmpKea = File.createTempFile("kea", fileExtension);
 
 		try {
 			session = JCRUtils.getSession();
@@ -337,7 +338,7 @@ public class DirectDocumentModule implements DocumentModule {
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
 
-			if (Config.RESTRICT_FILE_MIME && !Config.mimeAccept.contains(mimeType)) {
+			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
 				throw new UnsupportedMimeTypeException(mimeType);
 			}
 			
