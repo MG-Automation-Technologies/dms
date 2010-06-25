@@ -131,6 +131,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         log.info("*** Initializing workflow engine... ***");
         JbpmConfiguration.getInstance().createJbpmContext().getGraphSession();
         JbpmConfiguration.getInstance().getJobExecutor().start();//startJobExecutor();
+        
+        // Mime types
+        log.info("*** Initializing MIME types... ***");
+        Config.loadMimeTypes();
                 
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
