@@ -140,6 +140,10 @@
     <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>MimeIconServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.MimeIconServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>TextToSpeechServlet</servlet-name>
     <servlet-class>com.openkm.servlet.TextToSpeechServlet</servlet-class>
   </servlet>
@@ -208,6 +212,10 @@
   <servlet>
     <servlet-name>WorkflowServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.WorkflowServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>MimeTypeServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.MimeTypeServlet</servlet-class>
   </servlet>
   
   <!-- Extension Servlets 
@@ -362,6 +370,10 @@
     <url-pattern>/feed/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>MimeIconServlet</servlet-name>
+    <url-pattern>/mime/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>TextToSpeechServlet</servlet-name>
     <url-pattern>/TextToSpeech</url-pattern>
   </servlet-mapping>
@@ -430,6 +442,10 @@
   <servlet-mapping>
     <servlet-name>WorkflowServlet</servlet-name>
     <url-pattern>/admin/Workflow</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MimeTypeServlet</servlet-name>
+    <url-pattern>/admin/MimeType</url-pattern>
   </servlet-mapping>
   
   <!-- Extension Servlet Mappings 
