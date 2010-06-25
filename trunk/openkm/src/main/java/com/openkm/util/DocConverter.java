@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
@@ -195,7 +196,10 @@ public class DocConverter {
 		
 		try {
 			if (PDF.equals(mimeType)) {
-				new PdfTextExtractor().extractText(input, mimeType, "utf-8");
+				Reader r = new PdfTextExtractor().extractText(input, mimeType, "utf-8");
+				fos.close();
+				fos = new FileOutputStream(output);
+				IOUtils.copy(r, fos);
 			} else if (validOpenOffice.contains(mimeType)) {
 				IOUtils.copy(input, fos);
 				fos.flush();
