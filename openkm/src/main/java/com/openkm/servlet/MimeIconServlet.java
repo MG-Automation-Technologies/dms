@@ -54,7 +54,7 @@ public class MimeIconServlet extends HttpServlet {
 		
 		try {
 			if (mime.length() > 1) {
-				MimeType mt = MimeTypeDAO.findByName(mime.substring(1));
+				MimeType mt = MimeTypeDAO.findByName(mime.substring(1), false);
 				
 				if (mt != null) {
 					byte[] img = mt.getImageData();
