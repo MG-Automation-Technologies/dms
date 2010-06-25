@@ -30,8 +30,12 @@ import com.openkm.dao.HibernateUtil;
 
 public class Report implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String SQL = "sql";
+	public static final String HIBERNATE = "hibernate";
+	public static final String XPATH = "xpath";
 	private int id;
 	private String name;
+	private String type;
 	private byte[] fileData;
 	private String fileName;
 	private boolean active;
@@ -50,6 +54,14 @@ public class Report implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public byte[] getFileData() {
@@ -93,6 +105,7 @@ public class Report implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
+		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
 		sb.append(", fileData="); sb.append(fileData);
 		sb.append(", active="); sb.append(active);
