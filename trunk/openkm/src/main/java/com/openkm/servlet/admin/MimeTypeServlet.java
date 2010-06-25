@@ -26,8 +26,6 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.activation.FileTypeMap;
-import javax.activation.MimetypesFileTypeMap;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -45,8 +43,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import weka.classifiers.mi.MIEMDD;
-
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.bean.MimeType;
@@ -108,8 +105,8 @@ public class MimeTypeServlet extends BaseServlet {
 				sc.setAttribute("mt", mt);
 				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
 			} else if (action.equals("reset")) {
-				MimeType mt = new MimeType();
-				
+				MimeTypeDAO.deleteAll();
+				Config.resetMimeTypes();
 				list(session, request, response);
 			} else {
 				list(session, request, response);
@@ -165,9 +162,8 @@ public class MimeTypeServlet extends BaseServlet {
 							}
 						}
 					} else {
-						FileTypeMap ftm = MimetypesFileTypeMap.getDefaultFileTypeMap();
 						is = item.getInputStream();
-						mt.setImageMime(ftm.getContentType(item.getName()));
+						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
 						mt.setImageData(IOUtils.toByteArray(is));
 						is.close();
 					}
@@ -175,18 +171,21 @@ public class MimeTypeServlet extends BaseServlet {
 			
 				if (action.equals("create")) {
 					MimeTypeDAO.create(mt);
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					MimeTypeDAO.update(mt);
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
 					list(session, request, response);
 				} else if (action.equals("delete")) {
 					MimeTypeDAO.delete(mt.getId());
+					Config.loadMimeTypes();
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
