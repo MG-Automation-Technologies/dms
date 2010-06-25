@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.extractor.PdfTextExtractor;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
 import org.artofsolving.jodconverter.office.OfficeException;
@@ -187,16 +188,27 @@ public class DocConverter {
 	/**
 	 * Convert document to TXT.
 	 */
-	public void doc2txt(File input, String mimeType, File output) throws IOException {
+	public void doc2txt(InputStream input, String mimeType, File output) throws IOException {
 		log.info("** Convert from {} to TXT **", mimeType);
+		File tmp = File.createTempFile(input.toString(), ".cnv");
+		FileOutputStream fos = new FileOutputStream(tmp);
 		
 		try {
-			convert(input, mimeType, output);
+			if (PDF.equals(mimeType)) {
+				new PdfTextExtractor().extractText(input, mimeType, "utf-8");
+			} else if (validOpenOffice.contains(mimeType)) {
+				IOUtils.copy(input, fos);
+				fos.flush();
+				fos.close();
+				convert(tmp, mimeType, output);
+			}
 		} catch (Exception e) {
 			log.error("Error in {} to TXT conversion", mimeType, e);
 			output.delete();
 			throw new IOException("Error in "+mimeType+" to TXT conversion", e);
 		} finally {
+			FileUtils.deleteQuietly(tmp);
+			IOUtils.closeQuietly(fos);
 		}
 	}
 	
