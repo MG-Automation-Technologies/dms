@@ -24,6 +24,7 @@ package com.openkm.servlet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.ServletException;
@@ -36,6 +37,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMDocument;
+import com.openkm.bean.Document;
+import com.openkm.core.DatabaseException;
+import com.openkm.core.PathNotFoundException;
+import com.openkm.core.RepositoryException;
+import com.openkm.util.DocConverter;
 import com.openkm.util.WebUtil;
 
 /**
@@ -50,13 +57,19 @@ public class TextToSpeechServlet extends HttpServlet {
 		String cmd = "espeak -v mb-es1 -f input.txt | mbrola -e /usr/share/mbrola/voices/es1 - -.wav " + 
 			"| oggenc -Q - -o output.ogg";
 		String text = WebUtil.getString(request, "text");
+		String docPath = WebUtil.getString(request, "docPath");
 		response.setContentType("audio/ogg");
 		FileInputStream fis = null;
 		OutputStream os = null;
 		
 		try {
-			// Create input file
-			FileUtils.writeStringToFile(new File("input.txt"), text);
+			if (!text.equals("")) {
+				FileUtils.writeStringToFile(new File("input.txt"), text);
+			} else if (!docPath.equals("")) {
+				InputStream is = OKMDocument.getInstance().getContent(docPath, false);
+				Document doc = OKMDocument.getInstance().getProperties(docPath);
+				DocConverter.getInstance().doc2txt(is, doc.getMimeType(), new File("input.txt"));
+			}
 			
 			// Convert to voice
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", cmd);
@@ -77,6 +90,12 @@ public class TextToSpeechServlet extends HttpServlet {
 		} catch (InterruptedException e) {
 			log.warn(e.getMessage(), e);
 		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(fis);
