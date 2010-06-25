@@ -101,6 +101,36 @@ public class MimeTypeDAO {
 	}
 	
 	/**
+	 * Delete all
+	 */
+	@SuppressWarnings("unchecked")
+	public static void deleteAll() throws DatabaseException {
+		log.debug("deleteAll()");
+		String qs = "from MimeType";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			List<MimeType> ret = session.createQuery(qs).list();
+			
+			for (MimeType mt : ret) {
+				session.delete(mt);
+			}
+			
+			tx.commit();
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteAll: void");
+	}
+	
+	/**
 	 * Find by pk
 	 */
 	public static MimeType findByPk(int mtId) throws DatabaseException {
@@ -128,7 +158,7 @@ public class MimeTypeDAO {
 	@SuppressWarnings("unchecked")
 	public static List<MimeType> findAll() throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from MimeType mt";
+		String qs = "from MimeType mt order by mt.name";
 		Session session = null;
 		
 		try {
@@ -147,47 +177,23 @@ public class MimeTypeDAO {
 	/**
 	 * Find by name
 	 */
-	public static MimeType findByName(String name) throws DatabaseException {
+	public static MimeType findByName(String name, boolean filterByActive) throws DatabaseException {
 		log.debug("findByName({})", name);
-		String qs = "from MimeType mt where mt.name=:name";
+		String qs = "from MimeType mt where mt.name=:name " +
+			(filterByActive?"and mt.active=:active":"");
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("name", name);
-			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
-			log.debug("findByName: {}", ret);
-			return ret;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-	
-	/**
-	 * Find by file name
-	 */
-	public static MimeType findByFileName(String fileName, boolean filterByActive) throws DatabaseException {
-		log.debug("findByFileName({})", fileName);
-		String qs = "from MimeType mt where :extension in elements(mt.extensions) " +
-			(filterByActive?"and mt.active=:active":"");
-		Session session = null;
-		
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			int idx = fileName.lastIndexOf('.');
-			String fileExtension = idx>0&&fileName.length()>idx+1?fileName.substring(idx+1):"bin";
-			Query q = session.createQuery(qs);
-			q.setString("extension", fileExtension.toLowerCase());
 			
 			if (filterByActive) {
 				q.setBoolean("active", true);
 			}
 			
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
-			log.debug("findByFileName: {}", ret);
+			log.debug("findByName: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
