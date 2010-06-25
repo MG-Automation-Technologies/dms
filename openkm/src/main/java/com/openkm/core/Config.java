@@ -29,15 +29,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.openkm.dao.MimeTypeDAO;
+import com.openkm.dao.bean.MimeType;
 
 public class Config {
 	private static Logger log = LoggerFactory.getLogger(Config.class);
@@ -321,7 +325,6 @@ public class Config {
 	
 	// Misc
 	public static int SESSION_EXPIRATION = 1800; // 30 mins (session.getMaxInactiveInterval())
-	public static Set<String> mimeAccept = new TreeSet<String>();
 	
 	// Registered MIME types
 	public static MimetypesFileTypeMap mimeTypes = null;
@@ -613,46 +616,95 @@ public class Config {
 			log.warn("** IOError reading "+CONFIG_FILE+", set default config **");
 		} finally {
 			log.info("** Configuration **");
-			log.info(values.toString());
+			for (Entry<String, String> entry : values.entrySet()) {
+				log.info("{} => {}", entry.getKey(), entry.getValue());
+			}
 		}
-		
-		// Read MIME info
+	}
+	
+	/**
+	 * load mime types
+	 */
+	public static void loadMimeTypes() {
 		try {
-			log.info("** Reading MIME file " + MIME_FILE + " **");
-			InputStream is1 = Config.class.getResourceAsStream(MIME_FILE);
-			InputStream is2 = Config.class.getResourceAsStream(MIME_FILE);
+			List<MimeType> mimeTypeList = MimeTypeDAO.findAll();
+			Config.mimeTypes = new MimetypesFileTypeMap();
 			
-			if (is1 != null && is2 != null) {
-				mimeTypes = new MimetypesFileTypeMap(is1);
-				BufferedReader br = new BufferedReader(new InputStreamReader(is2));		
+			if (mimeTypeList.isEmpty()) {
+				resetMimeTypes();
+			} else {
+				for (MimeType mt : mimeTypeList) {
+					if (mt.isActive()) {
+						String entry = mt.getName();
+						for (String ext : mt.getExtensions()) {
+							entry += " " + ext;
+						}
+						log.info("-> Add Entry: {}", entry);
+						Config.mimeTypes.addMimeTypes(entry);
+					}
+				}
+			}
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Load default mime type definitions
+	 */
+	public static void resetMimeTypes() {
+		final String MIME_FILE = "/META-INF/mime.types";
+		
+		try {
+			log.info("** Reading MIME file **");
+			InputStream is = Config.class.getResourceAsStream(MIME_FILE);
+			
+			if (is != null) { 
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));		
 				String line;
 			
 				while ((line = br.readLine()) != null) {
 					line = line.trim();
+					
 					if (!line.startsWith("#") && line.length() > 0) {
-						mimeAccept.add(line.split("\\s")[0]);
+						String[] data = line.split("\\s");
+						MimeType mt = new MimeType();
+						mt.setName(data[0]);
+						InputStream iis = Config.class.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
+						mt.setImageData(IOUtils.toByteArray(iis));
+						iis.close();
+						mt.setImageMime("image/gif");
+						mt.setActive(true);
+						
+						for (int i=1; i<data.length; i++) {
+							mt.getExtensions().add(data[i]);
+						}
+						
+						log.info("*** Creating MIME type {} for {}", mt.getName(), mt.getExtensions());
+						MimeTypeDAO.create(mt);
 					}
 				}
 			
 				br.close();
-				is2.close();
-				is1.close();
+				is.close();
 			} else {
 				throw new FileNotFoundException(MIME_FILE);
 			}
 		} catch (FileNotFoundException e) {
-			log.warn("** No "+MIME_FILE+" file found **");
+			log.warn("** No MIME file found **");
 			if (RESTRICT_FILE_MIME) {
 				log.warn("** File upload disabled **");
 			}
 		} catch (IOException e) {
-			log.warn("** IO Error reading "+MIME_FILE+" **");
+			log.warn("** IO Error reading MIME file **");
 			if (RESTRICT_FILE_MIME) {
 				log.warn("** File upload disabled **");
 			}
-		} finally {
-			log.info("** MIME Accepted **");
-			log.info(mimeAccept.toString());
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			if (RESTRICT_FILE_MIME) {
+				log.warn("** File upload disabled **");
+			}
 		}
 	}
 }
