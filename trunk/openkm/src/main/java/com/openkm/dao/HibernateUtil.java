@@ -1,10 +1,14 @@
 package com.openkm.dao;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.sql.Blob;
+
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,5 +67,33 @@ public class HibernateUtil {
 		if (tx != null && tx.isActive()) {
 			tx.rollback();
 		}
+	}
+
+	/**
+	 * Convert from Blob to byte array
+	 */
+	public static byte[] toByteArray(Blob fromImageBlob) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		try {
+			byte buf[] = new byte[4000];
+			int dataSize;
+			InputStream is = fromImageBlob.getBinaryStream();
+			
+			try {
+				while((dataSize = is.read(buf)) != -1) {
+					baos.write(buf, 0, dataSize);
+				}
+			} finally {
+				if(is != null) {
+					is.close();
+				}
+			}
+			
+			return baos.toByteArray();
+		} catch (Exception e) {
+		}
+		
+		return null;
 	}
 }
