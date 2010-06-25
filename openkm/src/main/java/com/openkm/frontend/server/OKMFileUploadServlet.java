@@ -106,7 +106,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 				for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
 					FileItem item = it.next();
 									
-					if (item.isFormField()) { 
+					if (item.isFormField()) {
 						if (item.getFieldName().equals("path")) { path = item.getString("UTF-8"); }
 						if (item.getFieldName().equals("action")) { action = Integer.parseInt(item.getString("UTF-8")); }
 						if (item.getFieldName().equals("users")) { users = item.getString("UTF-8"); }
