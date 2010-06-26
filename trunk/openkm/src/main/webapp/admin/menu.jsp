@@ -26,7 +26,7 @@
 <% } %>
   <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
   &nbsp;
-  <a target="frame" href="report.jsp"><img src="img/toolbar/report.png" title="Reports"></a>
+  <a target="frame" href="Report"><img src="img/toolbar/report.png" title="Reports"></a>
   &nbsp;
   <a target="frame" href="ActivityLog"><img src="img/toolbar/activity.png" title="Activity log"></a>
   &nbsp;

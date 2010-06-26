@@ -21,6 +21,7 @@
 
 package com.openkm.util;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.util.Collection;
@@ -47,9 +48,9 @@ import net.sf.jasperreports.engine.export.JRRtfExporter;
  */
 public class ReportUtil {
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
-	public static final int REPORT_HTML_OUTPUT = 1;
-	public static final int REPORT_PDF_OUTPUT = 2;
-	public static final int REPORT_RTF_OUTPUT = 3;
+	public static final int HTML_OUTPUT = 1;
+	public static final int PDF_OUTPUT = 2;
+	public static final int RTF_OUTPUT = 3;
 
 	/**
 	 * Generates a report based on a bean collection.
@@ -79,7 +80,7 @@ public class ReportUtil {
 	}
 
 	/**
-	 * Generates a report based on a jdbc connection.
+	 * Generates a report based on a JDBC connection (from file)
 	 */
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
 			Map<String, String> parameters, int outputType,	Connection con) throws Exception {
@@ -105,18 +106,29 @@ public class ReportUtil {
 	}
 
 	/**
+	 * Generates a report based on a JDBC connection (from stream)
+	 */
+	public static OutputStream generateReport(OutputStream out, InputStream report, 
+			Map<String, String> parameters, int outputType,	Connection con) throws JRException {
+		JasperReport jasperReport = JasperCompileManager.compileReport(report);
+		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, con);
+		export(out, outputType, print);
+		return out;
+	}
+	
+	/**
 	 * Export report 
 	 */
 	private static void export(OutputStream out, int outputType, JasperPrint print) throws JRException {
 		switch (outputType) {
-		case REPORT_PDF_OUTPUT:
+		case PDF_OUTPUT:
 			JRPdfExporter pdfExp = new JRPdfExporter();
 			pdfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			pdfExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			pdfExp.exportReport();
 			break;
 
-		case REPORT_HTML_OUTPUT:
+		case HTML_OUTPUT:
 			JRHtmlExporter htmlExp = new JRHtmlExporter();
 			htmlExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			htmlExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
@@ -125,7 +137,7 @@ public class ReportUtil {
 			htmlExp.exportReport();
 			break;
 			
-		case REPORT_RTF_OUTPUT:
+		case RTF_OUTPUT:
 			JRRtfExporter rtfExp = new JRRtfExporter();
 			rtfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			rtfExp.setParameter(JRExporterParameter.OUTPUT_WRITER, out);

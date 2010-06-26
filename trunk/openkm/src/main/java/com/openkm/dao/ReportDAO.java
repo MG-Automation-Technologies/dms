@@ -21,7 +21,7 @@ public class ReportDAO {
 	/**
 	 * Create
 	 */
-	public static int create(ReportDAO rp) throws DatabaseException {
+	public static int create(Report rp) throws DatabaseException {
 		log.debug("create({})", rp);
 		Session session = null;
 		Transaction tx = null;
