@@ -65,9 +65,6 @@ import org.apache.jackrabbit.JcrConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.report.admin.ReportLockedDocument;
-import com.openkm.bean.report.admin.ReportSubscribedDocuments;
-import com.openkm.bean.report.admin.ReportUser;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.HibernateUtil;
@@ -319,12 +316,16 @@ public class ReportServlet extends BaseServlet {
 	/**
 	 * Gets all the users data
 	 */
-	private Collection<ReportUser> reportUsers() throws DatabaseException {
+	private Collection<Map<String, String>> reportUsers() throws DatabaseException {
 		log.debug("reportUsers()");
-		List<ReportUser> al = new ArrayList<ReportUser>();
+		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
 		
-		for (Iterator<User> it = AuthDAO.findAllUsers(false).iterator(); it.hasNext(); ) {
-			al.add(reportCopy(it.next()));
+		for (User user : AuthDAO.findAllUsers(false)) {
+			Map<String, String> usr = new HashMap<String, String>();
+			usr.put("id", user.getId());
+			usr.put("name", user.getName());
+			usr.put("email", user.getEmail());
+			usr.put("roles", user.getRoles().toString());
 		}
 		
 		log.debug("reportUsers: {}", al);
@@ -332,27 +333,13 @@ public class ReportServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Copy the Users data to GWTUser data.
-	 */
-	private static ReportUser reportCopy(User user) {
-		ReportUser reportUser = new ReportUser();
-		
-		reportUser.setEmail(user.getEmail());
-		reportUser.setId(user.getId());
-		//reportUser.setRoles(user.getRoles());
-		reportUser.setActive(user.isActive());
-
-		return reportUser;
-	}
-	
-	/**
 	 * Gets all the locked documents data
 	 * 
 	 * @return Collection of locked documents data
 	 */
-	private Collection<ReportLockedDocument> reportLockedDocuments() {
+	private Collection<Map<String, String>> reportLockedDocuments() {
 		log.debug("reportLockedDocuments()");
-		List<ReportLockedDocument> al = new ArrayList<ReportLockedDocument>();
+		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
 		String statement = "/jcr:root/okm:root//element(*,okm:document)[@jcr:lockOwner]/@jcr:lockOwner";
 		String type = "xpath";
 		
@@ -366,13 +353,13 @@ public class ReportServlet extends BaseServlet {
 			QueryResult result = query.execute();
 			
 			for (RowIterator it = result.getRows(); it.hasNext();) {
-				ReportLockedDocument ld = new ReportLockedDocument();
+				Map<String, String> ld = new HashMap<String, String>();
 				Row row = it.nextRow();
 				
 				Value v = row.getValue(JcrConstants.JCR_LOCKOWNER);
-				ld.setOwner(v==null?"NULL":v.getString());
+				ld.put("owner", v==null?"NULL":v.getString());
 				v = row.getValue(JcrConstants.JCR_PATH);
-				ld.setPath(v==null?"NULL":v.getString());
+				ld.put("path", v==null?"NULL":v.getString());
 				
 				al.add(ld);
 			}
@@ -389,9 +376,9 @@ public class ReportServlet extends BaseServlet {
 	 * 
 	 * @return Collection of documents observed data
 	 */
-	private Collection<ReportSubscribedDocuments> reportSubscribedDocuments() {
+	private Collection<Map<String, String>> reportSubscribedDocuments() {
 		log.debug("reportSubscribedDocuments()");
-		List<ReportSubscribedDocuments> al = new ArrayList<ReportSubscribedDocuments>();
+		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
 		String statement = "/jcr:root/okm:root//element(*, mix:notification)/@okm:subscriptors";
 		String type = "xpath";
 		
@@ -405,11 +392,11 @@ public class ReportServlet extends BaseServlet {
 			QueryResult result = query.execute();
 			
 			for (RowIterator it = result.getRows(); it.hasNext();) {
-				ReportSubscribedDocuments dob = new ReportSubscribedDocuments();
+				Map<String, String> dob = new HashMap<String, String>();
 				Row row = it.nextRow();
 				
 				Value v = row.getValue(JcrConstants.JCR_PATH);
-				dob.setPath(v==null?"NULL":v.getString());
+				dob.put("path", v==null?"NULL":v.getString());
 				
 				String path = row.getValue(JcrConstants.JCR_PATH).getString();
 				Node node = jcrSession.getRootNode().getNode(path.substring(1));
@@ -422,7 +409,7 @@ public class ReportServlet extends BaseServlet {
 					sb.append(", ");
 				}
 				sb.append(values[values.length-1].getString());
-				dob.setSubscriptors(sb.toString());
+				dob.put("subscriptors", sb.toString());
 				
 				al.add(dob);
 			}
