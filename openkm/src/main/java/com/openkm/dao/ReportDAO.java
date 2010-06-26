@@ -53,11 +53,15 @@ public class ReportDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setParameter("id", rp.getId());
-			Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-			rp.setFileContent(HibernateUtil.toByteArray((Blob) data[0]));
-			rp.setFileName((String) data[1]);
+			
+			if (rp.getFileContent().length == 0) {
+				Query q = session.createQuery(qs);
+				q.setParameter("id", rp.getId());
+				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
+				rp.setFileContent(HibernateUtil.toByteArray((Blob) data[0]));
+				rp.setFileName((String) data[1]);
+			}
+			
 			session.update(rp);
 			tx.commit();
 		} catch (HibernateException e) {

@@ -639,7 +639,7 @@ public class Config {
 						for (String ext : mt.getExtensions()) {
 							entry += " " + ext;
 						}
-						log.info("loadMimeTypes => Add Entry: {}", entry);
+						log.debug("loadMimeTypes => Add Entry: {}", entry);
 						Config.mimeTypes.addMimeTypes(entry);
 					}
 				}
