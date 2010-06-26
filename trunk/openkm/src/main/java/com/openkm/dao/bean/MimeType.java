@@ -34,7 +34,7 @@ public class MimeType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
-	private byte[] imageData;
+	private byte[] imageContent;
 	private String imageMime;
 	private boolean active;
 	private Set<String> extensions = new HashSet<String>();
@@ -55,24 +55,24 @@ public class MimeType implements Serializable {
 		this.name = name;
 	}
 
-	public byte[] getImageData() {
-		return imageData;
+	public byte[] getImageContent() {
+		return imageContent;
 	}
 
-	public void setImageData(byte[] imageData) {
-		this.imageData = imageData;
+	public void setImageContent(byte[] imageContent) {
+		this.imageContent = imageContent;
 	}
 	
 	/** Don't invoke this. Used by Hibernate only. */
 	@SuppressWarnings("unused")
-	private void setImageDataBlob(Blob data) {
-		this.imageData = HibernateUtil.toByteArray(data);
+	private void setImageContentBlob(Blob data) {
+		this.imageContent = HibernateUtil.toByteArray(data);
 	}
 
 	/** Don't invoke this. Used by Hibernate only. */
 	@SuppressWarnings("unused")
-	private Blob getImageDataBlob() {
-		return Hibernate.createBlob(imageData);
+	private Blob getImageContentBlob() {
+		return Hibernate.createBlob(imageContent);
 	}
 
 	public String getImageMime() {
@@ -105,7 +105,7 @@ public class MimeType implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", imageMime="); sb.append(imageMime);
-		sb.append(", imageData="); sb.append(imageData);
+		sb.append(", imageContent="); sb.append(imageContent);
 		sb.append(", active="); sb.append(active);
 		sb.append(", extensions="); sb.append(extensions);
 		sb.append("}");

@@ -62,7 +62,7 @@ public class MimeTypeDAO {
 			Query q = session.createQuery(qs);
 			q.setParameter("id", mt.getId());
 			Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-			mt.setImageData(HibernateUtil.toByteArray((Blob) data[0]));
+			mt.setImageContent(HibernateUtil.toByteArray((Blob) data[0]));
 			mt.setImageMime((String) data[1]);
 			session.update(mt);
 			tx.commit();

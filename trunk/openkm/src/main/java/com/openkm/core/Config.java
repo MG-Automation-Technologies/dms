@@ -671,7 +671,7 @@ public class Config {
 						MimeType mt = new MimeType();
 						mt.setName(data[0]);
 						InputStream iis = Config.class.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
-						mt.setImageData(IOUtils.toByteArray(iis));
+						mt.setImageContent(IOUtils.toByteArray(iis));
 						iis.close();
 						mt.setImageMime("image/gif");
 						mt.setActive(true);
