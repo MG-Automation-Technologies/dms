@@ -115,7 +115,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 			throws ServletException, IOException, ParseException, 
 			org.apache.jackrabbit.core.nodetype.compact.ParseException, 
 			javax.jcr.RepositoryException, InvalidNodeTypeDefException {
-		log.info("register({}, {}, {}, {})", new Object[] { session, pgPath, request, response });
+		log.debug("register({}, {}, {}, {})", new Object[] { session, pgPath, request, response });
 		
 		// Check xml property groups definition
 		FormUtils.resetPropertyGroupsForms();
@@ -136,7 +136,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException, ParseException, RepositoryException, DatabaseException {
-		log.info("list({}, {})", new Object[] { request, response });
+		log.debug("list({}, {})", new Object[] { request, response });
 		ServletContext sc = getServletContext();
 		FormUtils.resetPropertyGroupsForms();
 		OKMPropertyGroup okmPropGroups = OKMPropertyGroup.getInstance();
