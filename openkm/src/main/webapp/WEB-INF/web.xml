@@ -166,8 +166,8 @@
     <servlet-class>com.openkm.servlet.admin.RegisterWorkflowServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>ExecuteReportServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.admin.ExecuteReportServlet</servlet-class>
+    <servlet-name>ReportServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ReportServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>BenchmarkServlet</servlet-name>
@@ -396,8 +396,8 @@
     <url-pattern>/admin/RegisterWorkflow</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>ExecuteReportServlet</servlet-name>
-    <url-pattern>/admin/ExecuteReport</url-pattern>
+    <servlet-name>ReportServlet</servlet-name>
+    <url-pattern>/admin/Report</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>BenchmarkServlet</servlet-name>

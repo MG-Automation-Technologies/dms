@@ -72,7 +72,7 @@ public class MimeTypeServlet extends BaseServlet {
 			if (action.equals("create")) {
 				ServletContext sc = getServletContext();
 				MimeType mt = new MimeType();
-				sc.setAttribute("action", WebUtil.getString(request, "action"));
+				sc.setAttribute("action", action);
 				sc.setAttribute("extensions", null);
 				sc.setAttribute("mt", mt);
 				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
@@ -86,7 +86,7 @@ public class MimeTypeServlet extends BaseServlet {
 					extensions += ext + " ";
 				}
 				
-				sc.setAttribute("action", WebUtil.getString(request, "action"));
+				sc.setAttribute("action", action);
 				sc.setAttribute("extensions", extensions.trim());
 				sc.setAttribute("mt", mt);
 				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
@@ -100,7 +100,7 @@ public class MimeTypeServlet extends BaseServlet {
 					extensions += ext + " ";
 				}
 				
-				sc.setAttribute("action", WebUtil.getString(request, "action"));
+				sc.setAttribute("action", action);
 				sc.setAttribute("extensions", extensions.trim());
 				sc.setAttribute("mt", mt);
 				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
@@ -210,7 +210,7 @@ public class MimeTypeServlet extends BaseServlet {
 	}
 
 	/**
-	 * List node properties and children
+	 * List registered mime types
 	 */
 	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
