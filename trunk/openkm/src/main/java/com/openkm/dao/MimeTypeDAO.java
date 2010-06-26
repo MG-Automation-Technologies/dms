@@ -52,18 +52,22 @@ public class MimeTypeDAO {
 	 */
 	public static void update(MimeType mt) throws DatabaseException {
 		log.debug("update({})", mt);
-		String qs = "select mt.imageDataBlob, mt.imageMime from MimeType mt where mt.id=:id";
+		String qs = "select mt.imageContentBlob, mt.imageMime from MimeType mt where mt.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Query q = session.createQuery(qs);
-			q.setParameter("id", mt.getId());
-			Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-			mt.setImageContent(HibernateUtil.toByteArray((Blob) data[0]));
-			mt.setImageMime((String) data[1]);
+
+			if (mt.getImageContent().length == 0) {
+				Query q = session.createQuery(qs);
+				q.setParameter("id", mt.getId());
+				Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
+				mt.setImageContent(HibernateUtil.toByteArray((Blob) data[0]));
+				mt.setImageMime((String) data[1]);
+			}
+			
 			session.update(mt);
 			tx.commit();
 		} catch (HibernateException e) {
