@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.util;
+package com.openkm.report;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,7 +34,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -53,11 +53,11 @@ public class ReportUtil {
 	public static final int RTF_OUTPUT = 3;
 
 	/**
-	 * Generates a report based on a bean collection.
+	 * Generates a report based on a map collection (from file)
 	 */
-	@SuppressWarnings("unchecked")
 	public static OutputStream generateReport(OutputStream out, String fileReport, 
-			Map<String, String> parameters, int outputType,	Collection colleccion) throws Exception {
+			Map<String, String> parameters, int outputType,
+			Collection<Map<String, String>> list) throws Exception {
 		if (!JasperCharged.containsKey(fileReport)) {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			try {
@@ -70,12 +70,26 @@ public class ReportUtil {
 
 		try {
 			JasperReport jasperReport = (JasperReport) JasperCharged.get(fileReport);
-			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(colleccion));
+			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
+					new JRMapCollectionDataSource(list));
 			export(out, outputType, print);
 		} catch (JRException je) {
 			throw new JRException("Error generating report", je);
 		}
 
+		return out;
+	}
+	
+	/**
+	 * Generates a report based on a map collection (from stream)
+	 */
+	public static OutputStream generateReport(OutputStream out, InputStream report, 
+			Map<String, String> parameters, int outputType, 
+			Collection<Map<String, String>> list) throws JRException {
+		JasperReport jasperReport = JasperCompileManager.compileReport(report);
+		JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
+				new JRMapCollectionDataSource(list));
+		export(out, outputType, print);
 		return out;
 	}
 

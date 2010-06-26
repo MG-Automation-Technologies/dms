@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report Workflow Workload" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="ReportWorkflowWorkloadBundle">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Workflow Workload" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="ReportWorkflowWorkloadBundle" whenResourceMissingType="Key">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="host" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select ti.actorid_ as ti_actorid, pd.name_ as pd_name, ti.name_ as ti_name, ti.start_ as ti_start, ti.end_ as ti_end
-from jbpm_taskinstance as ti,  jbpm_processinstance as pi, jbpm_processdefinition as pd
+from JBPM_TASKINSTANCE as ti, JBPM_PROCESSINSTANCE as pi, JBPM_PROCESSDEFINITION as pd
 where ti.procinst_ = pi.id_ and pi.processdefinition_ = pd.id_
 order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 	</queryString>
-	<field name="TI_ACTORID" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="PD_NAME" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="TI_NAME" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="TI_START" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="TI_END" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="ti_actorid" class="java.lang.String"/>
+	<field name="pd_name" class="java.lang.String"/>
+	<field name="ti_name" class="java.lang.String"/>
+	<field name="ti_start" class="java.sql.Timestamp"/>
+	<field name="ti_end" class="java.sql.Timestamp"/>
 	<group name="Usuarios">
-		<groupExpression><![CDATA[$F{TI_ACTORID}]]></groupExpression>
+		<groupExpression><![CDATA[$F{ti_actorid}]]></groupExpression>
 		<groupHeader>
 			<band height="50">
 				<rectangle radius="10">
@@ -51,7 +41,7 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 					<textElement>
 						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{TI_ACTORID}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ti_actorid}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="182" y="14" width="60" height="14"/>
@@ -147,35 +137,35 @@ order by ti_actorid, pd_name, ti_name, ti_start, ti_end]]>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TI_START}]]></textFieldExpression>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ti_start}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="355" y="0" width="87" height="14"/>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TI_END}]]></textFieldExpression>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ti_end}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="120" y="1" width="119" height="13"/>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{TI_NAME}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ti_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH.mm.ss" isBlankWhenNull="true">
 				<reportElement x="453" y="1" width="102" height="13"/>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[new java.sql.Timestamp(($F{TI_END}.getTime()-$F{TI_START}.getTime())-1000*60*60)]]></textFieldExpression>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[new java.sql.Timestamp(($F{ti_end}.getTime()-$F{ti_start}.getTime())-1000*60*60)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="100" height="14"/>
 				<textElement>
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{PD_NAME}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pd_name}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
