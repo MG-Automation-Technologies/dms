@@ -174,7 +174,7 @@ public class ReportServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						rp.setFileName(FilenameUtils.getName(item.getName()));
-						rp.setFileData(IOUtils.toByteArray(is));
+						rp.setFileContent(IOUtils.toByteArray(is));
 						is.close();
 					}
 				}
@@ -286,7 +286,7 @@ public class ReportServlet extends BaseServlet {
 		
 		try {
 			os = response.getOutputStream();
-			bais = new ByteArrayInputStream(rp.getFileData());
+			bais = new ByteArrayInputStream(rp.getFileContent());
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();

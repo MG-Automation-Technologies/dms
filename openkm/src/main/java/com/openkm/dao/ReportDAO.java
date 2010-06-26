@@ -46,7 +46,7 @@ public class ReportDAO {
 	 */
 	public static void update(Report rp) throws DatabaseException {
 		log.debug("update({})", rp);
-		String qs = "select rp.fileDataBlob, rp.fileName from Report rp where rp.id=:id";
+		String qs = "select rp.fileContentBlob, rp.fileName from Report rp where rp.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -56,7 +56,7 @@ public class ReportDAO {
 			Query q = session.createQuery(qs);
 			q.setParameter("id", rp.getId());
 			Object[] data = (Object[]) q.setMaxResults(1).uniqueResult();
-			rp.setFileData(HibernateUtil.toByteArray((Blob) data[0]));
+			rp.setFileContent(HibernateUtil.toByteArray((Blob) data[0]));
 			rp.setFileName((String) data[1]);
 			session.update(rp);
 			tx.commit();

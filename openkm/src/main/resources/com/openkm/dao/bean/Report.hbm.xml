@@ -6,7 +6,7 @@
     <id name="id" column="RP_ID"><generator class="native"/></id>
     <property name="name" column="RP_NAME" not-null="true"/>
     <property name="type" column="RP_TYPE" not-null="true"/>
-    <property name="fileDataBlob" column="RP_FILE_DATA" not-null="true" type="blob"/>
+    <property name="fileContentBlob" column="RP_FILE_CONTENT" not-null="true" type="blob"/>
     <property name="fileName" column="RP_FILE_NAME" not-null="true"/>
     <property name="active" column="RP_ACTIVE" not-null="true"/>
   </class>

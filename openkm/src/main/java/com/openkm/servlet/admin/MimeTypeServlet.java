@@ -164,7 +164,7 @@ public class MimeTypeServlet extends BaseServlet {
 					} else {
 						is = item.getInputStream();
 						mt.setImageMime(Config.mimeTypes.getContentType(item.getName()));
-						mt.setImageData(IOUtils.toByteArray(is));
+						mt.setImageContent(IOUtils.toByteArray(is));
 						is.close();
 					}
 				}

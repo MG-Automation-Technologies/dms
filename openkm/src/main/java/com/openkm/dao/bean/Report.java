@@ -37,7 +37,7 @@ public class Report implements Serializable {
 	private int id;
 	private String name;
 	private String type;
-	private byte[] fileData;
+	private byte[] fileContent;
 	private String fileName;
 	private boolean active;
 	
@@ -65,12 +65,12 @@ public class Report implements Serializable {
 		this.type = type;
 	}
 	
-	public byte[] getFileData() {
-		return fileData;
+	public byte[] getFileContent() {
+		return fileContent;
 	}
 
-	public void setFileData(byte[] fileData) {
-		this.fileData = fileData;
+	public void setFileContent(byte[] fileContent) {
+		this.fileContent = fileContent;
 	}
 
 	public String getFileName() {
@@ -83,14 +83,14 @@ public class Report implements Serializable {
 	
 	/** Don't invoke this. Used by Hibernate only. */
 	@SuppressWarnings("unused")
-	private void setFileDataBlob(Blob data) {
-		this.fileData = HibernateUtil.toByteArray(data);
+	private void setFileContentBlob(Blob data) {
+		this.fileContent = HibernateUtil.toByteArray(data);
 	}
 
 	/** Don't invoke this. Used by Hibernate only. */
 	@SuppressWarnings("unused")
-	private Blob getFileDataBlob() {
-		return Hibernate.createBlob(fileData);
+	private Blob getFileContentBlob() {
+		return Hibernate.createBlob(fileContent);
 	}
 	
 	public boolean isActive() {
@@ -108,7 +108,7 @@ public class Report implements Serializable {
 		sb.append(", name="); sb.append(name);
 		sb.append(", type="); sb.append(type);
 		sb.append(", fileName="); sb.append(fileName);
-		sb.append(", fileData="); sb.append(fileData);
+		sb.append(", fileContent="); sb.append(fileContent);
 		sb.append(", active="); sb.append(active);
 		sb.append("}");
 		return sb.toString();
