@@ -76,7 +76,6 @@ import com.openkm.dao.bean.Report;
 import com.openkm.dao.bean.User;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
-import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.ReportUtil;
 import com.openkm.util.UserActivity;
