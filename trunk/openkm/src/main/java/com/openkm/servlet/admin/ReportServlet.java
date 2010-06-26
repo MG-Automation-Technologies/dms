@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,17 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.LoginException;
-import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.Workspace;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
-import javax.jcr.query.RowIterator;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -61,20 +51,17 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.jackrabbit.JcrConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.AuthDAO;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
-import com.openkm.dao.bean.User;
-import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.report.CustomDataSource;
+import com.openkm.report.ReportUtil;
 import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
-import com.openkm.util.ReportUtil;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -84,13 +71,7 @@ import com.openkm.util.WebUtil;
 public class ReportServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(ReportServlet.class);
-	
-	// Report files
-	public static final String REPORT_REGISTERED_USERS = "ReportRegisteredUsers.jrxml";
-	public static final String REPORT_LOCKED_DOCUMENTS = "ReportLockedDocuments.jrxml";
-	public static final String REPORT_SUBSCRIBED_DOCUMENTS = "ReportSubscribedDocuments.jrxml";
-	public static final String REPORT_WORKFLOW_WORKLOAD = "ReportWorkflowWorkload.jrxml";
-	
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
 		log.debug("doGet({}, {})", request, response);
@@ -105,7 +86,8 @@ public class ReportServlet extends BaseServlet {
 			Map<String, String> types = new LinkedHashMap<String, String>();
 			types.put(Report.SQL, "SQL");
 			types.put(Report.HIBERNATE, "Hibernate");
-			types.put(Report.XPATH, "XPath");
+			types.put(Report.COLLECTION, "Collection");
+			//types.put(Report.XPATH, "XPath");
 			
 			if (action.equals("create")) {
 				ServletContext sc = getServletContext();
@@ -146,7 +128,10 @@ public class ReportServlet extends BaseServlet {
 			sendErrorRedirect(request, response, e);
 		} catch (JRException e) {
 			log.error(e.getMessage(), e);
-			//sendErrorRedirect(request, response, e);
+			sendErrorRedirect(request, response, e);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request, response, e);
 		} finally {
 			JCRUtils.logout(session);
 		}
@@ -247,6 +232,8 @@ public class ReportServlet extends BaseServlet {
 				rp.setType("Hibernate");
 			} else if (Report.XPATH.equals(rp.getType())) {
 				rp.setType("XPath");
+			} else if (Report.COLLECTION.equals(rp.getType())) {
+				rp.setType("Collection");
 			}
 		}
 		
@@ -259,7 +246,7 @@ public class ReportServlet extends BaseServlet {
 	 * Execute report
 	 */
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
-			ServletException, IOException, DatabaseException, JRException {
+			Exception {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
 		int rpId = WebUtil.getInt(request, "rp_id");
 		Report rp = ReportDAO.findByPk(rpId);
@@ -273,20 +260,20 @@ public class ReportServlet extends BaseServlet {
 		
 		// Set MIME type
 		response.setContentType(DocConverter.PDF);
-		
+		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
+			
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
-			rp.setFileName(URLEncoder.encode(rp.getFileName(), "UTF-8").replaceAll("\\+", " "));
+			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
 		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
 			log.debug("Agent: Mozilla");
-			rp.setFileName(MimeUtility.encodeText(rp.getFileName(), "UTF-8", "B"));
+			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
 		} else {
 			log.debug("Agent: Unknown");
 		}
 		
-		// Setting filename
-		rp.setFileName(rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf");
-		response.setHeader("Content-disposition", "attachment; filename=\""+ rp.getFileName() +"\"");
+		// Set filename
+		response.setHeader("Content-disposition", "attachment; filename=\""+ fileName +"\"");
 		
 		// Set default report parameters
 		Map<String, String> parameters = new HashMap<String, String>();
@@ -300,10 +287,19 @@ public class ReportServlet extends BaseServlet {
 		try {
 			os = response.getOutputStream();
 			bais = new ByteArrayInputStream(rp.getFileData());
-			dbSession = HibernateUtil.getSessionFactory().openSession();
-			ReportUtil.generateReport(os, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
+			
+			if (Report.SQL.equals(rp.getType())) {
+				dbSession = HibernateUtil.getSessionFactory().openSession();
+				ReportUtil.generateReport(os, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
+			} else if (Report.COLLECTION.equals(rp.getType())) {
+				Collection<Map<String, String>> list = CustomDataSource.getDataSource(rp);
+				log.info("DataSource: {}", list);
+				ReportUtil.generateReport(os, bais, parameters, ReportUtil.PDF_OUTPUT, list);
+			}
 		} finally {
-			HibernateUtil.close(dbSession);
+			if (Report.SQL.equals(rp.getType())) {
+				HibernateUtil.close(dbSession);
+			}
 			IOUtils.closeQuietly(bais);
 			IOUtils.closeQuietly(os);
 		}
@@ -311,113 +307,5 @@ public class ReportServlet extends BaseServlet {
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_REPORT_EXECUTE", Integer.toString(rpId), rp.toString());
 		log.debug("execute: void");
-	}
-	
-	/**
-	 * Gets all the users data
-	 */
-	private Collection<Map<String, String>> reportUsers() throws DatabaseException {
-		log.debug("reportUsers()");
-		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
-		
-		for (User user : AuthDAO.findAllUsers(false)) {
-			Map<String, String> usr = new HashMap<String, String>();
-			usr.put("id", user.getId());
-			usr.put("name", user.getName());
-			usr.put("email", user.getEmail());
-			usr.put("roles", user.getRoles().toString());
-		}
-		
-		log.debug("reportUsers: {}", al);
-		return al;
-	}
-	
-	/**
-	 * Gets all the locked documents data
-	 * 
-	 * @return Collection of locked documents data
-	 */
-	private Collection<Map<String, String>> reportLockedDocuments() {
-		log.debug("reportLockedDocuments()");
-		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
-		String statement = "/jcr:root/okm:root//element(*,okm:document)[@jcr:lockOwner]/@jcr:lockOwner";
-		String type = "xpath";
-		
-		Session jcrSession = DirectRepositoryModule.getSystemSession();
-		Workspace workspace = jcrSession.getWorkspace();
-		QueryManager queryManager;
-		
-		try {
-			queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, type);
-			QueryResult result = query.execute();
-			
-			for (RowIterator it = result.getRows(); it.hasNext();) {
-				Map<String, String> ld = new HashMap<String, String>();
-				Row row = it.nextRow();
-				
-				Value v = row.getValue(JcrConstants.JCR_LOCKOWNER);
-				ld.put("owner", v==null?"NULL":v.getString());
-				v = row.getValue(JcrConstants.JCR_PATH);
-				ld.put("path", v==null?"NULL":v.getString());
-				
-				al.add(ld);
-			}
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-
-		log.debug("reportLockedDocuments: {}", al);
-		return al;
-	}
-	
-	/**
-	 * Gets all the documents with subscriptors data
-	 * 
-	 * @return Collection of documents observed data
-	 */
-	private Collection<Map<String, String>> reportSubscribedDocuments() {
-		log.debug("reportSubscribedDocuments()");
-		List<Map<String, String>> al = new ArrayList<Map<String, String>>();
-		String statement = "/jcr:root/okm:root//element(*, mix:notification)/@okm:subscriptors";
-		String type = "xpath";
-		
-		Session jcrSession = DirectRepositoryModule.getSystemSession();
-		Workspace workspace = jcrSession.getWorkspace();
-		QueryManager queryManager;
-		
-		try {
-			queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(statement, type);
-			QueryResult result = query.execute();
-			
-			for (RowIterator it = result.getRows(); it.hasNext();) {
-				Map<String, String> dob = new HashMap<String, String>();
-				Row row = it.nextRow();
-				
-				Value v = row.getValue(JcrConstants.JCR_PATH);
-				dob.put("path", v==null?"NULL":v.getString());
-				
-				String path = row.getValue(JcrConstants.JCR_PATH).getString();
-				Node node = jcrSession.getRootNode().getNode(path.substring(1));
-				Property prop = node.getProperty("okm:subscriptors");
-				Value[] values = prop.getValues();
-				StringBuilder sb = new StringBuilder();
-				
-				for (int i=0; i<values.length-1; i++) {
-					sb.append(values[i].getString());
-					sb.append(", ");
-				}
-				sb.append(values[values.length-1].getString());
-				dob.put("subscriptors", sb.toString());
-				
-				al.add(dob);
-			}
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-
-		log.debug("reportSubscribedDocuments: {}", al);
-		return al;
 	}
 }
