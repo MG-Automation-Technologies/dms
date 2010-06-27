@@ -22,11 +22,11 @@
 package com.openkm.servlet.admin;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -54,11 +54,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bsh.EvalError;
+
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
-import com.openkm.report.CustomDataSource;
 import com.openkm.report.ReportUtil;
 import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
@@ -85,8 +86,9 @@ public class ReportServlet extends BaseServlet {
 
 			Map<String, String> types = new LinkedHashMap<String, String>();
 			types.put(Report.SQL, "SQL");
-			types.put(Report.HIBERNATE, "Hibernate");
-			types.put(Report.COLLECTION, "Collection");
+			types.put(Report.SCRIPT, "Script");
+			//types.put(Report.HIBERNATE, "Hibernate");
+			//types.put(Report.COLLECTION, "Collection");
 			//types.put(Report.XPATH, "XPath");
 			
 			if (action.equals("create")) {
@@ -129,7 +131,7 @@ public class ReportServlet extends BaseServlet {
 		} catch (JRException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
-		} catch (Exception e) {
+		} catch (EvalError e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} finally {
@@ -228,6 +230,8 @@ public class ReportServlet extends BaseServlet {
 		for (Report rp : list) {
 			if (Report.SQL.equals(rp.getType())) {
 				rp.setType("SQL");
+			} else if (Report.SCRIPT.equals(rp.getType())) {
+				rp.setType("Script");
 			} else if (Report.HIBERNATE.equals(rp.getType())) {
 				rp.setType("Hibernate");
 			} else if (Report.XPATH.equals(rp.getType())) {
@@ -246,7 +250,7 @@ public class ReportServlet extends BaseServlet {
 	 * Execute report
 	 */
 	private void execute(Session session, HttpServletRequest request, HttpServletResponse response) throws 
-			Exception {
+			IOException, DatabaseException, JRException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
 		int rpId = WebUtil.getInt(request, "rp_id");
 		Report rp = ReportDAO.findByPk(rpId);
@@ -261,7 +265,7 @@ public class ReportServlet extends BaseServlet {
 		// Set MIME type
 		response.setContentType(DocConverter.PDF);
 		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
-			
+		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
 			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
@@ -280,27 +284,32 @@ public class ReportServlet extends BaseServlet {
 		String host = com.openkm.core.Config.APPLICATION_URL;
 		parameters.put("host", host.substring(0, host.lastIndexOf("/")+1));
 		
-		OutputStream os = null;
+		ByteArrayOutputStream baos = null;
 		ByteArrayInputStream bais = null;
+		OutputStream os = null;
 		org.hibernate.Session dbSession = null;
 		
 		try {
-			os = response.getOutputStream();
+			baos = new ByteArrayOutputStream();
 			bais = new ByteArrayInputStream(rp.getFileContent());
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				ReportUtil.generateReport(os, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
-			} else if (Report.COLLECTION.equals(rp.getType())) {
-				Collection<Map<String, String>> list = CustomDataSource.getDataSource(rp);
-				log.info("DataSource: {}", list);
-				ReportUtil.generateReport(os, bais, parameters, ReportUtil.PDF_OUTPUT, list);
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
+			} else if (Report.SCRIPT.equals(rp.getType())) {
+				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
 			}
+			
+			// Send back to browser
+			os = response.getOutputStream();
+			IOUtils.write(baos.toByteArray(), os);
+			os.flush();
 		} finally {
 			if (Report.SQL.equals(rp.getType())) {
 				HibernateUtil.close(dbSession);
 			}
 			IOUtils.closeQuietly(bais);
+			IOUtils.closeQuietly(baos);
 			IOUtils.closeQuietly(os);
 		}
 		
