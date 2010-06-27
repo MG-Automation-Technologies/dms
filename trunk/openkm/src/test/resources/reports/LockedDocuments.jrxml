@@ -9,6 +9,33 @@
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="host" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[import javax.jcr.*;
+import javax.jcr.query.*;
+import org.apache.jackrabbit.*;
+import com.openkm.module.direct.*;
+
+List al = new ArrayList ();
+String statement = "/jcr:root/okm:root//element(*,okm:document)[@jcr:lockOwner]/@jcr:lockOwner";
+String type = "xpath";
+Session jcrSession = DirectRepositoryModule.getSystemSession();
+Workspace workspace = jcrSession.getWorkspace();
+QueryManager queryManager = workspace.getQueryManager();
+Query query = queryManager.createQuery(statement, type);
+QueryResult result = query.execute();
+
+for (RowIterator it = result.getRows(); it.hasNext();) {
+  Map ld = new HashMap();
+  javax.jcr.query.Row row = it.nextRow();
+  javax.jcr.Value v = row.getValue(JcrConstants.JCR_LOCKOWNER);
+  ld.put("owner", v==null?"NULL":v.getString());
+  v = row.getValue(JcrConstants.JCR_PATH);
+  ld.put("path", v==null?"NULL":v.getString());
+  al.add(ld);
+}
+
+return al;]]>
+	</queryString>
 	<field name="owner" class="java.lang.String">
 		<fieldDescription><![CDATA[owner]]></fieldDescription>
 	</field>
