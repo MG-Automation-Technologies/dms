@@ -30,6 +30,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -40,6 +41,12 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import bsh.EvalError;
+import bsh.Interpreter;
+
 /**
  * Utilidades para jasper reports
  * 
@@ -47,6 +54,8 @@ import net.sf.jasperreports.engine.export.JRRtfExporter;
  * 
  */
 public class ReportUtil {
+	@SuppressWarnings("unused")
+	private static Logger log = LoggerFactory.getLogger(CustomDataSource.class);
 	public static Map<String, JasperReport> JasperCharged = new HashMap<String, JasperReport>();
 	public static final int HTML_OUTPUT = 1;
 	public static final int PDF_OUTPUT = 2;
@@ -92,6 +101,29 @@ public class ReportUtil {
 		export(out, outputType, print);
 		return out;
 	}
+	
+	/**
+	 * Generates a report based on a map collection (from stream)
+	 */
+	@SuppressWarnings("unchecked")
+	public static OutputStream generateReport(OutputStream out, InputStream report, 
+			Map<String, String> parameters, int outputType) throws JRException, EvalError {
+		JasperReport jasperReport = JasperCompileManager.compileReport(report);
+		JRQuery query = jasperReport.getQuery();
+		
+		if (query != null) {
+			Interpreter bsh = new Interpreter(null, System.out, System.err, false);
+			Collection list = (Collection)bsh.eval(query.getText());
+			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
+					new JRMapCollectionDataSource(list));
+			export(out, outputType, print);
+		} else {
+			throw new JRException("Null report query string");
+		}
+		
+		return out;
+	}
+
 
 	/**
 	 * Generates a report based on a JDBC connection (from file)

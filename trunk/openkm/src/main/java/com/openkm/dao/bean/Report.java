@@ -34,6 +34,7 @@ public class Report implements Serializable {
 	public static final String HIBERNATE = "hibernate";
 	public static final String XPATH = "xpath";
 	public static final String COLLECTION = "collection";
+	public static final String SCRIPT = "script";
 	private int id;
 	private String name;
 	private String type;
