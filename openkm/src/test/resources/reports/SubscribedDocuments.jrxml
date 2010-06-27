@@ -9,6 +9,42 @@
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="host" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[import javax.jcr.*;
+import javax.jcr.query.*;
+import org.apache.jackrabbit.*;
+import com.openkm.module.direct.*;
+
+List al = new ArrayList();
+String statement = "/jcr:root/okm:root//element(*, mix:notification)/@okm:subscriptors";
+String type = "xpath";
+Session jcrSession = DirectRepositoryModule.getSystemSession();
+Workspace workspace = jcrSession.getWorkspace();
+QueryManager queryManager = workspace.getQueryManager();
+Query query = queryManager.createQuery(statement, type);
+QueryResult result = query.execute();
+
+for (RowIterator it = result.getRows(); it.hasNext();) {
+  Map dob = new HashMap();
+  Row row = it.nextRow();
+  Value v = row.getValue(JcrConstants.JCR_PATH);
+  dob.put("path", v==null?"NULL":v.getString());
+  String path = row.getValue(JcrConstants.JCR_PATH).getString();
+  Node node = jcrSession.getRootNode().getNode(path.substring(1));
+  Property prop = node.getProperty("okm:subscriptors");
+  Value[] values = prop.getValues();
+  StringBuilder sb = new StringBuilder();
+
+  for (int i=0; i<values.length-1; i++) {
+    sb.append(values[i].getString());
+    sb.append(", ");
+  }
+
+  sb.append(values[values.length-1].getString());
+  dob.put("subscriptors", sb.toString());
+  al.add(dob);
+}]]>
+	</queryString>
 	<field name="subscriptors" class="java.lang.String">
 		<fieldDescription><![CDATA[subscriptors]]></fieldDescription>
 	</field>
