@@ -60,9 +60,9 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
-import com.openkm.report.ReportUtil;
 import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.ReportUtil;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
