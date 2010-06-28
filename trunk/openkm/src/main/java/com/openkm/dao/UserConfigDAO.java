@@ -64,9 +64,9 @@ public class UserConfigDAO {
 	/**
 	 * Update user config profile
 	 */
-	public static void updateProfile(int ucId, int upId) throws DatabaseException {
-		log.debug("updateProfile({}, {})", ucId, upId);
-		String qs = "update UserConfig uc set uc.profile=:profile where uc.id=:id";
+	public static void updateProfile(int ucUser, int upId) throws DatabaseException {
+		log.debug("updateProfile({}, {})", ucUser, upId);
+		String qs = "update UserConfig uc set uc.profile=:profile where uc.user=:user";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -75,7 +75,7 @@ public class UserConfigDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setEntity("profile", UserProfileDAO.findByPk(upId));
-			q.setInteger("id", ucId);
+			q.setInteger("user", ucUser);
 			q.executeUpdate();
 			tx.commit();
 		} catch (HibernateException e) {
