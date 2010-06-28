@@ -31,6 +31,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 
 public interface MailModule {
@@ -48,7 +49,7 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Mail create(Mail mail) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+			AccessDeniedException, RepositoryException, DatabaseException, UserQuotaExceededException;
 
 	/**
 	 * Obtains properties from a previously created mail.
@@ -135,7 +136,8 @@ public interface MailModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String mailPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+			UserQuotaExceededException;
 
 	/**
 	 * Retrieve a list of child mails from an existing folder.
