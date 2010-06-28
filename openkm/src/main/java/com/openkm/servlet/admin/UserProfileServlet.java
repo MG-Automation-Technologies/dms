@@ -226,7 +226,7 @@ public class UserProfileServlet extends BaseServlet {
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("userProfiles", UserProfileDAO.findAll());
+		sc.setAttribute("userProfiles", UserProfileDAO.findAll(false));
 		sc.getRequestDispatcher("/admin/user_profile_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
