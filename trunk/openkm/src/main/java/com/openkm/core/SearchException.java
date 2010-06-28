@@ -26,15 +26,7 @@ package com.openkm.core;
  * 
  */
 public class SearchException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2342613066710665162L;
-
-	/**
-	 * 
-	 */
-	
+	private static final long serialVersionUID = 1L;
 
 	public SearchException() {
 		super();

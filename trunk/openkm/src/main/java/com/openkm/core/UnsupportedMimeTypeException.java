@@ -26,11 +26,7 @@ package com.openkm.core;
  * 
  */
 public class UnsupportedMimeTypeException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7322363371347282080L;
+	private static final long serialVersionUID = 1L;
 
 	public UnsupportedMimeTypeException() {
 		super();

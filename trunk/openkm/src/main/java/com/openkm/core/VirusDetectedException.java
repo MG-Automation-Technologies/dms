@@ -26,11 +26,7 @@ package com.openkm.core;
  * 
  */
 public class VirusDetectedException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3048127681952113269L;
+	private static final long serialVersionUID = 1L;
 
 	public VirusDetectedException() {
 		super();

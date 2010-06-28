@@ -26,11 +26,7 @@ package com.openkm.core;
  * 
  */
 public class UserQuotaExceededException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3018227181952113269L;
+	private static final long serialVersionUID = 1L;
 
 	public UserQuotaExceededException() {
 		super();

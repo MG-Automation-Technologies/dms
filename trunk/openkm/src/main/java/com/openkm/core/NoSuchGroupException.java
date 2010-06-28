@@ -22,10 +22,7 @@
 package com.openkm.core;
 
 public class NoSuchGroupException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 889278387761480681L;
+	private static final long serialVersionUID = 1L;
 
 	public NoSuchGroupException() {
 		super();

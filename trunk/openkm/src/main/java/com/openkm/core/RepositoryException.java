@@ -26,10 +26,7 @@ package com.openkm.core;
  * 
  */
 public class RepositoryException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3369441265422907640L;
+	private static final long serialVersionUID = 1L;
 
 	public RepositoryException() {
 		super();
