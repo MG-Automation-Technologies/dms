@@ -31,7 +31,7 @@ public class UserConfig implements Serializable {
 	private String homePath;
 	private String homeType;
 	private String homeUuid;
-	private long quota;
+	private UserProfile profile;
 	private Set<String> lockTokens = new HashSet<String>();
 
 	public String getUser() {
@@ -66,18 +66,18 @@ public class UserConfig implements Serializable {
 		this.homeType = homeType;
 	}
 	
-	public long getQuota() {
-		return quota;
+	public UserProfile getProfile() {
+		return profile;
 	}
 
-	public void setQuota(long quota) {
-		this.quota = quota;
+	public void setProfile(UserProfile profile) {
+		this.profile = profile;
 	}
 	
 	public Set<String> getLockTokens() {
 		return lockTokens;
 	}
-
+	
 	public void setLockTokens(Set<String> lockTokens) {
 		this.lockTokens = lockTokens;
 	}
@@ -89,7 +89,7 @@ public class UserConfig implements Serializable {
 		sb.append(", homePath="); sb.append(homePath);
 		sb.append(", homeType="); sb.append(homeType);
 		sb.append(", homeUuid="); sb.append(homeUuid);
-		sb.append(", quota="); sb.append(quota);
+		sb.append(", profile="); sb.append(profile);
 		sb.append(", lockTokens="); sb.append(lockTokens);
 		sb.append("}");
 		return sb.toString();
