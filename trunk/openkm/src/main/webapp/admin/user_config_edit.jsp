@@ -19,14 +19,13 @@
     <c:when test="${isAdmin}">
       <h1>Edit user config</h1>
       <form action="UserConfig">
-        <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="uc_user" value="${uc.user}"/>
-        <table class="form" width="330px">
+        <input type="hidden" name="uc_id" value="${uc.id}"/>
+        <table class="form" width="250px">
           <tr>
             <td nowrap="nowrap">User profile</td>
             <td>
-              <select>
+              <select name="uc_profile">
                 <c:forEach var="up" items="${userProfiles}">
                   <c:choose>
                     <c:when test="">
