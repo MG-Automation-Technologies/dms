@@ -32,6 +32,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 
 public interface FolderModule {
 
@@ -135,7 +136,8 @@ public interface FolderModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+			UserQuotaExceededException;
 
 	/**
 	 * Retrieve a list of child folders from an existing one.

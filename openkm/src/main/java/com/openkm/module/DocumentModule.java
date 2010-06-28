@@ -36,6 +36,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 
@@ -59,10 +60,10 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException An error when inserting document data into the repository.
 	 */
-	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException,
-			FileSizeExceededException, VirusDetectedException, ItemExistsException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
-			DatabaseException;
+	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException, 
+			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
+			ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException;
 	
 	/**
 	 * Deletes a document from the repository. It is a logical delete,
@@ -168,8 +169,9 @@ public interface DocumentModule {
 	 * @throws IOException If there is any error setting the new content.
 	 */
 	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
-			VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
+			DatabaseException;
 
 	/**
 	 * Add a note to a document
@@ -357,7 +359,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void copy(String docPath, String fldPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException;
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+			UserQuotaExceededException;
 	
 	/**
 	 * Revert the document to an specific previous version.
