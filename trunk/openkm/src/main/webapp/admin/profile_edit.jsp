@@ -27,7 +27,7 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="450px">
+        <table class="form" width="400px">
           <tr>
             <td colspan="2">
               <!-- GENERAL -->
@@ -35,33 +35,55 @@
             </td>
           </tr>
           <tr>
-            <td width="50%">
-              <!-- USER QUOTA -->
-              <jsp:include page="profile_quota_edit.jsp"/>
+            <td valign="top" width="50%">
+              <table width="100%">
+                <tr>
+                  <td>
+                    <!-- USER QUOTA -->
+                    <jsp:include page="profile_quota_edit.jsp"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- CHAT -->
+                    <jsp:include page="profile_chat_edit.jsp"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- MENU -->
+                    <jsp:include page="profile_menu_edit.jsp"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- TAB -->
+                    <jsp:include page="profile_tab_edit.jsp"/>
+                  </td>
+                </tr>
+              </table>
             </td>
-            <td width="50%">
-              <!-- WIZARD -->
-              <jsp:include page="profile_wizard_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <!-- CHAT -->
-              <jsp:include page="profile_chat_edit.jsp"/>
-            </td>
-            <td>
-              <!-- STACKS -->
-              <jsp:include page="profile_stacks_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <!-- MENU -->
-              <jsp:include page="profile_menu_edit.jsp"/>
-            </td>
-            <td>
-              <!-- TAB -->
-              <jsp:include page="profile_tab_edit.jsp"/>
+            <td valign="top" width="50%">
+              <table width="100%">
+                <tr>
+                  <td>
+                    <!-- WIZARD -->
+                    <jsp:include page="profile_wizard_edit.jsp"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- STACKS -->
+                    <jsp:include page="profile_stacks_edit.jsp"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <!-- DASHBOARD -->
+                    <jsp:include page="profile_dashboard_edit.jsp"/>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr>
