@@ -17,7 +17,7 @@
     </tr>
     <tr>
       <td>Quota size</td>
-      <td><input name="up_user_quota_size" value="${up.userQuotaSize}"/></td>
+      <td><input name="up_user_quota_size" size="10" value="${up.userQuotaSize}"/></td>
     </tr>
  </table>
 </fieldset>
