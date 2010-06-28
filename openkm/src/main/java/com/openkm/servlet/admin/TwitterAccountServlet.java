@@ -111,7 +111,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", ta);
-			sc.getRequestDispatcher("/admin/twitter_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("create: void");
@@ -140,7 +140,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", TwitterAccountDAO.findByPk(taId));
-			sc.getRequestDispatcher("/admin/twitter_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("edit: void");
@@ -165,7 +165,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ta", TwitterAccountDAO.findByPk(taId));
-			sc.getRequestDispatcher("/admin/twitter_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/twitter_account_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("delete: void");
@@ -181,7 +181,7 @@ public class TwitterAccountServlet extends BaseServlet {
 		String usrId = WebUtil.getString(request, "ta_user");
 		sc.setAttribute("ta_user", usrId);
 		sc.setAttribute("twitterAccounts", TwitterAccountDAO.findByUser(usrId, false));
-		sc.getRequestDispatcher("/admin/twitter_list.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/twitter_account_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 }

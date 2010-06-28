@@ -49,7 +49,7 @@
       <table class="results" width="80%">
         <tr>
           <th>Id</th><th>Name</th><th>Mail</th><th>Roles</th><th width="25px">Active</th>
-          <th width="100px">
+          <th width="130px">
             <c:url value="Auth" var="urlCreate">
               <c:param name="action" value="userCreate"/>
             </c:url>
@@ -64,6 +64,9 @@
           <c:url value="Auth" var="urlDelete">
             <c:param name="action" value="userDelete"/>
             <c:param name="usr_id" value="${user.id}"/>
+          </c:url>
+          <c:url value="UserConfig" var="urlConfig">
+            <c:param name="uc_user" value="${user.id}"/>
           </c:url>
           <c:url value="MailAccount" var="urlMail">
             <c:param name="ma_user" value="${user.id}"/>
@@ -92,6 +95,8 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              &nbsp;
+              <a href="${urlConfig}"><img src="img/action/config.png" alt="User config" title="User config"/></a>
               &nbsp;
               <a href="${urlMail}"><img src="img/action/email.png" alt="Mail accounts" title="Mail accounts"/></a>
               &nbsp;

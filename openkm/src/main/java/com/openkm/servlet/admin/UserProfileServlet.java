@@ -135,7 +135,7 @@ public class UserProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("up", up);
-			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/user_profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("create: void");
@@ -188,7 +188,7 @@ public class UserProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("up", UserProfileDAO.findByPk(upId));
-			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/user_profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("edit: void");
@@ -213,7 +213,7 @@ public class UserProfileServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("up", UserProfileDAO.findByPk(upId));
-			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
+			sc.getRequestDispatcher("/admin/user_profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("delete: void");
@@ -227,7 +227,7 @@ public class UserProfileServlet extends BaseServlet {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		sc.setAttribute("userProfiles", UserProfileDAO.findAll());
-		sc.getRequestDispatcher("/admin/profile_list.jsp").forward(request, response);
+		sc.getRequestDispatcher("/admin/user_profile_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 }
