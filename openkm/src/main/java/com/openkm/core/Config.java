@@ -59,9 +59,6 @@ public class Config {
 	// Multihost
 	public static final String INSTALL = "";
 	
-	// Show hibernate queries
-	public static final boolean SHOW_SQL = false;
-	
 	// Configuration files
 	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static final String MIME_FILE = "mime.types";
