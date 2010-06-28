@@ -1,5 +1,7 @@
 package com.openkm.dao;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -64,15 +66,15 @@ public class UserProfileDAO {
 	/**
 	 * Delete
 	 */
-	public static void delete(String user) throws DatabaseException {
-		log.debug("delete({})", user);
+	public static void delete(int upId) throws DatabaseException {
+		log.debug("delete({})", upId);
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			UserProfile up = (UserProfile) session.load(UserProfile.class, user);
+			UserProfile up = (UserProfile) session.load(UserProfile.class, upId);
 			session.delete(up);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -90,7 +92,7 @@ public class UserProfileDAO {
 	 */
 	public static UserProfile findByPk(int upId) throws DatabaseException {
 		log.debug("findByPk({})", upId);
-		String qs = "from UserProfileDAO up where uc.id=:id";
+		String qs = "from UserProfile up where up.id=:id";
 		Session session = null;
 		
 		try {
@@ -99,6 +101,28 @@ public class UserProfileDAO {
 			q.setInteger("id", upId);
 			UserProfile ret = (UserProfile) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Find by pk
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<UserProfile> findAll() throws DatabaseException {
+		log.debug("findAll()");
+		String qs = "from UserProfile up";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			List<UserProfile> ret = q.list();
+			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

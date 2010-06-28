@@ -27,6 +27,7 @@ public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
+	private boolean active;
 	private boolean advancedFilters;
 	private long userQuotaSize;
 	private boolean userQuotaEnabled;
@@ -41,7 +42,7 @@ public class UserProfile implements Serializable {
 	private boolean stackMailVisible;
 	private boolean menuEditVisible;
 	private boolean menuToolsVisible;
-	private boolean menuBookmarkVisible;
+	private boolean menuBookmarksVisible;
 	private boolean menuHelpVisible;
 	private boolean tabDesktopVisible;
 	private boolean tabSearchVisible;
@@ -69,6 +70,14 @@ public class UserProfile implements Serializable {
 		this.name = name;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
 	}
@@ -181,12 +190,12 @@ public class UserProfile implements Serializable {
 		this.menuToolsVisible = menuToolsVisible;
 	}
 
-	public boolean isMenuBookmarkVisible() {
-		return menuBookmarkVisible;
+	public boolean isMenuBookmarksVisible() {
+		return menuBookmarksVisible;
 	}
 
-	public void setMenuBookmarkVisible(boolean menuBookmarkVisible) {
-		this.menuBookmarkVisible = menuBookmarkVisible;
+	public void setMenuBookmarksVisible(boolean menuBookmarksVisible) {
+		this.menuBookmarksVisible = menuBookmarksVisible;
 	}
 
 	public boolean isMenuHelpVisible() {
@@ -274,6 +283,7 @@ public class UserProfile implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
+		sb.append(", active="); sb.append(active);
 		sb.append(", userQuotaSize="); sb.append(userQuotaSize);
 		sb.append(", userQuotaEnabled="); sb.append(userQuotaEnabled);
 		sb.append(", wizardPropertyGroups="); sb.append(wizardPropertyGroups);
@@ -288,7 +298,7 @@ public class UserProfile implements Serializable {
 		sb.append(", stackMailVisible="); sb.append(stackMailVisible);
 		sb.append(", menuEditVisible="); sb.append(menuEditVisible);
 		sb.append(", menuToolsVisible="); sb.append(menuToolsVisible);
-		sb.append(", menuBookmarkVisible="); sb.append(menuBookmarkVisible);
+		sb.append(", menuBookmarksVisible="); sb.append(menuBookmarksVisible);
 		sb.append(", menuHelpVisible="); sb.append(menuHelpVisible);
 		sb.append(", tabDesktopVisible="); sb.append(tabDesktopVisible);
 		sb.append(", tabSearchVisible="); sb.append(tabSearchVisible);

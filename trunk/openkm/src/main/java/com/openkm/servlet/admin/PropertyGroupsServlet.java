@@ -109,7 +109,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Register properties
+	 * Register property group
 	 */
 	private void register(Session session, String pgPath, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException, 
@@ -131,7 +131,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 	}
 
 	/**
-	 * List node properties and children
+	 * List property groups
 
 	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException,
