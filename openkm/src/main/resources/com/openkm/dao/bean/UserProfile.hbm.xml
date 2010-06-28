@@ -6,6 +6,8 @@
     <id name="id" column="UP_ID"><generator class="native"/></id>
     <property name="name" column="UP_NAME" not-null="true"/>
     
+    <property name="advancedFilters" column="UP_ADVANCED_FILTERS" not-null="true"/>
+    
     <property name="userQuotaSize" column="UP_USER_QUOTA_SIZE" not-null="true"/>
     <property name="userQuotaEnabled" column="UP_USER_QUOTA_ENABLED" not-null="true"/>
     
@@ -15,8 +17,6 @@
     
     <property name="chatEnabled" column="UP_CHAT_ENABLED" not-null="true"/>
     <property name="chatAutoLogin" column="UP_CHAT_AUTO_LOGIN" not-null="true"/>
-    
-    <property name="advancedFilters" column="UP_ADVANCED_FILTERS" not-null="true"/>
     
     <property name="stackCategoriesVisible" column="UP_STACK_CATEGORIES_VISIBLE" not-null="true"/>
     <property name="stackThesaurusVisible" column="UP_STACK_THESAURUS_VISIBLE" not-null="true"/>
