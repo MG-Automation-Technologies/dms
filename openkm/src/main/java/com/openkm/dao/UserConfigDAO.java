@@ -1,5 +1,8 @@
 package com.openkm.dao;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -7,8 +10,11 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.bean.UserConfig;
+import com.openkm.util.JCRUtils;
 
 public class UserConfigDAO {
 	private static Logger log = LoggerFactory.getLogger(UserConfigDAO.class);
@@ -64,7 +70,7 @@ public class UserConfigDAO {
 	/**
 	 * Update user config profile
 	 */
-	public static void updateProfile(int ucUser, int upId) throws DatabaseException {
+	public static void updateProfile(String ucUser, int upId) throws DatabaseException {
 		log.debug("updateProfile({}, {})", ucUser, upId);
 		String qs = "update UserConfig uc set uc.profile=:profile where uc.user=:user";
 		Session session = null;
@@ -75,7 +81,7 @@ public class UserConfigDAO {
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setEntity("profile", UserProfileDAO.findByPk(upId));
-			q.setInteger("user", ucUser);
+			q.setString("user", ucUser);
 			q.executeUpdate();
 			tx.commit();
 		} catch (HibernateException e) {
@@ -144,8 +150,9 @@ public class UserConfigDAO {
 	/**
 	 * Find by pk
 	 */
-	public static UserConfig findByPk(String user) throws DatabaseException {
-		log.debug("findByPk({})", user);
+	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException, 
+			RepositoryException {
+		log.info("findByPk({}, {})", jcrSession, user);
 		String qs = "from UserConfig uc where uc.user=:user";
 		Session session = null;
 		
@@ -154,7 +161,27 @@ public class UserConfigDAO {
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			UserConfig ret = (UserConfig) q.setMaxResults(1).uniqueResult();
-			log.debug("findByPk: {}", ret);
+			
+			if (ret == null) {
+				Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+				ret = new UserConfig();
+				ret.setHomePath(okmRoot.getPath());
+				ret.setHomeUuid(okmRoot.getUUID());
+				ret.setHomeType(Folder.TYPE);
+				ret.setUser(user);
+				ret.setProfile(UserProfileDAO.findByPk(1));
+				UserConfigDAO.create(ret);
+			} else {
+				Node node = jcrSession.getNodeByUUID(ret.getHomeUuid());
+				
+				if (!node.getPath().equals(ret.getHomePath())) {
+					ret.setHomePath(node.getPath());
+					ret.setHomeType(JCRUtils.getNodeType(node));
+					UserConfigDAO.update(ret);
+				}
+			}
+					
+			log.info("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);

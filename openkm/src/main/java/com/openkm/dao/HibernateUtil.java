@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static final SessionFactory sessionFactory;
-	private static boolean SHOW_SQL = true;
+	private static final boolean SHOW_SQL = false;
 	
 	static {
 		try {
