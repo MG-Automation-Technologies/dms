@@ -42,6 +42,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.WebUtil;
 import com.openkm.util.impexp.HTMLInfoDecorator;
@@ -210,6 +211,9 @@ public class BenchmarkServlet extends BaseServlet {
 			out.flush();
 		} catch (DatabaseException e) {
 			out.println("<div class=\"warn\">DatabaseException: "+e.getMessage()+"</div>");
+			out.flush();
+		} catch (UserQuotaExceededException e) {
+			out.println("<div class=\"warn\">UserQuotaExceededException: "+e.getMessage()+"</div>");
 			out.flush();
 		}
 				
