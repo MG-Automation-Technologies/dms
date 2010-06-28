@@ -22,10 +22,7 @@
 package com.openkm.core;
 
 public class ItemExistsException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2571810121169161793L;
+	private static final long serialVersionUID = 1L;
 
 	public ItemExistsException() {
 		super();

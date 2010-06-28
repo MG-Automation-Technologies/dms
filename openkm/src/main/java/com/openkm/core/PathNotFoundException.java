@@ -22,10 +22,7 @@
 package com.openkm.core;
 
 public class PathNotFoundException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6273557644868091945L;
+	private static final long serialVersionUID = 1L;
 
 	public PathNotFoundException() {
 		super();

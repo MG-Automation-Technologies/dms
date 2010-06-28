@@ -67,6 +67,8 @@ public class UserMailImporter extends TimerTask {
 			log.error(e.getMessage(), e);
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
+		} catch (UserQuotaExceededException e) {
+			log.error(e.getMessage(), e);
 		}
 	}
 }

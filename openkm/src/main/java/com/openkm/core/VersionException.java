@@ -22,10 +22,7 @@
 package com.openkm.core;
 
 public class VersionException extends Exception {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3106668935554641947L;
+	private static final long serialVersionUID = 1L;
 
 	public VersionException() {
 		super();
