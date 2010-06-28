@@ -60,19 +60,19 @@ public class UserConfigServlet extends BaseServlet {
 			
 			if (WebUtil.getBoolean(request, "persist")) {
 				ServletContext sc = getServletContext();
-				int ucId = WebUtil.getInt(request, "uc_id");
+				String ucUser = WebUtil.getString(request, "uc_user");
 				int upId = WebUtil.getInt(request, "uc_profile");
-				UserConfigDAO.updateProfile(ucId, upId);
+				UserConfigDAO.updateProfile(ucUser, upId);
 				sc.getRequestDispatcher("/admin/Auth").forward(request, response);
 				
 				// Activity log
-				UserActivity.log(session.getUserID(), "ADMIN_USER_CONFIG_EDIT", Integer.toString(ucId), Integer.toString(upId));
+				UserActivity.log(session.getUserID(), "ADMIN_USER_CONFIG_EDIT", ucUser, Integer.toString(upId));
 			} else {
 				ServletContext sc = getServletContext();
 				String ucUser = WebUtil.getString(request, "uc_user");
 				sc.setAttribute("persist", true);
 				sc.setAttribute("userProfiles", UserProfileDAO.findAll(true));
-				sc.setAttribute("uc", UserConfigDAO.findByPk(ucUser));
+				sc.setAttribute("uc", UserConfigDAO.findByPk(session, ucUser));
 				sc.getRequestDispatcher("/admin/user_config_edit.jsp").forward(request, response);
 			}
 		} catch (LoginException e) {
