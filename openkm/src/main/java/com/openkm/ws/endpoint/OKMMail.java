@@ -37,6 +37,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.MailModule;
 import com.openkm.module.ModuleManager;
@@ -59,7 +60,7 @@ public class OKMMail {
 	 * @see com.openkm.module.MailModule#create(java.lang.String, com.openkm.bean.Mail)
 	 */
 	public Mail create(Mail mail) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, UserQuotaExceededException {
 		log.debug("create({})", mail);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail newMail = mm.create(mail);

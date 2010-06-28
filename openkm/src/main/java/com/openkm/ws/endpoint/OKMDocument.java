@@ -45,6 +45,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.DocumentModule;
@@ -69,9 +70,9 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#create(java.lang.String, com.openkm.bean.Document, byte[])
 	 */
 	public Document create(String token, Document doc, byte[] content) throws IOException,
-			UnsupportedMimeTypeException, FileSizeExceededException, VirusDetectedException,
-			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("create({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
@@ -223,8 +224,9 @@ public class OKMDocument {
 	 * @see com.openkm.module.DocumentModule#setContent(java.lang.String, byte[])
 	 */
 	public void setContent(String docPath, byte[] content) throws FileSizeExceededException, 
-			VirusDetectedException, VersionException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
+			DatabaseException {
 		log.debug("setContent({}, {})", docPath, content);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
