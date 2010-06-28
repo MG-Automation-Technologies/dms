@@ -52,7 +52,7 @@ public class UserProfile implements Serializable {
 	private boolean dashboardGeneralVisible;
 	private boolean dashboardWorkflowVisible;
 	private boolean dashboardKeywordsVisible;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -68,7 +68,15 @@ public class UserProfile implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public boolean isAdvancedFilters() {
+		return advancedFilters;
+	}
+
+	public void setAdvancedFilters(boolean advancedFilters) {
+		this.advancedFilters = advancedFilters;
+	}
+
 	public long getUserQuotaSize() {
 		return userQuotaSize;
 	}
@@ -125,20 +133,36 @@ public class UserProfile implements Serializable {
 		this.chatAutoLogin = chatAutoLogin;
 	}
 
-	public boolean isAdvancedFilters() {
-		return advancedFilters;
-	}
-
-	public void setAdvancedFilters(boolean advancedFilters) {
-		this.advancedFilters = advancedFilters;
-	}
-
 	public boolean isStackCategoriesVisible() {
 		return stackCategoriesVisible;
 	}
 
 	public void setStackCategoriesVisible(boolean stackCategoriesVisible) {
 		this.stackCategoriesVisible = stackCategoriesVisible;
+	}
+
+	public boolean isStackThesaurusVisible() {
+		return stackThesaurusVisible;
+	}
+
+	public void setStackThesaurusVisible(boolean stackThesaurusVisible) {
+		this.stackThesaurusVisible = stackThesaurusVisible;
+	}
+
+	public boolean isStackPersonalVisible() {
+		return stackPersonalVisible;
+	}
+
+	public void setStackPersonalVisible(boolean stackPersonalVisible) {
+		this.stackPersonalVisible = stackPersonalVisible;
+	}
+
+	public boolean isStackMailVisible() {
+		return stackMailVisible;
+	}
+
+	public void setStackMailVisible(boolean stackMailVisible) {
+		this.stackMailVisible = stackMailVisible;
 	}
 
 	public boolean isMenuEditVisible() {
@@ -196,7 +220,7 @@ public class UserProfile implements Serializable {
 	public void setTabDashboardVisible(boolean tabDashboardVisible) {
 		this.tabDashboardVisible = tabDashboardVisible;
 	}
-
+	
 	public boolean isDashboardUserVisible() {
 		return dashboardUserVisible;
 	}
