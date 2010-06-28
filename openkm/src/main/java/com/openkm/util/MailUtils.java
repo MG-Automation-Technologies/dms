@@ -81,6 +81,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.sun.mail.imap.IMAPFolder;
 
@@ -248,7 +249,7 @@ public class MailUtils {
 	 */
 	public static void importMessages(String uid, String host, String user, String password,
 			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+			AccessDeniedException, RepositoryException, DatabaseException, UserQuotaExceededException {
 		log.info("importMessages({}, {}, {}, {}, {})", new Object[] { uid, host, user, password, imapFolder });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
@@ -345,12 +346,15 @@ public class MailUtils {
 					
 					if (!okmRepository.hasNode(newMailPath)) {
 						okmMail.create(mail);
+						
 						try {
 							addAttachments(mail, msg);
 						} catch (UnsupportedMimeTypeException e) {
-							e.printStackTrace();
+							log.warn(e.getMessage(), e);
 						} catch (FileSizeExceededException e) {
-							e.printStackTrace();
+							log.warn(e.getMessage(), e);
+						} catch (UserQuotaExceededException e) {
+							log.warn(e.getMessage(), e);
 						}
 					}
 					
@@ -421,8 +425,8 @@ public class MailUtils {
 	/**
 	 * Add attachments to an imported mail.
 	 */
-	private static void addAttachments(com.openkm.bean.Mail mail, Part p) throws 
-			MessagingException, IOException, UnsupportedMimeTypeException, FileSizeExceededException,
+	private static void addAttachments(com.openkm.bean.Mail mail, Part p) throws MessagingException,
+			IOException, UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
 		if (p.isMimeType("multipart/*")) {
