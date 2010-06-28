@@ -31,7 +31,7 @@
           <tr>
             <td colspan="2">
               <!-- GENERAL -->
-              <jsp:include page="profile_general_edit.jsp"/>
+              <jsp:include page="user_profile_general_edit.jsp"/>
             </td>
           </tr>
           <tr>
@@ -40,25 +40,25 @@
                 <tr>
                   <td>
                     <!-- USER QUOTA -->
-                    <jsp:include page="profile_quota_edit.jsp"/>
+                    <jsp:include page="user_profile_quota_edit.jsp"/>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <!-- CHAT -->
-                    <jsp:include page="profile_chat_edit.jsp"/>
+                    <jsp:include page="user_profile_chat_edit.jsp"/>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <!-- MENU -->
-                    <jsp:include page="profile_menu_edit.jsp"/>
+                    <jsp:include page="user_profile_menu_edit.jsp"/>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <!-- TAB -->
-                    <jsp:include page="profile_tab_edit.jsp"/>
+                    <jsp:include page="user_profile_tab_edit.jsp"/>
                   </td>
                 </tr>
               </table>
@@ -68,19 +68,19 @@
                 <tr>
                   <td>
                     <!-- WIZARD -->
-                    <jsp:include page="profile_wizard_edit.jsp"/>
+                    <jsp:include page="user_profile_wizard_edit.jsp"/>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <!-- STACKS -->
-                    <jsp:include page="profile_stacks_edit.jsp"/>
+                    <jsp:include page="user_profile_stacks_edit.jsp"/>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <!-- DASHBOARD -->
-                    <jsp:include page="profile_dashboard_edit.jsp"/>
+                    <jsp:include page="user_profile_dashboard_edit.jsp"/>
                   </td>
                 </tr>
               </table>

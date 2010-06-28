@@ -221,7 +221,11 @@
     <servlet-name>UserProfileServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.UserProfileServlet</servlet-class>
   </servlet>
-    
+  <servlet>
+    <servlet-name>UserConfigServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.UserConfigServlet</servlet-class>
+  </servlet>
+      
   <!-- Extension Servlets 
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
@@ -455,7 +459,11 @@
     <servlet-name>UserProfileServlet</servlet-name>
     <url-pattern>/admin/UserProfile</url-pattern>
   </servlet-mapping>
-    
+  <servlet-mapping>
+    <servlet-name>UserConfigServlet</servlet-name>
+    <url-pattern>/admin/UserConfig</url-pattern>
+  </servlet-mapping>
+      
   <!-- Extension Servlet Mappings 
   <servlet-mapping>
     <servlet-name>StaplingServlet</servlet-name>

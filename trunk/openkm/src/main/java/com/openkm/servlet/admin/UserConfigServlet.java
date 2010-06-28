@@ -43,11 +43,11 @@ import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
- * User mail accounts servlet
+ * User config servlet
  */
-public class MailAccountServlet extends BaseServlet {
+public class UserConfigServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(MailAccountServlet.class);
+	private static Logger log = LoggerFactory.getLogger(UserConfigServlet.class);
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
