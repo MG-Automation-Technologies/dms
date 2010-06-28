@@ -156,7 +156,7 @@ public class DirectMailModule implements MailModule {
 			javax.jcr.RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
 		
 		// Check user quota
-		UserConfig uc = UserConfigDAO.findByPk(session.getUserID());
+		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 		UserItems ui = UserItemsManager.get(session.getUserID());
 		
 		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaSize()) {
