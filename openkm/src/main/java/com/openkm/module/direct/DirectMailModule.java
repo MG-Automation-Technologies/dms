@@ -47,6 +47,7 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
+import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -54,7 +55,11 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.UserConfig;
+import com.openkm.dao.bean.UserItems;
 import com.openkm.module.MailModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -148,7 +153,16 @@ public class DirectMailModule implements MailModule {
 			Calendar receivedDate, String subject, String content, String mimeType) throws
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, NoSuchNodeTypeException, 
 			javax.jcr.lock.LockException, VersionException, ConstraintViolationException,
-			javax.jcr.RepositoryException, IOException {
+			javax.jcr.RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
+		
+		// Check user quota
+		UserConfig uc = UserConfigDAO.findByPk(session.getUserID());
+		UserItems ui = UserItemsManager.get(session.getUserID());
+		
+		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaSize()) {
+			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
+		}
+		
 		// Create and add a new mail node
 		Node mailNode = parentNode.addNode(name, Mail.TYPE);
 		mailNode.setProperty(Mail.SIZE, size);
@@ -199,7 +213,7 @@ public class DirectMailModule implements MailModule {
 	
 	@Override
 	public Mail create(Mail mail) throws AccessDeniedException, RepositoryException, PathNotFoundException,
-			ItemExistsException, VirusDetectedException,	DatabaseException {
+			ItemExistsException, VirusDetectedException, DatabaseException, UserQuotaExceededException {
 		log.debug("create({})", mail);
 		Mail newMail = null;
 		Transaction t = null;
@@ -497,7 +511,8 @@ public class DirectMailModule implements MailModule {
 	 * Copy recursively
 	 */
 	public void copy(Session session, Node srcMailNode, Node dstFolderNode) throws ValueFormatException, 
-		javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
+			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { session, srcMailNode, dstFolderNode });
 		
 		String name = srcMailNode.getName();
@@ -531,7 +546,8 @@ public class DirectMailModule implements MailModule {
 
 	@Override
 	public void copy(String mailPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, IOException, DatabaseException {
+			PathNotFoundException, ItemExistsException, IOException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {})", mailPath, dstPath);
 		Transaction t = null;
 		XASession session = null;

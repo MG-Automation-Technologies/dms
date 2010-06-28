@@ -78,10 +78,13 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
 import com.openkm.dao.MimeTypeDAO;
+import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
@@ -232,13 +235,12 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	/**
-	 * Create a new document
-	 * TODO El parámetro session no hace falta porque la sesión viene implícita
-	 * en el segundo parámetro parentNode.
+	 * Create a new document 
 	 */
 	public Node create(Session session, Node parentNode, String name, String mimeType, String[] keywords,
 			InputStream is) throws javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException,
-			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException {
+			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException, DatabaseException,
+			UserQuotaExceededException {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
 		documentNode.setProperty(Property.KEYWORDS, keywords);
@@ -246,6 +248,14 @@ public class DirectDocumentModule implements DocumentModule {
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
 		long size = is.available();
+		
+		// Check user quota
+		UserConfig uc = UserConfigDAO.findByPk(session.getUserID());
+		UserItems ui = UserItemsManager.get(session.getUserID());
+		
+		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaSize()) {
+			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
+		}
 		
 		// Get parent node auth info
 		Value[] usersReadParent = parentNode.getProperty(Permission.USERS_READ).getValues();
@@ -306,28 +316,33 @@ public class DirectDocumentModule implements DocumentModule {
 	
 	@Override
 	public Document create(Document doc, InputStream is) throws	UnsupportedMimeTypeException, 
-			FileSizeExceededException, VirusDetectedException, ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException,	IOException, DatabaseException {
+			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
+			ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
 		log.debug("create({})", doc);
 		Document newDocument = null;
 		Node parentNode = null;
 		Session session = null;
-				
+		int size = is.available();
+		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		if (size > Config.MAX_FILE_SIZE) {
+			throw new FileSizeExceededException(Integer.toString(size));
 		}
 		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
 		File tmpAvr = File.createTempFile("okm", ".avr");
 		String parent = FileUtils.getParent(doc.getPath());
 		String name = FileUtils.getName(doc.getPath());
-		int size = is.available();
 		
 		// Add to kea - must have the same extension
 		int idx = name.lastIndexOf('.');
 		String fileExtension = idx>0?name.substring(idx):".tmp";
 		File tmpKea = File.createTempFile("kea", fileExtension);
-
+		
 		try {
 			session = JCRUtils.getSession();
 			
@@ -361,10 +376,6 @@ public class DirectDocumentModule implements DocumentModule {
 			fosKea.close();
 			is.close();
 			is = new FileInputStream(tmpJcr);
-
-			if (size > Config.MAX_FILE_SIZE) {
-				throw new FileSizeExceededException(""+size);
-			}
 			
 			if (!Config.SYSTEM_ANTIVIR.equals("")) {
 				VirusDetection.detect(tmpAvr);
@@ -609,14 +620,20 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
-			VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
+			DatabaseException {
 		log.debug("setContent({}, {})", docPath, is);
 		Node contentNode = null;
 		Session session = null;
+		int size = is.available();
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		if (size > Config.MAX_FILE_SIZE) {
+			throw new FileSizeExceededException(""+size);
 		}
 		
 		File tmpJcr = File.createTempFile("okm", ".jcr");
@@ -624,11 +641,6 @@ public class DirectDocumentModule implements DocumentModule {
 
 		try {
 			session = JCRUtils.getSession();
-			int size = is.available();
-		
-			if (size > Config.MAX_FILE_SIZE) {
-				throw new FileSizeExceededException(""+size);
-			}
 			
 			// Manage temporary files
 			byte[] buff = new byte[4*1024];
@@ -1511,7 +1523,8 @@ public class DirectDocumentModule implements DocumentModule {
 
 	@Override
 	public void copy(String docPath, String dstPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+			UserQuotaExceededException {
 		log.debug("copy({}, {})", docPath, dstPath);
 		Node dstFolderNode = null;
 		Session session = null;
@@ -1562,7 +1575,8 @@ public class DirectDocumentModule implements DocumentModule {
 	 * Is invoked from DirectDocumentNode and DirectFolderNode.
 	 */
 	public void copy(Session session, Node srcDocumentNode, Node dstFolderNode) throws ValueFormatException, 
-			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException {
+			javax.jcr.PathNotFoundException, javax.jcr.RepositoryException, IOException, DatabaseException,
+			UserQuotaExceededException {
 		log.debug("copy({}, {}, {})", new Object[] { session, srcDocumentNode, dstFolderNode });
 		
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
