@@ -39,6 +39,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.DocumentModule;
@@ -60,8 +61,9 @@ public class OKMDocument implements DocumentModule {
 	
 	@Override
 	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException, 
-			FileSizeExceededException, VirusDetectedException, ItemExistsException,	PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
+			ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {})", doc, is);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document newDocument = dm.create(doc, is);
@@ -196,8 +198,9 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
-			VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
+			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
+			DatabaseException {
 		log.debug("setContent({}, {})", docPath, is);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.setContent(docPath, is);
@@ -262,8 +265,8 @@ public class OKMDocument implements DocumentModule {
 
 	@Override
 	public void copy(String docPath, String destPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException,
-			RepositoryException, IOException, DatabaseException {
+			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+			UserQuotaExceededException {
 		log.debug("copy({}, {})", docPath, destPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.copy(docPath, destPath);
