@@ -113,14 +113,19 @@ public class UserProfileDAO {
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<UserProfile> findAll() throws DatabaseException {
+	public static List<UserProfile> findAll(boolean filterByActive) throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from UserProfile up";
+		String qs = "from UserProfile up " + (filterByActive?"where up.active=:active":"");
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
+			
+			if (filterByActive) {
+				q.setBoolean("active", true);
+			}
+			
 			List<UserProfile> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
