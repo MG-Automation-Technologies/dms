@@ -35,7 +35,7 @@ public class UserProfile implements Serializable {
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
 	private boolean chatEnabled;
-	private boolean chatAutoLogin;	
+	private boolean chatAutoLogin;
 	private boolean stackCategoriesVisible;
 	private boolean stackThesaurusVisible;
 	private boolean stackPersonalVisible;
