@@ -27,14 +27,14 @@ public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
-	private long userQuota;
+	private boolean advancedFilters;
+	private long userQuotaSize;
 	private boolean userQuotaEnabled;
 	private boolean wizardPropertyGroups;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
 	private boolean chatEnabled;
-	private boolean chatAutoLogin;
-	private boolean advancedFilters;
+	private boolean chatAutoLogin;	
 	private boolean stackCategoriesVisible;
 	private boolean stackThesaurusVisible;
 	private boolean stackPersonalVisible;
@@ -69,12 +69,12 @@ public class UserProfile implements Serializable {
 		this.name = name;
 	}
 	
-	public long getUserQuota() {
-		return userQuota;
+	public long getUserQuotaSize() {
+		return userQuotaSize;
 	}
 
-	public void setUserQuota(long userQuota) {
-		this.userQuota = userQuota;
+	public void setUserQuotaSize(long userQuotaSize) {
+		this.userQuotaSize = userQuotaSize;
 	}
 
 	public boolean isUserQuotaEnabled() {
@@ -250,7 +250,7 @@ public class UserProfile implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
-		sb.append(", userQuota="); sb.append(userQuota);
+		sb.append(", userQuotaSize="); sb.append(userQuotaSize);
 		sb.append(", userQuotaEnabled="); sb.append(userQuotaEnabled);
 		sb.append(", wizardPropertyGroups="); sb.append(wizardPropertyGroups);
 		sb.append(", wizardKeywords="); sb.append(wizardKeywords);
