@@ -13,6 +13,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.UserConfigDAO;
+import com.openkm.dao.UserProfileDAO;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.module.UserConfigModule;
 import com.openkm.util.JCRUtils;
@@ -71,6 +72,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 				ret.setHomeUuid(okmRoot.getUUID());
 				ret.setHomeType(Folder.TYPE);
 				ret.setUser(session.getUserID());
+				ret.setProfile(UserProfileDAO.findByPk(1));
 				UserConfigDAO.create(ret);
 			} else {
 				Node node = session.getNodeByUUID(ret.getHomeUuid());

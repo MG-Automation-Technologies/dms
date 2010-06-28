@@ -2,3 +2,4 @@ insert into OKM_USER (USR_ID, USR_NAME, USR_PASSWORD, USR_EMAIL, USR_ACTIVE) val
 insert into OKM_ROLE (ROL_ID, ROL_ACTIVE) values ('AdminRole', true);
 insert into OKM_ROLE (ROL_ID, ROL_ACTIVE) values ('UserRole', true);
 insert into OKM_USER_ROLE (UR_USER, UR_ROLE) values ('okmAdmin', 'AdminRole');
+insert into OKM_USER_PROFILE (UP_ID, UP_NAME, UP_ACTIVE) values (1, 'Default', true);
