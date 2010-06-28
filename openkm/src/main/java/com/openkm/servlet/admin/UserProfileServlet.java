@@ -115,6 +115,9 @@ public class UserProfileServlet extends BaseServlet {
 			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
 			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
 			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
+			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
+			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
+			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
 			
 			UserProfileDAO.create(up);
 			
@@ -159,6 +162,9 @@ public class UserProfileServlet extends BaseServlet {
 			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
 			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
 			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
+			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
+			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
+			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
 			
 			UserProfileDAO.update(up);
 			
