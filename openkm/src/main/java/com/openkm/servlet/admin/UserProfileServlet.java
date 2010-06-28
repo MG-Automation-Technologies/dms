@@ -93,7 +93,7 @@ public class UserProfileServlet extends BaseServlet {
 	 */
 	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.info("create({}, {}, {})", new Object[] { session, request, response });
+		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
 			UserProfile up = new UserProfile();
