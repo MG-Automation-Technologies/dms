@@ -7,6 +7,6 @@
     <property name="homePath" column="UC_HOME_PATH" not-null="true"/>
     <property name="homeUuid" column="UC_HOME_UUID" not-null="true"/>
     <property name="homeType" column="UC_HOME_TYPE" not-null="true"/>
-    <property name="quota" column="UC_QUOTA" not-null="true"/>
+    <property name="profile" column="UC_PROFILE" not-null="true"/>
   </class>
 </hibernate-mapping>
