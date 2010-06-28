@@ -14,7 +14,7 @@
   &nbsp;
   <a target="frame" href="search.jsp"><img src="img/toolbar/search.png" title="Repository Search"></a>
   &nbsp;
-  <a target="frame" href="RepositoryView"><img src="img/toolbar/view.png" title="Repository view"></a>
+  <a target="frame" href="RepositoryView"><img src="img/toolbar/repository.png" title="Repository view"></a>
   &nbsp;
   <a target="frame" href="PropertyGroups"><img src="img/toolbar/properties.png" title="Property groups"></a>
   &nbsp;
@@ -24,6 +24,8 @@
   <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>
   &nbsp;
 <% } %>
+  <a target="frame" href="UserProfile"><img src="img/toolbar/profile.png" title="User profiles"></a>
+  &nbsp;
   <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
   &nbsp;
   <a target="frame" href="Report"><img src="img/toolbar/report.png" title="Reports"></a>

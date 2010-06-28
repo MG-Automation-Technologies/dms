@@ -36,18 +36,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.MailAccountDAO;
-import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.UserProfileDAO;
+import com.openkm.dao.bean.UserProfile;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
 /**
- * User mail accounts servlet
+ * User twitter accounts servlet
  */
-public class MailAccountServlet extends BaseServlet {
+public class UserProfileServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(MailAccountServlet.class);
+	private static Logger log = LoggerFactory.getLogger(UserProfileServlet.class);
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -89,109 +89,127 @@ public class MailAccountServlet extends BaseServlet {
 	}
 	
 	/**
-	 * New mail account
+	 * New user
 	 */
 	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
 		log.info("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtil.getString(request, "ma_user"));
-			ma.setMailUser(WebUtil.getString(request, "ma_muser"));
-			ma.setMailPassword(WebUtil.getString(request, "ma_mpassword"));
-			ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
-			ma.setActive(WebUtil.getBoolean(request, "ma_active"));
-			MailAccountDAO.create(ma);
+			UserProfile up = new UserProfile();
+			up.setId(WebUtil.getInt(request, "up_id"));
+			up.setName(WebUtil.getString(request, "up_name"));
+			up.setActive(WebUtil.getBoolean(request, "up_active"));
+			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
+			up.setUserQuotaSize(WebUtil.getLong(request, "up_user_quota_size"));
+			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
+			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
+			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
+			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
+			up.setChatAutoLogin(WebUtil.getBoolean(request, "up_chat_auto_login"));
+			up.setStackCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
+			up.setStackThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
+			up.setStackPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
+			up.setStackMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
+			up.setMenuEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
+			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
+			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
+			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
+			
+			UserProfileDAO.create(up);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_CREATE", ma.getUser(), ma.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_CREATE", null, up.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			MailAccount ma = new MailAccount();
-			ma.setUser(WebUtil.getString(request, "ma_user"));
+			UserProfile up = new UserProfile();
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", ma);
-			sc.getRequestDispatcher("/admin/mail_edit.jsp").forward(request, response);
+			sc.setAttribute("up", up);
+			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("create: void");
 	}
 	
 	/**
-	 * Edit mail account
+	 * Edit user
 	 */
 	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			String password = WebUtil.getString(request, "ma_mpassword");
-			MailAccount ma = new MailAccount();
-			ma.setId(WebUtil.getInt(request, "ma_id"));
-			ma.setUser(WebUtil.getString(request, "ma_user"));
-			ma.setMailUser(WebUtil.getString(request, "ma_muser"));
-			ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
-			ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
-			ma.setActive(WebUtil.getBoolean(request, "ma_active"));
-			MailAccountDAO.update(ma);
+			UserProfile up = new UserProfile();
+			up.setId(WebUtil.getInt(request, "up_id"));
+			up.setName(WebUtil.getString(request, "up_name"));
+			up.setActive(WebUtil.getBoolean(request, "up_active"));
+			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
+			up.setUserQuotaSize(WebUtil.getLong(request, "up_user_quota_size"));
+			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
+			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
+			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
+			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
+			up.setChatAutoLogin(WebUtil.getBoolean(request, "up_chat_auto_login"));
+			up.setStackCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
+			up.setStackThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
+			up.setStackPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
+			up.setStackMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
+			up.setMenuEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
+			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
+			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
+			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
 			
-			if (!password.equals("")) {
-				MailAccountDAO.updatePassword(ma.getId(), password);
-			}
+			UserProfileDAO.update(up);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_EDIT", Integer.toString(ma.getId()), ma.toString());
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_EDIT", Integer.toString(up.getId()), up.toString());
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtil.getInt(request, "ma_id");
+			int upId = WebUtil.getInt(request, "up_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
-			sc.getRequestDispatcher("/admin/mail_edit.jsp").forward(request, response);
+			sc.setAttribute("up", UserProfileDAO.findByPk(upId));
+			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("edit: void");
 	}
 	
 	/**
-	 * Update mail account
+	 * Update user
 	 */
 	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
 		log.debug("delete({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			int maId = WebUtil.getInt(request, "ma_id");
-			MailAccountDAO.delete(maId);
+			int upId = WebUtil.getInt(request, "up_id");
+			UserProfileDAO.delete(upId);
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_DELETE", Integer.toString(maId), null);
+			UserActivity.log(session.getUserID(), "ADMIN_USER_PROFILE_DELETE", Integer.toString(upId), null);
 		} else {
 			ServletContext sc = getServletContext();
-			int maId = WebUtil.getInt(request, "ma_id");
+			int upId = WebUtil.getInt(request, "up_id");
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
-			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
-			sc.getRequestDispatcher("/admin/mail_edit.jsp").forward(request, response);
+			sc.setAttribute("up", UserProfileDAO.findByPk(upId));
+			sc.getRequestDispatcher("/admin/profile_edit.jsp").forward(request, response);
 		}
 		
 		log.debug("delete: void");
 	}
 
 	/**
-	 * List mail accounts
+	 * List user profiles
 	 */
 	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
 		log.debug("list({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		String usrId = WebUtil.getString(request, "ma_user");
-		sc.setAttribute("ma_user", usrId);
-		sc.setAttribute("mailAccounts", MailAccountDAO.findByUser(usrId, false));
-		sc.getRequestDispatcher("/admin/mail_list.jsp").forward(request, response);
+		sc.setAttribute("userProfiles", UserProfileDAO.findAll());
+		sc.getRequestDispatcher("/admin/profile_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
 }

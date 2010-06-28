@@ -5,6 +5,7 @@
   <class name="com.openkm.dao.bean.UserProfile" table="OKM_USER_PROFILE">
     <id name="id" column="UP_ID"><generator class="native"/></id>
     <property name="name" column="UP_NAME" not-null="true"/>
+    <property name="active" column="UP_ACTIVE" not-null="true"/>
     
     <property name="advancedFilters" column="UP_ADVANCED_FILTERS" not-null="true"/>
     

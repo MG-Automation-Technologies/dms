@@ -277,7 +277,7 @@ public class AuthServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Update role
+	 * Delete role
 	 */
 	private void roleDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {

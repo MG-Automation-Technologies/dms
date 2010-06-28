@@ -89,7 +89,7 @@ public class TwitterAccountServlet extends BaseServlet {
 	}
 	
 	/**
-	 * New user
+	 * New twitter account
 	 */
 	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
@@ -118,7 +118,7 @@ public class TwitterAccountServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Edit user
+	 * Edit twitter account
 	 */
 	private void edit(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
@@ -147,7 +147,7 @@ public class TwitterAccountServlet extends BaseServlet {
 	}
 	
 	/**
-	 * Update user
+	 * Update twitter account
 	 */
 	private void delete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
@@ -172,7 +172,7 @@ public class TwitterAccountServlet extends BaseServlet {
 	}
 
 	/**
-	 * List node properties and children
+	 * List twitter accounts
 	 */
 	private void list(Session session, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DatabaseException {
