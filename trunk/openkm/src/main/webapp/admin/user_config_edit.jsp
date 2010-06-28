@@ -20,15 +20,15 @@
       <h1>Edit user config</h1>
       <form action="UserConfig">
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="uc_id" value="${uc.id}"/>
-        <table class="form" width="250px">
+        <input type="hidden" name="uc_user" value="${uc.user}"/>
+        <table class="form" width="200px">
           <tr>
             <td nowrap="nowrap">User profile</td>
             <td>
               <select name="uc_profile">
                 <c:forEach var="up" items="${userProfiles}">
                   <c:choose>
-                    <c:when test="">
+                    <c:when test="${up.id == uc.profile.id}">
                       <option value="${up.id}" selected="selected">${up.name}</option>
                     </c:when>
                     <c:otherwise>
