@@ -1,4 +1,3 @@
-<%@page import="com.openkm.principal.DatabasePrincipalAdapter"%>
 <%@page import="com.openkm.core.Config"%>
 <table width="100%" border="0">
   <tr><td align="center">
@@ -20,10 +19,8 @@
   &nbsp;
   <a target="frame" href="LoggedUsers"><img src="img/toolbar/logged.png" title="Logged users"></a>
   &nbsp;
-<% if (Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName())) { %>
   <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>
   &nbsp;
-<% } %>
   <a target="frame" href="UserProfile"><img src="img/toolbar/profile.png" title="User profiles"></a>
   &nbsp;
   <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
