@@ -39,6 +39,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.module.ModuleManager;
 
@@ -140,6 +141,11 @@ public class RepositoryImporter {
 				} catch (FileSizeExceededException e) {
 					log.warn("FileSizeExceededException: {}", e.getMessage());
 					out.write(deco.print(files[i].getPath(), files[i].length(), "FileSizeExceeded"));
+					out.flush();
+					stats.setOk(docOk = false);
+				} catch (UserQuotaExceededException e) {
+					log.warn("UserQuotaExceededException: {}", e.getMessage());
+					out.write(deco.print(files[i].getPath(), files[i].length(), "UserQuotaExceeded"));
 					out.flush();
 					stats.setOk(docOk = false);
 				} catch (VirusDetectedException e) {
