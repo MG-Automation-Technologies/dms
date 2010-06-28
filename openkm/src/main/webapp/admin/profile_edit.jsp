@@ -27,55 +27,49 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="350px">
-          <tr><td>
-            <fieldset>
-              <legend>General</legend>
-              <table>
-                <tr>
-                  <td>Name</td>
-                  <td><input class=":required :only_on_blur" name="up_name" value="${up.name}"/></td>
-                </tr>
-                <tr>
-                  <td>Active</td>
-                  <td>
-                    <c:choose>
-                      <c:when test="${up.active}">
-                        <input name="up_active" type="checkbox" checked="checked"/>
-                      </c:when>
-                      <c:otherwise>
-                        <input name="up_active" type="checkbox"/>
-                      </c:otherwise>
-                    </c:choose>
-                  </td>
-                </tr>
-              </table>
-            </fieldset>
-            
-            <!-- USER QUOTA -->
-            <jsp:include page="profile_quota_edit.jsp"/>
-            
-            <!-- WIZARD -->
-            <jsp:include page="profile_wizard_edit.jsp"/>
-            
-            <!-- CHAT -->
-            <jsp:include page="profile_chat_edit.jsp"/>
-            
-            <!-- STACKS -->
-            <jsp:include page="profile_stacks_edit.jsp"/>
-            
-            <!-- MENU -->
-            <jsp:include page="profile_menu_edit.jsp"/>
-                        
-            <table>
-              <tr>
-                <td colspan="1" align="right">
-                  <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
-                  <input type="submit" value="Send"/>
-                </td>
-              </tr>
-            </table>
-          </td></tr>
+        <table class="form" width="450px">
+          <tr>
+            <td colspan="2">
+              <!-- GENERAL -->
+              <jsp:include page="profile_general_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td width="50%">
+              <!-- USER QUOTA -->
+              <jsp:include page="profile_quota_edit.jsp"/>
+            </td>
+            <td width="50%">
+              <!-- WIZARD -->
+              <jsp:include page="profile_wizard_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <!-- CHAT -->
+              <jsp:include page="profile_chat_edit.jsp"/>
+            </td>
+            <td>
+              <!-- STACKS -->
+              <jsp:include page="profile_stacks_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <!-- MENU -->
+              <jsp:include page="profile_menu_edit.jsp"/>
+            </td>
+            <td>
+              <!-- TAB -->
+              <jsp:include page="profile_tab_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="right">
+              <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
+              <input type="submit" value="Send"/>
+            </td>
+          </tr>
         </table>
       </form>
     </c:when>
