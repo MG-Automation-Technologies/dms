@@ -60,6 +60,7 @@ import com.openkm.core.ItemExistsException;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.dao.bean.UserItems;
 import com.openkm.module.FolderModule;
 import com.openkm.util.FileUtils;
@@ -579,7 +580,8 @@ public class DirectFolderModule implements FolderModule {
 	
 	@Override
 	public void copy(String fldPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, IOException, DatabaseException {
+			PathNotFoundException, ItemExistsException, IOException, DatabaseException, 
+			UserQuotaExceededException {
 		log.debug("copy({}, {})", fldPath, dstPath);
 		//Transaction t = null;
 		XASession session = null;
@@ -638,7 +640,7 @@ public class DirectFolderModule implements FolderModule {
 	 */
 	private void copyHelper(Session session, Node srcFolderNode, Node dstFolderNode) throws NoSuchNodeTypeException, 
 			VersionException, ConstraintViolationException, javax.jcr.lock.LockException, 
-			javax.jcr.RepositoryException, IOException {
+			javax.jcr.RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
 		log.debug("copyHelper({}, {}, {})", new Object[] { session, srcFolderNode.getPath(), dstFolderNode.getPath() });
 		
 		for (NodeIterator it = srcFolderNode.getNodes(); it.hasNext(); ) {
