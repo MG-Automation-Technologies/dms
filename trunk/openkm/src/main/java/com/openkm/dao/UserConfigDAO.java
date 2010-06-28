@@ -62,6 +62,33 @@ public class UserConfigDAO {
 	}
 	
 	/**
+	 * Update user config profile
+	 */
+	public static void updateProfile(int ucId, int upId) throws DatabaseException {
+		log.debug("updateProfile({}, {})", ucId, upId);
+		String qs = "update UserConfig uc set uc.profile=:profile where uc.id=:id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setEntity("profile", UserProfileDAO.findByPk(upId));
+			q.setInteger("id", ucId);
+			q.executeUpdate();
+			tx.commit();
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateProfile: void");
+	}
+	
+	/**
 	 * Delete
 	 */
 	public static void delete(String user) throws DatabaseException {
