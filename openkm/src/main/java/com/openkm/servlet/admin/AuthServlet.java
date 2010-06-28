@@ -23,6 +23,7 @@ package com.openkm.servlet.admin;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.LoginException;
@@ -36,10 +37,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
+import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.bean.Role;
 import com.openkm.dao.bean.User;
+import com.openkm.principal.DatabasePrincipalAdapter;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
@@ -50,6 +55,7 @@ import com.openkm.util.WebUtil;
 public class AuthServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(AuthServlet.class);
+	private static boolean db = Config.PRINCIPAL_ADAPTER.equals(DatabasePrincipalAdapter.class.getCanonicalName());
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -93,6 +99,9 @@ public class AuthServlet extends BaseServlet {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} catch (NoSuchAlgorithmException e) {
+			log.error(e.getMessage(), e);
+			sendErrorRedirect(request,response, e);
+		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request,response, e);
 		} finally {
@@ -206,19 +215,32 @@ public class AuthServlet extends BaseServlet {
 	 * List users
 	 */
 	private void userList(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PrincipalAdapterException {
 		log.debug("userList({}, {}, {})", new Object[] { session, request, response });
 		String roleFilter = WebUtil.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
 		
 		if (roleFilter.equals("")) {
-			sc.setAttribute("users", AuthDAO.findAllUsers(false));
+			if (db) {
+				sc.setAttribute("users", AuthDAO.findAllUsers(false));
+				sc.setAttribute("roles", AuthDAO.findAllRoles());
+			} else {
+				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsers()));
+				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
+			}
 		} else {
 			sc.setAttribute("roleFilter", roleFilter);
-			sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
+			
+			if (db) {
+				sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
+				sc.setAttribute("roles", AuthDAO.findAllRoles());
+			} else {
+				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsersByRole(roleFilter)));
+				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
+			}
 		}
 		
-		sc.setAttribute("roles", AuthDAO.findAllRoles());
+		sc.setAttribute("db", db);
 		sc.getRequestDispatcher("/admin/user_list.jsp").forward(request, response);
 		log.debug("userList: void");
 	}
@@ -305,11 +327,48 @@ public class AuthServlet extends BaseServlet {
 	 * List roles
 	 */
 	private void roleList(Session session, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
+			throws ServletException, IOException, DatabaseException, PrincipalAdapterException {
 		log.debug("roleList({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("roles", AuthDAO.findAllRoles());
+		
+		if (db) {
+			sc.setAttribute("roles", AuthDAO.findAllRoles());
+		} else {
+			sc.setAttribute("roles", OKMAuth.getInstance().getRoles());
+		}
+		
+		sc.setAttribute("db", db);
 		sc.getRequestDispatcher("/admin/role_list.jsp").forward(request, response);
 		log.debug("roleList: void");
+	}
+	
+	/**
+	 * Convenient conversion method 
+	 */
+	private List<User> str2user(List<String> strList) {
+		List<User> usrList = new ArrayList<User>();
+		
+		for (String id : strList) {
+			User usr = new User();
+			usr.setId(id);
+			usrList.add(usr);
+		}
+		
+		return usrList;
+	}
+	
+	/**
+	 * Convenient conversion method 
+	 */
+	private List<Role> str2role(List<String> strList) {
+		List<Role> rolList = new ArrayList<Role>();
+		
+		for (String id : strList) {
+			Role rol = new Role();
+			rol.setId(id);
+			rolList.add(rol);
+		}
+		
+		return rolList;
 	}
 }
