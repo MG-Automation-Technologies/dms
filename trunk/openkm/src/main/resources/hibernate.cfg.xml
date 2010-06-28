@@ -225,6 +225,7 @@
     <mapping resource="com/openkm/dao/bean/LockToken.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserConfig.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/UserProfile.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
