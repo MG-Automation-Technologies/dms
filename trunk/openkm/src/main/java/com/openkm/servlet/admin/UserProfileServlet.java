@@ -118,6 +118,12 @@ public class UserProfileServlet extends BaseServlet {
 			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
 			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
 			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
+			up.setDashboardUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
+			up.setDashboardMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
+			up.setDashboardNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
+			up.setDashboardGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
+			up.setDashboardWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
+			up.setDashboardKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
 			
 			UserProfileDAO.create(up);
 			
@@ -165,6 +171,12 @@ public class UserProfileServlet extends BaseServlet {
 			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
 			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
 			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
+			up.setDashboardUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
+			up.setDashboardMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
+			up.setDashboardNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
+			up.setDashboardGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
+			up.setDashboardWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
+			up.setDashboardKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
 			
 			UserProfileDAO.update(up);
 			
