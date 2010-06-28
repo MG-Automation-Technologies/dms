@@ -152,7 +152,7 @@ public class UserConfigDAO {
 	 */
 	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException, 
 			RepositoryException {
-		log.info("findByPk({}, {})", jcrSession, user);
+		log.debug("findByPk({}, {})", jcrSession, user);
 		String qs = "from UserConfig uc where uc.user=:user";
 		Session session = null;
 		
@@ -181,7 +181,7 @@ public class UserConfigDAO {
 				}
 			}
 					
-			log.info("findByPk: {}", ret);
+			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
