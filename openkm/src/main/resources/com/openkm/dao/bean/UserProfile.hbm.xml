@@ -25,8 +25,8 @@
     <property name="stackMailVisible" column="UP_STACK_MAIL_VISIBLE" not-null="true"/>
     
     <property name="menuEditVisible" column="UP_MENU_EDIT_VISIBLE" not-null="true"/>
-    <property name="menuToolsVisible" column="UP_MENU_TOOTLS_VISIBLE" not-null="true"/>
-    <property name="menuBookmarkVisible" column="UP_MENU_BOOKMARK_VISIBLE" not-null="true"/>
+    <property name="menuToolsVisible" column="UP_MENU_TOOLS_VISIBLE" not-null="true"/>
+    <property name="menuBookmarksVisible" column="UP_MENU_BOOKMARKS_VISIBLE" not-null="true"/>
     <property name="menuHelpVisible" column="UP_MENU_HELP_VISIBLE" not-null="true"/>
     
     <property name="tabDesktopVisible" column="UP_TAB_DESKTOP_VISIBLE" not-null="true"/>
