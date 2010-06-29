@@ -121,15 +121,33 @@
     <value>commandBar</value>
   </metadata>
   <metadata name="commandBar.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>17, 91</value>
   </metadata>
   <metadata name="adxExcelEvents.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>134, 17</value>
+    <value>17, 54</value>
   </metadata>
-  <metadata name="adxRibbonTab1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>262, 17</value>
+  <metadata name="ribbonTab.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
   </metadata>
   <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <data name="add" xml:space="preserve">
+    <value>Add document</value>
+  </data>
+  <data name="cancelcheckout" xml:space="preserve">
+    <value>Cancel Checkout</value>
+  </data>
+  <data name="checkin" xml:space="preserve">
+    <value>Checkin</value>
+  </data>
+  <data name="configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="help" xml:space="preserve">
+    <value>OpenKM online help</value>
+  </data>
 </root>
