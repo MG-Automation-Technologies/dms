@@ -124,6 +124,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		// Stack visibility
 		workspace.setStackCategoriesVisible(up.isStackCategoriesVisible());
 		workspace.setStackThesaurusVisible(up.isStackThesaurusVisible());
+		workspace.setStackTemplatesVisible(up.isStackTemplatesVisible());
 		workspace.setStackPersonalVisible(up.isStackPersonalVisible());
 		workspace.setStackMailVisible(up.isStackMailVisible());
 		
