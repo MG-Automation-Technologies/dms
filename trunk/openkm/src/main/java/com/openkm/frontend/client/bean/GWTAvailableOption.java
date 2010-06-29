@@ -29,8 +29,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author jllort
  *
  */
-public class GWTAvailableOption implements IsSerializable  {
-	
+public class GWTAvailableOption implements IsSerializable {
 	public boolean createFolderOption = true;
 	public boolean findFolderOption = true;
 	public boolean downloadOption = true;
