@@ -188,7 +188,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setCheckinOption(true);
 		availableOption.setCheckoutOption(true);
 		availableOption.setCancelCheckoutOption(true);
-		availableOption.setDeleteOption(true);	
+		availableOption.setDeleteOption(true);
 		availableOption.setAddPropertyGroupOption(true);
 		availableOption.setRemovePropertyGroupOption(true);
 		availableOption.setWorkflowOption(true);
