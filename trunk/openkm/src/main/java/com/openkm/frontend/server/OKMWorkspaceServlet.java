@@ -21,7 +21,10 @@
 
 package com.openkm.frontend.server;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
@@ -30,8 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.api.OKMDashboard;
+import com.openkm.api.OKMPropertyGroup;
+import com.openkm.bean.PropertyGroup;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.MailAccountDAO;
@@ -42,6 +48,7 @@ import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.UserProfile;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
+import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
@@ -81,15 +88,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setWorkflowProcessIntanceVariablePath(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH);
 		workspace.setToken(getThreadLocalRequest().getSession().getId());
 		
-		// Is a wizard to uploading documents
-		workspace.setWizardPropertyGroups(Config.WIZARD_PROPERTY_GROUPS.length>0);
-		workspace.setWizardCategories(!Config.WIZARD_CATEGORIES.equals(""));
-		workspace.setWizardKeywords(!Config.WIZARD_KEYWORDS.equals(""));
-		
 		// Schedule time
 		workspace.setKeepAliveSchedule(Config.SCHEDULE_SESSION_KEEPALIVE);
 		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
 		
+		List<GWTPropertyGroup> wizardPropGrpLst = new ArrayList<GWTPropertyGroup>();
 		UserProfile up = new UserProfile();
 		Session session = null;
 		
@@ -97,29 +100,54 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
+			String[] wizardProperties = up.getWizardPropertyGroups().split(" ");
+			
+			for (int i=0; i<wizardProperties.length; i++) {
+				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups()) {
+					if (pg.getName().equals(wizardProperties[i])) {
+						wizardPropGrpLst.add(Util.copy(pg));
+						break;
+					}
+				}
+			}
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException("###", e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException("###", e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException("###", e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_IOException), e.getMessage());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_ParseException), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} finally {
 			JCRUtils.logout(session);
 		}
 		
 		// Advanced filters ( used when there a lot of users and groups )
-		workspace.setAdvancedFilters(true);
+		workspace.setAdvancedFilters(up.isAdvancedFilters());
+		
+		// Is a wizard to uploading documents
+		workspace.setWizardPropertyGroups(!up.getWizardPropertyGroups().equals(""));
+		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
+		workspace.setWizardCategories(up.isWizardCategories());
+		workspace.setWizardKeywords(up.isWizardKeywords());
 		
 		// Is chat enabled and autologin
 		workspace.setChatEnabled(up.isChatEnabled());
 		workspace.setChatAutoLogin(up.isChatAutoLogin());
 		
 		// User quota ( limit user repository size )
-		workspace.setUserQuotaEnabled(up.isUserQuotaEnabled());
-		workspace.setUserQuotaLimit(up.getUserQuotaLimit());
+		workspace.setUserQuotaEnabled(up.getUserQuota() > 0);
+		workspace.setUserQuotaLimit(up.getUserQuota());
 		
 		// Stack visibility
 		workspace.setStackCategoriesVisible(up.isStackCategoriesVisible());
@@ -198,7 +226,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setProjectWebOption(true);
 		availableOption.setAboutOption(true);
 		workspace.setAvailableOption(availableOption);
-
+		
 		try {
 			User user = new User();
 			

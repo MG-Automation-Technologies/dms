@@ -36,8 +36,8 @@
   <a target="frame" href="repository_import.jsp"><img src="img/toolbar/import.png" title="Repository import"></a>
   &nbsp;
   <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
-  &nbsp;
-  <a target="frame" href="repository_backup.jsp"><img src="img/toolbar/backup.png" title="Repository backup"></a>
+  <%-- &nbsp; --%>
+  <%-- <a target="frame" href="repository_backup.jsp"><img src="img/toolbar/backup.png" title="Repository backup"></a> --%>
   <%-- &nbsp; --%>
   <%-- <a href="<%=request.getContextPath()%>/"><img src="img/toolbar/exit.png" title="Exit"></a> --%>
   </td></tr>

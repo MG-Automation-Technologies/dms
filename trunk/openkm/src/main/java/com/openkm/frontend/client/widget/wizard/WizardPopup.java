@@ -102,24 +102,12 @@ public class WizardPopup extends DialogBox {
 		actualButton.setEnabled(false);
 		this.docPath = docPath;
 		status = STATUS_ADD_PROPERTY_GROUPS;
-		getPropertyGroupWizard();
+		
+		// Wizard
+		groupIndex = 0;
+		groupsList = Main.get().workspaceUserProperties.getWorkspace().getWizardPropertyGroupsList();
+		addPropertyGroups();
 	}
-	
-	
-	/**
-	 * Gets asyncronous to get property groups wizard
-	 */
-	final AsyncCallback<List<GWTPropertyGroup>> callbackGetPropertyGroupWizard = new AsyncCallback<List<GWTPropertyGroup>>() {
-		public void onSuccess(List<GWTPropertyGroup> result) {
-			groupIndex = 0;
-			groupsList = result;
-			addPropertyGroups();
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("callbackGetPropertyGroupWizard", caught);
-		}
-	};
 	
 	/**
 	 * Gets asyncronous to add a group
@@ -139,12 +127,6 @@ public class WizardPopup extends DialogBox {
 			Main.get().showError("AddGroup", caught);
 		}
 	};
-	
-	public void getPropertyGroupWizard() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) propertyGroupService;
-		endPoint.setServiceEntryPoint(Config.OKMPropertyGroupService);	
-		propertyGroupService.getPropertyGroupWizard(callbackGetPropertyGroupWizard);
-	}
 	
 	/**
 	 * Add property groups to a document
