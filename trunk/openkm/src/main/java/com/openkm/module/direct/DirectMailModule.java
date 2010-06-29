@@ -159,7 +159,7 @@ public class DirectMailModule implements MailModule {
 		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 		UserItems ui = UserItemsManager.get(session.getUserID());
 		
-		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaSize()) {
+		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaLimit()) {
 			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
 		}
 		

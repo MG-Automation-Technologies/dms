@@ -58,7 +58,7 @@ public class UserInfo extends Composite {
 	private List<ChatRoomDialogBox> chatRoomList;
 	private Image imgUserQuota;
 	private boolean userQuota = false;
-	private int quotaLimit = 0;
+	private long quotaLimit = 0;
 	private boolean quotaExceeded = false;
 	private HTML quotaUsed;
 	private int percent = 0;
@@ -575,7 +575,7 @@ public class UserInfo extends Composite {
 	/**
 	 * enableUserQuota
 	 */
-	public void enableUserQuota(int quotaLimit) {
+	public void enableUserQuota(long quotaLimit) {
 		this.quotaLimit = quotaLimit;
 		imgUserQuota.setVisible(true);
 		quotaUsed.setVisible(true);

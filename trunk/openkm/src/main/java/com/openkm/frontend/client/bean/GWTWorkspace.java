@@ -30,10 +30,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public class GWTWorkspace implements IsSerializable {
-	
-	private String user = "";
-	private boolean isAdmin = false;
 	private String token = "";
+	private String user = "";
 	private String applicationURL = "";
 	private String imapHost = "";
 	private String imapUser = "";
@@ -43,37 +41,42 @@ public class GWTWorkspace implements IsSerializable {
 	private String password = "";
 	private boolean changePassword = true;
 	private String email = "";
+	
+	// System wide
 	private String appVersion = "";
 	private String workflowRunConfigForm = "";
 	private String workflowProcessIntanceVariableUUID = "";
 	private String workflowProcessIntanceVariablePath = "";
-	private boolean wizardPropertyGroups = false;
-	private boolean wizardKeywords = false;
-	private boolean wizardCategories = false;
-	private boolean chatEnabled = false;
-	private boolean chatAutoLogin = false;
-	private double keepAliveSchedule = 900*1000; 	// 15 minutes
-	private double dashboardSchedule = 1800*1000; 	// 30 minutes
-	private boolean advancedFilters = false;
-	private boolean userQuotaLimit = false;
-	private int userQuotaLimitSize = 0;
-	private boolean categoriesStackVisible = false;
-	private boolean thesaurusStackVisible = false;
-	private boolean personalStackVisible = false;
-	private boolean mailStackVisible = false;
-	private boolean editMenuVisible = false;
-	private boolean toolsMenuVisible = false;
-	private boolean bookmarkMenuVisible = false;
-	private boolean helpMenuVisible = false;
-	private boolean desktopTabVisible = false;
-	private boolean searchTabVisible = false;
-	private boolean dashboardTabVisible = false;
-	private boolean dashboardUserVisible = false;
-	private boolean dashboardMailVisible = false;
-	private boolean dashboardNewsVisible = false;
-	private boolean dashboardGeneralVisible = false;
-	private boolean dashboardWorkflowVisible = false;
-	private boolean dashboardKeywordsVisible = false;
+	private long keepAliveSchedule;
+	private long dashboardSchedule;
+	
+	// User Profile
+	private boolean advancedFilters;
+	private boolean chatEnabled;
+	private boolean chatAutoLogin;
+	private long userQuotaLimit;
+	private boolean userQuotaEnabled;
+	private boolean wizardPropertyGroups;
+	private boolean wizardKeywords;
+	private boolean wizardCategories;
+	private boolean stackCategoriesVisible;
+	private boolean stackThesaurusVisible;
+	private boolean stackPersonalVisible;
+	private boolean stackMailVisible;
+	private boolean menuEditVisible;
+	private boolean menuToolsVisible;
+	private boolean menuBookmarksVisible;
+	private boolean menuHelpVisible;
+	private boolean tabDesktopVisible;
+	private boolean tabSearchVisible;
+	private boolean tabDashboardVisible;
+	private boolean tabAdminVisible;
+	private boolean dashboardUserVisible;
+	private boolean dashboardMailVisible;
+	private boolean dashboardNewsVisible;
+	private boolean dashboardGeneralVisible;
+	private boolean dashboardWorkflowVisible;
+	private boolean dashboardKeywordsVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
@@ -81,39 +84,31 @@ public class GWTWorkspace implements IsSerializable {
 	 */
 	public GWTWorkspace() {
 	}
-	
-	public String getUser() {
-		return user;
-	}
-	
-	public void setUser(String user) {
-		this.user = user;
-	}
-	
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
 
 	public String getToken() {
 		return token;
 	}
-	
+
 	public void setToken(String token) {
 		this.token = token;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
 	public String getApplicationURL() {
 		return applicationURL;
 	}
-	
+
 	public void setApplicationURL(String applicationURL) {
 		this.applicationURL = applicationURL;
 	}
-	
+
 	public String getImapHost() {
 		return imapHost;
 	}
@@ -137,7 +132,7 @@ public class GWTWorkspace implements IsSerializable {
 	public void setImapPassword(String imapPassword) {
 		this.imapPassword = imapPassword;
 	}
-	
+
 	public String getImapFolder() {
 		return imapFolder;
 	}
@@ -145,23 +140,7 @@ public class GWTWorkspace implements IsSerializable {
 	public void setImapFolder(String imapFolder) {
 		this.imapFolder = imapFolder;
 	}
-	
-	public String getPassword() {
-		return password;
-	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public boolean isChangePassword() {
-		return changePassword;
-	}
-
-	public void setChangePassword(boolean changePassword) {
-		this.changePassword = changePassword;
-	}
-	
 	public int getImapID() {
 		return imapID;
 	}
@@ -169,7 +148,23 @@ public class GWTWorkspace implements IsSerializable {
 	public void setImapID(int imapID) {
 		this.imapID = imapID;
 	}
-	
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isChangePassword() {
+		return changePassword;
+	}
+
+	public void setChangePassword(boolean changePassword) {
+		this.changePassword = changePassword;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -178,14 +173,17 @@ public class GWTWorkspace implements IsSerializable {
 		this.email = email;
 	}
 	
+	/**
+	 * System Wide
+	 */
 	public String getAppVersion() {
 		return appVersion;
 	}
-	
+
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
 	}
-	
+
 	public String getWorkflowRunConfigForm() {
 		return workflowRunConfigForm;
 	}
@@ -193,7 +191,7 @@ public class GWTWorkspace implements IsSerializable {
 	public void setWorkflowRunConfigForm(String workflowRunConfigForm) {
 		this.workflowRunConfigForm = workflowRunConfigForm;
 	}
-	
+
 	public String getWorkflowProcessIntanceVariableUUID() {
 		return workflowProcessIntanceVariableUUID;
 	}
@@ -209,38 +207,6 @@ public class GWTWorkspace implements IsSerializable {
 	public void setWorkflowProcessIntanceVariablePath(String workflowProcessIntanceVariablePath) {
 		this.workflowProcessIntanceVariablePath = workflowProcessIntanceVariablePath;
 	}
-	
-	public boolean isWizardPropertyGroups() {
-		return wizardPropertyGroups;
-	}
-
-	public void setWizardPropertyGroups(boolean wizardPropertyGroups) {
-		this.wizardPropertyGroups = wizardPropertyGroups;
-	}
-	
-	public boolean isWizardKeywords() {
-		return wizardKeywords;
-	}
-
-	public void setWizardKeywords(boolean wizardKeywords) {
-		this.wizardKeywords = wizardKeywords;
-	}
-	
-	public boolean isWizardCategories() {
-		return wizardCategories;
-	}
-
-	public void setWizardCategories(boolean wizardCategories) {
-		this.wizardCategories = wizardCategories;
-	}
-	
-	public boolean isChatAutoLogin() {
-		return chatAutoLogin;
-	}
-
-	public void setChatAutoLogin(boolean chatAutoLogin) {
-		this.chatAutoLogin = chatAutoLogin;
-	}
 
 	public boolean isChatEnabled() {
 		return chatEnabled;
@@ -249,23 +215,34 @@ public class GWTWorkspace implements IsSerializable {
 	public void setChatEnabled(boolean chatEnabled) {
 		this.chatEnabled = chatEnabled;
 	}
+
+	public boolean isChatAutoLogin() {
+		return chatAutoLogin;
+	}
+
+	public void setChatAutoLogin(boolean chatAutoLogin) {
+		this.chatAutoLogin = chatAutoLogin;
+	}
 	
-	public double getDashboardSchedule() {
-		return dashboardSchedule;
-	}
-
-	public void setDashboardSchedule(double dashboardSchedule) {
-		this.dashboardSchedule = dashboardSchedule;
-	}
-
-	public double getKeepAliveSchedule() {
+	public long getKeepAliveSchedule() {
 		return keepAliveSchedule;
 	}
 
-	public void setKeepAliveSchedule(double keepAliveSchedule) {
+	public void setKeepAliveSchedule(long keepAliveSchedule) {
 		this.keepAliveSchedule = keepAliveSchedule;
 	}
+
+	public long getDashboardSchedule() {
+		return dashboardSchedule;
+	}
+
+	public void setDashboardSchedule(long dashboardSchedule) {
+		this.dashboardSchedule = dashboardSchedule;
+	}
 	
+	/**
+	 * User Profile
+	 */
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
 	}
@@ -273,119 +250,143 @@ public class GWTWorkspace implements IsSerializable {
 	public void setAdvancedFilters(boolean advancedFilters) {
 		this.advancedFilters = advancedFilters;
 	}
-	
-	public boolean isUserQuotaLimit() {
+
+	public long getUserQuotaLimit() {
 		return userQuotaLimit;
 	}
 
-	public void setUserQuotaLimit(boolean userQuotaLimit) {
+	public void setUserQuotaLimit(long userQuotaLimit) {
 		this.userQuotaLimit = userQuotaLimit;
 	}
+
+	public boolean isUserQuotaEnabled() {
+		return userQuotaEnabled;
+	}
+
+	public void setUserQuotaEnabled(boolean userQuotaEnabled) {
+		this.userQuotaEnabled = userQuotaEnabled;
+	}
+
+	public boolean isWizardPropertyGroups() {
+		return wizardPropertyGroups;
+	}
+
+	public void setWizardPropertyGroups(boolean wizardPropertyGroups) {
+		this.wizardPropertyGroups = wizardPropertyGroups;
+	}
+
+	public boolean isWizardKeywords() {
+		return wizardKeywords;
+	}
+
+	public void setWizardKeywords(boolean wizardKeywords) {
+		this.wizardKeywords = wizardKeywords;
+	}
+
+	public boolean isWizardCategories() {
+		return wizardCategories;
+	}
+
+	public void setWizardCategories(boolean wizardCategories) {
+		this.wizardCategories = wizardCategories;
+	}
+
+	public boolean isStackCategoriesVisible() {
+		return stackCategoriesVisible;
+	}
+
+	public void setStackCategoriesVisible(boolean stackCategoriesVisible) {
+		this.stackCategoriesVisible = stackCategoriesVisible;
+	}
+
+	public boolean isStackThesaurusVisible() {
+		return stackThesaurusVisible;
+	}
+
+	public void setStackThesaurusVisible(boolean stackThesaurusVisible) {
+		this.stackThesaurusVisible = stackThesaurusVisible;
+	}
+
+	public boolean isStackPersonalVisible() {
+		return stackPersonalVisible;
+	}
+
+	public void setStackPersonalVisible(boolean stackPersonalVisible) {
+		this.stackPersonalVisible = stackPersonalVisible;
+	}
+
+	public boolean isStackMailVisible() {
+		return stackMailVisible;
+	}
+
+	public void setStackMailVisible(boolean stackMailVisible) {
+		this.stackMailVisible = stackMailVisible;
+	}
+
+	public boolean isMenuEditVisible() {
+		return menuEditVisible;
+	}
+
+	public void setMenuEditVisible(boolean menuEditVisible) {
+		this.menuEditVisible = menuEditVisible;
+	}
+
+	public boolean isMenuToolsVisible() {
+		return menuToolsVisible;
+	}
+
+	public void setMenuToolsVisible(boolean menuToolsVisible) {
+		this.menuToolsVisible = menuToolsVisible;
+	}
+
+	public boolean isMenuBookmarksVisible() {
+		return menuBookmarksVisible;
+	}
+
+	public void setMenuBookmarksVisible(boolean menuBookmarksVisible) {
+		this.menuBookmarksVisible = menuBookmarksVisible;
+	}
+
+	public boolean isMenuHelpVisible() {
+		return menuHelpVisible;
+	}
+
+	public void setMenuHelpVisible(boolean menuHelpVisible) {
+		this.menuHelpVisible = menuHelpVisible;
+	}
+
+	public boolean isTabDesktopVisible() {
+		return tabDesktopVisible;
+	}
+
+	public void setTabDesktopVisible(boolean tabDesktopVisible) {
+		this.tabDesktopVisible = tabDesktopVisible;
+	}
+
+	public boolean isTabSearchVisible() {
+		return tabSearchVisible;
+	}
+
+	public void setTabSearchVisible(boolean tabSearchVisible) {
+		this.tabSearchVisible = tabSearchVisible;
+	}
+
+	public boolean isTabDashboardVisible() {
+		return tabDashboardVisible;
+	}
+
+	public void setTabDashboardVisible(boolean tabDashboardVisible) {
+		this.tabDashboardVisible = tabDashboardVisible;
+	}
 	
-	public int getUserQuotaLimitSize() {
-		return userQuotaLimitSize;
+	public boolean isTabAdminVisible() {
+		return tabAdminVisible;
 	}
 
-	public void setUserQuotaLimitSize(int userQuotaLimitSize) {
-		this.userQuotaLimitSize = userQuotaLimitSize;
-	}
-	
-	public boolean isCategoriesStackVisible() {
-		return categoriesStackVisible;
+	public void setTabAdminVisible(boolean tabAdminVisible) {
+		this.tabAdminVisible = tabAdminVisible;
 	}
 
-	public void setCategoriesStackVisible(boolean categoriesStackVisible) {
-		this.categoriesStackVisible = categoriesStackVisible;
-	}
-
-	public boolean isThesaurusStackVisible() {
-		return thesaurusStackVisible;
-	}
-
-	public void setThesaurusStackVisible(boolean thesaurusStackVisible) {
-		this.thesaurusStackVisible = thesaurusStackVisible;
-	}
-
-	public boolean isPersonalStackVisible() {
-		return personalStackVisible;
-	}
-
-	public void setPersonalStackVisible(boolean personalStackVisible) {
-		this.personalStackVisible = personalStackVisible;
-	}
-	
-	public boolean isMailStackVisible() {
-		return mailStackVisible;
-	}
-
-	public void setMailStackVisible(boolean mailStackVisible) {
-		this.mailStackVisible = mailStackVisible;
-	}
-	
-	public GWTAvailableOption getAvailableOption() {
-		return availableOption;
-	}
-
-	public void setAvailableOption(GWTAvailableOption availableOption) {
-		this.availableOption = availableOption;
-	}
-	
-	public boolean isEditMenuVisible() {
-		return editMenuVisible;
-	}
-
-	public void setEditMenuVisible(boolean editMenuVisible) {
-		this.editMenuVisible = editMenuVisible;
-	}
-
-	public boolean isToolsMenuVisible() {
-		return toolsMenuVisible;
-	}
-
-	public void setToolsMenuVisible(boolean toolsMenuVisible) {
-		this.toolsMenuVisible = toolsMenuVisible;
-	}
-
-	public boolean isBookmarkMenuVisible() {
-		return bookmarkMenuVisible;
-	}
-
-	public void setBookmarkMenuVisible(boolean bookmarkMenuVisible) {
-		this.bookmarkMenuVisible = bookmarkMenuVisible;
-	}
-
-	public boolean isHelpMenuVisible() {
-		return helpMenuVisible;
-	}
-
-	public void setHelpMenuVisible(boolean helpMenuVisible) {
-		this.helpMenuVisible = helpMenuVisible;
-	}
-	
-	public boolean isDesktopTabVisible() {
-		return desktopTabVisible;
-	}
-
-	public void setDesktopTabVisible(boolean desktopTabVisible) {
-		this.desktopTabVisible = desktopTabVisible;
-	}
-
-	public boolean isSearchTabVisible() {
-		return searchTabVisible;
-	}
-
-	public void setSearchTabVisible(boolean searchTabVisible) {
-		this.searchTabVisible = searchTabVisible;
-	}
-
-	public boolean isDashboardTabVisible() {
-		return dashboardTabVisible;
-	}
-
-	public void setDashboardTabVisible(boolean dashboardTabVisible) {
-		this.dashboardTabVisible = dashboardTabVisible;
-	}
-	
 	public boolean isDashboardUserVisible() {
 		return dashboardUserVisible;
 	}
@@ -432,5 +433,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setDashboardKeywordsVisible(boolean dashboardKeywordsVisible) {
 		this.dashboardKeywordsVisible = dashboardKeywordsVisible;
+	}
+
+	public GWTAvailableOption getAvailableOption() {
+		return availableOption;
+	}
+
+	public void setAvailableOption(GWTAvailableOption availableOption) {
+		this.availableOption = availableOption;
 	}
 }

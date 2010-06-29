@@ -29,7 +29,7 @@ public class UserProfile implements Serializable {
 	private String name;
 	private boolean active;
 	private boolean advancedFilters;
-	private long userQuotaSize;
+	private long userQuotaLimit;
 	private boolean userQuotaEnabled;
 	private boolean wizardPropertyGroups;
 	private boolean wizardKeywords;
@@ -86,12 +86,12 @@ public class UserProfile implements Serializable {
 		this.advancedFilters = advancedFilters;
 	}
 
-	public long getUserQuotaSize() {
-		return userQuotaSize;
+	public long getUserQuotaLimit() {
+		return userQuotaLimit;
 	}
 
-	public void setUserQuotaSize(long userQuotaSize) {
-		this.userQuotaSize = userQuotaSize;
+	public void setUserQuotaLimit(long userQuotaLimit) {
+		this.userQuotaLimit = userQuotaLimit;
 	}
 
 	public boolean isUserQuotaEnabled() {
@@ -284,7 +284,7 @@ public class UserProfile implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", active="); sb.append(active);
-		sb.append(", userQuotaSize="); sb.append(userQuotaSize);
+		sb.append(", userQuotaLimit="); sb.append(userQuotaLimit);
 		sb.append(", userQuotaEnabled="); sb.append(userQuotaEnabled);
 		sb.append(", wizardPropertyGroups="); sb.append(wizardPropertyGroups);
 		sb.append(", wizardKeywords="); sb.append(wizardKeywords);
