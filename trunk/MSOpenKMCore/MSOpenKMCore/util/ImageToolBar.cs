@@ -16,11 +16,11 @@ namespace MSOpenKMCore.util
         public const int IMG_TOOLBAR_ADD                        = 1;
         public const int IMG_TOOLBAR_EDIT                       = 2;
         public const int IMG_TOOLBAR_CHECKIN                    = 3;
-        public const int IMG_TOOLBAR_CANCELCHEKCOUT             = 4;
+        public const int IMG_TOOLBAR_CANCELCHECKOUT             = 4;
         public const int IMG_TOOLBAR_ADD_DISABLED               = 5;
         public const int IMG_TOOLBAR_EDIT_DISABLED              = 6;
         public const int IMG_TOOLBAR_CHECKIN_DISABLED           = 7;
-        public const int IMG_TOOLBAR_CANCELCHEKCOUT_DISABLED    = 8;
+        public const int IMG_TOOLBAR_CANCELCHECKOUT_DISABLED    = 8;
 
         private ImageList imageList = null;
 
@@ -57,7 +57,7 @@ namespace MSOpenKMCore.util
                 s.Close();
                 s = this.GetType().Assembly.GetManifestResourceStream("MSOpenKMCore.images.toolbar.cancel_checkout_disabled.gif");
                 imageList.Images.Add(Image.FromStream(s));
-                s.Close(); 
+                s.Close();
             }
             catch (Exception e)
             {
@@ -70,6 +70,5 @@ namespace MSOpenKMCore.util
         {
             return imageList;
         }
-
     }
 }
