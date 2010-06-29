@@ -145,6 +145,15 @@ public class OKMAuth implements AuthModule {
 	}
 	
 	@Override
+	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
+		log.debug("getRolesByUser({})", user);
+		AuthModule am = ModuleManager.getAuthModule();
+		List<String> users = am.getRolesByUser(user);
+		log.debug("getRolesByUser: {}", users);
+		return users;
+	}
+	
+	@Override
 	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails({})", users);
 		AuthModule am = ModuleManager.getAuthModule();
