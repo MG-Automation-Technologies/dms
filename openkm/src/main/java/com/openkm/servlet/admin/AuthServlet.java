@@ -334,7 +334,7 @@ public class AuthServlet extends BaseServlet {
 		if (db) {
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
 		} else {
-			sc.setAttribute("roles", OKMAuth.getInstance().getRoles());
+			sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
 		}
 		
 		sc.setAttribute("db", db);
@@ -351,6 +351,7 @@ public class AuthServlet extends BaseServlet {
 		for (String id : strList) {
 			User usr = new User();
 			usr.setId(id);
+			usr.setActive(true);
 			usrList.add(usr);
 		}
 		
@@ -366,6 +367,7 @@ public class AuthServlet extends BaseServlet {
 		for (String id : strList) {
 			Role rol = new Role();
 			rol.setId(id);
+			rol.setActive(true);
 			rolList.add(rol);
 		}
 		
