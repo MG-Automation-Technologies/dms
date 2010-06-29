@@ -24,7 +24,9 @@ package com.openkm.servlet.admin;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -345,13 +347,34 @@ public class AuthServlet extends BaseServlet {
 	/**
 	 * Convenient conversion method 
 	 */
-	private List<User> str2user(List<String> strList) {
+	private List<User> str2user(List<String> strList) throws PrincipalAdapterException {
 		List<User> usrList = new ArrayList<User>();
 		
-		for (String id : strList) {
+		for (String usrId : strList) {
+			List<String> userList = new ArrayList<String>();
+			userList.add(usrId);
+			List<String> mailList = OKMAuth.getInstance().getMails(userList);
+			List<String> roleList = OKMAuth.getInstance().getRolesByUser(usrId);			
 			User usr = new User();
-			usr.setId(id);
+			usr.setId(usrId);
 			usr.setActive(true);
+			usr.setName(Config.PRINCIPAL_ADAPTER);
+			
+			if (!mailList.isEmpty()) {
+				usr.setEmail(mailList.iterator().next());
+			}
+			
+			if (!roleList.isEmpty()) {
+				Set<Role> roles = new HashSet<Role>();
+				for (String rolId : roleList) {
+					Role rol = new Role();
+					rol.setId(rolId);
+					rol.setActive(true);
+					roles.add(rol);
+				}
+				usr.setRoles(roles);
+			}
+			
 			usrList.add(usr);
 		}
 		
