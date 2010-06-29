@@ -132,4 +132,22 @@
   <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <data name="add" xml:space="preserve">
+    <value>Add document</value>
+  </data>
+  <data name="cancelcheckout" xml:space="preserve">
+    <value>Cancel Checkout</value>
+  </data>
+  <data name="checkin" xml:space="preserve">
+    <value>Checkin</value>
+  </data>
+  <data name="configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="help" xml:space="preserve">
+    <value>OpenKM online help</value>
+  </data>
 </root>

@@ -30,7 +30,7 @@ namespace OpenKMWordAddIn
         private AddinExpress.MSO.ADXRibbonButton checkinRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton cancelCheckoutRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton helpRibbonButton;
-        private ComponentResourceManager resources = new ComponentResourceManager(typeof(OpenkMAddIn));
+        private ComponentResourceManager resources = new ComponentResourceManager(typeof(AddinModule));
 
         public AddinModule()
         {
