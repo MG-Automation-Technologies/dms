@@ -83,6 +83,7 @@
     <Compile Include="util\ApplicationWatcher.cs" />
     <Compile Include="util\Crypt.cs" />
     <Compile Include="util\FileUtil.cs" />
+    <Compile Include="util\ImageToolBar.cs" />
     <Compile Include="util\ImageToPictureConverter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -359,6 +360,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+<<<<<<< .mine
   <ItemGroup>
     <EmbeddedResource Include="images\mime\video\mp4.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -376,6 +378,56 @@
   <ItemGroup>
     <None Include="MSOpenKMCore.snk.pfx" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="images\toolbar\add_document.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\cancel_checkout.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\checkin.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\edit.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\openkm.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="images\toolbar\add_document_disabled.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\cancel_checkout_disabled.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\checkin_disabled.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\toolbar\edit_disabled.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+=======
+  <ItemGroup>
+    <EmbeddedResource Include="images\mime\video\mp4.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\mime\video\mpeg.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\mime\video\x-ms-wmv.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="images\mime\video\x-msvideo.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MSOpenKMCore.snk.pfx" />
+  </ItemGroup>
+>>>>>>> .r2833
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
