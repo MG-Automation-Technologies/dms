@@ -360,7 +360,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-<<<<<<< .mine
   <ItemGroup>
     <EmbeddedResource Include="images\mime\video\mp4.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -409,25 +408,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-=======
-  <ItemGroup>
-    <EmbeddedResource Include="images\mime\video\mp4.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\mpeg.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\x-ms-wmv.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="images\mime\video\x-msvideo.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MSOpenKMCore.snk.pfx" />
-  </ItemGroup>
->>>>>>> .r2833
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
