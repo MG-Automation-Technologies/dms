@@ -93,7 +93,7 @@
                 </c:otherwise>
               </c:choose>
             </td>
-            <td>
+            <td align="center">
               <c:if test="${db}">
                 <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
                 &nbsp;

@@ -25,7 +25,9 @@
             <c:url value="Auth" var="urlCreate">
               <c:param name="action" value="roleCreate"/>
             </c:url>
-            <a href="${urlCreate}"><img src="img/action/new.png" alt="New role" title="New role"/></a>
+            <c:if test="${db}">
+              <a href="${urlCreate}"><img src="img/action/new.png" alt="New role" title="New role"/></a>
+            </c:if>
           </th>
         </tr>
         <c:forEach var="role" items="${roles}" varStatus="row">
@@ -49,10 +51,12 @@
                 </c:otherwise>
               </c:choose>
             </td>
-            <td>
-              <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
-              &nbsp;
-              <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+            <td align="center">
+              <c:if test="${db}">
+                <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
+                &nbsp;
+                <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
+              </c:if>
             </td>
           </tr>
         </c:forEach>
