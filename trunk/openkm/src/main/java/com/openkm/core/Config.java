@@ -129,7 +129,6 @@ public class Config {
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
-	public static final String PROPERTY_DEFAULT_LANG = "default.lang";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
 	
@@ -502,8 +501,6 @@ public class Config {
 			APPLICATION_URL = config.getProperty(PROPERTY_APPLICATION_URL, APPLICATION_URL);
 			APPLICATION_BASE = getBase(APPLICATION_URL); 
 			values.put(PROPERTY_APPLICATION_URL, APPLICATION_URL);
-			DEFAULT_LANG = config.getProperty(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
-			values.put(PROPERTY_DEFAULT_LANG, DEFAULT_LANG);
 			USER_KEYWORDS_CACHE_STR = config.getProperty(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR);
 			USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
 			values.put(PROPERTY_USER_KEYWORDS_CACHE, USER_KEYWORDS_CACHE_STR+" ("+USER_KEYWORDS_CACHE+")");
