@@ -41,6 +41,9 @@
     <property name="stackThesaurusVisible" not-null="true">
       <column name="UP_STACK_THESAURUS_VISIBLE" default="true"/>
     </property>
+    <property name="stackTemplatesVisible" not-null="true">
+      <column name="UP_STACK_TEMPLATES_VISIBLE" default="true"/>
+    </property>
     <property name="stackPersonalVisible" not-null="true">
       <column name="UP_STACK_PERSONAL_VISIBLE" default="true"/>
     </property>

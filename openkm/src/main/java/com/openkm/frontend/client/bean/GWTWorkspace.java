@@ -61,6 +61,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean wizardCategories;
 	private boolean stackCategoriesVisible;
 	private boolean stackThesaurusVisible;
+	private boolean stackTemplatesVisible;
 	private boolean stackPersonalVisible;
 	private boolean stackMailVisible;
 	private boolean menuEditVisible;
@@ -305,6 +306,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setStackThesaurusVisible(boolean stackThesaurusVisible) {
 		this.stackThesaurusVisible = stackThesaurusVisible;
+	}
+	
+	public boolean isStackTemplatesVisible() {
+		return stackTemplatesVisible;
+	}
+
+	public void setStackTemplatesVisible(boolean stackTemplatesVisible) {
+		this.stackTemplatesVisible = stackTemplatesVisible;
 	}
 
 	public boolean isStackPersonalVisible() {

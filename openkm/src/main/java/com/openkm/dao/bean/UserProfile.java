@@ -38,6 +38,7 @@ public class UserProfile implements Serializable {
 	private boolean chatAutoLogin;
 	private boolean stackCategoriesVisible;
 	private boolean stackThesaurusVisible;
+	private boolean stackTemplatesVisible;
 	private boolean stackPersonalVisible;
 	private boolean stackMailVisible;
 	private boolean menuEditVisible;
@@ -156,6 +157,14 @@ public class UserProfile implements Serializable {
 
 	public void setStackThesaurusVisible(boolean stackThesaurusVisible) {
 		this.stackThesaurusVisible = stackThesaurusVisible;
+	}
+	
+	public boolean isStackTemplatesVisible() {
+		return stackTemplatesVisible;
+	}
+
+	public void setStackTemplatesVisible(boolean stackTemplatesVisible) {
+		this.stackTemplatesVisible = stackTemplatesVisible;
 	}
 
 	public boolean isStackPersonalVisible() {
@@ -294,6 +303,7 @@ public class UserProfile implements Serializable {
 		sb.append(", advancedFilters="); sb.append(advancedFilters);
 		sb.append(", stackCategoriesVisible="); sb.append(stackCategoriesVisible);
 		sb.append(", stackThesaurusVisible="); sb.append(stackThesaurusVisible);
+		sb.append(", stackTemplatesVisible="); sb.append(stackTemplatesVisible);
 		sb.append(", stackPersonalVisible="); sb.append(stackPersonalVisible);
 		sb.append(", stackMailVisible="); sb.append(stackMailVisible);
 		sb.append(", menuEditVisible="); sb.append(menuEditVisible);

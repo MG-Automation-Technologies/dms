@@ -29,6 +29,19 @@
       </td>
     </tr>
     <tr>
+      <td>Templates visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.stackTemplatedVisible}">
+            <input name="up_stack_templates_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_stack_templates_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
       <td>Personal visible</td>
       <td>
         <c:choose>
