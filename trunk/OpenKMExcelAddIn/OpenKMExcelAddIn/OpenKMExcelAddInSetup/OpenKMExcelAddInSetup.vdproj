@@ -298,7 +298,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8FC3F967_1709_47AF_B59D_EF1003355DC9"
+        "OwnerKey" = "8:_0169259CACA94BABA4196C3FE9874CF0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -310,7 +310,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0169259CACA94BABA4196C3FE9874CF0"
+        "OwnerKey" = "8:_8FC3F967_1709_47AF_B59D_EF1003355DC9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -970,7 +970,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OpenKM Excel AddIn"
         "ProductCode" = "8:{397CC90E-FC39-44A6-990D-F33809C0488F}"
-        "PackageCode" = "8:{2DB48C7E-E424-4744-9C11-B9F067E1D448}"
+        "PackageCode" = "8:{D28F8132-D6A6-428A-A447-2AF57DC6FD14}"
         "UpgradeCode" = "8:{15A23DF0-59F2-43C1-9504-9588376D8796}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1490,7 +1490,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_30D2D47AEE3446E6A1BEB5407EAFD9AE"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\OpenKMExcelAddIn.dll"
+            "SourcePath" = "8:..\\obj\\Release\\OpenKMExcelAddIn.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_499F7B51AC8B45F080ECDCC642DFB4E4"
