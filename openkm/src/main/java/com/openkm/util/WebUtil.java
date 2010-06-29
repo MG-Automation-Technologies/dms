@@ -46,7 +46,7 @@ public class WebUtil {
 		String stringValue = EMPTY_STRING;
 		if (value != null) {
 			try {
-				return new String(value.getBytes("ISO-8859-1"), "UTF-8");
+				return new String(value.getBytes("ISO-8859-1"), "UTF-8").trim();
 			} catch (UnsupportedEncodingException e) {
 				// Ignore
 			}

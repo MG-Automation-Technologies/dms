@@ -27,22 +27,32 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="400px">
+        <table class="form" width="465px">
           <tr>
-            <td colspan="2">
-              <!-- GENERAL -->
-              <jsp:include page="user_profile_general_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="50%">
+            <td colspan="3">
               <table width="100%">
                 <tr>
                   <td>
-                    <!-- USER QUOTA -->
-                    <jsp:include page="user_profile_quota_edit.jsp"/>
+                    <!-- GENERAL -->
+                    <jsp:include page="user_profile_general_edit.jsp"/>
+                  </td>
+                  <td>
+                    <!-- MISC -->
+                    <jsp:include page="user_profile_misc_edit.jsp"/>
                   </td>
                 </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <!-- WIZARD -->
+              <jsp:include page="user_profile_wizard_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="33%">
+              <table width="100%">
                 <tr>
                   <td>
                     <!-- CHAT -->
@@ -55,6 +65,16 @@
                     <jsp:include page="user_profile_menu_edit.jsp"/>
                   </td>
                 </tr>
+              </table>
+            </td>
+            <td valign="top" width="33%">
+              <table width="100%">
+                <tr>
+                  <td>
+                    <!-- STACKS -->
+                    <jsp:include page="user_profile_stacks_edit.jsp"/>
+                  </td>
+                </tr>
                 <tr>
                   <td>
                     <!-- TAB -->
@@ -63,20 +83,8 @@
                 </tr>
               </table>
             </td>
-            <td valign="top" width="50%">
+            <td valign="top" width="33%">
               <table width="100%">
-                <tr>
-                  <td>
-                    <!-- WIZARD -->
-                    <jsp:include page="user_profile_wizard_edit.jsp"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- STACKS -->
-                    <jsp:include page="user_profile_stacks_edit.jsp"/>
-                  </td>
-                </tr>
                 <tr>
                   <td>
                     <!-- DASHBOARD -->
@@ -87,7 +95,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2" align="right">
+            <td colspan="3" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>

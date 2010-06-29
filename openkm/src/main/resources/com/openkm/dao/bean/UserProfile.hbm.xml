@@ -11,15 +11,12 @@
       <column name="UP_ADVANCED_FILTERS" default="false"/>
     </property>
     
-    <property name="userQuotaLimit" not-null="true">
-      <column name="UP_USER_QUOTA_LIMIT" default="0"/>
-    </property>
-    <property name="userQuotaEnabled" not-null="true">
-      <column name="UP_USER_QUOTA_ENABLED" default="false"/>
+    <property name="userQuota" not-null="true">
+      <column name="UP_USER_QUOTA" default="0"/>
     </property>
     
     <property name="wizardPropertyGroups" not-null="true">
-      <column name="UP_WIZARD_PROPERTY_GROUPS" default="false"/>
+      <column name="UP_WIZARD_PROPERTY_GROUPS" default="''"/>
     </property>
     <property name="wizardKeywords" not-null="true">
       <column name="UP_WIZARD_KEYWORDS" default="false"/>

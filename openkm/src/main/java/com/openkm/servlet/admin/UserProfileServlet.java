@@ -100,9 +100,9 @@ public class UserProfileServlet extends BaseServlet {
 			up.setId(WebUtil.getInt(request, "up_id"));
 			up.setName(WebUtil.getString(request, "up_name"));
 			up.setActive(WebUtil.getBoolean(request, "up_active"));
-			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
-			up.setUserQuotaLimit(WebUtil.getLong(request, "up_user_quota_limit"));
-			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
+			up.setUserQuota(WebUtil.getLong(request, "up_user_quota"));
+			up.setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
+			up.setWizardPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
 			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
 			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
 			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
@@ -153,9 +153,9 @@ public class UserProfileServlet extends BaseServlet {
 			up.setId(WebUtil.getInt(request, "up_id"));
 			up.setName(WebUtil.getString(request, "up_name"));
 			up.setActive(WebUtil.getBoolean(request, "up_active"));
-			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
-			up.setUserQuotaLimit(WebUtil.getLong(request, "up_user_quota_limit"));
-			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
+			up.setUserQuota(WebUtil.getLong(request, "up_user_quota"));
+			up.setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
+			up.setWizardPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
 			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
 			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
 			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));

@@ -34,7 +34,6 @@ import com.openkm.api.OKMPropertyGroup;
 import com.openkm.bean.PropertyGroup;
 import com.openkm.bean.form.FormElement;
 import com.openkm.core.AccessDeniedException;
-import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
@@ -72,8 +71,6 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
-				log.debug("Group: "+group);
-				
 				groupList.add(group);
 			}
 		} catch (RepositoryException e) {
@@ -103,8 +100,6 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
-				log.debug("Group: {}", group);
-				
 				groupList.add(group);
 			}
 			
@@ -112,7 +107,6 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			if (!actualGroupsList.isEmpty()) {
 				for (Iterator<GWTPropertyGroup> it = actualGroupsList.iterator(); it.hasNext();) {	
 					GWTPropertyGroup group = it.next();
-					log.debug("Removing Group: {}", group);
 					
 					for (Iterator<GWTPropertyGroup> itGroupList = groupList.iterator(); itGroupList.hasNext();) {
 						GWTPropertyGroup groupListElement = itGroupList.next();
@@ -185,8 +179,6 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
 				GWTPropertyGroup group = Util.copy(it.next());
-				log.debug("Group: {}", group);
-
 				groupList.add(group);
 			}
 		} catch (PathNotFoundException e) {
@@ -337,25 +329,5 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 		}
 		
 		log.debug("removeGroup: void");
-	}
-	
-	@Override
-	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException {
-		List<GWTPropertyGroup> allPropertyGroupList = getAllGroups();
-		List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
-		updateSessionManager();
-		
-		for (int i=0; i<Config.WIZARD_PROPERTY_GROUPS.length; i++) {
-			String propertyGroup = Config.WIZARD_PROPERTY_GROUPS[i];
-			for (Iterator<GWTPropertyGroup> it = allPropertyGroupList.iterator(); it.hasNext();) {
-				GWTPropertyGroup gWTPropertyGroup = it.next();
-				if (gWTPropertyGroup.getName().equals(propertyGroup)) {
-					wizardPropertyGroupsList.add(gWTPropertyGroup);
-					break;
-				}
-			}
-		}
-		
-		return wizardPropertyGroupsList;
 	}
 }

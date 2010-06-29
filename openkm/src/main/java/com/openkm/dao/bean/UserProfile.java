@@ -29,9 +29,8 @@ public class UserProfile implements Serializable {
 	private String name;
 	private boolean active;
 	private boolean advancedFilters;
-	private long userQuotaLimit;
-	private boolean userQuotaEnabled;
-	private boolean wizardPropertyGroups;
+	private long userQuota;
+	private String wizardPropertyGroups;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
 	private boolean chatEnabled;
@@ -87,27 +86,19 @@ public class UserProfile implements Serializable {
 		this.advancedFilters = advancedFilters;
 	}
 
-	public long getUserQuotaLimit() {
-		return userQuotaLimit;
+	public long getUserQuota() {
+		return userQuota;
 	}
 
-	public void setUserQuotaLimit(long userQuotaLimit) {
-		this.userQuotaLimit = userQuotaLimit;
+	public void setUserQuota(long userQuota) {
+		this.userQuota= userQuota;
 	}
 
-	public boolean isUserQuotaEnabled() {
-		return userQuotaEnabled;
-	}
-
-	public void setUserQuotaEnabled(boolean userQuotaEnabled) {
-		this.userQuotaEnabled = userQuotaEnabled;
-	}
-
-	public boolean isWizardPropertyGroups() {
+	public String getWizardPropertyGroups() {
 		return wizardPropertyGroups;
 	}
 
-	public void setWizardPropertyGroups(boolean wizardPropertyGroups) {
+	public void setWizardPropertyGroups(String wizardPropertyGroups) {
 		this.wizardPropertyGroups = wizardPropertyGroups;
 	}
 
@@ -293,8 +284,7 @@ public class UserProfile implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", active="); sb.append(active);
-		sb.append(", userQuotaLimit="); sb.append(userQuotaLimit);
-		sb.append(", userQuotaEnabled="); sb.append(userQuotaEnabled);
+		sb.append(", userQuota="); sb.append(userQuota);
 		sb.append(", wizardPropertyGroups="); sb.append(wizardPropertyGroups);
 		sb.append(", wizardKeywords="); sb.append(wizardKeywords);
 		sb.append(", wizardCategories="); sb.append(wizardCategories);

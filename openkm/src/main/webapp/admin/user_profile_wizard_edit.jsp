@@ -5,14 +5,7 @@
     <tr>
       <td>Property groups</td>
       <td>
-        <c:choose>
-          <c:when test="${up.wizardPropertyGroups}">
-            <input name="up_wizard_property_groups" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_wizard_property_groups" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
+        <input name="up_wizard_property_groups" size="32" value="${up.wizardPropertyGroups}"/>
       </td>
     </tr>
     <tr>

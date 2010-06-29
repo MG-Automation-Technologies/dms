@@ -28,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -131,11 +130,6 @@ public class Config {
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
 	public static final String PROPERTY_USER_KEYWORDS_CACHE = "user.keywords.cache";
 	public static final String PROPERTY_USER_SIZE_CACHE = "user.size.cache";
-	
-	// Wizard
-	public static final String PROPERTY_WIZARD_PROPERTY_GROUPS = "wizard.property.groups";
-	public static final String PROPERTY_WIZARD_KEYWORDS = "wizard.keywords";
-	public static final String PROPERTY_WIZARD_CATEGORIES = "wizard.categories";
 	
 	// Schedule
 	public static final String PROPERTY_SCHEDULE_REPOSITORY_INFO = "schedule.repository.info";
@@ -255,12 +249,6 @@ public class Config {
 	public static boolean USER_KEYWORDS_CACHE = "on".equalsIgnoreCase(USER_KEYWORDS_CACHE_STR);
 	private static String USER_SIZE_CACHE_STR = "off";
 	public static boolean USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
-	
-	// Wizard
-	private static String WIZARD_PROPERTY_GROUPS_STR = "";
-	public static String[] WIZARD_PROPERTY_GROUPS = WIZARD_PROPERTY_GROUPS_STR.split(",");
-	public static String WIZARD_KEYWORDS = "";
-	public static String WIZARD_CATEGORIES = "";
 	
 	// Schedule
 	private static String SCHEDULE_REPOSITORY_INFO_STR = "1440"; // 24*60 min = 24 hours
@@ -507,15 +495,6 @@ public class Config {
 			USER_SIZE_CACHE_STR = config.getProperty(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE_STR);
 			USER_SIZE_CACHE = "on".equalsIgnoreCase(USER_SIZE_CACHE_STR);
 			values.put(PROPERTY_USER_SIZE_CACHE, USER_SIZE_CACHE_STR+" ("+USER_SIZE_CACHE+")");
-			
-			// Wizard
-			WIZARD_PROPERTY_GROUPS_STR = config.getProperty(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS_STR);
-			WIZARD_PROPERTY_GROUPS = WIZARD_PROPERTY_GROUPS_STR.split(","); 
-			values.put(PROPERTY_WIZARD_PROPERTY_GROUPS, WIZARD_PROPERTY_GROUPS_STR+" ("+Arrays.toString(WIZARD_PROPERTY_GROUPS)+")");
-			WIZARD_KEYWORDS = config.getProperty(PROPERTY_WIZARD_KEYWORDS, WIZARD_KEYWORDS);
-			values.put(PROPERTY_WIZARD_KEYWORDS, WIZARD_KEYWORDS);
-			WIZARD_CATEGORIES = config.getProperty(PROPERTY_WIZARD_CATEGORIES, WIZARD_CATEGORIES);
-			values.put(PROPERTY_WIZARD_CATEGORIES, WIZARD_CATEGORIES);
 			
 			// Schedule
 			SCHEDULE_REPOSITORY_INFO_STR = config.getProperty(PROPERTY_SCHEDULE_REPOSITORY_INFO, SCHEDULE_REPOSITORY_INFO_STR);

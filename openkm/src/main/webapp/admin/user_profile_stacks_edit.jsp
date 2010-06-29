@@ -32,7 +32,7 @@
       <td>Templates visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackTemplatedVisible}">
+          <c:when test="${up.stackTemplatesVisible}">
             <input name="up_stack_templates_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>

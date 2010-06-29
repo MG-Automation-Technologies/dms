@@ -42,6 +42,5 @@ public interface OKMPropertyGroupService extends RemoteService {
 	public List<GWTFormElement> getProperties(String docPath, String grpName) throws OKMException;
 	public void setProperties(String docPath, String grpName, List<GWTFormElement> formProperties) throws OKMException;
 	public void removeGroup( String docPath, String grpName) throws OKMException;
-	public List<GWTPropertyGroup> getPropertyGroupWizard() throws OKMException;
 	public List<GWTFormElement> getPropertyGroupForm(String grpName) throws OKMException;
 }

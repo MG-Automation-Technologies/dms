@@ -253,7 +253,7 @@ public class DirectDocumentModule implements DocumentModule {
 		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 		UserItems ui = UserItemsManager.get(session.getUserID());
 		
-		if (uc.getProfile().isUserQuotaEnabled() && ui.getSize() + size > uc.getProfile().getUserQuotaLimit()) {
+		if (uc.getProfile().getUserQuota() > 0 && ui.getSize() + size > uc.getProfile().getUserQuota()) {
 			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
 		}
 		
