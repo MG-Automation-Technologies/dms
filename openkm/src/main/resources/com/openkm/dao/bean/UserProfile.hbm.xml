@@ -11,8 +11,8 @@
       <column name="UP_ADVANCED_FILTERS" default="false"/>
     </property>
     
-    <property name="userQuotaSize" not-null="true">
-      <column name="UP_USER_QUOTA_SIZE" default="0"/>
+    <property name="userQuotaLimit" not-null="true">
+      <column name="UP_USER_QUOTA_LIMIT" default="0"/>
     </property>
     <property name="userQuotaEnabled" not-null="true">
       <column name="UP_USER_QUOTA_ENABLED" default="false"/>
@@ -29,7 +29,7 @@
     </property>
     
     <property name="chatEnabled" not-null="true">
-      <column name="UP_CHAT_ENABLED" default="true"/>
+      <column name="UP_CHAT_ENABLED" default="false"/>
     </property>
     <property name="chatAutoLogin" not-null="true">
       <column name="UP_CHAT_AUTO_LOGIN" default="false"/>

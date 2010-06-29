@@ -126,7 +126,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
-
+	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
 	public static final String PROPERTY_DEFAULT_LANG = "default.lang";
@@ -173,11 +173,7 @@ public class Config {
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_UPPERCASE = "validator.password.error.max.uppercase";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "validator.password.error.min.digits";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "validator.password.error.min.special";
-	
-	// Chat
-	public static final String PROPERTY_CHAT_ENABLED = "chat.enabled";
-	public static final String PROPERTY_CHAT_AUTOLOGIN = "chat.autologin";
-	
+
 	/**
 	 *  Default values
 	 */
@@ -597,14 +593,6 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS, VALIDATOR_PASSWORD_ERROR_MIN_DIGITS);
 			VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = config.getProperty(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
-			
-			// Chat
-			CHAT_ENABLED_STR = config.getProperty(PROPERTY_CHAT_ENABLED, CHAT_ENABLED_STR);
-			CHAT_ENABLED = "on".equalsIgnoreCase(CHAT_ENABLED_STR);
-			values.put(PROPERTY_CHAT_ENABLED, CHAT_ENABLED_STR+" ("+CHAT_ENABLED+")");
-			CHAT_AUTOLOGIN_STR = config.getProperty(PROPERTY_CHAT_AUTOLOGIN, CHAT_AUTOLOGIN_STR);
-			CHAT_AUTOLOGIN = "on".equalsIgnoreCase(CHAT_AUTOLOGIN_STR);
-			values.put(PROPERTY_CHAT_AUTOLOGIN, CHAT_AUTOLOGIN_STR+" ("+CHAT_AUTOLOGIN+")");
 			
 			fis.close();
 		} catch (FileNotFoundException e) {

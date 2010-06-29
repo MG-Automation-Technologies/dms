@@ -101,7 +101,7 @@ public class UserProfileServlet extends BaseServlet {
 			up.setName(WebUtil.getString(request, "up_name"));
 			up.setActive(WebUtil.getBoolean(request, "up_active"));
 			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
-			up.setUserQuotaSize(WebUtil.getLong(request, "up_user_quota_size"));
+			up.setUserQuotaLimit(WebUtil.getLong(request, "up_user_quota_limit"));
 			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
 			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
 			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
@@ -154,7 +154,7 @@ public class UserProfileServlet extends BaseServlet {
 			up.setName(WebUtil.getString(request, "up_name"));
 			up.setActive(WebUtil.getBoolean(request, "up_active"));
 			up.setUserQuotaEnabled(WebUtil.getBoolean(request, "up_user_quota_enabled"));
-			up.setUserQuotaSize(WebUtil.getLong(request, "up_user_quota_size"));
+			up.setUserQuotaLimit(WebUtil.getLong(request, "up_user_quota_limit"));
 			up.setWizardPropertyGroups(WebUtil.getBoolean(request, "up_wizard_property_groups"));
 			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
 			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));

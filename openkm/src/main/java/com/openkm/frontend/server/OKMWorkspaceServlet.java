@@ -23,6 +23,9 @@ package com.openkm.frontend.server;
 
 import java.util.Iterator;
 
+import javax.jcr.LoginException;
+import javax.jcr.Session;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +35,17 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.AuthDAO;
 import com.openkm.dao.MailAccountDAO;
+import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.User;
+import com.openkm.dao.bean.UserConfig;
+import com.openkm.dao.bean.UserProfile;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
+import com.openkm.util.JCRUtils;
 import com.openkm.util.WarUtils;
 import com.openkm.validator.ValidatorException;
 import com.openkm.validator.ValidatorFactory;
@@ -79,46 +86,66 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setWizardCategories(!Config.WIZARD_CATEGORIES.equals(""));
 		workspace.setWizardKeywords(!Config.WIZARD_KEYWORDS.equals(""));
 		
-		// Is chat enabled and autologin
-		workspace.setChatEnabled(Config.CHAT_ENABLED);
-		workspace.setChatAutoLogin(Config.CHAT_AUTOLOGIN);
-		
 		// Schedule time
 		workspace.setKeepAliveSchedule(Config.SCHEDULE_SESSION_KEEPALIVE);
 		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
 		
+		UserProfile up = new UserProfile();
+		Session session = null;
+		
+		try {
+			session = JCRUtils.getSession();
+			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
+			up = uc.getProfile();
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException("###", e.getMessage());
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException("###", e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException("###", e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
 		// Advanced filters ( used when there a lot of users and groups )
 		workspace.setAdvancedFilters(true);
 		
+		// Is chat enabled and autologin
+		workspace.setChatEnabled(up.isChatEnabled());
+		workspace.setChatAutoLogin(up.isChatAutoLogin());
+		
 		// User quota ( limit user repository size )
-		workspace.setUserQuotaLimit(true);
-		workspace.setUserQuotaLimitSize(10*1048576); // 10*1048576 = 5MB
+		workspace.setUserQuotaEnabled(up.isUserQuotaEnabled());
+		workspace.setUserQuotaLimit(up.getUserQuotaLimit());
 		
 		// Stack visibility
-		workspace.setCategoriesStackVisible(true);
-		workspace.setThesaurusStackVisible(true);
-		workspace.setPersonalStackVisible(true);
-		workspace.setMailStackVisible(true);
+		workspace.setStackCategoriesVisible(up.isStackCategoriesVisible());
+		workspace.setStackThesaurusVisible(up.isStackThesaurusVisible());
+		workspace.setStackPersonalVisible(up.isStackPersonalVisible());
+		workspace.setStackMailVisible(up.isStackMailVisible());
 		
 		// Menus visibility
-		workspace.setEditMenuVisible(true);
-		workspace.setBookmarkMenuVisible(true);
-		workspace.setToolsMenuVisible(true);
-		workspace.setHelpMenuVisible(true);
+		workspace.setMenuEditVisible(up.isMenuEditVisible());
+		workspace.setMenuBookmarksVisible(up.isMenuBookmarksVisible());
+		workspace.setMenuToolsVisible(up.isMenuToolsVisible());
+		workspace.setMenuHelpVisible(up.isMenuHelpVisible());
 		
 		// Tab visibility
-		workspace.setDesktopTabVisible(true);
-		workspace.setSearchTabVisible(true);
-		workspace.setDashboardTabVisible(true);
-		workspace.setAdmin(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+		workspace.setTabDesktopVisible(up.isTabDesktopVisible());
+		workspace.setTabSearchVisible(up.isTabSearchVisible());
+		workspace.setTabDashboardVisible(up.isTabDashboardVisible());
+		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Dashboard visibility
-		workspace.setDashboardUserVisible(true);
-		workspace.setDashboardMailVisible(true);
-		workspace.setDashboardNewsVisible(true);
-		workspace.setDashboardGeneralVisible(true);
-		workspace.setDashboardWorkflowVisible(true);
-		workspace.setDashboardKeywordsVisible(true);
+		workspace.setDashboardUserVisible(up.isDashboardUserVisible());
+		workspace.setDashboardMailVisible(up.isDashboardMailVisible());
+		workspace.setDashboardNewsVisible(up.isDashboardNewsVisible());
+		workspace.setDashboardGeneralVisible(up.isDashboardGeneralVisible());
+		workspace.setDashboardWorkflowVisible(up.isDashboardWorkflowVisible());
+		workspace.setDashboardKeywordsVisible(up.isDashboardKeywordsVisible());
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();

@@ -84,15 +84,15 @@ public class WorkspaceUserProperties {
 			workspace = result;
 			user = result.getUser();
 			applicationURL = result.getApplicationURL();
-			Main.get().mainPanel.bottomPanel.userInfo.setUser(user, result.isAdmin());
+			Main.get().mainPanel.bottomPanel.userInfo.setUser(user, result.isTabAdminVisible());
 			if (result.isChatEnabled()) {
 				Main.get().mainPanel.bottomPanel.userInfo.enableChat();
 				if (result.isChatAutoLogin()) {
 					Main.get().mainPanel.bottomPanel.userInfo.loginChat();
 				}
 			}
-			if (result.isUserQuotaLimit() && workspace.getUserQuotaLimitSize()>0) {
-				Main.get().mainPanel.bottomPanel.userInfo.enableUserQuota(workspace.getUserQuotaLimitSize());
+			if (result.isUserQuotaEnabled() && result.getUserQuotaLimit() > 0) {
+				Main.get().mainPanel.bottomPanel.userInfo.enableUserQuota(workspace.getUserQuotaLimit());
 			}
 			Main.get().aboutPopup.setAppVersion(result.getAppVersion());
 			getUserDocumentsSize(); // Refreshing user document size ( here is yet set userQuota limit )
@@ -109,29 +109,29 @@ public class WorkspaceUserProperties {
 			}
 			
 			// Show / hide menus
-			Main.get().mainPanel.topPanel.mainMenu.setEditMenuVisible(workspace.isEditMenuVisible());
-			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isToolsMenuVisible());
-			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isBookmarkMenuVisible());
-			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isHelpMenuVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setEditMenuVisible(workspace.isMenuEditVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isMenuToolsVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isMenuBookmarksVisible());
+			Main.get().mainPanel.topPanel.mainMenu.setHelpMenuVisible(workspace.isMenuHelpVisible());
 			
 			// Enabling / disabling some actions
 			Main.get().mainPanel.topPanel.toolBar.setAvailableOption(workspace.getAvailableOption());
 			
 			// Showing tabs
 			boolean refreshTab = false;
-			if (workspace.isDesktopTabVisible()) {
+			if (workspace.isTabDesktopVisible()) {
 				Main.get().mainPanel.topPanel.tabWorkspace.showDesktop();
 				refreshTab = true;
 			}
-			if (workspace.isSearchTabVisible()) {
+			if (workspace.isTabSearchVisible()) {
 				Main.get().mainPanel.topPanel.tabWorkspace.showSearh();
 				refreshTab = true;
 			}
-			if (workspace.isDashboardTabVisible()) {
+			if (workspace.isTabDashboardVisible()) {
 				Main.get().mainPanel.topPanel.tabWorkspace.showDashboard();
 				refreshTab = true;
 			}
-			if (result.isAdmin()) {
+			if (result.isTabAdminVisible()) {
 				Main.get().mainPanel.topPanel.mainMenu.administration.setVisible(true);
 				Main.get().mainPanel.topPanel.tabWorkspace.showAdministration();
 				refreshTab = true;
@@ -144,15 +144,15 @@ public class WorkspaceUserProperties {
 			
 			// showing stack
 			boolean refreshStack = false;
-			if (workspace.isCategoriesStackVisible()) {
+			if (workspace.isStackCategoriesVisible()) {
 				Main.get().mainPanel.desktop.navigator.showCategories();
 				refreshStack = true;
 			}
-			if (workspace.isThesaurusStackVisible()) {
+			if (workspace.isStackThesaurusVisible()) {
 				Main.get().mainPanel.desktop.navigator.showThesaurus();
 				refreshStack = true;
 			}
-			if (workspace.isPersonalStackVisible()) {
+			if (workspace.isStackPersonalVisible()) {
 				Main.get().mainPanel.desktop.navigator.showPersonal();
 				Main.get().mainPanel.desktop.navigator.taxonomyTree.folderSelectPopup.showPersonal();
 				Main.get().mainPanel.desktop.navigator.categoriesTree.folderSelectPopup.showPersonal();
@@ -165,7 +165,7 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.search.searchBrowser.searchIn.showPersonal();
 				refreshStack = true;
 			}
-			if (workspace.isMailStackVisible()) {
+			if (workspace.isStackMailVisible()) {
 				Main.get().mainPanel.desktop.navigator.showMail();
 				Main.get().mainPanel.desktop.navigator.taxonomyTree.folderSelectPopup.showMail();
 				Main.get().mainPanel.desktop.navigator.categoriesTree.folderSelectPopup.showMail();
