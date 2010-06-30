@@ -18,18 +18,20 @@ namespace OpenKMWordAddIn
     public class AddinModule : AddinExpress.MSO.ADXAddinModule
     {
         private ImageToolBar imageToolBar;
+        private ImageLargeToolbar imageLargeToolBar;
         private OpenkMAddIn openkmAddIn;
         private CommandBarOption commandBarOption = null;
         private AddinExpress.MSO.ADXRibbonTab ribbonTab;
         private AddinExpress.MSO.ADXRibbonGroup ribbonGroup;
-        private AddinExpress.MSO.ADXRibbonBox RibbonBox;
-        private AddinExpress.MSO.ADXRibbonMenu ribbonMenu;
+        private AddinExpress.MSO.ADXRibbonBox ribbonBox;
         private AddinExpress.MSO.ADXRibbonButton configurationRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton addRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton editRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton checkinRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton cancelCheckoutRibbonButton;
         private AddinExpress.MSO.ADXRibbonButton helpRibbonButton;
+        private AddinExpress.MSO.ADXRibbonSplitButton ribbonSplitButton;
+        private AddinExpress.MSO.ADXRibbonMenu ribbonMenu;
         private ComponentResourceManager resources = new ComponentResourceManager(typeof(AddinModule));
 
         public AddinModule()
@@ -39,6 +41,7 @@ namespace OpenKMWordAddIn
             // Please add any initialization code to the AddinInitialize event handler
             commandBarOption = new CommandBarOption();
             imageToolBar = new ImageToolBar();
+            imageLargeToolBar = new ImageLargeToolbar();
             openkmAddIn = new OpenkMAddIn();
 
             // Buttons
@@ -51,7 +54,7 @@ namespace OpenKMWordAddIn
             this.addButton.Image = ImageToolBar.IMG_TOOLBAR_ADD;
             this.editButton.Image = ImageToolBar.IMG_TOOLBAR_EDIT;
             this.checkinButton.Image = ImageToolBar.IMG_TOOLBAR_CHECKIN;
-            this.cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT;
+            this.cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT;
             this.addButton.ImageTransparentColor = Color.Black;
             this.editButton.ImageTransparentColor = Color.Black;
             this.checkinButton.ImageTransparentColor = Color.Black;
@@ -85,16 +88,20 @@ namespace OpenKMWordAddIn
             this.editRibbonButton.ImageList = imageToolBar.get();
             this.checkinRibbonButton.ImageList = imageToolBar.get();
             this.cancelCheckoutRibbonButton.ImageList = imageToolBar.get();
+            imageLargeToolBar.get().ImageSize = new Size(32, 32);
+            this.ribbonSplitButton.ImageList = imageLargeToolBar.get();
             this.configurationRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_OPENKM;
             this.addRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_ADD;
             this.editRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_EDIT;
             this.checkinRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CHECKIN;
-            this.cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT;
-            this.configurationRibbonButton.ImageTransparentColor = Color.Black;
+            this.cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT;
+            this.ribbonSplitButton.Image = ImageLargeToolbar.IMG_TOOLBAR_LOGO;
+            this.configurationRibbonButton.ImageTransparentColor = Color.White;
             this.addRibbonButton.ImageTransparentColor = Color.Black;
             this.editRibbonButton.ImageTransparentColor = Color.Black;
             this.checkinRibbonButton.ImageTransparentColor = Color.Black;
             this.cancelCheckoutRibbonButton.ImageTransparentColor = Color.Black;
+            this.ribbonSplitButton.ImageTransparentColor = Color.White;
             // Internationalization
             this.configurationRibbonButton.Caption = resources.GetString("configuration");
             this.addRibbonButton.Caption = resources.GetString("add");
@@ -249,7 +256,8 @@ namespace OpenKMWordAddIn
             this.adxWordEvents = new AddinExpress.MSO.ADXWordAppEvents(this.components);
             this.ribbonTab = new AddinExpress.MSO.ADXRibbonTab(this.components);
             this.ribbonGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
-            this.RibbonBox = new AddinExpress.MSO.ADXRibbonBox(this.components);
+            this.ribbonBox = new AddinExpress.MSO.ADXRibbonBox(this.components);
+            this.ribbonSplitButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
             this.ribbonMenu = new AddinExpress.MSO.ADXRibbonMenu(this.components);
             this.configurationRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
             this.addRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -335,31 +343,36 @@ namespace OpenKMWordAddIn
             // ribbonGroup
             // 
             this.ribbonGroup.Caption = "OpenKM tools";
-            this.ribbonGroup.Controls.Add(this.RibbonBox);
+            this.ribbonGroup.Controls.Add(this.ribbonBox);
             this.ribbonGroup.Id = "adxRibbonGroup_5ccf1332a1c4437d8775f2a045fdb10a";
             this.ribbonGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.ribbonGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrWordDocument;
             // 
-            // RibbonBox
+            // ribbonBox
             // 
-            this.RibbonBox.Controls.Add(this.ribbonMenu);
-            this.RibbonBox.Id = "adxRibbonBox_488573399981470b89b0404d005365fa";
-            this.RibbonBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrWordDocument;
+            this.ribbonBox.Controls.Add(this.ribbonSplitButton);
+            this.ribbonBox.Id = "adxRibbonBox_488573399981470b89b0404d005365fa";
+            this.ribbonBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrWordDocument;
+            // 
+            // ribbonSplitButton
+            // 
+            this.ribbonSplitButton.Controls.Add(this.ribbonMenu);
+            this.ribbonSplitButton.Id = "adxRibbonSplitButton_fd8ed0f7957e470d98ab0938222fb823";
+            this.ribbonSplitButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.ribbonSplitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrWordDocument;
+            this.ribbonSplitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
             // 
             // ribbonMenu
             // 
-            this.ribbonMenu.Caption = "Menu";
             this.ribbonMenu.Controls.Add(this.configurationRibbonButton);
             this.ribbonMenu.Controls.Add(this.addRibbonButton);
             this.ribbonMenu.Controls.Add(this.editRibbonButton);
             this.ribbonMenu.Controls.Add(this.checkinRibbonButton);
             this.ribbonMenu.Controls.Add(this.cancelCheckoutRibbonButton);
             this.ribbonMenu.Controls.Add(this.helpRibbonButton);
-            this.ribbonMenu.Id = "adxRibbonMenu_1ffccb664d4f4f34b03b49a4b15d3844";
+            this.ribbonMenu.Id = "adxRibbonMenu_a94f8c0efc504284bcd5fb337db7bbed";
             this.ribbonMenu.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.ribbonMenu.ItemSize = AddinExpress.MSO.ADXRibbonXItemSize.Large;
             this.ribbonMenu.Ribbons = AddinExpress.MSO.ADXRibbons.msrWordDocument;
-            this.ribbonMenu.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
             // 
             // configurationRibbonButton
             // 
@@ -527,14 +540,14 @@ namespace OpenKMWordAddIn
                 // Evaluate cancelcheckin icon
                 if (commandBarOption.isCancelCheckin())
                 {
-                    cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT;
-                    cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT;
+                    cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT;
+                    cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT;
                     cancelCheckoutRibbonButton.Enabled = true;
                 }
                 else
                 {
-                    cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT_DISABLED;
-                    cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHEKCOUT_DISABLED;
+                    cancelCheckoutButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT_DISABLED;
+                    cancelCheckoutRibbonButton.Image = ImageToolBar.IMG_TOOLBAR_CANCELCHECKOUT_DISABLED;
                     cancelCheckoutRibbonButton.Enabled = false;
                 }
             }
