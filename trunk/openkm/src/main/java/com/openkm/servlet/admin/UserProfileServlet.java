@@ -96,35 +96,7 @@ public class UserProfileServlet extends BaseServlet {
 		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			UserProfile up = new UserProfile();
-			up.setId(WebUtil.getInt(request, "up_id"));
-			up.setName(WebUtil.getString(request, "up_name"));
-			up.setActive(WebUtil.getBoolean(request, "up_active"));
-			up.setUserQuota(WebUtil.getLong(request, "up_user_quota"));
-			up.setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
-			up.setWizardPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
-			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
-			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
-			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
-			up.setChatAutoLogin(WebUtil.getBoolean(request, "up_chat_auto_login"));
-			up.setStackCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
-			up.setStackThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
-			up.setStackPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
-			up.setStackMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
-			up.setMenuEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
-			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
-			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
-			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
-			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
-			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
-			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
-			up.setDashboardUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
-			up.setDashboardMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
-			up.setDashboardNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
-			up.setDashboardGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
-			up.setDashboardWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
-			up.setDashboardKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
-			
+			UserProfile up = getUserProfile(request);
 			UserProfileDAO.create(up);
 			
 			// Activity log
@@ -149,35 +121,7 @@ public class UserProfileServlet extends BaseServlet {
 		log.debug("edit({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
-			UserProfile up = new UserProfile();
-			up.setId(WebUtil.getInt(request, "up_id"));
-			up.setName(WebUtil.getString(request, "up_name"));
-			up.setActive(WebUtil.getBoolean(request, "up_active"));
-			up.setUserQuota(WebUtil.getLong(request, "up_user_quota"));
-			up.setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
-			up.setWizardPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
-			up.setWizardKeywords(WebUtil.getBoolean(request, "up_wizard_keywords"));
-			up.setWizardCategories(WebUtil.getBoolean(request, "up_wizard_categories"));
-			up.setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
-			up.setChatAutoLogin(WebUtil.getBoolean(request, "up_chat_auto_login"));
-			up.setStackCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
-			up.setStackThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
-			up.setStackPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
-			up.setStackMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
-			up.setMenuEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
-			up.setMenuToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
-			up.setMenuBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
-			up.setMenuHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
-			up.setTabDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
-			up.setTabSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
-			up.setTabDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
-			up.setDashboardUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
-			up.setDashboardMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
-			up.setDashboardNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
-			up.setDashboardGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
-			up.setDashboardWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
-			up.setDashboardKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
-			
+			UserProfile up = getUserProfile(request);
 			UserProfileDAO.update(up);
 			
 			// Activity log
@@ -193,7 +137,7 @@ public class UserProfileServlet extends BaseServlet {
 		
 		log.debug("edit: void");
 	}
-	
+
 	/**
 	 * Update user
 	 */
@@ -229,5 +173,42 @@ public class UserProfileServlet extends BaseServlet {
 		sc.setAttribute("userProfiles", UserProfileDAO.findAll(false));
 		sc.getRequestDispatcher("/admin/user_profile_list.jsp").forward(request, response);
 		log.debug("list: void");
+	}
+	
+	/**
+	 * Fille user profile object
+	 */
+	private UserProfile getUserProfile(HttpServletRequest request) {
+		UserProfile up = new UserProfile();
+		
+		up.setId(WebUtil.getInt(request, "up_id"));
+		up.setName(WebUtil.getString(request, "up_name"));
+		up.setActive(WebUtil.getBoolean(request, "up_active"));
+		up.getMisc().setUserQuota(WebUtil.getLong(request, "up_user_quota"));
+		up.getMisc().setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
+		up.getWizard().setPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
+		up.getWizard().setKeywordsEnabled(WebUtil.getBoolean(request, "up_wizard_keywords"));
+		up.getWizard().setCategoriesEnabled(WebUtil.getBoolean(request, "up_wizard_categories"));
+		up.getChat().setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
+		up.getChat().setAutoLoginEnabled(WebUtil.getBoolean(request, "up_chat_auto_login"));
+		up.getStack().setCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
+		up.getStack().setThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
+		up.getStack().setPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
+		up.getStack().setMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
+		up.getMenu().setEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
+		up.getMenu().setToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
+		up.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
+		up.getMenu().setHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
+		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
+		up.getTab().setSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
+		up.getTab().setDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
+		up.getDashboard().setUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
+		up.getDashboard().setMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
+		up.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
+		up.getDashboard().setGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
+		up.getDashboard().setWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
+		up.getDashboard().setKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
+		
+		return up;
 	}
 }

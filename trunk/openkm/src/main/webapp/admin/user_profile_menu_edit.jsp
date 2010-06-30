@@ -6,7 +6,7 @@
       <td>Edit visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menuEditVisible}">
+          <c:when test="${up.menu.editVisible}">
             <input name="up_menu_edit_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -19,7 +19,7 @@
       <td>Tools visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menuToolsVisible}">
+          <c:when test="${up.menu.toolsVisible}">
             <input name="up_menu_tools_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -32,7 +32,7 @@
       <td>Bookmark visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menuBookmarksVisible}">
+          <c:when test="${up.menu.bookmarksVisible}">
             <input name="up_menu_bookmarks_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -45,7 +45,7 @@
       <td>Help visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menuHelpVisible}">
+          <c:when test="${up.menu.helpVisible}">
             <input name="up_menu_help_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>

@@ -8,6 +8,8 @@
     <property name="user" column="ACT_USER" not-null="true"/>
     <property name="action" column="ACT_ACTION" not-null="true"/>
     <property name="item" column="ACT_ITEM" length="512"/>
-    <property name="params" column="ACT_PARAMS" length="1024"/>
+    <property name="params">
+      <column name="ACT_PARAMS" sql-type="text"/>
+    </property>
   </class>
 </hibernate-mapping>

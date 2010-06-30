@@ -6,88 +6,185 @@
     <id name="id" column="UP_ID"><generator class="native"/></id>
     <property name="name" column="UP_NAME" not-null="true"/>
     <property name="active" column="UP_ACTIVE" not-null="true"/>
+
+    <!-- MISC -->
+    <component name="misc" class="com.openkm.dao.bean.UserProfileMisc">
+      <property name="advancedFilters" not-null="true">
+        <column name="UP_MISC_ADVANCED_FILTERS" default="false"/>
+      </property>
+      <property name="userQuota" not-null="true">
+        <column name="UP_MISC_USER_QUOTA" default="0"/>
+      </property>
+    </component>
     
-    <property name="advancedFilters" not-null="true">
-      <column name="UP_ADVANCED_FILTERS" default="false"/>
-    </property>
+    <!-- CHAT -->
+    <component name="chat" class="com.openkm.dao.bean.UserProfileChat">
+      <property name="chatEnabled" not-null="true">
+        <column name="UP_CHAT_CHAT_ENABLED" default="false"/>
+      </property>
+      <property name="autoLoginEnabled" not-null="true">
+        <column name="UP_CHAT_AUTO_LOGIN_ENABLED" default="false"/>
+      </property>
+    </component>
     
-    <property name="userQuota" not-null="true">
-      <column name="UP_USER_QUOTA" default="0"/>
-    </property>
+    <!-- WIZARD -->
+    <component name="wizard" class="com.openkm.dao.bean.UserProfileWizard">
+      <property name="propertyGroups" not-null="true">
+        <column name="UP_WIZARD_PROPERTY_GROUPS" default="''"/>
+      </property>
+      <property name="keywordsEnabled" not-null="true">
+        <column name="UP_WIZARD_KEYWORDS_ENABLED" default="false"/>
+      </property>
+      <property name="categoriesEnabled" not-null="true">
+        <column name="UP_WIZARD_CATEGORIES_ENABLED" default="false"/>
+      </property>
+    </component>
     
-    <property name="wizardPropertyGroups" not-null="true">
-      <column name="UP_WIZARD_PROPERTY_GROUPS" default="''"/>
-    </property>
-    <property name="wizardKeywords" not-null="true">
-      <column name="UP_WIZARD_KEYWORDS" default="false"/>
-    </property>
-    <property name="wizardCategories" not-null="true">
-      <column name="UP_WIZARD_CATEGORIES" default="false"/>
-    </property>
+    <!-- STACK -->
+    <component name="stack" class="com.openkm.dao.bean.UserProfileStack">
+      <property name="categoriesVisible" not-null="true">
+        <column name="UP_STACK_CATEGORIES_VISIBLE" default="true"/>
+      </property>
+      <property name="thesaurusVisible" not-null="true">
+        <column name="UP_STACK_THESAURUS_VISIBLE" default="true"/>
+      </property>
+      <property name="templatesVisible" not-null="true">
+        <column name="UP_STACK_TEMPLATES_VISIBLE" default="true"/>
+      </property>
+      <property name="personalVisible" not-null="true">
+        <column name="UP_STACK_PERSONAL_VISIBLE" default="true"/>
+      </property>
+      <property name="mailVisible" not-null="true">
+        <column name="UP_STACK_MAIL_VISIBLE" default="true"/>
+      </property>
+    </component>
     
-    <property name="chatEnabled" not-null="true">
-      <column name="UP_CHAT_ENABLED" default="false"/>
-    </property>
-    <property name="chatAutoLogin" not-null="true">
-      <column name="UP_CHAT_AUTO_LOGIN" default="false"/>
-    </property>
+    <!-- TAB -->
+    <component name="tab" class="com.openkm.dao.bean.UserProfileTab">
+      <property name="desktopVisible" not-null="true">
+        <column name="UP_TAB_DESKTOP_VISIBLE" default="true"/>
+      </property>
+      <property name="searchVisible" not-null="true">
+        <column name="UP_TAB_SEARCH_VISIBLE" default="true"/>
+      </property>
+      <property name="dashboardVisible" not-null="true">
+        <column name="UP_TAB_DASHBOARD_VISIBLE" default="true"/>
+      </property>
+    </component>
+  
+    <!-- DASHBOARD -->
+	<component name="dashboard" class="com.openkm.dao.bean.UserProfileDashboard">
+      <property name="userVisible" not-null="true">
+	    <column name="UP_DASHBOARD_USER_VISIBLE" default="true"/>
+	  </property>
+	  <property name="mailVisible" not-null="true">
+	    <column name="UP_DASHBOARD_MAIL_VISIBLE" default="true"/>
+	  </property>
+	  <property name="newsVisible" not-null="true">
+	    <column name="UP_DASHBOARD_NEWS_VISIBLE" default="true"/>
+	  </property>
+	  <property name="generalVisible" not-null="true">
+	    <column name="UP_DASHBOARD_GENERAL_VISIBLE" default="true"/>
+	  </property>
+	  <property name="workflowVisible" not-null="true">
+	    <column name="UP_DASHBOARD_WORKFLOW_VISIBLE" default="true"/>
+	  </property>
+	  <property name="keywordsVisible" not-null="true">
+	    <column name="UP_DASHBOARD_KEYWORDS_VISIBLE" default="true"/>
+	  </property>
+	</component>
+	
+	<!-- TOOLBAR -->
+	<component name="toolbar" class="com.openkm.dao.bean.UserProfileToolbar">
+	  <property name="createFolderVisible" not-null="true">
+	    <column name="UP_TOOLBAR_CREATE_FOLDER_VISIBLE" default="true"/>
+	  </property>
+	  <property name="findFolderVisible" not-null="true">
+	    <column name="UP_TOOLBAR_FIND_FOLDER_VISIBLE" default="true"/>
+	  </property>
+	  <property name="downloadVisible" not-null="true">
+	    <column name="UP_TOOLBAR_DOWNLOAD_VISIBLE" default="true"/>
+	  </property>
+	  <property name="downloadPdfVisible" not-null="true">
+	    <column name="UP_TOOLBAR_DOWNLOAD_PDF_VISIBLE" default="true"/>
+	  </property>
+	  <property name="lockVisible" not-null="true">
+	    <column name="UP_TOOLBAR_LOCK_VISIBLE" default="true"/>
+	  </property>
+	  <property name="unLockVisible" not-null="true">
+	    <column name="UP_TOOLBAR_UNLOCK_VISIBLE" default="true"/>
+	  </property>
+	  <property name="addDocumentVisible" not-null="true">
+	    <column name="UP_TOOLBAR_ADD_DOCUMENT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="checkInVisible" not-null="true">
+	    <column name="UP_TOOLBAR_CHECK_IN_VISIBLE" default="true"/>
+	  </property>
+	  <property name="checkOutVisible" not-null="true">
+	    <column name="UP_TOOLBAR_CHECK_OUT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="cancelCheckOutVisible" not-null="true">
+	    <column name="UP_TOOLBAR_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="deleteVisible" not-null="true">
+	    <column name="UP_TOOLBAR_DELETE_VISIBLE" default="true"/>
+	  </property>
+	  <property name="addPropertyGroupVisible" not-null="true">
+	    <column name="UP_TOOLBAR_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
+	  </property>
+	  <property name="removePropertyGroupVisible" not-null="true">
+	    <column name="UP_TOOLBAR_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
+	  </property>
+	  <property name="startWorkflowVisible" not-null="true">
+	    <column name="UP_TOOLBAR_START_WORKFLOW_VISIBLE" default="true"/>
+	  </property>
+	  <property name="addSubscriptionVisible" not-null="true">
+	    <column name="UP_TOOLBAR_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
+	  </property>
+	  <property name="removeSubscriptionVisible" not-null="true">
+	    <column name="UP_TOOLBAR_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
+	  </property>
+	  <property name="refreshVisible" not-null="true">
+	    <column name="UP_TOOLBAR_REFRESH_VISIBLE" default="true"/>
+	  </property>
+	  <property name="homeVisible" not-null="true">
+	    <column name="UP_TOOLBAR_HOME_VISIBLE" default="true"/>
+	  </property>
+	  <property name="scannerVisible" not-null="true">
+	    <column name="UP_TOOLBAR_SCANNER_VISIBLE" default="true"/>
+	  </property>
+	  <property name="uploaderVisible" not-null="true">
+	    <column name="UP_TOOLBAR_UPLOADER_VISIBLE" default="true"/>
+	  </property>
+	  <property name="renameVisible" not-null="true">
+	    <column name="UP_TOOLBAR_RENAME_VISIBLE" default="true"/>
+	  </property>
+	  <property name="copyVisible" not-null="true">
+	    <column name="UP_TOOLBAR_COPY_VISIBLE" default="true"/>
+	  </property>
+	  <property name="moveVisible" not-null="true">
+	    <column name="UP_TOOLBAR_MOVE_VISIBLE" default="true"/>
+	  </property>
+	  <property name="addBookmarkVisible" not-null="true">
+	    <column name="UP_TOOLBAR_ADD_BOOKMARK_VISIBLE" default="true"/>
+	  </property>
+    </component>
+	
+	<!-- MENU -->
+	<component name="menu" class="com.openkm.dao.bean.UserProfileMenu">
+      <property name="editVisible" not-null="true">
+        <column name="UP_MENU_EDIT_VISIBLE" default="true"/>
+      </property>
+      <property name="toolsVisible" not-null="true">
+        <column name="UP_MENU_TOOLS_VISIBLE" default="true"/>
+      </property>
+      <property name="bookmarksVisible" not-null="true">
+        <column name="UP_MENU_BOOKMARKS_VISIBLE" default="true"/>
+      </property>
+      <property name="helpVisible" not-null="true">
+        <column name="UP_MENU_HELP_VISIBLE" default="true"/>
+      </property>
+    </component>
     
-    <property name="stackCategoriesVisible" not-null="true">
-      <column name="UP_STACK_CATEGORIES_VISIBLE" default="true"/>
-    </property>
-    <property name="stackThesaurusVisible" not-null="true">
-      <column name="UP_STACK_THESAURUS_VISIBLE" default="true"/>
-    </property>
-    <property name="stackTemplatesVisible" not-null="true">
-      <column name="UP_STACK_TEMPLATES_VISIBLE" default="true"/>
-    </property>
-    <property name="stackPersonalVisible" not-null="true">
-      <column name="UP_STACK_PERSONAL_VISIBLE" default="true"/>
-    </property>
-    <property name="stackMailVisible" not-null="true">
-      <column name="UP_STACK_MAIL_VISIBLE" default="true"/>
-    </property>
-    
-    <property name="menuEditVisible" not-null="true">
-      <column name="UP_MENU_EDIT_VISIBLE" default="true"/>
-    </property>
-    <property name="menuToolsVisible" not-null="true">
-      <column name="UP_MENU_TOOLS_VISIBLE" default="true"/>
-    </property>
-    <property name="menuBookmarksVisible" not-null="true">
-      <column name="UP_MENU_BOOKMARKS_VISIBLE" default="true"/>
-    </property>
-    <property name="menuHelpVisible" not-null="true">
-      <column name="UP_MENU_HELP_VISIBLE" default="true"/>
-    </property>
-    
-    <property name="tabDesktopVisible" not-null="true">
-      <column name="UP_TAB_DESKTOP_VISIBLE" default="true"/>
-    </property>
-    <property name="tabSearchVisible" not-null="true">
-      <column name="UP_TAB_SEARCH_VISIBLE" default="true"/>
-    </property>
-    <property name="tabDashboardVisible" not-null="true">
-      <column name="UP_TAB_DASHBOARD_VISIBLE" default="true"/>
-    </property>
-    
-    <property name="dashboardUserVisible" not-null="true">
-      <column name="UP_DASHBOARD_USER_VISIBLE" default="true"/>
-    </property>
-    <property name="dashboardMailVisible" not-null="true">
-      <column name="UP_DASHBOARD_MAIL_VISIBLE" default="true"/>
-    </property>
-    <property name="dashboardNewsVisible" not-null="true">
-      <column name="UP_DASHBOARD_NEWS_VISIBLE" default="true"/>
-    </property>
-    <property name="dashboardGeneralVisible" not-null="true">
-      <column name="UP_DASHBOARD_GENERAL_VISIBLE" default="true"/>
-    </property>
-    <property name="dashboardWorkflowVisible" not-null="true">
-      <column name="UP_DASHBOARD_WORKFLOW_VISIBLE" default="true"/>
-    </property>
-    <property name="dashboardKeywordsVisible" not-null="true">
-      <column name="UP_DASHBOARD_KEYWORDS_VISIBLE" default="true"/>
-    </property>
   </class>
 </hibernate-mapping>

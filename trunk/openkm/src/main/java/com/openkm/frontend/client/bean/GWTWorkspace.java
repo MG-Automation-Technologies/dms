@@ -21,6 +21,7 @@
 
 package com.openkm.frontend.client.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -58,7 +59,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean chatAutoLogin;
 	private long userQuotaLimit;
 	private boolean userQuotaEnabled;
-	private List<GWTPropertyGroup> wizardPropertyGroupsList;
+	private List<GWTPropertyGroup> wizardPropertyGroupsList = new ArrayList<GWTPropertyGroup>();
 	private boolean wizardPropertyGroups;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;

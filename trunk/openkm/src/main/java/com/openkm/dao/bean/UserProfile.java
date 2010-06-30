@@ -28,31 +28,14 @@ public class UserProfile implements Serializable {
 	private int id;
 	private String name;
 	private boolean active;
-	private boolean advancedFilters;
-	private long userQuota;
-	private String wizardPropertyGroups;
-	private boolean wizardKeywords;
-	private boolean wizardCategories;
-	private boolean chatEnabled;
-	private boolean chatAutoLogin;
-	private boolean stackCategoriesVisible;
-	private boolean stackThesaurusVisible;
-	private boolean stackTemplatesVisible;
-	private boolean stackPersonalVisible;
-	private boolean stackMailVisible;
-	private boolean menuEditVisible;
-	private boolean menuToolsVisible;
-	private boolean menuBookmarksVisible;
-	private boolean menuHelpVisible;
-	private boolean tabDesktopVisible;
-	private boolean tabSearchVisible;
-	private boolean tabDashboardVisible;
-	private boolean dashboardUserVisible;
-	private boolean dashboardMailVisible;
-	private boolean dashboardNewsVisible;
-	private boolean dashboardGeneralVisible;
-	private boolean dashboardWorkflowVisible;
-	private boolean dashboardKeywordsVisible;
+	private UserProfileChat chat = new UserProfileChat();
+	private UserProfileDashboard dashboard = new UserProfileDashboard();
+	private UserProfileMenu menu = new UserProfileMenu();
+	private UserProfileMisc misc = new UserProfileMisc();
+	private UserProfileStack stack = new UserProfileStack();
+	private UserProfileTab tab = new UserProfileTab();
+	private UserProfileToolbar toolbar = new UserProfileToolbar();
+	private UserProfileWizard wizard = new UserProfileWizard();
 
 	public int getId() {
 		return id;
@@ -77,205 +60,69 @@ public class UserProfile implements Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
-	public boolean isAdvancedFilters() {
-		return advancedFilters;
+
+	public UserProfileChat getChat() {
+		return chat;
 	}
 
-	public void setAdvancedFilters(boolean advancedFilters) {
-		this.advancedFilters = advancedFilters;
+	public void setChat(UserProfileChat chat) {
+		this.chat = chat;
 	}
 
-	public long getUserQuota() {
-		return userQuota;
+	public UserProfileDashboard getDashboard() {
+		return dashboard;
 	}
 
-	public void setUserQuota(long userQuota) {
-		this.userQuota= userQuota;
+	public void setDashboard(UserProfileDashboard dashboard) {
+		this.dashboard = dashboard;
 	}
 
-	public String getWizardPropertyGroups() {
-		return wizardPropertyGroups;
+	public UserProfileMenu getMenu() {
+		return menu;
 	}
 
-	public void setWizardPropertyGroups(String wizardPropertyGroups) {
-		this.wizardPropertyGroups = wizardPropertyGroups;
+	public void setMenu(UserProfileMenu menu) {
+		this.menu = menu;
 	}
 
-	public boolean isWizardKeywords() {
-		return wizardKeywords;
+	public UserProfileMisc getMisc() {
+		return misc;
 	}
 
-	public void setWizardKeywords(boolean wizardKeywords) {
-		this.wizardKeywords = wizardKeywords;
+	public void setMisc(UserProfileMisc misc) {
+		this.misc = misc;
 	}
 
-	public boolean isWizardCategories() {
-		return wizardCategories;
+	public UserProfileStack getStack() {
+		return stack;
 	}
 
-	public void setWizardCategories(boolean wizardCategories) {
-		this.wizardCategories = wizardCategories;
+	public void setStack(UserProfileStack stack) {
+		this.stack = stack;
 	}
 
-	public boolean isChatEnabled() {
-		return chatEnabled;
+	public UserProfileTab getTab() {
+		return tab;
 	}
 
-	public void setChatEnabled(boolean chatEnabled) {
-		this.chatEnabled = chatEnabled;
+	public void setTab(UserProfileTab tab) {
+		this.tab = tab;
 	}
 
-	public boolean isChatAutoLogin() {
-		return chatAutoLogin;
+	public UserProfileToolbar getToolbar() {
+		return toolbar;
 	}
 
-	public void setChatAutoLogin(boolean chatAutoLogin) {
-		this.chatAutoLogin = chatAutoLogin;
+	public void setToolbar(UserProfileToolbar toolbar) {
+		this.toolbar = toolbar;
 	}
 
-	public boolean isStackCategoriesVisible() {
-		return stackCategoriesVisible;
+	public UserProfileWizard getWizard() {
+		return wizard;
 	}
 
-	public void setStackCategoriesVisible(boolean stackCategoriesVisible) {
-		this.stackCategoriesVisible = stackCategoriesVisible;
-	}
-
-	public boolean isStackThesaurusVisible() {
-		return stackThesaurusVisible;
-	}
-
-	public void setStackThesaurusVisible(boolean stackThesaurusVisible) {
-		this.stackThesaurusVisible = stackThesaurusVisible;
-	}
-	
-	public boolean isStackTemplatesVisible() {
-		return stackTemplatesVisible;
-	}
-
-	public void setStackTemplatesVisible(boolean stackTemplatesVisible) {
-		this.stackTemplatesVisible = stackTemplatesVisible;
-	}
-
-	public boolean isStackPersonalVisible() {
-		return stackPersonalVisible;
-	}
-
-	public void setStackPersonalVisible(boolean stackPersonalVisible) {
-		this.stackPersonalVisible = stackPersonalVisible;
-	}
-
-	public boolean isStackMailVisible() {
-		return stackMailVisible;
-	}
-
-	public void setStackMailVisible(boolean stackMailVisible) {
-		this.stackMailVisible = stackMailVisible;
-	}
-
-	public boolean isMenuEditVisible() {
-		return menuEditVisible;
-	}
-
-	public void setMenuEditVisible(boolean menuEditVisible) {
-		this.menuEditVisible = menuEditVisible;
-	}
-
-	public boolean isMenuToolsVisible() {
-		return menuToolsVisible;
-	}
-
-	public void setMenuToolsVisible(boolean menuToolsVisible) {
-		this.menuToolsVisible = menuToolsVisible;
-	}
-
-	public boolean isMenuBookmarksVisible() {
-		return menuBookmarksVisible;
-	}
-
-	public void setMenuBookmarksVisible(boolean menuBookmarksVisible) {
-		this.menuBookmarksVisible = menuBookmarksVisible;
-	}
-
-	public boolean isMenuHelpVisible() {
-		return menuHelpVisible;
-	}
-
-	public void setMenuHelpVisible(boolean menuHelpVisible) {
-		this.menuHelpVisible = menuHelpVisible;
-	}
-
-	public boolean isTabDesktopVisible() {
-		return tabDesktopVisible;
-	}
-
-	public void setTabDesktopVisible(boolean tabDesktopVisible) {
-		this.tabDesktopVisible = tabDesktopVisible;
-	}
-
-	public boolean isTabSearchVisible() {
-		return tabSearchVisible;
-	}
-
-	public void setTabSearchVisible(boolean tabSearchVisible) {
-		this.tabSearchVisible = tabSearchVisible;
-	}
-
-	public boolean isTabDashboardVisible() {
-		return tabDashboardVisible;
-	}
-
-	public void setTabDashboardVisible(boolean tabDashboardVisible) {
-		this.tabDashboardVisible = tabDashboardVisible;
-	}
-	
-	public boolean isDashboardUserVisible() {
-		return dashboardUserVisible;
-	}
-
-	public void setDashboardUserVisible(boolean dashboardUserVisible) {
-		this.dashboardUserVisible = dashboardUserVisible;
-	}
-
-	public boolean isDashboardMailVisible() {
-		return dashboardMailVisible;
-	}
-
-	public void setDashboardMailVisible(boolean dashboardMailVisible) {
-		this.dashboardMailVisible = dashboardMailVisible;
-	}
-
-	public boolean isDashboardNewsVisible() {
-		return dashboardNewsVisible;
-	}
-
-	public void setDashboardNewsVisible(boolean dashboardNewsVisible) {
-		this.dashboardNewsVisible = dashboardNewsVisible;
-	}
-
-	public boolean isDashboardGeneralVisible() {
-		return dashboardGeneralVisible;
-	}
-
-	public void setDashboardGeneralVisible(boolean dashboardGeneralVisible) {
-		this.dashboardGeneralVisible = dashboardGeneralVisible;
-	}
-
-	public boolean isDashboardWorkflowVisible() {
-		return dashboardWorkflowVisible;
-	}
-
-	public void setDashboardWorkflowVisible(boolean dashboardWorkflowVisible) {
-		this.dashboardWorkflowVisible = dashboardWorkflowVisible;
-	}
-
-	public boolean isDashboardKeywordsVisible() {
-		return dashboardKeywordsVisible;
-	}
-
-	public void setDashboardKeywordsVisible(boolean dashboardKeywordsVisible) {
-		this.dashboardKeywordsVisible = dashboardKeywordsVisible;
+	public void setWizard(UserProfileWizard wizard) {
+		this.wizard = wizard;
 	}
 	
 	public String toString() {
@@ -284,31 +131,14 @@ public class UserProfile implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", name="); sb.append(name);
 		sb.append(", active="); sb.append(active);
-		sb.append(", userQuota="); sb.append(userQuota);
-		sb.append(", wizardPropertyGroups="); sb.append(wizardPropertyGroups);
-		sb.append(", wizardKeywords="); sb.append(wizardKeywords);
-		sb.append(", wizardCategories="); sb.append(wizardCategories);
-		sb.append(", chatEnabled="); sb.append(chatEnabled);
-		sb.append(", chatAutoLogin="); sb.append(chatAutoLogin);
-		sb.append(", advancedFilters="); sb.append(advancedFilters);
-		sb.append(", stackCategoriesVisible="); sb.append(stackCategoriesVisible);
-		sb.append(", stackThesaurusVisible="); sb.append(stackThesaurusVisible);
-		sb.append(", stackTemplatesVisible="); sb.append(stackTemplatesVisible);
-		sb.append(", stackPersonalVisible="); sb.append(stackPersonalVisible);
-		sb.append(", stackMailVisible="); sb.append(stackMailVisible);
-		sb.append(", menuEditVisible="); sb.append(menuEditVisible);
-		sb.append(", menuToolsVisible="); sb.append(menuToolsVisible);
-		sb.append(", menuBookmarksVisible="); sb.append(menuBookmarksVisible);
-		sb.append(", menuHelpVisible="); sb.append(menuHelpVisible);
-		sb.append(", tabDesktopVisible="); sb.append(tabDesktopVisible);
-		sb.append(", tabSearchVisible="); sb.append(tabSearchVisible);
-		sb.append(", tabDashboardVisible="); sb.append(tabDashboardVisible);
-		sb.append(", dashboardUserVisible="); sb.append(dashboardUserVisible);
-		sb.append(", dashboardMailVisible="); sb.append(dashboardMailVisible);
-		sb.append(", dashboardNewsVisible="); sb.append(dashboardNewsVisible);
-		sb.append(", dashboardGeneralVisible="); sb.append(dashboardGeneralVisible);
-		sb.append(", dashboardWorkflowVisible="); sb.append(dashboardWorkflowVisible);
-		sb.append(", dashboardKeywordsVisible="); sb.append(dashboardKeywordsVisible);
+		sb.append(", chat="); sb.append(chat);
+		sb.append(", dashboard="); sb.append(dashboard);
+		sb.append(", menu="); sb.append(menu);
+		sb.append(", misc="); sb.append(misc);
+		sb.append(", stack="); sb.append(stack);
+		sb.append(", tab="); sb.append(tab);
+		sb.append(", toolbar="); sb.append(toolbar);
+		sb.append(", wizard="); sb.append(wizard);
 		sb.append("}");
 		return sb.toString();
 	}

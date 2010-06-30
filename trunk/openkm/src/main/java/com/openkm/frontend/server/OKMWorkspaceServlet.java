@@ -100,7 +100,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			session = JCRUtils.getSession();
 			UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 			up = uc.getProfile();
-			String[] wizardProperties = up.getWizardPropertyGroups().split(" ");
+			String[] wizardProperties = up.getWizard().getPropertyGroups().split(" ");
 			
 			for (int i=0; i<wizardProperties.length; i++) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups()) {
@@ -133,48 +133,48 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		}
 		
 		// Advanced filters ( used when there a lot of users and groups )
-		workspace.setAdvancedFilters(up.isAdvancedFilters());
+		workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
 		
 		// Is a wizard to uploading documents
-		workspace.setWizardPropertyGroups(!up.getWizardPropertyGroups().equals(""));
+		workspace.setWizardPropertyGroups(!up.getWizard().getPropertyGroups().equals(""));
 		workspace.setWizardPropertyGroupsList(wizardPropGrpLst);
-		workspace.setWizardCategories(up.isWizardCategories());
-		workspace.setWizardKeywords(up.isWizardKeywords());
+		workspace.setWizardCategories(up.getWizard().isCategoriesEnabled());
+		workspace.setWizardKeywords(up.getWizard().isKeywordsEnabled());
 		
 		// Is chat enabled and autologin
-		workspace.setChatEnabled(up.isChatEnabled());
-		workspace.setChatAutoLogin(up.isChatAutoLogin());
+		workspace.setChatEnabled(up.getChat().isChatEnabled());
+		workspace.setChatAutoLogin(up.getChat().isAutoLoginEnabled());
 		
 		// User quota ( limit user repository size )
-		workspace.setUserQuotaEnabled(up.getUserQuota() > 0);
-		workspace.setUserQuotaLimit(up.getUserQuota());
+		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
+		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
 		
 		// Stack visibility
-		workspace.setStackCategoriesVisible(up.isStackCategoriesVisible());
-		workspace.setStackThesaurusVisible(up.isStackThesaurusVisible());
-		workspace.setStackTemplatesVisible(up.isStackTemplatesVisible());
-		workspace.setStackPersonalVisible(up.isStackPersonalVisible());
-		workspace.setStackMailVisible(up.isStackMailVisible());
+		workspace.setStackCategoriesVisible(up.getStack().isCategoriesVisible());
+		workspace.setStackThesaurusVisible(up.getStack().isThesaurusVisible());
+		workspace.setStackTemplatesVisible(up.getStack().isTemplatesVisible());
+		workspace.setStackPersonalVisible(up.getStack().isPersonalVisible());
+		workspace.setStackMailVisible(up.getStack().isMailVisible());
 		
 		// Menus visibility
-		workspace.setMenuEditVisible(up.isMenuEditVisible());
-		workspace.setMenuBookmarksVisible(up.isMenuBookmarksVisible());
-		workspace.setMenuToolsVisible(up.isMenuToolsVisible());
-		workspace.setMenuHelpVisible(up.isMenuHelpVisible());
+		workspace.setMenuEditVisible(up.getMenu().isEditVisible());
+		workspace.setMenuBookmarksVisible(up.getMenu().isBookmarksVisible());
+		workspace.setMenuToolsVisible(up.getMenu().isToolsVisible());
+		workspace.setMenuHelpVisible(up.getMenu().isHelpVisible());
 		
 		// Tab visibility
-		workspace.setTabDesktopVisible(up.isTabDesktopVisible());
-		workspace.setTabSearchVisible(up.isTabSearchVisible());
-		workspace.setTabDashboardVisible(up.isTabDashboardVisible());
+		workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
+		workspace.setTabSearchVisible(up.getTab().isSearchVisible());
+		workspace.setTabDashboardVisible(up.getTab().isDashboardVisible());
 		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Dashboard visibility
-		workspace.setDashboardUserVisible(up.isDashboardUserVisible());
-		workspace.setDashboardMailVisible(up.isDashboardMailVisible());
-		workspace.setDashboardNewsVisible(up.isDashboardNewsVisible());
-		workspace.setDashboardGeneralVisible(up.isDashboardGeneralVisible());
-		workspace.setDashboardWorkflowVisible(up.isDashboardWorkflowVisible());
-		workspace.setDashboardKeywordsVisible(up.isDashboardKeywordsVisible());
+		workspace.setDashboardUserVisible(up.getDashboard().isUserVisible());
+		workspace.setDashboardMailVisible(up.getDashboard().isMailVisible());
+		workspace.setDashboardNewsVisible(up.getDashboard().isNewsVisible());
+		workspace.setDashboardGeneralVisible(up.getDashboard().isGeneralVisible());
+		workspace.setDashboardWorkflowVisible(up.getDashboard().isWorkflowVisible());
+		workspace.setDashboardKeywordsVisible(up.getDashboard().isKeywordsVisible());
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();

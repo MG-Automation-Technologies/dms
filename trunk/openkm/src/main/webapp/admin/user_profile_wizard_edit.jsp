@@ -5,14 +5,14 @@
     <tr>
       <td>Property groups</td>
       <td>
-        <input name="up_wizard_property_groups" size="32" value="${up.wizardPropertyGroups}"/>
+        <input name="up_wizard_property_groups" size="32" value="${up.wizard.propertyGroups}"/>
       </td>
     </tr>
     <tr>
       <td>Keywords</td>
       <td>
         <c:choose>
-          <c:when test="${up.wizardKeywords}">
+          <c:when test="${up.wizard.keywordsEnabled}">
             <input name="up_wizard_keywords" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -25,7 +25,7 @@
       <td>Categories</td>
       <td>
         <c:choose>
-          <c:when test="${up.wizardCategories}">
+          <c:when test="${up.wizard.categoriesEnabled}">
             <input name="up_wizard_categories" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
