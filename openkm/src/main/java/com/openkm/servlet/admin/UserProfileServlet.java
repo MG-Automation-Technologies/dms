@@ -193,6 +193,7 @@ public class UserProfileServlet extends BaseServlet {
 		up.getChat().setAutoLoginEnabled(WebUtil.getBoolean(request, "up_chat_auto_login"));
 		up.getStack().setCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
 		up.getStack().setThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
+		up.getStack().setTemplatesVisible(WebUtil.getBoolean(request, "up_stack_templates_visible"));
 		up.getStack().setPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
 		up.getStack().setMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
 		up.getMenu().setEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
