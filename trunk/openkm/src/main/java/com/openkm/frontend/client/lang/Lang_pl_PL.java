@@ -47,13 +47,13 @@ public class Lang_pl_PL {
 	    lang.put("startup.openkm", "Trwa ładowanie OpenKM");
 	    lang.put("startup.starting.loading", "Rozpoczynam ładowanie OpenKM");
 	    lang.put("startup.taxonomy", "Pobieranie korzenia repozytorium");
-	    lang.put("startup.categories", "Getting categories root node");
-	    lang.put("startup.thesaurus", "Getting thesaurus root node");
+	    lang.put("startup.categories", "Pobieranie korzenia kategorii");
+	    lang.put("startup.thesaurus", "Pobieranie korzenia tezaurusa");
 	    lang.put("startup.template", "Pobieranie korzenia repozytorium szablonów");
 	    lang.put("startup.personal", "Pobieranie korzenia repozytorium osobistego");
-	    lang.put("startup.mail", "Getting e-mail root node");
+	    lang.put("startup.mail", "Pobieranie korzenia poczty");
 	    lang.put("startup.trash", "Pobieranie korzenia śmietnika");
-	    lang.put("startup.user.home", "Pobieranie foldera domowego");
+	    lang.put("startup.user.home", "Pobieranie folderu domowego");
 	    lang.put("startup.bookmarks", "Pobieranie zakładek");
 	    lang.put("startup.loading.taxonomy", "Ładowanie repozytorium");
 	    lang.put("startup.loading.taxonomy.getting.folders", "Ładowanie repozytorium - pobieranie folderów");
@@ -61,11 +61,11 @@ public class Lang_pl_PL {
 	    lang.put("startup.loading.taxonomy.open.path", "Ładowanie repozytorium - otwieranie ścieżki");
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "Ładowanie repozytorium - pobieranie folderów");
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "Ładowanie repozytorium - pobieranie dokumentów");
-	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
+	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "LŁadowanie repozytorium - pobieranie poczty");
 	    lang.put("startup.loading.personal", "Ładowanie ustawień");
-	    lang.put("startup.loading.mail", "Loading e-mails");
-	    lang.put("startup.loading.categories", "Loading categories");
-	    lang.put("startup.loading.thesaurus", "Loading thesaurus");
+	    lang.put("startup.loading.mail", "Ładowanie poczty");
+	    lang.put("startup.loading.categories", "Ładowanie kategorii");
+	    lang.put("startup.loading.thesaurus", "Ładowanie tezaurusa");
 	    lang.put("startup.loading.templates", "Ładowanie szablonów");
 	    lang.put("startup.loading.trash", "Ładowanie śmietnika");
 	    lang.put("startup.loading.history.search", "Ładowanie historii wyszukiwania");
@@ -78,14 +78,14 @@ public class Lang_pl_PL {
 	    // Left Panel
 	    lang.put("leftpanel.label.taxonomy", "Repozytorium");
 	    lang.put("leftpanel.label.trash", "Śmietnik");
-	    lang.put("leftpanel.label.mail", "E-mail");
+	    lang.put("leftpanel.label.mail", "Poczta");
 	    lang.put("leftpanel.label.stored.search", "Zapamiętane wyszukiwanie");
-	    lang.put("leftpanel.label.categories", "Categories");
-	    lang.put("leftpanel.label.thesaurus", "Thesaurus");
+	    lang.put("leftpanel.label.categories", "Kategoria");
+	    lang.put("leftpanel.label.thesaurus", "Tezaurus");
 	    lang.put("leftpanel.label.templates", "Szablony");
 	    lang.put("leftpanel.label.my.documents", "Moje dokumenty");
 	    lang.put("leftpanel.label.user.search", "Nowości");
-	    lang.put("leftpanel.label.all.repository", "All repository");
+	    lang.put("leftpanel.label.all.repository", "Całe repozytorium");
 	    
 	    // Tree
 	    lang.put("tree.menu.directory.create", "Utwórz folder");
@@ -109,10 +109,10 @@ public class Lang_pl_PL {
 	    lang.put("tree.status.refresh.add.subscription", "Dodawanie subskrypcji");
 	    lang.put("tree.status.refresh.remove.subscription", "Usuwanie subskrypcji");
 	    lang.put("tree.status.refresh.get.root", "Odświeżanie korzenia folderów");
-	    lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
+	    lang.put("tree.status.refresh.get.keywords", "Odświeżanie słów kluczowych");
 	    lang.put("tree.status.refresh.get.user.home", "Pobieranie zawartości katalogu domowego");
 	    lang.put("tree.status.refresh.purge.trash", "Opróżnianie śmietnika");
-	    lang.put("tree.menu.directory.find.folder","Find folder");
+	    lang.put("tree.menu.directory.find.folder","Znajdź folder");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Przywróć");
@@ -129,7 +129,7 @@ public class Lang_pl_PL {
 			lang.put("general.menu.file.download.document", "Pobierz dokument");
 			lang.put("general.menu.file.download.document.pdf", "Pobierz dokument jako PDF");
 			lang.put("general.menu.file.send.link", "Wyślij link do dokumentu");
-			lang.put("general.menu.file.send.attachment", "Send document attachment");
+			lang.put("general.menu.file.send.attachment", "Wyślij załącznik");
 			lang.put("general.menu.file.lock", "Zablokuj");
 			lang.put("general.menu.file.unlock", "Odblokuj");
 			lang.put("general.menu.file.add.document", "Dodaj dokument");
@@ -138,8 +138,8 @@ public class Lang_pl_PL {
 			lang.put("general.menu.file.cancel.checkout", "Anuluj wyciągnięcie");
 			lang.put("general.menu.file.delete", "Usuń");
 			lang.put("general.menu.file.refresh", "Odśwież");
-			lang.put("general.menu.file.scanner", "Scanner");
-			lang.put("general.menu.file.uploader", "File uploader");
+			lang.put("general.menu.file.scanner", "Skaner");
+			lang.put("general.menu.file.uploader", "Przesyłanie plików");
 	    lang.put("general.menu.tools", "Narzędzia");
 	    	lang.put("general.menu.tools.languages", "Języki");
 	    	lang.put("general.menu.tools.skin", "Skórka");
@@ -147,11 +147,11 @@ public class Lang_pl_PL {
     			lang.put("general.menu.tools.skin.default2", "Domyślna 2");
     			lang.put("general.menu.tools.skin.mediumfont", "Średnia czcionka");
     			lang.put("general.menu.tools.skin.bigfont", "Duża czcionka");
-    		lang.put("general.menu.debug.console", "Konsola debug");
+    		lang.put("general.menu.debug.console", "Konsola debugowania");
     		lang.put("general.menu.administration", "Pokaż panel administracyjny");
-    		lang.put("general.menu.tools.preferences", "Preferences");
-    			lang.put("general.menu.tools.user.preferences", "User configuration");
-    	lang.put("general.menu.bookmark", "Zakłądki");
+    		lang.put("general.menu.tools.preferences", "Preferencje");
+    			lang.put("general.menu.tools.user.preferences", "Konfiguracja użytkownia");
+    	lang.put("general.menu.bookmark", "Zakładki");
 	    	lang.put("general.menu.bookmark.home", "Folder domowy");
 	    	lang.put("general.menu.bookmark.default.home", "Ustaw domyślny folder domowy");
 	    	lang.put("general.menu.bookmark.edit", "Edycja zakładek");
@@ -195,12 +195,12 @@ public class Lang_pl_PL {
 	    lang.put("filebrowser.menu.play", "Uruchom");
 	    lang.put("filebrowser.menu.image.viewer", "Przeglądarka obrazów");
 	    lang.put("filebrowser.status.refresh.folder", "Aktualizacja listy folderów");
-	    lang.put("filebrowser.status.refresh.document", "Aktualizacji listy dokumentów");
-	    lang.put("filebrowser.status.refresh.mail", "Updating mail list");
+	    lang.put("filebrowser.status.refresh.document", "Aktualizacja listy dokumentów");
+	    lang.put("filebrowser.status.refresh.mail", "Aktualizacja listy wiadomości");
 	    lang.put("filebrowser.status.refresh.delete.folder", "Usuwanie folderu");
 	    lang.put("filebrowser.status.refresh.delete.document", "Usuwanie dokumentu");
 	    lang.put("filebrowser.status.refresh.checkout", "Wyciąganie dokumentu");
-	    lang.put("filebrowser.status.refresh.lock", "Blokowani dokumentu");
+	    lang.put("filebrowser.status.refresh.lock", "Blokowanie dokumentu");
 	    lang.put("filebrowser.status.refresh.unlock", "Odblokowywanie dokumentu");
 	    lang.put("filebrowser.status.refresh.document.rename", "Zmiana nazwy dokumentu");
 	    lang.put("filebrowser.status.refresh.folder.rename", "Zmiana nazwy folderu");
@@ -211,13 +211,13 @@ public class Lang_pl_PL {
 	    lang.put("filebrowser.status.refresh.add.subscription", "Dodawanie subskrypcji");
 	    lang.put("filebrowser.status.refresh.remove.subscription", "Usuwanie subskrypcji");
 	    lang.put("filebrowser.status.refresh.get.user.home", "Pobieranie katalogu domowego");
-	    lang.put("filebrowser.status.refresh.delete.mail", "Deleting mail");
-	    lang.put("filebrowser.status.refresh.mail.purge", "Deleting mail");
+	    lang.put("filebrowser.status.refresh.delete.mail", "Usuwanie wiadomości");
+	    lang.put("filebrowser.status.refresh.mail.purge", "Usuwanie wiadomości");
 	    
 	    // File Upload
 	    lang.put("fileupload.send", "Wyślij");
 	    lang.put("fileupload.status.sending", "Ładowanie pliku...");
-	    lang.put("fileupload.status.indexing", "Indexing file...");
+	    lang.put("fileupload.status.indexing", "Indeksowanie pliku...");
 	    lang.put("fileupload.status.ok", "Plik został poprawnie załadowany");
 	    lang.put("fileupload.upload.status", "Status ładowania");
 	    lang.put("fileupload.upload.uploaded", "Załadowany");
@@ -227,11 +227,11 @@ public class Lang_pl_PL {
 	    lang.put("fileupload.button.close", "Zamknij");
 	    lang.put("fileupload.button.add.other.file", "Dodaj kolejny plik");
 	    lang.put("fileupload.status.move.file", "Przenoszenie pliku...");
-	    lang.put("fileupload.status.move.mail", "Moving mail...");
+	    lang.put("fileupload.status.move.mail", "Przenoszenie wiadomości...");
 	    lang.put("fileupload.status.copy.file", "Kopiowanie pliku...");
-	    lang.put("fileupload.status.copy.mail", "Coping mail...");
+	    lang.put("fileupload.status.copy.mail", "Kopiowanie wiadomości...");
 	    lang.put("fileupload.status.restore.file", "Przywracanie pliku...");
-	    lang.put("fileupload.status.restore.mail", "Restoring mail...");
+	    lang.put("fileupload.status.restore.mail", "Przeywracanie wiadoomości...");
 	    lang.put("fileupload.status.move.folder", "Przenoszenie folderu...");
 	    lang.put("fileupload.status.copy.folder", "Kopiowanie folderu...");
 	    lang.put("fileupload.status.restore.folder", "Przywracanie folderu...");
@@ -243,18 +243,18 @@ public class Lang_pl_PL {
 	    lang.put("fileupload.label.comment", "Skomentuj");
 	    lang.put("fileupload.label.users.to.notify",  "Informowani użytkownicy");
 	    lang.put("fileupload.label.users",  "Użytkownicy");
-	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
-	    lang.put("fileupload.label.groups","Groups");
+	    lang.put("fileupload.label.groups.to.notify","Informowane grupy");
+	    lang.put("fileupload.label.groups","Groupy");
 	    lang.put("fileupload.label.must.select.users",  "Musisz wybrać użytkowników do powiadomienia");
 	    lang.put("fileupload.label.importZip", "Importuj dokumenty z archiwum ZIP");
 	    lang.put("fileupload.label.notify.comment", "Wiadomość");
 	    lang.put("fileupload.label.error.importing.zip", "Błąd importowania pliku");
 	    lang.put("fileupload.label.error.move.file", "Błąd przenoszenia pliku");
-	    lang.put("fileupload.label.error.move.mail", "Error moving mail");
+	    lang.put("fileupload.label.error.move.mail", "Błąd przenoszenia wiadomości");
 	    lang.put("fileupload.label.error.copy.file", "Błąd kopiowania pliku");
-	    lang.put("fileupload.label.error.copy.mail", "Error coping mail");
+	    lang.put("fileupload.label.error.copy.mail", "Błąd kopiowania wiadomości");
 	    lang.put("fileupload.label.error.restore.file", "Błąd przywracania pliku");
-	    lang.put("fileupload.label.error.restore.mail", "Error restoring mail");
+	    lang.put("fileupload.label.error.restore.mail", "Błąd przywracania wiadomości");
 	    lang.put("fileupload.label.error.move.folder", "Błąd przenoszenia folderu");
 	    lang.put("fileupload.label.error.copy.folder", "Błąd kopiowania folderu");
 	    lang.put("fileupload.label.error.restore.folder", "Błąd przywracania folderu");
@@ -272,12 +272,12 @@ public class Lang_pl_PL {
 	    lang.put("tab.status.security.user", "Aktualizacja uprawnień użytkowników");
 	    lang.put("tab.document.status.group.properties", "Aktualizacja grup właściwości");
 	    lang.put("tab.document.status.set.keywords", "Tworzenie słów kluczowych");
-	    lang.put("tab.document.status.set.categories", "Updating categories");
+	    lang.put("tab.document.status.set.categories", "Aktualizowanie kategorii");
 	    lang.put("tab.document.status.get.version.history.size", "Odświeżanie historii dokumentu");
 	    lang.put("tab.document.status.purge.version.history", "Kompresja historii dokumentu");
 	    lang.put("tab.document.status.restore.version", "Przywracanie historii dokumentu");
 	    lang.put("tab.document.security", "Uprawnienia");
-	    lang.put("tab.document.preview", "Preview");
+	    lang.put("tab.document.preview", "Podgląd");
 	    lang.put("tab.folder.properties", "Właściwości");
 	    lang.put("tab.folder.security", "Uprawnienia");
 	    
@@ -293,7 +293,7 @@ public class Lang_pl_PL {
 	    lang.put("document.folder", "Folder");
 	    lang.put("document.size", "Wielkość");
 	    lang.put("document.created", "Utworzono");
-	    lang.put("document.lastmodified", "ZModyfikowano");
+	    lang.put("document.lastmodified", "Zmodyfikowano");
 	    lang.put("document.mimetype", "Typ dokumentu");
 	    lang.put("document.keywords", "Słowa kluczowe");
 	    lang.put("document.by", "przez");
@@ -309,8 +309,8 @@ public class Lang_pl_PL {
 	    lang.put("document.url", "URL");
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "Dodaj notatkę");
-	    lang.put("document.keywords.cloud", "Keywords cloud");
-	    lang.put("document.categories", "Categories");
+	    lang.put("document.keywords.cloud", "Chmura słów kluczowych");
+	    lang.put("document.categories", "Kategorie");
 	    
 	    // Folder
 	    lang.put("folder.uuid", "UUID");
@@ -324,9 +324,9 @@ public class Lang_pl_PL {
 	    lang.put("folder.subscribed.users", "Subskrybujący użytkownicy");
 	    lang.put("folder.url", "URL");
 	    lang.put("folder.webdav", "WebDAV");
-	    lang.put("folder.number.folders", "Folders");
-	    lang.put("folder.number.documents", "Documents");
-	    lang.put("folder.number.mails", "Mails");
+	    lang.put("folder.number.folders", "Foldery");
+	    lang.put("folder.number.documents", "Dokumenty");
+	    lang.put("folder.number.mails", "Wiadomości");
 	    
 	    // Version
 	    lang.put("version.name", "Wersja");
@@ -341,29 +341,29 @@ public class Lang_pl_PL {
 	    lang.put("security.group.name", "Grupa");
 	    lang.put("security.group.permission.read", "Odczyt");
 	    lang.put("security.group.permission.write", "Zapis");
-	    lang.put("security.group.permission.delete", "Delete");
-	    lang.put("security.group.permission.security", "Security");
+	    lang.put("security.group.permission.delete", "Usunięcie");
+	    lang.put("security.group.permission.security", "Zabezpieczenia");
 	    lang.put("security.user.name", "Użytkownik");
 	    lang.put("security.user.permission.read", "Odczyt");
 	    lang.put("security.user.permission.write", "Zapis");
-	    lang.put("security.user.permission.delete", "Delete");
+	    lang.put("security.user.permission.delete", "Usunięcie");
 	    lang.put("security.user.permission.security", "Security");
 	    lang.put("security.users", "Użytkownik");
 	    lang.put("security.groups", "Grupy");
 	    lang.put("security.recursive", "Dziedziczenie uprawnień");
-	    lang.put("secutiry.filter.by.users","Users filter");
-	    lang.put("secutiry.filter.by.groups","Groups filter");
-	    lang.put("security.status.updating","Updating security");
+	    lang.put("secutiry.filter.by.users","Filtr użytkowników");
+	    lang.put("secutiry.filter.by.groups","Filtr grup");
+	    lang.put("security.status.updating","Aktualizowanie zabezpieczeń");
 	    
 	    // Preview
-	    lang.put("preview.unavailable", "Preview unavailable");
+	    lang.put("preview.unavailable", "Podgląd niedostępny");
 
 	    // Mail
-	    lang.put("mail.from", "From");
-	    lang.put("mail.reply", "Reply to");
-	    lang.put("mail.to", "To");
-	    lang.put("mail.subject", "Subject");
-	    lang.put("mail.attachment", "Attachments");
+	    lang.put("mail.from", "Od");
+	    lang.put("mail.reply", "Odpowiedź do");
+	    lang.put("mail.to", "Do");
+	    lang.put("mail.subject", "Temat");
+	    lang.put("mail.attachment", "Załączniki");
 	    
 	    // Error
 	    lang.put("error.label", "Wystąpił błąd");
@@ -391,25 +391,25 @@ public class Lang_pl_PL {
 	    lang.put("confirm.set.default.home", "Czy na pewno chcesz ustawić domyślny folder domowy?");
 	    lang.put("confirm.delete.saved.search", "Czy na pewno chcesz usunąć zapisane wyniki wyszukiwania?");
 	    lang.put("confirm.delete.user.news", "Czy na pewno chcesz usunąć nowości?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
+	    lang.put("confirm.delete.mail", "¿ Czy na pewno chcesz usunąć wiadomości ?");
+	    lang.put("confirm.get.pooled.workflow.task","¿ Czy chcesz przypisać to zadanie do siebie ?");
 	    
 	    // Search inputs
-	    lang.put("search.context", "Kontext");
-	    lang.put("search.content", "Kontent");
+	    lang.put("search.context", "Kontekst");
+	    lang.put("search.content", "Zawartość");
 	    lang.put("search.name", "Nazwa");
 	    lang.put("search.keywords", "Słowa kluczowe");
 	    lang.put("search.folder", "Folder");
-	    lang.put("search.category", "Category");
+	    lang.put("search.category", "Kategoria");
 	    lang.put("search.results", "Wyniki");
 	    lang.put("search.to", "dla");
 	    lang.put("search.page.results", "Stronnicowane wyniki");
 	    lang.put("search.add.property.group", "Dodaj grupę właściwości");
 	    lang.put("search.mimetype", "Typ");
-	    lang.put("search.type", "Type");
-	    lang.put("search.type.document", "Document");
+	    lang.put("search.type", "Typ");
+	    lang.put("search.type.document", "Dokument");
 	    lang.put("search.type.folder", "Folder");
-	    lang.put("search.type.mail", "Mail");
+	    lang.put("search.type.mail", "Wiadomość");
 	    lang.put("search.advanced", "Wyszukiwanie zaawansowane");
 	    lang.put("search.user", "Użytkownik");
 	    lang.put("search.date.and", "i");
@@ -417,8 +417,8 @@ public class Lang_pl_PL {
 	    lang.put("search.save.as.news", "Zapisz nowości");
 
 	    // search folder filter popup
-	    lang.put("search.folder.filter", "Filter by folder");
-	    lang.put("search.category.filter", "Filter by category");
+	    lang.put("search.folder.filter", "Filtruj wg folderu");
+	    lang.put("search.category.filter", "Filtruj wg kategorii");
 	    
 	    // Search results
 	    lang.put("search.result.name", "Nazwa");
@@ -430,7 +430,7 @@ public class Lang_pl_PL {
 	    lang.put("search.result.path", "Ścieżka");
 	    lang.put("search.result.menu.download", "Pobierz");
 	    lang.put("search.result.menu.go.folder", "Idź do folderu");
-	    lang.put("search.result.menu.go.document", "Go to document");
+	    lang.put("search.result.menu.go.document", "Idź do dokumentu");
 	    lang.put("search.result.status.findPaginated", "Aktualizacja wyszukiwania");
 	    lang.put("search.result.status.runsearch", "Aktualizacja zapisanych wyników wyszukiwania");
 	    
@@ -463,9 +463,9 @@ public class Lang_pl_PL {
 	    lang.put("button.memory", "Aktualizuj");
 	    lang.put("button.copy.clipboard", "Skopiuj do schowka");	
 	    lang.put("button.start", "Start");
-	    lang.put("button.select", "Select");
+	    lang.put("button.select", "Wybierz");
 	    lang.put("button.test", "Test");
-	    lang.put("button.next", "Next");
+	    lang.put("button.next", "Następny");
 	    
 	    // Group
 	    lang.put("group.label", "Dodaj grupę właściwości");
@@ -482,8 +482,8 @@ public class Lang_pl_PL {
 	    lang.put("bookmark.type.folder", "Folder");
 	    
 	    // Notify
-	    lang.put("notify.label", "Wysyłanie linka do dokumentu");
-	    lang.put("notify.label.attachment", "Send document attachment");
+	    lang.put("notify.label", "Wysyłanie skrótu do dokumentu");
+	    lang.put("notify.label.attachment", "Wysyłanie dokumentu jako ząłącznika");
 	    
 	    // Status
 	    lang.put("status.document.copied", "Dokument oznaczony do skopiowania");
@@ -491,9 +491,9 @@ public class Lang_pl_PL {
 	    lang.put("status.folder.copied", "Folder oznaczony do skopiowania");
 	    lang.put("status.folder.cut", "Folder oznaczony do wycięcia");
 	    lang.put("status.keep.alive.error", "Wykryto zerwanie połączenia z serwerem (mechanizm utrzymywania połączenia)");
-	    lang.put("status.debug.enabled", "Debug włączony");
-	    lang.put("status.debug.disabled", "Debug wyłączony");
-	    lang.put("status.network.error.detected", "Network error detected");
+	    lang.put("status.debug.enabled", "Debugowanie włączone");
+	    lang.put("status.debug.disabled", "Debugowanie wyłączone");
+	    lang.put("status.network.error.detected", "Wykryto błąd sieci");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "Niedziela");
@@ -520,28 +520,28 @@ public class Lang_pl_PL {
 	    lang.put("media.player.label", "Odtwarzacz");
 	    
 	    // Image viewer
-	    lang.put("image.viewer.label", "Przeglądarka obraów");
+	    lang.put("image.viewer.label", "Przeglądarka obrazów");
 	    lang.put("image.viewer.zoom.in", "Przybliż");
 	    lang.put("image.viewer.zoom.out", "Oddal");
 	    
 	    // Debug console
-	    lang.put("debug.console.label", "Konsola debug");
-	    lang.put("debug.enable.disable", "Naciśnij CTRL+Z aby aktywować trzyb debug");
+	    lang.put("debug.console.label", "Konsola debugowania");
+	    lang.put("debug.enable.disable", "Naciśnij CTRL+Z aby aktywować tryb debugowania");
 
 	    // Dashboard tab
 	    lang.put("dashboard.tab.general", "Główne");
 	    lang.put("dashboard.tab.news", "Nowości");
 	    lang.put("dashboard.tab.user", "Użytkownik");
 	    lang.put("dashboard.tab.workflow", "Obieg dokumentu");
-	    lang.put("dashboard.tab.mail", "Mail");
-	    lang.put("dashboard.tab.keymap", "Keyword map");
+	    lang.put("dashboard.tab.mail", "Poczta");
+	    lang.put("dashboard.tab.keymap", "Mapa słów kluczowych");
 	    
 	    // Dahboard general
 	    lang.put("dashboard.new.items", "Nowe");
 	    lang.put("dashboard.user.locked.documents", "Zablokowane dokumenty");
 	    lang.put("dashboard.user.checkout.documents", "Wyciągnięte i zablokowane");
 	    lang.put("dashboard.user.last.modified.documents", "Ostatnio zmodyfikowane");
-	    lang.put("dashboard.user.last.downloaded.documents", "Last downloaded documents");
+	    lang.put("dashboard.user.last.downloaded.documents", "Ostatnio pobrane dokumenty");
 	    lang.put("dashboard.user.subscribed.documents", "Zasybskrybowane dokumenty");
 	    lang.put("dashboard.user.subscribed.folders", "Zasubskrybowane foldery");
 	    lang.put("dashboard.user.last.uploaded.documents", "Ostatnio załadowane dokumenty");
@@ -551,7 +551,7 @@ public class Lang_pl_PL {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "Najczęściej modyfikowane w ostatnim miesiącu");
 	    lang.put("dashboard.general.last.uploaded.documents", "Ostatnio załadowane dokumenty");
 	    lang.put("dashboard.workflow.pending.tasks", "Zadania oczekujące");
-	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Nieprzypisane zadania oczekujące");
 	    lang.put("dashboard.workflow.task", "Zadanie");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "Nazwa");
@@ -566,78 +566,78 @@ public class Lang_pl_PL {
 	    lang.put("dashboard.workflow.task.process.name", "Nazwa");
 	    lang.put("dashboard.workflow.task.process.description", "Opis");
 	    lang.put("dashboard.workflow.task.process.data", "Dane");
-	    lang.put("dashboard.workflow.comments", "Comments");
-	    lang.put("dashboard.workflow.task.process.forms", "Form");
-	    lang.put("dashboard.workflow.add.comment","Add comment");
+	    lang.put("dashboard.workflow.comments", "Komentarze");
+	    lang.put("dashboard.workflow.task.process.forms", "Od");
+	    lang.put("dashboard.workflow.add.comment","Dodaj komentarz");
 	    lang.put("dashboard.workflow.task.process.definition", "Definicja procesu");
 	    lang.put("dashboard.workflow.task.process.path", "Ścieżka");
 	    lang.put("dashboard.refreshing", "Odśwież");
-	    lang.put("dashboard.keyword", "Keywords");
-	    lang.put("dashboard.keyword.suggest", "Type the keyword");
-	    lang.put("dashboard.keyword.all", "All keywords");
-	    lang.put("dashboard.keyword.top", "Top keywords");
-	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Go to document");
-	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
-	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
-	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
+	    lang.put("dashboard.keyword", "Słowa kluczowe");
+	    lang.put("dashboard.keyword.suggest", "Wpisz słowo kluczowe");
+	    lang.put("dashboard.keyword.all", "Wszystkie słowa kluczowe");
+	    lang.put("dashboard.keyword.top", "Najczęstsze słowa kluczowe");
+	    lang.put("dashboard.keyword.related", "Powiązane słowa kluczowe");
+	    lang.put("dashboard.keyword.goto.document", "Idź do dokumentu");
+	    lang.put("dashboard.keyword.clean.keywords", "Wyczyść słowa kluczowe");
+	    lang.put("dashboard.mail.last.imported.mails", "Wiadomości elektroniczne");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "Załączniki");
 	    
 	    // Workflow
 	    lang.put("workflow.label", "Uruchom obieg dokumentu");
 	    
 	    // User configuration
-	    lang.put("user.preferences.label", "User configuration");
-	    lang.put("user.preferences.user", "User");
-	    lang.put("user.preferences.password", "Password");
+	    lang.put("user.preferences.label", "Konfiguracja użytkownika");
+	    lang.put("user.preferences.user", "Użytkownik");
+	    lang.put("user.preferences.password", "Hasło");
 	    lang.put("user.preferences.mail", "E-mail");
-	    lang.put("user.preferences.imap.host", "IMAP server");
-	    lang.put("user.preferences.imap.user", "IMAP user name");
-	    lang.put("user.preferences.imap.user.password", "IMAP user password");
+	    lang.put("user.preferences.imap.host", "IMAP serwer");
+	    lang.put("user.preferences.imap.user", "IMAP login");
+	    lang.put("user.preferences.imap.user.password", "IMAP hasło");
 	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferent");
-	    lang.put("user.preferences.user.data", "User account");
-	    lang.put("user.preferences.mail.data", "Mail account");
-	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
-	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
-	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
-	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
+	    lang.put("user.preferences.password.error", "Błąd: hasła się różnią");
+	    lang.put("user.preferences.user.data", "Konto użytkownika");
+	    lang.put("user.preferences.mail.data", "Konto pocztowe");
+	    lang.put("user.preferences.imap.error", "Wszystkie pola muszą być wypełnione");
+	    lang.put("user.preferences.imap.password.error.void", "Hasło nie może być puste");
+	    lang.put("user.preferences.imap.test.error","Błąd konfiguracji IMAP");
+	    lang.put("user.preferences.imap.test.ok","Konfiguracja IMAP poprawna");
 
 	    // Thesaurus
-	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
-	    lang.put("thesaurus.tab.tree", "Tree");
-	    lang.put("thesaurus.tab.keywords", "Keywords");
+	    lang.put("thesaurus.directory.select.label", "Dodaj słowo kluczowe tezaurusa");
+	    lang.put("thesaurus.tab.tree", "Drzewo");
+	    lang.put("thesaurus.tab.keywords", "Słowa kluczowe");
 	    
 	    // Categories
-	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    lang.put("categories.folder.select.label", "Dodaj kategorię");
+	    lang.put("categories.folder.error.delete", "Nie można usunąć kategorii wraz z dokumentami");
 	    
 	    // Wizard
-	    lang.put("wizard.document.uploading", "Document wizard");
+	    lang.put("wizard.document.uploading", "Kreator dokumentów");
 	    
 	    // User info
-	    lang.put("user.info.chat.connect", "Connect to chat");
-	    lang.put("user.info.chat.disconnect", "Disconnet chat");
-	    lang.put("user.info.chat.new.room", "Net chat room");
-	    lang.put("user.info.locked.actual", "Locked documents");
-	    lang.put("user.info.checkout.actual", "Checkout documents");
-	    lang.put("user.info.subscription.actual", "Actual subscriptions");
-	    lang.put("user.info.news.new", "News");
-	    lang.put("user.info.workflow.pending", "Pending workflows");
-	    lang.put("user.info.user.quota", "Used quota");
+	    lang.put("user.info.chat.connect", "Podłącz do czatu");
+	    lang.put("user.info.chat.disconnect", "Rozłącz z czatem");
+	    lang.put("user.info.chat.new.room", "Pokój czatu");
+	    lang.put("user.info.locked.actual", "Zablokowane dokumenty");
+	    lang.put("user.info.checkout.actual", "Wyciągnij dokumenty");
+	    lang.put("user.info.subscription.actual", "Aktualne subskrypcje");
+	    lang.put("user.info.news.new", "Wiadomości");
+	    lang.put("user.info.workflow.pending", "Oczekujące zadania");
+	    lang.put("user.info.user.quota", "Użyty udział");
 	    
 	    // Users online popup
-	    lang.put("user.online", "Users online");
+	    lang.put("user.online", "Połączeni użytkownicy");
 	    
 	    // Chat room
-	    lang.put("chat.room", "Chat");
-	    lang.put("chat.users.in.room", "Users");
+	    lang.put("chat.room", "Czat");
+	    lang.put("chat.users.in.room", "Użytkownicy");
 	    
 	    // Errors
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_AccessDenied, "Brak dostępu do dokumentu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Lock, "Dokument jest zablokowany");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_PathNotFound, "Nie odnaleziono ścieżki do dokumentu");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Version, "Version error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyService+ErrorCode.CAUSE_Version, "Błąd wersji");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_AccessDenied, "Brak dostępu do dokumentu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemNotFound, "Nie znaleziono dokumentu");
@@ -647,7 +647,7 @@ public class Lang_pl_PL {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "Nie odnaleziono ścieżki do dokumentu");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_AccessDenied, "Brak dostępu do folderu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemNotFound, "Nie znaleziono folderu");
@@ -655,13 +655,13 @@ public class Lang_pl_PL {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "Nie odnaleziono ścieżki do folderu");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_AccessDenied, "Brak dostępu do elementu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_ItemNotFound, "Nie znaleziono elementu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_ItemNotFound, "Nie znaleziono dokumentu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_General, "Wewnętrzny błąd repozytorium");
@@ -671,61 +671,61 @@ public class Lang_pl_PL {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_FileSizeExceeded, "Przekroczono maksymalną wielkość dokumentu");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "Sesja została zamknięta");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd wykonania zapuytania");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "Nazwa zapamiętanych wyników wyszukiwania musi być unikalna");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "Nazwa zakładki musi być unikalna");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRemoteService+ErrorCode.CAUSE_SessionLost , "Sesja została przerwana");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_IOException, "Błąd wejścia/wyjścia");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error in browser configuration");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error user quota exceed, contact with adminitrator");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Błąd w konfiguracji przeglądarki");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Błąd, przydział użytkownika wyczerpany. Skontaktuj sięz administratorem");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "Document access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "Document not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "Document already exists");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "Document lock denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "Document path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu do dokumentu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "Dokument nie odnaleziony");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "Dokument już istnieje");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "Odmowa dostępu do zablokowania dokumentu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "Ścieżka do dokumentu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "Path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "Access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "Database error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "Application internal error"); 
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "Nie odnaleziono ścieżki");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytoriu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji"); 
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_Lock, "Locked");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_PathNotFound, "Path not exist");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_AccessDenied, "Access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_DatabaseException, "Database error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_NoSuchGroup, "Group not exists");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_NoSuchProperty, "Property not exists");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_IOException, "Error on I/O");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_Lock, "Zablokowany");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_PathNotFound, "Ścieżka nie istnieje");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_NoSuchGroup, "Grupa nie istnieje");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_NoSuchProperty, "Właściwość nie istnieje");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_IOException, "Błąd I/O");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_PathNotFound, "Path not exist");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_DatabaseException, "Database error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_AccessDenied, "Access denied");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_PathNotFound, "Ścieżka nie istnieje");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRepositoryService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUserCopyService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	  }
 }
