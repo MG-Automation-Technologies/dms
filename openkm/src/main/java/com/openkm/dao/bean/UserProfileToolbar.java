@@ -30,7 +30,7 @@ public class UserProfileToolbar implements Serializable {
 	private boolean downloadVisible;
 	private boolean downloadPdfVisible;
 	private boolean lockVisible;
-	private boolean unLockVisible;
+	private boolean unlockVisible;
 	private boolean addDocumentVisible;
 	private boolean checkInVisible;
 	private boolean checkOutVisible;
@@ -90,12 +90,12 @@ public class UserProfileToolbar implements Serializable {
 		this.lockVisible = lockVisible;
 	}
 
-	public boolean isUnLockVisible() {
-		return unLockVisible;
+	public boolean isUnlockVisible() {
+		return unlockVisible;
 	}
 
-	public void setUnLockVisible(boolean unLockVisible) {
-		this.unLockVisible = unLockVisible;
+	public void setUnlockVisible(boolean unlockVisible) {
+		this.unlockVisible = unlockVisible;
 	}
 
 	public boolean isAddDocumentVisible() {
@@ -250,7 +250,7 @@ public class UserProfileToolbar implements Serializable {
 		sb.append(", downloadVisible="); sb.append(downloadVisible);
 		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);
 		sb.append(", lockVisible="); sb.append(lockVisible);
-		sb.append(", unLockVisible="); sb.append(unLockVisible);
+		sb.append(", unlockVisible="); sb.append(unlockVisible);
 		sb.append(", addDocumentVisible="); sb.append(addDocumentVisible);
 		sb.append(", checkInVisible="); sb.append(checkInVisible);
 		sb.append(", checkOutVisible="); sb.append(checkOutVisible);
