@@ -80,7 +80,6 @@
         </c:choose>
       </td>
     </tr>
-
     <tr>
       <td>Add document visible</td>
       <td>
@@ -159,6 +158,161 @@
         </c:choose>
       </td>
     </tr>
-
+    <tr>
+      <td>Remove property group visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.removePropertyGroupVisible}">
+            <input name="up_toolbar_remove_property_group_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_remove_property_group_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Start workflow visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.startWorkflowVisible}">
+            <input name="up_toolbar_start_workflow_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_start_workflow_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Add subscription visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.addSubscriptionVisible}">
+            <input name="up_toolbar_add_subscription_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_add_subscription_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Remove subscription visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.removeSubscriptionVisible}">
+            <input name="up_toolbar_remove_subscription_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_remove_subscription_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Refresh visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.refreshVisible}">
+            <input name="up_toolbar_refresh_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_refresh_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Home visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.homeVisible}">
+            <input name="up_toolbar_home_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_home_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Rename visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.renameVisible}">
+            <input name="up_toolbar_rename_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_rename_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Copy visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.copyVisible}">
+            <input name="up_toolbar_copy_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_copy_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Move visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.moveVisible}">
+            <input name="up_toolbar_move_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_move_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Add bookmark visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.addBookmarkVisible}">
+            <input name="up_toolbar_add_bookmark_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_add_bookmark_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Scanner visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.scannerVisible}">
+            <input name="up_toolbar_scanner_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_scanner_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Uploader visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.toolbar.uploaderVisible}">
+            <input name="up_toolbar_uploader_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_toolbar_uploader_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
   </table>
 </fieldset>
