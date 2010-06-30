@@ -111,7 +111,7 @@
 	  <property name="lockVisible" not-null="true">
 	    <column name="UP_TOOLBAR_LOCK_VISIBLE" default="true"/>
 	  </property>
-	  <property name="unLockVisible" not-null="true">
+	  <property name="unlockVisible" not-null="true">
 	    <column name="UP_TOOLBAR_UNLOCK_VISIBLE" default="true"/>
 	  </property>
 	  <property name="addDocumentVisible" not-null="true">

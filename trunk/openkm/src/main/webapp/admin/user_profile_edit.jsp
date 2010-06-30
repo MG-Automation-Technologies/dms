@@ -55,6 +55,8 @@
               <table width="100%">
                 <tr>
                   <td>
+                    <!-- TOOLBAR -->
+                    <jsp:include page="user_profile_toolbar_edit.jsp"/>
                     <!-- CHAT -->
                     <jsp:include page="user_profile_chat_edit.jsp"/>
                   </td>

@@ -217,7 +217,7 @@ public class UserProfileServlet extends BaseServlet {
 		up.getToolbar().setDownloadVisible(WebUtil.getBoolean(request, "up_toolbar_download_visible"));
 		up.getToolbar().setDownloadPdfVisible(WebUtil.getBoolean(request, "up_toolbar_download_pdf_visible"));
 		up.getToolbar().setLockVisible(WebUtil.getBoolean(request, "up_toolbar_lock_visible"));
-		up.getToolbar().setUnLockVisible(WebUtil.getBoolean(request, "up_toolbar_unlock_visible"));
+		up.getToolbar().setUnlockVisible(WebUtil.getBoolean(request, "up_toolbar_unlock_visible"));
 		up.getToolbar().setAddDocumentVisible(WebUtil.getBoolean(request, "up_toolbar_add_document_visible"));
 		up.getToolbar().setCheckInVisible(WebUtil.getBoolean(request, "up_toolbar_check_in_visible"));
 		up.getToolbar().setCheckOutVisible(WebUtil.getBoolean(request, "up_toolbar_check_out_visible"));
