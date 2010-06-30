@@ -27,7 +27,7 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="465px">
+        <table class="form" width="525px">
           <tr>
             <td colspan="3">
               <table width="100%">
@@ -51,12 +51,20 @@
             </td>
           </tr>
           <tr>
-            <td valign="top" width="33%">
+            <td valign="top" width="40%">
               <table width="100%">
                 <tr>
                   <td>
                     <!-- TOOLBAR -->
                     <jsp:include page="user_profile_toolbar_edit.jsp"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td valign="top" width="30%">
+              <table width="100%">
+                <tr>
+                  <td>
                     <!-- CHAT -->
                     <jsp:include page="user_profile_chat_edit.jsp"/>
                   </td>
@@ -67,16 +75,6 @@
                     <jsp:include page="user_profile_menu_edit.jsp"/>
                   </td>
                 </tr>
-              </table>
-            </td>
-            <td valign="top" width="33%">
-              <table width="100%">
-                <tr>
-                  <td>
-                    <!-- STACKS -->
-                    <jsp:include page="user_profile_stacks_edit.jsp"/>
-                  </td>
-                </tr>
                 <tr>
                   <td>
                     <!-- TAB -->
@@ -85,8 +83,14 @@
                 </tr>
               </table>
             </td>
-            <td valign="top" width="33%">
+            <td valign="top" width="30%">
               <table width="100%">
+                 <tr>
+                  <td>
+                    <!-- STACKS -->
+                    <jsp:include page="user_profile_stacks_edit.jsp"/>
+                  </td>
+                </tr>
                 <tr>
                   <td>
                     <!-- DASHBOARD -->
