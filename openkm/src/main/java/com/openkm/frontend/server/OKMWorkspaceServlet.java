@@ -178,36 +178,38 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();
-		availableOption.setCreateFolderOption(up.getToolbar().isCreateFolderVisible());
-		availableOption.setFindFolderOption(up.getToolbar().isFindFolderVisible());
-		availableOption.setDownloadOption(up.getToolbar().isDownloadVisible());
-		availableOption.setDownloadPdfOption(up.getToolbar().isDownloadPdfVisible());
-		availableOption.setLockOption(up.getToolbar().isLockVisible());
-		availableOption.setUnLockOption(up.getToolbar().isUnlockVisible());
-		availableOption.setAddDocumentOption(up.getToolbar().isAddDocumentVisible());
-		availableOption.setCheckinOption(up.getToolbar().isCheckInVisible());
-		availableOption.setCheckoutOption(up.getToolbar().isCheckOutVisible());
-		availableOption.setCancelCheckoutOption(up.getToolbar().isCancelCheckOutVisible());
-		availableOption.setDeleteOption(up.getToolbar().isDeleteVisible());
-		availableOption.setAddPropertyGroupOption(up.getToolbar().isAddPropertyGroupVisible());
-		availableOption.setRemovePropertyGroupOption(up.getToolbar().isRemovePropertyGroupVisible());
-		availableOption.setWorkflowOption(up.getToolbar().isStartWorkflowVisible());
-		availableOption.setAddSubscription(up.getToolbar().isAddSubscriptionVisible());
-		availableOption.setRemoveSubscription(up.getToolbar().isRemoveSubscriptionVisible());
-		availableOption.setRefreshOption(up.getToolbar().isRefreshVisible());
-		availableOption.setHomeOption(up.getToolbar().isHomeVisible());
-		availableOption.setScannerOption(up.getToolbar().isScannerVisible());
-		availableOption.setUploaderOption(up.getToolbar().isUploaderVisible());
-		availableOption.setRenameOption(up.getToolbar().isRenameVisible());
-		availableOption.setCopyOption(up.getToolbar().isCopyVisible());
-		availableOption.setMoveOption(up.getToolbar().isMoveVisible());
-		availableOption.setAddBookmarkOption(up.getToolbar().isAddBookmarkVisible());
+		availableOption.setCreateFolderOption(up.getAction().isCreateFolderVisible());
+		availableOption.setFindFolderOption(up.getAction().isFindFolderVisible());
+		availableOption.setGotoFolderOption(up.getAction().isGoFolderVisible());
+		availableOption.setDownloadOption(up.getAction().isDownloadVisible());
+		availableOption.setDownloadPdfOption(up.getAction().isDownloadPdfVisible());
+		availableOption.setLockOption(up.getAction().isLockVisible());
+		availableOption.setUnLockOption(up.getAction().isUnlockVisible());
+		availableOption.setAddDocumentOption(up.getAction().isAddDocumentVisible());
+		availableOption.setCheckinOption(up.getAction().isCheckInVisible());
+		availableOption.setCheckoutOption(up.getAction().isCheckOutVisible());
+		availableOption.setCancelCheckoutOption(up.getAction().isCancelCheckOutVisible());
+		availableOption.setDeleteOption(up.getAction().isDeleteVisible());
+		availableOption.setAddPropertyGroupOption(up.getAction().isAddPropertyGroupVisible());
+		availableOption.setRemovePropertyGroupOption(up.getAction().isRemovePropertyGroupVisible());
+		availableOption.setWorkflowOption(up.getAction().isStartWorkflowVisible());
+		availableOption.setAddSubscription(up.getAction().isAddSubscriptionVisible());
+		availableOption.setRemoveSubscription(up.getAction().isRemoveSubscriptionVisible());
+		availableOption.setRefreshOption(up.getAction().isRefreshVisible());
+		availableOption.setHomeOption(up.getAction().isGoHomeVisible());
+		availableOption.setSetHomeOption(up.getAction().isSetHomeVisible());
+		availableOption.setScannerOption(up.getAction().isScannerVisible());
+		availableOption.setUploaderOption(up.getAction().isUploaderVisible());
+		availableOption.setRenameOption(up.getAction().isRenameVisible());
+		availableOption.setCopyOption(up.getAction().isCopyVisible());
+		availableOption.setMoveOption(up.getAction().isMoveVisible());
+		availableOption.setAddBookmarkOption(up.getAction().isAddBookmarkVisible());
 		
-		availableOption.setSetHomeOption(true);
+		
 		availableOption.setExportOption(true);
 		availableOption.setMediaPlayerOption(true);
 		availableOption.setImageViewerOption(true);
-		availableOption.setGotoFolderOption(true);
+		
 		availableOption.setCreateFromTemplateOption(true);
 		availableOption.setPurgeOption(true);
 		availableOption.setRestoreOption(true);

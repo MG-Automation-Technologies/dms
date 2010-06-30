@@ -34,8 +34,8 @@ public class UserProfile implements Serializable {
 	private UserProfileMisc misc = new UserProfileMisc();
 	private UserProfileStack stack = new UserProfileStack();
 	private UserProfileTab tab = new UserProfileTab();
-	private UserProfileToolbar toolbar = new UserProfileToolbar();
 	private UserProfileWizard wizard = new UserProfileWizard();
+	private UserProfileAction action = new UserProfileAction();
 
 	public int getId() {
 		return id;
@@ -109,12 +109,12 @@ public class UserProfile implements Serializable {
 		this.tab = tab;
 	}
 
-	public UserProfileToolbar getToolbar() {
-		return toolbar;
+	public UserProfileAction getAction() {
+		return action;
 	}
 
-	public void setToolbar(UserProfileToolbar toolbar) {
-		this.toolbar = toolbar;
+	public void setAction(UserProfileAction action) {
+		this.action = action;
 	}
 
 	public UserProfileWizard getWizard() {
@@ -137,8 +137,8 @@ public class UserProfile implements Serializable {
 		sb.append(", misc="); sb.append(misc);
 		sb.append(", stack="); sb.append(stack);
 		sb.append(", tab="); sb.append(tab);
-		sb.append(", toolbar="); sb.append(toolbar);
 		sb.append(", wizard="); sb.append(wizard);
+		sb.append(", action="); sb.append(action);
 		sb.append("}");
 		return sb.toString();
 	}

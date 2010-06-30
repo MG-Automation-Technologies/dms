@@ -55,8 +55,8 @@
               <table width="100%">
                 <tr>
                   <td>
-                    <!-- TOOLBAR -->
-                    <jsp:include page="user_profile_toolbar_edit.jsp"/>
+                    <!-- ACTION -->
+                    <jsp:include page="user_profile_action_edit.jsp"/>
                   </td>
                 </tr>
               </table>
