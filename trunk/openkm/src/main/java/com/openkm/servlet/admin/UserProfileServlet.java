@@ -211,31 +211,33 @@ public class UserProfileServlet extends BaseServlet {
 		up.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
 		up.getMenu().setHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
 		
-		// Toolbar
-		up.getToolbar().setCreateFolderVisible(WebUtil.getBoolean(request, "up_toolbar_create_folder_visible"));
-		up.getToolbar().setFindFolderVisible(WebUtil.getBoolean(request, "up_toolbar_find_folder_visible"));
-		up.getToolbar().setDownloadVisible(WebUtil.getBoolean(request, "up_toolbar_download_visible"));
-		up.getToolbar().setDownloadPdfVisible(WebUtil.getBoolean(request, "up_toolbar_download_pdf_visible"));
-		up.getToolbar().setLockVisible(WebUtil.getBoolean(request, "up_toolbar_lock_visible"));
-		up.getToolbar().setUnlockVisible(WebUtil.getBoolean(request, "up_toolbar_unlock_visible"));
-		up.getToolbar().setAddDocumentVisible(WebUtil.getBoolean(request, "up_toolbar_add_document_visible"));
-		up.getToolbar().setCheckInVisible(WebUtil.getBoolean(request, "up_toolbar_check_in_visible"));
-		up.getToolbar().setCheckOutVisible(WebUtil.getBoolean(request, "up_toolbar_check_out_visible"));
-		up.getToolbar().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_toolbar_cancel_check_out_visible"));
-		up.getToolbar().setDeleteVisible(WebUtil.getBoolean(request, "up_toolbar_delete_visible"));
-		up.getToolbar().setAddPropertyGroupVisible(WebUtil.getBoolean(request, "up_toolbar_add_property_group_visible"));
-		up.getToolbar().setRemovePropertyGroupVisible(WebUtil.getBoolean(request, "up_toolbar_remove_property_group_visible"));
-		up.getToolbar().setStartWorkflowVisible(WebUtil.getBoolean(request, "up_toolbar_start_workflow_visible"));
-		up.getToolbar().setAddSubscriptionVisible(WebUtil.getBoolean(request, "up_toolbar_add_subscription_visible"));
-		up.getToolbar().setRemoveSubscriptionVisible(WebUtil.getBoolean(request, "up_toolbar_remove_subscription_visible"));
-		up.getToolbar().setRefreshVisible(WebUtil.getBoolean(request, "up_toolbar_refresh_visible"));
-		up.getToolbar().setHomeVisible(WebUtil.getBoolean(request, "up_toolbar_home_visible"));
-		up.getToolbar().setScannerVisible(WebUtil.getBoolean(request, "up_toolbar_scanner_visible"));
-		up.getToolbar().setUploaderVisible(WebUtil.getBoolean(request, "up_toolbar_uploader_visible"));
-		up.getToolbar().setRenameVisible(WebUtil.getBoolean(request, "up_toolbar_rename_visible"));
-		up.getToolbar().setCopyVisible(WebUtil.getBoolean(request, "up_toolbar_copy_visible"));
-		up.getToolbar().setMoveVisible(WebUtil.getBoolean(request, "up_toolbar_move_visible"));
-		up.getToolbar().setAddBookmarkVisible(WebUtil.getBoolean(request, "up_toolbar_add_bookmark_visible"));
+		// Action
+		up.getAction().setCreateFolderVisible(WebUtil.getBoolean(request, "up_action_create_folder_visible"));
+		up.getAction().setFindFolderVisible(WebUtil.getBoolean(request, "up_action_find_folder_visible"));
+		up.getAction().setGoFolderVisible(WebUtil.getBoolean(request, "up_action_go_folder_visible"));
+		up.getAction().setDownloadVisible(WebUtil.getBoolean(request, "up_action_download_visible"));
+		up.getAction().setDownloadPdfVisible(WebUtil.getBoolean(request, "up_action_download_pdf_visible"));
+		up.getAction().setLockVisible(WebUtil.getBoolean(request, "up_action_lock_visible"));
+		up.getAction().setUnlockVisible(WebUtil.getBoolean(request, "up_action_unlock_visible"));
+		up.getAction().setAddDocumentVisible(WebUtil.getBoolean(request, "up_action_add_document_visible"));
+		up.getAction().setCheckInVisible(WebUtil.getBoolean(request, "up_action_check_in_visible"));
+		up.getAction().setCheckOutVisible(WebUtil.getBoolean(request, "up_action_check_out_visible"));
+		up.getAction().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_action_cancel_check_out_visible"));
+		up.getAction().setDeleteVisible(WebUtil.getBoolean(request, "up_action_delete_visible"));
+		up.getAction().setAddPropertyGroupVisible(WebUtil.getBoolean(request, "up_action_add_property_group_visible"));
+		up.getAction().setRemovePropertyGroupVisible(WebUtil.getBoolean(request, "up_action_remove_property_group_visible"));
+		up.getAction().setStartWorkflowVisible(WebUtil.getBoolean(request, "up_action_start_workflow_visible"));
+		up.getAction().setAddSubscriptionVisible(WebUtil.getBoolean(request, "up_action_add_subscription_visible"));
+		up.getAction().setRemoveSubscriptionVisible(WebUtil.getBoolean(request, "up_action_remove_subscription_visible"));
+		up.getAction().setRefreshVisible(WebUtil.getBoolean(request, "up_action_refresh_visible"));
+		up.getAction().setGoHomeVisible(WebUtil.getBoolean(request, "up_action_go_home_visible"));
+		up.getAction().setSetHomeVisible(WebUtil.getBoolean(request, "up_action_set_home_visible"));
+		up.getAction().setScannerVisible(WebUtil.getBoolean(request, "up_action_scanner_visible"));
+		up.getAction().setUploaderVisible(WebUtil.getBoolean(request, "up_action_uploader_visible"));
+		up.getAction().setRenameVisible(WebUtil.getBoolean(request, "up_action_rename_visible"));
+		up.getAction().setCopyVisible(WebUtil.getBoolean(request, "up_action_copy_visible"));
+		up.getAction().setMoveVisible(WebUtil.getBoolean(request, "up_action_move_visible"));
+		up.getAction().setAddBookmarkVisible(WebUtil.getBoolean(request, "up_action_add_bookmark_visible"));
 		
 		// Tab
 		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));

@@ -23,10 +23,11 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileToolbar implements Serializable {
+public class UserProfileAction implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean createFolderVisible;
 	private boolean findFolderVisible;
+	private boolean goFolderVisible;
 	private boolean downloadVisible;
 	private boolean downloadPdfVisible;
 	private boolean lockVisible;
@@ -42,7 +43,8 @@ public class UserProfileToolbar implements Serializable {
 	private boolean addSubscriptionVisible;
 	private boolean removeSubscriptionVisible;
 	private boolean refreshVisible;
-	private boolean homeVisible;
+	private boolean goHomeVisible;
+	private boolean setHomeVisible;
 	private boolean scannerVisible;
 	private boolean uploaderVisible;
 	private boolean renameVisible;
@@ -66,6 +68,14 @@ public class UserProfileToolbar implements Serializable {
 		this.findFolderVisible = findFolderVisible;
 	}
 
+	public boolean isGoFolderVisible() {
+		return goFolderVisible;
+	}
+
+	public void setGoFolderVisible(boolean goFolderVisible) {
+		this.goFolderVisible = goFolderVisible;
+	}
+	
 	public boolean isDownloadVisible() {
 		return downloadVisible;
 	}
@@ -186,12 +196,20 @@ public class UserProfileToolbar implements Serializable {
 		this.refreshVisible = refreshVisible;
 	}
 
-	public boolean isHomeVisible() {
-		return homeVisible;
+	public boolean isGoHomeVisible() {
+		return goHomeVisible;
 	}
 
-	public void setHomeVisible(boolean homeVisible) {
-		this.homeVisible = homeVisible;
+	public void setGoHomeVisible(boolean goHomeVisible) {
+		this.goHomeVisible = goHomeVisible;
+	}
+	
+	public boolean isSetHomeVisible() {
+		return setHomeVisible;
+	}
+
+	public void setSetHomeVisible(boolean setHomeVisible) {
+		this.setHomeVisible = setHomeVisible;
 	}
 
 	public boolean isScannerVisible() {
@@ -247,6 +265,7 @@ public class UserProfileToolbar implements Serializable {
 		sb.append("{");
 		sb.append("createFolderVisible="); sb.append(createFolderVisible);
 		sb.append(", findFolderVisible="); sb.append(findFolderVisible);
+		sb.append(", goFolderVisible="); sb.append(goFolderVisible);
 		sb.append(", downloadVisible="); sb.append(downloadVisible);
 		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);
 		sb.append(", lockVisible="); sb.append(lockVisible);
@@ -262,7 +281,8 @@ public class UserProfileToolbar implements Serializable {
 		sb.append(", addSubscriptionVisible="); sb.append(addSubscriptionVisible);
 		sb.append(", removeSubscriptionVisible="); sb.append(removeSubscriptionVisible);
 		sb.append(", refreshVisible="); sb.append(refreshVisible);
-		sb.append(", homeVisible="); sb.append(homeVisible);
+		sb.append(", goHomeVisible="); sb.append(goHomeVisible);
+		sb.append(", setHomeVisible="); sb.append(setHomeVisible);
 		sb.append(", scannerVisible="); sb.append(scannerVisible);
 		sb.append(", uploaderVisible="); sb.append(uploaderVisible);
 		sb.append(", renameVisible="); sb.append(renameVisible);

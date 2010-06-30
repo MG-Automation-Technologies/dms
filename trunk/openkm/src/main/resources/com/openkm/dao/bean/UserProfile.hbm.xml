@@ -94,79 +94,85 @@
 	  </property>
 	</component>
 	
-	<!-- TOOLBAR -->
-	<component name="toolbar" class="com.openkm.dao.bean.UserProfileToolbar">
+	<!-- ACTION -->
+	<component name="action" class="com.openkm.dao.bean.UserProfileAction">
 	  <property name="createFolderVisible" not-null="true">
-	    <column name="UP_TOOLBAR_CREATE_FOLDER_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_CREATE_FOLDER_VISIBLE" default="true"/>
 	  </property>
 	  <property name="findFolderVisible" not-null="true">
-	    <column name="UP_TOOLBAR_FIND_FOLDER_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_FIND_FOLDER_VISIBLE" default="true"/>
+	  </property>
+	   <property name="goFolderVisible" not-null="true">
+	    <column name="UP_ACTION_GO_FOLDER_VISIBLE" default="true"/>
 	  </property>
 	  <property name="downloadVisible" not-null="true">
-	    <column name="UP_TOOLBAR_DOWNLOAD_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_DOWNLOAD_VISIBLE" default="true"/>
 	  </property>
 	  <property name="downloadPdfVisible" not-null="true">
-	    <column name="UP_TOOLBAR_DOWNLOAD_PDF_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_DOWNLOAD_PDF_VISIBLE" default="true"/>
 	  </property>
 	  <property name="lockVisible" not-null="true">
-	    <column name="UP_TOOLBAR_LOCK_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_LOCK_VISIBLE" default="true"/>
 	  </property>
 	  <property name="unlockVisible" not-null="true">
-	    <column name="UP_TOOLBAR_UNLOCK_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_UNLOCK_VISIBLE" default="true"/>
 	  </property>
 	  <property name="addDocumentVisible" not-null="true">
-	    <column name="UP_TOOLBAR_ADD_DOCUMENT_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_ADD_DOCUMENT_VISIBLE" default="true"/>
 	  </property>
 	  <property name="checkInVisible" not-null="true">
-	    <column name="UP_TOOLBAR_CHECK_IN_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_CHECK_IN_VISIBLE" default="true"/>
 	  </property>
 	  <property name="checkOutVisible" not-null="true">
-	    <column name="UP_TOOLBAR_CHECK_OUT_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_CHECK_OUT_VISIBLE" default="true"/>
 	  </property>
 	  <property name="cancelCheckOutVisible" not-null="true">
-	    <column name="UP_TOOLBAR_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
 	  </property>
 	  <property name="deleteVisible" not-null="true">
-	    <column name="UP_TOOLBAR_DELETE_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_DELETE_VISIBLE" default="true"/>
 	  </property>
 	  <property name="addPropertyGroupVisible" not-null="true">
-	    <column name="UP_TOOLBAR_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
 	  </property>
 	  <property name="removePropertyGroupVisible" not-null="true">
-	    <column name="UP_TOOLBAR_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
 	  </property>
 	  <property name="startWorkflowVisible" not-null="true">
-	    <column name="UP_TOOLBAR_START_WORKFLOW_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_START_WORKFLOW_VISIBLE" default="true"/>
 	  </property>
 	  <property name="addSubscriptionVisible" not-null="true">
-	    <column name="UP_TOOLBAR_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
 	  </property>
 	  <property name="removeSubscriptionVisible" not-null="true">
-	    <column name="UP_TOOLBAR_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
 	  </property>
 	  <property name="refreshVisible" not-null="true">
-	    <column name="UP_TOOLBAR_REFRESH_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_REFRESH_VISIBLE" default="true"/>
 	  </property>
-	  <property name="homeVisible" not-null="true">
-	    <column name="UP_TOOLBAR_HOME_VISIBLE" default="true"/>
+	  <property name="goHomeVisible" not-null="true">
+	    <column name="UP_ACTION_GO_HOME_VISIBLE" default="true"/>
+	  </property>
+	  <property name="setHomeVisible" not-null="true">
+	    <column name="UP_ACTION_SET_HOME_VISIBLE" default="true"/>
 	  </property>
 	  <property name="scannerVisible" not-null="true">
-	    <column name="UP_TOOLBAR_SCANNER_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_SCANNER_VISIBLE" default="true"/>
 	  </property>
 	  <property name="uploaderVisible" not-null="true">
-	    <column name="UP_TOOLBAR_UPLOADER_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_UPLOADER_VISIBLE" default="true"/>
 	  </property>
 	  <property name="renameVisible" not-null="true">
-	    <column name="UP_TOOLBAR_RENAME_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_RENAME_VISIBLE" default="true"/>
 	  </property>
 	  <property name="copyVisible" not-null="true">
-	    <column name="UP_TOOLBAR_COPY_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_COPY_VISIBLE" default="true"/>
 	  </property>
 	  <property name="moveVisible" not-null="true">
-	    <column name="UP_TOOLBAR_MOVE_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_MOVE_VISIBLE" default="true"/>
 	  </property>
 	  <property name="addBookmarkVisible" not-null="true">
-	    <column name="UP_TOOLBAR_ADD_BOOKMARK_VISIBLE" default="true"/>
+	    <column name="UP_ACTION_ADD_BOOKMARK_VISIBLE" default="true"/>
 	  </property>
     </component>
 	
