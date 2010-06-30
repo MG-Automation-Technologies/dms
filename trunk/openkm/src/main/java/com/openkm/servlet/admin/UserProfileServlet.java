@@ -184,25 +184,65 @@ public class UserProfileServlet extends BaseServlet {
 		up.setId(WebUtil.getInt(request, "up_id"));
 		up.setName(WebUtil.getString(request, "up_name"));
 		up.setActive(WebUtil.getBoolean(request, "up_active"));
+		
+		// Misc
 		up.getMisc().setUserQuota(WebUtil.getLong(request, "up_user_quota"));
 		up.getMisc().setAdvancedFilters(WebUtil.getBoolean(request, "up_advanced_filter"));
+		
+		// Wizard
 		up.getWizard().setPropertyGroups(WebUtil.getString(request, "up_wizard_property_groups"));
 		up.getWizard().setKeywordsEnabled(WebUtil.getBoolean(request, "up_wizard_keywords"));
 		up.getWizard().setCategoriesEnabled(WebUtil.getBoolean(request, "up_wizard_categories"));
+		
+		// Chat
 		up.getChat().setChatEnabled(WebUtil.getBoolean(request, "up_chat_enabled"));
 		up.getChat().setAutoLoginEnabled(WebUtil.getBoolean(request, "up_chat_auto_login"));
+		
+		// Stack
 		up.getStack().setCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
 		up.getStack().setThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
 		up.getStack().setTemplatesVisible(WebUtil.getBoolean(request, "up_stack_templates_visible"));
 		up.getStack().setPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
 		up.getStack().setMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
+		
+		// Menu
 		up.getMenu().setEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
 		up.getMenu().setToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
 		up.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
 		up.getMenu().setHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
+		
+		// Toolbar
+		up.getToolbar().setCreateFolderVisible(WebUtil.getBoolean(request, "up_toolbar_create_folder_visible"));
+		up.getToolbar().setFindFolderVisible(WebUtil.getBoolean(request, "up_toolbar_find_folder_visible"));
+		up.getToolbar().setDownloadVisible(WebUtil.getBoolean(request, "up_toolbar_download_visible"));
+		up.getToolbar().setDownloadPdfVisible(WebUtil.getBoolean(request, "up_toolbar_download_pdf_visible"));
+		up.getToolbar().setLockVisible(WebUtil.getBoolean(request, "up_toolbar_lock_visible"));
+		up.getToolbar().setUnLockVisible(WebUtil.getBoolean(request, "up_toolbar_unlock_visible"));
+		up.getToolbar().setAddDocumentVisible(WebUtil.getBoolean(request, "up_toolbar_add_document_visible"));
+		up.getToolbar().setCheckInVisible(WebUtil.getBoolean(request, "up_toolbar_check_in_visible"));
+		up.getToolbar().setCheckOutVisible(WebUtil.getBoolean(request, "up_toolbar_check_out_visible"));
+		up.getToolbar().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_toolbar_cancel_check_out_visible"));
+		up.getToolbar().setDeleteVisible(WebUtil.getBoolean(request, "up_toolbar_delete_visible"));
+		up.getToolbar().setAddPropertyGroupVisible(WebUtil.getBoolean(request, "up_toolbar_add_property_group_visible"));
+		up.getToolbar().setRemovePropertyGroupVisible(WebUtil.getBoolean(request, "up_toolbar_remove_property_group_visible"));
+		up.getToolbar().setStartWorkflowVisible(WebUtil.getBoolean(request, "up_toolbar_start_workflow_visible"));
+		up.getToolbar().setAddSubscriptionVisible(WebUtil.getBoolean(request, "up_toolbar_add_subscription_visible"));
+		up.getToolbar().setRemoveSubscriptionVisible(WebUtil.getBoolean(request, "up_toolbar_remove_subscription_visible"));
+		up.getToolbar().setRefreshVisible(WebUtil.getBoolean(request, "up_toolbar_refresh_visible"));
+		up.getToolbar().setHomeVisible(WebUtil.getBoolean(request, "up_toolbar_home_visible"));
+		up.getToolbar().setScannerVisible(WebUtil.getBoolean(request, "up_toolbar_scanner_visible"));
+		up.getToolbar().setUploaderVisible(WebUtil.getBoolean(request, "up_toolbar_uploader_visible"));
+		up.getToolbar().setRenameVisible(WebUtil.getBoolean(request, "up_toolbar_rename_visible"));
+		up.getToolbar().setCopyVisible(WebUtil.getBoolean(request, "up_toolbar_copy_visible"));
+		up.getToolbar().setMoveVisible(WebUtil.getBoolean(request, "up_toolbar_move_visible"));
+		up.getToolbar().setAddBookmarkVisible(WebUtil.getBoolean(request, "up_toolbar_add_bookmark_visible"));
+		
+		// Tab
 		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
 		up.getTab().setSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
 		up.getTab().setDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
+		
+		// Dashboard
 		up.getDashboard().setUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
 		up.getDashboard().setMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
 		up.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
