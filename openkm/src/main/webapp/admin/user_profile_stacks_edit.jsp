@@ -6,7 +6,7 @@
       <td>Categories visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackCategoriesVisible}">
+          <c:when test="${up.stack.categoriesVisible}">
             <input name="up_stack_categories_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -19,7 +19,7 @@
       <td>Thesaurus visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackThesaurusVisible}">
+          <c:when test="${up.stack.thesaurusVisible}">
             <input name="up_stack_thesaurus_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -32,7 +32,7 @@
       <td>Templates visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackTemplatesVisible}">
+          <c:when test="${up.stack.templatesVisible}">
             <input name="up_stack_templates_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -45,7 +45,7 @@
       <td>Personal visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackPersonalVisible}">
+          <c:when test="${up.stack.personalVisible}">
             <input name="up_stack_personal_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -58,7 +58,7 @@
       <td>Mail visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.stackMailVisible}">
+          <c:when test="${up.stack.mailVisible}">
             <input name="up_stack_mail_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>

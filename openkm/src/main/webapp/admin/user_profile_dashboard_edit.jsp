@@ -6,7 +6,7 @@
       <td>User visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardUserVisible}">
+          <c:when test="${up.dashboard.userVisible}">
             <input name="up_dashboard_user_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -19,7 +19,7 @@
       <td>Mail visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardMailVisible}">
+          <c:when test="${up.dashboard.mailVisible}">
             <input name="up_dashboard_mail_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -32,7 +32,7 @@
       <td>News visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardNewsVisible}">
+          <c:when test="${up.dashboard.newsVisible}">
             <input name="up_dashboard_news_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -45,7 +45,7 @@
       <td>General visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardGeneralVisible}">
+          <c:when test="${up.dashboard.generalVisible}">
             <input name="up_dashboard_general_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -58,7 +58,7 @@
       <td>Workflow visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardWorkflowVisible}">
+          <c:when test="${up.dashboard.workflowVisible}">
             <input name="up_dashboard_workflow_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -71,7 +71,7 @@
       <td>Keywords visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.dashboardKeywordsVisible}">
+          <c:when test="${up.dashboard.keywordsVisible}">
             <input name="up_dashboard_keywords_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>

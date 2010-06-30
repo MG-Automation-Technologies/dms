@@ -60,6 +60,7 @@ import com.openkm.core.VirusDetectedException;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.UserProfileMisc;
 import com.openkm.module.MailModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -158,8 +159,9 @@ public class DirectMailModule implements MailModule {
 		// Check user quota
 		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 		UserItems ui = UserItemsManager.get(session.getUserID());
+		UserProfileMisc upm = uc.getProfile().getMisc();
 		
-		if (uc.getProfile().getUserQuota() > 0 && ui.getSize() + size > uc.getProfile().getUserQuota()) {
+		if (upm.getUserQuota() > 0 && ui.getSize() + size > upm.getUserQuota()) {
 			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
 		}
 		

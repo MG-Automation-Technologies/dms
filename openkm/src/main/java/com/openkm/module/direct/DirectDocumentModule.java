@@ -86,6 +86,7 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.UserConfig;
 import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.UserProfileMisc;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -252,8 +253,9 @@ public class DirectDocumentModule implements DocumentModule {
 		// Check user quota
 		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
 		UserItems ui = UserItemsManager.get(session.getUserID());
+		UserProfileMisc upm = uc.getProfile().getMisc();
 		
-		if (uc.getProfile().getUserQuota() > 0 && ui.getSize() + size > uc.getProfile().getUserQuota()) {
+		if (upm.getUserQuota() > 0 && ui.getSize() + size > upm.getUserQuota()) {
 			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
 		}
 		
