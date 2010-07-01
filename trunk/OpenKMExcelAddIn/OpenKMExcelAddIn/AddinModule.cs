@@ -21,6 +21,13 @@ namespace OpenKMExcelAddIn
         private ImageLargeToolbar imageLargeToolBar;
         private OpenkMAddIn openkmAddIn;
         private CommandBarOption commandBarOption = null;
+        private AddinExpress.MSO.ADXCommandBar commandBar;
+        private AddinExpress.MSO.ADXCommandBarButton configureButton;
+        private AddinExpress.MSO.ADXCommandBarButton addButton;
+        private AddinExpress.MSO.ADXCommandBarButton editButton;
+        private AddinExpress.MSO.ADXCommandBarButton checkinButton;
+        private AddinExpress.MSO.ADXCommandBarButton cancelCheckoutButton;
+        private AddinExpress.MSO.ADXCommandBarButton helpButton;
         private AddinExpress.MSO.ADXExcelAppEvents adxExcelEvents;
         private AddinExpress.MSO.ADXRibbonTab ribbonTab;
         private AddinExpress.MSO.ADXRibbonGroup ribbonGroup;
@@ -38,8 +45,6 @@ namespace OpenKMExcelAddIn
         public AddinModule()
         {
             InitializeComponent();
-            // Please add any initialization code to the AddinInitialize event handler
-
             // Please add any initialization code to the AddinInitialize event handler
             commandBarOption = new CommandBarOption();
             imageToolBar = new ImageToolBar();
@@ -61,7 +66,7 @@ namespace OpenKMExcelAddIn
             this.editButton.ImageTransparentColor = Color.Black;
             this.checkinButton.ImageTransparentColor = Color.Black;
             this.cancelCheckoutButton.ImageTransparentColor = Color.Black;
-            this.configureButton.ImageTransparentColor = Color.Black;
+            this.configureButton.ImageTransparentColor = Color.White;
             // Internationalization
             this.configureButton.Caption = resources.GetString("configuration");
             this.configureButton.TooltipText = resources.GetString("configuration");
@@ -220,7 +225,7 @@ namespace OpenKMExcelAddIn
         {
             if (commandBarOption.isEdit())
             {
-                openkmAddIn.showExplorerForm(ExcelApp.Application);
+                openkmAddIn.showExplorerForm(ExcelApp.Workbooks);
             }
         }
 
@@ -228,7 +233,7 @@ namespace OpenKMExcelAddIn
         {
             if (commandBarOption.isAdd())
             {
-                openkmAddIn.showTreeForm(ExcelApp.Application);
+                openkmAddIn.showTreeForm(ExcelApp.ActiveWorkbook);
             }
         }
 
@@ -254,7 +259,7 @@ namespace OpenKMExcelAddIn
         {
             if (commandBarOption.isAdd())
             {
-                openkmAddIn.showTreeForm(ExcelApp.Application);
+                openkmAddIn.showTreeForm(ExcelApp.ActiveWorkbook);
             }
         }
 
@@ -270,7 +275,7 @@ namespace OpenKMExcelAddIn
         {
             if (commandBarOption.isEdit())
             {
-                openkmAddIn.showExplorerForm(ExcelApp.Application);
+                openkmAddIn.showExplorerForm(ExcelApp.Workbooks);
             }
         }
 
@@ -278,14 +283,6 @@ namespace OpenKMExcelAddIn
         {
             openkmAddIn.showConfigurationForm();
         }
-
-        private AddinExpress.MSO.ADXCommandBar commandBar;
-        private AddinExpress.MSO.ADXCommandBarButton configureButton;
-        private AddinExpress.MSO.ADXCommandBarButton addButton;
-        private AddinExpress.MSO.ADXCommandBarButton editButton;
-        private AddinExpress.MSO.ADXCommandBarButton checkinButton;
-        private AddinExpress.MSO.ADXCommandBarButton cancelCheckoutButton;
-        private AddinExpress.MSO.ADXCommandBarButton helpButton;
  
         #region Component Designer generated code
         /// <summary>

@@ -51,13 +51,13 @@ namespace OpenKMExcelAddIn
         }
 
         // Show explorer form
-        public void showExplorerForm(Excel.Application application)
+        public void showExplorerForm(Excel.Workbooks workkbooks)
         {
             try
             {
                 if (explorerForm == null)
                 {
-                    explorerForm = new ExplorerForm(application, OKMDocumentType.TYPE_EXCEL, configXML, docXML);
+                    explorerForm = new ExplorerForm(workkbooks, OKMDocumentType.TYPE_EXCEL, configXML, docXML);
                 }
                 explorerForm.Show();
                 explorerForm.startUp();
@@ -69,13 +69,17 @@ namespace OpenKMExcelAddIn
         }
 
         // Show tree form
-        public void showTreeForm(Excel.Application application)
+        public void showTreeForm(Excel.Workbook workbook)
         {
             try
             {
                 if (treeForm == null)
                 {
-                    treeForm = new TreeForm(application, configXML);
+                    treeForm = new TreeForm(workbook, configXML);
+                }
+                else
+                {
+                    treeForm.setApplication(workbook);
                 }
                 treeForm.Show();
                 treeForm.startUp();
