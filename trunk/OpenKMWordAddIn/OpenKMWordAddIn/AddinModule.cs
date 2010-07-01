@@ -21,6 +21,14 @@ namespace OpenKMWordAddIn
         private ImageLargeToolbar imageLargeToolBar;
         private OpenkMAddIn openkmAddIn;
         private CommandBarOption commandBarOption = null;
+        private AddinExpress.MSO.ADXCommandBar commandBar;
+        private AddinExpress.MSO.ADXCommandBarButton configureButton;
+        private AddinExpress.MSO.ADXCommandBarButton addButton;
+        private AddinExpress.MSO.ADXCommandBarButton editButton;
+        private AddinExpress.MSO.ADXCommandBarButton checkinButton;
+        private AddinExpress.MSO.ADXCommandBarButton cancelCheckoutButton;
+        private AddinExpress.MSO.ADXCommandBarButton helpButton;
+        private AddinExpress.MSO.ADXWordAppEvents adxWordEvents;
         private AddinExpress.MSO.ADXRibbonTab ribbonTab;
         private AddinExpress.MSO.ADXRibbonGroup ribbonGroup;
         private AddinExpress.MSO.ADXRibbonBox ribbonBox;
@@ -59,7 +67,7 @@ namespace OpenKMWordAddIn
             this.editButton.ImageTransparentColor = Color.Black;
             this.checkinButton.ImageTransparentColor = Color.Black;
             this.cancelCheckoutButton.ImageTransparentColor = Color.Black;
-            this.configureButton.ImageTransparentColor = Color.Black;
+            this.configureButton.ImageTransparentColor = Color.White;
             // Internationalization
             this.configureButton.Caption = resources.GetString("configuration");
             this.configureButton.TooltipText = resources.GetString("configuration");
@@ -145,7 +153,7 @@ namespace OpenKMWordAddIn
         {
             if (commandBarOption.isEdit())
             {
-                openkmAddIn.showExplorerForm(WordApp.Application);
+                openkmAddIn.showExplorerForm(WordApp.Documents);
             }
         }
 
@@ -153,7 +161,7 @@ namespace OpenKMWordAddIn
         {
             if (commandBarOption.isAdd())
             {
-                openkmAddIn.showTreeForm(WordApp.Application);
+                openkmAddIn.showTreeForm(WordApp.ActiveDocument);
             }
         }
 
@@ -179,7 +187,7 @@ namespace OpenKMWordAddIn
         {
             if (commandBarOption.isAdd())
             {
-                openkmAddIn.showTreeForm(WordApp.Application);
+                openkmAddIn.showTreeForm(WordApp.ActiveDocument);
             }
         }
 
@@ -195,7 +203,7 @@ namespace OpenKMWordAddIn
         {
             if (commandBarOption.isEdit())
             {
-                openkmAddIn.showExplorerForm(WordApp.Application);
+                openkmAddIn.showExplorerForm(WordApp.Documents);
             }
         }
 
@@ -223,15 +231,6 @@ namespace OpenKMWordAddIn
                 MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-
-        private AddinExpress.MSO.ADXCommandBar commandBar;
-        private AddinExpress.MSO.ADXCommandBarButton configureButton;
-        private AddinExpress.MSO.ADXCommandBarButton addButton;
-        private AddinExpress.MSO.ADXCommandBarButton editButton;
-        private AddinExpress.MSO.ADXCommandBarButton checkinButton;
-        private AddinExpress.MSO.ADXCommandBarButton cancelCheckoutButton;
-        private AddinExpress.MSO.ADXCommandBarButton helpButton;
-        private AddinExpress.MSO.ADXWordAppEvents adxWordEvents;
  
         #region Component Designer generated code
         /// <summary>

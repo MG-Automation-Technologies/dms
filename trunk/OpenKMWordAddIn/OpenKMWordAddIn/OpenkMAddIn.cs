@@ -51,13 +51,13 @@ namespace OpenKMWordAddIn
         }
 
         // Show explorer form
-        public void showExplorerForm(Word.Application application)
+        public void showExplorerForm(Word.Documents documents)
         {
             try
             {
                 if (explorerForm == null)
                 {
-                    explorerForm = new ExplorerForm(application, OKMDocumentType.TYPE_WORD, configXML, docXML); 
+                    explorerForm = new ExplorerForm(documents, OKMDocumentType.TYPE_WORD, configXML, docXML); 
                 }
                 explorerForm.Show();
                 explorerForm.startUp();
@@ -69,13 +69,17 @@ namespace OpenKMWordAddIn
         }
 
         // Show tree form
-        public void showTreeForm(Word.Application application)
+        public void showTreeForm(Word.Document document)
         {
             try
             {
                 if (treeForm == null)
                 {
-                    treeForm = new TreeForm(application, configXML);
+                    treeForm = new TreeForm(document, configXML);
+                }
+                else
+                {
+                    treeForm.setApplication(document);
                 }
                 treeForm.Show();
                 treeForm.startUp();
