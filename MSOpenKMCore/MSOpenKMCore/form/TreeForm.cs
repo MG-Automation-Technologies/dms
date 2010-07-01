@@ -74,6 +74,12 @@ namespace MSOpenKMCore.form
             }
         }
 
+        // Sets application
+        public void setApplication(Object application)
+        {
+            this.application = application;
+        }
+
         // Init services
         private void initServices()
         {
@@ -260,30 +266,34 @@ namespace MSOpenKMCore.form
             try
             {
                 disableAllButtons();
-                if (application is Word.Application)
+                if (application is Word.Document)
                 {
-                    Word._Document activeDocument = ((Word.Application) application).ActiveDocument;
+                    Word.Document activeDocument = ((Word.Document)application);
                     activeDocument.Save(); // Saves the document
                     localFileName = activeDocument.FullName;
                 }
-                else if (application is Excel.Application)
+                else if (application is Excel.Workbook)
                 {
-                    Excel.Workbook actitiveWorkBook = ((Excel.Application)application).ActiveWorkbook;
+                    Excel.Workbook actitiveWorkBook = ((Excel.Workbook)application);
                     actitiveWorkBook.Save(); // Saves the document;
                     localFileName = actitiveWorkBook.FullName;
                 }
-                else if (application is PowerPoint.Application)
+                else if (application is PowerPoint.Presentation)
                 {
-                    PowerPoint.Presentation activePresentation = ((PowerPoint.Application)application).ActivePresentation;
+                    PowerPoint.Presentation activePresentation = ((PowerPoint.Presentation)application);
                     activePresentation.Save(); // Saves the document
                     localFileName = activePresentation.FullName;
                 }
-                else if (application is Visio.Application)
+                else if (application is Visio.Document)
                 {
-                    Visio.Document activeDocument = ((Visio.Application)application).ActiveDocument;
+                    Visio.Document activeDocument = ((Visio.Document)application);
                     activeDocument.Save(); // Saves the document
                     localFileName = activeDocument.FullName;
                 }
+                else if (application is String ) {
+                    localFileName = (String)application;
+                }
+                     
                 String docPath = Util.getOpenKMPath(localFileName, (folder)actualNode.Tag);
                 // Must save a temporary file to be uploaded
                 File.Copy(localFileName, localFileName + "_TEMP");

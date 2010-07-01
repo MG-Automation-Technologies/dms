@@ -424,29 +424,29 @@ namespace MSOpenKMCore.form
                             object missingValue = Type.Missing;
                             object readOnly = false;
                             object fileName = oKMDocument.getLocalFilename();
-                            
-                            if (application is Word.Application)
+
+                            if (application is Word.Documents)
                             {
-                                ((Word.Application)application).Documents.Open(ref fileName,
+                                ((Word.Documents)application).Open(ref fileName,
                                     ref missingValue, ref readOnly, ref missingValue, ref missingValue, ref missingValue,
                                     ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue,
                                     ref missingValue, ref missingValue, ref missingValue, ref missingValue, ref missingValue);
                             }
-                            else if (application is Excel.Application)
+                            else if (application is Excel.Workbooks)
                             {
-                                ((Excel.Application)application).Workbooks.Open(oKMDocument.getLocalFilename(),
+                                ((Excel.Workbooks)application).Open(oKMDocument.getLocalFilename(),
                                     missingValue, readOnly, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue, missingValue,
                                     missingValue, missingValue, missingValue, missingValue);
                             } 
-                            else if (application is PowerPoint.Application)
+                            else if (application is PowerPoint.Presentations)
                             {
-                                ((PowerPoint.Application)application).Presentations.Open(oKMDocument.getLocalFilename(), Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse,
+                                ((PowerPoint.Presentations)application).Open(oKMDocument.getLocalFilename(), Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse,
                                   Office.MsoTriState.msoTrue);
                             }
-                            else if (application is Visio.Application)
+                            else if (application is Visio.Documents)
                             {
-                                ((Visio.Application)application).Documents.Open(oKMDocument.getLocalFilename());
+                                ((Visio.Documents)application).Open(oKMDocument.getLocalFilename());
                             }
                         }
                     }
