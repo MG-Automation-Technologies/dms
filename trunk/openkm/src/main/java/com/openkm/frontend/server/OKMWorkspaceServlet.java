@@ -157,12 +157,12 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setStackMailVisible(up.getStack().isMailVisible());
 		
 		// Menus visibility
+		workspace.setMenuFileVisible(up.getMenu().isFileVisible());
 		workspace.setMenuEditVisible(up.getMenu().isEditVisible());
 		workspace.setMenuBookmarksVisible(up.getMenu().isBookmarksVisible());
 		workspace.setMenuToolsVisible(up.getMenu().isToolsVisible());
 		workspace.setMenuHelpVisible(up.getMenu().isHelpVisible());
-		workspace.setMenuFileVisible(true);
-		
+				
 		// Tab visibility
 		workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
 		workspace.setTabSearchVisible(up.getTab().isSearchVisible());
@@ -205,29 +205,28 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setCopyOption(up.getAction().isCopyVisible());
 		availableOption.setMoveOption(up.getAction().isMoveVisible());
 		availableOption.setAddBookmarkOption(up.getAction().isAddBookmarkVisible());
+		availableOption.setExportOption(up.getAction().isExportVisible());
+		availableOption.setCreateFromTemplateOption(up.getAction().isCreateFromTemplateVisible());
+		availableOption.setPurgeOption(up.getAction().isPurgeVisible());
+		availableOption.setRestoreOption(up.getAction().isRestoreVisible());
+		availableOption.setPurgeTrashOption(up.getAction().isPurgeTrashVisible());
+		availableOption.setSendDocumentLinkOption(up.getAction().isSendDocumentLinkVisible());
+		availableOption.setSkinOption(up.getAction().isSkinVisible());
+		availableOption.setDebugOption(up.getAction().isDebugVisible());
+		availableOption.setAdministrationOption(up.getAction().isAdministrationVisible());
+		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible());
+		availableOption.setHelpOption(up.getAction().isHelpVisible());
+		availableOption.setDocumentationOption(up.getAction().isDocumentationVisible());
+		availableOption.setBugReportOption(up.getAction().isBugReportVisible());
+		availableOption.setSupportRequestOption(up.getAction().isSupportRequestVisible());
+		availableOption.setPublicForumOption(up.getAction().isPublicForumVisible());
+		availableOption.setVersionChangesOption(up.getAction().isVersionChangesVisible());
+		availableOption.setProjectWebOption(up.getAction().isProjectWebVisible());
+		availableOption.setAboutOption(up.getAction().isAboutVisible());
 		
-		
-		availableOption.setExportOption(true);
 		availableOption.setMediaPlayerOption(true);
 		availableOption.setImageViewerOption(true);
 		
-		availableOption.setCreateFromTemplateOption(true);
-		availableOption.setPurgeOption(true);
-		availableOption.setRestoreOption(true);
-		availableOption.setPurgeTrashOption(true);
-		availableOption.setSendDocumentLinkOption(true);
-		availableOption.setSkinOption(true);
-		availableOption.setDebugOption(true);
-		availableOption.setAdministrationOption(true);
-		availableOption.setManageBookmarkOption(true);
-		availableOption.setHelpOption(true);
-		availableOption.setDocumentationOption(true);
-		availableOption.setBugReportOption(true);
-		availableOption.setSupportRequestOption(true);
-		availableOption.setPublicForumOption(true);
-		availableOption.setVersionChangesOption(true);
-		availableOption.setProjectWebOption(true);
-		availableOption.setAboutOption(true);
 		workspace.setAvailableOption(availableOption);
 		
 		try {
