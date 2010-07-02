@@ -63,11 +63,11 @@ public class UserProfileAction implements Serializable {
 	private boolean manageBookmarksVisible;
 	private boolean helpVisible;
 	private boolean documentationVisible;
-	private boolean bugReportVisible;
-	private boolean supportRequestVisible;
-	private boolean publicForumVisible;
-	private boolean versionChangesVisible;
-	private boolean projectWebVisible;
+	private boolean bugTrackingVisible;
+	private boolean supportVisible;
+	private boolean forumVisible;
+	private boolean changelogVisible;
+	private boolean webSiteVisible;
 	private boolean aboutVisible;
 	
 	public boolean isCreateFolderVisible() {
@@ -374,46 +374,46 @@ public class UserProfileAction implements Serializable {
 		this.documentationVisible = documentationVisible;
 	}
 
-	public boolean isBugReportVisible() {
-		return bugReportVisible;
+	public boolean isBugTrackingVisible() {
+		return bugTrackingVisible;
 	}
 
-	public void setBugReportVisible(boolean bugReportVisible) {
-		this.bugReportVisible = bugReportVisible;
+	public void setBugTrackingVisible(boolean bugTrackingVisible) {
+		this.bugTrackingVisible = bugTrackingVisible;
 	}
 
-	public boolean isSupportRequestVisible() {
-		return supportRequestVisible;
+	public boolean isSupportVisible() {
+		return supportVisible;
 	}
 
-	public void setSupportRequestVisible(boolean supportRequestVisible) {
-		this.supportRequestVisible = supportRequestVisible;
+	public void setSupportVisible(boolean supportVisible) {
+		this.supportVisible = supportVisible;
 	}
 
-	public boolean isPublicForumVisible() {
-		return publicForumVisible;
+	public boolean isForumVisible() {
+		return forumVisible;
 	}
 
-	public void setPublicForumVisible(boolean publicForumVisible) {
-		this.publicForumVisible = publicForumVisible;
+	public void setForumVisible(boolean forumVisible) {
+		this.forumVisible = forumVisible;
 	}
 
-	public boolean isVersionChangesVisible() {
-		return versionChangesVisible;
+	public boolean isChangelogVisible() {
+		return changelogVisible;
 	}
 
-	public void setVersionChangesVisible(boolean versionChangesVisible) {
-		this.versionChangesVisible = versionChangesVisible;
+	public void setChangelogVisible(boolean changelogVisible) {
+		this.changelogVisible = changelogVisible;
 	}
 
-	public boolean isProjectWebVisible() {
-		return projectWebVisible;
+	public boolean isWebSiteVisible() {
+		return webSiteVisible;
 	}
 
-	public void setProjectWebVisible(boolean projectWebVisible) {
-		this.projectWebVisible = projectWebVisible;
+	public void setWebSiteVisible(boolean webSiteVisible) {
+		this.webSiteVisible = webSiteVisible;
 	}
-
+	
 	public boolean isAboutVisible() {
 		return aboutVisible;
 	}

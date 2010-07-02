@@ -238,6 +238,24 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setCopyVisible(WebUtil.getBoolean(request, "up_action_copy_visible"));
 		up.getAction().setMoveVisible(WebUtil.getBoolean(request, "up_action_move_visible"));
 		up.getAction().setAddBookmarkVisible(WebUtil.getBoolean(request, "up_action_add_bookmark_visible"));
+		up.getAction().setManageBookmarksVisible(WebUtil.getBoolean(request, "up_action_manage_bookmarks_visible"));
+		up.getAction().setExportVisible(WebUtil.getBoolean(request, "up_action_export_visible"));
+		up.getAction().setCreateFromTemplateVisible(WebUtil.getBoolean(request, "up_action_create_from_template_visible"));
+		up.getAction().setPurgeVisible(WebUtil.getBoolean(request, "up_action_purge_visible"));
+		up.getAction().setPurgeTrashVisible(WebUtil.getBoolean(request, "up_action_purge_trash_visible"));
+		up.getAction().setRestoreVisible(WebUtil.getBoolean(request, "up_action_restore_visible"));
+		up.getAction().setSendDocumentLinkVisible(WebUtil.getBoolean(request, "up_action_send_document_link_visible"));
+		up.getAction().setSkinVisible(WebUtil.getBoolean(request, "up_action_skin_visible"));
+		up.getAction().setDebugVisible(WebUtil.getBoolean(request, "up_action_debug_visible"));
+		up.getAction().setAdministrationVisible(WebUtil.getBoolean(request, "up_action_administration_visible"));
+		//up.getAction().setHelpVisible(WebUtil.getBoolean(request, "up_action_help_visible"));
+		//up.getAction().setDocumentationVisible(WebUtil.getBoolean(request, "up_action_documentation_visible"));
+		//up.getAction().setBugTrackingVisible(WebUtil.getBoolean(request, "up_action_bug_tracking_visible"));
+		//up.getAction().setSupportVisible(WebUtil.getBoolean(request, "up_action_support_visible"));
+		//up.getAction().setForumVisible(WebUtil.getBoolean(request, "up_action_forum_visible"));
+		//up.getAction().setChangelogVisible(WebUtil.getBoolean(request, "up_action_changelog_visible"));
+		//up.getAction().setWebSiteVisible(WebUtil.getBoolean(request, "up_action_web_site_visible"));
+		//up.getAction().setAboutVisible(WebUtil.getBoolean(request, "up_action_about_visible"));
 		
 		// Tab
 		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
