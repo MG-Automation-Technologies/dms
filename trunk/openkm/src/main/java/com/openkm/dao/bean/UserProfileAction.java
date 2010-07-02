@@ -51,7 +51,25 @@ public class UserProfileAction implements Serializable {
 	private boolean copyVisible;
 	private boolean moveVisible;
 	private boolean addBookmarkVisible;
-
+	private boolean exportVisible;
+	private boolean createFromTemplateVisible;
+	private boolean purgeVisible;
+	private boolean restoreVisible;
+	private boolean purgeTrashVisible;
+	private boolean sendDocumentLinkVisible;
+	private boolean skinVisible;
+	private boolean debugVisible;
+	private boolean administrationVisible;
+	private boolean manageBookmarksVisible;
+	private boolean helpVisible;
+	private boolean documentationVisible;
+	private boolean bugReportVisible;
+	private boolean supportRequestVisible;
+	private boolean publicForumVisible;
+	private boolean versionChangesVisible;
+	private boolean projectWebVisible;
+	private boolean aboutVisible;
+	
 	public boolean isCreateFolderVisible() {
 		return createFolderVisible;
 	}
@@ -258,6 +276,150 @@ public class UserProfileAction implements Serializable {
 
 	public void setAddBookmarkVisible(boolean addBookmarkVisible) {
 		this.addBookmarkVisible = addBookmarkVisible;
+	}
+	
+	public boolean isExportVisible() {
+		return exportVisible;
+	}
+
+	public void setExportVisible(boolean exportVisible) {
+		this.exportVisible = exportVisible;
+	}
+
+	public boolean isCreateFromTemplateVisible() {
+		return createFromTemplateVisible;
+	}
+
+	public void setCreateFromTemplateVisible(boolean createFromTemplateVisible) {
+		this.createFromTemplateVisible = createFromTemplateVisible;
+	}
+
+	public boolean isPurgeVisible() {
+		return purgeVisible;
+	}
+
+	public void setPurgeVisible(boolean purgeVisible) {
+		this.purgeVisible = purgeVisible;
+	}
+
+	public boolean isRestoreVisible() {
+		return restoreVisible;
+	}
+
+	public void setRestoreVisible(boolean restoreVisible) {
+		this.restoreVisible = restoreVisible;
+	}
+
+	public boolean isPurgeTrashVisible() {
+		return purgeTrashVisible;
+	}
+
+	public void setPurgeTrashVisible(boolean purgeTrashVisible) {
+		this.purgeTrashVisible = purgeTrashVisible;
+	}
+
+	public boolean isSendDocumentLinkVisible() {
+		return sendDocumentLinkVisible;
+	}
+
+	public void setSendDocumentLinkVisible(boolean sendDocumentLinkVisible) {
+		this.sendDocumentLinkVisible = sendDocumentLinkVisible;
+	}
+
+	public boolean isSkinVisible() {
+		return skinVisible;
+	}
+
+	public void setSkinVisible(boolean skinVisible) {
+		this.skinVisible = skinVisible;
+	}
+
+	public boolean isDebugVisible() {
+		return debugVisible;
+	}
+
+	public void setDebugVisible(boolean debugVisible) {
+		this.debugVisible = debugVisible;
+	}
+
+	public boolean isAdministrationVisible() {
+		return administrationVisible;
+	}
+
+	public void setAdministrationVisible(boolean administrationVisible) {
+		this.administrationVisible = administrationVisible;
+	}
+
+	public boolean isManageBookmarksVisible() {
+		return manageBookmarksVisible;
+	}
+
+	public void setManageBookmarksVisible(boolean manageBookmarksVisible) {
+		this.manageBookmarksVisible = manageBookmarksVisible;
+	}
+
+	public boolean isHelpVisible() {
+		return helpVisible;
+	}
+
+	public void setHelpVisible(boolean helpVisible) {
+		this.helpVisible = helpVisible;
+	}
+
+	public boolean isDocumentationVisible() {
+		return documentationVisible;
+	}
+
+	public void setDocumentationVisible(boolean documentationVisible) {
+		this.documentationVisible = documentationVisible;
+	}
+
+	public boolean isBugReportVisible() {
+		return bugReportVisible;
+	}
+
+	public void setBugReportVisible(boolean bugReportVisible) {
+		this.bugReportVisible = bugReportVisible;
+	}
+
+	public boolean isSupportRequestVisible() {
+		return supportRequestVisible;
+	}
+
+	public void setSupportRequestVisible(boolean supportRequestVisible) {
+		this.supportRequestVisible = supportRequestVisible;
+	}
+
+	public boolean isPublicForumVisible() {
+		return publicForumVisible;
+	}
+
+	public void setPublicForumVisible(boolean publicForumVisible) {
+		this.publicForumVisible = publicForumVisible;
+	}
+
+	public boolean isVersionChangesVisible() {
+		return versionChangesVisible;
+	}
+
+	public void setVersionChangesVisible(boolean versionChangesVisible) {
+		this.versionChangesVisible = versionChangesVisible;
+	}
+
+	public boolean isProjectWebVisible() {
+		return projectWebVisible;
+	}
+
+	public void setProjectWebVisible(boolean projectWebVisible) {
+		this.projectWebVisible = projectWebVisible;
+	}
+
+	public boolean isAboutVisible() {
+		return aboutVisible;
+	}
+
+	public void setAboutVisible(boolean aboutVisible) {
+		this.aboutVisible = aboutVisible;
 	}
 	
 	public String toString() {
