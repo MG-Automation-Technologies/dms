@@ -94,6 +94,25 @@
 	  </property>
 	</component>
 	
+	<!-- MENU -->
+	<component name="menu" class="com.openkm.dao.bean.UserProfileMenu">
+      <property name="fileVisible" not-null="true">
+        <column name="UP_MENU_FILE_VISIBLE" default="true"/>
+      </property>
+      <property name="editVisible" not-null="true">
+        <column name="UP_MENU_EDIT_VISIBLE" default="true"/>
+      </property>
+      <property name="toolsVisible" not-null="true">
+        <column name="UP_MENU_TOOLS_VISIBLE" default="true"/>
+      </property>
+      <property name="bookmarksVisible" not-null="true">
+        <column name="UP_MENU_BOOKMARKS_VISIBLE" default="true"/>
+      </property>
+      <property name="helpVisible" not-null="true">
+        <column name="UP_MENU_HELP_VISIBLE" default="true"/>
+      </property>
+    </component>
+		
 	<!-- ACTION -->
 	<component name="action" class="com.openkm.dao.bean.UserProfileAction">
 	  <property name="createFolderVisible" not-null="true">
@@ -174,22 +193,6 @@
 	  <property name="addBookmarkVisible" not-null="true">
 	    <column name="UP_ACTION_ADD_BOOKMARK_VISIBLE" default="true"/>
 	  </property>
-    </component>
-	
-	<!-- MENU -->
-	<component name="menu" class="com.openkm.dao.bean.UserProfileMenu">
-      <property name="editVisible" not-null="true">
-        <column name="UP_MENU_EDIT_VISIBLE" default="true"/>
-      </property>
-      <property name="toolsVisible" not-null="true">
-        <column name="UP_MENU_TOOLS_VISIBLE" default="true"/>
-      </property>
-      <property name="bookmarksVisible" not-null="true">
-        <column name="UP_MENU_BOOKMARKS_VISIBLE" default="true"/>
-      </property>
-      <property name="helpVisible" not-null="true">
-        <column name="UP_MENU_HELP_VISIBLE" default="true"/>
-      </property>
     </component>
     
   </class>

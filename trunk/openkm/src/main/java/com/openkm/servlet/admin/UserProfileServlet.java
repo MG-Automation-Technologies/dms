@@ -206,6 +206,7 @@ public class UserProfileServlet extends BaseServlet {
 		up.getStack().setMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
 		
 		// Menu
+		up.getMenu().setFileVisible(WebUtil.getBoolean(request, "up_menu_file_visible"));
 		up.getMenu().setEditVisible(WebUtil.getBoolean(request, "up_menu_edit_visible"));
 		up.getMenu().setToolsVisible(WebUtil.getBoolean(request, "up_menu_tools_visible"));
 		up.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
