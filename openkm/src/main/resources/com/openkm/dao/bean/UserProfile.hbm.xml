@@ -190,8 +190,65 @@
 	  <property name="moveVisible" not-null="true">
 	    <column name="UP_ACTION_MOVE_VISIBLE" default="true"/>
 	  </property>
+	  <property name="purgeVisible" not-null="true">
+	    <column name="UP_ACTION_PURGE_VISIBLE" default="true"/>
+	  </property>
+	  <property name="purgeTrashVisible" not-null="true">
+	    <column name="UP_ACTION_PURGE_TRASH_VISIBLE" default="true"/>
+	  </property>
+	  <property name="restoreVisible" not-null="true">
+	    <column name="UP_ACTION_RESTORE_VISIBLE" default="true"/>
+	  </property>
 	  <property name="addBookmarkVisible" not-null="true">
 	    <column name="UP_ACTION_ADD_BOOKMARK_VISIBLE" default="true"/>
+	  </property>
+	  <property name="manageBookmarksVisible" not-null="true">
+	    <column name="UP_ACTION_MANAGE_BOOKMARKS_VISIBLE" default="true"/>
+	  </property>
+	  <property name="exportVisible" not-null="true">
+	    <column name="UP_ACTION_EXPORT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="createFromTemplateVisible" not-null="true">
+	    <column name="UP_ACTION_CREATE_FROM_TEMPLATE_VISIBLE" default="true"/>
+	  </property>
+	  <property name="sendDocumentLinkVisible" not-null="true">
+	    <column name="UP_ACTION_SEND_DOCUMENT_LINK_VISIBLE" default="true"/>
+	  </property>
+	  <property name="sendDocumentAttachmentVisible" not-null="true">
+	    <column name="UP_ACTION_SEND_DOCUMENT_ATTACHMENT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="changeSkinVisible" not-null="true">
+	    <column name="UP_ACTION_CHANGE_SKIN_VISIBLE" default="true"/>
+	  </property>
+	  <property name="debugVisible" not-null="true">
+	    <column name="UP_ACTION_DEBUG_VISIBLE" default="true"/>
+	  </property>
+	  <property name="administrationVisible" not-null="true">
+	    <column name="UP_ACTION_ADMINISTRATION_VISIBLE" default="true"/>
+	  </property>
+	  <property name="helpVisible" not-null="true">
+	    <column name="UP_ACTION_HELP_VISIBLE" default="true"/>
+	  </property>
+	  <property name="documentationVisible" not-null="true">
+	    <column name="UP_ACTION_DOCUMENTATION_VISIBLE" default="true"/>
+	  </property>
+	  <property name="bugTrackingVisible" not-null="true">
+	    <column name="UP_ACTION_BUG_TRACKING_VISIBLE" default="true"/>
+	  </property>
+	  <property name="supportVisible" not-null="true">
+	    <column name="UP_ACTION_SUPPORT_VISIBLE" default="true"/>
+	  </property>
+	  <property name="forumVisible" not-null="true">
+	    <column name="UP_ACTION_FORUM_VISIBLE" default="true"/>
+	  </property>
+	  <property name="changelogVisible" not-null="true">
+	    <column name="UP_ACTION_CHANGELOG_VISIBLE" default="true"/>
+	  </property>
+	  <property name="webSiteVisible" not-null="true">
+	    <column name="UP_ACTION_WEB_SITE_VISIBLE" default="true"/>
+	  </property>
+	  <property name="aboutVisible" not-null="true">
+	    <column name="UP_ACTION_ABOUT_VISIBLE" default="true"/>
 	  </property>
     </component>
     

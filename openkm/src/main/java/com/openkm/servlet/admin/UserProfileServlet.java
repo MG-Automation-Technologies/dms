@@ -212,6 +212,19 @@ public class UserProfileServlet extends BaseServlet {
 		up.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "up_menu_bookmarks_visible"));
 		up.getMenu().setHelpVisible(WebUtil.getBoolean(request, "up_menu_help_visible"));
 		
+		// Tab
+		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
+		up.getTab().setSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
+		up.getTab().setDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
+		
+		// Dashboard
+		up.getDashboard().setUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
+		up.getDashboard().setMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
+		up.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
+		up.getDashboard().setGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
+		up.getDashboard().setWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
+		up.getDashboard().setKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
+		
 		// Action
 		up.getAction().setCreateFolderVisible(WebUtil.getBoolean(request, "up_action_create_folder_visible"));
 		up.getAction().setFindFolderVisible(WebUtil.getBoolean(request, "up_action_find_folder_visible"));
@@ -246,7 +259,8 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setPurgeTrashVisible(WebUtil.getBoolean(request, "up_action_purge_trash_visible"));
 		up.getAction().setRestoreVisible(WebUtil.getBoolean(request, "up_action_restore_visible"));
 		up.getAction().setSendDocumentLinkVisible(WebUtil.getBoolean(request, "up_action_send_document_link_visible"));
-		up.getAction().setSkinVisible(WebUtil.getBoolean(request, "up_action_skin_visible"));
+		up.getAction().setSendDocumentAttachmentVisible(WebUtil.getBoolean(request, "up_action_send_document_attachment_visible"));
+		up.getAction().setChangeSkinVisible(WebUtil.getBoolean(request, "up_action_change_skin_visible"));
 		up.getAction().setDebugVisible(WebUtil.getBoolean(request, "up_action_debug_visible"));
 		up.getAction().setAdministrationVisible(WebUtil.getBoolean(request, "up_action_administration_visible"));
 		//up.getAction().setHelpVisible(WebUtil.getBoolean(request, "up_action_help_visible"));
@@ -257,20 +271,7 @@ public class UserProfileServlet extends BaseServlet {
 		//up.getAction().setChangelogVisible(WebUtil.getBoolean(request, "up_action_changelog_visible"));
 		//up.getAction().setWebSiteVisible(WebUtil.getBoolean(request, "up_action_web_site_visible"));
 		//up.getAction().setAboutVisible(WebUtil.getBoolean(request, "up_action_about_visible"));
-		
-		// Tab
-		up.getTab().setDesktopVisible(WebUtil.getBoolean(request, "up_tab_desktop_visible"));
-		up.getTab().setSearchVisible(WebUtil.getBoolean(request, "up_tab_search_visible"));
-		up.getTab().setDashboardVisible(WebUtil.getBoolean(request, "up_tab_dashboard_visible"));
-		
-		// Dashboard
-		up.getDashboard().setUserVisible(WebUtil.getBoolean(request, "up_dashboard_user_visible"));
-		up.getDashboard().setMailVisible(WebUtil.getBoolean(request, "up_dashboard_mail_visible"));
-		up.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "up_dashboard_news_visible"));
-		up.getDashboard().setGeneralVisible(WebUtil.getBoolean(request, "up_dashboard_general_visible"));
-		up.getDashboard().setWorkflowVisible(WebUtil.getBoolean(request, "up_dashboard_workflow_visible"));
-		up.getDashboard().setKeywordsVisible(WebUtil.getBoolean(request, "up_dashboard_keywords_visible"));
-		
+				
 		return up;
 	}
 }
