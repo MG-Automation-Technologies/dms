@@ -42,6 +42,9 @@
     
     <!-- STACK -->
     <component name="stack" class="com.openkm.dao.bean.UserProfileStack">
+      <property name="taxonomyVisible" not-null="true">
+        <column name="UP_STACK_TAXONOMY_VISIBLE" default="true"/>
+      </property>
       <property name="categoriesVisible" not-null="true">
         <column name="UP_STACK_CATEGORIES_VISIBLE" default="true"/>
       </property>
@@ -56,6 +59,9 @@
       </property>
       <property name="mailVisible" not-null="true">
         <column name="UP_STACK_MAIL_VISIBLE" default="true"/>
+      </property>
+      <property name="trashVisible" not-null="true">
+        <column name="UP_STACK_TRASH_VISIBLE" default="true"/>
       </property>
     </component>
     

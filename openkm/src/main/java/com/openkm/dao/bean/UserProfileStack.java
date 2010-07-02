@@ -25,11 +25,21 @@ import java.io.Serializable;
 
 public class UserProfileStack implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private boolean taxonomyVisible;
 	private boolean categoriesVisible;
 	private boolean thesaurusVisible;
 	private boolean templatesVisible;
 	private boolean personalVisible;
 	private boolean mailVisible;
+	private boolean trashVisible;
+
+	public boolean isTaxonomyVisible() {
+		return taxonomyVisible;
+	}
+
+	public void setTaxonomyVisible(boolean taxonomyVisible) {
+		this.taxonomyVisible = taxonomyVisible;
+	}
 
 	public boolean isCategoriesVisible() {
 		return categoriesVisible;
@@ -70,15 +80,25 @@ public class UserProfileStack implements Serializable {
 	public void setMailVisible(boolean mailVisible) {
 		this.mailVisible = mailVisible;
 	}
+
+	public boolean isTrashVisible() {
+		return trashVisible;
+	}
+
+	public void setTrashVisible(boolean trashVisible) {
+		this.trashVisible = trashVisible;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("categoriesVisible="); sb.append(categoriesVisible);
+		sb.append("taxonomyVisible="); sb.append(taxonomyVisible);
+		sb.append(", categoriesVisible="); sb.append(categoriesVisible);
 		sb.append(", thesaurusVisible="); sb.append(thesaurusVisible);
 		sb.append(", templatesVisible="); sb.append(templatesVisible);
 		sb.append(", personalVisible="); sb.append(personalVisible);
 		sb.append(", mailVisible="); sb.append(mailVisible);
+		sb.append(", trashVisible="); sb.append(trashVisible);
 		sb.append("}");
 		return sb.toString();
 	}
