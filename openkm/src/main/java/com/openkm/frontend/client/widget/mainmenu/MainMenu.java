@@ -468,6 +468,7 @@ public class MainMenu extends Composite {
 		MainMenu.setAutoOpen(false);
 		
 		// By default hide menus
+		menuFile.setVisible(false);
 		menuEdit.setVisible(false);
 		menuTools.setVisible(false);
 		menuBookmark.setVisible(false);
@@ -1162,6 +1163,15 @@ public class MainMenu extends Composite {
 	 */
 	public void setHelpMenuVisible(boolean visible) {
 		menuHelp.setVisible(visible);
+	}
+	
+	/**
+	 * setFileMenuVisible
+	 * 
+	 * @param visible
+	 */
+	public void setFileMenuVisible(boolean visible) {
+		menuFile.setVisible(visible);
 	}
 	
 	/**

@@ -68,6 +68,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean stackTemplatesVisible;
 	private boolean stackPersonalVisible;
 	private boolean stackMailVisible;
+	private boolean menuFileVisible;
 	private boolean menuEditVisible;
 	private boolean menuToolsVisible;
 	private boolean menuBookmarksVisible;
@@ -342,6 +343,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setStackMailVisible(boolean stackMailVisible) {
 		this.stackMailVisible = stackMailVisible;
+	}
+	
+	public boolean isMenuFileVisible() {
+		return menuFileVisible;
+	}
+
+	public void setMenuFileVisible(boolean menuFileVisible) {
+		this.menuFileVisible = menuFileVisible;
 	}
 
 	public boolean isMenuEditVisible() {
