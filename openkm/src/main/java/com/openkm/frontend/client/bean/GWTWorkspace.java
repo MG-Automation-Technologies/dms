@@ -35,6 +35,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTWorkspace implements IsSerializable {
 	private String token = "";
 	private String user = "";
+	private List<String> roleList = new ArrayList<String>();
 	private String applicationURL = "";
 	private String imapHost = "";
 	private String imapUser = "";
@@ -471,5 +472,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setAvailableOption(GWTAvailableOption availableOption) {
 		this.availableOption = availableOption;
+	}
+	
+	public List<String> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<String> roleList) {
+		this.roleList = roleList;
 	}
 }

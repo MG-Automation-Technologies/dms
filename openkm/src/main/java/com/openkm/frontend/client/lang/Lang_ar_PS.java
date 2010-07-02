@@ -588,6 +588,7 @@ public class Lang_ar_PS {
 	    lang.put("user.preferences.user", "المستخدم");
 	    lang.put("user.preferences.password", "كلمة المرور");
 	    lang.put("user.preferences.mail", "البريد الالكتروني");
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "IMAP مقلم");
 	    lang.put("user.preferences.imap.user", "IMAP اسم مستخدم");
 	    lang.put("user.preferences.imap.user.password", "IMAP كلمة المرور");
