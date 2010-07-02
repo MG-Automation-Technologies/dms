@@ -3,6 +3,19 @@
   <legend>Stacks</legend>
   <table>
     <tr>
+      <td>Taxonomy visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.stack.taxonomyVisible}">
+            <input name="up_stack_taxonomy_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_stack_taxonomy_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
       <td>Categories visible</td>
       <td>
         <c:choose>
@@ -63,6 +76,19 @@
           </c:when>
           <c:otherwise>
             <input name="up_stack_mail_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Trash visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.stack.trashVisible}">
+            <input name="up_stack_trash_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_stack_trash_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>

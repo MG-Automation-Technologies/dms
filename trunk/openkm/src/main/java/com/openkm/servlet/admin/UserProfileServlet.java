@@ -199,11 +199,13 @@ public class UserProfileServlet extends BaseServlet {
 		up.getChat().setAutoLoginEnabled(WebUtil.getBoolean(request, "up_chat_auto_login"));
 		
 		// Stack
+		up.getStack().setTaxonomyVisible(WebUtil.getBoolean(request, "up_stack_taxonomy_visible"));
 		up.getStack().setCategoriesVisible(WebUtil.getBoolean(request, "up_stack_categories_visible"));
 		up.getStack().setThesaurusVisible(WebUtil.getBoolean(request, "up_stack_thesaurus_visible"));
 		up.getStack().setTemplatesVisible(WebUtil.getBoolean(request, "up_stack_templates_visible"));
 		up.getStack().setPersonalVisible(WebUtil.getBoolean(request, "up_stack_personal_visible"));
 		up.getStack().setMailVisible(WebUtil.getBoolean(request, "up_stack_mail_visible"));
+		up.getStack().setTrashVisible(WebUtil.getBoolean(request, "up_stack_trash_visible"));
 		
 		// Menu
 		up.getMenu().setFileVisible(WebUtil.getBoolean(request, "up_menu_file_visible"));
@@ -254,7 +256,7 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setChangeSkinVisible(WebUtil.getBoolean(request, "up_action_change_skin_visible"));
 		up.getAction().setDebugVisible(WebUtil.getBoolean(request, "up_action_debug_visible"));
 		up.getAction().setAdministrationVisible(WebUtil.getBoolean(request, "up_action_administration_visible"));
-
+		
 		// Edit
 		up.getEdit().setRenameVisible(WebUtil.getBoolean(request, "up_edit_rename_visible"));
 		up.getEdit().setCopyVisible(WebUtil.getBoolean(request, "up_edit_copy_visible"));
