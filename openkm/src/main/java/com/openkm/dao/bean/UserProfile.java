@@ -36,6 +36,8 @@ public class UserProfile implements Serializable {
 	private UserProfileTab tab = new UserProfileTab();
 	private UserProfileWizard wizard = new UserProfileWizard();
 	private UserProfileAction action = new UserProfileAction();
+	private UserProfileHelp help = new UserProfileHelp();
+	private UserProfileEdit edit = new UserProfileEdit();
 
 	public int getId() {
 		return id;
@@ -125,6 +127,22 @@ public class UserProfile implements Serializable {
 		this.wizard = wizard;
 	}
 	
+	public UserProfileHelp getHelp() {
+		return help;
+	}
+
+	public void setHelp(UserProfileHelp help) {
+		this.help = help;
+	}
+	
+	public UserProfileEdit getEdit() {
+		return edit;
+	}
+
+	public void setEdit(UserProfileEdit edit) {
+		this.edit = edit;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -139,6 +157,8 @@ public class UserProfile implements Serializable {
 		sb.append(", tab="); sb.append(tab);
 		sb.append(", wizard="); sb.append(wizard);
 		sb.append(", action="); sb.append(action);
+		sb.append(", help="); sb.append(help);
+		sb.append(", edit="); sb.append(edit);
 		sb.append("}");
 		return sb.toString();
 	}

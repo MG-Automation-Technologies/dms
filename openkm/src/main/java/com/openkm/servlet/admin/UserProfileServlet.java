@@ -231,13 +231,7 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setGoFolderVisible(WebUtil.getBoolean(request, "up_action_go_folder_visible"));
 		up.getAction().setDownloadVisible(WebUtil.getBoolean(request, "up_action_download_visible"));
 		up.getAction().setDownloadPdfVisible(WebUtil.getBoolean(request, "up_action_download_pdf_visible"));
-		up.getAction().setLockVisible(WebUtil.getBoolean(request, "up_action_lock_visible"));
-		up.getAction().setUnlockVisible(WebUtil.getBoolean(request, "up_action_unlock_visible"));
 		up.getAction().setAddDocumentVisible(WebUtil.getBoolean(request, "up_action_add_document_visible"));
-		up.getAction().setCheckInVisible(WebUtil.getBoolean(request, "up_action_check_in_visible"));
-		up.getAction().setCheckOutVisible(WebUtil.getBoolean(request, "up_action_check_out_visible"));
-		up.getAction().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_action_cancel_check_out_visible"));
-		up.getAction().setDeleteVisible(WebUtil.getBoolean(request, "up_action_delete_visible"));
 		up.getAction().setAddPropertyGroupVisible(WebUtil.getBoolean(request, "up_action_add_property_group_visible"));
 		up.getAction().setRemovePropertyGroupVisible(WebUtil.getBoolean(request, "up_action_remove_property_group_visible"));
 		up.getAction().setStartWorkflowVisible(WebUtil.getBoolean(request, "up_action_start_workflow_visible"));
@@ -248,9 +242,6 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setSetHomeVisible(WebUtil.getBoolean(request, "up_action_set_home_visible"));
 		up.getAction().setScannerVisible(WebUtil.getBoolean(request, "up_action_scanner_visible"));
 		up.getAction().setUploaderVisible(WebUtil.getBoolean(request, "up_action_uploader_visible"));
-		up.getAction().setRenameVisible(WebUtil.getBoolean(request, "up_action_rename_visible"));
-		up.getAction().setCopyVisible(WebUtil.getBoolean(request, "up_action_copy_visible"));
-		up.getAction().setMoveVisible(WebUtil.getBoolean(request, "up_action_move_visible"));
 		up.getAction().setAddBookmarkVisible(WebUtil.getBoolean(request, "up_action_add_bookmark_visible"));
 		up.getAction().setManageBookmarksVisible(WebUtil.getBoolean(request, "up_action_manage_bookmarks_visible"));
 		up.getAction().setExportVisible(WebUtil.getBoolean(request, "up_action_export_visible"));
@@ -263,14 +254,27 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setChangeSkinVisible(WebUtil.getBoolean(request, "up_action_change_skin_visible"));
 		up.getAction().setDebugVisible(WebUtil.getBoolean(request, "up_action_debug_visible"));
 		up.getAction().setAdministrationVisible(WebUtil.getBoolean(request, "up_action_administration_visible"));
-		//up.getAction().setHelpVisible(WebUtil.getBoolean(request, "up_action_help_visible"));
-		//up.getAction().setDocumentationVisible(WebUtil.getBoolean(request, "up_action_documentation_visible"));
-		//up.getAction().setBugTrackingVisible(WebUtil.getBoolean(request, "up_action_bug_tracking_visible"));
-		//up.getAction().setSupportVisible(WebUtil.getBoolean(request, "up_action_support_visible"));
-		//up.getAction().setForumVisible(WebUtil.getBoolean(request, "up_action_forum_visible"));
-		//up.getAction().setChangelogVisible(WebUtil.getBoolean(request, "up_action_changelog_visible"));
-		//up.getAction().setWebSiteVisible(WebUtil.getBoolean(request, "up_action_web_site_visible"));
-		//up.getAction().setAboutVisible(WebUtil.getBoolean(request, "up_action_about_visible"));
+
+		// Edit
+		up.getEdit().setRenameVisible(WebUtil.getBoolean(request, "up_edit_rename_visible"));
+		up.getEdit().setCopyVisible(WebUtil.getBoolean(request, "up_edit_copy_visible"));
+		up.getEdit().setMoveVisible(WebUtil.getBoolean(request, "up_edit_move_visible"));
+		up.getEdit().setLockVisible(WebUtil.getBoolean(request, "up_edit_lock_visible"));
+		up.getEdit().setUnlockVisible(WebUtil.getBoolean(request, "up_edit_unlock_visible"));
+		up.getEdit().setCheckInVisible(WebUtil.getBoolean(request, "up_edit_check_in_visible"));
+		up.getEdit().setCheckOutVisible(WebUtil.getBoolean(request, "up_edit_check_out_visible"));
+		up.getEdit().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_edit_cancel_check_out_visible"));
+		up.getEdit().setDeleteVisible(WebUtil.getBoolean(request, "up_edit_delete_visible"));
+		
+		// Help
+		up.getHelp().setHelpVisible(WebUtil.getBoolean(request, "up_help_help_visible"));
+		up.getHelp().setDocumentationVisible(WebUtil.getBoolean(request, "up_help_documentation_visible"));
+		up.getHelp().setBugTrackingVisible(WebUtil.getBoolean(request, "up_help_bug_tracking_visible"));
+		up.getHelp().setSupportVisible(WebUtil.getBoolean(request, "up_help_support_visible"));
+		up.getHelp().setForumVisible(WebUtil.getBoolean(request, "up_help_forum_visible"));
+		up.getHelp().setChangelogVisible(WebUtil.getBoolean(request, "up_help_changelog_visible"));
+		up.getHelp().setWebSiteVisible(WebUtil.getBoolean(request, "up_help_web_site_visible"));
+		up.getHelp().setAboutVisible(WebUtil.getBoolean(request, "up_help_about_visible"));
 				
 		return up;
 	}
