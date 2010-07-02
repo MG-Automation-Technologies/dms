@@ -106,5 +106,11 @@ public class GeneralComunicator {
 		Main.get().showError(callback, caught);
 	}
 	
+	/**
+	 * logout
+	 */
+	public static void logout() {
+		Main.get().logoutPopup.logout();
+	}
 
 }

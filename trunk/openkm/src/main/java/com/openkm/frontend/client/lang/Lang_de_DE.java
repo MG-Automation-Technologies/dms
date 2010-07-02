@@ -588,6 +588,7 @@ public class Lang_de_DE {
 	    lang.put("user.preferences.user", "User");
 	    lang.put("user.preferences.password", "Password");
 	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "IMAP server");
 	    lang.put("user.preferences.imap.user", "IMAP user name");
 	    lang.put("user.preferences.imap.user.password", "IMAP user password");

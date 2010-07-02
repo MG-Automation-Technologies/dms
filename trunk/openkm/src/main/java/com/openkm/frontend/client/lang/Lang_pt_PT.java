@@ -588,6 +588,7 @@ public class Lang_pt_PT {
 	    lang.put("user.preferences.user", "Utilizador");
 	    lang.put("user.preferences.password", "Senha");
 	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "servidor IMAP");
 	    lang.put("user.preferences.imap.user", "Nome de utilizador IMAP");
 	    lang.put("user.preferences.imap.user.password", "Senha IMAP");

@@ -32,6 +32,7 @@ import javax.jcr.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDashboard;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.bean.PropertyGroup;
@@ -52,6 +53,7 @@ import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMWorkspaceService;
+import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.WarUtils;
 import com.openkm.validator.ValidatorException;
@@ -250,9 +252,15 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				workspace.setImapFolder(mailAccount.getMailFolder());
 				workspace.setImapID(mailAccount.getId());
 			}
+			
+			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(user.getId()));
+			 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
+		} catch (PrincipalAdapterException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_PrincipalAdapterException), e.getMessage());
 		}
 		
 		if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {

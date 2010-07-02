@@ -587,6 +587,7 @@ public class Lang_zh_CN {
 	    lang.put("user.preferences.user", "用户名"); //User
 	    lang.put("user.preferences.password", "密码");//Password
 	    lang.put("user.preferences.mail", "E-mail");//E-mail
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "IMAP服务器");//IMAP server
 	    lang.put("user.preferences.imap.user", "IMAP用户名");//IMAP user name
 	    lang.put("user.preferences.imap.user.password", "IMAP用户密码");//IMAP user password

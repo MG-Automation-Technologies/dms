@@ -590,6 +590,7 @@ public class Lang_pl_PL {
 	    lang.put("user.preferences.user", "Użytkownik");
 	    lang.put("user.preferences.password", "Hasło");
 	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "IMAP serwer");
 	    lang.put("user.preferences.imap.user", "IMAP login");
 	    lang.put("user.preferences.imap.user.password", "IMAP hasło");

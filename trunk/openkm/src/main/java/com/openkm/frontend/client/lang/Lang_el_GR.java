@@ -589,6 +589,7 @@ public class Lang_el_GR {
 	    lang.put("user.preferences.user", "Χρήστης");
 	    lang.put("user.preferences.password", "Κωδικός");
 	    lang.put("user.preferences.mail", "E-mail");
+	    lang.put("user.preferences.roles","Roles");
 	    lang.put("user.preferences.imap.host", "Διακομιστής IMAP");
 	    lang.put("user.preferences.imap.user", "IMAP όνομα χρήστη");
 	    lang.put("user.preferences.imap.user.password", "IMAP κωδικός");

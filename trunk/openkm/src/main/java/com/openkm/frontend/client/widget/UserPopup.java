@@ -21,6 +21,8 @@
 
 package com.openkm.frontend.client.widget;
 
+import java.util.Iterator;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,7 +40,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.bean.GWTWorkspace;
@@ -65,6 +66,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 	private HTML userName;
 	private HTML userPassword;
 	private HTML userMail;
+	private HTML userRoles;
 	private HTML imapHost;
 	private HTML imapUser;
 	private HTML imapPassword;
@@ -75,6 +77,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 	private PasswordTextBox userPasswordText;
 	private PasswordTextBox userPasswordTextVerify;
 	private TextBox userMailText;
+	private VerticalPanel rolesPanel;
 	private PasswordTextBox imapUserPasswordText;
 	private Button update;
 	private Button cancel;
@@ -115,6 +118,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userName = new HTML(Main.i18n("user.preferences.user"));
 		userPassword = new HTML(Main.i18n("user.preferences.password"));
 		userMail = new HTML(Main.i18n("user.preferences.mail"));
+		userRoles = new HTML(Main.i18n("user.preferences.roles"));
 		imapHost = new HTML(Main.i18n("user.preferences.imap.host"));
 		imapUser = new HTML(Main.i18n("user.preferences.imap.user"));
 		imapPassword = new HTML(Main.i18n("user.preferences.imap.user.password"));
@@ -122,6 +126,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userPasswordText = new PasswordTextBox();
 		userPasswordTextVerify = new PasswordTextBox();
 		userMailText = new TextBox();
+		rolesPanel = new VerticalPanel();
 		imapUserPasswordText = new PasswordTextBox();
 		passwordError = new HTML(Main.i18n("user.preferences.password.error"));
 		passwordValidationError = new HTML("");
@@ -261,12 +266,16 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userFlexTable.setWidget(0, 0, userName);
 		userFlexTable.setWidget(1, 0, userPassword);
 		userFlexTable.setWidget(2, 0, userMail);
+		userFlexTable.setWidget(3, 0, userRoles);
 		
 		userFlexTable.setWidget(1, 1, userPasswordText);
 		userFlexTable.setWidget(1, 2, userPasswordTextVerify);
 		userFlexTable.setWidget(2, 1, userMailText);
+		userFlexTable.setWidget(3, 1, rolesPanel);
 		
+		userFlexTable.getFlexCellFormatter().setVerticalAlignment(3, 0, HasAlignment.ALIGN_TOP);
 		userFlexTable.getFlexCellFormatter().setColSpan(2, 1, 2);
+		userFlexTable.getFlexCellFormatter().setColSpan(3, 1, 2);
 		
 		mailFlexTable.setCellPadding(0);
 		mailFlexTable.setCellSpacing(2);
@@ -291,6 +300,7 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		
 		userMailText.setWidth("275");
 		hostText.setWidth("275");
+		rolesPanel.setWidth("275");
 		userGroupBoxPanel.setWidth("370px");
 		mailGroupBoxPanel.setWidth("370px");
 		
@@ -409,6 +419,10 @@ public class UserPopup extends DialogBox implements ClickHandler {
 		userFlexTable.setText(0, 1, workspace.getUser());
 		userFlexTable.getFlexCellFormatter().setColSpan(0, 1, 2);
 		userMailText.setText(workspace.getEmail());
+		
+		for (Iterator<String> it = workspace.getRoleList().iterator(); it.hasNext();) {
+			rolesPanel.add(new HTML(it.next()));
+		}
 		
 		passwordError.setVisible(false);
 		passwordValidationError.setVisible(false);
