@@ -109,6 +109,7 @@ public class WorkspaceUserProperties {
 			}
 			
 			// Show / hide menus
+			Main.get().mainPanel.topPanel.mainMenu.setFileMenuVisible(workspace.isMenuFileVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setEditMenuVisible(workspace.isMenuEditVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setToolsMenuVisible(workspace.isMenuToolsVisible());
 			Main.get().mainPanel.topPanel.mainMenu.setBookmarkMenuVisible(workspace.isMenuBookmarksVisible());

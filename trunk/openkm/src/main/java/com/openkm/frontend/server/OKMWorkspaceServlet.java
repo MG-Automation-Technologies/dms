@@ -161,6 +161,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setMenuBookmarksVisible(up.getMenu().isBookmarksVisible());
 		workspace.setMenuToolsVisible(up.getMenu().isToolsVisible());
 		workspace.setMenuHelpVisible(up.getMenu().isHelpVisible());
+		workspace.setMenuFileVisible(true);
 		
 		// Tab visibility
 		workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
