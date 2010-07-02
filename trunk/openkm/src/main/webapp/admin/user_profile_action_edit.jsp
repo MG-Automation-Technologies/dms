@@ -431,5 +431,18 @@
         </c:choose>
       </td>
     </tr>
+    <tr>
+      <td>Send document attachment visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.action.sendDocumentAttachmentVisible}">
+            <input name="up_action_send_document_attachment_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_action_send_document_attachment_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
   </table>
 </fieldset>

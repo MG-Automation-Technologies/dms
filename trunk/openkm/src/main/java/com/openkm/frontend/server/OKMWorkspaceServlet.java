@@ -211,7 +211,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setRestoreOption(up.getAction().isRestoreVisible());
 		availableOption.setPurgeTrashOption(up.getAction().isPurgeTrashVisible());
 		availableOption.setSendDocumentLinkOption(up.getAction().isSendDocumentLinkVisible());
-		availableOption.setSkinOption(up.getAction().isSkinVisible());
+		availableOption.setSkinOption(up.getAction().isChangeSkinVisible());
 		availableOption.setDebugOption(up.getAction().isDebugVisible());
 		availableOption.setAdministrationOption(up.getAction().isAdministrationVisible());
 		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible());

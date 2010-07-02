@@ -57,7 +57,8 @@ public class UserProfileAction implements Serializable {
 	private boolean restoreVisible;
 	private boolean purgeTrashVisible;
 	private boolean sendDocumentLinkVisible;
-	private boolean skinVisible;
+	private boolean sendDocumentAttachmentVisible;
+	private boolean changeSkinVisible;
 	private boolean debugVisible;
 	private boolean administrationVisible;
 	private boolean manageBookmarksVisible;
@@ -325,13 +326,21 @@ public class UserProfileAction implements Serializable {
 	public void setSendDocumentLinkVisible(boolean sendDocumentLinkVisible) {
 		this.sendDocumentLinkVisible = sendDocumentLinkVisible;
 	}
-
-	public boolean isSkinVisible() {
-		return skinVisible;
+	
+	public boolean isSendDocumentAttachmentVisible() {
+		return sendDocumentAttachmentVisible;
 	}
 
-	public void setSkinVisible(boolean skinVisible) {
-		this.skinVisible = skinVisible;
+	public void setSendDocumentAttachmentVisible(boolean sendDocumentAttachmentVisible) {
+		this.sendDocumentAttachmentVisible = sendDocumentAttachmentVisible;
+	}
+
+	public boolean isChangeSkinVisible() {
+		return changeSkinVisible;
+	}
+
+	public void setChangeSkinVisible(boolean changeSkinVisible) {
+		this.changeSkinVisible = changeSkinVisible;
 	}
 
 	public boolean isDebugVisible() {

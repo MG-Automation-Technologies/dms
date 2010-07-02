@@ -27,81 +27,61 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="525px">
+        <table class="form" width="600px">
           <tr>
-            <td colspan="3">
-              <table width="100%">
-                <tr>
-                  <td>
-                    <!-- GENERAL -->
-                    <jsp:include page="user_profile_general_edit.jsp"/>
-                  </td>
-                  <td>
-                    <!-- MISC -->
-                    <jsp:include page="user_profile_misc_edit.jsp"/>
-                  </td>
-                </tr>
-              </table>
+            <td valign="top">
+              <!-- GENERAL -->
+              <jsp:include page="user_profile_general_edit.jsp"/>
+            </td>
+            <td valign="top" rowspan="8">
+              <!-- ACTION -->
+              <jsp:include page="user_profile_action_edit.jsp"/>
             </td>
           </tr>
           <tr>
-            <td colspan="3">
+            <td valign="top">
+              <!-- MISC -->
+              <jsp:include page="user_profile_misc_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
               <!-- WIZARD -->
               <jsp:include page="user_profile_wizard_edit.jsp"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="40%">
-              <table width="100%">
-                <tr>
-                  <td>
-                    <!-- ACTION -->
-                    <jsp:include page="user_profile_action_edit.jsp"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td valign="top" width="30%">
-              <table width="100%">
-                <tr>
-                  <td>
-                    <!-- CHAT -->
-                    <jsp:include page="user_profile_chat_edit.jsp"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- MENU -->
-                    <jsp:include page="user_profile_menu_edit.jsp"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- TAB -->
-                    <jsp:include page="user_profile_tab_edit.jsp"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td valign="top" width="30%">
-              <table width="100%">
-                 <tr>
-                  <td>
-                    <!-- STACKS -->
-                    <jsp:include page="user_profile_stacks_edit.jsp"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <!-- DASHBOARD -->
-                    <jsp:include page="user_profile_dashboard_edit.jsp"/>
-                  </td>
-                </tr>
-              </table>
+            <td valign="top">
+              <!-- STACKS -->
+              <jsp:include page="user_profile_stacks_edit.jsp"/>
             </td>
           </tr>
           <tr>
-            <td colspan="3" align="right">
+            <td valign="top">
+              <!-- MENU -->
+              <jsp:include page="user_profile_menu_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              <!-- DASHBOARD -->
+              <jsp:include page="user_profile_dashboard_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              <!-- TAB -->
+              <jsp:include page="user_profile_tab_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              <!-- CHAT -->
+              <jsp:include page="user_profile_chat_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>
