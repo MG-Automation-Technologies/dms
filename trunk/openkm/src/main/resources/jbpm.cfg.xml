@@ -10,8 +10,8 @@
     <service name='persistence' factory='org.jbpm.persistence.db.DbPersistenceServiceFactory' />
   </jbpm-context>
   -->
-  <string name="jbpm.mail.smtp.host" value="mail.git.es" />
-  <string name="jbpm.mail.from.address" value="noreply@git.es" />
+  <string name="jbpm.mail.smtp.host" value="nosuchhost.nosuchdomain.com" />
+  <string name="jbpm.mail.from.address" value="nobody@nosuchhost.nosuchdomain.com" />
   <string name="resource.mail.templates" value="jbpm.mail.templates.xml"/>
   <bean name="jbpm.mail.address.resolver" class="com.openkm.workflow.OKMAddressResolver" singleton="true"/>
   
