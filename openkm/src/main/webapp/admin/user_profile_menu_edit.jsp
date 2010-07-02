@@ -3,6 +3,19 @@
   <legend>Menu</legend>
   <table>
     <tr>
+      <td>File visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.menu.fileVisible}">
+            <input name="up_menu_file_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_menu_file_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
       <td>Edit visible</td>
       <td>
         <c:choose>
