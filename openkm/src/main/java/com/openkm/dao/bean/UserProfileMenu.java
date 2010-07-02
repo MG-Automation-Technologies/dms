@@ -25,11 +25,20 @@ import java.io.Serializable;
 
 public class UserProfileMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private boolean fileVisible;
 	private boolean editVisible;
 	private boolean toolsVisible;
 	private boolean bookmarksVisible;
 	private boolean helpVisible;
 
+	public boolean isFileVisible() {
+		return fileVisible;
+	}
+
+	public void setFileVisible(boolean fileVisible) {
+		this.fileVisible = fileVisible;
+	}
+	
 	public boolean isEditVisible() {
 		return editVisible;
 	}
@@ -65,7 +74,8 @@ public class UserProfileMenu implements Serializable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("editVisible="); sb.append(editVisible);
+		sb.append("fileVisible="); sb.append(fileVisible);
+		sb.append(", editVisible="); sb.append(editVisible);
 		sb.append(", toolsVisible="); sb.append(toolsVisible);
 		sb.append(", bookmarksVisible="); sb.append(bookmarksVisible);
 		sb.append(", helpVisible="); sb.append(helpVisible);
