@@ -232,7 +232,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		try {
 			User user = new User();
 			
-			if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
+			if (Config.PRINCIPAL_ADAPTER.equals(com.openkm.principal.DatabasePrincipalAdapter.class.getName())) {
 				user = AuthDAO.findUserByPk(getThreadLocalRequest().getRemoteUser());
 				workspace.setEmail(user.getEmail());
 			} else {
