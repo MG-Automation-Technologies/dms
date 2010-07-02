@@ -186,13 +186,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setGotoFolderOption(up.getAction().isGoFolderVisible());
 		availableOption.setDownloadOption(up.getAction().isDownloadVisible());
 		availableOption.setDownloadPdfOption(up.getAction().isDownloadPdfVisible());
-		availableOption.setLockOption(up.getAction().isLockVisible());
-		availableOption.setUnLockOption(up.getAction().isUnlockVisible());
 		availableOption.setAddDocumentOption(up.getAction().isAddDocumentVisible());
-		availableOption.setCheckinOption(up.getAction().isCheckInVisible());
-		availableOption.setCheckoutOption(up.getAction().isCheckOutVisible());
-		availableOption.setCancelCheckoutOption(up.getAction().isCancelCheckOutVisible());
-		availableOption.setDeleteOption(up.getAction().isDeleteVisible());
 		availableOption.setAddPropertyGroupOption(up.getAction().isAddPropertyGroupVisible());
 		availableOption.setRemovePropertyGroupOption(up.getAction().isRemovePropertyGroupVisible());
 		availableOption.setWorkflowOption(up.getAction().isStartWorkflowVisible());
@@ -203,9 +197,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setSetHomeOption(up.getAction().isSetHomeVisible());
 		availableOption.setScannerOption(up.getAction().isScannerVisible());
 		availableOption.setUploaderOption(up.getAction().isUploaderVisible());
-		availableOption.setRenameOption(up.getAction().isRenameVisible());
-		availableOption.setCopyOption(up.getAction().isCopyVisible());
-		availableOption.setMoveOption(up.getAction().isMoveVisible());
 		availableOption.setAddBookmarkOption(up.getAction().isAddBookmarkVisible());
 		availableOption.setExportOption(up.getAction().isExportVisible());
 		availableOption.setCreateFromTemplateOption(up.getAction().isCreateFromTemplateVisible());
@@ -217,14 +208,27 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setDebugOption(up.getAction().isDebugVisible());
 		availableOption.setAdministrationOption(up.getAction().isAdministrationVisible());
 		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible());
-		availableOption.setHelpOption(up.getAction().isHelpVisible());
-		availableOption.setDocumentationOption(up.getAction().isDocumentationVisible());
-		availableOption.setBugReportOption(up.getAction().isBugTrackingVisible());
-		availableOption.setSupportRequestOption(up.getAction().isSupportVisible());
-		availableOption.setPublicForumOption(up.getAction().isForumVisible());
-		availableOption.setVersionChangesOption(up.getAction().isChangelogVisible());
-		availableOption.setProjectWebOption(up.getAction().isWebSiteVisible());
-		availableOption.setAboutOption(up.getAction().isAboutVisible());
+		
+		// Edit
+		availableOption.setLockOption(up.getEdit().isLockVisible());
+		availableOption.setUnLockOption(up.getEdit().isUnlockVisible());
+		availableOption.setRenameOption(up.getEdit().isRenameVisible());
+		availableOption.setCopyOption(up.getEdit().isCopyVisible());
+		availableOption.setMoveOption(up.getEdit().isMoveVisible());
+		availableOption.setCheckinOption(up.getEdit().isCheckInVisible());
+		availableOption.setCheckoutOption(up.getEdit().isCheckOutVisible());
+		availableOption.setCancelCheckoutOption(up.getEdit().isCancelCheckOutVisible());
+		availableOption.setDeleteOption(up.getEdit().isDeleteVisible());
+		
+		// Help
+		availableOption.setHelpOption(up.getHelp().isHelpVisible());
+		availableOption.setDocumentationOption(up.getHelp().isDocumentationVisible());
+		availableOption.setBugReportOption(up.getHelp().isBugTrackingVisible());
+		availableOption.setSupportRequestOption(up.getHelp().isSupportVisible());
+		availableOption.setPublicForumOption(up.getHelp().isForumVisible());
+		availableOption.setVersionChangesOption(up.getHelp().isChangelogVisible());
+		availableOption.setProjectWebOption(up.getHelp().isWebSiteVisible());
+		availableOption.setAboutOption(up.getHelp().isAboutVisible());
 		
 		availableOption.setMediaPlayerOption(true);
 		availableOption.setImageViewerOption(true);

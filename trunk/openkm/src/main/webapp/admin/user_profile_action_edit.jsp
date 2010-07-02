@@ -68,32 +68,6 @@
       </td>
     </tr>
     <tr>
-      <td>Lock visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.lockVisible}">
-            <input name="up_action_lock_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_lock_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Unlock visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.unlockVisible}">
-            <input name="up_action_unlock_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_unlock_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
       <td>Add document visible</td>
       <td>
         <c:choose>
@@ -102,97 +76,6 @@
           </c:when>
           <c:otherwise>
             <input name="up_action_add_document_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Delete visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.deleteVisible}">
-            <input name="up_action_delete_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_delete_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Check-in visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.checkInVisible}">
-            <input name="up_action_check_in_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_check_in_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Check-out visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.checkOutVisible}">
-            <input name="up_action_check_out_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_check_out_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Cancel check-out visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.cancelCheckOutVisible}">
-            <input name="up_action_cancel_check_out_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_cancel_check_out_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Rename visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.renameVisible}">
-            <input name="up_action_rename_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_rename_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Copy visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.copyVisible}">
-            <input name="up_action_copy_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_copy_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Move visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.moveVisible}">
-            <input name="up_action_move_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_move_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -440,6 +323,19 @@
           </c:when>
           <c:otherwise>
             <input name="up_action_send_document_attachment_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Change skin visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${up.action.changeSkinVisible}">
+            <input name="up_action_change_skin_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="up_action_change_skin_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>

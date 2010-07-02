@@ -30,13 +30,7 @@ public class UserProfileAction implements Serializable {
 	private boolean goFolderVisible;
 	private boolean downloadVisible;
 	private boolean downloadPdfVisible;
-	private boolean lockVisible;
-	private boolean unlockVisible;
 	private boolean addDocumentVisible;
-	private boolean checkInVisible;
-	private boolean checkOutVisible;
-	private boolean cancelCheckOutVisible;
-	private boolean deleteVisible;
 	private boolean addPropertyGroupVisible;
 	private boolean removePropertyGroupVisible;
 	private boolean startWorkflowVisible;
@@ -47,9 +41,6 @@ public class UserProfileAction implements Serializable {
 	private boolean setHomeVisible;
 	private boolean scannerVisible;
 	private boolean uploaderVisible;
-	private boolean renameVisible;
-	private boolean copyVisible;
-	private boolean moveVisible;
 	private boolean addBookmarkVisible;
 	private boolean exportVisible;
 	private boolean createFromTemplateVisible;
@@ -62,14 +53,6 @@ public class UserProfileAction implements Serializable {
 	private boolean debugVisible;
 	private boolean administrationVisible;
 	private boolean manageBookmarksVisible;
-	private boolean helpVisible;
-	private boolean documentationVisible;
-	private boolean bugTrackingVisible;
-	private boolean supportVisible;
-	private boolean forumVisible;
-	private boolean changelogVisible;
-	private boolean webSiteVisible;
-	private boolean aboutVisible;
 	
 	public boolean isCreateFolderVisible() {
 		return createFolderVisible;
@@ -111,60 +94,12 @@ public class UserProfileAction implements Serializable {
 		this.downloadPdfVisible = downloadPdfVisible;
 	}
 
-	public boolean isLockVisible() {
-		return lockVisible;
-	}
-
-	public void setLockVisible(boolean lockVisible) {
-		this.lockVisible = lockVisible;
-	}
-
-	public boolean isUnlockVisible() {
-		return unlockVisible;
-	}
-
-	public void setUnlockVisible(boolean unlockVisible) {
-		this.unlockVisible = unlockVisible;
-	}
-
 	public boolean isAddDocumentVisible() {
 		return addDocumentVisible;
 	}
 
 	public void setAddDocumentVisible(boolean addDocumentVisible) {
 		this.addDocumentVisible = addDocumentVisible;
-	}
-
-	public boolean isCheckInVisible() {
-		return checkInVisible;
-	}
-
-	public void setCheckInVisible(boolean checkInVisible) {
-		this.checkInVisible = checkInVisible;
-	}
-
-	public boolean isCheckOutVisible() {
-		return checkOutVisible;
-	}
-
-	public void setCheckOutVisible(boolean checkOutVisible) {
-		this.checkOutVisible = checkOutVisible;
-	}
-
-	public boolean isCancelCheckOutVisible() {
-		return cancelCheckOutVisible;
-	}
-
-	public void setCancelCheckOutVisible(boolean cancelCheckOutVisible) {
-		this.cancelCheckOutVisible = cancelCheckOutVisible;
-	}
-
-	public boolean isDeleteVisible() {
-		return deleteVisible;
-	}
-
-	public void setDeleteVisible(boolean deleteVisible) {
-		this.deleteVisible = deleteVisible;
 	}
 
 	public boolean isAddPropertyGroupVisible() {
@@ -245,30 +180,6 @@ public class UserProfileAction implements Serializable {
 
 	public void setUploaderVisible(boolean uploaderVisible) {
 		this.uploaderVisible = uploaderVisible;
-	}
-
-	public boolean isRenameVisible() {
-		return renameVisible;
-	}
-
-	public void setRenameVisible(boolean renameVisible) {
-		this.renameVisible = renameVisible;
-	}
-
-	public boolean isCopyVisible() {
-		return copyVisible;
-	}
-
-	public void setCopyVisible(boolean copyVisible) {
-		this.copyVisible = copyVisible;
-	}
-
-	public boolean isMoveVisible() {
-		return moveVisible;
-	}
-
-	public void setMoveVisible(boolean moveVisible) {
-		this.moveVisible = moveVisible;
 	}
 
 	public boolean isAddBookmarkVisible() {
@@ -366,70 +277,6 @@ public class UserProfileAction implements Serializable {
 	public void setManageBookmarksVisible(boolean manageBookmarksVisible) {
 		this.manageBookmarksVisible = manageBookmarksVisible;
 	}
-
-	public boolean isHelpVisible() {
-		return helpVisible;
-	}
-
-	public void setHelpVisible(boolean helpVisible) {
-		this.helpVisible = helpVisible;
-	}
-
-	public boolean isDocumentationVisible() {
-		return documentationVisible;
-	}
-
-	public void setDocumentationVisible(boolean documentationVisible) {
-		this.documentationVisible = documentationVisible;
-	}
-
-	public boolean isBugTrackingVisible() {
-		return bugTrackingVisible;
-	}
-
-	public void setBugTrackingVisible(boolean bugTrackingVisible) {
-		this.bugTrackingVisible = bugTrackingVisible;
-	}
-
-	public boolean isSupportVisible() {
-		return supportVisible;
-	}
-
-	public void setSupportVisible(boolean supportVisible) {
-		this.supportVisible = supportVisible;
-	}
-
-	public boolean isForumVisible() {
-		return forumVisible;
-	}
-
-	public void setForumVisible(boolean forumVisible) {
-		this.forumVisible = forumVisible;
-	}
-
-	public boolean isChangelogVisible() {
-		return changelogVisible;
-	}
-
-	public void setChangelogVisible(boolean changelogVisible) {
-		this.changelogVisible = changelogVisible;
-	}
-
-	public boolean isWebSiteVisible() {
-		return webSiteVisible;
-	}
-
-	public void setWebSiteVisible(boolean webSiteVisible) {
-		this.webSiteVisible = webSiteVisible;
-	}
-	
-	public boolean isAboutVisible() {
-		return aboutVisible;
-	}
-
-	public void setAboutVisible(boolean aboutVisible) {
-		this.aboutVisible = aboutVisible;
-	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -438,14 +285,8 @@ public class UserProfileAction implements Serializable {
 		sb.append(", findFolderVisible="); sb.append(findFolderVisible);
 		sb.append(", goFolderVisible="); sb.append(goFolderVisible);
 		sb.append(", downloadVisible="); sb.append(downloadVisible);
-		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);
-		sb.append(", lockVisible="); sb.append(lockVisible);
-		sb.append(", unlockVisible="); sb.append(unlockVisible);
+		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);;
 		sb.append(", addDocumentVisible="); sb.append(addDocumentVisible);
-		sb.append(", checkInVisible="); sb.append(checkInVisible);
-		sb.append(", checkOutVisible="); sb.append(checkOutVisible);
-		sb.append(", cancelCheckOutVisible="); sb.append(cancelCheckOutVisible);
-		sb.append(", deleteVisible="); sb.append(deleteVisible);
 		sb.append(", addPropertyGroupVisible="); sb.append(addPropertyGroupVisible);
 		sb.append(", removePropertyGroupVisible="); sb.append(removePropertyGroupVisible);
 		sb.append(", startWorkflowVisible="); sb.append(startWorkflowVisible);
@@ -456,9 +297,6 @@ public class UserProfileAction implements Serializable {
 		sb.append(", setHomeVisible="); sb.append(setHomeVisible);
 		sb.append(", scannerVisible="); sb.append(scannerVisible);
 		sb.append(", uploaderVisible="); sb.append(uploaderVisible);
-		sb.append(", renameVisible="); sb.append(renameVisible);
-		sb.append(", copyVisible="); sb.append(copyVisible);
-		sb.append(", moveVisible="); sb.append(moveVisible);
 		sb.append(", addBookmarkVisible="); sb.append(addBookmarkVisible);
 		sb.append("}");
 		return sb.toString();

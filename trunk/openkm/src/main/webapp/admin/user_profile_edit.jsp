@@ -81,6 +81,18 @@
             </td>
           </tr>
           <tr>
+            <td valign="top">
+              <!-- EDIT -->
+              <jsp:include page="user_profile_edit_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              <!-- HELP -->
+              <jsp:include page="user_profile_help_edit.jsp"/>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
