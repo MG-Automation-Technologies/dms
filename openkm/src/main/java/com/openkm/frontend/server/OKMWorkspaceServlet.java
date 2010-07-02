@@ -217,11 +217,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible());
 		availableOption.setHelpOption(up.getAction().isHelpVisible());
 		availableOption.setDocumentationOption(up.getAction().isDocumentationVisible());
-		availableOption.setBugReportOption(up.getAction().isBugReportVisible());
-		availableOption.setSupportRequestOption(up.getAction().isSupportRequestVisible());
-		availableOption.setPublicForumOption(up.getAction().isPublicForumVisible());
-		availableOption.setVersionChangesOption(up.getAction().isVersionChangesVisible());
-		availableOption.setProjectWebOption(up.getAction().isProjectWebVisible());
+		availableOption.setBugReportOption(up.getAction().isBugTrackingVisible());
+		availableOption.setSupportRequestOption(up.getAction().isSupportVisible());
+		availableOption.setPublicForumOption(up.getAction().isForumVisible());
+		availableOption.setVersionChangesOption(up.getAction().isChangelogVisible());
+		availableOption.setProjectWebOption(up.getAction().isWebSiteVisible());
 		availableOption.setAboutOption(up.getAction().isAboutVisible());
 		
 		availableOption.setMediaPlayerOption(true);
