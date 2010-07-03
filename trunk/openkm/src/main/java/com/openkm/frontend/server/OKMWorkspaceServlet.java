@@ -210,7 +210,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setSkinOption(up.getAction().isChangeSkinVisible());
 		availableOption.setDebugOption(up.getAction().isDebugVisible());
 		availableOption.setAdministrationOption(up.getAction().isAdministrationVisible());
-		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible());
+		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible()); 
 		
 		// Edit
 		availableOption.setLockOption(up.getEdit().isLockVisible());
@@ -234,7 +234,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setAboutOption(up.getHelp().isAboutVisible());
 		
 		availableOption.setMediaPlayerOption(true);
-		availableOption.setImageViewerOption(true);
+		availableOption.setImageViewerOption(true); 
 		
 		workspace.setAvailableOption(availableOption);
 		
