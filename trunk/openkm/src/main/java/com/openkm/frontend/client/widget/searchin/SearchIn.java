@@ -154,8 +154,10 @@ public class SearchIn extends Composite {
 	HorizontalPanel searchTypePanel;
 	final CheckBox searchTypeAnd;
 	final CheckBox searchTypeOr;
+	private boolean templatesVisible = false;
 	private boolean personalVisible = false;
 	private boolean mailVisible		= false;
+	private boolean trashVisible 	= false;
 	private int posTaxonomy = 0;
 	private int posTemplates = 0;
 	private int posPersonal = 0;
@@ -164,6 +166,8 @@ public class SearchIn extends Composite {
 	private String trashContextValue = "";
 	private String personalContextValue = "";
 	private String mailContextValue = "";
+	private String templatesContextValue = "";
+	private String taxonomyContextValue = "";
 	
 	/**
 	 * SearchIn
@@ -377,8 +381,10 @@ public class SearchIn extends Composite {
 		int count = 0;
 		posTaxonomy = count++;
 		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
-		posTemplates = count++;
-		context.addItem(Main.i18n("leftpanel.label.templates"),"");
+		if (templatesVisible) {
+			posTemplates = count++;
+			context.addItem(Main.i18n("leftpanel.label.templates"),"");
+		}
 		if (personalVisible) {
 			posPersonal = count++;
 			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
@@ -387,8 +393,10 @@ public class SearchIn extends Composite {
 			posMail = count ++;
 			context.addItem(Main.i18n("leftpanel.label.mail"),"");
 		}
-		posTrash = count ++;
-		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		if (trashVisible) {
+			posTrash = count ++;
+			context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		}
 		context.setSelectedIndex(posTaxonomy);
 		
 		context.addChangeHandler(new ChangeHandler(){
@@ -824,14 +832,18 @@ public class SearchIn extends Composite {
 		tableMail.setHTML(2, 0, Main.i18n("mail.subject"));
 		
 		context.setItemText(posTaxonomy,Main.i18n("leftpanel.label.taxonomy"));
-		context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		if (templatesVisible) {
+			context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		}
 		if (personalVisible) {
 			context.setItemText(posPersonal,Main.i18n("leftpanel.label.my.documents"));
 		}
 		if (mailVisible) {
 			context.setItemText(posMail,Main.i18n("leftpanel.label.mail"));
 		}
-		context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+		if (trashVisible) {
+			context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+		}
 		
 		document.setHTML(Main.i18n("search.type.document"));
 		folder.setHTML(Main.i18n("search.type.folder"));
@@ -1220,24 +1232,40 @@ public class SearchIn extends Composite {
 	public void setContextValue(String contextValue, int stackView){
 		switch (stackView) {
 		 	case PanelDefinition.NAVIGATOR_TAXONOMY:
+		 		taxonomyContextValue = contextValue;
 		 		context.setValue(posTaxonomy,contextValue);
 		 		break;
 		 	
 		 	case PanelDefinition.NAVIGATOR_TEMPLATES:
-		 		context.setValue(posTemplates,contextValue);
+		 		templatesContextValue = contextValue;
+		 		if (templatesVisible) {
+		 			posTemplates = context.getItemCount()+1; 
+		 			context.addItem(Main.i18n("leftpanel.label.templates"), templatesContextValue);
+		 		}
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_PERSONAL:
 		 		personalContextValue = contextValue;
+		 		if (personalVisible) {
+		 			posPersonal = context.getItemCount()+1; 
+		 			context.addItem(Main.i18n("leftpanel.label.my.documents"), personalContextValue);
+		 		}
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_MAIL:
 		 		mailContextValue = contextValue;
+		 		if (mailVisible) {
+		 			posMail = context.getItemCount()+1; 
+		 			context.addItem(Main.i18n("leftpanel.label.mail"), mailContextValue);
+		 		}
 		 		break;
 		 		
 		 	case PanelDefinition.NAVIGATOR_TRASH:
 		 		trashContextValue = contextValue;
-		 		context.setValue(posTrash,contextValue);
+		 		if (trashVisible) {
+		 			posTrash = context.getItemCount()+1; 
+		 			context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
+		 		}
 		 		break;
 		}
 	}
@@ -1329,17 +1357,18 @@ public class SearchIn extends Composite {
 		endPoint.setServiceEntryPoint(Config.OKMSearchService);
 		searchService.saveSearch(params, type, callbackSaveSearch);
 	}	
+	
+	/**
+	 * showTemplates
+	 */
+	public void showTemplates() {
+		templatesVisible = true;
+	}
 		
 	/**
 	 * showPersonal
 	 */
 	public void showPersonal() {
-		// removing trash and add after
-		context.removeItem(posTrash);
-		posPersonal = posTrash; 
-		posTrash++;
-		context.addItem(Main.i18n("leftpanel.label.my.documents"), personalContextValue);
-		context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
 		personalVisible = true;
 	}
 	
@@ -1347,13 +1376,14 @@ public class SearchIn extends Composite {
 	 * showMail
 	 */
 	public void showMail() {
-		// removing trash and add after
-		context.removeItem(posTrash);
-		posMail = posTrash;
-		posTrash++;
-		context.addItem(Main.i18n("leftpanel.label.mail"), mailContextValue);
-		context.addItem(Main.i18n("leftpanel.label.trash"), trashContextValue);
 		mailVisible = true;
+	}
+	
+	/**
+	 * showTrash
+	 */
+	public void showTrash() {
+		trashVisible = true;
 	}
 	
 	/**

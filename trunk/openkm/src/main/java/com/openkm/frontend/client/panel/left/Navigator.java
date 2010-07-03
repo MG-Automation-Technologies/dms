@@ -134,14 +134,14 @@ public class Navigator extends Composite {
 		verticalMailPanel.add(mailTree);
 		scrollMailPanel.add(verticalMailPanel);
 		
-		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		//stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
 		//stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
 		//stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
-		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		//stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
 		//stackPanel.add(scrollMyDocumentsPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		//stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
-		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
-		stackPanel.showStack(0);
+		//stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+		//stackPanel.showStack(0);
 		stackPanel.setStyleName("okm-StackPanel");
 		//stackPanel.addStyleName("okm-DisableSelect"); // This style causes problem with cursor at renaming folder
 		
@@ -154,7 +154,10 @@ public class Navigator extends Composite {
 	 */
 	public void langRefresh() {
 		int count = 0;
-		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		if (stackPanel.isTaxonomyVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+			taxonomyTree.langRefresh();
+		}
 		if (stackPanel.isCategoriesVisible()) {
 			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
 			categoriesTree.langRefresh();
@@ -163,7 +166,10 @@ public class Navigator extends Composite {
 			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 			thesaurusTree.langRefresh();
 		}
-		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		if (stackPanel.isTemplatesVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+			templateTree.langRefresh();
+		}
 		if (stackPanel.isPersonalVisible()) {
 			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 			personalTree.langRefresh();
@@ -172,10 +178,10 @@ public class Navigator extends Composite {
 			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
 			mailTree.langRefresh();
 		}
-		stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
-		taxonomyTree.langRefresh();
-		templateTree.langRefresh();
-		trashTree.langRefresh();
+		if (stackPanel.isTrashVisible()) {
+			stackPanel.setStackText(count++, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+			trashTree.langRefresh();
+		}
 	}
 	
 	/**
@@ -190,21 +196,34 @@ public class Navigator extends Composite {
 		int hiddenStacks = stackPanel.getHiddenStacks();
 		stackPanel.setSize(""+width, ""+height);
 		// Substract 2 pixels for borders on stackPanel
-		scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		if (stackPanel.isTaxonomyVisible()) {
+			scrollTaxonomyPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
 		if (stackPanel.isCategoriesVisible()) {
 			scrollCategoriesPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		}
 		if (stackPanel.isThesaurusVisible()) {
 			scrollThesaurusPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		}
+		if (stackPanel.isTemplatesVisible()) {
+			scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
 		if (stackPanel.isPersonalVisible()) {
 			scrollPersonalPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		}
-		scrollTemplatePanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		if (stackPanel.isMailVisible()) {
 			scrollMailPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
 		}
-		scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		if (stackPanel.isTrashVisible()) {
+			scrollTrashPanel.setSize(""+(width-2), ""+(height-2-((PanelDefinition.NUMBER_OF_STACKS-hiddenStacks) * PanelDefinition.STACK_HEIGHT)));
+		}
+	}
+	
+	/**
+	 * showTaxonomy
+	 */
+	public void showTaxonomy() {
+		stackPanel.showTaxonomy();
 	}
 	
 	/**
@@ -222,6 +241,13 @@ public class Navigator extends Composite {
 	}
 	
 	/**
+	 * showTemplates
+	 */
+	public void showTemplates() {
+		stackPanel.showTemplates();
+	}
+	
+	/**
 	 * showPersonal
 	 */
 	public void showPersonal() {
@@ -236,6 +262,13 @@ public class Navigator extends Composite {
 	}
 	
 	/**
+	 * showTrash
+	 */
+	public void showTrash() {
+		stackPanel.showTrash();
+	}
+	
+	/**
 	 * refreshContentPanels
 	 */
 	private void refreshStartupContentPanels() {
@@ -244,22 +277,27 @@ public class Navigator extends Composite {
 		while (stackPanel.getWidgetCount() > 0) {
 			stackPanel.remove(0);
 		}
-		
-		stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		if (stackPanel.isTaxonomyVisible()) {
+			stackPanel.add(scrollTaxonomyPanel, Util.createHeaderHTML("img/icon/stackpanel/chart_organisation.gif", Main.i18n("leftpanel.label.taxonomy")), true);
+		}
 		if (stackPanel.isCategoriesVisible()) {
 			stackPanel.add(scrollCategoriesPanel, Util.createHeaderHTML("img/icon/stackpanel/table_key.gif", Main.i18n("leftpanel.label.categories")), true);
 		}
 		if (stackPanel.isThesaurusVisible()) {
 			stackPanel.add(scrollThesaurusPanel, Util.createHeaderHTML("img/icon/stackpanel/book_open.gif", Main.i18n("leftpanel.label.thesaurus")), true);
 		}
-		stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		if (stackPanel.isTemplatesVisible()) {
+			stackPanel.add(scrollTemplatePanel, Util.createHeaderHTML("img/icon/stackpanel/template.gif", Main.i18n("leftpanel.label.templates")), true);
+		}
 		if (stackPanel.isPersonalVisible()) {
 			stackPanel.add(scrollPersonalPanel, Util.createHeaderHTML("img/icon/stackpanel/personal.gif", Main.i18n("leftpanel.label.my.documents")), true);
 		}
 		if (stackPanel.isMailVisible()) {
 			stackPanel.add(scrollMailPanel, Util.createHeaderHTML("img/icon/stackpanel/email.gif", Main.i18n("leftpanel.label.mail")), true);
 		}
-		stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+		if (stackPanel.isTrashVisible()) {
+			stackPanel.add(scrollTrashPanel, Util.createHeaderHTML("img/icon/stackpanel/bin.gif", Main.i18n("leftpanel.label.trash")), true);
+		}
 		
 		//stackPanel.showStack(selected);
 		stackPanel.setStartUpFinished();

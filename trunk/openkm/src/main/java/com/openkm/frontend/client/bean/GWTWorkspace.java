@@ -64,11 +64,13 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean wizardPropertyGroups;
 	private boolean wizardKeywords;
 	private boolean wizardCategories;
+	private boolean stackTaxonomy;
 	private boolean stackCategoriesVisible;
 	private boolean stackThesaurusVisible;
 	private boolean stackTemplatesVisible;
 	private boolean stackPersonalVisible;
 	private boolean stackMailVisible;
+	private boolean stackTrashVisible;
 	private boolean menuFileVisible;
 	private boolean menuEditVisible;
 	private boolean menuToolsVisible;
@@ -305,6 +307,14 @@ public class GWTWorkspace implements IsSerializable {
 	public void setWizardCategories(boolean wizardCategories) {
 		this.wizardCategories = wizardCategories;
 	}
+	
+	public boolean isStackTaxonomy() {
+		return stackTaxonomy;
+	}
+
+	public void setStackTaxonomy(boolean stackTaxonomy) {
+		this.stackTaxonomy = stackTaxonomy;
+	}
 
 	public boolean isStackCategoriesVisible() {
 		return stackCategoriesVisible;
@@ -344,6 +354,14 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setStackMailVisible(boolean stackMailVisible) {
 		this.stackMailVisible = stackMailVisible;
+	}
+	
+	public boolean isStackTrashVisible() {
+		return stackTrashVisible;
+	}
+
+	public void setStackTrashVisible(boolean stackTrashVisible) {
+		this.stackTrashVisible = stackTrashVisible;
 	}
 	
 	public boolean isMenuFileVisible() {

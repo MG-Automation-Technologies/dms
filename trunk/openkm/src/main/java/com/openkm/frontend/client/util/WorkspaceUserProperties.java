@@ -145,12 +145,22 @@ public class WorkspaceUserProperties {
 			
 			// showing stack
 			boolean refreshStack = false;
+			if (workspace.isStackTaxonomy()) {
+				Main.get().mainPanel.desktop.navigator.showTaxonomy();
+				refreshStack = true;
+			}
 			if (workspace.isStackCategoriesVisible()) {
 				Main.get().mainPanel.desktop.navigator.showCategories();
 				refreshStack = true;
 			}
 			if (workspace.isStackThesaurusVisible()) {
 				Main.get().mainPanel.desktop.navigator.showThesaurus();
+				refreshStack = true;
+			}
+			if (workspace.isStackTemplatesVisible()) {
+				Main.get().mainPanel.desktop.navigator.showTemplates();
+				Main.get().mainPanel.dashboard.keyMapDashboard.showTemplates();
+				Main.get().mainPanel.search.searchBrowser.searchIn.showTemplates();
 				refreshStack = true;
 			}
 			if (workspace.isStackPersonalVisible()) {
@@ -177,6 +187,12 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.navigator.trashTree.folderSelectPopup.showMail();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showMail();
 				Main.get().mainPanel.search.searchBrowser.searchIn.showMail();
+				refreshStack = true;
+			}
+			if (workspace.isStackTrashVisible()) {
+				Main.get().mainPanel.desktop.navigator.showTrash();
+				Main.get().mainPanel.dashboard.keyMapDashboard.showTrash();
+				Main.get().mainPanel.search.searchBrowser.searchIn.showTrash();
 				refreshStack = true;
 			}
 			if (refreshStack) {

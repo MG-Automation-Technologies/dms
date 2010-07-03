@@ -152,11 +152,13 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());
 		
 		// Stack visibility
+		workspace.setStackTaxonomy(true);
 		workspace.setStackCategoriesVisible(up.getStack().isCategoriesVisible());
 		workspace.setStackThesaurusVisible(up.getStack().isThesaurusVisible());
 		workspace.setStackTemplatesVisible(up.getStack().isTemplatesVisible());
 		workspace.setStackPersonalVisible(up.getStack().isPersonalVisible());
 		workspace.setStackMailVisible(up.getStack().isMailVisible());
+		workspace.setStackTrashVisible(false);
 		
 		// Menus visibility
 		workspace.setMenuFileVisible(up.getMenu().isFileVisible());
