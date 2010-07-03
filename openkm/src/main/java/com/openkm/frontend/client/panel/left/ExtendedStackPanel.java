@@ -37,11 +37,14 @@ import com.openkm.frontend.client.panel.PanelDefinition;
 public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent, HasNavigatorHandlerExtension {
 	
 	private boolean startupFinished		= false; // to indicate process starting up has finished
+	private boolean taxonomyVisible		= false;
 	private boolean categoriesVisible	= false;
 	private boolean thesaurusVisible 	= false;
+	private boolean templatesVisible 	= false;
 	private boolean personalVisible 	= false;
 	private boolean mailVisible			= false;
-	private int hiddenStacks = 4;
+	private boolean trashVisible		= false;
+	private int hiddenStacks = 7;
 	private int stackIndex = 0;
 	private List<NavigatorHandlerExtension> navHandlerExtensionList;
 	
@@ -179,6 +182,15 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	} 
 	
 	/**
+	 * isTaxonomyVisible
+	 * 
+	 * @return
+	 */
+	public boolean isTaxonomyVisible() {
+		return taxonomyVisible;
+	}
+	
+	/**
 	 * isCategoriesVisible
 	 * 
 	 * @return
@@ -194,6 +206,15 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	 */
 	public boolean isThesaurusVisible() {
 		return thesaurusVisible;
+	}
+	
+	/**
+	 * isTemplatesVisible
+	 * 
+	 * @return
+	 */
+	public boolean isTemplatesVisible() {
+		return templatesVisible;
 	}
 	
 	/**
@@ -213,6 +234,23 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	public boolean isMailVisible() {
 		return mailVisible;
 	}
+	
+	/**
+	 * isTrashVisible
+	 * 
+	 * @return
+	 */
+	public boolean isTrashVisible() {
+		return trashVisible;
+	}
+	
+	/**
+	 * showTaxonomy
+	 */
+	public void showTaxonomy() {
+		hiddenStacks--;
+		taxonomyVisible = true;
+	}
 
 	/**
 	 * showCategories
@@ -231,6 +269,14 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	public void showThesaurus() {
 		hiddenStacks--;
 		thesaurusVisible = true;
+	}
+	
+	/**
+	 * showTemplates
+	 */
+	public void showTemplates() {
+		hiddenStacks--;
+		templatesVisible = true;
 	}
 	
 	/**
@@ -254,6 +300,14 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	}
 	
 	/**
+	 * showTrash
+	 */
+	public void showTrash() {
+		hiddenStacks--;
+		trashVisible = true;
+	}
+	
+	/**
 	 * indexCorrectedChangeViewIndex
 	 * 
 	 * Return index correction made depending visible panels
@@ -263,16 +317,25 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	 */
 	public int indexCorrectedChangeViewIndex(int index) {
 		int corrected = index;
+		if (!taxonomyVisible && corrected>=PanelDefinition.NAVIGATOR_TAXONOMY) {
+			corrected++;
+		}
 		if (!categoriesVisible && corrected>=PanelDefinition.NAVIGATOR_CATEGORIES) {
 			corrected++;
 		}
 		if (!thesaurusVisible && corrected>=PanelDefinition.NAVIGATOR_THESAURUS) {
 			corrected++;
 		}
+		if (!templatesVisible && corrected>=PanelDefinition.NAVIGATOR_TEMPLATES) {
+			corrected++;
+		}
 		if (!personalVisible && corrected>=PanelDefinition.NAVIGATOR_PERSONAL) {
 			corrected++;
 		}
 		if (!mailVisible && corrected>=PanelDefinition.NAVIGATOR_MAIL) {
+			corrected++;
+		}
+		if (!trashVisible && corrected>=PanelDefinition.NAVIGATOR_TRASH) {
 			corrected++;
 		}
 		return corrected;
@@ -288,6 +351,9 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 	 */
 	private int correctedStackIndex(int index) {
 		int corrected = index;
+		if (!trashVisible && corrected>=PanelDefinition.NAVIGATOR_TRASH) {
+			corrected--;
+		}
 		if (!mailVisible && corrected>=PanelDefinition.NAVIGATOR_MAIL) {
 			corrected--;
 		}
@@ -297,7 +363,13 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 		if (!thesaurusVisible && corrected>=PanelDefinition.NAVIGATOR_THESAURUS) {
 			corrected--;
 		}
+		if (!templatesVisible && corrected>=PanelDefinition.NAVIGATOR_TEMPLATES) {
+			corrected--;
+		}
 		if (!categoriesVisible && corrected>=PanelDefinition.NAVIGATOR_CATEGORIES) {
+			corrected--;
+		}
+		if (!taxonomyVisible && corrected>=PanelDefinition.NAVIGATOR_TAXONOMY) {
 			corrected--;
 		}
 		return corrected;

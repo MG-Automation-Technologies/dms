@@ -104,6 +104,8 @@ public class KeyMapDashboard extends Composite {
 	private TagCloud tagCloud;
 	private boolean personalVisible = false;
 	private boolean mailVisible		= false;
+	private boolean trashVisible 	= false;
+	private boolean templatesVisible = false;
 	private boolean firstTime = true;
 	private boolean refresh = false;
 	private int posTaxonomy = 0;
@@ -300,8 +302,10 @@ public class KeyMapDashboard extends Composite {
 		int count = 0;
 		posTaxonomy = count++;
 		context.addItem(Main.i18n("leftpanel.label.taxonomy"),"");
-		posTemplates = count++;
-		context.addItem(Main.i18n("leftpanel.label.templates"),"");
+		if (templatesVisible) {
+			posTemplates = count++;
+			context.addItem(Main.i18n("leftpanel.label.templates"),"");
+		}
 		if (personalVisible) {
 			posPersonal = count++;
 			context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
@@ -310,8 +314,10 @@ public class KeyMapDashboard extends Composite {
 			posMail = count ++;
 			context.addItem(Main.i18n("leftpanel.label.mail"),"");
 		}
-		posTrash = count ++;
-		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		if (trashVisible) {
+			posTrash = count ++;
+			context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		}
 		posAllContext = count++;
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
 		context.setSelectedIndex(posAllContext);
@@ -437,14 +443,18 @@ public class KeyMapDashboard extends Composite {
 		controlSearchIn.langRefresh();
 		
 		context.setItemText(posTaxonomy,Main.i18n("leftpanel.label.taxonomy"));
-		context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		if (templatesVisible) {
+			context.setItemText(posTemplates,Main.i18n("leftpanel.label.templates"));
+		}
 		if (personalVisible) {
 			context.setItemText(posPersonal,Main.i18n("leftpanel.label.my.documents"));
 		}
 		if (mailVisible) {
 			context.setItemText(posMail ,Main.i18n("leftpanel.label.mail"));
 		}
-		context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+		if (trashVisible) {
+			context.setItemText(posTrash,Main.i18n("leftpanel.label.trash"));
+		}
 		context.setItemText(posAllContext,Main.i18n("leftpanel.label.all.repository"));
 		
 		table.langRefresh();
@@ -942,17 +952,27 @@ public class KeyMapDashboard extends Composite {
 	}
 	
 	/**
+	 * showTemplates
+	 */
+	public void showTemplates() {
+		// removing allcontext and add after
+		context.removeItem(posAllContext);
+		posTemplates = posAllContext; 
+		posAllContext++;
+		context.addItem(Main.i18n("leftpanel.label.templates"),"");
+		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
+		templatesVisible = true;
+	}
+	
+	/**
 	 * showPersonal
 	 */
 	public void showPersonal() {
-		// removing trash and allcontext and add after
+		// removing allcontext and add after
 		context.removeItem(posAllContext);
-		context.removeItem(posTrash);
-		posPersonal = posTrash; 
-		posTrash++;
+		posPersonal = posAllContext; 
 		posAllContext++;
 		context.addItem(Main.i18n("leftpanel.label.my.documents"),"");
-		context.addItem(Main.i18n("leftpanel.label.trash"),"");
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
 		personalVisible = true;
 	}
@@ -961,15 +981,25 @@ public class KeyMapDashboard extends Composite {
 	 * showMail
 	 */
 	public void showMail() {
-		// removing trash and allcontext and add after
+		// removing allcontext and add after
 		context.removeItem(posAllContext);
-		context.removeItem(posTrash);
-		posMail = posTrash;
-		posTrash++;
+		posMail = posAllContext;
 		posAllContext++;
 		context.addItem(Main.i18n("leftpanel.label.mail"),"");
-		context.addItem(Main.i18n("leftpanel.label.trash"),"");
 		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
 		mailVisible = true;
+	}
+	
+	/**
+	 * showPersonal
+	 */
+	public void showTrash() {
+		// removing allcontext and add after
+		context.removeItem(posAllContext);
+		posTrash = posAllContext; 
+		posAllContext++;
+		context.addItem(Main.i18n("leftpanel.label.trash"),"");
+		context.addItem(Main.i18n("leftpanel.label.all.repository"),"");
+		trashVisible = true;
 	}
 }
