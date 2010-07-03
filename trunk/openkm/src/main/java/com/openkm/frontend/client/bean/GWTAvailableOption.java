@@ -64,6 +64,7 @@ public class GWTAvailableOption implements IsSerializable {
 	public boolean restoreOption = true;
 	public boolean purgeTrashOption = true;
 	public boolean sendDocumentLinkOption = true;
+	public boolean sendDocumentAttachmentOption = true;
 	public boolean skinOption = true;
 	public boolean debugOption = true;
 	public boolean administrationOption = true;
@@ -350,6 +351,14 @@ public class GWTAvailableOption implements IsSerializable {
 
 	public void setSendDocumentLinkOption(boolean sendDocumentLinkOption) {
 		this.sendDocumentLinkOption = sendDocumentLinkOption;
+	}
+	
+	public boolean isSendDocumentAttachmentOption() {
+		return sendDocumentAttachmentOption;
+	}
+
+	public void setSendDocumentAttachmentOption(boolean sendDocumentAttachmentOption) {
+		this.sendDocumentAttachmentOption = sendDocumentAttachmentOption;
 	}
 	
 	public boolean isSkinOption() {

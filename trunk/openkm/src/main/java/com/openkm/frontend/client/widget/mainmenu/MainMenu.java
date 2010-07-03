@@ -1090,9 +1090,11 @@ public class MainMenu extends Composite {
 		download.setVisible(option.isDownloadOption());
 		downloadPdf.setVisible(option.isDownloadPdfOption());
 		sendDocumentLink.setVisible(option.isSendDocumentLinkOption());
+		sendDocumentAttachment.setVisible(option.isSendDocumentAttachmentOption());
 		export.setVisible(option.isExportOption());
 		horizontalLineFile1.setVisible(option.isCreateFolderOption() || option.isAddDocumentOption() || option.isDownloadOption() ||
-									   option.isDownloadPdfOption() || option.isSendDocumentLinkOption() || option.isExportOption()); 
+									   option.isDownloadPdfOption() || option.isSendDocumentLinkOption() || 
+									   option.isSendDocumentAttachmentOption() || option.isExportOption()); 
 		purgeTrash.setVisible(option.isPurgeTrashOption());
 		horizontalLineFile2.setVisible(option.isPurgeTrashOption());
 		
