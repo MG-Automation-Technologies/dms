@@ -20,7 +20,7 @@
       <h1>Mail accounts <span style="font-size: 10px;">(<a href="${urlUserList}">Users</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Mail host</th><th>Mail user</th><th>Mail password</th>
+          <th>Mail host</th><th>Mail user</th>
           <th>Mail folder</th><th>Active</th>
           <th width="50px">
             <c:url value="MailAccount" var="urlCreate">
@@ -40,7 +40,7 @@
             <c:param name="ma_id" value="${ma.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${ma.mailHost}</td><td>${ma.mailUser}</td><td>${ma.mailPassword}</td>
+            <td>${ma.mailHost}</td><td>${ma.mailUser}</td>
             <td>${ma.mailFolder}</td>
             <td align="center">
               <c:choose>
