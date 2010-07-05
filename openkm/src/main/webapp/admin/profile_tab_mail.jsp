@@ -6,7 +6,7 @@
       <td>Properties visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.tab.mail.propertiesVisible}">
+          <c:when test="${prf.tab.mail.propertiesVisible}">
             <input name="prf_tab_mail_properties_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
@@ -19,7 +19,7 @@
       <td>Security visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.tab.mail.securityVisible}">
+          <c:when test="${prf.tab.mail.securityVisible}">
             <input name="prf_tab_mail_security_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
