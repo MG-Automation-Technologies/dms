@@ -218,8 +218,8 @@
     <servlet-class>com.openkm.servlet.admin.MimeTypeServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>UserProfileServlet</servlet-name>
-    <servlet-class>com.openkm.servlet.admin.UserProfileServlet</servlet-class>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ProfileServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>UserConfigServlet</servlet-name>
@@ -456,8 +456,8 @@
     <url-pattern>/admin/MimeType</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>UserProfileServlet</servlet-name>
-    <url-pattern>/admin/UserProfile</url-pattern>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/admin/Profile</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UserConfigServlet</servlet-name>

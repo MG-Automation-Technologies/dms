@@ -21,7 +21,7 @@
   &nbsp;
   <a target="frame" href="Auth"><img src="img/toolbar/users.png" title="Users"></a>
   &nbsp;
-  <a target="frame" href="UserProfile"><img src="img/toolbar/profile.png" title="User profiles"></a>
+  <a target="frame" href="Profile"><img src="img/toolbar/profile.png" title="Profiles"></a>
   &nbsp;
   <a target="frame" href="DatabaseQuery"><img src="img/toolbar/database.png" title="Database query"></a>
   &nbsp;

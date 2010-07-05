@@ -6,11 +6,11 @@
       <td>Desktop visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.tab.desktopVisible}">
-            <input name="up_tab_desktop_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.tab.desktopVisible}">
+            <input name="prf_tab_desktop_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_tab_desktop_visible" type="checkbox"/>
+            <input name="prf_tab_desktop_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -19,11 +19,11 @@
       <td>Search visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.tab.searchVisible}">
-            <input name="up_tab_search_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.tab.searchVisible}">
+            <input name="prf_tab_search_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_tab_search_visible" type="checkbox"/>
+            <input name="prf_tab_search_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -32,11 +32,11 @@
       <td>Dashboard visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.tab.dashboardVisible}">
-            <input name="up_tab_dashboard_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.tab.dashboardVisible}">
+            <input name="prf_tab_dashboard_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_tab_dashboard_visible" type="checkbox"/>
+            <input name="prf_tab_dashboard_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>

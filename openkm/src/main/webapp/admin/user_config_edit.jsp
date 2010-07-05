@@ -26,7 +26,7 @@
             <td nowrap="nowrap">User profile</td>
             <td>
               <select name="uc_profile">
-                <c:forEach var="up" items="${userProfiles}">
+                <c:forEach var="up" items="${profiles}">
                   <c:choose>
                     <c:when test="${up.id == uc.profile.id}">
                       <option value="${up.id}" selected="selected">${up.name}</option>

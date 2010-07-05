@@ -23,59 +23,59 @@
         <c:when test="${action == 'edit'}"><h1>Edit profile</h1></c:when>
         <c:when test="${action == 'delete'}"><h1>Delete profile</h1></c:when>
       </c:choose>
-      <form action="UserProfile">
+      <form action="Profile">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="700px" border="0">
+        <table class="form" width="765px" border="0">
           <tr>
             <td valign="top" colspan="2" width="50%">
               <!-- GENERAL -->
-              <jsp:include page="user_profile_general.jsp"/>
+              <jsp:include page="profile_general.jsp"/>
             </td>
             <td valign="top" rowspan="3" width="25%">
               <!-- STACKS -->
-              <jsp:include page="user_profile_stacks.jsp"/>
+              <jsp:include page="profile_stacks.jsp"/>
               <!-- CHAT -->
-              <jsp:include page="user_profile_chat_edit.jsp"/>
+              <jsp:include page="profile_chat_edit.jsp"/>
             </td>
             <td valign="top" rowspan="3" width="25%">
               <!-- DASHBOARD -->
-              <jsp:include page="user_profile_dashboard.jsp"/>
+              <jsp:include page="profile_dashboard.jsp"/>
               <!-- TAB -->
-              <jsp:include page="user_profile_tab.jsp"/>
+              <jsp:include page="profile_tab.jsp"/>
             </td>
           </tr>
           <tr>
             <td valign="top" colspan="2">
               <!-- MISC -->
-              <jsp:include page="user_profile_misc.jsp"/>
+              <jsp:include page="profile_misc.jsp"/>
             </td>
           </tr>
           <tr>
             <td valign="top" colspan="2">
               <!-- WIZARD -->
-              <jsp:include page="user_profile_wizard.jsp"/>
+              <jsp:include page="profile_wizard.jsp"/>
             </td>
           </tr>
           <tr>
             <td valign="top">
               <!-- MENU -->
-              <jsp:include page="user_profile_menu.jsp"/>
+              <jsp:include page="profile_menu.jsp"/>
               <!-- MENU BOOKMARK -->
-              <jsp:include page="user_profile_menu_bookmark.jsp"/>
+              <jsp:include page="profile_menu_bookmark.jsp"/>
               <!-- MENU HELP -->
-              <jsp:include page="user_profile_menu_help.jsp"/>
+              <jsp:include page="profile_menu_help.jsp"/>
             </td>
             <td valign="top">
               <!-- MENU FILE -->
-              <jsp:include page="user_profile_menu_file.jsp"/>
+              <jsp:include page="profile_menu_file.jsp"/>
             </td>
             <td valign="top">
               <!-- MENU EDIT -->
-              <jsp:include page="user_profile_menu_edit.jsp"/>
+              <jsp:include page="profile_menu_edit.jsp"/>
               <!-- MENU TOOL -->
-              <jsp:include page="user_profile_menu_tool.jsp"/>
+              <jsp:include page="profile_menu_tool.jsp"/>
             </td>
             <td valign="top">
               <!-- TAB DOCUMENT -->
