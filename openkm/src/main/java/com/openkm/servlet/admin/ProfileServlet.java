@@ -214,19 +214,6 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMenu().setBookmarksVisible(WebUtil.getBoolean(request, "prf_menu_bookmarks_visible"));
 		prf.getMenu().setHelpVisible(WebUtil.getBoolean(request, "prf_menu_help_visible"));
 		
-		// Tab
-		prf.getTab().setDesktopVisible(WebUtil.getBoolean(request, "prf_tab_desktop_visible"));
-		prf.getTab().setSearchVisible(WebUtil.getBoolean(request, "prf_tab_search_visible"));
-		prf.getTab().setDashboardVisible(WebUtil.getBoolean(request, "prf_tab_dashboard_visible"));
-		
-		// Dashboard
-		prf.getDashboard().setUserVisible(WebUtil.getBoolean(request, "prf_dashboard_user_visible"));
-		prf.getDashboard().setMailVisible(WebUtil.getBoolean(request, "prf_dashboard_mail_visible"));
-		prf.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "prf_dashboard_news_visible"));
-		prf.getDashboard().setGeneralVisible(WebUtil.getBoolean(request, "prf_dashboard_general_visible"));
-		prf.getDashboard().setWorkflowVisible(WebUtil.getBoolean(request, "prf_dashboard_workflow_visible"));
-		prf.getDashboard().setKeywordsVisible(WebUtil.getBoolean(request, "prf_dashboard_keywords_visible"));
-		
 		// Menu File
 		prf.getMenu().getFile().setCreateFolderVisible(WebUtil.getBoolean(request, "prf_menu_file_create_folder_visible"));
 		prf.getMenu().getFile().setFindFolderVisible(WebUtil.getBoolean(request, "prf_menu_file_find_folder_visible"));
@@ -281,6 +268,31 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMenu().getHelp().setChangelogVisible(WebUtil.getBoolean(request, "prf_menu_help_changelog_visible"));
 		prf.getMenu().getHelp().setWebSiteVisible(WebUtil.getBoolean(request, "prf_menu_help_web_site_visible"));
 		prf.getMenu().getHelp().setAboutVisible(WebUtil.getBoolean(request, "prf_menu_help_about_visible"));
+		
+		// Tab
+		prf.getTab().setDesktopVisible(WebUtil.getBoolean(request, "prf_tab_desktop_visible"));
+		prf.getTab().setSearchVisible(WebUtil.getBoolean(request, "prf_tab_search_visible"));
+		prf.getTab().setDashboardVisible(WebUtil.getBoolean(request, "prf_tab_dashboard_visible"));
+		
+		// Tab Document
+		prf.getTab().getDocument().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_document_properties_visible"));
+		prf.getTab().getDocument().setSecurityVisible(WebUtil.getBoolean(request, "prf_tab_document_security_visible"));
+
+		// Tab Folder
+		prf.getTab().getFolder().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_folder_properties_visible"));
+		prf.getTab().getFolder().setSecurityVisible(WebUtil.getBoolean(request, "prf_tab_folder_security_visible"));
+
+		// Tab Mail
+		prf.getTab().getMail().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_mail_properties_visible"));
+		prf.getTab().getMail().setSecurityVisible(WebUtil.getBoolean(request, "prf_tab_mail_security_visible"));
+
+		// Dashboard
+		prf.getDashboard().setUserVisible(WebUtil.getBoolean(request, "prf_dashboard_user_visible"));
+		prf.getDashboard().setMailVisible(WebUtil.getBoolean(request, "prf_dashboard_mail_visible"));
+		prf.getDashboard().setNewsVisible(WebUtil.getBoolean(request, "prf_dashboard_news_visible"));
+		prf.getDashboard().setGeneralVisible(WebUtil.getBoolean(request, "prf_dashboard_general_visible"));
+		prf.getDashboard().setWorkflowVisible(WebUtil.getBoolean(request, "prf_dashboard_workflow_visible"));
+		prf.getDashboard().setKeywordsVisible(WebUtil.getBoolean(request, "prf_dashboard_keywords_visible"));
 				
 		return prf;
 	}
