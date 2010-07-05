@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileMisc implements Serializable {
+public class ProfileMisc implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean advancedFilters;
 	private long userQuota;

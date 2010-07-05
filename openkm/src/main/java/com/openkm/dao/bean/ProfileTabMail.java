@@ -23,32 +23,32 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileChat implements Serializable {
+public class ProfileTabMail implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean chatEnabled;
-	private boolean autoLoginEnabled;
-	
-	public boolean isChatEnabled() {
-		return chatEnabled;
+	private boolean propertiesVisible;
+	private boolean securityVisible;
+		
+	public boolean isPropertiesVisible() {
+		return propertiesVisible;
 	}
 
-	public void setChatEnabled(boolean chatEnabled) {
-		this.chatEnabled = chatEnabled;
+	public void setPropertiesVisible(boolean propertiesVisible) {
+		this.propertiesVisible = propertiesVisible;
 	}
 
-	public boolean isAutoLoginEnabled() {
-		return autoLoginEnabled;
+	public boolean isSecurityVisible() {
+		return securityVisible;
 	}
 
-	public void setAutoLoginEnabled(boolean autoLoginEnabled) {
-		this.autoLoginEnabled = autoLoginEnabled;
+	public void setSecurityVisible(boolean securityVisible) {
+		this.securityVisible = securityVisible;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("chatEnabled="); sb.append(chatEnabled);
-		sb.append(", autoLoginEnabled="); sb.append(autoLoginEnabled);
+		sb.append("propertiesVisible="); sb.append(propertiesVisible);
+		sb.append(", securityVisible="); sb.append(securityVisible);
 		sb.append("}");
 		return sb.toString();
 	}

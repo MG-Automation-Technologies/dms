@@ -31,7 +31,7 @@ public class UserConfig implements Serializable {
 	private String homePath;
 	private String homeType;
 	private String homeUuid;
-	private UserProfile profile;
+	private Profile profile;
 	private Set<String> lockTokens = new HashSet<String>();
 
 	public String getUser() {
@@ -66,11 +66,11 @@ public class UserConfig implements Serializable {
 		this.homeType = homeType;
 	}
 	
-	public UserProfile getProfile() {
+	public Profile getProfile() {
 		return profile;
 	}
 
-	public void setProfile(UserProfile profile) {
+	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 	

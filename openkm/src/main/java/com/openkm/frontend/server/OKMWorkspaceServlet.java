@@ -46,7 +46,7 @@ import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.dao.bean.User;
 import com.openkm.dao.bean.UserConfig;
-import com.openkm.dao.bean.UserProfile;
+import com.openkm.dao.bean.Profile;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTPropertyGroup;
@@ -95,7 +95,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setDashboardSchedule(Config.SCHEDULE_DASHBOARD_REFRESH);
 		
 		List<GWTPropertyGroup> wizardPropGrpLst = new ArrayList<GWTPropertyGroup>();
-		UserProfile up = new UserProfile();
+		Profile up = new Profile();
 		Session session = null;
 		
 		try {

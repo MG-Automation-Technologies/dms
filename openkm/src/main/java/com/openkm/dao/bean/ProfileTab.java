@@ -23,14 +23,14 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileTab implements Serializable {
+public class ProfileTab implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean desktopVisible;
 	private boolean searchVisible;
 	private boolean dashboardVisible;
-	private UserProfileTabFolder folder = new UserProfileTabFolder();
-	private UserProfileTabDocument document = new UserProfileTabDocument();
-	private UserProfileTabMail mail = new UserProfileTabMail();
+	private ProfileTabFolder folder = new ProfileTabFolder();
+	private ProfileTabDocument document = new ProfileTabDocument();
+	private ProfileTabMail mail = new ProfileTabMail();
 
 	public boolean isDesktopVisible() {
 		return desktopVisible;
@@ -56,27 +56,27 @@ public class UserProfileTab implements Serializable {
 		this.dashboardVisible = dashboardVisible;
 	}
 
-	public UserProfileTabFolder getFolder() {
+	public ProfileTabFolder getFolder() {
 		return folder;
 	}
 
-	public void setFolder(UserProfileTabFolder folder) {
+	public void setFolder(ProfileTabFolder folder) {
 		this.folder = folder;
 	}
 
-	public UserProfileTabDocument getDocument() {
+	public ProfileTabDocument getDocument() {
 		return document;
 	}
 
-	public void setDocument(UserProfileTabDocument document) {
+	public void setDocument(ProfileTabDocument document) {
 		this.document = document;
 	}
 
-	public UserProfileTabMail getMail() {
+	public ProfileTabMail getMail() {
 		return mail;
 	}
 
-	public void setMail(UserProfileTabMail mail) {
+	public void setMail(ProfileTabMail mail) {
 		this.mail = mail;
 	}
 	

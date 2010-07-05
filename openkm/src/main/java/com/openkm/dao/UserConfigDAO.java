@@ -80,7 +80,7 @@ public class UserConfigDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
-			q.setEntity("profile", UserProfileDAO.findByPk(upId));
+			q.setEntity("profile", ProfileDAO.findByPk(upId));
 			q.setString("user", ucUser);
 			q.executeUpdate();
 			tx.commit();
@@ -169,7 +169,7 @@ public class UserConfigDAO {
 				ret.setHomeUuid(okmRoot.getUUID());
 				ret.setHomeType(Folder.TYPE);
 				ret.setUser(user);
-				ret.setProfile(UserProfileDAO.findByPk(1));
+				ret.setProfile(ProfileDAO.findByPk(1));
 				UserConfigDAO.create(ret);
 			} else {
 				Node node = jcrSession.getNodeByUUID(ret.getHomeUuid());

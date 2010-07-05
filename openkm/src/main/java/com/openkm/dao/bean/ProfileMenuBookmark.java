@@ -23,42 +23,52 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileWizard implements Serializable {
+public class ProfileMenuBookmark implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String propertyGroups;
-	private boolean keywordsEnabled;
-	private boolean categoriesEnabled;
-
-	public String getPropertyGroups() {
-		return propertyGroups;
+	private boolean manageBookmarksVisible;
+	private boolean addBookmarkVisible;
+	private boolean setHomeVisible;
+	private boolean goHomeVisible;
+	
+	public boolean isManageBookmarksVisible() {
+		return manageBookmarksVisible;
 	}
 
-	public void setPropertyGroups(String propertyGroups) {
-		this.propertyGroups = propertyGroups;
+	public void setManageBookmarksVisible(boolean manageBookmarksVisible) {
+		this.manageBookmarksVisible = manageBookmarksVisible;
 	}
 
-	public boolean isKeywordsEnabled() {
-		return keywordsEnabled;
+	public boolean isAddBookmarkVisible() {
+		return addBookmarkVisible;
 	}
 
-	public void setKeywordsEnabled(boolean keywordsEnabled) {
-		this.keywordsEnabled = keywordsEnabled;
+	public void setAddBookmarkVisible(boolean addBookmarkVisible) {
+		this.addBookmarkVisible = addBookmarkVisible;
 	}
 
-	public boolean isCategoriesEnabled() {
-		return categoriesEnabled;
+	public boolean isSetHomeVisible() {
+		return setHomeVisible;
 	}
 
-	public void setCategoriesEnabled(boolean categoriesEnabled) {
-		this.categoriesEnabled = categoriesEnabled;
+	public void setSetHomeVisible(boolean setHomeVisible) {
+		this.setHomeVisible = setHomeVisible;
+	}
+
+	public boolean isGoHomeVisible() {
+		return goHomeVisible;
+	}
+
+	public void setGoHomeVisible(boolean goHomeVisible) {
+		this.goHomeVisible = goHomeVisible;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("propertyGroups="); sb.append(propertyGroups);
-		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
-		sb.append(", categoriesEnabled="); sb.append(categoriesEnabled);
+		sb.append("manageBookmarksVisible="); sb.append(manageBookmarksVisible);
+		sb.append(", addBookmarkVisible="); sb.append(addBookmarkVisible);
+		sb.append(", setHomeVisible="); sb.append(setHomeVisible);
+		sb.append(", goHomeVisible="); sb.append(goHomeVisible);
 		sb.append("}");
 		return sb.toString();
 	}

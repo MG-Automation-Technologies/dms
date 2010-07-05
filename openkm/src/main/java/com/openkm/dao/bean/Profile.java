@@ -23,18 +23,18 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfile implements Serializable {
+public class Profile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private boolean active;
-	private UserProfileChat chat = new UserProfileChat();
-	private UserProfileDashboard dashboard = new UserProfileDashboard();
-	private UserProfileMenu menu = new UserProfileMenu();
-	private UserProfileMisc misc = new UserProfileMisc();
-	private UserProfileStack stack = new UserProfileStack();
-	private UserProfileTab tab = new UserProfileTab();
-	private UserProfileWizard wizard = new UserProfileWizard();
+	private ProfileChat chat = new ProfileChat();
+	private ProfileDashboard dashboard = new ProfileDashboard();
+	private ProfileMenu menu = new ProfileMenu();
+	private ProfileMisc misc = new ProfileMisc();
+	private ProfileStack stack = new ProfileStack();
+	private ProfileTab tab = new ProfileTab();
+	private ProfileWizard wizard = new ProfileWizard();
 		
 	public int getId() {
 		return id;
@@ -60,59 +60,59 @@ public class UserProfile implements Serializable {
 		this.active = active;
 	}
 
-	public UserProfileChat getChat() {
+	public ProfileChat getChat() {
 		return chat;
 	}
 
-	public void setChat(UserProfileChat chat) {
+	public void setChat(ProfileChat chat) {
 		this.chat = chat;
 	}
 
-	public UserProfileDashboard getDashboard() {
+	public ProfileDashboard getDashboard() {
 		return dashboard;
 	}
 
-	public void setDashboard(UserProfileDashboard dashboard) {
+	public void setDashboard(ProfileDashboard dashboard) {
 		this.dashboard = dashboard;
 	}
 
-	public UserProfileMenu getMenu() {
+	public ProfileMenu getMenu() {
 		return menu;
 	}
 
-	public void setMenu(UserProfileMenu menu) {
+	public void setMenu(ProfileMenu menu) {
 		this.menu = menu;
 	}
 
-	public UserProfileMisc getMisc() {
+	public ProfileMisc getMisc() {
 		return misc;
 	}
 
-	public void setMisc(UserProfileMisc misc) {
+	public void setMisc(ProfileMisc misc) {
 		this.misc = misc;
 	}
 
-	public UserProfileStack getStack() {
+	public ProfileStack getStack() {
 		return stack;
 	}
 
-	public void setStack(UserProfileStack stack) {
+	public void setStack(ProfileStack stack) {
 		this.stack = stack;
 	}
 
-	public UserProfileTab getTab() {
+	public ProfileTab getTab() {
 		return tab;
 	}
 
-	public void setTab(UserProfileTab tab) {
+	public void setTab(ProfileTab tab) {
 		this.tab = tab;
 	}
 
-	public UserProfileWizard getWizard() {
+	public ProfileWizard getWizard() {
 		return wizard;
 	}
 
-	public void setWizard(UserProfileWizard wizard) {
+	public void setWizard(ProfileWizard wizard) {
 		this.wizard = wizard;
 	}
 	
