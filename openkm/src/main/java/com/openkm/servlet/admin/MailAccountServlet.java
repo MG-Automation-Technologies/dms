@@ -22,6 +22,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 
 import javax.jcr.LoginException;
@@ -39,6 +40,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.MailAccountDAO;
 import com.openkm.dao.bean.MailAccount;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.MailUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
 
@@ -88,12 +90,47 @@ public class MailAccountServlet extends BaseServlet {
 		}
 	}
 	
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException {
+		log.debug("doGet({}, {})", request, response);
+		request.setCharacterEncoding("UTF-8");
+		String action = WebUtil.getString(request, "action");
+		Session session = null;
+		updateSessionManager(request);
+		PrintWriter pw = response.getWriter();
+		
+		try {
+			session = JCRUtils.getSession();
+			
+			if (action.equals("check")) {
+				check(session, request, response);
+				pw.println("Success!");
+			}
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			pw.print(e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			pw.print(e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			pw.print(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			pw.print(e.getMessage());
+		} finally {
+			JCRUtils.logout(session);
+			pw.flush();
+			pw.close();
+		}
+	}
+
 	/**
 	 * New mail account
 	 */
 	private void create(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
-		log.info("create({}, {}, {})", new Object[] { session, request, response });
+		log.debug("create({}, {}, {})", new Object[] { session, request, response });
 		
 		if (WebUtil.getBoolean(request, "persist")) {
 			MailAccount ma = new MailAccount();
@@ -154,6 +191,29 @@ public class MailAccountServlet extends BaseServlet {
 		}
 		
 		log.debug("edit: void");
+	}
+	
+	/**
+	 * Check connectivity
+	 */
+	private void check(Session session, HttpServletRequest request, HttpServletResponse response) throws 
+			ServletException, IOException {
+		log.debug("check({}, {}, {})", new Object[] { session, request, response });
+		MailAccount ma = new MailAccount();
+		ma.setId(WebUtil.getInt(request, "ma_id"));
+		ma.setUser(WebUtil.getString(request, "ma_user"));
+		ma.setMailUser(WebUtil.getString(request, "ma_muser"));
+		ma.setMailPassword(WebUtil.getString(request, "ma_mpassword"));
+		ma.setMailHost(WebUtil.getString(request, "ma_mhost"));
+		ma.setMailFolder(WebUtil.getString(request, "ma_mfolder"));
+		ma.setActive(WebUtil.getBoolean(request, "ma_active"));
+				
+		// Check
+		MailUtils.testConnection(ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
+		
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_MAIL_ACCOUNT_CHECK", Integer.toString(ma.getId()), ma.toString());
+		log.debug("check: void");
 	}
 	
 	/**
