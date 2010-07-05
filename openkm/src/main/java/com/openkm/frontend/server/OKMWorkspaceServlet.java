@@ -174,11 +174,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Tab document visibility
-		workspace.setTabDocumentPropertiesVisible(false);
-		workspace.setTabDocumentNotesVisible(false);
-		workspace.setTabDocumentVersionVisible(false);
-		workspace.setTabDocumentSecurityVisible(false);
-		workspace.setTabDocumentPreviewVisible(false);
+		workspace.setTabDocumentPropertiesVisible(true);
+		workspace.setTabDocumentNotesVisible(true);
+		workspace.setTabDocumentVersionVisible(true);
+		workspace.setTabDocumentSecurityVisible(true);
+		workspace.setTabDocumentPreviewVisible(true);
 		workspace.setTabDocumentPropertyGroupsVisible(true);
 		
 		// Tab folder visibility
