@@ -26,7 +26,7 @@
       <form action="Profile">
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
-        <input type="hidden" name="up_id" value="${up.id}"/>
+        <input type="hidden" name="prf_id" value="${prf.id}"/>
         <table class="form" width="765px" border="0">
           <tr>
             <td valign="top" colspan="2" width="50%">
