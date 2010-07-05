@@ -206,6 +206,45 @@ public class WorkspaceUserProperties {
 				Main.get().mainPanel.desktop.navigator.refreshView();
 			}
 			
+			// Documents tabs
+			if (workspace.isTabDocumentPropertiesVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showDocument();
+			}
+			if (workspace.isTabDocumentNotesVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showNotes();
+			}
+			if (workspace.isTabDocumentSecurityVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showSecurity();
+			}
+			if (workspace.isTabDocumentVersionVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showVersion();
+			}
+			if (workspace.isTabDocumentPreviewVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showPreview();
+			}
+			if (workspace.isTabDocumentPropertyGroupsVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showPropertyGroups();
+			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
+			
+			// Folder tabs
+			if (workspace.isTabFolderPropertiesVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showProperties();
+			}
+			if (workspace.isTabFolderSecurityVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showSecurity();
+			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.init();
+			
+			// Mail tabs
+			if (workspace.isTabMailPropertiesVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showProperties();
+			}
+			if (workspace.isTabMailSecurityVisible()) {
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showSecurity();
+			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.init();
+			
 			// Show / hide dashboard tools
 			if (workspace.isDashboardUserVisible()) {
 				Main.get().mainPanel.dashboard.showUser();

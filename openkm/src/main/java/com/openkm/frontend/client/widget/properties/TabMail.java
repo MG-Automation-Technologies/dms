@@ -40,13 +40,16 @@ import com.openkm.frontend.client.bean.GWTPermission;
  *
  */
 public class TabMail extends Composite {
-
+	private int SECURITY_TAB = -1;
+	
 	public TabPanel tabPanel;
 	public Mail mail;
 	public SecurityScrollTable security;
 	private VerticalPanel panel;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
+	private boolean propertiesVisible = false;
+	private boolean securityVisible = false;
 	
 	/**
 	 * The Document tab
@@ -57,13 +60,14 @@ public class TabMail extends Composite {
 		security = new SecurityScrollTable();
 		panel = new VerticalPanel();
 
-		tabPanel.add(mail, Main.i18n("tab.document.properties"));
-		tabPanel.add(security, Main.i18n("tab.document.security"));
-		
-		tabPanel.selectTab(0);
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
+				int tabIndex = event.getSelectedItem().intValue();
+				selectedTab = tabIndex;
+				if (tabIndex==SECURITY_TAB) {
+					security.fillWidth(); // Always when shows fires fill width
+				}
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(event.getSelectedItem().intValue()));
 			}
 		});
@@ -99,15 +103,17 @@ public class TabMail extends Composite {
 	public void setProperties(GWTMail gWTMail) {	
 		selectedTab = tabPanel.getTabBar().getSelectedTab(); // Sets the actual selected Tab
 		
-		security.setPath(gWTMail.getPath());
-		security.GetGrants();
-		
-		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
-		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
-			(gWTMail.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
-			security.setChangePermision(true);
-		} else {
-			security.setChangePermision(false);
+		if (securityVisible) {
+			security.setPath(gWTMail.getPath());
+			security.GetGrants();
+			
+			GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+			if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+				(gWTMail.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
+				security.setChangePermision(true);
+			} else {
+				security.setChangePermision(false);
+			}
 		}
 		
 		mail.set(gWTMail);
@@ -131,11 +137,14 @@ public class TabMail extends Composite {
 			tabPanel.remove(0);
 		}
 		
-		tabPanel.add(mail, Main.i18n("tab.document.properties"));
-		tabPanel.add(security, Main.i18n("tab.document.security"));
-		
-		mail.langRefresh();
-		security.langRefresh();
+		if (propertiesVisible) {
+			tabPanel.add(mail, Main.i18n("tab.document.properties"));
+			mail.langRefresh();
+		}
+		if (securityVisible) {
+			tabPanel.add(security, Main.i18n("tab.document.security"));
+			security.langRefresh();
+		}
 		
 		tabPanel.selectTab(selectedTab);
 		
@@ -158,6 +167,32 @@ public class TabMail extends Composite {
 	 */
 	private boolean isSelectedTabGroupPropety(int tabIndex){
 		return (tabPanel.getWidget(tabIndex) instanceof PropertyGroup);
+	}
+	
+	/**
+	 * showProperties
+	 */
+	public void showProperties() {
+		tabPanel.add(mail, Main.i18n("tab.document.properties"));
+		propertiesVisible = true;	
+	}
+	
+	/**
+	 * showSecurity
+	 */
+	public void showSecurity() {
+		tabPanel.add(security, Main.i18n("tab.document.security"));
+		securityVisible = true;
+		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // Starts at 0
+	}
+	
+	/**
+	 * init
+	 */
+	public void init() {
+		if (tabPanel.getTabBar().getTabCount()>0) {
+			tabPanel.selectTab(0);
+		}
 	}
 	
 	/**

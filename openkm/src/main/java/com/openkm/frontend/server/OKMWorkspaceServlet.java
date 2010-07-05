@@ -173,6 +173,22 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setTabDashboardVisible(up.getTab().isDashboardVisible());
 		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
+		// Tab document visibility
+		workspace.setTabDocumentPropertiesVisible(false);
+		workspace.setTabDocumentNotesVisible(false);
+		workspace.setTabDocumentVersionVisible(false);
+		workspace.setTabDocumentSecurityVisible(false);
+		workspace.setTabDocumentPreviewVisible(false);
+		workspace.setTabDocumentPropertyGroupsVisible(true);
+		
+		// Tab folder visibility
+		workspace.setTabFolderPropertiesVisible(true);
+		workspace.setTabFolderSecurityVisible(true);
+		
+		// Tab mail visibility
+		workspace.setTabMailPropertiesVisible(true);
+		workspace.setTabMailSecurityVisible(true);
+		
 		// Dashboard visibility
 		workspace.setDashboardUserVisible(up.getDashboard().isUserVisible());
 		workspace.setDashboardMailVisible(up.getDashboard().isMailVisible());
