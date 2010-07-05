@@ -86,6 +86,16 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean dashboardGeneralVisible;
 	private boolean dashboardWorkflowVisible;
 	private boolean dashboardKeywordsVisible;
+	private boolean tabDocumentPropertiesVisible;
+	private boolean tabDocumentNotesVisible;
+	private boolean tabDocumentSecurityVisible;
+	private boolean tabDocumentVersionVisible;
+	private boolean tabDocumentPreviewVisible;
+	private boolean tabDocumentPropertyGroupsVisible;
+	private boolean tabFolderPropertiesVisible;
+	private boolean tabFolderSecurityVisible;
+	private boolean tabMailPropertiesVisible;
+	private boolean tabMailSecurityVisible;
 	private GWTAvailableOption availableOption = new GWTAvailableOption();
 
 	/**
@@ -498,5 +508,85 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setRoleList(List<String> roleList) {
 		this.roleList = roleList;
+	}
+	
+	public boolean isTabDocumentPropertiesVisible() {
+		return tabDocumentPropertiesVisible;
+	}
+
+	public void setTabDocumentPropertiesVisible(boolean tabDocumentProperties) {
+		this.tabDocumentPropertiesVisible = tabDocumentProperties;
+	}
+
+	public boolean isTabDocumentNotesVisible() {
+		return tabDocumentNotesVisible;
+	}
+
+	public void setTabDocumentNotesVisible(boolean tabDocumentNotes) {
+		this.tabDocumentNotesVisible = tabDocumentNotes;
+	}
+
+	public boolean isTabDocumentSecurityVisible() {
+		return tabDocumentSecurityVisible;
+	}
+
+	public void setTabDocumentSecurityVisible(boolean tabDocumentSecurity) {
+		this.tabDocumentSecurityVisible = tabDocumentSecurity;
+	}
+
+	public boolean isTabDocumentVersionVisible() {
+		return tabDocumentVersionVisible;
+	}
+
+	public void setTabDocumentVersionVisible(boolean tabDocumentVersion) {
+		this.tabDocumentVersionVisible = tabDocumentVersion;
+	}
+
+	public boolean isTabDocumentPreviewVisible() {
+		return tabDocumentPreviewVisible;
+	}
+
+	public void setTabDocumentPreviewVisible(boolean tabDocumentPreview) {
+		this.tabDocumentPreviewVisible = tabDocumentPreview;
+	}
+
+	public boolean isTabDocumentPropertyGroupsVisible() {
+		return tabDocumentPropertyGroupsVisible;
+	}
+
+	public void setTabDocumentPropertyGroupsVisible(boolean tabDocumentPropertyGroups) {
+		this.tabDocumentPropertyGroupsVisible = tabDocumentPropertyGroups;
+	}
+	
+	public boolean isTabFolderPropertiesVisible() {
+		return tabFolderPropertiesVisible;
+	}
+
+	public void setTabFolderPropertiesVisible(boolean tabFolderPropertiesVisible) {
+		this.tabFolderPropertiesVisible = tabFolderPropertiesVisible;
+	}
+
+	public boolean isTabFolderSecurityVisible() {
+		return tabFolderSecurityVisible;
+	}
+
+	public void setTabFolderSecurityVisible(boolean tabFolderSecurityVisible) {
+		this.tabFolderSecurityVisible = tabFolderSecurityVisible;
+	}
+	
+	public boolean isTabMailPropertiesVisible() {
+		return tabMailPropertiesVisible;
+	}
+
+	public void setTabMailPropertiesVisible(boolean tabMailPropertiesVisible) {
+		this.tabMailPropertiesVisible = tabMailPropertiesVisible;
+	}
+
+	public boolean isTabMailSecurityVisible() {
+		return tabMailSecurityVisible;
+	}
+
+	public void setTabMailSecurityVisible(boolean tabMailSecurityVisible) {
+		this.tabMailSecurityVisible = tabMailSecurityVisible;
 	}
 }

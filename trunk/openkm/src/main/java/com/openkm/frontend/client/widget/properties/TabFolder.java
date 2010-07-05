@@ -55,6 +55,7 @@ import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 public class TabFolder extends Composite implements HasFolderEvent, HasFolderHandlerExtension {
 	
 	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private int SECURITY_TAB = -1;
 	
 	public TabPanel tabPanel;
 	private Folder folder;
@@ -66,6 +67,8 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	private int selectedTab = 0; 
 	private int height = 0;
 	private int width = 0;
+	private boolean propertiesVisible = false;
+	private boolean securityVisible = false;
 	
 	public TabFolder() {
 		widgetExtensionList = new ArrayList<TabFolderExtension>();
@@ -75,16 +78,12 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		security = new SecurityScrollTable();
 		panel = new VerticalPanel();
 		
-		tabPanel.add(folder, Main.i18n("tab.folder.properties"));
-		tabPanel.add(security, Main.i18n("tab.folder.security"));
-
-		tabPanel.selectTab(0);
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabIndex = event.getSelectedItem().intValue();
 				selectedTab = tabIndex;
-				if (tabIndex==1) {
+				if (tabIndex==SECURITY_TAB) {
 					security.fillWidth(); // Always when shows fires fill width
 				}
 				fireEvent(HasFolderEvent.TAB_CHANGED);
@@ -131,13 +130,16 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 * @param folder The folder object
 	 */
 	public void setProperties(GWTFolder folder) {
-		this.folder.set(folder);
-		security.setPath(folder.getPath());
-		security.GetGrants();
-		if ((folder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
-			security.setChangePermision(true);
-		} else {
-			security.setChangePermision(false);
+		this.folder.set(folder); // Used by tabFolderCommunicator
+		if (securityVisible) {
+			security.setPath(folder.getPath());
+			security.GetGrants();
+			
+			if ((folder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
+				security.setChangePermision(true);
+			} else {
+				security.setChangePermision(false);
+			}
 		}
 		
 		// Setting folder object to extensions
@@ -174,8 +176,14 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			tabPanel.remove(0);
 		}
 		
-		tabPanel.add(folder, Main.i18n("tab.folder.properties"));
-		tabPanel.add(security, Main.i18n("tab.folder.security"));
+		if (propertiesVisible) {
+			tabPanel.add(folder, Main.i18n("tab.folder.properties"));
+			folder.langRefresh();
+		}
+		if (securityVisible) {
+			tabPanel.add(security, Main.i18n("tab.folder.security"));
+			security.langRefresh();
+		}
 		
 		// Adding extensions
 		for (Iterator<TabFolderExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
@@ -184,9 +192,6 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		}
 		
 		tabPanel.selectTab(selectedTab);
-		
-		folder.langRefresh();
-		security.langRefresh();
 		
 		resizingIncubatorWidgets();
 	}
@@ -290,6 +295,32 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void setNumberOfMails(int num) {
 		folder.setNumberOfMails(num);
+	}
+	
+	/**
+	 * showProperties
+	 */
+	public void showProperties() {
+		tabPanel.add(folder, Main.i18n("tab.folder.properties"));
+		propertiesVisible = true;
+	}
+	
+	/**
+	 * showSecurity
+	 */
+	public void showSecurity() {
+		tabPanel.add(security, Main.i18n("tab.folder.security"));
+		securityVisible = true;
+		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // Starts at 0
+	}
+	
+	/**
+	 * init
+	 */
+	public void init() {
+		if (tabPanel.getTabBar().getTabCount()>0) {
+			tabPanel.selectTab(0);
+		}
 	}
 	
 	/**
