@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileMenuFile implements Serializable {
+public class ProfileMenuFile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean createFolderVisible;
 	private boolean findFolderVisible;

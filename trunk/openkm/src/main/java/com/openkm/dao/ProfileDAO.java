@@ -10,17 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.UserProfile;
+import com.openkm.dao.bean.Profile;
 
-public class UserProfileDAO {
-	private static Logger log = LoggerFactory.getLogger(UserProfileDAO.class);
+public class ProfileDAO {
+	private static Logger log = LoggerFactory.getLogger(ProfileDAO.class);
 
-	private UserProfileDAO() {}
+	private ProfileDAO() {}
 	
 	/**
 	 * Create
 	 */
-	public static void create(UserProfile up) throws DatabaseException {
+	public static void create(Profile up) throws DatabaseException {
 		log.debug("create({})", up);
 		Session session = null;
 		Transaction tx = null;
@@ -43,7 +43,7 @@ public class UserProfileDAO {
 	/**
 	 * Update
 	 */
-	public static void update(UserProfile up) throws DatabaseException {
+	public static void update(Profile up) throws DatabaseException {
 		log.debug("update({})", up);
 		Session session = null;
 		Transaction tx = null;
@@ -74,7 +74,7 @@ public class UserProfileDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			UserProfile up = (UserProfile) session.load(UserProfile.class, upId);
+			Profile up = (Profile) session.load(Profile.class, upId);
 			session.delete(up);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -90,16 +90,16 @@ public class UserProfileDAO {
 	/**
 	 * Find by pk
 	 */
-	public static UserProfile findByPk(int upId) throws DatabaseException {
+	public static Profile findByPk(int upId) throws DatabaseException {
 		log.debug("findByPk({})", upId);
-		String qs = "from UserProfile up where up.id=:id";
+		String qs = "from Profile prf where prf.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", upId);
-			UserProfile ret = (UserProfile) q.setMaxResults(1).uniqueResult();
+			Profile ret = (Profile) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -113,9 +113,9 @@ public class UserProfileDAO {
 	 * Find by pk
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<UserProfile> findAll(boolean filterByActive) throws DatabaseException {
+	public static List<Profile> findAll(boolean filterByActive) throws DatabaseException {
 		log.debug("findAll()");
-		String qs = "from UserProfile up " + (filterByActive?"where up.active=:active":"");
+		String qs = "from Profile prf " + (filterByActive?"where prf.active=:active":"");
 		Session session = null;
 		
 		try {
@@ -126,7 +126,7 @@ public class UserProfileDAO {
 				q.setBoolean("active", true);
 			}
 			
-			List<UserProfile> ret = q.list();
+			List<Profile> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {

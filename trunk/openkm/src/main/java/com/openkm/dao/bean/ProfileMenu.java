@@ -23,18 +23,18 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileMenu implements Serializable {
+public class ProfileMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean fileVisible;
 	private boolean editVisible;
 	private boolean toolsVisible;
 	private boolean bookmarksVisible;
 	private boolean helpVisible;
-	private UserProfileMenuFile file = new UserProfileMenuFile();
-	private UserProfileMenuBookmark bookmark = new UserProfileMenuBookmark();
-	private UserProfileMenuTool tool = new UserProfileMenuTool();
-	private UserProfileMenuEdit edit = new UserProfileMenuEdit();
-	private UserProfileMenuHelp help = new UserProfileMenuHelp();
+	private ProfileMenuFile file = new ProfileMenuFile();
+	private ProfileMenuBookmark bookmark = new ProfileMenuBookmark();
+	private ProfileMenuTool tool = new ProfileMenuTool();
+	private ProfileMenuEdit edit = new ProfileMenuEdit();
+	private ProfileMenuHelp help = new ProfileMenuHelp();
 	
 	public boolean isFileVisible() {
 		return fileVisible;
@@ -76,43 +76,43 @@ public class UserProfileMenu implements Serializable {
 		this.helpVisible = helpVisible;
 	}
 
-	public UserProfileMenuFile getFile() {
+	public ProfileMenuFile getFile() {
 		return file;
 	}
 
-	public void setFile(UserProfileMenuFile file) {
+	public void setFile(ProfileMenuFile file) {
 		this.file = file;
 	}
 	
-	public UserProfileMenuBookmark getBookmark() {
+	public ProfileMenuBookmark getBookmark() {
 		return bookmark;
 	}
 
-	public void setBookmark(UserProfileMenuBookmark bookmark) {
+	public void setBookmark(ProfileMenuBookmark bookmark) {
 		this.bookmark = bookmark;
 	}
 
-	public UserProfileMenuTool getTool() {
+	public ProfileMenuTool getTool() {
 		return tool;
 	}
 
-	public void setTool(UserProfileMenuTool tool) {
+	public void setTool(ProfileMenuTool tool) {
 		this.tool = tool;
 	}
 
-	public UserProfileMenuEdit getEdit() {
+	public ProfileMenuEdit getEdit() {
 		return edit;
 	}
 
-	public void setEdit(UserProfileMenuEdit edit) {
+	public void setEdit(ProfileMenuEdit edit) {
 		this.edit = edit;
 	}
 
-	public UserProfileMenuHelp getHelp() {
+	public ProfileMenuHelp getHelp() {
 		return help;
 	}
 
-	public void setHelp(UserProfileMenuHelp help) {
+	public void setHelp(ProfileMenuHelp help) {
 		this.help = help;
 	}
 	

@@ -23,42 +23,42 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileMenuTool implements Serializable {
+public class ProfileWizard implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean changeSkinVisible;
-	private boolean debugVisible;
-	private boolean administrationVisible;
-	
-	public boolean isChangeSkinVisible() {
-		return changeSkinVisible;
+	private String propertyGroups;
+	private boolean keywordsEnabled;
+	private boolean categoriesEnabled;
+
+	public String getPropertyGroups() {
+		return propertyGroups;
 	}
 
-	public void setChangeSkinVisible(boolean changeSkinVisible) {
-		this.changeSkinVisible = changeSkinVisible;
+	public void setPropertyGroups(String propertyGroups) {
+		this.propertyGroups = propertyGroups;
 	}
 
-	public boolean isDebugVisible() {
-		return debugVisible;
+	public boolean isKeywordsEnabled() {
+		return keywordsEnabled;
 	}
 
-	public void setDebugVisible(boolean debugVisible) {
-		this.debugVisible = debugVisible;
+	public void setKeywordsEnabled(boolean keywordsEnabled) {
+		this.keywordsEnabled = keywordsEnabled;
 	}
 
-	public boolean isAdministrationVisible() {
-		return administrationVisible;
+	public boolean isCategoriesEnabled() {
+		return categoriesEnabled;
 	}
 
-	public void setAdministrationVisible(boolean administrationVisible) {
-		this.administrationVisible = administrationVisible;
+	public void setCategoriesEnabled(boolean categoriesEnabled) {
+		this.categoriesEnabled = categoriesEnabled;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("changeSkinVisible="); sb.append(changeSkinVisible);
-		sb.append(", debugVisible="); sb.append(debugVisible);
-		sb.append(", administrationVisible="); sb.append(administrationVisible);
+		sb.append("propertyGroups="); sb.append(propertyGroups);
+		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
+		sb.append(", categoriesEnabled="); sb.append(categoriesEnabled);
 		sb.append("}");
 		return sb.toString();
 	}

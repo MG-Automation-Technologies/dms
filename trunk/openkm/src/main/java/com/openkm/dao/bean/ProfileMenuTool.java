@@ -23,32 +23,42 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileTabMail implements Serializable {
+public class ProfileMenuTool implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean propertiesVisible;
-	private boolean securityVisible;
-		
-	public boolean isPropertiesVisible() {
-		return propertiesVisible;
+	private boolean changeSkinVisible;
+	private boolean debugVisible;
+	private boolean administrationVisible;
+	
+	public boolean isChangeSkinVisible() {
+		return changeSkinVisible;
 	}
 
-	public void setPropertiesVisible(boolean propertiesVisible) {
-		this.propertiesVisible = propertiesVisible;
+	public void setChangeSkinVisible(boolean changeSkinVisible) {
+		this.changeSkinVisible = changeSkinVisible;
 	}
 
-	public boolean isSecurityVisible() {
-		return securityVisible;
+	public boolean isDebugVisible() {
+		return debugVisible;
 	}
 
-	public void setSecurityVisible(boolean securityVisible) {
-		this.securityVisible = securityVisible;
+	public void setDebugVisible(boolean debugVisible) {
+		this.debugVisible = debugVisible;
+	}
+
+	public boolean isAdministrationVisible() {
+		return administrationVisible;
+	}
+
+	public void setAdministrationVisible(boolean administrationVisible) {
+		this.administrationVisible = administrationVisible;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("propertiesVisible="); sb.append(propertiesVisible);
-		sb.append(", securityVisible="); sb.append(securityVisible);
+		sb.append("changeSkinVisible="); sb.append(changeSkinVisible);
+		sb.append(", debugVisible="); sb.append(debugVisible);
+		sb.append(", administrationVisible="); sb.append(administrationVisible);
 		sb.append("}");
 		return sb.toString();
 	}

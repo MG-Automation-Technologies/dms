@@ -23,52 +23,32 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileMenuBookmark implements Serializable {
+public class ProfileChat implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean manageBookmarksVisible;
-	private boolean addBookmarkVisible;
-	private boolean setHomeVisible;
-	private boolean goHomeVisible;
+	private boolean chatEnabled;
+	private boolean autoLoginEnabled;
 	
-	public boolean isManageBookmarksVisible() {
-		return manageBookmarksVisible;
+	public boolean isChatEnabled() {
+		return chatEnabled;
 	}
 
-	public void setManageBookmarksVisible(boolean manageBookmarksVisible) {
-		this.manageBookmarksVisible = manageBookmarksVisible;
+	public void setChatEnabled(boolean chatEnabled) {
+		this.chatEnabled = chatEnabled;
 	}
 
-	public boolean isAddBookmarkVisible() {
-		return addBookmarkVisible;
+	public boolean isAutoLoginEnabled() {
+		return autoLoginEnabled;
 	}
 
-	public void setAddBookmarkVisible(boolean addBookmarkVisible) {
-		this.addBookmarkVisible = addBookmarkVisible;
-	}
-
-	public boolean isSetHomeVisible() {
-		return setHomeVisible;
-	}
-
-	public void setSetHomeVisible(boolean setHomeVisible) {
-		this.setHomeVisible = setHomeVisible;
-	}
-
-	public boolean isGoHomeVisible() {
-		return goHomeVisible;
-	}
-
-	public void setGoHomeVisible(boolean goHomeVisible) {
-		this.goHomeVisible = goHomeVisible;
+	public void setAutoLoginEnabled(boolean autoLoginEnabled) {
+		this.autoLoginEnabled = autoLoginEnabled;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("manageBookmarksVisible="); sb.append(manageBookmarksVisible);
-		sb.append(", addBookmarkVisible="); sb.append(addBookmarkVisible);
-		sb.append(", setHomeVisible="); sb.append(setHomeVisible);
-		sb.append(", goHomeVisible="); sb.append(goHomeVisible);
+		sb.append("chatEnabled="); sb.append(chatEnabled);
+		sb.append(", autoLoginEnabled="); sb.append(autoLoginEnabled);
 		sb.append("}");
 		return sb.toString();
 	}

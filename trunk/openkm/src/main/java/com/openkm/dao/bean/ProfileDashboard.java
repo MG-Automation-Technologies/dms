@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileDashboard implements Serializable {
+public class ProfileDashboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean userVisible;
 	private boolean mailVisible;

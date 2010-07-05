@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileTabFolder implements Serializable {
+public class ProfileTabFolder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean propertiesVisible;
 	private boolean securityVisible;
