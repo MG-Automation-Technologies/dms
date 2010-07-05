@@ -320,6 +320,17 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void init() {
 		if (tabPanel.getTabBar().getTabCount()>0) {
 			tabPanel.selectTab(0);
+			
+			if (securityVisible && folder.get()!=null) {
+				security.setPath(folder.get().getPath());
+				security.GetGrants();
+				
+				if ((folder.get().getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
+					security.setChangePermision(true);
+				} else {
+					security.setChangePermision(false);
+				}
+			}
 		}
 	}
 	
