@@ -5,18 +5,18 @@
     <tr>
       <td>Property groups</td>
       <td>
-        <input name="up_wizard_property_groups" size="32" value="${up.wizard.propertyGroups}"/>
+        <input name="prf_wizard_property_groups" size="32" value="${prf.wizard.propertyGroups}"/>
       </td>
     </tr>
     <tr>
       <td>Keywords</td>
       <td>
         <c:choose>
-          <c:when test="${up.wizard.keywordsEnabled}">
-            <input name="up_wizard_keywords" type="checkbox" checked="checked"/>
+          <c:when test="${prf.wizard.keywordsEnabled}">
+            <input name="prf_wizard_keywords" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_wizard_keywords" type="checkbox"/>
+            <input name="prf_wizard_keywords" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -25,11 +25,11 @@
       <td>Categories</td>
       <td>
         <c:choose>
-          <c:when test="${up.wizard.categoriesEnabled}">
-            <input name="up_wizard_categories" type="checkbox" checked="checked"/>
+          <c:when test="${prf.wizard.categoriesEnabled}">
+            <input name="prf_wizard_categories" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_wizard_categories" type="checkbox"/>
+            <input name="prf_wizard_categories" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>

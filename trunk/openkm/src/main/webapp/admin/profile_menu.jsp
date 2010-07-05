@@ -6,11 +6,11 @@
       <td>File visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menu.fileVisible}">
-            <input name="up_menu_file_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.fileVisible}">
+            <input name="prf_menu_file_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_menu_file_visible" type="checkbox"/>
+            <input name="prf_menu_file_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -19,11 +19,11 @@
       <td>Edit visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menu.editVisible}">
-            <input name="up_menu_edit_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.editVisible}">
+            <input name="prf_menu_edit_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_menu_edit_visible" type="checkbox"/>
+            <input name="prf_menu_edit_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -32,11 +32,11 @@
       <td>Tools visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menu.toolsVisible}">
-            <input name="up_menu_tools_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.toolsVisible}">
+            <input name="prf_menu_tools_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_menu_tools_visible" type="checkbox"/>
+            <input name="prf_menu_tools_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -45,11 +45,11 @@
       <td>Bookmark visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menu.bookmarksVisible}">
-            <input name="up_menu_bookmarks_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.bookmarksVisible}">
+            <input name="prf_menu_bookmarks_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_menu_bookmarks_visible" type="checkbox"/>
+            <input name="prf_menu_bookmarks_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -58,11 +58,11 @@
       <td>Help visible</td>
       <td>
         <c:choose>
-          <c:when test="${up.menu.helpVisible}">
-            <input name="up_menu_help_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.helpVisible}">
+            <input name="prf_menu_help_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="up_menu_help_visible" type="checkbox"/>
+            <input name="prf_menu_help_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>

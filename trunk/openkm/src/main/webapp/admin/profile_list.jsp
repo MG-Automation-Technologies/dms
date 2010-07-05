@@ -20,26 +20,26 @@
         <tr>
           <th>Name</th><th width="25px">Active</th>
           <th width="50px">
-            <c:url value="UserProfile" var="urlCreate">
+            <c:url value="Profile" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
             <a href="${urlCreate}"><img src="img/action/new.png" alt="New profile" title="New profile"/></a>
           </th>
         </tr>
-        <c:forEach var="up" items="${userProfiles}" varStatus="row">
-          <c:url value="UserProfile" var="urlEdit">
+        <c:forEach var="prf" items="${userProfiles}" varStatus="row">
+          <c:url value="Profile" var="urlEdit">
             <c:param name="action" value="edit"/>
-            <c:param name="up_id" value="${up.id}"/>
+            <c:param name="prf_id" value="${prf.id}"/>
           </c:url>
-          <c:url value="UserProfile" var="urlDelete">
+          <c:url value="Profile" var="urlDelete">
             <c:param name="action" value="delete"/>
-            <c:param name="up_id" value="${up.id}"/>
+            <c:param name="prf_id" value="${prf.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${up.name}</td>
+            <td>${prf.name}</td>
             <td align="center">
               <c:choose>
-                <c:when test="${up.active}">
+                <c:when test="${prf.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
                 </c:when>
                 <c:otherwise>
