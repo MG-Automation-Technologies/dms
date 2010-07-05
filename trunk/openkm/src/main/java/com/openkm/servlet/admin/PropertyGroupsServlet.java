@@ -126,7 +126,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 		DirectRepositoryModule.registerCustomNodeTypes(session, fis);
 				
 		// Activity log
-		UserActivity.log(request.getRemoteUser(), "REPOSITORY_UNLOCK", pgPath, null);
+		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", pgPath, null);
 		log.debug("register: void");
 	}
 

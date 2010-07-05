@@ -35,8 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.ProfileDAO;
 import com.openkm.dao.UserConfigDAO;
-import com.openkm.dao.UserProfileDAO;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtil;
@@ -71,7 +71,7 @@ public class UserConfigServlet extends BaseServlet {
 				ServletContext sc = getServletContext();
 				String ucUser = WebUtil.getString(request, "uc_user");
 				sc.setAttribute("persist", true);
-				sc.setAttribute("userProfiles", UserProfileDAO.findAll(true));
+				sc.setAttribute("profiles", ProfileDAO.findAll(true));
 				sc.setAttribute("uc", UserConfigDAO.findByPk(session, ucUser));
 				sc.getRequestDispatcher("/admin/user_config_edit.jsp").forward(request, response);
 			}
