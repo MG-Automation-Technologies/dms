@@ -76,6 +76,48 @@
       <property name="dashboardVisible" not-null="true">
         <column name="UP_TAB_DASHBOARD_VISIBLE" default="true"/>
       </property>
+      
+      <!-- TAB DOCUMENT -->
+      <component name="document" class="com.openkm.dao.bean.UserProfileTabDocument">
+        <property name="propertiesVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_PROPERTIES_VISIBLE" default="true"/>
+        </property>
+        <property name="securityVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_SECURITY_VISIBLE" default="true"/>
+        </property>
+        <property name="notesVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_NOTES_VISIBLE" default="true"/>
+        </property>
+        <property name="versionsVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_VERSIONS_VISIBLE" default="true"/>
+        </property>
+        <property name="previewVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_PREVIEW_VISIBLE" default="true"/>
+        </property>
+        <property name="propertyGroupsVisible" not-null="true">
+          <column name="UP_TAB_DOCUMENT_PROPERTY_GROUPS_VISIBLE" default="true"/>
+        </property>
+      </component> 
+
+      <!-- TAB FOLDER -->
+      <component name="folder" class="com.openkm.dao.bean.UserProfileTabFolder">
+        <property name="propertiesVisible" not-null="true">
+          <column name="UP_TAB_FOLDER_PROPERTIES_VISIBLE" default="true"/>
+        </property>
+        <property name="securityVisible" not-null="true">
+          <column name="UP_TAB_FOLDER_SECURITY_VISIBLE" default="true"/>
+        </property>
+      </component> 
+
+      <!-- TAB MAIL -->
+      <component name="mail" class="com.openkm.dao.bean.UserProfileTabMail">
+        <property name="propertiesVisible" not-null="true">
+          <column name="UP_TAB_MAIL_PROPERTIES_VISIBLE" default="true"/>
+        </property>
+        <property name="securityVisible" not-null="true">
+          <column name="UP_TAB_MAIL_SECURITY_VISIBLE" default="true"/>
+        </property>
+      </component>
     </component>
   
     <!-- DASHBOARD -->
@@ -118,7 +160,62 @@
         <column name="UP_MENU_HELP_VISIBLE" default="true"/>
       </property>
 
-      <!-- EDIT -->
+      <!-- MENU FILE -->
+	  <component name="file" class="com.openkm.dao.bean.UserProfileMenuFile">
+	    <property name="createFolderVisible" not-null="true">
+	      <column name="UP_MENU_FILE_CREATE_FOLDER_VISIBLE" default="true"/>
+	    </property>
+	    <property name="findFolderVisible" not-null="true">
+	      <column name="UP_MENU_FILE_FIND_FOLDER_VISIBLE" default="true"/>
+	    </property>
+	    <property name="goFolderVisible" not-null="true">
+	      <column name="UP_MENU_FILE_GO_FOLDER_VISIBLE" default="true"/>
+	    </property>
+	    <property name="downloadVisible" not-null="true">
+	      <column name="UP_MENU_FILE_DOWNLOAD_VISIBLE" default="true"/>
+	    </property>
+	    <property name="downloadPdfVisible" not-null="true">
+	      <column name="UP_MENU_FILE_DOWNLOAD_PDF_VISIBLE" default="true"/>
+	    </property>
+	    <property name="addDocumentVisible" not-null="true">
+	      <column name="UP_MENU_FILE_ADD_DOCUMENT_VISIBLE" default="true"/>
+	    </property>
+	    <property name="startWorkflowVisible" not-null="true">
+	      <column name="UP_MENU_FILE_START_WORKFLOW_VISIBLE" default="true"/>
+	    </property>
+	    <property name="refreshVisible" not-null="true">
+	      <column name="UP_MENU_FILE_REFRESH_VISIBLE" default="true"/>
+	    </property>
+	    <property name="scannerVisible" not-null="true">
+	      <column name="UP_MENU_FILE_SCANNER_VISIBLE" default="true"/>
+	    </property>
+	    <property name="uploaderVisible" not-null="true">
+	      <column name="UP_MENU_FILE_UPLOADER_VISIBLE" default="true"/>
+	    </property>
+	    <property name="purgeVisible" not-null="true">
+	      <column name="UP_MENU_FILE_PURGE_VISIBLE" default="true"/>
+	    </property>
+	    <property name="purgeTrashVisible" not-null="true">
+	      <column name="UP_MENU_FILE_PURGE_TRASH_VISIBLE" default="true"/>
+	    </property>
+	    <property name="restoreVisible" not-null="true">
+	      <column name="UP_MENU_FILE_RESTORE_VISIBLE" default="true"/>
+	    </property>
+	    <property name="exportVisible" not-null="true">
+	      <column name="UP_MENU_FILE_EXPORT_VISIBLE" default="true"/>
+	    </property>
+	    <property name="createFromTemplateVisible" not-null="true">
+	      <column name="UP_MENU_FILE_CREATE_FROM_TEMPLATE_VISIBLE" default="true"/>
+	    </property>
+	    <property name="sendDocumentLinkVisible" not-null="true">
+	      <column name="UP_MENU_FILE_SEND_DOCUMENT_LINK_VISIBLE" default="true"/>
+	    </property>
+	    <property name="sendDocumentAttachmentVisible" not-null="true">
+	      <column name="UP_MENU_FILE_SEND_DOCUMENT_ATTACHMENT_VISIBLE" default="true"/>
+	    </property>
+      </component>
+
+      <!-- MENU EDIT -->
       <component name="edit" class="com.openkm.dao.bean.UserProfileMenuEdit">
 	    <property name="lockVisible" not-null="true">
 	      <column name="UP_MENU_EDIT_LOCK_VISIBLE" default="true"/>
@@ -147,13 +244,51 @@
 	    <property name="moveVisible" not-null="true">
 	      <column name="UP_MENU_EDIT_MOVE_VISIBLE" default="true"/>
 	    </property>
+	    <property name="addPropertyGroupVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
+	    </property>
+	    <property name="removePropertyGroupVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
+	    </property>
+	    <property name="addSubscriptionVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
+	    </property>
+	    <property name="removeSubscriptionVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
+	    </property>
       </component>
       
-      <!-- HELP -->
-      <component name="help" class="com.openkm.dao.bean.UserProfileMenuHelp">
-        <property name="helpVisible" not-null="true">
-	      <column name="UP_MENU_HELP_HELP_VISIBLE" default="true"/>
+      <!-- MENU BOOKMARK -->
+      <component name="bookmark" class="com.openkm.dao.bean.UserProfileMenuBookmark">
+      	<property name="manageBookmarksVisible" not-null="true">
+          <column name="UP_MENU_BOOKMARK_MANAGE_BOOKMARKS_VISIBLE" default="true"/>
 	    </property>
+      	<property name="addBookmarkVisible" not-null="true">
+	      <column name="UP_MENU_BOOKMARK_ADD_BOOKMARK_VISIBLE" default="true"/>
+	    </property>
+	    <property name="setHomeVisible" not-null="true">
+	      <column name="UP_MENU_BOOKMARK_SET_HOME_VISIBLE" default="true"/>
+	    </property>
+      	<property name="goHomeVisible" not-null="true">
+	      <column name="UP_MENU_BOOKMARK_GO_HOME_VISIBLE" default="true"/>
+	    </property>
+      </component>
+      
+      <!-- MENU TOOL -->
+      <component name="tool" class="com.openkm.dao.bean.UserProfileMenuTool">
+        <property name="changeSkinVisible" not-null="true">
+          <column name="UP_MENU_TOOL_CHANGE_SKIN_VISIBLE" default="true"/>
+	    </property>
+	    <property name="debugVisible" not-null="true">
+          <column name="UP_MENU_TOOL_DEBUG_VISIBLE" default="true"/>
+	    </property>
+	    <property name="administrationVisible" not-null="true">
+	      <column name="UP_MENU_TOOL_ADMINISTRATION_VISIBLE" default="true"/>
+	    </property>
+      </component>
+      
+      <!-- MENU HELP -->
+      <component name="help" class="com.openkm.dao.bean.UserProfileMenuHelp">
 	    <property name="documentationVisible" not-null="true">
 	      <column name="UP_MENU_HELP_DOCUMENTATION_VISIBLE" default="true"/>
 	    </property>
@@ -176,94 +311,6 @@
 	      <column name="UP_MENU_HELP_ABOUT_VISIBLE" default="true"/>
 	    </property>
       </component>
-    </component>
-	
-	<!-- ACTION -->
-	<component name="action" class="com.openkm.dao.bean.UserProfileAction">
-	  <property name="createFolderVisible" not-null="true">
-	    <column name="UP_ACTION_CREATE_FOLDER_VISIBLE" default="true"/>
-	  </property>
-	  <property name="findFolderVisible" not-null="true">
-	    <column name="UP_ACTION_FIND_FOLDER_VISIBLE" default="true"/>
-	  </property>
-	   <property name="goFolderVisible" not-null="true">
-	    <column name="UP_ACTION_GO_FOLDER_VISIBLE" default="true"/>
-	  </property>
-	  <property name="downloadVisible" not-null="true">
-	    <column name="UP_ACTION_DOWNLOAD_VISIBLE" default="true"/>
-	  </property>
-	  <property name="downloadPdfVisible" not-null="true">
-	    <column name="UP_ACTION_DOWNLOAD_PDF_VISIBLE" default="true"/>
-	  </property>
-	  <property name="addDocumentVisible" not-null="true">
-	    <column name="UP_ACTION_ADD_DOCUMENT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="addPropertyGroupVisible" not-null="true">
-	    <column name="UP_ACTION_ADD_PROPERTY_GROUP_VISIBLE" default="true"/>
-	  </property>
-	  <property name="removePropertyGroupVisible" not-null="true">
-	    <column name="UP_ACTION_REMOVE_PROPERTY_GROUP_VISIBLE" default="true"/>
-	  </property>
-	  <property name="startWorkflowVisible" not-null="true">
-	    <column name="UP_ACTION_START_WORKFLOW_VISIBLE" default="true"/>
-	  </property>
-	  <property name="addSubscriptionVisible" not-null="true">
-	    <column name="UP_ACTION_ADD_SUBSCRIPTION_VISIBLE" default="true"/>
-	  </property>
-	  <property name="removeSubscriptionVisible" not-null="true">
-	    <column name="UP_ACTION_REMOVE_SUBSCRIPTION_VISIBLE" default="true"/>
-	  </property>
-	  <property name="refreshVisible" not-null="true">
-	    <column name="UP_ACTION_REFRESH_VISIBLE" default="true"/>
-	  </property>
-	  <property name="goHomeVisible" not-null="true">
-	    <column name="UP_ACTION_GO_HOME_VISIBLE" default="true"/>
-	  </property>
-	  <property name="setHomeVisible" not-null="true">
-	    <column name="UP_ACTION_SET_HOME_VISIBLE" default="true"/>
-	  </property>
-	  <property name="scannerVisible" not-null="true">
-	    <column name="UP_ACTION_SCANNER_VISIBLE" default="true"/>
-	  </property>
-	  <property name="uploaderVisible" not-null="true">
-	    <column name="UP_ACTION_UPLOADER_VISIBLE" default="true"/>
-	  </property>
-	  <property name="purgeVisible" not-null="true">
-	    <column name="UP_ACTION_PURGE_VISIBLE" default="true"/>
-	  </property>
-	  <property name="purgeTrashVisible" not-null="true">
-	    <column name="UP_ACTION_PURGE_TRASH_VISIBLE" default="true"/>
-	  </property>
-	  <property name="restoreVisible" not-null="true">
-	    <column name="UP_ACTION_RESTORE_VISIBLE" default="true"/>
-	  </property>
-	  <property name="addBookmarkVisible" not-null="true">
-	    <column name="UP_ACTION_ADD_BOOKMARK_VISIBLE" default="true"/>
-	  </property>
-	  <property name="manageBookmarksVisible" not-null="true">
-	    <column name="UP_ACTION_MANAGE_BOOKMARKS_VISIBLE" default="true"/>
-	  </property>
-	  <property name="exportVisible" not-null="true">
-	    <column name="UP_ACTION_EXPORT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="createFromTemplateVisible" not-null="true">
-	    <column name="UP_ACTION_CREATE_FROM_TEMPLATE_VISIBLE" default="true"/>
-	  </property>
-	  <property name="sendDocumentLinkVisible" not-null="true">
-	    <column name="UP_ACTION_SEND_DOCUMENT_LINK_VISIBLE" default="true"/>
-	  </property>
-	  <property name="sendDocumentAttachmentVisible" not-null="true">
-	    <column name="UP_ACTION_SEND_DOCUMENT_ATTACHMENT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="changeSkinVisible" not-null="true">
-	    <column name="UP_ACTION_CHANGE_SKIN_VISIBLE" default="true"/>
-	  </property>
-	  <property name="debugVisible" not-null="true">
-	    <column name="UP_ACTION_DEBUG_VISIBLE" default="true"/>
-	  </property>
-	  <property name="administrationVisible" not-null="true">
-	    <column name="UP_ACTION_ADMINISTRATION_VISIBLE" default="true"/>
-	  </property>
     </component>
     
   </class>

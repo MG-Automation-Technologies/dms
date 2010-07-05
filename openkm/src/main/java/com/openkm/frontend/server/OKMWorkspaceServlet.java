@@ -174,20 +174,20 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
 		
 		// Tab document visibility
-		workspace.setTabDocumentPropertiesVisible(true);
-		workspace.setTabDocumentNotesVisible(true);
-		workspace.setTabDocumentVersionVisible(true);
-		workspace.setTabDocumentSecurityVisible(true);
-		workspace.setTabDocumentPreviewVisible(true);
-		workspace.setTabDocumentPropertyGroupsVisible(true);
+		workspace.setTabDocumentPropertiesVisible(up.getTab().getDocument().isPropertiesVisible());
+		workspace.setTabDocumentSecurityVisible(up.getTab().getDocument().isSecurityVisible());
+		workspace.setTabDocumentNotesVisible(up.getTab().getDocument().isNotesVisible());
+		workspace.setTabDocumentVersionVisible(up.getTab().getDocument().isVersionsVisible());
+		workspace.setTabDocumentPreviewVisible(up.getTab().getDocument().isPreviewVisible());
+		workspace.setTabDocumentPropertyGroupsVisible(up.getTab().getDocument().isPropertyGroupsVisible());
 		
 		// Tab folder visibility
-		workspace.setTabFolderPropertiesVisible(true);
-		workspace.setTabFolderSecurityVisible(true);
+		workspace.setTabFolderPropertiesVisible(up.getTab().getFolder().isPropertiesVisible());
+		workspace.setTabFolderSecurityVisible(up.getTab().getFolder().isSecurityVisible());
 		
 		// Tab mail visibility
-		workspace.setTabMailPropertiesVisible(true);
-		workspace.setTabMailSecurityVisible(true);
+		workspace.setTabMailPropertiesVisible(up.getTab().getMail().isPropertiesVisible());
+		workspace.setTabMailSecurityVisible(up.getTab().getMail().isSecurityVisible());
 		
 		// Dashboard visibility
 		workspace.setDashboardUserVisible(up.getDashboard().isUserVisible());
@@ -199,36 +199,27 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		
 		// Available options
 		GWTAvailableOption availableOption = new GWTAvailableOption();
-		availableOption.setCreateFolderOption(up.getAction().isCreateFolderVisible());
-		availableOption.setFindFolderOption(up.getAction().isFindFolderVisible());
-		availableOption.setGotoFolderOption(up.getAction().isGoFolderVisible());
-		availableOption.setDownloadOption(up.getAction().isDownloadVisible());
-		availableOption.setDownloadPdfOption(up.getAction().isDownloadPdfVisible());
-		availableOption.setAddDocumentOption(up.getAction().isAddDocumentVisible());
-		availableOption.setAddPropertyGroupOption(up.getAction().isAddPropertyGroupVisible());
-		availableOption.setRemovePropertyGroupOption(up.getAction().isRemovePropertyGroupVisible());
-		availableOption.setWorkflowOption(up.getAction().isStartWorkflowVisible());
-		availableOption.setAddSubscription(up.getAction().isAddSubscriptionVisible());
-		availableOption.setRemoveSubscription(up.getAction().isRemoveSubscriptionVisible());
-		availableOption.setRefreshOption(up.getAction().isRefreshVisible());
-		availableOption.setHomeOption(up.getAction().isGoHomeVisible());
-		availableOption.setSetHomeOption(up.getAction().isSetHomeVisible());
-		availableOption.setScannerOption(up.getAction().isScannerVisible());
-		availableOption.setUploaderOption(up.getAction().isUploaderVisible());
-		availableOption.setAddBookmarkOption(up.getAction().isAddBookmarkVisible());
-		availableOption.setExportOption(up.getAction().isExportVisible());
-		availableOption.setCreateFromTemplateOption(up.getAction().isCreateFromTemplateVisible());
-		availableOption.setPurgeOption(up.getAction().isPurgeVisible());
-		availableOption.setRestoreOption(up.getAction().isRestoreVisible());
-		availableOption.setPurgeTrashOption(up.getAction().isPurgeTrashVisible());
-		availableOption.setSendDocumentLinkOption(up.getAction().isSendDocumentLinkVisible());
-		availableOption.setSendDocumentAttachmentOption(up.getAction().isSendDocumentAttachmentVisible());
-		availableOption.setSkinOption(up.getAction().isChangeSkinVisible());
-		availableOption.setDebugOption(up.getAction().isDebugVisible());
-		availableOption.setAdministrationOption(up.getAction().isAdministrationVisible());
-		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible()); 
 		
-		// Edit
+		// Menu File
+		availableOption.setCreateFolderOption(up.getMenu().getFile().isCreateFolderVisible());
+		availableOption.setFindFolderOption(up.getMenu().getFile().isFindFolderVisible());
+		availableOption.setGotoFolderOption(up.getMenu().getFile().isGoFolderVisible());
+		availableOption.setDownloadOption(up.getMenu().getFile().isDownloadVisible());
+		availableOption.setDownloadPdfOption(up.getMenu().getFile().isDownloadPdfVisible());
+		availableOption.setAddDocumentOption(up.getMenu().getFile().isAddDocumentVisible());
+		availableOption.setWorkflowOption(up.getMenu().getFile().isStartWorkflowVisible());
+		availableOption.setRefreshOption(up.getMenu().getFile().isRefreshVisible());
+		availableOption.setScannerOption(up.getMenu().getFile().isScannerVisible());
+		availableOption.setUploaderOption(up.getMenu().getFile().isUploaderVisible());
+		availableOption.setExportOption(up.getMenu().getFile().isExportVisible());
+		availableOption.setCreateFromTemplateOption(up.getMenu().getFile().isCreateFromTemplateVisible());
+		availableOption.setPurgeOption(up.getMenu().getFile().isPurgeVisible());
+		availableOption.setRestoreOption(up.getMenu().getFile().isRestoreVisible());
+		availableOption.setPurgeTrashOption(up.getMenu().getFile().isPurgeTrashVisible());
+		availableOption.setSendDocumentLinkOption(up.getMenu().getFile().isSendDocumentLinkVisible());
+		availableOption.setSendDocumentAttachmentOption(up.getMenu().getFile().isSendDocumentAttachmentVisible());
+				
+		// Menu Edit
 		availableOption.setLockOption(up.getMenu().getEdit().isLockVisible());
 		availableOption.setUnLockOption(up.getMenu().getEdit().isUnlockVisible());
 		availableOption.setRenameOption(up.getMenu().getEdit().isRenameVisible());
@@ -238,8 +229,23 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setCheckoutOption(up.getMenu().getEdit().isCheckOutVisible());
 		availableOption.setCancelCheckoutOption(up.getMenu().getEdit().isCancelCheckOutVisible());
 		availableOption.setDeleteOption(up.getMenu().getEdit().isDeleteVisible());
+		availableOption.setAddPropertyGroupOption(up.getMenu().getEdit().isAddPropertyGroupVisible());
+		availableOption.setRemovePropertyGroupOption(up.getMenu().getEdit().isRemovePropertyGroupVisible());
+		availableOption.setAddSubscription(up.getMenu().getEdit().isAddSubscriptionVisible());
+		availableOption.setRemoveSubscription(up.getMenu().getEdit().isRemoveSubscriptionVisible());
 		
-		// Help
+		// Menu Bookmark
+		availableOption.setManageBookmarkOption(up.getMenu().getBookmark().isManageBookmarksVisible());
+		availableOption.setAddBookmarkOption(up.getMenu().getBookmark().isAddBookmarkVisible());
+		availableOption.setHomeOption(up.getMenu().getBookmark().isGoHomeVisible());
+		availableOption.setSetHomeOption(up.getMenu().getBookmark().isSetHomeVisible());
+		
+		// Menu Tool
+		availableOption.setSkinOption(up.getMenu().getTool().isChangeSkinVisible());
+		availableOption.setDebugOption(up.getMenu().getTool().isDebugVisible());
+		availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible());
+		
+		// Menu Help
 		availableOption.setHelpOption(up.getMenu().getHelp().isHelpVisible());
 		availableOption.setDocumentationOption(up.getMenu().getHelp().isDocumentationVisible());
 		availableOption.setBugReportOption(up.getMenu().getHelp().isBugTrackingVisible());

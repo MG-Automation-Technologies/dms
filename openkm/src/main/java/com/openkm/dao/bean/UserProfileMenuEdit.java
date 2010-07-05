@@ -34,6 +34,10 @@ public class UserProfileMenuEdit implements Serializable {
 	private boolean renameVisible;
 	private boolean copyVisible;
 	private boolean moveVisible;
+	private boolean addPropertyGroupVisible;
+	private boolean removePropertyGroupVisible;
+	private boolean addSubscriptionVisible;
+	private boolean removeSubscriptionVisible;
 
 	public boolean isLockVisible() {
 		return lockVisible;
@@ -107,6 +111,38 @@ public class UserProfileMenuEdit implements Serializable {
 		this.moveVisible = moveVisible;
 	}
 	
+	public boolean isAddPropertyGroupVisible() {
+		return addPropertyGroupVisible;
+	}
+
+	public void setAddPropertyGroupVisible(boolean addPropertyGroupVisible) {
+		this.addPropertyGroupVisible = addPropertyGroupVisible;
+	}
+
+	public boolean isRemovePropertyGroupVisible() {
+		return removePropertyGroupVisible;
+	}
+
+	public void setRemovePropertyGroupVisible(boolean removePropertyGroupVisible) {
+		this.removePropertyGroupVisible = removePropertyGroupVisible;
+	}
+
+	public boolean isAddSubscriptionVisible() {
+		return addSubscriptionVisible;
+	}
+
+	public void setAddSubscriptionVisible(boolean addSubscriptionVisible) {
+		this.addSubscriptionVisible = addSubscriptionVisible;
+	}
+
+	public boolean isRemoveSubscriptionVisible() {
+		return removeSubscriptionVisible;
+	}
+
+	public void setRemoveSubscriptionVisible(boolean removeSubscriptionVisible) {
+		this.removeSubscriptionVisible = removeSubscriptionVisible;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -119,6 +155,10 @@ public class UserProfileMenuEdit implements Serializable {
 		sb.append(", renameVisible="); sb.append(renameVisible);
 		sb.append(", copyVisible="); sb.append(copyVisible);
 		sb.append(", moveVisible="); sb.append(moveVisible);
+		sb.append(", addPropertyGroupVisible="); sb.append(addPropertyGroupVisible);
+		sb.append(", removePropertyGroupVisible="); sb.append(removePropertyGroupVisible);
+		sb.append(", removeSubscriptionVisible="); sb.append(removeSubscriptionVisible);
+		sb.append(", addSubscriptionVisible="); sb.append(addSubscriptionVisible);
 		sb.append("}");
 		return sb.toString();
 	}
