@@ -1398,6 +1398,7 @@ iframe {
 	font-size : 5pt;
 	font-family : "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
 	height: 30px;
+	text-decoration:none;
 }
 
 .okm-cloudTags a {
@@ -1405,6 +1406,7 @@ iframe {
 	text-decoration : none;
 	font-size : 5pt;
 	position: relative;
+	text-decoration:none;
 }   
 
 .okm-cloudSeparator {
