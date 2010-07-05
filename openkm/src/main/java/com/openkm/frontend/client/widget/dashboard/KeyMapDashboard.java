@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -38,7 +37,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
@@ -789,22 +787,20 @@ public class KeyMapDashboard extends Composite {
 			tagCloud.calculateFrequencies(relatedKeywordList);
 			for (Iterator<GWTKeyword> it = relatedKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
-				Anchor tagLink = new Anchor(keyword.getKeyword(), null); 
+				AnchorExtended tagLink = new AnchorExtended(keyword.getKeyword(), true); 
 				tagLink.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
 						selectKey(keyword.getKeyword());
 					}
 				});
-				tagLink.setStylePrimaryName("okm-cloudTags");  
-				Style linkStyle = tagLink.getElement().getFirstChildElement().getStyle();
-				tagLink.getElement().getFirstChildElement().setClassName("okm-cloudTags");
+				tagLink.setStyleName("okm-cloudTags");				
 				int fontSize = tagCloud.getLabelSize(keyword.getFrequency());
-				linkStyle.setProperty("fontSize", fontSize+"pt");
-				linkStyle.setProperty("color", tagCloud.getColor(fontSize));
+				tagLink.setProperty("fontSize", fontSize+"pt");
+				tagLink.setProperty("color", tagCloud.getColor(fontSize));
 				if (fontSize>0) {
-					linkStyle.setProperty("top", (tagCloud.getMaxFontSize()-fontSize)/2+"px" );
-				} 
+					tagLink.setProperty("top", (tagCloud.getMaxFontSize()-fontSize)/2+"px" );
+				}
 				tagCloud.add(tagLink);
 			}
 		} else {
@@ -814,21 +810,19 @@ public class KeyMapDashboard extends Composite {
 			totalMinFrequency = tagCloud.getMinFrequency();
 			for (Iterator<GWTKeyword> it = allKeywordList.iterator(); it.hasNext();) {
 				final GWTKeyword keyword = it.next();
-				Anchor tagLink = new Anchor(keyword.getKeyword(), null); 
+				AnchorExtended tagLink = new AnchorExtended(keyword.getKeyword(), true); 
 				tagLink.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
 						selectKey(keyword.getKeyword());
 					}
 				});
-				tagLink.setStylePrimaryName("okm-cloudTags");  
-				Style linkStyle = tagLink.getElement().getFirstChildElement().getStyle();
-				tagLink.getElement().getFirstChildElement().setClassName("okm-cloudTags");
+				tagLink.setStyleName("okm-cloudTags");				
 				int fontSize = tagCloud.getLabelSize(keyword.getFrequency());
-				linkStyle.setProperty("fontSize", fontSize+"pt");
-				linkStyle.setProperty("color", tagCloud.getColor(fontSize));
+				tagLink.setProperty("fontSize", fontSize+"pt");
+				tagLink.setProperty("color", tagCloud.getColor(fontSize));
 				if (fontSize>0) {
-					linkStyle.setProperty("top", (tagCloud.getMaxFontSize()-fontSize)/2+"px" );
+					tagLink.setProperty("top", (tagCloud.getMaxFontSize()-fontSize)/2+"px" );
 				}
 				tagCloud.add(tagLink);
 			}
