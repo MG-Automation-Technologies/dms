@@ -159,6 +159,13 @@ public class WorkspaceUserProperties {
 			}
 			if (workspace.isStackTemplatesVisible()) {
 				Main.get().mainPanel.desktop.navigator.showTemplates();
+				Main.get().mainPanel.desktop.navigator.taxonomyTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.categoriesTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.thesaurusTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.personalTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.templateTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.mailTree.folderSelectPopup.showTemplates();
+				Main.get().mainPanel.desktop.navigator.trashTree.folderSelectPopup.showTemplates();
 				Main.get().mainPanel.dashboard.keyMapDashboard.showTemplates();
 				Main.get().mainPanel.search.searchBrowser.searchIn.showTemplates();
 				refreshStack = true;
