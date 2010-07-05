@@ -27,73 +27,67 @@
         <input type="hidden" name="action" value="${action}"/>
         <input type="hidden" name="persist" value="${persist}"/>
         <input type="hidden" name="up_id" value="${up.id}"/>
-        <table class="form" width="600px">
+        <table class="form" width="700px" border="0">
           <tr>
-            <td valign="top">
+            <td valign="top" colspan="2" width="50%">
               <!-- GENERAL -->
-              <jsp:include page="user_profile_general_edit.jsp"/>
+              <jsp:include page="user_profile_general.jsp"/>
             </td>
-            <td valign="top" rowspan="8">
-              <!-- ACTION -->
-              <jsp:include page="user_profile_action_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              <!-- MISC -->
-              <jsp:include page="user_profile_misc_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              <!-- WIZARD -->
-              <jsp:include page="user_profile_wizard_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
+            <td valign="top" rowspan="3" width="25%">
               <!-- STACKS -->
-              <jsp:include page="user_profile_stacks_edit.jsp"/>
+              <jsp:include page="user_profile_stacks.jsp"/>
+              <!-- CHAT -->
+              <jsp:include page="user_profile_chat_edit.jsp"/>
+            </td>
+            <td valign="top" rowspan="3" width="25%">
+              <!-- DASHBOARD -->
+              <jsp:include page="user_profile_dashboard.jsp"/>
+              <!-- TAB -->
+              <jsp:include page="user_profile_tab.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" colspan="2">
+              <!-- MISC -->
+              <jsp:include page="user_profile_misc.jsp"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" colspan="2">
+              <!-- WIZARD -->
+              <jsp:include page="user_profile_wizard.jsp"/>
             </td>
           </tr>
           <tr>
             <td valign="top">
               <!-- MENU -->
+              <jsp:include page="user_profile_menu.jsp"/>
+              <!-- MENU BOOKMARK -->
+              <jsp:include page="user_profile_menu_bookmark.jsp"/>
+              <!-- MENU HELP -->
+              <jsp:include page="user_profile_menu_help.jsp"/>
+            </td>
+            <td valign="top">
+              <!-- MENU FILE -->
+              <jsp:include page="user_profile_menu_file.jsp"/>
+            </td>
+            <td valign="top">
+              <!-- MENU EDIT -->
               <jsp:include page="user_profile_menu_edit.jsp"/>
+              <!-- MENU TOOL -->
+              <jsp:include page="user_profile_menu_tool.jsp"/>
             </td>
-          </tr>
-          <tr>
             <td valign="top">
-              <!-- DASHBOARD -->
-              <jsp:include page="user_profile_dashboard_edit.jsp"/>
+              <!-- TAB DOCUMENT -->
+              <jsp:include page="profile_tab_document.jsp"/>
+              <!-- TAB FOLDER -->
+              <jsp:include page="profile_tab_folder.jsp"/>
+              <!-- TAB MAIL -->
+              <jsp:include page="profile_tab_mail.jsp"/>
             </td>
           </tr>
           <tr>
-            <td valign="top">
-              <!-- TAB -->
-              <jsp:include page="user_profile_tab_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              <!-- CHAT -->
-              <jsp:include page="user_profile_chat_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              <!-- EDIT -->
-              <jsp:include page="user_profile_menu_edit_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              <!-- HELP -->
-              <jsp:include page="user_profile_menu_help_edit.jsp"/>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" align="right">
+            <td colspan="4" align="right">
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>

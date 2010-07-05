@@ -31,6 +31,8 @@ public class UserProfileMenu implements Serializable {
 	private boolean bookmarksVisible;
 	private boolean helpVisible;
 	private UserProfileMenuFile file = new UserProfileMenuFile();
+	private UserProfileMenuBookmark bookmark = new UserProfileMenuBookmark();
+	private UserProfileMenuTool tool = new UserProfileMenuTool();
 	private UserProfileMenuEdit edit = new UserProfileMenuEdit();
 	private UserProfileMenuHelp help = new UserProfileMenuHelp();
 	
@@ -81,6 +83,22 @@ public class UserProfileMenu implements Serializable {
 	public void setFile(UserProfileMenuFile file) {
 		this.file = file;
 	}
+	
+	public UserProfileMenuBookmark getBookmark() {
+		return bookmark;
+	}
+
+	public void setBookmark(UserProfileMenuBookmark bookmark) {
+		this.bookmark = bookmark;
+	}
+
+	public UserProfileMenuTool getTool() {
+		return tool;
+	}
+
+	public void setTool(UserProfileMenuTool tool) {
+		this.tool = tool;
+	}
 
 	public UserProfileMenuEdit getEdit() {
 		return edit;
@@ -107,6 +125,8 @@ public class UserProfileMenu implements Serializable {
 		sb.append(", bookmarksVisible="); sb.append(bookmarksVisible);
 		sb.append(", helpVisible="); sb.append(helpVisible);
 		sb.append(", file="); sb.append(file);
+		sb.append(", bookmark="); sb.append(bookmark);
+		sb.append(", tool="); sb.append(tool);
 		sb.append(", edit="); sb.append(edit);
 		sb.append(", help="); sb.append(help);
 		sb.append("}");

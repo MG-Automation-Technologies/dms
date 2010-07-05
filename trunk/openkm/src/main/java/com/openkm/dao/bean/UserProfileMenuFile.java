@@ -31,17 +31,10 @@ public class UserProfileMenuFile implements Serializable {
 	private boolean downloadVisible;
 	private boolean downloadPdfVisible;
 	private boolean addDocumentVisible;
-	private boolean addPropertyGroupVisible;
-	private boolean removePropertyGroupVisible;
 	private boolean startWorkflowVisible;
-	private boolean addSubscriptionVisible;
-	private boolean removeSubscriptionVisible;
 	private boolean refreshVisible;
-	private boolean goHomeVisible;
-	private boolean setHomeVisible;
 	private boolean scannerVisible;
 	private boolean uploaderVisible;
-	private boolean addBookmarkVisible;
 	private boolean exportVisible;
 	private boolean createFromTemplateVisible;
 	private boolean purgeVisible;
@@ -49,11 +42,7 @@ public class UserProfileMenuFile implements Serializable {
 	private boolean purgeTrashVisible;
 	private boolean sendDocumentLinkVisible;
 	private boolean sendDocumentAttachmentVisible;
-	private boolean changeSkinVisible;
-	private boolean debugVisible;
-	private boolean administrationVisible;
-	private boolean manageBookmarksVisible;
-	
+
 	public boolean isCreateFolderVisible() {
 		return createFolderVisible;
 	}
@@ -77,7 +66,7 @@ public class UserProfileMenuFile implements Serializable {
 	public void setGoFolderVisible(boolean goFolderVisible) {
 		this.goFolderVisible = goFolderVisible;
 	}
-	
+
 	public boolean isDownloadVisible() {
 		return downloadVisible;
 	}
@@ -102,22 +91,6 @@ public class UserProfileMenuFile implements Serializable {
 		this.addDocumentVisible = addDocumentVisible;
 	}
 
-	public boolean isAddPropertyGroupVisible() {
-		return addPropertyGroupVisible;
-	}
-
-	public void setAddPropertyGroupVisible(boolean addPropertyGroupVisible) {
-		this.addPropertyGroupVisible = addPropertyGroupVisible;
-	}
-
-	public boolean isRemovePropertyGroupVisible() {
-		return removePropertyGroupVisible;
-	}
-
-	public void setRemovePropertyGroupVisible(boolean removePropertyGroupVisible) {
-		this.removePropertyGroupVisible = removePropertyGroupVisible;
-	}
-
 	public boolean isStartWorkflowVisible() {
 		return startWorkflowVisible;
 	}
@@ -126,44 +99,12 @@ public class UserProfileMenuFile implements Serializable {
 		this.startWorkflowVisible = startWorkflowVisible;
 	}
 
-	public boolean isAddSubscriptionVisible() {
-		return addSubscriptionVisible;
-	}
-
-	public void setAddSubscriptionVisible(boolean addSubscriptionVisible) {
-		this.addSubscriptionVisible = addSubscriptionVisible;
-	}
-
-	public boolean isRemoveSubscriptionVisible() {
-		return removeSubscriptionVisible;
-	}
-
-	public void setRemoveSubscriptionVisible(boolean removeSubscriptionVisible) {
-		this.removeSubscriptionVisible = removeSubscriptionVisible;
-	}
-
 	public boolean isRefreshVisible() {
 		return refreshVisible;
 	}
 
 	public void setRefreshVisible(boolean refreshVisible) {
 		this.refreshVisible = refreshVisible;
-	}
-
-	public boolean isGoHomeVisible() {
-		return goHomeVisible;
-	}
-
-	public void setGoHomeVisible(boolean goHomeVisible) {
-		this.goHomeVisible = goHomeVisible;
-	}
-	
-	public boolean isSetHomeVisible() {
-		return setHomeVisible;
-	}
-
-	public void setSetHomeVisible(boolean setHomeVisible) {
-		this.setHomeVisible = setHomeVisible;
 	}
 
 	public boolean isScannerVisible() {
@@ -182,14 +123,6 @@ public class UserProfileMenuFile implements Serializable {
 		this.uploaderVisible = uploaderVisible;
 	}
 
-	public boolean isAddBookmarkVisible() {
-		return addBookmarkVisible;
-	}
-
-	public void setAddBookmarkVisible(boolean addBookmarkVisible) {
-		this.addBookmarkVisible = addBookmarkVisible;
-	}
-	
 	public boolean isExportVisible() {
 		return exportVisible;
 	}
@@ -237,45 +170,13 @@ public class UserProfileMenuFile implements Serializable {
 	public void setSendDocumentLinkVisible(boolean sendDocumentLinkVisible) {
 		this.sendDocumentLinkVisible = sendDocumentLinkVisible;
 	}
-	
+
 	public boolean isSendDocumentAttachmentVisible() {
 		return sendDocumentAttachmentVisible;
 	}
 
 	public void setSendDocumentAttachmentVisible(boolean sendDocumentAttachmentVisible) {
 		this.sendDocumentAttachmentVisible = sendDocumentAttachmentVisible;
-	}
-
-	public boolean isChangeSkinVisible() {
-		return changeSkinVisible;
-	}
-
-	public void setChangeSkinVisible(boolean changeSkinVisible) {
-		this.changeSkinVisible = changeSkinVisible;
-	}
-
-	public boolean isDebugVisible() {
-		return debugVisible;
-	}
-
-	public void setDebugVisible(boolean debugVisible) {
-		this.debugVisible = debugVisible;
-	}
-
-	public boolean isAdministrationVisible() {
-		return administrationVisible;
-	}
-
-	public void setAdministrationVisible(boolean administrationVisible) {
-		this.administrationVisible = administrationVisible;
-	}
-
-	public boolean isManageBookmarksVisible() {
-		return manageBookmarksVisible;
-	}
-
-	public void setManageBookmarksVisible(boolean manageBookmarksVisible) {
-		this.manageBookmarksVisible = manageBookmarksVisible;
 	}
 	
 	public String toString() {
@@ -287,17 +188,10 @@ public class UserProfileMenuFile implements Serializable {
 		sb.append(", downloadVisible="); sb.append(downloadVisible);
 		sb.append(", downloadPdfVisible="); sb.append(downloadPdfVisible);;
 		sb.append(", addDocumentVisible="); sb.append(addDocumentVisible);
-		sb.append(", addPropertyGroupVisible="); sb.append(addPropertyGroupVisible);
-		sb.append(", removePropertyGroupVisible="); sb.append(removePropertyGroupVisible);
 		sb.append(", startWorkflowVisible="); sb.append(startWorkflowVisible);
-		sb.append(", addSubscriptionVisible="); sb.append(addSubscriptionVisible);
-		sb.append(", removeSubscriptionVisible="); sb.append(removeSubscriptionVisible);
 		sb.append(", refreshVisible="); sb.append(refreshVisible);
-		sb.append(", goHomeVisible="); sb.append(goHomeVisible);
-		sb.append(", setHomeVisible="); sb.append(setHomeVisible);
 		sb.append(", scannerVisible="); sb.append(scannerVisible);
 		sb.append(", uploaderVisible="); sb.append(uploaderVisible);
-		sb.append(", addBookmarkVisible="); sb.append(addBookmarkVisible);
 		sb.append("}");
 		return sb.toString();
 	}

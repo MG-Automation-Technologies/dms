@@ -28,6 +28,9 @@ public class UserProfileTab implements Serializable {
 	private boolean desktopVisible;
 	private boolean searchVisible;
 	private boolean dashboardVisible;
+	private UserProfileTabFolder folder = new UserProfileTabFolder();
+	private UserProfileTabDocument document = new UserProfileTabDocument();
+	private UserProfileTabMail mail = new UserProfileTabMail();
 
 	public boolean isDesktopVisible() {
 		return desktopVisible;
@@ -52,6 +55,30 @@ public class UserProfileTab implements Serializable {
 	public void setDashboardVisible(boolean dashboardVisible) {
 		this.dashboardVisible = dashboardVisible;
 	}
+
+	public UserProfileTabFolder getFolder() {
+		return folder;
+	}
+
+	public void setFolder(UserProfileTabFolder folder) {
+		this.folder = folder;
+	}
+
+	public UserProfileTabDocument getDocument() {
+		return document;
+	}
+
+	public void setDocument(UserProfileTabDocument document) {
+		this.document = document;
+	}
+
+	public UserProfileTabMail getMail() {
+		return mail;
+	}
+
+	public void setMail(UserProfileTabMail mail) {
+		this.mail = mail;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -59,6 +86,9 @@ public class UserProfileTab implements Serializable {
 		sb.append("desktopVisible="); sb.append(desktopVisible);
 		sb.append(", searchVisible="); sb.append(searchVisible);
 		sb.append(", dashboardVisible="); sb.append(dashboardVisible);
+		sb.append(", document="); sb.append(document);
+		sb.append(", folder="); sb.append(folder);
+		sb.append(", mail="); sb.append(mail);
 		sb.append("}");
 		return sb.toString();
 	}

@@ -120,32 +120,6 @@
       </td>
     </tr>
     <tr>
-      <td>Add property group visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.addPropertyGroupVisible}">
-            <input name="up_action_add_property_group_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_add_property_group_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Remove property group visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.removePropertyGroupVisible}">
-            <input name="up_action_remove_property_group_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_remove_property_group_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
       <td>Start workflow visible</td>
       <td>
         <c:choose>
@@ -154,32 +128,6 @@
           </c:when>
           <c:otherwise>
             <input name="up_action_start_workflow_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Add subscription visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.addSubscriptionVisible}">
-            <input name="up_action_add_subscription_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_add_subscription_visible" type="checkbox"/>
-          </c:otherwise>
-        </c:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Remove subscription visible</td>
-      <td>
-        <c:choose>
-          <c:when test="${up.action.removeSubscriptionVisible}">
-            <input name="up_action_remove_subscription_visible" type="checkbox" checked="checked"/>
-          </c:when>
-          <c:otherwise>
-            <input name="up_action_remove_subscription_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
