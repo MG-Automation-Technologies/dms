@@ -64,6 +64,7 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 
 /**
@@ -414,6 +415,7 @@ public class PropertyGroupWidget extends Composite {
 				textBox.setEnabled(false);
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
 				if (!value.equals("")) {
+					HorizontalPanel hLinkPanel = new HorizontalPanel();
 					Anchor anchor = new Anchor(value, true);
 					final String url = value;
 					anchor.addClickHandler(new ClickHandler() {
@@ -422,7 +424,14 @@ public class PropertyGroupWidget extends Composite {
 							Window.open(url, url, "");
 						}
 					});
-					table.setWidget(row, 1, anchor);
+					String containerName = ((GWTInput) gwtMetadata).getName() + "ContainerName";
+					hLinkPanel.add(new HTML("<div id=\""+containerName+"\"></div>\n"));
+					HTML space = new HTML("");
+					hLinkPanel.add(space);
+					hLinkPanel.add(anchor);
+					hLinkPanel.setCellWidth(space, "5px");
+					table.setWidget(row, 1, hLinkPanel);
+					Util.createLinkClipboardButton(url, containerName);
 				} else {
 					table.setHTML(row, 1, "");
 				}

@@ -240,6 +240,10 @@ public class Util {
 		return $wnd.deployJava.getJREs();
 	}-*/;  
     
+    public static native void createLinkClipboardButton(String textToCopy, String containerName) /*-{
+		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", containerName, 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
+	}-*/;
+    
     public static native void createURLClipboardButton(String textToCopy) /*-{
 		$wnd.swfobject.embedSWF("/OpenKM/clippy.swf", "urlclipboardcontainer", 14, 14, "9.0.0", "/OpenKM/clippy.swf", {text:textToCopy}, {quality:"high",scale:"noscale",bgcolor:"#FFFFFF"}, {id:"clippy",name:"clippy"});
 	}-*/;
