@@ -188,18 +188,18 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		if (securityVisible) {
 			security.setPath(doc.getPath());
 			security.GetGrants();
+			
+			GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+			if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+				(doc.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY && 
+				!doc.isCheckedOut() && !doc.isLocked()) {
+				security.setChangePermision(true);
+			} else {
+				security.setChangePermision(false);
+			}
 		}
 		if (previewVisible) {
 			preview.setPreviewAvailable(doc.isConvertibleToSwf());
-		}
-		
-		GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
-		if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
-			(doc.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY && 
-			!doc.isCheckedOut() && !doc.isLocked()) {
-			security.setChangePermision(true);
-		} else {
-			security.setChangePermision(false);
 		}
 		
 		if (!propertyGroup.isEmpty()) {
@@ -458,6 +458,20 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void init() {
 		if (tabPanel.getTabBar().getTabCount()>0) {
 			tabPanel.selectTab(0);
+			
+			if (securityVisible && doc!=null) {
+				security.setPath(doc.getPath());
+				security.GetGrants();
+				
+				GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+				if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+					(doc.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY && 
+					!doc.isCheckedOut() && !doc.isLocked()) {
+					security.setChangePermision(true);
+				} else {
+					security.setChangePermision(false);
+				}
+			}
 		}
 	}
 	

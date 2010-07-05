@@ -60,6 +60,7 @@ public class Mail extends Composite {
 	private HTML content;
 	public MenuPopup menuPopup;
 	private Map<Integer, GWTDocument> attachmentsList;
+	private GWTMail mail;
 	
 	public Mail() {
 		table = new FlexTable();
@@ -150,11 +151,21 @@ public class Mail extends Composite {
 	}
 	
 	/**
+	 * get
+	 * 
+	 * @return
+	 */
+	public GWTMail get() {
+		return mail;
+	}
+	
+	/**
 	 * Sets the mail values
 	 * 
 	 * @param mail The document object
 	 */
 	public void set(GWTMail mail) {
+		this.mail = mail;
 		Anchor hFrom = new Anchor();
 		final String mailFrom = mail.getFrom().substring(mail.getFrom().indexOf("<")+1, mail.getFrom().indexOf(">"));
 		hFrom.setHTML(mail.getFrom().replace("<", "&lt;").replace(">", "&gt;"));

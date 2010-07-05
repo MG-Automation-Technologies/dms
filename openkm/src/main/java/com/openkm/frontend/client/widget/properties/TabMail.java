@@ -192,6 +192,19 @@ public class TabMail extends Composite {
 	public void init() {
 		if (tabPanel.getTabBar().getTabCount()>0) {
 			tabPanel.selectTab(0);
+			
+			if (securityVisible && mail.get()!=null) {
+				security.setPath(mail.get().getPath());
+				security.GetGrants();
+				
+				GWTFolder parentFolder = Main.get().activeFolderTree.getFolder();
+				if ((parentFolder.getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY &&
+					(mail.get().getPermissions() & GWTPermission.SECURITY) == GWTPermission.SECURITY) {
+					security.setChangePermision(true);
+				} else {
+					security.setChangePermision(false);
+				}
+			}
 		}
 	}
 	
