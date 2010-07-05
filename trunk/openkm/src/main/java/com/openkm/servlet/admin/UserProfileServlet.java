@@ -258,25 +258,25 @@ public class UserProfileServlet extends BaseServlet {
 		up.getAction().setAdministrationVisible(WebUtil.getBoolean(request, "up_action_administration_visible"));
 		
 		// Edit
-		up.getEdit().setRenameVisible(WebUtil.getBoolean(request, "up_edit_rename_visible"));
-		up.getEdit().setCopyVisible(WebUtil.getBoolean(request, "up_edit_copy_visible"));
-		up.getEdit().setMoveVisible(WebUtil.getBoolean(request, "up_edit_move_visible"));
-		up.getEdit().setLockVisible(WebUtil.getBoolean(request, "up_edit_lock_visible"));
-		up.getEdit().setUnlockVisible(WebUtil.getBoolean(request, "up_edit_unlock_visible"));
-		up.getEdit().setCheckInVisible(WebUtil.getBoolean(request, "up_edit_check_in_visible"));
-		up.getEdit().setCheckOutVisible(WebUtil.getBoolean(request, "up_edit_check_out_visible"));
-		up.getEdit().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_edit_cancel_check_out_visible"));
-		up.getEdit().setDeleteVisible(WebUtil.getBoolean(request, "up_edit_delete_visible"));
+		up.getMenu().getEdit().setRenameVisible(WebUtil.getBoolean(request, "up_menu_edit_rename_visible"));
+		up.getMenu().getEdit().setCopyVisible(WebUtil.getBoolean(request, "up_menu_edit_copy_visible"));
+		up.getMenu().getEdit().setMoveVisible(WebUtil.getBoolean(request, "up_menu_edit_move_visible"));
+		up.getMenu().getEdit().setLockVisible(WebUtil.getBoolean(request, "up_menu_edit_lock_visible"));
+		up.getMenu().getEdit().setUnlockVisible(WebUtil.getBoolean(request, "up_menu_edit_unlock_visible"));
+		up.getMenu().getEdit().setCheckInVisible(WebUtil.getBoolean(request, "up_menu_edit_check_in_visible"));
+		up.getMenu().getEdit().setCheckOutVisible(WebUtil.getBoolean(request, "up_menu_edit_check_out_visible"));
+		up.getMenu().getEdit().setCancelCheckOutVisible(WebUtil.getBoolean(request, "up_menu_edit_cancel_check_out_visible"));
+		up.getMenu().getEdit().setDeleteVisible(WebUtil.getBoolean(request, "up_menu_edit_delete_visible"));
 		
 		// Help
-		up.getHelp().setHelpVisible(WebUtil.getBoolean(request, "up_help_help_visible"));
-		up.getHelp().setDocumentationVisible(WebUtil.getBoolean(request, "up_help_documentation_visible"));
-		up.getHelp().setBugTrackingVisible(WebUtil.getBoolean(request, "up_help_bug_tracking_visible"));
-		up.getHelp().setSupportVisible(WebUtil.getBoolean(request, "up_help_support_visible"));
-		up.getHelp().setForumVisible(WebUtil.getBoolean(request, "up_help_forum_visible"));
-		up.getHelp().setChangelogVisible(WebUtil.getBoolean(request, "up_help_changelog_visible"));
-		up.getHelp().setWebSiteVisible(WebUtil.getBoolean(request, "up_help_web_site_visible"));
-		up.getHelp().setAboutVisible(WebUtil.getBoolean(request, "up_help_about_visible"));
+		up.getMenu().getHelp().setHelpVisible(WebUtil.getBoolean(request, "up_menu_help_help_visible"));
+		up.getMenu().getHelp().setDocumentationVisible(WebUtil.getBoolean(request, "up_menu_help_documentation_visible"));
+		up.getMenu().getHelp().setBugTrackingVisible(WebUtil.getBoolean(request, "up_menu_help_bug_tracking_visible"));
+		up.getMenu().getHelp().setSupportVisible(WebUtil.getBoolean(request, "up_menu_help_support_visible"));
+		up.getMenu().getHelp().setForumVisible(WebUtil.getBoolean(request, "up_menu_help_forum_visible"));
+		up.getMenu().getHelp().setChangelogVisible(WebUtil.getBoolean(request, "up_menu_help_changelog_visible"));
+		up.getMenu().getHelp().setWebSiteVisible(WebUtil.getBoolean(request, "up_menu_help_web_site_visible"));
+		up.getMenu().getHelp().setAboutVisible(WebUtil.getBoolean(request, "up_menu_help_about_visible"));
 				
 		return up;
 	}

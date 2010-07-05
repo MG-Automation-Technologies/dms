@@ -15,7 +15,7 @@
     $(document).ready(function(){
       $("#check").click(function(event) {
         $("#dest").html('Checking....');
-        $("#dest").load('MailAccount', {action: "check", ma_mhost: $('#ma_mhost').val(), ma_muser: $('#ma_muser').val(), ma_mpassword: $('#ma_mpassword').val(), ma_mfolder: $('#ma_mfolder').val()});
+        $("#dest").load('MailAccount', {action: "check", ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(), ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val()});
       });
     })
   </script>
@@ -38,19 +38,19 @@
         <table class="form" width="345px" align="center">
           <tr>
             <td nowrap="nowrap">Mail host</td>
-            <td><input class=":required :only_on_blur" name="ma_mhost" id="ma_mhost" value="${ma.mailHost}"/></td>
+            <td><input class=":required :only_on_blur" name="ma_mhost" value="${ma.mailHost}"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Mail user</td>
-            <td><input class=":required :only_on_blur" name="ma_muser" id="ma_muser" value="${ma.mailUser}"/></td>
+            <td><input class=":required :only_on_blur" name="ma_muser" value="${ma.mailUser}"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Mail password</td>
-            <td><input class=":required :only_on_blur" name="ma_mpassword" id="ma_mpassword" type="password" value="${ma.mailPassword}"/></td>
+            <td><input class=":required :only_on_blur" name="ma_mpassword" type="password" value="${ma.mailPassword}"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Mail folder</td>
-            <td><input name="ma_mfolder" id="ma_mfolder" value="${ma.mailFolder}"/></td>
+            <td><input name="ma_mfolder" value="${ma.mailFolder}"/></td>
           </tr>
           <tr>
             <td>Active</td>

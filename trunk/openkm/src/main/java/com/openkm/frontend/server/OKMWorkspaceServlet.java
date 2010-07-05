@@ -213,25 +213,25 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setManageBookmarkOption(up.getAction().isManageBookmarksVisible()); 
 		
 		// Edit
-		availableOption.setLockOption(up.getEdit().isLockVisible());
-		availableOption.setUnLockOption(up.getEdit().isUnlockVisible());
-		availableOption.setRenameOption(up.getEdit().isRenameVisible());
-		availableOption.setCopyOption(up.getEdit().isCopyVisible());
-		availableOption.setMoveOption(up.getEdit().isMoveVisible());
-		availableOption.setCheckinOption(up.getEdit().isCheckInVisible());
-		availableOption.setCheckoutOption(up.getEdit().isCheckOutVisible());
-		availableOption.setCancelCheckoutOption(up.getEdit().isCancelCheckOutVisible());
-		availableOption.setDeleteOption(up.getEdit().isDeleteVisible());
+		availableOption.setLockOption(up.getMenu().getEdit().isLockVisible());
+		availableOption.setUnLockOption(up.getMenu().getEdit().isUnlockVisible());
+		availableOption.setRenameOption(up.getMenu().getEdit().isRenameVisible());
+		availableOption.setCopyOption(up.getMenu().getEdit().isCopyVisible());
+		availableOption.setMoveOption(up.getMenu().getEdit().isMoveVisible());
+		availableOption.setCheckinOption(up.getMenu().getEdit().isCheckInVisible());
+		availableOption.setCheckoutOption(up.getMenu().getEdit().isCheckOutVisible());
+		availableOption.setCancelCheckoutOption(up.getMenu().getEdit().isCancelCheckOutVisible());
+		availableOption.setDeleteOption(up.getMenu().getEdit().isDeleteVisible());
 		
 		// Help
-		availableOption.setHelpOption(up.getHelp().isHelpVisible());
-		availableOption.setDocumentationOption(up.getHelp().isDocumentationVisible());
-		availableOption.setBugReportOption(up.getHelp().isBugTrackingVisible());
-		availableOption.setSupportRequestOption(up.getHelp().isSupportVisible());
-		availableOption.setPublicForumOption(up.getHelp().isForumVisible());
-		availableOption.setVersionChangesOption(up.getHelp().isChangelogVisible());
-		availableOption.setProjectWebOption(up.getHelp().isWebSiteVisible());
-		availableOption.setAboutOption(up.getHelp().isAboutVisible());
+		availableOption.setHelpOption(up.getMenu().getHelp().isHelpVisible());
+		availableOption.setDocumentationOption(up.getMenu().getHelp().isDocumentationVisible());
+		availableOption.setBugReportOption(up.getMenu().getHelp().isBugTrackingVisible());
+		availableOption.setSupportRequestOption(up.getMenu().getHelp().isSupportVisible());
+		availableOption.setPublicForumOption(up.getMenu().getHelp().isForumVisible());
+		availableOption.setVersionChangesOption(up.getMenu().getHelp().isChangelogVisible());
+		availableOption.setProjectWebOption(up.getMenu().getHelp().isWebSiteVisible());
+		availableOption.setAboutOption(up.getMenu().getHelp().isAboutVisible());
 		
 		availableOption.setMediaPlayerOption(true);
 		availableOption.setImageViewerOption(true); 

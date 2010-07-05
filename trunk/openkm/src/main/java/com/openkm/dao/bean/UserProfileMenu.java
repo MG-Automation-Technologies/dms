@@ -30,7 +30,10 @@ public class UserProfileMenu implements Serializable {
 	private boolean toolsVisible;
 	private boolean bookmarksVisible;
 	private boolean helpVisible;
-
+	private UserProfileMenuFile file = new UserProfileMenuFile();
+	private UserProfileMenuEdit edit = new UserProfileMenuEdit();
+	private UserProfileMenuHelp help = new UserProfileMenuHelp();
+	
 	public boolean isFileVisible() {
 		return fileVisible;
 	}
@@ -70,6 +73,30 @@ public class UserProfileMenu implements Serializable {
 	public void setHelpVisible(boolean helpVisible) {
 		this.helpVisible = helpVisible;
 	}
+
+	public UserProfileMenuFile getFile() {
+		return file;
+	}
+
+	public void setFile(UserProfileMenuFile file) {
+		this.file = file;
+	}
+
+	public UserProfileMenuEdit getEdit() {
+		return edit;
+	}
+
+	public void setEdit(UserProfileMenuEdit edit) {
+		this.edit = edit;
+	}
+
+	public UserProfileMenuHelp getHelp() {
+		return help;
+	}
+
+	public void setHelp(UserProfileMenuHelp help) {
+		this.help = help;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -79,6 +106,9 @@ public class UserProfileMenu implements Serializable {
 		sb.append(", toolsVisible="); sb.append(toolsVisible);
 		sb.append(", bookmarksVisible="); sb.append(bookmarksVisible);
 		sb.append(", helpVisible="); sb.append(helpVisible);
+		sb.append(", file="); sb.append(file);
+		sb.append(", edit="); sb.append(edit);
+		sb.append(", help="); sb.append(help);
 		sb.append("}");
 		return sb.toString();
 	}
