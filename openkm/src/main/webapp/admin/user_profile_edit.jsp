@@ -83,13 +83,13 @@
           <tr>
             <td valign="top">
               <!-- EDIT -->
-              <jsp:include page="user_profile_edit_edit.jsp"/>
+              <jsp:include page="user_profile_menu_edit_edit.jsp"/>
             </td>
           </tr>
           <tr>
             <td valign="top">
               <!-- HELP -->
-              <jsp:include page="user_profile_help_edit.jsp"/>
+              <jsp:include page="user_profile_menu_help_edit.jsp"/>
             </td>
           </tr>
           <tr>

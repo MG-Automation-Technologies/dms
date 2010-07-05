@@ -117,65 +117,65 @@
       <property name="helpVisible" not-null="true">
         <column name="UP_MENU_HELP_VISIBLE" default="true"/>
       </property>
-    </component>
-    
-    <!-- HELP -->
-    <component name="help" class="com.openkm.dao.bean.UserProfileHelp">
-      <property name="helpVisible" not-null="true">
-	    <column name="UP_HELP_HELP_VISIBLE" default="true"/>
-	  </property>
-	  <property name="documentationVisible" not-null="true">
-	    <column name="UP_HELP_DOCUMENTATION_VISIBLE" default="true"/>
-	  </property>
-	  <property name="bugTrackingVisible" not-null="true">
-	    <column name="UP_HELP_BUG_TRACKING_VISIBLE" default="true"/>
-	  </property>
-	  <property name="supportVisible" not-null="true">
-	    <column name="UP_HELP_SUPPORT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="forumVisible" not-null="true">
-	    <column name="UP_HELP_FORUM_VISIBLE" default="true"/>
-	  </property>
-	  <property name="changelogVisible" not-null="true">
-	    <column name="UP_HELP_CHANGELOG_VISIBLE" default="true"/>
-	  </property>
-	  <property name="webSiteVisible" not-null="true">
-	    <column name="UP_HELP_WEB_SITE_VISIBLE" default="true"/>
-	  </property>
-	  <property name="aboutVisible" not-null="true">
-	    <column name="UP_HELP_ABOUT_VISIBLE" default="true"/>
-	  </property>
-    </component>
-    
-    <!-- EDIT -->
-    <component name="edit" class="com.openkm.dao.bean.UserProfileEdit">
-	  <property name="lockVisible" not-null="true">
-	    <column name="UP_EDIT_LOCK_VISIBLE" default="true"/>
-	  </property>
-	  <property name="unlockVisible" not-null="true">
-	    <column name="UP_EDIT_UNLOCK_VISIBLE" default="true"/>
-	  </property>
-	  <property name="checkInVisible" not-null="true">
-	    <column name="UP_EDIT_CHECK_IN_VISIBLE" default="true"/>
-	  </property>
-	  <property name="checkOutVisible" not-null="true">
-	    <column name="UP_EDIT_CHECK_OUT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="cancelCheckOutVisible" not-null="true">
-	    <column name="UP_EDIT_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
-	  </property>
-	  <property name="deleteVisible" not-null="true">
-	    <column name="UP_EDIT_DELETE_VISIBLE" default="true"/>
-	  </property>
-	  <property name="renameVisible" not-null="true">
-	    <column name="UP_EDIT_RENAME_VISIBLE" default="true"/>
-	  </property>
-	  <property name="copyVisible" not-null="true">
-	    <column name="UP_EDIT_COPY_VISIBLE" default="true"/>
-	  </property>
-	  <property name="moveVisible" not-null="true">
-	    <column name="UP_EDIT_MOVE_VISIBLE" default="true"/>
-	  </property>
+
+      <!-- EDIT -->
+      <component name="edit" class="com.openkm.dao.bean.UserProfileMenuEdit">
+	    <property name="lockVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_LOCK_VISIBLE" default="true"/>
+	    </property>
+	    <property name="unlockVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_UNLOCK_VISIBLE" default="true"/>
+	    </property>
+	    <property name="checkInVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_CHECK_IN_VISIBLE" default="true"/>
+	    </property>
+	    <property name="checkOutVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_CHECK_OUT_VISIBLE" default="true"/>
+	    </property>
+	    <property name="cancelCheckOutVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_CANCEL_CHECK_OUT_VISIBLE" default="true"/>
+	    </property>
+	    <property name="deleteVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_DELETE_VISIBLE" default="true"/>
+	    </property>
+	    <property name="renameVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_RENAME_VISIBLE" default="true"/>
+	    </property>
+	    <property name="copyVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_COPY_VISIBLE" default="true"/>
+	    </property>
+	    <property name="moveVisible" not-null="true">
+	      <column name="UP_MENU_EDIT_MOVE_VISIBLE" default="true"/>
+	    </property>
+      </component>
+      
+      <!-- HELP -->
+      <component name="help" class="com.openkm.dao.bean.UserProfileMenuHelp">
+        <property name="helpVisible" not-null="true">
+	      <column name="UP_MENU_HELP_HELP_VISIBLE" default="true"/>
+	    </property>
+	    <property name="documentationVisible" not-null="true">
+	      <column name="UP_MENU_HELP_DOCUMENTATION_VISIBLE" default="true"/>
+	    </property>
+	    <property name="bugTrackingVisible" not-null="true">
+	      <column name="UP_MENU_HELP_BUG_TRACKING_VISIBLE" default="true"/>
+	    </property>
+	    <property name="supportVisible" not-null="true">
+	      <column name="UP_MENU_HELP_SUPPORT_VISIBLE" default="true"/>
+	    </property>
+	    <property name="forumVisible" not-null="true">
+	      <column name="UP_MENU_HELP_FORUM_VISIBLE" default="true"/>
+	    </property>
+	    <property name="changelogVisible" not-null="true">
+	      <column name="UP_MENU_HELP_CHANGELOG_VISIBLE" default="true"/>
+	    </property>
+	    <property name="webSiteVisible" not-null="true">
+	      <column name="UP_MENU_HELP_WEB_SITE_VISIBLE" default="true"/>
+	    </property>
+	    <property name="aboutVisible" not-null="true">
+	      <column name="UP_MENU_HELP_ABOUT_VISIBLE" default="true"/>
+	    </property>
+      </component>
     </component>
 	
 	<!-- ACTION -->

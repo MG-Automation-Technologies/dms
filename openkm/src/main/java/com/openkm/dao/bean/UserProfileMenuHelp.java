@@ -23,7 +23,7 @@ package com.openkm.dao.bean;
 
 import java.io.Serializable;
 
-public class UserProfileHelp implements Serializable {
+public class UserProfileMenuHelp implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean helpVisible;
 	private boolean documentationVisible;
@@ -33,7 +33,7 @@ public class UserProfileHelp implements Serializable {
 	private boolean changelogVisible;
 	private boolean webSiteVisible;
 	private boolean aboutVisible;
-	
+		
 	public boolean isHelpVisible() {
 		return helpVisible;
 	}
