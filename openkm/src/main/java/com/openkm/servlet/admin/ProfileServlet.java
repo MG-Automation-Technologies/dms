@@ -234,10 +234,10 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMenu().getFile().setSendDocumentAttachmentVisible(WebUtil.getBoolean(request, "prf_menu_file_send_document_attachment_visible"));
 
 		// Menu Bookmarks
-		prf.getMenu().getBookmark().setManageBookmarksVisible(WebUtil.getBoolean(request, "prf_menu_bookmarks_manage_bookmarks_visible"));
-		prf.getMenu().getBookmark().setAddBookmarkVisible(WebUtil.getBoolean(request, "prf_menu_bookmarks_add_bookmark_visible"));
-		prf.getMenu().getBookmark().setSetHomeVisible(WebUtil.getBoolean(request, "prf_menu_bookmarks_set_home_visible"));
-		prf.getMenu().getBookmark().setGoHomeVisible(WebUtil.getBoolean(request, "prf_menu_bookmarks_go_home_visible"));
+		prf.getMenu().getBookmark().setManageBookmarksVisible(WebUtil.getBoolean(request, "prf_menu_bookmark_manage_bookmarks_visible"));
+		prf.getMenu().getBookmark().setAddBookmarkVisible(WebUtil.getBoolean(request, "prf_menu_bookmark_add_bookmark_visible"));
+		prf.getMenu().getBookmark().setSetHomeVisible(WebUtil.getBoolean(request, "prf_menu_bookmark_set_home_visible"));
+		prf.getMenu().getBookmark().setGoHomeVisible(WebUtil.getBoolean(request, "prf_menu_bookmark_go_home_visible"));
 		
 		// Menu Tools
 		prf.getMenu().getTool().setChangeSkinVisible(WebUtil.getBoolean(request, "prf_menu_tool_change_skin_visible"));
@@ -277,6 +277,10 @@ public class ProfileServlet extends BaseServlet {
 		// Tab Document
 		prf.getTab().getDocument().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_document_properties_visible"));
 		prf.getTab().getDocument().setSecurityVisible(WebUtil.getBoolean(request, "prf_tab_document_security_visible"));
+		prf.getTab().getDocument().setNotesVisible(WebUtil.getBoolean(request, "prf_tab_document_notes_visible"));
+		prf.getTab().getDocument().setVersionsVisible(WebUtil.getBoolean(request, "prf_tab_document_versions_visible"));
+		prf.getTab().getDocument().setPreviewVisible(WebUtil.getBoolean(request, "prf_tab_document_preview_visible"));
+		prf.getTab().getDocument().setPropertyGroupsVisible(WebUtil.getBoolean(request, "prf_tab_document_property_groups_visible"));
 
 		// Tab Folder
 		prf.getTab().getFolder().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_folder_properties_visible"));
