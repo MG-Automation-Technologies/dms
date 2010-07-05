@@ -766,7 +766,8 @@ public class Util {
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
 			gWTInput.setName(((Input) formElement).getName());
-			if (((Input) formElement).getType().equals(Input.TYPE_TEXT)) {
+			if (((Input) formElement).getType().equals(Input.TYPE_TEXT) || 
+				((Input) formElement).getType().equals(Input.TYPE_LINK)) {
 				gWTInput.setValue(((Input) formElement).getValue());
 			} else if (((Input) formElement).getType().equals(Input.TYPE_DATE)) {
 				if (!((Input) formElement).getValue().equals("")) {
@@ -826,7 +827,8 @@ public class Util {
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();
 			input.setName(((GWTInput) formElement).getName());
-			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT)) {
+			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT) || 
+					((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
 				input.setValue(((GWTInput) formElement).getValue());
 			} else if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 				if (((GWTInput) formElement).getDate()!=null) {
@@ -834,7 +836,7 @@ public class Util {
 					cal.setTime(((GWTInput) formElement).getDate());
 					input.setValue(ISO8601.format(cal));
 				}
-			}
+			} 
 			input.setType(((GWTInput) formElement).getType());
 			return input;
 		} else if (formElement instanceof GWTCheckBox) {

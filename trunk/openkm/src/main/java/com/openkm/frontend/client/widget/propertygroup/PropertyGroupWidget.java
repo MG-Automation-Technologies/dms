@@ -33,8 +33,10 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -266,6 +268,12 @@ public class PropertyGroupWidget extends Composite {
 			} else if (formElement instanceof GWTInput) {
 				HorizontalPanel hPanel = (HorizontalPanel) hWidgetProperties.get(formElement.getName());
 				TextBox textBox = (TextBox) hPanel.getWidget(0);
+				if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
+					// Always must start with http://
+					if (!textBox.getText().equals("") && !textBox.getText().startsWith("http://")) {
+						textBox.setText("http://" + textBox.getText());
+					}
+				} 
 				((GWTInput) formElement).setValue(textBox.getText()); // note that date is added by click handler in drawform method
 
 			} else if (formElement instanceof GWTCheckBox) {	
@@ -371,6 +379,9 @@ public class PropertyGroupWidget extends Composite {
 					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
 					value = dtf.format(((GWTInput) gwtMetadata).getDate());
 				}
+			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
+				value = ((GWTInput) gwtMetadata).getValue();
+				textBox.setValue(value);
 			}
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
@@ -401,6 +412,20 @@ public class PropertyGroupWidget extends Composite {
 				hPanel.add(new HTML("&nbsp;"));
 				hPanel.add(calendarIcon);
 				textBox.setEnabled(false);
+			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
+				if (!value.equals("")) {
+					Anchor anchor = new Anchor(value, true);
+					final String url = value;
+					anchor.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							Window.open(url, url, "");
+						}
+					});
+					table.setWidget(row, 1, anchor);
+				} else {
+					table.setHTML(row, 1, "");
+				}
 			}
 			
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);

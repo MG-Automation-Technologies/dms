@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTInput extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
+	public static final String TYPE_LINK = "link";
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
