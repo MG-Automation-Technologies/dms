@@ -749,9 +749,11 @@ public class DirectWorkflowModule implements WorkflowModule {
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			TaskMgmtInstance taskMgmtInstance = pi.getTaskMgmtInstance();
 			
-			for (Iterator it = taskMgmtInstance.getTaskInstances().iterator(); it.hasNext(); ) {
-				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
-				al.add(WorkflowUtils.copy(ti));
+			if (taskMgmtInstance.getTaskInstances() != null) {
+				for (Iterator it = taskMgmtInstance.getTaskInstances().iterator(); it.hasNext(); ) {
+					org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
+					al.add(WorkflowUtils.copy(ti));
+				}
 			}
 			
 			// Sort
