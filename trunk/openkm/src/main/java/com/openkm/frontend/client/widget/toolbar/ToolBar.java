@@ -522,11 +522,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	ClickHandler scannerHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
-			if (toolBarOption.scannerOption ) {
-				setScannerApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
-						  Main.get().activeFolderTree.getActualPath());
-				fireEvent(HasToolBarEvent.EXECUTE_SCANNER);
-			}
+			executeScanner();
 		}
 	};
 	
@@ -536,13 +532,32 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	ClickHandler uploaderHandler = new ClickHandler() { 
 		@Override
 		public void onClick(ClickEvent event) {
-			if (toolBarOption.uploaderOption ) {
-				setUploaderApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
-						  Main.get().activeFolderTree.getActualPath());
-				fireEvent(HasToolBarEvent.EXECUTE_UPLOADER);
-			}
+			executeUploader();
 		}
 	};
+	
+	/**
+	 * executeScanner
+	 */
+	public void executeScanner() {
+		if (toolBarOption.scannerOption ) {
+			setScannerApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
+					  Main.get().activeFolderTree.getActualPath());
+			fireEvent(HasToolBarEvent.EXECUTE_SCANNER);
+		}
+	}
+	
+	/**
+	 * executeUploader
+	 */
+	public void executeUploader() {
+		if (toolBarOption.uploaderOption ) {
+			setUploaderApplet(Main.get().workspaceUserProperties.getWorkspace().getToken(),
+					  Main.get().activeFolderTree.getActualPath());
+			fireEvent(HasToolBarEvent.EXECUTE_UPLOADER);
+		}
+
+	}
 	
 	/**
 	 * Refreshing workspace

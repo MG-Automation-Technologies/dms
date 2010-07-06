@@ -68,8 +68,11 @@ public class MainMenu extends Composite {
 			private MenuItem sendDocumentAttachment;
 			private MenuItem export;
 			private MenuItem horizontalLineFile1;
-			private MenuItem purgeTrash;
+			private MenuItem scanner;
+			private MenuItem uploader;
 			private MenuItem horizontalLineFile2;
+			private MenuItem purgeTrash;
+			private MenuItem horizontalLineFile3;
 			private MenuItem exit;
 	private MenuItem menuEdit;
 		private MenuBar subMenuEdit;
@@ -183,12 +186,20 @@ public class MainMenu extends Composite {
 				horizontalLineFile1.setStyleName("okm-MainMenuItem");
 				horizontalLineFile1.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
 				horizontalLineFile1.setHeight("2");
-				purgeTrash = new MenuItem(Util.menuHTML("img/icon/actions/purge_trash.gif", Main.i18n("general.menu.file.purge.trash")), true, purgeTrashOKM);
-				purgeTrash.addStyleName("okm-MainMenuItem");
+				scanner = new MenuItem(Util.menuHTML("img/icon/actions/scanner.gif", Main.i18n("general.menu.file.scanner")), true, scanFile);
+				scanner.addStyleName("okm-MainMenuItem");
+				uploader = new MenuItem(Util.menuHTML("img/icon/actions/upload.gif", Main.i18n("general.menu.file.uploader")), true, uploadFile);
+				uploader.addStyleName("okm-MainMenuItem");
 				horizontalLineFile2 = new MenuItem("", true, nullExecute);
 				horizontalLineFile2.setStyleName("okm-MainMenuItem");
 				horizontalLineFile2.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
 				horizontalLineFile2.setHeight("2");
+				purgeTrash = new MenuItem(Util.menuHTML("img/icon/actions/purge_trash.gif", Main.i18n("general.menu.file.purge.trash")), true, purgeTrashOKM);
+				purgeTrash.addStyleName("okm-MainMenuItem");
+				horizontalLineFile3 = new MenuItem("", true, nullExecute);
+				horizontalLineFile3.setStyleName("okm-MainMenuItem");
+				horizontalLineFile3.addStyleName("okm-MainMenuItem-Base-HorizontalSeparator");
+				horizontalLineFile3.setHeight("2");
 				exit = new MenuItem(Util.menuHTML("img/icon/menu/exit.gif", Main.i18n("general.menu.file.exit")), true, exitOKM);
 				exit.addStyleName("okm-MainMenuItem");
 			subMenuFile = new MenuBar(true);
@@ -202,8 +213,11 @@ public class MainMenu extends Composite {
 			subMenuFile.addItem(sendDocumentAttachment);
 			subMenuFile.addItem(export);
 			subMenuFile.addItem(horizontalLineFile1);
-			subMenuFile.addItem(purgeTrash);
+			subMenuFile.addItem(scanner);
+			subMenuFile.addItem(uploader);
 			subMenuFile.addItem(horizontalLineFile2);
+			subMenuFile.addItem(purgeTrash);
+			subMenuFile.addItem(horizontalLineFile3);
 			subMenuFile.addItem(exit);
 		menuFile = new MenuItem(Main.i18n("general.menu.file"), subMenuFile);
 		menuFile.addStyleName("okm-MainMenuBar");
@@ -488,6 +502,8 @@ public class MainMenu extends Composite {
 			sendDocumentLink.setHTML(Util.menuHTML("img/icon/actions/send_document_link.gif", Main.i18n("general.menu.file.send.link")));
 			sendDocumentAttachment.setHTML(Util.menuHTML("img/icon/actions/send_document_attachment.gif", Main.i18n("general.menu.file.send.attachment")));
 			export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
+			scanner.setHTML(Util.menuHTML("img/icon/actions/scanner.gif", Main.i18n("general.menu.file.scanner")));
+			uploader.setHTML(Util.menuHTML("img/icon/actions/upload.gif", Main.i18n("general.menu.file.uploader")));
 			lock.setHTML(Util.menuHTML("img/icon/actions/lock.gif", Main.i18n("general.menu.file.lock")));
 			unlock.setHTML(Util.menuHTML("img/icon/actions/unlock.gif", Main.i18n("general.menu.file.unlock")));
 			addDocument.setHTML(Util.menuHTML("img/icon/actions/add_document.gif", Main.i18n("general.menu.file.add.document")));
@@ -556,6 +572,8 @@ public class MainMenu extends Composite {
 		if (mainMenuOption.sendDocumentLinkOption) { enable(sendDocumentLink); } else { disable(sendDocumentLink); }
 		if (mainMenuOption.sendDocumentAttachmentOption) { enable(sendDocumentAttachment); } else { disable(sendDocumentAttachment); }
 		if (mainMenuOption.exportOption) { enable(export); } else { disable(export); }
+		if (mainMenuOption.scannerOption) { enable(scanner); } else { disable(scanner); }
+		if (mainMenuOption.uploaderOption) { enable(uploader); } else { disable(uploader); }
 		if (mainMenuOption.lockOption) { enable(lock); } else {	disable(lock); }
 		if (mainMenuOption.unLockOption) { enable(unlock); } else { disable(unlock); }
 		if (mainMenuOption.addDocumentOption) { enable(addDocument); } else { disable(addDocument); }
@@ -852,11 +870,29 @@ public class MainMenu extends Composite {
 	};
 	
 	
-	// Command menu to send document link
+	// Command menu to export
 	Command exportToFile = new Command() {
 		public void execute() {
 			if (mainMenuOption.exportOption) {
 				Main.get().mainPanel.topPanel.toolBar.executeExport();
+			}
+		}
+	};
+	
+	// Command menu to scan
+	Command scanFile = new Command() {
+		public void execute() {
+			if (mainMenuOption.scannerOption) {
+				Main.get().mainPanel.topPanel.toolBar.executeScanner();
+			}
+		}
+	};
+	
+	// Command menu to upload
+	Command uploadFile = new Command() {
+		public void execute() {
+			if (mainMenuOption.uploaderOption) {
+				Main.get().mainPanel.topPanel.toolBar.executeUploader();
 			}
 		}
 	};
@@ -1094,9 +1130,12 @@ public class MainMenu extends Composite {
 		export.setVisible(option.isExportOption());
 		horizontalLineFile1.setVisible(option.isCreateFolderOption() || option.isAddDocumentOption() || option.isDownloadOption() ||
 									   option.isDownloadPdfOption() || option.isSendDocumentLinkOption() || 
-									   option.isSendDocumentAttachmentOption() || option.isExportOption()); 
+									   option.isSendDocumentAttachmentOption() || option.isExportOption());
+		scanner.setVisible(option.isScannerOption());
+		uploader.setVisible(option.isUploaderOption());
+		horizontalLineFile2.setVisible(option.isScannerOption() || option.isUploaderOption());
 		purgeTrash.setVisible(option.isPurgeTrashOption());
-		horizontalLineFile2.setVisible(option.isPurgeTrashOption());
+		horizontalLineFile3.setVisible(option.isPurgeTrashOption());
 		
 		// EDIT MENU
 		lock.setVisible(option.isLockOption());
