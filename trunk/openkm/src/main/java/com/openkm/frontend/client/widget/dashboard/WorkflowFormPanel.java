@@ -551,7 +551,7 @@ public class WorkflowFormPanel extends Composite {
 				textBox.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTInput.getLabel() + "</b>");
 				formTable.setWidget(row, 1, hInputPanel);
-				widget = textBox;
+				widget = hInputPanel;
 				
 			} else if (formField instanceof GWTCheckBox) {
 				GWTCheckBox gWTCheckBox = (GWTCheckBox) formField;
