@@ -31,6 +31,9 @@ import com.openkm.frontend.client.config.ErrorCode;
  * @author Stanisław Klunder & Łukasz Frankowski
  *  
  * sklunder@gmail.com
+ * 
+ * correction Włodzimierz Kalinowski
+ * cresco@poczta.onet.pl
  */
 public class Lang_pl_PL {
 	
@@ -61,7 +64,7 @@ public class Lang_pl_PL {
 	    lang.put("startup.loading.taxonomy.open.path", "Ładowanie repozytorium - otwieranie ścieżki");
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "Ładowanie repozytorium - pobieranie folderów");
 	    lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "Ładowanie repozytorium - pobieranie dokumentów");
-	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "LŁadowanie repozytorium - pobieranie poczty");
+	    lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Ładowanie repozytorium - pobieranie poczty");
 	    lang.put("startup.loading.personal", "Ładowanie ustawień");
 	    lang.put("startup.loading.mail", "Ładowanie poczty");
 	    lang.put("startup.loading.categories", "Ładowanie kategorii");
@@ -103,7 +106,7 @@ public class Lang_pl_PL {
 	    lang.put("tree.status.refresh.delete", "Usuwanie folderu");
 	    lang.put("tree.status.refresh.rename", "Zmiana nazwy folderu");
 	    lang.put("tree.status.refresh.restore", "Odtwarzanie folderu");
-	    lang.put("tree.status.refresh.purge", "Niedwracalne usuwanie folderu");
+	    lang.put("tree.status.refresh.purge", "Nieodwracalne usuwanie folderu");
 	    lang.put("tree.status.refresh.get", "Aktualizacja folderu");
 	    lang.put("tree.folder.new", "Nowy folder");
 	    lang.put("tree.status.refresh.add.subscription", "Dodawanie subskrypcji");
@@ -117,7 +120,7 @@ public class Lang_pl_PL {
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "Przywróć");
 	    lang.put("trash.menu.directory.purge", "Opróżnij");
-	    lang.put("trash.menu.directory.purge.trash", "Opróznij śmietnik");
+	    lang.put("trash.menu.directory.purge.trash", "Opróżnij śmietnik");
 	    lang.put("trash.directory.select.label", "Wybierz folder docelowy");
 	    
 	    // General menu
@@ -150,7 +153,7 @@ public class Lang_pl_PL {
     		lang.put("general.menu.debug.console", "Konsola debugowania");
     		lang.put("general.menu.administration", "Pokaż panel administracyjny");
     		lang.put("general.menu.tools.preferences", "Preferencje");
-    			lang.put("general.menu.tools.user.preferences", "Konfiguracja użytkownia");
+    			lang.put("general.menu.tools.user.preferences", "Konfiguracja użytkownika");
     	lang.put("general.menu.bookmark", "Zakładki");
 	    	lang.put("general.menu.bookmark.home", "Folder domowy");
 	    	lang.put("general.menu.bookmark.default.home", "Ustaw domyślny folder domowy");
@@ -231,12 +234,12 @@ public class Lang_pl_PL {
 	    lang.put("fileupload.status.copy.file", "Kopiowanie pliku...");
 	    lang.put("fileupload.status.copy.mail", "Kopiowanie wiadomości...");
 	    lang.put("fileupload.status.restore.file", "Przywracanie pliku...");
-	    lang.put("fileupload.status.restore.mail", "Przeywracanie wiadoomości...");
+	    lang.put("fileupload.status.restore.mail", "Przywracanie wiadoomości...");
 	    lang.put("fileupload.status.move.folder", "Przenoszenie folderu...");
 	    lang.put("fileupload.status.copy.folder", "Kopiowanie folderu...");
 	    lang.put("fileupload.status.restore.folder", "Przywracanie folderu...");
 	    lang.put("fileupload.status.create.from.template", "Tworzenie pliku z szablonu...");
-	    lang.put("fileupload.status.of", "of");
+	    lang.put("fileupload.status.of", "z");
 	    lang.put("fileupload.label.insert", "Dodaj nowe dokumenty");
 	    lang.put("fileupload.label.update", "Zaktualizuj dokumenty");
 	    lang.put("fileupload.label.users.notify", "Poinformuj użytkowników");
@@ -244,7 +247,7 @@ public class Lang_pl_PL {
 	    lang.put("fileupload.label.users.to.notify",  "Informowani użytkownicy");
 	    lang.put("fileupload.label.users",  "Użytkownicy");
 	    lang.put("fileupload.label.groups.to.notify","Informowane grupy");
-	    lang.put("fileupload.label.groups","Groupy");
+	    lang.put("fileupload.label.groups","Grupy");
 	    lang.put("fileupload.label.must.select.users",  "Musisz wybrać użytkowników do powiadomienia");
 	    lang.put("fileupload.label.importZip", "Importuj dokumenty z archiwum ZIP");
 	    lang.put("fileupload.label.notify.comment", "Wiadomość");
@@ -391,8 +394,8 @@ public class Lang_pl_PL {
 	    lang.put("confirm.set.default.home", "Czy na pewno chcesz ustawić domyślny folder domowy?");
 	    lang.put("confirm.delete.saved.search", "Czy na pewno chcesz usunąć zapisane wyniki wyszukiwania?");
 	    lang.put("confirm.delete.user.news", "Czy na pewno chcesz usunąć nowości?");
-	    lang.put("confirm.delete.mail", "¿ Czy na pewno chcesz usunąć wiadomości ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Czy chcesz przypisać to zadanie do siebie ?");
+	    lang.put("confirm.delete.mail", "Czy na pewno chcesz usunąć wiadomości ?");
+	    lang.put("confirm.get.pooled.workflow.task","Czy chcesz przypisać to zadanie do siebie ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Kontekst");
@@ -403,7 +406,7 @@ public class Lang_pl_PL {
 	    lang.put("search.category", "Kategoria");
 	    lang.put("search.results", "Wyniki");
 	    lang.put("search.to", "dla");
-	    lang.put("search.page.results", "Stronnicowane wyniki");
+	    lang.put("search.page.results", "Stronicowane wyniki");
 	    lang.put("search.add.property.group", "Dodaj grupę właściwości");
 	    lang.put("search.mimetype", "Typ");
 	    lang.put("search.type", "Typ");
@@ -447,7 +450,7 @@ public class Lang_pl_PL {
 	    lang.put("button.logout", "Wyloguj");
 	    lang.put("button.update", "Aktualizuj");
 	    lang.put("button.cancel", "Anuluj");
-	    lang.put("button.accept", "Akcpetuj");
+	    lang.put("button.accept", "Akceptuj");
 	    lang.put("button.restore", "Przywróć");
 	    lang.put("button.move", "Przenieś");
 	    lang.put("button.change", "Zmień");
@@ -590,7 +593,7 @@ public class Lang_pl_PL {
 	    lang.put("user.preferences.user", "Użytkownik");
 	    lang.put("user.preferences.password", "Hasło");
 	    lang.put("user.preferences.mail", "E-mail");
-	    lang.put("user.preferences.roles","Roles");
+	    lang.put("user.preferences.roles","Role");
 	    lang.put("user.preferences.imap.host", "IMAP serwer");
 	    lang.put("user.preferences.imap.user", "IMAP login");
 	    lang.put("user.preferences.imap.user.password", "IMAP hasło");
@@ -674,7 +677,7 @@ public class Lang_pl_PL {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "Sesja została zamknięta");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd wykonania zapuytania");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd wykonania zapytania");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "Nazwa zapamiętanych wyników wyszukiwania musi być unikalna");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
@@ -692,7 +695,7 @@ public class Lang_pl_PL {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Błąd w konfiguracji przeglądarki");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Błąd, przydział użytkownika wyczerpany. Skontaktuj sięz administratorem");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Błąd, przydział użytkownika wyczerpany. Skontaktuj się z administratorem");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu do dokumentu");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "Dokument nie odnaleziony");
@@ -705,7 +708,7 @@ public class Lang_pl_PL {
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "Nie odnaleziono ścieżki");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "Odmowa dostępu");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytoriu");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Wewnętrzny błąd repozytorium");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "Błąd bazy danych");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "Wewnętrzny błąd aplikacji"); 
 	    
