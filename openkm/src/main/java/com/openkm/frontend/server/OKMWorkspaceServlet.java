@@ -241,9 +241,11 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		availableOption.setSetHomeOption(up.getMenu().getBookmark().isSetHomeVisible());
 		
 		// Menu Tool
-		availableOption.setSkinOption(up.getMenu().getTool().isChangeSkinVisible());
+		availableOption.setLanguagesOption(up.getMenu().getTool().isLanguagesVisible());
+		availableOption.setSkinOption(up.getMenu().getTool().isSkinVisible());
 		availableOption.setDebugOption(up.getMenu().getTool().isDebugVisible());
 		availableOption.setAdministrationOption(up.getMenu().getTool().isAdministrationVisible());
+		availableOption.setPreferencesOption(up.getMenu().getTool().isPreferencesVisible());
 		
 		// Menu Help
 		availableOption.setHelpOption(up.getMenu().getHelp().isHelpVisible());

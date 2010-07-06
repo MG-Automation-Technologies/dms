@@ -240,9 +240,11 @@ public class ProfileServlet extends BaseServlet {
 		prf.getMenu().getBookmark().setGoHomeVisible(WebUtil.getBoolean(request, "prf_menu_bookmark_go_home_visible"));
 		
 		// Menu Tools
-		prf.getMenu().getTool().setChangeSkinVisible(WebUtil.getBoolean(request, "prf_menu_tool_change_skin_visible"));
+		prf.getMenu().getTool().setLanguagesVisible(WebUtil.getBoolean(request, "prf_menu_tool_languages_visible"));
+		prf.getMenu().getTool().setSkinVisible(WebUtil.getBoolean(request, "prf_menu_tool_skin_visible"));
 		prf.getMenu().getTool().setDebugVisible(WebUtil.getBoolean(request, "prf_menu_tool_debug_visible"));
 		prf.getMenu().getTool().setAdministrationVisible(WebUtil.getBoolean(request, "prf_menu_tool_administration_visible"));
+		prf.getMenu().getTool().setPreferencesVisible(WebUtil.getBoolean(request, "prf_menu_tool_preferences_visible"));
 		
 		// Menu Edit
 		prf.getMenu().getEdit().setRenameVisible(WebUtil.getBoolean(request, "prf_menu_edit_rename_visible"));

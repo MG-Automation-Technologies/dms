@@ -276,14 +276,20 @@
       
       <!-- MENU TOOL -->
       <component name="tool" class="com.openkm.dao.bean.ProfileMenuTool">
-        <property name="changeSkinVisible" not-null="true">
-          <column name="PRF_MENU_TOOL_CHANGE_SKIN_VISIBLE" default="true"/>
+        <property name="languagesVisible" not-null="true">
+          <column name="PRF_MENU_TOOL_LANGUAGES_VISIBLE" default="true"/>
+	    </property>
+        <property name="skinVisible" not-null="true">
+          <column name="PRF_MENU_TOOL_SKIN_VISIBLE" default="true"/>
 	    </property>
 	    <property name="debugVisible" not-null="true">
           <column name="PRF_MENU_TOOL_DEBUG_VISIBLE" default="true"/>
 	    </property>
 	    <property name="administrationVisible" not-null="true">
 	      <column name="PRF_MENU_TOOL_ADMINISTRATION_VISIBLE" default="true"/>
+	    </property>
+	    <property name="preferencesVisible" not-null="true">
+	      <column name="PRF_MENU_TOOL_PREFERENCES_VISIBLE" default="true"/>
 	    </property>
       </component>
       

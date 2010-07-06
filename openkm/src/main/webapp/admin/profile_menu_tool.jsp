@@ -3,14 +3,27 @@
   <legend>Menu tool</legend>
   <table>
     <tr>
-      <td>Change skin visible</td>
+      <td>Languages visible</td>
       <td>
         <c:choose>
-          <c:when test="${prf.menu.tool.changeSkinVisible}">
-            <input name="prf_menu_tool_change_skin_visible" type="checkbox" checked="checked"/>
+          <c:when test="${prf.menu.tool.languagesVisible}">
+            <input name="prf_menu_tool_languages_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="prf_menu_tool_change_skin_visible" type="checkbox"/>
+            <input name="prf_menu_tool_languages_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Skin visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${prf.menu.tool.skinVisible}">
+            <input name="prf_menu_tool_skin_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="prf_menu_tool_skin_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
@@ -37,6 +50,19 @@
           </c:when>
           <c:otherwise>
             <input name="prf_menu_tool_administration_visible" type="checkbox"/>
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Preferences visible</td>
+      <td>
+        <c:choose>
+          <c:when test="${prf.menu.tool.preferencesVisible}">
+            <input name="prf_menu_tool_preferences_visible" type="checkbox" checked="checked"/>
+          </c:when>
+          <c:otherwise>
+            <input name="prf_menu_tool_preferences_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
