@@ -77,6 +77,8 @@ public class GWTAvailableOption implements IsSerializable {
 	public boolean versionChangesOption = true;
 	public boolean projectWebOption = true;
 	public boolean aboutOption = true;
+	public boolean languagesOption = true;
+	public boolean preferencesOption = true;
 
 	public GWTAvailableOption() {
 	}
@@ -455,5 +457,21 @@ public class GWTAvailableOption implements IsSerializable {
 
 	public void setAboutOption(boolean aboutOption) {
 		this.aboutOption = aboutOption;
+	}
+
+	public boolean isLanguagesOption() {
+		return languagesOption;
+	}
+
+	public void setLanguagesOption(boolean languagesOption) {
+		this.languagesOption = languagesOption;
+	}
+
+	public boolean isPreferencesOption() {
+		return preferencesOption;
+	}
+
+	public void setPreferencesOption(boolean preferencesOption) {
+		this.preferencesOption = preferencesOption;
 	}
 }

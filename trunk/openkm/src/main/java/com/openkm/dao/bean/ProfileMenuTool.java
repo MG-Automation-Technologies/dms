@@ -25,16 +25,26 @@ import java.io.Serializable;
 
 public class ProfileMenuTool implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private boolean changeSkinVisible;
+	private boolean languagesVisible;
+	private boolean skinVisible;
 	private boolean debugVisible;
 	private boolean administrationVisible;
-	
-	public boolean isChangeSkinVisible() {
-		return changeSkinVisible;
+	private boolean preferencesVisible;
+
+	public boolean isLanguagesVisible() {
+		return languagesVisible;
 	}
 
-	public void setChangeSkinVisible(boolean changeSkinVisible) {
-		this.changeSkinVisible = changeSkinVisible;
+	public void setLanguagesVisible(boolean languagesVisible) {
+		this.languagesVisible = languagesVisible;
+	}
+
+	public boolean isSkinVisible() {
+		return skinVisible;
+	}
+
+	public void setSkinVisible(boolean skinVisible) {
+		this.skinVisible = skinVisible;
 	}
 
 	public boolean isDebugVisible() {
@@ -52,13 +62,23 @@ public class ProfileMenuTool implements Serializable {
 	public void setAdministrationVisible(boolean administrationVisible) {
 		this.administrationVisible = administrationVisible;
 	}
+
+	public boolean isPreferencesVisible() {
+		return preferencesVisible;
+	}
+
+	public void setPreferencesVisible(boolean preferencesVisible) {
+		this.preferencesVisible = preferencesVisible;
+	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
-		sb.append("changeSkinVisible="); sb.append(changeSkinVisible);
+		sb.append("languagesVisible="); sb.append(languagesVisible);
+		sb.append(", skinVisible="); sb.append(skinVisible);
 		sb.append(", debugVisible="); sb.append(debugVisible);
 		sb.append(", administrationVisible="); sb.append(administrationVisible);
+		sb.append(", preferencesVisible="); sb.append(preferencesVisible);
 		sb.append("}");
 		return sb.toString();
 	}
