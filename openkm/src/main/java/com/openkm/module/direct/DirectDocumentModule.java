@@ -664,6 +664,7 @@ public class DirectDocumentModule implements DocumentModule {
 				VirusDetection.detect(tmpAvr);
 			}
 			
+			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			contentNode = documentNode.getNode(Document.CONTENT);
 			contentNode.setProperty(Document.SIZE, size);
