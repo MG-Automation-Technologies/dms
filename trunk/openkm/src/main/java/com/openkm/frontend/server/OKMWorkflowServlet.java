@@ -78,6 +78,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("findLatestProcessDefinitions: {}", processDefinitionList);
@@ -104,6 +107,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 				
 		log.debug("runProcessDefinition: void");
@@ -128,6 +134,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("findUserTaskInstances: {}", taskInstances);
@@ -153,6 +162,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("findPooledTaskInstances: {}", taskInstances);
@@ -189,6 +201,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("getProcessDefinitionForms: {}", formElementList);
@@ -215,6 +230,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("setTaskInstanceValues: void");
@@ -236,6 +254,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("addComment: void");
@@ -257,6 +278,9 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		} catch (WorkflowException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_WorkflowException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		
 		log.debug("setTaskInstanceActorId: void");
