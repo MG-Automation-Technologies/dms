@@ -73,11 +73,14 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			OKMAuth.getInstance().logout();
 			getThreadLocalRequest().getSession().invalidate();
 		} catch (RepositoryException e) {
-			log.warn(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_Repository), e.getMessage());
 		} catch (DatabaseException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_DatabaseException), e.getMessage());		} finally {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_General), e.getMessage());
 		}
 		log.debug("logout: void");
 	}
