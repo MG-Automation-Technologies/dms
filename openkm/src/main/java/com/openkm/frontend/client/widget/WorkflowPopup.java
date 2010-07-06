@@ -157,7 +157,7 @@ public class WorkflowPopup extends DialogBox {
 	}
 	
 	/**
-	 * Gets asyncronous to get all process definitions
+	 * Gets asynchronous to get all process definitions
 	 */
 	final AsyncCallback<List<GWTProcessDefinition>> callbackFindLatestProcessDefinitions = new AsyncCallback<List<GWTProcessDefinition>>() {
 		public void onSuccess(List<GWTProcessDefinition> result){
@@ -175,7 +175,7 @@ public class WorkflowPopup extends DialogBox {
 	};
 	
 	/**
-	 * Gets asyncronous to run process definition
+	 * Gets asynchronous to run process definition
 	 */
 	final AsyncCallback<Object> callbackRunProcessDefinition = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
@@ -297,9 +297,10 @@ public class WorkflowPopup extends DialogBox {
 		
 		GWTDocument gwtDocument = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
 		ServiceDefTarget endPoint = (ServiceDefTarget) workflowService;
-		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);	
-		workflowService.runProcessDefinition(gwtDocument.getUuid(), new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
-											 formFieldList, callbackRunProcessDefinition);
+		endPoint.setServiceEntryPoint(Config.OKMWorkflowService);
+		workflowService.runProcessDefinition(gwtDocument.getUuid(), 
+				new Double(listBox.getValue(listBox.getSelectedIndex())).doubleValue(),
+				formFieldList, callbackRunProcessDefinition);
 		hide();
 		if (Main.get().mainPanel.desktop.browser.fileBrowser.isDocumentSelected() ){
 			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
