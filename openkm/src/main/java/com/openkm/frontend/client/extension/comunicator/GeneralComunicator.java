@@ -80,6 +80,16 @@ public class GeneralComunicator {
 	}
 	
 	/**
+	 * downloadFile
+	 * 
+	 * @param path
+	 * @param params
+	 */
+	public static void downloadFile(String path, String params) {
+		Util.downloadFile(path, params);
+	}
+	
+	/**
 	 * Sets the status
 	 * 
 	 * @param msg
@@ -111,6 +121,13 @@ public class GeneralComunicator {
 	 */
 	public static void logout() {
 		Main.get().logoutPopup.logout();
+	}
+	
+	/**
+	 * refreshUserDocumentsSize
+	 */
+	public static void refreshUserDocumentsSize() {
+		Main.get().workspaceUserProperties.getUserDocumentsSize();
 	}
 
 }

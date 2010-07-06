@@ -113,7 +113,21 @@ public class TabDocumentComunicator {
 	 * 
 	 * @return
 	 */
-	public boolean isVisibleButton() {
+	public static boolean isVisibleButton() {
 		return Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.isVisibleButton();
+	}
+	
+	/**
+	 * setRefreshingStyle
+	 */
+	public static void setRefreshingStyle() {
+		Main.get().mainPanel.desktop.browser.tabMultiple.setStyleName("okm-PanelRefreshing");
+	}
+	
+	/**
+	 * unsetRefreshingStyle
+	 */
+	public static void unsetRefreshingStyle() {
+		Main.get().mainPanel.desktop.browser.tabMultiple.removeStyleName("okm-PanelRefreshing");
 	}
 }
