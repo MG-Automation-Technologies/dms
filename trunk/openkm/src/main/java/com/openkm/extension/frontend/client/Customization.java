@@ -25,8 +25,6 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.openkm.extension.frontend.client.widget.tabdocument.version.Version;
-
 /**
  * Customization
  * 
