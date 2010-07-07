@@ -42,7 +42,9 @@ import com.openkm.frontend.client.bean.GWTPropertyGroup;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasDocumentHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
@@ -53,7 +55,7 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  * @author jllort
  *
  */
-public class TabDocument extends Composite implements HasDocumentEvent, HasDocumentHandlerExtension {
+public class TabDocument extends Composite implements HasDocumentEvent, HasDocumentHandlerExtension, HasPropertyGroupHandlerExtension {
 	
 	public int TAB_PREVIEW = -1;
 	
@@ -81,11 +83,13 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	private boolean securityVisible = false;
 	private boolean previewVisible = false;
 	private boolean propertyGroupsVisible = false;
+	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
 	
 	/**
 	 * The Document tab
 	 */
 	public TabDocument() {
+		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		tabPanel = new TabPanel();
 		document = new Document();
 		notes = new Notes();
@@ -314,6 +318,10 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				PropertyGroup group = new PropertyGroup(gwtGroup.getName(), gwtGroup.getLabel(), doc, gwtFolder, visibleButton);
 				tabPanel.add(group, groupTranslation);
 				propertyGroup.add(group);
+				// Adds property group handlers
+				for (Iterator<PropertyGroupHandlerExtension> itx = propertyGroupHandlerExtensionList.iterator(); itx.hasNext();) {
+					group.addPropertyGroupHandlerExtension(itx.next());
+				}
 			}
 			// To prevent change on document that has minor tabs than previous the new selected tab it'll be the max - 1 on that cases
 			if (tabPanel.getTabBar().getTabCount()-1<selectedTab) {
@@ -501,5 +509,10 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		for (Iterator<DocumentHandlerExtension> it = docHandlerExtensionList.iterator(); it.hasNext();) {
 			it.next().onChange(event);
 		}
+	}
+
+	@Override
+	public void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
+		propertyGroupHandlerExtensionList.add(handlerExtension);
 	}
 }

@@ -61,6 +61,9 @@ import com.openkm.frontend.client.bean.GWTOption;
 import com.openkm.frontend.client.bean.GWTSelect;
 import com.openkm.frontend.client.bean.GWTTextArea;
 import com.openkm.frontend.client.config.Config;
+import com.openkm.frontend.client.extension.event.HasPropertyGroupEvent;
+import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -73,7 +76,7 @@ import com.openkm.frontend.client.widget.searchin.CalendarWidget;
  * @author jllort
  *
  */
-public class PropertyGroupWidget extends Composite {
+public class PropertyGroupWidget extends Composite implements HasPropertyGroupEvent, HasPropertyGroupHandlerExtension  {
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 	
@@ -84,6 +87,7 @@ public class PropertyGroupWidget extends Composite {
 	private Map<String, Widget> hWidgetProperties = new HashMap<String, Widget>();
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
+	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
 	
 	/**
 	 * PropertyGroup
@@ -94,6 +98,7 @@ public class PropertyGroupWidget extends Composite {
 	 * @param PropertyGroupWidgetToFire widget with methods to be fired
 	 */
 	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
+		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		table = new FlexTable();
 		this.docPath = docPath;
 		this.grpName = grpName;
@@ -163,6 +168,7 @@ public class PropertyGroupWidget extends Composite {
 			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedGetProperties();
 			}
+			fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_GET_PROPERTIES);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -181,6 +187,7 @@ public class PropertyGroupWidget extends Composite {
 			if (propertyGroupWidgetToFire!=null) {
 				propertyGroupWidgetToFire.finishedSetProperties();
 			}
+			fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_CHANGED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -196,6 +203,7 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	final AsyncCallback<Object> callbackRemoveGroup = new AsyncCallback<Object>() {
 		public void onSuccess(Object result){
+			fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_REMOVED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -251,6 +259,8 @@ public class PropertyGroupWidget extends Composite {
 			}
 			rows++;
 		}
+		
+		fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_EDIT);
 	}
 	
 	/**
@@ -341,6 +351,7 @@ public class PropertyGroupWidget extends Composite {
 			drawFormElement(rows, it.next());
 			rows++;
 		}
+		fireEvent(HasPropertyGroupEvent.PROPERTYGROUP_CANCEL_EDIT);
 	}
 	
 	/**
@@ -639,5 +650,18 @@ public class PropertyGroupWidget extends Composite {
 	 */
 	public String getGrpName(){
 		return grpName;
+	}
+	
+
+	@Override
+	public void fireEvent(PropertyGroupEventConstant event) {
+		for (Iterator<PropertyGroupHandlerExtension> it = propertyGroupHandlerExtensionList.iterator(); it.hasNext();) {
+			it.next().onChange(event);
+		}
+	}
+
+	@Override
+	public void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
+		propertyGroupHandlerExtensionList.add(handlerExtension);
 	}
 }
