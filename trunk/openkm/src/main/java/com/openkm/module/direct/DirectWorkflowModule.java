@@ -276,19 +276,20 @@ public class DirectWorkflowModule implements WorkflowModule {
 			
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			org.jbpm.graph.exe.ProcessInstance pi = pd.createProcessInstance(hm);
-			org.jbpm.taskmgmt.exe.TaskMgmtInstance tmi = pi.getTaskMgmtInstance();
 			
-			// http://www.jboss.com/index.html?module=bb&op=viewtopic&t=100779
-			if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
-				org.jbpm.taskmgmt.exe.TaskInstance ti = tmi.createStartTaskInstance();
-				ti.start();
-				//ti.end();
-			} else {
-				pi.getRootToken().signal();
+			if (pi != null) {
+				org.jbpm.taskmgmt.exe.TaskMgmtInstance tmi = pi.getTaskMgmtInstance();
+				
+				// http://community.jboss.org/thread/115182
+				if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
+					tmi.createStartTaskInstance();
+				} else {
+					pi.getRootToken().signal();
+				}
+				
+				jbpmContext.save(pi);
+				vo = WorkflowUtils.copy(pi);
 			}
-			 
-			jbpmContext.save(pi);
-			vo = WorkflowUtils.copy(pi);
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "RUN_PROCESS_DEFINITION", ""+processDefinitionId, variables.toString());
