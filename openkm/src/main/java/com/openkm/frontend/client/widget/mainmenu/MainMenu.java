@@ -379,7 +379,6 @@ public class MainMenu extends Composite {
 				// Submenu skin
 				skin = new MenuItem(Util.menuHTML("img/icon/menu/skin.gif", Main.i18n("general.menu.tools.skin")), true, subMenuSkin);
 				skin.addStyleName("okm-MainMenuItem");
-				//skin.addStyleName("okm-MainMenuItem-Base-Childs");
 				
 				// Other tools options
 				debugConsole = new MenuItem(Util.menuHTML("img/icon/menu/console.gif", Main.i18n("general.menu.debug.console")), true, setViewDebugConsole);
@@ -1149,9 +1148,17 @@ public class MainMenu extends Composite {
 		rename.setVisible(option.isRenameOption());
 		
 		// MENU TOOLS
-		skin.setVisible(option.isSkinOption());
+		if (!option.isLanguagesOption()) {
+			subMenuTools.removeItem(language);
+		}
+		if (!option.isSkinOption()) {
+			subMenuTools.removeItem(skin);
+		}
 		debugConsole.setVisible(option.isDebugOption());
 		administration.setVisible(option.isAdministrationOption());
+		if (!option.isPreferencesOption()) {
+			subMenuTools.removeItem(preferences);
+		}
 		
 		// MENU BOOKMARKS
 		home.setVisible(option.isHomeOption());
