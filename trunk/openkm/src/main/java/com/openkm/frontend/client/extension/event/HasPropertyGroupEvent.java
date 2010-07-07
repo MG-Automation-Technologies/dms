@@ -21,7 +21,6 @@
 
 package com.openkm.frontend.client.extension.event;
 
-import com.openkm.frontend.client.extension.event.HasDocumentEvent.DocumentEventConstant;
 
 /**
  * HasPropertyGroupEvent
