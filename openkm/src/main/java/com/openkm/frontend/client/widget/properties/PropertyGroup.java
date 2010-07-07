@@ -33,6 +33,8 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
 import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidget;
 import com.openkm.frontend.client.widget.propertygroup.PropertyGroupWidgetToFire;
@@ -44,10 +46,10 @@ import com.openkm.frontend.client.widget.propertygroup.WidgetToFire;
  * @author jllort
  *
  */
-public class PropertyGroup extends Composite {
+public class PropertyGroup extends Composite implements HasPropertyGroupHandlerExtension {
 	
 	private ScrollPanel scrollPanel;
-	PropertyGroupWidget propertyGroupWidget;
+	private PropertyGroupWidget propertyGroupWidget;
 	private String grpName;
 	private String grpLabel;
 	private Button changeButton;
@@ -253,5 +255,10 @@ public class PropertyGroup extends Composite {
 		public void add(Widget widget) {
 			hPanel.add(widget);
 		}
+	}
+
+	@Override
+	public void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
+		propertyGroupWidget.addPropertyGroupHandlerExtension(handlerExtension);
 	}
 }

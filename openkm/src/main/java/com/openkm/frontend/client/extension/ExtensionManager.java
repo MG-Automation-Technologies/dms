@@ -29,6 +29,7 @@ import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtensi
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
@@ -83,6 +84,9 @@ public class ExtensionManager {
 			}
 			if (obj instanceof WorkspaceHandlerExtension) {
 				addWorkspaceHandlerExtension((WorkspaceHandlerExtension) obj);
+			}
+			if (obj instanceof PropertyGroupHandlerExtension) {
+				addPropertyGroupHandlerExtension((PropertyGroupHandlerExtension) obj);
 			}
 		}
 	}
@@ -195,5 +199,14 @@ public class ExtensionManager {
 	 */
 	private static void addWorkspaceHandlerExtension(WorkspaceHandlerExtension handlerExtension) {
 		Main.get().mainPanel.topPanel.tabWorkspace.addWorkspaceHandlerExtension(handlerExtension);
+	}
+	
+	/**
+	 * addPropertyGroupHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addPropertyGroupHandlerExtension(PropertyGroupHandlerExtension handlerExtension) {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.addPropertyGroupHandlerExtension(handlerExtension);
 	}
 }

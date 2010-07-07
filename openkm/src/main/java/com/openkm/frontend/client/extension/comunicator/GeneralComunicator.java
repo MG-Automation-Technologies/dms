@@ -21,6 +21,8 @@
 
 package com.openkm.frontend.client.extension.comunicator;
 
+import java.util.List;
+
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.ToolBarOption;
 import com.openkm.frontend.client.util.Util;
@@ -128,6 +130,15 @@ public class GeneralComunicator {
 	 */
 	public static void refreshUserDocumentsSize() {
 		Main.get().workspaceUserProperties.getUserDocumentsSize();
+	}
+	
+	/**
+	 * getUserRoleList
+	 * 
+	 * @return
+	 */
+	public static List<String> getUserRoleList() {
+		return Main.get().workspaceUserProperties.getWorkspace().getRoleList();
 	}
 
 }
