@@ -54,7 +54,7 @@ public class Customization {
 //		extensions.add(new DownloadButton().getButton());
 //		extensions.add(new DownloadPdfButton().getButton());
 //		extensions.addAll(new Stapling().getExtensions());
-//		extensions.addAll(new Version().getExtensions());
+//		extensions.addAll(new MetromUsa().getExtensions());
 		
 		return extensions;
 	}
