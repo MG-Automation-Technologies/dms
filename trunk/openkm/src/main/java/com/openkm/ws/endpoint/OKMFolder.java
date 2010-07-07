@@ -65,6 +65,20 @@ public class OKMFolder {
 		log.debug("create: {}", newFolder);
 		return newFolder;
 	}
+	
+	/**
+	 * Simplified version of create(Folder fld) 
+	 */
+	public Folder createSimple(String fldPath) throws AccessDeniedException, RepositoryException, 
+			PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("createSimple({})", fldPath);
+		FolderModule fm = ModuleManager.getFolderModule();
+		Folder fld = new Folder();
+		fld.setPath(fldPath);
+		Folder newFolder = fm.create(fld);
+		log.debug("createSimple: {}", newFolder);
+		return newFolder;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.openkm.module.FolderModule#getProperties(java.lang.String, java.lang.String)

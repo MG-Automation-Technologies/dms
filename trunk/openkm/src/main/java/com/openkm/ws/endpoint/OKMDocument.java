@@ -69,7 +69,7 @@ public class OKMDocument {
 	/* (non-Javadoc)
 	 * @see com.openkm.module.DocumentModule#create(java.lang.String, com.openkm.bean.Document, byte[])
 	 */
-	public Document create(String token, Document doc, byte[] content) throws IOException,
+	public Document create(Document doc, byte[] content) throws IOException,
 			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
@@ -79,6 +79,24 @@ public class OKMDocument {
 		Document newDocument = dm.create(doc, bais);
 		bais.close();
 		log.debug("create: {}", newDocument);
+		return newDocument;
+	}
+	
+	/**
+	 * Simplified version of create(Document doc)
+	 */
+	public Document createSimple(String docPath, byte[] content) throws IOException,
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("createSimple({})", docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		ByteArrayInputStream bais = new ByteArrayInputStream(content);
+		Document doc = new Document();
+		doc.setPath(docPath);
+		Document newDocument = dm.create(doc, bais);
+		bais.close();
+		log.debug("createSimple: {}", newDocument);
 		return newDocument;
 	}
 
