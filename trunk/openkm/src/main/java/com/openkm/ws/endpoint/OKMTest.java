@@ -23,6 +23,8 @@ package com.openkm.ws.endpoint;
 
 import java.util.Arrays;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -31,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Note;
-import com.openkm.ws.util.StringArray;
 
 /**
  * Servlet Class
@@ -41,52 +42,42 @@ import com.openkm.ws.util.StringArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMTest {
 	private static Logger log = LoggerFactory.getLogger(OKMTest.class);
 	
-	/**
-	 * 
-	 */
-	public void simple(String param1) {
+	@WebMethod
+	public void simple(@WebParam(name = "param1") String param1) {
 		log.info("simple({})", param1);
 	}
 	
-	/**
-	 * 
-	 */
-	public void complex(Note note) {
+	@WebMethod
+	public void complex(@WebParam(name = "note") Note note) {
 		log.info("complex({})", note);
 	}
 	
-	/**
-	 * 
-	 */
-	public String[] sort1(String[] a) {
+	@WebMethod
+	public String[] sort1(@WebParam(name = "a") String[] a) {
 		log.info("sort1({})", a);
 		if (a != null) log.info("sort1: a.length={}", a.length);
 		Arrays.sort(a);
 		return a;
 	}
 	
-	/**
-	 * 
-	 */
-	public StringArray sort2(StringArray a) {
+	@WebMethod
+	public String[] sort2(@WebParam(name = "a") String[] a) {
 		log.info("sort2({})", a);
 		if (a != null) {
-			log.info("sort2: a.value={}", a.getValue());
-			if (a.getValue() != null) log.info("sort2: a.length={}", a.getValue().length);
+			log.info("sort2: a.value={}", a);
+			if (a != null) log.info("sort2: a.length={}", a.length);
 		}
-		Arrays.sort(a.getValue());
+		Arrays.sort(a);
 		return a;
 	}
 	
-	/**
-	 * 
-	 */
-	public String greetings(String name) {
+	@WebMethod
+	public String greetings(@WebParam(name = "name") String name) {
 		log.info("greetings({})", name);
 		return "Hello, "+name+"!";
 	}

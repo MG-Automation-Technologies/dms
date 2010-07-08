@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -42,7 +44,6 @@ import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.ws.util.BytePair;
 import com.openkm.ws.util.BytePairArray;
-import com.openkm.ws.util.StringArray;
 
 /**
  * Servlet Class
@@ -52,14 +53,12 @@ import com.openkm.ws.util.StringArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMAuth {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#login(java.lang.String, java.lang.String)
-	 */
+	@WebMethod
 	public void login() throws RepositoryException, DatabaseException {
 		log.debug("login()");
 		AuthModule am = ModuleManager.getAuthModule();
@@ -67,9 +66,7 @@ public class OKMAuth {
 		log.debug("login: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#logout(java.lang.String)
-	 */
+	@WebMethod
 	public void logout() throws RepositoryException, DatabaseException {
 		log.debug("logout()");
 		AuthModule am = ModuleManager.getAuthModule();
@@ -77,11 +74,9 @@ public class OKMAuth {
 		log.debug("logout: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedRoles(java.lang.String, java.lang.String)
-	 */
-	public BytePairArray getGrantedRoles(String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public BytePairArray getGrantedRoles(@WebParam(name = "nodePath") String nodePath) throws 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedRoles(nodePath);
@@ -103,11 +98,9 @@ public class OKMAuth {
 		return uh;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getGrantedUsers(java.lang.String, java.lang.String)
-	 */
-	public BytePairArray getGrantedUsers(String nodePath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public BytePairArray getGrantedUsers(@WebParam(name = "nodePath") String nodePath) throws
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedUsers(nodePath);
@@ -129,70 +122,68 @@ public class OKMAuth {
 		return uh;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getRoles(java.lang.String)
-	 */
-	public StringArray getRoles() throws PrincipalAdapterException {
+	@WebMethod
+	public String[] getRoles() throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		AuthModule am = ModuleManager.getAuthModule();
-		StringArray sa = new StringArray();
 		List<String> col = am.getRoles();
-		sa.setValue((String[]) col.toArray(new String[col.size()])); 
-		log.debug("getRoles: {}", sa);
-		return sa;
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getRoles: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#getUsers(java.lang.String)
-	 */
-	public StringArray getUsers() throws PrincipalAdapterException {
+	@WebMethod
+	public String[] getUsers() throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		AuthModule am = ModuleManager.getAuthModule();
-		StringArray sa = new StringArray();
 		List<String> col = am.getUsers();
-		sa.setValue((String[]) col.toArray(new String[col.size()])); 
-		log.debug("getUsers: {]", sa);
-		return sa;
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getUsers: {]", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
-	public void grantRole(String nodePath, String role, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public void grantRole(@WebParam(name = "nodePath") String nodePath, 
+			@WebParam(name = "role") String role, 
+			@WebParam(name = "permissions") int permissions, 
+			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantRole({}, {}, {}, {})", new Object[] { nodePath, role, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantRole(nodePath, role, permissions, recursive); 
 		log.debug("grantRole: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#grantUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
-	public void grantUser(String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public void grantUser(@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "user") String user,
+			@WebParam(name = "permissions") int permissions,
+			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.grantUser(nodePath, user, permissions, recursive); 
 		log.debug("grantUser: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeRole(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
-	public void revokeRole(String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public void revokeRole(@WebParam(name = "nodePath") String nodePath, 
+			@WebParam(name = "user") String user,
+			@WebParam(name = "permissions") int permissions,
+			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeRole({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeRole(nodePath, user, permissions, recursive); 
 		log.debug("revokeRole: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.AuthModule#revokeUser(java.lang.String, java.lang.String, java.lang.String, int, boolean)
-	 */
-	public void revokeUser(String nodePath, String user, int permissions, boolean recursive)
-			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public void revokeUser(@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "user") String user,
+			@WebParam(name = "permissions") int permissions,
+			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeUser(nodePath, user, permissions, recursive); 
