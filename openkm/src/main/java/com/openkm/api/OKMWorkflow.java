@@ -21,9 +21,9 @@
 
 package com.openkm.api;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public class OKMWorkflow implements WorkflowModule {
 	}
 
 	@Override
-	public void registerProcessDefinition(ZipInputStream is) throws ParseException, RepositoryException,
+	public void registerProcessDefinition(InputStream is) throws ParseException, RepositoryException,
 			DatabaseException, WorkflowException {
 		log.debug("registerProcessDefinition({})", is);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
