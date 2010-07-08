@@ -21,9 +21,9 @@
 
 package com.openkm.module;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipInputStream;
 
 import com.openkm.bean.form.FormElement;
 import com.openkm.bean.workflow.ProcessDefinition;
@@ -40,7 +40,7 @@ public interface WorkflowModule {
 	/**
 	 * Get list of locked documents by user
 	 */
-	public void registerProcessDefinition(ZipInputStream is) throws ParseException, RepositoryException,
+	public void registerProcessDefinition(InputStream is) throws ParseException, RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
