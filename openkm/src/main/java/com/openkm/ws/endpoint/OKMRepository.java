@@ -46,7 +46,7 @@ import com.openkm.module.RepositoryModule;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMRepository {
 	private static Logger log = LoggerFactory.getLogger(OKMRepository.class);

@@ -55,7 +55,7 @@ import com.openkm.module.PropertyGroupModule;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMPropertyGroup {
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroup.class);

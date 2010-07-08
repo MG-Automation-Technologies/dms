@@ -52,7 +52,7 @@ import com.openkm.module.ModuleManager;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMMail {
 	private static Logger log = LoggerFactory.getLogger(OKMMail.class);

@@ -57,7 +57,7 @@ import com.openkm.ws.util.IntegerPairArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMSearch {
 	private static Logger log = LoggerFactory.getLogger(OKMSearch.class);
