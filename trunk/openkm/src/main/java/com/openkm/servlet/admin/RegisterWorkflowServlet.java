@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -66,9 +65,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					fileName = FilenameUtils.getName(fileName);
 					log.debug("Upload file: {}", fileName);
 					InputStream is = new ByteArrayInputStream(content);
-					ZipInputStream zis = new ZipInputStream(is);
-					OKMWorkflow.getInstance().registerProcessDefinition(zis);
-					zis.close();
+					OKMWorkflow.getInstance().registerProcessDefinition(is);
 					is.close();
 				}
 				
