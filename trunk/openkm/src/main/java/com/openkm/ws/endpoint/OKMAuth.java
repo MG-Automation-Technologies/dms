@@ -53,7 +53,7 @@ import com.openkm.ws.util.BytePairArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMAuth {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);

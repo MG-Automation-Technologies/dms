@@ -42,7 +42,7 @@ import com.openkm.bean.Note;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMTest {
 	private static Logger log = LoggerFactory.getLogger(OKMTest.class);

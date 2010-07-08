@@ -55,7 +55,7 @@ import com.openkm.module.WorkflowModule;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 @SecurityDomain("OpenKM")
 public class OKMWorkflow {
 	private static Logger log = LoggerFactory.getLogger(OKMWorkflow.class);
