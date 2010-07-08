@@ -71,20 +71,22 @@ public class DirectWorkflowModule implements WorkflowModule {
 	private static Logger log = LoggerFactory.getLogger(DirectWorkflowModule.class);
 
 	@Override
-	public void registerProcessDefinition(ZipInputStream zis) throws ParseException, RepositoryException,
+	public void registerProcessDefinition(InputStream is) throws ParseException, RepositoryException,
 			WorkflowException, DatabaseException {
-		log.debug("registerProcessDefinition({})", zis);
+		log.debug("registerProcessDefinition({})", is);
 		JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
-		InputStream is = null;
+		InputStream isForms = null;
+		ZipInputStream zis = null;
 		Session session = null;
 		
 		try {
 			session = JCRUtils.getSession();
+			zis = new ZipInputStream(is);
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
 									
 			// Check xml form definition  
 			FileDefinition fileDef = processDefinition.getFileDefinition();
-			is = fileDef.getInputStream("forms.xml");
+			isForms = fileDef.getInputStream("forms.xml");
 			FormUtils.parseWorkflowForms(is);
 						
 			// If it is ok, deploy it
@@ -98,7 +100,8 @@ public class DirectWorkflowModule implements WorkflowModule {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
 			JCRUtils.logout(session);
-			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(isForms);
+			IOUtils.closeQuietly(zis);
 			jbpmContext.close();
 		}
 		
