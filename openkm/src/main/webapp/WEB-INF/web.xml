@@ -266,6 +266,10 @@
     <servlet-class>com.openkm.ws.endpoint.OKMMail</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>OKMWorkflow</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMWorkflow</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
@@ -502,6 +506,10 @@
   <servlet-mapping>
     <servlet-name>OKMRepository</servlet-name>
     <url-pattern>/OKMRepository</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMWorkflow</servlet-name>
+    <url-pattern>/OKMWorkflow</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMTest</servlet-name>
