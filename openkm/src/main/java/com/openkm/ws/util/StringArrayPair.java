@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class StringArrayPair implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String key = null;
-	private StringArray value = null;
+	private String[] value = null;
 
 	public StringArrayPair() {
 	}
@@ -39,11 +39,11 @@ public class StringArrayPair implements Serializable {
 		this.key = key;
 	}
 
-	public StringArray getValue() {
+	public String[] getValue() {
 		return value;
 	}
 
-	public void setValue(StringArray value) {
+	public void setValue(String[] value) {
 		this.value = value;
 	}
 }
