@@ -24,6 +24,8 @@ package com.openkm.ws.endpoint;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -37,7 +39,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.NotificationModule;
-import com.openkm.ws.util.StringArray;
 
 /**
  * Servlet Class
@@ -47,55 +48,49 @@ import com.openkm.ws.util.StringArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMNotification {
 	private static Logger log = LoggerFactory.getLogger(OKMNotification.class);
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#subscribe(java.lang.String, java.lang.String)
-	 */
-	public void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	@WebMethod
+	public void subscribe(@WebParam(name = "nodePath") String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("subscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.subscribe(nodePath);
 		log.debug("subscribe: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#unsubscribe(java.lang.String, java.lang.String)
-	 */
-	public void unsubscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	@WebMethod
+	public void unsubscribe(@WebParam(name = "nodePath") String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("unsubscribe({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
 		nm.unsubscribe(nodePath);
 		log.debug("unsubscribe: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#getSubscriptors(java.lang.String, java.lang.String)
-	 */
-	public StringArray getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	@WebMethod
+	public String[] getSubscriptors(@WebParam(name = "nodePath") String nodePath) throws
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getSubscriptors({})", nodePath);
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		StringArray sa = new StringArray();
 		List<String> col = nm.getSubscriptors(nodePath);
-		sa.setValue(col.toArray(new String[col.size()]));
-		log.debug("getSubscriptors: {}", sa);
-		return sa;
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getSubscriptors: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.NotificationModule#notify(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
-	 */
-	public void notify(String nodePath, StringArray users, String message, boolean attachment) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
+	@WebMethod
+	public void notify(@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "users") String[] users,
+			@WebParam(name = "message") String message,
+			@WebParam(name = "attachment") boolean attachment) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException {
 		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
 		NotificationModule nm = ModuleManager.getNotificationModule();
-		nm.notify(nodePath, Arrays.asList(users.getValue()), message, attachment);
+		nm.notify(nodePath, Arrays.asList(users), message, attachment);
 		log.debug("notify: void");
 	}
 }

@@ -23,6 +23,8 @@ package com.openkm.ws.endpoint;
 
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -39,7 +41,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.FolderModule;
 import com.openkm.module.ModuleManager;
-import com.openkm.ws.util.FolderArray;
 
 /**
  * Servlet Class
@@ -49,16 +50,14 @@ import com.openkm.ws.util.FolderArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMFolder {
 	private static Logger log = LoggerFactory.getLogger(OKMFolder.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#create(java.lang.String, com.openkm.bean.Folder)
-	 */
-	public Folder create(Folder fld) throws AccessDeniedException, RepositoryException, 
-			PathNotFoundException, ItemExistsException, DatabaseException {
+	@WebMethod
+	public Folder create(@WebParam(name = "fld") Folder fld) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("create({})", fld);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder newFolder = fm.create(fld);
@@ -66,11 +65,9 @@ public class OKMFolder {
 		return newFolder;
 	}
 	
-	/**
-	 * Simplified version of create(Folder fld) 
-	 */
-	public Folder createSimple(String fldPath) throws AccessDeniedException, RepositoryException, 
-			PathNotFoundException, ItemExistsException, DatabaseException {
+	@WebMethod
+	public Folder createSimple(@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
 		log.debug("createSimple({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = new Folder();
@@ -80,11 +77,9 @@ public class OKMFolder {
 		return newFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#getProperties(java.lang.String, java.lang.String)
-	 */
-	public Folder getProperties(String fldPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
+	@WebMethod
+	public Folder getProperties(@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, DatabaseException {
 		log.debug("getProperties({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = fm.getProperties(fldPath);
@@ -92,21 +87,18 @@ public class OKMFolder {
 		return fld;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#delete(java.lang.String, java.lang.String)
-	 */
-	public void delete(String fldPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	@WebMethod
+	public void delete(@WebParam(name = "fldPath") String fldPath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		fm.delete(fldPath);
 		log.debug("delete: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#rename(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public Folder rename(String fldPath, String newName) throws PathNotFoundException, ItemExistsException,
+	@WebMethod
+	public Folder rename(@WebParam(name = "fldPath") String fldPath,
+			@WebParam(name = "newName") String newName) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
@@ -115,10 +107,9 @@ public class OKMFolder {
 		return renamedFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#move(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void move(String fldPath, String dstPath) throws PathNotFoundException, ItemExistsException,
+	@WebMethod
+	public void move(@WebParam(name = "fldPath") String fldPath, 
+			@WebParam(name = "dstPath") String dstPath) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("move({}, {})", fldPath, dstPath);
 		FolderModule fm = ModuleManager.getFolderModule();
@@ -126,25 +117,20 @@ public class OKMFolder {
 		log.debug("move: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#getChilds(java.lang.String, java.lang.String)
-	 */
-	public FolderArray getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
+	@WebMethod
+	public Folder[] getChilds(@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("getChilds({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		FolderArray fa = new FolderArray();
 		List<Folder> col = fm.getChilds(fldPath);
-		fa.setValue((Folder []) col.toArray(new Folder[col.size()]));
-		log.debug("getChilds: {}", fa);
-		return fa;
+		Folder[] result = (Folder []) col.toArray(new Folder[col.size()]);
+		log.debug("getChilds: {}", result);
+		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.FolderModule#isValid(java.lang.String, java.lang.String)
-	 */
-	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	@WebMethod
+	public boolean isValid(@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("isValid({})", fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		boolean valid = fm.isValid(fldPath);

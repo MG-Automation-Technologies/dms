@@ -21,6 +21,8 @@
 
 package com.openkm.ws.endpoint;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -44,14 +46,12 @@ import com.openkm.module.RepositoryModule;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMRepository {
 	private static Logger log = LoggerFactory.getLogger(OKMRepository.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getRootFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getRootFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -60,9 +60,7 @@ public class OKMRepository {
 		return root;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTrashFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getTrashFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -71,9 +69,7 @@ public class OKMRepository {
 		return trash;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getTemplate(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getTemplatesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -82,9 +78,7 @@ public class OKMRepository {
 		return templatesFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getPersonalFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getPersonalFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -93,9 +87,7 @@ public class OKMRepository {
 		return personalFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getMailFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getMailFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -104,9 +96,7 @@ public class OKMRepository {
 		return mailFolder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getThesaurusFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getThesaurusFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -115,9 +105,7 @@ public class OKMRepository {
 		return thesaurusFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getCategoriesFolder(java.lang.String)
-	 */
+	@WebMethod
 	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getCategoriesFolder()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -126,9 +114,7 @@ public class OKMRepository {
 		return categoriesFolder;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#purgeTrash(java.lang.String)
-	 */
+	@WebMethod
 	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("purgeTrash()");
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
@@ -136,10 +122,9 @@ public class OKMRepository {
 		log.debug("purgeTrash: void");
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#hasNode(java.lang.String, java.lang.String)
-	 */
-	public boolean hasNode(String path) throws RepositoryException, DatabaseException {
+	@WebMethod
+	public boolean hasNode(@WebParam(name = "path") String path) throws RepositoryException, 
+			DatabaseException {
 		log.debug("hasNode({})", path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		boolean ret = rm.hasNode(path);
@@ -147,10 +132,8 @@ public class OKMRepository {
 		return ret;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.RepositoryModule#getPath(java.lang.String, java.lang.String)
-	 */
-	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
+	@WebMethod
+	public String getPath(@WebParam(name = "uuid") String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getPath({})", uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
 		String path = rm.getPath(uuid);

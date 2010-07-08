@@ -22,13 +22,15 @@
 package com.openkm.ws.endpoint;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -44,11 +46,8 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
-import com.openkm.ws.util.DocumentArray;
 import com.openkm.ws.util.IntegerPair;
 import com.openkm.ws.util.IntegerPairArray;
-import com.openkm.ws.util.QueryResultArray;
-import com.openkm.ws.util.StringArray;
 
 /**
  * Servlet Class
@@ -58,94 +57,72 @@ import com.openkm.ws.util.StringArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMSearch {
 	private static Logger log = LoggerFactory.getLogger(OKMSearch.class);
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByContent(java.lang.String, java.lang.String)
-	 */
-	public QueryResultArray findByContent(String words) throws IOException, ParseException, 
-			RepositoryException, DatabaseException {
-		log.debug("findByContent({})", words);
+	@WebMethod
+	public QueryResult[] findByContent(@WebParam(name = "content") String content) throws IOException, 
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("findByContent({})", content);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryResultArray qra = new QueryResultArray();
-		List<QueryResult> col = sm.findByContent(words);
-		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByContent: {}", qra);
-		return qra;
+		List<QueryResult> col = sm.findByContent(content);
+		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
+		log.debug("findByContent: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByName(java.lang.String, java.lang.String)
-	 */
-	public QueryResultArray findByName(String words) throws IOException, ParseException, RepositoryException,
-			DatabaseException {
-		log.debug("findByName({})", words);
+	@WebMethod
+	public QueryResult[] findByName(@WebParam(name = "name") String name) throws IOException, 
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("findByName({})", name);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryResultArray qra = new QueryResultArray();
-		List<QueryResult> col = sm.findByName(words);
-		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByName: {}", qra);
-		return qra;
+		List<QueryResult> col = sm.findByName(name);
+		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
+		log.debug("findByName: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByKeywords(java.lang.String, java.lang.String)
-	 */
-	public QueryResultArray findByKeywords(HashSet<String> words) throws IOException, ParseException, 
-			RepositoryException, DatabaseException {
-		log.debug("findByKeywords({})", words);
+	@WebMethod
+	public QueryResult[] findByKeywords(@WebParam(name = "keywords") HashSet<String> keywords) throws
+			IOException, ParseException, RepositoryException, DatabaseException {
+		log.debug("findByKeywords({})", keywords);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryResultArray qra = new QueryResultArray();
-		List<QueryResult> col = sm.findByKeywords(words);
-		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByKeywords: {}", qra);
-		return qra;
+		List<QueryResult> col = sm.findByKeywords(keywords);
+		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
+		log.debug("findByKeywords: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#findByStatement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public QueryResultArray findByStatement(String statement, String type) throws RepositoryException,
-			DatabaseException {
+	@WebMethod
+	public QueryResult[] findByStatement(@WebParam(name = "statement") String statement,
+			@WebParam(name = "type") String type) throws RepositoryException, DatabaseException {
 		log.debug("findByStatement({})", statement);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryResultArray qra = new QueryResultArray();
 		List<QueryResult> col = sm.findByStatement(statement, type);
-		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("findByStatement: {}", qra);
-		return qra;
+		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
+		log.debug("findByStatement: {}", result);
+		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#find(java.lang.String, com.openkm.bean.QueryParams)
-	 */
-	public QueryResultArray find(QueryParams params) throws IOException, ParseException, RepositoryException,
-			DatabaseException {
+	@WebMethod
+	public QueryResult[] find(@WebParam(name = "params") QueryParams params) throws IOException, 
+			ParseException, RepositoryException, DatabaseException {
 		log.debug("find({})", params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		QueryResultArray qra = new QueryResultArray();
 		List<QueryResult> col = sm.find(params);
-		qra.setValue((QueryResult[]) col.toArray(new QueryResult[col.size()]));
-		log.debug("find: {}", qra);
-		return qra;
+		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
+		log.debug("find: {}", result);
+		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#getKeywordMap(java.lang.String, java.util.Collection)
-	 */
-	public IntegerPairArray getKeywordMap(StringArray filter) throws RepositoryException, DatabaseException {
+	@WebMethod
+	public IntegerPairArray getKeywordMap(@WebParam(name = "filter") String[] filter) throws 
+			RepositoryException, DatabaseException {
 		log.debug("getKeywordMap()");
 		SearchModule sm = ModuleManager.getSearchModule();
-		ArrayList<String> alFilter = new ArrayList<String>();
-		String[] values = filter.getValue();
-		
-		for (int i=0; i<values.length; i++) {
-			alFilter.add(values[i]);
-		}
-		
+		List<String> alFilter = Arrays.asList(filter);
 		Map<String, Integer> map = sm.getKeywordMap(alFilter);
 		Set<String> keys = map.keySet();
 		IntegerPair[] tmp = new IntegerPair[keys.size()];
@@ -165,17 +142,14 @@ public class OKMSearch {
 		return uh;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.SearchModule#getCategorizedDocuments(java.lang.String, java.lang.String)
-	 */
-	public DocumentArray getCategorizedDocuments(String categoryId) throws RepositoryException,
-			DatabaseException {
+	@WebMethod
+	public Document[] getCategorizedDocuments(@WebParam(name = "categoryId") String categoryId) throws 
+			RepositoryException, DatabaseException {
 		log.debug("getCategorizedDocuments()");
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<Document> col = sm.getCategorizedDocuments(categoryId);
-		DocumentArray da = new DocumentArray();
-		da.setValue((Document[]) col.toArray(new Document[col.size()]));
-		log.debug("getCategorizedDocuments: {}", da);
-		return da;
+		Document[] result = (Document[]) col.toArray(new Document[col.size()]);
+		log.debug("getCategorizedDocuments: {}", result);
+		return result;
 	}
 }

@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -44,8 +46,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.PropertyGroupModule;
-import com.openkm.ws.util.FormElementArray;
-import com.openkm.ws.util.PropertyGroupArray;
 
 /**
  * Servlet Class
@@ -55,15 +55,14 @@ import com.openkm.ws.util.PropertyGroupArray;
  */
 
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)
+@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 @SecurityDomain("OpenKM")
 public class OKMPropertyGroup {
 	private static Logger log = LoggerFactory.getLogger(OKMPropertyGroup.class);
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#addGroup(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
+	@WebMethod
+	public void addGroup(@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "grpName") String grpName) throws NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("addGroup({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
@@ -71,10 +70,9 @@ public class OKMPropertyGroup {
 		log.debug("addGroup: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#removeGroup(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
+	@WebMethod
+	public void removeGroup(@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "grpName") String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("removeGroup({}, {})", docPath, grpName);
@@ -83,59 +81,49 @@ public class OKMPropertyGroup {
 		log.debug("removeGroup: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getGroups(java.lang.String, java.lang.String)
-	 */
-	public PropertyGroupArray getGroups(String docPath) throws IOException, ParseException,
-			PathNotFoundException, RepositoryException, DatabaseException {
+	@WebMethod
+	public PropertyGroup[] getGroups(@WebParam(name = "docPath") String docPath) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getGroups({})", docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		PropertyGroupArray sa = new PropertyGroupArray();
 		List<PropertyGroup> col = cm.getGroups(docPath);
-		sa.setValue((PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]));
-		log.debug("getGroups: {}", sa);
-		return sa;
+		PropertyGroup[] result = (PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]);
+		log.debug("getGroups: {}", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getAllGroups(java.lang.String)
-	 */
-	public PropertyGroupArray getAllGroups() throws IOException, ParseException, RepositoryException,
+	@WebMethod
+	public PropertyGroup[] getAllGroups() throws IOException, ParseException, RepositoryException,
 			DatabaseException {
 		log.debug("getAllGroups()");
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		PropertyGroupArray sa = new PropertyGroupArray();
 		List<PropertyGroup> col = cm.getAllGroups();
-		sa.setValue((PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]));
-		log.debug("getAllGroups: {} ", sa);
-		return sa;
+		PropertyGroup[] result = (PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]);
+		log.debug("getAllGroups: {} ", result);
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#getProperties(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public FormElementArray getProperties(String docPath, String grpName) throws IOException, 
-			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, 
-			DatabaseException {
+	@WebMethod
+	public FormElement[] getProperties(@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "grpName") String grpName) throws IOException, ParseException,
+			NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
 		log.debug("getProperties({}, {})", docPath, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		FormElementArray fea = new FormElementArray();
-		List<FormElement> fes = cm.getProperties(docPath, grpName);
-		fea.setValue((FormElement[]) fes.toArray(new FormElement[fes.size()]));
-		log.debug("getProperties: {}", fea);
-		return fea;
+		List<FormElement> col = cm.getProperties(docPath, grpName);
+		FormElement[] result = (FormElement[]) col.toArray(new FormElement[col.size()]);
+		log.debug("getProperties: {}", result);
+		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.openkm.module.PropertyGroupModule#setProperties(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
-	 */
-	public void setProperties(String docPath, String grpName, FormElementArray properties) throws 
-			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	@WebMethod
+	public void setProperties(@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "grpName") String grpName,
+			@WebParam(name = "properties") FormElement[] properties) throws IOException, ParseException,
+			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		FormElement[] fes = properties.getValue();
-		cm.setProperties(docPath, grpName, Arrays.asList(fes));
+		cm.setProperties(docPath, grpName, Arrays.asList(properties));
 		log.debug("setProperties: void");
 	}
 }
