@@ -150,6 +150,9 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="AddinModule.pl-PL.resx">
+      <DependentUpon>AddinModule.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -165,6 +168,9 @@
     <EmbeddedResource Include="OpenKMAddIN.es-ES.resx">
       <DependentUpon>OpenKMAddIn.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenKMAddIn.pl-PL.resx">
+      <DependentUpon>OpenKMAddIn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenKMAddIn.resx">
       <DependentUpon>OpenKMAddIn.cs</DependentUpon>
