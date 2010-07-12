@@ -43,7 +43,6 @@ import com.openkm.module.AuthModule;
 import com.openkm.module.ModuleManager;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.ws.util.BytePair;
-import com.openkm.ws.util.BytePairArray;
 
 /**
  * Servlet Class
@@ -75,13 +74,13 @@ public class OKMAuth {
 	}
 
 	@WebMethod
-	public BytePairArray getGrantedRoles(@WebParam(name = "nodePath") String nodePath) throws 
+	public BytePair[] getGrantedRoles(@WebParam(name = "nodePath") String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedRoles(nodePath);
 		Set<String> keys = hm.keySet();
-		BytePair[] tmp = new BytePair[keys.size()];
+		BytePair[] result = new BytePair[keys.size()];
 		int i=0;
 		
 		for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
@@ -89,23 +88,21 @@ public class OKMAuth {
 			BytePair p = new BytePair();
 			p.setKey(key);
 			p.setValue((Byte) hm.get(key));
-			tmp[i++] = p;
+			result[i++] = p;
 		}
-		
-		BytePairArray uh = new BytePairArray();
-		uh.setValue(tmp);
-		log.debug("getGrantedRoles: {}", uh);
-		return uh;
+				
+		log.debug("getGrantedRoles: {}", result);
+		return result;
 	}
 
 	@WebMethod
-	public BytePairArray getGrantedUsers(@WebParam(name = "nodePath") String nodePath) throws
+	public BytePair[] getGrantedUsers(@WebParam(name = "nodePath") String nodePath) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({})", nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
 		Map<String, Byte> hm = am.getGrantedUsers(nodePath);
 		Set<String> keys = hm.keySet();
-		BytePair[] tmp = new BytePair[keys.size()];
+		BytePair[] result = new BytePair[keys.size()];
 		int i=0;
 		
 		for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
@@ -113,13 +110,11 @@ public class OKMAuth {
 			BytePair p = new BytePair();
 			p.setKey(key);
 			p.setValue((Byte) hm.get(key));
-			tmp[i++] = p;
+			result[i++] = p;
 		}
 		
-		BytePairArray uh = new BytePairArray();
-		uh.setValue(tmp);
-		log.debug("getGrantedUsers: {}", uh);
-		return uh;
+		log.debug("getGrantedUsers: {}", result);
+		return result;
 	}
 
 	@WebMethod
