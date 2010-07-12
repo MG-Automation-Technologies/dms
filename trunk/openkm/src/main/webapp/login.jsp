@@ -18,12 +18,15 @@
   <% } %>
   <% 
   	LinkedHashMap<String, String> langs = new LinkedHashMap<String, String>();
+  	langs.put("Arabic", Lang.LANG_ar_PS);
     langs.put("Bosnian", Lang.LANG_bs_BA);
     langs.put("Català", Lang.LANG_ca_ES);
     langs.put("Chinese simple", Lang.LANG_zh_CN);
     langs.put("Chinese traditional", Lang.LANG_zh_TW);
+    langs.put("Czech", Lang.LANG_cs_CZ);
     langs.put("Deutsch", Lang.LANG_de_DE);
     langs.put("English", Lang.LANG_en_GB);
+    langs.put("English USA", Lang.LANG_en_US);
     langs.put("Español", Lang.LANG_es_ES);
     langs.put("Español Colombia", Lang.LANG_co_ES);
     langs.put("Farsi", Lang.LANG_fa_FA);
