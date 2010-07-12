@@ -47,7 +47,6 @@ import com.openkm.dao.bean.QueryParams;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.SearchModule;
 import com.openkm.ws.util.IntegerPair;
-import com.openkm.ws.util.IntegerPairArray;
 
 /**
  * Servlet Class
@@ -118,14 +117,14 @@ public class OKMSearch {
 	}
 	
 	@WebMethod
-	public IntegerPairArray getKeywordMap(@WebParam(name = "filter") String[] filter) throws 
+	public IntegerPair[] getKeywordMap(@WebParam(name = "filter") String[] filter) throws 
 			RepositoryException, DatabaseException {
 		log.debug("getKeywordMap()");
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<String> alFilter = Arrays.asList(filter);
 		Map<String, Integer> map = sm.getKeywordMap(alFilter);
 		Set<String> keys = map.keySet();
-		IntegerPair[] tmp = new IntegerPair[keys.size()];
+		IntegerPair[] result = new IntegerPair[keys.size()];
 		int i=0;
 		
 		for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
@@ -133,13 +132,11 @@ public class OKMSearch {
 			IntegerPair p = new IntegerPair();
 			p.setKey(key);
 			p.setValue((Integer) map.get(key));
-			tmp[i++] = p;
+			result[i++] = p;
 		}
 		
-		IntegerPairArray uh = new IntegerPairArray();
-		uh.setValue(tmp);
-		log.debug("getKeywordMap: {}", uh);
-		return uh;
+		log.debug("getKeywordMap: {}", result);
+		return result;
 	}
 	
 	@WebMethod
