@@ -7,6 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
   <title>OpenKM Mobile</title>
@@ -69,6 +70,8 @@
     <!-- List documents -->
     <c:forEach var="doc" items="${documentChilds}" varStatus="row">
       <c:set var="size"><u:formatSize size="${doc.actualVersion.size}"/></c:set>
+      <c:url value="/mime/${doc.mimeType}" var="urlIcon">
+      </c:url>
       <c:url value="../OKMDownloadServlet" var="urlDownload">
         <c:if test="${doc.convertibleToPdf}">
             <c:param name="toPdf"/>
@@ -80,7 +83,7 @@
         <c:param name="path" value="${doc.path}"/>
       </c:url>
       <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-        <td width="18px"><img src="../com.openkm.frontend.Main/img/icon/mime/${doc.mimeType}.gif"/></td>
+        <td width="18px"><img src="${urlIcon}"/></td>
         <td width="100%" onclick="if (confirm('Download ${size} document?')) { document.location='${urlDownload}'; }">
           <u:getName path="${doc.path}"/>
         </td>
