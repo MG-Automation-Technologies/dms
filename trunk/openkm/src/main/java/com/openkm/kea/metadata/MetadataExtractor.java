@@ -61,9 +61,7 @@ import com.openkm.bean.kea.MetadataDTO;
  *
  */
 public class MetadataExtractor {
-
 	private static Logger log = LoggerFactory.getLogger(MetadataExtractor.class);
-
     private MetadataDTO mdDTO;
     private File tempFile;
     private RDFContainer rdf;
