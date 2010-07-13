@@ -15,9 +15,9 @@
 <body>
   <c:set var="ctxTaxonomy" value="/okm:root"/>
   <c:set var="ctxTemplates" value="/okm:templates"/>
-  <c:set var="ctxPersonal" value="/okm:home/${userId}/okm:personal"/>
-  <c:set var="ctxMail" value="/okm:home/${userId}/okm:mail"/>
-  <c:set var="ctxTrash" value="/okm:home/${userId}/okm:trash"/>
+  <c:set var="ctxPersonal" value="/okm:personal/${userId}"/>
+  <c:set var="ctxMail" value="/okm:mail/${userId}"/>
+  <c:set var="ctxTrash" value="/okm:trash/${userId}"/>
   <table width="100%" cellpadding="2" cellspacing="2">
     <tr>
       <td>
