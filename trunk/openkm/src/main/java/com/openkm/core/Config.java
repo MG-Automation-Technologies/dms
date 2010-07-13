@@ -58,6 +58,10 @@ public class Config {
 	// Multihost
 	public static final String INSTALL = "";
 	
+	// Scripting
+	public static final String START_SCRIPT = "start.bsh";
+	public static final String STOP_SCRIPT = "stop.bsh";
+	
 	// Configuration files
 	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
 	public static final String MIME_FILE = "mime.types";
