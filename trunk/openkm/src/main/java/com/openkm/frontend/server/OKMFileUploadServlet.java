@@ -122,7 +122,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					}
 				}
 
-				// Now, we have read all parameters and the uploaded file  
+				// Now, we have read all parameters and the uploaded file
 				if (action == FancyFileUpload.ACTION_INSERT) {
 					if (fileName != null && !fileName.equals("")) {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
