@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.File;
+import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.Timer;
@@ -29,6 +30,7 @@ import java.util.Timer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.velocity.app.Velocity;
@@ -36,6 +38,9 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.jbpm.JbpmConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 import com.openkm.cache.UserItemsManager;
 import com.openkm.cache.UserDocumentKeywordsManager;
@@ -162,11 +167,26 @@ public class RepositoryStartupServlet extends HttpServlet {
         	timer.scheduleAtFixedRate(dsgc, now.getTime(), 24*60*60*1000); // First tomorrow at 00:00, next each 24 hours
         }
         
-        log.info("*** Activating thesaurus repository ***");
-        RDFREpository.getInstance();
+        try {
+        	log.info("*** Activating thesaurus repository ***");
+        	RDFREpository.getInstance();
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
         
-        log.info("*** Start OpenOffice manager ***");
-        DocConverter.getInstance().start();
+        try {
+        	log.info("*** Start OpenOffice manager ***");
+        	DocConverter.getInstance().start();
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
+        
+        try {
+        	log.info("*** Ejecute stop script ***");
+        	runScript(Config.START_SCRIPT);
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -204,9 +224,6 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (log == null) log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");
         
-        // Close active session
-        // TODO Close active sessions
-        
         // Serialize
         try {
         	log.info("*** Cache serialization ***");
@@ -221,5 +238,39 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         if (log == null) log("*** Repository shutted down ***");
         else log.info("*** Repository shutted down ***");
+        
+        try {
+        	if (log == null) log("*** Ejecute stop script ***");
+        	else log.info("*** Ejecute stop script ***");
+        	runScript(Config.STOP_SCRIPT);
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Ejecute script
+     */
+    private void runScript(String name) {
+    	try {
+        	File script = new File(Config.HOME_DIR + File.separatorChar + name); 
+        	FileReader fr = null;
+        	
+        	if (script.exists() && script.canRead()) {
+        		Interpreter i = new Interpreter();
+        		fr = new FileReader(script);
+				
+				try {
+					Object result = i.eval(fr);
+					log.info("Script output: "+(result!=null?result.toString():"null"));
+				} catch (EvalError e) {
+					log.warn(e.getMessage(), e);
+				} finally {
+					IOUtils.closeQuietly(fr);
+				}
+        	}
+        } catch (Exception e) {
+        	log.warn(e.getMessage(), e);
+        }
     }
 }
