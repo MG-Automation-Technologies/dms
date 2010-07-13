@@ -12,6 +12,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="<%=request.getContextPath() %>/favicon.ico" />
   <% if (FormatUtil.isMobile(request)) { %>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
   <link rel="stylesheet" href="<%=request.getContextPath() %>/css/mobile.css" type="text/css" />
   <% } else { %>
   <link rel="stylesheet" href="<%=request.getContextPath() %>/css/desktop.css" type="text/css" />
