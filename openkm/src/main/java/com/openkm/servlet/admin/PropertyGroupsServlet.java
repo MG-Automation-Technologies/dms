@@ -36,6 +36,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.core.nodetype.InvalidNodeTypeDefException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,9 +123,15 @@ public class PropertyGroupsServlet extends BaseServlet {
 		FormUtils.parsePropertyGroupsForms();
 		
 		// If it is ok, register it
-		FileInputStream fis = new FileInputStream(pgPath);
-		DirectRepositoryModule.registerCustomNodeTypes(session, fis);
-				
+		FileInputStream fis = null;
+		
+		try {
+			fis = new FileInputStream(pgPath);
+			DirectRepositoryModule.registerCustomNodeTypes(session, fis);
+		} finally {
+			IOUtils.closeQuietly(fis);
+		}
+		
 		// Activity log
 		UserActivity.log(request.getRemoteUser(), "ADMIN_PROPERTY_GROUP_REGISTER", pgPath, null);
 		log.debug("register: void");
