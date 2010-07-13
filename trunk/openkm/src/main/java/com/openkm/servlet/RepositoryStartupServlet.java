@@ -182,7 +182,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         }
         
         try {
-        	log.info("*** Ejecute stop script ***");
+        	log.info("*** Ejecute start script ***");
         	runScript(Config.START_SCRIPT);
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
