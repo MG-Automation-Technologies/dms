@@ -77,6 +77,8 @@ public class DocConverter {
 		validImageMagick.add("image/png");
 		validImageMagick.add("image/gif");
 		validImageMagick.add("image/tiff");
+		validImageMagick.add("image/bmp");
+		validImageMagick.add("image/svg+xml");
 	}
 	
 	/**
