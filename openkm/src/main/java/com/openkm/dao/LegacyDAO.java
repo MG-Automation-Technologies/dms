@@ -21,6 +21,9 @@
 
 package com.openkm.dao;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,6 +62,40 @@ public class LegacyDAO {
 		} catch (SQLException e) {
 			log.error("Can't get connection from DataSource", e);
 			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Execute sentence
+	 */
+	public static void execute(Connection con, String sql) throws IOException, SQLException {
+		Statement stmt = con.createStatement();
+		
+		try {
+			log.info("execute: {}", sql);
+			stmt.execute(sql);
+		} finally {
+			close(stmt);
+		}
+	}
+	
+	/**
+	 * Execute script
+	 */
+	public static void executeScript(Connection con, Reader file) throws IOException, SQLException {
+		BufferedReader br = new BufferedReader(file);
+		Statement stmt = con.createStatement();
+		String line = null;
+		
+		try {
+			while ((line = br.readLine()) != null) {
+				if (!line.trim().equals("")) {
+					log.info("executeScript: {}", line);
+					stmt.execute(line);
+				}
+			}
+		} finally {
+			close(stmt);
 		}
 	}
 	
