@@ -78,7 +78,7 @@ public class HandlerServlet extends HttpServlet {
 	 */
 	private void browse(HttpServletRequest request, HttpServletResponse response) throws 
 			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
-		log.info("browse({}, {})", request, response);
+		log.debug("browse({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String userId = request.getRemoteUser();
 		String path = request.getParameter("path");
@@ -100,7 +100,7 @@ public class HandlerServlet extends HttpServlet {
 	 */
 	private void fldProperties(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
-		log.info("fldProperties({}, {})", request, response);
+		log.debug("fldProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String path = request.getParameter("path");
 		
@@ -119,7 +119,7 @@ public class HandlerServlet extends HttpServlet {
 	 */
 	private void docProperties(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, RepositoryException, IOException, ServletException, DatabaseException {
-		log.info("docProperties({}, {})", request, response);
+		log.debug("docProperties({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String path = request.getParameter("path");
 		
@@ -139,7 +139,7 @@ public class HandlerServlet extends HttpServlet {
 	private void search(HttpServletRequest request, HttpServletResponse response) throws
 			PathNotFoundException, ParseException, RepositoryException, IOException, 
 			ServletException, DatabaseException {
-		log.info("search({}, {})", request, response);
+		log.debug("search({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String query = request.getParameter("query");
 						
@@ -156,7 +156,7 @@ public class HandlerServlet extends HttpServlet {
 	 */
 	private void logout(HttpServletRequest request, HttpServletResponse response) throws 
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		log.info("logout({}, {})", request, response);
+		log.debug("logout({}, {})", request, response);
 		OKMAuth.getInstance().logout();
 		request.getSession().invalidate();
 		response.sendRedirect(request.getContextPath());
