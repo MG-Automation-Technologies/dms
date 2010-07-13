@@ -142,7 +142,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							doc.setPath(path+"/"+fileName);
 							OKMDocument.getInstance().create(doc, is);
 							uploadedDocPath = doc.getPath();
-							out.print(returnOKMessage + " path["+uploadedDocPath+"]path"); // Return the path of the inserted document in response
+							
+							// Return the path of the inserted document in response
+							out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
 						}
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
