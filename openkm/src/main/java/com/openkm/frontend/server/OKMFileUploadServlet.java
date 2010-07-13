@@ -147,11 +147,18 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					}
 				} else if (action == FancyFileUpload.ACTION_UPDATE) {
 					log.info("File updated: {}", path);
-					OKMDocument document = OKMDocument.getInstance();
-					document.setContent(path, is);
-					document.checkin(path, comment);
-					uploadedDocPath = path;
-					out.print(returnOKMessage + " path["+uploadedDocPath+"]path"); // Return the path of the inserted document in response
+					
+					if (FileUtils.getName(path).equals(fileName)) {
+						OKMDocument document = OKMDocument.getInstance();
+						document.setContent(path, is);
+						document.checkin(path, comment);
+						uploadedDocPath = path;
+						
+						// Return the path of the inserted document in response
+						out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
+					} else {
+						out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_DocumentNameMismatch));
+					}
 				} else if (action == FancyFileUpload.ACTION_FOLDER) {
 					log.info("Folder create: {}", path);
 					Folder fld = new Folder();

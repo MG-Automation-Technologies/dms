@@ -78,6 +78,7 @@ public class ErrorCode {
 	public static final String CAUSE_DatabaseException			= "024";
 	public static final String CAUSE_PrincipalAdapterException	= "025";
 	public static final String CAUSE_WorkflowException			= "026";
+	public static final String CAUSE_DocumentNameMismatch		= "027";
 
 	/**
 	 * Gets the error
