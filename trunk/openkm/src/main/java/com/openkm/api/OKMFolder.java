@@ -62,6 +62,17 @@ public class OKMFolder implements FolderModule {
 		log.debug("create: {}", newFld);
 		return newFld;
 	}
+		
+	public Folder createSimple(String fldPath) throws PathNotFoundException, ItemExistsException, 
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("createSimple({})", fldPath);
+		FolderModule fm = ModuleManager.getFolderModule();
+		Folder fld = new Folder();
+		fld.setPath(fldPath);
+		Folder newFolder = fm.create(fld);
+		log.debug("createSimple: {}", newFolder);
+		return newFolder;
+	}
 	
 	@Override
 	public Folder getProperties(String fldPath) throws PathNotFoundException, RepositoryException,
