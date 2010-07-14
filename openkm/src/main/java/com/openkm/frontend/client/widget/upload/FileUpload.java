@@ -106,7 +106,7 @@ public class FileUpload extends DialogBox {
             			} else {
             				addButton.setVisible(true);
             			}
-            		} 
+            		}
                }
             }
 	    }); 
