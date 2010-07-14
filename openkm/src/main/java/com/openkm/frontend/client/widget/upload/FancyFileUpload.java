@@ -342,7 +342,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				pendingPanel.setVisible(true);
 				status.setText(Main.i18n("fileupload.label.error.importing.zip"));
 			} else {
-				status.setHTML(Main.i18n(msg));
+				status.setHTML(Main.i18n(msg.substring(msg.indexOf("OKM"),msg.indexOf("OKM")+10)));
 			}
 			pendingPanel.setStyleName("fancyfileupload-failed");
 			widgetState = FAILED_STATE;
