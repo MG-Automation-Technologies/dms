@@ -1,6 +1,6 @@
 <%@page import="com.openkm.core.Config"%>
 <table width="100%" border="0">
-  <tr><td align="center">
+  <tr><td align="center" width="100%">
   <a target="frame" href="home.jsp"><img src="img/toolbar/home.png" title="Home"></a>
   &nbsp;
   <a target="frame" href="config.jsp"><img src="img/toolbar/config.png" title="Configuration"></a>
@@ -38,7 +38,6 @@
   <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
   <%-- &nbsp; --%>
   <%-- <a href="<%=request.getContextPath()%>/"><img src="img/toolbar/exit.png" title="Exit"></a> --%>
-  &nbsp;
-  <a target="frame" href="legacy.jsp">&nbsp;</a>
-  </td></tr>
+  </td>
+  <td><a target="frame" href="legacy.jsp">&nbsp;</a></td></tr>
 </table>
