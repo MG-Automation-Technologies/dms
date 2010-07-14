@@ -106,7 +106,7 @@ public class FileUpload extends DialogBox {
             			} else {
             				addButton.setVisible(true);
             			}
-            		}
+            		} 
                }
             }
 	    }); 
@@ -165,8 +165,10 @@ public class FileUpload extends DialogBox {
 	 */
 	public void hide() {
 		if (doAction == FancyFileUpload.ACTION_UPDATE) {
-			GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDocument();
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
+			if (Main.get().mainPanel.desktop.browser.fileBrowser.table.isDocumentSelected()) {
+				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.table.getDocument();
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.setProperties(doc);
+			}
 		}
 		super.hide();
 	}
