@@ -714,23 +714,18 @@ public class DirectDocumentModule implements DocumentModule {
 	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.info("addNote({}, {})", docPath, text);
-		Node notesNode = null;
 		Session session = null;
+		Node notesNode = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
 		}
-
+		
 		try {
 			session = JCRUtils.getSession();
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			notesNode = documentNode.getNode(Note.LIST);
-			Calendar cal = Calendar.getInstance();
-			Node note = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
-			note.setProperty(Note.DATE, cal);
-			note.setProperty(Note.USER, session.getUserID());
-			note.setProperty(Note.TEXT, text);
-			notesNode.save();
+			addInternalNote(session, notesNode, text);
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
@@ -756,8 +751,24 @@ public class DirectDocumentModule implements DocumentModule {
 		} finally {
 			JCRUtils.logout(session);
 		}
-
+		
 		log.debug("addNote: void");
+	}
+	
+	/**
+	 * Centralize document notes creation
+	 */
+	private void addInternalNote(Session session, Node notesNode, String text) throws 
+			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, javax.jcr.lock.LockException,
+			javax.jcr.version.VersionException, javax.jcr.RepositoryException  {
+		log.info("addInternalNote({}, {}, {})", new Object[] { session, notesNode, text });
+		Calendar cal = Calendar.getInstance();
+		Node note = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
+		note.setProperty(Note.DATE, cal);
+		note.setProperty(Note.USER, session.getUserID());
+		note.setProperty(Note.TEXT, text);
+		notesNode.save();
+		log.debug("addInternalNote: void");
 	}
 
 	@Override
@@ -1111,7 +1122,9 @@ public class DirectDocumentModule implements DocumentModule {
 			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
 			
 			// Add comment (as system user)
-			addNote(docPath, "New version "+version.getName()+" by "+session.getUserID()+": "+version.getComment());
+			Node notesNode = documentNode.getNode(Note.LIST);
+			addInternalNote(DirectRepositoryModule.getSystemSession(), notesNode,
+					"New version "+version.getName()+" by "+session.getUserID()+": "+version.getComment());
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
