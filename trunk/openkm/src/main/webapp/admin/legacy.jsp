@@ -20,6 +20,7 @@
         <a href="LogCat">LogCat</a><br/>
         <a href="benchmark.jsp">Benchmark</a><br/>
         <a href="populate.jsp">Populate</a><br/>
+        <a href="repository_backup.jsp">Repository backup</a>
       </center>
     </c:when>
     <c:otherwise>
