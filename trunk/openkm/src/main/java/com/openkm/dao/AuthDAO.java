@@ -171,9 +171,9 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			User user = findUserByPk(usrId);
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
+			User user = (User) session.load(User.class, usrId);
 			session.delete(user);
 						
 			Query qMail = session.createQuery(qsMail);
