@@ -16,7 +16,6 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>LogCat</h1>
-      <h2>View log</h2>
       <form action="LogCat">
         <input type="hidden" name="action" value="view"/>
         <input type="hidden" name="file" value="${file}"/>

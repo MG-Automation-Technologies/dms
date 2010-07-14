@@ -16,7 +16,6 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>LogCat</h1>
-      <h2>Log files</h2>
       <table class="results" width="100%">
         <tr><th>File</th><th>Action</th></tr>
         <c:forEach var="log" items="${files}" varStatus="row">
