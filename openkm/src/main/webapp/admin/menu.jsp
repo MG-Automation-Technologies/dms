@@ -37,8 +37,8 @@
   &nbsp;
   <a target="frame" href="repository_export.jsp"><img src="img/toolbar/export.png" title="Repository export"></a>
   <%-- &nbsp; --%>
-  <%-- <a target="frame" href="repository_backup.jsp"><img src="img/toolbar/backup.png" title="Repository backup"></a> --%>
-  <%-- &nbsp; --%>
   <%-- <a href="<%=request.getContextPath()%>/"><img src="img/toolbar/exit.png" title="Exit"></a> --%>
+  &nbsp;
+  <a target="frame" href="legacy.jsp">&nbsp;</a>
   </td></tr>
 </table>
