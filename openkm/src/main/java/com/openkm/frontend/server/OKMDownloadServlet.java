@@ -217,8 +217,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 		resp.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
 		resp.setHeader("Cache-Control", "max-age=0, must-revalidate");
 		resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
-		resp.setHeader("Pragma", "no-cache");
-
+		
 		// Set MIME type
 		resp.setContentType(mimeType);
 		
