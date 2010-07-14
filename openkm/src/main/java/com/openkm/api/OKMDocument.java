@@ -71,6 +71,19 @@ public class OKMDocument implements DocumentModule {
 		return newDocument;
 	}
 	
+	public Document createSimple(String docPath, InputStream is) throws UnsupportedMimeTypeException, 
+			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
+			ItemExistsException, PathNotFoundException, AccessDeniedException, 
+			RepositoryException, IOException, DatabaseException {
+		log.debug("createSimple({})", docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		Document doc = new Document();
+		doc.setPath(docPath);
+		Document newDocument = dm.create(doc, is);
+		log.debug("createSimple: {}", newDocument);
+		return newDocument;
+	}
+	
 	@Override
 	public void delete(String docPath) throws LockException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, DatabaseException {
