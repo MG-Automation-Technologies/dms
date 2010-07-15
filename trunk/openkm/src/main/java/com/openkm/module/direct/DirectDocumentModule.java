@@ -787,8 +787,14 @@ public class DirectDocumentModule implements DocumentModule {
 			session = JCRUtils.getSession();
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
 			parentNode = noteNode.getParent();
-			noteNode.remove();
-			parentNode.save();
+			
+			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString()) ||
+					session.getUserID().equals(Config.ADMIN_USER)) {
+				noteNode.remove();
+				parentNode.save();
+			} else {
+				throw new AccessDeniedException("Note can only be removed by its creator");
+			}
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "REMOVE_NOTE", null);
@@ -876,9 +882,14 @@ public class DirectDocumentModule implements DocumentModule {
 		try {
 			session = JCRUtils.getSession();
 			noteNode = session.getRootNode().getNode(notePath.substring(1));
-			noteNode.setProperty(Note.USER, session.getUserID());
-			noteNode.setProperty(Note.TEXT, text);
-			noteNode.save();
+			
+			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString()) ||
+					session.getUserID().equals(Config.ADMIN_USER)) {
+				noteNode.setProperty(Note.TEXT, text);
+				noteNode.save();
+			} else {
+				throw new AccessDeniedException("Note can only be modified by its creator");
+			}
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
