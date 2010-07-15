@@ -859,16 +859,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		}
 		Log.debug("downloadDocumentPdf: void");
 	}
-
-	/**
-	 * Media player document
-	 */
-	public void mediaPlayerDocument() {
-		if (isDocumentSelected()) {
-			Main.get().mediaPlayerPopup.center();
-			Main.get().mediaPlayerPopup.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
-		}
-	}
 	
 	/**
 	 * Image viewer document

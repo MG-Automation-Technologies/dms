@@ -54,7 +54,6 @@ public class PersonalMenu extends MenuBase {
 	private boolean moveOption 			= false;
 	private boolean copyOption			= false;
 	private boolean exportOption		= false;
-	private boolean mediaPlayerOption	= false;
 	private boolean imageViewerOption	= false;
 	
 	private MenuBar dirMenu;
@@ -69,7 +68,6 @@ public class PersonalMenu extends MenuBase {
 	private MenuItem move;
 	private MenuItem copy;
 	private MenuItem export;
-	private MenuItem mediaPlayer;
 	private MenuItem imageViewer;
 	
 	/**
@@ -113,9 +111,6 @@ public class PersonalMenu extends MenuBase {
 		export = new MenuItem(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")), true, exportToFile);
 		export.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(export);
-		mediaPlayer = new MenuItem(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")), true, mediaPlayerFile);
-		mediaPlayer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(mediaPlayer);
 		dirMenu.setStyleName("okm-MenuBar");
 		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
 		imageViewer.addStyleName("okm-MenuItem-strike");
@@ -237,16 +232,6 @@ public class PersonalMenu extends MenuBase {
 	};
 	
 	// Command menu to download file
-	Command mediaPlayerFile = new Command() {
-		public void execute() {		
-			if (mediaPlayerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.mediaPlayerDocument();
-				hide();
-			}
-		}
-	};
-	
-	// Command menu to download file
 	Command imageViewerFile = new Command() {
 		public void execute() {		
 			if (imageViewerOption) {
@@ -271,7 +256,6 @@ public class PersonalMenu extends MenuBase {
 		move.setHTML(Util.menuHTML("img/icon/actions/move_document.gif", Main.i18n("filebrowser.menu.move")));
 		copy.setHTML(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("filebrowser.menu.copy")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
-		mediaPlayer.setHTML(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")));
 		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 	}
 	
@@ -289,7 +273,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;
 		copyOption 				= true;
 		exportOption			= true;
-		mediaPlayerOption		= false;
 		imageViewerOption		= false;
 		
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
@@ -318,15 +301,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;	
 		copyOption 				= true;
 		exportOption			= false;
-		
-		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || 
-				doc.getMimeType().equals("application/x-shockwave-flash") ||  
-				doc.getMimeType().equals("audio/mpeg") || doc.getMimeType().equals("image/gif") ||
-				doc.getMimeType().equals("image/jpeg") || doc.getMimeType().equals("image/png")) {
-			mediaPlayerOption = true;
-		} else {
-			mediaPlayerOption = false;
-		}
 		
 		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
 				doc.getMimeType().equals("image/png")) {
@@ -404,7 +378,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;	
 		copyOption 				= true;
 		exportOption			= false;
-		mediaPlayerOption 		= false;
 		imageViewerOption 		= false;
 		lockOption				= false;
 		checkoutOption 			= false;
@@ -438,7 +411,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;
 		moveOption 			 	= false;
 		exportOption			= false;
-		mediaPlayerOption		= false;
 		imageViewerOption		= false;
 	}
 	
@@ -457,7 +429,6 @@ public class PersonalMenu extends MenuBase {
 		if (moveOption){enable(move);} else {disable(move);}
 		if (copyOption){enable(copy);} else {disable(copy);}
 		if (exportOption){enable(export);} else {disable(export);}
-		if (mediaPlayerOption){enable(mediaPlayer);} else {disable(mediaPlayer);}
 		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 	}
 	
@@ -474,7 +445,6 @@ public class PersonalMenu extends MenuBase {
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
 		export.setVisible(option.isExportOption());
-		mediaPlayer.setVisible(option.isMediaPlayerOption());
 		imageViewer.setVisible(option.isImageViewerOption());
 	}
 	

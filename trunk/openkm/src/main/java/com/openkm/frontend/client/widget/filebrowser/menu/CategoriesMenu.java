@@ -53,7 +53,6 @@ public class CategoriesMenu extends MenuBase {
 	private boolean lockOption 				= false;
 	private boolean unlockOption 			= false;
 	private boolean addPropertyGroupOption  = false;
-	private boolean mediaPlayerOption		= false;
 	private boolean imageViewerOption		= false;
 	private boolean goOption				= false;
 	
@@ -66,7 +65,6 @@ public class CategoriesMenu extends MenuBase {
 	private MenuItem download;
 	private MenuItem lock;
 	private MenuItem unlock;
-	private MenuItem mediaPlayer;
 	private MenuItem imageViewer;
 	private MenuItem go;
 	
@@ -102,9 +100,6 @@ public class CategoriesMenu extends MenuBase {
 		rename = new MenuItem(Util.menuHTML("img/icon/actions/rename.gif", Main.i18n("filebrowser.menu.rename")), true, renameFile);
 		rename.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(rename);
-		mediaPlayer = new MenuItem(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")), true, mediaPlayerFile);
-		mediaPlayer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(mediaPlayer);
 		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
 		imageViewer.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(imageViewer);
@@ -207,16 +202,6 @@ public class CategoriesMenu extends MenuBase {
 			}
 		}
 	};
-
-	// Command menu to download file
-	Command mediaPlayerFile = new Command() {
-		public void execute() {		
-			if (mediaPlayerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.mediaPlayerDocument();
-				hide();
-			}
-		}
-	};
 	
 	// Command menu to download file
 	Command imageViewerFile = new Command() {
@@ -256,7 +241,6 @@ public class CategoriesMenu extends MenuBase {
 		lock.setHTML(Util.menuHTML("img/icon/actions/lock.gif", Main.i18n("filebrowser.menu.lock")));
 		unlock.setHTML(Util.menuHTML("img/icon/actions/unlock.gif", Main.i18n("filebrowser.menu.unlock")));
 		download.setHTML(Util.menuHTML("img/icon/actions/download.gif", Main.i18n("filebrowser.menu.download")));
-		mediaPlayer.setHTML(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")));
 		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 		go.setHTML(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")));
 	}
@@ -282,14 +266,6 @@ public class CategoriesMenu extends MenuBase {
 		cancelCheckoutOption 	= false;
 		unlockOption 		 	= false;	
 		goOption				= true;
-		
-		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("application/x-shockwave-flash") ||  
-				doc.getMimeType().equals("audio/mpeg") || doc.getMimeType().equals("image/gif") ||
-				doc.getMimeType().equals("image/jpeg") || doc.getMimeType().equals("image/png")) {
-			mediaPlayerOption = true;
-		} else {
-			mediaPlayerOption = false;
-		}
 		
 		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
 				doc.getMimeType().equals("image/png")) {
@@ -377,7 +353,6 @@ public class CategoriesMenu extends MenuBase {
 		lockOption 			 	= false;
 		unlockOption 		 	= false;
 		addPropertyGroupOption 	= false;
-		mediaPlayerOption		= false;
 		imageViewerOption		= false;
 		goOption				= false;
 	}
@@ -394,7 +369,6 @@ public class CategoriesMenu extends MenuBase {
 		if (cancelCheckoutOption){enable(cancelCheckout);} else {disable(cancelCheckout);}
 		if (lockOption){enable(lock);} else {disable(lock);}
 		if (unlockOption){enable(unlock);} else {disable(unlock);}
-		if (mediaPlayerOption){enable(mediaPlayer);} else {disable(mediaPlayer);}
 		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 		if (goOption){enable(go);} else {disable(go);}
 	}
@@ -409,7 +383,6 @@ public class CategoriesMenu extends MenuBase {
 		cancelCheckout.setVisible(option.cancelCheckoutOption);
 		lock.setVisible(option.isLockOption());
 		unlock.setVisible(option.isUnLockOption());
-		mediaPlayer.setVisible(option.isMediaPlayerOption());
 		imageViewer.setVisible(option.isImageViewerOption());
 		go.setVisible(option.isGotoFolderOption());
 	}

@@ -56,7 +56,6 @@ public class TaxonomyMenu extends MenuBase {
 	private boolean addBookmarkOption		= false;
 	private boolean setHomeOption			= false;
 	private boolean exportOption			= false;
-	private boolean mediaPlayerOption		= false;
 	private boolean imageViewerOption		= false;
 	
 	private MenuBar dirMenu;
@@ -73,7 +72,6 @@ public class TaxonomyMenu extends MenuBase {
 	private MenuItem bookmark;
 	private MenuItem home;
 	private MenuItem export;
-	private MenuItem mediaPlayer;
 	private MenuItem imageViewer;
 	
 	/**
@@ -123,9 +121,6 @@ public class TaxonomyMenu extends MenuBase {
 		export = new MenuItem(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")), true, exportToFile);
 		export.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(export);
-		mediaPlayer = new MenuItem(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")), true, mediaPlayerFile);
-		mediaPlayer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(mediaPlayer);
 		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
 		imageViewer.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(imageViewer);
@@ -284,16 +279,6 @@ public class TaxonomyMenu extends MenuBase {
 	};
 	
 	// Command menu to download file
-	Command mediaPlayerFile = new Command() {
-		public void execute() {		
-			if (mediaPlayerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.mediaPlayerDocument();
-				hide();
-			}
-		}
-	};
-	
-	// Command menu to download file
 	Command imageViewerFile = new Command() {
 		public void execute() {		
 			if (imageViewerOption) {
@@ -320,7 +305,6 @@ public class TaxonomyMenu extends MenuBase {
 		bookmark.setHTML(Util.menuHTML("img/icon/actions/add_bookmark.gif", Main.i18n("filebrowser.menu.add.bookmark")));
 		home.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("filebrowser.menu.set.home")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
-		mediaPlayer.setHTML(Util.menuHTML("img/icon/actions/media_preview.gif", Main.i18n("filebrowser.menu.play")));
 		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 	}
 	
@@ -341,7 +325,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= true;
 		copyOption 				= true;
 		exportOption			= true;
-		mediaPlayerOption		= false;
 		imageViewerOption		= false;
 		
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
@@ -372,15 +355,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= true;
 		copyOption 				= true;
 		exportOption			= false;
-		
-		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || 
-				doc.getMimeType().equals("application/x-shockwave-flash") ||  
-				doc.getMimeType().equals("audio/mpeg") || doc.getMimeType().equals("image/gif") ||
-				doc.getMimeType().equals("image/jpeg") || doc.getMimeType().equals("image/png")) {
-			mediaPlayerOption = true;
-		} else {
-			mediaPlayerOption = false;
-		}
 		
 		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
 				doc.getMimeType().equals("image/png")) {
@@ -466,7 +440,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= false;
 		copyOption 				= true;
 		exportOption			= false;
-		mediaPlayerOption 		= false;
 		imageViewerOption 		= false;
 		lockOption				= false;
 		checkoutOption 			= false;
@@ -506,7 +479,6 @@ public class TaxonomyMenu extends MenuBase {
 		addBookmarkOption		= false;
 		setHomeOption			= false;
 		exportOption			= false;
-		mediaPlayerOption		= false;
 		imageViewerOption		= false;
 	}
 	
@@ -527,7 +499,6 @@ public class TaxonomyMenu extends MenuBase {
 		if (addBookmarkOption){enable(bookmark);} else {disable(bookmark);}
 		if (setHomeOption){enable(home);} else {disable(home);}
 		if (exportOption){enable(export);} else {disable(export);}
-		if (mediaPlayerOption){enable(mediaPlayer);} else {disable(mediaPlayer);}
 		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 	}
 	
@@ -546,7 +517,6 @@ public class TaxonomyMenu extends MenuBase {
 		bookmark.setVisible(option.isAddBookmarkOption());
 		home.setVisible(option.isSetHomeOption());
 		export.setVisible(option.isExportOption());
-		mediaPlayer.setVisible(option.isMediaPlayerOption());
 		imageViewer.setVisible(option.isImageViewerOption());
 	}
 	
