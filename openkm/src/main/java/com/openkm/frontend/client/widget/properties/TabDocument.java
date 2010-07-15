@@ -28,6 +28,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Composite;
@@ -104,12 +106,18 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				int tabIndex = event.getSelectedItem().intValue();
+				final int tabIndex = event.getSelectedItem().intValue();
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupProperty(tabIndex));
 				selectedTab = tabIndex;
-				if (tabIndex == TAB_PREVIEW) {
-					preview.showEmbedSWF(doc.getUuid());
-				}
+				Timer previewTimer = new Timer() {
+					@Override
+					public void run() {
+						if (tabIndex == TAB_PREVIEW) {
+							previewDocument(false);
+						}
+					}
+				};
+				previewTimer.schedule(500);
 				fireEvent(HasDocumentEvent.TAB_CHANGED);
 			}
 		});
@@ -156,7 +164,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 
 		if (selectedTab == TAB_PREVIEW) {
-			preview.showEmbedSWF(doc.getUuid());
+			previewDocument(true);
 		}
 		
 		fireEvent(HasDocumentEvent.PANEL_RESIZED);
@@ -458,6 +466,21 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	
 	public void showPropertyGroups() {
 		propertyGroupsVisible = true;
+	}
+	
+	/**
+	 * previewDocument
+	 */
+	private void previewDocument(boolean refreshing) {
+		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || 
+				doc.getMimeType().equals("application/x-shockwave-flash") ||  
+				doc.getMimeType().equals("audio/mpeg")) {
+			if (!refreshing) {
+				preview.setMediaFile(Config.OKMDownloadServlet +"?uuid=" + URL.encodeComponent(getDocument().getUuid()), getDocument().getMimeType());
+			}
+		} else {
+			preview.showEmbedSWF(doc.getUuid());
+		}
 	}
 	
 	/**

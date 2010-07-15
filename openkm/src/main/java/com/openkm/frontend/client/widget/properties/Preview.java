@@ -41,9 +41,13 @@ public class Preview extends Composite {
 
 	private HorizontalPanel hPanel;
 	private HTML text;
+	private HTML space;
+	private HTML video;
 	private int width = 0;
 	private int height = 0;
 	private boolean previewAvailable = false;
+	String mediaUrl = "";
+	private String mediaProvider = "";
 	
 	/**
 	 * Preview
@@ -51,10 +55,16 @@ public class Preview extends Composite {
 	public Preview() {
 		hPanel = new HorizontalPanel();
 		text= new HTML("<div id=\"pdfviewercontainer\"></div>\n");
+		space = new HTML("");
+		video = new HTML("<div id=\"mediaplayercontainer\"></div>\n");
 		hPanel.add(text);
+		hPanel.add(space);
+		hPanel.add(video);
 		hPanel.setCellHorizontalAlignment(text, HasAlignment.ALIGN_CENTER);
 		hPanel.setCellVerticalAlignment(text, HasAlignment.ALIGN_MIDDLE);
-		
+		hPanel.setCellHorizontalAlignment(video, HasAlignment.ALIGN_CENTER);
+		hPanel.setCellVerticalAlignment(video, HasAlignment.ALIGN_MIDDLE);
+		hPanel.setCellHeight(space, "10");
 		initWidget(hPanel);
 	}
 	
@@ -68,6 +78,9 @@ public class Preview extends Composite {
 	}
 	
 	public void showEmbedSWF(String Uuid) {
+		text.setVisible(true);
+		space.setVisible(false);
+		video.setVisible(false);
 		if (previewAvailable) {
 			String url = Config.OKMDownloadServlet +"?toSwf&inline&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
@@ -75,6 +88,41 @@ public class Preview extends Composite {
 		} else {
 			text.setHTML("<div id=\"pdfviewercontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n"); // needed for rewriting purpose
 		}
+	}
+	
+	/**
+	 * Set the media file to reproduce
+	 * 
+	 * @param mediaUrl The media file url
+	 */
+	public void setMediaFile(String mediaUrl, String mimeType) {
+		text.setVisible(false);
+		space.setVisible(true);
+		video.setVisible(true);
+		this.mediaUrl = mediaUrl;
+		Util.removeMediaPlayer();
+		video.setHTML("<div id=\"mediaplayercontainer\"></div>\n");
+				
+		if (mimeType.equals("audio/mpeg")) {
+			mediaProvider = "sound";
+		} else if (mimeType.equals("video/x-flv") || mimeType.equals("video/mp4")) {
+			mediaProvider = "video";
+		} 
+		
+		// Size ratio
+		int width= 400;
+		int height = 280;
+		
+		// Controls size square ( adapts )
+		if (this.width>1.4*this.height) {
+			height = this.height;
+			width = new Double(1.4*this.height).intValue();
+		} else {
+			width = this.width;
+			height = new Double(this.width/1.4).intValue();
+		}
+		
+		Util.createMediaPlayer(mediaUrl, mediaProvider, ""+(width-10), ""+(height-10));
 	}
 	
 	/**
