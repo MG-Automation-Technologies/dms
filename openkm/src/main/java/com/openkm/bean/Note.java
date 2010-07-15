@@ -37,6 +37,7 @@ public class Note implements Serializable {
 	private Calendar date;
 	private String user;
 	private String text;
+	private String path;
 
 	public Calendar getDate() {
 		return date;
@@ -61,6 +62,14 @@ public class Note implements Serializable {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -68,6 +77,7 @@ public class Note implements Serializable {
 		sb.append("date="); sb.append(date==null?null:date.getTime());
 		sb.append(", user="); sb.append(user);
 		sb.append(", text="); sb.append(text);
+		sb.append(", path="); sb.append(path);
 		sb.append("}");
 		return sb.toString();
 	}

@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
+import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -130,6 +131,34 @@ public class OKMDocument implements DocumentModule {
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.addNote(docPath, text);
 		log.debug("addNote: void");
+	}
+	
+	@Override
+	public Note getNote(String notePath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("addNote({})", notePath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		Note ret = dm.getNote(notePath);
+		log.debug("addNote: {}", ret);
+		return ret;
+	}
+
+	@Override
+	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeNote({})", notePath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.removeNote(notePath);
+		log.debug("removeNote: void");
+	}
+
+	@Override
+	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setNote({}, {})", notePath, text);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.setNote(notePath, text);
+		log.debug("setNote: void");
 	}
 	
 	@Override
