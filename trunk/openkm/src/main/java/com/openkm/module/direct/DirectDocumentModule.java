@@ -352,10 +352,10 @@ public class DirectDocumentModule implements DocumentModule {
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
 			doc.setPath(parent+"/"+name);
-
+			
 			// Check file restrictions
 			String mimeType = Config.mimeTypes.getContentType(name.toLowerCase());
-
+			
 			if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
 				throw new UnsupportedMimeTypeException(mimeType);
 			}
@@ -406,7 +406,7 @@ public class DirectDocumentModule implements DocumentModule {
 		        	} else {
 		        		keywords.add(term.getText().replace(" ", "_")); // Replacing spaces to "_" and adding at ends space for other word
 		        	}
-		        }        
+		        }
 	        }
 	        // Ends KEA
 	        
@@ -652,7 +652,7 @@ public class DirectDocumentModule implements DocumentModule {
 			int read;
 			while ((read = is.read(buff)) != -1) {
 				fosJcr.write(buff, 0, read);
-				fosAvr.write(buff, 0, read);
+				if (!Config.SYSTEM_ANTIVIR.equals("")) fosAvr.write(buff, 0, read);
 			}
 			fosJcr.flush();
 			fosJcr.close();
@@ -788,8 +788,7 @@ public class DirectDocumentModule implements DocumentModule {
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
 			parentNode = noteNode.getParent();
 			
-			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString()) ||
-					session.getUserID().equals(Config.ADMIN_USER)) {
+			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
 				noteNode.remove();
 				parentNode.save();
 			} else {
@@ -883,8 +882,7 @@ public class DirectDocumentModule implements DocumentModule {
 			session = JCRUtils.getSession();
 			noteNode = session.getRootNode().getNode(notePath.substring(1));
 			
-			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString()) ||
-					session.getUserID().equals(Config.ADMIN_USER)) {
+			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
 				noteNode.setProperty(Note.TEXT, text);
 				noteNode.save();
 			} else {
