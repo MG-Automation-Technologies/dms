@@ -23,9 +23,7 @@
 package com.openkm.extension.frontend.client;
 
 import com.google.gwt.user.client.Window;
-import com.openkm.frontend.client.extension.event.HasNavigatorEvent.NavigatorEventConstant;
 import com.openkm.frontend.client.extension.event.HasWorkspaceEvent.WorkspaceEventConstant;
-import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtension;
 
 /**
