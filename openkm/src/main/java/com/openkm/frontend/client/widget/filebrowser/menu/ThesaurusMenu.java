@@ -53,7 +53,6 @@ public class ThesaurusMenu extends MenuBase {
 	private boolean lockOption 				= false;
 	private boolean unlockOption 			= false;
 	private boolean addPropertyGroupOption  = false;
-	private boolean imageViewerOption		= false;
 	private boolean goOption				= false;
 	
 	private MenuBar dirMenu;
@@ -65,7 +64,6 @@ public class ThesaurusMenu extends MenuBase {
 	private MenuItem download;
 	private MenuItem lock;
 	private MenuItem unlock;
-	private MenuItem imageViewer;
 	private MenuItem go;
 	
 	/**
@@ -100,9 +98,6 @@ public class ThesaurusMenu extends MenuBase {
 		rename = new MenuItem(Util.menuHTML("img/icon/actions/rename.gif", Main.i18n("filebrowser.menu.rename")), true, renameFile);
 		rename.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(rename);
-		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
-		imageViewer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(imageViewer);
 		go = new MenuItem(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")), true, goDirectory);
 		go.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(go);
@@ -203,16 +198,6 @@ public class ThesaurusMenu extends MenuBase {
 		}
 	};
 	
-	// Command menu to download file
-	Command imageViewerFile = new Command() {
-		public void execute() {		
-			if (imageViewerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
-				hide();
-			}
-		}
-	};
-	
 	// Command menu to go directory file
 	Command goDirectory = new Command() {
 		public void execute() {
@@ -241,7 +226,6 @@ public class ThesaurusMenu extends MenuBase {
 		lock.setHTML(Util.menuHTML("img/icon/actions/lock.gif", Main.i18n("filebrowser.menu.lock")));
 		unlock.setHTML(Util.menuHTML("img/icon/actions/unlock.gif", Main.i18n("filebrowser.menu.unlock")));
 		download.setHTML(Util.menuHTML("img/icon/actions/download.gif", Main.i18n("filebrowser.menu.download")));
-		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 		go.setHTML(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")));
 	}
 	
@@ -266,13 +250,6 @@ public class ThesaurusMenu extends MenuBase {
 		cancelCheckoutOption 	= false;
 		unlockOption 		 	= false;	
 		goOption				= true;
-		
-		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
-				doc.getMimeType().equals("image/png")) {
-			imageViewerOption = true;
-		} else {
-			imageViewerOption = false;
-		}
 		
 		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			lockOption				= true;
@@ -353,7 +330,6 @@ public class ThesaurusMenu extends MenuBase {
 		lockOption 			 	= false;
 		unlockOption 		 	= false;
 		addPropertyGroupOption 	= false;
-		imageViewerOption		= false;
 		goOption				= false;
 	}
 	
@@ -369,7 +345,6 @@ public class ThesaurusMenu extends MenuBase {
 		if (cancelCheckoutOption){enable(cancelCheckout);} else {disable(cancelCheckout);}
 		if (lockOption){enable(lock);} else {disable(lock);}
 		if (unlockOption){enable(unlock);} else {disable(unlock);}
-		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 		if (goOption){enable(go);} else {disable(go);}
 	}
 	
@@ -383,7 +358,6 @@ public class ThesaurusMenu extends MenuBase {
 		cancelCheckout.setVisible(option.isCancelCheckoutOption());
 		lock.setVisible(option.isLockOption());
 		unlock.setVisible(option.isUnLockOption());
-		imageViewer.setVisible(option.isImageViewerOption());
 		go.setVisible(option.isGotoFolderOption());
 	}
 	

@@ -24,7 +24,6 @@ package com.openkm.frontend.client.widget.filebrowser.menu;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTAvailableOption;
 import com.openkm.frontend.client.bean.GWTDocument;
@@ -53,7 +52,6 @@ public class CategoriesMenu extends MenuBase {
 	private boolean lockOption 				= false;
 	private boolean unlockOption 			= false;
 	private boolean addPropertyGroupOption  = false;
-	private boolean imageViewerOption		= false;
 	private boolean goOption				= false;
 	
 	private MenuBar dirMenu;
@@ -65,7 +63,6 @@ public class CategoriesMenu extends MenuBase {
 	private MenuItem download;
 	private MenuItem lock;
 	private MenuItem unlock;
-	private MenuItem imageViewer;
 	private MenuItem go;
 	
 	/**
@@ -100,9 +97,6 @@ public class CategoriesMenu extends MenuBase {
 		rename = new MenuItem(Util.menuHTML("img/icon/actions/rename.gif", Main.i18n("filebrowser.menu.rename")), true, renameFile);
 		rename.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(rename);
-		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
-		imageViewer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(imageViewer);
 		go = new MenuItem(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")), true, goDirectory);
 		go.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(go);
@@ -203,16 +197,6 @@ public class CategoriesMenu extends MenuBase {
 		}
 	};
 	
-	// Command menu to download file
-	Command imageViewerFile = new Command() {
-		public void execute() {		
-			if (imageViewerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
-				hide();
-			}
-		}
-	};
-	
 	// Command menu to go directory file
 	Command goDirectory = new Command() {
 		public void execute() {
@@ -241,7 +225,6 @@ public class CategoriesMenu extends MenuBase {
 		lock.setHTML(Util.menuHTML("img/icon/actions/lock.gif", Main.i18n("filebrowser.menu.lock")));
 		unlock.setHTML(Util.menuHTML("img/icon/actions/unlock.gif", Main.i18n("filebrowser.menu.unlock")));
 		download.setHTML(Util.menuHTML("img/icon/actions/download.gif", Main.i18n("filebrowser.menu.download")));
-		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 		go.setHTML(Util.menuHTML("img/icon/actions/goto_folder.gif", Main.i18n("search.result.menu.go.folder")));
 	}
 	
@@ -266,13 +249,6 @@ public class CategoriesMenu extends MenuBase {
 		cancelCheckoutOption 	= false;
 		unlockOption 		 	= false;	
 		goOption				= true;
-		
-		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
-				doc.getMimeType().equals("image/png")) {
-			imageViewerOption = true;
-		} else {
-			imageViewerOption = false;
-		}
 		
 		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			lockOption				= true;
@@ -353,7 +329,6 @@ public class CategoriesMenu extends MenuBase {
 		lockOption 			 	= false;
 		unlockOption 		 	= false;
 		addPropertyGroupOption 	= false;
-		imageViewerOption		= false;
 		goOption				= false;
 	}
 	
@@ -369,7 +344,6 @@ public class CategoriesMenu extends MenuBase {
 		if (cancelCheckoutOption){enable(cancelCheckout);} else {disable(cancelCheckout);}
 		if (lockOption){enable(lock);} else {disable(lock);}
 		if (unlockOption){enable(unlock);} else {disable(unlock);}
-		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 		if (goOption){enable(go);} else {disable(go);}
 	}
 	
@@ -383,7 +357,6 @@ public class CategoriesMenu extends MenuBase {
 		cancelCheckout.setVisible(option.cancelCheckoutOption);
 		lock.setVisible(option.isLockOption());
 		unlock.setVisible(option.isUnLockOption());
-		imageViewer.setVisible(option.isImageViewerOption());
 		go.setVisible(option.isGotoFolderOption());
 	}
 	

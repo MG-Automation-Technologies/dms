@@ -57,7 +57,6 @@ import com.openkm.frontend.client.widget.Dragable;
 import com.openkm.frontend.client.widget.ErrorPopup;
 import com.openkm.frontend.client.widget.ExternalURLPopup;
 import com.openkm.frontend.client.widget.GroupPopup;
-import com.openkm.frontend.client.widget.ImageViewerPopup;
 import com.openkm.frontend.client.widget.LogoutPopup;
 import com.openkm.frontend.client.widget.MsgPopup;
 import com.openkm.frontend.client.widget.UserPopup;
@@ -108,7 +107,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	public GroupPopup groupPopup;
 	public WorkflowPopup workflowPopup;
 	public NotifyPopup notifyPopup;
-	public ImageViewerPopup imageViewerPopup;
 	public DebugConsolePopup debugConsolePopup;
 	public FindFolderSelectPopup findFolderSelectPopup;
 	public WizardPopup wizardPopup;
@@ -259,11 +257,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		notifyPopup.setWidth("300px");
 		notifyPopup.setHeight("100px");
 		notifyPopup.setStyleName("okm-Popup");
-		imageViewerPopup = new ImageViewerPopup();
-		imageViewerPopup.setWidth("400px");
-		imageViewerPopup.setHeight("200px");
-		imageViewerPopup.setStyleName("okm-Popup");
-		imageViewerPopup.addStyleName("okm-DisableSelect");
 		debugConsolePopup = new DebugConsolePopup();
 		debugConsolePopup.setWidth("300px");
 		debugConsolePopup.setHeight("100px");
@@ -346,7 +339,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		groupPopup.langRefresh();
 		workflowPopup.langRefresh();
 		notifyPopup.langRefresh();
-		imageViewerPopup.langRefresh();
 		debugConsolePopup.langRefresh();
 		findFolderSelectPopup.langRefresh();
 		wizardPopup.langRefresh();
