@@ -56,7 +56,6 @@ public class TaxonomyMenu extends MenuBase {
 	private boolean addBookmarkOption		= false;
 	private boolean setHomeOption			= false;
 	private boolean exportOption			= false;
-	private boolean imageViewerOption		= false;
 	
 	private MenuBar dirMenu;
 	private MenuItem checkout;
@@ -72,7 +71,6 @@ public class TaxonomyMenu extends MenuBase {
 	private MenuItem bookmark;
 	private MenuItem home;
 	private MenuItem export;
-	private MenuItem imageViewer;
 	
 	/**
 	 * Browser menu
@@ -121,9 +119,6 @@ public class TaxonomyMenu extends MenuBase {
 		export = new MenuItem(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")), true, exportToFile);
 		export.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(export);
-		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
-		imageViewer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(imageViewer);
 		
 		dirMenu.setStyleName("okm-MenuBar");
 		initWidget(dirMenu);
@@ -278,16 +273,6 @@ public class TaxonomyMenu extends MenuBase {
 		}
 	};
 	
-	// Command menu to download file
-	Command imageViewerFile = new Command() {
-		public void execute() {		
-			if (imageViewerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
-				hide();
-			}
-		}
-	};
-	
 	/**
 	 *  Refresh language values
 	 */
@@ -305,7 +290,6 @@ public class TaxonomyMenu extends MenuBase {
 		bookmark.setHTML(Util.menuHTML("img/icon/actions/add_bookmark.gif", Main.i18n("filebrowser.menu.add.bookmark")));
 		home.setHTML(Util.menuHTML("img/icon/actions/bookmark.gif", Main.i18n("filebrowser.menu.set.home")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
-		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 	}
 	
 	/**
@@ -325,7 +309,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= true;
 		copyOption 				= true;
 		exportOption			= true;
-		imageViewerOption		= false;
 		
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
 			 (folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE )  {
@@ -355,13 +338,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= true;
 		copyOption 				= true;
 		exportOption			= false;
-		
-		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
-				doc.getMimeType().equals("image/png")) {
-			imageViewerOption = true;
-		} else {
-			imageViewerOption = false;
-		}
 		
 		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			lockOption				= true;
@@ -440,7 +416,6 @@ public class TaxonomyMenu extends MenuBase {
 		setHomeOption			= false;
 		copyOption 				= true;
 		exportOption			= false;
-		imageViewerOption 		= false;
 		lockOption				= false;
 		checkoutOption 			= false;
 		lockOption 				= false;
@@ -479,7 +454,6 @@ public class TaxonomyMenu extends MenuBase {
 		addBookmarkOption		= false;
 		setHomeOption			= false;
 		exportOption			= false;
-		imageViewerOption		= false;
 	}
 	
 	/**
@@ -499,7 +473,6 @@ public class TaxonomyMenu extends MenuBase {
 		if (addBookmarkOption){enable(bookmark);} else {disable(bookmark);}
 		if (setHomeOption){enable(home);} else {disable(home);}
 		if (exportOption){enable(export);} else {disable(export);}
-		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 	}
 	
 	@Override
@@ -517,7 +490,7 @@ public class TaxonomyMenu extends MenuBase {
 		bookmark.setVisible(option.isAddBookmarkOption());
 		home.setVisible(option.isSetHomeOption());
 		export.setVisible(option.isExportOption());
-		imageViewer.setVisible(option.isImageViewerOption());
+
 	}
 	
 	/**

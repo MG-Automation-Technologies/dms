@@ -29,7 +29,6 @@ import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.SelectionGrid;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -41,7 +40,6 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
-import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.panel.PanelDefinition;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.OriginPanel;
@@ -858,16 +856,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			Util.downloadFile(getDocument().getPath(), "toPdf");
 		}
 		Log.debug("downloadDocumentPdf: void");
-	}
-	
-	/**
-	 * Image viewer document
-	 */
-	public void imageViewerDocument() {
-		if (isDocumentSelected()) {
-			Main.get().imageViewerPopup.setImageFile(Config.OKMDownloadServlet +"?id=" + URL.encodeComponent(getDocument().getPath()));
-			Main.get().imageViewerPopup.center();
-		}
 	}
 	
 	/**

@@ -54,7 +54,6 @@ public class PersonalMenu extends MenuBase {
 	private boolean moveOption 			= false;
 	private boolean copyOption			= false;
 	private boolean exportOption		= false;
-	private boolean imageViewerOption	= false;
 	
 	private MenuBar dirMenu;
 	private MenuItem checkout;
@@ -68,7 +67,6 @@ public class PersonalMenu extends MenuBase {
 	private MenuItem move;
 	private MenuItem copy;
 	private MenuItem export;
-	private MenuItem imageViewer;
 	
 	/**
 	 * Browser menu
@@ -112,9 +110,6 @@ public class PersonalMenu extends MenuBase {
 		export.addStyleName("okm-MenuItem-strike");
 		dirMenu.addItem(export);
 		dirMenu.setStyleName("okm-MenuBar");
-		imageViewer = new MenuItem(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")), true, imageViewerFile);
-		imageViewer.addStyleName("okm-MenuItem-strike");
-		dirMenu.addItem(imageViewer);
 		
 		initWidget(dirMenu);
 	}
@@ -230,16 +225,6 @@ public class PersonalMenu extends MenuBase {
 			}
 		}
 	};
-	
-	// Command menu to download file
-	Command imageViewerFile = new Command() {
-		public void execute() {		
-			if (imageViewerOption) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.table.imageViewerDocument();
-				hide();
-			}
-		}
-	};
 
 	/**
 	 *  Refresh language values
@@ -256,7 +241,6 @@ public class PersonalMenu extends MenuBase {
 		move.setHTML(Util.menuHTML("img/icon/actions/move_document.gif", Main.i18n("filebrowser.menu.move")));
 		copy.setHTML(Util.menuHTML("img/icon/actions/copy.gif", Main.i18n("filebrowser.menu.copy")));
 		export.setHTML(Util.menuHTML("img/icon/actions/export.gif", Main.i18n("filebrowser.menu.export")));
-		imageViewer.setHTML(Util.menuHTML("img/icon/actions/image_viewer.gif", Main.i18n("filebrowser.menu.image.viewer")));
 	}
 	
 	/**
@@ -273,7 +257,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;
 		copyOption 				= true;
 		exportOption			= true;
-		imageViewerOption		= false;
 		
 		if ( (folder.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE && 
 			 (folderParent.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE )  {
@@ -301,13 +284,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;	
 		copyOption 				= true;
 		exportOption			= false;
-		
-		if (doc.getMimeType().equals("image/gif") || doc.getMimeType().equals("image/jpeg") ||
-				doc.getMimeType().equals("image/png")) {
-			imageViewerOption = true;
-		} else {
-			imageViewerOption = false;
-		}
 		
 		if ( (doc.getPermissions() & GWTPermission.WRITE) == GWTPermission.WRITE)  {
 			lockOption				= true;
@@ -378,7 +354,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;	
 		copyOption 				= true;
 		exportOption			= false;
-		imageViewerOption 		= false;
 		lockOption				= false;
 		checkoutOption 			= false;
 		renameOption 			= false;
@@ -411,7 +386,6 @@ public class PersonalMenu extends MenuBase {
 		unlockOption 		 	= false;
 		moveOption 			 	= false;
 		exportOption			= false;
-		imageViewerOption		= false;
 	}
 	
 	/**
@@ -429,7 +403,6 @@ public class PersonalMenu extends MenuBase {
 		if (moveOption){enable(move);} else {disable(move);}
 		if (copyOption){enable(copy);} else {disable(copy);}
 		if (exportOption){enable(export);} else {disable(export);}
-		if (imageViewerOption){enable(imageViewer);} else {disable(imageViewer);}
 	}
 	
 	@Override
@@ -445,7 +418,6 @@ public class PersonalMenu extends MenuBase {
 		move.setVisible(option.isMoveOption());
 		copy.setVisible(option.isCopyOption());
 		export.setVisible(option.isExportOption());
-		imageViewer.setVisible(option.isImageViewerOption());
 	}
 	
 	/**
