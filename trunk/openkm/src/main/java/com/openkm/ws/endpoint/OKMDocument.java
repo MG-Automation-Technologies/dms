@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -314,5 +315,44 @@ public class OKMDocument {
 		String path = dm.getPath(uuid);
 		log.debug("getPath: {}", path);
 		return path;
+	}
+	
+	@WebMethod
+	public void addNote(@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addNote({}, {})", docPath, text);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.addNote(docPath, text);
+		log.debug("addNote: void");
+	}
+	
+	@WebMethod
+	public Note getNote(@WebParam(name = "notePath") String notePath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addNote({})", notePath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		Note ret = dm.getNote(notePath);
+		log.debug("addNote: {}", ret);
+		return ret;
+	}
+
+	@WebMethod
+	public void removeNote(@WebParam(name = "notePath") String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeNote({})", notePath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.removeNote(notePath);
+		log.debug("removeNote: void");
+	}
+
+	@WebMethod
+	public void setNote(@WebParam(name = "notePath") String notePath,
+			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setNote({}, {})", notePath, text);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.setNote(notePath, text);
+		log.debug("setNote: void");
 	}
 }

@@ -225,6 +225,7 @@ public class DirectDocumentModule implements DocumentModule {
 			note.setDate(noteNode.getProperty(Note.DATE).getDate());
 			note.setUser(noteNode.getProperty(Note.USER).getString());
 			note.setText(noteNode.getProperty(Note.TEXT).getString());
+			note.setPath(noteNode.getPath());
 			notes.add(note);
 		}
 
@@ -769,6 +770,142 @@ public class DirectDocumentModule implements DocumentModule {
 		note.setProperty(Note.TEXT, text);
 		notesNode.save();
 		log.debug("addInternalNote: void");
+	}
+	
+	@Override
+	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.info("deleteNote({})", notePath);
+		Session session = null;
+		Node parentNode = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		try {
+			session = JCRUtils.getSession();
+			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
+			parentNode = noteNode.getParent();
+			noteNode.remove();
+			parentNode.save();
+			
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "REMOVE_NOTE", null);
+
+			// Activity log
+			UserActivity.log(session.getUserID(), "REMOVE_DOCUMENT_NOTE", notePath, null);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new LockException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(parentNode);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		log.debug("deleteNote: void");
+	}
+	
+	@Override
+	public Note getNote(String notePath) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.info("getNote({})", notePath);
+		Session session = null;
+		Note note = new Note();
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		try {
+			session = JCRUtils.getSession();
+			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
+			note.setDate(noteNode.getProperty(Note.DATE).getDate());
+			note.setUser(noteNode.getProperty(Note.USER).getString());
+			note.setText(noteNode.getProperty(Note.TEXT).getString());
+			note.setPath(noteNode.getPath());
+			
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "GET_NOTE", null);
+
+			// Activity log
+			UserActivity.log(session.getUserID(), "GET_DOCUMENT_NOTE", notePath, null);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
+			throw new LockException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		log.debug("getNote: {}", note);
+		return note;
+	}
+
+	@Override
+	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.info("setNote({}, {})", notePath, text);
+		Session session = null;
+		Node noteNode = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+		
+		try {
+			session = JCRUtils.getSession();
+			noteNode = session.getRootNode().getNode(notePath.substring(1));
+			noteNode.setProperty(Note.USER, session.getUserID());
+			noteNode.setProperty(Note.TEXT, text);
+			noteNode.save();
+			
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
+
+			// Activity log
+			UserActivity.log(session.getUserID(), "SET_DOCUMENT_NOTE", notePath, null);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(noteNode);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(noteNode);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(noteNode);
+			throw new LockException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			JCRUtils.discardsPendingChanges(noteNode);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			JCRUtils.logout(session);
+		}
+		
+		log.debug("setNote: void");
 	}
 
 	@Override

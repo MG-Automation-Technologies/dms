@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
+import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -185,6 +186,45 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any problem.
 	 */
 	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
+	
+	/**
+	 * Remove a note from a document
+	 * 
+	 * @param notePath The path that identifies an unique document.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't access this folder because of lack of permissions.
+	 * @throws RepositoryException If there is any problem.
+	 */
+	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
+	
+	/**
+	 * Get a note from a document
+	 * 
+	 * @param notePath The path that identifies an unique document.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't access this folder because of lack of permissions.
+	 * @throws RepositoryException If there is any problem.
+	 */
+	public Note getNote(String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
+
+	/**
+	 * Set a note from a document
+	 * 
+	 * @param notePath The path that identifies an unique document.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't access this folder because of lack of permissions.
+	 * @throws RepositoryException If there is any problem.
+	 */
+	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
