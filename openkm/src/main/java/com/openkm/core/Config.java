@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -590,23 +591,24 @@ public class Config {
 	/**
 	 * load mime types
 	 */
-	public static void loadMimeTypes() {
+	public static void loadMimeTypes(ServletContext sc) {
 		try {
 			List<MimeType> mimeTypeList = MimeTypeDAO.findAll();
 			Config.mimeTypes = new MimetypesFileTypeMap();
 			
 			if (mimeTypeList.isEmpty()) {
-				resetMimeTypes();
-			} else {
-				for (MimeType mt : mimeTypeList) {
-					if (mt.isActive()) {
-						String entry = mt.getName();
-						for (String ext : mt.getExtensions()) {
-							entry += " " + ext;
-						}
-						log.debug("loadMimeTypes => Add Entry: {}", entry);
-						Config.mimeTypes.addMimeTypes(entry);
+				resetMimeTypes(sc);
+				mimeTypeList = MimeTypeDAO.findAll();
+			}
+			
+			for (MimeType mt : mimeTypeList) {
+				if (mt.isActive()) {
+					String entry = mt.getName();
+					for (String ext : mt.getExtensions()) {
+						entry += " " + ext;
 					}
+					log.info("loadMimeTypes => Add Entry: {}", entry);
+					Config.mimeTypes.addMimeTypes(entry);
 				}
 			}
 		} catch (DatabaseException e) {
@@ -617,14 +619,14 @@ public class Config {
 	/**
 	 * Load default mime type definitions
 	 */
-	public static void resetMimeTypes() {
+	public static void resetMimeTypes(ServletContext sc) {
 		final String MIME_FILE = "/META-INF/mime.types";
 		
 		try {
 			log.info("** Reading MIME file **");
-			InputStream is = Config.class.getResourceAsStream(MIME_FILE);
+			InputStream is = sc.getResourceAsStream(MIME_FILE);
 			
-			if (is != null) { 
+			if (is != null) {
 				BufferedReader br = new BufferedReader(new InputStreamReader(is));		
 				String line;
 			
@@ -635,7 +637,7 @@ public class Config {
 						String[] data = line.split("\\s");
 						MimeType mt = new MimeType();
 						mt.setName(data[0]);
-						InputStream iis = Config.class.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
+						InputStream iis = sc.getResourceAsStream("/META-INF/mime/" + mt.getName() + ".gif");
 						mt.setImageContent(IOUtils.toByteArray(iis));
 						iis.close();
 						mt.setImageMime("image/gif");
@@ -645,7 +647,7 @@ public class Config {
 							mt.getExtensions().add(data[i]);
 						}
 						
-						log.info("*** Creating MIME type {} for {}", mt.getName(), mt.getExtensions());
+						log.debug("*** Creating MIME type {} for {}", mt.getName(), mt.getExtensions());
 						MimeTypeDAO.create(mt);
 					}
 				}
