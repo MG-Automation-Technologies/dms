@@ -7,7 +7,7 @@ public class StackTraceUtil {
 		
 		// Once you have the trace you can pick out information you need.
 		if (trace.length >= 2) {
-			return trace[1];
+			return trace[2];
 		}
 		
 		return null;
