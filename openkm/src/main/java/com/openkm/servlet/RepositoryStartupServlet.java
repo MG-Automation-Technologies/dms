@@ -139,7 +139,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Mime types
         log.info("*** Initializing MIME types... ***");
-        Config.loadMimeTypes();
+        Config.loadMimeTypes(getServletContext());
                 
         if (Config.UPDATE_INFO) {
         	 log.info("*** Activating update info ***");
