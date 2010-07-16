@@ -106,7 +106,7 @@ public class MimeTypeServlet extends BaseServlet {
 				sc.getRequestDispatcher("/admin/mime_edit.jsp").forward(request, response);
 			} else if (action.equals("reset")) {
 				MimeTypeDAO.deleteAll();
-				Config.resetMimeTypes();
+				Config.resetMimeTypes(getServletContext());
 				list(session, request, response);
 			} else {
 				list(session, request, response);
@@ -171,21 +171,21 @@ public class MimeTypeServlet extends BaseServlet {
 			
 				if (action.equals("create")) {
 					MimeTypeDAO.create(mt);
-					Config.loadMimeTypes();
+					Config.loadMimeTypes(getServletContext());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_CREATE", null, mt.toString());
 					list(session, request, response);
 				} else if (action.equals("edit")) {
 					MimeTypeDAO.update(mt);
-					Config.loadMimeTypes();
+					Config.loadMimeTypes(getServletContext());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_EDIT", Integer.toString(mt.getId()), mt.toString());
 					list(session, request, response);
 				} else if (action.equals("delete")) {
 					MimeTypeDAO.delete(mt.getId());
-					Config.loadMimeTypes();
+					Config.loadMimeTypes(getServletContext());
 					
 					// Activity log
 					UserActivity.log(session.getUserID(), "ADMIN_MIME_TYPE_DELETE", Integer.toString(mt.getId()), null);
