@@ -107,7 +107,9 @@ public class Preview extends Composite {
 			mediaProvider = "sound";
 		} else if (mimeType.equals("video/x-flv") || mimeType.equals("video/mp4")) {
 			mediaProvider = "video";
-		} 
+		} else if (mimeType.equals("application/x-shockwave-flash")) {
+			mediaProvider = "";
+		}
 		
 		// Size ratio
 		int width= 400;
