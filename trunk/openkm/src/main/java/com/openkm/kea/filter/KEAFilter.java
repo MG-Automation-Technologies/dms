@@ -776,6 +776,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	 * @exception Exception if the input instance was not of the correct 
 	 * format or if there was a problem with the filtering.
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean input(Instance instance) throws Exception {
 		if (getInputFormat() == null) {
 			throw new Exception("No input instance format defined");
@@ -1222,6 +1223,7 @@ public class KEAFilter extends Filter implements OptionHandler {
 	/**
 	 * Sets output format and converts pending input instances.
 	 */
+	@SuppressWarnings("unchecked")
 	private void convertPendingInstances() throws Exception {
 		
 		if (m_Debug) {
