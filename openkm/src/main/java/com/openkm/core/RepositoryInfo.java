@@ -40,9 +40,9 @@ public class RepositoryInfo extends TimerTask {
 		OKMStats okmStats = OKMStats.getInstance();
 		
 		try {
-			documentsByContext = okmStats.getDocumentsByContext();
-			foldersByContext = okmStats.getFoldersByContext();
-			documentsSizeByContext = okmStats.getDocumentsSizeByContext();
+			documentsByContext = okmStats.getDocumentsByContext(null);
+			foldersByContext = okmStats.getFoldersByContext(null);
+			documentsSizeByContext = okmStats.getDocumentsSizeByContext(null);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 		} catch (DatabaseException e) {
