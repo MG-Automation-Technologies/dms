@@ -48,38 +48,42 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@Override
-	public void addCategory(String nodePath, String category)	throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addCategory({})", nodePath);
+	public void addCategory(String token, String nodePath, String category)	throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addCategory(nodePath, category);
+		pm.addCategory(token, nodePath, category);
 		log.debug("addCategory: void");
 	}
 
 	@Override
-	public void removeCategory(String nodePath, String category) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeCategory({})", nodePath);
+	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeCategory(nodePath, category);
+		pm.removeCategory(token, nodePath, category);
 		log.debug("removeCategory: void");
 	}
 
 	@Override
-	public void addKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addKeyword({})", nodePath);
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addKeyword(nodePath, keyword);
+		pm.addKeyword(token, nodePath, keyword);
 		log.debug("addKeyword: void");
 	}
 
 	@Override
-	public void removeKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeKeyword({})", nodePath);
+	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("removeKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeKeyword(nodePath, keyword);
+		pm.removeKeyword(token, nodePath, keyword);
 		log.debug("removeKeyword: void");
 	}
 }

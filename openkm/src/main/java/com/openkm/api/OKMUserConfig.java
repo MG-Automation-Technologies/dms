@@ -46,19 +46,19 @@ public class OKMUserConfig implements UserConfigModule {
 	}
 	
 	@Override
-	public void setHome(String path) throws AccessDeniedException, RepositoryException,
+	public void setHome(String token, String path) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("setHome()");
+		log.debug("setHome({}, {})", token, path);
 		UserConfigModule ucm = ModuleManager.getUserConfigModule();
-		ucm.setHome(path);
+		ucm.setHome(token, path);
 		log.debug("setHome: void");
 	}
 
 	@Override
-	public UserConfig getConfig() throws RepositoryException, DatabaseException {
-		log.debug("getConfig()");
+	public UserConfig getConfig(String token) throws RepositoryException, DatabaseException {
+		log.debug("getConfig({})", token);
 		UserConfigModule ucm = ModuleManager.getUserConfigModule();
-		UserConfig userConfig= ucm.getConfig();
+		UserConfig userConfig= ucm.getConfig(token);
 		log.debug("getConfig: {}", userConfig);
 		return userConfig;
 	}

@@ -47,30 +47,30 @@ public class OKMScripting implements ScriptingModule {
 	}
 
 	@Override
-	public void setScript(String nodePath, String code) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("setScript({}, {})", nodePath, code);
+	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		ScriptingModule sm = ModuleManager.getScriptingModule();
-		sm.setScript(nodePath, code);
+		sm.setScript(token, nodePath, code);
 		log.debug("setScript: void");
 	}
 
 	@Override
-	public void removeScript(String nodePath) throws PathNotFoundException,	AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("removeScript({})", nodePath);
+	public void removeScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
-		sm.removeScript(nodePath);
+		sm.removeScript(token, nodePath);
 		log.debug("removeScript: void");
 	}
 
 	@Override
-	public String getScript(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("getScript({})", nodePath);
+	public String getScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("getScript({}, {})", token, nodePath);
 		ScriptingModule sm = ModuleManager.getScriptingModule();
-		String code = sm.getScript(nodePath);
-		log.debug("getScript: " + code);
+		String code = sm.getScript(token, nodePath);
+		log.debug("getScript: {}", code);
 		return code;
 	}
 }

@@ -61,18 +61,18 @@ public class OKMDocument implements DocumentModule {
 	}
 	
 	@Override
-	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException, 
+	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
 		log.debug("create({}, {})", doc, is);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Document newDocument = dm.create(doc, is);
+		Document newDocument = dm.create(token, doc, is);
 		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 	
-	public Document createSimple(String docPath, InputStream is) throws UnsupportedMimeTypeException, 
+	public Document createSimple(String token, String docPath, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
@@ -80,7 +80,7 @@ public class OKMDocument implements DocumentModule {
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = new Document();
 		doc.setPath(docPath);
-		Document newDocument = dm.create(doc, is);
+		Document newDocument = dm.create(token, doc, is);
 		log.debug("createSimple: {}", newDocument);
 		return newDocument;
 	}
@@ -250,11 +250,11 @@ public class OKMDocument implements DocumentModule {
 	}
 
 	@Override
-	public void lock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
+	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("lock({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.lock(docPath);
+		dm.lock(token, docPath);
 		log.debug("lock: void");
 	}
 
