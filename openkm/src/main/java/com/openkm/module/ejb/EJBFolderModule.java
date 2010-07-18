@@ -106,4 +106,11 @@ public class EJBFolderModule implements com.openkm.module.FolderModule {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
