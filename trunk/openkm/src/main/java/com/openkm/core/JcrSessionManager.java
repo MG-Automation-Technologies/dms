@@ -112,7 +112,6 @@ public class JcrSessionManager {
 		sessions.remove(token);
 	}
 		
-		
 	/**
 	 * Return all active tokens
 	 */
