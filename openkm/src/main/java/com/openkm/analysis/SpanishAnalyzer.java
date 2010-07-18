@@ -85,17 +85,20 @@ public class SpanishAnalyzer extends Analyzer {
     /** 
      * Contains words that should be indexed but not stemmed. 
      */  
-    private Set<Object> exclTable = new HashSet<Object>();  
+    @SuppressWarnings("unused")
+	private Set<Object> exclTable = new HashSet<Object>();  
       
     /** 
      * Builds an analyzer with the default stop words. 
      */  
-    public SpanishAnalyzer() {  
+    @SuppressWarnings("unchecked")
+	public SpanishAnalyzer() {  
         stopTable = StopFilter.makeStopSet(SPANISH_STOP_WORDS);  
     }  
   
     /** Builds an analyzer with the given stop words. */  
-    public SpanishAnalyzer(String[] stopWords) {  
+    @SuppressWarnings("unchecked")
+	public SpanishAnalyzer(String[] stopWords) {  
         stopTable = StopFilter.makeStopSet(stopWords);  
     }  
       
@@ -103,7 +106,8 @@ public class SpanishAnalyzer extends Analyzer {
      * Builds an analyzer with the given stop words from file. 
      * @throws IOException  
      */  
-    public SpanishAnalyzer(File stopWords) throws IOException {  
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public SpanishAnalyzer(File stopWords) throws IOException {  
         stopTable = new HashSet(WordlistLoader.getWordSet(stopWords));  
     }  
       
