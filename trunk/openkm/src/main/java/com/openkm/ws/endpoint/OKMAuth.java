@@ -58,27 +58,32 @@ public class OKMAuth {
 	private static Logger log = LoggerFactory.getLogger(OKMAuth.class);
 	
 	@WebMethod
-	public void login() throws RepositoryException, DatabaseException {
-		log.debug("login()");
+	public String login(@WebParam(name = "user") String user,
+			@WebParam(name = "password") String password) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("login({}, {})", user, password);
 		AuthModule am = ModuleManager.getAuthModule();
-		am.login();
-		log.debug("login: void");
+		String token = am.login(user, password);
+		log.debug("login: {}", token);
+		return token;
 	}
 
 	@WebMethod
-	public void logout() throws RepositoryException, DatabaseException {
-		log.debug("logout()");
+	public void logout(@WebParam(name = "token") String token) throws RepositoryException, 
+			DatabaseException {
+		log.debug("logout({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
-		am.logout();
+		am.logout(token);
 		log.debug("logout: void");
 	}
 
 	@WebMethod
-	public BytePair[] getGrantedRoles(@WebParam(name = "nodePath") String nodePath) throws 
+	public BytePair[] getGrantedRoles(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath) throws 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getGrantedRoles({})", nodePath);
+		log.debug("getGrantedRoles({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		Map<String, Byte> hm = am.getGrantedRoles(nodePath);
+		Map<String, Byte> hm = am.getGrantedRoles(token, nodePath);
 		Set<String> keys = hm.keySet();
 		BytePair[] result = new BytePair[keys.size()];
 		int i=0;
@@ -96,11 +101,12 @@ public class OKMAuth {
 	}
 
 	@WebMethod
-	public BytePair[] getGrantedUsers(@WebParam(name = "nodePath") String nodePath) throws
+	public BytePair[] getGrantedUsers(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath) throws
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getGrantedUsers({})", nodePath);
+		log.debug("getGrantedUsers({}, {})", token, nodePath);
 		AuthModule am = ModuleManager.getAuthModule();
-		Map<String, Byte> hm = am.getGrantedUsers(nodePath);
+		Map<String, Byte> hm = am.getGrantedUsers(token, nodePath);
 		Set<String> keys = hm.keySet();
 		BytePair[] result = new BytePair[keys.size()];
 		int i=0;
@@ -118,70 +124,74 @@ public class OKMAuth {
 	}
 
 	@WebMethod
-	public String[] getRoles() throws PrincipalAdapterException {
-		log.debug("getRoles()");
+	public String[] getRoles(@WebParam(name = "token") String token) throws PrincipalAdapterException {
+		log.debug("getRoles({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> col = am.getRoles();
+		List<String> col = am.getRoles(token);
 		String[] result = (String[]) col.toArray(new String[col.size()]);
 		log.debug("getRoles: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public String[] getUsers() throws PrincipalAdapterException {
-		log.debug("getUsers()");
+	public String[] getUsers(@WebParam(name = "token") String token) throws PrincipalAdapterException {
+		log.debug("getUsers({})", token);
 		AuthModule am = ModuleManager.getAuthModule();
-		List<String> col = am.getUsers();
+		List<String> col = am.getUsers(token);
 		String[] result = (String[]) col.toArray(new String[col.size()]);
 		log.debug("getUsers: {]", result);
 		return result;
 	}
 
 	@WebMethod
-	public void grantRole(@WebParam(name = "nodePath") String nodePath, 
+	public void grantRole(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath, 
 			@WebParam(name = "role") String role, 
 			@WebParam(name = "permissions") int permissions, 
 			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("grantRole({}, {}, {}, {})", new Object[] { nodePath, role, permissions, recursive });
+		log.debug("grantRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, role, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.grantRole(nodePath, role, permissions, recursive); 
+		am.grantRole(token, nodePath, role, permissions, recursive); 
 		log.debug("grantRole: void");
 	}
 
 	@WebMethod
-	public void grantUser(@WebParam(name = "nodePath") String nodePath,
+	public void grantUser(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "user") String user,
 			@WebParam(name = "permissions") int permissions,
 			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("grantUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
+		log.debug("grantUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.grantUser(nodePath, user, permissions, recursive); 
+		am.grantUser(token, nodePath, user, permissions, recursive); 
 		log.debug("grantUser: void");
 	}
 
 	@WebMethod
-	public void revokeRole(@WebParam(name = "nodePath") String nodePath, 
+	public void revokeRole(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath, 
 			@WebParam(name = "user") String user,
 			@WebParam(name = "permissions") int permissions,
 			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("revokeRole({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
+		log.debug("revokeRole({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeRole(nodePath, user, permissions, recursive); 
+		am.revokeRole(token, nodePath, user, permissions, recursive); 
 		log.debug("revokeRole: void");
 	}
 
 	@WebMethod
-	public void revokeUser(@WebParam(name = "nodePath") String nodePath,
+	public void revokeUser(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "user") String user,
 			@WebParam(name = "permissions") int permissions,
 			@WebParam(name = "recursive") boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("revokeUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
+		log.debug("revokeUser({}, {}, {}, {}, {})", new Object[] { token, nodePath, user, permissions, recursive });
 		AuthModule am = ModuleManager.getAuthModule();
-		am.revokeUser(nodePath, user, permissions, recursive); 
+		am.revokeUser(token, nodePath, user, permissions, recursive); 
 		log.debug("revokeUser: void");
 	}
 }

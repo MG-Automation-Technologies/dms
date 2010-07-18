@@ -62,67 +62,72 @@ public class OKMSearch {
 	private static Logger log = LoggerFactory.getLogger(OKMSearch.class);
 	
 	@WebMethod
-	public QueryResult[] findByContent(@WebParam(name = "content") String content) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
-		log.debug("findByContent({})", content);
+	public QueryResult[] findByContent(@WebParam(name = "token") String token,
+			@WebParam(name = "content") String content) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
+		log.debug("findByContent({}, {})", token, content);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByContent(content);
+		List<QueryResult> col = sm.findByContent(token, content);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("findByContent: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public QueryResult[] findByName(@WebParam(name = "name") String name) throws IOException, 
-			ParseException, RepositoryException, DatabaseException {
-		log.debug("findByName({})", name);
+	public QueryResult[] findByName(@WebParam(name = "token") String token,
+			@WebParam(name = "name") String name) throws IOException, ParseException, RepositoryException,
+			DatabaseException {
+		log.debug("findByName({}, {})", token, name);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByName(name);
+		List<QueryResult> col = sm.findByName(token, name);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("findByName: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public QueryResult[] findByKeywords(@WebParam(name = "keywords") HashSet<String> keywords) throws
+	public QueryResult[] findByKeywords(@WebParam(name = "token") String token,
+			@WebParam(name = "keywords") HashSet<String> keywords) throws
 			IOException, ParseException, RepositoryException, DatabaseException {
-		log.debug("findByKeywords({})", keywords);
+		log.debug("findByKeywords({}, {})", token, keywords);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByKeywords(keywords);
+		List<QueryResult> col = sm.findByKeywords(token, keywords);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("findByKeywords: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public QueryResult[] findByStatement(@WebParam(name = "statement") String statement,
+	public QueryResult[] findByStatement(@WebParam(name = "token") String token,
+			@WebParam(name = "statement") String statement,
 			@WebParam(name = "type") String type) throws RepositoryException, DatabaseException {
-		log.debug("findByStatement({})", statement);
+		log.debug("findByStatement({}, {}, {})", new Object[] { token, statement, type });
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.findByStatement(statement, type);
+		List<QueryResult> col = sm.findByStatement(token, statement, type);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("findByStatement: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public QueryResult[] find(@WebParam(name = "params") QueryParams params) throws IOException, 
+	public QueryResult[] find(@WebParam(name = "token") String token,
+			@WebParam(name = "params") QueryParams params) throws IOException, 
 			ParseException, RepositoryException, DatabaseException {
-		log.debug("find({})", params);
+		log.debug("find({}, {})", token, params);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<QueryResult> col = sm.find(params);
+		List<QueryResult> col = sm.find(token, params);
 		QueryResult[] result = (QueryResult[]) col.toArray(new QueryResult[col.size()]);
 		log.debug("find: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public IntegerPair[] getKeywordMap(@WebParam(name = "filter") String[] filter) throws 
-			RepositoryException, DatabaseException {
-		log.debug("getKeywordMap()");
+	public IntegerPair[] getKeywordMap(@WebParam(name = "token") String token,
+			@WebParam(name = "filter") String[] filter) throws RepositoryException, DatabaseException {
+		log.debug("getKeywordMap({}, {})", token, filter);
 		SearchModule sm = ModuleManager.getSearchModule();
 		List<String> alFilter = Arrays.asList(filter);
-		Map<String, Integer> map = sm.getKeywordMap(alFilter);
+		Map<String, Integer> map = sm.getKeywordMap(token, alFilter);
 		Set<String> keys = map.keySet();
 		IntegerPair[] result = new IntegerPair[keys.size()];
 		int i=0;
@@ -140,11 +145,11 @@ public class OKMSearch {
 	}
 	
 	@WebMethod
-	public Document[] getCategorizedDocuments(@WebParam(name = "categoryId") String categoryId) throws 
-			RepositoryException, DatabaseException {
-		log.debug("getCategorizedDocuments()");
+	public Document[] getCategorizedDocuments(@WebParam(name = "token") String token,
+			@WebParam(name = "categoryId") String categoryId) throws RepositoryException, DatabaseException {
+		log.debug("getCategorizedDocuments({}, {})", token, categoryId);
 		SearchModule sm = ModuleManager.getSearchModule();
-		List<Document> col = sm.getCategorizedDocuments(categoryId);
+		List<Document> col = sm.getCategorizedDocuments(token, categoryId);
 		Document[] result = (Document[]) col.toArray(new Document[col.size()]);
 		log.debug("getCategorizedDocuments: {}", result);
 		return result;
