@@ -25,10 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Folder;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.core.AccessDeniedException;
 import com.openkm.module.ModuleManager;
 import com.openkm.module.RepositoryModule;
 
@@ -43,135 +43,147 @@ public class OKMRepository implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getRootFolder()");
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getRootFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder rootFolder = rm.getRootFolder();
+		Folder rootFolder = rm.getRootFolder(token);
 		log.debug("getRootFolder: {}", rootFolder);
 		return rootFolder;
 	}
 
 	@Override
-	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTrashFolder()");
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTrashFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder trashFolder = rm.getTrashFolder();
+		Folder trashFolder = rm.getTrashFolder(token);
 		log.debug("getTrashFolder: {}", trashFolder);
 		return trashFolder;
 	}
 
 	@Override
-	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTrashFolderBase()");
+	public Folder getTrashFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTrashFolderBase({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder trashFolder = rm.getTrashFolderBase();
+		Folder trashFolder = rm.getTrashFolderBase(token);
 		log.debug("getTrashFolderBase: {}", trashFolder);
 		return trashFolder;
 	}
 	
 	@Override
-	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTemplatesFolder()");
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTemplatesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder templatesFolder = rm.getTemplatesFolder();
+		Folder templatesFolder = rm.getTemplatesFolder(token);
 		log.debug("getTemplatesFolder: {}", templatesFolder);
 		return templatesFolder;
 	}
 
 	@Override
-	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPersonalFolder()");
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPersonalFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder personalFolder = rm.getPersonalFolder();
+		Folder personalFolder = rm.getPersonalFolder(token);
 		log.debug("getPersonalFolder: {}", personalFolder);
 		return personalFolder;
 	}
 	
 	@Override
-	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPersonalFolderBase()");
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPersonalFolderBase({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder personalFolder = rm.getPersonalFolderBase();
+		Folder personalFolder = rm.getPersonalFolderBase(token);
 		log.debug("getPersonalFolderBase: {}", personalFolder);
 		return personalFolder;
 	}
 
 	@Override
-	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getMailFolder()");
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getMailFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder mailFolder = rm.getMailFolder();
+		Folder mailFolder = rm.getMailFolder(token);
 		log.debug("getMailFolder: {}", mailFolder);
 		return mailFolder;
 	}
 	
 	@Override
-	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getMailFolderBase()");
+	public Folder getMailFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getMailFolderBase({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder mailFolder = rm.getMailFolderBase();
+		Folder mailFolder = rm.getMailFolderBase(token);
 		log.debug("getMailFolderBase: {}", mailFolder);
 		return mailFolder;
 	}
 
 	@Override
-	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getThesaurusFolder()");
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getThesaurusFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder thesaurusFolder = rm.getThesaurusFolder();
+		Folder thesaurusFolder = rm.getThesaurusFolder(token);
 		log.debug("getThesaurusFolder: {}", thesaurusFolder);
 		return thesaurusFolder;
 	}
 
 	@Override
-	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getCategoriesFolder()");
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getCategoriesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder categoriesFolder = rm.getCategoriesFolder();
+		Folder categoriesFolder = rm.getCategoriesFolder(token);
 		log.debug("getCategoriesFolder: {}", categoriesFolder);
 		return categoriesFolder;
 	}
 	
 	@Override
-	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("purgeTrash()");
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("purgeTrash({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		rm.purgeTrash();
+		rm.purgeTrash(token);
 		log.debug("purgeTrash: void");
 	}
 
 	@Override
-	public String getUpdateMessage() throws RepositoryException { 
-		log.debug("getUpdateMessage()");
+	public String getUpdateMessage(String token) throws RepositoryException { 
+		log.debug("getUpdateMessage({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String updateMessage = rm.getUpdateMessage();
+		String updateMessage = rm.getUpdateMessage(token);
 		log.debug("getUpdateMessage: {}", updateMessage);
 		return updateMessage;
 	}
 
 	@Override
-	public String getUuid() throws RepositoryException {
-		log.debug("getUuid()");
+	public String getUuid(String token) throws RepositoryException {
+		log.debug("getUuid({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String uuid = rm.getUuid();
+		String uuid = rm.getUuid(token);
 		log.debug("getUuid: {}", uuid);
 		return uuid;
 	}
 
 	@Override
-	public boolean hasNode(String path) throws RepositoryException, DatabaseException {
-		log.debug("hasNode({})", path);
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
+		log.debug("hasNode({})", token, path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		boolean ret = rm.hasNode(path);
+		boolean ret = rm.hasNode(token, path);
 		log.debug("hasNode: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String ret = rm.getPath(uuid);
+		String ret = rm.getPath(token, uuid);
 		log.debug("getPath: {}", ret);
 		return ret;
 	}

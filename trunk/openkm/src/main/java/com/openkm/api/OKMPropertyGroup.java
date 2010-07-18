@@ -55,71 +55,72 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 	}
 	
 	@Override
-	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addGroup({}, {})", docPath, grpName);
+	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.addGroup(docPath, grpName);
+		cm.addGroup(token, docPath, grpName);
 		log.debug("addGroup: void");
 	}
 
 	@Override
-	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
+	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("removeGroup({}, {})", docPath, grpName);
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.removeGroup(docPath, grpName);
+		cm.removeGroup(token, docPath, grpName);
 		log.debug("removeGroup: void");
 	}
 
 	@Override
-	public List<PropertyGroup> getGroups(String docPath) throws IOException, ParseException, 
+	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException, ParseException, 
 			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getGroups({})", docPath);
+		log.debug("getGroups({}, {})", token, docPath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<PropertyGroup> ret = cm.getGroups(docPath);
+		List<PropertyGroup> ret = cm.getGroups(token, docPath);
 		log.debug("getGroups: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public List<PropertyGroup> getAllGroups() throws IOException, ParseException, RepositoryException, 
-			DatabaseException {
-		log.debug("getAllGroups()");
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
+		log.debug("getAllGroups({})", token);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<PropertyGroup> ret = cm.getAllGroups();
-		log.debug("getAllGroups: "+ret);
+		List<PropertyGroup> ret = cm.getAllGroups(token);
+		log.debug("getAllGroups: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
+	public List<FormElement> getProperties(String token, String docPath, String grpName) throws IOException,
 			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, 
 			DatabaseException {
-		log.debug("getProperties({}, {})", docPath, grpName);
+		log.debug("getProperties({}, {}, {})", new Object[] { token, docPath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<FormElement> ret = cm.getProperties(docPath, grpName);
+		List<FormElement> ret = cm.getProperties(token, docPath, grpName);
 		log.debug("getProperties: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws 
-			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+	public void setProperties(String token, String docPath, String grpName, List<FormElement> properties)
+			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {})", docPath, properties);
+		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, docPath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.setProperties(docPath, grpName, properties);
+		cm.setProperties(token, docPath, grpName, properties);
 		log.debug("setProperties: void");
 	}
 
 	@Override
-	public List<FormElement> getPropertyGroupForm(String grpName) throws ParseException, IOException,
-			RepositoryException, DatabaseException {
-		log.debug("getPropertyGroupForm({})", grpName);
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+			IOException, RepositoryException, DatabaseException {
+		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<FormElement> ret = cm.getPropertyGroupForm(grpName);
+		List<FormElement> ret = cm.getPropertyGroupForm(token, grpName);
 		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
