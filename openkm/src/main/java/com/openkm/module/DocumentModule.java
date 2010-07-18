@@ -78,7 +78,7 @@ public interface DocumentModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void delete(String docPath) throws LockException, PathNotFoundException,
+	public void delete(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -94,7 +94,7 @@ public interface DocumentModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Document rename(String docPath, String newName) throws PathNotFoundException,
+	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -106,8 +106,8 @@ public interface DocumentModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Document getProperties(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException;
+	public Document getProperties(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Set document properties in the repository.
@@ -121,8 +121,8 @@ public interface DocumentModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(Document doc) throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void setProperties(String token, Document doc) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Obtain document content from the repository.
@@ -135,8 +135,8 @@ public interface DocumentModule {
      * @throws IOException An error when retrieving document data 
      * from the repository.
 	 */
-	public InputStream getContent(String docPath, boolean checkout) throws PathNotFoundException, 
-			RepositoryException, IOException, DatabaseException;
+	public InputStream getContent(String token, String docPath, boolean checkout) throws 
+			PathNotFoundException, RepositoryException, IOException, DatabaseException;
 
 	/**
 	 * Obtain document content from the repository.
@@ -150,8 +150,8 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 * @throws IOException An error when retrieving document data from the repository.
 	 */
-	public InputStream getContentByVersion(String docPath, String versionId) throws RepositoryException,
-			PathNotFoundException, IOException, DatabaseException;
+	public InputStream getContentByVersion(String token, String docPath, String versionId) throws 
+			RepositoryException, PathNotFoundException, IOException, DatabaseException;
 
 	/**
 	 * Set document content in the repository.
@@ -169,7 +169,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException If there is any error setting the new content.
 	 */
-	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
+	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
 			DatabaseException;
@@ -185,8 +185,8 @@ public interface DocumentModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void addNote(String token, String docPath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove a note from a document
@@ -198,7 +198,7 @@ public interface DocumentModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
@@ -211,7 +211,7 @@ public interface DocumentModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public Note getNote(String notePath) throws LockException, PathNotFoundException,
+	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -224,8 +224,8 @@ public interface DocumentModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void setNote(String token, String notePath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Retrieve a list of child documents from an existing folder.
@@ -235,8 +235,8 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no folder in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Document> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException;
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Checkout the document to edit it. The document can't be edited by another
@@ -249,8 +249,8 @@ public interface DocumentModule {
 	 * the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void checkout(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public void checkout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Cancel a previous checked out state in a document.
@@ -262,7 +262,7 @@ public interface DocumentModule {
 	 * the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void cancelCheckout(String docPath) throws LockException, PathNotFoundException,
+	public void cancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
@@ -273,8 +273,8 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no document in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public boolean isCheckedOut(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException;
+	public boolean isCheckedOut(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Check in the document to create a new version.
@@ -289,8 +289,9 @@ public interface DocumentModule {
 	 * the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Version checkin(String docPath, String comment) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public Version checkin(String token, String docPath, String comment) throws LockException,
+			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Get the document version history.
@@ -300,8 +301,8 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no document in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Version> getVersionHistory(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException;
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Lock a document, so only is editable by the locker.
@@ -326,8 +327,8 @@ public interface DocumentModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void unlock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public void unlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Tell if a document is locked.
@@ -339,7 +340,7 @@ public interface DocumentModule {
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @return True if the document is locked, and False otherwise.
 	 */
-	public boolean isLocked(String docPath) throws RepositoryException, PathNotFoundException,
+	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException,
 			DatabaseException;
 	
 	/**
@@ -353,8 +354,8 @@ public interface DocumentModule {
 	 * @throws LockException If the node is not locked.
 	 * @return The lock info.
 	 */
-	public Lock getLock(String docPath) throws RepositoryException, PathNotFoundException, LockException,
-			DatabaseException;
+	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException,
+			LockException, DatabaseException;
 	
 	/**
 	 * Deletes definitively a document from the repository. It is a physical delete, so
@@ -366,7 +367,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 */
-	public void purge(String docPath) throws AccessDeniedException, RepositoryException,
+	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, DatabaseException;
 
 	/**
@@ -382,8 +383,8 @@ public interface DocumentModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void move(String docPath, String fldPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void move(String token, String docPath, String fldPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Copy a document to another location in the repository.
@@ -398,9 +399,9 @@ public interface DocumentModule {
 	 * because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void copy(String docPath, String fldPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
-			UserQuotaExceededException;
+	public void copy(String token, String docPath, String fldPath) throws ItemExistsException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, UserQuotaExceededException;
 	
 	/**
 	 * Revert the document to an specific previous version.
@@ -412,7 +413,7 @@ public interface DocumentModule {
 	 * can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void restoreVersion(String docPath, String versionId) throws PathNotFoundException,
+	public void restoreVersion(String token, String docPath, String versionId) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -425,8 +426,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public void purgeVersionHistory(String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException;
+	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, DatabaseException;
 
 	/**
 	 * Get the version size of a Document.
@@ -437,8 +438,8 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public long getVersionHistorySize(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException;
+	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, DatabaseException;
 	
 	/**
 	 * Test if a document path is valid.
@@ -449,7 +450,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
 	 */
-	public boolean isValid(String docPath) throws PathNotFoundException, AccessDeniedException,
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException;
 	
 	/**
@@ -461,5 +462,6 @@ public interface DocumentModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public String getPath(String uuid) throws AccessDeniedException, RepositoryException, DatabaseException;
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 }
