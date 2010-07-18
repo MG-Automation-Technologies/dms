@@ -214,9 +214,10 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public Mail create(Mail mail) throws AccessDeniedException, RepositoryException, PathNotFoundException,
-			ItemExistsException, VirusDetectedException, DatabaseException, UserQuotaExceededException {
-		log.debug("create({})", mail);
+	public Mail create(String token, Mail mail) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, ItemExistsException, VirusDetectedException, DatabaseException,
+			UserQuotaExceededException {
+		log.debug("create({}, {})", token, mail);
 		Mail newMail = null;
 		Transaction t = null;
 		XASession session = null;
@@ -285,9 +286,9 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public Mail getProperties(String mailPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getProperties({})", mailPath);
+	public Mail getProperties(String token, String mailPath) throws PathNotFoundException, 
+			RepositoryException, DatabaseException {
+		log.debug("getProperties({}, {})", token, mailPath);
 		Mail mail = null;
 		Session session = null;
 		
@@ -312,9 +313,9 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public void delete(String mailPath) throws AccessDeniedException, RepositoryException,
+	public void delete(String token, String mailPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("delete({})", mailPath);
+		log.debug("delete({}, {})", token, mailPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -364,9 +365,9 @@ public class DirectMailModule implements MailModule {
 	}	
 	
 	@Override
-	public void purge(String mailPath) throws AccessDeniedException, RepositoryException,
+	public void purge(String token, String mailPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, DatabaseException {
-		log.debug("purge({})", mailPath);
+		log.debug("purge({}, {})", token, mailPath);
 		Node parentNode = null;
 		Session session = null;
 		
@@ -406,9 +407,9 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public Mail rename(String mailPath, String newName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("rename({}, {})", mailPath, newName);
+	public Mail rename(String token, String mailPath, String newName) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("rename({}, {}, {})", new Object[] { token, mailPath, newName });
 		Mail renamedMail = null;
 		Session session = null;
 		
@@ -469,9 +470,9 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public void move(String mailPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("move({}, {})", mailPath, dstPath);
+	public void move(String token, String mailPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("move({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -547,10 +548,10 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public void copy(String mailPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, IOException, DatabaseException,
+	public void copy(String token, String mailPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, IOException, DatabaseException,
 			UserQuotaExceededException {
-		log.debug("copy({}, {})", mailPath, dstPath);
+		log.debug("copy({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		Transaction t = null;
 		XASession session = null;
 		
@@ -604,9 +605,9 @@ public class DirectMailModule implements MailModule {
 	}
 	
 	@Override
-	public List<Mail> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("findChilds({})", fldPath);
+	public List<Mail> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("findChilds({}, {})", token, fldPath);
 		List<Mail> childs = new ArrayList<Mail>();
 		Session session = null;
 		
@@ -639,9 +640,9 @@ public class DirectMailModule implements MailModule {
 	}
 
 	@Override
-	public boolean isValid(String mailPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("isValid({})", mailPath);
+	public boolean isValid(String token, String mailPath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("isValid({}, {})", token, mailPath);
 		boolean valid = false;
 		Session session = null;
 		

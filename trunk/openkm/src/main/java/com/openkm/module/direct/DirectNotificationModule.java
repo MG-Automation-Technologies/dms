@@ -66,9 +66,9 @@ public class DirectNotificationModule implements NotificationModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNotificationModule.class);
 	
 	@Override
-	public synchronized void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("subscribe({})", nodePath);
+	public synchronized void subscribe(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("subscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -131,9 +131,9 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public synchronized void unsubscribe(String nodePath) throws PathNotFoundException, 
+	public synchronized void unsubscribe(String token, String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("unsubscribe({})", nodePath);
+		log.debug("unsubscribe({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -190,9 +190,9 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public List<String> getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("getSusbcriptions({})", nodePath);
+	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("getSusbcriptions({}, {})", token, nodePath);
 		List<String> users = new ArrayList<String>();
 		Session session = null;
 		
@@ -222,21 +222,21 @@ public class DirectNotificationModule implements NotificationModule {
 	}
 	
 	@Override
-	public void notify(String nodePath, List<String> users, String message, boolean attachment) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException {
-		log.debug("notify({}, {}, {})", new Object[] { nodePath, users, message });
+	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException {
+		log.debug("notify({}, {}, {}, {})", new Object[] { token, nodePath, users, message });
 		Session session = null;
 		
 		if (!users.isEmpty()) {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
 				session = JCRUtils.getSession();
-				List<String> emails = new DirectAuthModule().getMails(users);
+				List<String> emails = new DirectAuthModule().getMails(token, users);
 				
 				// Get session user email address
 				ArrayList<String> dummy = new ArrayList<String>();
 				dummy.add(session.getUserID());
-				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(dummy);
+				ArrayList<String> from = (ArrayList<String>) new DirectAuthModule().getMails(token, dummy);
 				
 				if (!emails.isEmpty() && !from.isEmpty()) {
 					StringWriter swSubject = new StringWriter();
@@ -303,7 +303,7 @@ public class DirectNotificationModule implements NotificationModule {
 		 */
 		try {
 			if (users != null && !users.isEmpty()) {
-				List<String> emails = new DirectAuthModule().getMails(users);
+				List<String> emails = new DirectAuthModule().getMails(null, users);
 					
 				if (!emails.isEmpty()) {
 					if (comment == null) { comment = ""; }

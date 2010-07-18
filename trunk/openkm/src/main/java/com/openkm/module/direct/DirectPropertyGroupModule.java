@@ -64,9 +64,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyGroupModule.class);
 
 	@Override
-	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addGroup({}, {})", docPath, grpName);
+	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -113,10 +114,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
+	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException, 
 			DatabaseException {
-		log.debug("removeGroup({}, {})", docPath, grpName);
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -155,9 +156,9 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<PropertyGroup> getGroups(String docPath) throws IOException, ParseException, 
+	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException, ParseException, 
 			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getGroups({})", docPath);
+		log.debug("getGroups({}, {})", token, docPath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
 		
@@ -194,9 +195,9 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<PropertyGroup> getAllGroups() throws IOException, ParseException, RepositoryException,
-			DatabaseException {
-		log.debug("getAllGroups()");
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException,
+			RepositoryException, DatabaseException {
+		log.debug("getAllGroups({})", token);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
 		
@@ -231,9 +232,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
-			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getProperties({})", grpName);
+	public List<FormElement> getProperties(String token, String docPath, String grpName) throws IOException,
+			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getProperties({}, {})", token, grpName);
 		Session session = null;
 		
 		try {
@@ -308,10 +310,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws 
-			IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+	public void setProperties(String token, String docPath, String grpName, List<FormElement> properties)
+			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {}, {})", new Object[] { docPath, grpName, properties });
+		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, docPath, grpName, properties });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -404,9 +406,9 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<FormElement> getPropertyGroupForm(String grpName) throws IOException, ParseException,
-			RepositoryException, DatabaseException {
-		log.debug("getPropertyGroupForm({})", grpName);
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws IOException,
+			ParseException, RepositoryException, DatabaseException {
+		log.debug("getPropertyGroupForm({}, {})", token, grpName);
 		List<FormElement> ret = new ArrayList<FormElement>();
 		Session session = null;
 		

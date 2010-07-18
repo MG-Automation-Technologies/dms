@@ -385,8 +385,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getRootFolder()");
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException, 
+			DatabaseException {
+		log.debug("getRootFolder({})", token);
 		Folder rootFolder = new Folder();
 		Session session = null;
 		
@@ -411,8 +412,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTrashFolder()");
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTrashFolder({})", token);
 		Folder trashFolder = new Folder();
 		Session session = null;
 		
@@ -437,8 +439,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTrashFolderBase({})");
+	public Folder getTrashFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTrashFolderBase({})", token);
 		Folder trashFolder = new Folder();
 		Session session = null;
 		
@@ -463,8 +466,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTemplatesFolder()");
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getTemplatesFolder({})", token);
 		Folder templatesFolder = new Folder();
 		Session session = null;
 		
@@ -489,8 +493,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPersonalFolder()");
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPersonalFolder({})", token);
 		Folder personalFolder = new Folder();
 		Session session = null;
 		
@@ -515,9 +520,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException,
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("getPersonalFolderBase({})");
+		log.debug("getPersonalFolderBase({})", token);
 		Folder personalFolder = new Folder();
 		Session session = null;
 		
@@ -542,8 +547,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getMailFolder()");
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getMailFolder({})", token);
 		Folder mailFolder = new Folder();
 		Session session = null;
 		
@@ -569,8 +575,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getMailFolderBase({})");
+	public Folder getMailFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getMailFolderBase({})", token);
 		Folder mailFolder = new Folder();
 		Session session = null;
 		
@@ -595,8 +602,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getThesaurusFolder()");
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getThesaurusFolder({})", token);
 		Folder thesaurusFolder = new Folder();
 		Session session = null;
 		
@@ -621,8 +629,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getCategoriesFolder()");
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getCategoriesFolder({})", token);
 		Folder categoriesFolder = new Folder();
 		Session session = null;
 		
@@ -701,8 +710,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("purgeTrash()");
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("purgeTrash({})", token);
 		Node userTrash = null;
 		Session session = null;
 		
@@ -768,18 +778,18 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 	
 	@Override
-	public String getUpdateMessage() throws RepositoryException {
+	public String getUpdateMessage(String token) throws RepositoryException {
 		return Repository.getUpdateMsg();
 	}
 
 	@Override
-	public String getUuid() throws RepositoryException {
+	public String getUuid(String token) throws RepositoryException {
 		return Repository.getUuid();
 	}
 	
 	@Override
-	public boolean hasNode(String path) throws RepositoryException, DatabaseException {
-		log.debug("hasNode({})", path);
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
+		log.debug("hasNode({}, {})", token, path);
 		boolean ret = false;
 		Session session = null;
 		
@@ -798,8 +808,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		String ret;
 		Session session = null;
 		

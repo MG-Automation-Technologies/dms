@@ -30,6 +30,7 @@ import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 
@@ -42,12 +43,14 @@ import com.openkm.bean.Repository;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.AuthModule;
 import com.openkm.principal.PrincipalAdapter;
 import com.openkm.principal.PrincipalAdapterException;
 import com.openkm.util.JCRUtils;
+import com.openkm.util.UUIDGenerator;
 import com.openkm.util.UserActivity;
 
 public class DirectAuthModule implements AuthModule {
@@ -71,22 +74,60 @@ public class DirectAuthModule implements AuthModule {
 			JCRUtils.logout(session);
 		}
 	}
+	
+	@Override
+	public String login(String user, String password) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		String token = null;
+		
+		try {
+			javax.jcr.Repository r = DirectRepositoryModule.getRepository();
+			Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
+			token = UUIDGenerator.generate(this);
+			JcrSessionManager.getInstance().add(token, session);
+			return token;
+		} catch (LoginException e) {
+			log.error(e.getMessage(), e);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		}
+	}
 
 	@Override
-	public void logout() throws RepositoryException, DatabaseException {
+	public void logout(String token) throws RepositoryException, DatabaseException {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
 			
-			// Activity log
-			UserActivity.log(session.getUserID(), "LOGOUT", null, null);
+			if (session != null) {
+				// Activity log
+				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
+
+				for (String key : JcrSessionManager.getInstance().getSessions().keySet()) {
+					log.info("{} => {}", key, JcrSessionManager.getInstance().getSession(key));
+				}
+
+				
+				JcrSessionManager.getInstance().remove(token);
+				session.logout();
+				
+				for (String key : JcrSessionManager.getInstance().getSessions().keySet()) {
+					log.info("{} => {}", key, JcrSessionManager.getInstance().getSession(key));
+				}
+			}
 		} catch (LoginException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -147,17 +188,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public void grantUser(String nodePath, String user, int permissions,
-			boolean recursive) throws PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
 		Node node = null;
 		Session session = null;
 		
-		// TODO: Comprobar si el usuario es dueño del nodo.
-		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -194,7 +237,7 @@ public class DirectAuthModule implements AuthModule {
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("grantUser: void");
@@ -245,16 +288,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public void revokeUser(String nodePath, String user, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeUser({}, {}, {}, {})", new Object[] { nodePath, user, permissions, recursive });
 		Node node = null;
 		Session session = null;
-
-		// TODO: Comprobar si el usuario es dueño del nodo.
-		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
+		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -291,7 +337,7 @@ public class DirectAuthModule implements AuthModule {
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("revokeUser: void");
@@ -339,16 +385,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public void grantRole(String nodePath, String role, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("grantRole({}, {}, {}, {})", new Object[] { nodePath, role, permissions, recursive });
 		Node node = null;
 		Session session = null;
 		
-		// TODO: Comprobar si el usuario es dueño del nodo.
-		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -385,7 +434,7 @@ public class DirectAuthModule implements AuthModule {
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("grantRole: void");
@@ -436,16 +485,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public void revokeRole(String nodePath, String role, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("revokeRole({}, {}, {}, {})", new Object[] { nodePath, role, permissions, recursive });
 		Node node = null;
 		Session session = null;
 		
-		// TODO: Comprobar si el usuario es dueño del nodo.
-		// O a lo mejor hacer esta comprobación en el OKMAccessManager.
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			String property = null;
 
@@ -482,7 +534,7 @@ public class DirectAuthModule implements AuthModule {
 			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("revokeRole: void");
@@ -530,14 +582,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public HashMap<String, Byte> getGrantedUsers(String nodePath) throws PathNotFoundException, 
+	public HashMap<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedUsers({})", nodePath);
 		HashMap<String, Byte> users = new HashMap<String, Byte>();
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 			Value[] usersRead = node.getProperty(Permission.USERS_READ).getValues();
 
@@ -587,7 +644,7 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getGrantedUsers: {}", users);
@@ -595,14 +652,19 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public Map<String, Byte> getGrantedRoles(String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getGrantedRoles({})", nodePath);
 		Map<String, Byte> roles = new HashMap<String, Byte>();
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 			Value[] rolesRead = node.getProperty(Permission.ROLES_READ).getValues();
 
@@ -652,7 +714,7 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getGrantedRoles: {}", roles);
@@ -662,11 +724,16 @@ public class DirectAuthModule implements AuthModule {
 	/**
 	 *  View user session info
 	 */
-	public void view() throws RepositoryException, DatabaseException {
+	public void view(String token) throws RepositoryException, DatabaseException {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			String[] atributes = session.getAttributeNames();
 			log.info("** ATRIBUTES **");
 			for (int i=0; i<atributes.length; i++) {
@@ -685,7 +752,7 @@ public class DirectAuthModule implements AuthModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 
@@ -714,7 +781,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public List<String> getUsers() throws PrincipalAdapterException {
+	public List<String> getUsers(String token) throws PrincipalAdapterException {
 		log.debug("getUsers()");
 		List<String> list = null;
 
@@ -731,7 +798,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 
 	@Override
-	public List<String> getRoles() throws PrincipalAdapterException {
+	public List<String> getRoles(String token) throws PrincipalAdapterException {
 		log.debug("getRoles()");
 		List<String> list = null;
 
@@ -748,7 +815,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
+	public List<String> getUsersByRole(String token, String role) throws PrincipalAdapterException {
 		log.debug("getUsersByRole({})", role);
 		List<String> list = null;
 
@@ -765,7 +832,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
+	public List<String> getRolesByUser(String token, String user) throws PrincipalAdapterException {
 		log.debug("getRolesByUser({})", user);
 		List<String> list = null;
 
@@ -782,7 +849,7 @@ public class DirectAuthModule implements AuthModule {
 	}
 	
 	@Override
-	public List<String> getMails(List<String> users) throws PrincipalAdapterException {
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException {
 		log.debug("getMails()");
 		List<String> list = null;
 
