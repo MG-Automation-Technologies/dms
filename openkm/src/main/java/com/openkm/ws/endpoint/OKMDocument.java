@@ -102,31 +102,34 @@ public class OKMDocument {
 	}
 
 	@WebMethod
-	public void delete(@WebParam(name = "docPath") String docPath) throws AccessDeniedException, 
-			RepositoryException, PathNotFoundException, LockException, DatabaseException {
-		log.debug("delete({})", docPath);
+	public void delete(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, LockException, DatabaseException {
+		log.debug("delete({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.delete(docPath);
+		dm.delete(token, docPath);
 		log.debug("delete: void");
 	}
 	
 	@WebMethod
-	public Document getProperties(@WebParam(name = "docPath") String docPath) throws RepositoryException,
-			PathNotFoundException, DatabaseException {
-		log.debug("getProperties({})", docPath);
+	public Document getProperties(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws RepositoryException, PathNotFoundException,
+			DatabaseException {
+		log.debug("getProperties({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Document doc = dm.getProperties(docPath);
+		Document doc = dm.getProperties(token, docPath);
 		log.debug("getProperties: {}", doc);
 		return doc;
 	}
 
 	@WebMethod
-	public byte[] getContent(@WebParam(name = "docPath") String docPath,
+	public byte[] getContent(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "checkout") boolean checkout) throws RepositoryException, IOException,
 			PathNotFoundException, DatabaseException {
-		log.debug("getContent({}, {})", docPath, checkout);
+		log.debug("getContent({}, {}, {})", new Object[] { token, docPath, checkout });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		InputStream is = dm.getContent(docPath, checkout);
+		InputStream is = dm.getContent(token, docPath, checkout);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(is, baos);
 		byte[] data = baos.toByteArray();
@@ -135,12 +138,13 @@ public class OKMDocument {
 	}
 
 	@WebMethod
-	public byte[] getContentByVersion(@WebParam(name = "docPath") String docPath,
+	public byte[] getContentByVersion(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "versionId") String versionId) throws RepositoryException, IOException,
 			PathNotFoundException, DatabaseException {
-		log.debug("getContentByVersion({}, {})", docPath, versionId);
+		log.debug("getContentByVersion({}, {}, {})", new Object[] { token,  docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		InputStream is = dm.getContentByVersion(docPath, versionId); 
+		InputStream is = dm.getContentByVersion(token, docPath, versionId); 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(is, baos);
 		byte[] data = baos.toByteArray();
@@ -149,86 +153,94 @@ public class OKMDocument {
 	}
 
 	@WebMethod
-	public Document[] getChilds(@WebParam(name = "fldPath") String fldPath) throws RepositoryException, 
-			PathNotFoundException, DatabaseException {
-		log.debug("getChilds({})", fldPath);
+	public Document[] getChilds(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws RepositoryException, PathNotFoundException,
+			DatabaseException {
+		log.debug("getChilds({}, {})", token, fldPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		List<Document> col = dm.getChilds(fldPath);
+		List<Document> col = dm.getChilds(token, fldPath);
 		Document[] result = (Document[]) col.toArray(new Document[col.size()]);
 		log.debug("getChilds: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public Document rename(@WebParam(name = "docPath") String docPath,
+	public Document rename(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "newName") String newName) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("rename({}, {})", docPath, newName);
+		log.debug("rename({}, {}, {})", new Object[] { token, docPath, newName });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Document renamedDocument = dm.rename(docPath, newName);
+		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
 		return renamedDocument;
 	}
 	
 	@WebMethod
-	public void setProperties(@WebParam(name = "doc") Document doc) throws AccessDeniedException,
+	public void setProperties(@WebParam(name = "token") String token,
+			@WebParam(name = "doc") Document doc) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, VersionException, LockException, DatabaseException {
-		log.debug("setProperties({})", doc);
+		log.debug("setProperties({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setProperties(doc);
+		dm.setProperties(token, doc);
 		log.debug("setProperties: void");
 	}
 
 	@WebMethod
-	public void checkout(@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
+	public void checkout(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException, DatabaseException {
-		log.debug("checkout({})", docPath);
+		log.debug("checkout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.checkout(docPath);
+		dm.checkout(token, docPath);
 		log.debug("checkout: void");
 	}
 
 	@WebMethod
-	public void cancelCheckout(@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
+	public void cancelCheckout(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, LockException, DatabaseException {
-		log.debug("cancelCheckout({})", docPath);
+		log.debug("cancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.cancelCheckout(docPath);
+		dm.cancelCheckout(token, docPath);
 		log.debug("cancelCheckout: void");
 	}
 	
 	@WebMethod
-	public Version checkin(@WebParam(name = "docPath") String docPath,
+	public Version checkin(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "comment") String comment) throws LockException, VersionException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("checkin({}, {})", docPath, comment);
+		log.debug("checkin({}, {} ,{})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Version version = dm.checkin(docPath, comment);
+		Version version = dm.checkin(token, docPath, comment);
 		log.debug("checkin: {}", version);
 		return version;
 	}
 
 	@WebMethod
-	public Version[] getVersionHistory(@WebParam(name = "docPath") String docPath) throws 
-			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getVersionHistory({})", docPath);
+	public Version[] getVersionHistory(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		List<Version> col = dm.getVersionHistory(docPath);
+		List<Version> col = dm.getVersionHistory(token, docPath);
 		Version[] result = (Version[]) col.toArray(new Version[col.size()]);
 		log.debug("getVersionHistory: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public void setContent(@WebParam(name = "docPath") String docPath,
+	public void setContent(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "content") byte[] content) throws FileSizeExceededException, 
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
 			DatabaseException {
-		log.debug("setContent({}, {})", docPath, content);
+		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, content });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
-		dm.setContent(docPath, bais);
+		dm.setContent(token, docPath, bais);
 		bais.close();
 		log.debug("setContent: void");
 	}
@@ -237,125 +249,137 @@ public class OKMDocument {
 	public void lock(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("lock({})", docPath);
+		log.debug("lock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		dm.lock(token, docPath);
 		log.debug("lock: void");
 	}
 
 	@WebMethod
-	public void unlock(@WebParam(name = "docPath") String docPath) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("unlock({})", docPath);
+	public void unlock(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("unlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.unlock(docPath);
+		dm.unlock(token, docPath);
 		log.debug("unlock: void");
 	}
 
 	@WebMethod
-	public void purge(@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("purge({})", docPath);
+	public void purge(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("purge({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.purge(docPath);
+		dm.purge(token, docPath);
 		log.debug("purge: void");
 	}
 
 	@WebMethod
-	public void move(@WebParam(name = "docPath") String docPath, 
+	public void move(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath, 
 			@WebParam(name = "fldPath") String fldPath) throws LockException, PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {})", docPath, fldPath);
+		log.debug("move({}, {}, {})", new Object[] { token, docPath, fldPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.move(docPath, fldPath);
+		dm.move(token, docPath, fldPath);
 		log.debug("move: void");
 	}
 	
 	@WebMethod
-	public void restoreVersion(@WebParam(name = "docPath") String docPath,
+	public void restoreVersion(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "versionId") String versionId) throws AccessDeniedException, 
 			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("restoreVersion({}, {})", docPath, versionId);
+		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.restoreVersion(docPath, versionId);
+		dm.restoreVersion(token, docPath, versionId);
 		log.debug("restoreVersion: void");
 	}
 	
 	@WebMethod
-	public void purgeVersionHistory(@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
-			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("purgeVersionHistory({})", docPath);
+	public void purgeVersionHistory(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("purgeVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.purgeVersionHistory(docPath);
+		dm.purgeVersionHistory(token, docPath);
 		log.debug("purgeVersionHistory: void");
 	}
 	
 	@WebMethod
-	public long getVersionHistorySize(@WebParam(name = "docPath") String docPath) throws RepositoryException,
-			PathNotFoundException, DatabaseException {
-		log.debug("getVersionHistorySize({})", docPath);
+	public long getVersionHistorySize(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws RepositoryException, PathNotFoundException,
+			DatabaseException {
+		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		long size = dm.getVersionHistorySize(docPath);
+		long size = dm.getVersionHistorySize(token, docPath);
 		log.debug("getVersionHistorySize: {}", size);
 		return size;
 	}
 	
 	@WebMethod
-	public boolean isValid(@WebParam(name = "docPath") String docPath) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("isValid({})", docPath);
+	public boolean isValid(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("isValid({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		boolean valid = dm.isValid(docPath);
+		boolean valid = dm.isValid(token, docPath);
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
 	
 	@WebMethod
-	public String getPath(@WebParam(name = "uuid") String uuid) throws AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(@WebParam(name = "token") String token,
+			@WebParam(name = "uuid") String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		String path = dm.getPath(uuid);
+		String path = dm.getPath(token, uuid);
 		log.debug("getPath: {}", path);
 		return path;
 	}
 	
 	@WebMethod
-	public void addNote(@WebParam(name = "docPath") String docPath,
+	public void addNote(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {})", docPath, text);
+		log.debug("addNote({}, {}, {})", new Object[] {  token, docPath, text });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.addNote(docPath, text);
+		dm.addNote(token, docPath, text);
 		log.debug("addNote: void");
 	}
 	
 	@WebMethod
-	public Note getNote(@WebParam(name = "notePath") String notePath) throws LockException,
+	public Note getNote(@WebParam(name = "token") String token,
+			@WebParam(name = "notePath") String notePath) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({})", notePath);
+		log.debug("addNote({}, {})", token, notePath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Note ret = dm.getNote(notePath);
+		Note ret = dm.getNote(token, notePath);
 		log.debug("addNote: {}", ret);
 		return ret;
 	}
 
 	@WebMethod
-	public void removeNote(@WebParam(name = "notePath") String notePath) throws LockException, PathNotFoundException,
+	public void removeNote(@WebParam(name = "token") String token,
+			@WebParam(name = "notePath") String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeNote({})", notePath);
+		log.debug("removeNote({}, {})", token, notePath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.removeNote(notePath);
+		dm.removeNote(token, notePath);
 		log.debug("removeNote: void");
 	}
 
 	@WebMethod
-	public void setNote(@WebParam(name = "notePath") String notePath,
+	public void setNote(@WebParam(name = "token") String token,
+			@WebParam(name = "notePath") String notePath,
 			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setNote({}, {})", notePath, text);
+		log.debug("setNote({}, {}, {})", new Object[] { token, notePath, text });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setNote(notePath, text);
+		dm.setNote(token, notePath, text);
 		log.debug("setNote: void");
 	}
 }
