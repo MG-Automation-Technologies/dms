@@ -24,7 +24,7 @@ package com.openkm.bean;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class SessionInfo implements Serializable {
+public class HttpSessionInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String user;
 	private String ip;
