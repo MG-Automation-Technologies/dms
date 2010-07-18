@@ -33,10 +33,9 @@ import com.openkm.bean.workflow.Transition;
 public class WorkflowUtils {
 	
 	/**
-	 * @param pd
-	 * @return
+	 * Copy process definition
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static ProcessDefinition copy(org.jbpm.graph.def.ProcessDefinition pd) {
 		ProcessDefinition vo = new ProcessDefinition();
 		
@@ -57,10 +56,9 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * @param pi
-	 * @return
+	 * Copy process instance
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static ProcessInstance copy(org.jbpm.graph.exe.ProcessInstance pi) {
 		ProcessInstance vo = new ProcessInstance();
 
@@ -100,10 +98,9 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * @param ti
-	 * @return
+	 * Copy task instance
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static TaskInstance copy(org.jbpm.taskmgmt.exe.TaskInstance ti) {
 		TaskInstance vo = new TaskInstance();
 
@@ -182,10 +179,9 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * @param t
-	 * @return
+	 * Copy token
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static Token copy(org.jbpm.graph.exe.Token t) {
 		Token vo = null;
 		
@@ -238,8 +234,7 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * @param c
-	 * @return
+	 * Copy comment
 	 */
 	public static Comment copy(org.jbpm.graph.exe.Comment c) {
 		Comment vo = new Comment();
@@ -254,8 +249,7 @@ public class WorkflowUtils {
 	}
 
 	/**
-	 * @param t
-	 * @return
+	 * Copy transition
 	 */
 	public static Transition copy(org.jbpm.graph.def.Transition t) {
 		Transition vo = new Transition();
@@ -269,7 +263,7 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * 
+	 * Get diagram info
 	 */
 	public static WorkflowUtils.DiagramInfo getDiagramInfo(InputStream is) {
 		try {
@@ -327,7 +321,7 @@ public class WorkflowUtils {
 	}
 	
 	/**
-	 * 
+	 * Diagram info helper
 	 */
 	public static final class DiagramInfo implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -364,7 +358,7 @@ public class WorkflowUtils {
     }
 
 	/**
-	 * 
+	 * Diagram node info
 	 */
 	public static final class DiagramNodeInfo implements Serializable {
         private static final long serialVersionUID = 1L;
