@@ -66,8 +66,8 @@ public class TextToSpeechServlet extends HttpServlet {
 			if (!text.equals("")) {
 				FileUtils.writeStringToFile(new File("input.txt"), text);
 			} else if (!docPath.equals("")) {
-				InputStream is = OKMDocument.getInstance().getContent(docPath, false);
-				Document doc = OKMDocument.getInstance().getProperties(docPath);
+				InputStream is = OKMDocument.getInstance().getContent(null, docPath, false);
+				Document doc = OKMDocument.getInstance().getProperties(null, docPath);
 				DocConverter.getInstance().doc2txt(is, doc.getMimeType(), new File("input.txt"));
 			}
 			
