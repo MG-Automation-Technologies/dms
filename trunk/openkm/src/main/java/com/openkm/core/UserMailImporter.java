@@ -42,7 +42,7 @@ public class UserMailImporter extends TimerTask {
 		log.info("*** UserMailImporter activated ***");
         
 		try {
-			Collection<String> users = OKMAuth.getInstance().getUsers();
+			Collection<String> users = OKMAuth.getInstance().getUsers(null);
 						
 			for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
 				String uid = usrIt.next();

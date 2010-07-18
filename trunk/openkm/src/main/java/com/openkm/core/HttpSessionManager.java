@@ -32,27 +32,27 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.SessionInfo;
+import com.openkm.bean.HttpSessionInfo;
 
 /**
  * @author pavila
  */
-public class SessionManager {
+public class HttpSessionManager {
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(SessionManager.class);
-	private static SessionManager instance = new SessionManager();
-	private List<SessionInfo> sessions = new ArrayList<SessionInfo>();
+	private static Logger log = LoggerFactory.getLogger(HttpSessionManager.class);
+	private static HttpSessionManager instance = new HttpSessionManager();
+	private List<HttpSessionInfo> sessions = new ArrayList<HttpSessionInfo>();
 
 	/**
 	 * Prevents class instantiation
 	 */
-	private SessionManager() {
+	private HttpSessionManager() {
 	}
 	
 	/**
 	 * Instantiate a SessionManager.
 	 */
-	public static SessionManager getInstance() {
+	public static HttpSessionManager getInstance() {
 		return instance;
 	}
 	
@@ -60,11 +60,11 @@ public class SessionManager {
 	 * Add a new session
 	 */
 	public synchronized void add(HttpServletRequest request) {
-		SessionInfo si = new SessionInfo();
+		HttpSessionInfo si = new HttpSessionInfo();
 		HttpSession s = request.getSession();
 		boolean add = true;
 		
-		for (SessionInfo rsi : sessions) {
+		for (HttpSessionInfo rsi : sessions) {
 			if (rsi.getId().equals(s.getId())) {
 				add = false;
 			}
@@ -91,7 +91,7 @@ public class SessionManager {
 	 * Update session last accessed time
 	 */
 	public synchronized void update(String id) {
-		for (SessionInfo si : sessions) {
+		for (HttpSessionInfo si : sessions) {
 			if (si.getId().equals(id)) {
 				si.setLastAccessed(Calendar.getInstance());
 			}
@@ -102,8 +102,8 @@ public class SessionManager {
 	 * Remove a session
 	 */
 	public synchronized void remove(String id) {
-		for (Iterator<SessionInfo> it  = sessions.iterator(); it.hasNext(); ) {
-			SessionInfo si = it.next();
+		for (Iterator<HttpSessionInfo> it  = sessions.iterator(); it.hasNext(); ) {
+			HttpSessionInfo si = it.next();
 			
 			if (si.getId().equals(id)) {
 				it.remove();
@@ -115,8 +115,8 @@ public class SessionManager {
 	/**
 	 * Return a session info
 	 */
-	public SessionInfo getSession(String id) {
-		for (SessionInfo si : sessions) {
+	public HttpSessionInfo getSession(String id) {
+		for (HttpSessionInfo si : sessions) {
 			if (si.getId().equals(id)) {
 				return si;
 			}
@@ -127,7 +127,7 @@ public class SessionManager {
 	/**
 	 * Return all active sessions
 	 */
-	public List<SessionInfo> getSessions() {
+	public List<HttpSessionInfo> getSessions() {
 		return sessions;
 	}
 }
