@@ -105,7 +105,6 @@ public class ReportUtil {
 	/**
 	 * Generates a report based on a map collection (from stream)
 	 */
-	@SuppressWarnings("unchecked")
 	public static OutputStream generateReport(OutputStream out, InputStream report, 
 			Map<String, String> parameters, int outputType) throws JRException, EvalError {
 		JasperReport jasperReport = JasperCompileManager.compileReport(report);
@@ -113,7 +112,8 @@ public class ReportUtil {
 		
 		if (query != null) {
 			Interpreter bsh = new Interpreter(null, System.out, System.err, false);
-			Collection list = (Collection)bsh.eval(query.getText());
+			@SuppressWarnings("rawtypes")
+			Collection list = (Collection) bsh.eval(query.getText());
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, 
 					new JRMapCollectionDataSource(list));
 			export(out, outputType, print);
