@@ -465,9 +465,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void delete(String docPath) throws AccessDeniedException, RepositoryException,
+	public void delete(String token, String docPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("delete({})", docPath);
+		log.debug("delete({}, {})", token, docPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -523,9 +523,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Document getProperties(String docPath) throws RepositoryException, PathNotFoundException, 
-			DatabaseException {
-		log.debug("getProperties({})", docPath);
+	public Document getProperties(String token, String docPath) throws RepositoryException, 
+			PathNotFoundException, DatabaseException {
+		log.debug("getProperties({}, {})", token, docPath);
 		Document doc = null;
 		Session session = null;
 		
@@ -564,9 +564,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public InputStream getContent(String docPath, boolean checkout) throws PathNotFoundException,
-			RepositoryException, IOException, DatabaseException {
-		log.debug("getContent({})", docPath);
+	public InputStream getContent(String token, String docPath, boolean checkout) throws 
+			PathNotFoundException, RepositoryException, IOException, DatabaseException {
+		log.debug("getContent({}, {}, {})", new Object[] { token, docPath, checkout });
 		InputStream is;
 		Session session = null;
 		
@@ -595,9 +595,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public InputStream getContentByVersion(String docPath, String versionId) throws RepositoryException,
-			PathNotFoundException, IOException, DatabaseException {
-		log.debug("getContentByVersion({})", docPath);
+	public InputStream getContentByVersion(String token, String docPath, String versionId) throws 
+			RepositoryException, PathNotFoundException, IOException, DatabaseException {
+		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		InputStream is;
 		Session session = null;
 		
@@ -627,7 +627,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
+	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
 			DatabaseException {
@@ -717,9 +717,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("addNote({}, {})", docPath, text);
+	public void addNote(String token, String docPath, String text) throws LockException, 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.info("addNote({}, {}, {})", new Object[] { token, docPath, text });
 		Session session = null;
 		Node notesNode = null;
 		
@@ -778,9 +778,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	@Override
-	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("deleteNote({})", notePath);
+		log.info("deleteNote({}, {})", token, notePath);
 		Session session = null;
 		Node parentNode = null;
 		
@@ -829,9 +829,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	@Override
-	public Note getNote(String notePath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.info("getNote({})", notePath);
+	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.info("getNote({}, {})", token, notePath);
 		Session session = null;
 		Note note = new Note();
 		
@@ -873,9 +873,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("setNote({}, {})", notePath, text);
+	public void setNote(String token, String notePath, String text) throws LockException, 
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.info("setNote({}, {}, {})", new Object[] { token, notePath, text });
 		Session session = null;
 		Node noteNode = null;
 		
@@ -923,9 +923,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public List<Document> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getChilds({})", fldPath);
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getChilds({}, {})", token, fldPath);
 		List<Document> childs = new ArrayList<Document>();
 		Session session = null;
 		
@@ -959,9 +959,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Document rename(String docPath, String newName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("rename:({}, {})", docPath, newName);
+	public Document rename(String token, String docPath, String newName) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("rename:({}, {}, {})", new Object[] { token, docPath, newName });
 		Document renamedDocument = null;
 		Session session = null;
 		
@@ -1022,9 +1022,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void setProperties(Document doc) throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({})", doc);
+	public void setProperties(String token, Document doc) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setProperties({}, {})", token, doc);
 		Node documentNode = null;
 		Session session = null;
 		
@@ -1075,9 +1075,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void checkout(String docPath) throws AccessDeniedException, RepositoryException, 
+	public void checkout(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("checkout({})", docPath);
+		log.debug("checkout({}, {})", token, docPath);
 		Transaction t = null;
 		XASession session = null;
 		
@@ -1134,9 +1134,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void cancelCheckout(String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, LockException, DatabaseException {
-		log.debug("cancelCheckout({})", docPath);
+	public void cancelCheckout(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+		log.debug("cancelCheckout({}, {})", token, docPath);
 		Transaction t = null;
 		XASession session = null;
 		
@@ -1195,9 +1195,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public boolean isCheckedOut(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException {
-		log.debug("isCheckedOut({})", docPath);
+	public boolean isCheckedOut(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("isCheckedOut({}, {})", token, docPath);
 		boolean checkedOut = false;
 		Session session = null;
 
@@ -1221,9 +1221,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Version checkin(String docPath, String comment) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, LockException, VersionException, DatabaseException {
-		log.debug("checkin({}, {})", docPath, comment);
+	public Version checkin(String token, String docPath, String comment) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, VersionException, DatabaseException {
+		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		Version version = new Version();
 		Node contentNode = null;
 		Transaction t = null;
@@ -1318,9 +1318,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public List<Version> getVersionHistory(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getVersionHistory({})", docPath);
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getVersionHistory({}, {})", token, docPath);
 		List<Version> history = new ArrayList<Version>();
 		Session session = null;
 		
@@ -1426,9 +1426,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void unlock(String docPath) throws AccessDeniedException, RepositoryException, 
+	public void unlock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("unlock({}", docPath);
+		log.debug("unlock({}, {})", token, docPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -1473,9 +1473,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public boolean isLocked(String docPath) throws RepositoryException, PathNotFoundException, 
+	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException, 
 			DatabaseException {
-		log.debug("isLocked({})", docPath);
+		log.debug("isLocked({}, {})", token, docPath);
 		boolean locked;
 		Session session = null;
 		
@@ -1498,9 +1498,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public Lock getLock(String docPath) throws RepositoryException, PathNotFoundException, LockException,
-			DatabaseException {
-		log.debug("getLock({})", docPath);
+	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException,
+			LockException, DatabaseException {
+		log.debug("getLock({}, {})", token, docPath);
 		Lock lock = new Lock();
 		Session session = null;
 		
@@ -1541,9 +1541,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void purge(String docPath) throws AccessDeniedException, RepositoryException, 
+	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, DatabaseException {
-		log.debug("purge({})", docPath);
+		log.debug("purge({}, {})", token, docPath);
 		Node parentNode = null;
 		Session session = null;
 		
@@ -1653,9 +1653,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void move(String docPath, String dstPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {})", docPath, dstPath);
+	public void move(String token, String docPath, String dstPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("move({}, {}, {})", new Object[] { token, docPath, dstPath });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -1694,10 +1694,10 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void copy(String docPath, String dstPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
+	public void copy(String token, String docPath, String dstPath) throws ItemExistsException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException, 
 			UserQuotaExceededException {
-		log.debug("copy({}, {})", docPath, dstPath);
+		log.debug("copy({}, {}, {})", new Object[]  { token, docPath, dstPath });
 		Node dstFolderNode = null;
 		Session session = null;
 		
@@ -1761,9 +1761,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void restoreVersion(String docPath, String versionId) throws AccessDeniedException,
+	public void restoreVersion(String token, String docPath, String versionId) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("restoreVersion({}, {})", docPath, versionId);
+		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		Node contentNode = null;
 		Session session = null;
 		
@@ -1803,9 +1803,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void purgeVersionHistory(String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
-		log.debug("purgeVersionHistory({})", docPath);
+	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, DatabaseException {
+		log.debug("purgeVersionHistory({}, {})", token, docPath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -1848,9 +1848,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public long getVersionHistorySize(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException {
-		log.debug("getVersionHistorySize({})", docPath);
+	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		long ret = 0;
 		Session session = null;
 		
@@ -1885,9 +1885,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public boolean isValid(String docPath) throws PathNotFoundException, AccessDeniedException,
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.debug("isValid({})", docPath);
+		log.debug("isValid({}, {})", token, docPath);
 		boolean valid = false;
 		Session session = null;
 		
@@ -1916,8 +1916,9 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public String getPath(String uuid) throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		String path = null;
 		Session session = null;
 		
