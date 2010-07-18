@@ -41,8 +41,8 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark add(String nodePath, String name) throws AccessDeniedException,	PathNotFoundException,
-			RepositoryException, DatabaseException;
+	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
+			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
 	 * Obtains properties from a previously created folder.
@@ -51,7 +51,8 @@ public interface BookmarkModule {
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void remove(int bmId) throws AccessDeniedException, RepositoryException, DatabaseException;
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Rename a previous stored bookmark.
@@ -63,8 +64,8 @@ public interface BookmarkModule {
 	 * repository with the same name.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Bookmark rename(int bmId, String newName) throws AccessDeniedException, RepositoryException, 
-			DatabaseException;
+	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException, 
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Retrive an user bookmark collection.
@@ -72,5 +73,5 @@ public interface BookmarkModule {
 	 * @return All the user bookmarks
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<Bookmark> getAll() throws RepositoryException, DatabaseException;
+	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException;
 }

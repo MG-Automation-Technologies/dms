@@ -38,7 +38,7 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void subscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
+	public void subscribe(String token, String nodePath) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException;
 	
 	/**
@@ -49,8 +49,8 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void unsubscribe(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public void unsubscribe(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get user subscriptions from am item (document or folder).
@@ -61,8 +61,8 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public List<String> getSubscriptors(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public List<String> getSubscriptors(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Send a notification message to an user list.
@@ -74,6 +74,6 @@ public interface NotificationModule {
 	 * @throws AccessDeniedException If the token authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void notify(String nodePath, List<String> users, String message, boolean attachment) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException;
+	public void notify(String token, String nodePath, List<String> users, String message, boolean attachment)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException;
 }

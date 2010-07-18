@@ -30,15 +30,15 @@ public interface StatsModule {
 	/**
 	 * Get number of documents per context
 	 */
-	public StatsInfo getDocumentsByContext() throws RepositoryException, DatabaseException;
+	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get number of folders per context
 	 */
-	public StatsInfo getFoldersByContext() throws RepositoryException, DatabaseException;
+	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Get sizer of documents per context
 	 */
-	public StatsInfo getDocumentsSizeByContext() throws RepositoryException, DatabaseException;
+	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException;
 }

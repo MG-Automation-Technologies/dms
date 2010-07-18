@@ -45,8 +45,8 @@ public interface SearchModule {
 	 * @return A collection of document which content matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<QueryResult> findByContent(String expression) throws IOException, ParseException,
-			RepositoryException, DatabaseException;
+	public List<QueryResult> findByContent(String token, String expression) throws IOException,
+			ParseException, RepositoryException, DatabaseException;
 
 	/**
 	 * Search for documents by document name.
@@ -55,7 +55,7 @@ public interface SearchModule {
 	 * @return A collection of document which name matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<QueryResult> findByName(String expression) throws IOException, ParseException,
+	public List<QueryResult> findByName(String token, String expression) throws IOException, ParseException,
 			RepositoryException, DatabaseException;
 
 	/**
@@ -65,8 +65,8 @@ public interface SearchModule {
 	 * @return A collection of document which keywords matched the searched expression.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<QueryResult> findByKeywords(Set<String> expression) throws IOException, ParseException,
-			RepositoryException, DatabaseException;
+	public List<QueryResult> findByKeywords(String token, Set<String> expression) throws IOException,
+			ParseException, RepositoryException, DatabaseException;
 
 	/**
 	 * Performs a complex search by content, name and keywords (between others).
@@ -76,7 +76,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException If something fails when parsing metadata.
 	 */
-	public List<QueryResult> find(QueryParams params) throws IOException, ParseException,
+	public List<QueryResult> find(String token, QueryParams params) throws IOException, ParseException,
 			RepositoryException, DatabaseException;
 
 	/**
@@ -90,8 +90,8 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public ResultSet findPaginated(QueryParams params, int offset, int limit) throws IOException,
-			ParseException, RepositoryException, DatabaseException;
+	public ResultSet findPaginated(String token, QueryParams params, int offset, int limit) throws
+			IOException, ParseException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -101,8 +101,8 @@ public interface SearchModule {
 	 * @return A collection of document from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public List<QueryResult> findByStatement(String statement, String type) throws RepositoryException,
-			DatabaseException;
+	public List<QueryResult> findByStatement(String token, String statement, String type) throws
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Search for documents and folder nodes specifying a complex query statement.
@@ -116,8 +116,8 @@ public interface SearchModule {
 	 * from the resulting query statement.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public ResultSet findByStatementPaginated(String statement, String type, int offset, int limit) throws 
-			RepositoryException, DatabaseException;
+	public ResultSet findByStatementPaginated(String token, String statement, String type, int offset,
+			int limit) throws RepositoryException, DatabaseException;
 
 	/**
 	 * Save a search for future use.
@@ -126,8 +126,8 @@ public interface SearchModule {
 	 * @param name The name of the query to be saved.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public int saveSearch(QueryParams params) throws AccessDeniedException, RepositoryException,
-			DatabaseException;
+	public int saveSearch(String token, QueryParams params) throws AccessDeniedException,
+			RepositoryException, DatabaseException;
 	
 	/**
 	 * Get a saved search.
@@ -137,7 +137,7 @@ public interface SearchModule {
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
 	@Deprecated
-	public QueryParams getSearch(int qpId) throws PathNotFoundException, RepositoryException, 
+	public QueryParams getSearch(String token, int qpId) throws PathNotFoundException, RepositoryException, 
 			DatabaseException;
 	
 	/**
@@ -146,7 +146,7 @@ public interface SearchModule {
 	 * @return A collection with the names of the saved search.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public List<QueryParams> getAllSearchs() throws RepositoryException, DatabaseException;
+	public List<QueryParams> getAllSearchs(String token) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Delete a saved search.
@@ -155,7 +155,7 @@ public interface SearchModule {
 	 * @throws PathNotFoundException If there is no saved search with this name.
 	 * @throws RepositoryException If there is any general repository problem or the query fails
 	 */
-	public void deleteSearch(int qpId) throws AccessDeniedException, PathNotFoundException,
+	public void deleteSearch(String token, int qpId) throws AccessDeniedException, PathNotFoundException,
 			RepositoryException, DatabaseException;
 	
 	/**
@@ -165,7 +165,7 @@ public interface SearchModule {
 	 * @return The keyword map.
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public Map<String, Integer> getKeywordMap(List<String> filter) throws RepositoryException,
+	public Map<String, Integer> getKeywordMap(String token, List<String> filter) throws RepositoryException,
 			DatabaseException;
 	
 	/**
@@ -175,6 +175,6 @@ public interface SearchModule {
 	 * @return A Collection of documents in the category
 	 * @throws RepositoryException If there is any general repository problem or the query fails.
 	 */
-	public List<Document> getCategorizedDocuments(String categoryId) throws RepositoryException,
-			DatabaseException;
+	public List<Document> getCategorizedDocuments(String token, String categoryId) throws
+			RepositoryException, DatabaseException;
 }
