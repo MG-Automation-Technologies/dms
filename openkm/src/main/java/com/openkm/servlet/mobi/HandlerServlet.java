@@ -89,7 +89,7 @@ public class HandlerServlet extends HttpServlet {
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
 		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(null, path));
-		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(path));
+		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(null, path));
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/browse.jsp").forward(request, response);
@@ -128,7 +128,7 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("doc", OKMDocument.getInstance().getProperties(path));
+		sc.setAttribute("doc", OKMDocument.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/doc-properties.jsp").forward(request, response);
 	}
