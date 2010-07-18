@@ -38,6 +38,7 @@ public class SpanishStemFilter extends TokenFilter {
 	}
 
 	/** Returns the next input Token, after being stemmed */
+	@SuppressWarnings("deprecation")
 	public final Token next() throws IOException {
 		if ((token = input.next()) == null) {
 			return null;
