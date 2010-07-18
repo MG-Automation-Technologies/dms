@@ -89,7 +89,7 @@ public class KEATree {
 				path += "/" + term.getText();
 				Folder folder = new Folder();
 				folder.setPath(path);
-				OKMFolder.getInstance().create(folder);
+				OKMFolder.getInstance().create(null, folder);
 				// To solve infinite loop (nodes must not be in a infinite
 				// cycle)
 				if (!newParentUIDs.contains(term.getUid())) {
