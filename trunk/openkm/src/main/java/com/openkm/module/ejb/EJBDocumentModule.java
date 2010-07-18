@@ -45,190 +45,6 @@ import com.openkm.core.VirusDetectedException;
 public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 
 	@Override
-	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void cancelCheckout(String docPath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Version checkin(String docPath, String comment) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void checkout(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void copy(String docPath, String fldPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void delete(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public List<Document> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public InputStream getContent(String docPath, boolean checkout) throws PathNotFoundException,
-			RepositoryException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public InputStream getContentByVersion(String docPath, String versionId) throws RepositoryException,
-			PathNotFoundException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Lock getLock(String docPath) throws RepositoryException, PathNotFoundException, LockException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPath(String uuid) throws AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Document getProperties(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Version> getVersionHistory(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public long getVersionHistorySize(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isCheckedOut(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isLocked(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isValid(String docPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void move(String docPath, String fldPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void purge(String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void purgeVersionHistory(String docPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Document rename(String docPath, String newName) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void restoreVersion(String docPath, String versionId) throws PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
-			VirusDetectedException, VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setProperties(Document doc) throws VersionException, LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void unlock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Note getNote(String notePath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void removeNote(String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
@@ -238,9 +54,208 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 	}
 
 	@Override
+	public void delete(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Document getProperties(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProperties(String token, Document doc) throws VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public InputStream getContent(String token, String docPath, boolean checkout)
+			throws PathNotFoundException, RepositoryException, IOException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public InputStream getContentByVersion(String token, String docPath, String versionId)
+			throws RepositoryException, PathNotFoundException, IOException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
+			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addNote(String token, String docPath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setNote(String token, String notePath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void checkout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isCheckedOut(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Version checkin(String token, String docPath, String comment) throws LockException,
+			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void unlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isLocked(String token, String docPath) throws RepositoryException, PathNotFoundException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Lock getLock(String token, String docPath) throws RepositoryException, PathNotFoundException,
+			LockException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void purge(String token, String docPath) throws AccessDeniedException, RepositoryException,
+			PathNotFoundException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void move(String token, String docPath, String fldPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void copy(String token, String docPath, String fldPath) throws ItemExistsException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, UserQuotaExceededException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void restoreVersion(String token, String docPath, String versionId) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void purgeVersionHistory(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public long getVersionHistorySize(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, DatabaseException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
