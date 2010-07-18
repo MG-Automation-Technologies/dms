@@ -103,9 +103,9 @@ public class RepositoryViewServlet extends BaseServlet {
 			} else if (action.equals("save")) {
 				save(session, path, request, response);
 			} else if (action.equals("set_script")) {
-				OKMScripting.getInstance().setScript(path, Config.DEFAULT_SCRIPT);
+				OKMScripting.getInstance().setScript(null, path, Config.DEFAULT_SCRIPT);
 			} else if (action.equals("remove_script")) {
-				OKMScripting.getInstance().removeScript(path);
+				OKMScripting.getInstance().removeScript(null, path);
 			}
 			
 			if (!action.equals("edit")) {
@@ -304,7 +304,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		
 		if (request.getSession().getAttribute("stats") != null && node.isNodeType(Folder.TYPE)) {
 			try {
-				ci = OKMFolder.getInstance().getContentInfo(node.getPath());
+				ci = OKMFolder.getInstance().getContentInfo(null, node.getPath());
 			} catch (AccessDeniedException e) {
 				log.warn(e.getMessage(), e);
 			} catch (com.openkm.core.RepositoryException e) {

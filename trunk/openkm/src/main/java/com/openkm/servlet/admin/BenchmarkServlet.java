@@ -98,7 +98,7 @@ public class BenchmarkServlet extends BaseServlet {
 			
 			Folder fld = new Folder();
 			fld.setPath("/okm:root/Benchmark");
-			OKMFolder.getInstance().create(fld);
+			OKMFolder.getInstance().create(null, fld);
 			tBegin = System.currentTimeMillis();
 			
 			for (int i=0; i<times; i++) {
@@ -109,7 +109,7 @@ public class BenchmarkServlet extends BaseServlet {
 				
 				long begin = System.currentTimeMillis();
 				fld.setPath("/okm:root/Benchmark/"+i);
-				OKMFolder.getInstance().create(fld);
+				OKMFolder.getInstance().create(null, fld);
 				ImpExpStats stats = RepositoryImporter.importDocuments(dir, fld.getPath(), out, 
 						new HTMLInfoDecorator(docs));
 				long end = System.currentTimeMillis();
@@ -173,7 +173,7 @@ public class BenchmarkServlet extends BaseServlet {
 		out.flush();
 		
 		try {
-			cInfo = OKMFolder.getInstance().getContentInfo(src);
+			cInfo = OKMFolder.getInstance().getContentInfo(null, src);
 			out.println("<b>- Source:</b> "+src+"<br/>");
 			out.println("<b>- Destination:</b> "+dst+"<br/>");
 			out.println("<b>- Size:</b> "+FormatUtil.formatSize(cInfo.getSize())+"<br/>");
@@ -189,8 +189,8 @@ public class BenchmarkServlet extends BaseServlet {
 				long begin = System.currentTimeMillis();
 				Folder fld = new Folder();
 				fld.setPath(dst+"/"+i);
-				OKMFolder.getInstance().create(fld);
-				OKMFolder.getInstance().copy(src, fld.getPath());
+				OKMFolder.getInstance().create(null, fld);
+				OKMFolder.getInstance().copy(null, src, fld.getPath());
 				long end = System.currentTimeMillis();
 				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 				out.flush();

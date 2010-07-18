@@ -227,8 +227,8 @@ public class AuthServlet extends BaseServlet {
 				sc.setAttribute("users", AuthDAO.findAllUsers(false));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
-				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsers()));
-				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
+				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsers(null)));
+				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 			}
 		} else {
 			sc.setAttribute("roleFilter", roleFilter);
@@ -237,8 +237,8 @@ public class AuthServlet extends BaseServlet {
 				sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
 			} else {
-				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsersByRole(roleFilter)));
-				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
+				sc.setAttribute("users", str2user(OKMAuth.getInstance().getUsersByRole(null, roleFilter)));
+				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 			}
 		}
 		
@@ -336,7 +336,7 @@ public class AuthServlet extends BaseServlet {
 		if (db) {
 			sc.setAttribute("roles", AuthDAO.findAllRoles());
 		} else {
-			sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles()));
+			sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 		}
 		
 		sc.setAttribute("db", db);
@@ -353,8 +353,8 @@ public class AuthServlet extends BaseServlet {
 		for (String usrId : strList) {
 			List<String> userList = new ArrayList<String>();
 			userList.add(usrId);
-			List<String> mailList = OKMAuth.getInstance().getMails(userList);
-			List<String> roleList = OKMAuth.getInstance().getRolesByUser(usrId);			
+			List<String> mailList = OKMAuth.getInstance().getMails(null, userList);
+			List<String> roleList = OKMAuth.getInstance().getRolesByUser(null, usrId);			
 			User usr = new User();
 			usr.setId(usrId);
 			usr.setActive(true);

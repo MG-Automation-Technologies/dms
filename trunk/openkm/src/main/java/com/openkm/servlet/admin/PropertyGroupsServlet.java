@@ -147,11 +147,11 @@ public class PropertyGroupsServlet extends BaseServlet {
 		ServletContext sc = getServletContext();
 		FormUtils.resetPropertyGroupsForms();
 		OKMPropertyGroup okmPropGroups = OKMPropertyGroup.getInstance();
-		List<PropertyGroup> groups = okmPropGroups.getAllGroups();
+		List<PropertyGroup> groups = okmPropGroups.getAllGroups(null);
 		Map<PropertyGroup, List<Map<String, String>>> pGroups = new HashMap<PropertyGroup, List<Map<String,String>>>();
 		
 		for (PropertyGroup group : groups) {
-			List<FormElement> mData = okmPropGroups.getPropertyGroupForm(group.getName());
+			List<FormElement> mData = okmPropGroups.getPropertyGroupForm(null, group.getName());
 			List<Map<String, String>> fMaps = new ArrayList<Map<String,String>>();
 			
 			for (FormElement fe : mData) {

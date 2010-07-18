@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.openkm.core.SessionManager;
+import com.openkm.core.HttpSessionManager;
 
 public class BaseServlet extends HttpServlet  {
 	private static final long serialVersionUID = 1L;
@@ -24,6 +24,6 @@ public class BaseServlet extends HttpServlet  {
 	}
 	
 	public void updateSessionManager(HttpServletRequest request) {
-		SessionManager.getInstance().update(request.getSession().getId());
+		HttpSessionManager.getInstance().update(request.getSession().getId());
 	}
 }

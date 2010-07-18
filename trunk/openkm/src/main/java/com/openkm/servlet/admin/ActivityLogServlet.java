@@ -95,7 +95,7 @@ public class ActivityLogServlet extends BaseServlet {
 			sc.setAttribute("userFilter", user);
 			sc.setAttribute("actionFilter", action);
 			sc.setAttribute("actions", actions);
-			sc.setAttribute("users", OKMAuth.getInstance().getUsers());
+			sc.setAttribute("users", OKMAuth.getInstance().getUsers(null));
 			sc.getRequestDispatcher("/admin/activity_log.jsp").forward(request, response);
 		} catch (ParseException e) {
 			sendErrorRedirect(request, response, e);
