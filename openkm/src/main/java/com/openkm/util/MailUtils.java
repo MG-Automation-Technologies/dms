@@ -260,7 +260,7 @@ public class MailUtils {
 			OKMMail okmMail = OKMMail.getInstance();
 			String mailPath = getUserMailPath(uid);
 			
-			if (okmRepository.hasNode(mailPath)) {
+			if (okmRepository.hasNode(null, mailPath)) {
 				// Open connection
 				Store store = session.getStore("imaps");
 				store.connect(host, user, password);
@@ -292,26 +292,26 @@ public class MailUtils {
 					log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
 					String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
 					
-					if (!okmRepository.hasNode(path)) {
+					if (!okmRepository.hasNode(null, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(fld);
+						okmFolder.create(null, fld);
 					}
 					
 					path += "/"+(receivedDate.get(Calendar.MONTH)+1);
 					
-					if (!okmRepository.hasNode(path)) {
+					if (!okmRepository.hasNode(null, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(fld);
+						okmFolder.create(null, fld);
 					}
 					
 					path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
 					
-					if (!okmRepository.hasNode(path)) {
+					if (!okmRepository.hasNode(null, path)) {
 						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
 						fld.setPath(path);
-						okmFolder.create(fld);
+						okmFolder.create(null, fld);
 					}
 					
 					com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
@@ -344,8 +344,8 @@ public class MailUtils {
 					String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
 					log.info("newMailPath: {}", newMailPath);
 					
-					if (!okmRepository.hasNode(newMailPath)) {
-						okmMail.create(mail);
+					if (!okmRepository.hasNode(null, newMailPath)) {
+						okmMail.create(null, mail);
 						
 						try {
 							addAttachments(mail, msg);
@@ -443,7 +443,7 @@ public class MailUtils {
 					attachment.setMimeType(mimeType);
 					attachment.setPath(mail.getPath()+"/"+bp.getFileName());
 					InputStream is = bp.getInputStream();
-					okmDocument.create(attachment, is);
+					okmDocument.create(null, attachment, is);
 					is.close();
 				}
 			}

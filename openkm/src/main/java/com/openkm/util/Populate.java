@@ -62,7 +62,7 @@ public class Populate {
 					final String fileName = URLDecoder.decode(
 							(String) folderNames.remove(folderNames.size() - 1), "UTF-8")
 							.replaceAll(":", "_");
-					String path = okmRepository.getRootFolder().getPath();
+					String path = okmRepository.getRootFolder(null).getPath();
 
 					for (Iterator<String> fn = folderNames.iterator(); fn.hasNext();) {
 						String name = URLDecoder.decode((String) fn.next(), "UTF-8");
@@ -72,16 +72,16 @@ public class Populate {
 						}
 						
 						path = path + "/" + name;
-						if (!okmRepository.hasNode(path)) {
+						if (!okmRepository.hasNode(null, path)) {
 							//log.info("Create folder: {}", path);
 							Folder fld = new Folder();
 							fld.setPath(path);
-							okmFolder.create(fld);
+							okmFolder.create(null, fld);
 						}
 					}
 					
 					path = path + "/" + fileName;
-					if (!okmRepository.hasNode(path)) {
+					if (!okmRepository.hasNode(null, path)) {
 						final Writer fOut = out;
 						final String docPath = path; 
 						final Exception[] ex = new Exception[1];
@@ -90,7 +90,7 @@ public class Populate {
 						Thread t = new Thread(new Runnable() {
 							public void run() {
 								try {
-									String info = fileName + " (" + host + ")";
+									//String info = fileName + " (" + host + ")";
 									URLConnection con = currentURL.openConnection();
 									InputStream in = con.getInputStream();
 									try {
@@ -109,7 +109,7 @@ public class Populate {
 										log.info("Create document: {}", docPath);
 										Document doc = new Document();
 										doc.setPath(docPath);
-										okmDocument.create(doc, in);
+										okmDocument.create(null, doc, in);
 									} finally {
 										in.close();
 									}
