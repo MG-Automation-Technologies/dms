@@ -21,13 +21,19 @@
 
 package com.openkm.core;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.openkm.bean.JcrSessionInfo;
+import com.openkm.util.UUIDGenerator;
 
 /**
  * @author pavila
@@ -36,8 +42,9 @@ public class JcrSessionManager {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(JcrSessionManager.class);
 	private static JcrSessionManager instance = new JcrSessionManager();
-	private Map<String, Session> sessions = new HashMap<String, Session>();
-
+	private Map<String, JcrSessionInfo> sessions = new HashMap<String, JcrSessionInfo>();
+	private static String systemToken;
+	
 	/**
 	 * Prevents class instantiation
 	 */
@@ -52,10 +59,50 @@ public class JcrSessionManager {
 	}
 	
 	/**
+	 * Get system token
+	 */
+	public String getSystemToken() {
+		return systemToken;
+	}
+	
+	/**
+	 * Set system session
+	 */
+	public void putSystemSession(Session session) {
+		systemToken = UUIDGenerator.generate(this);
+		add(systemToken, session);
+	}
+	
+	/**
 	 * Add a new session
 	 */
 	public synchronized void add(String token, Session session) {
-		sessions.put(token, session);
+		JcrSessionInfo si = new JcrSessionInfo();
+		si.setSession(session);
+		si.setCreation(Calendar.getInstance());
+		si.setAccess(Calendar.getInstance());
+		sessions.put(token, si);
+	}
+	
+	/**
+	 * Return a session
+	 */
+	public Session get(String token) {
+		JcrSessionInfo si = (JcrSessionInfo) sessions.get(token);
+		
+		if (si != null) {
+			si.setAccess(Calendar.getInstance());
+			return si.getSession();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Return a session info
+	 */
+	public JcrSessionInfo getInfo(String token) {
+		return sessions.get(token);
 	}
 	
 	/**
@@ -64,18 +111,21 @@ public class JcrSessionManager {
 	public synchronized void remove(String token) {
 		sessions.remove(token);
 	}
-	
-	/**
-	 * Return a session info
-	 */
-	public Session getSession(String token) {
-		return sessions.get(token);
-	}
+		
 		
 	/**
-	 * Return all active sessions
+	 * Return all active tokens
 	 */
-	public Map<String, Session> getSessions() {
-		return sessions;
+	public List<String> getTokens() {
+		List<String> list = new ArrayList<String>();
+		
+		for (String token : sessions.keySet()) {
+			if (!systemToken.equals(token)) {
+				list.add(token);
+			}
+		}
+		
+		return list;
 	}
+
 }
