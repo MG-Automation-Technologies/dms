@@ -773,9 +773,9 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             return false;
         }
     }
-    
-    @SuppressWarnings("unchecked")
+    	
 	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
     public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws
     		RepositoryException {
         log.debug("importProperties({}, {})", importContext, isCollection);

@@ -264,9 +264,9 @@ public class DirListingExportHandler implements IOHandler, PropertyHandler {
 	public boolean canImport(PropertyImportContext importContext, boolean isCollection) {
 		return false;
 	}
-
+	
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Map importProperties(PropertyImportContext importContext, boolean isCollection) throws
 			RepositoryException {
 		// export facilities only -> throw
