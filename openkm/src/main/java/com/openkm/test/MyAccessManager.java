@@ -7,16 +7,13 @@ import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.RepositoryException;
-import javax.security.auth.Subject;
 
-import org.apache.jackrabbit.core.HierarchyManager;
 import org.apache.jackrabbit.core.ItemId;
 import org.apache.jackrabbit.core.security.AMContext;
 import org.apache.jackrabbit.core.security.AccessManager;
 import org.apache.jackrabbit.core.security.authorization.AccessControlProvider;
 import org.apache.jackrabbit.core.security.authorization.Permission;
 import org.apache.jackrabbit.core.security.authorization.WorkspaceAccessManager;
-import org.apache.jackrabbit.core.security.user.UserManagerImpl;
 import org.apache.jackrabbit.spi.Name;
 import org.apache.jackrabbit.spi.Path;
 import org.apache.jackrabbit.spi.commons.name.PathFactoryImpl;
@@ -113,6 +110,7 @@ public class MyAccessManager implements AccessManager {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("deprecation")
 	private int deprecatedActionsToNewApi(int actions) {
 		boolean read = (actions & READ) != 0;
 		boolean write = (actions & WRITE) != 0;
@@ -139,6 +137,7 @@ public class MyAccessManager implements AccessManager {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	private String actionsToString(int actions) {
 		StringBuilder sb = new StringBuilder();
 
