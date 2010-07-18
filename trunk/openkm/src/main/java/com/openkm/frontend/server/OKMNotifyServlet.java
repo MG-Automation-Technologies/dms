@@ -58,7 +58,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		updateSessionManager();
 		
 		try {
-			OKMNotification.getInstance().subscribe(nodePath);
+			OKMNotification.getInstance().subscribe(null, nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -85,7 +85,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 		updateSessionManager();
 		
 		try {
-			OKMNotification.getInstance().unsubscribe(nodePath);
+			OKMNotification.getInstance().unsubscribe(null, nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -117,7 +117,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 			List<String> roleNames = Arrays.asList(roles.split(","));
 			
 			for (String role : roleNames) {
-				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(role);
+				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
 				
 				for (String user : usersInRole) {
 					if (!userNames.contains(user)) {
@@ -126,7 +126,7 @@ public class OKMNotifyServlet extends OKMRemoteServiceServlet implements OKMNoti
 				}
 			}
 			
-			OKMNotification.getInstance().notify(docPath, userNames, message, attachment);
+			OKMNotification.getInstance().notify(null, docPath, userNames, message, attachment);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNotifyService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

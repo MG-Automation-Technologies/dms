@@ -70,7 +70,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLockedDocuments();
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLockedDocuments(null);
 			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardDocumentResult documentResult = it.next();
 				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
@@ -95,7 +95,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserCheckedOutDocuments();
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserCheckedOutDocuments(null);
 			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {
 				DashboardDocumentResult documentResult = it.next();
 				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
@@ -120,7 +120,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastModifiedDocuments();
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastModifiedDocuments(null);
 			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardDocumentResult documentResult = it.next();
 				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
@@ -145,7 +145,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserSubscribedDocuments();
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserSubscribedDocuments(null);
 			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardDocumentResult documentResult = it.next();
 				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
@@ -170,7 +170,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastUploadedDocuments();
+			Collection<DashboardDocumentResult> col = OKMDashboard.getInstance().getUserLastUploadedDocuments(null);
 			for (Iterator<DashboardDocumentResult> it = col.iterator(); it.hasNext();) {		
 				DashboardDocumentResult documentResult = it.next();
 				GWTDashboardDocumentResult documentResultClient = Util.copy(documentResult);
@@ -195,7 +195,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			Collection<DashboardFolderResult> col = OKMDashboard.getInstance().getUserSubscribedFolders();
+			Collection<DashboardFolderResult> col = OKMDashboard.getInstance().getUserSubscribedFolders(null);
 			for (Iterator<DashboardFolderResult> it = col.iterator(); it.hasNext();) {		
 				DashboardFolderResult folderResult = it.next();
 				GWTDashboardFolderResult folderResultClient = Util.copy(folderResult);
@@ -220,7 +220,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<QueryParams> it = OKMDashboard.getInstance().getUserSearchs().iterator(); it.hasNext(); ) {
+			for (Iterator<QueryParams> it = OKMDashboard.getInstance().getUserSearchs(null).iterator(); it.hasNext(); ) {
 				searchList.add(Util.copy(it.next()));
 			}
 		} catch (IOException e) {
@@ -251,7 +251,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(id).iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().find(null, id).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (IOException e) {
@@ -279,7 +279,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopDownloadedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopDownloadedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -301,7 +301,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopDownloadedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopDownloadedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -323,7 +323,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopModifiedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastWeekTopModifiedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -345,7 +345,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopModifiedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastMonthTopModifiedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -367,7 +367,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastDownloadedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastDownloadedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -389,7 +389,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastModifiedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastModifiedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -411,7 +411,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastUploadedDocuments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getLastUploadedDocuments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -433,7 +433,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastImportedMailAttachments().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardDocumentResult> it = OKMDashboard.getInstance().getUserLastImportedMailAttachments(null).iterator(); it.hasNext(); ) {
 				docList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -455,7 +455,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		updateSessionManager();
 		
 		try {
-			for (Iterator<DashboardMailResult> it = OKMDashboard.getInstance().getUserLastImportedMails().iterator(); it.hasNext(); ) {
+			for (Iterator<DashboardMailResult> it = OKMDashboard.getInstance().getUserLastImportedMails(null).iterator(); it.hasNext(); ) {
 				mailList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -479,7 +479,7 @@ public class OKMDashboardServlet extends OKMRemoteServiceServlet implements OKMD
 		try {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
-			OKMDashboard.getInstance().visiteNode(source, node, cal);
+			OKMDashboard.getInstance().visiteNode(null, source, node, cal);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDashboardService, ErrorCode.CAUSE_Repository), e.getMessage());

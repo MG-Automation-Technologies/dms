@@ -70,7 +70,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		updateSessionManager();
 		
 		try {
-			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs().iterator(); it.hasNext();) {		
+			for (Iterator<QueryParams> it = OKMSearch.getInstance().getAllSearchs(null).iterator(); it.hasNext();) {		
 				resultList.add(Util.copy(it.next()));
 			}
 		}  catch (RepositoryException e) {
@@ -94,7 +94,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		updateSessionManager();
 		
 		try {
-			return OKMSearch.getInstance().saveSearch(Util.copy(params));
+			return OKMSearch.getInstance().saveSearch(null, Util.copy(params));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -113,7 +113,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		updateSessionManager();
 		
 		try {
-			OKMSearch.getInstance().deleteSearch(id);
+			OKMSearch.getInstance().deleteSearch(null, id);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMSearchService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -142,7 +142,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		
 		try {
 			queryParams = Util.copy(params);
-			results = OKMSearch.getInstance().findPaginated(queryParams, offset, limit);
+			results = OKMSearch.getInstance().findPaginated(null, queryParams, offset, limit);
 			
 			for (Iterator<QueryResult> it = results.getResults().iterator(); it.hasNext();) {		
 				QueryResult queryResult = it.next();
@@ -182,7 +182,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		
 		try {
 			queryParams = Util.copy(params);
-			results = OKMSearch.getInstance().find(queryParams);
+			results = OKMSearch.getInstance().find(null, queryParams);
 			
 			for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
 				QueryResult queryResult = it.next();
@@ -221,7 +221,7 @@ public class OKMSearchServlet extends OKMRemoteServiceServlet implements OKMSear
 		updateSessionManager();
 		
 		try {
-			Map<String, Integer> keyMap = OKMSearch.getInstance().getKeywordMap(filter);
+			Map<String, Integer> keyMap = OKMSearch.getInstance().getKeywordMap(null, filter);
 			for (Iterator<String> it = keyMap.keySet().iterator(); it.hasNext();)  {
 				String key = it.next();
 				GWTKeyword keyword = new GWTKeyword();

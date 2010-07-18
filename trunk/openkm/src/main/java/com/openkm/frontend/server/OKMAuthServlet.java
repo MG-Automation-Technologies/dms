@@ -70,7 +70,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		log.debug("logout()");
 		updateSessionManager();
 		try {
-			OKMAuth.getInstance().logout();
+			OKMAuth.getInstance().logout(null);
 			getThreadLocalRequest().getSession().invalidate();
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -92,7 +92,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			hm = OKMAuth.getInstance().getGrantedRoles(nodePath);
+			hm = OKMAuth.getInstance().getGrantedRoles(null, nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -121,7 +121,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			hm = OKMAuth.getInstance().getGrantedUsers(nodePath);
+			hm = OKMAuth.getInstance().getGrantedUsers(null, nodePath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -158,8 +158,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers();
-			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getUsers(null);
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(null, nodePath).keySet();
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -198,8 +198,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles();
-			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getRoles(null);
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(null, nodePath).keySet();
 			
 			//Not add rols that are granted
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
@@ -240,8 +240,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers();
-			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getUsers(null);
+			Collection<String> grantedUsers = OKMAuth.getInstance().getGrantedUsers(null, nodePath).keySet();
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -280,8 +280,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles();
-			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(nodePath).keySet();
+			Collection<String> col = OKMAuth.getInstance().getRoles(null);
+			Collection<String> grantedRoles = OKMAuth.getInstance().getGrantedRoles(null, nodePath).keySet();
 			
 			//Not add rols that are granted
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
@@ -322,7 +322,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			OKMAuth.getInstance().grantUser(path, user, permissions, recursive);
+			OKMAuth.getInstance().grantUser(null, path, user, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -350,8 +350,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		
 		try {
 			OKMAuth oKMAuth = OKMAuth.getInstance();
-			oKMAuth.revokeUser(path, user, Permission.READ, recursive);
-			oKMAuth.revokeUser(path, user, Permission.WRITE, recursive);
+			oKMAuth.revokeUser(null, path, user, Permission.READ, recursive);
+			oKMAuth.revokeUser(null, path, user, Permission.WRITE, recursive);
 			//oKMAuth.revokeUser(path, user, Permission.REMOVE);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -379,7 +379,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			OKMAuth.getInstance().revokeUser(path, user, permissions, recursive);
+			OKMAuth.getInstance().revokeUser(null, path, user, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -406,7 +406,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			OKMAuth.getInstance().grantRole(path, role, permissions, recursive);
+			OKMAuth.getInstance().grantRole(null, path, role, permissions, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -435,8 +435,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
 				OKMAuth oKMAuth = OKMAuth.getInstance();
-				oKMAuth.revokeRole(path, role, Permission.READ, recursive);
-				oKMAuth.revokeRole(path, role, Permission.WRITE, recursive);
+				oKMAuth.revokeRole(null, path, role, Permission.READ, recursive);
+				oKMAuth.revokeRole(null, path, role, Permission.WRITE, recursive);
 				//oKMAuth.revokeRole(path, user, Permission.REMOVE);
 			}
 		} catch (PathNotFoundException e) {
@@ -466,7 +466,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		
 		try {
 			if (!(Config.SYSTEM_DEMO && path.equals("/okm:root"))) {
-				OKMAuth.getInstance().revokeRole(path, role, permissions, recursive);
+				OKMAuth.getInstance().revokeRole(null, path, role, permissions, recursive);
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -519,7 +519,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers();
+			Collection<String> col = OKMAuth.getInstance().getUsers(null);
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -546,7 +546,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles();
+			Collection<String> col = OKMAuth.getInstance().getRoles(null);
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String rol = it.next();
@@ -575,7 +575,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getUsers();
+			Collection<String> col = OKMAuth.getInstance().getUsers(null);
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
@@ -604,7 +604,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 		updateSessionManager();
 		
 		try {
-			Collection<String> col = OKMAuth.getInstance().getRoles();
+			Collection<String> col = OKMAuth.getInstance().getRoles(null);
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String rol = it.next();

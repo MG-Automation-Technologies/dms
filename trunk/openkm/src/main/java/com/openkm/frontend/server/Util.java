@@ -485,7 +485,7 @@ public class Util {
 		if (params.getCategories() != null && !params.getCategories().isEmpty()) {
 			itCat = params.getCategories().iterator();
 			if (itCat.hasNext()) {
-				gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(itCat.next()));
+				gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(null, itCat.next()));
 			}
 		}
 		
@@ -504,13 +504,13 @@ public class Util {
 			boolean found = false;
 			
 			// Obtain all group names
-			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups();
+			Collection<PropertyGroup> colGroups = OKMPropertyGroup.getInstance().getAllGroups(null);
 			Iterator<PropertyGroup> itGroup = colGroups.iterator();
 			while (itGroup.hasNext() && !found) {
 				PropertyGroup group = itGroup.next();
 				
 				// Obtain all metadata values
-				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(group.getName());
+				Collection<FormElement> metaData = OKMPropertyGroup.getInstance().getPropertyGroupForm(null, group.getName());
 				for (Iterator<FormElement> it = metaData.iterator(); it.hasNext();) {
 					FormElement formElement = it.next();
 					if (formElement.getName().equals(key)) {

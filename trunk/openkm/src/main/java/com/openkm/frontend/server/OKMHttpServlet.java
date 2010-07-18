@@ -24,7 +24,7 @@ package com.openkm.frontend.server;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import com.openkm.core.SessionManager;
+import com.openkm.core.HttpSessionManager;
 
 /**
  * @author jllort
@@ -33,6 +33,6 @@ public class OKMHttpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void updateSessionManager(HttpServletRequest request) {
-		SessionManager.getInstance().update(request.getSession().getId());
+		HttpSessionManager.getInstance().update(request.getSession().getId());
 	}
 }

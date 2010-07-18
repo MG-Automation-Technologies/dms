@@ -62,7 +62,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		updateSessionManager();
 		
 		try {
-			Collection<Bookmark> col = OKMBookmark.getInstance().getAll();
+			Collection<Bookmark> col = OKMBookmark.getInstance().getAll(null);
 			
 			for (Iterator<Bookmark> it = col.iterator(); it.hasNext();) {		
 				Bookmark bookmark = it.next();
@@ -93,7 +93,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		updateSessionManager();
 		
 		try {
-			return Util.copy(OKMBookmark.getInstance().add(nodePath, name));
+			return Util.copy(OKMBookmark.getInstance().add(null, nodePath, name));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -115,7 +115,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		updateSessionManager();
 		
 		try {
-			OKMBookmark.getInstance().remove(bmId);
+			OKMBookmark.getInstance().remove(null, bmId);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -136,7 +136,7 @@ public class OKMBookmarkServlet extends OKMRemoteServiceServlet implements OKMBo
 		updateSessionManager();
 		
 		try {
-			return Util.copy(OKMBookmark.getInstance().rename(bmId, newName));
+			return Util.copy(OKMBookmark.getInstance().rename(null, bmId, newName));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMBookmarkService, ErrorCode.CAUSE_Repository), e.getMessage());

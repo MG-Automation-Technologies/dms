@@ -67,7 +67,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().create(folder));
+			gWTFolder = Util.copy(OKMFolder.getInstance().create(null, folder));
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -98,7 +98,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			OKMFolder.getInstance().delete(fldPath);
+			OKMFolder.getInstance().delete(null, fldPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -130,7 +130,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		
 		try {
 			log.debug("ParentFolder: {}", fldPath);
-			Collection<Folder> col = OKMFolder.getInstance().getChilds(fldPath);
+			Collection<Folder> col = OKMFolder.getInstance().getChilds(null, fldPath);
 			for (Iterator<Folder> it = col.iterator(); it.hasNext();){				
 				Folder folder = it.next();
 				GWTFolder gWTFolder = Util.copy(folder);
@@ -163,7 +163,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().rename(fldId, newName));
+			gWTFolder = Util.copy(OKMFolder.getInstance().rename(null, fldId, newName));
 		} catch (ItemExistsException e){
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -194,7 +194,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			OKMFolder.getInstance().move(fldPath, dstPath);
+			OKMFolder.getInstance().move(null, fldPath, dstPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -224,7 +224,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			OKMFolder.getInstance().purge(fldPath);
+			OKMFolder.getInstance().purge(null, fldPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -252,7 +252,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 		
 		try {
-			gWTFolder = Util.copy(OKMFolder.getInstance().getProperties(fldPath));
+			gWTFolder = Util.copy(OKMFolder.getInstance().getProperties(null, fldPath));
 		} catch (PathNotFoundException e ){
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -277,7 +277,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 	
 		try {
-			OKMFolder.getInstance().copy(fldPath, dstPath);
+			OKMFolder.getInstance().copy(null, fldPath, dstPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -307,7 +307,7 @@ public class OKMFolderServlet extends OKMRemoteServiceServlet implements OKMFold
 		updateSessionManager();
 	
 		try {
-			return Boolean.valueOf(OKMFolder.getInstance().isValid(fldPath));
+			return Boolean.valueOf(OKMFolder.getInstance().isValid(null, fldPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMFolderService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

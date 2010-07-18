@@ -66,7 +66,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 		
 		try {
-			for (Iterator<ProcessDefinition> it = OKMWorkflow.getInstance().findLatestProcessDefinitions().iterator(); it.hasNext();) {
+			for (Iterator<ProcessDefinition> it = OKMWorkflow.getInstance().findLatestProcessDefinitions(null).iterator(); it.hasNext();) {
 				processDefinitionList.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -97,7 +97,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
 				formElementList.add(Util.copy(it.next()));
 			}
-			OKMWorkflow.getInstance().runProcessDefinition(new Double(id).longValue(), UUID, formElementList);
+			OKMWorkflow.getInstance().runProcessDefinition(null, new Double(id).longValue(), UUID, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -122,7 +122,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 		
 		try {
-			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances().iterator(); it.hasNext();) {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findUserTaskInstances(null).iterator(); it.hasNext();) {
 				taskInstances.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -150,7 +150,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 		
 		try {
-			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances().iterator(); it.hasNext();) {
+			for (Iterator<TaskInstance> it= OKMWorkflow.getInstance().findPooledTaskInstances(null).iterator(); it.hasNext();) {
 				taskInstances.add(Util.copy(it.next()));
 			}
 		} catch (RepositoryException e) {
@@ -178,7 +178,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 		
 		try {
-			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(new Double(id).longValue());
+			Map<String, List<FormElement>> list = OKMWorkflow.getInstance().getProcessDefinitionForms(null, new Double(id).longValue());
 			
 			for (Iterator<String> it= list.keySet().iterator(); it.hasNext();) {
 				String key = it.next();
@@ -220,7 +220,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 			for (Iterator<GWTFormElement> it = formElements.iterator(); it.hasNext();) {
 				formElementList.add(Util.copy(it.next()));
 			}
-			OKMWorkflow.getInstance().setTaskInstanceValues(new Double(id).longValue(), transitionName, formElementList);
+			OKMWorkflow.getInstance().setTaskInstanceValues(null, new Double(id).longValue(), transitionName, formElementList);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -244,7 +244,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 
 		try {
-			OKMWorkflow.getInstance().addTokenComment(new Double(tokenId).longValue(), message);
+			OKMWorkflow.getInstance().addTokenComment(null, new Double(tokenId).longValue(), message);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -268,7 +268,7 @@ public class OKMWorkflowServlet extends OKMRemoteServiceServlet implements OKMWo
 		updateSessionManager();
 		
 		try {
-			OKMWorkflow.getInstance().setTaskInstanceActorId(new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
+			OKMWorkflow.getInstance().setTaskInstanceActorId(null, new Double(id).longValue(), getThreadLocalRequest().getRemoteUser());
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkflowService, ErrorCode.CAUSE_Repository), e.getMessage());

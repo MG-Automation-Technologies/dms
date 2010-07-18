@@ -105,7 +105,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			String[] wizardProperties = up.getWizard().getPropertyGroups().split(" ");
 			
 			for (int i=0; i<wizardProperties.length; i++) {
-				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups()) {
+				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
 					if (pg.getName().equals(wizardProperties[i])) {
 						wizardPropGrpLst.add(Util.copy(pg));
 						break;
@@ -284,7 +284,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				workspace.setImapID(mailAccount.getId());
 			}
 			
-			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(user.getId()));
+			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
 			 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -309,7 +309,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		updateSessionManager();
 		
 		try {
-			docSize = new Double(OKMDashboard.getInstance().getUserDocumentsSize());
+			docSize = new Double(OKMDashboard.getInstance().getUserDocumentsSize(null));
 			
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);

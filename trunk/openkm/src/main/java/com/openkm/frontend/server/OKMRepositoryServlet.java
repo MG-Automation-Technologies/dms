@@ -57,7 +57,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 
 		try {
-			msg = OKMRepository.getInstance().getUpdateMessage();
+			msg = OKMRepository.getInstance().getUpdateMessage(null);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -80,9 +80,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-				folder = OKMRepository.getInstance().getPersonalFolderBase();
+				folder = OKMRepository.getInstance().getPersonalFolderBase(null);
 			} else {
-				folder = OKMRepository.getInstance().getPersonalFolder();
+				folder = OKMRepository.getInstance().getPersonalFolder(null);
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -111,7 +111,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			folder =  OKMRepository.getInstance().getTemplatesFolder();
+			folder =  OKMRepository.getInstance().getTemplatesFolder(null);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -137,7 +137,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			OKMRepository.getInstance().purgeTrash();
+			OKMRepository.getInstance().purgeTrash(null);
 		} catch (AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
@@ -165,9 +165,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-				folder = OKMRepository.getInstance().getTrashFolderBase();
+				folder = OKMRepository.getInstance().getTrashFolderBase(null);
 			} else {
-				folder = OKMRepository.getInstance().getTrashFolder();
+				folder = OKMRepository.getInstance().getTrashFolder(null);
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -196,7 +196,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			folder = OKMRepository.getInstance().getRootFolder();
+			folder = OKMRepository.getInstance().getRootFolder(null);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -226,9 +226,9 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		try {
 			// Administrators user can see all user homes
 			if (getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE)) {
-				folder = OKMRepository.getInstance().getMailFolderBase();
+				folder = OKMRepository.getInstance().getMailFolderBase(null);
 			} else {
-				folder = OKMRepository.getInstance().getMailFolder();
+				folder = OKMRepository.getInstance().getMailFolder(null);
 			}
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
@@ -257,7 +257,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			folder = OKMRepository.getInstance().getThesaurusFolder();
+			folder = OKMRepository.getInstance().getThesaurusFolder(null);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -285,7 +285,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			folder = OKMRepository.getInstance().getCategoriesFolder();
+			folder = OKMRepository.getInstance().getCategoriesFolder(null);
 			gWTFolder = Util.copy(folder);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -312,7 +312,7 @@ public class OKMRepositoryServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			path = OKMRepository.getInstance().getPath(uuid);
+			path = OKMRepository.getInstance().getPath(null, uuid);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMRepositoryService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
