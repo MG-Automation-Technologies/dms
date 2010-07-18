@@ -69,6 +69,7 @@ import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -205,6 +206,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 		
 		// Store system session token 
 		DirectAuthModule.loadUserData(systemSession);
+		JcrSessionManager.getInstance().putSystemSession(systemSession);
 		log.debug("*** System user created "+systemSession.getUserID());				
 				
 		log.debug("initialize: {}", okmRootPath);
