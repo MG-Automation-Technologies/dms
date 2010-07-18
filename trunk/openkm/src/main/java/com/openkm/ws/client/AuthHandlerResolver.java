@@ -37,7 +37,7 @@ public class AuthHandlerResolver implements HandlerResolver {
 		this.password = password;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public List<Handler> getHandlerChain(PortInfo portInfo) {
 		List<Handler> handlerChain = new ArrayList<Handler>();
 		HeaderHandler hh = new HeaderHandler(username, password);
