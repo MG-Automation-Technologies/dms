@@ -221,7 +221,7 @@ public class MailUtils {
 			String docName = FileUtils.getName(docPath);
 				
 			try {
-				is = OKMDocument.getInstance().getContent(docPath, false);
+				is = OKMDocument.getInstance().getContent(null, docPath, false);
 				File tmp = File.createTempFile("okm", ".tmp");
 				fos = new FileOutputStream(tmp);
 				IOUtils.copy(is, fos);
