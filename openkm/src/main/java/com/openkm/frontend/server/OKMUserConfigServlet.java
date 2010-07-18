@@ -52,7 +52,7 @@ public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			OKMUserConfig.getInstance().setHome(path);
+			OKMUserConfig.getInstance().setHome(null, path);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Repository), e.getMessage());
@@ -73,7 +73,7 @@ public class OKMUserConfigServlet extends OKMRemoteServiceServlet implements OKM
 		updateSessionManager();
 		
 		try {
-			return Util.copy(OKMUserConfig.getInstance().getConfig());
+			return Util.copy(OKMUserConfig.getInstance().getConfig(null));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMUserCopyService, ErrorCode.CAUSE_Repository), e.getMessage());

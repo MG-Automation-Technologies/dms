@@ -25,7 +25,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.openkm.core.SessionManager;
+import com.openkm.core.HttpSessionManager;
 
 /**
  * Extends the RemoteServiceServlet to obtain token auth on development and production
@@ -43,6 +43,6 @@ public class OKMRemoteServiceServlet extends RemoteServiceServlet {
 	}
 	
 	public void updateSessionManager() {
-		SessionManager.getInstance().update(getThreadLocalRequest().getSession().getId());
+		HttpSessionManager.getInstance().update(getThreadLocalRequest().getSession().getId());
 	}
 }

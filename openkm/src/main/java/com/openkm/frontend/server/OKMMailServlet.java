@@ -66,11 +66,11 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		
 		try {
 			if (fldPath == null) {
-				fldPath = OKMRepository.getInstance().getMailFolder().getPath();
+				fldPath = OKMRepository.getInstance().getMailFolder(null).getPath();
 			} 
 			
 			log.debug("ParentFolder: {}", fldPath);
-			Collection<Mail> col = OKMMail.getInstance().getChilds(fldPath);
+			Collection<Mail> col = OKMMail.getInstance().getChilds(null, fldPath);
 			
 			for (Iterator<Mail> it = col.iterator(); it.hasNext();) {		
 				Mail mail = it.next();
@@ -102,7 +102,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		updateSessionManager();
 		
 		try {
-			OKMMail.getInstance().delete(mailPath);
+			OKMMail.getInstance().delete(null, mailPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -132,7 +132,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		updateSessionManager();
 		
 		try {
-			OKMMail.getInstance().move(mailPath, destPath);
+			OKMMail.getInstance().move(null, mailPath, destPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -162,7 +162,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		updateSessionManager();
 		
 		try {
-			OKMMail.getInstance().purge(mailPath);
+			OKMMail.getInstance().purge(null, mailPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -189,7 +189,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		updateSessionManager();
 		
 		try {
-			OKMMail.getInstance().copy(mailPath, fldPath);
+			OKMMail.getInstance().copy(null, mailPath, fldPath);
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -223,7 +223,7 @@ public class OKMMailServlet extends OKMRemoteServiceServlet implements OKMMailSe
 		updateSessionManager();
 		
 		try {
-			mailClient = Util.copy(OKMMail.getInstance().getProperties(mailPath));
+			mailClient = Util.copy(OKMMail.getInstance().getProperties(null, mailPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMMailService, ErrorCode.CAUSE_PathNotFound), e.getMessage());

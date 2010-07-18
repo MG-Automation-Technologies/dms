@@ -76,7 +76,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		
 		try {
 			if (fldPath == null) {
-				fldPath = OKMRepository.getInstance().getRootFolder().getPath();
+				fldPath = OKMRepository.getInstance().getRootFolder(null).getPath();
 			}
 			
 			// Case thesaurus view must search documents in keywords 
@@ -85,7 +85,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				Set<String> keywords = new HashSet<String>();
 				keywords.add(fldPath.substring(fldPath.lastIndexOf("/")+1).replace(" ", "_"));
 				queryParams.setKeywords(keywords);
-				Collection<QueryResult> results = OKMSearch.getInstance().find(queryParams);
+				Collection<QueryResult> results = OKMSearch.getInstance().find(null, queryParams);
 				for (Iterator<QueryResult> it = results.iterator(); it.hasNext();) {		
 					QueryResult queryResult = it.next();
 					if (queryResult.getDocument()!=null) {
@@ -95,8 +95,8 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				}
 			} else if (fldPath.startsWith("/okm:categories")){
 				//TODO: Possible optimization getting folder really could not be needed we've got UUID in GWT UI
-				String uuid = OKMFolder.getInstance().getProperties(fldPath).getUuid();
-				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(uuid);
+				String uuid = OKMFolder.getInstance().getProperties(null, fldPath).getUuid();
+				Collection<Document> results = OKMSearch.getInstance().getCategorizedDocuments(null, uuid);
 				for (Iterator<Document> it = results.iterator(); it.hasNext();) {		
 					GWTDocument docClient = Util.copy(it.next());
 					docList.add(docClient);
@@ -261,7 +261,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().lock(docPath);
+			OKMDocument.getInstance().lock(null, docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());

@@ -140,7 +140,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 							log.info("Upload file '{}' into '{}'", fileName, path);
 							Document doc = new Document();
 							doc.setPath(path+"/"+fileName);
-							OKMDocument.getInstance().create(doc, is);
+							OKMDocument.getInstance().create(null, doc, is);
 							uploadedDocPath = doc.getPath();
 							
 							// Return the path of the inserted document in response
@@ -165,7 +165,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					log.info("Folder create: {}", path);
 					Folder fld = new Folder();
 					fld.setPath(path+"/"+folder);
-					OKMFolder.getInstance().create(fld);
+					OKMFolder.getInstance().create(null, fld);
 					out.print(returnOKMessage);
 				}
 				
@@ -177,7 +177,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					List<String> roleNames = Arrays.asList(roles.split(","));
 					
 					for (String role : roleNames) {
-						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(role);
+						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
 						
 						for (String user : usersInRole) {
 							if (!userNames.contains(user)) {
@@ -186,7 +186,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						}
 					}
 					
-					OKMNotification.getInstance().notify(uploadedDocPath, userNames, message, false);
+					OKMNotification.getInstance().notify(null, uploadedDocPath, userNames, message, false);
 				}
 			}
 		} catch (AccessDeniedException e) {

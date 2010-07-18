@@ -55,7 +55,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		updateSessionManager();
 
 		try {
-			OKMProperty.getInstance().addCategory(nodePath, category);
+			OKMProperty.getInstance().addCategory(null, nodePath, category);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -84,7 +84,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		updateSessionManager();
 
 		try {
-			OKMProperty.getInstance().removeCategory(nodePath, category);
+			OKMProperty.getInstance().removeCategory(null, nodePath, category);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -113,7 +113,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		updateSessionManager();
 
 		try {
-			OKMProperty.getInstance().addKeyword(nodePath, keyword);
+			OKMProperty.getInstance().addKeyword(null, nodePath, keyword);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
@@ -142,7 +142,7 @@ public class OKMPropertyServlet extends OKMRemoteServiceServlet implements OKMPr
 		updateSessionManager();
 
 		try {
-			OKMProperty.getInstance().removeKeyword(nodePath, keyword);
+			OKMProperty.getInstance().removeKeyword(null, nodePath, keyword);
 		} catch (VersionException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMPropertyService, ErrorCode.CAUSE_Version), e.getMessage());
