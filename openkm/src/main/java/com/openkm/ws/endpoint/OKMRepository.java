@@ -52,91 +52,101 @@ public class OKMRepository {
 	private static Logger log = LoggerFactory.getLogger(OKMRepository.class);
 
 	@WebMethod
-	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getRootFolder()");
+	public Folder getRootFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getRootFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder root = rm.getRootFolder();
+		Folder root = rm.getRootFolder(token);
 		log.debug("getRootFolder: {}", root);
 		return root;
 	}
 
 	@WebMethod
-	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTrashFolder()");
+	public Folder getTrashFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getTrashFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder trash = rm.getTrashFolder();
+		Folder trash = rm.getTrashFolder(token);
 		log.debug("getTrashFolder: {}", trash);
 		return trash;
 	}
 
 	@WebMethod
-	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getTemplatesFolder()");
+	public Folder getTemplatesFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getTemplatesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder templatesFolder = rm.getTemplatesFolder();
+		Folder templatesFolder = rm.getTemplatesFolder(token);
 		log.debug("getTemplatesFolder: {}", templatesFolder);
 		return templatesFolder;
 	}
 
 	@WebMethod
-	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPersonalFolder()");
+	public Folder getPersonalFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getPersonalFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder personalFolder = rm.getPersonalFolder();
+		Folder personalFolder = rm.getPersonalFolder(token);
 		log.debug("getPersonalFolder: {}", personalFolder);
 		return personalFolder;
 	}
 	
 	@WebMethod
-	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getMailFolder()");
+	public Folder getMailFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getMailFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder mailFolder = rm.getMailFolder();
+		Folder mailFolder = rm.getMailFolder(token);
 		log.debug("getMailFolder: {}", mailFolder);
 		return mailFolder;
 	}
 	
 	@WebMethod
-	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getThesaurusFolder()");
+	public Folder getThesaurusFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getThesaurusFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder thesaurusFolder = rm.getThesaurusFolder();
+		Folder thesaurusFolder = rm.getThesaurusFolder(token);
 		log.debug("getThesaurusFolder: {}", thesaurusFolder);
 		return thesaurusFolder;
 	}
 
 	@WebMethod
-	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getCategoriesFolder()");
+	public Folder getCategoriesFolder(@WebParam(name = "token") String token) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getCategoriesFolder({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		Folder categoriesFolder = rm.getCategoriesFolder();
+		Folder categoriesFolder = rm.getCategoriesFolder(token);
 		log.debug("getCategoriesFolder: {}", categoriesFolder);
 		return categoriesFolder;
 	}
 
 	@WebMethod
-	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("purgeTrash()");
+	public void purgeTrash(@WebParam(name = "token") String token) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("purgeTrash({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		rm.purgeTrash();
+		rm.purgeTrash(token);
 		log.debug("purgeTrash: void");
 	}
 	
 	@WebMethod
-	public boolean hasNode(@WebParam(name = "path") String path) throws RepositoryException, 
-			DatabaseException {
-		log.debug("hasNode({})", path);
+	public boolean hasNode(@WebParam(name = "token") String token,
+			@WebParam(name = "path") String path) throws RepositoryException, DatabaseException {
+		log.debug("hasNode({}, {})", token, path);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		boolean ret = rm.hasNode(path);
+		boolean ret = rm.hasNode(token, path);
 		log.debug("hasNode: {}", ret);
 		return ret;
 	}
 	
 	@WebMethod
-	public String getPath(@WebParam(name = "uuid") String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(@WebParam(name = "token") String token,
+			@WebParam(name = "uuid") String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String path = rm.getPath(uuid);
+		String path = rm.getPath(token, uuid);
 		log.debug("getPath: {}", path);
 		return path;
 	}

@@ -58,62 +58,68 @@ public class OKMMail {
 	private static Logger log = LoggerFactory.getLogger(OKMMail.class);
 
 	@WebMethod
-	public Mail create(@WebParam(name = "mail") Mail mail) throws PathNotFoundException, ItemExistsException,
+	public Mail create(@WebParam(name = "token") String token,
+			@WebParam(name = "mail") Mail mail) throws PathNotFoundException, ItemExistsException,
 			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException,
 			UserQuotaExceededException {
-		log.debug("create({})", mail);
+		log.debug("create({}, {})", token, mail);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail newMail = mm.create(mail);
+		Mail newMail = mm.create(token, mail);
 		log.debug("create: {}", newMail);
 		return newMail;
 	}
 
 	@WebMethod
-	public Mail getProperties(@WebParam(name = "mailPath") String mailPath) throws PathNotFoundException,
+	public Mail getProperties(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
-		log.debug("getProperties({})", mailPath);
+		log.debug("getProperties({}, {})", token, mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		Mail mail = mm.getProperties(mailPath);
+		Mail mail = mm.getProperties(token, mailPath);
 		log.debug("getProperties: {}", mail);
 		return mail;
 	}
 
 	@WebMethod
-	public void delete(@WebParam(name = "mailPath") String mailPath) throws LockException,
+	public void delete(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("delete({})", mailPath);
+		log.debug("delete({}, {})", token, mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		mm.delete(mailPath);
+		mm.delete(token, mailPath);
 		log.debug("delete: void");
 	}
 	
 	@WebMethod
-	public Mail rename(@WebParam(name = "mailPath") String mailPath,
+	public Mail rename(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath,
 			@WebParam(name = "newName") String newName) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {})", mailPath, newName);
+		log.debug("rename({}, {}, {})", new Object[] { token, mailPath, newName });
 		MailModule mm = ModuleManager.getMailModule();
-		Mail renamedMail = mm.rename(mailPath, newName);
+		Mail renamedMail = mm.rename(token, mailPath, newName);
 		log.debug("rename: {}");
 		return renamedMail;
 	}
 	
 	@WebMethod
-	public void move(@WebParam(name = "mailPath") String mailPath,
+	public void move(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath,
 			@WebParam(name = "dstPath") String dstPath) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {})", mailPath, dstPath);
+		log.debug("move({}, {}, {})", new Object[] { token, mailPath, dstPath });
 		MailModule mm = ModuleManager.getMailModule();
-		mm.move(mailPath, dstPath);
+		mm.move(token, mailPath, dstPath);
 		log.debug("move: void");
 	}
 	
 	@WebMethod
-	public Mail[] getChilds(@WebParam(name = "mailPath") String mailPath) throws PathNotFoundException,
+	public Mail[] getChilds(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
-		log.debug("getChilds({})", mailPath);
+		log.debug("getChilds({}, {})", token, mailPath);
 		MailModule mm = ModuleManager.getMailModule();
-		List<Mail> col = mm.getChilds(mailPath);
+		List<Mail> col = mm.getChilds(token, mailPath);
 		Mail[] result = (Mail[]) col.toArray(new Mail[col.size()]);
 		log.debug("getChilds: {}", result);
 		return result;

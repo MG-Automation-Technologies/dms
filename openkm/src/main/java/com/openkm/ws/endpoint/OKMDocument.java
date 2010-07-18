@@ -68,7 +68,8 @@ public class OKMDocument {
 	private static Logger log = LoggerFactory.getLogger(OKMDocument.class);
 
 	@WebMethod
-	public Document create(@WebParam(name = "doc") Document doc,
+	public Document create(@WebParam(name = "token") String token,
+			@WebParam(name = "doc") Document doc,
 			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
@@ -76,14 +77,15 @@ public class OKMDocument {
 		log.debug("create({})", doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
-		Document newDocument = dm.create(doc, bais);
+		Document newDocument = dm.create(token, doc, bais);
 		bais.close();
 		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 	
 	@WebMethod
-	public Document createSimple(@WebParam(name = "docPath") String docPath,
+	public Document createSimple(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "content") byte[] content) throws IOException, UnsupportedMimeTypeException,
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
@@ -93,7 +95,7 @@ public class OKMDocument {
 		ByteArrayInputStream bais = new ByteArrayInputStream(content);
 		Document doc = new Document();
 		doc.setPath(docPath);
-		Document newDocument = dm.create(doc, bais);
+		Document newDocument = dm.create(token, doc, bais);
 		bais.close();
 		log.debug("createSimple: {}", newDocument);
 		return newDocument;
@@ -232,11 +234,12 @@ public class OKMDocument {
 	}
 
 	@WebMethod
-	public void lock(@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
+	public void lock(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("lock({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.lock(docPath);
+		dm.lock(token, docPath);
 		log.debug("lock: void");
 	}
 

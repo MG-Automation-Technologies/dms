@@ -61,49 +61,54 @@ public class OKMWorkflow {
 	private static Logger log = LoggerFactory.getLogger(OKMWorkflow.class);
 	
 	@WebMethod
-	public void registerProcessDefinition(@WebParam(name = "pda") byte[] pda) throws
-			ParseException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("registerProcessDefinition({})", pda);
+	public void registerProcessDefinition(@WebParam(name = "token") String token,
+			@WebParam(name = "pda") byte[] pda) throws ParseException, RepositoryException,
+			DatabaseException, WorkflowException {
+		log.debug("registerProcessDefinition({}, {})", token, pda);
 		ByteArrayInputStream bais = new ByteArrayInputStream(pda);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.registerProcessDefinition(bais);
+		wm.registerProcessDefinition(token, bais);
 		IOUtils.closeQuietly(bais);
 		log.debug("registerProcessDefinition: void");
 	}
 	
 	@WebMethod
-	public void deleteProcessDefinition(@WebParam(name = "pdId") long pdId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("deleteProcessDefinition({})", pdId);
+	public void deleteProcessDefinition(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("deleteProcessDefinition({}, {})", token, pdId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteProcessDefinition(pdId);
+		wm.deleteProcessDefinition(token, pdId);
 		log.debug("deleteProcessDefinition: void");
 	}
 	
 	@WebMethod
-	public ProcessDefinition getProcessDefinition(@WebParam(name = "pdId") long pdId) throws 
-			RepositoryException, DatabaseException, WorkflowException {
-		log.debug("getProcessDefinition({})", pdId);
+	public ProcessDefinition getProcessDefinition(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("getProcessDefinition({}, {})", token, pdId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessDefinition result = wm.getProcessDefinition(pdId);
+		ProcessDefinition result = wm.getProcessDefinition(token, pdId);
 		log.debug("getProcessDefinition: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public byte[] getProcessDefinitionImage(@WebParam(name = "pdId") long pdId,
-			@WebParam(name = "node") String node) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("getProcessDefinitionImage({})", pdId, node);
+	public byte[] getProcessDefinitionImage(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId,
+			@WebParam(name = "node") String node) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("getProcessDefinitionImage({}, {}, {})", new Object[] { token, pdId, node });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		byte[] result = wm.getProcessDefinitionImage(pdId, node);
+		byte[] result = wm.getProcessDefinitionImage(token, pdId, node);
 		log.debug("getProcessDefinitionImage: {}", result);
 		return result;
 	}
 	
 	/*
-	public Map<String, List<FormElement>> getProcessDefinitionForms(@WebParam(name = "pdId") long pdId) throws 
-			ParseException, RepositoryException, DatabaseException, WorkflowException {
+	public Map<String, List<FormElement>> getProcessDefinitionForms(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId) throws ParseException, RepositoryException,
+			DatabaseException, WorkflowException {
 		log.debug("getProcessDefinitionForms({})", pdId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		Map<String, List<FormElement>> result = wm.getProcessDefinitionForms(pdId);
@@ -113,338 +118,367 @@ public class OKMWorkflow {
 	*/
 	
 	@WebMethod
-	public ProcessInstance runProcessDefinition(@WebParam(name = "pdId") long pdId,
+	public ProcessInstance runProcessDefinition(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId,
 			@WebParam(name = "uuid") String uuid, 
 			@WebParam(name = "vars") FormElement[] vars) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("runProcessDefinition({})", pdId, vars);
+		log.debug("runProcessDefinition({}, {}, {}, {})", new Object[] { token, pdId, uuid, vars });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		List<FormElement> col = Arrays.asList(vars);
-		ProcessInstance result = wm.runProcessDefinition(pdId, uuid, col);
+		ProcessInstance result = wm.runProcessDefinition(token, pdId, uuid, col);
 		log.debug("runProcessDefinition: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public ProcessInstance sendProcessInstanceSignal(@WebParam(name = "piId") long piId,
-			@WebParam(name = "transName") String transName) throws
-			RepositoryException, DatabaseException, WorkflowException {
-		log.debug("sendProcessInstanceSignal({})", piId, transName);
+	public ProcessInstance sendProcessInstanceSignal(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId,
+			@WebParam(name = "transName") String transName) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("sendProcessInstanceSignal({}, {}, {})", new Object[] { token, piId, transName });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.sendProcessInstanceSignal(piId, transName);
+		ProcessInstance result = wm.sendProcessInstanceSignal(token, piId, transName);
 		log.debug("sendProcessInstanceSignal: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public void endProcessInstance(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("endProcessInstance({})", piId);
+	public void endProcessInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("endProcessInstance({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.endProcessInstance(piId);
+		wm.endProcessInstance(token, piId);
 		log.debug("endProcessInstance: void");
 	}
 	
 	@WebMethod
-	public void deleteProcessInstance(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("deleteProcessInstance({})", piId);
+	public void deleteProcessInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("deleteProcessInstance({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteProcessInstance(piId);
+		wm.deleteProcessInstance(token, piId);
 		log.debug("deleteProcessInstance: void");
 	}
 	
 	@WebMethod
-	public ProcessInstance[] findProcessInstances(@WebParam(name = "pdId") long pdId) throws 
-			RepositoryException, DatabaseException, WorkflowException {
-		log.debug("findProcessInstances({})", pdId);
+	public ProcessInstance[] findProcessInstances(@WebParam(name = "token") String token,
+			@WebParam(name = "pdId") long pdId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("findProcessInstances({}, {})", token, pdId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessInstance> col = wm.findProcessInstances(pdId);
+		List<ProcessInstance> col = wm.findProcessInstances(token, pdId);
 		ProcessInstance[] result = (ProcessInstance[]) col.toArray(new ProcessInstance[col.size()]);
 		log.debug("findProcessInstances: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public ProcessDefinition[] findAllProcessDefinitions() throws RepositoryException, DatabaseException,
-			WorkflowException {
-		log.debug("findAllProcessDefinitions()");
+	public ProcessDefinition[] findAllProcessDefinitions(@WebParam(name = "token") String token) throws
+			RepositoryException, DatabaseException, WorkflowException {
+		log.debug("findAllProcessDefinitions({})", token);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> col = wm.findAllProcessDefinitions();
+		List<ProcessDefinition> col = wm.findAllProcessDefinitions(token);
 		ProcessDefinition[] result = (ProcessDefinition[]) col.toArray(new ProcessDefinition[col.size()]);
 		log.debug("findAllProcessDefinitions: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public ProcessDefinition[] findLatestProcessDefinitions() throws RepositoryException, DatabaseException,
-			WorkflowException {
-		log.debug("findLatestProcessDefinitions()");
+	public ProcessDefinition[] findLatestProcessDefinitions(@WebParam(name = "token") String token) throws 
+			RepositoryException, DatabaseException, WorkflowException {
+		log.debug("findLatestProcessDefinitions({})", token);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> col = wm.findLatestProcessDefinitions();
+		List<ProcessDefinition> col = wm.findLatestProcessDefinitions(token);
 		ProcessDefinition[] result = (ProcessDefinition[]) col.toArray(new ProcessDefinition[col.size()]);
 		log.debug("findLatestProcessDefinitions: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public ProcessDefinition[] findAllProcessDefinitionVersions(@WebParam(name = "name") String name) throws 
-			RepositoryException, DatabaseException, WorkflowException {
-		log.debug("findAllProcessDefinitionVersions({})", name);
+	public ProcessDefinition[] findAllProcessDefinitionVersions(@WebParam(name = "token") String token,
+			@WebParam(name = "name") String name) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("findAllProcessDefinitionVersions({}, {})", token, name);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<ProcessDefinition> col = wm.findAllProcessDefinitionVersions(name);
+		List<ProcessDefinition> col = wm.findAllProcessDefinitionVersions(token, name);
 		ProcessDefinition[] result = (ProcessDefinition[]) col.toArray(new ProcessDefinition[col.size()]);
 		log.debug("findAllProcessDefinitionVersions: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public ProcessInstance getProcessInstance(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("getProcessInstance({})", piId);
+	public ProcessInstance getProcessInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("getProcessInstance({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		ProcessInstance result = wm.getProcessInstance(piId);
+		ProcessInstance result = wm.getProcessInstance(token, piId);
 		log.debug("getProcessInstance: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public void suspendProcessInstance(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("suspendProcessInstance({})", piId);
+	public void suspendProcessInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("suspendProcessInstance({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendProcessInstance(piId);
+		wm.suspendProcessInstance(token, piId);
 		log.debug("suspendProcessInstance: void");
 	}
 	
 	@WebMethod
-	public void resumeProcessInstance(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("resumeProcessInstance({})", piId);
+	public void resumeProcessInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("resumeProcessInstance({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeProcessInstance(piId);
+		wm.resumeProcessInstance(token, piId);
 		log.debug("resumeProcessInstance: void");
 	}
 
 	@WebMethod
-	public void addProcessInstanceVariable(@WebParam(name = "piId") long piId,
+	public void addProcessInstanceVariable(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId,
 			@WebParam(name = "name") String name,
 			@WebParam(name = "value") Object value) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("addProcessInstanceVariable({}, {}, {})", new Object[] { piId, name, value });
+		log.debug("addProcessInstanceVariable({}, {}, {}, {})", new Object[] { token, piId, name, value });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addProcessInstanceVariable(piId, name, value);
+		wm.addProcessInstanceVariable(token, piId, name, value);
 		log.debug("addProcessInstanceVariable: void");
 	}
 	
 	@WebMethod
-	public void deleteProcessInstanceVariable(@WebParam(name = "piId") long piId,
+	public void deleteProcessInstanceVariable(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId,
 			@WebParam(name = "name") String name) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("deleteProcessInstanceVariable({}, {})", piId, name);
+		log.debug("deleteProcessInstanceVariable({}, {}, {})", new Object[] { token, piId, name });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteProcessInstanceVariable(piId, name);
+		wm.deleteProcessInstanceVariable(token, piId, name);
 		log.debug("deleteProcessInstanceVariable: void");
 	}
 	
 	@WebMethod
-	public TaskInstance[] findUserTaskInstances() throws RepositoryException, DatabaseException,
-			WorkflowException {
-		log.debug("findUserTaskInstances()");
+	public TaskInstance[] findUserTaskInstances(@WebParam(name = "token") String token) throws 
+			RepositoryException, DatabaseException, WorkflowException {
+		log.debug("findUserTaskInstances({})", token);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> col = wm.findUserTaskInstances();
+		List<TaskInstance> col = wm.findUserTaskInstances(token);
 		TaskInstance[] result = (TaskInstance[]) col.toArray(new TaskInstance[col.size()]);
 		log.debug("findUserTaskInstances: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public TaskInstance[] findPooledTaskInstances() throws RepositoryException, DatabaseException,
-			WorkflowException {
-		log.debug("findPooledTaskInstances()");
+	public TaskInstance[] findPooledTaskInstances(@WebParam(name = "token") String token) throws
+			RepositoryException, DatabaseException, WorkflowException {
+		log.debug("findPooledTaskInstances({})", token);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> col = wm.findPooledTaskInstances();
+		List<TaskInstance> col = wm.findPooledTaskInstances(token);
 		TaskInstance[] result = (TaskInstance[]) col.toArray(new TaskInstance[col.size()]);
 		log.debug("findPooledTaskInstances: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public TaskInstance[] findTaskInstances(@WebParam(name = "piId") long piId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("findTaskInstances({})", piId);
+	public TaskInstance[] findTaskInstances(@WebParam(name = "token") String token,
+			@WebParam(name = "piId") long piId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("findTaskInstances({}, {})", token, piId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		List<TaskInstance> col = wm.findTaskInstances(piId);
+		List<TaskInstance> col = wm.findTaskInstances(token, piId);
 		TaskInstance[] result = (TaskInstance[]) col.toArray(new TaskInstance[col.size()]);
 		log.debug("findTaskInstances: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public void setTaskInstanceValues(@WebParam(name = "tiId") long tiId,
+	public void setTaskInstanceValues(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId,
 			@WebParam(name = "transName") String transName,
 			@WebParam(name = "values") FormElement[] values)
 			throws RepositoryException, DatabaseException, WorkflowException {
-		log.debug("setTaskInstanceValues({}, {}, {})", new Object[] { tiId, transName, values });
+		log.debug("setTaskInstanceValues({}, {}, {}, {})", new Object[] { token, tiId, transName, values });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
 		List<FormElement> col = Arrays.asList(values);
-		wm.setTaskInstanceValues(tiId, transName, col);
+		wm.setTaskInstanceValues(token, tiId, transName, col);
 		log.debug("setTaskInstanceValues: void");
 	}
 	
 	@WebMethod
-	public void addTaskInstanceComment(@WebParam(name = "tiId") long tiId,
+	public void addTaskInstanceComment(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId,
 			@WebParam(name = "message") String message) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("addTaskInstanceComment({}, {})", tiId, message);
+		log.debug("addTaskInstanceComment({}, {}, {})", new Object[] { token, tiId, message });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTaskInstanceComment(tiId, message);
+		wm.addTaskInstanceComment(token, tiId, message);
 		log.debug("addTaskInstanceComment: void");
 	}
 	
 	@WebMethod
-	public TaskInstance getTaskInstance(@WebParam(name = "tiId") long tiId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("getTaskInstance({})", tiId);
+	public TaskInstance getTaskInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("getTaskInstance({}, {})", token, tiId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		TaskInstance result = wm.getTaskInstance(tiId);
+		TaskInstance result = wm.getTaskInstance(token, tiId);
 		log.debug("getTaskInstance: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public void setTaskInstanceActorId(@WebParam(name = "tiId") long tiId,
-			@WebParam(name = "actorId") String actorId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("setTaskInstanceActorId({})", tiId, actorId);
+	public void setTaskInstanceActorId(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId,
+			@WebParam(name = "actorId") String actorId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("setTaskInstanceActorId({}, {}, {})", new Object[] { token, tiId, actorId });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.setTaskInstanceActorId(tiId, actorId);
+		wm.setTaskInstanceActorId(token, tiId, actorId);
 		log.debug("setTaskInstanceActorId: void");
 	}
 	
 	@WebMethod
-	public void addTaskInstanceVariable(@WebParam(name = "tiId") long tiId, 
+	public void addTaskInstanceVariable(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId, 
 			@WebParam(name = "name") String name,
 			@WebParam(name = "value") Object value) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("addTaskInstanceVariable({}, {}, {})", new Object[] { tiId, name, value });
+		log.debug("addTaskInstanceVariable({}, {}, {}, {})", new Object[] { token, tiId, name, value });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTaskInstanceVariable(tiId, name, value);
+		wm.addTaskInstanceVariable(token, tiId, name, value);
 		log.debug("addTaskInstanceVariable: void");
 	}
 	
 	@WebMethod
-	public void deleteTaskInstanceVariable(@WebParam(name = "tiId") long tiId,
+	public void deleteTaskInstanceVariable(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId,
 			@WebParam(name = "name") String name) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("deleteTaskInstanceVariable({}, {})", tiId, name);
+		log.debug("deleteTaskInstanceVariable({}, {}, {})", new Object[] { token, tiId, name });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.deleteTaskInstanceVariable(tiId, name);
+		wm.deleteTaskInstanceVariable(token, tiId, name);
 		log.debug("deleteTaskInstanceVariable: void");
 	}
 	
 	@WebMethod
-	public void startTaskInstance(@WebParam(name = "tiId") long tiId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("startTaskInstance({})", tiId);
+	public void startTaskInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("startTaskInstance({}, {})", token, tiId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.startTaskInstance(tiId);
+		wm.startTaskInstance(token, tiId);
 		log.debug("startTaskInstance: void");
 	}
 	
 	@WebMethod
-	public void endTaskInstance(@WebParam(name = "tiId") long tiId,
-			@WebParam(name = "transName") String transName) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("endTaskInstance({}, {})", tiId, transName);
+	public void endTaskInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId,
+			@WebParam(name = "transName") String transName) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("endTaskInstance({}, {}, {})", new Object[] { token, tiId, transName });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.endTaskInstance(tiId, transName);
+		wm.endTaskInstance(token, tiId, transName);
 		log.debug("endTaskInstance: void");
 	}
 	
 	@WebMethod
-	public void suspendTaskInstance(@WebParam(name = "tiId") long tiId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("suspendTaskInstance({})", tiId);
+	public void suspendTaskInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("suspendTaskInstance({}, {})", token, tiId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendTaskInstance(tiId);
+		wm.suspendTaskInstance(token, tiId);
 		log.debug("suspendTaskInstance: void");
 	}
 	
 	@WebMethod
-	public void resumeTaskInstance(@WebParam(name = "tiId") long tiId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("resumeTaskInstance({})", tiId);
+	public void resumeTaskInstance(@WebParam(name = "token") String token,
+			@WebParam(name = "tiId") long tiId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("resumeTaskInstance({}, {})", token, tiId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeTaskInstance(tiId);
+		wm.resumeTaskInstance(token, tiId);
 		log.debug("resumeTaskInstance: void");
 	}
 	
 	@WebMethod
-	public Token getToken(@WebParam(name = "tkId") long tkId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("getToken({})", tkId);
+	public Token getToken(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("getToken({}, {})", token, tkId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Token result = wm.getToken(tkId);
-		log.debug("getToken: "+result);
+		Token result = wm.getToken(token, tkId);
+		log.debug("getToken: {}", result);
 		return result;
 	}
 
 	@WebMethod
-	public void addTokenComment(@WebParam(name = "tkId") long tkId,
+	public void addTokenComment(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId,
 			@WebParam(name = "message") String message) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("addTokenComment({}, {})", tkId, message);
+		log.debug("addTokenComment({}, {}, {})", new Object[] { token, tkId, message });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.addTokenComment(tkId, message);
+		wm.addTokenComment(token, tkId, message);
 		log.debug("addTokenComment: void");
 	}
 	
 	@WebMethod
-	public void suspendToken(@WebParam(name = "tkId") long tkId) throws RepositoryException,
-			DatabaseException, WorkflowException {
-		log.debug("suspendToken({})", tkId);
+	public void suspendToken(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("suspendToken({}, {})", token, tkId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.suspendToken(tkId);
+		wm.suspendToken(token, tkId);
 		log.debug("suspendToken: void");
 	}
 	
 	@WebMethod
-	public void resumeToken(@WebParam(name = "tkId") long tkId) throws RepositoryException, 
-			DatabaseException, WorkflowException {
-		log.debug("resumeToken({})", tkId);
+	public void resumeToken(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId) throws RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("resumeToken({}, {})", token, tkId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.resumeToken(tkId);
+		wm.resumeToken(token, tkId);
 		log.debug("resumeToken: void");
 	}
 	
 	@WebMethod
-	public Token sendTokenSignal(@WebParam(name = "tkId") long tkId,
+	public Token sendTokenSignal(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId,
 			@WebParam(name = "transName") String transName) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("sendTokenSignal({}, {})", tkId, transName);
+		log.debug("sendTokenSignal({}, {}, {})", new Object[] { token, tkId, transName });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		Token result = wm.sendTokenSignal(tkId, transName);
+		Token result = wm.sendTokenSignal(token, tkId, transName);
 		log.debug("sendTokenSignal: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public void setTokenNode(@WebParam(name = "tkId") long tkId,
+	public void setTokenNode(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId,
 			@WebParam(name = "nodeName") String nodeName) throws RepositoryException, DatabaseException,
 			WorkflowException {
-		log.debug("setTokenNode({}, {})", tkId, nodeName);
+		log.debug("setTokenNode({}, {}, {})", new Object[] { token, tkId, nodeName });
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.setTokenNode(tkId, nodeName);
+		wm.setTokenNode(token, tkId, nodeName);
 		log.debug("setTokenNode: void");
 	}
 	
 	@WebMethod
-	public void endToken(@WebParam(name = "tkId") long tkId) throws RepositoryException, DatabaseException,
+	public void endToken(@WebParam(name = "token") String token,
+			@WebParam(name = "tkId") long tkId) throws RepositoryException, DatabaseException, 
 			WorkflowException {
-		log.debug("endToken({})", tkId);
+		log.debug("endToken({}, {})", token, tkId);
 		WorkflowModule wm = ModuleManager.getWorkflowModule();
-		wm.endToken(tkId);
+		wm.endToken(token, tkId);
 		log.debug("endToken: void");
 	}
 }

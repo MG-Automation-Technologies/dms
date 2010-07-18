@@ -56,84 +56,92 @@ public class OKMFolder {
 	private static Logger log = LoggerFactory.getLogger(OKMFolder.class);
 
 	@WebMethod
-	public Folder create(@WebParam(name = "fld") Folder fld) throws AccessDeniedException,
+	public Folder create(@WebParam(name = "token") String token,
+			@WebParam(name = "fld") Folder fld) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("create({})", fld);
+		log.debug("create({}, {})", token, fld);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder newFolder = fm.create(fld);
+		Folder newFolder = fm.create(token, fld);
 		log.debug("create: {}", newFolder);
 		return newFolder;
 	}
 	
 	@WebMethod
-	public Folder createSimple(@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
+	public Folder createSimple(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("createSimple({})", fldPath);
+		log.debug("createSimple({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
 		Folder fld = new Folder();
 		fld.setPath(fldPath);
-		Folder newFolder = fm.create(fld);
+		Folder newFolder = fm.create(token, fld);
 		log.debug("createSimple: {}", newFolder);
 		return newFolder;
 	}
 
 	@WebMethod
-	public Folder getProperties(@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
+	public Folder getProperties(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws AccessDeniedException,
 			RepositoryException, PathNotFoundException, DatabaseException {
-		log.debug("getProperties({})", fldPath);
+		log.debug("getProperties({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder fld = fm.getProperties(fldPath);
+		Folder fld = fm.getProperties(token, fldPath);
 		log.debug("getProperties: {}", fld);
 		return fld;
 	}
 
 	@WebMethod
-	public void delete(@WebParam(name = "fldPath") String fldPath) throws LockException,
+	public void delete(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("delete({})", fldPath);
+		log.debug("delete({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		fm.delete(fldPath);
+		fm.delete(token, fldPath);
 		log.debug("delete: void");
 	}
 	
 	@WebMethod
-	public Folder rename(@WebParam(name = "fldPath") String fldPath,
+	public Folder rename(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath,
 			@WebParam(name = "newName") String newName) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({})", fldPath);
+		log.debug("rename({}, {}, {})", new Object[] { token, fldPath, newName });
 		FolderModule fm = ModuleManager.getFolderModule();
-		Folder renamedFolder = fm.rename(fldPath, newName);
+		Folder renamedFolder = fm.rename(token, fldPath, newName);
 		log.debug("rename: {}", renamedFolder);
 		return renamedFolder;
 	}
 	
 	@WebMethod
-	public void move(@WebParam(name = "fldPath") String fldPath, 
+	public void move(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath, 
 			@WebParam(name = "dstPath") String dstPath) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {})", fldPath, dstPath);
+		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		FolderModule fm = ModuleManager.getFolderModule();
-		fm.move(fldPath, dstPath);
+		fm.move(token, fldPath, dstPath);
 		log.debug("move: void");
 	}
 	
 	@WebMethod
-	public Folder[] getChilds(@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
+	public Folder[] getChilds(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
-		log.debug("getChilds({})", fldPath);
+		log.debug("getChilds({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		List<Folder> col = fm.getChilds(fldPath);
+		List<Folder> col = fm.getChilds(token, fldPath);
 		Folder[] result = (Folder []) col.toArray(new Folder[col.size()]);
 		log.debug("getChilds: {}", result);
 		return result;
 	}
 	
 	@WebMethod
-	public boolean isValid(@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
+	public boolean isValid(@WebParam(name = "token") String token,
+			@WebParam(name = "fldPath") String fldPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("isValid({})", fldPath);
+		log.debug("isValid({}, {})", token, fldPath);
 		FolderModule fm = ModuleManager.getFolderModule();
-		boolean valid = fm.isValid(fldPath);
+		boolean valid = fm.isValid(token, fldPath);
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
