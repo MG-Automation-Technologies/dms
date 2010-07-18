@@ -30,92 +30,103 @@ import com.openkm.core.RepositoryException;
 public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 
 	@Override
-	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException,
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+	public Folder getTrashFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException {
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException {
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getUpdateMessage() throws RepositoryException {
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getUuid() throws RepositoryException {
+	public Folder getMailFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean hasNode(String path) throws RepositoryException, DatabaseException {
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getUpdateMessage(String token) throws RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUuid(String token) throws RepositoryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException {
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
 		// TODO Auto-generated method stub
+		return null;
 	}
 }
