@@ -69,9 +69,9 @@ public class DirectDashboardModule implements DashboardModule {
 	private static final int MAX_RESULTS = 20;
 
 	@Override
-	public List<DashboardDocumentResult> getUserLockedDocuments() throws RepositoryException,
+	public List<DashboardDocumentResult> getUserLockedDocuments(String token) throws RepositoryException,
 			DatabaseException {
-		log.debug("getUserLockedDocuments()");
+		log.debug("getUserLockedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -102,9 +102,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserCheckedOutDocuments() throws RepositoryException, 
+	public List<DashboardDocumentResult> getUserCheckedOutDocuments(String token) throws RepositoryException, 
 			DatabaseException {
-		log.debug("getUserCheckedOutDocuments()");
+		log.debug("getUserCheckedOutDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -135,8 +135,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserSubscribedDocuments() throws RepositoryException {
-		log.debug("getUserSubscribedDocuments()");
+	public List<DashboardDocumentResult> getUserSubscribedDocuments(String token) throws RepositoryException {
+		log.debug("getUserSubscribedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -169,8 +169,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardFolderResult> getUserSubscribedFolders() throws RepositoryException {
-		log.debug("getUserSubscribedFolders()");
+	public List<DashboardFolderResult> getUserSubscribedFolders(String token) throws RepositoryException {
+		log.debug("getUserSubscribedFolders({})", token);
 		Session session = null;
 		
 		try {
@@ -267,8 +267,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getUserLastUploadedDocuments() throws RepositoryException {
-		log.debug("getUserLastUploadedDocuments()");
+	public List<DashboardDocumentResult> getUserLastUploadedDocuments(String token) throws 
+			RepositoryException {
+		log.debug("getUserLastUploadedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -303,8 +304,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastModifiedDocuments() throws RepositoryException {
-		log.debug("getUserLastModifiedDocuments()");
+	public List<DashboardDocumentResult> getUserLastModifiedDocuments(String token) throws 
+			RepositoryException {
+		log.debug("getUserLastModifiedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -339,8 +341,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastDownloadedDocuments() throws RepositoryException {
-		log.debug("getUserLastDownloadedDocuments()");
+	public List<DashboardDocumentResult> getUserLastDownloadedDocuments(String token) throws 
+			RepositoryException {
+		log.debug("getUserLastDownloadedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -375,8 +378,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardMailResult> getUserLastImportedMails() throws RepositoryException {
-		log.debug("getUserLastImportedMails()");
+	public List<DashboardMailResult> getUserLastImportedMails(String token) throws RepositoryException {
+		log.debug("getUserLastImportedMails({})", token);
 		Session session = null;
 		
 		try {
@@ -410,8 +413,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getUserLastImportedMailAttachments() throws RepositoryException {
-		log.debug("getUserLastImportedMailAttachments()");
+	public List<DashboardDocumentResult> getUserLastImportedMailAttachments(String token) throws
+			RepositoryException {
+		log.debug("getUserLastImportedMailAttachments({})", token);
 		Session session = null;
 		
 		try {
@@ -525,8 +529,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public long getUserDocumentsSize() throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSize()");
+	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSize({})", token);
 		long size = 0;
 		
 		if (Config.USER_SIZE_CACHE) {
@@ -594,8 +598,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<QueryParams> getUserSearchs() throws RepositoryException, DatabaseException {
-		log.debug("getUserSearchs()");
+	public List<QueryParams> getUserSearchs(String token) throws RepositoryException, DatabaseException {
+		log.debug("getUserSearchs({})", token);
 		List<QueryParams> ret = new ArrayList<QueryParams>();
 		Session session = null;
 		
@@ -629,9 +633,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> find(int qpId) throws IOException, ParseException,
+	public List<DashboardDocumentResult> find(String token, int qpId) throws IOException, ParseException,
 			RepositoryException, DatabaseException {
-		log.debug("find({})", qpId);
+		log.debug("find({}, {})", token, qpId);
 		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
 		Session session = null;
 		
@@ -711,8 +715,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments() throws RepositoryException {
-		log.debug("getLastWeekTopDownloadedDocuments()");
+	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token) throws 
+			RepositoryException {
+		log.debug("getLastWeekTopDownloadedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -749,8 +754,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments() throws RepositoryException {
-		log.debug("getLastMonthTopDownloadedDocuments()");
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocuments(String token) throws
+			RepositoryException {
+		log.debug("getLastMonthTopDownloadedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -787,8 +793,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments() throws RepositoryException {
-		log.debug("getLastWeekTopModifiedDocuments()");
+	public List<DashboardDocumentResult> getLastWeekTopModifiedDocuments(String token) throws
+			RepositoryException {
+		log.debug("getLastWeekTopModifiedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -827,8 +834,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments() throws RepositoryException {
-		log.debug("getLastMonthTopModifiedDocuments()");
+	public List<DashboardDocumentResult> getLastMonthTopModifiedDocuments(String token) throws
+			RepositoryException {
+		log.debug("getLastMonthTopModifiedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -865,8 +873,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastModifiedDocuments() throws RepositoryException {
-		log.debug("getLastModifiedDocuments()");
+	public List<DashboardDocumentResult> getLastModifiedDocuments(String token) throws RepositoryException {
+		log.debug("getLastModifiedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -903,8 +911,8 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public List<DashboardDocumentResult> getLastUploadedDocuments() throws RepositoryException {
-		log.debug("getLastUploadedDocuments()");
+	public List<DashboardDocumentResult> getLastUploadedDocuments(String token) throws RepositoryException {
+		log.debug("getLastUploadedDocuments({})", token);
 		Session session = null;
 		
 		try {
@@ -984,8 +992,9 @@ public class DirectDashboardModule implements DashboardModule {
 	}
 	
 	@Override
-	public void visiteNode(String source, String node, Calendar date) throws RepositoryException {
-		log.debug("visiteNode({}, {}, {})", new Object[] { source, node, (date==null?null:date.getTime()) });
+	public void visiteNode(String token, String source, String node, Calendar date) throws 
+			RepositoryException {
+		log.debug("visiteNode({}, {}, {}, {})", new Object[] { token, source, node, (date==null?null:date.getTime()) });
 		Session session = null;
 		
 		try {

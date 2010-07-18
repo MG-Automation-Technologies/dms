@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.BookmarkDAO;
@@ -46,9 +47,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 	private static Logger log = LoggerFactory.getLogger(DirectBookmarkModule.class);
 	
 	@Override
-	public Bookmark add(String nodePath, String name) throws AccessDeniedException, PathNotFoundException,
-			RepositoryException, DatabaseException {
-		log.debug("add({}, {})", nodePath, name);
+	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
+			PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("add({}, {}, {})", new Object[] { token, nodePath, name });
 		Bookmark newBookmark = null;
 		Session session = null;
 		
@@ -57,7 +58,12 @@ public class DirectBookmarkModule implements BookmarkModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			Node rootNode = session.getRootNode();
 			Node node = rootNode.getNode(nodePath.substring(1));
 			
@@ -77,7 +83,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("add: {}", newBookmark);
@@ -85,8 +91,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public void remove(int bmId) throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("remove({})", bmId);
+	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("remove({}, {})", token, bmId);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -94,7 +101,12 @@ public class DirectBookmarkModule implements BookmarkModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			BookmarkDAO.delete(bmId);
 			
 			// Activity log
@@ -102,16 +114,16 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("remove: void");
 	}
 
 	@Override
-	public Bookmark rename(int bmId, String newName) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
-		log.debug("rename({}, {})", bmId, newName);
+	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
+		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		Bookmark renamedBookmark = null;
 		Session session = null;
 		
@@ -120,7 +132,12 @@ public class DirectBookmarkModule implements BookmarkModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			Bookmark bm = BookmarkDAO.findByPk(bmId);
 			bm.setName(newName);
 			BookmarkDAO.update(bm);
@@ -130,7 +147,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("rename: {}", renamedBookmark);
@@ -138,13 +155,18 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public List<Bookmark> getAll() throws RepositoryException, DatabaseException {
+	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
 		log.debug("getAll()");
 		List<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			BookmarkDAO.findByUser(session.getUserID());
 						
 			// Activity log
@@ -152,7 +174,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getAll: {}", ret);

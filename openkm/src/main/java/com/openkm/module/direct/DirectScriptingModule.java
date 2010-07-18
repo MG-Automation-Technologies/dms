@@ -47,9 +47,9 @@ public class DirectScriptingModule implements ScriptingModule {
 	private static Logger log = LoggerFactory.getLogger(DirectScriptingModule.class);
 
 	@Override
-	public void setScript(String nodePath, String code) throws PathNotFoundException,
+	public void setScript(String token, String nodePath, String code) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setScript({}, {})", nodePath, code);
+		log.debug("setScript({}, {}, {})", new Object[] { token, nodePath, code });
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -96,9 +96,9 @@ public class DirectScriptingModule implements ScriptingModule {
 	}
 
 	@Override
-	public void removeScript(String nodePath) throws PathNotFoundException, AccessDeniedException, 
-			RepositoryException, DatabaseException {
-		log.debug("removeScript({})", nodePath);
+	public void removeScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("removeScript({}, {})", token, nodePath);
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
@@ -146,9 +146,9 @@ public class DirectScriptingModule implements ScriptingModule {
 	}
 
 	@Override
-	public String getScript(String nodePath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("getScript({})", nodePath);
+	public String getScript(String token, String nodePath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("getScript({}, {})", token, nodePath);
 		String code = null;
 		Session session = null;
 		

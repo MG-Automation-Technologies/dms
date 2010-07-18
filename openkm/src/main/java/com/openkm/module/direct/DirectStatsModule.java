@@ -54,8 +54,8 @@ public class DirectStatsModule implements StatsModule {
 	private static String TRASH_FOLDERS = "/jcr:root/okm:trash//element(*,okm:folder)";
 	
 	@Override
-	public StatsInfo getDocumentsByContext() throws RepositoryException, DatabaseException {
-		log.debug("getDocumentsByContext()");
+	public StatsInfo getDocumentsByContext(String token) throws RepositoryException, DatabaseException {
+		log.debug("getDocumentsByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
@@ -103,8 +103,8 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getFoldersByContext() throws RepositoryException, DatabaseException {
-		log.debug("getFoldersByContext()");
+	public StatsInfo getFoldersByContext(String token) throws RepositoryException, DatabaseException {
+		log.debug("getFoldersByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];
@@ -162,8 +162,8 @@ public class DirectStatsModule implements StatsModule {
 	}
 	
 	@Override
-	public StatsInfo getDocumentsSizeByContext() throws RepositoryException, DatabaseException {
-		log.debug("getDocumentsSizeByContext()");
+	public StatsInfo getDocumentsSizeByContext(String token) throws RepositoryException, DatabaseException {
+		log.debug("getDocumentsSizeByContext({})", token);
 		StatsInfo si = new StatsInfo();
 		double[] percents = new double[4];
 		String[] sizes = new String[4];

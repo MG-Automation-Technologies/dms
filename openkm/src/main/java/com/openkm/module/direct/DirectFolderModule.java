@@ -190,9 +190,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder create(Folder fld) throws AccessDeniedException, RepositoryException, 
+	public Folder create(String token, Folder fld) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("create({})", fld);
+		log.debug("create({}, {})", token, fld);
 		Folder newFolder = null;
 		Node parentNode = null;
 		Session session = null;
@@ -246,9 +246,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder getProperties(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getProperties({})", fldPath);
+	public Folder getProperties(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getProperties({}, {})", token, fldPath);
 		Folder fld = null;
 		Session session = null;
 
@@ -273,9 +273,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void delete(String fldPath) throws AccessDeniedException, RepositoryException,
+	public void delete(String token, String fldPath) throws AccessDeniedException, RepositoryException,
 			PathNotFoundException, LockException, DatabaseException {
-		log.debug("delete({})", fldPath);
+		log.debug("delete({}, {})", token, fldPath);
 		Session session = null;
 		
 		try {
@@ -383,9 +383,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void purge(String fldPath) throws AccessDeniedException, RepositoryException, 
+	public void purge(String token, String fldPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, DatabaseException {
-		log.debug("purge({})", fldPath);
+		log.debug("purge({}, {})", token, fldPath);
 		Node parentNode = null;
 		Session session = null;
 		
@@ -475,9 +475,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public Folder rename(String fldPath, String newName) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("rename({}, {})", fldPath, newName);
+	public Folder rename(String token, String fldPath, String newName) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("rename({}, {}, {})", new Object[] { token, fldPath, newName });
 		Folder renamedFolder = null;
 		Session session = null;
 		
@@ -538,9 +538,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void move(String fldPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, DatabaseException {
-		log.debug("move({}, {})", fldPath, dstPath);
+	public void move(String token, String fldPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, DatabaseException {
+		log.debug("move({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -579,10 +579,10 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public void copy(String fldPath, String dstPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, ItemExistsException, IOException, DatabaseException, 
+	public void copy(String token, String fldPath, String dstPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, ItemExistsException, IOException, DatabaseException, 
 			UserQuotaExceededException {
-		log.debug("copy({}, {})", fldPath, dstPath);
+		log.debug("copy({}, {}, {})", new Object[] { token, fldPath, dstPath });
 		//Transaction t = null;
 		XASession session = null;
 		
@@ -663,9 +663,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public List<Folder> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("findChilds({})", fldPath);
+	public List<Folder> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("findChilds({}, {})", token, fldPath);
 		List<Folder> childs = new ArrayList<Folder>();
 		Session session = null;
 		
@@ -698,9 +698,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public ContentInfo getContentInfo(String fldPath) throws AccessDeniedException, RepositoryException,
-			PathNotFoundException, DatabaseException {
-		log.debug("getContentInfo({})", fldPath);
+	public ContentInfo getContentInfo(String token, String fldPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, DatabaseException {
+		log.debug("getContentInfo({}, {})", token, fldPath);
 		ContentInfo contentInfo = new ContentInfo();
 		Session session = null;
 		
@@ -772,9 +772,9 @@ public class DirectFolderModule implements FolderModule {
 	}
 	
 	@Override
-	public boolean isValid(String fldPath) throws PathNotFoundException, AccessDeniedException, 
+	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException, 
 			RepositoryException, DatabaseException {
-		log.debug("isValid({})", fldPath);
+		log.debug("isValid({}, {})", token, fldPath);
 		boolean valid = false;
 		Session session = null;
 		

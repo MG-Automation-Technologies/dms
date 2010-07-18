@@ -20,9 +20,9 @@ public class DirectUserConfigModule implements UserConfigModule {
 	private static Logger log = LoggerFactory.getLogger(DirectUserConfigModule.class);
 	
 	@Override
-	public void setHome(String nodePath) throws AccessDeniedException, RepositoryException,
+	public void setHome(String token, String nodePath) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("setHome({})", nodePath);
+		log.debug("setHome({}, {})", token, nodePath);
 		Session session = null;
 		
 		if (Config.SYSTEM_READONLY) {
@@ -53,8 +53,8 @@ public class DirectUserConfigModule implements UserConfigModule {
 	}
 	
 	@Override
-	public UserConfig getConfig() throws RepositoryException, DatabaseException {
-		log.debug("getConfig()");
+	public UserConfig getConfig(String token) throws RepositoryException, DatabaseException {
+		log.debug("getConfig({})", token);
 		UserConfig ret = new UserConfig();
 		Session session = null;
 		

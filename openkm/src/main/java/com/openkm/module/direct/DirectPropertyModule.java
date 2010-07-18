@@ -48,9 +48,10 @@ public class DirectPropertyModule implements PropertyModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyModule.class);
 
 	@Override
-	public void addCategory(String nodePath, String category) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addCategory({}, {})", nodePath, category);
+	public void addCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -119,9 +120,10 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public void removeCategory(String nodePath, String category) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeCategory({}, {})", nodePath, category);
+	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -188,9 +190,10 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public void addKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addKeyword({}, {})", nodePath, keyword);
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("addKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -263,9 +266,10 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public void removeKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeKeyword({}, {})", nodePath, keyword);
+	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("removeKeyword({}, {}, {})", new Object[] { token, nodePath, keyword });
 		Node documentNode = null;
 		Session session = null;
 		

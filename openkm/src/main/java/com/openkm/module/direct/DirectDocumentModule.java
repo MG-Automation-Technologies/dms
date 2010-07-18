@@ -74,6 +74,7 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -318,7 +319,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 	
 	@Override
-	public Document create(Document doc, InputStream is) throws	UnsupportedMimeTypeException, 
+	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
@@ -347,7 +348,11 @@ public class DirectDocumentModule implements DocumentModule {
 		File tmpKea = File.createTempFile("kea", fileExtension);
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
 			
 			// Escape dangerous chars in name
 			name = FileUtils.escape(name);
@@ -452,7 +457,7 @@ public class DirectDocumentModule implements DocumentModule {
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpJcr);
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpAvr);
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpKea);
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("create: {}", newDocument);
@@ -1370,7 +1375,7 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	@Override
-	public void lock(String docPath) throws AccessDeniedException, RepositoryException, 
+	public void lock(String token, String docPath) throws AccessDeniedException, RepositoryException, 
 			PathNotFoundException, LockException, DatabaseException {
 		log.debug("lock({})", docPath);
 		Session session = null;
@@ -1380,7 +1385,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().getSession(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lck = documentNode.lock(true, false);
 			JCRUtils.addLockToken(session, documentNode);
@@ -1409,7 +1419,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("lock: void");
