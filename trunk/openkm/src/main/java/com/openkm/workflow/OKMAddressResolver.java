@@ -43,7 +43,7 @@ public class OKMAddressResolver implements AddressResolver {
 		try {
 			List<String> users = new ArrayList<String>();
 			users.add(actorId);
-			List<String> emails = new DirectAuthModule().getMails(users);
+			List<String> emails = new DirectAuthModule().getMails(null, users);
 			
 			for (Iterator<String> it = emails.iterator(); it.hasNext(); ) {
 				email = it.next();
