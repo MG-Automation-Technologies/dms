@@ -88,7 +88,7 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(path));
+		sc.setAttribute("folderChilds", OKMFolder.getInstance().getChilds(null, path));
 		sc.setAttribute("documentChilds", OKMDocument.getInstance().getChilds(path));
 		sc.setAttribute("userId", userId);
 		sc.setAttribute("path", path);
@@ -109,7 +109,7 @@ public class HandlerServlet extends HttpServlet {
 		}
 		
 		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
-		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(path));
+		sc.setAttribute("fld", OKMFolder.getInstance().getProperties(null, path));
 		sc.setAttribute("path", path);
 		sc.getRequestDispatcher("/mobi/fld-properties.jsp").forward(request, response);
 	}
@@ -145,7 +145,7 @@ public class HandlerServlet extends HttpServlet {
 						
 		if (query != null && !query.equals("")) {
 			query = new String(query.getBytes("ISO-8859-1"), "UTF-8");
-			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(query));	
+			sc.setAttribute("queryResult", OKMSearch.getInstance().findByContent(null, query));	
 		}
 
 		sc.getRequestDispatcher("/mobi/search.jsp").forward(request, response);
@@ -157,7 +157,7 @@ public class HandlerServlet extends HttpServlet {
 	private void logout(HttpServletRequest request, HttpServletResponse response) throws 
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		log.debug("logout({}, {})", request, response);
-		OKMAuth.getInstance().logout();
+		OKMAuth.getInstance().logout(null);
 		request.getSession().invalidate();
 		response.sendRedirect(request.getContextPath());
 	}
