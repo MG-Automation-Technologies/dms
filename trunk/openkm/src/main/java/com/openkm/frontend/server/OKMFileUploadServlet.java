@@ -152,8 +152,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					
 					if (FileUtils.getName(path).equals(fileName)) {
 						OKMDocument document = OKMDocument.getInstance();
-						document.setContent(path, is);
-						document.checkin(path, comment);
+						document.setContent(null, path, is);
+						document.checkin(null, path, comment);
 						uploadedDocPath = path;
 						
 						// Return the path of the inserted document in response
