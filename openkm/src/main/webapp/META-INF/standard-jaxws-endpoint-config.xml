@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jaxws-config xmlns="urn:jboss:jaxws-config:2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:javaee="http://java.sun.com/xml/ns/javaee"
-  xsi:schemaLocation="urn:jboss:jaxws-config:2.0 jaxws-config_2_0.xsd">
+<!--
+<jaxws-config xmlns="urn:jboss:jaxws-config:2.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+              xsi:schemaLocation="urn:jboss:jaxws-config:2.0 jaxws-config_2_0.xsd">
   <endpoint-config>
     <config-name>Standard WSSecurity Endpoint</config-name>
     <post-handler-chains>
@@ -18,3 +21,4 @@
     </post-handler-chains>
   </endpoint-config>
 </jaxws-config>
+-->
