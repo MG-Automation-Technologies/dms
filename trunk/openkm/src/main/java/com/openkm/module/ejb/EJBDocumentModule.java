@@ -37,6 +37,7 @@ import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 
@@ -72,14 +73,6 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 	public void copy(String docPath, String fldPath) throws ItemExistsException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, IOException, DatabaseException {
 		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException,
-			FileSizeExceededException, VirusDetectedException, ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -165,12 +158,6 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 	}
 
 	@Override
-	public void lock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void move(String docPath, String fldPath) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
@@ -236,6 +223,22 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 
 	@Override
 	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException,
+			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException,
+			ItemExistsException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			IOException, DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void lock(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		
