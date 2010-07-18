@@ -50,7 +50,7 @@ public class DocumentLockActionHandler implements ActionHandler {
 		log.info("Path: "+path);
 		
 		try {
-			OKMDocument.getInstance().lock(path);
+			OKMDocument.getInstance().lock(null, path);
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage());
 		} catch (LockException e) {
