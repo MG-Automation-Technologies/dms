@@ -61,7 +61,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Node rootNode = session.getRootNode();
@@ -104,7 +104,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			BookmarkDAO.delete(bmId);
@@ -135,7 +135,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Bookmark bm = BookmarkDAO.findByPk(bmId);
@@ -164,7 +164,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			BookmarkDAO.findByUser(session.getUserID());

@@ -103,24 +103,15 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			if (session != null) {
 				// Activity log
 				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
-
-				for (String key : JcrSessionManager.getInstance().getSessions().keySet()) {
-					log.info("{} => {}", key, JcrSessionManager.getInstance().getSession(key));
-				}
-
 				
 				JcrSessionManager.getInstance().remove(token);
 				session.logout();
-				
-				for (String key : JcrSessionManager.getInstance().getSessions().keySet()) {
-					log.info("{} => {}", key, JcrSessionManager.getInstance().getSession(key));
-				}
 			}
 		} catch (LoginException e) {
 			throw new RepositoryException(e.getMessage(), e);
@@ -198,7 +189,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
@@ -298,7 +289,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
@@ -395,7 +386,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
@@ -495,7 +486,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			node = session.getRootNode().getNode(nodePath.substring(1));
@@ -592,7 +583,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
@@ -662,7 +653,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
@@ -731,7 +722,7 @@ public class DirectAuthModule implements AuthModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			String[] atributes = session.getAttributeNames();
