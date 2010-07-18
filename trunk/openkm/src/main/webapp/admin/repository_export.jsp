@@ -51,7 +51,7 @@
 		try {
 			if (repoPath != null && !repoPath.equals("") && fsPath != null && !fsPath.equals("")) {
 				out.println("<hr/>");
-				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(repoPath);
+				ContentInfo cInfo = OKMFolder.getInstance().getContentInfo(null, repoPath);
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryExporter.exportDocuments(repoPath, new File(fsPath), out, new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();

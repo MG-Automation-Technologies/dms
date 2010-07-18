@@ -1,7 +1,7 @@
 <%@ page import="java.io.File" %>
 <%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.core.HttpSessionManager" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page import="com.openkm.util.impexp.RepositoryImporter" %>
 <%@ page import="com.openkm.util.impexp.HTMLInfoDecorator" %>
