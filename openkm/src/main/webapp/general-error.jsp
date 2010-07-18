@@ -1,7 +1,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="com.openkm.core.Config" %>
-<%@ page import="com.openkm.core.SessionManager" %>
-<%@ page import="com.openkm.bean.SessionInfo" %>
+<%@ page import="com.openkm.core.JcrSessionManager" %>
+<%@ page import="com.openkm.bean.JcrSessionInfo" %>
 <%@ page import="com.openkm.util.FormatUtil"%>
 <%@ page isErrorPage="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.openkm.bean.SessionInfo" %>
+<%@ page import="com.openkm.bean.HttpSessionInfo" %>
 <%@ page import="com.openkm.util.FormatUtil" %>
-<%@ page import="com.openkm.core.SessionManager" %>
+<%@ page import="com.openkm.core.HttpSessionManager" %>
 <%@ page import="com.openkm.core.Config" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
@@ -16,15 +16,15 @@
   out.println("<tr><td class=\"demo_title\">- LOGGED USERS -</td></tr>");
   out.println("<tr><td>");
 
-  SessionManager sm = SessionManager.getInstance();
+  HttpSessionManager sm = HttpSessionManager.getInstance();
 
   if (sm.getSessions().isEmpty()) {
     out.print("<b>No users logged, all demo users are available.</b>");
   } else {
     out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
     out.println("<tr><th>User</th><th>Login</th><th>Last action</th></tr>");
-    for (Iterator<SessionInfo> it = sm.getSessions().iterator(); it.hasNext(); ) {
-      SessionInfo si = it.next();
+    for (Iterator<HttpSessionInfo> it = sm.getSessions().iterator(); it.hasNext(); ) {
+      HttpSessionInfo si = it.next();
       out.print("<tr><td>"+si.getUser()+"</td><td>"+
         FormatUtil.formatDate(si.getCreation())+"</td><td>"+
         FormatUtil.formatDate(si.getLastAccessed())+"</td</tr>");
