@@ -27,7 +27,7 @@
         <tr><td><a href="mailto:support@openkm.com">support@openkm.com</a></td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td><b>Installation ID</b></td></tr>
-        <tr><td><%=OKMRepository.getInstance().getUuid()%></td></tr>
+        <tr><td><%=OKMRepository.getInstance().getUuid(null)%></td></tr>
       </table>
     </c:when>
     <c:otherwise>
