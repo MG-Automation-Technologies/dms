@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
  * JBoss UsersRolesLoginModule.java source code:
  * http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossSX
  */
+@SuppressWarnings("deprecation")
 public class OKMLoginModule implements LoginModule {
 	private static Logger log = LoggerFactory.getLogger(OKMLoginModule.class);
 	private String usersRsrcName = "users.properties";
@@ -68,9 +69,7 @@ public class OKMLoginModule implements LoginModule {
     private final Set<Principal> principals = new HashSet<Principal>();
     private String defaultUserId = null;
 	
-	/* (non-Javadoc)
-	 * @see javax.security.auth.spi.LoginModule#initialize(javax.security.auth.Subject, javax.security.auth.callback.CallbackHandler, java.util.Map, java.util.Map)
-	 */
+	@Override
 	public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
 		log.debug("initialize("+subject+", "+callbackHandler+", "+sharedState+", "+options+")");
 
@@ -89,9 +88,7 @@ public class OKMLoginModule implements LoginModule {
 		log.debug("initialize: void");
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.security.auth.spi.LoginModule#login()
-	 */
+	@Override
 	public boolean login() throws LoginException {
 		log.debug("login()");
 		boolean ok;
@@ -179,9 +176,7 @@ public class OKMLoginModule implements LoginModule {
         return ok;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.security.auth.spi.LoginModule#commit()
-	 */
+	@Override
 	public boolean commit() throws LoginException {
 		log.debug("commit()");
 		boolean ok;
@@ -198,9 +193,7 @@ public class OKMLoginModule implements LoginModule {
 		return ok;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.security.auth.spi.LoginModule#abort()
-	 */
+	@Override
 	public boolean abort() throws LoginException {
 		log.debug("abort()");
 		boolean ok;
@@ -216,9 +209,7 @@ public class OKMLoginModule implements LoginModule {
 		return ok;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.security.auth.spi.LoginModule#logout()
-	 */
+	@Override
 	public boolean logout() throws LoginException {
 		log.debug("logout()");
 		boolean ok = true;
@@ -244,6 +235,7 @@ public class OKMLoginModule implements LoginModule {
 	 * @exception IOException thrown if the properties file cannot be found
 	 *    or loaded 
 	 */
+	@SuppressWarnings("unused")
 	static Properties loadProperties(String propertiesName) throws IOException {
 		log.debug("loadProperties("+propertiesName+")");
 		Properties bundle = null;

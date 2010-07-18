@@ -65,6 +65,7 @@ public class OKMAccessManager implements AccessManager {
 	private String principalUser = null;
 	private Set<String> principalRoles = null;
 
+	@SuppressWarnings("unused")
 	@Override
 	public void init(AMContext context) throws AccessDeniedException, Exception {
 		log.debug("init({})", context);
