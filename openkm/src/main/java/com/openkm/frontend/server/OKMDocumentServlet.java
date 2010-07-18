@@ -103,7 +103,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 				}
 			} else {
 				log.debug("ParentFolder: {}", fldPath);
-				Collection<Document> col = OKMDocument.getInstance().getChilds(fldPath);
+				Collection<Document> col = OKMDocument.getInstance().getChilds(null, fldPath);
 				
 				for (Iterator<Document> it = col.iterator(); it.hasNext();) {		
 					Document doc = it.next();
@@ -139,7 +139,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 	
 		try {
-			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(docPath);
+			Collection<Version> col = OKMDocument.getInstance().getVersionHistory(null, docPath);
 			
 			for (Iterator<Version> it = col.iterator(); it.hasNext();){		
 				Version version = it.next();
@@ -171,7 +171,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().delete(docPath);
+			OKMDocument.getInstance().delete(null, docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -201,7 +201,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().checkout(docPath);
+			OKMDocument.getInstance().checkout(null, docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -231,7 +231,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().cancelCheckout(docPath);
+			OKMDocument.getInstance().cancelCheckout(null, docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Lock), e.getMessage());
@@ -291,7 +291,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().unlock(docPath);
+			OKMDocument.getInstance().unlock(null, docPath);
 		} catch (LockException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_UnLock), e.getMessage());
@@ -322,7 +322,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			gWTDocument = Util.copy(OKMDocument.getInstance().rename(docPath, newName));
+			gWTDocument = Util.copy(OKMDocument.getInstance().rename(null, docPath, newName));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -353,7 +353,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().move(docPath, destPath);
+			OKMDocument.getInstance().move(null, docPath, destPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -383,7 +383,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().purge(docPath);
+			OKMDocument.getInstance().purge(null, docPath);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -410,7 +410,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().restoreVersion(docPath, versionId);
+			OKMDocument.getInstance().restoreVersion(null, docPath, versionId);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -438,7 +438,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			gWTDocument = Util.copy(OKMDocument.getInstance().getProperties(docPath));
+			gWTDocument = Util.copy(OKMDocument.getInstance().getProperties(null, docPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -460,7 +460,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().copy(docPath, fldPath);
+			OKMDocument.getInstance().copy(null, docPath, fldPath);
 		} catch (ItemExistsException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_ItemExists), e.getMessage());
@@ -493,7 +493,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			return new Boolean(OKMDocument.getInstance().isValid(docPath));
+			return new Boolean(OKMDocument.getInstance().isValid(null, docPath));
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -518,7 +518,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 	
 		try {
-			return new Long(OKMDocument.getInstance().getVersionHistorySize(docPath));			
+			return new Long(OKMDocument.getInstance().getVersionHistorySize(null, docPath));			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -537,7 +537,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 	
 		try {
-			OKMDocument.getInstance().purgeVersionHistory(docPath);			
+			OKMDocument.getInstance().purgeVersionHistory(null, docPath);			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -564,7 +564,7 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		updateSessionManager();
 		
 		try {
-			OKMDocument.getInstance().addNote(docPath, text);
+			OKMDocument.getInstance().addNote(null, docPath, text);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
