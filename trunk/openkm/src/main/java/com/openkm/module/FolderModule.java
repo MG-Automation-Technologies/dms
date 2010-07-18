@@ -175,4 +175,16 @@ public interface FolderModule {
 	 */
 	public boolean isValid(String token, String fldPath) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException;
+	
+	/**
+	 * Get the folder path from a UUID
+	 * 
+	 * @param uuid The unique folder id.
+	 * @return The folder path
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't access this folder because of lack of permissions.
+	 * @throws RepositoryException If there is any problem.
+	 */
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 }
