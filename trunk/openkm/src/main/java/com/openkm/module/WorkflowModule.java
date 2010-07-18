@@ -40,225 +40,229 @@ public interface WorkflowModule {
 	/**
 	 * Get list of locked documents by user
 	 */
-	public void registerProcessDefinition(InputStream is) throws ParseException, RepositoryException,
-			DatabaseException, WorkflowException;
+	public void registerProcessDefinition(String token, InputStream is) throws ParseException,
+			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * Delete a previously registered process definition
 	 */
-	public void deleteProcessDefinition(long processDefinitionId) throws RepositoryException, 
+	public void deleteProcessDefinition(String token, long processDefinitionId) throws RepositoryException, 
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public ProcessDefinition getProcessDefinition(long processDefinitionId) throws RepositoryException,
-			DatabaseException, WorkflowException;
+	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId) throws 
+			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public byte[] getProcessDefinitionImage(long processDefinitionId, String node) throws RepositoryException,
-		DatabaseException, WorkflowException;
+	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node) throws 
+			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public Map<String, List<FormElement>> getProcessDefinitionForms(long processDefinitionId) throws 
-			ParseException, RepositoryException, DatabaseException, WorkflowException;
+	public Map<String, List<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
+			throws ParseException, RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public ProcessInstance runProcessDefinition(long processDefinitionId, String uuid, 
+	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, String uuid, 
 			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public ProcessInstance sendProcessInstanceSignal(long processInstanceId, String transitionName) throws 
-			RepositoryException, DatabaseException, WorkflowException;
+	public ProcessInstance sendProcessInstanceSignal(String token, long processInstanceId, 
+			String transitionName) throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void endProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
+	public void endProcessInstance(String token, long processInstanceId) throws RepositoryException, 
+			DatabaseException, WorkflowException;
 	
 	/**
 	 * 
 	 */
-	public void deleteProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
+	public void deleteProcessInstance(String token, long processInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public List<ProcessInstance> findProcessInstances(long processDefinitionId) throws RepositoryException, 
-			DatabaseException, WorkflowException;
+	public List<ProcessInstance> findProcessInstances(String token, long processDefinitionId) throws 
+			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * Get list of registered process definitions
 	 */
-	public List<ProcessDefinition> findAllProcessDefinitions() throws RepositoryException, DatabaseException,
-			WorkflowException;
+	public List<ProcessDefinition> findAllProcessDefinitions(String token) throws RepositoryException,
+			DatabaseException, WorkflowException;
 
 	/**
 	 * Get list of registered process definitions. Only last version for each
 	 * process
 	 */
-	public List<ProcessDefinition> findLatestProcessDefinitions() throws RepositoryException, DatabaseException,
-			WorkflowException;
+	public List<ProcessDefinition> findLatestProcessDefinitions(String token) throws RepositoryException,
+			DatabaseException, WorkflowException;
 
 	/**
 	 * Get list of registered process definitions versions
 	 */
-	public List<ProcessDefinition> findAllProcessDefinitionVersions(String name) throws RepositoryException, 
-			DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public ProcessInstance getProcessInstance(long processInstanceId) throws RepositoryException, 
-			DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void suspendProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void resumeProcessInstance(long processInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void addProcessInstanceVariable(long processInstanceId, String name, Object value) throws
+	public List<ProcessDefinition> findAllProcessDefinitionVersions(String token, String name) throws
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void deleteProcessInstanceVariable(long processInstanceId, String name) throws RepositoryException,
+	public ProcessInstance getProcessInstance(String token, long processInstanceId) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void suspendProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public List<TaskInstance> findUserTaskInstances() throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public List<TaskInstance> findPooledTaskInstances() throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public List<TaskInstance> findTaskInstances(long processInstanceId) throws RepositoryException,
+	public void resumeProcessInstance(String token, long processInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void setTaskInstanceValues(long taskInstanceId, String transitionName, List<FormElement> values)
+	public void addProcessInstanceVariable(String token, long processInstanceId, String name, Object value)
 			throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void addTaskInstanceComment(long taskInstanceId, String message) throws RepositoryException, 
-			DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public TaskInstance getTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void setTaskInstanceActorId(long taskInstanceId, String actorId) throws RepositoryException,
-			DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void addTaskInstanceVariable(long taskInstanceId, String name, Object value) throws 
+	public void deleteProcessInstanceVariable(String token, long processInstanceId, String name) throws
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void deleteTaskInstanceVariable(long taskInstanceId, String name) throws RepositoryException,
+	public List<TaskInstance> findUserTaskInstances(String token) throws RepositoryException, 
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void startTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
+	public List<TaskInstance> findPooledTaskInstances(String token) throws RepositoryException,
+			DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public List<TaskInstance> findTaskInstances(String token, long processInstanceId) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void setTaskInstanceValues(String token, long taskInstanceId, String transitionName, 
+			List<FormElement> values) throws RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void addTaskInstanceComment(String token, long taskInstanceId, String message) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public TaskInstance getTaskInstance(String token, long taskInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void setTaskInstanceActorId(String token, long taskInstanceId, String actorId) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void addTaskInstanceVariable(String token, long taskInstanceId, String name, Object value) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void deleteTaskInstanceVariable(String token, long taskInstanceId, String name) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void startTaskInstance(String token, long taskInstanceId) throws RepositoryException,
+			DatabaseException, WorkflowException;
 	
 	/**
 	 * 
 	 */
-	public void endTaskInstance(long taskInstanceId, String transitionName) throws RepositoryException,
+	public void endTaskInstance(String token, long taskInstanceId, String transitionName) throws
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void suspendTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void suspendTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void resumeTaskInstance(long taskInstanceId) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public Token getToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void addTokenComment(long tokenId, String message) throws RepositoryException, DatabaseException,
-			WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void suspendToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public void resumeToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException;
-
-	/**
-	 * 
-	 */
-	public Token sendTokenSignal(long tokenId, String transitionName) throws RepositoryException,
+	public void resumeTaskInstance(String token, long taskInstanceId) throws RepositoryException,
 			DatabaseException, WorkflowException;
 
 	/**
 	 * 
 	 */
-	public void setTokenNode(long tokenId, String nodeName) throws RepositoryException, DatabaseException,
+	public Token getToken(String token, long tokenId) throws RepositoryException, DatabaseException,
 			WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void addTokenComment(String token, long tokenId, String message) throws RepositoryException, 
+			DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void suspendToken(String token, long tokenId) throws RepositoryException, DatabaseException,
+			WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void resumeToken(String token, long tokenId) throws RepositoryException, DatabaseException,
+			WorkflowException;
+
+	/**
+	 * 
+	 */
+	public Token sendTokenSignal(String token, long tokenId, String transitionName) throws 
+			RepositoryException, DatabaseException, WorkflowException;
+
+	/**
+	 * 
+	 */
+	public void setTokenNode(String token, long tokenId, String nodeName) throws RepositoryException,
+			DatabaseException, WorkflowException;
 	
 	/**
 	 * 
 	 */
-	public void endToken(long tokenId) throws RepositoryException, DatabaseException, WorkflowException;
+	public void endToken(String token, long tokenId) throws RepositoryException, DatabaseException,
+			WorkflowException;
 }

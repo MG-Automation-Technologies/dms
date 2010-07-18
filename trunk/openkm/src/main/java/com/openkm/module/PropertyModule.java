@@ -42,8 +42,9 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addCategory(String nodePath, String category) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void addCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Remove a category from a node.
@@ -57,8 +58,9 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeCategory(String nodePath, String category) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Add a keyword to a node.
@@ -72,8 +74,9 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void addKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Remove a keyword from a node.
@@ -87,6 +90,7 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeKeyword(String nodePath, String keyword) throws VersionException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void removeKeyword(String token, String nodePath, String keyword) throws VersionException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 }

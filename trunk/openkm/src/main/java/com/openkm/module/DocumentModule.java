@@ -61,7 +61,7 @@ public interface DocumentModule {
 	 * @throws RepositoryException If there is any general repository problem.
 	 * @throws IOException An error when inserting document data into the repository.
 	 */
-	public Document create(Document doc, InputStream is) throws UnsupportedMimeTypeException, 
+	public Document create(String token, Document doc, InputStream is) throws UnsupportedMimeTypeException, 
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException;
@@ -313,8 +313,8 @@ public interface DocumentModule {
 	 * the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void lock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException;
+	public void lock(String token, String docPath) throws LockException, PathNotFoundException, 
+			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Unlock a document, so will be editable for other users.

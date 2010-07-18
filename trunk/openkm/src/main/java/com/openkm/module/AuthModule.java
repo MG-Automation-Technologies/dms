@@ -36,11 +36,14 @@ public interface AuthModule {
 	 * Logins into the repository.
 	 */
 	public void login() throws RepositoryException, DatabaseException;
+	
+	public String login(String user, String password) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Log out from the repository.
 	 */
-	public void logout() throws RepositoryException, DatabaseException;
+	public void logout(String token) throws RepositoryException, DatabaseException;
 
 	/**
 	 * Add user permissions to a node.
@@ -54,8 +57,8 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void grantUser(String nodePath, String user, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void grantUser(String token, String nodePath, String user, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Revoke user permissions from a node.
@@ -69,8 +72,8 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void revokeUser(String nodePath, String user, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void revokeUser(String token, String nodePath, String user, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get user permissions from am item (document or folder).
@@ -81,7 +84,7 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public Map<String, Byte> getGrantedUsers(String nodePath) throws PathNotFoundException,
+	public Map<String, Byte> getGrantedUsers(String token, String nodePath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
@@ -96,8 +99,8 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void grantRole(String nodePath, String role, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void grantRole(String token, String nodePath, String role, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Revoke role permissions from a node.
@@ -111,8 +114,8 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public void revokeRole(String nodePath, String role, int permissions, boolean recursive) throws 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void revokeRole(String token, String nodePath, String role, int permissions, boolean recursive)
+			throws PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/** 
 	 * Get roles permissions from am item (document or folder).
@@ -123,7 +126,7 @@ public interface AuthModule {
 	 * @throws AccessDeniedException If the authorization information is not valid.
 	 * @throws RepositoryException If there is any error accessing to the repository.
 	 */
-	public Map<String, Byte> getGrantedRoles(String nodePath) throws PathNotFoundException, 
+	public Map<String, Byte> getGrantedRoles(String token, String nodePath) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
@@ -132,7 +135,7 @@ public interface AuthModule {
 	 * @return A collection of repository users.
 	 * @throws RepositoryException If there is any error retrieving the users list.
 	 */
-	public List<String> getUsers() throws PrincipalAdapterException;
+	public List<String> getUsers(String token) throws PrincipalAdapterException;
 	
 	/**
 	 * Retrieves a list of repository roles.
@@ -140,7 +143,7 @@ public interface AuthModule {
 	 * @return A collection of repository roles.
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
-	public List<String> getRoles() throws PrincipalAdapterException;
+	public List<String> getRoles(String token) throws PrincipalAdapterException;
 
 	/**
 	 * Retrieves a list of users by role.
@@ -148,7 +151,7 @@ public interface AuthModule {
 	 * @return A repository role.
 	 * @throws RepositoryException If there is any error retrieving the user list.
 	 */
-	public List<String> getUsersByRole(String role) throws PrincipalAdapterException;
+	public List<String> getUsersByRole(String token, String role) throws PrincipalAdapterException;
 	
 	/**
 	 * Retrieves a list of roles by user.
@@ -156,7 +159,7 @@ public interface AuthModule {
 	 * @return A repository user.
 	 * @throws RepositoryException If there is any error retrieving the roles list.
 	 */
-	public List<String> getRolesByUser(String user) throws PrincipalAdapterException;
+	public List<String> getRolesByUser(String token, String user) throws PrincipalAdapterException;
 	
 	/**
 	 * Retrieves the user mails from an user list.
@@ -165,5 +168,5 @@ public interface AuthModule {
 	 * @return A collection of user mails.
 	 * @throws RepositoryException If there is any error retrieving the mail list.
 	 */
-	public List<String> getMails(List<String> users) throws PrincipalAdapterException;
+	public List<String> getMails(String token, List<String> users) throws PrincipalAdapterException;
 }

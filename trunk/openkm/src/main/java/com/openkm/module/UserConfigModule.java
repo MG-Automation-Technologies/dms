@@ -35,7 +35,7 @@ public interface UserConfigModule {
 	 * @param nodePath A node path to be set as user home folder.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setHome(String nodePath) throws AccessDeniedException, RepositoryException,
+	public void setHome(String token, String nodePath) throws AccessDeniedException, RepositoryException,
 			DatabaseException;
 	
 	/**
@@ -44,5 +44,5 @@ public interface UserConfigModule {
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public UserConfig getConfig() throws RepositoryException, DatabaseException;
+	public UserConfig getConfig(String token) throws RepositoryException, DatabaseException;
 }

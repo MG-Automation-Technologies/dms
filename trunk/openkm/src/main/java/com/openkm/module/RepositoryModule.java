@@ -36,7 +36,8 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no root folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getRootFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getRootFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtains the user trash folder.
@@ -45,9 +46,11 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user trash folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getTrashFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getTrashFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
-	public Folder getTrashFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getTrashFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtain the template folder of the repository.
@@ -56,7 +59,8 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no templates folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getTemplatesFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getTemplatesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtain the personal documents folder of the repository.
@@ -65,9 +69,11 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getPersonalFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getPersonalFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
-	public Folder getPersonalFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getPersonalFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtain the personal mails folder of the repository.
@@ -76,9 +82,11 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getMailFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getMailFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
-	public Folder getMailFolderBase() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getMailFolderBase(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtain the thesaurus folder of the repository.
@@ -87,7 +95,8 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getThesaurusFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getThesaurusFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Obtain the categories folder of the repository.
@@ -96,7 +105,8 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user documents folder node in the repository.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public Folder getCategoriesFolder() throws PathNotFoundException, RepositoryException, DatabaseException;
+	public Folder getCategoriesFolder(String token) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Remove all the items in the user trash folder for ever. You can't 
@@ -107,7 +117,8 @@ public interface RepositoryModule {
 	 * of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void purgeTrash() throws AccessDeniedException, RepositoryException, DatabaseException;
+	public void purgeTrash(String token) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Get the update message, if any.
@@ -115,7 +126,7 @@ public interface RepositoryModule {
 	 * @return A possible update message or simple info for the application.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public String getUpdateMessage() throws RepositoryException;
+	public String getUpdateMessage(String token) throws RepositoryException;
 	
 	/**
 	 * Get the unique repository identifier
@@ -123,7 +134,7 @@ public interface RepositoryModule {
 	 * @return The repository UUID
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public String getUuid() throws RepositoryException;
+	public String getUuid(String token) throws RepositoryException;
 	
 	/**
 	 * Test if a node path exists
@@ -132,7 +143,7 @@ public interface RepositoryModule {
 	 * @return true if the node exist or false if not
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public boolean hasNode(String path) throws RepositoryException, DatabaseException;
+	public boolean hasNode(String token, String path) throws RepositoryException, DatabaseException;
 	
 	/**
 	 * Obtain the node path with a given uuid.
@@ -142,5 +153,6 @@ public interface RepositoryModule {
 	 * @throws PathNotFoundException If there is no user node in the repository with this uuid.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public String getPath(String uuid) throws PathNotFoundException, RepositoryException, DatabaseException;
+	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException;
 }

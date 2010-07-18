@@ -50,8 +50,9 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addGroup(String docPath, String grpName) throws NoSuchGroupException, LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
+	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException;
 
 	/**
 	 * Removes a property group from a document.
@@ -64,7 +65,7 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeGroup(String docPath, String grpName) throws AccessDeniedException, 
+	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException;
 
@@ -76,7 +77,7 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<PropertyGroup> getGroups(String docPath) throws IOException, ParseException,
+	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException, ParseException,
 			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
@@ -84,8 +85,8 @@ public interface PropertyGroupModule {
 	 * 
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<PropertyGroup> getAllGroups() throws IOException, ParseException, RepositoryException,
-			DatabaseException;
+	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException,
+			RepositoryException, DatabaseException;
 
 	/**
 	 * Get all properties defined in a document by group.
@@ -97,8 +98,9 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<FormElement> getProperties(String docPath, String grpName) throws IOException,
-			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException;
+	public List<FormElement> getProperties(String token, String docPath, String grpName) throws IOException,
+			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException,
+			DatabaseException;
 	
 	/**
 	 * Set group properties to a document.
@@ -115,9 +117,9 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String docPath, String grpName, List<FormElement> properties) throws IOException,
-			ParseException, NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException, 
-			AccessDeniedException, RepositoryException, DatabaseException;
+	public void setProperties(String token, String docPath, String grpName, List<FormElement> properties)
+			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Get all possible values which can have a property.
@@ -126,6 +128,6 @@ public interface PropertyGroupModule {
 	 * @throws IOException If there is any problem reading the property values.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<FormElement> getPropertyGroupForm(String grpName) throws ParseException, IOException, 
-			RepositoryException, DatabaseException;
+	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
+			IOException, RepositoryException, DatabaseException;
 }
