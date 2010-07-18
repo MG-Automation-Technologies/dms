@@ -112,11 +112,11 @@ public class RepositoryExporter {
 		fsPath.mkdirs();
 
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		for (Iterator<Document> it = dm.getChilds(fldPath).iterator(); it.hasNext();) {
+		for (Iterator<Document> it = dm.getChilds(null, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			path = fsPath.getPath() + File.separator+ FileUtils.getName(docChild.getPath()).replace(':', '_');
 			FileOutputStream fos = new FileOutputStream(path);
-			InputStream is = dm.getContent(docChild.getPath(), false);
+			InputStream is = dm.getContent(null, docChild.getPath(), false);
 			IOUtils.copy(is, fos);
 			is.close();
 			fos.close();
