@@ -65,18 +65,18 @@ public class OKMDocument implements DocumentModule {
 			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
 			ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
-		log.debug("create({}, {})", doc, is);
+		log.debug("create({}, {}, {})", new Object[] { token, doc, is });
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document newDocument = dm.create(token, doc, is);
 		log.debug("create: {}", newDocument);
 		return newDocument;
 	}
 	
-	public Document createSimple(String token, String docPath, InputStream is) throws UnsupportedMimeTypeException, 
-			FileSizeExceededException, UserQuotaExceededException, VirusDetectedException, 
-			ItemExistsException, PathNotFoundException, AccessDeniedException, 
+	public Document createSimple(String token, String docPath, InputStream is) throws 
+			UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
+			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException, 
 			RepositoryException, IOException, DatabaseException {
-		log.debug("createSimple({})", docPath);
+		log.debug("createSimple({}, {}, {})", new Object[] { token, docPath, is});
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		Document doc = new Document();
 		doc.setPath(docPath);
@@ -86,166 +86,167 @@ public class OKMDocument implements DocumentModule {
 	}
 	
 	@Override
-	public void delete(String docPath) throws LockException, PathNotFoundException, AccessDeniedException, 
-			RepositoryException, DatabaseException {
+	public void delete(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("delete({})", docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.delete(docPath);
+		dm.delete(token, docPath);
 		log.debug("delete: void");
 	}
 	
 	@Override
-	public Document getProperties(String docPath) throws RepositoryException, PathNotFoundException,
-			DatabaseException {
-		log.debug("getProperties({})", docPath);
+	public Document getProperties(String token, String docPath) throws RepositoryException,
+			PathNotFoundException, DatabaseException {
+		log.debug("getProperties({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Document doc = dm.getProperties(docPath);
+		Document doc = dm.getProperties(token, docPath);
 		log.debug("getProperties: {}", doc);
 		return doc;
 	}
 
 	@Override
-	public InputStream getContent(String docPath, boolean checkout) throws PathNotFoundException, 
-			RepositoryException, IOException, DatabaseException {
-		log.debug("getContent({}, {})", docPath, checkout);
+	public InputStream getContent(String token, String docPath, boolean checkout) throws 
+			PathNotFoundException, RepositoryException, IOException, DatabaseException {
+		log.debug("getContent({}, {}, {})", new Object[] { token, docPath, checkout });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		InputStream is = dm.getContent(docPath, checkout);
+		InputStream is = dm.getContent(token, docPath, checkout);
 		log.debug("getContent: {}", is);
 		return is;
 	}
 	
 	@Override
-	public InputStream getContentByVersion(String docPath, String versionId) throws RepositoryException, 
-			PathNotFoundException, IOException, DatabaseException {
-		log.debug("getContentByVersion({}, {})", docPath, versionId);
+	public InputStream getContentByVersion(String token, String docPath, String versionId) throws
+			RepositoryException, PathNotFoundException, IOException, DatabaseException {
+		log.debug("getContentByVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		InputStream is = dm.getContentByVersion(docPath, versionId);
+		InputStream is = dm.getContentByVersion(token, docPath, versionId);
 		log.debug("getContentByVersion: {}", is);
 		return is;
 	}
 
 	@Override
-	public void addNote(String docPath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {})", docPath, text);
+	public void addNote(String token, String docPath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addNote({}, {}, {})", new Object[] { token, docPath, text });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.addNote(docPath, text);
+		dm.addNote(token, docPath, text);
 		log.debug("addNote: void");
 	}
 	
 	@Override
-	public Note getNote(String notePath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("addNote({})", notePath);
+	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("addNote({}, {})", token, notePath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Note ret = dm.getNote(notePath);
+		Note ret = dm.getNote(token, notePath);
 		log.debug("addNote: {}", ret);
 		return ret;
 	}
 
 	@Override
-	public void removeNote(String notePath) throws LockException, PathNotFoundException,
+	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeNote({})", notePath);
+		log.debug("removeNote({}, {})", token, notePath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.removeNote(notePath);
+		dm.removeNote(token, notePath);
 		log.debug("removeNote: void");
 	}
 
 	@Override
-	public void setNote(String notePath, String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setNote({}, {})", notePath, text);
+	public void setNote(String token, String notePath, String text) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setNote({}, {}, {})", new Object[] { token, notePath, text });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setNote(notePath, text);
+		dm.setNote(token, notePath, text);
 		log.debug("setNote: void");
 	}
 	
 	@Override
-	public List<Document> getChilds(String fldPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getChilds({})", fldPath);
+	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getChilds({}, {})", fldPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		List<Document> col = dm.getChilds(fldPath);
+		List<Document> col = dm.getChilds(token, fldPath);
 		log.debug("getChilds: {}", col);
 		return col;
 	}
 
 	@Override
-	public Document rename(String docPath, String newName) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException {
+	public Document rename(String token, String docPath, String newName) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("rename({}, {})", docPath, newName);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Document renamedDocument = dm.rename(docPath, newName);
+		Document renamedDocument = dm.rename(token, docPath, newName);
 		log.debug("rename: {}", renamedDocument);
 		return renamedDocument;
 	}
 
 	@Override
-	public void setProperties(Document doc) throws LockException, VersionException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({})", doc);
+	public void setProperties(String token, Document doc) throws LockException, VersionException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("setProperties({}, {})", token, doc);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setProperties(doc);
+		dm.setProperties(token, doc);
 		log.debug("setProperties: void");
 	}
 
 	@Override
-	public void checkout(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("checkout({})", docPath);
+	public void checkout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("checkout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.checkout(docPath);
+		dm.checkout(token, docPath);
 		log.debug("checkout: void");
 	}
 
 	@Override
-	public void cancelCheckout(String docPath) throws LockException, PathNotFoundException,
+	public void cancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("cancelCheckout({})", docPath);
+		log.debug("cancelCheckout({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.cancelCheckout(docPath);
+		dm.cancelCheckout(token, docPath);
 		log.debug("cancelCheckout: void");
 	}
 	
 	@Override
-	public boolean isCheckedOut(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("isCheckedOut({})", docPath);
+	public boolean isCheckedOut(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("isCheckedOut({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		boolean checkedOut = dm.isCheckedOut(docPath);
+		boolean checkedOut = dm.isCheckedOut(token, docPath);
 		log.debug("isCheckedOut: {}", checkedOut);
 		return checkedOut;
 	}
 	
 	@Override
-	public Version checkin(String docPath, String comment) throws LockException, VersionException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("checkin({}, {})", docPath, comment);
+	public Version checkin(String token, String docPath, String comment) throws LockException,
+			VersionException, PathNotFoundException, AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("checkin({}, {}, {})", new Object[] { token, docPath, comment });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Version version = dm.checkin(docPath, comment);
+		Version version = dm.checkin(token, docPath, comment);
 		log.debug("checkin: {}", version);
 		return version;
 	}
 
 	@Override
-	public List<Version> getVersionHistory(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getVersionHistory({})", docPath);
+	public List<Version> getVersionHistory(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		List<Version> history = dm.getVersionHistory(docPath);
+		List<Version> history = dm.getVersionHistory(token, docPath);
 		log.debug("getVersionHistory: {}", history);
 		return history;
 	}
 
 	@Override
-	public void setContent(String docPath, InputStream is) throws FileSizeExceededException,
+	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, 
 			DatabaseException {
-		log.debug("setContent({}, {})", docPath, is);
+		log.debug("setContent({}, {}, {})", new Object[] { token, docPath, is });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setContent(docPath, is);
+		dm.setContent(token, docPath, is);
 		log.debug("setContent: void");
 	}
 
@@ -259,105 +260,106 @@ public class OKMDocument implements DocumentModule {
 	}
 
 	@Override
-	public void unlock(String docPath) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("unlock({})", docPath);
+	public void unlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("unlock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.unlock(docPath);
+		dm.unlock(token, docPath);
 		log.debug("unlock: void");
 	}
 
 	@Override
-	public boolean isLocked(String docPath) throws PathNotFoundException, RepositoryException,
+	public boolean isLocked(String token, String docPath) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("isLocked({})", docPath);
+		log.debug("isLocked({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		boolean locked = dm.isLocked(docPath);
+		boolean locked = dm.isLocked(token, docPath);
 		log.debug("isLocked: {}", locked);
 		return locked;
 	}
 
 	@Override
-	public Lock getLock(String docPath) throws LockException, PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getLock({})", docPath);
+	public Lock getLock(String token, String docPath) throws LockException, PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getLock({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		Lock lock = dm.getLock(docPath);
+		Lock lock = dm.getLock(token, docPath);
 		log.debug("getLock: {}", lock);
 		return lock;
 	}
 
 	@Override
-	public void purge(String docPath) throws PathNotFoundException, AccessDeniedException,
+	public void purge(String token, String docPath) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.debug("purge({})", docPath);
+		log.debug("purge({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.purge(docPath);
+		dm.purge(token, docPath);
 		log.debug("purge: void");
 	}
 
 	@Override
-	public void move(String docPath, String destPath) throws PathNotFoundException, ItemExistsException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {})", docPath, destPath);
+	public void move(String token, String docPath, String destPath) throws PathNotFoundException,
+			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("move({}, {}, {})", new Object[] { token, docPath, destPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.move(docPath, destPath);
+		dm.move(token, docPath, destPath);
 		log.debug("move: void");
 	}
 
 	@Override
-	public void copy(String docPath, String destPath) throws ItemExistsException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, IOException, DatabaseException, 
-			UserQuotaExceededException {
-		log.debug("copy({}, {})", docPath, destPath);
+	public void copy(String token, String docPath, String destPath) throws ItemExistsException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, IOException,
+			DatabaseException, UserQuotaExceededException {
+		log.debug("copy({}, {}, {})", new Object[] { token, docPath, destPath });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.copy(docPath, destPath);
+		dm.copy(token, docPath, destPath);
 		log.debug("copy: void");
 	}
 	
 	@Override
-	public void restoreVersion(String docPath, String versionId) throws PathNotFoundException, 
+	public void restoreVersion(String token, String docPath, String versionId) throws PathNotFoundException, 
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("restoreVersion({}, {})", docPath, versionId);
+		log.debug("restoreVersion({}, {}, {})", new Object[] { token, docPath, versionId });
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.restoreVersion(docPath, versionId);
+		dm.restoreVersion(token, docPath, versionId);
 		log.debug("restoreVersion: void");
 	}
 
 	@Override
-	public void purgeVersionHistory(String docPath) throws PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("purgeVersionHistory({})", docPath);
+	public void purgeVersionHistory(String token, String docPath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("purgeVersionHistory({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.purgeVersionHistory(docPath);
+		dm.purgeVersionHistory(token, docPath);
 		log.debug("purgeVersionHistory: void");
 	}
 
 	@Override
-	public long getVersionHistorySize(String docPath) throws PathNotFoundException, RepositoryException,
-			DatabaseException {
-		log.debug("getVersionHistorySize({})", docPath);
+	public long getVersionHistorySize(String token, String docPath) throws PathNotFoundException,
+			RepositoryException, DatabaseException {
+		log.debug("getVersionHistorySize({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		long size = dm.getVersionHistorySize(docPath);
+		long size = dm.getVersionHistorySize(token, docPath);
 		log.debug("getVersionHistorySize: {}", size);
 		return size;
 	}
 
 	@Override
-	public boolean isValid(String docPath) throws PathNotFoundException, AccessDeniedException, 
+	public boolean isValid(String token, String docPath) throws PathNotFoundException, AccessDeniedException, 
 			RepositoryException, DatabaseException {
-		log.debug("isValid({})", docPath);
+		log.debug("isValid({}, {})", token, docPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		boolean valid = dm.isValid(docPath);
+		boolean valid = dm.isValid(token, docPath);
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
 
 	@Override
-	public String getPath(String uuid) throws AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("getPath({})", uuid);
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
 		DocumentModule dm = ModuleManager.getDocumentModule();
-		String path = dm.getPath(uuid);
+		String path = dm.getPath(token, uuid);
 		log.debug("getPath: {}", path);
 		return path;
 	}
