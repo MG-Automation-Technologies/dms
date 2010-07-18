@@ -106,7 +106,7 @@ public class RepositoryImporter {
 				fld.setPath(fldPath + "/" + files[i].getName());
 				
 				try {
-					ModuleManager.getFolderModule().create(fld);
+					ModuleManager.getFolderModule().create(null, fld);
 					ImpExpStats tmp = importDocumentsHelper(files[i], fld.getPath(), out, deco);
 					
 					// Stats
@@ -128,7 +128,7 @@ public class RepositoryImporter {
 				boolean docOk = true;
 				
 				try {
-					ModuleManager.getDocumentModule().create(doc, fisContent);
+					ModuleManager.getDocumentModule().create(null, doc, fisContent);
 					
 					// Stats
 					stats.setSize(stats.getSize() + size);
