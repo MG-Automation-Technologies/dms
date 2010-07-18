@@ -351,7 +351,7 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			// Escape dangerous chars in name
@@ -1388,7 +1388,7 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) {
 				session = JCRUtils.getSession();
 			} else {
-				session = JcrSessionManager.getInstance().getSession(token);
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
