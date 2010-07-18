@@ -195,7 +195,7 @@ public class WorkflowServlet extends BaseServlet {
 			ServletException, IOException, com.openkm.core.RepositoryException, DatabaseException, WorkflowException {
 		log.debug("listProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
-		sc.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions());
+		sc.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 		sc.getRequestDispatcher("/admin/process_definition_list.jsp").forward(request, response);
 		log.debug("listProcessDefinition: void");
 	}
@@ -207,7 +207,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("deleteProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		long pdid = WebUtil.getLong(request, "pdid");
-		OKMWorkflow.getInstance().deleteProcessDefinition(pdid);
+		OKMWorkflow.getInstance().deleteProcessDefinition(null, pdid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_DEFINITION_DELETE", null, null);
@@ -223,7 +223,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("viewProcessDefinition({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long pdid = WebUtil.getLong(request, "pdid");
-		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(pdid);
+		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, pdid);
 		Map<String, List<Map<String, String>>> pdf = new HashMap<String, List<Map<String,String>>>();
 		
 		for (String key : procDefForms.keySet()) {
@@ -236,8 +236,8 @@ public class WorkflowServlet extends BaseServlet {
 			pdf.put(key, value);
 		}
 		
-		sc.setAttribute("processDefinition", OKMWorkflow.getInstance().getProcessDefinition(pdid));
-		sc.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(pdid));
+		sc.setAttribute("processDefinition", OKMWorkflow.getInstance().getProcessDefinition(null, pdid));
+		sc.setAttribute("processInstances", OKMWorkflow.getInstance().findProcessInstances(null, pdid));
 		sc.setAttribute("processDefinitionForms", pdf);
 		sc.getRequestDispatcher("/admin/process_definition_view.jsp").forward(request, response);
 		log.debug("viewProcessDefinition: void");
@@ -252,7 +252,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("processInstanceView({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long piid = WebUtil.getLong(request, "piid");
-		ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(piid);
+		ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(null, piid);
 		Map<String, String> vars = new HashMap<String, String>();
 		
 		for (Entry<String, Object> entry : pi.getVariables().entrySet()) {
@@ -266,8 +266,8 @@ public class WorkflowServlet extends BaseServlet {
 		
 		sc.setAttribute("variables", vars);
 		sc.setAttribute("processInstance", pi);
-		sc.setAttribute("taskInstances", OKMWorkflow.getInstance().findTaskInstances(piid));
-		sc.setAttribute("users", OKMAuth.getInstance().getUsers());
+		sc.setAttribute("taskInstances", OKMWorkflow.getInstance().findTaskInstances(null, piid));
+		sc.setAttribute("users", OKMAuth.getInstance().getUsers(null));
 		sc.getRequestDispatcher("/admin/process_instance_view.jsp").forward(request, response);
 		log.debug("processInstanceView: void");
 	}
@@ -279,7 +279,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceDelete({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
-		OKMWorkflow.getInstance().deleteProcessInstance(piid);
+		OKMWorkflow.getInstance().deleteProcessInstance(null, piid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_DELETE", Long.toString(piid), null);
@@ -293,7 +293,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceEnd({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
-		OKMWorkflow.getInstance().endProcessInstance(piid);
+		OKMWorkflow.getInstance().endProcessInstance(null, piid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_END", Long.toString(piid), null);
@@ -307,7 +307,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceResume({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
-		OKMWorkflow.getInstance().resumeProcessInstance(piid);
+		OKMWorkflow.getInstance().resumeProcessInstance(null, piid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_RESUME", Long.toString(piid), null);
@@ -321,7 +321,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("processInstanceSuspend({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
-		OKMWorkflow.getInstance().suspendProcessInstance(piid);
+		OKMWorkflow.getInstance().suspendProcessInstance(null, piid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_SUSPEND", Long.toString(piid), null);
@@ -338,7 +338,7 @@ public class WorkflowServlet extends BaseServlet {
 		String message = WebUtil.getString(request, "message");
 		
 		if (!message.equals("")) {
-			OKMWorkflow.getInstance().addTokenComment(tid, message);
+			OKMWorkflow.getInstance().addTokenComment(null, tid, message);
 		}
 		
 		// Activity log
@@ -354,7 +354,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("processInstanceVariableDelete({}, {}, {})", new Object[] { session, request, response });
 		long piid = WebUtil.getLong(request, "piid");
 		String name = WebUtil.getString(request, "name");
-		OKMWorkflow.getInstance().deleteProcessInstanceVariable(piid, name);
+		OKMWorkflow.getInstance().deleteProcessInstanceVariable(null, piid, name);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_VARIABLE_DELETE", Long.toString(piid), null);
@@ -370,7 +370,7 @@ public class WorkflowServlet extends BaseServlet {
 		long piid = WebUtil.getLong(request, "piid");
 		String name = WebUtil.getString(request, "name");
 		String value= WebUtil.getString(request, "value");
-		OKMWorkflow.getInstance().addProcessInstanceVariable(piid, name, value);
+		OKMWorkflow.getInstance().addProcessInstanceVariable(null, piid, name, value);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_PROCESS_INSTANCE_VARIABLE_ADD", Long.toString(piid), 
@@ -386,7 +386,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("taskInstanceSetActor({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
 		String actor = WebUtil.getString(request, "actor");
-		OKMWorkflow.getInstance().setTaskInstanceActorId(tiid, actor);
+		OKMWorkflow.getInstance().setTaskInstanceActorId(null, tiid, actor);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_SET_ACTOR", Long.toString(tiid), actor);
@@ -402,8 +402,8 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("taskInstanceView({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long tiid = WebUtil.getLong(request, "tiid");
-		TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(tiid);
-		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(ti.getProcessInstance().getProcessDefinition().getId());
+		TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(null, tiid);
+		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, ti.getProcessInstance().getProcessDefinition().getId());
 		List<Map<String, String>> pdf = new ArrayList<Map<String,String>>();
 		Map<String, String> vars = new HashMap<String, String>();
 		
@@ -434,7 +434,7 @@ public class WorkflowServlet extends BaseServlet {
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("taskInstanceStart({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
-		OKMWorkflow.getInstance().startTaskInstance(tiid);
+		OKMWorkflow.getInstance().startTaskInstance(null, tiid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_START", Long.toString(tiid), null);
@@ -449,7 +449,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("taskInstanceEnd({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
 		String transition = WebUtil.getString(request, "transition", null);
-		OKMWorkflow.getInstance().endTaskInstance(tiid, transition);
+		OKMWorkflow.getInstance().endTaskInstance(null, tiid, transition);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_END", Long.toString(tiid), null);
@@ -463,7 +463,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("taskInstanceSuspend({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
-		OKMWorkflow.getInstance().suspendTaskInstance(tiid);
+		OKMWorkflow.getInstance().suspendTaskInstance(null, tiid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_SUSPEND", Long.toString(tiid), null);
@@ -480,7 +480,7 @@ public class WorkflowServlet extends BaseServlet {
 		String message = WebUtil.getString(request, "message");
 		
 		if (!message.equals("")) {
-			OKMWorkflow.getInstance().addTaskInstanceComment(tiid, message);
+			OKMWorkflow.getInstance().addTaskInstanceComment(null, tiid, message);
 		}
 		
 		// Activity log
@@ -496,7 +496,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("taskInstanceVariableDelete({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
 		String name = WebUtil.getString(request, "name");
-		OKMWorkflow.getInstance().deleteTaskInstanceVariable(tiid, name);
+		OKMWorkflow.getInstance().deleteTaskInstanceVariable(null, tiid, name);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_VARIABLE_DELETE", Long.toString(tiid), null);
@@ -512,7 +512,7 @@ public class WorkflowServlet extends BaseServlet {
 		long tiid = WebUtil.getLong(request, "tiid");
 		String name = WebUtil.getString(request, "name");
 		String value= WebUtil.getString(request, "value");
-		OKMWorkflow.getInstance().addTaskInstanceVariable(tiid, name, value);
+		OKMWorkflow.getInstance().addTaskInstanceVariable(null, tiid, name, value);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_VARIABLE_ADD", Long.toString(tiid), 
@@ -527,7 +527,7 @@ public class WorkflowServlet extends BaseServlet {
 			HttpServletResponse response) throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("taskInstanceResume({}, {}, {})", new Object[] { session, request, response });
 		long tiid = WebUtil.getLong(request, "tiid");
-		OKMWorkflow.getInstance().resumeTaskInstance(tiid);
+		OKMWorkflow.getInstance().resumeTaskInstance(null, tiid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TASK_INSTANCE_RESUME", Long.toString(tiid), null);
@@ -541,7 +541,7 @@ public class WorkflowServlet extends BaseServlet {
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("tokenSuspend({}, {}, {})", new Object[] { session, request, response });
 		long tid = WebUtil.getLong(request, "tid");
-		OKMWorkflow.getInstance().suspendToken(tid);
+		OKMWorkflow.getInstance().suspendToken(null, tid);
 
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SUSPEND", Long.toString(tid), null);
@@ -555,7 +555,7 @@ public class WorkflowServlet extends BaseServlet {
 			throws RepositoryException, DatabaseException, WorkflowException {
 		log.debug("tokenResume({}, {}, {})", new Object[] { session, request, response });
 		long tid = WebUtil.getLong(request, "tid");
-		OKMWorkflow.getInstance().resumeToken(tid);
+		OKMWorkflow.getInstance().resumeToken(null, tid);
 
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_RESUME", Long.toString(tid), null);
@@ -569,7 +569,7 @@ public class WorkflowServlet extends BaseServlet {
 			RepositoryException, DatabaseException, WorkflowException {
 		log.debug("tokenEnd({}, {}, {})", new Object[] { session, request, response });
 		long tid = WebUtil.getLong(request, "tid");
-		OKMWorkflow.getInstance().endToken(tid);
+		OKMWorkflow.getInstance().endToken(null, tid);
 		
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_END", Long.toString(tid), null);
@@ -584,7 +584,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("tokenSetNode({}, {}, {})", new Object[] { session, request, response });
 		long tid = WebUtil.getLong(request, "tid");
 		String node = WebUtil.getString(request, "node");
-		OKMWorkflow.getInstance().setTokenNode(tid, node);
+		OKMWorkflow.getInstance().setTokenNode(null, tid, node);
 				
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SET_NODE", Long.toString(tid), node);
@@ -599,7 +599,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("tokenSignal({}, {}, {})", new Object[] { session, request, response });
 		long tid = WebUtil.getLong(request, "tid");
 		String transition = WebUtil.getString(request, "transition");
-		OKMWorkflow.getInstance().sendTokenSignal(tid, transition);
+		OKMWorkflow.getInstance().sendTokenSignal(null, tid, transition);
 				
 		// Activity log
 		UserActivity.log(session.getUserID(), "ADMIN_TOKEN_SIGNAL", Long.toString(tid), transition);
@@ -614,7 +614,7 @@ public class WorkflowServlet extends BaseServlet {
 		log.debug("tokenView({}, {}, {})", new Object[] { session, request, response });
 		ServletContext sc = getServletContext();
 		long tid = WebUtil.getLong(request, "tid");
-		sc.setAttribute("token", OKMWorkflow.getInstance().getToken(tid));
+		sc.setAttribute("token", OKMWorkflow.getInstance().getToken(null, tid));
 		sc.getRequestDispatcher("/admin/token_view.jsp").forward(request, response);
 		log.debug("tokenView: void");
 	}

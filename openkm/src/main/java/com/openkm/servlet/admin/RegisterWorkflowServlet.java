@@ -65,7 +65,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 					fileName = FilenameUtils.getName(fileName);
 					log.debug("Upload file: {}", fileName);
 					InputStream is = new ByteArrayInputStream(content);
-					OKMWorkflow.getInstance().registerProcessDefinition(is);
+					OKMWorkflow.getInstance().registerProcessDefinition(null, is);
 					is.close();
 				}
 				

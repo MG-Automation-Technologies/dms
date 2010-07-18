@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.SessionInfo;
-import com.openkm.core.SessionManager;
+import com.openkm.bean.HttpSessionInfo;
+import com.openkm.core.HttpSessionManager;
 import com.openkm.util.UserActivity;
 
 /**
@@ -50,7 +50,7 @@ public class LoggedUsersServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		updateSessionManager(request);
 		
-		List<SessionInfo> sessions = SessionManager.getInstance().getSessions();
+		List<HttpSessionInfo> sessions = HttpSessionManager.getInstance().getSessions();
 		sc.setAttribute("sessions", sessions);
 		sc.getRequestDispatcher("/admin/logged_users.jsp").forward(request, response);
 		
