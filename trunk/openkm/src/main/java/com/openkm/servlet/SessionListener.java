@@ -30,8 +30,8 @@ import javax.servlet.http.HttpSessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.bean.SessionInfo;
-import com.openkm.core.SessionManager;
+import com.openkm.bean.HttpSessionInfo;
+import com.openkm.core.HttpSessionManager;
 import com.openkm.util.UserActivity;
 
 /**
@@ -49,8 +49,8 @@ public class SessionListener implements HttpSessionListener {
 	public void sessionDestroyed(HttpSessionEvent se) {
 		log.debug("Session destroyed on {} with id {}", new Date(), se.getSession().getId());
 		HttpSession session = se.getSession();
-		SessionInfo si = SessionManager.getInstance().getSession(session.getId());
-		SessionManager.getInstance().remove(session.getId());
+		HttpSessionInfo si = HttpSessionManager.getInstance().getSession(session.getId());
+		HttpSessionManager.getInstance().remove(session.getId());
 		
 		// Activity log
 		if (si != null) {
