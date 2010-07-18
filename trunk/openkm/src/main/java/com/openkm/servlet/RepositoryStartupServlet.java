@@ -50,6 +50,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
+import com.openkm.core.Watchdog;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
@@ -67,6 +68,7 @@ public class RepositoryStartupServlet extends HttpServlet {
 	private static Logger log = LoggerFactory.getLogger(RepositoryStartupServlet.class);
 	private static final long serialVersionUID = 207151527252937549L;
 	private Timer timer;
+	private Watchdog wd;
 	private UpdateInfo ui;
 	private RepositoryInfo ri;
 	private UserMailImporter umi;
@@ -147,6 +149,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         	 timer.schedule(ui, 1000, 24*60*60*1000); // First in 1 seg, next each 24 hours
         }
 		
+        log.info("*** Activating watchdog ***");
+        wd = new Watchdog();
+        timer.schedule(wd, 60*1000, 5*60*1000); // First in 1 min, next each 5 mins
+        
         log.info("*** Activating repository info ***");
         ri = new RepositoryInfo();
         timer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
@@ -210,6 +216,10 @@ public class RepositoryStartupServlet extends HttpServlet {
         if (log == null) log("*** Shutting down repository info... ***");
         else log.info("*** Shutting down repository info... ***");
         ri.cancel();
+        
+        if (log == null) log("*** Shutting down watchdog... ***");
+        else log.info("*** Shutting down watchdog... ***");
+        wd.cancel();
         
         if (log == null) log("*** Shutting down update info... ***");
         else log.info("*** Shutting down update info... ***");
