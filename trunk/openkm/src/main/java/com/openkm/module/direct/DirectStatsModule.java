@@ -21,7 +21,6 @@
 
 package com.openkm.module.direct;
 
-import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
@@ -37,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.bean.Document;
 import com.openkm.bean.StatsInfo;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.StatsModule;
 import com.openkm.util.JCRUtils;
@@ -62,10 +62,10 @@ public class DirectStatsModule implements StatsModule {
 		Session session = null;
 		
 		try {
-			try {
+			if (token == null) {
 				session = JCRUtils.getSession();
-			} catch (LoginException e) {
-				session = DirectRepositoryModule.getSystemSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -93,9 +93,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (session != DirectRepositoryModule.getSystemSession()) {
-				JCRUtils.logout(session);
-			}
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getDocumentsByContext: {}", si);
@@ -111,10 +109,10 @@ public class DirectStatsModule implements StatsModule {
 		Session session = null;
 		
 		try {
-			try {
+			if (token == null) {
 				session = JCRUtils.getSession();
-			} catch (LoginException e) {
-				session = DirectRepositoryModule.getSystemSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -142,9 +140,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (session != DirectRepositoryModule.getSystemSession()) {
-				JCRUtils.logout(session);
-			}
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getFoldersByContext: {}", si);
@@ -170,10 +166,10 @@ public class DirectStatsModule implements StatsModule {
 		Session session = null;
 		
 		try {
-			try {
+			if (token == null) {
 				session = JCRUtils.getSession();
-			} catch (LoginException e) {
-				session = DirectRepositoryModule.getSystemSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
 			Workspace workspace = session.getWorkspace();
@@ -201,9 +197,7 @@ public class DirectStatsModule implements StatsModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			if (session != DirectRepositoryModule.getSystemSession()) {
-				JCRUtils.logout(session);
-			}
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getDocumentsSizeByContext: {}", si);

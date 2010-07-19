@@ -37,6 +37,7 @@ import com.openkm.bean.Scripting;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.module.ScriptingModule;
@@ -59,7 +60,11 @@ public class DirectScriptingModule implements ScriptingModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -89,7 +94,7 @@ public class DirectScriptingModule implements ScriptingModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("setScript: void");
@@ -108,7 +113,11 @@ public class DirectScriptingModule implements ScriptingModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Session systemSession = DirectRepositoryModule.getSystemSession();
@@ -139,7 +148,7 @@ public class DirectScriptingModule implements ScriptingModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("removeScript: void");
@@ -153,7 +162,11 @@ public class DirectScriptingModule implements ScriptingModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
 
 			if (Config.ADMIN_USER.equals(session.getUserID())) {
 				Node node = session.getRootNode().getNode(nodePath.substring(1));
@@ -171,7 +184,7 @@ public class DirectScriptingModule implements ScriptingModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getScript: {}", code);

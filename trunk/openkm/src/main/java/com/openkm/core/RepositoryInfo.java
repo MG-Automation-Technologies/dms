@@ -37,12 +37,13 @@ public class RepositoryInfo extends TimerTask {
 	
 	public void run() {
 		log.debug("*** Begin repository info ***");
+		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMStats okmStats = OKMStats.getInstance();
 		
 		try {
-			documentsByContext = okmStats.getDocumentsByContext(null);
-			foldersByContext = okmStats.getFoldersByContext(null);
-			documentsSizeByContext = okmStats.getDocumentsSizeByContext(null);
+			documentsByContext = okmStats.getDocumentsByContext(systemToken);
+			foldersByContext = okmStats.getFoldersByContext(systemToken);
+			documentsSizeByContext = okmStats.getDocumentsSizeByContext(systemToken);
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 		} catch (DatabaseException e) {
