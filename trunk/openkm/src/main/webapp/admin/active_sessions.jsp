@@ -16,7 +16,7 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Active sessions</h1>
-      <table class="results" width="80%">
+      <table class="results" width="70%">
         <tr><th>Token</th><th>User</th><th>Creation</th><th>Last access</th></tr>
         <c:forEach var="se" items="${sessions}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
