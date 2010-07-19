@@ -15,7 +15,14 @@
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <h1>Logged users</h1>
+      <c:url value="LoggedUsers" var="urlReload">
+      </c:url>
+      <table align="center">
+        <tr>
+          <td><h1>Logged users</h1></td>
+          <td> &nbsp; <a href="${urlReload}"><img src="img/action/reload.png" alt="Reload" title="Reload"/></a></td>
+        </tr>
+      </table>
       <table class="results" width="80%">
         <tr><th>User</th><th>Session id</th><th>Remote IP</th><th>Remote host</th><th>Creation</th><th>Last accessed</th></tr>
         <c:forEach var="se" items="${sessions}" varStatus="row">
