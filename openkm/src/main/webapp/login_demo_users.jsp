@@ -27,7 +27,7 @@
       HttpSessionInfo si = it.next();
       out.print("<tr><td>"+si.getUser()+"</td><td>"+
         FormatUtil.formatDate(si.getCreation())+"</td><td>"+
-        FormatUtil.formatDate(si.getLastAccessed())+"</td</tr>");
+        FormatUtil.formatDate(si.getLastAccess())+"</td</tr>");
     }
     out.println("</table>");
   }
