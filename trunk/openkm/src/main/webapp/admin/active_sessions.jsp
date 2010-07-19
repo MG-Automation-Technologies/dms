@@ -20,7 +20,7 @@
         <tr><th>Token</th><th>User</th><th>Creation</th><th>Last access</th></tr>
         <c:forEach var="se" items="${sessions}" varStatus="row">
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${se.key}</td><td>${se.value.userID}</td>
+            <td>${se.key}</td><td>${se.value.session.userID}</td>
             <td><fmt:formatDate value="${se.value.creation.time}" type="both"/></td>
             <td><fmt:formatDate value="${se.value.lastAccess.time}" type="both"/></td>
           </tr>
