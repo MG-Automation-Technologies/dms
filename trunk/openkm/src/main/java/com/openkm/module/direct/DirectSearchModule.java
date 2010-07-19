@@ -624,9 +624,9 @@ public class DirectSearchModule implements SearchModule {
 		Map<String, Integer> cloud = null;
 		
 		if (Config.USER_KEYWORDS_CACHE) {
-			cloud = getKeywordMapCached(filter);
+			cloud = getKeywordMapCached(token, filter);
 		} else {
-			cloud = getKeywordMapLive(filter);
+			cloud = getKeywordMapLive(token, filter);
 		}
 		
 		log.debug("getKeywordMap: {}", cloud);
@@ -636,15 +636,20 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapLive(List<String> filter) throws RepositoryException,
-			DatabaseException {
-		log.debug("getKeywordMapLive({})", filter);
+	private Map<String, Integer> getKeywordMapLive(String token, List<String> filter) throws 
+			RepositoryException, DatabaseException {
+		log.debug("getKeywordMapLive({}, {})", token, filter);
 		String statement = "/jcr:root//element(*,okm:document)";
 		HashMap<String, Integer> cloud = new HashMap<String, Integer>();
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
 			Query query = queryManager.createQuery(statement, Query.XPATH);
@@ -673,7 +678,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getKeywordMapLive: {}", cloud);
@@ -683,14 +688,19 @@ public class DirectSearchModule implements SearchModule {
 	/**
 	 * Get keyword map
 	 */
-	private Map<String, Integer> getKeywordMapCached(Collection<String> filter) throws RepositoryException,
-			DatabaseException {
-		log.debug("getKeywordMapCached({})", filter);
+	private Map<String, Integer> getKeywordMapCached(String token, List<String> filter) throws
+			RepositoryException, DatabaseException {
+		log.debug("getKeywordMapCached({}, {})", token, filter);
 		HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Collection<UserDocumentKeywords> userDocKeywords = UserDocumentKeywordsManager.get(session.getUserID()).values();
 						
 			for (Iterator<UserDocumentKeywords> kwIt = userDocKeywords.iterator(); kwIt.hasNext(); ) {
@@ -710,7 +720,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getKeywordMapCached: {}", keywordMap);

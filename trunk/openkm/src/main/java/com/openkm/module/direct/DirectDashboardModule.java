@@ -580,9 +580,9 @@ public class DirectDashboardModule implements DashboardModule {
 		long size = 0;
 		
 		if (Config.USER_SIZE_CACHE) {
-			size = getUserDocumentsSizeCached();
+			size = getUserDocumentsSizeCached(token);
 		} else {
-			size = getUserDocumentsSizeLive();
+			size = getUserDocumentsSizeLive(token);
 		}
 
 		log.info("getUserDocumentsSize: {}", size);
@@ -592,13 +592,18 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeLive() throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeLive()");
+	private long getUserDocumentsSizeLive(String token) throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSizeLive({})", token);
 		long size = 0;
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 			Workspace workspace = session.getWorkspace();
 			QueryManager queryManager = workspace.getQueryManager();
@@ -614,7 +619,7 @@ public class DirectDashboardModule implements DashboardModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.info("getUserDocumentsSizeLive: {}", size);
@@ -624,19 +629,24 @@ public class DirectDashboardModule implements DashboardModule {
 	/**
 	 * Get user document size
 	 */
-	private long getUserDocumentsSizeCached() throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeCached()");
+	private long getUserDocumentsSizeCached(String token) throws RepositoryException, DatabaseException {
+		log.info("getUserDocumentsSizeCached({})", token);
 		Session session = null;
 		UserItems usrItems = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			usrItems = UserItemsManager.get(session.getUserID());
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.info("getUserDocumentsSizeCached: {}", usrItems.getSize());
