@@ -31,7 +31,7 @@ public class HttpSessionInfo implements Serializable {
 	private String host;
 	private String id;
 	private Calendar creation;
-	private Calendar lastAccessed;
+	private Calendar lastAccess;
 
 	public String getUser() {
 		return user;
@@ -73,12 +73,12 @@ public class HttpSessionInfo implements Serializable {
 		this.creation = creation;
 	}
 	
-	public Calendar getLastAccessed() {
-		return lastAccessed;
+	public Calendar getLastAccess() {
+		return lastAccess;
 	}
 
-	public void setLastAccessed(Calendar lastAccessed) {
-		this.lastAccessed = lastAccessed;
+	public void setLastAccess(Calendar lastAccess) {
+		this.lastAccess = lastAccess;
 	}
 	
 	public String toString() {
@@ -88,7 +88,7 @@ public class HttpSessionInfo implements Serializable {
 		sb.append(", ip="); sb.append(ip);
 		sb.append(", id="); sb.append(id);
 		sb.append(", creation="); sb.append(creation==null?null:creation.getTime());
-		sb.append(", lastAccessed="); sb.append(lastAccessed==null?null:lastAccessed.getTime());
+		sb.append(", lastAccess="); sb.append(lastAccess==null?null:lastAccess.getTime());
 		sb.append("}");
 		return sb.toString();
 	}
