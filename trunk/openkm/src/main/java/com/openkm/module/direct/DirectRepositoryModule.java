@@ -394,7 +394,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			rootFolder = new DirectFolderModule().getProperties(session, "/"+Repository.ROOT);
 			
 			// Activity log
@@ -406,7 +411,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getRootFolder: {}", rootFolder);
@@ -421,7 +426,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH+"/"+session.getUserID());
 			
 			// Activity log
@@ -433,7 +443,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getTrashFolder: {}", trashFolder);
@@ -448,7 +458,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			trashFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TRASH);
 			
 			// Activity log
@@ -460,7 +475,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getTrashFolderBase: {}", trashFolder);
@@ -475,7 +490,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			templatesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.TEMPLATES);
 			
 			// Activity log
@@ -487,7 +507,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getTemplatesFolder: {}", templatesFolder);
@@ -502,7 +522,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL+"/"+session.getUserID());
 			
 			// Activity log
@@ -514,7 +539,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getPersonalFolder: {}", personalFolder);
@@ -529,7 +554,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			personalFolder = new DirectFolderModule().getProperties(session, "/"+Repository.PERSONAL);
 			
 			// Activity log
@@ -541,7 +571,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getPersonalFolderBase: {}", personalFolder);
@@ -556,7 +586,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String mailPath = MailUtils.getUserMailPath(session.getUserID());
 			mailFolder = new DirectFolderModule().getProperties(session, mailPath);
 			
@@ -569,7 +604,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getMailFolder: {}", mailFolder);
@@ -584,7 +619,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			mailFolder = new DirectFolderModule().getProperties(session, "/"+Repository.MAIL);
 			
 			// Activity log
@@ -596,7 +636,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getMailFolderBase: {}", mailFolder);
@@ -611,7 +651,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			thesaurusFolder = new DirectFolderModule().getProperties(session, "/"+Repository.THESAURUS);
 			
 			// Activity log
@@ -623,7 +668,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getThesaurusFolder: {}", thesaurusFolder);
@@ -638,7 +683,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			categoriesFolder = new DirectFolderModule().getProperties(session, "/"+Repository.CATEGORIES);
 			
 			// Activity log
@@ -650,7 +700,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getCategoriesFolder: {}", categoriesFolder);
@@ -723,7 +773,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
 			HashMap<String, UserItems> userItemsHash = new HashMap<String, UserItems>(); 
 			
@@ -773,7 +828,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			JCRUtils.discardsPendingChanges(userTrash);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("purgeTrash: void");
@@ -796,13 +851,18 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			ret = session.getRootNode().hasNode(path.substring(1));
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("hasNode: {}", ret);
@@ -817,7 +877,12 @@ public class DirectRepositoryModule implements RepositoryModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			ret = session.getNodeByUUID(uuid).getPath();
 		} catch (javax.jcr.ItemNotFoundException e) {
 			log.error(e.getMessage(), e);
@@ -826,7 +891,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getPath: {}", ret);

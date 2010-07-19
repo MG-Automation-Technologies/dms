@@ -49,6 +49,7 @@ import com.openkm.bean.form.TextArea;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.NoSuchGroupException;
 import com.openkm.core.NoSuchPropertyException;
@@ -76,7 +77,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -107,7 +113,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("addGroup: void");
@@ -126,7 +132,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -149,7 +160,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("removeGroup: void");
@@ -163,7 +174,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
 			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
@@ -187,7 +203,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getGroups: {}", ret);
@@ -202,7 +218,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
@@ -224,7 +245,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getAllGroups: {}", ret);
@@ -239,7 +260,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
 			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
@@ -305,7 +331,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 
@@ -322,7 +348,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
@@ -399,7 +430,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("setProperties: void");
@@ -413,7 +444,12 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
@@ -432,7 +468,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.info("getPropertyGroupForm: {}", ret);
