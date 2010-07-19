@@ -475,7 +475,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(docPath);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node parentNode = documentNode.getParent();
@@ -516,7 +521,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("delete: void");
@@ -530,7 +535,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			doc = getProperties(session, docPath);
 
 			// Activity log
@@ -542,7 +552,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getProperties: {}", doc);
@@ -571,7 +581,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			is = getContent(session, documentNode);
 
@@ -587,7 +602,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getContent: {}", is);
@@ -602,7 +617,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -619,7 +639,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getContentByVersion: "+is);
@@ -648,7 +668,11 @@ public class DirectDocumentModule implements DocumentModule {
 		File tmpAvr = File.createTempFile("okm", ".avr");
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
 			
 			// Manage temporary files
 			byte[] buff = new byte[4*1024];
@@ -710,7 +734,7 @@ public class DirectDocumentModule implements DocumentModule {
 		} finally {
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpJcr);
 			org.apache.commons.io.FileUtils.deleteQuietly(tmpAvr);
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("setContent: void");
@@ -728,7 +752,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			notesNode = documentNode.getNode(Note.LIST);
 			addInternalNote(session, notesNode, text);
@@ -755,7 +784,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(notesNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("addNote: void");
@@ -789,7 +818,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
 			parentNode = noteNode.getParent();
 			
@@ -822,7 +856,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("deleteNote: void");
@@ -840,7 +874,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
 			note.setDate(noteNode.getProperty(Note.DATE).getDate());
 			note.setUser(noteNode.getProperty(Note.USER).getString());
@@ -865,7 +904,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getNote: {}", note);
@@ -884,7 +923,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			noteNode = session.getRootNode().getNode(notePath.substring(1));
 			
 			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
@@ -916,7 +960,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(noteNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("setNote: void");
@@ -930,7 +974,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -951,7 +1000,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getChilds: "+childs);
@@ -970,7 +1019,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String parent = FileUtils.getParent(docPath);
 			String name = FileUtils.getName(docPath);
 			
@@ -1014,7 +1068,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("rename: {}", renamedDocument);
@@ -1033,7 +1087,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			documentNode = session.getRootNode().getNode(doc.getPath().substring(1));
 			
 			// Update document keyword cache
@@ -1068,7 +1127,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(documentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("setProperties: void");
@@ -1086,7 +1145,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			javax.jcr.lock.Lock lck = null;
 
 			t = new Transaction(session);
@@ -1127,7 +1191,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.rollback();
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("checkout: void");
@@ -1145,7 +1209,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			t = new Transaction(session);
 			t.start();
 			
@@ -1188,7 +1257,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.rollback();
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("cancelCheckout: void");
@@ -1202,7 +1271,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			checkedOut = contentNode.isCheckedOut();
@@ -1213,7 +1287,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("isCheckedOut: {}", checkedOut);
@@ -1234,7 +1308,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			t = new Transaction(session);
 			t.start();
 			
@@ -1310,7 +1389,7 @@ public class DirectDocumentModule implements DocumentModule {
 			t.rollback();
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("checkin: "+version);
@@ -1325,7 +1404,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -1367,7 +1451,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getVersionHistory: {}", history);
@@ -1436,7 +1520,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			documentNode.unlock();
@@ -1466,7 +1555,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("unlock: void");
@@ -1480,7 +1569,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			locked = documentNode.isLocked();
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -1490,7 +1584,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("isLocked: {}", locked);
@@ -1505,7 +1599,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			lock = getLock(session, docPath);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
@@ -1517,7 +1616,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getLock: {}", lock);
@@ -1552,7 +1651,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null;
 			
@@ -1589,7 +1693,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("purge: void");
@@ -1663,7 +1767,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(docPath);
 			session.move(docPath, dstPath+"/"+name);
 			session.save();
@@ -1687,7 +1796,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("move: void");
@@ -1706,7 +1815,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node srcDocumentNode = session.getRootNode().getNode(docPath.substring(1));
 			dstFolderNode = session.getRootNode().getNode(dstPath.substring(1));
 			copy(session, srcDocumentNode, dstFolderNode);
@@ -1737,7 +1851,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(dstFolderNode);
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("copy: void");
@@ -1772,7 +1886,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 
 			synchronized (documentNode) {
@@ -1796,7 +1915,7 @@ public class DirectDocumentModule implements DocumentModule {
 			JCRUtils.discardsPendingChanges(contentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("restoreVersion: void");
@@ -1813,7 +1932,12 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			
 			synchronized (documentNode) {
@@ -1841,7 +1965,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("purgeVersionHistory: void");
@@ -1855,7 +1979,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			VersionHistory vh = contentNode.getVersionHistory();
@@ -1877,7 +2006,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getVersionHistorySize: {}", ret);
@@ -1892,7 +2021,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getRootNode().getNode(docPath.substring(1));
 
 			if (node.isNodeType(Document.TYPE)) {
@@ -1908,7 +2042,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("isValid: {}", valid);
@@ -1923,7 +2057,12 @@ public class DirectDocumentModule implements DocumentModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getNodeByUUID(uuid);
 
 			if (node.isNodeType(Document.TYPE)) {
@@ -1936,7 +2075,7 @@ public class DirectDocumentModule implements DocumentModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getPath: {}", path);

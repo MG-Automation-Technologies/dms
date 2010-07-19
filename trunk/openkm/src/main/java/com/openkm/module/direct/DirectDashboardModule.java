@@ -50,6 +50,7 @@ import com.openkm.bean.Mail;
 import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.ActivityDAO;
@@ -75,14 +76,19 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserLockedDocuments(session);
 			log.debug("getUserLockedDocuments: {}", al);
 			return al;
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -108,14 +114,19 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserCheckedOutDocuments(session);
 			log.debug("getUserCheckedOutDocuments: {}", al);
 			return al;
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -140,7 +151,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserSubscribedDocuments(session);
 			log.debug("getUserSubscribedDocuments: {}", al);
 			return al;
@@ -149,7 +165,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -174,7 +190,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardFolderResult> al = getUserSubscribedFolders(session);
 			log.debug("getUserSubscribedFolders: {}", al);
 			return al;
@@ -183,7 +204,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -273,7 +294,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserLastUploadedDocuments(session);
 			log.debug("getUserLastUploadedDocuments: {}", al);
 			return al;
@@ -282,7 +308,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -310,7 +336,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserLastModifiedDocuments(session);
 			log.debug("getUserLastModifiedDocuments: {}", al);
 			return al;
@@ -319,7 +350,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -347,7 +378,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserLastDownloadedDocuments(session);
 			log.debug("getUserLastDownloadedDocuments: {}", al);
 			return al;
@@ -356,7 +392,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -383,7 +419,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardMailResult> al = getUserLastImportedMails(session);
 			log.debug("getUserLastImportedMails: {}", al);
 			return al;
@@ -392,7 +433,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -419,7 +460,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getUserLastImportedMailAttachments(session);
 			log.debug("getUserLastImportedMailAttachments: {}", al);
 			return al;
@@ -428,7 +474,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -604,7 +650,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
@@ -625,7 +676,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getUserSearchs: {}", ret);
@@ -640,14 +691,19 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			al = find(session, qpId);
 		} catch (DatabaseException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("find: {}", al);
@@ -721,7 +777,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastWeekTopDownloadedDocuments(session);
 			log.debug("getLastWeekTopDownloadedDocuments: {}", al);
 			return al;
@@ -730,7 +791,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -760,7 +821,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastMonthTopDownloadedDocuments(session);
 			log.debug("getLastMonthTopDownloadedDocuments: {}", al);
 			return al;
@@ -769,7 +835,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -799,7 +865,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastWeekTopModifiedDocuments(session);
 			log.debug("getLastWeekTopModifiedDocuments: {}", al);
 			return al;
@@ -810,7 +881,7 @@ public class DirectDashboardModule implements DashboardModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -840,7 +911,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastMonthTopModifiedDocuments(session);
 			log.debug("getLastMonthTopModifiedDocuments: {}", al);
 			return al;
@@ -849,7 +925,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -878,7 +954,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastModifiedDocuments(session);
 			log.debug("getLastModifiedDocuments: {}", al);
 			return al;
@@ -889,7 +970,7 @@ public class DirectDashboardModule implements DashboardModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -916,7 +997,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<DashboardDocumentResult> al = getLastUploadedDocuments(session);
 			log.debug("getLastUploadedDocuments: {}", al);
 			return al;
@@ -925,7 +1011,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 	}
 	
@@ -998,7 +1084,12 @@ public class DirectDashboardModule implements DashboardModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Dashboard vo = new Dashboard();
 			vo.setUser(session.getUserID());
 			vo.setSource(source);
@@ -1010,7 +1101,7 @@ public class DirectDashboardModule implements DashboardModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("visiteNode: void");
