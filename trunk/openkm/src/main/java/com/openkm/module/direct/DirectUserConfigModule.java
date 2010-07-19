@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.UserConfig;
@@ -30,7 +31,12 @@ public class DirectUserConfigModule implements UserConfigModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node rootNode = session.getRootNode();
 			Node node = rootNode.getNode(nodePath.substring(1));
 			UserConfig uc = new UserConfig();
@@ -46,7 +52,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("setHome: void");
@@ -59,7 +65,12 @@ public class DirectUserConfigModule implements UserConfigModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			ret = UserConfigDAO.findByPk(session, session.getUserID());
 						
 			// Activity log
@@ -67,7 +78,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 		} catch (javax.jcr.RepositoryException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getConfig: {}", ret);
