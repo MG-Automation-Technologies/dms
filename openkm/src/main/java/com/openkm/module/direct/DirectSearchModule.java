@@ -64,6 +64,7 @@ import com.openkm.cache.UserDocumentKeywordsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -378,7 +379,11 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
 
 			if (statement != null && !statement.equals("")) {
 				Workspace workspace = session.getWorkspace();
@@ -393,7 +398,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("findByStatement: {}", rs);
@@ -470,7 +475,12 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			params.setUser(session.getUserID());
 			id = QueryParamsDAO.create(params);
 			
@@ -481,7 +491,7 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("saveSearch: {}", id);
@@ -497,7 +507,12 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			qp = QueryParamsDAO.findByPk(qpId);
 			
 			// If this is a dashboard user search, dates are used internally
@@ -515,7 +530,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getSearch: {}", qp);
@@ -529,7 +544,12 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			List<QueryParams> qParams = QueryParamsDAO.findByUser(session.getUserID());
 			
 			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
@@ -547,7 +567,7 @@ public class DirectSearchModule implements SearchModule {
 		} catch (DatabaseException e) {
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getAllSearchs: {}", ret);
@@ -565,7 +585,12 @@ public class DirectSearchModule implements SearchModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			QueryParams qp = QueryParamsDAO.findByPk(qpId);
 			QueryParamsDAO.delete(qpId);
 			
@@ -586,7 +611,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("deleteSearch: void");
@@ -700,7 +725,12 @@ public class DirectSearchModule implements SearchModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node category = session.getNodeByUUID(categoryId);
 			
 			for (PropertyIterator it = category.getReferences(); it.hasNext(); ) {
@@ -716,7 +746,7 @@ public class DirectSearchModule implements SearchModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getCategorizedDocuments: {}", documents);
