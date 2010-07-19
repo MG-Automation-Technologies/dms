@@ -225,6 +225,10 @@
     <servlet-name>UserConfigServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.UserConfigServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ActiveSessionsServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.ActiveSessionsServlet</servlet-class>
+  </servlet>
       
   <!-- Extension Servlets 
   <servlet>
@@ -467,7 +471,11 @@
     <servlet-name>UserConfigServlet</servlet-name>
     <url-pattern>/admin/UserConfig</url-pattern>
   </servlet-mapping>
-      
+  <servlet-mapping>
+    <servlet-name>ActiveSessionsServlet</servlet-name>
+    <url-pattern>/admin/ActiveSessions</url-pattern>
+  </servlet-mapping>
+
   <!-- Extension Servlet Mappings 
   <servlet-mapping>
     <servlet-name>StaplingServlet</servlet-name>
