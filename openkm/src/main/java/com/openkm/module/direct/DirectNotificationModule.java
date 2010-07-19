@@ -52,6 +52,7 @@ import com.openkm.bean.Notification;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.TwitterAccountDAO;
@@ -78,7 +79,12 @@ public class DirectNotificationModule implements NotificationModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -124,7 +130,7 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("subscribe: void");
@@ -143,7 +149,12 @@ public class DirectNotificationModule implements NotificationModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Session systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
@@ -183,7 +194,7 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("unsubscribe: void");
@@ -197,7 +208,12 @@ public class DirectNotificationModule implements NotificationModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getRootNode().getNode(nodePath.substring(1));
 			
 			if (node.isNodeType(Notification.TYPE)) {
@@ -214,7 +230,7 @@ public class DirectNotificationModule implements NotificationModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getSusbcriptions: {}", users);
@@ -230,7 +246,12 @@ public class DirectNotificationModule implements NotificationModule {
 		if (!users.isEmpty()) {
 			try {
 				log.debug("Nodo: {}, Message: {}", nodePath, message);
-				session = JCRUtils.getSession();
+				if (token == null) {
+					session = JCRUtils.getSession();
+				} else {
+					session = JcrSessionManager.getInstance().get(token);
+				}
+				
 				List<String> emails = new DirectAuthModule().getMails(token, users);
 				
 				// Get session user email address
@@ -274,7 +295,7 @@ public class DirectNotificationModule implements NotificationModule {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				JCRUtils.logout(session);
+				if (token == null) JCRUtils.logout(session);
 			}
 		}
 
