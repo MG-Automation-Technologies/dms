@@ -43,7 +43,7 @@ public class Watchdog extends TimerTask {
         for (Iterator<String> it = sm.getTokens().iterator(); it.hasNext(); ) {
 			String token = it.next();
 			JcrSessionInfo si = sm.getInfo(token);
-			Calendar expiration = (Calendar) si.getAccess().clone();
+			Calendar expiration = (Calendar) si.getLastAccess().clone();
 			expiration.add(Calendar.SECOND, Config.SESSION_EXPIRATION);
 			log.debug(si.getSession().getUserID()+", Expiration: "+expiration.getTime());
 			
@@ -51,7 +51,7 @@ public class Watchdog extends TimerTask {
 				try {
 					// Activity log
 					Session system = DirectRepositoryModule.getSystemSession();
-					UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getAccess().getTime());
+					UserActivity.log(system.getUserID(), "SESSION_EXPIRATION", si.getSession().getUserID(), token+", IDLE FROM: "+si.getLastAccess().getTime());
 					OKMAuth.getInstance().logout(token);
 				} catch (RepositoryException e) {
 					log.error(e.getMessage(), e);

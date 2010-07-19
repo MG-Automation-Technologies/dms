@@ -78,9 +78,9 @@ public class HttpSessionManager {
 			Calendar creation = Calendar.getInstance();
 			creation.setTimeInMillis(s.getCreationTime());
 			si.setCreation(creation);
-			Calendar lastAccessed = Calendar.getInstance();
-			lastAccessed.setTimeInMillis(s.getLastAccessedTime());
-			si.setLastAccessed(lastAccessed);
+			Calendar lastAccess = Calendar.getInstance();
+			lastAccess.setTimeInMillis(s.getLastAccessedTime());
+			si.setLastAccess(lastAccess);
 			
 			s.setAttribute("user", request.getRemoteUser());
 			sessions.add(si);
@@ -93,7 +93,7 @@ public class HttpSessionManager {
 	public synchronized void update(String id) {
 		for (HttpSessionInfo si : sessions) {
 			if (si.getId().equals(id)) {
-				si.setLastAccessed(Calendar.getInstance());
+				si.setLastAccess(Calendar.getInstance());
 			}
 		}
 	}

@@ -80,7 +80,7 @@ public class JcrSessionManager {
 		JcrSessionInfo si = new JcrSessionInfo();
 		si.setSession(session);
 		si.setCreation(Calendar.getInstance());
-		si.setAccess(Calendar.getInstance());
+		si.setLastAccess(Calendar.getInstance());
 		sessions.put(token, si);
 	}
 	
@@ -91,7 +91,7 @@ public class JcrSessionManager {
 		JcrSessionInfo si = (JcrSessionInfo) sessions.get(token);
 		
 		if (si != null) {
-			si.setAccess(Calendar.getInstance());
+			si.setLastAccess(Calendar.getInstance());
 			return si.getSession();
 		}
 		
@@ -126,5 +126,11 @@ public class JcrSessionManager {
 		
 		return list;
 	}
-
+	
+	/**
+	 * Get active sessions
+	 */
+	public Map<String, JcrSessionInfo> getSessions() {
+		return sessions;
+	}
 }
