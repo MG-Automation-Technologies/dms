@@ -57,6 +57,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -202,7 +203,12 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String parent = FileUtils.getParent(fld.getPath());
 			String name = FileUtils.getName(fld.getPath());
 			parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -238,7 +244,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("create: {}", newFolder);
@@ -253,7 +259,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			fld = getProperties(session, fldPath);
 			
 			// Activity log
@@ -265,7 +276,7 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("get: {}", fld);
@@ -279,7 +290,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(fldPath);
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
@@ -322,7 +338,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 				
 		log.debug("delete: void");
@@ -394,7 +410,12 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			HashMap<String, UserItems> userItemsHash = null; 
 			
@@ -432,7 +453,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("purge: void");
@@ -486,7 +507,12 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String parent = FileUtils.getParent(fldPath);
 			String name = FileUtils.getName(fldPath);
 							
@@ -530,7 +556,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("rename: {}", renamedFolder);
@@ -548,7 +574,12 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(fldPath);
 			session.move(fldPath, dstPath+"/"+name);
 			session.save();
@@ -572,7 +603,7 @@ public class DirectFolderModule implements FolderModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("move: void");	
@@ -591,7 +622,12 @@ public class DirectFolderModule implements FolderModule {
 		}
 		
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(fldPath);
 			//t = new Transaction(session);
 			//t.start();
@@ -629,7 +665,7 @@ public class DirectFolderModule implements FolderModule {
 			//t.rollback();
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("copy: void");
@@ -670,7 +706,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -690,7 +731,7 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 				
 		log.debug("findChilds: {}", childs);
@@ -705,7 +746,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			contentInfo = getContentInfoHelper(folderNode);
 			
@@ -721,7 +767,7 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("getContentInfo: {}", contentInfo);
@@ -779,7 +825,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getRootNode().getNode(fldPath.substring(1));
 			
 			if (node.isNodeType(Folder.TYPE)) {
@@ -795,7 +846,7 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("isValid: {}", valid);
@@ -810,7 +861,12 @@ public class DirectFolderModule implements FolderModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getNodeByUUID(uuid);
 
 			if (node.isNodeType(Folder.TYPE)) {
@@ -823,7 +879,7 @@ public class DirectFolderModule implements FolderModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("getPath: {}", path);

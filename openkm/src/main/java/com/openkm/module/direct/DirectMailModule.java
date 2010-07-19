@@ -52,6 +52,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.LockException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
@@ -227,7 +228,12 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			String parent = FileUtils.getParent(mail.getPath());
 			String name = FileUtils.getName(mail.getPath());
 			Node parentNode = session.getRootNode().getNode(parent.substring(1));
@@ -278,7 +284,7 @@ public class DirectMailModule implements MailModule {
 			t.rollback();
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("create: {}", newMail);
@@ -293,7 +299,12 @@ public class DirectMailModule implements MailModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			mail = getProperties(session, mailPath);
 			
 			// Activity log
@@ -305,7 +316,7 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("get: {}", mail);
@@ -323,7 +334,12 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(mailPath);
 			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
 			Node parentNode = folderNode.getParent();
@@ -358,7 +374,7 @@ public class DirectMailModule implements MailModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 				
 		log.debug("delete: void");
@@ -376,7 +392,12 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(mailPath.substring(1));
 			parentNode = folderNode.getParent();
 			folderNode.remove();
@@ -400,7 +421,7 @@ public class DirectMailModule implements MailModule {
 			JCRUtils.discardsPendingChanges(parentNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("purge: void");
@@ -418,7 +439,12 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String parent = FileUtils.getParent(mailPath);
 			String name = FileUtils.getName(mailPath);
 							
@@ -462,7 +488,7 @@ public class DirectMailModule implements MailModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("rename: {}", renamedMail);
@@ -480,7 +506,12 @@ public class DirectMailModule implements MailModule {
 		}
 
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			String name = FileUtils.getName(mailPath);
 			session.move(mailPath, dstPath+"/"+name);
 			session.save();
@@ -504,7 +535,7 @@ public class DirectMailModule implements MailModule {
 			JCRUtils.discardsPendingChanges(session);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("move: void");
@@ -560,7 +591,12 @@ public class DirectMailModule implements MailModule {
 		}
 		
 		try {
-			session = (XASession) JCRUtils.getSession();
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
 			t = new Transaction(session);
 			t.start();
 			
@@ -598,7 +634,7 @@ public class DirectMailModule implements MailModule {
 			t.rollback();
 			throw e;
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 		
 		log.debug("copy: void");
@@ -612,7 +648,12 @@ public class DirectMailModule implements MailModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 
 			for (NodeIterator ni = folderNode.getNodes(); ni.hasNext(); ) {
@@ -632,7 +673,7 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 				
 		log.debug("findChilds: {}", childs);
@@ -647,7 +688,12 @@ public class DirectMailModule implements MailModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			Node node = session.getRootNode().getNode(mailPath.substring(1));
 			
 			if (node.isNodeType(Mail.TYPE)) {
@@ -663,7 +709,7 @@ public class DirectMailModule implements MailModule {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 		}
 
 		log.debug("isValid: {}", valid);
