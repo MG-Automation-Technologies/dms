@@ -58,6 +58,7 @@ import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.ParseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.WorkflowException;
@@ -80,7 +81,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			zis = new ZipInputStream(is);
 			org.jbpm.graph.def.ProcessDefinition processDefinition = org.jbpm.graph.def.ProcessDefinition.parseParZipInputStream(zis);
 									
@@ -99,7 +105,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			IOUtils.closeQuietly(isForms);
 			IOUtils.closeQuietly(zis);
 			jbpmContext.close();
@@ -116,7 +122,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			graphSession.deleteProcessDefinition(processDefinitionId);
 			jbpmContext.getSession().flush();
@@ -128,7 +139,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -144,7 +155,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			vo = WorkflowUtils.copy(pd);
@@ -156,7 +172,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -173,7 +189,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
@@ -209,7 +230,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (IOException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -228,7 +249,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.def.ProcessDefinition pd = graphSession.getProcessDefinition(processDefinitionId);
 			FileDefinition fileDef = pd.getFileDefinition();
@@ -248,7 +274,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (IOException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			IOUtils.closeQuietly(is);
 			jbpmContext.close();
 		}
@@ -267,7 +293,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			jbpmContext.setActorId(session.getUserID());
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			Map<String, Object> hm = new HashMap<String, Object>();
@@ -301,7 +332,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -318,7 +349,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			org.jbpm.graph.exe.Token t = pi.getRootToken();
@@ -339,7 +375,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -355,7 +391,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			graphSession.getProcessInstance(processInstanceId).end();
 			jbpmContext.getSession().flush();
@@ -367,7 +408,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -382,7 +423,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			graphSession.deleteProcessInstance(processInstanceId);
 			jbpmContext.getSession().flush();
@@ -394,7 +440,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -411,7 +457,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findProcessInstances(processDefinitionId).iterator(); it.hasNext(); ) {
@@ -425,7 +476,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -443,7 +494,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findAllProcessDefinitions().iterator(); it.hasNext(); ){
@@ -457,7 +513,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -475,7 +531,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findLatestProcessDefinitions().iterator(); it.hasNext(); ) {
@@ -489,7 +550,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -507,7 +568,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			
 			for (Iterator it = graphSession.findAllProcessDefinitionVersions(name).iterator(); it.hasNext(); ){
@@ -521,7 +587,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -538,7 +604,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			vo = WorkflowUtils.copy(pi);
@@ -550,7 +621,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -566,7 +637,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.suspend();
 			jbpmContext.getSession().flush();
@@ -578,7 +654,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -593,7 +669,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.resume();
 			jbpmContext.getSession().flush();
@@ -605,7 +686,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -620,7 +701,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.getContextInstance().setVariable(name, value);
 			jbpmContext.getSession().flush();
@@ -632,7 +718,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -647,7 +733,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.ProcessInstance pi = jbpmContext.getProcessInstance(processInstanceId);
 			pi.getContextInstance().deleteVariable(name);
 			jbpmContext.getSession().flush();
@@ -659,7 +750,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -676,7 +767,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			
 			for (Iterator it = taskMgmtSession.findTaskInstances(session.getUserID()).iterator(); it.hasNext(); ) {
@@ -694,7 +790,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -712,7 +808,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			
 			for (Iterator it = taskMgmtSession.findPooledTaskInstances(session.getUserID()).iterator(); it.hasNext(); ) {
@@ -730,7 +831,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -748,7 +849,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			GraphSession graphSession = jbpmContext.getGraphSession();
 			org.jbpm.graph.exe.ProcessInstance pi = graphSession.getProcessInstance(processInstanceId);
 			TaskMgmtInstance taskMgmtInstance = pi.getTaskMgmtInstance();
@@ -770,7 +876,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -786,7 +892,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			Map<String, FormElement> hm = new HashMap<String, FormElement>();
 			
@@ -810,7 +921,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -825,7 +936,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.addComment(new org.jbpm.graph.exe.Comment(session.getUserID(), message));
@@ -838,7 +954,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -854,7 +970,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			vo = WorkflowUtils.copy(ti);
@@ -866,7 +987,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -882,7 +1003,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.taskmgmt.exe.TaskInstance ti = jbpmContext.getTaskInstance(taskInstanceId);
 			ti.setActorId(actorId);
 			jbpmContext.getSession().flush();
@@ -894,7 +1020,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -910,7 +1036,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.taskmgmt.exe.TaskInstance ti = jbpmContext.getTaskInstance(taskInstanceId);
 			ti.setVariable(name, value);
 			jbpmContext.getSession().flush();
@@ -922,7 +1053,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -937,7 +1068,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.taskmgmt.exe.TaskInstance ti = jbpmContext.getTaskInstance(taskInstanceId);
 			ti.deleteVariable(name);
 			jbpmContext.getSession().flush();
@@ -949,7 +1085,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -964,7 +1100,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.start();
@@ -977,7 +1118,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -992,7 +1133,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			
@@ -1011,7 +1157,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1026,7 +1172,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.suspend();
@@ -1039,7 +1190,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1054,7 +1205,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			ti.resume();
@@ -1067,7 +1223,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1083,7 +1239,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			vo = WorkflowUtils.copy(t);
 			vo.setProcessInstance(WorkflowUtils.copy(t.getProcessInstance())); // Avoid recursion
@@ -1095,7 +1256,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1111,7 +1272,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.addComment(new org.jbpm.graph.exe.Comment(session.getUserID(), message));
 			jbpmContext.getSession().flush();
@@ -1123,7 +1289,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1138,7 +1304,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.suspend();
 			jbpmContext.getSession().flush();
@@ -1150,7 +1321,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1165,7 +1336,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			t.resume();
 			jbpmContext.getSession().flush();
@@ -1177,7 +1353,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1193,7 +1369,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 
 			if (transitionName != null && !transitionName.equals("")) {
@@ -1213,7 +1394,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1229,7 +1410,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			org.jbpm.graph.exe.Token t = jbpmContext.getToken(tokenId);
 			org.jbpm.graph.def.Node node = t.getProcessInstance().getProcessDefinition().getNode(nodeName);
 			t.setNode(node);
@@ -1242,7 +1428,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
@@ -1257,7 +1443,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 		Session session = null;
 		
 		try {
-			session = JCRUtils.getSession();
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
 			jbpmContext.getToken(tokenId).end();
 			jbpmContext.getSession().flush();
 			
@@ -1268,7 +1459,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 		} catch (JbpmException e) {
 			throw new WorkflowException(e.getMessage(), e);
 		} finally {
-			JCRUtils.logout(session);
+			if (token == null) JCRUtils.logout(session);
 			jbpmContext.close();
 		}
 		
