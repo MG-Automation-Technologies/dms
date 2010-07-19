@@ -17,12 +17,21 @@
     <c:when test="${isAdmin}">
       <h1>Active sessions</h1>
       <table class="results" width="70%">
-        <tr><th>Token</th><th>User</th><th>Creation</th><th>Last access</th></tr>
+        <tr><th>Token</th><th>User</th><th>Creation</th><th>Last access</th><th>Action</th></tr>
         <c:forEach var="se" items="${sessions}" varStatus="row">
+          <c:url value="ActiveSessions" var="urlLogout">
+            <c:param name="action" value="logout"/>
+            <c:param name="token" value="${se.key}"/>
+          </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${se.key}</td><td>${se.value.session.userID}</td>
             <td><fmt:formatDate value="${se.value.creation.time}" type="both"/></td>
             <td><fmt:formatDate value="${se.value.lastAccess.time}" type="both"/></td>
+            <td align="center">
+              <c:if test="${se.value.session.userID != 'system'}">
+                <a href="${urlLogout}"><img src="img/action/logout.png" alt="Logout" title="Logout"/></a>
+              </c:if>
+            </td>
           </tr>
         </c:forEach>
       </table>
