@@ -576,7 +576,7 @@ public class DirectDashboardModule implements DashboardModule {
 
 	@Override
 	public long getUserDocumentsSize(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSize({})", token);
+		log.debug("getUserDocumentsSize({})", token);
 		long size = 0;
 		
 		if (Config.USER_SIZE_CACHE) {
@@ -585,7 +585,7 @@ public class DirectDashboardModule implements DashboardModule {
 			size = getUserDocumentsSizeLive(token);
 		}
 
-		log.info("getUserDocumentsSize: {}", size);
+		log.debug("getUserDocumentsSize: {}", size);
 		return size;
 	}
 	
@@ -593,7 +593,7 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Get user document size
 	 */
 	private long getUserDocumentsSizeLive(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeLive({})", token);
+		log.debug("getUserDocumentsSizeLive({})", token);
 		long size = 0;
 		Session session = null;
 		
@@ -622,7 +622,7 @@ public class DirectDashboardModule implements DashboardModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.info("getUserDocumentsSizeLive: {}", size);
+		log.debug("getUserDocumentsSizeLive: {}", size);
 		return size;
 	}
 	
@@ -630,7 +630,7 @@ public class DirectDashboardModule implements DashboardModule {
 	 * Get user document size
 	 */
 	private long getUserDocumentsSizeCached(String token) throws RepositoryException, DatabaseException {
-		log.info("getUserDocumentsSizeCached({})", token);
+		log.debug("getUserDocumentsSizeCached({})", token);
 		Session session = null;
 		UserItems usrItems = null;
 		
@@ -649,7 +649,7 @@ public class DirectDashboardModule implements DashboardModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.info("getUserDocumentsSizeCached: {}", usrItems.getSize());
+		log.debug("getUserDocumentsSizeCached: {}", usrItems.getSize());
 		return usrItems.getSize();
 	}
 
