@@ -22,7 +22,7 @@
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${se.user}</td><td>${se.id}</td><td>${se.ip}</td><td>${se.host}</td>
             <td><fmt:formatDate value="${se.creation.time}" type="both"/></td>
-            <td><fmt:formatDate value="${se.lastAccessed.time}" type="both"/></td>
+            <td><fmt:formatDate value="${se.lastAccess.time}" type="both"/></td>
           </tr>
         </c:forEach>
       </table>
