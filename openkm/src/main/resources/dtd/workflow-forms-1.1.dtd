@@ -59,6 +59,7 @@
 <!ELEMENT button EMPTY>
 <!ATTLIST button
 	label CDATA #REQUIRED
+	name CDATA #REQUIRED
 	value CDATA #IMPLIED
 	type (submit|transition) "submit"
 	width CDATA #IMPLIED
