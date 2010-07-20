@@ -50,6 +50,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMPropertyService	 		= "017";
 	public static final String ORIGIN_OKMBrowser 					= "018";
 	public static final String ORIGIN_OKMUserCopyService 			= "019";
+	public static final String ORIGIN_OKMNoteService				= "020";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
