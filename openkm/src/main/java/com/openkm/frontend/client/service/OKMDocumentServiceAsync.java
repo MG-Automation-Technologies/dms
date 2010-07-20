@@ -49,5 +49,4 @@ public interface OKMDocumentServiceAsync {
 	public void isValid(String docPath, AsyncCallback<Boolean> callback);
 	public void getVersionHistorySize(String docPath, AsyncCallback<Long> callback);
 	public void purgeVersionHistory(String docPath, AsyncCallback<?> callback);
-	public void addNote(String docPath, String text, AsyncCallback<?> callback);
 }

@@ -34,11 +34,8 @@ import com.openkm.frontend.client.bean.GWTVersion;
  *
  */
 public interface OKMDocumentService extends RemoteService {
-
 	public List<GWTDocument> getChilds(String fldId) throws OKMException;
-
 	public List<GWTVersion> getVersionHistory(String docPath) throws OKMException;
-	
 	public void delete(String docPath) throws OKMException;
 	public void checkout(String docPath) throws OKMException;
 	public void cancelCheckout (String docPath) throws OKMException;
@@ -53,5 +50,4 @@ public interface OKMDocumentService extends RemoteService {
 	public Boolean isValid(String docPath) throws OKMException;
 	public Long getVersionHistorySize(String docPath) throws OKMException;
 	public void purgeVersionHistory(String docPath) throws OKMException;
-	public void addNote(String docPath, String text) throws OKMException;
 }
