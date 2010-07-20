@@ -24,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMNote;
 import com.openkm.api.OKMNotification;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
+import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
@@ -153,8 +155,12 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 					if (FileUtils.getName(path).equals(fileName)) {
 						OKMDocument document = OKMDocument.getInstance();
 						document.setContent(null, path, is);
-						document.checkin(null, path, comment);
+						Version ver = document.checkin(null, path, comment);
 						uploadedDocPath = path;
+						
+						// Add comment (as system user)
+						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment(); 
+						OKMNote.getInstance().add(null, path, text);
 						
 						// Return the path of the inserted document in response
 						out.print(returnOKMessage + " path["+uploadedDocPath+"]path");

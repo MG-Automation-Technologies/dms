@@ -557,31 +557,4 @@ public class OKMDocumentServlet extends OKMRemoteServiceServlet implements OKMDo
 		
 		log.debug("purgeVersionHistory: void");
 	}
-	
-	@Override
-	public void addNote(String docPath, String text) throws OKMException {
-		log.debug("addNote({}, {})", docPath, text);
-		updateSessionManager();
-		
-		try {
-			OKMDocument.getInstance().addNote(null, docPath, text);
-		} catch (PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
-		} catch (AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_Repository), e.getMessage());
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDocumentService, ErrorCode.CAUSE_General), e.getMessage());
-		}
-		
-		log.debug("addNote: void");
-	}
 }
