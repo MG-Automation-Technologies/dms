@@ -27,7 +27,6 @@ import java.util.List;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
-import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -99,34 +98,6 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 	public void setContent(String token, String docPath, InputStream is) throws FileSizeExceededException,
 			UserQuotaExceededException, VirusDetectedException, VersionException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, IOException, DatabaseException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addNote(String token, String docPath, String text) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setNote(String token, String notePath, String text) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}
