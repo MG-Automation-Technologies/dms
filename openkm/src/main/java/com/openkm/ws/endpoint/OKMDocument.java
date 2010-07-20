@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -338,48 +337,5 @@ public class OKMDocument {
 		String path = dm.getPath(token, uuid);
 		log.debug("getPath: {}", path);
 		return path;
-	}
-	
-	@WebMethod
-	public void addNote(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath,
-			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {}, {})", new Object[] {  token, docPath, text });
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.addNote(token, docPath, text);
-		log.debug("addNote: void");
-	}
-	
-	@WebMethod
-	public Note getNote(@WebParam(name = "token") String token,
-			@WebParam(name = "notePath") String notePath) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {})", token, notePath);
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		Note ret = dm.getNote(token, notePath);
-		log.debug("addNote: {}", ret);
-		return ret;
-	}
-
-	@WebMethod
-	public void removeNote(@WebParam(name = "token") String token,
-			@WebParam(name = "notePath") String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeNote({}, {})", token, notePath);
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.removeNote(token, notePath);
-		log.debug("removeNote: void");
-	}
-
-	@WebMethod
-	public void setNote(@WebParam(name = "token") String token,
-			@WebParam(name = "notePath") String notePath,
-			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setNote({}, {}, {})", new Object[] { token, notePath, text });
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setNote(token, notePath, text);
-		log.debug("setNote: void");
 	}
 }
