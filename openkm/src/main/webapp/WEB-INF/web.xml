@@ -129,7 +129,11 @@
   	<servlet-name>OKMUserConfigServlet</servlet-name>
     <servlet-class>com.openkm.frontend.server.OKMUserConfigServlet</servlet-class>
   </servlet>
-    
+  <servlet>
+  	<servlet-name>OKMNoteServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.OKMNoteServlet</servlet-class>
+  </servlet>
+  
   <!-- Misc servlets -->
   <servlet>
   	<servlet-name>HandlerServlet</servlet-name>
@@ -274,6 +278,10 @@
     <servlet-class>com.openkm.ws.endpoint.OKMWorkflow</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>OKMNote</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMNote</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>OKMTest</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMTest</servlet-class>
   </servlet>
@@ -374,6 +382,10 @@
   <servlet-mapping>
     <servlet-name>OKMUserConfigServlet</servlet-name>
     <url-pattern>/OKMUserConfigServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMNoteServlet</servlet-name>
+    <url-pattern>/OKMNoteServlet</url-pattern>
   </servlet-mapping>
   
   <!-- Misc servlets mappings -->
@@ -518,6 +530,10 @@
   <servlet-mapping>
     <servlet-name>OKMWorkflow</servlet-name>
     <url-pattern>/OKMWorkflow</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMNote</servlet-name>
+    <url-pattern>/OKMNote</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMTest</servlet-name>
