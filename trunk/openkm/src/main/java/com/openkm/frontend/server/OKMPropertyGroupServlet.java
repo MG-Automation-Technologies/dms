@@ -70,8 +70,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getAllGroups(null);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
-				GWTPropertyGroup group = Util.copy(it.next());
-				groupList.add(group);
+				PropertyGroup pg = it.next();
+				
+				if (pg.isVisible()) {
+					GWTPropertyGroup group = Util.copy(pg);
+					groupList.add(group);
+				}
 			}
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
@@ -99,8 +103,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			List<GWTPropertyGroup> actualGroupsList = getGroups(docPath);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
-				GWTPropertyGroup group = Util.copy(it.next());
-				groupList.add(group);
+				PropertyGroup pg = it.next();
+				
+				if (pg.isVisible()) {
+					GWTPropertyGroup group = Util.copy(pg);
+					groupList.add(group);
+				}
 			}
 			
 			// Purge from list values that are assigned to document
@@ -178,8 +186,12 @@ public class OKMPropertyGroupServlet extends OKMRemoteServiceServlet implements 
 			Collection<PropertyGroup> col = OKMPropertyGroup.getInstance().getGroups(null, docPath);
 			
 			for (Iterator<PropertyGroup> it = col.iterator(); it.hasNext();) {	
-				GWTPropertyGroup group = Util.copy(it.next());
-				groupList.add(group);
+				PropertyGroup pg = it.next();
+				
+				if (pg.isVisible()) {
+					GWTPropertyGroup group = Util.copy(pg);
+					groupList.add(group);
+				}
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);

@@ -106,7 +106,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			
 			for (int i=0; i<wizardProperties.length; i++) {
 				for (PropertyGroup pg : OKMPropertyGroup.getInstance().getAllGroups(null)) {
-					if (pg.getName().equals(wizardProperties[i])) {
+					if (pg.getName().equals(wizardProperties[i]) && pg.isVisible()) {
 						wizardPropGrpLst.add(Util.copy(pg));
 						break;
 					}
