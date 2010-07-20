@@ -50,7 +50,7 @@ public class DirectNoteModule implements NoteModule {
 	@Override
 	public void add(String token, String nodePath, String text) throws LockException, 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("add({}, {}, {})", new Object[] { token, nodePath, text });
+		log.debug("add({}, {}, {})", new Object[] { token, nodePath, text });
 		Session session = null;
 		Node notesNode = null;
 		
@@ -105,7 +105,7 @@ public class DirectNoteModule implements NoteModule {
 	@Override
 	public void remove(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("delete({}, {})", token, notePath);
+		log.debug("remove({}, {})", token, notePath);
 		Session session = null;
 		Node parentNode = null;
 		
@@ -155,13 +155,13 @@ public class DirectNoteModule implements NoteModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("delete: void");
+		log.debug("remove: void");
 	}
 	
 	@Override
 	public Note get(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("get({}, {})", token, notePath);
+		log.debug("get({}, {})", token, notePath);
 		Session session = null;
 		Note note = new Note();
 		
@@ -210,7 +210,7 @@ public class DirectNoteModule implements NoteModule {
 	@Override
 	public void set(String token, String notePath, String text) throws LockException, 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("set({}, {}, {})", new Object[] { token, notePath, text });
+		log.debug("set({}, {}, {})", new Object[] { token, notePath, text });
 		Session session = null;
 		Node noteNode = null;
 		
