@@ -18,16 +18,17 @@
       <h1>Property groups</h1>
         <c:if test="${empty pGroups}">
           <table class="results" width="80%">
-            <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
+            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property group visible</th></tr>
             <tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
           </table>
         </c:if>
         <c:forEach var="pGroup" items="${pGroups}">
           <table class="results" width="80%">
-            <tr><th colspan="3">Property group label</th><th colspan="4">Property group name</th></tr>
+            <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property group visible</th></tr>
             <tr class="fuzzy">
-              <td colspan="3" align="center"><b>${pGroup.key.label}</b></td>
-              <td colspan="4" align="center"><b>${pGroup.key.name}</b></td>
+              <td colspan="2" align="center"><b>${pGroup.key.label}</b></td>
+              <td colspan="3" align="center"><b>${pGroup.key.name}</b></td>
+              <td colspan="1" align="center"><c:if test="${pGroup.key.visible}"><img src="img/true.png"/></c:if></td>
             </tr>
             <tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
             <c:forEach var="pgForm" items="${pGroup.value}" varStatus="row">

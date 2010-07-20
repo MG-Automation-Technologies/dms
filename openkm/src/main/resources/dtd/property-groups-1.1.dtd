@@ -5,6 +5,7 @@
 <!ATTLIST property-group
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
+	visible (true|false) "true"
 >
 
 <!ELEMENT input (validator*)>
