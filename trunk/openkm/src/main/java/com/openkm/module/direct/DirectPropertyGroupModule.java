@@ -471,7 +471,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.info("getPropertyGroupForm: {}", ret);
+		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
 }
