@@ -35,8 +35,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -216,8 +216,8 @@ public class DirectDocumentModule implements DocumentModule {
 		doc.setConvertibleToPdf(convert.convertibleToPdf(doc.getMimeType()));
 		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
 		
-		// Get comments
-		ArrayList<Note> notes = new ArrayList<Note>();
+		// Get notes
+		List<Note> notes = new ArrayList<Note>();
 		Node notesNode = documentNode.getNode(Note.LIST);
 		
 		for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
@@ -739,233 +739,7 @@ public class DirectDocumentModule implements DocumentModule {
 
 		log.debug("setContent: void");
 	}
-
-	@Override
-	public void addNote(String token, String docPath, String text) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("addNote({}, {}, {})", new Object[] { token, docPath, text });
-		Session session = null;
-		Node notesNode = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
-			notesNode = documentNode.getNode(Note.LIST);
-			addInternalNote(session, notesNode, text);
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_DOCUMENT_NOTE", docPath, text);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("addNote: void");
-	}
 	
-	/**
-	 * Centralize document notes creation
-	 */
-	private void addInternalNote(Session session, Node notesNode, String text) throws 
-			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, javax.jcr.lock.LockException,
-			javax.jcr.version.VersionException, javax.jcr.RepositoryException  {
-		log.info("addInternalNote({}, {}, {})", new Object[] { session, notesNode, text });
-		Calendar cal = Calendar.getInstance();
-		Node note = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
-		note.setProperty(Note.DATE, cal);
-		note.setProperty(Note.USER, session.getUserID());
-		note.setProperty(Note.TEXT, text);
-		notesNode.save();
-		log.debug("addInternalNote: void");
-	}
-	
-	@Override
-	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("deleteNote({}, {})", token, notePath);
-		Session session = null;
-		Node parentNode = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
-			parentNode = noteNode.getParent();
-			
-			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
-				noteNode.remove();
-				parentNode.save();
-			} else {
-				throw new AccessDeniedException("Note can only be removed by its creator");
-			}
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "REMOVE_NOTE", null);
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_DOCUMENT_NOTE", notePath, null);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(parentNode);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("deleteNote: void");
-	}
-	
-	@Override
-	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("getNote({}, {})", token, notePath);
-		Session session = null;
-		Note note = new Note();
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
-			note.setDate(noteNode.getProperty(Note.DATE).getDate());
-			note.setUser(noteNode.getProperty(Note.USER).getString());
-			note.setText(noteNode.getProperty(Note.TEXT).getString());
-			note.setPath(noteNode.getPath());
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "GET_NOTE", null);
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "GET_DOCUMENT_NOTE", notePath, null);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("getNote: {}", note);
-		return note;
-	}
-
-	@Override
-	public void setNote(String token, String notePath, String text) throws LockException, 
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.info("setNote({}, {}, {})", new Object[] { token, notePath, text });
-		Session session = null;
-		Node noteNode = null;
-		
-		if (Config.SYSTEM_READONLY) {
-			throw new AccessDeniedException("System is in read-only mode");
-		}
-		
-		try {
-			if (token == null) {
-				session = JCRUtils.getSession();
-			} else {
-				session = JcrSessionManager.getInstance().get(token);
-			}
-			
-			noteNode = session.getRootNode().getNode(notePath.substring(1));
-			
-			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
-				noteNode.setProperty(Note.TEXT, text);
-				noteNode.save();
-			} else {
-				throw new AccessDeniedException("Note can only be modified by its creator");
-			}
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "SET_NOTE", null);
-
-			// Activity log
-			UserActivity.log(session.getUserID(), "SET_DOCUMENT_NOTE", notePath, null);
-		} catch (javax.jcr.PathNotFoundException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(noteNode);
-			throw new PathNotFoundException(e.getMessage(), e);
-		} catch (javax.jcr.AccessDeniedException e) {
-			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(noteNode);
-			throw new AccessDeniedException(e.getMessage(), e);
-		} catch (javax.jcr.lock.LockException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(noteNode);
-			throw new LockException(e.getMessage(), e);
-		} catch (javax.jcr.RepositoryException e) {
-			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(noteNode);
-			throw new RepositoryException(e.getMessage(), e);
-		} finally {
-			if (token == null) JCRUtils.logout(session);
-		}
-		
-		log.debug("setNote: void");
-	}
-
 	@Override
 	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
@@ -1003,7 +777,7 @@ public class DirectDocumentModule implements DocumentModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.debug("getChilds: "+childs);
+		log.debug("getChilds: {}", childs);
 		return childs;
 	}
 
@@ -1350,11 +1124,6 @@ public class DirectDocumentModule implements DocumentModule {
 			// Remove pdf & preview from cache
 			new File(Config.PDF_CACHE+File.separator+documentNode.getUUID()+".pdf").delete();
 			new File(Config.SWF_CACHE+File.separator+documentNode.getUUID()+".swf").delete();
-			
-			// Add comment (as system user)
-			Node notesNode = documentNode.getNode(Note.LIST);
-			addInternalNote(DirectRepositoryModule.getSystemSession(), notesNode,
-					"New version "+version.getName()+" by "+session.getUserID()+": "+version.getComment());
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "CHECKIN", comment);
