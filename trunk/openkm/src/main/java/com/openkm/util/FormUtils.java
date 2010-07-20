@@ -125,11 +125,13 @@ public class FormUtils {
 						if (nForm.getNodeType() == Node.ELEMENT_NODE) {
 							String pgLabel = nForm.getAttributes().getNamedItem("label").getNodeValue();
 							String pgName = nForm.getAttributes().getNamedItem("name").getNodeValue();
+							String pgVisible = nForm.getAttributes().getNamedItem("visible").getNodeValue();
 							NodeList nlField = nForm.getChildNodes();
 							List<FormElement> fe = parseField(nlField);
 							PropertyGroup pg = new PropertyGroup();
 							pg.setLabel(pgLabel);
 							pg.setName(pgName);
+							pg.setVisible(Boolean.valueOf(pgVisible));
 							pGroups.put(pg, fe);
 						}
 					}

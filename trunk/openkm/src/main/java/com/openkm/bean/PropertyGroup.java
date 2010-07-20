@@ -36,6 +36,7 @@ public class PropertyGroup implements Serializable {
 	
 	private String label = "";
 	private String name = "";
+	private boolean visible = true;
 	
 	public String getLabel() {
 		return label;
@@ -53,11 +54,20 @@ public class PropertyGroup implements Serializable {
 		this.name = name;
 	}
 	
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("label="); sb.append(label);
 		sb.append(", name="); sb.append(name);
+		sb.append(", visible="); sb.append(visible);
 		sb.append("}");
 		return sb.toString();
 	}
