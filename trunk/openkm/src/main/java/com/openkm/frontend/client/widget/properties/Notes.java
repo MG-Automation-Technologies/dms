@@ -46,8 +46,8 @@ import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
-import com.openkm.frontend.client.service.OKMDocumentService;
-import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
+import com.openkm.frontend.client.service.OKMNoteService;
+import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
@@ -58,8 +58,7 @@ import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
  *
  */
 public class Notes extends Composite {
-	
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMNoteServiceAsync noteService = (OKMNoteServiceAsync) GWT.create(OKMNoteService.class);
 	
 	private FlexTable tableNotes;
 	private GWTDocument document;
@@ -260,8 +259,8 @@ public class Notes extends Composite {
 	 * addNote document
 	 */
 	private void addNote() {
-		ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-		endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
+		endPoint.setServiceEntryPoint(Config.OKMNoteService);
 		String noteText = "";
 		//Show hides panels depending browser to prevent problems with IE
 		if (Util.getUserAgent().startsWith("ie")) {
@@ -270,7 +269,7 @@ public class Notes extends Composite {
 			noteText = richTextArea.getHTML();
 		}
 		
-		documentService.addNote(document.getPath(), noteText, callbackAddNote);
+		noteService.add(document.getPath(), noteText, callbackAddNote);
 	}
 	
 	/**
