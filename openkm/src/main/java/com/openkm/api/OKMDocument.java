@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.bean.Lock;
-import com.openkm.bean.Note;
 import com.openkm.bean.Version;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
@@ -123,48 +122,11 @@ public class OKMDocument implements DocumentModule {
 		log.debug("getContentByVersion: {}", is);
 		return is;
 	}
-
-	@Override
-	public void addNote(String token, String docPath, String text) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {}, {})", new Object[] { token, docPath, text });
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.addNote(token, docPath, text);
-		log.debug("addNote: void");
-	}
-	
-	@Override
-	public Note getNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addNote({}, {})", token, notePath);
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		Note ret = dm.getNote(token, notePath);
-		log.debug("addNote: {}", ret);
-		return ret;
-	}
-
-	@Override
-	public void removeNote(String token, String notePath) throws LockException, PathNotFoundException,
-			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("removeNote({}, {})", token, notePath);
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.removeNote(token, notePath);
-		log.debug("removeNote: void");
-	}
-
-	@Override
-	public void setNote(String token, String notePath, String text) throws LockException,
-			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setNote({}, {}, {})", new Object[] { token, notePath, text });
-		DocumentModule dm = ModuleManager.getDocumentModule();
-		dm.setNote(token, notePath, text);
-		log.debug("setNote: void");
-	}
-	
+		
 	@Override
 	public List<Document> getChilds(String token, String fldPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
-		log.debug("getChilds({}, {})", fldPath);
+		log.debug("getChilds({}, {})", token, fldPath);
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		List<Document> col = dm.getChilds(token, fldPath);
 		log.debug("getChilds: {}", col);
