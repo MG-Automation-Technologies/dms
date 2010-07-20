@@ -26,6 +26,7 @@ public class ModuleManager {
 	private static RepositoryModule repositoryModule = null;
 	private static FolderModule folderModule = null;
 	private static DocumentModule documentModule = null;
+	private static NoteModule noteModule = null;
 	private static SearchModule searchModule = null;
 	private static PropertyGroupModule propertyGroupModule= null;
 	private static NotificationModule notificationModule = null;
@@ -84,6 +85,18 @@ public class ModuleManager {
 		}
 		
 		return documentModule;
+	}
+	
+	/**
+	 * 
+	 */
+	public static synchronized NoteModule getNoteModule() {
+		if (noteModule == null) {
+			noteModule = new com.openkm.module.direct.DirectNoteModule();
+			//noteModule = new com.openkm.module.ejb.EJBNoteModule(); 
+		}
+		
+		return noteModule;
 	}
 
 	/**
