@@ -196,13 +196,22 @@ public class OKMAccessManager implements AccessManager {
 		} else {
 			log.debug("{} Path: {}", subject.getPrincipals(), absPath);
 			NodeId nodeId = context.getHierarchyManager().resolveNodePath(absPath);
-
+			
 			if (nodeId != null) {
 				log.debug("{} This is a NODE", subject.getPrincipals());
 			} else {
 				PropertyId propertyId = context.getHierarchyManager().resolvePropertyPath(absPath);
-				nodeId = propertyId.getParentId();
-				log.debug("{} This is a PROPERTY", subject.getPrincipals());
+				
+				if (propertyId != null) {
+					log.debug("{} This is a PROPERTY", subject.getPrincipals());
+					nodeId = propertyId.getParentId();
+				} else {
+					// Seems to be a just-removed property
+					log.debug("{} This is a UNKNOWN: {}", subject.getPrincipals(), absPath);
+					Path ancestor = absPath.getAncestor(1);
+					log.debug("UNKNOWN ancestor: {}", ancestor);
+					nodeId = context.getHierarchyManager().resolveNodePath(ancestor);
+				}
 			}
 
 			if (access || absPath.denotesRoot()) {
