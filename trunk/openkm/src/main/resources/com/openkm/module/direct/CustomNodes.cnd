@@ -45,6 +45,7 @@
 [okm:folder] > nt:folder, mix:referenceable, mix:lockable, mix:accessControlled
 - okm:author (string) mandatory
 - okm:name (string) mandatory
++ okm:notes (okm:notes) = okm:notes autocreated mandatory
 
 [okm:mail] > nt:folder, mix:referenceable, mix:accessControlled
 - okm:size (long) mandatory
@@ -58,6 +59,7 @@
 - okm:subject (string) mandatory
 - okm:content (string) mandatory
 - okm:mimeType (string) mandatory
++ okm:notes (okm:notes) = okm:notes autocreated mandatory
 + * (okm:document)
 
 [okm:sysConfig]
