@@ -65,10 +65,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyGroupModule.class);
 
 	@Override
-	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -83,7 +83,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			documentNode = session.getRootNode().getNode(docPath.substring(1));
+			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
 				documentNode.addMixin(grpName);
@@ -91,7 +91,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", docPath, grpName);
+			UserActivity.log(session.getUserID(), "ADD_PROPERTY_GROUP", nodePath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -120,10 +120,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException, 
+	public void removeGroup(String token, String nodePath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException, 
 			DatabaseException {
-		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -138,7 +138,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			documentNode = session.getRootNode().getNode(docPath.substring(1));
+			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
 				documentNode.removeMixin(grpName);
@@ -146,7 +146,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", docPath, grpName);
+			UserActivity.log(session.getUserID(), "REMOVE_PROPERTY_GROUP", nodePath, grpName);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			throw new NoSuchGroupException(e.getMessage(), e);
@@ -167,9 +167,9 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException, ParseException, 
+	public List<PropertyGroup> getGroups(String token, String nodePath) throws IOException, ParseException, 
 			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getGroups({}, {})", token, docPath);
+		log.debug("getGroups({}, {})", token, nodePath);
 		ArrayList<PropertyGroup> ret = new ArrayList<PropertyGroup>();
 		Session session = null;
 		
@@ -180,7 +180,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			NodeType[] nt = documentNode.getMixinNodeTypes();
 			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
 			
@@ -253,10 +253,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public List<FormElement> getProperties(String token, String docPath, String grpName) throws IOException,
+	public List<FormElement> getProperties(String token, String nodePath, String grpName) throws IOException,
 			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("getProperties({}, {})", token, grpName);
+		log.debug("getProperties({}, {}, {})", new Object[] { token, nodePath, grpName });
 		Session session = null;
 		
 		try {
@@ -268,7 +268,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			
 			Map<PropertyGroup, List<FormElement>> pgfs = FormUtils.parsePropertyGroupsForms();
 			List<FormElement> pgf = FormUtils.getPropertyGroupForms(pgfs, grpName);
-			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
@@ -320,7 +320,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			}
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+pgf);
+			UserActivity.log(session.getUserID(), "GET_PROPERTY_GROUP_PROPERTIES", nodePath, grpName+", "+pgf);
 			
 			log.debug("getProperties: {}", pgf);
 			return pgf;
@@ -336,10 +336,10 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 	}
 
 	@Override
-	public void setProperties(String token, String docPath, String grpName, List<FormElement> properties)
+	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, docPath, grpName, properties });
+		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -357,7 +357,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			NodeTypeManager ntm = session.getWorkspace().getNodeTypeManager();
 			NodeType nt = ntm.getNodeType(grpName);
 			PropertyDefinition[] pd = nt.getDeclaredPropertyDefinitions();
-			documentNode = session.getRootNode().getNode(docPath.substring(1));
+			documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			
 			synchronized (documentNode) {
 				for (FormElement fe : properties) {
@@ -408,7 +408,7 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 			documentNode.save();
 			
 			// Activity log
-			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", docPath, grpName+", "+properties);
+			UserActivity.log(session.getUserID(), "SET_PROPERTY_GROUP_PROPERTIES", nodePath, grpName+", "+properties);
 		} catch (javax.jcr.nodetype.NoSuchNodeTypeException e) {
 			log.error(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);

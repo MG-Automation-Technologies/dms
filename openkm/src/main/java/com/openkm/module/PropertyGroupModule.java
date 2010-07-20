@@ -40,7 +40,7 @@ public interface PropertyGroupModule {
 	/**
 	 * Add a property group to a document.
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws LockException Can't modify a locked document. 
@@ -50,14 +50,14 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addGroup(String token, String docPath, String grpName) throws NoSuchGroupException,
+	public void addGroup(String token, String nodePath, String grpName) throws NoSuchGroupException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException;
 
 	/**
 	 * Removes a property group from a document.
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws LockException Can't modify a locked document. 
@@ -65,19 +65,19 @@ public interface PropertyGroupModule {
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeGroup(String token, String docPath, String grpName) throws AccessDeniedException, 
+	public void removeGroup(String token, String nodePath, String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException;
 
 	/**
 	 * Get groups assigned to a document.
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param nodePath The path that identifies an unique node.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<PropertyGroup> getGroups(String token, String docPath) throws IOException, ParseException,
+	public List<PropertyGroup> getGroups(String token, String nodePath) throws IOException, ParseException,
 			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
@@ -91,21 +91,21 @@ public interface PropertyGroupModule {
 	/**
 	 * Get all properties defined in a document by group.
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param docPath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<FormElement> getProperties(String token, String docPath, String grpName) throws IOException,
+	public List<FormElement> getProperties(String token, String nodePathnodePath, String grpName) throws IOException,
 			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException,
 			DatabaseException;
 	
 	/**
 	 * Set group properties to a document.
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @param propName The category property name.
 	 * @throws NoSuchPropertyException If there is no such registered category property.
@@ -117,7 +117,7 @@ public interface PropertyGroupModule {
 	 * you can't modify the document because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void setProperties(String token, String docPath, String grpName, List<FormElement> properties)
+	public void setProperties(String token, String nodePath, String grpName, List<FormElement> properties)
 			throws IOException, ParseException, NoSuchPropertyException, NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 

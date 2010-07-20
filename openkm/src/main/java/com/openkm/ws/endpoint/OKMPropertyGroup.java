@@ -62,34 +62,34 @@ public class OKMPropertyGroup {
 
 	@WebMethod
 	public void addGroup(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws NoSuchGroupException, LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("addGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("addGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.addGroup(token, docPath, grpName);
+		cm.addGroup(token, nodePath, grpName);
 		log.debug("addGroup: void");
 	}
 
 	@WebMethod
 	public void removeGroup(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws AccessDeniedException, 
 			NoSuchGroupException, LockException, PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("removeGroup({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("removeGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.removeGroup(token, docPath, grpName);
+		cm.removeGroup(token, nodePath, grpName);
 		log.debug("removeGroup: void");
 	}
 
 	@WebMethod
 	public PropertyGroup[] getGroups(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath) throws IOException,
+			@WebParam(name = "nodePath") String nodePath) throws IOException,
 			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getGroups({}, {})", token, docPath);
+		log.debug("getGroups({}, {})", token, nodePath);
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<PropertyGroup> col = cm.getGroups(token, docPath);
+		List<PropertyGroup> col = cm.getGroups(token, nodePath);
 		PropertyGroup[] result = (PropertyGroup[]) col.toArray(new PropertyGroup[col.size()]);
 		log.debug("getGroups: {}", result);
 		return result;
@@ -108,12 +108,12 @@ public class OKMPropertyGroup {
 
 	@WebMethod
 	public FormElement[] getProperties(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName) throws IOException, ParseException,
 			NoSuchGroupException, PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("getProperties({}, {}, {})", new Object[] { token, docPath, grpName });
+		log.debug("getProperties({}, {}, {})", new Object[] { token, nodePath, grpName });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		List<FormElement> col = cm.getProperties(token, docPath, grpName);
+		List<FormElement> col = cm.getProperties(token, nodePath, grpName);
 		FormElement[] result = (FormElement[]) col.toArray(new FormElement[col.size()]);
 		log.debug("getProperties: {}", result);
 		return result;
@@ -121,14 +121,14 @@ public class OKMPropertyGroup {
 	
 	@WebMethod
 	public void setProperties(@WebParam(name = "token") String token,
-			@WebParam(name = "docPath") String docPath,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "grpName") String grpName,
 			@WebParam(name = "properties") FormElement[] properties) throws IOException, ParseException,
 			NoSuchPropertyException, NoSuchGroupException, LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, docPath, grpName, properties });
+		log.debug("setProperties({}, {}, {}, {})", new Object[] { token, nodePath, grpName, properties });
 		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
-		cm.setProperties(token, docPath, grpName, Arrays.asList(properties));
+		cm.setProperties(token, nodePath, grpName, Arrays.asList(properties));
 		log.debug("setProperties: void");
 	}
 }
