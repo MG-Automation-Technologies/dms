@@ -91,14 +91,14 @@ public interface PropertyGroupModule {
 	/**
 	 * Get all properties defined in a document by group.
 	 * 
-	 * @param docPath The path that identifies an unique node.
+	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public List<FormElement> getProperties(String token, String nodePathnodePath, String grpName) throws IOException,
+	public List<FormElement> getProperties(String token, String nodePath, String grpName) throws IOException,
 			ParseException, NoSuchGroupException, PathNotFoundException, RepositoryException,
 			DatabaseException;
 	
@@ -130,4 +130,17 @@ public interface PropertyGroupModule {
 	 */
 	public List<FormElement> getPropertyGroupForm(String token, String grpName) throws ParseException,
 			IOException, RepositoryException, DatabaseException;
+	
+	/**
+	 * Test if a node has a property group assigned
+	 *
+	 * @param nodePath The path that identifies an unique node.
+	 * @param grpName The group name previously registered in the system.
+	 * @throws NoSuchGroupException If there is no such registered group name.
+	 * @throws PathNotFoundException If there is no document in this 
+	 * repository path.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public boolean hasGroup(String token, String nodePath, String grpName) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException;
 }

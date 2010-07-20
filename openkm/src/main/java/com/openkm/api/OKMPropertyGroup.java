@@ -124,4 +124,14 @@ public class OKMPropertyGroup implements PropertyGroupModule {
 		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
+	
+	@Override
+	public boolean hasGroup(String token, String nodePath, String grpName) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("hasGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
+		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
+		boolean ret = cm.hasGroup(token, nodePath, grpName);
+		log.debug("hasGroup: {}", ret);
+		return ret;
+	}
 }

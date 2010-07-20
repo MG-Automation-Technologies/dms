@@ -131,4 +131,16 @@ public class OKMPropertyGroup {
 		cm.setProperties(token, nodePath, grpName, Arrays.asList(properties));
 		log.debug("setProperties: void");
 	}
+	
+	@WebMethod
+	public boolean hasGroup(@WebParam(name = "token") String token,
+			@WebParam(name = "nodePath") String nodePath,
+			@WebParam(name = "grpName") String grpName) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("hasGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
+		PropertyGroupModule cm = ModuleManager.getPropertyGroupModule();
+		boolean ret = cm.hasGroup(token, nodePath, grpName);
+		log.debug("hasGroup: {}", ret);
+		return ret;
+	}
 }

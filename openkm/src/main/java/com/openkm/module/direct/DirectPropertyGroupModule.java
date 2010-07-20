@@ -474,4 +474,49 @@ public class DirectPropertyGroupModule implements PropertyGroupModule {
 		log.debug("getPropertyGroupForm: {}", ret);
 		return ret;
 	}
+
+	@Override
+	public boolean hasGroup(String token, String nodePath, String grpName) throws IOException,
+			ParseException, PathNotFoundException, RepositoryException, DatabaseException {
+		log.debug("hasGroup({}, {}, {})", new Object[] { token, nodePath, grpName });
+		boolean ret = false;
+		Session session = null;
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
+			NodeType[] nt = documentNode.getMixinNodeTypes();
+			Map<PropertyGroup, List<FormElement>> pgf = FormUtils.parsePropertyGroupsForms();
+			
+			// Only return registered property definitions
+			for (int i=0; i<nt.length; i++) {
+				if (nt[i].getName().startsWith(PropertyGroup.GROUP+":")) {
+					for (Iterator<PropertyGroup> it = pgf.keySet().iterator(); it.hasNext(); ) {
+						PropertyGroup pg = it.next();
+						
+						if (pg.getName().equals(nt[i].getName())) {
+							ret = true;
+							break;
+						}
+					}
+				}
+			}
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+		
+		log.debug("hasGroup: {}", ret);
+		return ret;
+	}
 }
