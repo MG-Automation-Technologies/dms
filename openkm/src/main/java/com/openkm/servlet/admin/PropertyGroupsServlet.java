@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +149,7 @@ public class PropertyGroupsServlet extends BaseServlet {
 		FormUtils.resetPropertyGroupsForms();
 		OKMPropertyGroup okmPropGroups = OKMPropertyGroup.getInstance();
 		List<PropertyGroup> groups = okmPropGroups.getAllGroups(null);
-		Map<PropertyGroup, List<Map<String, String>>> pGroups = new HashMap<PropertyGroup, List<Map<String,String>>>();
+		Map<PropertyGroup, List<Map<String, String>>> pGroups = new LinkedHashMap<PropertyGroup, List<Map<String,String>>>();
 		
 		for (PropertyGroup group : groups) {
 			List<FormElement> mData = okmPropGroups.getPropertyGroupForm(null, group.getName());

@@ -28,7 +28,12 @@
             <tr class="fuzzy">
               <td colspan="2" align="center"><b>${pGroup.key.label}</b></td>
               <td colspan="3" align="center"><b>${pGroup.key.name}</b></td>
-              <td colspan="1" align="center"><c:if test="${pGroup.key.visible}"><img src="img/true.png"/></c:if></td>
+              <td colspan="1" align="center">
+                <c:choose>
+                  <c:when test="${pGroup.key.visible}"><img src="img/true.png"/></c:when>
+                  <c:otherwise><img src="img/false.png"/></c:otherwise>
+                </c:choose>
+              </td>
             </tr>
             <tr><th>Label</th><th>Name</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
             <c:forEach var="pgForm" items="${pGroup.value}" varStatus="row">
