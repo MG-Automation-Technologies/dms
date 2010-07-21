@@ -74,8 +74,8 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.util.JCRUtils;
 
-public class OKMHandler implements IOHandler, PropertyHandler {
-	private static Logger log = LoggerFactory.getLogger(OKMHandler.class);
+public class DefaultHandler implements IOHandler, PropertyHandler {
+	private static Logger log = LoggerFactory.getLogger(DefaultHandler.class);
 
     //private String collectionNodetype = JcrConstants.NT_FOLDER;
 	private String collectionNodetype = Folder.TYPE;
@@ -94,8 +94,8 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      *
      * @see OKMHandler#setIOManager(IOManager)
      */
-    public OKMHandler() {
-    	log.debug("OKMHandler()");
+    public DefaultHandler() {
+    	log.debug("DefaultHandler()");
     }
 
     /**
@@ -108,8 +108,8 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      *
      * @param ioManager
      */
-    public OKMHandler(IOManager ioManager) {
-    	log.debug("OKMHandler({})", ioManager);
+    public DefaultHandler(IOManager ioManager) {
+    	log.debug("DefaultHandler({})", ioManager);
         this.ioManager = ioManager;
     }
 
@@ -122,8 +122,8 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      * @param defaultNodetype
      * @param contentNodetype
      */
-    public OKMHandler(IOManager ioManager, String collectionNodetype, String defaultNodetype, String contentNodetype) {
-    	log.debug("OKMHandler({}, {}, {}, {})", new Object[] { ioManager, collectionNodetype, defaultNodetype, contentNodetype });
+    public DefaultHandler(IOManager ioManager, String collectionNodetype, String defaultNodetype, String contentNodetype) {
+    	log.debug("DefaultHandler({}, {}, {}, {})", new Object[] { ioManager, collectionNodetype, defaultNodetype, contentNodetype });
     	this.ioManager = ioManager;
         this.collectionNodetype = collectionNodetype;
         this.defaultNodetype = defaultNodetype;
@@ -508,7 +508,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      */
     @Override
     public boolean canExport(ExportContext context, boolean isCollection) {
-    	//log.debug("canExport("+context+", "+isCollection+")");
+    	log.debug("canExport(ExportContext:{}, {})", context, isCollection);
         if (context == null || context.isCompleted()) {
             return false;
         }
@@ -518,7 +518,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
             try {
                 Node n = ((Node)exportRoot);
                 
-                //log.debug("Path: "+n.getPath());
+                log.debug("Path: {}", n.getPath());
                 //for (NodeIterator nit = n.getNodes(); nit.hasNext(); ) {
                 	//log.debug("### "+nit.nextNode().getPath());
                 //}
@@ -537,7 +537,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
      */
     @Override
     public boolean canExport(ExportContext context, DavResource resource) {
-    	//log.debug("canExport("+context+", "+resource+")");
+    	log.debug("canExport(ExportContext:{}, DavResource:{})", context, resource);
         if (resource == null) {
             return false;
         }
@@ -715,7 +715,7 @@ public class OKMHandler implements IOHandler, PropertyHandler {
     //----------------------------------------------------< PropertyHandler >---
     @Override
     public boolean canExport(PropertyExportContext context, boolean isCollection) {
-    	//log.debug("canExport({}, {})", context, isCollection);
+    	log.debug("canExport(PropertyExportContext:{}, {})", context, isCollection);
         return canExport((ExportContext) context, isCollection);
     }
     

@@ -50,7 +50,7 @@ public class LocatorFactoryImplEx extends AbstractLocatorFactory {
         if (resourcePath == null) {
             return resourcePath;
         }
-
+        
         if (resourcePath.equals(wspPath) || startsWithWorkspace(resourcePath, wspPath)) {
             String repositoryPath = resourcePath.substring(wspPath.length());
             String name = Text.getName(repositoryPath);

@@ -88,7 +88,7 @@
         </iohandler>
         <iohandler>
             <!-- <class name="org.apache.jackrabbit.server.io.DefaultHandler" /> -->
-            <class name="com.openkm.webdav.OKMHandler" />
+            <class name="com.openkm.webdav.DefaultHandler" />
         </iohandler>
     </iomanager>
     <!--
@@ -129,7 +129,7 @@
         -->
         <propertyhandler>
             <!-- <class name="org.apache.jackrabbit.server.io.DefaultHandler" /> -->
-            <class name="com.openkm.webdav.OKMHandler" />
+            <class name="com.openkm.webdav.DefaultHandler" />
         </propertyhandler>
     </propertymanager>
     <!--
@@ -166,7 +166,8 @@
     <filter>
         <!-- class element defines the resource filter to be used. The specified class
              must implement the ItemFilter interface -->
-        <class name="org.apache.jackrabbit.webdav.simple.DefaultItemFilter" />
+        <!-- <class name="org.apache.jackrabbit.webdav.simple.DefaultItemFilter" /> -->
+        <class name="com.openkm.webdav.DefaultItemFilter" />
         <!--
          Nodetype names to be used to filter child nodes.
          A child node can be filtered if the declaring nodetype of its definition
