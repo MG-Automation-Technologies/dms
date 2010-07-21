@@ -14,6 +14,7 @@
 	type CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
+	readonly (true|false) "false"
 >
 
 <!ELEMENT checkbox (validator*)>
@@ -23,6 +24,7 @@
 	value (true|false) "false"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
+	readonly (true|false) "false"
 >
 
 <!ELEMENT textarea (validator*)>
@@ -32,6 +34,7 @@
 	value CDATA #IMPLIED
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
+	readonly (true|false) "false"
 >
 
 <!ELEMENT select (option+, validator*)>
@@ -41,6 +44,7 @@
 	type (simple|multiple) "simple"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
+	readonly (true|false) "false"
 >
 
 <!ELEMENT option EMPTY>
