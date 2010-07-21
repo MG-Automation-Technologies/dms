@@ -217,21 +217,23 @@ public class DirectDocumentModule implements DocumentModule {
 		doc.setConvertibleToSwf(convert.convertibleToSwf(doc.getMimeType()));
 		
 		// Get notes
-		List<Note> notes = new ArrayList<Note>();
-		Node notesNode = documentNode.getNode(Note.LIST);
-		
-		for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
-			Node noteNode = nit.nextNode();
-			Note note = new Note();
-			note.setDate(noteNode.getProperty(Note.DATE).getDate());
-			note.setUser(noteNode.getProperty(Note.USER).getString());
-			note.setText(noteNode.getProperty(Note.TEXT).getString());
-			note.setPath(noteNode.getPath());
-			notes.add(note);
+		if (documentNode.isNodeType(Note.MIX_TYPE)) {
+			List<Note> notes = new ArrayList<Note>();
+			Node notesNode = documentNode.getNode(Note.LIST);
+			
+			for (NodeIterator nit = notesNode.getNodes(); nit.hasNext(); ) {
+				Node noteNode = nit.nextNode();
+				Note note = new Note();
+				note.setDate(noteNode.getProperty(Note.DATE).getDate());
+				note.setUser(noteNode.getProperty(Note.USER).getString());
+				note.setText(noteNode.getProperty(Note.TEXT).getString());
+				note.setPath(noteNode.getPath());
+				notes.add(note);
+			}
+			
+			doc.setNotes(notes);
 		}
-
-		doc.setNotes(notes);
-		
+				
 		log.debug("Permisos: {} => {}", docPath, doc.getPermissions());
 		log.debug("getProperties[session]: {}", doc);
 		return doc;
