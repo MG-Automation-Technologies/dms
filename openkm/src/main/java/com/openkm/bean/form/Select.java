@@ -46,6 +46,7 @@ public class Select extends FormElement {
 		sb.append(", name="); sb.append(name);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", type="); sb.append(type);
 		sb.append(", options="); sb.append(options);
 		sb.append(", validators="); sb.append(validators);

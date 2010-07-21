@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public class Validator implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String TYPE_TEXT = "text";
 	private String type = "";
 	private String parameter = "";
-	
+		
 	public String getType() {
 		return type;
 	}
