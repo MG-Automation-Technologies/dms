@@ -190,6 +190,28 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	}
 	
 	/**
+	 * deleteNoteIconToSelectedRow
+	 */
+	public void deleteNoteIconToSelectedRow() {
+		String htmlValue = dataTable.getHTML(selectedRow,0);
+		String newHtmlIcons = "";
+		
+		if (htmlValue.indexOf("edit.gif")>=0) {
+			newHtmlIcons = Util.imageItemHTML("img/icon/edit.gif");
+		} else if (htmlValue.indexOf("lock.gif")>0) {
+			newHtmlIcons = Util.imageItemHTML("img/icon/lock.gif");
+		} else {
+			newHtmlIcons = "&nbsp;";
+		}
+		
+		if (htmlValue.indexOf("subscribed.gif")>=0) {
+			newHtmlIcons += Util.imageItemHTML("img/icon/subscribed.gif");
+		}
+		
+		dataTable.setHTML(selectedRow, 0, newHtmlIcons);
+	}
+	
+	/**
 	 * Sets the document to the row
 	 * 
 	 * @param rows The table row

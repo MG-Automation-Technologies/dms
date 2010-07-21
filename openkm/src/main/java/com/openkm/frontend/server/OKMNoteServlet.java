@@ -54,6 +54,7 @@ public class OKMNoteServlet extends OKMRemoteServiceServlet implements OKMNoteSe
 		
 		try {
 			OKMNote.getInstance().add(null, nodePath, text);
+			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -72,5 +73,57 @@ public class OKMNoteServlet extends OKMRemoteServiceServlet implements OKMNoteSe
 		}
 		
 		log.debug("add: void");
+	}
+	
+	@Override
+	public void remove(String notePath) throws OKMException {
+		log.debug("remove({})", notePath);
+		
+		try {
+			OKMNote.getInstance().remove(null, notePath);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("remove: void");
+	}
+	
+	@Override
+	public void set(String notePath, String text) throws OKMException {
+		log.debug("set({}, {})", notePath, text);
+		
+		try {
+			OKMNote.getInstance().set(null, notePath, text);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
+		} catch (AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_AccessDenied), e.getMessage());
+		} catch (RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_Repository), e.getMessage());
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
+		}
+		
+		log.debug("set: void");
 	}
 }

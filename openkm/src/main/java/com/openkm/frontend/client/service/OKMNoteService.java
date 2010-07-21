@@ -30,4 +30,6 @@ import com.openkm.frontend.client.OKMException;
  */
 public interface OKMNoteService extends RemoteService {
 	public void add(String nodePath, String text) throws OKMException;
+	public void remove(String notePath) throws OKMException;
+	public void set(String notePath, String text) throws OKMException;
 }

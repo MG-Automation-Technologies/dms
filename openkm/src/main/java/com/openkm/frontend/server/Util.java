@@ -920,7 +920,7 @@ public class Util {
 	 */
 	public static List<GWTNote> copy(List<Note> commentList) {
 		List<GWTNote> gWTCommentList = new ArrayList<GWTNote>();
-		
+
 		for (Iterator<Note> it = commentList.iterator(); it.hasNext();) {
 			Note documentComment = it.next();
 			GWTNote gWTNote = new GWTNote();
@@ -928,6 +928,7 @@ public class Util {
 			gWTNote.setDate(documentComment.getDate().getTime());
 			gWTNote.setText(documentComment.getText());
 			gWTNote.setUser(documentComment.getUser());
+			gWTNote.setPath(documentComment.getPath());
 			
 			gWTCommentList.add(gWTNote);
 		}

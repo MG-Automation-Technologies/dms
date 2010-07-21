@@ -1612,6 +1612,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	}
 	
 	/**
+	 * deleteNoteIconToSelectedRow
+	 */
+	public void deleteNoteIconToSelectedRow() {
+		table.deleteNoteIconToSelectedRow();
+	}
+	
+	/**
 	 * hasRows
 	 * 
 	 * @return has rows
