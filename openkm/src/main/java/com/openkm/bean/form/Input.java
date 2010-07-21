@@ -8,6 +8,7 @@ public class Input extends FormElement {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	public static final String TYPE_LINK = "link";
+	public static final String TYPE_FOLDER = "folder";
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
