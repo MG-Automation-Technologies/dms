@@ -30,6 +30,7 @@ public class Note implements Serializable {
 	public static final String TYPE = "okm:note";
 	public static final String LIST = "okm:notes";
 	public static final String LIST_TYPE = "okm:notes";
+	public static final String MIX_TYPE = "mix:notes";
 	public static final String DATE = "okm:date";
 	public static final String USER = "okm:user";
 	public static final String TEXT = "okm:text";

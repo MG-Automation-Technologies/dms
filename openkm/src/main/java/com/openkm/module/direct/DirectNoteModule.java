@@ -67,7 +67,7 @@ public class DirectNoteModule implements NoteModule {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, text });
 		Note newNote = null;
 		Session session = null;
-		Node notesNode = null;
+		Node node = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -80,8 +80,15 @@ public class DirectNoteModule implements NoteModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
-			notesNode = documentNode.getNode(Note.LIST);
+			node = session.getRootNode().getNode(nodePath.substring(1));
+			
+			if (!node.isNodeType(Note.MIX_TYPE)) {
+				log.debug("Adding mixing '{}' to {}", Note.MIX_TYPE, node.getPath());
+				node.addMixin(Note.MIX_TYPE);
+				node.save();
+			}
+			
+			Node notesNode = node.getNode(Note.LIST);
 			Calendar cal = Calendar.getInstance();
 			Node noteNode = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
 			noteNode.setProperty(Note.DATE, cal);
@@ -91,27 +98,27 @@ public class DirectNoteModule implements NoteModule {
 			
 			// Retrieve stored values
 			newNote = get(noteNode);
-			
+						
 			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
+			DirectNotificationModule.checkSubscriptions(node, session.getUserID(), "ADD_NOTE", text);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "ADD_NOTE", nodePath, text);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
+			JCRUtils.discardsPendingChanges(node);
 			throw new PathNotFoundException(e.getMessage(), e);
 		} catch (javax.jcr.AccessDeniedException e) {
 			log.warn(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
+			JCRUtils.discardsPendingChanges(node);
 			throw new AccessDeniedException(e.getMessage(), e);
 		} catch (javax.jcr.lock.LockException e) {
 			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
+			JCRUtils.discardsPendingChanges(node);
 			throw new LockException(e.getMessage(), e);
 		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
-			JCRUtils.discardsPendingChanges(notesNode);
+			JCRUtils.discardsPendingChanges(node);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
 			if (token == null) JCRUtils.logout(session);
@@ -145,6 +152,13 @@ public class DirectNoteModule implements NoteModule {
 			if (session.getUserID().equals(noteNode.getProperty(Note.USER).getString())) {
 				noteNode.remove();
 				parentNode.save();
+				
+				if (!parentNode.hasNodes()) {
+					Node primary = parentNode.getParent();
+					log.info("Remove mixin '{}' from {}", Note.MIX_TYPE, primary);
+					primary.removeMixin(Note.MIX_TYPE);
+					primary.save();
+				}
 			} else {
 				throw new AccessDeniedException("Note can only be removed by its creator");
 			}
