@@ -171,7 +171,7 @@ public class DirectNotificationModule implements NotificationModule {
 				}
 				
 				if (newUsers.isEmpty()) {
-					sNode.removeMixin(Notification.TYPE);			
+					sNode.removeMixin(Notification.TYPE);
 				} else {
 					sNode.setProperty(Notification.SUBSCRIPTORS, (String[])newUsers.toArray(new String[newUsers.size()]));
 				}			
