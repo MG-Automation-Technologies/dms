@@ -119,6 +119,7 @@ public class MainMenu extends Composite {
 					private MenuItem indonesian;
 					private MenuItem portuguese;
 					private MenuItem arabic;
+					private MenuItem thai;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -294,6 +295,7 @@ public class MainMenu extends Composite {
 						russian = new MenuItem(Util.menuHTML("img/icon/menu/ru.gif", "Russian"), true, setRussian);
 						serbian = new MenuItem(Util.menuHTML("img/icon/menu/rs.gif", "Serbian"), true, setLangSerbian);
 						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
+						thai = new MenuItem(Util.menuHTML("img/icon/menu/th.gif", "Thai"), true, setLangThai);
 						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
 						arabic.addStyleName("okm-MainMenuItem");
 						bosnian.addStyleName("okm-MainMenuItem");
@@ -324,6 +326,7 @@ public class MainMenu extends Composite {
 						russian.addStyleName("okm-MainMenuItem");
 						serbian.addStyleName("okm-MainMenuItem");
 						swedish.addStyleName("okm-MainMenuItem");
+						thai.addStyleName("okm-MainMenuItem");
 						turkish.addStyleName("okm-MainMenuItem");
 					subMenuLanguage.addItem(arabic);
 					subMenuLanguage.addItem(bosnian);
@@ -808,7 +811,14 @@ public class MainMenu extends Composite {
 		}
 	};
 	
-	// Command menu to set Swedish
+	// Command menu to set Thai
+	Command setLangThai = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_th_TH);
+		}
+	};
+	
+	// Command menu to set Turkish
 	Command setLangTurkish = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_tr_TR);
