@@ -30,6 +30,7 @@ import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.OKMNoteService;
 
@@ -48,12 +49,12 @@ public class OKMNoteServlet extends OKMRemoteServiceServlet implements OKMNoteSe
 	private static final long serialVersionUID = 5746571509174291745L;
 	
 	@Override
-	public void add(String nodePath, String text) throws OKMException {
+	public GWTNote add(String nodePath, String text) throws OKMException {
 		log.debug("add({}, {})", nodePath, text);
 		updateSessionManager();
 		
 		try {
-			OKMNote.getInstance().add(null, nodePath, text);
+			return Util.copy(OKMNote.getInstance().add(null, nodePath, text));
 			
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
@@ -71,8 +72,6 @@ public class OKMNoteServlet extends OKMRemoteServiceServlet implements OKMNoteSe
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMNoteService, ErrorCode.CAUSE_General), e.getMessage());
 		}
-		
-		log.debug("add: void");
 	}
 	
 	@Override

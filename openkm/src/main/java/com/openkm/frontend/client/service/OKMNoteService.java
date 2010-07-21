@@ -23,13 +23,14 @@ package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
+import com.openkm.frontend.client.bean.GWTNote;
 
 /**
  * @author jllort
  *
  */
 public interface OKMNoteService extends RemoteService {
-	public void add(String nodePath, String text) throws OKMException;
+	public GWTNote add(String nodePath, String text) throws OKMException;
 	public void remove(String notePath) throws OKMException;
 	public void set(String notePath, String text) throws OKMException;
 }

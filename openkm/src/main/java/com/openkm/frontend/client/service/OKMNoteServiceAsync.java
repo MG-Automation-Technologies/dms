@@ -22,13 +22,14 @@
 package com.openkm.frontend.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.openkm.frontend.client.bean.GWTNote;
 
 /**
  * @author jllort
  *
  */
 public interface OKMNoteServiceAsync {
-	public void add(String nodePath, String text, AsyncCallback<?> callback);
+	public void add(String nodePath, String text, AsyncCallback<GWTNote> callback);
 	public void remove(String notePath, AsyncCallback<?> callback);
 	public void set(String notePath, String text, AsyncCallback<?> callback);
 }

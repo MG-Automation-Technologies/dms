@@ -922,18 +922,25 @@ public class Util {
 		List<GWTNote> gWTCommentList = new ArrayList<GWTNote>();
 
 		for (Iterator<Note> it = commentList.iterator(); it.hasNext();) {
-			Note documentComment = it.next();
-			GWTNote gWTNote = new GWTNote();
-			
-			gWTNote.setDate(documentComment.getDate().getTime());
-			gWTNote.setText(documentComment.getText());
-			gWTNote.setUser(documentComment.getUser());
-			gWTNote.setPath(documentComment.getPath());
-			
-			gWTCommentList.add(gWTNote);
+			gWTCommentList.add(copy(it.next()));
 		}
 		
 		return gWTCommentList;
+	}
+	
+	/**
+	 * Copy Note data to GWTNote
+	 * @param Note the original data
+	 * @return The GWTNote object with data values from original Note
+	 */
+	public static GWTNote copy(Note note) {
+		GWTNote gWTNote = new GWTNote();
+		
+		gWTNote.setDate(note.getDate().getTime());
+		gWTNote.setText(note.getText());
+		gWTNote.setUser(note.getUser());
+		gWTNote.setPath(note.getPath());
+		return gWTNote;
 	}
 	
 	/**
