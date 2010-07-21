@@ -37,6 +37,7 @@ public class TextArea extends FormElement {
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
