@@ -228,6 +228,8 @@ public class FormUtils {
 					if (item != null) input.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) input.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("readonly");
+					if (item != null) input.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					input.setValidators(parseValidators(nField));
 					fe.add(input);
 				} else if (fieldComponent.equals("checkbox")) {
@@ -242,6 +244,8 @@ public class FormUtils {
 					if (item != null) checkBox.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) checkBox.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("readonly");
+					if (item != null) checkBox.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					checkBox.setValidators(parseValidators(nField));
 					fe.add(checkBox);
 				} else if (fieldComponent.equals("textarea")) {
@@ -256,6 +260,8 @@ public class FormUtils {
 					if (item != null) textArea.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) textArea.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("readonly");
+					if (item != null) textArea.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					textArea.setValidators(parseValidators(nField));
 					fe.add(textArea);
 				} else if (fieldComponent.equals("button")) {
@@ -286,6 +292,8 @@ public class FormUtils {
 					if (item != null) select.setWidth(item.getNodeValue());
 					item = nField.getAttributes().getNamedItem("height");
 					if (item != null) select.setHeight(item.getNodeValue());
+					item = nField.getAttributes().getNamedItem("readonly");
+					if (item != null) select.setReadonly(Boolean.parseBoolean(item.getNodeValue()));
 					
 					NodeList nlOptions = nField.getChildNodes();
 					for (int k = 0; k < nlOptions.getLength(); k++) {
