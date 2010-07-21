@@ -26,6 +26,7 @@ import java.io.Serializable;
 public class ProfileWizard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String propertyGroups;
+	private String workflows;
 	private boolean keywordsEnabled;
 	private boolean categoriesEnabled;
 
@@ -35,6 +36,14 @@ public class ProfileWizard implements Serializable {
 
 	public void setPropertyGroups(String propertyGroups) {
 		this.propertyGroups = propertyGroups;
+	}
+	
+	public String getWorkflows() {
+		return workflows;
+	}
+
+	public void setWorkflows(String workflows) {
+		this.workflows = workflows;
 	}
 
 	public boolean isKeywordsEnabled() {
@@ -57,6 +66,7 @@ public class ProfileWizard implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("propertyGroups="); sb.append(propertyGroups);
+		sb.append(", workflows="); sb.append(workflows);
 		sb.append(", keywordsEnabled="); sb.append(keywordsEnabled);
 		sb.append(", categoriesEnabled="); sb.append(categoriesEnabled);
 		sb.append("}");

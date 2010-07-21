@@ -27,6 +27,7 @@ public class ProfileMisc implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean advancedFilters;
 	private long userQuota;
+	private String webSkin;
 
 	public boolean isAdvancedFilters() {
 		return advancedFilters;
@@ -44,11 +45,20 @@ public class ProfileMisc implements Serializable {
 		this.userQuota = userQuota;
 	}
 	
+	public String getWebSkin() {
+		return webSkin;
+	}
+
+	public void setWebSkin(String webSkin) {
+		this.webSkin = webSkin;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("userQuota="); sb.append(userQuota);
 		sb.append(", advancedFilters="); sb.append(advancedFilters);
+		sb.append(", webSkin="); sb.append(webSkin);
 		sb.append("}");
 		return sb.toString();
 	}
