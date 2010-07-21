@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class GWTTextArea extends GWTFormElement implements IsSerializable {
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String value = "";
+	private boolean readonly = false;
 	
 	public String getValue() {
 		return value;
@@ -46,6 +47,14 @@ public class GWTTextArea extends GWTFormElement implements IsSerializable {
 		this.validators = validators;
 	}
 	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -54,6 +63,7 @@ public class GWTTextArea extends GWTFormElement implements IsSerializable {
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", validators="); sb.append(validators);
 		sb.append("}");
 		return sb.toString();
