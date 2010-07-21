@@ -129,10 +129,7 @@ public class DirectNoteModule implements NoteModule {
 			} else {
 				throw new AccessDeniedException("Note can only be removed by its creator");
 			}
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "REMOVE_NOTE", null);
-
+						
 			// Activity log
 			UserActivity.log(session.getUserID(), "REMOVE_NOTE", notePath, null);
 		} catch (javax.jcr.PathNotFoundException e) {
@@ -181,9 +178,6 @@ public class DirectNoteModule implements NoteModule {
 			note.setUser(noteNode.getProperty(Note.USER).getString());
 			note.setText(noteNode.getProperty(Note.TEXT).getString());
 			note.setPath(noteNode.getPath());
-			
-			// Check subscriptions
-			DirectNotificationModule.checkSubscriptions(noteNode, session.getUserID(), "GET_NOTE", null);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_NOTE", notePath, null);
