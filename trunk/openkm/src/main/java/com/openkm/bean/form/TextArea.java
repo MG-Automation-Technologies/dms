@@ -7,6 +7,7 @@ public class TextArea extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String value = "";
+	private boolean readonly = false;
 	
 	public TextArea() {
 		width = "300px";
@@ -27,6 +28,14 @@ public class TextArea extends FormElement {
 
 	public void setValidators(List<Validator> validators) {
 		this.validators = validators;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 	
 	public String toString() {

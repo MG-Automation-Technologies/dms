@@ -11,6 +11,7 @@ public class Input extends FormElement {
 	private List<Validator> validators = new ArrayList<Validator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
+	private boolean readonly = false;
 	
 	public String getType() {
 		return type;
@@ -34,6 +35,14 @@ public class Input extends FormElement {
 
 	public void setValidators(List<Validator> validators) {
 		this.validators = validators;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 	
 	public String toString() {
