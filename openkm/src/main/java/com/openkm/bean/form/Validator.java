@@ -12,10 +12,13 @@ public class Validator implements Serializable {
 	public static final String TYPE_DECIMAL = "dec";
 	public static final String TYPE_NUMERIC = "num";
 	public static final String TYPE_EMAIL = "email";
+	public static final String TYPE_URL = "url";
 	public static final String TYPE_MAXLENGTH = "maxlen";
 	public static final String TYPE_MINLENGTH = "minlen";
 	public static final String TYPE_LESSTHAN = "lt";
 	public static final String TYPE_GREATERTHAN= "gt";
+	public static final String TYPE_MINIMUN= "min";
+	public static final String TYPE_MAXIMUN= "max";
 	public static final String TYPE_REGEXP = "regexp";
 	private String type = "";
 	private String parameter = "";

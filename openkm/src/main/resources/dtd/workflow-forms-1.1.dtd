@@ -11,7 +11,7 @@
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
 	value CDATA #IMPLIED
-	type CDATA #IMPLIED
+	type (text | date | link | folder) "text"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 	readonly (true|false) "false"
@@ -56,7 +56,7 @@
 
 <!ELEMENT validator EMPTY>
 <!ATTLIST validator
-	type (req | alpha | dec | num | email | maxlen | minlen | lt | gt | regexp) ""
+	type (req | alpha | dec | num | email | url | maxlen | minlen | lt | gt | min | max | regexp) "req"
 	parameter CDATA #IMPLIED
 >
 
