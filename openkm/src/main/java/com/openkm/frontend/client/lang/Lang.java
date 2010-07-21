@@ -62,6 +62,7 @@ public class Lang {
 	public static final String LANG_id_ID = "id-ID";
 	public static final String LANG_pt_PT = "pt-PT";
 	public static final String LANG_ar_PS = "ar-PS";
+	public static final String LANG_th_TH = "th-TH";
 	
 	public static HashMap<String, String> getLang(String lang) {
 		HashMap<String, String> hLang = new HashMap<String, String>();
@@ -138,6 +139,8 @@ public class Lang {
 			hLang = Lang_cs_CZ.lang;
 		} else if (LANG_ar_PS.equalsIgnoreCase(lang) || LANG_ar_PS.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_ar_PS.lang;
+		} else if (LANG_th_TH.equalsIgnoreCase(lang) || LANG_th_TH.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			hLang = Lang_th_TH.lang;
 		} else {
 			hLang = Lang_en_GB.lang;
 		}
