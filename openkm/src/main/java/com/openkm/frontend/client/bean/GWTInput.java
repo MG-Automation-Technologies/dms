@@ -31,10 +31,12 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_TEXT = "text";
 	public static final String TYPE_DATE = "date";
 	public static final String TYPE_LINK = "link";
+	public static final String TYPE_FOLDER = "folder";
 	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
 	private String type = TYPE_TEXT;
 	private String value = "";
 	private Date date;
+	private boolean readonly = false;
 
 	public Date getDate() {
 		return date;
@@ -68,6 +70,14 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		this.validators = validators;
 	}
 	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
@@ -76,6 +86,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 		sb.append(", value="); sb.append(value);
 		sb.append(", width="); sb.append(width);
 		sb.append(", height="); sb.append(height);
+		sb.append(", readonly="); sb.append(readonly);
 		sb.append(", type="); sb.append(type);
 		sb.append(", validators="); sb.append(validators);
 		sb.append(", date="); sb.append(date);

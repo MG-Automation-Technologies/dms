@@ -766,8 +766,10 @@ public class Util {
 			gWTInput.setWidth(formElement.getWidth());
 			gWTInput.setHeight(formElement.getHeight());
 			gWTInput.setName(((Input) formElement).getName());
+			gWTInput.setReadonly(((Input) formElement).isReadonly());
 			if (((Input) formElement).getType().equals(Input.TYPE_TEXT) || 
-				((Input) formElement).getType().equals(Input.TYPE_LINK)) {
+				((Input) formElement).getType().equals(Input.TYPE_LINK) ||
+				((Input) formElement).getType().equals(Input.TYPE_FOLDER)) {
 				gWTInput.setValue(((Input) formElement).getValue());
 			} else if (((Input) formElement).getType().equals(Input.TYPE_DATE)) {
 				if (!((Input) formElement).getValue().equals("")) {
@@ -782,6 +784,7 @@ public class Util {
 			gWTCheckbox.setLabel(formElement.getLabel());
 			gWTCheckbox.setName(((CheckBox) formElement).getName());
 			gWTCheckbox.setValue(((CheckBox) formElement).getValue());
+			gWTCheckbox.setReadonly(((CheckBox) formElement).isReadonly());
 			gWTCheckbox.setValidators(copyValidators(((CheckBox) formElement).getValidators()));
 			return gWTCheckbox;
 		} else if (formElement instanceof Select) {
@@ -791,6 +794,7 @@ public class Util {
 			gWTselect.setHeight(formElement.getHeight());
 			gWTselect.setName(((Select) formElement).getName());
 			gWTselect.setType(((Select) formElement).getType());
+			gWTselect.setReadonly(((Select) formElement).isReadonly());
 			List<GWTOption> options = new ArrayList<GWTOption>();
 			for (Iterator<Option> it = ((Select) formElement).getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
@@ -805,6 +809,7 @@ public class Util {
 			gWTTextArea.setHeight(formElement.getHeight());
 			gWTTextArea.setName(((TextArea) formElement).getName());
 			gWTTextArea.setValue(((TextArea) formElement).getValue());
+			gWTTextArea.setReadonly(((TextArea) formElement).isReadonly());
 			gWTTextArea.setValidators(copyValidators(((TextArea) formElement).getValidators()));
 			return gWTTextArea;
 		} else {
@@ -827,6 +832,7 @@ public class Util {
 		} else if (formElement instanceof GWTInput) {
 			Input input = new Input();
 			input.setName(((GWTInput) formElement).getName());
+			input.setReadonly(((GWTInput) formElement).isReadonly());
 			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT) || 
 					((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
 				input.setValue(((GWTInput) formElement).getValue());
@@ -844,11 +850,13 @@ public class Util {
 			checkbox.setLabel(formElement.getLabel());
 			checkbox.setName(((GWTCheckBox) formElement).getName());
 			checkbox.setValue(((GWTCheckBox) formElement).getValue());
+			checkbox.setReadonly(((GWTCheckBox) formElement).isReadonly());
 			return checkbox;
 		} else if (formElement instanceof GWTSelect) {
 			Select gWTselect = new Select();
 			gWTselect.setName(((GWTSelect) formElement).getName());
 			gWTselect.setType(((GWTSelect) formElement).getType());
+			gWTselect.setReadonly(((GWTSelect) formElement).isReadonly());
 			List<Option> options = new ArrayList<Option>();
 			for (Iterator<GWTOption> it = ((GWTSelect) formElement).getOptions().iterator(); it.hasNext();) {
 				options.add(copy(it.next()));
@@ -859,6 +867,7 @@ public class Util {
 			TextArea gWTTextArea= new TextArea();
 			gWTTextArea.setName(((GWTTextArea) formElement).getName());
 			gWTTextArea.setValue(((GWTTextArea) formElement).getValue());
+			gWTTextArea.setReadonly(((GWTTextArea) formElement).isReadonly());
 			return gWTTextArea;
 		} else {
 			return new FormElement();
