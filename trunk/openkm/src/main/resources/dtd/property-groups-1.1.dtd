@@ -12,7 +12,7 @@
 <!ATTLIST input
 	label CDATA #REQUIRED
 	name CDATA #REQUIRED
-	type CDATA #IMPLIED
+	type (text | date | link | folder) "text"
 	width CDATA #IMPLIED
 	height CDATA #IMPLIED
 >
@@ -51,6 +51,6 @@
 
 <!ELEMENT validator EMPTY>
 <!ATTLIST validator
-	type (req | alpha | dec | num | email | maxlen | minlen | lt | gt | regexp) ""
+	type (req | alpha | dec | num | email | url | maxlen | minlen | lt | gt | min | max | regexp) "req"
 	parameter CDATA #IMPLIED
 >
