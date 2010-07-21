@@ -10,6 +10,7 @@ public class Select extends FormElement {
 	private List<Validator> validators = new ArrayList<Validator>();
 	private List<Option> options = new ArrayList<Option>();
 	private String type = TYPE_SIMPLE;
+	private boolean readonly = false;
 	
 	public Select() {
 		super.width = "150px";
@@ -37,6 +38,14 @@ public class Select extends FormElement {
 
 	public void setValidators(List<Validator> validators) {
 		this.validators = validators;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 	
 	public String toString() {

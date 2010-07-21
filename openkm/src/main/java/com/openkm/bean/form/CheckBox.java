@@ -7,7 +7,8 @@ public class CheckBox extends FormElement {
 	private static final long serialVersionUID = 1L;
 	private List<Validator> validators = new ArrayList<Validator>();
 	private boolean value = false;
-
+	private boolean readonly = false;
+	
 	public boolean getValue() {
 		return value;
 	}
@@ -22,6 +23,14 @@ public class CheckBox extends FormElement {
 
 	public void setValidators(List<Validator> validators) {
 		this.validators = validators;
+	}
+	
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 	
 	public String toString() {

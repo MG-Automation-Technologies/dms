@@ -8,8 +8,7 @@ public class FormElement implements Serializable {
 	protected String name = "";
 	protected String width = "100px";
 	protected String height = "25px";
-	protected boolean readonly = false;
-	
+		
 	public String getLabel() {
 		return label;
 	}
