@@ -56,7 +56,7 @@
 
 <!ELEMENT validator EMPTY>
 <!ATTLIST validator
-	type CDATA #REQUIRED
+	type (req | alpha | dec | num | email | maxlen | minlen | lt | gt | regexp) ""
 	parameter CDATA #IMPLIED
 >
 
