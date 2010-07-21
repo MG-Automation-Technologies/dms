@@ -88,7 +88,12 @@
         <h2>Mixin</h2>
         <ul>
           <c:forEach var="mixin" items="${node.mixinNodeTypes}">
-            <li>${fn:toUpperCase(mixin.name)}</li>
+            <c:url value="RepositoryView" var="urlRemoveMixin">
+              <c:param name="path" value="${node.path}"/>
+              <c:param name="mixin" value="${mixin.name}"/>
+              <c:param name="action" value="remove_mixin"/>
+            </c:url>
+            <li>${fn:toUpperCase(mixin.name)} <a href="${urlRemoveMixin}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a></li>
           </c:forEach>
         </ul>
       </c:if>
