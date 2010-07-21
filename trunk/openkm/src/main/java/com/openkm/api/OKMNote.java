@@ -50,12 +50,13 @@ public class OKMNote implements NoteModule {
 	}
 			
 	@Override
-	public void add(String token, String nodePath, String text) throws LockException,
+	public Note add(String token, String nodePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, text });
 		NoteModule nm = ModuleManager.getNoteModule();
-		nm.add(token, nodePath, text);
-		log.debug("add: void");
+		Note ret = nm.add(token, nodePath, text);
+		log.debug("add: {}", ret);
+		return ret;
 	}
 	
 	@Override

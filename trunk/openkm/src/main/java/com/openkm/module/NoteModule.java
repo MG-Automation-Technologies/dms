@@ -42,7 +42,7 @@ public interface NoteModule {
 	 * you can't access this folder because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public void add(String token, String nodePath, String comment) throws LockException,
+	public Note add(String token, String nodePath, String comment) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
