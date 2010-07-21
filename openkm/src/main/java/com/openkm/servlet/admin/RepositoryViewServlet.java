@@ -98,6 +98,8 @@ public class RepositoryViewServlet extends BaseServlet {
 				removeContent(session, path, request, response);
 			} else if (action.equals("remove_current")) {
 				path = removeCurrent(session, path, request, response);
+			} else if (action.equals("remove_mixin")) {
+				removeMixin(session, path, request, response);
 			} else if (action.equals("edit")) {
 				edit(session, path, request, response);
 			} else if (action.equals("save")) {
@@ -206,6 +208,22 @@ public class RepositoryViewServlet extends BaseServlet {
 		UserActivity.log(session.getUserID(), "REPOSITORY_REMOVE_CURRENT", path, "");
 		log.debug("removeCurrent: {}", path);
 		return parentPath;
+	}
+	
+	/**
+	 * Remove mixin
+	 */
+	private void removeMixin(Session session, String path, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+		log.debug("removeMixin({}, {}, {}, {})", new Object[] { session, path, request, response });
+		Node node = session.getRootNode().getNode(path.substring(1));
+		String mixin = WebUtil.getString(request, "mixin");
+		node.removeMixin(mixin);		
+		node.save();
+				
+		// Activity log
+		UserActivity.log(session.getUserID(), "REPOSITORY_REMOVE_MIXIN", path, mixin);
+		log.debug("removeMixin: {}", path);
 	}
 	
 	/**
