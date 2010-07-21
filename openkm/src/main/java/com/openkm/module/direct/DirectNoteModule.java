@@ -46,11 +46,26 @@ import com.openkm.util.UserActivity;
 
 public class DirectNoteModule implements NoteModule {
 	private static Logger log = LoggerFactory.getLogger(DirectNoteModule.class);
-
+	
+	/**
+	 * Read note values
+	 */
+	private Note get(Node noteNode) throws javax.jcr.PathNotFoundException, javax.jcr.RepositoryException {
+		Note note = new Note();
+		
+		note.setDate(noteNode.getProperty(Note.DATE).getDate());
+		note.setUser(noteNode.getProperty(Note.USER).getString());
+		note.setText(noteNode.getProperty(Note.TEXT).getString());
+		note.setPath(noteNode.getPath());
+		
+		return note;
+	}
+	
 	@Override
-	public void add(String token, String nodePath, String text) throws LockException, 
+	public Note add(String token, String nodePath, String text) throws LockException, 
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] { token, nodePath, text });
+		Note newNote = null;
 		Session session = null;
 		Node notesNode = null;
 		
@@ -68,11 +83,14 @@ public class DirectNoteModule implements NoteModule {
 			Node documentNode = session.getRootNode().getNode(nodePath.substring(1));
 			notesNode = documentNode.getNode(Note.LIST);
 			Calendar cal = Calendar.getInstance();
-			Node note = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
-			note.setProperty(Note.DATE, cal);
-			note.setProperty(Note.USER, session.getUserID());
-			note.setProperty(Note.TEXT, text);
+			Node noteNode = notesNode.addNode(cal.getTimeInMillis()+"", Note.TYPE);
+			noteNode.setProperty(Note.DATE, cal);
+			noteNode.setProperty(Note.USER, session.getUserID());
+			noteNode.setProperty(Note.TEXT, text);
 			notesNode.save();
+			
+			// Retrieve stored values
+			newNote = get(noteNode);
 			
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "ADD_NOTE", text);
@@ -99,7 +117,8 @@ public class DirectNoteModule implements NoteModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 		
-		log.debug("add: void");
+		log.debug("add: {}", newNote);
+		return newNote;
 	}
 
 	@Override
@@ -160,7 +179,7 @@ public class DirectNoteModule implements NoteModule {
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("get({}, {})", token, notePath);
 		Session session = null;
-		Note note = new Note();
+		Note note = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -174,10 +193,7 @@ public class DirectNoteModule implements NoteModule {
 			}
 			
 			Node noteNode = session.getRootNode().getNode(notePath.substring(1));
-			note.setDate(noteNode.getProperty(Note.DATE).getDate());
-			note.setUser(noteNode.getProperty(Note.USER).getString());
-			note.setText(noteNode.getProperty(Note.TEXT).getString());
-			note.setPath(noteNode.getPath());
+			note = get(noteNode);
 
 			// Activity log
 			UserActivity.log(session.getUserID(), "GET_NOTE", notePath, null);

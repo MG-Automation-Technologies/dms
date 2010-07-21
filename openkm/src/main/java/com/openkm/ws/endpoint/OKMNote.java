@@ -55,14 +55,15 @@ public class OKMNote {
 	private static Logger log = LoggerFactory.getLogger(OKMNote.class);
 	
 	@WebMethod
-	public void add(@WebParam(name = "token") String token,
+	public Note add(@WebParam(name = "token") String token,
 			@WebParam(name = "nodePath") String docPath,
 			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("add({}, {}, {})", new Object[] {  token, docPath, text });
 		NoteModule nm = ModuleManager.getNoteModule();
-		nm.add(token, docPath, text);
-		log.debug("addNote: void");
+		Note ret = nm.add(token, docPath, text);
+		log.debug("addNote: {}", ret);
+		return ret;
 	}
 	
 	@WebMethod
