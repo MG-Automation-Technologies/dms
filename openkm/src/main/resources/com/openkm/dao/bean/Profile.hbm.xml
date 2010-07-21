@@ -15,6 +15,9 @@
       <property name="userQuota" not-null="true">
         <column name="PRF_MISC_USER_QUOTA" default="0"/>
       </property>
+      <property name="webSkin" not-null="true">
+        <column name="PRF_MISC_WEB_SKIN" default="'default'"/>
+      </property>
     </component>
     
     <!-- CHAT -->
@@ -31,6 +34,9 @@
     <component name="wizard" class="com.openkm.dao.bean.ProfileWizard">
       <property name="propertyGroups" not-null="true">
         <column name="PRF_WIZARD_PROPERTY_GROUPS" default="''"/>
+      </property>
+      <property name="workflows" not-null="true">
+        <column name="PRF_WIZARD_WORKFLOWS" default="''"/>
       </property>
       <property name="keywordsEnabled" not-null="true">
         <column name="PRF_WIZARD_KEYWORDS_ENABLED" default="false"/>

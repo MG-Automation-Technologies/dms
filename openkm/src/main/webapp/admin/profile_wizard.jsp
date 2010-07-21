@@ -9,6 +9,12 @@
       </td>
     </tr>
     <tr>
+      <td>Workflows</td>
+      <td>
+        <input name="prf_wizard_workflows" size="32" value="${prf.wizard.workflows}"/>
+      </td>
+    </tr>
+    <tr>
       <td>Keywords</td>
       <td>
         <c:choose>

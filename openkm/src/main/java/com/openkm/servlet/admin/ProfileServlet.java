@@ -186,11 +186,13 @@ public class ProfileServlet extends BaseServlet {
 		prf.setActive(WebUtil.getBoolean(request, "prf_active"));
 		
 		// Misc
-		prf.getMisc().setUserQuota(WebUtil.getLong(request, "prf_user_quota"));
-		prf.getMisc().setAdvancedFilters(WebUtil.getBoolean(request, "prf_advanced_filter"));
+		prf.getMisc().setUserQuota(WebUtil.getLong(request, "prf_misc_user_quota"));
+		prf.getMisc().setAdvancedFilters(WebUtil.getBoolean(request, "prf_misc_advanced_filter"));
+		prf.getMisc().setWebSkin(WebUtil.getString(request, "prf_misc_web_skin"));
 		
 		// Wizard
 		prf.getWizard().setPropertyGroups(WebUtil.getString(request, "prf_wizard_property_groups"));
+		prf.getWizard().setWorkflows(WebUtil.getString(request, "prf_wizard_workflows"));
 		prf.getWizard().setKeywordsEnabled(WebUtil.getBoolean(request, "prf_wizard_keywords"));
 		prf.getWizard().setCategoriesEnabled(WebUtil.getBoolean(request, "prf_wizard_categories"));
 		
