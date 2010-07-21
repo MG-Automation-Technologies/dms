@@ -280,4 +280,10 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/security/no.gif")
 	public ImageResource no();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/comment_edit.gif")
+	public ImageResource noteEdit();
+	
+	@Source("com/openkm/frontend/public/img/icon/actions/comment_delete.gif")
+	public ImageResource noteDelete();
 }

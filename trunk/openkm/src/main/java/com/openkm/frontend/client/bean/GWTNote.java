@@ -36,7 +36,8 @@ public class GWTNote implements IsSerializable {
 	private Date date;
 	private String user;
 	private String text;
-	
+	private String path;
+
 	/**
 	 * GWTNote
 	 */
@@ -65,5 +66,13 @@ public class GWTNote implements IsSerializable {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

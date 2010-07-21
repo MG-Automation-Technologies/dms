@@ -37,10 +37,13 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
@@ -63,6 +66,8 @@ public class Notes extends Composite {
 	private FlexTable tableNotes;
 	private GWTDocument document;
 	private Button add;
+	private Button update;
+	private Button cancel;
 	private ScrollPanel scrollPanel;
 	private RichTextArea richTextArea;
 	private RichTextToolbar richTextToolbar;
@@ -71,6 +76,10 @@ public class Notes extends Composite {
 	private HTML addNote;
 	private Grid gridRichText;
 	boolean visibleButtons = true;
+	boolean addNoteOption = false;
+	boolean isEditingNote = false;
+	String editedNotePath = "";
+	int editedNoteRow = 0;
 	
 	public Notes () {
 		document = new GWTDocument();
@@ -97,6 +106,22 @@ public class Notes extends Composite {
 			}
 		});
 		
+		update = new Button(Main.i18n("button.update"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				setNote(editedNotePath, getTextNote(), editedNoteRow);
+			}
+		});
+		
+		cancel = new Button(Main.i18n("button.cancel"), new ClickHandler() { 
+			@Override
+			public void onClick(ClickEvent event) {
+				reset();
+			}
+		});
+		update.setVisible(false);
+		cancel.setVisible(false);
+		
 		HTML space = new HTML("");
 		newNotePanel.add(space);
 		newNotePanel.add(addNote);
@@ -104,15 +129,23 @@ public class Notes extends Composite {
 		newNotePanel.add(textArea);
 		HTML space2 = new HTML("");
 		newNotePanel.add(space2);
-		newNotePanel.add(add);
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(add);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(update);
+		hPanel.add(new HTML("&nbsp;"));
+		hPanel.add(cancel);
+		newNotePanel.add(hPanel);
 		
 		newNotePanel.setCellHeight(space, "40px");
 		newNotePanel.setCellHeight(space2, "10px");
 		newNotePanel.setCellHorizontalAlignment(addNote, HasAlignment.ALIGN_CENTER);
 		newNotePanel.setCellHorizontalAlignment(gridRichText, HasAlignment.ALIGN_CENTER);
-		newNotePanel.setCellHorizontalAlignment(add, HasAlignment.ALIGN_CENTER);
+		newNotePanel.setCellHorizontalAlignment(hPanel, HasAlignment.ALIGN_CENTER);
 		
 		add.setStyleName("okm-Button");
+		update.setStyleName("okm-Button");
+		cancel.setStyleName("okm-Button");
 
 		tableNotes.setWidth("100%");
 		gridRichText.setStyleName("cw-RichText");
@@ -134,6 +167,7 @@ public class Notes extends Composite {
 	 * @param doc The document object
 	 */
 	public void set(GWTDocument doc) {
+		reset();
 		this.document = doc;
 		richTextArea.setText("");
 		
@@ -163,11 +197,58 @@ public class Notes extends Composite {
 	 * 
 	 * @param note
 	 */
-	private void writeNote(GWTNote note) {
+	private void writeNote(final GWTNote note) {
 		int row = tableNotes.getRowCount();
 		tableNotes.setHTML(row, 0, "<b>" + note.getUser() + "</b>");
+		Image editNote = new Image(OKMBundleResources.INSTANCE.noteEdit());
+		Image deleteNote = new Image(OKMBundleResources.INSTANCE.noteDelete());
+		editNote.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				reset();
+				isEditingNote = true;
+				add.setVisible(false);
+				update.setVisible(true);
+				cancel.setVisible(true);
+				editedNoteRow = tableNotes.getCellForEvent(event).getRowIndex() + 2; // The text row is + 2
+				editedNotePath = note.getPath();
+				setTextNoteToEditor(tableNotes.getHTML(editedNoteRow, 0));
+			}
+		});
+		deleteNote.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				removeNote(note.getPath(), tableNotes.getCellForEvent(event).getRowIndex());
+			}
+		});
+		editNote.setStyleName("okm-Hyperlink");
+		deleteNote.setStyleName("okm-Hyperlink");
+		
 		DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.date.pattern"));
-		tableNotes.setHTML(row, 1, dtf.format(note.getDate()));
+		HTML space = new HTML("");
+		HTML space2 = new HTML("");
+		HTML date = new HTML(dtf.format(note.getDate()));
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.add(editNote);
+		hPanel.add(space);
+		hPanel.add(deleteNote);
+		hPanel.add(space2);
+		hPanel.add(date);
+		hPanel.setCellWidth(space, "5");
+		hPanel.setCellWidth(space2, "5");
+		if (note.getUser().equals(Main.get().workspaceUserProperties.getUser())) {
+			if (visibleButtons || addNoteOption) {
+				editNote.setVisible(true);
+				deleteNote.setVisible(true);
+			} else {
+				editNote.setVisible(false);
+				deleteNote.setVisible(false);
+			}
+		} else {
+			editNote.setVisible(false);
+			deleteNote.setVisible(false);
+		}
+		tableNotes.setWidget(row, 1, hPanel);
 		tableNotes.getCellFormatter().setHorizontalAlignment(row, 1, HasAlignment.ALIGN_RIGHT);
 		tableNotes.getRowFormatter().setStyleName(row, "okm-Notes-Title");
 		tableNotes.getCellFormatter().setHeight(row, 1, "30");
@@ -188,6 +269,8 @@ public class Notes extends Composite {
 	 */
 	public void langRefresh() {		
 		add.setHTML(Main.i18n("button.add"));
+		update.setHTML(Main.i18n("button.update"));
+		cancel.setHTML(Main.i18n("button.cancel"));
 		addNote.setHTML("<b>" + Main.i18n("document.add.note") + "</b>");
 	}	
 	
@@ -213,7 +296,7 @@ public class Notes extends Composite {
 	 * @param visible The visible value
 	 */
 	public void setVisibleAddNote(boolean visible) {
-		boolean addNoteOption = visible && visibleButtons;
+		addNoteOption = visible && visibleButtons;
 		add.setVisible(addNoteOption);
 		addNote.setVisible(addNoteOption);
 		if (Util.getUserAgent().startsWith("ie")) {
@@ -239,8 +322,7 @@ public class Notes extends Composite {
 			tableNotes.removeRow(tableNotes.getRowCount()-1); // Deletes last row = addComment
 			writeNote(note);
 			writeAddNote();
-			richTextArea.setText("");
-			textArea.setText("");
+			reset();
 			document.getNotes().add(note);
 			// If is added first note must adding some icon on filebrowser
 			if (!document.isHasNotes()) {
@@ -251,7 +333,7 @@ public class Notes extends Composite {
 		}
 
 		public void onFailure(Throwable caught) {
-			Main.get().showError("addComment", caught);
+			Main.get().showError("addNote", caught);
 		}
 	};
 	
@@ -261,15 +343,118 @@ public class Notes extends Composite {
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
 		endPoint.setServiceEntryPoint(Config.OKMNoteService);
-		String noteText = "";
+		noteService.add(document.getPath(), getTextNote(), callbackAddNote);
+	}
+	
+	/**
+	 * getTextNote
+	 * 
+	 * @return
+	 */
+	private String getTextNote() {
 		//Show hides panels depending browser to prevent problems with IE
 		if (Util.getUserAgent().startsWith("ie")) {
-			noteText = textArea.getText();
+			return textArea.getText();
 		} else {
-			noteText = richTextArea.getHTML();
+			return richTextArea.getHTML();
 		}
-		
-		noteService.add(document.getPath(), noteText, callbackAddNote);
+	}
+	
+	/**
+	 * setTextNoteToEditor
+	 * 
+	 * @param text
+	 */
+	private void setTextNoteToEditor(String text) {
+		//Show hides panels depending browser to prevent problems with IE
+		if (Util.getUserAgent().startsWith("ie")) {
+			textArea.setText(text);
+		} else {
+			richTextArea.setHTML(text);
+		}
+	}
+	
+	/**
+	 * reset
+	 */
+	private void reset() {
+		isEditingNote = false;
+		editedNotePath = "";
+		editedNoteRow = 0;
+		richTextArea.setText("");
+		textArea.setText("");
+		add.setHTML(Main.i18n("button.add"));
+		if (visibleButtons || addNoteOption) {
+			add.setVisible(true);
+		}
+		update.setVisible(false);
+		cancel.setVisible(false);
+	}
+	
+	/**
+	 * removeNote
+	 * 
+	 * @param notePath
+	 */
+	private void removeNote(final String notePath, final int row) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
+		endPoint.setServiceEntryPoint(Config.OKMNoteService);
+		noteService.remove(notePath, new AsyncCallback<Object>() {
+			@Override
+			public void onSuccess(Object result) {
+				tableNotes.removeRow(row); // row + 0
+				tableNotes.removeRow(row); // row + 1;
+				tableNotes.removeRow(row); // row + 2
+				
+				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
+					GWTNote note = it.next();
+					if (note.getPath().equals(notePath)) {
+						document.getNotes().remove(note);
+						break;
+					}
+				}
+				
+				if (document.getNotes().isEmpty()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
+					document.setHasNotes(false);
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("removeNote", caught);
+			}
+		});
+	}
+	
+	/**
+	 * setNote
+	 * 
+	 * @param notePath
+	 * @param text
+	 * @param row
+	 */
+	private void setNote(String notePath, final String text, final int row) {
+		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
+		endPoint.setServiceEntryPoint(Config.OKMNoteService);
+		noteService.set(notePath, text, new AsyncCallback<Object>() {
+			@Override
+			public void onSuccess(Object result) {
+				tableNotes.setHTML(row, 0, text);
+				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
+					GWTNote note = it.next();
+					if (note.getPath().equals(editedNotePath)) {
+						note.setText(text);
+						break;
+					}
+				}
+				reset();
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("setNote", caught);
+			}
+		});
 	}
 	
 	/**
