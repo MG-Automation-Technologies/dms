@@ -22,7 +22,6 @@
 package com.openkm.frontend.client.widget.properties;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -43,7 +42,6 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
 import com.openkm.frontend.client.bean.GWTNote;
@@ -51,6 +49,7 @@ import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
+import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
@@ -309,21 +308,13 @@ public class Notes extends Composite {
 	/**
 	 * Callback addNote document
 	 */
-	final AsyncCallback<Object> callbackAddNote = new AsyncCallback<Object>() {
-		public void onSuccess(Object result) {	
-			GWTNote note = new GWTNote();
-			if (Util.getUserAgent().startsWith("ie")) {
-				note.setText(textArea.getText());
-			} else {
-				note.setText(richTextArea.getHTML());
-			}
-			note.setDate(new Date());
-			note.setUser(Main.get().workspaceUserProperties.getUser());
+	final AsyncCallback<GWTNote> callbackAddNote = new AsyncCallback<GWTNote>() {
+		public void onSuccess(GWTNote result) {	
 			tableNotes.removeRow(tableNotes.getRowCount()-1); // Deletes last row = addComment
-			writeNote(note);
+			writeNote(result);
 			writeAddNote();
 			reset();
-			document.getNotes().add(note);
+			document.getNotes().add(result);
 			// If is added first note must adding some icon on filebrowser
 			if (!document.isHasNotes()) {
 				Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
