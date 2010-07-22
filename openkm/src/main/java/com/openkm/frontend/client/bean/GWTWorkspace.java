@@ -45,7 +45,8 @@ public class GWTWorkspace implements IsSerializable {
 	private String password = "";
 	private boolean changePassword = true;
 	private String email = "";
-	
+	private String webSkin = "";
+
 	// System wide
 	private String appVersion = "";
 	private String workflowRunConfigForm = "";
@@ -588,5 +589,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setTabMailSecurityVisible(boolean tabMailSecurityVisible) {
 		this.tabMailSecurityVisible = tabMailSecurityVisible;
+	}
+	
+	public String getWebSkin() {
+		return webSkin;
+	}
+
+	public void setWebSkin(String webSkin) {
+		this.webSkin = webSkin;
 	}
 }

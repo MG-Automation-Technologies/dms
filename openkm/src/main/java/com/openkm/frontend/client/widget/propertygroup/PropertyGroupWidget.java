@@ -389,7 +389,9 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			final TextBox textBox = new TextBox(); // Create a widget for this property
 			hPanel.add(textBox);
 			String value = "";
-			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT)) {
+			if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_TEXT) || 
+				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK) ||
+				((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
 				textBox.setText(((GWTInput) gwtMetadata).getValue());
 				value = ((GWTInput) gwtMetadata).getValue();
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_DATE)) {
@@ -398,13 +400,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					textBox.setText(dtf.format(((GWTInput) gwtMetadata).getDate()));
 					value = dtf.format(((GWTInput) gwtMetadata).getDate());
 				}
-			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
-				value = ((GWTInput) gwtMetadata).getValue();
-				textBox.setValue(value);
-			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
-				value = ((GWTInput) gwtMetadata).getValue();
-				textBox.setValue(value); // The folder path
-			}
+			} 
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
 			hWidgetProperties.put(propertyName,hPanel);
@@ -462,7 +458,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 					final GWTFolder folder = ((GWTInput) gwtMetadata).getFolder();
 					String path = value.substring(value.indexOf("/",1)+1); // removes first ocurrence
 					// Looks if must change icon on parent if now has no childs and properties with user security atention
-					if (((GWTInput) gwtMetadata).getFolder().getHasChilds()) {
+					if (folder.getHasChilds()) {
 						anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
 					} else {
 						anchor.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
