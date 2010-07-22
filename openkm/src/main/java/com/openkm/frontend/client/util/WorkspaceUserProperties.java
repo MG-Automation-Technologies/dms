@@ -84,6 +84,10 @@ public class WorkspaceUserProperties {
 			workspace = result;
 			user = result.getUser();
 			applicationURL = result.getApplicationURL();
+			
+			// Changing the web skin
+			Util.changeCss(workspace.getWebSkin());
+			
 			Main.get().mainPanel.bottomPanel.userInfo.setUser(user, result.isTabAdminVisible());
 			if (result.isChatEnabled()) {
 				Main.get().mainPanel.bottomPanel.userInfo.enableChat();

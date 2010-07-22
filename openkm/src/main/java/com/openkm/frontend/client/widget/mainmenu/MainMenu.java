@@ -1020,28 +1020,28 @@ public class MainMenu extends Composite {
 	// Command menu to set default skin
 	Command setSkinDefault = new Command() {
 		public void execute() {
-			changeCss("default");
+			Util.changeCss("default");
 		}
 	};
 	
 	// Command menu to set test skin
 	Command setSkinDefault2 = new Command() {
 		public void execute() {
-			changeCss("test");
+			Util.changeCss("test");
 		}
 	};
 	
 	// Command menu to set test skin
 	Command setSkinMediumFont = new Command() {
 		public void execute() {
-			changeCss("mediumfont");
+			Util.changeCss("mediumfont");
 		}
 	};
 	
 	// Command menu to set test skin
 	Command setSkinBigFont = new Command() {
 		public void execute() {
-			changeCss("bigfont");
+			Util.changeCss("bigfont");
 		}
 	};
 	
@@ -1112,16 +1112,6 @@ public class MainMenu extends Composite {
 	public ToolBarOption getToolBarOption() {
 		return mainMenuOption;
 	}
-	
-	/**
-	 * Change on fly the actual css
-	 * 
-	 * @param title The css name
-	 */
-	public static native void changeCss(String title) /*-{
-		new $wnd.changeCss(title);
-	}-*/;
-	
 	
 	/**
 	 * setAvailableOption
