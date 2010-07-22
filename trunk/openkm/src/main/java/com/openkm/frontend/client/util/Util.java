@@ -172,6 +172,15 @@ public class Util {
 	}
 	
 	/**
+	 * Change on fly the actual css
+	 * 
+	 * @param title The css name
+	 */
+	public static native void changeCss(String title) /*-{
+		new $wnd.changeCss(title);
+	}-*/;
+	
+	/**
 	 * Format file size in Bytes, KBytes or MBytes. 
 	 * @param size The file size in bytes.
 	 * @return The formated file size.
