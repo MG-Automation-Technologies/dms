@@ -441,7 +441,7 @@ public class SearchIn extends Composite {
 		pathExplorerPanel = new HorizontalPanel();
 		path = new TextBox();
 		path.setReadOnly(true);
-		pathExplorer =  new Image("img/icon/search/folder_explore.gif");
+		pathExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
 		
 		pathExplorerPanel.add(path);
 		pathExplorerPanel.add(new HTML("&nbsp;"));
@@ -461,7 +461,7 @@ public class SearchIn extends Composite {
 		categoryPath = new TextBox();
 		categoryUuid = "";
 		categoryPath.setReadOnly(true);
-		categoryExplorer =  new Image("img/icon/search/folder_explore.gif");
+		categoryExplorer =  new Image(OKMBundleResources.INSTANCE.folderExplorer());
 		
 		categoryExplorerPanel.add(categoryPath);
 		categoryExplorerPanel.add(new HTML("&nbsp;"));
@@ -982,7 +982,7 @@ public class SearchIn extends Composite {
 				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyParam.getFormElement().getLabel() + "&nbsp;");
 				tableProperties.setWidget(rows, 2, textBox);
 				
-				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 				removeImage.addClickHandler(new ClickHandler() { 
 					@Override
 					public void onClick(ClickEvent event) {
@@ -1030,7 +1030,7 @@ public class SearchIn extends Composite {
 				tableProperties.setHTML(rows, 1, "&nbsp;" + propertyParam.getFormElement().getLabel() + "&nbsp;");
 				tableProperties.setWidget(rows, 2, listBox);
 				
-				removeImage = new Image("img/icon/actions/delete.gif");
+				removeImage = new Image(OKMBundleResources.INSTANCE.deleteIcon());
 				removeImage.addStyleName("okm-Hyperlink");
 				removeImage.addClickHandler(new ClickHandler() { 
 					@Override
