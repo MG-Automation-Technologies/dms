@@ -55,6 +55,7 @@ import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTCheckBox;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
@@ -66,6 +67,7 @@ import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerEx
 import com.openkm.frontend.client.extension.event.hashandler.HasPropertyGroupHandlerExtension;
 import com.openkm.frontend.client.service.OKMPropertyGroupService;
 import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
+import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
@@ -88,6 +90,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	private CellFormatter cellFormatter;
 	private PropertyGroupWidgetToFire propertyGroupWidgetToFire;
 	private List<PropertyGroupHandlerExtension> propertyGroupHandlerExtensionList;
+	private FolderSelectPopup folderSelectPopup;
 	
 	/**
 	 * PropertyGroup
@@ -100,6 +103,7 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 	public PropertyGroupWidget(String docPath, String grpName, Widget widget, PropertyGroupWidgetToFire propertyGroupWidgetToFire) {	
 		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
 		table = new FlexTable();
+		folderSelectPopup = new FolderSelectPopup();
 		this.docPath = docPath;
 		this.grpName = grpName;
 		this.propertyGroupWidgetToFire = propertyGroupWidgetToFire;
@@ -120,6 +124,9 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			
 		// Format borders and margins
 		cellFormatter.addStyleName(0,0,"okm-Security-Title-RightBorder");
+		
+		folderSelectPopup.setStyleName("okm-Popup");
+		folderSelectPopup.addStyleName("okm-DisableSelect");
 		
 		initWidget(table);
 	}
@@ -394,6 +401,9 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_LINK)) {
 				value = ((GWTInput) gwtMetadata).getValue();
 				textBox.setValue(value);
+			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
+				value = ((GWTInput) gwtMetadata).getValue();
+				textBox.setValue(value); // The folder path
 			}
 			textBox.setWidth(gwtMetadata.getWidth());
 			textBox.setStyleName("okm-Input");
@@ -446,6 +456,53 @@ public class PropertyGroupWidget extends Composite implements HasPropertyGroupEv
 				} else {
 					table.setHTML(row, 1, "");
 				}
+			} else if (((GWTInput) gwtMetadata).getType().equals(GWTInput.TYPE_FOLDER)) {
+				if (!value.equals("")) {
+					Anchor anchor = new Anchor();
+					final GWTFolder folder = ((GWTInput) gwtMetadata).getFolder();
+					String path = value.substring(value.indexOf("/",1)+1); // removes first ocurrence
+					// Looks if must change icon on parent if now has no childs and properties with user security atention
+					if (((GWTInput) gwtMetadata).getFolder().getHasChilds()) {
+						anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
+					} else {
+						anchor.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
+					}
+					
+					anchor.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent arg0) {
+							CommonUI.openAllFolderPath(folder.getPath(), null);
+						}
+					});
+					anchor.setStyleName("okm-KeyMap-ImageHover");
+					table.setWidget(row, 1, anchor);
+				} else {
+					table.setHTML(row, 1, "");
+				}
+				Image pathExplorer = new Image(OKMBundleResources.INSTANCE.folderExplorer());
+				pathExplorer.addClickHandler(new ClickHandler() { 
+					@Override
+					public void onClick(ClickEvent event) {
+						folderSelectPopup.show(textBox, ((GWTInput) gwtMetadata).getFolder());
+					}
+				});
+				Image cleanPathExplorer = new Image(OKMBundleResources.INSTANCE.deleteIcon());
+				cleanPathExplorer.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						textBox.setValue("");
+						((GWTInput) gwtMetadata).setFolder(new GWTFolder());
+					}
+				});
+				pathExplorer.setStyleName("okm-KeyMap-ImageHover");
+				cleanPathExplorer.setStyleName("okm-KeyMap-ImageHover");
+				hPanel.add(new HTML("&nbsp;"));
+				hPanel.add(pathExplorer);
+				hPanel.add(new HTML("&nbsp;"));
+				hPanel.add(cleanPathExplorer);
+				hPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
+				hPanel.setCellVerticalAlignment(cleanPathExplorer, HasAlignment.ALIGN_MIDDLE);
+				textBox.setEnabled(false);
 			}
 			
 			table.getCellFormatter().setVerticalAlignment(row,0,VerticalPanel.ALIGN_TOP);
