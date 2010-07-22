@@ -147,6 +147,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setChatEnabled(up.getChat().isChatEnabled());
 		workspace.setChatAutoLogin(up.getChat().isAutoLoginEnabled());
 		
+		// Setting web skin
+		workspace.setWebSkin(up.getMisc().getWebSkin());
+		
 		// User quota ( limit user repository size )
 		workspace.setUserQuotaEnabled(up.getMisc().getUserQuota() > 0);
 		workspace.setUserQuotaLimit(up.getMisc().getUserQuota());

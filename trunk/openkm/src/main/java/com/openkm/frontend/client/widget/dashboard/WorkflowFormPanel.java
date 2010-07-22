@@ -39,6 +39,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Anchor;
@@ -59,6 +60,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTButton;
 import com.openkm.frontend.client.bean.GWTCheckBox;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTFormElement;
 import com.openkm.frontend.client.bean.GWTInput;
 import com.openkm.frontend.client.bean.GWTOption;
@@ -75,6 +77,8 @@ import com.openkm.frontend.client.service.OKMWorkflowService;
 import com.openkm.frontend.client.service.OKMWorkflowServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.OKMBundleResources;
+import com.openkm.frontend.client.util.Util;
+import com.openkm.frontend.client.widget.propertygroup.FolderSelectPopup;
 import com.openkm.frontend.client.widget.searchin.CalendarWidget;
 
 /**
@@ -108,11 +112,13 @@ public class WorkflowFormPanel extends Composite {
 	private HTML addComment;
 	private Button add;
 	private FlexTable tableNotes;
+	private FolderSelectPopup folderSelectPopup;
 	
 	/**
 	 * WorkflowFormPanel
 	 */
 	public WorkflowFormPanel() {
+		folderSelectPopup = new FolderSelectPopup();
 		vPanel = new VerticalPanel();
 		table = new FlexTable();
 		formTable = new FlexTable();
@@ -510,15 +516,25 @@ public class WorkflowFormPanel extends Composite {
 				final TextBox textBox = new TextBox();
 				hInputPanel.add(textBox);
 				textBox.setName(gWTInput.getName());
-				if (gWTInput.getType().equals(GWTInput.TYPE_TEXT))  {
+				if (gWTInput.getType().equals(GWTInput.TYPE_TEXT) || 
+					gWTInput.getType().equals(GWTInput.TYPE_LINK) ||
+					gWTInput.getType().equals(GWTInput.TYPE_FOLDER))  {
 					textBox.setValue(gWTInput.getValue());
 				} else if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
 					if (gWTInput.getDate()!=null) {
 						DateTimeFormat dtf = DateTimeFormat.getFormat(Main.i18n("general.day.pattern"));
 						textBox.setText(dtf.format(gWTInput.getDate()));
 					}
-				}
+				} 
 				textBox.setWidth(gWTInput.getWidth());
+				
+				// Case is read only
+				if (textBox.isReadOnly()) {
+					textBox.setVisible(false);
+					if (gWTInput.getType().equals(GWTInput.TYPE_TEXT) || gWTInput.getType().equals(GWTInput.TYPE_DATE)) {
+						hInputPanel.add(new HTML(textBox.getValue()));
+					}
+				}
 				
 				// Case input is date must disable input
 				if (gWTInput.getType().equals(GWTInput.TYPE_DATE))  {
@@ -542,9 +558,92 @@ public class WorkflowFormPanel extends Composite {
 							calendarPopup.show();
 						}
 					});
-					hPanel.add(new HTML("&nbsp;"));
-					hPanel.add(calendarIcon);
-					textBox.setEnabled(false);
+					if (!gWTInput.isReadonly()) {
+						hInputPanel.add(new HTML("&nbsp;"));
+						hInputPanel.add(calendarIcon);
+						textBox.setEnabled(false);
+						hInputPanel.setCellVerticalAlignment(calendarIcon, HasAlignment.ALIGN_MIDDLE);
+					} 
+					
+				} else if (gWTInput.getType().equals(GWTInput.TYPE_LINK))  {
+					String value = gWTInput.getValue(); 
+					if (!value.equals("")) {
+						HorizontalPanel hLinkPanel = new HorizontalPanel();
+						Anchor anchor = new Anchor(value, true);
+						final String url = value;
+						anchor.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent event) {
+								Window.open(url, url, "");
+							}
+						});
+						String containerName = gWTInput.getName() + "ContainerName";
+						hLinkPanel.add(new HTML("<div id=\""+containerName+"\"></div>\n"));
+						HTML space = new HTML("");
+						hLinkPanel.add(space);
+						hLinkPanel.add(anchor);
+						hLinkPanel.setCellWidth(space, "5px");
+						if (gWTInput.isReadonly()) {
+							hInputPanel.add(hLinkPanel);
+							Util.createLinkClipboardButton(url, containerName);
+							hInputPanel.setCellVerticalAlignment(hLinkPanel, HasAlignment.ALIGN_MIDDLE);
+						}
+					} 					
+					
+				} else if (gWTInput.getType().equals(GWTInput.TYPE_FOLDER))  {
+					String value = gWTInput.getValue(); 
+					if (!value.equals("")) {
+						Anchor anchor = new Anchor();
+						final GWTFolder folder = gWTInput.getFolder();
+						String path = value.substring(value.indexOf("/",1)+1); // removes first ocurrence
+						// Looks if must change icon on parent if now has no childs and properties with user security atention
+						if (folder.getHasChilds()) {
+							anchor.setHTML(Util.imageItemHTML("img/menuitem_childs.gif", path, "top"));
+						} else {
+							anchor.setHTML(Util.imageItemHTML("img/menuitem_empty.gif", path, "top"));
+						}
+						
+						anchor.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent arg0) {
+								CommonUI.openAllFolderPath(folder.getPath(), null);
+							}
+						});
+						anchor.setStyleName("okm-KeyMap-ImageHover");
+						if (gWTInput.isReadonly()) {
+							hInputPanel.add(anchor);
+							hInputPanel.setCellVerticalAlignment(anchor, HasAlignment.ALIGN_MIDDLE);
+						}
+					} 
+					Image pathExplorer = new Image(OKMBundleResources.INSTANCE.folderExplorer());
+					pathExplorer.addClickHandler(new ClickHandler() { 
+						@Override
+						public void onClick(ClickEvent event) {
+							folderSelectPopup.show(textBox, gWTInput.getFolder());
+						}
+					});
+					Image cleanPathExplorer = new Image(OKMBundleResources.INSTANCE.deleteIcon());
+					cleanPathExplorer.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							textBox.setValue("");
+							gWTInput.setFolder(new GWTFolder());
+						}
+					});
+					pathExplorer.setStyleName("okm-KeyMap-ImageHover");
+					cleanPathExplorer.setStyleName("okm-KeyMap-ImageHover");
+					HorizontalPanel hFolderPanel = new HorizontalPanel();
+					hFolderPanel.add(new HTML("&nbsp;"));
+					hFolderPanel.add(pathExplorer);
+					hFolderPanel.add(new HTML("&nbsp;"));
+					hFolderPanel.add(cleanPathExplorer);
+					hFolderPanel.setCellVerticalAlignment(pathExplorer, HasAlignment.ALIGN_MIDDLE);
+					hFolderPanel.setCellVerticalAlignment(cleanPathExplorer, HasAlignment.ALIGN_MIDDLE);
+					if (!gWTInput.isReadonly()) {
+						hInputPanel.add(hFolderPanel);
+						textBox.setEnabled(false);
+						hInputPanel.setCellVerticalAlignment(hFolderPanel, HasAlignment.ALIGN_MIDDLE);
+					}
 				}
 				
 				textBox.setWidth(gWTInput.getWidth());
@@ -557,6 +656,7 @@ public class WorkflowFormPanel extends Composite {
 				GWTCheckBox gWTCheckBox = (GWTCheckBox) formField;
 				CheckBox checkBox = new CheckBox();
 				checkBox.setValue(gWTCheckBox.getValue());
+				checkBox.setEnabled(!gWTCheckBox.isReadonly());
 				formTable.setHTML(row, 0, "<b>" + gWTCheckBox.getLabel() + "</b>");
 				formTable.setWidget(row, 1, checkBox);
 				widget = checkBox;
@@ -588,6 +688,7 @@ public class WorkflowFormPanel extends Composite {
 							final String label = htmlLabel.getText();
 							final String value = htmlValue.getText();
 							Image removeImage = new Image("img/icon/actions/delete.gif");
+							removeImage.setVisible(!gWTSelect.isReadonly());
 							removeImage.addClickHandler(new ClickHandler() { 
 								@Override
 								public void onClick(ClickEvent event) {
@@ -620,6 +721,7 @@ public class WorkflowFormPanel extends Composite {
 						}
 					}
 				});
+				addButton.setVisible(!gWTSelect.isReadonly());
 				
 				listBox.setName(gWTSelect.getName());
 				listBox.setWidth(gWTSelect.getWidth());
@@ -628,6 +730,7 @@ public class WorkflowFormPanel extends Composite {
 				
 				formTable.setHTML(row, 0, "<b>" + gWTSelect.getLabel() + "</b>");
 				if (gWTSelect.getType().equals(GWTSelect.TYPE_SIMPLE)) {
+					listBox.setEnabled(!gWTSelect.isReadonly());
 					formTable.setWidget(row, 1, listBox);
 					widget = listBox;
 				} else if (gWTSelect.getType().equals(GWTSelect.TYPE_MULTIPLE)) {
@@ -656,6 +759,7 @@ public class WorkflowFormPanel extends Composite {
 							HTML htmlValue = new HTML(option.getValue());
 							
 							Image removeImage = new Image("img/icon/actions/delete.gif");
+							removeImage.setVisible(!gWTSelect.isReadonly());
 							removeImage.addClickHandler(new ClickHandler() { 
 								@Override
 								public void onClick(ClickEvent event) {
@@ -695,6 +799,7 @@ public class WorkflowFormPanel extends Composite {
 				textArea.setName(gWTTextArea.getName());
 				textArea.setSize(gWTTextArea.getWidth(), gWTTextArea.getHeight());
 				textArea.setValue(gWTTextArea.getValue());
+				textArea.setReadOnly(gWTTextArea.isReadonly());
 				
 				textArea.setStyleName("okm-Input");
 				formTable.setHTML(row, 0, "<b>" + gWTTextArea.getLabel() + "</b>");
@@ -745,7 +850,15 @@ public class WorkflowFormPanel extends Composite {
 				Widget widget = formWidgetList.get(formElement.getName());
 				if (formElement instanceof GWTInput) {
 					// Date is set in drawform click handler, here only capture text
-					((GWTInput)formElement).setValue(((TextBox)((HorizontalPanel) widget).getWidget(0)).getValue()); 
+					HorizontalPanel hPanel = (HorizontalPanel) widget;
+					TextBox textBox = (TextBox) hPanel.getWidget(0);
+					if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
+						// Always must start with http://
+						if (!textBox.getText().equals("") && !textBox.getText().startsWith("http://")) {
+							textBox.setText("http://" + textBox.getText());
+						}
+					} 
+					((GWTInput)formElement).setValue(textBox.getValue()); 
 					
 				} else if (formElement instanceof GWTCheckBox) {
 					((GWTCheckBox) formElement).setValue(((CheckBox) widget).getValue());
