@@ -36,6 +36,7 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.DashboardDocumentResult;
@@ -605,8 +606,11 @@ public class Util {
 	 * Copy to TaskInstance data to  GWTTaskInstance
 	 * @param TaskInstance the original data
 	 * @return The GWTTaskInstance object with data values from original TaskInstance
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws PathNotFoundException 
 	 */
-	public static GWTTaskInstance copy(TaskInstance taskInstance) {
+	public static GWTTaskInstance copy(TaskInstance taskInstance) throws PathNotFoundException, RepositoryException, DatabaseException {
 		GWTTaskInstance gWTTaskInstance = new GWTTaskInstance();
 		
 		gWTTaskInstance.setActorId(taskInstance.getActorId());
@@ -633,8 +637,11 @@ public class Util {
 	 * Copy to ProcessInstance data to  GWTProcessInstance
 	 * @param ProcessInstance the original data
 	 * @return The GWTProcessInstance object with data values from original ProcessInstance
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws PathNotFoundException 
 	 */
-	public static GWTProcessInstance copy(ProcessInstance processInstance) {
+	public static GWTProcessInstance copy(ProcessInstance processInstance) throws PathNotFoundException, RepositoryException, DatabaseException {
 		GWTProcessInstance gWTProcessInstance = new GWTProcessInstance();
 		
 		gWTProcessInstance.setEnded(processInstance.isEnded());
@@ -667,8 +674,11 @@ public class Util {
 	 * Copy to Token data to GWTToken
 	 * @param FormElement the original data
 	 * @return The GWTToken object with data values from original Token
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws PathNotFoundException 
 	 */
-	public static GWTToken copy(Token token) {
+	public static GWTToken copy(Token token) throws PathNotFoundException, RepositoryException, DatabaseException {
 		GWTToken gWTToken = new GWTToken();
 		Collection<GWTTransition> availableTransitions = new ArrayList<GWTTransition>();
 		for (Iterator<Transition> it = token.getAvailableTransitions().iterator(); it.hasNext();) {
@@ -749,8 +759,11 @@ public class Util {
 	 * Copy to FormElement data to GWTFormElemen
 	 * @param FormElement the original data
 	 * @return The GWTFormElement object with data values from original FormElement
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws PathNotFoundException 
 	 */
-	public static GWTFormElement copy(FormElement formElement) {
+	public static GWTFormElement copy(FormElement formElement) throws PathNotFoundException, RepositoryException, DatabaseException {
 		if (formElement instanceof Button) {
 			GWTButton gWTButton = new GWTButton();
 			gWTButton.setLabel(formElement.getLabel());
@@ -769,12 +782,15 @@ public class Util {
 			gWTInput.setReadonly(((Input) formElement).isReadonly());
 			if (((Input) formElement).getType().equals(Input.TYPE_TEXT) || 
 				((Input) formElement).getType().equals(Input.TYPE_LINK) ||
-				((Input) formElement).getType().equals(Input.TYPE_FOLDER)) {
+				((Input) formElement).getType().equals(Input.TYPE_FOLDER )) {
 				gWTInput.setValue(((Input) formElement).getValue());
 			} else if (((Input) formElement).getType().equals(Input.TYPE_DATE)) {
 				if (!((Input) formElement).getValue().equals("")) {
 					gWTInput.setDate(ISO8601.parse(((Input) formElement).getValue()).getTime());
 				}
+			}
+			if (((Input) formElement).getType().equals(Input.TYPE_FOLDER) && !gWTInput.getValue().equals("")) {
+				gWTInput.setFolder(copy(OKMFolder.getInstance().getProperties(null, ((Input) formElement).getValue())));
 			}
 			gWTInput.setType(((Input) formElement).getType());
 			gWTInput.setValidators(copyValidators(((Input) formElement).getValidators()));
@@ -834,7 +850,8 @@ public class Util {
 			input.setName(((GWTInput) formElement).getName());
 			input.setReadonly(((GWTInput) formElement).isReadonly());
 			if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_TEXT) || 
-					((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK)) {
+				((GWTInput) formElement).getType().equals(GWTInput.TYPE_LINK) ||
+				((GWTInput) formElement).getType().equals(GWTInput.TYPE_FOLDER) ) {
 				input.setValue(((GWTInput) formElement).getValue());
 			} else if (((GWTInput) formElement).getType().equals(GWTInput.TYPE_DATE)) {
 				if (((GWTInput) formElement).getDate()!=null) {

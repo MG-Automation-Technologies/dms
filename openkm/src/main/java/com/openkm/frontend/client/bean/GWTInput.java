@@ -37,6 +37,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 	private String value = "";
 	private Date date;
 	private boolean readonly = false;
+	private GWTFolder folder = new GWTFolder();
 
 	public Date getDate() {
 		return date;
@@ -76,6 +77,14 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+	
+	public GWTFolder getFolder() {
+		return folder;
+	}
+
+	public void setFolder(GWTFolder folder) {
+		this.folder = folder;
 	}
 	
 	public String toString() {

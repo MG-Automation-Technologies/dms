@@ -286,4 +286,7 @@ public interface OKMBundleResources extends ClientBundle {
 	
 	@Source("com/openkm/frontend/public/img/icon/actions/comment_delete.gif")
 	public ImageResource noteDelete();
+	
+	@Source("com/openkm/frontend/public/img/icon/search/folder_explore.gif")
+	public ImageResource folderExplorer();
 }
