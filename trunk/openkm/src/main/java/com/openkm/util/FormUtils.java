@@ -78,9 +78,9 @@ public class FormUtils {
 				is.close();
 			}
 		} catch (ParserConfigurationException e) {
-			throw new ParseException(e.getMessage());
+			throw new ParseException(e.getMessage(), e);
 		} catch (SAXException e) {
-			throw new ParseException(e.getMessage());
+			throw new ParseException(e.getMessage(), e);
 		} catch (IOException e) {
 			throw new ParseException(e.getCause());
 		}
