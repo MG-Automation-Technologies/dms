@@ -47,7 +47,7 @@
 
   <properties>
     <!-- Using this GWT version -->
-    <gwt.version>2.0.3</gwt.version>
+    <gwt.version>2.0.4</gwt.version>
 
     <!-- Using this Jackrabbit version -->
     <jcr.version>1.6.1</jcr.version>
@@ -100,14 +100,6 @@
     	<name>OpenKM Maven Reporitory</name>
     	<url>http://repository.openkm.com/maven2</url>
     </repository>
-
-    <!-- Needed for GWT incubator -->
-    <!-- New incubator version not found in a Maven repository -->
-    <!-- <repository>
-      <id>mule-deps</id>
-      <name>Mule Dependencies</name>
-      <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
-    </repository> -->
   </repositories>
 
   <dependencies>
@@ -350,15 +342,13 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Only for development -->
-    <!-- 
+    <!-- Only for development 
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency>
-    -->
+    </dependency>-->
 
     <!-- GWT Maven plugin -->
     <dependency>
@@ -381,9 +371,9 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-incubator</artifactId>
-      <version>20100204-r1747</version>
+      <version>2.0.1</version>
     </dependency>
-
+    
     <!-- KEA -->
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
@@ -424,13 +414,11 @@
     </dependency>
     
     <!-- OpenKM extensions -->
-    <!--
     <dependency>
       <groupId>com.openkm.extension</groupId>
       <artifactId>sample-full</artifactId>
       <version>1.0</version>
     </dependency>
-    -->
   </dependencies>
 
   <build>
