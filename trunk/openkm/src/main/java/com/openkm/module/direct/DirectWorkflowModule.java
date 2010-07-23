@@ -93,7 +93,7 @@ public class DirectWorkflowModule implements WorkflowModule {
 			// Check xml form definition  
 			FileDefinition fileDef = processDefinition.getFileDefinition();
 			isForms = fileDef.getInputStream("forms.xml");
-			FormUtils.parseWorkflowForms(is);
+			FormUtils.parseWorkflowForms(isForms);
 						
 			// If it is ok, deploy it
 			jbpmContext.deployProcessDefinition(processDefinition);
