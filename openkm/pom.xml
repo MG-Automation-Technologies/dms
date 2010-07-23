@@ -97,9 +97,9 @@
     
     <!-- OpenKM repository -->
     <repository>
-    	<id>openkm.com</id>
-    	<name>OpenKM Maven Reporitory</name>
-    	<url>http://repository.openkm.com/maven2</url>
+      <id>openkm.com</id>
+      <name>OpenKM Maven Reporitory</name>
+      <url>http://repository.openkm.com/maven2</url>
     </repository>
   </repositories>
 
