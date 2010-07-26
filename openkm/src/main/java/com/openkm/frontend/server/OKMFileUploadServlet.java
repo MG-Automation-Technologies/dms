@@ -33,6 +33,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
@@ -159,8 +160,9 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						uploadedDocPath = path;
 						
 						// Add comment (as system user)
-						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment(); 
-						OKMNote.getInstance().add(null, path, text);
+						String text = "New version "+ver.getName()+" by "+request.getRemoteUser()+": "+ver.getComment();
+						String sysToken = JcrSessionManager.getInstance().getSystemToken();
+						OKMNote.getInstance().add(sysToken, path, text);
 						
 						// Return the path of the inserted document in response
 						out.print(returnOKMessage + " path["+uploadedDocPath+"]path");
