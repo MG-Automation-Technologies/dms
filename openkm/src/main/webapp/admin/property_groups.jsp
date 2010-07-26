@@ -17,7 +17,7 @@
     <c:when test="${isAdmin}">
       <h1>Property groups</h1>
         <c:if test="${empty pGroups}">
-          <table class="results" width="80%">
+          <table class="results" width="90%">
             <tr><th colspan="2">Property group label</th><th colspan="3">Property group name</th><th colspan="1">Property group visible</th></tr>
             <tr><th>Label</th><th>Name</th><th>Value</th><th>Width</th><th>Height</th><th>Field</th><th>Others</th></tr>
           </table>
