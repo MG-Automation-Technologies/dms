@@ -281,12 +281,13 @@ public class FileBrowser extends Composite implements OriginPanel {
 	 */
 	private void pendingCheckoutFile() {
 		if (pendingChekoutFile) {
-			pendingChekoutFile = false;
-			if (!Main.get().mainPanel.dashboard.userDashboard.isPendingCheckoutDocumentFlag()) {
+			if (!Main.get().mainPanel.dashboard.userDashboard.isPendingCheckoutDocumentFlag() &&
+				!Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
 				Timer timer = new Timer() {
 					@Override
 					public void run() {
 						table.downloadDocument(true);
+						pendingChekoutFile = false;
 					}
 				};
 				timer.schedule(200); // Time to ensure finishing last method call is really finished
