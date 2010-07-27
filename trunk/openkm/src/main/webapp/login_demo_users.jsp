@@ -12,7 +12,7 @@
   out.println("This demo is available for testing purposes.<br>");
   out.println("These documents can be removed at any time, <br>");
   out.println("so don't expect your document to be here tomorrow.<br><br>");
-  out.println("Please, report any issue on this site sending a DM to <a href=\"http://twitter.com/openkm\">@openkm</a>");
+  out.println("Please, report any issue on this site to <a href=\"http://twitter.com/openkm\">@openkm</a>.");
   out.println("</td></tr>");
   out.println("<tr><td class=\"demo_title\">- LOGGED USERS -</td></tr>");
   out.println("<tr><td>");
