@@ -37,7 +37,7 @@ public class Lang_zh_CN {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "yyyy-MM-dd hh:mm:ss");
+	    lang.put("general.date.pattern", "yyyy-MM-dd HH:mm:ss");
 	    lang.put("general.day.pattern", "yyyy-MM-dd");
 	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
@@ -127,7 +127,7 @@ public class Lang_zh_CN {
 			lang.put("general.menu.file.download.document", "下载文档");
 			lang.put("general.menu.file.download.document.pdf", "下载保存为pdf");
 			lang.put("general.menu.file.send.link", "发送文档链接");
-			lang.put("general.menu.file.send.attachment", "Send document attachment");
+			lang.put("general.menu.file.send.attachment", "以附件的形式发送文档");
 			lang.put("general.menu.file.lock", "上锁");
 			lang.put("general.menu.file.unlock", "解锁");
 			lang.put("general.menu.file.add.document", "新增文档");
@@ -234,7 +234,7 @@ public class Lang_zh_CN {
 	    lang.put("fileupload.status.copy.folder", "文件夹复制中...");
 	    lang.put("fileupload.status.restore.folder", "文件夹恢复中...");
 	    lang.put("fileupload.status.create.from.template", "从模板新建文件中...");
-	    lang.put("fileupload.status.of", "of");
+	    lang.put("fileupload.status.of", "的");//of
 	    lang.put("fileupload.label.insert", "增加新文档");
 	    lang.put("fileupload.label.update", "更新文档");
 	    lang.put("fileupload.label.users.notify", "通知用户");
@@ -351,7 +351,7 @@ public class Lang_zh_CN {
 	    lang.put("security.recursive", "递归修改权限");
 	    lang.put("secutiry.filter.by.users","用户查询");//Users filter
 	    lang.put("secutiry.filter.by.groups","用户组查询");//Groups filter
-	    lang.put("security.status.updating","Updating security");
+	    lang.put("security.status.updating","正在更新权限...");
 	    
 	    // Preview
 	    lang.put("preview.unavailable", "预览不可用");
@@ -480,7 +480,7 @@ public class Lang_zh_CN {
 	    
 	    // Notify
 	    lang.put("notify.label", "正在发送文档链接");
-	    lang.put("notify.label.attachment", "Send document attachment");
+	    lang.put("notify.label.attachment", "正在以附件的形式发送文档");
 	    
 	    // Status
 	    lang.put("status.document.copied", "文档已标记复制");
@@ -548,7 +548,7 @@ public class Lang_zh_CN {
 	    lang.put("dashboard.general.last.month.top.modified.documents", "上个月被修改次数最多的文档");//Last month top modified documents
 	    lang.put("dashboard.general.last.uploaded.documents", "最近上传的文档");//Last uploaded documents
 	    lang.put("dashboard.workflow.pending.tasks", "挂起的任务");//Pending tasks
-	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "未分配的挂起的任务");//Unassigned pending tasks
 	    lang.put("dashboard.workflow.task", "任务");//Task
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "名称");//Name
@@ -645,7 +645,7 @@ public class Lang_zh_CN {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "存储器内部错误");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "应用程序内部错误");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "找不到文档路径");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_AccessDenied, "文件夹拒绝访问");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemNotFound, "找不到文件夹");
@@ -665,46 +665,46 @@ public class Lang_zh_CN {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_UnsupportedMimeType, "不支持的文件格式");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_ItemExists, "文档已经存在");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_FileSizeExceeded, "文档超过规定大小");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_DocumentNameMismatch, "Document name is diferent");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_DocumentNameMismatch, "文档名称不一致");//Document name is diferent
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "会话关闭");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "通常查询错误");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "已保存的检索名必须唯一");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "The bookmark name must be unique");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "书签名称必须唯一");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBookmarkService+ErrorCode.CAUSE_ItemExists, "书签名必须唯一");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRemoteService+ErrorCode.CAUSE_SessionLost , "会话断开");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_Repository, "存储器内部错误");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_Repository, "存储库内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_IOException, "Error on I/O");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_Repository, "存储库内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_IOException, "I/O读写错误");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "存储库内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error in browser configuration");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error user quota exceed, contact with adminitrator");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "浏览配置文件的时候出错！");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "超出用户配额，请联系管理员！");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "Document access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "Document not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "Document already exists");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "Document lock denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "Document path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "文档拒绝访问");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "文档没有找到");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "文档已经存在");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "文档锁定被拒绝");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "存储库内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "应用内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "文档路径没有找到");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "Path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "Access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "Database error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "Application internal error"); 
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "路径没有找到");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "拒绝访问");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "存储库内部错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "数据库错误");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "应用内部错误"); 
 	  }
 }
