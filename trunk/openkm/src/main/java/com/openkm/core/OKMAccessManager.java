@@ -214,7 +214,7 @@ public class OKMAccessManager implements AccessManager {
 				}
 			}
 
-			if (access || absPath.denotesRoot()) {
+			if (access || absPath.denotesRoot() || nodeId == null) {
 				// Root node has full access
 				access = true;
 			} else {
