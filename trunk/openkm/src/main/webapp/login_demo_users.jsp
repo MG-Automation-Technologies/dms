@@ -11,7 +11,8 @@
   out.println("<tr><td class=\"demo_alert\">");
   out.println("This demo is available for testing purposes.<br>");
   out.println("These documents can be removed at any time, <br>");
-  out.println("so don't expect your document to be here tomorrow.<br>");
+  out.println("so don't expect your document to be here tomorrow.<br><br>");
+  out.println("Please, report any issue on this site sending a DM to <a href=\"http://twitter.com/openkm\">@openkm</a>");
   out.println("</td></tr>");
   out.println("<tr><td class=\"demo_title\">- LOGGED USERS -</td></tr>");
   out.println("<tr><td>");
@@ -19,7 +20,7 @@
   HttpSessionManager sm = HttpSessionManager.getInstance();
 
   if (sm.getSessions().isEmpty()) {
-    out.print("<b>No users logged, all demo users are available.</b>");
+    out.println("<b>No users logged, all demo users are available.</b>");
   } else {
     out.println("<table class=\"demo_list\" width=\"100%\" align=\"center\">");
     out.println("<tr><th>User</th><th>Login</th><th>Last action</th></tr>");
