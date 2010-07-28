@@ -10,9 +10,21 @@
     <service name='persistence' factory='org.jbpm.persistence.db.DbPersistenceServiceFactory' />
   </jbpm-context>
   -->
-  <string name="jbpm.mail.smtp.host" value="nosuchhost.nosuchdomain.com" />
-  <string name="jbpm.mail.from.address" value="nobody@nosuchhost.nosuchdomain.com" />
   <string name="resource.mail.templates" value="jbpm.mail.templates.xml"/>
+  <string name="jbpm.mail.from.address" value="nobody@nosuchhost.nosuchdomain.com" />
+  <string name="jbpm.mail.smtp.host" value="nosuchhost.nosuchdomain.com" />
+  <!--
+  <string name="jbpm.mail.smtp.ssl" value="false" />
+  <string name="jbpm.mail.smtp.port" value="25" />
+  <string name="jbpm.mail.smtp.user" value="openkm@nosuchdomain.com" />
+  <string name="jbpm.mail.smtp.pwd" value="somepassword" />
+  <string name="jbpm.mail.smtp.pass" value="somepassword" />
+  <string name="jbpm.mail.smtp.password" value="somepassword" />
+  <string name="jbpm.mail.smtp.auth" value="true" />
+  <string name="jbpm.mail.smtp.starttls.enable" value="false" />
+  <string name="jbpm.mail.debug" value="true" />
+  -->
+    
   <bean name="jbpm.mail.address.resolver" class="com.openkm.workflow.OKMAddressResolver" singleton="true"/>
   
 </jbpm-configuration>
