@@ -914,8 +914,16 @@ public class DirectWorkflowModule implements WorkflowModule {
 			ti.setVariables(hm);
 			
 			if (transitionName != null && !transitionName.equals("")) {
+				if (ti.getStart() == null) {
+					ti.start();
+				}
+				
 				ti.end(transitionName);
 			} else {
+				if (ti.getStart() == null) {
+					ti.start();
+				}
+				
 				ti.end();
 			}
 			
@@ -1148,8 +1156,16 @@ public class DirectWorkflowModule implements WorkflowModule {
 			org.jbpm.taskmgmt.exe.TaskInstance ti = taskMgmtSession.getTaskInstance(taskInstanceId);
 			
 			if (transitionName != null && !transitionName.equals("")) {
+				if (ti.getStart() == null) {
+					ti.start();
+				}
+				
 				ti.end(transitionName);
 			} else {
+				if (ti.getStart() == null) {
+					ti.start();
+				}
+				
 				ti.end();
 			}
 			
