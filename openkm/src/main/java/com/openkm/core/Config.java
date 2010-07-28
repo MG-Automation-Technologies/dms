@@ -82,6 +82,10 @@ public class Config {
 	public static final String PROPERTY_DEFAULT_USER_ROLE = "default.user.role";
 	public static final String PROPERTY_DEFAULT_ADMIN_ROLE = "default.admin.role";
 	
+	// Workflow
+	public static final String PROPERTY_WORKFLOW_START_TASK_AUTO_RUN = "workflow.start.task.auto.run";
+	
+	// Principal
 	public static final String PROPERTY_PRINCIPAL_ADAPTER = "principal.adapter";
 	public static final String PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "principal.database.filter.inactive.users";
 	
@@ -184,10 +188,14 @@ public class Config {
 	public static String DEFAULT_USER_ROLE = "UserRole";
 	public static String DEFAULT_ADMIN_ROLE = "AdminRole";
 	
+	// Workflow
 	public static String WORKFLOW_RUN_CONFIG_FORM = "run_config";
+	public static String WORKFLOW_START_TASK_AUTO_RUN_STR = "on";
+	public static boolean WORKFLOW_START_TASK_AUTO_RUN = "on".equalsIgnoreCase(WORKFLOW_START_TASK_AUTO_RUN_STR);
 	public static String WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID = "uuid";
 	public static String WORKFLOW_PROCESS_INSTANCE_VARIABLE_PATH = "path";
 	
+	// Principal
 	public static String PRINCIPAL_ADAPTER = "com.openkm.principal.DatabasePrincipalAdapter";
 	public static String PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS_STR = "on";
 	public static boolean PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS = "on".equalsIgnoreCase(PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS_STR);
@@ -395,6 +403,12 @@ public class Config {
 			DEFAULT_ADMIN_ROLE = config.getProperty(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 			values.put(PROPERTY_DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 			
+			// Workflow
+			WORKFLOW_START_TASK_AUTO_RUN_STR = config.getProperty(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, WORKFLOW_START_TASK_AUTO_RUN_STR);
+			WORKFLOW_START_TASK_AUTO_RUN = "on".equalsIgnoreCase(WORKFLOW_START_TASK_AUTO_RUN_STR);
+			values.put(PROPERTY_WORKFLOW_START_TASK_AUTO_RUN, WORKFLOW_START_TASK_AUTO_RUN_STR+" ("+WORKFLOW_START_TASK_AUTO_RUN+")");
+			
+			// Principal
 			PRINCIPAL_ADAPTER = config.getProperty(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
 			values.put(PROPERTY_PRINCIPAL_ADAPTER, PRINCIPAL_ADAPTER);
 			PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS_STR = config.getProperty(PROPERTY_PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS, PRINCIPAL_DATABASE_FILTER_INACTIVE_USERS_STR);
