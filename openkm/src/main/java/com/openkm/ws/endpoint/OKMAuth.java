@@ -21,6 +21,7 @@
 
 package com.openkm.ws.endpoint;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -193,5 +194,38 @@ public class OKMAuth {
 		AuthModule am = ModuleManager.getAuthModule();
 		am.revokeUser(token, nodePath, user, permissions, recursive); 
 		log.debug("revokeUser: void");
+	}
+	
+	@WebMethod
+	public String[] getUsersByRole(@WebParam(name = "token") String token,
+			@WebParam(name = "role") String role) throws PrincipalAdapterException {
+		log.debug("getUsersByRole({}, {})", token, role);
+		AuthModule am = ModuleManager.getAuthModule();
+		List<String> col = am.getUsersByRole(token, role);
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getUsersByRole: {}", result);
+		return result;
+	}
+	
+	@WebMethod
+	public String[] getRolesByUser(@WebParam(name = "token") String token,
+			@WebParam(name = "user") String user) throws PrincipalAdapterException {
+		log.debug("getRolesByUser({}, {})", token, user);
+		AuthModule am = ModuleManager.getAuthModule();
+		List<String> col = am.getRolesByUser(token, user);
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getRolesByUser: {}", result);
+		return result;
+	}
+	
+	@WebMethod
+	public String[] getMails(@WebParam(name = "token") String token,
+			@WebParam(name = "users") String[] users) throws PrincipalAdapterException {
+		log.debug("getMails({}, {})", token, users);
+		AuthModule am = ModuleManager.getAuthModule();
+		List<String> col = am.getMails(token, Arrays.asList(users));
+		String[] result = (String[]) col.toArray(new String[col.size()]);
+		log.debug("getMails: {}", result);
+		return result;
 	}
 }
