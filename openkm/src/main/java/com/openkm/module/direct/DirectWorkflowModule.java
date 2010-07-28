@@ -316,7 +316,12 @@ public class DirectWorkflowModule implements WorkflowModule {
 				
 				// http://community.jboss.org/thread/115182
 				if (tmi.getTaskMgmtDefinition().getStartTask() != null) {
-					tmi.createStartTaskInstance();
+					org.jbpm.taskmgmt.exe.TaskInstance ti = tmi.createStartTaskInstance();
+					
+					if (Config.WORKFLOW_START_TASK_AUTO_RUN) {
+						ti.start();
+						ti.end();
+					}
 				} else {
 					pi.getRootToken().signal();
 				}
