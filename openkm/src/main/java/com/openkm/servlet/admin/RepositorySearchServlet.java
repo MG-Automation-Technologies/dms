@@ -130,21 +130,26 @@ public class RepositorySearchServlet extends BaseServlet {
 					// Get property from node
 					String path = row.getValue(JcrConstants.JCR_PATH).getString();
 					Node node = session.getRootNode().getNode(path.substring(1));
-					Property prop = node.getProperty(cols[j]);
 					
-					if (prop != null) {
-						if (prop.getDefinition().isMultiple()) {
-							Value[] values = prop.getValues();
-							StringBuilder sb = new StringBuilder();
-							
-							for (int k=0; k<values.length; k++) {
-								sb.append(values[k].getString()+" ");
+					if (node.hasProperty(cols[j])) {
+						Property prop = node.getProperty(cols[j]);
+						
+						if (prop != null) {
+							if (prop.getDefinition().isMultiple()) {
+								Value[] values = prop.getValues();
+								StringBuilder sb = new StringBuilder();
+								
+								for (int k=0; k<values.length; k++) {
+									sb.append(values[k].getString()+" ");
+								}
+								
+								tmp.add(sb.toString());
+							} else {
+								tmp.add(prop.getValue()!=null?prop.getValue().getString():"NULL");
 							}
-							
-							tmp.add(sb.toString());
-						} else {
-							tmp.add(prop.getValue()!=null?prop.getValue().getString():"NULL");
 						}
+					} else {
+						tmp.add("");
 					}
 				}
 			}
