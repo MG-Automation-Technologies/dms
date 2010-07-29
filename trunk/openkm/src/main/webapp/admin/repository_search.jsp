@@ -80,27 +80,21 @@
         </table>
       </form>
       <br/>
-      <c:choose>
-        <c:when test="${rows != null}">
-          <center>Row Count: ${rows}</center>
-        </c:when>
-        <c:otherwise>
-          <table class="results" width="100%">
-            <tr>
-              <c:forEach var="col" items="${columns}">
-                <th>${col}</th>
-              </c:forEach>
-            </tr>
-            <c:forEach var="result" items="${results}" varStatus="row">
-              <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-                <c:forEach var="tp" items="${result}">
-                  <td>${tp}</td>
-                </c:forEach>
-              </tr>
+      <center><b>Count:</b> ${size}</center>
+      <table class="results" width="100%">
+        <tr>
+          <c:forEach var="col" items="${columns}">
+            <th>${col}</th>
+          </c:forEach>
+        </tr>
+        <c:forEach var="result" items="${results}" varStatus="row">
+          <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
+            <c:forEach var="tp" items="${result}">
+              <td>${tp}</td>
             </c:forEach>
-          </table>
-        </c:otherwise>
-      </c:choose>
+          </tr>
+        </c:forEach>
+      </table>
     </c:when>
     <c:otherwise>
       <div class="error"><h3>Only admin users allowed</h3></div>
