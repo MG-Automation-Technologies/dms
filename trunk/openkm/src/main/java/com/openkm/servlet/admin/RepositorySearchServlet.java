@@ -77,6 +77,11 @@ public class RepositorySearchServlet extends BaseServlet {
 				UserActivity.log(request.getRemoteUser(), "ADMIN_REPOSITORY_SEARCH", null, type+" : "+statement);
 			} else {
 				ServletContext sc = getServletContext();
+				sc.setAttribute("statement", null);
+				sc.setAttribute("type", null);
+				sc.setAttribute("size", null);
+				sc.setAttribute("columns", null);
+				sc.setAttribute("results", null);
 				sc.getRequestDispatcher("/admin/repository_search.jsp").forward(request, response);
 			}
 		} catch (DatabaseException e) {
@@ -98,7 +103,7 @@ public class RepositorySearchServlet extends BaseServlet {
 	 */
 	private void search(Session session, String statement, String type, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, RepositoryException {
-		log.info("search({}, {}, {}, {}, {})", new Object[] { session, statement, type, request, response });
+		log.debug("search({}, {}, {}, {}, {})", new Object[] { session, statement, type, request, response });
 		ServletContext sc = getServletContext();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
@@ -146,7 +151,7 @@ public class RepositorySearchServlet extends BaseServlet {
 			
 			results.add(tmp);
 		}
-		log.info("Columns: {}", columns);
+		
 		sc.setAttribute("statement", statement);
 		sc.setAttribute("type", type);
 		sc.setAttribute("size", it.getSize());
