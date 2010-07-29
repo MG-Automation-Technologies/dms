@@ -80,7 +80,9 @@
         </table>
       </form>
       <br/>
-      <center><b>Count:</b> ${size}</center>
+      <c:if test="${size != null }">
+        <center><b>Count:</b> ${size}</center>
+      </c:if>
       <table class="results" width="100%">
         <tr>
           <c:forEach var="col" items="${columns}">
