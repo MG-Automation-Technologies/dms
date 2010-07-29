@@ -4,7 +4,7 @@
 <workflow-forms>
   <workflow-form task="start">
   	<input label="Quantity" name="quantity" value="10"/>
-  	<button label="Save" />
+  	<button name="save" label="Save" />
   </workflow-form>
   <workflow-form task="user_info">
     <input label="Name" type="text" name="name" value="John" />
@@ -15,7 +15,7 @@
       <option label="Type 2" value="t2" selected="true" />
       <option label="Type 3" value="t3" />
     </select>
-    <button label="Goto 1" value="route 1" type="transition" />
-    <button label="Goto 2" value="route 2" type="transition" />
+    <button name="goto_1" label="Goto 1" value="route 1" type="transition" />
+    <button name="goto_2" label="Goto 2" value="route 2" type="transition" />
   </workflow-form>
 </workflow-forms>
