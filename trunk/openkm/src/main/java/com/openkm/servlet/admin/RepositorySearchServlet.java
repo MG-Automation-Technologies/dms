@@ -115,10 +115,12 @@ public class RepositorySearchServlet extends BaseServlet {
 
 		while (it.hasNext()) {
 			Row row = it.nextRow();
+			List<String> tmp = new ArrayList<String>();
+			
 			for (int j=0; j<cols.length; j++) {
 				if (cols[j].startsWith("jcr:")) {
 					// Get property from row
-					//out.println("<td>"+(row.getValue(columns[j])!=null?row.getValue(columns[j]).getString():"NULL")+"</td>");
+					tmp.add(row.getValue(cols[j])!=null?row.getValue(cols[j]).getString():"NULL");
 				} else {
 					// Get property from node
 					String path = row.getValue(JcrConstants.JCR_PATH).getString();
@@ -128,24 +130,29 @@ public class RepositorySearchServlet extends BaseServlet {
 					if (prop != null) {
 						if (prop.getDefinition().isMultiple()) {
 							Value[] values = prop.getValues();
-							for (int k=0; k<values.length-1; k++) {
-								//out.print(values[k].getString()+", ");
+							StringBuilder sb = new StringBuilder();
+							
+							for (int k=0; k<values.length; k++) {
+								sb.append(values[k].getString()+" ");
 							}
-							//out.print(values[values.length-1].getString());
+							
+							tmp.add(sb.toString());
 						} else {
-							//out.print("<td>"+(prop.getValue()!=null?prop.getValue().getString():"NULL")+"</td>");
+							tmp.add(prop.getValue()!=null?prop.getValue().getString():"NULL");
 						}
 					}
 				}
 			}
+			
+			results.add(tmp);
 		}
-		
+		log.info("Columns: {}", columns);
 		sc.setAttribute("statement", statement);
 		sc.setAttribute("type", type);
 		sc.setAttribute("size", it.getSize());
 		sc.setAttribute("columns", columns);
 		sc.setAttribute("results", results);
 		sc.getRequestDispatcher("/admin/repository_search.jsp").forward(request, response);
-		log.info("search: void");
+		log.debug("search: void");
 	}	
 }
