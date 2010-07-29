@@ -233,7 +233,11 @@
     <servlet-name>ActiveSessionsServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.ActiveSessionsServlet</servlet-class>
   </servlet>
-      
+  <servlet>
+    <servlet-name>RepositorySearchServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.RepositorySearchServlet</servlet-class>
+  </servlet>
+        
   <!-- Extension Servlets 
   <servlet>
     <servlet-name>StaplingServlet</servlet-name>
@@ -486,6 +490,10 @@
   <servlet-mapping>
     <servlet-name>ActiveSessionsServlet</servlet-name>
     <url-pattern>/admin/ActiveSessions</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RepositorySearchServlet</servlet-name>
+    <url-pattern>/admin/RepositorySearch</url-pattern>
   </servlet-mapping>
 
   <!-- Extension Servlet Mappings 
