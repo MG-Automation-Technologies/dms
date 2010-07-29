@@ -636,7 +636,14 @@ public class KeyMapDashboard extends Composite {
 			params.setPath("");
 		}
 		
-		searchService.findPaginated(params, offset, limit, callbackFindPaginated);
+		// Only execute search if there's some keyword
+		if (params.getKeywords().equals("")) {
+			table.reset();
+			controlSearchIn.refreshControl(0);
+			table.unsetRefreshing();
+		} else {
+			searchService.findPaginated(params, offset, limit, callbackFindPaginated);
+		}
 	}
 	
 	/**
