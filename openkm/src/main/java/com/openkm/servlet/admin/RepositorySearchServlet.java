@@ -63,7 +63,7 @@ public class RepositorySearchServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		request.setCharacterEncoding("UTF-8");
 		String statement = WebUtil.getString(request, "statement");
-		String type = WebUtil.getString(request, "type");		
+		String type = WebUtil.getString(request, "type");
 		Session session = null;
 		updateSessionManager(request);
 		
@@ -98,6 +98,7 @@ public class RepositorySearchServlet extends BaseServlet {
 	 */
 	private void search(Session session, String statement, String type, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, RepositoryException {
+		log.info("search({}, {}, {}, {}, {})", new Object[] { session, statement, type, request, response });
 		ServletContext sc = getServletContext();
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
@@ -139,9 +140,12 @@ public class RepositorySearchServlet extends BaseServlet {
 			}
 		}
 		
+		sc.setAttribute("statement", statement);
+		sc.setAttribute("type", type);
 		sc.setAttribute("size", it.getSize());
 		sc.setAttribute("columns", columns);
 		sc.setAttribute("results", results);
 		sc.getRequestDispatcher("/admin/repository_search.jsp").forward(request, response);
+		log.info("search: void");
 	}	
 }
