@@ -11,7 +11,7 @@
   &nbsp;
   <a target="frame" href="scripting.jsp"><img src="img/toolbar/scripting.png" title="Scripting"></a>
   &nbsp;
-  <a target="frame" href="search.jsp"><img src="img/toolbar/search.png" title="Repository Search"></a>
+  <a target="frame" href="RepositorySearch"><img src="img/toolbar/search.png" title="Repository Search"></a>
   &nbsp;
   <a target="frame" href="RepositoryView"><img src="img/toolbar/repository.png" title="Repository view"></a>
   &nbsp;
