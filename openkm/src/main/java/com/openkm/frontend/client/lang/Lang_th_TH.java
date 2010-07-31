@@ -37,8 +37,8 @@ public class Lang_th_TH {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "วว-ดด-ปปปป hh:mm:ss");
-	    lang.put("general.day.pattern", "วว-ดด-ปปปป");
+	    lang.put("general.date.pattern", "dd-mm-yyyy hh:mm:ss");
+	    lang.put("general.day.pattern", "dd-mm-yyyy");
 	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
 	    // Startup
