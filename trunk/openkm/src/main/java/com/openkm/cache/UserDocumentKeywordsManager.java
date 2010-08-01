@@ -103,6 +103,7 @@ public class UserDocumentKeywordsManager {
 	
 	/**
 	 * TODO: Not fully implemented
+	 * SEE: DirectSearchModule.getKeywordMapLive() 
 	 */
 	public static synchronized void refreshUserDocKeywords(Session session) throws RepositoryException {
 		log.info("refreshUserDocKeywords({})", session);
