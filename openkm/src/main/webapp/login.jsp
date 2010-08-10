@@ -26,6 +26,7 @@
     langs.put("Chinese traditional", Lang.LANG_zh_TW);
     langs.put("Czech", Lang.LANG_cs_CZ);
     langs.put("Deutsch", Lang.LANG_de_DE);
+    langs.put("Dutch", Lang.LANG_nl_BE);
     langs.put("English", Lang.LANG_en_GB);
     langs.put("English USA", Lang.LANG_en_US);
     langs.put("Español", Lang.LANG_es_ES);
@@ -40,7 +41,6 @@
     langs.put("Japanese", Lang.LANG_ja_JP);
     langs.put("Latvian", Lang.LANG_lv_LV);
     langs.put("Macedonian", Lang.LANG_mk_MK);
-    langs.put("Nederlands", Lang.LANG_nl_NL);
     langs.put("Polish", Lang.LANG_pl_PL);
     langs.put("Português", Lang.LANG_pt_PT);
     langs.put("Português do Brasil", Lang.LANG_pt_BR);

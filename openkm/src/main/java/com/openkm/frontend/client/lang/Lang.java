@@ -38,7 +38,7 @@ public class Lang {
 	public static final String LANG_en_GB = "en-GB";
 	public static final String LANG_fr_FR = "fr-FR";
 	public static final String LANG_pt_BR = "pt-BR";
-	public static final String LANG_nl_NL = "nl-NL";
+	public static final String LANG_nl_BE = "nl-BE";
 	public static final String LANG_fa_FA = "fa-FA";
 	public static final String LANG_de_DE = "de-DE";
 	public static final String LANG_it_IT = "it-IT";
@@ -91,8 +91,8 @@ public class Lang {
 			} else {
 				hLang = Lang_pt_PT.lang;
 			}
-		} else if (LANG_nl_NL.equalsIgnoreCase(lang) || LANG_nl_NL.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
-			hLang = Lang_nl_NL.lang;
+		} else if (LANG_nl_BE.equalsIgnoreCase(lang) || LANG_nl_BE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			hLang = Lang_nl_BE.lang;
 		} else if (LANG_fa_FA.equalsIgnoreCase(lang) || LANG_fa_FA.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_fa_FA.lang;
 		} else if (LANG_de_DE.equalsIgnoreCase(lang) || LANG_de_DE.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {

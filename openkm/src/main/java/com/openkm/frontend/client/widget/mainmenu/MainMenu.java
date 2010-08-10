@@ -807,7 +807,7 @@ public class MainMenu extends Composite {
 	// Command menu to set Dutch lang
 	Command setLangNlBe = new Command() {
 		public void execute() {
-			Main.get().refreshLang(Lang.LANG_nl_NL);
+			Main.get().refreshLang(Lang.LANG_nl_BE);
 		}
 	};
 	
