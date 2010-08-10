@@ -31,7 +31,7 @@ import com.openkm.frontend.client.config.ErrorCode;
  * @author Ph Vervoort
  * v4.0 M. van den Berg
  */
-public class Lang_nl_NL {
+public class Lang_nl_BE {
 	
 	public final static HashMap<String, String> lang;
 	  static {
