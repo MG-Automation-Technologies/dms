@@ -1,0 +1,60 @@
+package com.openkm.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.openkm.core.DatabaseException;
+import com.openkm.dao.HibernateUtil;
+
+public class HibernateFilter implements Filter {
+	private static Logger log = LoggerFactory.getLogger(HibernateFilter.class);
+	
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		log.info("Init filter");
+	}
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		boolean action = false;
+		
+		if (request instanceof HttpServletRequest) {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			String req = httpRequest.getRequestURL().toString();
+			String params = httpRequest.getQueryString();
+			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".css")) {
+				log.info("URL: {}", req + (params == null ? "": "?"+params));
+				action = true;
+			}
+		}
+
+		try {
+			// Continue request processing)
+			chain.doFilter(request, response);
+		} finally {
+			try {
+				if (action) {
+					HibernateUtil.closeSession();
+				}
+			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
+			}
+		}
+	}
+
+	@Override
+	public void destroy() {
+		log.info("Destroy filter");
+	}	
+}
