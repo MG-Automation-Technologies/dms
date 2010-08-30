@@ -79,6 +79,7 @@ public class DocConverter {
 		validImageMagick.add("image/tiff");
 		validImageMagick.add("image/bmp");
 		validImageMagick.add("image/svg+xml");
+		validImageMagick.add("image/x-psd");
 	}
 	
 	/**
@@ -220,10 +221,13 @@ public class DocConverter {
 	
 	/**
 	 * Convert IMG to PDF (for document preview feature).
+	 * 
+	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php
 	 */
 	public void img2pdf(InputStream is, String mimeType, File output) throws IOException {
 		log.info("** Convert from {} to PDF **", mimeType);
 		File tmp = File.createTempFile("okm", ".img");
+		String inputFile = tmp.getPath()+"[0]";
 		FileOutputStream fos = null;
 		
 		try {
@@ -232,7 +236,7 @@ public class DocConverter {
 			fos.flush();
 			fos.close();
 			
-			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_IMG2PDF, tmp.getPath(), output.getPath());
+			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_IMG2PDF, inputFile, output.getPath());
 			Process process = pb.start();
 			process.waitFor();
 			String info = IOUtils.toString(process.getInputStream());
