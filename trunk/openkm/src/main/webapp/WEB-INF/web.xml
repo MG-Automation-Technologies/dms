@@ -10,6 +10,12 @@
       <taglib-location>/WEB-INF/tlds/utils.tld</taglib-location>
     </taglib>
   </jsp-config>
+  
+  <!-- Filters -->
+  <filter>
+    <filter-name>HibernateFilter</filter-name>
+    <filter-class>com.openkm.servlet.HibernateFilter</filter-class>
+  </filter>
 
   <!-- Listeners -->
   <listener>
@@ -295,6 +301,24 @@
     <servlet-name>Test</servlet-name>
     <servlet-class>com.openkm.servlet.TestServlet</servlet-class>
   </servlet>
+  
+  <!-- Filter Mappings -->
+  <filter-mapping>
+    <filter-name>HibernateFilter</filter-name>
+    
+    <!-- GWT -->
+    <url-pattern>/com.openkm.frontend.Main/*</url-pattern>
+    
+    <!-- JSPs -->
+    <url-pattern>/admin/*</url-pattern>
+    <url-pattern>/mobi/*</url-pattern>
+    
+    <!-- Servlets -->
+	<url-pattern>/RepositoryStartup</url-pattern>
+	<url-pattern>/TextToSpeech</url-pattern>
+	<url-pattern>/Test</url-pattern>
+	<url-pattern>/OKM*</url-pattern>
+  </filter-mapping>
 
   <!-- Frontend Servlet Mappings -->
   <!-- 
@@ -575,8 +599,7 @@
       
       <!-- GWT -->
       <url-pattern>/com.openkm.frontend.Main/*</url-pattern>
-      <url-pattern>/com.openkm.backend.Main/*</url-pattern>
-      
+            
       <!-- JSPs -->
       <url-pattern>/admin/*</url-pattern>
       <url-pattern>/mobi/*</url-pattern>
