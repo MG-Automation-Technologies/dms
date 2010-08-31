@@ -14,15 +14,15 @@
     <property name="dashboard" column="QP_DASHBOARD"/>
     <property name="lastModifiedFrom" column="QP_LAST_MODIFIED_FROM"/>
     <property name="lastModifiedTo" column="QP_LAST_MODIFIED_TO"/>
-    <set name="keywords" table="OKM_QUERY_PARAMS_KEYWORD" lazy="false">
+    <set name="keywords" table="OKM_QUERY_PARAMS_KEYWORD">
       <key column="QPK_ID" not-null="true"/>
       <element column="QPK_NAME" type="string"/>
     </set>
-    <set name="categories" table="OKM_QUERY_PARAMS_CATEGORY" lazy="false">
+    <set name="categories" table="OKM_QUERY_PARAMS_CATEGORY">
       <key column="QPC_ID" not-null="true"/>
       <element column="QPC_NAME" type="string"/>
     </set>
-    <map name="properties" table="OKM_QUERY_PARAMS_PROPERTY" lazy="false">
+    <map name="properties" table="OKM_QUERY_PARAMS_PROPERTY">
       <key column="QPP_ID" not-null="true"/>
       <index column="QPP_NAME" type="string"/>
       <element column="QPP_VALUE" type="string"/>
