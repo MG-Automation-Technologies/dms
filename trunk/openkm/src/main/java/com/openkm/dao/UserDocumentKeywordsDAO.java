@@ -26,16 +26,14 @@ public class UserDocumentKeywordsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			UserDocumentKeywords udk = (UserDocumentKeywords) session.load(UserDocumentKeywords.class, id);
 			session.delete(udk);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("remove: void");
@@ -50,15 +48,13 @@ public class UserDocumentKeywordsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(udk);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -74,7 +70,7 @@ public class UserDocumentKeywordsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<UserDocumentKeywords> ret = q.list();
@@ -82,8 +78,6 @@ public class UserDocumentKeywordsDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -97,15 +91,13 @@ public class UserDocumentKeywordsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			List<String> ret = q.list();
 			log.debug("findUsers: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}	
 	
@@ -119,15 +111,13 @@ public class UserDocumentKeywordsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			List<UserDocumentKeywords> ret = q.list();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -142,18 +132,18 @@ public class UserDocumentKeywordsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			List<UserDocumentKeywords> ret = session.createQuery(qs).list();
+			
 			for (UserDocumentKeywords udk : ret) {
 				session.delete(udk);
 			}
-			tx.commit();
+			
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("clean: void");

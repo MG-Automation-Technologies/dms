@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static final SessionFactory sessionFactory;
+	private static final ThreadLocal<Session> thread = new ThreadLocal<Session>();
 	private static final boolean SHOW_SQL = false;
 	
 	static {
@@ -51,11 +52,49 @@ public class HibernateUtil {
 	}
 	
 	/**
+	 * Get session
+	 */
+	public static Session getSession() {
+		Session s = (Session) thread.get();
+				
+		if (s == null) {
+			// Open a new Session, if this thread has none yet
+			log.info("Open Hibernate Session");
+			s = sessionFactory.openSession();
+			thread.set(s);
+		}
+		
+		return s;
+	}
+	
+	/**
 	 * Close session
 	 */
-	public static void close(Session session) {
+	public static void closeSession() {
+		Session s = (Session) thread.get();
+		thread.set(null);
+
+		if (s != null && s.isOpen()) {
+			log.info("Close Hibernate Session");
+			s.close();
+		}
+	}
+
+	/**
+	 * Close session
+	 */
+	public static void closeSession(Session session) {
 		if (session != null && session.isOpen()) {
 			session.close();
+		}
+	}
+	
+	/**
+	 * Commit transaction
+	 */
+	public static void commit(Transaction tx) {
+		if (tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
+			tx.commit();
 		}
 	}
 	
@@ -63,7 +102,7 @@ public class HibernateUtil {
 	 * Rollback transaction
 	 */
 	public static void rollback(Transaction tx) {
-		if (tx != null && tx.isActive()) {
+		if (tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
 			tx.rollback();
 		}
 	}

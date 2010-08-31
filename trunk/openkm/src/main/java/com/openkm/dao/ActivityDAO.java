@@ -48,15 +48,13 @@ public class ActivityDAO  {
 	    Transaction tx = null;
 	    
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 	    	session.save(activity);
-	    	tx.commit();
+	    	HibernateUtil.commit(tx);
 	    } catch (HibernateException e) {
 	    	HibernateUtil.rollback(tx);
 	    	throw new DatabaseException(e.getMessage(), e);
-	    } finally {
-	    	HibernateUtil.close(session);
 	    }
 	}
 	
@@ -74,7 +72,7 @@ public class ActivityDAO  {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setCalendar("begin", filter.getBegin());
 			q.setCalendar("end", filter.getEnd());
@@ -89,8 +87,6 @@ public class ActivityDAO  {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -107,7 +103,7 @@ public class ActivityDAO  {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = null;
 			
 			if (action != null) {
@@ -131,8 +127,6 @@ public class ActivityDAO  {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

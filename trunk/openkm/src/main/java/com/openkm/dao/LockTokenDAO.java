@@ -26,15 +26,13 @@ public class LockTokenDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(lt);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("add: void");
@@ -50,18 +48,16 @@ public class LockTokenDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("token", token);
 			q.executeUpdate();
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("remove: void");
@@ -77,7 +73,7 @@ public class LockTokenDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<LockToken> ret = q.list();
@@ -85,8 +81,6 @@ public class LockTokenDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}	
 }

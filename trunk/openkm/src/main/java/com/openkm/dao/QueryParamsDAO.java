@@ -28,7 +28,7 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(qp);
 			QueryParams qpTmp = (QueryParams) session.load(QueryParams.class, id);
@@ -46,14 +46,12 @@ public class QueryParamsDAO {
 				qpTmp.getProperties().put(entry.getKey(), entry.getValue());
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -66,15 +64,13 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.update(qp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -89,16 +85,14 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
 			session.delete(qp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -113,7 +107,7 @@ public class QueryParamsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", qpId);
 			QueryParams ret = (QueryParams) q.setMaxResults(1).uniqueResult();
@@ -121,8 +115,6 @@ public class QueryParamsDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -136,7 +128,7 @@ public class QueryParamsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<QueryParams> ret = q.list();
@@ -144,8 +136,6 @@ public class QueryParamsDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

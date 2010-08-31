@@ -26,15 +26,13 @@ public class TwitterAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("create: void");
@@ -49,15 +47,13 @@ public class TwitterAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.update(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -72,16 +68,14 @@ public class TwitterAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			TwitterAccount ta = (TwitterAccount) session.load(TwitterAccount.class, taId);
 			session.delete(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteTwitterAccount: void");
@@ -99,7 +93,7 @@ public class TwitterAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			
@@ -112,8 +106,6 @@ public class TwitterAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -129,7 +121,7 @@ public class TwitterAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
@@ -141,8 +133,6 @@ public class TwitterAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -155,7 +145,7 @@ public class TwitterAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", taId);
 			TwitterAccount ret = (TwitterAccount) q.setMaxResults(1).uniqueResult();
@@ -163,8 +153,6 @@ public class TwitterAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}	
 }

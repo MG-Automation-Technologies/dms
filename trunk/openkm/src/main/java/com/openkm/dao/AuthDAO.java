@@ -50,7 +50,7 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			user.setPassword(SecureStore.md5Encode(user.getPassword().getBytes()));
 			session.save(user);
@@ -61,8 +61,6 @@ public class AuthDAO {
 		} catch (NoSuchAlgorithmException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("createUser: void");
@@ -78,7 +76,7 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setParameter("id", user.getId());
@@ -89,8 +87,6 @@ public class AuthDAO {
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUser: void");
@@ -107,7 +103,7 @@ public class AuthDAO {
 		
 		try {
 			if (usrPassword != null && usrPassword.trim().length() > 0) {
-				session = HibernateUtil.getSessionFactory().openSession();
+				session = HibernateUtil.getSession();
 				tx = session.beginTransaction();
 				Query q = session.createQuery(qs);
 				q.setString("password", SecureStore.md5Encode(usrPassword.getBytes()));
@@ -121,8 +117,6 @@ public class AuthDAO {
 		} catch (NoSuchAlgorithmException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUserPassword: void");
@@ -139,7 +133,7 @@ public class AuthDAO {
 		
 		try {
 			if (usrEmail != null && usrEmail.trim().length() > 0) {
-				session = HibernateUtil.getSessionFactory().openSession();
+				session = HibernateUtil.getSession();
 				tx = session.beginTransaction();
 				Query q = session.createQuery(qs);
 				q.setString("email", usrEmail);
@@ -150,8 +144,6 @@ public class AuthDAO {
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateUserEmail: void");
@@ -159,6 +151,9 @@ public class AuthDAO {
 	
 	/**
 	 * Delete user from database
+	 * 
+	 * Note: This should be made manually because the user is not always in the database
+	 * and may be located in an external source like LDAP.
 	 */
 	public static void deleteUser(String usrId) throws DatabaseException {
 		log.debug("deleteUser({})", usrId);
@@ -167,41 +162,62 @@ public class AuthDAO {
 		String qsBookmark = "delete from Bookmark bm where bm.user=:user";
 		String qsConfig = "delete from UserConfig uc where uc.user=:user";
 		String qsItems = "delete from UserItems ui where ui.user=:user";
+		String qsDocument = "delete from UserDocumentKeywords udk where udk.user=:user";
+		String qsLock = "delete from LockToken lt where lt.user=:user";
+		String qsQuery = "delete from QueryParams qp where qp.user=:user";
 		Session session = null;
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			User user = (User) session.load(User.class, usrId);
 			session.delete(user);
-						
+			
+			// Clean OKM_MAIL_ACCOUNT table
 			Query qMail = session.createQuery(qsMail);
 			qMail.setString("user", usrId);
 			qMail.executeUpdate();
 			
+			// Clean OKM_TWITTER_ACCOUNT table
 			Query qTwitter = session.createQuery(qsTwitter);
 			qTwitter.setString("user", usrId);
 			qTwitter.executeUpdate();
 			
+			// Clean OKM_BOOKMARK table
 			Query qBookmark = session.createQuery(qsBookmark);
 			qBookmark.setString("user", usrId);
 			qBookmark.executeUpdate();
 			
+			// Clean OKM_USER_CONFIG table
 			Query qConfig = session.createQuery(qsConfig);
 			qConfig.setString("user", usrId);
 			qConfig.executeUpdate();
 			
+			// Clean OKM_USER_ITEMS table
 			Query qItems = session.createQuery(qsItems);
 			qItems.setString("user", usrId);
 			qItems.executeUpdate();
 			
+			// Clean OKM_USER_DOCUMENT table
+			Query qDocument = session.createQuery(qsDocument);
+			qDocument.setString("user", usrId);
+			qDocument.executeUpdate();
+			
+			// Clean OKM_LOCK_TOKEN table
+			Query qLock = session.createQuery(qsLock);
+			qLock.setString("user", usrId);
+			qLock.executeUpdate();
+			
+			// Clean OKM_QUERY_PARAMS table
+			Query qQuery = session.createQuery(qsQuery);
+			qQuery.setString("user", usrId);
+			qQuery.executeUpdate();
+						
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteUser: void");
@@ -217,7 +233,7 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
@@ -229,8 +245,6 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -245,7 +259,7 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("rolId", rolId);
 			
@@ -258,8 +272,6 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -274,7 +286,7 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("usrId", usrId);
 			
@@ -287,8 +299,6 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -301,7 +311,7 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("id", usrId);
 			User ret = (User) q.setMaxResults(1).uniqueResult();
@@ -309,8 +319,6 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -323,15 +331,13 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(role);
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("createRole: void");
@@ -346,15 +352,13 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.update(role);
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateRole: void");
@@ -369,7 +373,7 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {			
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Role role = (Role) session.load(Role.class, rolId);
 			session.delete(role);
@@ -377,8 +381,6 @@ public class AuthDAO {
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteRole: void");
@@ -394,15 +396,13 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			List<Role> ret = q.list();
 			log.debug("findAllRoles: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -415,7 +415,7 @@ public class AuthDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("id", rolId);
 			Role ret = (Role) q.setMaxResults(1).uniqueResult();
@@ -423,8 +423,6 @@ public class AuthDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -437,7 +435,7 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			User user = (User) session.load(User.class, usrId);
 			Role role = (Role) session.load(Role.class, rolId);
@@ -447,8 +445,6 @@ public class AuthDAO {
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("grantRole: void");
@@ -463,7 +459,7 @@ public class AuthDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			User user = (User) session.load(User.class, usrId);
 			Role role = (Role) session.load(Role.class, rolId);
@@ -473,8 +469,6 @@ public class AuthDAO {
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("revokeRole: void");
