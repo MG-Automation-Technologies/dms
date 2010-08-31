@@ -34,8 +34,10 @@ public class HibernateFilter implements Filter {
 			String params = httpRequest.getQueryString();
 			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".css") &&
 					!req.endsWith(".js")) {
-				log.info("URL: {}", req + (params == null ? "": "?"+params));
+				log.info("ACT: {}", req + (params == null ? "": "?"+params));
 				//action = true;
+			} else {
+				log.info("RES: {}", req + (params == null ? "": "?"+params));
 			}
 		}
 
