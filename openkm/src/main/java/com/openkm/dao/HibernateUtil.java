@@ -12,6 +12,8 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.util.StackTraceUtil;
+
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
  * JBPM Integration => org.jbpm.db.JbpmSessionFactory
@@ -59,7 +61,7 @@ public class HibernateUtil {
 				
 		if (s == null) {
 			// Open a new Session, if this thread has none yet
-			log.info("Open Hibernate Session");
+			log.info("Open Session: {} <= {}", thread, StackTraceUtil.whoCalledMe());
 			s = sessionFactory.openSession();
 			thread.set(s);
 		}
@@ -75,7 +77,7 @@ public class HibernateUtil {
 		thread.set(null);
 
 		if (s != null && s.isOpen()) {
-			log.info("Close Hibernate Session");
+			log.info("Close Session: {} <= {}", thread, StackTraceUtil.whoCalledMe());
 			s.close();
 		}
 	}
