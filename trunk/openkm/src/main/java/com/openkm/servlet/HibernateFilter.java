@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 
 public class HibernateFilter implements Filter {
@@ -27,15 +26,16 @@ public class HibernateFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		boolean action = false;
+		//boolean action = false;
 		
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			String req = httpRequest.getRequestURL().toString();
 			String params = httpRequest.getQueryString();
-			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".css")) {
+			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".css") &&
+					!req.endsWith(".js")) {
 				log.info("URL: {}", req + (params == null ? "": "?"+params));
-				action = true;
+				//action = true;
 			}
 		}
 
@@ -43,13 +43,9 @@ public class HibernateFilter implements Filter {
 			// Continue request processing)
 			chain.doFilter(request, response);
 		} finally {
-			try {
-				if (action) {
-					HibernateUtil.closeSession();
-				}
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-			}
+			//if (action) {
+				HibernateUtil.closeSession();
+			//}
 		}
 	}
 
