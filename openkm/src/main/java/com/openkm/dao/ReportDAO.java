@@ -27,17 +27,15 @@ public class ReportDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -51,7 +49,7 @@ public class ReportDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			
 			if (rp.getFileContent().length == 0) {
@@ -63,12 +61,10 @@ public class ReportDAO {
 			}
 			
 			session.update(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -83,16 +79,14 @@ public class ReportDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Report rp = (Report) session.load(Report.class, rpId);
 			session.delete(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -107,7 +101,7 @@ public class ReportDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", rpId);
 			Report ret = (Report) q.setMaxResults(1).uniqueResult();
@@ -115,8 +109,6 @@ public class ReportDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -130,15 +122,13 @@ public class ReportDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			List<Report> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

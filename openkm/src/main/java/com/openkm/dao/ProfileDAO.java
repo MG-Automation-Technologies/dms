@@ -26,15 +26,13 @@ public class ProfileDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(up);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("create: void");
@@ -49,15 +47,13 @@ public class ProfileDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.update(up);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -72,16 +68,14 @@ public class ProfileDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Profile up = (Profile) session.load(Profile.class, upId);
 			session.delete(up);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -96,7 +90,7 @@ public class ProfileDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", upId);
 			Profile ret = (Profile) q.setMaxResults(1).uniqueResult();
@@ -104,8 +98,6 @@ public class ProfileDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -119,7 +111,7 @@ public class ProfileDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
@@ -131,8 +123,6 @@ public class ProfileDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

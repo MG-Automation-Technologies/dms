@@ -27,7 +27,7 @@ public class MimeTypeDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(mt);
 			MimeType mtTmp = (MimeType) session.load(MimeType.class, id);
@@ -36,14 +36,12 @@ public class MimeTypeDAO {
 				mtTmp.getExtensions().add(extensions);	
 			}
 
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -57,7 +55,7 @@ public class MimeTypeDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 
 			if (mt.getImageContent().length == 0) {
@@ -69,12 +67,10 @@ public class MimeTypeDAO {
 			}
 			
 			session.update(mt);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -89,16 +85,14 @@ public class MimeTypeDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			MimeType mt = (MimeType) session.load(MimeType.class, mtId);
 			session.delete(mt);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -115,7 +109,7 @@ public class MimeTypeDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			List<MimeType> ret = session.createQuery(qs).list();
 			
@@ -123,12 +117,10 @@ public class MimeTypeDAO {
 				session.delete(mt);
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteAll: void");
@@ -143,7 +135,7 @@ public class MimeTypeDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", mtId);
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
@@ -151,8 +143,6 @@ public class MimeTypeDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 	
@@ -166,15 +156,13 @@ public class MimeTypeDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			List<MimeType> ret = q.list();
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -188,7 +176,7 @@ public class MimeTypeDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("name", name);
 			
@@ -201,8 +189,6 @@ public class MimeTypeDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

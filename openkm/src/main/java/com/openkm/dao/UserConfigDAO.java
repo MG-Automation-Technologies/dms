@@ -30,15 +30,13 @@ public class UserConfigDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("create: void");
@@ -53,15 +51,13 @@ public class UserConfigDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.update(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -77,18 +73,16 @@ public class UserConfigDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setEntity("profile", ProfileDAO.findByPk(upId));
 			q.setString("user", ucUser);
 			q.executeUpdate();
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updateProfile: void");
@@ -103,16 +97,14 @@ public class UserConfigDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			UserConfig uc = (UserConfig) session.load(UserConfig.class, user);
 			session.delete(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -129,19 +121,17 @@ public class UserConfigDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("path", uc.getHomePath());
 			q.setString("uuid", uc.getHomeUuid());
 			q.setString("type", uc.getHomeType());
 			q.executeUpdate();
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("setHome: void");
@@ -157,7 +147,7 @@ public class UserConfigDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			UserConfig ret = (UserConfig) q.setMaxResults(1).uniqueResult();
@@ -185,8 +175,6 @@ public class UserConfigDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }

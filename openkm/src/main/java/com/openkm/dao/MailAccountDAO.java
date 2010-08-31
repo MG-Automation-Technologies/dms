@@ -26,15 +26,13 @@ public class MailAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			session.save(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("create: void");
@@ -50,19 +48,17 @@ public class MailAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setParameter("id", ma.getId());
 			String pass = (String) q.setMaxResults(1).uniqueResult();
 			ma.setMailPassword(pass);
 			session.update(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -79,19 +75,17 @@ public class MailAccountDAO {
 		
 		try {
 			if (mailPassword != null && mailPassword.trim().length() > 0) {
-				session = HibernateUtil.getSessionFactory().openSession();
+				session = HibernateUtil.getSession();
 				tx = session.beginTransaction();
 				Query q = session.createQuery(qs);
 				q.setString("mailPassword", mailPassword);
 				q.setInteger("id", maId);
 				q.executeUpdate();
-				tx.commit();
+				HibernateUtil.commit(tx);
 			}
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("updatePassword: void");
@@ -106,16 +100,14 @@ public class MailAccountDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			tx = session.beginTransaction();
 			MailAccount ma = (MailAccount) session.load(MailAccount.class, maId);
 			session.delete(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -132,7 +124,7 @@ public class MailAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
 			
@@ -145,8 +137,6 @@ public class MailAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -161,7 +151,7 @@ public class MailAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			
 			if (filterByActive) {
@@ -173,8 +163,6 @@ public class MailAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 
@@ -187,7 +175,7 @@ public class MailAccountDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", maId);
 			MailAccount ret = (MailAccount) q.setMaxResults(1).uniqueResult();
@@ -195,8 +183,6 @@ public class MailAccountDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
 		}
 	}
 }
