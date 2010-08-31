@@ -18,7 +18,9 @@
     ==== JDBC connection properties (end) -->
 
     <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
-    <!-- <property name="hibernate.current_session_context_class">jta</property> -->
+    <!-- http://docs.jboss.org/hibernate/core/3.3/reference/en/html/architecture.html#architecture-current-session -->
+    <!-- <property name="hibernate.current_session_context_class">thread</property> -->
+    <!-- <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> -->
 
     <!-- DataSource properties (begin) -->
     <property name="hibernate.connection.datasource">java:/OpenKMDS</property>
