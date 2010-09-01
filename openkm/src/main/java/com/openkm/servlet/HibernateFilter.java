@@ -37,7 +37,7 @@ public class HibernateFilter implements Filter {
 				log.info("ACT: {}", req + (params == null ? "": "?"+params));
 				//action = true;
 			} else {
-				log.info("RES: {}", req + (params == null ? "": "?"+params));
+				//log.info("RES: {}", req + (params == null ? "": "?"+params));
 			}
 		}
 
