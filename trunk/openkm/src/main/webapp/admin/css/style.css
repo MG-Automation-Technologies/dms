@@ -86,6 +86,10 @@ table.results tr.fuzzy {
 	background-color: #C3D9FF;
 }
 
+legend {
+	font-weight: bold;
+}
+
 div.error {
 	color: red;
 	text-align: center;
