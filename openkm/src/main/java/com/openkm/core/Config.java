@@ -176,6 +176,11 @@ public class Config {
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "validator.password.error.min.digits";
 	public static final String PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "validator.password.error.min.special";
 
+	// Hibernate
+	public static final String PROPERTY_HIBERNATE_DIALECT = "hibernate.dialect";
+	public static final String PROPERTY_HIBERNATE_DATASOURCE = "hibernate.datasource";
+	public static final String PROPERTY_HIBERNATE_HBM2DDL = "hibernate.hbm2ddl";
+	
 	/**
 	 *  Default values
 	 */
@@ -309,6 +314,11 @@ public class Config {
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_UPPERCASE = "Password error: too few uppercase characters";
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_DIGITS = "Password error: too few digits";
 	public static String VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = "Password error: too few special characters";
+	
+	// Hibernate
+	public static String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
+	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
+	public static String HIBERNATE_HBM2DDL = "create";
 	
 	// Chat
 	private static String CHAT_ENABLED_STR = "on";
@@ -588,6 +598,14 @@ public class Config {
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_DIGITS, VALIDATOR_PASSWORD_ERROR_MIN_DIGITS);
 			VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL = config.getProperty(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
 			values.put(PROPERTY_VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL, VALIDATOR_PASSWORD_ERROR_MIN_SPECIAL);
+			
+			// Hibernate
+			HIBERNATE_DIALECT = config.getProperty(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
+			values.put(PROPERTY_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
+			HIBERNATE_DATASOURCE = config.getProperty(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
+			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
+			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
+			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
