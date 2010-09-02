@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.dao;
 
 import java.util.List;
@@ -26,13 +47,15 @@ public class BookmarkDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(bm);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("create: void");
@@ -47,13 +70,15 @@ public class BookmarkDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(bm);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -68,14 +93,16 @@ public class BookmarkDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Bookmark bm = (Bookmark) session.load(Bookmark.class, bmId);
 			session.delete(bm);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -91,7 +118,7 @@ public class BookmarkDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
 			List<Bookmark> ret = q.list();
@@ -99,6 +126,8 @@ public class BookmarkDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -112,7 +141,7 @@ public class BookmarkDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", bmId);
 			Bookmark ret = (Bookmark) q.setMaxResults(1).uniqueResult();
@@ -120,6 +149,8 @@ public class BookmarkDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 }

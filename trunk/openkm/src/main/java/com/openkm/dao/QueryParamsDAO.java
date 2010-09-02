@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.dao;
 
 import java.util.Iterator;
@@ -28,7 +49,7 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(qp);
 			QueryParams qpTmp = (QueryParams) session.load(QueryParams.class, id);
@@ -46,12 +67,14 @@ public class QueryParamsDAO {
 				qpTmp.getProperties().put(entry.getKey(), entry.getValue());
 			}
 			
-			HibernateUtil.commit(tx);
+			tx.commit();
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -64,13 +87,15 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(qp);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -85,14 +110,16 @@ public class QueryParamsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
 			session.delete(qp);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("delete: void");
@@ -107,7 +134,7 @@ public class QueryParamsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", qpId);
 			QueryParams ret = (QueryParams) q.setMaxResults(1).uniqueResult();
@@ -115,6 +142,8 @@ public class QueryParamsDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -128,7 +157,7 @@ public class QueryParamsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			List<QueryParams> ret = q.list();
@@ -136,6 +165,8 @@ public class QueryParamsDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 }

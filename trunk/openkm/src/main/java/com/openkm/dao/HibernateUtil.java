@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.dao;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +33,7 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.util.StackTraceUtil;
+import com.openkm.core.Config;
 
 /**
  * Show SQL => Logger.getLogger("org.hibernate.SQL").setThreshold(Level.INFO);
@@ -23,17 +44,20 @@ import com.openkm.util.StackTraceUtil;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static final SessionFactory sessionFactory;
-	private static final ThreadLocal<Session> thread = new ThreadLocal<Session>();
 	private static final boolean SHOW_SQL = false;
 	
 	static {
 		try {
+			Configuration cfg = new Configuration().configure();
+			
 			if (SHOW_SQL) {
-				sessionFactory = new Configuration().configure().setProperty("hibernate.show_sql", "true")
-						.buildSessionFactory();
-			} else {
-				sessionFactory = new Configuration().configure().buildSessionFactory();
+				cfg.setProperty("hibernate.show_sql", "true");
 			}
+			
+			cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
+			cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
+			cfg.setProperty("hibernate.hbm2ddl.auto", Config.HIBERNATE_HBM2DDL);
+			sessionFactory = cfg.buildSessionFactory();
 		} catch (HibernateException e) {
 			log.error(e.getMessage(), e);
 			throw new ExceptionInInitializerError(e);
@@ -54,38 +78,9 @@ public class HibernateUtil {
 	}
 	
 	/**
-	 * Get session
-	 */
-	public static Session getSession() {
-		Session s = (Session) thread.get();
-				
-		if (s == null) {
-			// Open a new Session, if this thread has none yet
-			log.info("Open Session: {} <= {}", thread, StackTraceUtil.whoCalledMe());
-			s = sessionFactory.openSession();
-			thread.set(s);
-		}
-		
-		return s;
-	}
-	
-	/**
 	 * Close session
 	 */
-	public static void closeSession() {
-		Session s = (Session) thread.get();
-		thread.set(null);
-
-		if (s != null && s.isOpen()) {
-			log.info("Close Session: {} <= {}", thread, StackTraceUtil.whoCalledMe());
-			s.close();
-		}
-	}
-
-	/**
-	 * Close session
-	 */
-	public static void closeSession(Session session) {
+	public static void close(Session session) {
 		if (session != null && session.isOpen()) {
 			session.close();
 		}

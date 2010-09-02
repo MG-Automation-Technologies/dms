@@ -1,3 +1,24 @@
+/**
+ *  OpenKM, Open Document Management System (http://www.openkm.com)
+ *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
+ *
+ *  No bytes were intentionally harmed during the development of this application.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 package com.openkm.dao;
 
 import java.util.List;
@@ -26,14 +47,16 @@ public class UserItemsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			UserItems ui = (UserItems) session.load(UserItems.class, user);
 			session.delete(ui);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("remove: void");
@@ -48,13 +71,15 @@ public class UserItemsDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(ui);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("update: void");
@@ -69,7 +94,7 @@ public class UserItemsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			UserItems ui = (UserItems) q.setMaxResults(1).uniqueResult();
@@ -77,6 +102,8 @@ public class UserItemsDAO {
 			return ui;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -90,13 +117,15 @@ public class UserItemsDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			List<UserItems> ret = q.list();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}	
 }

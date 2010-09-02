@@ -49,7 +49,7 @@ public class DashboardDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", dsId);
 			List<Dashboard> results = q.list(); // uniqueResult
@@ -63,6 +63,8 @@ public class DashboardDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -76,7 +78,7 @@ public class DashboardDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", db.getUser());
@@ -88,10 +90,12 @@ public class DashboardDAO {
 				session.save(db);
 			}
 			
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -103,14 +107,16 @@ public class DashboardDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Dashboard ds = (Dashboard) session.load(Dashboard.class, dsId);
 			session.delete(ds);
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 
@@ -125,7 +131,7 @@ public class DashboardDAO {
 		Session session = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
@@ -134,6 +140,8 @@ public class DashboardDAO {
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	
@@ -147,16 +155,18 @@ public class DashboardDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			q.setString("source", source);
 			q.executeUpdate();
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("deleteVisitedNodes: void");
@@ -174,7 +184,7 @@ public class DashboardDAO {
 		Transaction tx = null;
 		
 		try {
-			session = HibernateUtil.getSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
@@ -182,10 +192,12 @@ public class DashboardDAO {
 			q.setString("node", node);
 			q.setCalendar("date", date);
 			q.executeUpdate();
-			HibernateUtil.commit(tx);
+			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 		
 		log.debug("purgeOldVisitedNode: void");
