@@ -36,6 +36,7 @@ import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.jbpm.JbpmConfiguration;
+import org.jbpm.JbpmContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,7 @@ import com.openkm.core.RepositoryInfo;
 import com.openkm.core.UpdateInfo;
 import com.openkm.core.UserMailImporter;
 import com.openkm.core.Watchdog;
+import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
@@ -136,8 +138,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         // Workflow
         log.info("*** Initializing workflow engine... ***");
-        JbpmConfiguration.getInstance().createJbpmContext().getGraphSession();
-        JbpmConfiguration.getInstance().getJobExecutor().start();//startJobExecutor();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+        jbpmContext.setSessionFactory(HibernateUtil.getSessionFactory());
+        jbpmContext.getGraphSession();
+        jbpmContext.getJbpmConfiguration().getJobExecutor().start();//startJobExecutor();
+        jbpmContext.close();
         
         // Mime types
         log.info("*** Initializing MIME types... ***");
@@ -229,7 +234,9 @@ public class RepositoryStartupServlet extends HttpServlet {
         
         if (log == null) log("*** Shutting down workflow engine... ***");
         else log.info("*** Shutting down workflow engine... ***");
-        JbpmConfiguration.getInstance().getJobExecutor().stop();
+        JbpmContext jbpmContext = JbpmConfiguration.getInstance().createJbpmContext();
+        jbpmContext.getJbpmConfiguration().getJobExecutor().stop();
+        jbpmContext.close();
         
         if (log == null) log("*** Shutting down repository... ***");
         else log.info("*** Shutting down repository...");

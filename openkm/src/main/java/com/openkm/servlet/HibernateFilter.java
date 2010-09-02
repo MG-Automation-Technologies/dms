@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.dao.HibernateUtil;
-
 public class HibernateFilter implements Filter {
 	private static Logger log = LoggerFactory.getLogger(HibernateFilter.class);
 	
@@ -32,13 +30,15 @@ public class HibernateFilter implements Filter {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			String req = httpRequest.getRequestURL().toString();
 			String params = httpRequest.getQueryString();
-			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".css") &&
-					!req.endsWith(".js")) {
+			if (!req.endsWith(".png") && !req.endsWith(".gif") && !req.endsWith(".ico")
+					&& !req.endsWith(".css") && !req.endsWith(".js")) {
 				log.info("ACT: {}", req + (params == null ? "": "?"+params));
 				//action = true;
 			} else {
 				//log.info("RES: {}", req + (params == null ? "": "?"+params));
 			}
+		} else {
+			log.info("NOK: {}", request.getClass());
 		}
 
 		try {
@@ -46,7 +46,7 @@ public class HibernateFilter implements Filter {
 			chain.doFilter(request, response);
 		} finally {
 			//if (action) {
-				HibernateUtil.closeSession();
+				//HibernateUtil.closeSession();
 			//}
 		}
 	}
