@@ -5,9 +5,5 @@
   <class name="com.openkm.dao.bean.Role" table="OKM_ROLE">
     <id name="id" column="ROL_ID"><generator class="assigned"/></id>
     <property name="active" column="ROL_ACTIVE" not-null="true"/>
-    <set name="users" table="OKM_USER_ROLE" cascade="save-update">
-      <key column="UR_ROLE"/>
-      <many-to-many column="UR_USER" class="com.openkm.dao.bean.User"/>
-    </set>
   </class>
 </hibernate-mapping>
