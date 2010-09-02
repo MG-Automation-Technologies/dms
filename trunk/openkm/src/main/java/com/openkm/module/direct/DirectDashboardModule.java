@@ -507,7 +507,7 @@ public class DirectDashboardModule implements DashboardModule {
 		org.hibernate.Session hSession = null;
 		
 		try {
-			hSession = HibernateUtil.getSession();
+			hSession = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Query q = hSession.createQuery(qs);
 			q.setString("user", session.getUserID());
 			q.setMaxResults(MAX_RESULTS);
@@ -528,6 +528,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 		
 		log.debug("getDocuments: {}", al);
@@ -545,7 +547,7 @@ public class DirectDashboardModule implements DashboardModule {
 		org.hibernate.Session hSession = null;
 		
 		try {
-			hSession = HibernateUtil.getSession();
+			hSession = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Query q = hSession.createQuery(qs);
 			q.setString("user", session.getUserID());
 			q.setMaxResults(MAX_RESULTS);
@@ -564,6 +566,8 @@ public class DirectDashboardModule implements DashboardModule {
 			}
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 		
 		log.debug("getMails: {}", al);
@@ -1050,7 +1054,7 @@ public class DirectDashboardModule implements DashboardModule {
 		org.hibernate.Session hSession = null;
 		
 		try {
-			hSession = HibernateUtil.getSession();
+			hSession = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Query q = hSession.createQuery(qs);
 			
 			if (date != null) {
@@ -1078,6 +1082,8 @@ public class DirectDashboardModule implements DashboardModule {
 			return al;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(hSession);
 		}
 	}
 	
