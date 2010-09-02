@@ -22,14 +22,11 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id = "";
 	private boolean active = false;
-	private Set<User> users = new HashSet<User>();
 		
 	public String getId() {
 		return id;
@@ -39,14 +36,6 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-	
 	public boolean isActive() {
 		return active;
 	}
@@ -60,10 +49,6 @@ public class Role implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", active="); sb.append(active);
 		sb.append(", users=");
-		for (User user : users) {
-			sb.append(user.getId());
-			sb.append(", ");
-		}
 		sb.append("}");
 		return sb.toString();
 	}
