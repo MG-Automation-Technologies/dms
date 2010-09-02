@@ -90,11 +90,7 @@ public class User implements Serializable {
 		sb.append(", password="); sb.append(password);
 		sb.append(", email="); sb.append(email);
 		sb.append(", active="); sb.append(active);
-		sb.append(", roles=");
-		for (Role role : roles) {
-			sb.append(role.getId());
-			sb.append(", ");
-		}
+		sb.append(", roles="); sb.append(roles);
 		sb.append("}");
 		return sb.toString();
 	}
