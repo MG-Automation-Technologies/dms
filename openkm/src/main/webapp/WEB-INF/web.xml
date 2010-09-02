@@ -12,10 +12,12 @@
   </jsp-config>
   
   <!-- Filters -->
+  <!--
   <filter>
     <filter-name>HibernateFilter</filter-name>
     <filter-class>com.openkm.servlet.HibernateFilter</filter-class>
   </filter>
+  -->
 
   <!-- Listeners -->
   <listener>
@@ -303,22 +305,12 @@
   </servlet>
   
   <!-- Filter Mappings -->
+  <!--
   <filter-mapping>
     <filter-name>HibernateFilter</filter-name>
-    
-    <!-- GWT -->
-    <url-pattern>/com.openkm.frontend.Main/*</url-pattern>
-    
-    <!-- JSPs -->
-    <url-pattern>/admin/*</url-pattern>
-    <url-pattern>/mobi/*</url-pattern>
-    
-    <!-- Servlets -->
-	<url-pattern>/RepositoryStartup</url-pattern>
-	<url-pattern>/TextToSpeech</url-pattern>
-	<url-pattern>/Test</url-pattern>
-	<url-pattern>/OKM*</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
+  -->
 
   <!-- Frontend Servlet Mappings -->
   <!-- 
