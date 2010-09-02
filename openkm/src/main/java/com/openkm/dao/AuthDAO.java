@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
@@ -365,6 +366,7 @@ public class AuthDAO {
 	 */
 	public static void deleteRole(String rolId) throws DatabaseException {
 		log.debug("deleteRole({})", rolId);
+		String qs = "delete from OKM_USER_ROLE where UR_ROLE=:rolId";
 		Session session = null;
 		Transaction tx = null;
 		
@@ -373,6 +375,12 @@ public class AuthDAO {
 			tx = session.beginTransaction();
 			Role role = (Role) session.load(Role.class, rolId);
 			session.delete(role);
+			
+			// TODO: Make Hibernate handle this relation.
+			SQLQuery q = session.createSQLQuery(qs);
+			q.setString("rolId", rolId);
+			q.executeUpdate();
+			
 			tx.commit();
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
