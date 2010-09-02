@@ -66,7 +66,7 @@ public class DatabaseQueryServlet extends BaseServlet {
 		
 		try {
 			if (!qs.equals("") && !method.equals("")) {
-				session = HibernateUtil.getSession();
+				session = HibernateUtil.getSessionFactory().openSession();
 				
 				if (method.equals("jdbc")) {
 					executeJdbc(session, qs, request, response);
@@ -83,6 +83,8 @@ public class DatabaseQueryServlet extends BaseServlet {
 			}
 		} catch (SQLException e) {
 			sendErrorRedirect(request,response, e);
+		} finally {
+			HibernateUtil.close(session);
 		}
 	}
 	

@@ -294,7 +294,7 @@ public class ReportServlet extends BaseServlet {
 			bais = new ByteArrayInputStream(rp.getFileContent());
 			
 			if (Report.SQL.equals(rp.getType())) {
-				dbSession = HibernateUtil.getSession();
+				dbSession = HibernateUtil.getSessionFactory().openSession();
 				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
 			} else if (Report.SCRIPT.equals(rp.getType())) {
 				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
@@ -306,7 +306,7 @@ public class ReportServlet extends BaseServlet {
 			os.flush();
 		} finally {
 			if (Report.SQL.equals(rp.getType())) {
-				//HibernateUtil.close(dbSession);
+				HibernateUtil.close(dbSession);
 			}
 			IOUtils.closeQuietly(bais);
 			IOUtils.closeQuietly(baos);
