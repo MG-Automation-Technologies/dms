@@ -157,7 +157,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 	@Override
 	public List<Bookmark> getAll(String token) throws RepositoryException,
 			DatabaseException {
-		log.info("getAll({})", token);
+		log.debug("getAll({})", token);
 		List<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
 		
