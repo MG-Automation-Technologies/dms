@@ -156,7 +156,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 
 	@Override
 	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
-		log.debug("getAll()");
+		log.info("getAll()");
 		List<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
 		
@@ -167,8 +167,8 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			BookmarkDAO.findByUser(session.getUserID());
-						
+			ret = BookmarkDAO.findByUser(session.getUserID());
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "BOOKMARK_GET_ALL", null, null);
 		} catch (javax.jcr.RepositoryException e) {
