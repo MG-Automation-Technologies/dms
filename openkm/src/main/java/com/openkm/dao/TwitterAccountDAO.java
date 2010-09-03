@@ -50,7 +50,7 @@ public class TwitterAccountDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -73,7 +73,7 @@ public class TwitterAccountDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -97,7 +97,7 @@ public class TwitterAccountDAO {
 			tx = session.beginTransaction();
 			TwitterAccount ta = (TwitterAccount) session.load(TwitterAccount.class, taId);
 			session.delete(ta);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

@@ -51,7 +51,7 @@ public class ReportDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Integer id = (Integer) session.save(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
@@ -84,7 +84,7 @@ public class ReportDAO {
 			}
 			
 			session.update(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -108,7 +108,7 @@ public class ReportDAO {
 			tx = session.beginTransaction();
 			Report rp = (Report) session.load(Report.class, rpId);
 			session.delete(rp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

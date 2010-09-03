@@ -55,7 +55,7 @@ public class AuthDAO {
 			tx = session.beginTransaction();
 			user.setPassword(SecureStore.md5Encode(user.getPassword().getBytes()));
 			session.save(user);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -86,7 +86,7 @@ public class AuthDAO {
 			String password = (String) q.setMaxResults(1).uniqueResult();
 			user.setPassword(password);
 			session.update(user);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -114,7 +114,7 @@ public class AuthDAO {
 				q.setString("password", SecureStore.md5Encode(usrPassword.getBytes()));
 				q.setString("id", usrId);
 				q.executeUpdate();
-				tx.commit();
+				HibernateUtil.commit(tx);
 			}
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -146,7 +146,7 @@ public class AuthDAO {
 				q.setString("email", usrEmail);
 				q.setString("id", usrId);
 				q.executeUpdate();
-				tx.commit();
+				HibernateUtil.commit(tx);
 			}
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -197,7 +197,7 @@ public class AuthDAO {
 			qItems.setString("user", usrId);
 			qItems.executeUpdate();
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -327,7 +327,7 @@ public class AuthDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(role);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -350,7 +350,7 @@ public class AuthDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(role);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -381,7 +381,7 @@ public class AuthDAO {
 			q.setString("rolId", rolId);
 			q.executeUpdate();
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -451,7 +451,7 @@ public class AuthDAO {
 			Role role = (Role) session.load(Role.class, rolId);
 			user.getRoles().add(role);
 			session.update(user);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -477,7 +477,7 @@ public class AuthDAO {
 			Role role = (Role) session.load(Role.class, rolId);
 			user.getRoles().remove(role);
 			session.update(user);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

@@ -51,7 +51,7 @@ public class UserDocumentKeywordsDAO {
 			tx = session.beginTransaction();
 			UserDocumentKeywords udk = (UserDocumentKeywords) session.load(UserDocumentKeywords.class, id);
 			session.delete(udk);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -74,7 +74,7 @@ public class UserDocumentKeywordsDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(udk);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -169,7 +169,7 @@ public class UserDocumentKeywordsDAO {
 			for (UserDocumentKeywords udk : ret) {
 				session.delete(udk);
 			}
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

@@ -50,7 +50,7 @@ public class MailAccountDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -78,7 +78,7 @@ public class MailAccountDAO {
 			String pass = (String) q.setMaxResults(1).uniqueResult();
 			ma.setMailPassword(pass);
 			session.update(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -106,7 +106,7 @@ public class MailAccountDAO {
 				q.setString("mailPassword", mailPassword);
 				q.setInteger("id", maId);
 				q.executeUpdate();
-				tx.commit();
+				HibernateUtil.commit(tx);
 			}
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -131,7 +131,7 @@ public class MailAccountDAO {
 			tx = session.beginTransaction();
 			MailAccount ma = (MailAccount) session.load(MailAccount.class, maId);
 			session.delete(ma);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

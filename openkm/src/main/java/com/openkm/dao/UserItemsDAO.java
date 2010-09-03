@@ -51,7 +51,7 @@ public class UserItemsDAO {
 			tx = session.beginTransaction();
 			UserItems ui = (UserItems) session.load(UserItems.class, user);
 			session.delete(ui);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch(HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -74,7 +74,7 @@ public class UserItemsDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(ui);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

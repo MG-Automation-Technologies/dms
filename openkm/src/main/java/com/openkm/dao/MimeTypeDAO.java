@@ -57,7 +57,7 @@ public class MimeTypeDAO {
 				mtTmp.getExtensions().add(extensions);	
 			}
 
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
@@ -90,7 +90,7 @@ public class MimeTypeDAO {
 			}
 			
 			session.update(mt);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -114,7 +114,7 @@ public class MimeTypeDAO {
 			tx = session.beginTransaction();
 			MimeType mt = (MimeType) session.load(MimeType.class, mtId);
 			session.delete(mt);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -144,7 +144,7 @@ public class MimeTypeDAO {
 				session.delete(mt);
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
