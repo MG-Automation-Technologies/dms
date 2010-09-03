@@ -138,7 +138,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Bookmark bm = BookmarkDAO.findByPk(bmId);
+			Bookmark bm = BookmarkDAO.findByPk(session, bmId);
 			bm.setName(newName);
 			BookmarkDAO.update(bm);
 						
@@ -155,8 +155,9 @@ public class DirectBookmarkModule implements BookmarkModule {
 	}
 
 	@Override
-	public List<Bookmark> getAll(String token) throws RepositoryException, DatabaseException {
-		log.info("getAll()");
+	public List<Bookmark> getAll(String token) throws RepositoryException,
+			DatabaseException {
+		log.info("getAll({})", token);
 		List<Bookmark> ret = new ArrayList<Bookmark>();
 		Session session = null;
 		
@@ -167,7 +168,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			ret = BookmarkDAO.findByUser(session.getUserID());
+			ret = BookmarkDAO.findByUser(session, session.getUserID());
 			
 			// Activity log
 			UserActivity.log(session.getUserID(), "BOOKMARK_GET_ALL", null, null);

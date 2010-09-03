@@ -43,6 +43,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 			uc.setHomePath(nodePath);
 			uc.setHomeUuid(node.getUUID());
 			uc.setHomeType(JCRUtils.getNodeType(node));
+			uc.setUser(session.getUserID());
 			UserConfigDAO.setHome(uc);
 			
 			// Activity log
@@ -72,7 +73,7 @@ public class DirectUserConfigModule implements UserConfigModule {
 			}
 			
 			ret = UserConfigDAO.findByPk(session, session.getUserID());
-						
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "USER_CONFIG_GET_CONFIG", null, null);
 		} catch (javax.jcr.RepositoryException e) {
