@@ -876,6 +876,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 			
 			boolean isRoot = Main.get().taxonomyRootFolder.getPath().equals(folder.getPath()) || 
 							 Main.get().thesaurusRootFolder.getPath().equals(folder.getPath()) ||
+							 Main.get().categoriesRootFolder.getPath().equals(folder.getPath()) ||
 							 Main.get().templatesRootFolder.getPath().equals(folder.getPath()) ||
 							 Main.get().personalRootFolder.getPath().equals(folder.getPath()) || 
 							 Main.get().trashRootFolder.getPath().equals(folder.getPath()) ||
