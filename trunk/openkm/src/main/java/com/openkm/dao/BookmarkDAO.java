@@ -32,6 +32,8 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
@@ -131,12 +133,21 @@ public class BookmarkDAO {
 			List<Bookmark> ret = q.list();
 			
 			for (Bookmark bm : ret) {
-				Node node = jcrSession.getNodeByUUID(bm.getUuid());
-				
-				if (!node.getPath().equals(bm.getPath())) {
-					bm.setPath(node.getPath());
-					bm.setType(JCRUtils.getNodeType(node));
-					session.update(bm);
+				try {
+					Node node = jcrSession.getNodeByUUID(bm.getUuid());
+					
+					if (!node.getPath().equals(bm.getPath())) {
+						bm.setPath(node.getPath());
+						bm.setType(JCRUtils.getNodeType(node));
+						session.update(bm);
+					}
+				} catch (javax.jcr.ItemNotFoundException e) {
+					// If user bookmark is missing, set a default
+					Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+					bm.setPath(okmRoot.getPath());
+					bm.setUuid(okmRoot.getUUID());
+					bm.setType(Folder.TYPE);
+					session.save(bm);
 				}
 			}
 			
@@ -171,12 +182,22 @@ public class BookmarkDAO {
 			Query q = session.createQuery(qs);
 			q.setInteger("id", bmId);
 			Bookmark ret = (Bookmark) q.setMaxResults(1).uniqueResult();
-			Node node = jcrSession.getNodeByUUID(ret.getUuid());
 			
-			if (!node.getPath().equals(ret.getPath())) {
-				ret.setPath(node.getPath());
-				ret.setType(JCRUtils.getNodeType(node));
-				session.update(ret);
+			try {
+				Node node = jcrSession.getNodeByUUID(ret.getUuid());
+				
+				if (!node.getPath().equals(ret.getPath())) {
+					ret.setPath(node.getPath());
+					ret.setType(JCRUtils.getNodeType(node));
+					session.update(ret);
+				}
+			} catch (javax.jcr.ItemNotFoundException e) {
+				// If user bookmark is missing, set a default
+				Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+				ret.setPath(okmRoot.getPath());
+				ret.setUuid(okmRoot.getUUID());
+				ret.setType(Folder.TYPE);
+				session.save(ret);
 			}
 			
 			HibernateUtil.commit(tx);
