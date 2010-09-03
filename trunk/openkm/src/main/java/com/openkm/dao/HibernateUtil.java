@@ -91,7 +91,7 @@ public class HibernateUtil {
 	 */
 	public static void commit(Transaction tx) {
 		if (tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
-			tx.commit();
+			HibernateUtil.commit(tx);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class HibernateUtil {
 	 */
 	public static void rollback(Transaction tx) {
 		if (tx != null && !tx.wasCommitted() && !tx.wasRolledBack()) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 		}
 	}
 

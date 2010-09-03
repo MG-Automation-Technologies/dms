@@ -54,7 +54,7 @@ public class BookmarkDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(bm);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -77,7 +77,7 @@ public class BookmarkDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(bm);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -101,7 +101,7 @@ public class BookmarkDAO {
 			tx = session.beginTransaction();
 			Bookmark bm = (Bookmark) session.load(Bookmark.class, bmId);
 			session.delete(bm);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -140,14 +140,14 @@ public class BookmarkDAO {
 				}
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("findByUser: {}", ret);
 			return ret;
 		} catch (javax.jcr.RepositoryException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -179,14 +179,14 @@ public class BookmarkDAO {
 				session.update(ret);
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (javax.jcr.RepositoryException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);

@@ -67,7 +67,7 @@ public class QueryParamsDAO {
 				qpTmp.getProperties().put(entry.getKey(), entry.getValue());
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("create: {}", id);
 			return id.intValue();
 		} catch (HibernateException e) {
@@ -90,7 +90,7 @@ public class QueryParamsDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(qp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -114,7 +114,7 @@ public class QueryParamsDAO {
 			tx = session.beginTransaction();
 			QueryParams qp = (QueryParams) session.load(QueryParams.class, qpId);
 			session.delete(qp);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);

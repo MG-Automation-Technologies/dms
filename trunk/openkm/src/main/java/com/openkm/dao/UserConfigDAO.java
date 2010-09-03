@@ -54,7 +54,7 @@ public class UserConfigDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.save(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -77,7 +77,7 @@ public class UserConfigDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			session.update(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -104,7 +104,7 @@ public class UserConfigDAO {
 			q.setEntity("profile", ProfileDAO.findByPk(upId));
 			q.setString("user", ucUser);
 			q.executeUpdate();
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -128,7 +128,7 @@ public class UserConfigDAO {
 			tx = session.beginTransaction();
 			UserConfig uc = (UserConfig) session.load(UserConfig.class, user);
 			session.delete(uc);
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -158,7 +158,7 @@ public class UserConfigDAO {
 			q.setString("type", uc.getHomeType());
 			q.setString("user", uc.getUser());
 			q.executeUpdate();
-			tx.commit();
+			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -205,14 +205,14 @@ public class UserConfigDAO {
 				}
 			}
 			
-			tx.commit();
+			HibernateUtil.commit(tx);
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (javax.jcr.RepositoryException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
-			tx.rollback();
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);

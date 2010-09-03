@@ -51,7 +51,7 @@ public class ActivityDAO  {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 	    	session.save(activity);
-	    	tx.commit();
+	    	HibernateUtil.commit(tx);
 	    } catch (HibernateException e) {
 	    	HibernateUtil.rollback(tx);
 	    	throw new DatabaseException(e.getMessage(), e);
