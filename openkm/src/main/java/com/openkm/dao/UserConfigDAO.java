@@ -194,14 +194,23 @@ public class UserConfigDAO {
 				ret.setHomeType(Folder.TYPE);
 				ret.setUser(user);
 				ret.setProfile(ProfileDAO.findByPk(1));
-				UserConfigDAO.create(ret);
+				session.save(ret);
 			} else {
-				Node node = jcrSession.getNodeByUUID(ret.getHomeUuid());
-				
-				if (!node.getPath().equals(ret.getHomePath())) {
-					ret.setHomePath(node.getPath());
-					ret.setHomeType(JCRUtils.getNodeType(node));
-					session.update(ret);
+				try {
+					Node node = jcrSession.getNodeByUUID(ret.getHomeUuid());
+								
+					if (!node.getPath().equals(ret.getHomePath())) {
+						ret.setHomePath(node.getPath());
+						ret.setHomeType(JCRUtils.getNodeType(node));
+						session.update(ret);
+					}
+				} catch (javax.jcr.ItemNotFoundException e) {
+					// If user home is missing, set a default one
+					Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+					ret.setHomePath(okmRoot.getPath());
+					ret.setHomeUuid(okmRoot.getUUID());
+					ret.setHomeType(Folder.TYPE);
+					session.save(ret);
 				}
 			}
 			
