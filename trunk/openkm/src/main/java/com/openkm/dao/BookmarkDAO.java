@@ -23,6 +23,8 @@ package com.openkm.dao;
 
 import java.util.List;
 
+import javax.jcr.Node;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,7 +33,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
+import com.openkm.util.JCRUtils;
 
 public class BookmarkDAO {
 	private static Logger log = LoggerFactory.getLogger(BookmarkDAO.class);
@@ -112,19 +116,38 @@ public class BookmarkDAO {
 	 * Finde by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Bookmark> findByUser(String usrId) throws DatabaseException {
-		log.debug("findByUser({})", usrId);
+	public static List<Bookmark> findByUser(javax.jcr.Session jcrSession, String usrId) throws DatabaseException,
+			RepositoryException {
+		log.debug("findByUser({}, {})", jcrSession, usrId);
 		String qs = "from Bookmark bm where bm.user=:user order by bm.id";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
 			List<Bookmark> ret = q.list();
+			
+			for (Bookmark bm : ret) {
+				Node node = jcrSession.getNodeByUUID(bm.getUuid());
+				
+				if (!node.getPath().equals(bm.getPath())) {
+					bm.setPath(node.getPath());
+					bm.setType(JCRUtils.getNodeType(node));
+					session.update(bm);
+				}
+			}
+			
+			tx.commit();
 			log.debug("findByUser: {}", ret);
 			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			tx.rollback();
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -135,19 +158,35 @@ public class BookmarkDAO {
 	/**
 	 * Find by pk
 	 */
-	public static Bookmark findByPk(int bmId) throws DatabaseException {
+	public static Bookmark findByPk(javax.jcr.Session jcrSession, int bmId) throws DatabaseException,
+			RepositoryException {
 		log.debug("findByPk({})", bmId);
 		String qs = "from Bookmark bm where bm.id=:id";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", bmId);
 			Bookmark ret = (Bookmark) q.setMaxResults(1).uniqueResult();
+			Node node = jcrSession.getNodeByUUID(ret.getUuid());
+			
+			if (!node.getPath().equals(ret.getPath())) {
+				ret.setPath(node.getPath());
+				ret.setType(JCRUtils.getNodeType(node));
+				session.update(ret);
+			}
+			
+			tx.commit();
 			log.debug("findByPk: {}", ret);
 			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			tx.rollback();
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);

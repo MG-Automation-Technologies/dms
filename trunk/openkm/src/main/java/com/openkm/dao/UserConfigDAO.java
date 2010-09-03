@@ -143,7 +143,7 @@ public class UserConfigDAO {
 	 * Set user home
 	 */
 	public static void setHome(UserConfig uc) throws DatabaseException {
-		log.debug("setHome({})", uc);
+		log.info("setHome({})", uc);
 		String qs = "update UserConfig uc set uc.homePath=:path, uc.homeUuid=:uuid, " +
 			"uc.homeType=:type where uc.user=:user";
 		Session session = null;
@@ -156,6 +156,7 @@ public class UserConfigDAO {
 			q.setString("path", uc.getHomePath());
 			q.setString("uuid", uc.getHomeUuid());
 			q.setString("type", uc.getHomeType());
+			q.setString("user", uc.getUser());
 			q.executeUpdate();
 			tx.commit();
 		} catch (HibernateException e) {
@@ -171,14 +172,16 @@ public class UserConfigDAO {
 	/**
 	 * Find by pk
 	 */
-	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException, 
+	public static UserConfig findByPk(javax.jcr.Session jcrSession, String user) throws DatabaseException,
 			RepositoryException {
 		log.debug("findByPk({}, {})", jcrSession, user);
 		String qs = "from UserConfig uc where uc.user=:user";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("user", user);
 			UserConfig ret = (UserConfig) q.setMaxResults(1).uniqueResult();
@@ -198,13 +201,18 @@ public class UserConfigDAO {
 				if (!node.getPath().equals(ret.getHomePath())) {
 					ret.setHomePath(node.getPath());
 					ret.setHomeType(JCRUtils.getNodeType(node));
-					UserConfigDAO.update(ret);
+					session.update(ret);
 				}
 			}
-					
+			
+			tx.commit();
 			log.debug("findByPk: {}", ret);
 			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			tx.rollback();
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
+			tx.rollback();
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
