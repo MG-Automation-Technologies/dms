@@ -300,13 +300,20 @@ public class DirectFolderModule implements FolderModule {
 			Node folderNode = session.getRootNode().getNode(fldPath.substring(1));
 			Node parentNode = folderNode.getParent();
 			Node userTrash = session.getRootNode().getNode(Repository.TRASH+"/"+session.getUserID());
-						
+			
 			if (hasLockedNodes(folderNode)) {
 				throw new LockException("Can't delete a folder with child locked nodes");
 			}
 			
 			if (!hasWriteAccess(folderNode)) {
 				throw new AccessDeniedException("Can't delete a folder with readonly nodes");
+			}
+			
+			if (Repository.ROOT.equals(name) || Repository.CATEGORIES.equals(name) || 
+					Repository.THESAURUS.equals(name) || Repository.TEMPLATES.equals(name) ||
+					Repository.PERSONAL.equals(name) || Repository.MAIL.equals(name) ||
+					Repository.TRASH.equals(name)) {
+				throw new AccessDeniedException("Can't delete a required node");
 			}
 			
 			// Test if already exists a folder whith the same name in the trash
