@@ -23,6 +23,9 @@ package com.openkm.dao;
 
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,7 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
+import com.openkm.dao.bean.FilterRule;
 import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.bean.MailFilter;
 
 public class MailAccountDAO {
 	private static Logger log = LoggerFactory.getLogger(MailAccountDAO.class);
@@ -213,6 +218,155 @@ public class MailAccountDAO {
 			q.setInteger("id", maId);
 			MailAccount ret = (MailAccount) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
+			return ret;
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Update
+	 */
+	public static void updateFilter(MailFilter mf) throws DatabaseException {
+		log.debug("updateFilter({})", mf);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(mf);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateFilter: void");
+	}
+	
+	/**
+	 * Delete
+	 */
+	public static void deleteFilter(int mfId) throws DatabaseException {
+		log.debug("deleteFilter({})", mfId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			MailFilter mf = (MailFilter) session.load(MailFilter.class, mfId);
+			session.delete(mf);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteFilter: void");
+	}
+	
+	/**
+	 * Find by pk
+	 */
+	public static MailFilter findFilterByPk(javax.jcr.Session jcrSession, int mfId) throws 
+			DatabaseException, RepositoryException {
+		log.debug("findFilterByPk({})", mfId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			MailFilter ret = (MailFilter) session.load(MailFilter.class, mfId);
+			Node node = jcrSession.getNodeByUUID(ret.getUuid());
+			
+			// Always keep path in sync with uuid
+			if (!node.getPath().equals(ret.getPath())) {
+				ret.setPath(node.getPath());
+				session.update(ret);
+			}
+			
+			HibernateUtil.commit(tx);
+			log.debug("findFilterByPk: {}", ret);
+			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			HibernateUtil.rollback(tx);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
+	
+	/**
+	 * Update
+	 */
+	public static void updateRule(FilterRule fr) throws DatabaseException {
+		log.debug("updateRule({})", fr);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(fr);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("updateRule: void");
+	}
+	
+	/**
+	 * Delete
+	 */
+	public static void deleteRule(int frId) throws DatabaseException {
+		log.debug("deleteRule({})", frId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			FilterRule fr = (FilterRule) session.load(MailFilter.class, frId);
+			session.delete(fr);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("deleteRule: void");
+	}
+	
+	/**
+	 * Find by pk
+	 */
+	public static FilterRule findRuleByPk(int frId) throws DatabaseException {
+		log.debug("findRuleByPk({})", frId);
+		Session session = null;
+				
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			FilterRule ret = (FilterRule) session.load(FilterRule.class, frId);
+			
+			log.debug("findRuleByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
 			throw new DatabaseException(e.getMessage(), e);
