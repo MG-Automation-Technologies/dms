@@ -194,7 +194,7 @@ public class Mail implements Serializable {
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append(", receivedDate="); sb.append(receivedDate==null?null:receivedDate.getTime());
 		sb.append(", subject="); sb.append(subject);
-		sb.append(", content="); sb.append(content);
+		//sb.append(", content="); sb.append(content);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", attachments="); sb.append(attachments);
 		sb.append("}");
