@@ -604,17 +604,7 @@ public class DirectDashboardModule implements DashboardModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
-			Workspace workspace = session.getWorkspace();
-			QueryManager queryManager = workspace.getQueryManager();
-			Query query = queryManager.createQuery(qs, "xpath");
-			QueryResult result = query.execute();
-			
-			for (NodeIterator nit = result.getNodes(); nit.hasNext(); ) {
-				Node node = nit.nextNode();
-				Node contentNode = node.getNode(Document.CONTENT);
-				size += contentNode.getProperty(Document.SIZE).getLong();
-			}
+			size = JCRUtils.calculateQuota(session);
  		} catch (javax.jcr.RepositoryException e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e.getMessage(), e);

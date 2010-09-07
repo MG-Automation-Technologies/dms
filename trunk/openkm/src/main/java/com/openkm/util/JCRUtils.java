@@ -31,9 +31,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import javax.jcr.Workspace;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.Subject;
@@ -360,5 +365,26 @@ public class JCRUtils {
 	public static String getPath(Session session, String uuid) throws javax.jcr.RepositoryException {
 		Node node = session.getNodeByUUID(uuid);
 		return node.getPath();
+	}
+	
+	/**
+	 * Calculate user quota
+	 */
+	public static long calculateQuota(Session session) throws javax.jcr.RepositoryException {
+		// String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
+		String qs = "/jcr:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
+		Workspace workspace = session.getWorkspace();
+		QueryManager queryManager = workspace.getQueryManager();
+		Query query = queryManager.createQuery(qs, "xpath");
+		QueryResult result = query.execute();
+		long size = 0;
+		
+		for (NodeIterator nit = result.getNodes(); nit.hasNext(); ) {
+			Node node = nit.nextNode();
+			Node contentNode = node.getNode(Document.CONTENT);
+			size += contentNode.getProperty(Document.SIZE).getLong();
+		}
+		
+		return size;
 	}
 }
