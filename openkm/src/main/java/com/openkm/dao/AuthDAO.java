@@ -134,7 +134,7 @@ public class AuthDAO {
 	 */
 	public static void updateUserEmail(String usrId, String usrEmail) throws DatabaseException {
 		log.debug("updateUserEmail({}, {})", usrId, usrEmail);
-		String qs = "update User set u.email=:email where u.id=:id";
+		String qs = "update User u set u.email=:email where u.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
