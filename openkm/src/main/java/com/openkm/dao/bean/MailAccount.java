@@ -22,15 +22,26 @@
 package com.openkm.dao.bean;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MailAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String PROTOCOL_POP3 = "pop3";
+	public static final String PROTOCOL_IMAP = "imap";
+	public static final String PROTOCOL_IMAPS = "imaps";
+	
 	private int id = -1;
 	private String user = "";
+	private String mailProtocol = PROTOCOL_IMAP;
 	private String mailHost = "";
 	private String mailFolder = "";
 	private String mailUser = "";
 	private String mailPassword = "";
+	private boolean mailMarkSeen = false;
+	private boolean mailMarkDeleted = false;
+	private Set<MailFilter> mailFilters = new HashSet<MailFilter>();
 	private boolean active = false;
 	
 	public int getId() {
@@ -47,6 +58,14 @@ public class MailAccount implements Serializable {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public String getMailProtocol() {
+		return mailProtocol;
+	}
+
+	public void setMailProtocol(String mailProtocol) {
+		this.mailProtocol= mailProtocol;
 	}
 
 	public String getMailHost() {
@@ -80,6 +99,22 @@ public class MailAccount implements Serializable {
 	public void setMailPassword(String mailPassword) {
 		this.mailPassword = mailPassword;
 	}
+	
+	public boolean isMailMarkSeen() {
+		return mailMarkSeen;
+	}
+
+	public void setMailMarkSeen(boolean mailMarkSeen) {
+		this.mailMarkSeen = mailMarkSeen;
+	}
+
+	public boolean isMailMarkDeleted() {
+		return mailMarkDeleted;
+	}
+
+	public void setMailMarkDeleted(boolean mailMarkDeleted) {
+		this.mailMarkDeleted = mailMarkDeleted;
+	}
 
 	public boolean isActive() {
 		return active;
@@ -89,16 +124,28 @@ public class MailAccount implements Serializable {
 		this.active = active;
 	}
 
+	public Set<MailFilter> getMailFilters() {
+		return mailFilters;
+	}
+
+	public void setMailFilters(Set<MailFilter> mailFilters) {
+		this.mailFilters = mailFilters;
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", user="); sb.append(user);
+		sb.append(", mailProtocol="); sb.append(mailProtocol);
 		sb.append(", mailHost="); sb.append(mailHost);
 		sb.append(", mailFolder="); sb.append(mailFolder);
 		sb.append(", mailUser="); sb.append(mailUser);
 		sb.append(", mailPassword="); sb.append(mailPassword);
+		sb.append(", mailMarkSeen="); sb.append(mailMarkSeen);
+		sb.append(", mailMarkDeleted="); sb.append(mailMarkDeleted);
 		sb.append(", active="); sb.append(active);
+		sb.append(", mailFilters="); sb.append(mailFilters);
 		sb.append("}");
 		return sb.toString();
 	}
