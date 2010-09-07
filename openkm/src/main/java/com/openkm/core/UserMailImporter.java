@@ -43,14 +43,14 @@ public class UserMailImporter extends TimerTask {
         
 		try {
 			Collection<String> users = OKMAuth.getInstance().getUsers(null);
-						
+			
 			for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
 				String uid = usrIt.next();
 				List<MailAccount> mailAccounts = MailAccountDAO.findByUser(uid, true);
 				
 				for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
 					MailAccount ma = maIt.next();
-					MailUtils.importMessages(uid, ma.getMailHost(), ma.getMailUser(), ma.getMailPassword(), ma.getMailFolder());
+					MailUtils.importMessages(uid, ma);
 				}
 			}
 		} catch (RepositoryException e) {
