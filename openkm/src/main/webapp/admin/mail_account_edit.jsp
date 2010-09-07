@@ -15,9 +15,9 @@
     $(document).ready(function(){
       $("#check").click(function(event) {
         $("#dest").html('Checking....');
-        $("#dest").load('MailAccount', {action: "check", ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(), ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val()});
+        $("#dest").load('MailAccount', {action: "check", ma_mprotocol: $('[name=ma_mprotocol]').val(), ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(), ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val()});
       });
-    })
+    });
   </script>
   <title>Mail account</title>
 </head>
@@ -37,6 +37,23 @@
         <input type="hidden" name="ma_user" value="${ma.user}"/>
         <table class="form" width="345px" align="center">
           <tr>
+            <td nowrap="nowrap">Mail protocol</td>
+            <td>
+              <select name="ma_mprotocol">
+                <c:forEach var="proto" items="${protocols}">
+                  <c:choose>
+                    <c:when test="${proto == ma.mailProtocol}">
+                      <option value="${proto}" selected="selected">${proto}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${proto}">${proto}</option>
+                    </c:otherwise>
+                  </c:choose>
+                </c:forEach>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td nowrap="nowrap">Mail host</td>
             <td><input class=":required :only_on_blur" name="ma_mhost" value="${ma.mailHost}"/></td>
           </tr>
@@ -46,11 +63,37 @@
           </tr>
           <tr>
             <td nowrap="nowrap">Mail password</td>
-            <td><input class=":required :only_on_blur" name="ma_mpassword" type="password" value="${ma.mailPassword}"/></td>
+            <td><input class=":required :only_on_blur" name="ma_mpassword" type="password" value="${ma.mailPassword}" autocomplete="off"/></td>
           </tr>
           <tr>
             <td nowrap="nowrap">Mail folder</td>
             <td><input name="ma_mfolder" value="${ma.mailFolder}"/></td>
+          </tr>
+          <tr>
+            <td>Mail mark seen</td>
+            <td>
+              <c:choose>
+                <c:when test="${ma.mailMarkSeen}">
+                  <input name="ma_mmark_seen" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="ma_mmark_seen" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
+            <td>Mail mark deleted</td>
+            <td>
+              <c:choose>
+                <c:when test="${ma.mailMarkDeleted}">
+                  <input name="ma_mmark_deleted" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="ma_mmark_deleted" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
           </tr>
           <tr>
             <td>Active</td>

@@ -9,49 +9,53 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="Shortcut icon" href="favicon.ico" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
-  <title>Mail accounts</title>
+  <title>Filter rules</title>
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
   <c:choose>
     <c:when test="${isAdmin}">
-      <c:url value="Auth" var="urlUserList">
+      <c:url value="MailAccount" var="urlFilterList">
+        <c:param name="action" value="filterList"/>
+        <c:param name="ma_user" value="${ma.user}"/>
+        <c:param name="ma_id" value="${ma_id}"/>
       </c:url>
-      <h1>Mail accounts <span style="font-size: 10px;">(<a href="${urlUserList}">Users</a>)</span></h1>
+      <h1>Filters rules <span style="font-size: 10px;">(<a href="${urlFilterList}">Mail filters</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Mail protocol</th><th>Mail host</th><th>Mail user</th>
-          <th>Mail folder</th><th>Active</th>
-          <th width="75px">
+          <th>Field</th><th>Operation</th><th>Value</th><th>Active</th>
+          <th width="50px">
             <c:url value="MailAccount" var="urlCreate">
-              <c:param name="action" value="create"/>
+              <c:param name="action" value="ruleCreate"/>
               <c:param name="ma_user" value="${ma_user}"/>
+              <c:param name="ma_id" value="${ma_id}"/>
+              <c:param name="mf_id" value="${mf_id}"/>
             </c:url>
-            <a href="${urlCreate}"><img src="img/action/new.png" alt="New account" title="New account"/></a>
+            <a href="${urlCreate}"><img src="img/action/new.png" alt="New rule" title="New rule"/></a>
           </th>
         </tr>
-        <c:forEach var="ma" items="${mailAccounts}" varStatus="row">
+        <c:forEach var="fr" items="${filterRules}" varStatus="row">
           <c:url value="MailAccount" var="urlEdit">
-            <c:param name="action" value="edit"/>
-            <c:param name="ma_id" value="${ma.id}"/>
+            <c:param name="action" value="ruleEdit"/>
             <c:param name="ma_user" value="${ma_user}"/>
+            <c:param name="ma_id" value="${ma_id}"/>
+            <c:param name="mf_id" value="${mf_id}"/>
+            <c:param name="fr_id" value="${fr.id}"/>
           </c:url>
           <c:url value="MailAccount" var="urlDelete">
-            <c:param name="action" value="delete"/>
-            <c:param name="ma_id" value="${ma.id}"/>
+            <c:param name="action" value="ruleDelete"/>
             <c:param name="ma_user" value="${ma_user}"/>
-          </c:url>
-          <c:url value="MailAccount" var="urlFilter">
-            <c:param name="action" value="filterList"/>
-            <c:param name="ma_id" value="${ma.id}"/>
-            <c:param name="ma_user" value="${ma_user}"/>
+            <c:param name="ma_id" value="${ma_id}"/>
+            <c:param name="mf_id" value="${mf_id}"/>
+            <c:param name="fr_id" value="${fr.id}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${ma.mailProtocol}</td><td>${ma.mailHost}</td>
-            <td>${ma.mailUser}</td><td>${ma.mailFolder}</td>
+            <td>${fr.field}</td>
+            <td>${fr.operation}</td>
+            <td>${fr.value}</td>
             <td align="center">
               <c:choose>
-                <c:when test="${ma.active}">
+                <c:when test="${fr.active}">
                   <img src="img/true.png" alt="Active" title="Active"/>
                 </c:when>
                 <c:otherwise>
@@ -63,8 +67,6 @@
               <a href="${urlEdit}"><img src="img/action/edit.png" alt="Edit" title="Edit"/></a>
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
-              &nbsp;
-              <a href="${urlFilter}"><img src="img/action/filter.png" alt="Filters" title="Filters"/></a>
             </td>
           </tr>
         </c:forEach>
