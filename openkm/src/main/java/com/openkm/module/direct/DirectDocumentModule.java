@@ -256,11 +256,22 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		// Check user quota
 		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
-		UserItems ui = UserItemsManager.get(session.getUserID());
 		ProfileMisc pm = uc.getProfile().getMisc();
 		
-		if (pm.getUserQuota() > 0 && ui.getSize() + size > pm.getUserQuota()) {
-			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
+		// System user don't care quotas
+		if (!Config.SYSTEM_USER.equals(session.getUserID())) {
+			long currentQuota = 0;
+			
+			if (Config.USER_SIZE_CACHE) {
+				UserItems ui = UserItemsManager.get(session.getUserID());
+				currentQuota = ui.getSize();
+			} else {
+				currentQuota = JCRUtils.calculateQuota(session);
+			}
+			
+			if (pm.getUserQuota() > 0 && currentQuota + size > pm.getUserQuota()) {
+				throw new UserQuotaExceededException(Long.toString(currentQuota + size));
+			}
 		}
 		
 		// Get parent node auth info

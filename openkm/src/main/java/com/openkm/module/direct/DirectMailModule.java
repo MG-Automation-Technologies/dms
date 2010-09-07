@@ -47,7 +47,6 @@ import com.openkm.bean.Document;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
-import com.openkm.cache.UserItemsManager;
 import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
@@ -58,10 +57,6 @@ import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
-import com.openkm.dao.UserConfigDAO;
-import com.openkm.dao.bean.ProfileMisc;
-import com.openkm.dao.bean.UserConfig;
-import com.openkm.dao.bean.UserItems;
 import com.openkm.module.MailModule;
 import com.openkm.util.FileUtils;
 import com.openkm.util.JCRUtils;
@@ -156,16 +151,6 @@ public class DirectMailModule implements MailModule {
 			javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException, NoSuchNodeTypeException, 
 			javax.jcr.lock.LockException, VersionException, ConstraintViolationException,
 			javax.jcr.RepositoryException, IOException, DatabaseException, UserQuotaExceededException {
-		
-		// Check user quota
-		UserConfig uc = UserConfigDAO.findByPk(session, session.getUserID());
-		UserItems ui = UserItemsManager.get(session.getUserID());
-		ProfileMisc pm = uc.getProfile().getMisc();
-		
-		if (pm.getUserQuota() > 0 && ui.getSize() + size > pm.getUserQuota()) {
-			throw new UserQuotaExceededException(Long.toString(ui.getSize() + size));
-		}
-		
 		// Create and add a new mail node
 		Node mailNode = parentNode.addNode(name, Mail.TYPE);
 		mailNode.setProperty(Mail.SIZE, size);
@@ -210,11 +195,6 @@ public class DirectMailModule implements MailModule {
 		mailNode.setProperty(Permission.ROLES_SECURITY, rolesSecurity);
 		
 		parentNode.save();
-		
-		// Update user items size
-		if (Config.USER_SIZE_CACHE) {
-			UserItemsManager.incSize(session.getUserID(), size);
-		}
 		
 		return mailNode;
 	}
@@ -266,7 +246,7 @@ public class DirectMailModule implements MailModule {
 			
 			// Check scripting
 			DirectScriptingModule.checkScripts(session, parentNode, mailNode, "CREATE_MAIL");
-
+			
 			// Activity log
 			UserActivity.log(session.getUserID(), "CREATE_MAIL", mail.getPath(), null);
 		} catch (javax.jcr.PathNotFoundException e) {
