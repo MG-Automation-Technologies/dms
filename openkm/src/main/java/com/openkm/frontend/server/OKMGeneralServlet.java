@@ -26,6 +26,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.dao.bean.MailAccount;
 import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
 import com.openkm.frontend.client.bean.GWTTestImap;
 import com.openkm.frontend.client.service.OKMGeneralService;
@@ -75,7 +76,14 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		
 		try {
 			test.setError(false);
-			MailUtils.testConnection(host, user, password, imapFolder);
+			MailAccount ma = new MailAccount();
+			ma.setMailProtocol(MailAccount.PROTOCOL_IMAP);
+			ma.setMailHost(host);
+			ma.setMailUser(user);
+			ma.setMailPassword(password);
+			ma.setMailFolder(imapFolder);
+			ma.setMailMarkSeen(true);
+			MailUtils.testConnection(ma);
 		} catch (IOException e) {
 			test.setError(true);
 			test.setErrorMsg(e.getMessage());

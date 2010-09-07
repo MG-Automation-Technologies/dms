@@ -351,7 +351,10 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 				// Can change password
 				if (Config.PRINCIPAL_ADAPTER.equals("com.openkm.principal.DatabasePrincipalAdapter")) {
 					AuthDAO.updateUserPassword(workspace.getUser(), workspace.getPassword());
-					if (!user.getEmail().equals("")) AuthDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
+					
+					if (!user.getEmail().equals("")) {
+						AuthDAO.updateUserEmail(workspace.getUser(), workspace.getEmail());
+					}
 				}
 				
 				if (MailAccountDAO.findByUser(workspace.getUser(), false).size() > 0) {
@@ -365,6 +368,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 					MailAccountDAO.create(mailAccount);
 				}
 			} catch (DatabaseException e) {
+				log.error(e.getMessage(), e);
 				throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
 			}
 		}
