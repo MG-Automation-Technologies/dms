@@ -211,6 +211,11 @@ public class DirectMailModule implements MailModule {
 		
 		parentNode.save();
 		
+		// Update user items size
+		if (Config.USER_SIZE_CACHE) {
+			UserItemsManager.incSize(session.getUserID(), size);
+		}
+		
 		return mailNode;
 	}
 	
