@@ -344,4 +344,21 @@ public class JCRUtils {
 
 		return ret;
 	}
+	
+	/**
+	 * Get node uuid from path
+	 */
+	public static String getUUID(Session session, String path) throws javax.jcr.RepositoryException {
+		Node rootNode = session.getRootNode();
+		Node node = rootNode.getNode(path.substring(1));
+		return node.getUUID();
+	}
+	
+	/**
+	 * Get node path from uuid
+	 */
+	public static String getPath(Session session, String uuid) throws javax.jcr.RepositoryException {
+		Node node = session.getNodeByUUID(uuid);
+		return node.getPath();
+	}
 }

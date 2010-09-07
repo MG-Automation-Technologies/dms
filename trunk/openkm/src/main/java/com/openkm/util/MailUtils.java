@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -78,12 +79,17 @@ import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.FileSizeExceededException;
 import com.openkm.core.ItemExistsException;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.dao.bean.FilterRule;
+import com.openkm.dao.bean.MailAccount;
+import com.openkm.dao.bean.MailFilter;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.pop3.POP3Folder;
 
 public class MailUtils {
 	private static Logger log = LoggerFactory.getLogger(MailUtils.class);
@@ -247,125 +253,99 @@ public class MailUtils {
 	/**
 	 * Import messages 
 	 */
-	public static void importMessages(String uid, String host, String user, String password,
-			String imapFolder) throws PathNotFoundException, ItemExistsException, VirusDetectedException,
-			AccessDeniedException, RepositoryException, DatabaseException, UserQuotaExceededException {
-		log.info("importMessages({}, {}, {}, {}, {})", new Object[] { uid, host, user, password, imapFolder });
+	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
+			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException, 
+			UserQuotaExceededException {
+		log.info("importMessages({}, {})", new Object[] { uid, ma });
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		
 		try {
-			OKMRepository okmRepository = OKMRepository.getInstance();
-			OKMFolder okmFolder = OKMFolder.getInstance();
-			OKMMail okmMail = OKMMail.getInstance();
-			String mailPath = getUserMailPath(uid);
+			// Open connection
+			Store store = session.getStore(ma.getMailProtocol());
+			store.connect(ma.getMailHost(), ma.getMailUser(), ma.getMailPassword());
 			
-			if (okmRepository.hasNode(null, mailPath)) {
-				// Open connection
-				Store store = session.getStore("imaps");
-				store.connect(host, user, password);
+			Folder folder = store.getFolder(ma.getMailFolder());
+			folder.open(Folder.READ_WRITE);
+			//Message messages[] = folder.getMessages();
+			Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+			
+			for (int i=0; i < messages.length; i++) {
+				Message msg = messages[i];
+				//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
+				//log.info("Received: "+msg.getReceivedDate());
+				//log.info("Sent: "+msg.getSentDate());
 				
-				Folder folder = store.getFolder(imapFolder);
-				folder.open(Folder.READ_WRITE);
-				//Message messages[] = folder.getMessages();
-				Message messages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+				Calendar receivedDate = Calendar.getInstance();
+				Calendar sentDate = Calendar.getInstance();
+				
+				// Can be void
+				if (msg.getReceivedDate() != null) {
+					receivedDate.setTime(msg.getReceivedDate());
+				}
+				
+				// Can be void
+				if (msg.getSentDate() != null) {
+					sentDate.setTime(msg.getSentDate());
+				}
+				
+				log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
+				com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
+				String body = getText(msg);
+				
+				//	log.info("getText: "+body);
+				if (body.charAt(0) == 'H') {
+					mail.setMimeType("text/html");
+				} else if (body.charAt(0) == 'T') {
+					mail.setMimeType("text/plain");
+				} else {
+					mail.setMimeType("unknown");
+				}
+				
+				mail.setContent(body.substring(1));
+				
+				if (msg.getFrom().length > 0) {
+					mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
+				}
+				
+				mail.setSize(msg.getSize());
+				mail.setSubject(msg.getSubject());
+				mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
+				mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
+				mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
+				mail.setReceivedDate(receivedDate);
+				mail.setSentDate(sentDate);
+				
+				if (ma.getMailFilters().isEmpty()) {
+					log.info("Import in compatibility mode");
+					String mailPath = getUserMailPath(uid);
+					importMail(mailPath, folder, msg, ma, mail);
+				} else {
+					for (MailFilter mf : ma.getMailFilters()) {
+						log.info("MailFilter: {}", mf);
 						
-				for (int i=0; i < messages.length; i++) {
-					Message msg = messages[i];
-					//log.info(i + ": " + msg.getFrom()[0] + " " + msg.getSubject()+" "+msg.getContentType());
-					//log.info("Received: "+msg.getReceivedDate());
-					//log.info("Sent: "+msg.getSentDate());
-					
-					Calendar receivedDate = Calendar.getInstance();
-					Calendar sentDate = Calendar.getInstance();
-					
-					// Can be void
-					if (msg.getReceivedDate() != null) {
-						receivedDate.setTime(msg.getReceivedDate());
-					}
-					
-					// Can be void
-					if (msg.getSentDate() != null) {
-						sentDate.setTime(msg.getSentDate());
-					}
-					
-					log.info("{} -> {} - {}", new Object[] { i ,msg.getSubject(), msg.getReceivedDate() });
-					String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
-					
-					if (!okmRepository.hasNode(null, path)) {
-						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
-						fld.setPath(path);
-						okmFolder.create(null, fld);
-					}
-					
-					path += "/"+(receivedDate.get(Calendar.MONTH)+1);
-					
-					if (!okmRepository.hasNode(null, path)) {
-						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
-						fld.setPath(path);
-						okmFolder.create(null, fld);
-					}
-					
-					path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
-					
-					if (!okmRepository.hasNode(null, path)) {
-						com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
-						fld.setPath(path);
-						okmFolder.create(null, fld);
-					}
-					
-					com.openkm.bean.Mail mail = new com.openkm.bean.Mail();
-					mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
-					mail.setReceivedDate(receivedDate);
-					mail.setSentDate(sentDate);
-					
-					String body = getText(msg);
-					//log.info("getText: "+body);
-					if (body.charAt(0) == 'H') {
-						mail.setMimeType("text/html");
-					} else if (body.charAt(0) == 'T') {
-						mail.setMimeType("text/plain");
-					} else {
-						mail.setMimeType("unknown");
-					}
-					
-					mail.setContent(body.substring(1));
-					
-					if (msg.getFrom().length > 0) {
-						mail.setFrom(MimeUtility.decodeText(msg.getFrom()[0].toString()));
-					}
-					
-					mail.setSize(msg.getSize());
-					mail.setSubject(msg.getSubject());
-					mail.setTo(address2String(msg.getRecipients(Message.RecipientType.TO)));
-					mail.setCc(address2String(msg.getRecipients(Message.RecipientType.CC)));
-					mail.setBcc(address2String(msg.getRecipients(Message.RecipientType.BCC)));
-					
-					String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
-					log.info("newMailPath: {}", newMailPath);
-					
-					if (!okmRepository.hasNode(null, newMailPath)) {
-						okmMail.create(null, mail);
-						
-						try {
-							addAttachments(mail, msg);
-						} catch (UnsupportedMimeTypeException e) {
-							log.warn(e.getMessage(), e);
-						} catch (FileSizeExceededException e) {
-							log.warn(e.getMessage(), e);
-						} catch (UserQuotaExceededException e) {
-							log.warn(e.getMessage(), e);
+						if (checkRules(mail, mf.getFilterRules())) {
+							String  mailPath = mf.getPath();
+							importMail(mailPath, folder, msg, ma, mail);		
 						}
 					}
-					
-					// Set message as seen
+				}
+				
+				// Set message as seen
+				if (ma.isMailMarkSeen()) {
 					msg.setFlag(Flags.Flag.SEEN, true);
 				}
-			
-				// Close connection 
-				folder.close(false);
-				store.close();
+				
+				// Delete readed mail if requested
+				if (ma.isMailMarkDeleted()) {
+					msg.setFlag(Flags.Flag.DELETED, true);
+				}
 			}
+			
+			// Close connection
+			log.info("Expunge: {}", ma.isMailMarkDeleted());
+			folder.close(ma.isMailMarkDeleted());
+			store.close();
 		} catch (NoSuchProviderException e) {
 			log.error(e.getMessage(), e);
 		} catch (MessagingException e) {
@@ -375,6 +355,128 @@ public class MailUtils {
 		}
 		
 		log.info("importMessages: void");
+	}
+	
+	/**
+	 * Import mail into OpenKM repository 
+	 */
+	private static void importMail(String mailPath, Folder folder, Message msg, MailAccount ma, 
+			com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException, AccessDeniedException,
+			ItemExistsException, PathNotFoundException, MessagingException, VirusDetectedException, 
+			UserQuotaExceededException, IOException {
+		String systemToken = JcrSessionManager.getInstance().getSystemToken();
+		OKMRepository okmRepository = OKMRepository.getInstance();
+		OKMMail okmMail = OKMMail.getInstance();
+		String path = createPath(mailPath, mail.getReceivedDate());
+		
+		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
+			mail.setPath(path+"/"+((POP3Folder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+		} else {
+			mail.setPath(path+"/"+((IMAPFolder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
+		}
+		
+		String newMailPath = FileUtils.getParent(mail.getPath())+"/"+FileUtils.escape(FileUtils.getName(mail.getPath())); 
+		log.info("newMailPath: {}", newMailPath);
+		
+		if (!okmRepository.hasNode(systemToken, newMailPath)) {
+			okmMail.create(systemToken, mail);
+			
+			try {
+				addAttachments(mail, msg);
+			} catch (UnsupportedMimeTypeException e) {
+				log.warn(e.getMessage(), e);
+			} catch (FileSizeExceededException e) {
+				log.warn(e.getMessage(), e);
+			} catch (UserQuotaExceededException e) {
+				log.warn(e.getMessage(), e);
+			}
+		}
+	}
+	
+	/**
+	 * Check mail import rules
+	 */
+	private static boolean checkRules(com.openkm.bean.Mail mail, Set<FilterRule> filterRules) {
+		log.info("checkRules({}, {})", mail, filterRules);
+		boolean ret = true;
+		
+		for (FilterRule fr : filterRules) {
+			log.info("FilterRule: {}", fr);
+			
+			if (fr.isActive()) {
+				if (FilterRule.FIELD_FROM.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+						ret &= mail.getFrom().toLowerCase().contains(fr.getValue().toLowerCase());
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+						ret &= mail.getFrom().equalsIgnoreCase(fr.getValue());
+					}
+				} else if (FilterRule.FIELD_TO.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+						for (int j=0; j<mail.getTo().length; j++) {
+							ret &= mail.getTo()[j].toLowerCase().contains(fr.getValue().toLowerCase());
+						}
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+						for (int j=0; j<mail.getTo().length; j++) {
+							ret &= mail.getTo()[j].equalsIgnoreCase(fr.getValue());
+						}
+					}
+				} else if (FilterRule.FIELD_SUBJECT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+						ret &= mail.getSubject().toLowerCase().contains(fr.getValue().toLowerCase());
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+						ret &= mail.getSubject().equalsIgnoreCase(fr.getValue());
+					}
+				} else if (FilterRule.FIELD_CONTENT.equals(fr.getField())) {
+					if (FilterRule.OPERATION_CONTAINS.equals(fr.getOperation())) {
+						ret &= mail.getContent().toLowerCase().contains(fr.getValue().toLowerCase());
+					} else if (FilterRule.OPERATION_EQUALS.equals(fr.getOperation())) {
+						ret &= mail.getContent().equalsIgnoreCase(fr.getValue());
+					}
+				}
+			}
+			
+			log.info("FilterRule: {}", ret);
+		}
+		
+		log.info("checkRules: {}", ret);
+		return ret;
+	}
+	
+	/**
+	 * Create mail path
+	 */
+	private static String createPath(String mailPath, Calendar receivedDate) throws DatabaseException,
+			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
+		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
+		String systemToken = JcrSessionManager.getInstance().getSystemToken();
+		OKMRepository okmRepository = OKMRepository.getInstance();
+		String path = mailPath+"/"+receivedDate.get(Calendar.YEAR);
+		OKMFolder okmFolder = OKMFolder.getInstance();
+		
+		if (!okmRepository.hasNode(systemToken, path)) {
+			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
+			fld.setPath(path);
+			okmFolder.create(systemToken, fld);
+		}
+		
+		path += "/"+(receivedDate.get(Calendar.MONTH)+1);
+		
+		if (!okmRepository.hasNode(systemToken, path)) {
+			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
+			fld.setPath(path);
+			okmFolder.create(systemToken, fld);
+		}
+		
+		path += "/"+receivedDate.get(Calendar.DAY_OF_MONTH);
+		
+		if (!okmRepository.hasNode(systemToken, path)) {
+			com.openkm.bean.Folder fld = new com.openkm.bean.Folder();
+			fld.setPath(path);
+			okmFolder.create(systemToken, fld);
+		}
+		
+		log.info("createPath: {}", path);
+		return path;
 	}
 	
 	/**
@@ -429,6 +531,8 @@ public class MailUtils {
 			IOException, UnsupportedMimeTypeException, FileSizeExceededException, UserQuotaExceededException,
 			VirusDetectedException, ItemExistsException, PathNotFoundException, AccessDeniedException,
 			RepositoryException, DatabaseException {
+		String systemToken = JcrSessionManager.getInstance().getSystemToken();
+		
 		if (p.isMimeType("multipart/*")) {
 			Multipart mp = (Multipart)p.getContent();
 			int count = mp.getCount();
@@ -443,7 +547,7 @@ public class MailUtils {
 					attachment.setMimeType(mimeType);
 					attachment.setPath(mail.getPath()+"/"+bp.getFileName());
 					InputStream is = bp.getInputStream();
-					okmDocument.create(null, attachment, is);
+					okmDocument.create(systemToken, attachment, is);
 					is.close();
 				}
 			}
@@ -494,19 +598,18 @@ public class MailUtils {
 	
 	/**
 	 * Test IMAP connection
-	 * @throws MessagingException 
 	 */
-	public static void testConnection(String host, String user, String password, String imapFolder)
-			throws IOException {
+	public static void testConnection(MailAccount ma) throws IOException {
+		log.info("testConnection({})", ma);
 		Properties props = System.getProperties();
 		Session session = Session.getDefaultInstance(props);
 		Store store = null;
 		Folder folder = null;
 		
 		try {
-			store = session.getStore("imaps");
-			store.connect(host, user, password);
-			folder = store.getFolder(imapFolder);
+			store = session.getStore(ma.getMailProtocol());
+			store.connect(ma.getMailHost(), ma.getMailUser(), ma.getMailPassword());
+			folder = store.getFolder(ma.getMailFolder());
 			folder.open(Folder.READ_WRITE);
 			folder.close(false);
 		} catch (NoSuchProviderException e) {
@@ -532,5 +635,7 @@ public class MailUtils {
 				}
 			}
 		}
+		
+		log.info("testConnection: void");
 	}
 }
