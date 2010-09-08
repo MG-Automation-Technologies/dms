@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,14 +10,6 @@
   <link rel="stylesheet" type="text/css" href="css/style.css" />
   <script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
   <script src="js/vanadium-min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $("#check").click(function(event) {
-        $("#dest").html('Checking....');
-        $("#dest").load('MailAccount', {action: "check", ma_mhost: $('[name=ma_mhost]').val(), ma_muser: $('[name=ma_muser]').val(), ma_mpassword: $('[name=ma_mpassword]').val(), ma_mfolder: $('[name=ma_mfolder]').val()});
-      });
-    });
-  </script>
   <title>Mail filter</title>
 </head>
 <body>
@@ -56,7 +47,6 @@
           </tr>
           <tr>
             <td colspan="2" align="right">
-              <!-- <input type="button" id="check" value="Check"/> -->
               <input type="button" onclick="javascript:window.history.back()" value="Cancel"/>
               <input type="submit" value="Send"/>
             </td>
