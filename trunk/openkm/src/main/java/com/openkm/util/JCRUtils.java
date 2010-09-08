@@ -371,7 +371,7 @@ public class JCRUtils {
 	 * Calculate user quota
 	 */
 	public static long calculateQuota(Session session) throws javax.jcr.RepositoryException {
-		// String qs = "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
+		// "/jcr:root/okm:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 		String qs = "/jcr:root//element(*, okm:document)[okm:content/@okm:author='"+session.getUserID()+"']";
 		Workspace workspace = session.getWorkspace();
 		QueryManager queryManager = workspace.getQueryManager();
