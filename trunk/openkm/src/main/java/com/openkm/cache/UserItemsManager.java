@@ -18,7 +18,7 @@ import com.openkm.bean.Document;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.UserItemsDAO;
-import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.cache.UserItems;
 
 public class UserItemsManager {
 	private static Logger log = LoggerFactory.getLogger(UserItemsManager.class);

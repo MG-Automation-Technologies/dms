@@ -41,7 +41,7 @@ import com.openkm.bean.Property;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.UserDocumentKeywordsDAO;
-import com.openkm.dao.bean.UserDocumentKeywords;
+import com.openkm.dao.bean.cache.UserDocumentKeywords;
 
 public class UserDocumentKeywordsManager {
 	private static Logger log = LoggerFactory.getLogger(UserDocumentKeywordsManager.class);
