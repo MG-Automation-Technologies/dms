@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -71,7 +71,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.DashboardDAO;
 import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.QueryParams;
-import com.openkm.dao.bean.UserDocumentKeywords;
+import com.openkm.dao.bean.cache.UserDocumentKeywords;
 import com.openkm.module.SearchModule;
 import com.openkm.util.FormUtils;
 import com.openkm.util.JCRUtils;

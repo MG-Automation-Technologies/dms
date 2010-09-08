@@ -87,7 +87,7 @@ import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.ProfileMisc;
 import com.openkm.dao.bean.UserConfig;
-import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.kea.RDFREpository;
 import com.openkm.kea.metadata.MetadataExtractionException;
 import com.openkm.kea.metadata.MetadataExtractor;
@@ -1448,13 +1448,15 @@ public class DirectDocumentModule implements DocumentModule {
 			}
 			
 			// Update user items
-			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-				Entry<String, UserItems> entry = it.next();
-				String uid = entry.getKey();
-				UserItems userItems = entry.getValue();
-				UserItemsManager.decSize(uid, userItems.getSize());
-				UserItemsManager.decDocuments(uid, userItems.getDocuments());
-				UserItemsManager.decFolders(uid, userItems.getFolders());
+			if (Config.USER_SIZE_CACHE) {
+				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+					Entry<String, UserItems> entry = it.next();
+					String uid = entry.getKey();
+					UserItems userItems = entry.getValue();
+					UserItemsManager.decSize(uid, userItems.getSize());
+					UserItemsManager.decDocuments(uid, userItems.getDocuments());
+					UserItemsManager.decFolders(uid, userItems.getFolders());
+				}
 			}
 			
 			// Check scripting
@@ -1519,21 +1521,25 @@ public class DirectDocumentModule implements DocumentModule {
 				log.debug("vh.removeVersion({})", versionName);
 				vh.removeVersion(versionName);
 				
-				// Update local user items for versions
-				UserItems userItems = userItemsHash.get(author);
-				if (userItems == null) userItems = new UserItems();
-				userItems.setSize(userItems.getSize() + size);
-				userItems.setDocuments(userItems.getDocuments() + 1);
-				userItemsHash.put(author, userItems);
+				if (Config.USER_SIZE_CACHE) {
+					// Update local user items for versions
+					UserItems userItems = userItemsHash.get(author);
+					if (userItems == null) userItems = new UserItems();
+					userItems.setSize(userItems.getSize() + size);
+					userItems.setDocuments(userItems.getDocuments() + 1);
+					userItemsHash.put(author, userItems);
+				}
 			}
 		}
-
-		// Update local user items for working version
-		UserItems userItems = userItemsHash.get(author);
-		if (userItems == null) userItems = new UserItems();
-		userItems.setSize(userItems.getSize() + size);
-		userItems.setDocuments(userItems.getDocuments() + 1);
-		userItemsHash.put(author, userItems);
+		
+		if (Config.USER_SIZE_CACHE) {
+			// Update local user items for working version
+			UserItems userItems = userItemsHash.get(author);
+			if (userItems == null) userItems = new UserItems();
+			userItems.setSize(userItems.getSize() + size);
+			userItems.setDocuments(userItems.getDocuments() + 1);
+			userItemsHash.put(author, userItems);
+		}
 		
 		return userItemsHash;
 	}

@@ -73,7 +73,7 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.core.OKMSystemSession;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.RepositoryModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.MailUtils;
@@ -792,29 +792,33 @@ public class DirectRepositoryModule implements RepositoryModule {
 					userItemsHashRet = new DirectFolderModule().purgeHelper(session, child);
 				}
 				
-				// Join hash maps
-				for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
-					Entry<String, UserItems> entry = entIt.next();
-					String uid = entry.getKey();
-					UserItems userItem = entry.getValue();
-					UserItems userItemTmp = userItemsHash.get(uid);
-					if (userItemTmp == null) userItemTmp = new UserItems();
-					userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
-					userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
-					userItemsHash.put(uid, userItemTmp);
+				if (Config.USER_SIZE_CACHE) {
+					// Join hash maps
+					for (Iterator<Entry<String, UserItems>> entIt = userItemsHashRet.entrySet().iterator(); entIt.hasNext(); ) {
+						Entry<String, UserItems> entry = entIt.next();
+						String uid = entry.getKey();
+						UserItems userItem = entry.getValue();
+						UserItems userItemTmp = userItemsHash.get(uid);
+						if (userItemTmp == null) userItemTmp = new UserItems();
+						userItemTmp.setSize(userItemTmp.getSize() + userItem.getSize());
+						userItemTmp.setDocuments(userItemTmp.getDocuments() + userItem.getDocuments());
+						userItemsHash.put(uid, userItemTmp);
+					}
 				}
 			}
 			
 			userTrash.save();
 			
-			// Update user items
-			for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
-				Entry<String, UserItems> entry = it.next();
-				String uid = entry.getKey();
-				UserItems userItems = entry.getValue();
-				UserItemsManager.decSize(uid, userItems.getSize());
-				UserItemsManager.decDocuments(uid, userItems.getDocuments());
-				UserItemsManager.decFolders(uid, userItems.getFolders());
+			if (Config.USER_SIZE_CACHE) {
+				// Update user items
+				for (Iterator<Entry<String, UserItems>> it = userItemsHash.entrySet().iterator(); it.hasNext(); ) {
+					Entry<String, UserItems> entry = it.next();
+					String uid = entry.getKey();
+					UserItems userItems = entry.getValue();
+					UserItemsManager.decSize(uid, userItems.getSize());
+					UserItemsManager.decDocuments(uid, userItems.getDocuments());
+					UserItemsManager.decFolders(uid, userItems.getFolders());
+				}
 			}
 			
 			// Activity log
