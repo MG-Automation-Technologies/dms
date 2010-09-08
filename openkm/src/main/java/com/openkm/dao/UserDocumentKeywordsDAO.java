@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.core.DatabaseException;
-import com.openkm.dao.bean.UserDocumentKeywords;
+import com.openkm.dao.bean.cache.UserDocumentKeywords;
 
 public class UserDocumentKeywordsDAO {
 	private static Logger log = LoggerFactory.getLogger(UserDocumentKeywordsDAO.class);
