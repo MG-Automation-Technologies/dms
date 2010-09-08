@@ -226,7 +226,6 @@
     <mapping resource="com/openkm/dao/bean/Activity.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MimeType.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/LockToken.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/UserConfig.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MailFilter.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/FilterRule.hbm.xml"/>
@@ -234,7 +233,8 @@
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
-    <mapping resource="com/openkm/dao/bean/UserDocumentKeyword.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->
