@@ -60,7 +60,7 @@ import com.openkm.dao.QueryParamsDAO;
 import com.openkm.dao.bean.Activity;
 import com.openkm.dao.bean.Dashboard;
 import com.openkm.dao.bean.QueryParams;
-import com.openkm.dao.bean.UserItems;
+import com.openkm.dao.bean.cache.UserItems;
 import com.openkm.module.DashboardModule;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
