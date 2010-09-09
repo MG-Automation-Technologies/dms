@@ -96,7 +96,7 @@ public class ManageBookmarkPopup extends DialogBox {
 					}
 					
 				} else if ((char)KeyCodes.KEY_ESCAPE == event.getCharCode() ) {
-					tableBookmark.setHTML(0,1,table.getText(selectedRow,2));
+					tableBookmark.setHTML(0,1,table.getText(selectedRow,1));
 					deleteButton.setEnabled(true);
 					updateButton.setEnabled(true);
 				}	
@@ -158,10 +158,10 @@ public class ManageBookmarkPopup extends DialogBox {
 					styleRow(selectedRow, false);
 					styleRow(row, true);
 					selectedRow = row;
-					if (bookmarkMap.containsKey(table.getText(row,1))) {
-						GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(row,1));
+					if (bookmarkMap.containsKey(table.getText(row,2))) {
+						GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(row,2));
 						tableBookmark.setHTML(0,1,bookmark.getName());
-						tableBookmark.setHTML(0,2,bookmark.getUuid());
+						tableBookmark.setHTML(0,2,table.getText(row,2));
 						tableBookmark.getFlexCellFormatter().setVisible(0, 2, false);
 						tableBookmark.setHTML(1,1,bookmark.getPath());
 						if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
@@ -248,7 +248,7 @@ public class ManageBookmarkPopup extends DialogBox {
 			
 			for (Iterator<GWTBookmark> it = result.iterator(); it.hasNext();) {
 				GWTBookmark bookmark = (GWTBookmark) it.next();	
-				bookmarkMap.put(bookmark.getUuid(),bookmark);
+				bookmarkMap.put(String.valueOf(bookmark.getId()),bookmark);
 				
 				String icon = "";
 				if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
@@ -259,12 +259,15 @@ public class ManageBookmarkPopup extends DialogBox {
 				
 				table.setHTML(row,0,Util.imageHTML(icon));
 				table.setHTML(row,1,bookmark.getName());
+				table.setHTML(row,2,String.valueOf(bookmark.getId()));
 				table.getRowFormatter().setStyleName(row, "okm-Table-Row");
 				table.getCellFormatter().setWidth(row,0,"25");
+				table.getCellFormatter().setVisible(row, 2, false);
 				setRowWordWarp(row,2,false);
 				
 				if(row==0) {
 					tableBookmark.setHTML(0,1,bookmark.getName());
+					tableBookmark.setHTML(0,2,String.valueOf(bookmark.getId()));
 					tableBookmark.setHTML(1,1,bookmark.getPath());
 					tableBookmark.setHTML(2,1,bookmark.getType());
 					if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
@@ -302,6 +305,16 @@ public class ManageBookmarkPopup extends DialogBox {
 					} else {
 						styleRow(selectedRow,true);
 					}
+					GWTBookmark bookmark = (GWTBookmark) bookmarkMap.get(table.getText(selectedRow,2));
+					tableBookmark.setHTML(0,1,bookmark.getName());
+					tableBookmark.setHTML(0,2,String.valueOf(bookmark.getId()));
+					tableBookmark.setHTML(1,1,bookmark.getPath());
+					tableBookmark.setHTML(2,1,bookmark.getType());
+					if (bookmark.getType().equals(Bookmark.BOOKMARK_DOCUMENT)) {
+						tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.document"));
+					} else if (bookmark.getType().equals(Bookmark.BOOKMARK_FOLDER)) {
+						tableBookmark.setHTML(2,1,Main.i18n("bookmark.type.folder"));
+					}
 				} else {
 					deleteButton.setEnabled(false);
 					updateButton.setEnabled(false);
@@ -322,8 +335,7 @@ public class ManageBookmarkPopup extends DialogBox {
 		public void onSuccess(GWTBookmark result) {
 			if (selectedRow>=0) {
 				bookmarkMap.remove(table.getText(selectedRow,2));
-				result.setName(result.getName());
-				bookmarkMap.put(result.getName(),result);
+				bookmarkMap.put(table.getText(selectedRow,2),result);
 				tableBookmark.setHTML(0,1,result.getName());
 				table.setHTML(selectedRow,1,result.getName());
 			}

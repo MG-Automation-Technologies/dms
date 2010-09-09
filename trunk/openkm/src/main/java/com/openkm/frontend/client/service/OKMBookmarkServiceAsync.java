@@ -24,7 +24,6 @@ package com.openkm.frontend.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.openkm.frontend.client.bean.GWTBookmark;
 
 /**
@@ -36,4 +35,5 @@ public interface OKMBookmarkServiceAsync {
 	public void add(String nodePath, String name, AsyncCallback<GWTBookmark> callback);
 	public void remove(int bmId, AsyncCallback<?> callback);
 	public void rename(int bmId, String newName, AsyncCallback<GWTBookmark> callback);
+	public void get(int bmId, AsyncCallback<GWTBookmark> callback);
 }

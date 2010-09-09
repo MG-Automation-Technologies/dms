@@ -31,16 +31,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.service.OKMBookmarkService;
 import com.openkm.frontend.client.service.OKMBookmarkServiceAsync;
-import com.openkm.frontend.client.service.OKMDocumentService;
-import com.openkm.frontend.client.service.OKMDocumentServiceAsync;
-import com.openkm.frontend.client.service.OKMFolderService;
-import com.openkm.frontend.client.service.OKMFolderServiceAsync;
 import com.openkm.frontend.client.service.OKMUserConfigService;
 import com.openkm.frontend.client.service.OKMUserConfigServiceAsync;
 import com.openkm.frontend.client.util.Util;
@@ -56,8 +51,6 @@ import com.openkm.frontend.client.widget.startup.StartUp;
 public class Bookmark {
 	
 	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT.create(OKMBookmarkService.class);
-	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
 	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT.create(OKMUserConfigService.class);
 	
 	public static final String BOOKMARK_DOCUMENT	= "okm:document";
@@ -68,7 +61,6 @@ public class Bookmark {
 	private String nodePath = "";
 	private boolean document = false;
 	private boolean bookmarkEnabled = true;
-	private String validPath = "";
 	
 	/**
 	 * Bookmark
@@ -108,13 +100,30 @@ public class Bookmark {
 				MenuItem tmpBookmark = new MenuItem(Util.menuHTML(icon, bookmark.getName()), true, new Command() {
 						public void execute() {
 							if (bookmarkEnabled) {
-
-								if (bookmark.getType().equals(BOOKMARK_DOCUMENT)) {
-									String path = bookmark.getPath().substring(0,bookmark.getPath().lastIndexOf("/"));
-									Main.get().activeFolderTree.openAllPathFolder(path,bookmark.getPath());
-								} else if (bookmark.getType().equals(BOOKMARK_FOLDER)) {
-									Main.get().activeFolderTree.openAllPathFolder(bookmark.getPath(),"");
-								}
+								ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+								endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+								bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
+									@Override
+									public void onSuccess(GWTBookmark result) {
+										String validPath = result.getPath(); 
+										if (result.getType().equals(BOOKMARK_DOCUMENT) && 
+											validPath!=null && !validPath.equals("")) {
+											// Opens folder passed by parameter
+											String path = validPath.substring(0,validPath.lastIndexOf("/"));
+											Main.get().activeFolderTree.openAllPathFolder(path,validPath);
+												
+										} else if (bookmark.getType().equals(BOOKMARK_FOLDER) && 
+												   validPath!=null && !validPath.equals("")) {
+											// Opens document passed by parameter
+											Main.get().activeFolderTree.openAllPathFolder(validPath,"");
+										}
+									}
+									
+									@Override
+									public void onFailure(Throwable caught) {
+										Main.get().showError("get", caught);
+									}
+								});
 							}
 						}
 					}
@@ -152,16 +161,30 @@ public class Bookmark {
 			MenuItem tmpBookmark = new MenuItem(Util.menuHTML(icon, bookmark.getName()), true, new Command() {
 				public void execute() {
 					if (bookmarkEnabled) {
-						validPath = bookmark.getPath();
-						if (bookmark.getType().equals(BOOKMARK_DOCUMENT)) {
-							ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
-							endPoint.setServiceEntryPoint(Config.OKMDocumentService);
-							documentService.isValid( validPath ,callbackIsValidDocument);
-						} else if (bookmark.getType().equals(BOOKMARK_FOLDER)) {
-							ServiceDefTarget endPoint = (ServiceDefTarget) folderService;
-							endPoint.setServiceEntryPoint(Config.OKMFolderService);	
-							folderService.isValid(validPath, callbackIsValidFolder);
-						}
+						ServiceDefTarget endPoint = (ServiceDefTarget) bookmarkService;
+						endPoint.setServiceEntryPoint(Config.OKMBookmarkService);
+						bookmarkService.get(bookmark.getId(), new AsyncCallback<GWTBookmark>() {
+							@Override
+							public void onSuccess(GWTBookmark result) {
+								String validPath = result.getPath(); 
+								if (result.getType().equals(BOOKMARK_DOCUMENT) && 
+									validPath!=null && !validPath.equals("")) {
+									// Opens folder passed by parameter
+									String path = validPath.substring(0,validPath.lastIndexOf("/"));
+									Main.get().activeFolderTree.openAllPathFolder(path,validPath);
+										
+								} else if (bookmark.getType().equals(BOOKMARK_FOLDER) && 
+										   validPath!=null && !validPath.equals("")) {
+									// Opens document passed by parameter
+									Main.get().activeFolderTree.openAllPathFolder(validPath,"");
+								}
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+								Main.get().showError("get", caught);
+							}
+						});
 					}
 				}
 			}
@@ -192,45 +215,6 @@ public class Bookmark {
 
 		public void onFailure(Throwable caught) {
 			Main.get().showError("setUserHome", caught);
-		}
-	};
-	
-	/**
-	 * Call back opens document passed by url param
-	 */
-	final AsyncCallback<Boolean> callbackIsValidDocument = new AsyncCallback<Boolean>() {
-		public void onSuccess(Boolean result){
-			Boolean isValid = result;
-			
-			if (isValid.booleanValue() && validPath!=null && !validPath.equals("")) {
-				// Opens folder passed by parameter
-				String path = validPath.substring(0,validPath.lastIndexOf("/"));
-				Main.get().activeFolderTree.openAllPathFolder(path,validPath);
-			}
-			validPath = "";
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("isValid", caught);
-		}
-	};
-	
-	/**
-	 * Call back opens folder passed by url param
-	 */
-	final AsyncCallback<Boolean> callbackIsValidFolder = new AsyncCallback<Boolean>() {
-		public void onSuccess(Boolean result){
-			Boolean isValid = result;
-			
-			if (isValid.booleanValue() && validPath!=null && !validPath.equals("")) {
-				// Opens document passed by parameter
-				Main.get().activeFolderTree.openAllPathFolder(validPath,"");
-			}
-			validPath = "";
-		}
-
-		public void onFailure(Throwable caught) {
-			Main.get().showError("isValid", caught);
 		}
 	};
 	
