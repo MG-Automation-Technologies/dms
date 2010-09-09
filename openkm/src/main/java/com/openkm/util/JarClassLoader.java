@@ -17,7 +17,12 @@ public class JarClassLoader extends URLClassLoader implements MultipleClassLoade
 		super(new URL[] { url });
 		this.url = url;
 	}
-
+	
+	public JarClassLoader(URL url, ClassLoader parent) {
+		super(new URL[] { url }, parent);
+		this.url = url;
+	}
+	
 	@Override
 	public String getMainClassName() throws IOException {
 		log.debug("getMainClassName()");
