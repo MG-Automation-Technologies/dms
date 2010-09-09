@@ -72,7 +72,7 @@ public class OKMBookmark implements BookmarkModule {
 			RepositoryException, DatabaseException {
 		log.debug("rename({}, {}, {})", new Object[] { token, bmId, newName });
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
-		Bookmark bookmark= bm.rename(token, bmId, newName);
+		Bookmark bookmark = bm.rename(token, bmId, newName);
 		log.debug("rename: {}", bookmark);
 		return bookmark;
 	}
