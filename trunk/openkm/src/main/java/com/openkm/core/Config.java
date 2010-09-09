@@ -62,6 +62,8 @@ public class Config {
 	// Scripting
 	public static final String START_SCRIPT = "start.bsh";
 	public static final String STOP_SCRIPT = "stop.bsh";
+	public static final String START_JAR = "start.jar";
+	public static final String STOP_JAR = "stop.jar";
 	
 	// Configuration files
 	public static final String CONFIG_FILE = "OpenKM"+INSTALL+".cfg";
