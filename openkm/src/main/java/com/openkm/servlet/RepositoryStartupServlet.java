@@ -43,8 +43,8 @@ import org.slf4j.LoggerFactory;
 import bsh.EvalError;
 import bsh.Interpreter;
 
-import com.openkm.cache.UserItemsManager;
 import com.openkm.cache.UserDocumentKeywordsManager;
+import com.openkm.cache.UserItemsManager;
 import com.openkm.core.Config;
 import com.openkm.core.DataStoreGarbageCollector;
 import com.openkm.core.DatabaseException;
@@ -55,10 +55,10 @@ import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
-import com.openkm.util.ClassLoaderUtils;
 import com.openkm.util.DocConverter;
-import com.openkm.util.JarClassLoader;
 import com.openkm.util.WarUtils;
+import com.openkm.util.cl.ClassLoaderUtils;
+import com.openkm.util.cl.JarClassLoader;
 
 /**
  * Servlet Class
