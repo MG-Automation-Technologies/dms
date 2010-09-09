@@ -4,8 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ClassLoaderUtils {
-		
+	private static Logger log = LoggerFactory.getLogger(ClassLoaderUtils.class);
+	
 	/**
 	 * Invoke class
 	 * 
@@ -13,6 +17,7 @@ public class ClassLoaderUtils {
 	 */
 	public static void invokeClass(Class<?> c, String[] args) throws ClassNotFoundException,
 			NoSuchMethodException, InvocationTargetException {
+		log.debug("invokeClass({}, {})", c, args);
 		Method m = c.getMethod("main", new Class[] { args.getClass() });
 		m.setAccessible(true);
 		int mods = m.getModifiers();

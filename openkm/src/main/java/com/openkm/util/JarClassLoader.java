@@ -6,7 +6,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.Attributes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class JarClassLoader extends URLClassLoader implements MultipleClassLoader {
+	private static Logger log = LoggerFactory.getLogger(JarClassLoader.class);
 	private URL url;
 	
 	public JarClassLoader(URL url) {
@@ -16,6 +20,7 @@ public class JarClassLoader extends URLClassLoader implements MultipleClassLoade
 
 	@Override
 	public String getMainClassName() throws IOException {
+		log.debug("getMainClassName()");
 		URL u = new URL("jar", "", url + "!/");
 		JarURLConnection uc = (JarURLConnection) u.openConnection();
 		Attributes attr = uc.getMainAttributes();
