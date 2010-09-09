@@ -20,6 +20,18 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 	
 	public BinaryClassLoader(byte[] buf) throws IOException {
 		super();
+		createCache(buf);
+		
+	}
+	public BinaryClassLoader(byte[] buf, ClassLoader parent) throws IOException {
+		super(parent);
+		createCache(buf);
+	}
+	
+	/**
+	 * Create internal classes and resources cache
+	 */
+	private void createCache(byte[] buf) throws IOException {
 		ByteArrayInputStream bais = null;
 		JarInputStream jis = null;
 		byte[] buffer = new byte[1024 * 4];
