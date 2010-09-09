@@ -12,8 +12,15 @@ public class ClassLoaderUtils {
 	
 	/**
 	 * Invoke class
-	 * 
-	 * Class<?> c = loadClass(name);
+	 */
+	public static void invokeClass(String className, String[] args, ClassLoader classLoader) throws 
+			ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
+		Class<?> c = classLoader.loadClass(className);
+		invokeClass(c, args);
+	}
+	
+	/**
+	 * Invoke class
 	 */
 	public static void invokeClass(Class<?> c, String[] args) throws ClassNotFoundException,
 			NoSuchMethodException, InvocationTargetException {
