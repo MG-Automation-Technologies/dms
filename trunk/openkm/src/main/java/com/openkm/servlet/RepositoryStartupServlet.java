@@ -55,7 +55,9 @@ import com.openkm.core.Watchdog;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.ClassLoaderUtils;
 import com.openkm.util.DocConverter;
+import com.openkm.util.JarClassLoader;
 import com.openkm.util.WarUtils;
 
 /**
@@ -195,12 +197,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	log.info("*** Ejecute start script ***");
         	runScript(Config.START_SCRIPT);
+        	runJar(Config.START_JAR);
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
         }
     }
 
-    @Override
+	@Override
     public void destroy() {
         super.destroy();
 
@@ -260,6 +263,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         	if (log == null) log("*** Ejecute stop script ***");
         	else log.info("*** Ejecute stop script ***");
         	runScript(Config.STOP_SCRIPT);
+        	runJar(Config.STOP_JAR);
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
         }
@@ -270,7 +274,7 @@ public class RepositoryStartupServlet extends HttpServlet {
      */
     private void runScript(String name) {
     	try {
-        	File script = new File(Config.HOME_DIR + File.separatorChar + name); 
+    		File script = new File(Config.HOME_DIR + File.separatorChar + name); 
         	FileReader fr = null;
         	
         	if (script.exists() && script.canRead()) {
@@ -285,9 +289,36 @@ public class RepositoryStartupServlet extends HttpServlet {
 				} finally {
 					IOUtils.closeQuietly(fr);
 				}
+        	} else {
+        		log.warn("Unable to read script: {}", script.getPath());
         	}
         } catch (Exception e) {
         	log.warn(e.getMessage(), e);
         }
     }
+    
+    /**
+     * Ejecute jar
+     */
+    private void runJar(String name) {
+    	try {
+    		File jar = new File(Config.HOME_DIR + File.separatorChar + name); 
+    		
+    		if (jar.exists() && jar.canRead()) {
+    			JarClassLoader jcl = new JarClassLoader(jar.toURI().toURL(), getClass().getClassLoader());
+    			String mainClass = jcl.getMainClassName();
+    			
+    			if (mainClass != null) {
+    				Class<?> c = jcl.loadClass(jcl.getMainClassName());
+    				ClassLoaderUtils.invokeClass(c, new String[] {});
+    			} else {
+    				log.error("Main class not defined at: {}", jar.getPath());
+    			}
+    		} else {
+    			log.warn("Unable to read jar: {}", jar.getPath());
+    		}
+    	} catch (Exception e) {
+    		log.warn(e.getMessage(), e);
+    	}
+	}
 }
