@@ -57,6 +57,16 @@ public class OKMBookmark implements BookmarkModule {
 		log.debug("add: {}", bookmark);
 		return bookmark;
 	}
+	
+	@Override
+	public Bookmark get(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("get({}, {})", new Object[] { token, bmId });
+		BookmarkModule bm = ModuleManager.getBookmarkModule();
+		Bookmark bookmark = bm.get(token, bmId);
+		log.debug("get: {}", bookmark);
+		return bookmark;
+	}
 
 	@Override
 	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,

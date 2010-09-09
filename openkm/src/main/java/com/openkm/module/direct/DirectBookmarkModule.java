@@ -89,6 +89,38 @@ public class DirectBookmarkModule implements BookmarkModule {
 		log.debug("add: {}", newBookmark);
 		return newBookmark;
 	}
+	
+	@Override
+	public Bookmark get(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("get({}, {})", token, bmId);
+		Bookmark bookmark = null;
+		Session session = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			bookmark = BookmarkDAO.findByPk(session, bmId);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "BOOKMARK_GET", Integer.toString(bmId), bookmark.toString());
+		} catch (javax.jcr.RepositoryException e) {
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+
+		log.debug("get: {}", bookmark);
+		return bookmark;
+	}
 
 	@Override
 	public void remove(String token, int bmId) throws AccessDeniedException, RepositoryException,

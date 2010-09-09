@@ -36,6 +36,7 @@ public interface BookmarkModule {
 	 * Create a new folder in the repository.
 	 * 
 	 * @param nodePath A node path to be bookmarked.
+	 * @param name The name of the bookmark.
 	 * @thows PathNotFoundException If there is no node with this nodePath.
 	 * @throws ItemExistsException If there is already a bookmark in the
 	 * repository with the same name.
@@ -45,7 +46,17 @@ public interface BookmarkModule {
 			PathNotFoundException, RepositoryException, DatabaseException;
 
 	/**
-	 * Obtains properties from a previously created folder.
+	 * Get info from a previously created bookmark
+	 * 
+	 * @param token 
+	 * @param bmId The unique bookmark id.
+	 * @return The bookmark object.
+	 */
+	public Bookmark get(String token, int bmId) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
+	
+	/**
+	 * Remove a bookmark
 	 * 
 	 * @param name The bookmark name to be deleted. 
 	 * @throws PathNotFoundException If the indicated bookmark doesn't exist.
