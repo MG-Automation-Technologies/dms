@@ -9,7 +9,11 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BinaryClassLoader extends ClassLoader implements MultipleClassLoader {
+	private static Logger log = LoggerFactory.getLogger(BinaryClassLoader.class);
 	private Hashtable<String, Class<?>> classes = new Hashtable<String, Class<?>>();
 	private Hashtable<String, byte[]> resources = new Hashtable<String, byte[]>();
 	private String mainClassName = null;
@@ -72,6 +76,7 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 	 */
 	@Override
 	public String getMainClassName() throws IOException {
+		log.debug("getMainClassName()");
 		return mainClassName;
 	}
 	
@@ -80,7 +85,7 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 	 */
 	@Override
 	public Class<?> findClass(String className) {
-		//System.out.println("findClass("+className+")");
+		log.debug("findClass({})", className);
 		Class<?> ret = classes.get(className);
 		
 		if (ret != null) {
@@ -111,7 +116,7 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 	 */
 	@Override
 	public InputStream getResourceAsStream(String name) {
-		//System.out.println("getResourceAsStream("+name);
+		log.debug("getResourceAsStream({})", name);
 		byte[] bytes = resources.get(name);
 		
 		if (bytes != null) {
