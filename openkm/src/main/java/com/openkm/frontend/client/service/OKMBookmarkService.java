@@ -37,4 +37,5 @@ public interface OKMBookmarkService extends RemoteService {
 	public GWTBookmark add(String nodePath, String name) throws OKMException;
 	public void remove(int bmId) throws OKMException;
 	public GWTBookmark rename(int bmId, String newName) throws OKMException;
+	public GWTBookmark get(int bmId) throws OKMException;
 }
