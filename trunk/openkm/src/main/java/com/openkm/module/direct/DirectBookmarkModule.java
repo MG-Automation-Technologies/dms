@@ -141,6 +141,7 @@ public class DirectBookmarkModule implements BookmarkModule {
 			Bookmark bm = BookmarkDAO.findByPk(session, bmId);
 			bm.setName(newName);
 			BookmarkDAO.update(bm);
+			renamedBookmark = BookmarkDAO.findByPk(session, bmId);
 						
 			// Activity log
 			UserActivity.log(session.getUserID(), "BOOKMARK_RENAME", Integer.toString(bmId), newName);
