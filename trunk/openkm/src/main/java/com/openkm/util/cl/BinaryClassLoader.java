@@ -9,6 +9,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,21 +66,8 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (jis != null) {
-				try {
-					jis.close();
-				} catch (IOException e) {
-					// Ignore
-				}
-			}
-			
-			if (bais != null) {
-				try {
-					bais.close();
-				} catch (IOException e) {
-					// Ignore
-				}
-			}
+			IOUtils.closeQuietly(jis);
+			IOUtils.closeQuietly(bais);
 		}
 	}
 	
@@ -114,7 +102,7 @@ public class BinaryClassLoader extends ClassLoader implements MultipleClassLoade
 		byte[] classByte = resources.get(className);
 		
 		if (classByte != null) {
-			ret = defineClass(className, classByte, 0, classByte.length, null);  
+			ret = defineClass(className, classByte, 0, classByte.length, null);
 			classes.put(className, ret);
 			resources.remove(className);
 			return ret;

@@ -1,17 +1,14 @@
 package com.openkm.util.cl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +43,7 @@ public class FilesystemClassLoader extends ClassLoader implements MultipleClassL
 				return attr != null ? attr.getValue(Attributes.Name.MAIN_CLASS) : null;
 			}
 		} finally {
-			if (fis != null) {
-				fis.close();
-			}
+			IOUtils.closeQuietly(fis);
 		}
 		
 		return null;
@@ -59,7 +54,10 @@ public class FilesystemClassLoader extends ClassLoader implements MultipleClassL
 	 */
 	@Override
 	public Class<?> findClass(String className) {
-		log.debug("findClass({})", className);
+		log.info("findClass({})", className);
+		String classFile = className.replace('.', '/').concat(".class"); 
+		File fc = new File(file, classFile);
+		FileInputStream fis = null;
 		
 		// Check for system class
 		try {
@@ -68,14 +66,20 @@ public class FilesystemClassLoader extends ClassLoader implements MultipleClassL
 			// Ignore
 		}
 		
-		//byte[] classByte = resources.get(className);
-		
-		//if (classByte != null) {
-			//ret = defineClass(className, classByte, 0, classByte.length, null);  
-			//classes.put(className, ret);
-			//resources.remove(className);
-			//return ret;
-		//}
+		try {
+			if (fc.exists() && fc.canRead()) {
+				fis = new FileInputStream(fc);
+				byte[] classByte = IOUtils.toByteArray(fis);
+				
+				if (classByte != null) {
+					return defineClass(className, classByte, 0, classByte.length, null);
+				}
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			IOUtils.closeQuietly(fis);
+		}
 		
 		return null;
 	}
@@ -86,11 +90,15 @@ public class FilesystemClassLoader extends ClassLoader implements MultipleClassL
 	@Override
 	public InputStream getResourceAsStream(String name) {
 		log.debug("getResourceAsStream({})", name);
-		//byte[] bytes = resources.get(name);
+		File fr = new File(file, name);
 		
-		//if (bytes != null) {
-			//return new ByteArrayInputStream(bytes);
-		//}
+		try {
+			if (fr.exists() && fr.canRead()) { 
+				return new FileInputStream(fr);
+			}
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage(), e);
+		}
 		
 		return null;
 	}
