@@ -182,6 +182,7 @@ public class MailAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma", ma);
+			sc.setAttribute("protocols", protocols);
 			sc.getRequestDispatcher("/admin/mail_account_edit.jsp").forward(request, response);
 		}
 		
@@ -273,6 +274,7 @@ public class MailAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("ma", MailAccountDAO.findByPk(maId));
+			sc.setAttribute("protocols", protocols);
 			sc.getRequestDispatcher("/admin/mail_account_edit.jsp").forward(request, response);
 		}
 		
@@ -452,6 +454,8 @@ public class MailAccountServlet extends BaseServlet {
 			sc.setAttribute("action", WebUtil.getString(request, "action"));
 			sc.setAttribute("persist", true);
 			sc.setAttribute("fr", fr);
+			sc.setAttribute("fields", fields);
+			sc.setAttribute("operations", operations);
 			sc.getRequestDispatcher("/admin/filter_rule_edit.jsp").forward(request, response);
 		}
 		
@@ -502,5 +506,29 @@ public class MailAccountServlet extends BaseServlet {
 	 */
 	private void ruleDelete(Session session, HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DatabaseException {
+		log.debug("ruleDelete({}, {}, {})", new Object[] { session, request, response });
+		
+		if (WebUtil.getBoolean(request, "persist")) {
+			int frId = WebUtil.getInt(request, "fr_id");
+			MailAccountDAO.deleteRule(frId);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "ADMIN_FILTER_RULE_DELETE", Integer.toString(frId), null);
+		} else {
+			ServletContext sc = getServletContext();
+			int maId = WebUtil.getInt(request, "ma_id");
+			int mfId = WebUtil.getInt(request, "mf_id");
+			int frId = WebUtil.getInt(request, "fr_id");
+			sc.setAttribute("action", WebUtil.getString(request, "action"));
+			sc.setAttribute("persist", true);
+			sc.setAttribute("ma_id", maId);
+			sc.setAttribute("mf_id", mfId);
+			sc.setAttribute("fr", MailAccountDAO.findRuleByPk(frId));
+			sc.setAttribute("fields", fields);
+			sc.setAttribute("operations", operations);
+			sc.getRequestDispatcher("/admin/filter_rule_edit.jsp").forward(request, response);
+		}
+		
+		log.debug("ruleDelete: void");
 	}
 }
