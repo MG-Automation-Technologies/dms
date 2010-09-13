@@ -4,7 +4,7 @@
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.MailAccount" table="OKM_MAIL_ACCOUNT">
     <id name="id" column="MA_ID"><generator class="native"/></id>
-    <property name="user" column="MA_USER" not-null="true"/>
+    <property name="user" column="MA_USER" not-null="true" length="127"/>
     <property name="mailProtocol" column="MA_MPROTOCOL" not-null="true"/>
     <property name="mailHost" column="MA_MHOST" not-null="true"/>
     <property name="mailFolder" column="MA_MFOLDER" not-null="true"/>

@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.User" table="OKM_USER">
-    <id name="id" column="USR_ID"><generator class="assigned"/></id>
+    <id name="id" column="USR_ID" length="127"><generator class="assigned"/></id>
     <property name="name" column="USR_NAME" not-null="true"/>
     <property name="password" column="USR_PASSWORD" not-null="true"/>
     <property name="email" column="USR_EMAIL" not-null="true"/>

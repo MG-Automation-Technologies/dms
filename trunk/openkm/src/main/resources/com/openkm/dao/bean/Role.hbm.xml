@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="com.openkm.dao.bean.Role" table="OKM_ROLE">
-    <id name="id" column="ROL_ID"><generator class="assigned"/></id>
+    <id name="id" column="ROL_ID" length="127"><generator class="assigned"/></id>
     <property name="active" column="ROL_ACTIVE" not-null="true"/>
   </class>
 </hibernate-mapping>
