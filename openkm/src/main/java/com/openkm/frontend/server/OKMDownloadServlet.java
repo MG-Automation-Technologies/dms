@@ -98,7 +98,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			// Now an document can be located by UUID
 			if (uuid != null && !uuid.equals("")) {
 				OKMRepository okmRepo = OKMRepository.getInstance();
-				path = okmRepo.getPath(null, uuid);
+				path = okmRepo.getNodePath(null, uuid);
 			}
 						
 			// Get document
