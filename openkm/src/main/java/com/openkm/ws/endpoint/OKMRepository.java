@@ -141,13 +141,24 @@ public class OKMRepository {
 	}
 	
 	@WebMethod
-	public String getPath(@WebParam(name = "token") String token,
+	public String getNodePath(@WebParam(name = "token") String token,
 			@WebParam(name = "uuid") String uuid) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("getPath({}, {})", token, uuid);
+		log.debug("getNodePath({}, {})", token, uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String path = rm.getPath(token, uuid);
-		log.debug("getPath: {}", path);
+		String path = rm.getNodePath(token, uuid);
+		log.debug("getNodePath: {}", path);
+		return path;
+	}
+	
+	@WebMethod
+	public String getNodeUuid(@WebParam(name = "token") String token,
+			@WebParam(name = "path") String path) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getNodeUuid({}, {})", token, path);
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		String uuid = rm.getNodePath(token, path);
+		log.debug("getNodeUuid: {}", uuid);
 		return path;
 	}
 }
