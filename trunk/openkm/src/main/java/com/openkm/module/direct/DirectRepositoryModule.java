@@ -844,7 +844,7 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getUuid(String token) throws RepositoryException {
+	public String getRepositoryUuid(String token) throws RepositoryException {
 		return Repository.getUuid();
 	}
 	
@@ -874,9 +874,9 @@ public class DirectRepositoryModule implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("getPath({}, {})", token, uuid);
+		log.debug("getNodePath({}, {})", token, uuid);
 		String ret;
 		Session session = null;
 		
@@ -898,7 +898,36 @@ public class DirectRepositoryModule implements RepositoryModule {
 			if (token == null) JCRUtils.logout(session);
 		}
 
-		log.debug("getPath: {}", ret);
+		log.debug("getNodePath: {}", ret);
+		return ret;
+	}
+	
+	@Override
+	public String getNodeUuid(String token, String path) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getNodeUuid({}, {})", token, path);
+		String ret;
+		Session session = null;
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			ret = session.getRootNode().getNode(path.substring(1)).getUUID();
+		} catch (javax.jcr.ItemNotFoundException e) {
+			log.error(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+
+		log.debug("getNodeUuid: {}", ret);
 		return ret;
 	}
 }
