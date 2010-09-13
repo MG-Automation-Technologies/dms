@@ -161,11 +161,11 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public String getUuid(String token) throws RepositoryException {
-		log.debug("getUuid({})", token);
+	public String getRepositoryUuid(String token) throws RepositoryException {
+		log.debug("getRepositoryUuid({})", token);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String uuid = rm.getUuid(token);
-		log.debug("getUuid: {}", uuid);
+		String uuid = rm.getRepositoryUuid(token);
+		log.debug("getRepositoryUuid: {}", uuid);
 		return uuid;
 	}
 
@@ -179,12 +179,22 @@ public class OKMRepository implements RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
-		log.debug("getPath({}, {})", token, uuid);
+		log.debug("getNodePath({}, {})", token, uuid);
 		RepositoryModule rm = ModuleManager.getRepositoryModule();
-		String ret = rm.getPath(token, uuid);
-		log.debug("getPath: {}", ret);
+		String ret = rm.getNodePath(token, uuid);
+		log.debug("getNodePath: {}", ret);
+		return ret;
+	}
+	
+	@Override
+	public String getNodeUuid(String token, String path) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		log.debug("getNodeUuid({}, {})", token, path);
+		RepositoryModule rm = ModuleManager.getRepositoryModule();
+		String ret = rm.getNodeUuid(token, path);
+		log.debug("getNodeUuid: {}", ret);
 		return ret;
 	}
 }
