@@ -112,7 +112,7 @@ public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 	}
 
 	@Override
-	public String getUuid(String token) throws RepositoryException {
+	public String getRepositoryUuid(String token) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -124,7 +124,14 @@ public class EJBRepositoryModule implements com.openkm.module.RepositoryModule {
 	}
 
 	@Override
-	public String getPath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+	public String getNodePath(String token, String uuid) throws PathNotFoundException, RepositoryException,
+			DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getNodeUuid(String token, String path) throws PathNotFoundException, RepositoryException,
 			DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
