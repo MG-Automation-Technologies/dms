@@ -486,7 +486,7 @@ public class Util {
 		if (params.getCategories() != null && !params.getCategories().isEmpty()) {
 			itCat = params.getCategories().iterator();
 			if (itCat.hasNext()) {
-				gWTParams.setCategoryPath(OKMRepository.getInstance().getPath(null, itCat.next()));
+				gWTParams.setCategoryPath(OKMRepository.getInstance().getNodePath(null, itCat.next()));
 			}
 		}
 		
