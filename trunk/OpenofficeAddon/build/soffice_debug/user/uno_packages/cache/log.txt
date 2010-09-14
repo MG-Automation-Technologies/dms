@@ -1,0 +1,19 @@
+###### Progress log entry 2010-09-14 18:07:05 ######
+Copying: OpenKMAddOn.oxt
+Enabling: OpenKM
+ Enabling: ProtocolHandler.xcu
+ Enabling: Addons.xcu
+ Enabling: WriterWindowState.xcu
+###### Progress log entry 2010-09-14 18:07:33 ######
+###### Progress log entry 2010-09-14 18:09:50 ######
+Copying: OpenKMAddOn.oxt
+Disabling: OpenKM
+ Disabling: WriterWindowState.xcu
+ Disabling: Addons.xcu
+ Disabling: ProtocolHandler.xcu
+Enabling: OpenKM
+ Enabling: OpenofficeAddOn.jar
+ Enabling: Addons.xcu
+ Enabling: WriterWindowState.xcu
+ Enabling: ProtocolHandler.xcu
+###### Progress log entry 2010-09-14 18:09:59 ######
