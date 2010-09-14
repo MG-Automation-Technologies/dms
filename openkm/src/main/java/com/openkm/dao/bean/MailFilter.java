@@ -30,7 +30,8 @@ public class MailFilter implements Serializable {
 	private int id;
 	private String path;
 	private String uuid;
-	private boolean active;
+	private boolean grouping = true;
+	private boolean active = false;
 	private Set<FilterRule> filterRules = new HashSet<FilterRule>();
 
 	public int getId() {
@@ -56,6 +57,14 @@ public class MailFilter implements Serializable {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+	
+	public boolean isGrouping() {
+		return grouping;
+	}
+
+	public void setGrouping(boolean grouping) {
+		this.grouping = grouping;
+	}
 
 	public boolean isActive() {
 		return active;
@@ -79,6 +88,7 @@ public class MailFilter implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", path="); sb.append(path);
 		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", grouping="); sb.append(grouping);
 		sb.append(", active="); sb.append(active);
 		sb.append(", filterRules="); sb.append(filterRules);
 		sb.append("}");
