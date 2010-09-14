@@ -324,6 +324,7 @@ public class MailAccountServlet extends BaseServlet {
 			MailFilter mf = new MailFilter();
 			mf.setPath(WebUtil.getString(request, "mf_path"));
 			mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
+			mf.setGrouping(WebUtil.getBoolean(request, "mf_grouping"));
 			mf.setActive(WebUtil.getBoolean(request, "mf_active"));
 			MailAccount ma = MailAccountDAO.findByPk(maId);
 			ma.getMailFilters().add(mf);
@@ -357,6 +358,7 @@ public class MailAccountServlet extends BaseServlet {
 			if (mf != null) {
 				mf.setPath(WebUtil.getString(request, "mf_path"));
 				mf.setUuid(JCRUtils.getUUID(session, mf.getPath()));
+				mf.setGrouping(WebUtil.getBoolean(request, "mf_grouping"));
 				mf.setActive(WebUtil.getBoolean(request, "mf_active"));
 				MailAccountDAO.updateFilter(mf);
 			}
