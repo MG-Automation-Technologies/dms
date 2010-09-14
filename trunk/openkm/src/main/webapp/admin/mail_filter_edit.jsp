@@ -33,6 +33,19 @@
             <td><input name="mf_path" value="${mf.path}" size="48"/></td>
           </tr>
           <tr>
+            <td>Grouping</td>
+            <td>
+              <c:choose>
+                <c:when test="${mf.grouping}">
+                  <input name="mf_grouping" type="checkbox" checked="checked"/>
+                </c:when>
+                <c:otherwise>
+                  <input name="mf_grouping" type="checkbox"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr>
             <td>Active</td>
             <td>
               <c:choose>
