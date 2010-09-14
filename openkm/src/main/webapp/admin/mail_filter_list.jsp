@@ -20,7 +20,7 @@
       <h1>Mail filters <span style="font-size: 10px;">(<a href="${urlMailList}">Mail accounts</a>)</span></h1>
       <table class="results" width="70%">
         <tr>
-          <th>Folder</th><th>Active</th>
+          <th>Folder</th><th>Grouping</th><th>Active</th>
           <th width="75px">
             <c:url value="MailAccount" var="urlCreate">
               <c:param name="action" value="filterCreate"/>
@@ -51,6 +51,16 @@
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${mf.path}</td>
+            <td align="center">
+              <c:choose>
+                <c:when test="${mf.grouping}">
+                  <img src="img/true.png" alt="Active" title="Active"/>
+                </c:when>
+                <c:otherwise>
+                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                </c:otherwise>
+              </c:choose>
+            </td>
             <td align="center">
               <c:choose>
                 <c:when test="${mf.active}">
