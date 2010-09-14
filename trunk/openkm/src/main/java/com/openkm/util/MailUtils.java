@@ -251,7 +251,24 @@ public class MailUtils {
 	}
 		
 	/**
-	 * Import messages 
+	 * Import messages
+	 * 
+	 * == Using Unique Identifier (UIDL) ==
+	 * Mail server assigns an unique identifier for every email in the same account. You can get as UIDL 
+	 * for every email by MailInfo.UIDL property. To avoid receiving the same email twice, the best way is
+	 * storing the UIDL of email retrieved to a text file or database. Next time before you retrieve email,
+	 * compare your local uidl list with remote uidl. If this uidl exists in your local uidl list, don't
+	 * receive it; otherwise receive it.
+	 * 
+	 * == Different property of UIDL in POP3 and IMAP4 ==
+	 * UIDL is always unique in IMAP4 and it is always an incremental integer. UIDL in POP3 can be any valid
+	 * asc-ii characters, and an UIDL may be reused by POP3 server if email with this UIDL has been deleted
+	 * from the server. Hence you are advised to remove the uidl from your local uidl list if that uidl is
+	 * no longer exist on the POP3 server.
+	 * 
+	 * == Remarks ==
+	 * You should create different local uidl list for different email account, because the uidl is only
+	 * unique for the same account. 
 	 */
 	public static void importMessages(String uid, MailAccount ma) throws PathNotFoundException, ItemExistsException,
 			VirusDetectedException, AccessDeniedException, RepositoryException, DatabaseException, 
