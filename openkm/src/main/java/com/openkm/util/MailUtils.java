@@ -334,6 +334,8 @@ public class MailUtils {
 				// Set message as seen
 				if (ma.isMailMarkSeen()) {
 					msg.setFlag(Flags.Flag.SEEN, true);
+				} else {
+					msg.setFlag(Flags.Flag.SEEN, false);
 				}
 				
 				// Delete readed mail if requested
