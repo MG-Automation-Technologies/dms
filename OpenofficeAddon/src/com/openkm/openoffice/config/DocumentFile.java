@@ -1,0 +1,189 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.openkm.openoffice.config;
+
+import com.openkm.openoffice.bean.OKMDocumentBean;
+import com.openkm.openoffice.logic.OKMException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+/**
+ *
+ * @author jllort
+ */
+public class DocumentFile {
+    private static String OPENKM_FOLDER = "OpenKM";
+    private static String OPENKM_CONFIG_FILENAME = "document.xml";
+    private static String directoryToStoreFiles;
+    private static String documentFilename;
+    private static List<OKMDocumentBean> docList;
+
+
+    public static void init() throws OKMException {
+        directoryToStoreFiles = getDirectoryToStoreFiles();
+        if (directoryToStoreFiles==null)  {
+            directoryToStoreFiles = getWorkingPath() + OPENKM_FOLDER;
+            File file = new File(directoryToStoreFiles);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+        }
+
+        if (documentFilename==null) {
+            documentFilename = directoryToStoreFiles + "/" + OPENKM_CONFIG_FILENAME;
+            File f = new File(documentFilename);
+            try {
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+            } catch (IOException ex) {
+                throw new OKMException(ex.getMessage());
+            }
+        }
+        docList = new ArrayList<OKMDocumentBean>();
+    }
+
+    public static String getDirectoryToStoreFiles() {
+        return directoryToStoreFiles;
+    }
+
+    public static String getWorkingPath() {
+        return System.getProperty("user.home")+"/";
+    }
+
+    public static void save() throws OKMException {
+        try {
+            XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+            FileWriter fileWriter = new FileWriter(documentFilename);
+            XMLStreamWriter writer = outputFactory.createXMLStreamWriter(fileWriter);
+
+            writer.writeStartDocument("utf-8", "1.0");      // Header
+            writer.writeStartElement("openkm");             // openkm node
+
+            for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
+                OKMDocumentBean doc = it.next();
+                writer.writeStartElement("document");       // document node
+
+                writer.writeStartElement("uuid");           // uuid
+                writer.writeCharacters(doc.getUUID());
+                writer.writeEndElement();
+
+                writer.writeStartElement("path");           // path
+                writer.writeCharacters(doc.getPath());
+                writer.writeEndElement();
+
+                writer.writeStartElement("localfilename");  // localfilename
+                writer.writeCharacters(doc.getLocalFilename());
+                writer.writeEndElement();
+
+                writer.writeStartElement("name");           // name
+                writer.writeCharacters(doc.getName());
+                writer.writeEndElement();
+
+                writer.writeEndElement();                   // close document
+            }
+
+            writer.writeEndElement();                       // close openkm
+            writer.flush();
+            writer.close();
+
+        } catch (XMLStreamException ex) {
+            throw new OKMException(ex.getMessage());
+        } catch (IOException ex) {
+            throw new OKMException(ex.getMessage());
+        } finally {
+        }
+    }
+
+    public static List<OKMDocumentBean> read() throws OKMException {
+        try {
+            docList = new ArrayList<OKMDocumentBean>();
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse (new File(documentFilename));
+
+            NodeList nodes = doc.getElementsByTagName("document");
+            if (nodes.getLength()>0) {
+                for (int i=0; i<nodes.getLength(); i++) {
+                    OKMDocumentBean oKMDocumentBean = new OKMDocumentBean();
+                    Node document = nodes.item(i);
+                    Element docElement = (Element) document;
+                    oKMDocumentBean.setUUID(docElement.getElementsByTagName("uuid").item(0).getChildNodes().item(0).getNodeValue());
+                    oKMDocumentBean.setPath(docElement.getElementsByTagName("path").item(0).getChildNodes().item(0).getNodeValue());
+                    oKMDocumentBean.setLocalFilename(docElement.getElementsByTagName("localfilename").item(0).getChildNodes().item(0).getNodeValue());
+                    oKMDocumentBean.setName(docElement.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue());
+                    docList.add(oKMDocumentBean);
+                }
+            }
+
+        } catch (ParserConfigurationException ex) {
+            throw new OKMException(ex.getMessage());
+        } catch (SAXException ex) {
+            throw new OKMException(ex.getMessage());
+        } catch (IOException ex) {
+            throw new OKMException(ex.getMessage());
+        }
+
+        return docList;
+    }
+
+    public static void add(OKMDocumentBean doc) throws OKMException {
+        read();
+        docList.add(doc);
+        save();
+    }
+
+    public static void remove(OKMDocumentBean doc) throws OKMException {
+        read();
+        for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
+            OKMDocumentBean tmpDoc = it.next();
+            if (tmpDoc.getUUID().equals(doc.getUUID())) {
+                docList.remove(tmpDoc);
+                break;
+            }
+        }
+        save();
+    }
+
+    public static boolean isOpenKMDocument(String localFilename) throws OKMException {
+        boolean found = false;
+        read();
+        for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
+            OKMDocumentBean doc = it.next();
+            if (localFilename.equals(doc.getLocalFilename())) {
+                found = true;
+                break;
+            } 
+        }
+        return found;
+    }
+
+    public static OKMDocumentBean findByLocalFileName(String localFilename) throws OKMException {
+        read();
+        for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
+            OKMDocumentBean doc = it.next();
+            if (localFilename.equals(doc.getLocalFilename())) {
+                return doc;
+            }
+        }
+        return null;
+    }
+}
