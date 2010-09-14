@@ -319,14 +319,14 @@ public class MailUtils {
 				if (ma.getMailFilters().isEmpty()) {
 					log.info("Import in compatibility mode");
 					String mailPath = getUserMailPath(uid);
-					importMail(mailPath, folder, msg, ma, mail);
+					importMail(mailPath, true, folder, msg, ma, mail);
 				} else {
 					for (MailFilter mf : ma.getMailFilters()) {
 						log.info("MailFilter: {}", mf);
 						
 						if (checkRules(mail, mf.getFilterRules())) {
 							String  mailPath = mf.getPath();
-							importMail(mailPath, folder, msg, ma, mail);		
+							importMail(mailPath, mf.isGrouping(), folder, msg, ma, mail);		
 						}
 					}
 				}
@@ -360,14 +360,14 @@ public class MailUtils {
 	/**
 	 * Import mail into OpenKM repository 
 	 */
-	private static void importMail(String mailPath, Folder folder, Message msg, MailAccount ma, 
-			com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException, AccessDeniedException,
-			ItemExistsException, PathNotFoundException, MessagingException, VirusDetectedException, 
-			UserQuotaExceededException, IOException {
+	private static void importMail(String mailPath, boolean grouping, Folder folder, Message msg, 
+			MailAccount ma, com.openkm.bean.Mail mail) throws DatabaseException, RepositoryException,
+			AccessDeniedException, ItemExistsException, PathNotFoundException, MessagingException,
+			VirusDetectedException, UserQuotaExceededException, IOException {
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
 		OKMRepository okmRepository = OKMRepository.getInstance();
 		OKMMail okmMail = OKMMail.getInstance();
-		String path = createPath(mailPath, mail.getReceivedDate());
+		String path = grouping ? createGroupPath(mailPath, mail.getReceivedDate()) : mailPath;
 		
 		if (ma.getMailProtocol().equals(MailAccount.PROTOCOL_POP3)) {
 			mail.setPath(path+"/"+((POP3Folder)folder).getUID(msg)+"-"+FileUtils.escape(msg.getSubject()));
@@ -445,7 +445,7 @@ public class MailUtils {
 	/**
 	 * Create mail path
 	 */
-	private static String createPath(String mailPath, Calendar receivedDate) throws DatabaseException,
+	private static String createGroupPath(String mailPath, Calendar receivedDate) throws DatabaseException,
 			RepositoryException, AccessDeniedException, ItemExistsException, PathNotFoundException {
 		log.info("createPath({}, {})", new Object[] { mailPath, receivedDate });
 		String systemToken = JcrSessionManager.getInstance().getSystemToken();
