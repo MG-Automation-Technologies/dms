@@ -6,6 +6,7 @@
     <id name="id" column="MF_ID"><generator class="native"/></id>
     <property name="path" column="MF_PATH" not-null="true"/>
     <property name="uuid" column="MF_UUID" not-null="true"/>
+    <property name="grouping" column="MF_GROUPING" not-null="true"/>
     <property name="active" column="MF_ACTIVE" not-null="true"/>
     <set name="filterRules" table="OKM_FILTER_RULE" order-by="FR_ID asc" cascade="all-delete-orphan" lazy="false">
       <key column="FR_MAIL_FILTER" not-null="true"/>
