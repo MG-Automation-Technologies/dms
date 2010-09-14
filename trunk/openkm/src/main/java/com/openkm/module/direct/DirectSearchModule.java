@@ -433,9 +433,13 @@ public class DirectSearchModule implements SearchModule {
 					if (node.isNodeType(Document.TYPE)) {
 						Document doc = new DirectDocumentModule().getProperties(session, path);
 						
-						if (node.getParent().isNodeType(Mail.TYPE)) {
-							qr.setAttachment(doc);
-						} else {
+						try {
+							if (node.getParent().isNodeType(Mail.TYPE)) {
+								qr.setAttachment(doc);
+							} else {
+								qr.setDocument(doc);
+							}
+						} catch (javax.jcr.AccessDeniedException e) {
 							qr.setDocument(doc);
 						}
 					} else if (node.isNodeType(Folder.TYPE)) {
