@@ -112,7 +112,7 @@ public class ScannerManager implements ScannerListener {
 					log.log(Level.SEVERE, "Error: " + response);
 					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
 				}
-								
+				
 				win.call("refresh", new Object[] {});
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
