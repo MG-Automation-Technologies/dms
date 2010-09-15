@@ -7,7 +7,7 @@
     <registration>
         <simple-license accept-by="user" default-license-id="es" suppress-on-update="true">
             <license-text lang="es" license-id="es" xlink:href="licenses/license.txt"/>
-            <license-text lang="en" xlink:href="licenses/license.txt"/>
+            <license-text lang="en" license-id="en" xlink:href="licenses/license.txt"/>
         </simple-license>
     </registration>
     <publisher>
@@ -26,7 +26,7 @@
         <high-contrast xlink:href="images/logo_openkm.png"/>
     </icon>
     <extension-description>
-        <src lang="en" xlink:href="description/description.txt"/>
+        <src lang="en" xlink:href="description/description_en.txt"/>
         <src lang="es" xlink:href="description/description.txt"/>
     </extension-description>
 </description>
