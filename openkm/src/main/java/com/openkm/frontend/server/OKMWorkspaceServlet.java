@@ -288,7 +288,6 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			}
 			
 			workspace.setRoleList(OKMAuth.getInstance().getRolesByUser(null, user.getId()));
-			 
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMWorkspaceService, ErrorCode.CAUSE_SQLException), e.getMessage());
