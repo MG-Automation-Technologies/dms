@@ -27,12 +27,12 @@ import org.xml.sax.SAXException;
  */
 public class ConfigFile {
 
-    private static String OPENKM_FOLDER = "OpenKM";
-    private static String OPENKM_CONFIG_FILENAME = "openkm.xml";
-    private static String directoryToStoreFiles;
-    private static String configFilename;
+    private String OPENKM_FOLDER = "OpenKM";
+    private String OPENKM_CONFIG_FILENAME = "openkm.xml";
+    private String directoryToStoreFiles;
+    private String configFilename;
 
-    public static void init() throws OKMException {
+    public ConfigFile() throws OKMException {
         directoryToStoreFiles = getDirectoryToStoreFiles();
         if (directoryToStoreFiles==null)  {
             directoryToStoreFiles = getWorkingPath() + OPENKM_FOLDER;
@@ -48,6 +48,7 @@ public class ConfigFile {
             try {
                 if (!f.exists()) {
                     f.createNewFile();
+                    save(new ConfigBean());
                 }
             } catch (IOException ex) {
                 throw new OKMException(ex.getMessage());
@@ -55,15 +56,15 @@ public class ConfigFile {
         }
     }
 
-    public static String getDirectoryToStoreFiles() {
+    public String getDirectoryToStoreFiles() {
         return directoryToStoreFiles;
     }
 
-    public static String getWorkingPath() {
+    public String getWorkingPath() {
         return System.getProperty("user.home")+"/";
     }
 
-    public static void save(ConfigBean configBean) throws OKMException {
+    public void save(ConfigBean configBean) throws OKMException {
         try {
             XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             FileWriter fileWriter = new FileWriter(configFilename);
@@ -96,7 +97,7 @@ public class ConfigFile {
         }
     }
 
-    public static ConfigBean read() throws OKMException {
+    public ConfigBean read() throws OKMException {
         ConfigBean configBean = new ConfigBean();
 
         try {
@@ -108,9 +109,15 @@ public class ConfigFile {
             if (nodes.getLength()>0) {
                 Node config = nodes.item(0);
                 Element configElement = (Element) config;
-                configBean.setHost(configElement.getElementsByTagName("host").item(0).getChildNodes().item(0).getNodeValue());
-                configBean.setUser(configElement.getElementsByTagName("user").item(0).getChildNodes().item(0).getNodeValue());
-                configBean.setPassword(configElement.getElementsByTagName("password").item(0).getChildNodes().item(0).getNodeValue());
+                if (configElement.getElementsByTagName("host").item(0).hasChildNodes()) {
+                    configBean.setHost(configElement.getElementsByTagName("host").item(0).getChildNodes().item(0).getNodeValue());
+                }
+                if (configElement.getElementsByTagName("user").item(0).hasChildNodes()) {
+                    configBean.setUser(configElement.getElementsByTagName("user").item(0).getChildNodes().item(0).getNodeValue());
+                }
+                if (configElement.getElementsByTagName("password").item(0).hasChildNodes()) {
+                    configBean.setPassword(configElement.getElementsByTagName("password").item(0).getChildNodes().item(0).getNodeValue());
+                }
             }
 
         } catch (ParserConfigurationException ex) {
@@ -119,7 +126,7 @@ public class ConfigFile {
             throw new OKMException(ex.getMessage());
         } catch (IOException ex) {
             throw new OKMException(ex.getMessage());
-        }
+        } 
 
         return configBean;
     }

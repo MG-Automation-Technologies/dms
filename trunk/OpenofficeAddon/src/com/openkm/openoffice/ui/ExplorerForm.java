@@ -92,10 +92,12 @@ public class ExplorerForm extends javax.swing.JFrame {
     private String password = "";
     private ImageUtil imageUtil;
     private XFrame xFrame;
+    private DocumentFile documentFile;
 
     /** Creates new form ExplorerForm */
-    public ExplorerForm(ImageUtil imageUtil) {
+    public ExplorerForm(DocumentFile documentFile, ImageUtil imageUtil) {
         try {
+            this.documentFile = documentFile;
             this.imageUtil = imageUtil;
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
@@ -266,10 +268,10 @@ public class ExplorerForm extends javax.swing.JFrame {
         int selectedRow = table.getSelectedRow();
         try {
             Document doc = (Document) table.getValueAt(selectedRow, 3);
-            OKMDocumentBean oKMDocumentBean = DocumentLogic.chekckout(host, username, password, doc);
+            OKMDocumentBean oKMDocumentBean = DocumentLogic.chekckout(host, username, password, doc, documentFile.getDirectoryToStoreFiles());
             XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
             loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
-            DocumentFile.add(oKMDocumentBean);
+            documentFile.add(oKMDocumentBean);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         }
