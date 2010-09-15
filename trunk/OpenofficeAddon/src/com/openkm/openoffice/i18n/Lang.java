@@ -20,9 +20,6 @@ public class Lang {
     public Lang() {
         Locale locale = Locale.getDefault();
         Locale[] avaialable = Locale.getAvailableLocales();
-        for (int i=0; i<avaialable.length; i++) {
-            System.out.println("available:"+avaialable[i].getLanguage());
-        }
         lang = locale.getLanguage();
         if (!lang.equals("en") && !lang.equals("es")) {
             lang = "en"; // setting default language
