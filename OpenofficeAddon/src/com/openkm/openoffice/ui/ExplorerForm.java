@@ -269,9 +269,9 @@ public class ExplorerForm extends javax.swing.JFrame {
         try {
             Document doc = (Document) table.getValueAt(selectedRow, 3);
             OKMDocumentBean oKMDocumentBean = DocumentLogic.chekckout(host, username, password, doc, documentFile.getDirectoryToStoreFiles());
+            documentFile.add(oKMDocumentBean);
             XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
             loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
-            documentFile.add(oKMDocumentBean);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         }
