@@ -50,9 +50,6 @@ public final class OpenKMAddOn extends WeakBase
 	}
 
     public ImageUtil imageUtil;
-    public ConfigForm configForm;
-    public TreeForm treeForm;
-    public ExplorerForm explorerForm;
     public WaitWindow waitWindow;
     private final XComponentContext m_xContext;
     private com.sun.star.frame.XFrame m_xFrame;
@@ -71,9 +68,6 @@ public final class OpenKMAddOn extends WeakBase
             documentFile = new DocumentFile();
             lang = new Lang();
             imageUtil = new ImageUtil();
-            configForm = new ConfigForm(configFile);
-            treeForm = new TreeForm(imageUtil);
-            explorerForm = new ExplorerForm(documentFile,imageUtil);
             waitWindow = new WaitWindow();
         } catch (OKMException ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
@@ -116,7 +110,12 @@ public final class OpenKMAddOn extends WeakBase
                 {
                     Util.startNewThread(this.getClass().getClassLoader(), new Runnable() {
                         public void run() {
-                            configForm.setVisible(true);
+                            try {
+                                ConfigForm configForm = new ConfigForm(configFile);
+                                configForm.setVisible(true);
+                            } catch (OKMException ex) {
+                                JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                     });
                     return;
@@ -128,6 +127,7 @@ public final class OpenKMAddOn extends WeakBase
                         public void run() {
                             try {
                                 ConfigBean configBean = configFile.read();
+                                ExplorerForm explorerForm = new ExplorerForm(documentFile,imageUtil);
                                 explorerForm.initServices(configFile.read().getHost());
                                 explorerForm.startUp(m_xFrame, configBean.getUser(), configBean.getPassword());
                                 explorerForm.setVisible(true);
@@ -146,6 +146,7 @@ public final class OpenKMAddOn extends WeakBase
                             public void run() {
                                 try {
                                     ConfigBean configBean = configFile.read();
+                                    TreeForm treeForm = new TreeForm(imageUtil);
                                     treeForm.initServices(configFile.read().getHost());
                                     treeForm.startUp(configBean.getUser(), configBean.getPassword());
                                     treeForm.setVisible(true);
@@ -173,25 +174,17 @@ public final class OpenKMAddOn extends WeakBase
                                             ConfigBean configBean = configFile.read();
                                             DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
                                             documentFile.remove(oKMDocumentBean);
-                                            File file = new File(documentPath);
-                                            file.deleteOnExit(); // file is always locally deleted
                                             waitWindow.setVisible(false);
-                                            XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-                                            closeDocument(xcomponent);
+                                            m_xFrame.dispose();
+                                            File file = new File(documentPath);
+                                            file.delete(); // file is always locally deleted
                                         }
                                     }
                                 }
                             } catch (OKMException ex) {
                                 waitWindow.setVisible(false);
                                 JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
-                            } catch (CloseVetoException ex) {
-                                // Some extrange error on closing document
-                                waitWindow.setVisible(false);
-                                try {
-                                    this.finalize();
-                                } catch (Throwable ex1) {
-                                }
-                            }
+                            } 
                         }
                     });
                     return;
@@ -204,31 +197,23 @@ public final class OpenKMAddOn extends WeakBase
                                 String documentPath = getCurrentDocumentPath();
                                 if (documentPath != null && !documentPath.equals("")) {
                                     if (documentFile.isOpenKMDocument(documentPath)) {
-                                        if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.cancel.edi"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+                                        if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.cancel.edit"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
                                             waitWindow.setVisible(true);
                                             OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
                                             ConfigBean configBean = configFile.read();
                                             DocumentLogic.cancelCheckout(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
                                             documentFile.remove(oKMDocumentBean);
-                                            File file = new File(documentPath);
-                                            file.deleteOnExit(); // file is always locally deleted
                                             waitWindow.setVisible(false);
-                                            XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-                                            closeDocument(xcomponent);
+                                            m_xFrame.dispose();
+                                            File file = new File(documentPath);
+                                            file.delete(); // file is always locally deleted
                                         }
                                     }
                                 }
                             } catch (OKMException ex) {
                                 waitWindow.setVisible(false);
                                 JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
-                            } catch (CloseVetoException ex) {
-                                // Some extrange error on closing document
-                                waitWindow.setVisible(false);
-                                try {
-                                    this.finalize();
-                                } catch (Throwable ex1) {
-                                }
-                            }
+                            } 
                         }
                     });
                     return;
@@ -432,19 +417,6 @@ public final class OpenKMAddOn extends WeakBase
         } else {
             waitWindow.setVisible(false);
             JOptionPane.showMessageDialog(null,lang.getString("main.error.save.file"),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public void closeDocument(XComponent aComponent) throws CloseVetoException {
-        XComponent xComponent2 = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
-        xComponent2.dispose();
-        XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, aComponent);
-
-        if (xCloseable != null) {
-            xCloseable.close(true);
-        } else {
-            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
-            xComponent.dispose();
         }
     }
 
