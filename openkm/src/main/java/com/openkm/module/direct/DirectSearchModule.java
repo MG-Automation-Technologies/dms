@@ -46,6 +46,7 @@ import javax.jcr.query.RowIterator;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.core.query.QueryImpl;
+import org.apache.jackrabbit.core.query.lucene.QueryResultImpl;
 import org.apache.jackrabbit.util.ISO8601;
 import org.apache.jackrabbit.util.ISO9075;
 import org.apache.jackrabbit.util.Text;
@@ -418,9 +419,9 @@ public class DirectSearchModule implements SearchModule {
 			// http://n4.nabble.com/Query-performance-for-large-query-results-td531360.html
 			((QueryImpl) query).setLimit(limit);
 			((QueryImpl) query).setOffset(offset);
-			javax.jcr.query.QueryResult result = query.execute();
+			QueryResultImpl result = (QueryResultImpl) query.execute();
 			RowIterator it = result.getRows();
-			rs.setTotal(it.getSize());
+			rs.setTotal(result.getTotalSize());
 			
 			while (it.hasNext()) {
 				Row row = it.nextRow();
