@@ -51,7 +51,7 @@ public interface WorkflowModule {
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
-	 * Delete a previously registered process definition
+	 * Delete a previously registered process definition.
 	 * 
 	 * @param token The session authorization token.
 	 * @param processDefinitionId Process definition identifier.
@@ -101,10 +101,19 @@ public interface WorkflowModule {
 			throws ParseException, RepositoryException, DatabaseException, WorkflowException;
 
 	/**
+	 * Run a process definition to create a process instance: begins a worflow process.
 	 * 
+	 * @param token The session authorization token.
+	 * @param processDefinitionId Process definition identifier.
+	 * @param uuid Node identifier associated with the created process instance.
+	 * @param vars A list of form elements with variable definitions.
+	 * @return The created process instance.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public ProcessInstance runProcessDefinition(String token, long processDefinitionId, String uuid, 
-			List<FormElement> variables) throws RepositoryException, DatabaseException, WorkflowException;
+			List<FormElement> vars) throws RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * 
