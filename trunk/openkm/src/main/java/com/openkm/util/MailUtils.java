@@ -252,6 +252,7 @@ public class MailUtils {
 		
 	/**
 	 * Import messages
+	 * http://www.jguru.com/faq/view.jsp?EID=26898
 	 * 
 	 * == Using Unique Identifier (UIDL) ==
 	 * Mail server assigns an unique identifier for every email in the same account. You can get as UIDL 
