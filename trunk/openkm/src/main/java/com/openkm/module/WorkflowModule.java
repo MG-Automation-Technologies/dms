@@ -38,31 +38,64 @@ import com.openkm.core.WorkflowException;
 public interface WorkflowModule {
 
 	/**
-	 * Get list of locked documents by user
+	 * Register a new process definition in the workflow engine.
+	 * 
+	 * @param token The session authorization token.
+	 * @param is Input stream where process definition can be read.
+	 * @throws ParseException If there is an error parsing the forms.xml file.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public void registerProcessDefinition(String token, InputStream is) throws ParseException,
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
 	 * Delete a previously registered process definition
+	 * 
+	 * @param token The session authorization token.
+	 * @param processDefinitionId Process definition identifier.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public void deleteProcessDefinition(String token, long processDefinitionId) throws RepositoryException, 
 			DatabaseException, WorkflowException;
 
 	/**
+	 * Gets a process definition from the engine by the identifier.
 	 * 
+	 * @param token The session authorization token.
+	 * @param processDefinitionId Process definition identifier.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public ProcessDefinition getProcessDefinition(String token, long processDefinitionId) throws 
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
+	 * Get a visual representation of the process definition.
 	 * 
+	 * @param token The session authorization token.
+	 * @param processDefinitionId Process definition identifier.
+	 * @param node Mark the designed node as active, if not null.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public byte[] getProcessDefinitionImage(String token, long processDefinitionId, String node) throws 
 			RepositoryException, DatabaseException, WorkflowException;
 
 	/**
+	 * Obtain a map with the forms defined in the process definition.
 	 * 
+	 * @param token The session authorization token.
+	 * @param processDefinitionId Process definition identifier.
+	 * @throws ParseException If there is an error parsing the forms.xml file.
+	 * @throws RepositoryException If there is a general repository error.
+	 * @throws DatabaseException If there is a general database error.
+	 * @throws WorkflowException If there is any workflow engine error.
 	 */
 	public Map<String, List<FormElement>> getProcessDefinitionForms(String token, long processDefinitionId)
 			throws ParseException, RepositoryException, DatabaseException, WorkflowException;
