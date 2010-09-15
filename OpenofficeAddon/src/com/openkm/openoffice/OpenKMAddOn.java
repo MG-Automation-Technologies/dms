@@ -59,19 +59,21 @@ public final class OpenKMAddOn extends WeakBase
     private static final String m_implementationName = OpenKMAddOn.class.getName();
     private static final String[] m_serviceNames = { "com.sun.star.frame.ProtocolHandler" };
     private Lang lang;
+    private ConfigFile configFile;
+    private DocumentFile documentFile;
 
     public OpenKMAddOn( XComponentContext context )
     {
         singleton = this;
         m_xContext = context;
         try {
-            ConfigFile.init();
-            DocumentFile.init();
+            configFile = new ConfigFile();
+            documentFile = new DocumentFile();
             lang = new Lang();
             imageUtil = new ImageUtil();
-            configForm = new ConfigForm(ConfigFile.read());
+            configForm = new ConfigForm(configFile);
             treeForm = new TreeForm(imageUtil);
-            explorerForm = new ExplorerForm(imageUtil);
+            explorerForm = new ExplorerForm(documentFile,imageUtil);
             waitWindow = new WaitWindow();
         } catch (OKMException ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
@@ -125,8 +127,8 @@ public final class OpenKMAddOn extends WeakBase
                     Util.startNewThread(this.getClass().getClassLoader(), new Runnable() {
                         public void run() {
                             try {
-                                ConfigBean configBean = ConfigFile.read();
-                                explorerForm.initServices(ConfigFile.read().getHost());
+                                ConfigBean configBean = configFile.read();
+                                explorerForm.initServices(configFile.read().getHost());
                                 explorerForm.startUp(m_xFrame, configBean.getUser(), configBean.getPassword());
                                 explorerForm.setVisible(true);
                             } catch (OKMException ex) {
@@ -143,8 +145,8 @@ public final class OpenKMAddOn extends WeakBase
                         Util.startNewThread(this.getClass().getClassLoader(), new Runnable() {
                             public void run() {
                                 try {
-                                    ConfigBean configBean = ConfigFile.read();
-                                    treeForm.initServices(ConfigFile.read().getHost());
+                                    ConfigBean configBean = configFile.read();
+                                    treeForm.initServices(configFile.read().getHost());
                                     treeForm.startUp(configBean.getUser(), configBean.getPassword());
                                     treeForm.setVisible(true);
                                 } catch (OKMException ex) {
@@ -164,13 +166,13 @@ public final class OpenKMAddOn extends WeakBase
                             try {
                                 String documentPath = getCurrentDocumentPath();
                                 if (documentPath != null && !documentPath.equals("")) {
-                                    if (DocumentFile.isOpenKMDocument(documentPath)) {
+                                    if (documentFile.isOpenKMDocument(documentPath)) {
                                         if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.update"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
                                             waitWindow.setVisible(true);
-                                            OKMDocumentBean oKMDocumentBean = DocumentFile.findByLocalFileName(documentPath);
-                                            ConfigBean configBean = ConfigFile.read();
+                                            OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
+                                            ConfigBean configBean = configFile.read();
                                             DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
-                                            DocumentFile.remove(oKMDocumentBean);
+                                            documentFile.remove(oKMDocumentBean);
                                             File file = new File(documentPath);
                                             file.deleteOnExit(); // file is always locally deleted
                                             waitWindow.setVisible(false);
@@ -201,13 +203,13 @@ public final class OpenKMAddOn extends WeakBase
                             try {
                                 String documentPath = getCurrentDocumentPath();
                                 if (documentPath != null && !documentPath.equals("")) {
-                                    if (DocumentFile.isOpenKMDocument(documentPath)) {
+                                    if (documentFile.isOpenKMDocument(documentPath)) {
                                         if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.cancel.edi"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
                                             waitWindow.setVisible(true);
-                                            OKMDocumentBean oKMDocumentBean = DocumentFile.findByLocalFileName(documentPath);
-                                            ConfigBean configBean = ConfigFile.read();
+                                            OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
+                                            ConfigBean configBean = configFile.read();
                                             DocumentLogic.cancelCheckout(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
-                                            DocumentFile.remove(oKMDocumentBean);
+                                            documentFile.remove(oKMDocumentBean);
                                             File file = new File(documentPath);
                                             file.deleteOnExit(); // file is always locally deleted
                                             waitWindow.setVisible(false);
@@ -261,7 +263,7 @@ public final class OpenKMAddOn extends WeakBase
             boolean isOpenKMDoc = false;
 
             if (!getCurrentDocumentPath().equals("")) {
-                if (DocumentFile.isOpenKMDocument(getCurrentDocumentPath())) {
+                if (documentFile.isOpenKMDocument(getCurrentDocumentPath())) {
                     isOpenKMDoc = true;
                 }
             }
@@ -416,7 +418,7 @@ public final class OpenKMAddOn extends WeakBase
         String documentPath = getCurrentDocumentPath();
         if (documentPath!=null && !documentPath.equals("")) {
             waitWindow.setVisible(true);
-            ConfigBean configBean = ConfigFile.read();
+            ConfigBean configBean = configFile.read();
             OKMDocumentBean document = new OKMDocumentBean();
             document.setLocalFilename(documentPath);
             try {

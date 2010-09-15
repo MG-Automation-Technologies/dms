@@ -23,8 +23,12 @@ import com.openkm.openoffice.config.ConfigFile;
  */
 public class ConfigForm extends javax.swing.JFrame {
 
+    private ConfigFile configFile;
+
     /** Creates new form Configuration */
-    public ConfigForm(ConfigBean configBean) {
+    public ConfigForm(ConfigFile configFile) throws OKMException {
+        this.configFile = configFile;
+        ConfigBean configBean = configFile.read();
         initComponents();
         setLocationByPlatform(true);
         setLocationRelativeTo(getParent());
@@ -157,7 +161,7 @@ public class ConfigForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,OpenKMAddOn.get().getLang().getString("config.error.password.empty"),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         } else {
             try {
-                ConfigFile.save(configBean);
+                configFile.save(configBean);
             } catch (OKMException ex) {
                 JOptionPane.showMessageDialog(null,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
             }

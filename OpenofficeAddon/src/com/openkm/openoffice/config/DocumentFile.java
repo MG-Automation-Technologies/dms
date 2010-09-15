@@ -30,14 +30,14 @@ import org.xml.sax.SAXException;
  * @author jllort
  */
 public class DocumentFile {
-    private static String OPENKM_FOLDER = "OpenKM";
-    private static String OPENKM_CONFIG_FILENAME = "document.xml";
-    private static String directoryToStoreFiles;
-    private static String documentFilename;
-    private static List<OKMDocumentBean> docList;
+    private String OPENKM_FOLDER = "OpenKM";
+    private String OPENKM_CONFIG_FILENAME = "document.xml";
+    private String directoryToStoreFiles;
+    private String documentFilename;
+    private List<OKMDocumentBean> docList;
 
-
-    public static void init() throws OKMException {
+    public DocumentFile() throws OKMException {
+        docList = new ArrayList<OKMDocumentBean>();
         directoryToStoreFiles = getDirectoryToStoreFiles();
         if (directoryToStoreFiles==null)  {
             directoryToStoreFiles = getWorkingPath() + OPENKM_FOLDER;
@@ -53,6 +53,7 @@ public class DocumentFile {
             try {
                 if (!f.exists()) {
                     f.createNewFile();
+                    save();
                 }
             } catch (IOException ex) {
                 throw new OKMException(ex.getMessage());
@@ -61,15 +62,15 @@ public class DocumentFile {
         docList = new ArrayList<OKMDocumentBean>();
     }
 
-    public static String getDirectoryToStoreFiles() {
+    public String getDirectoryToStoreFiles() {
         return directoryToStoreFiles;
     }
 
-    public static String getWorkingPath() {
+    public String getWorkingPath() {
         return System.getProperty("user.home")+"/";
     }
 
-    public static void save() throws OKMException {
+    public void save() throws OKMException {
         try {
             XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             FileWriter fileWriter = new FileWriter(documentFilename);
@@ -113,7 +114,7 @@ public class DocumentFile {
         }
     }
 
-    public static List<OKMDocumentBean> read() throws OKMException {
+    public List<OKMDocumentBean> read() throws OKMException {
         try {
             docList = new ArrayList<OKMDocumentBean>();
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -145,13 +146,13 @@ public class DocumentFile {
         return docList;
     }
 
-    public static void add(OKMDocumentBean doc) throws OKMException {
+    public void add(OKMDocumentBean doc) throws OKMException {
         read();
         docList.add(doc);
         save();
     }
 
-    public static void remove(OKMDocumentBean doc) throws OKMException {
+    public void remove(OKMDocumentBean doc) throws OKMException {
         read();
         for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
             OKMDocumentBean tmpDoc = it.next();
@@ -163,7 +164,7 @@ public class DocumentFile {
         save();
     }
 
-    public static boolean isOpenKMDocument(String localFilename) throws OKMException {
+    public boolean isOpenKMDocument(String localFilename) throws OKMException {
         boolean found = false;
         read();
         for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
@@ -176,7 +177,7 @@ public class DocumentFile {
         return found;
     }
 
-    public static OKMDocumentBean findByLocalFileName(String localFilename) throws OKMException {
+    public OKMDocumentBean findByLocalFileName(String localFilename) throws OKMException {
         read();
         for (Iterator<OKMDocumentBean> it = docList.iterator(); it.hasNext();) {
             OKMDocumentBean doc = it.next();

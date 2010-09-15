@@ -48,17 +48,17 @@ public class Util {
         return doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
     }
 
-    public static String getDocumentNameWithoutCollisions(Document doc) throws OKMException {
+    public static String getDocumentNameWithoutCollisions(Document doc, String directoryPath) throws OKMException {
         String fileName = "";
         try {
-            fileName = DocumentFile.getDirectoryToStoreFiles() + "/" + doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
+            fileName = directoryPath + "/" + doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
             File file = new File(fileName);
             int count = 0;
             while (file.exists()) {
                 fileName = doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
                 String docExtension = fileName.substring(fileName.lastIndexOf(".")+1);
                 String docName = fileName.substring(0,fileName.lastIndexOf(".")-1);
-                fileName = DocumentFile.getDirectoryToStoreFiles() + "/" + docName + "_" + count + "." + docExtension;
+                fileName = directoryPath + "/" + docName + "_" + count + "." + docExtension;
                 count++;
                 file = new File(fileName);
             }

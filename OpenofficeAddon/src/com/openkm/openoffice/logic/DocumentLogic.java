@@ -63,7 +63,7 @@ public class DocumentLogic {
         } 
     }
 
-    public static OKMDocumentBean chekckout(String host, String username, String password, Document doc) throws OKMException {
+    public static OKMDocumentBean chekckout(String host, String username, String password, Document doc, String directoryPath) throws OKMException {
         String token = "";
         OKMAuthService authService = null;
         OKMDocumentService docService = null;
@@ -81,7 +81,7 @@ public class DocumentLogic {
             okmDocument.checkout(token, doc.getPath());
             byte[] bytedoc = okmDocument.getContent(token, doc.getPath(), false);
 
-            String fileName = Util.getDocumentNameWithoutCollisions(doc);
+            String fileName = Util.getDocumentNameWithoutCollisions(doc, directoryPath);
             File file = new File(fileName);
             file.createNewFile();
 
