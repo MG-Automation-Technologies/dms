@@ -6,6 +6,7 @@ wsimport -p com.openkm.ws.client http://localhost:8080/OpenKM/OKMFolder?wsdl
 wsimport -p com.openkm.ws.client http://localhost:8080/OpenKM/OKMSearch?wsdl
 wsimport -p com.openkm.ws.client http://localhost:8080/OpenKM/OKMNotification?wsdl
 wsimport -p com.openkm.ws.client http://localhost:8080/OpenKM/OKMRepository?wsdl
+wsimport -p com.openkm.ws.client http://localhost:8080/OpenKM/OKMWorkflow?wsdl
 
 jar cvf okm-ws-client-2.1.jar com
 
