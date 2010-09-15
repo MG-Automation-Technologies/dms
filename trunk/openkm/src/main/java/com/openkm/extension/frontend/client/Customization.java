@@ -25,6 +25,8 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+
 /**
  * Customization
  * 
@@ -54,7 +56,7 @@ public class Customization {
 //		extensions.add(new DownloadButton().getButton());
 //		extensions.add(new DownloadPdfButton().getButton());
 //		extensions.addAll(new Stapling().getExtensions());
-//		extensions.addAll(new MetromUsa().getExtensions());
+		extensions.addAll(new MetromUsa().getExtensions());
 		
 		return extensions;
 	}
