@@ -17,8 +17,8 @@
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>OpenKM Administration</h1>
-      <table width="205px" class="form" style="margin-top: 25px">
-        <tr><td><b>OpenKM Enterprise Edition</b></td></tr>
+      <table width="215px" class="form" style="margin-top: 25px">
+        <tr><td><b>OpenKM - Knowledge Management</b></td></tr>
         <tr><td>Version: <%=WarUtils.getAppVersion() %></td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr><td>&copy; 2006-2010  OpenKM</td></tr>
