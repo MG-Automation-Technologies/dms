@@ -21,6 +21,8 @@
 
 package com.openkm.core;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xbill.DNS.Address;
 
 import com.openkm.bean.HttpSessionInfo;
 
@@ -74,6 +77,20 @@ public class HttpSessionManager {
 			si.setUser(request.getRemoteUser());
 			si.setIp(request.getRemoteAddr());
 			si.setHost(request.getRemoteHost());
+			
+			try {
+				InetAddress addr = Address.getByAddress(request.getRemoteAddr());
+				String hostName = Address.getHostName(addr);
+				
+				if (hostName.endsWith(".")) {
+					si.setHost(hostName.substring(0, hostName.length()-1));
+				} else {
+					si.setHost(hostName);
+				}
+			} catch (UnknownHostException e) {
+				// Ignore
+			}
+			
 			si.setId(s.getId());
 			Calendar creation = Calendar.getInstance();
 			creation.setTimeInMillis(s.getCreationTime());
