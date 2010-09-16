@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/OpenKMAddOn.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/bean/FolderNodeBean.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/config/DocumentFile.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/logic/DocumentLogic.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/ui/ExplorerForm.java</file>
+        <file>file:/C:/Documents%20and%20Settings/Administrador/Mis%20documentos/NetBeansProjects/OpenKMAddOn/src/com/openkm/openoffice/util/Util.java</file>
+    </open-files>
 </project-private>
