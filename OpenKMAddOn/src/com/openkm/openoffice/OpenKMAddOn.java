@@ -404,7 +404,7 @@ public final class OpenKMAddOn extends WeakBase
             OKMDocumentBean document = new OKMDocumentBean();
             document.setLocalFilename(documentPath);
             try {
-                document.setPath(path + "/" + Util.getFileName(documentPath));
+                document.setPath(path + "/" + Util.getOKMFileName(documentPath));
             } catch (UnsupportedEncodingException ex) {
                 new OKMException(ex.getMessage());
             }

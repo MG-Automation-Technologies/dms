@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 /**
  *
@@ -42,6 +43,11 @@ public class DocumentLogic {
             docService = new OKMDocumentService(new URL(host + "/OKMDocument?wsdl"), DocumentServiceName);
             okmAuth = authService.getOKMAuthPort();
             okmDocument = docService.getOKMDocumentPort();
+            BindingProvider bpAuth = (BindingProvider) okmAuth;
+            BindingProvider bpDocument= (BindingProvider) okmDocument;
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpDocument.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMDocument");
+
             token = okmAuth.login(username, password);
 
             doc.setPath(document.getPath());
@@ -76,12 +82,17 @@ public class DocumentLogic {
             docService = new OKMDocumentService(new URL(host + "/OKMDocument?wsdl"), DocumentServiceName);
             okmAuth = authService.getOKMAuthPort();
             okmDocument = docService.getOKMDocumentPort();
+            BindingProvider bpAuth = (BindingProvider) okmAuth;
+            BindingProvider bpDocument= (BindingProvider) okmDocument;
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpDocument.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMDocument");
+
             token = okmAuth.login(username, password);
 
             okmDocument.checkout(token, doc.getPath());
             byte[] bytedoc = okmDocument.getContent(token, doc.getPath(), false);
 
-            String fileName = Util.getDocumentNameWithoutCollisions(doc, directoryPath);
+            String fileName = Util.getLocalFilenameWithoutCollisions(doc, directoryPath);
             File file = new File(fileName);
             file.createNewFile();
 
@@ -122,6 +133,11 @@ public class DocumentLogic {
             docService = new OKMDocumentService(new URL(host + "/OKMDocument?wsdl"), DocumentServiceName);
             okmAuth = authService.getOKMAuthPort();
             okmDocument = docService.getOKMDocumentPort();
+            BindingProvider bpAuth = (BindingProvider) okmAuth;
+            BindingProvider bpDocument= (BindingProvider) okmDocument;
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpDocument.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMDocument");
+
             token = okmAuth.login(username, password);
 
             okmDocument.cancelCheckout(token, document.getPath());
@@ -154,6 +170,11 @@ public class DocumentLogic {
             docService = new OKMDocumentService(new URL(host + "/OKMDocument?wsdl"), DocumentServiceName);
             okmAuth = authService.getOKMAuthPort();
             okmDocument = docService.getOKMDocumentPort();
+            BindingProvider bpAuth = (BindingProvider) okmAuth;
+            BindingProvider bpDocument= (BindingProvider) okmDocument;
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpDocument.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMDocument");
+
             token = okmAuth.login(username, password);
 
             okmDocument.setContent(token, document.getPath(), FileUtil.readFile(document.getLocalFilename()));

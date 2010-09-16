@@ -42,6 +42,6 @@ public class FolderNodeBean implements Serializable {
     }
 
     public String toString() {
-        return Util.getFolderName(folder);
+        return Util.getOKMFolderName(folder);
     }
 }

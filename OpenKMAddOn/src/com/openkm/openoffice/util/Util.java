@@ -7,7 +7,6 @@ package com.openkm.openoffice.util;
 
 import com.openkm.openoffice.bean.OKMDocumentBean;
 import com.openkm.openoffice.bean.OKMPermissionBean;
-import com.openkm.openoffice.config.DocumentFile;
 import com.openkm.openoffice.logic.OKMException;
 import com.openkm.ws.client.Document;
 import com.openkm.ws.client.Folder;
@@ -27,7 +26,7 @@ public class Util {
         thread.start();
     }
 
-    public static String getFolderName(Folder folder) {
+    public static String getOKMFolderName(Folder folder) {
         return folder.getPath().substring(folder.getPath().lastIndexOf("/")+1);
     }
 
@@ -40,25 +39,25 @@ public class Util {
                 ((doc.getPermissions() & OKMPermissionBean.WRITE)== OKMPermissionBean.WRITE));
     }
 
-    public static String getFileName(String path) throws UnsupportedEncodingException {
+    public static String getOKMFileName(String path) throws UnsupportedEncodingException {
         return path.substring(path.lastIndexOf("/")+1);
     }
 
-    public static String getDocumentName(Document doc) {
+    public static String getOKMDocumentName(Document doc) {
         return doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
     }
 
-    public static String getDocumentNameWithoutCollisions(Document doc, String directoryPath) throws OKMException {
+    public static String getLocalFilenameWithoutCollisions(Document doc, String directoryPath) throws OKMException {
         String fileName = "";
         try {
-            fileName = directoryPath + "/" + doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
+            fileName = directoryPath + FileUtil.getFolderPathSeparator() + doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
             File file = new File(fileName);
             int count = 0;
             while (file.exists()) {
                 fileName = doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
                 String docExtension = fileName.substring(fileName.lastIndexOf(".")+1);
                 String docName = fileName.substring(0,fileName.lastIndexOf(".")-1);
-                fileName = directoryPath + "/" + docName + "_" + count + "." + docExtension;
+                fileName = directoryPath + FileUtil.getFolderPathSeparator() + docName + "_" + count + "." + docExtension;
                 count++;
                 file = new File(fileName);
             }
@@ -76,7 +75,7 @@ public class Util {
         OKMDocumentBean oKMDocumentBean = new OKMDocumentBean();
 
         oKMDocumentBean.setUUID(doc.getUuid());
-        oKMDocumentBean.setName(getDocumentName(doc));
+        oKMDocumentBean.setName(getOKMDocumentName(doc));
         oKMDocumentBean.setPath(doc.getPath());
 
         return oKMDocumentBean;
@@ -85,5 +84,9 @@ public class Util {
     public static URI convertFileNamePathToURI(String fileName) {
         File file = new File(fileName);
         return file.toURI();
+    }
+
+    public static String getOS() {
+        return System.getProperty("os.name");
     }
 }

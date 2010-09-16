@@ -62,6 +62,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 /**
  *
@@ -271,7 +272,11 @@ public class ExplorerForm extends javax.swing.JFrame {
             OKMDocumentBean oKMDocumentBean = DocumentLogic.chekckout(host, username, password, doc, documentFile.getDirectoryToStoreFiles());
             documentFile.add(oKMDocumentBean);
             XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
-            loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
+            if (Util.getOS().toLowerCase().contains("windows")) {
+                loader.loadComponentFromURL("file:///"+oKMDocumentBean.getLocalFilename(), "_blank", 0, new PropertyValue[0]);
+            } else {
+                loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         }
@@ -412,7 +417,16 @@ public class ExplorerForm extends javax.swing.JFrame {
         okmRepository = repositoryService.getOKMRepositoryPort();
         okmFolder = folderService.getOKMFolderPort();
         okmDocument = documentService.getOKMDocumentPort();
+        BindingProvider bpAuth = (BindingProvider) okmAuth;
+        BindingProvider bpRepository = (BindingProvider) okmRepository;
+        BindingProvider bpFolder= (BindingProvider) okmFolder;
+        BindingProvider bpDocument= (BindingProvider) okmDocument;
+        
         try {
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpRepository.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMRepository");
+            bpFolder.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMFolder");
+            bpDocument.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMDocument");
             enableDefaultButton();
             token = okmAuth.login(username, password);
             getRootFolder();
@@ -610,7 +624,7 @@ public class ExplorerForm extends javax.swing.JFrame {
 
             super.getTableCellRendererComponent(table, value, selected, focused, row, column);
             if (value instanceof Document) {
-                setText(Util.getDocumentName((Document)value));
+                setText(Util.getOKMDocumentName((Document)value));
                 setIcon(null);
             } else if (value instanceof ImageIcon) {
                 setText(value.toString());
