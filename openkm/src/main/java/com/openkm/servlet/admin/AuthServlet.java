@@ -82,12 +82,16 @@ public class AuthServlet extends BaseServlet {
 				userDelete(session, request, response);
 			} else if (action.equals("roleDelete")) {
 				roleDelete(session, request, response);
+			} else if (action.equals("userActive")) {
+				userActive(session, request, response);
+			} else if (action.equals("roleActive")) {
+				roleActive(session, request, response);
 			}
 			
-			if (action.equals("") || 
+			if (action.equals("") || action.equals("userActive") ||
 					(action.startsWith("user") && WebUtil.getBoolean(request, "persist"))) {
 				userList(session, request, response);
-			} else if (action.equals("roleList") || 
+			} else if (action.equals("roleList") || action.equals("roleActive") ||
 					(action.startsWith("role") && WebUtil.getBoolean(request, "persist"))) {
 				roleList(session, request, response);
 			}
@@ -212,6 +216,21 @@ public class AuthServlet extends BaseServlet {
 		
 		log.debug("userDelete: void");
 	}
+	
+	/**
+	 * Active user
+	 */
+	private void userActive(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("userActive({}, {}, {})", new Object[] { session, request, response });
+		String usrId = WebUtil.getString(request, "usr_id");
+		boolean active = WebUtil.getBoolean(request, "usr_active");
+		AuthDAO.activeUser(usrId, active);
+			
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_USER_ACTIVE", usrId, Boolean.toString(active));
+		log.debug("userActive: void");
+	}
 
 	/**
 	 * List users
@@ -221,6 +240,7 @@ public class AuthServlet extends BaseServlet {
 		log.debug("userList({}, {}, {})", new Object[] { session, request, response });
 		String roleFilter = WebUtil.getString(request, "roleFilter");
 		ServletContext sc = getServletContext();
+		sc.setAttribute("roleFilter", roleFilter);
 		
 		if (roleFilter.equals("")) {
 			if (db) {
@@ -231,8 +251,6 @@ public class AuthServlet extends BaseServlet {
 				sc.setAttribute("roles", str2role(OKMAuth.getInstance().getRoles(null)));
 			}
 		} else {
-			sc.setAttribute("roleFilter", roleFilter);
-			
 			if (db) {
 				sc.setAttribute("users", AuthDAO.findUsersByRole(roleFilter, false));
 				sc.setAttribute("roles", AuthDAO.findAllRoles());
@@ -323,6 +341,21 @@ public class AuthServlet extends BaseServlet {
 		}
 		
 		log.debug("roleDelete: void");
+	}
+	
+	/**
+	 * Active role
+	 */
+	private void roleActive(Session session, HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("roleActive({}, {}, {})", new Object[] { session, request, response });
+		String rolId = WebUtil.getString(request, "rol_id");
+		boolean active = WebUtil.getBoolean(request, "rol_active");
+		AuthDAO.activeRole(rolId, active);
+			
+		// Activity log
+		UserActivity.log(session.getUserID(), "ADMIN_ROLE_ACTIVE", rolId, Boolean.toString(active));
+		log.debug("roleActive: void");
 	}
 
 	/**
