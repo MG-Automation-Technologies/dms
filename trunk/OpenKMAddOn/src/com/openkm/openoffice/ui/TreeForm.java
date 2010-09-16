@@ -43,6 +43,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 /**
  *
@@ -65,6 +66,7 @@ public class TreeForm extends javax.swing.JFrame {
     private DefaultMutableTreeNode actualNode = null;
     private String username = "";
     private String password = "";
+    private String host = "";
     private ImageUtil imageUtil;
 
     /** Creates new form ExplorerForm */
@@ -178,6 +180,7 @@ public class TreeForm extends javax.swing.JFrame {
 
     public void initServices(String host) throws OKMException {
         try {
+            this.host = host;
             authService = new OKMAuthService(new URL(host + "/OKMAuth?wsdl"), AuthServiceName);
             repositoryService = new OKMRepositoryService(new URL(host + "/OKMRepository?wsdl"), RepositoryServiceName);
             folderService = new OKMFolderService(new URL(host + "/OKMFolder?wsdl"), FolderServiceName);
@@ -232,7 +235,15 @@ public class TreeForm extends javax.swing.JFrame {
         okmAuth = authService.getOKMAuthPort();
         okmRepository = repositoryService.getOKMRepositoryPort();
         okmFolder = folderService.getOKMFolderPort();
+
+        BindingProvider bpAuth = (BindingProvider) okmAuth;
+        BindingProvider bpRepository = (BindingProvider) okmRepository;
+        BindingProvider bpFolder= (BindingProvider) okmFolder;
+        
         try {
+            bpAuth.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMAuth");
+            bpRepository.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMRepository");
+            bpFolder.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, host+"/OKMFolder");
             enableDefaultButton();
             token = okmAuth.login(username, password);
             getRootFolder();
@@ -271,6 +282,9 @@ public class TreeForm extends javax.swing.JFrame {
             okmAuth.logout(token);
             token = "";
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,ex.getClass(),"log", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"log", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,ex.getStackTrace(),"log", JOptionPane.ERROR_MESSAGE);
             if (!token.equals("")) {
                 try {
                     // Logout OpenKM
