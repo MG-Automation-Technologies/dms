@@ -178,13 +178,9 @@ public class TreeForm extends javax.swing.JFrame {
 
     public void initServices(String host) throws OKMException {
         try {
-            JOptionPane.showMessageDialog(null,"1",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
             authService = new OKMAuthService(new URL(host + "/OKMAuth?wsdl"), AuthServiceName);
-            JOptionPane.showMessageDialog(null,"2",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
             repositoryService = new OKMRepositoryService(new URL(host + "/OKMRepository?wsdl"), RepositoryServiceName);
-            JOptionPane.showMessageDialog(null,"3",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
             folderService = new OKMFolderService(new URL(host + "/OKMFolder?wsdl"), FolderServiceName);
-            JOptionPane.showMessageDialog(null,"4",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             throw new OKMException(ex.getMessage());
         }
@@ -233,17 +229,12 @@ public class TreeForm extends javax.swing.JFrame {
     public void startUp(final String username, final String password) throws OKMException {
         this.username = username;
         this.password = password;
-        JOptionPane.showMessageDialog(null,"5",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         okmAuth = authService.getOKMAuthPort();
-        JOptionPane.showMessageDialog(null,"6",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         okmRepository = repositoryService.getOKMRepositoryPort();
-        JOptionPane.showMessageDialog(null,"7",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         okmFolder = folderService.getOKMFolderPort();
-        JOptionPane.showMessageDialog(null,"8"+username+"-"+password,OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
         try {
             enableDefaultButton();
             token = okmAuth.login(username, password);
-            JOptionPane.showMessageDialog(null,"9",OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
             getRootFolder();
             getChilds();
 
