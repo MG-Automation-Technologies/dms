@@ -15,6 +15,7 @@ import com.openkm.openoffice.util.ImageUtil;
 import com.openkm.openoffice.util.Util;
 import com.sun.star.frame.FeatureStateEvent;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -24,10 +25,14 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.system.XSystemShellExecute;
+import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.XCloseable;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -158,7 +163,8 @@ public final class OpenKMAddOn extends WeakBase
                                     DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
                                     documentFile.remove(oKMDocumentBean);
                                     waitWindow.setVisible(false);
-                                    m_xFrame.dispose();
+                                    XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
+                                    closeDocument(xcomponent);
                                     File file = new File(documentPath);
                                     file.delete(); // file is always locally deleted
                                 }
@@ -183,14 +189,14 @@ public final class OpenKMAddOn extends WeakBase
                                     DocumentLogic.cancelCheckout(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
                                     documentFile.remove(oKMDocumentBean);
                                     waitWindow.setVisible(false);
-                                    m_xFrame.dispose();
+                                    XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
+                                    closeDocument(xcomponent);
                                     File file = new File(documentPath);
                                     file.delete(); // file is always locally deleted
                                 }
                             }
                         }
-                        throw new Exception("test");
-                    } catch (Exception ex) {
+                    } catch (OKMException ex) {
                         waitWindow.setVisible(false);
                         JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
                     }
@@ -397,6 +403,23 @@ public final class OpenKMAddOn extends WeakBase
         } else {
             waitWindow.setVisible(false);
             JOptionPane.showMessageDialog(null,lang.getString("main.error.save.file"),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void closeDocument(XComponent aComponent) {
+        XComponent xComponent2 = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
+        xComponent2.dispose();
+        XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, aComponent);
+
+        if (xCloseable != null) {
+            try {
+                xCloseable.close(true);
+            } catch (CloseVetoException ex) {
+                // Don't propagate the error
+            }
+        } else {
+            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
+            xComponent.dispose();
         }
     }
 
