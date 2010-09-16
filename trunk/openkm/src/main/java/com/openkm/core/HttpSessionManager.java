@@ -76,8 +76,7 @@ public class HttpSessionManager {
 		if (add) {
 			si.setUser(request.getRemoteUser());
 			si.setIp(request.getRemoteAddr());
-			si.setHost(request.getRemoteHost());
-			
+						
 			try {
 				InetAddress addr = Address.getByAddress(request.getRemoteAddr());
 				String hostName = Address.getHostName(addr);
@@ -88,7 +87,7 @@ public class HttpSessionManager {
 					si.setHost(hostName);
 				}
 			} catch (UnknownHostException e) {
-				// Ignore
+				si.setHost(request.getRemoteHost());
 			}
 			
 			si.setId(s.getId());
