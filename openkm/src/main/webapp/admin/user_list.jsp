@@ -67,6 +67,12 @@
             <c:param name="action" value="userDelete"/>
             <c:param name="usr_id" value="${user.id}"/>
           </c:url>
+          <c:url value="Auth" var="urlActive">
+            <c:param name="action" value="userActive"/>
+            <c:param name="usr_id" value="${user.id}"/>
+            <c:param name="roleFilter" value="${roleFilter}"/>
+            <c:param name="usr_active" value="${!user.active}"/>
+          </c:url>
           <c:url value="UserConfig" var="urlConfig">
             <c:param name="uc_user" value="${user.id}"/>
           </c:url>
@@ -86,10 +92,10 @@
             <td align="center">
               <c:choose>
                 <c:when test="${user.active}">
-                  <img src="img/true.png" alt="Active" title="Active"/>
+                  <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
                 </c:when>
                 <c:otherwise>
-                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                  <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
                 </c:otherwise>
               </c:choose>
             </td>

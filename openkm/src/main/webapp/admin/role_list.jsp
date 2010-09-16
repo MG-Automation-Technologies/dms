@@ -39,15 +39,20 @@
             <c:param name="action" value="roleDelete"/>
             <c:param name="rol_id" value="${role.id}"/>
           </c:url>
+          <c:url value="Auth" var="urlActive">
+            <c:param name="action" value="roleActive"/>
+            <c:param name="rol_id" value="${role.id}"/>
+            <c:param name="rol_active" value="${!role.active}"/>
+          </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${role.id}</td>
             <td align="center">
               <c:choose>
                 <c:when test="${role.active}">
-                  <img src="img/true.png" alt="Active" title="Active"/>
+                  <a href="${urlActive}"><img src="img/true.png" alt="Active" title="Active"/></a>
                 </c:when>
                 <c:otherwise>
-                  <img src="img/false.png" alt="Inactive" title="Inactive"/>
+                  <a href="${urlActive}"><img src="img/false.png" alt="Inactive" title="Inactive"/></a>
                 </c:otherwise>
               </c:choose>
             </td>
