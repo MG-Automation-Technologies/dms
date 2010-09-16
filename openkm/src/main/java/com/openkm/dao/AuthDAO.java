@@ -98,6 +98,33 @@ public class AuthDAO {
 	}
 	
 	/**
+	 * Active user in database
+	 */
+	public static void activeUser(String usrId, boolean active) throws DatabaseException {
+		log.debug("activeUser({}, {})", usrId, active);
+		String qs = "update User u set u.active=:active where u.id=:id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setBoolean("active", active);
+			q.setString("id", usrId);
+			q.executeUpdate();
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("activeUser: void");
+	}
+	
+	/**
 	 * Update user password in database 
 	 */
 	public static void updateUserPassword(String usrId, String usrPassword) throws DatabaseException {
@@ -359,6 +386,33 @@ public class AuthDAO {
 		}
 		
 		log.debug("updateRole: void");
+	}
+	
+	/**
+	 * Active role in database
+	 */
+	public static void activeRole(String rolId, boolean active) throws DatabaseException {
+		log.debug("activeRole({}, {})", rolId, active);
+		String qs = "update Role r set r.active=:active where r.id=:id";
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Query q = session.createQuery(qs);
+			q.setBoolean("active", active);
+			q.setString("id", rolId);
+			q.executeUpdate();
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("activeRole: void");
 	}
 
 	/**
