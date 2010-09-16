@@ -1,0 +1,3 @@
+OpenKM AddOn
+
+Permite editar, actualizar, cancelar un documento editado o subir un documento nuevo a o desde un servidor con el repositorio de OpenKM.
