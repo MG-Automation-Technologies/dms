@@ -37,6 +37,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -204,7 +205,6 @@ public class ExplorerForm extends javax.swing.JFrame {
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);
         scrollPanelTable.setViewportView(table);
-        table.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         editButton.setText("Edit");
         editButton.setName("edit"); // NOI18N
@@ -278,7 +278,7 @@ public class ExplorerForm extends javax.swing.JFrame {
             }
             loader.loadComponentFromURL(Util.fileNameToOOoURL(fileName), "_blank", 0, new PropertyValue[0]);
         } catch (Exception ex) {
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
         }
         dispose();
     }//GEN-LAST:event_editButtonActionPerformed
@@ -301,7 +301,7 @@ public class ExplorerForm extends javax.swing.JFrame {
             folderService = new OKMFolderService(new URL(host + "/OKMFolder?wsdl"), FolderServiceName);
             documentService = new OKMDocumentService(new URL(host + "/OKMDocument?wsdl"), DocumentServiceName);
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -324,7 +324,7 @@ public class ExplorerForm extends javax.swing.JFrame {
             pack();
 
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -343,7 +343,7 @@ public class ExplorerForm extends javax.swing.JFrame {
             }
             pack();
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -405,7 +405,7 @@ public class ExplorerForm extends javax.swing.JFrame {
             }
             pack();
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -433,12 +433,20 @@ public class ExplorerForm extends javax.swing.JFrame {
             getChilds();
             getDocumentChilds();
 
-            table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
+            table.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
                 public void valueChanged(ListSelectionEvent arg0) {
                     int selectedRow = table.getSelectedRow();
-                    Document doc = (Document) table.getValueAt(selectedRow, 3);
-                    evaluateEnabledButtonByPermissions(doc);
+                    // clearing selection make call to listener and then selected row is -1
+                    if (selectedRow>=0) {
+                        Document doc = (Document) table.getValueAt(selectedRow, 3);
+                        try {
+                            evaluateEnabledButtonByPermissions(doc);
+                        } catch (UnsupportedEncodingException ex) {
+                            // Do nothing
+                        }
+                    } else {
+                        enableDefaultButton();
+                    }
                 }
             });
 
@@ -450,6 +458,8 @@ public class ExplorerForm extends javax.swing.JFrame {
                         actualNode = node;
 
                         token = okmAuth.login(username, password);
+                        // Clear selection fires selection listener, must be
+                        table.getSelectionModel().clearSelection();
                         getChilds();
                         getDocumentChilds();
 
@@ -457,7 +467,7 @@ public class ExplorerForm extends javax.swing.JFrame {
                         okmAuth.logout(token);
                         token = "";
                     } catch (Exception ex) {
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                         if (!token.equals("")) {
                             try {
                                 // Logout OpenKM
@@ -482,7 +492,7 @@ public class ExplorerForm extends javax.swing.JFrame {
                 } catch (Exception ex1) {
                 } 
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -496,9 +506,10 @@ public class ExplorerForm extends javax.swing.JFrame {
         cancelButton.setEnabled(true);
     }
 
-    private void evaluateEnabledButtonByPermissions(Document doc) {
+    private void evaluateEnabledButtonByPermissions(Document doc) throws UnsupportedEncodingException {
         if (Util.hasWritePermission(((FolderNodeBean) actualNode.getUserObject()).getFolder(), doc) &&
-            !doc.isCheckedOut() && !doc.isLocked()) {
+            !doc.isCheckedOut() && !doc.isLocked() &&
+            Util.findFormatForFilterName(Util.getOKMFileName(doc.getPath())) != null) {
             editButton.setEnabled(true);
         } else {
             editButton.setEnabled(false);

@@ -60,7 +60,7 @@ public class DocumentFile {
                     save();
                 }
             } catch (IOException ex) {
-                throw new OKMException(ex.getMessage());
+                throw new OKMException(ex);
             }
         }
         docList = new ArrayList<OKMDocumentBean>();
@@ -108,9 +108,9 @@ public class DocumentFile {
             writer.close();
 
         } catch (XMLStreamException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (IOException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } finally {
         }
     }
@@ -137,11 +137,11 @@ public class DocumentFile {
             }
 
         } catch (ParserConfigurationException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (SAXException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (IOException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
 
         return docList;

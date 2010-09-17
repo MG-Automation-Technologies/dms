@@ -12,6 +12,7 @@ package com.openkm.openoffice.logic;
 public class OKMException extends Exception {
 
     String message = "";
+    Throwable cause = null;
 
     public OKMException() {
     }
@@ -20,8 +21,19 @@ public class OKMException extends Exception {
         this.message = message;
     }
 
+    public OKMException(Exception ex) {
+        this.cause = ex.getCause();
+        this.message = ex.getMessage();
+        super.setStackTrace(ex.getStackTrace());
+    }
+
     @Override
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public Throwable getCause() {
+        return cause;
     }
 }

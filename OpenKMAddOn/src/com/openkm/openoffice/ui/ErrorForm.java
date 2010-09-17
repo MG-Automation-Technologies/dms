@@ -20,7 +20,11 @@ import com.openkm.openoffice.OpenKMAddOn;
 public class ErrorForm extends javax.swing.JFrame {
 
     /** Creates new form MessageForm */
-    public ErrorForm(String message) {
+    public ErrorForm(Exception ex) {
+        String message = ex.getMessage();
+        message += "\nCause:" +ex.getCause();
+        message += "\n\nStackTrace" + ((ex.getStackTrace()!=null)?ex.getStackTrace().toString():"");
+
         initComponents();
         setLocationByPlatform(true);
         setLocationRelativeTo(getParent());

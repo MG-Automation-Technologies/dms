@@ -63,7 +63,7 @@ public class Util {
                 file = new File(fileName);
             }
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
         return fileName;
     }

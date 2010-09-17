@@ -65,7 +65,7 @@ public class DocumentLogic {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex.getMessage() + "\nStackTrace\n" + ex.getStackTrace());
         } 
     }
 
@@ -116,7 +116,7 @@ public class DocumentLogic {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex.getMessage() + "\nStackTrace\n" + ex.getStackTrace());
         }
         return okmDocumentBean;
     }
@@ -154,7 +154,7 @@ public class DocumentLogic {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex.getMessage() + "\nStackTrace\n" + ex.getStackTrace());
         }
     }
 
@@ -192,7 +192,7 @@ public class DocumentLogic {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex.getMessage() + "\nStackTrace\n" + ex.getStackTrace());
         }
     }
 }
