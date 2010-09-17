@@ -17,6 +17,8 @@ import com.openkm.openoffice.util.ImageUtil;
 import com.openkm.openoffice.util.Util;
 import com.sun.star.frame.FeatureStateEvent;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XStorable;
+import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.Exception;
@@ -413,6 +415,7 @@ public final class OpenKMAddOn extends WeakBase
     public void executeCheckin(String documentPath) {
         try {
             waitWindow.setVisible(true);
+            storeToDisk();
             OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
             ConfigBean configBean = configFile.read();
             DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
@@ -446,5 +449,18 @@ public final class OpenKMAddOn extends WeakBase
             waitWindow.setVisible(false);
             new ErrorForm(ex.getMessage());
         }
+    }
+
+    private boolean storeToDisk() {
+        // OK, here we will have small sample of wrong behavior, this means exception driven control flow... but it's easier ;p
+        boolean result = true;
+        XStorable storable = (XStorable) UnoRuntime.queryInterface(
+                XStorable.class, m_xFrame.getController().getModel()) ;
+        try {
+            storable.store();
+        } catch (IOException ioe) {
+            result = false;
+        }
+        return result;
     }
 }
