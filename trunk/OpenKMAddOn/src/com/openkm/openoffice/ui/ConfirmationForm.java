@@ -129,6 +129,7 @@ public class ConfirmationForm extends javax.swing.JFrame {
     }//GEN-LAST:event_noButtonActionPerformed
 
     private void yesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesButtonActionPerformed
+        dispose();
         switch (operation) {
             case OPERATION_CHECKIN :
                 OpenKMAddOn.get().executeCheckin(documentPath);
@@ -138,7 +139,6 @@ public class ConfirmationForm extends javax.swing.JFrame {
                 OpenKMAddOn.get().executeCancelCheckin(documentPath);
                 break;
         }
-        dispose();
     }//GEN-LAST:event_yesButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
