@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.Iterator;
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -68,6 +67,7 @@ public class TreeForm extends javax.swing.JFrame {
     private String password = "";
     private String host = "";
     private ImageUtil imageUtil;
+    private String documentPath = "";
 
     /** Creates new form ExplorerForm */
     public TreeForm(ImageUtil imageUtil) {
@@ -138,7 +138,7 @@ public class TreeForm extends javax.swing.JFrame {
                 .addGap(68, 68, 68))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                .addComponent(scrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -163,10 +163,11 @@ public class TreeForm extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try {
             disableAllButton();
-            OpenKMAddOn.get().create(((FolderNodeBean) actualNode.getUserObject()).getFolder().getPath());
+            OpenKMAddOn.get().create(((FolderNodeBean) actualNode.getUserObject()).getFolder().getPath(), documentPath);
             dispose();
         } catch (OKMException ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            OpenKMAddOn.get().hideWaitWindow();
+            new ErrorForm(ex.getMessage());
             evaluateEnabledButtonByPermissions();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -229,7 +230,8 @@ public class TreeForm extends javax.swing.JFrame {
         }
     }
 
-    public void startUp(final String username, final String password) throws OKMException {
+    public void startUp(final String username, final String password, String documentPath) throws OKMException {
+        this.documentPath = documentPath;
         this.username = username;
         this.password = password;
         okmAuth = authService.getOKMAuthPort();
@@ -264,7 +266,7 @@ public class TreeForm extends javax.swing.JFrame {
                         okmAuth.logout(token);
                         token = "";
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                         if (!token.equals("")) {
                             try {
                                 // Logout OpenKM
@@ -282,9 +284,6 @@ public class TreeForm extends javax.swing.JFrame {
             okmAuth.logout(token);
             token = "";
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,ex.getClass(),"log", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null,ex.getMessage(),"log", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null,ex.getStackTrace(),"log", JOptionPane.ERROR_MESSAGE);
             if (!token.equals("")) {
                 try {
                     // Logout OpenKM

@@ -56,7 +56,7 @@ public class Util {
             while (file.exists()) {
                 fileName = doc.getPath().substring(doc.getPath().lastIndexOf("/")+1);
                 String docExtension = fileName.substring(fileName.lastIndexOf(".")+1);
-                String docName = fileName.substring(0,fileName.lastIndexOf(".")-1);
+                String docName = fileName.substring(0,fileName.lastIndexOf("."));
                 fileName = directoryPath + FileUtil.getFolderPathSeparator() + docName + "_" + count + "." + docExtension;
                 count++;
                 file = new File(fileName);
@@ -70,6 +70,11 @@ public class Util {
     public static String getDocumentExtension(Document doc) {
         return doc.getPath().substring(doc.getPath().lastIndexOf(".")+1);
     }
+
+    public static String getLocalFileName(String path) throws UnsupportedEncodingException {
+        return path.substring(path.lastIndexOf(FileUtil.getFolderPathSeparator())+1);
+    }
+
 
     public static OKMDocumentBean copy(Document doc) {
         OKMDocumentBean oKMDocumentBean = new OKMDocumentBean();

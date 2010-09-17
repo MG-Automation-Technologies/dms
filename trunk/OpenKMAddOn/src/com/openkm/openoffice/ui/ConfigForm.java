@@ -12,7 +12,6 @@
 package com.openkm.openoffice.ui;
 import com.openkm.openoffice.OpenKMAddOn;
 import com.openkm.openoffice.logic.OKMException;
-import javax.swing.JOptionPane;
 
 import com.openkm.openoffice.bean.ConfigBean;
 import com.openkm.openoffice.config.ConfigFile;
@@ -157,16 +156,16 @@ public class ConfigForm extends javax.swing.JFrame {
         configBean.setUser(userInput.getText());
         configBean.setPassword(new String(passwordInput.getPassword()));
         if (host.equals("")) {
-            JOptionPane.showMessageDialog(null,OpenKMAddOn.get().getLang().getString("config.error.host.empty"),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.host.empty"));
         } else if (configBean.getUser().equals("")) {
-            JOptionPane.showMessageDialog(null,OpenKMAddOn.get().getLang().getString("config.error.user.empty"),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.user.empty"));
         } else if (configBean.getPassword().equals("")) {
-            JOptionPane.showMessageDialog(null,OpenKMAddOn.get().getLang().getString("config.error.password.empty"),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.password.empty"));
         } else {
             try {
                 configFile.save(configBean);
             } catch (OKMException ex) {
-                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                new ErrorForm(ex.getMessage());
             }
             dispose();
         }

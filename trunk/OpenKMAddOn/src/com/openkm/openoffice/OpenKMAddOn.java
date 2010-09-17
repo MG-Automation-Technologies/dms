@@ -8,7 +8,9 @@ import com.openkm.openoffice.i18n.Lang;
 import com.openkm.openoffice.logic.DocumentLogic;
 import com.openkm.openoffice.logic.OKMException;
 import com.openkm.openoffice.ui.ConfigForm;
+import com.openkm.openoffice.ui.ConfirmationForm;
 import com.openkm.openoffice.ui.ExplorerForm;
+import com.openkm.openoffice.ui.ErrorForm;
 import com.openkm.openoffice.ui.TreeForm;
 import com.openkm.openoffice.ui.WaitWindow;
 import com.openkm.openoffice.util.ImageUtil;
@@ -31,10 +33,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 
 public final class OpenKMAddOn extends WeakBase
    implements com.sun.star.lang.XInitialization,
@@ -72,7 +70,7 @@ public final class OpenKMAddOn extends WeakBase
             imageUtil = new ImageUtil();
             waitWindow = new WaitWindow();
         } catch (OKMException ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(ex.getMessage());
         }
     };
 
@@ -114,7 +112,7 @@ public final class OpenKMAddOn extends WeakBase
                         ConfigForm configForm = new ConfigForm(configFile);
                         configForm.setVisible(true);
                     } catch (OKMException ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                     }
                     return;
                 }
@@ -128,7 +126,7 @@ public final class OpenKMAddOn extends WeakBase
                         explorerForm.startUp(m_xFrame, configBean.getUser(), configBean.getPassword());
                         explorerForm.setVisible(true);
                     } catch (OKMException ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                     }
                     return;
                 }
@@ -140,13 +138,13 @@ public final class OpenKMAddOn extends WeakBase
                             ConfigBean configBean = configFile.read();
                             TreeForm treeForm = new TreeForm(imageUtil);
                             treeForm.initServices(configFile.read().getHost());
-                            treeForm.startUp(configBean.getUser(), configBean.getPassword());
+                            treeForm.startUp(configBean.getUser(), configBean.getPassword(),documentPath);
                             treeForm.setVisible(true);
                         } catch (OKMException ex) {
-                            JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                            new ErrorForm(ex.getMessage());
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null,lang.getString("main.error.save.file"),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(lang.getString("main.error.save.file"));
                     }
                     return;
                 }
@@ -156,23 +154,12 @@ public final class OpenKMAddOn extends WeakBase
                         String documentPath = getCurrentDocumentPath();
                         if (documentPath != null && !documentPath.equals("")) {
                             if (documentFile.isOpenKMDocument(documentPath)) {
-                                if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.update"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-                                    waitWindow.setVisible(true);
-                                    OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
-                                    ConfigBean configBean = configFile.read();
-                                    DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
-                                    documentFile.remove(oKMDocumentBean);
-                                    waitWindow.setVisible(false);
-                                    XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-                                    closeDocument(xcomponent);
-                                    File file = new File(documentPath);
-                                    file.delete(); // file is always locally deleted
-                                }
+                                new ConfirmationForm("main.question.update",ConfirmationForm.OPERATION_CHECKIN, documentPath);
                             }
                         }
                     } catch (OKMException ex) {
                         waitWindow.setVisible(false);
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                     }
                     return;
                 }
@@ -182,23 +169,12 @@ public final class OpenKMAddOn extends WeakBase
                         String documentPath = getCurrentDocumentPath();
                         if (documentPath != null && !documentPath.equals("")) {
                             if (documentFile.isOpenKMDocument(documentPath)) {
-                                if (JOptionPane.showConfirmDialog(null,lang.getString("main.question.cancel.edit"),"Warning", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
-                                    waitWindow.setVisible(true);
-                                    OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
-                                    ConfigBean configBean = configFile.read();
-                                    DocumentLogic.cancelCheckout(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
-                                    documentFile.remove(oKMDocumentBean);
-                                    waitWindow.setVisible(false);
-                                    XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-                                    closeDocument(xcomponent);
-                                    File file = new File(documentPath);
-                                    file.delete(); // file is always locally deleted
-                                }
+                                new ConfirmationForm("main.question.cancel.edit",ConfirmationForm.OPERATION_CANCELCHECKIN, documentPath);
                             }
                         }
                     } catch (OKMException ex) {
                         waitWindow.setVisible(false);
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                     }
                     return;
                 }
@@ -210,14 +186,14 @@ public final class OpenKMAddOn extends WeakBase
                         XSystemShellExecute shell = (XSystemShellExecute) UnoRuntime.queryInterface( XSystemShellExecute.class, xObject );
                         shell.execute("http://www.openkm.com", "", 0);
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                     }
 
                     return;
                 }
             }
         } catch (OKMException ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage(),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(ex.getMessage());
         }
     }
 
@@ -385,24 +361,23 @@ public final class OpenKMAddOn extends WeakBase
         return docPath;
     }
 
-    public void create(String path) throws OKMException {
-        String documentPath = getCurrentDocumentPath();
+    public void create(String path, String documentPath) throws OKMException {
         if (documentPath!=null && !documentPath.equals("")) {
             waitWindow.setVisible(true);
             ConfigBean configBean = configFile.read();
             OKMDocumentBean document = new OKMDocumentBean();
             document.setLocalFilename(documentPath);
             try {
-                document.setPath(path + "/" + Util.getOKMFileName(documentPath));
+                document.setPath(path + "/" + Util.getLocalFileName(documentPath));
             } catch (UnsupportedEncodingException ex) {
                 new OKMException(ex.getMessage());
             }
             DocumentLogic.create(configBean.getHost(), configBean.getUser(), configBean.getPassword(), document);
             waitWindow.setVisible(false);
-            JOptionPane.showMessageDialog(null,lang.getString("main.document.added"),lang.getString("window.information"), JOptionPane.PLAIN_MESSAGE);
+            new ConfirmationForm("main.document.added",ConfirmationForm.OPERATION_DOCUMENT_ADDED, "");
         } else {
             waitWindow.setVisible(false);
-            JOptionPane.showMessageDialog(null,lang.getString("main.error.save.file"),lang.getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(lang.getString("main.error.save.file"));
         }
     }
 
@@ -433,5 +408,43 @@ public final class OpenKMAddOn extends WeakBase
 
     public Lang getLang() {
         return lang;
+    }
+
+    public void executeCheckin(String documentPath) {
+        try {
+            waitWindow.setVisible(true);
+            OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
+            ConfigBean configBean = configFile.read();
+            DocumentLogic.checkin(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
+            documentFile.remove(oKMDocumentBean);
+            waitWindow.setVisible(false);
+            m_xFrame.dispose();
+            //XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
+            //closeDocument(xcomponent);
+            File file = new File(documentPath);
+            file.delete(); // file is always locally deleted
+        } catch (OKMException ex) {
+            waitWindow.setVisible(false);
+            new ErrorForm(ex.getMessage());
+        }
+    }
+
+    public void executeCancelCheckin(String documentPath) {
+        try {
+            waitWindow.setVisible(true);
+            OKMDocumentBean oKMDocumentBean = documentFile.findByLocalFileName(documentPath);
+            ConfigBean configBean = configFile.read();
+            DocumentLogic.cancelCheckout(configBean.getHost(), configBean.getUser(), configBean.getPassword(), oKMDocumentBean);
+            documentFile.remove(oKMDocumentBean);
+            waitWindow.setVisible(false);
+            m_xFrame.dispose();
+            //XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
+            //closeDocument(xcomponent);
+            File file = new File(documentPath);
+            file.delete(); // file is always locally deleted
+        } catch (OKMException ex) {
+            waitWindow.setVisible(false);
+            new ErrorForm(ex.getMessage());
+        }
     }
 }
