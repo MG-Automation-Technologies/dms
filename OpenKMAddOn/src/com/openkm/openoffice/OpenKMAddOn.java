@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class OpenKMAddOn extends WeakBase
    implements com.sun.star.lang.XInitialization,
@@ -383,17 +385,13 @@ public final class OpenKMAddOn extends WeakBase
         }
     }
 
-    public void closeDocument(XComponent aComponent) {
+    public void closeDocument(XComponent aComponent) throws CloseVetoException {
         XComponent xComponent2 = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
         xComponent2.dispose();
         XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, aComponent);
 
         if (xCloseable != null) {
-            try {
-                xCloseable.close(true);
-            } catch (CloseVetoException ex) {
-                // Don't propagate the error
-            }
+            xCloseable.close(true);
         } else {
             XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, aComponent);
             xComponent.dispose();
@@ -422,8 +420,6 @@ public final class OpenKMAddOn extends WeakBase
             documentFile.remove(oKMDocumentBean);
             waitWindow.setVisible(false);
             m_xFrame.dispose();
-            //XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-            //closeDocument(xcomponent);
             File file = new File(documentPath);
             file.delete(); // file is always locally deleted
         } catch (OKMException ex) {
@@ -441,8 +437,6 @@ public final class OpenKMAddOn extends WeakBase
             documentFile.remove(oKMDocumentBean);
             waitWindow.setVisible(false);
             m_xFrame.dispose();
-            //XComponent xcomponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, m_xFrame);
-            //closeDocument(xcomponent);
             File file = new File(documentPath);
             file.delete(); // file is always locally deleted
         } catch (OKMException ex) {
@@ -459,6 +453,7 @@ public final class OpenKMAddOn extends WeakBase
         try {
             storable.store();
         } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
             result = false;
         }
         return result;
