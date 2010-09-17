@@ -102,10 +102,35 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void sendMessage(List<String> toAddress, String subject, String text) throws 
+	public static void sendMessage(List<String> toAddress, String subject, String content) throws 
 			MessagingException {
 		try {
-			send(null, toAddress, subject, text, null);
+			send(null, toAddress, subject, content, null);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Send mail without FROM addresses.
+	 * 
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void sendMessage(String toAddress, String subject, String content) throws 
+			MessagingException {
+		try {
+			ArrayList<String> toList = new ArrayList<String>();
+			toList.add(toAddress);
+			send(null, toList, subject, content, null);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (RepositoryException e) {
@@ -125,10 +150,35 @@ public class MailUtils {
 	 * @param text The mail body.
 	 * @throws MessagingException If there is any error.
 	 */
-	public static void sendMessage(String fromAddress, List<String> toAddress, String subject, String text) throws 
+	public static void sendMessage(String fromAddress, List<String> toAddress, String subject, String content) throws 
 			MessagingException {
 		try {
-			send(fromAddress, toAddress, subject, text, null);
+			send(fromAddress, toAddress, subject, content, null);
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+		} catch (RepositoryException e) {
+			log.warn(e.getMessage(), e);
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Send mail without FROM addresses.
+	 * 
+	 * @param toAddress Destination addresses.
+	 * @param subject The mail subject.
+	 * @param text The mail body.
+	 * @throws MessagingException If there is any error.
+	 */
+	public static void sendMessage(String fromAddress, String toAddress, String subject, String content) throws 
+			MessagingException {
+		try {
+			ArrayList<String> toList = new ArrayList<String>();
+			toList.add(toAddress);
+			send(fromAddress, toList, subject, content, null);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 		} catch (RepositoryException e) {
