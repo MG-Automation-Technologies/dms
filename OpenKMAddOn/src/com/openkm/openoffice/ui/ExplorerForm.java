@@ -45,7 +45,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.UIManager;
@@ -200,7 +199,6 @@ public class ExplorerForm extends javax.swing.JFrame {
 
         scrollPanel.setViewportView(tree);
 
-        table.setBackground(java.awt.Color.white);
         table.setModel(tableModel);
         table.setSelectionBackground(new java.awt.Color(91, 94, 100));
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -278,7 +276,7 @@ public class ExplorerForm extends javax.swing.JFrame {
                 loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+            new ErrorForm(ex.getMessage());
         }
         dispose();
     }//GEN-LAST:event_editButtonActionPerformed
@@ -457,7 +455,7 @@ public class ExplorerForm extends javax.swing.JFrame {
                         okmAuth.logout(token);
                         token = "";
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null,ex.getMessage(),OpenKMAddOn.get().getLang().getString("window.error"), JOptionPane.ERROR_MESSAGE);
+                        new ErrorForm(ex.getMessage());
                         if (!token.equals("")) {
                             try {
                                 // Logout OpenKM
