@@ -54,7 +54,7 @@ public class ConfigFile {
                     save(new ConfigBean());
                 }
             } catch (IOException ex) {
-                throw new OKMException(ex.getMessage());
+                throw new OKMException(ex);
             }
         }
     }
@@ -92,9 +92,9 @@ public class ConfigFile {
             writer.close();
 
         } catch (XMLStreamException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (IOException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } finally {
         }
     }
@@ -123,11 +123,11 @@ public class ConfigFile {
             }
 
         } catch (ParserConfigurationException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (SAXException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } catch (IOException ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         } 
 
         return configBean;

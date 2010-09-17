@@ -167,7 +167,7 @@ public class TreeForm extends javax.swing.JFrame {
             dispose();
         } catch (OKMException ex) {
             OpenKMAddOn.get().hideWaitWindow();
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
             evaluateEnabledButtonByPermissions();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -186,7 +186,7 @@ public class TreeForm extends javax.swing.JFrame {
             repositoryService = new OKMRepositoryService(new URL(host + "/OKMRepository?wsdl"), RepositoryServiceName);
             folderService = new OKMFolderService(new URL(host + "/OKMFolder?wsdl"), FolderServiceName);
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
     
@@ -209,7 +209,7 @@ public class TreeForm extends javax.swing.JFrame {
             pack();
 
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -226,7 +226,7 @@ public class TreeForm extends javax.swing.JFrame {
                 actualNode.add(childNode);
             }
         } catch (Exception ex) {
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 
@@ -266,7 +266,7 @@ public class TreeForm extends javax.swing.JFrame {
                         okmAuth.logout(token);
                         token = "";
                     } catch (Exception ex) {
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                         if (!token.equals("")) {
                             try {
                                 // Logout OpenKM
@@ -293,7 +293,7 @@ public class TreeForm extends javax.swing.JFrame {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
-            throw new OKMException(ex.getMessage());
+            throw new OKMException(ex);
         }
     }
 

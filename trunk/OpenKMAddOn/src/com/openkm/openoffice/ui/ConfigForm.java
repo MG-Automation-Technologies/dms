@@ -156,16 +156,16 @@ public class ConfigForm extends javax.swing.JFrame {
         configBean.setUser(userInput.getText());
         configBean.setPassword(new String(passwordInput.getPassword()));
         if (host.equals("")) {
-            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.host.empty"));
+            new ErrorForm(new OKMException(OpenKMAddOn.get().getLang().getString("config.error.host.empty")));
         } else if (configBean.getUser().equals("")) {
-            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.user.empty"));
+            new ErrorForm(new OKMException(OpenKMAddOn.get().getLang().getString("config.error.user.empty")));
         } else if (configBean.getPassword().equals("")) {
-            new ErrorForm(OpenKMAddOn.get().getLang().getString("config.error.password.empty"));
+            new ErrorForm(new OKMException(OpenKMAddOn.get().getLang().getString("config.error.password.empty")));
         } else {
             try {
                 configFile.save(configBean);
             } catch (OKMException ex) {
-                new ErrorForm(ex.getMessage());
+                new ErrorForm(ex);
             }
             dispose();
         }

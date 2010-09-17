@@ -35,8 +35,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class OpenKMAddOn extends WeakBase
    implements com.sun.star.lang.XInitialization,
@@ -74,7 +72,7 @@ public final class OpenKMAddOn extends WeakBase
             imageUtil = new ImageUtil();
             waitWindow = new WaitWindow();
         } catch (OKMException ex) {
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
         }
     };
 
@@ -116,7 +114,7 @@ public final class OpenKMAddOn extends WeakBase
                         ConfigForm configForm = new ConfigForm(configFile);
                         configForm.setVisible(true);
                     } catch (OKMException ex) {
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                     }
                     return;
                 }
@@ -130,7 +128,7 @@ public final class OpenKMAddOn extends WeakBase
                         explorerForm.startUp(m_xFrame, configBean.getUser(), configBean.getPassword());
                         explorerForm.setVisible(true);
                     } catch (OKMException ex) {
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                     }
                     return;
                 }
@@ -145,10 +143,10 @@ public final class OpenKMAddOn extends WeakBase
                             treeForm.startUp(configBean.getUser(), configBean.getPassword(),documentPath);
                             treeForm.setVisible(true);
                         } catch (OKMException ex) {
-                            new ErrorForm(ex.getMessage());
+                            new ErrorForm(ex);
                         }
                     } else {
-                        new ErrorForm(lang.getString("main.error.save.file"));
+                        new ErrorForm(new OKMException(lang.getString("main.error.save.file")));
                     }
                     return;
                 }
@@ -163,7 +161,7 @@ public final class OpenKMAddOn extends WeakBase
                         }
                     } catch (OKMException ex) {
                         waitWindow.setVisible(false);
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                     }
                     return;
                 }
@@ -178,7 +176,7 @@ public final class OpenKMAddOn extends WeakBase
                         }
                     } catch (OKMException ex) {
                         waitWindow.setVisible(false);
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                     }
                     return;
                 }
@@ -190,14 +188,14 @@ public final class OpenKMAddOn extends WeakBase
                         XSystemShellExecute shell = (XSystemShellExecute) UnoRuntime.queryInterface( XSystemShellExecute.class, xObject );
                         shell.execute("http://www.openkm.com", "", 0);
                     } catch (Exception ex) {
-                        new ErrorForm(ex.getMessage());
+                        new ErrorForm(ex);
                     }
 
                     return;
                 }
             }
         } catch (OKMException ex) {
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
         }
     }
 
@@ -345,9 +343,9 @@ public final class OpenKMAddOn extends WeakBase
                 url = new URL(xDoc.getURL());
                 docPath = java.net.URLDecoder.decode(url.getPath(), "UTF-8"); // All local path are in UTF-8
             } catch (MalformedURLException ex) {
-                throw new OKMException(ex.getMessage());
+                throw new OKMException(ex);
             } catch (UnsupportedEncodingException ex) {
-                throw new OKMException(ex.getMessage());
+                throw new OKMException(ex);
             }
 
             if (docPath.startsWith("////")) {
@@ -374,14 +372,14 @@ public final class OpenKMAddOn extends WeakBase
             try {
                 document.setPath(path + "/" + Util.getLocalFileName(documentPath));
             } catch (UnsupportedEncodingException ex) {
-                new OKMException(ex.getMessage());
+                new OKMException(ex);
             }
             DocumentLogic.create(configBean.getHost(), configBean.getUser(), configBean.getPassword(), document);
             waitWindow.setVisible(false);
             new ConfirmationForm("main.document.added",ConfirmationForm.OPERATION_DOCUMENT_ADDED, "");
         } else {
             waitWindow.setVisible(false);
-            new ErrorForm(lang.getString("main.error.save.file"));
+            new ErrorForm(new OKMException(lang.getString("main.error.save.file")));
         }
     }
 
@@ -424,7 +422,7 @@ public final class OpenKMAddOn extends WeakBase
             file.delete(); // file is always locally deleted
         } catch (OKMException ex) {
             waitWindow.setVisible(false);
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
         }
     }
 
@@ -441,7 +439,7 @@ public final class OpenKMAddOn extends WeakBase
             file.delete(); // file is always locally deleted
         } catch (OKMException ex) {
             waitWindow.setVisible(false);
-            new ErrorForm(ex.getMessage());
+            new ErrorForm(ex);
         }
     }
 
