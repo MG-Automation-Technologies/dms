@@ -75,10 +75,11 @@ public class CheckEmailServlet extends BaseServlet {
 		
 		try {
 			MailUtils.sendMessage(from, to, subject, content);
+			sc.setAttribute("error", "Ok");
 		} catch (Exception e) {
 			sc.setAttribute("error", e.getMessage());
 		}
-				
+		
 		sc.getRequestDispatcher("/admin/check_email.jsp").forward(request, response);
 		
 		// Activity log
