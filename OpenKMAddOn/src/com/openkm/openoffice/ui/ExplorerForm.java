@@ -270,11 +270,13 @@ public class ExplorerForm extends javax.swing.JFrame {
             OKMDocumentBean oKMDocumentBean = DocumentLogic.chekckout(host, username, password, doc, documentFile.getDirectoryToStoreFiles());
             documentFile.add(oKMDocumentBean);
             XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
+            String fileName = "";
             if (Util.getOS().toLowerCase().contains("windows")) {
-                loader.loadComponentFromURL("file:///"+oKMDocumentBean.getLocalFilename(), "_blank", 0, new PropertyValue[0]);
+                fileName =  oKMDocumentBean.getLocalFilename();
             } else {
-                loader.loadComponentFromURL("file:///"+Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath(), "_blank", 0, new PropertyValue[0]);
+                fileName = Util.convertFileNamePathToURI(oKMDocumentBean.getLocalFilename()).toURL().getPath();
             }
+            loader.loadComponentFromURL(Util.fileNameToOOoURL(fileName), "_blank", 0, new PropertyValue[0]);
         } catch (Exception ex) {
             new ErrorForm(ex.getMessage());
         }

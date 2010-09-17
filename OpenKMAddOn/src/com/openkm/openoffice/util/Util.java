@@ -8,6 +8,7 @@ package com.openkm.openoffice.util;
 import com.openkm.openoffice.bean.OKMDocumentBean;
 import com.openkm.openoffice.bean.OKMPermissionBean;
 import com.openkm.openoffice.logic.OKMException;
+import com.openkm.openoffice.bean.OOoFormats;
 import com.openkm.ws.client.Document;
 import com.openkm.ws.client.Folder;
 import java.io.File;
@@ -94,4 +95,21 @@ public class Util {
     public static String getOS() {
         return System.getProperty("os.name");
     }
+
+    public static OOoFormats findFormatForFilterName(String filterName) {
+        OOoFormats[] formats =  OOoFormats.values();
+        for (OOoFormats format:formats) {
+            if (format.getFilterName().equals(filterName)) {
+                return format;
+            }
+        }
+        return null;
+    }
+    
+    public static String fileNameToOOoURL(final String fName) {
+        StringBuilder sLoadUrl = new StringBuilder("file:///");
+        sLoadUrl.append(fName.replace('\\', '/').replace("#", "%23"));
+        return sLoadUrl.toString();
+    }
+
 }
