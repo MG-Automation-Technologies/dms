@@ -245,6 +245,10 @@
     <servlet-name>RepositorySearchServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.RepositorySearchServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>CheckEmailServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
+  </servlet>
         
   <!-- Extension Servlets 
   <servlet>
@@ -510,6 +514,10 @@
   <servlet-mapping>
     <servlet-name>RepositorySearchServlet</servlet-name>
     <url-pattern>/admin/RepositorySearch</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckEmailServlet</servlet-name>
+    <url-pattern>/admin/CheckEmail</url-pattern>
   </servlet-mapping>
 
   <!-- Extension Servlet Mappings 
