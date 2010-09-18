@@ -23,7 +23,11 @@ public class ErrorForm extends javax.swing.JFrame {
     public ErrorForm(Exception ex) {
         String message = ex.getMessage();
         message += "\nCause:" +ex.getCause();
-        message += "\n\nStackTrace" + ((ex.getStackTrace()!=null)?ex.getStackTrace().toString():"");
+        message += "\n\nStackTrace:\n";
+
+        for (int i=0; i<ex.getStackTrace().length; i++) {
+            message += ex.getStackTrace()[i] + "\n";
+        }
 
         initComponents();
         setLocationByPlatform(true);
