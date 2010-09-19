@@ -16,7 +16,7 @@ import com.openkm.openoffice.bean.FolderNodeBean;
 import com.openkm.openoffice.logic.OKMException;
 import com.openkm.openoffice.util.ImageUtil;
 import com.openkm.openoffice.util.Util;
-import com.openkm.ws.client.DatabaseException_Exception;
+import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.Folder;
 import com.openkm.ws.client.OKMAuth;
 import com.openkm.ws.client.OKMAuthService;
@@ -30,6 +30,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -50,9 +52,9 @@ import javax.xml.ws.BindingProvider;
  */
 public class TreeForm extends javax.swing.JFrame {
 
-    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMAuthService");
-    private static QName RepositoryServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMRepositoryService");
-    private static QName FolderServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMFolderService");
+    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMAuthService");
+    private static QName RepositoryServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMRepositoryService");
+    private static QName FolderServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMFolderService");
 
     private DefaultTreeModel rootModel;
     private String token = "";
@@ -217,7 +219,7 @@ public class TreeForm extends javax.swing.JFrame {
         try {
         actualNode.removeAllChildren();
         FolderNodeBean folderNode = (FolderNodeBean) actualNode.getUserObject();
-            for (Iterator<Folder> it = okmFolder.getChilds(token, folderNode.getFolder().getPath()).getItem().iterator(); it.hasNext();) {
+            for (Iterator<Folder> it = okmFolder.getChilds(token, folderNode.getFolder().getPath()).getValue().iterator(); it.hasNext();) {
                 Folder folder = it.next();
                 FolderNodeBean newfolderNode = new FolderNodeBean();
                 newfolderNode.setFolder(folder);
@@ -272,7 +274,7 @@ public class TreeForm extends javax.swing.JFrame {
                                 // Logout OpenKM
                                 okmAuth.logout(token);
                                 token = "";
-                            } catch (DatabaseException_Exception ex1) {
+                            } catch (AccessDeniedException_Exception ex1) {
                             } catch (RepositoryException_Exception ex1) {
                             }
                         }
@@ -289,7 +291,7 @@ public class TreeForm extends javax.swing.JFrame {
                     // Logout OpenKM
                     okmAuth.logout(token);
                     token = "";
-                } catch (DatabaseException_Exception ex1) {
+                } catch (AccessDeniedException_Exception ex1) {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }

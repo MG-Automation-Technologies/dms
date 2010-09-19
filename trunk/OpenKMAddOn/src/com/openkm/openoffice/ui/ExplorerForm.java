@@ -70,10 +70,10 @@ import javax.xml.ws.BindingProvider;
  */
 public class ExplorerForm extends javax.swing.JFrame {
 
-    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMAuthService");
-    private static QName RepositoryServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMRepositoryService");
-    private static QName FolderServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMFolderService");
-    private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMDocumentService");
+    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMAuthService");
+    private static QName RepositoryServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMRepositoryService");
+    private static QName FolderServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMFolderService");
+    private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMDocumentService");
 
     private DefaultTreeModel rootModel;
     private DefaultTableModel tableModel;
@@ -333,7 +333,7 @@ public class ExplorerForm extends javax.swing.JFrame {
         try {
             actualNode.removeAllChildren();
             FolderNodeBean folderNode = (FolderNodeBean) actualNode.getUserObject();
-            for (Iterator<Folder> it = okmFolder.getChilds(token, folderNode.getFolder().getPath()).getItem().iterator(); it.hasNext();) {
+            for (Iterator<Folder> it = okmFolder.getChilds(token, folderNode.getFolder().getPath()).getValue().iterator(); it.hasNext();) {
                 Folder folder = it.next();
                 FolderNodeBean newfolderNode = new FolderNodeBean();
                 newfolderNode.setFolder(folder);
@@ -357,7 +357,7 @@ public class ExplorerForm extends javax.swing.JFrame {
         }
         FolderNodeBean folderNode = (FolderNodeBean) actualNode.getUserObject();
         try {
-            for (Iterator<Document> it = okmDocument.getChilds(token, folderNode.getFolder().getPath()).getItem().iterator(); it.hasNext();) {
+            for (Iterator<Document> it = okmDocument.getChilds(token, folderNode.getFolder().getPath()).getValue().iterator(); it.hasNext();) {
                 Document doc = it.next();
                 Object[] data = new Object[7];
                 if (doc.isLocked() && !doc.isCheckedOut()) {
@@ -509,7 +509,7 @@ public class ExplorerForm extends javax.swing.JFrame {
     private void evaluateEnabledButtonByPermissions(Document doc) throws UnsupportedEncodingException {
         if (Util.hasWritePermission(((FolderNodeBean) actualNode.getUserObject()).getFolder(), doc) &&
             !doc.isCheckedOut() && !doc.isLocked() &&
-            Util.findFormatForFilterName(Util.getOKMFileName(doc.getPath())) != null) {
+            Util.findFormatForFileExtension(Util.getOKMDocumentExtension(doc)) != null) {
             editButton.setEnabled(true);
         } else {
             editButton.setEnabled(false);

@@ -68,7 +68,7 @@ public class Util {
         return fileName;
     }
 
-    public static String getDocumentExtension(Document doc) {
+    public static String getOKMDocumentExtension(Document doc) {
         return doc.getPath().substring(doc.getPath().lastIndexOf(".")+1);
     }
 
@@ -96,10 +96,10 @@ public class Util {
         return System.getProperty("os.name");
     }
 
-    public static OOoFormats findFormatForFilterName(String filterName) {
+    public static OOoFormats findFormatForFileExtension(String filterName) {
         OOoFormats[] formats =  OOoFormats.values();
         for (OOoFormats format:formats) {
-            if (format.getFilterName().equals(filterName)) {
+            if (format.getFileExtension().equals(filterName)) {
                 return format;
             }
         }
