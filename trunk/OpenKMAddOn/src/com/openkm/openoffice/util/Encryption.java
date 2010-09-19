@@ -51,7 +51,6 @@ public class Encryption {
             ecipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 
-            System.out.println("be");
         } catch (javax.crypto.NoSuchPaddingException e) {
         } catch (java.security.NoSuchAlgorithmException e) {
         } catch (java.security.InvalidKeyException e) { 
