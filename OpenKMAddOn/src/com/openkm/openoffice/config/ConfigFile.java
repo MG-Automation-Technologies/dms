@@ -7,6 +7,7 @@ package com.openkm.openoffice.config;
 
 import com.openkm.openoffice.bean.ConfigBean;
 import com.openkm.openoffice.logic.OKMException;
+import com.openkm.openoffice.util.Encryption;
 import com.openkm.openoffice.util.FileUtil;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,8 +35,10 @@ public class ConfigFile {
     private String OPENKM_CONFIG_FILENAME = "openkm.xml";
     private String directoryToStoreFiles;
     private String configFilename;
+    private Encryption encryption;
 
     public ConfigFile() throws OKMException {
+        encryption = new Encryption();
         directoryToStoreFiles = getDirectoryToStoreFiles();
         if (directoryToStoreFiles==null)  {
             directoryToStoreFiles = FileUtil.getWorkingPath() + OPENKM_FOLDER;
@@ -83,6 +86,9 @@ public class ConfigFile {
             writer.writeCharacters(configBean.getUser());
             writer.writeEndElement();
 
+            if (configBean.getPassword().length()>0) {
+                configBean.setPassword(encryption.encrypt(configBean.getPassword()));
+            }
             writer.writeStartElement("password");           // password
             writer.writeCharacters(configBean.getPassword());
             writer.writeEndElement();
@@ -119,6 +125,9 @@ public class ConfigFile {
                 }
                 if (configElement.getElementsByTagName("password").item(0).hasChildNodes()) {
                     configBean.setPassword(configElement.getElementsByTagName("password").item(0).getChildNodes().item(0).getNodeValue());
+                }
+                if (configBean.getPassword().length()>0) {
+                    configBean.setPassword(encryption.decrypt(configBean.getPassword()));
                 }
             }
 

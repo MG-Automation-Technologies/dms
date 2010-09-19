@@ -8,7 +8,7 @@ package com.openkm.openoffice.logic;
 import com.openkm.openoffice.bean.OKMDocumentBean;
 import com.openkm.openoffice.util.FileUtil;
 import com.openkm.openoffice.util.Util;
-import com.openkm.ws.client.DatabaseException_Exception;
+import com.openkm.ws.client.AccessDeniedException_Exception;
 import com.openkm.ws.client.Document;
 import com.openkm.ws.client.OKMAuth;
 import com.openkm.ws.client.OKMAuthService;
@@ -18,6 +18,8 @@ import com.openkm.ws.client.RepositoryException_Exception;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
@@ -27,8 +29,8 @@ import javax.xml.ws.BindingProvider;
  */
 public class DocumentLogic {
 
-    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMAuthService");
-    private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.com/", "OKMDocumentService");
+    private static QName AuthServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMAuthService");
+    private static QName DocumentServiceName = new QName("http://endpoint.ws.openkm.git.es/", "OKMDocumentService");
 
     public static void create(String host, String username, String password, OKMDocumentBean document) throws OKMException {
         String token = "";
@@ -59,9 +61,9 @@ public class DocumentLogic {
         } catch (Exception ex) {
             if (!token.equals("")) {
                 try {
-                    // Logout OpenKM
-                    okmAuth.logout(token);
-                } catch (DatabaseException_Exception ex1) {
+                  // Logout OpenKM
+                        okmAuth.logout(token);
+                } catch (AccessDeniedException_Exception ex1) {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
@@ -112,7 +114,7 @@ public class DocumentLogic {
                 try {
                     // Logout OpenKM
                     okmAuth.logout(token);
-                } catch (DatabaseException_Exception ex1) {
+                } catch (AccessDeniedException_Exception ex1) {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
@@ -150,7 +152,7 @@ public class DocumentLogic {
                 try {
                     // Logout OpenKM
                     okmAuth.logout(token);
-                } catch (DatabaseException_Exception ex1) {
+                } catch (AccessDeniedException_Exception ex1) {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
@@ -188,7 +190,7 @@ public class DocumentLogic {
                 try {
                     // Logout OpenKM
                     okmAuth.logout(token);
-                } catch (DatabaseException_Exception ex1) {
+                } catch (AccessDeniedException_Exception ex1) {
                 } catch (RepositoryException_Exception ex1) {
                 }
             }
