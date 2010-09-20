@@ -44,7 +44,7 @@ import com.openkm.webdav.LocatorFactoryImplEx;
  */
 public class WebdavServlet extends SimpleWebdavServlet {
 	private static Logger log = LoggerFactory.getLogger(WebdavServlet.class);
-	private static final long serialVersionUID = 8388108181983911121L;
+	private static final long serialVersionUID = 1L;
 
 	public void init() throws ServletException {
 		log.info("*** Webdav initializing... ***");
