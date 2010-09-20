@@ -169,7 +169,6 @@ public class DefaultHandler implements IOHandler, PropertyHandler {
         	log.debug("MimeType: {}", mimeType);
         	log.debug("Size: {}", context.getContentLength());
         	
-        	
         	// Restrict for MIME
         	try {
         		if (Config.RESTRICT_FILE_MIME && MimeTypeDAO.findByName(mimeType, true) == null) {
