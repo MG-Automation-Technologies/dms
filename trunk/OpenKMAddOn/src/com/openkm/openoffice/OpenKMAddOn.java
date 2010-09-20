@@ -265,6 +265,7 @@ public final class OpenKMAddOn extends WeakBase
                 }
             }
         } catch (OKMException ex) {
+            System.out.println(ex);
         }
     }
 
