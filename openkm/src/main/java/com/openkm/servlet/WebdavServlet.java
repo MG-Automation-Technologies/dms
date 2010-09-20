@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.jcr.Repository;
 import javax.servlet.ServletException;
@@ -77,6 +78,11 @@ public class WebdavServlet extends SimpleWebdavServlet {
     		throws ServletException, IOException {
 		if (Config.SYSTEM_WEBDAV) {
 			super.service(request, response);
+		} else {
+			PrintWriter out = response.getWriter();
+			out.println("WebDAV is disabled. Contact with your administrator.");
+			out.flush();
+			out.close();
 		}
 	}
 }
