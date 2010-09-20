@@ -21,13 +21,18 @@
 
 package com.openkm.servlet;
 
+import java.io.IOException;
+
 import javax.jcr.Repository;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jackrabbit.webdav.simple.SimpleWebdavServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.core.Config;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.webdav.LocatorFactoryImplEx;
 
@@ -65,5 +70,13 @@ public class WebdavServlet extends SimpleWebdavServlet {
 		}
 		
 		return repository;
+	}
+	
+	@Override
+	public void service(HttpServletRequest request, HttpServletResponse response)
+    		throws ServletException, IOException {
+		if (Config.SYSTEM_WEBDAV) {
+			super.service(request, response);
+		}
 	}
 }

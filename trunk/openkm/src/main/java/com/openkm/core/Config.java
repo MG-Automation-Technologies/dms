@@ -128,6 +128,7 @@ public class Config {
 	public static final String PROPERTY_SUBSCRIPTION_TWITTER_STATUS = "notify.twitter.status";
 	
 	public static final String PROPERTY_SYSTEM_DEMO = "system.demo";
+	public static final String PROPERTY_SYSTEM_WEBDAV = "system.webdav";
 	public static final String PROPERTY_SYSTEM_READONLY = "system.readonly";
 	public static final String PROPERTY_SYSTEM_MAINTENANCE = "system.maintenance";
 	public static final String PROPERTY_SYSTEM_OCR = "system.ocr";
@@ -248,6 +249,8 @@ public class Config {
 	
 	private static String SYSTEM_DEMO_STR = "off";
 	public static boolean SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
+	private static String SYSTEM_WEBDAV_STR = "on";
+	public static boolean SYSTEM_WEBDAV = "on".equalsIgnoreCase(SYSTEM_WEBDAV_STR);
 	private static String SYSTEM_MAINTENANCE_STR = "off";
 	public static boolean SYSTEM_MAINTENANCE = "on".equalsIgnoreCase(SYSTEM_MAINTENANCE_STR); 
 	private static String SYSTEM_READONLY_STR = "off";
@@ -494,6 +497,9 @@ public class Config {
 			SYSTEM_DEMO_STR = config.getProperty(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO_STR);
 			SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
 			values.put(PROPERTY_SYSTEM_DEMO, SYSTEM_DEMO_STR+" ("+SYSTEM_DEMO+")");
+			SYSTEM_WEBDAV_STR = config.getProperty(PROPERTY_SYSTEM_WEBDAV, SYSTEM_WEBDAV_STR);
+			SYSTEM_WEBDAV = "on".equalsIgnoreCase(SYSTEM_WEBDAV_STR);
+			values.put(PROPERTY_SYSTEM_WEBDAV, SYSTEM_WEBDAV_STR+" ("+SYSTEM_WEBDAV+")");
 			SYSTEM_MAINTENANCE_STR = config.getProperty(PROPERTY_SYSTEM_MAINTENANCE, SYSTEM_MAINTENANCE_STR);
 			SYSTEM_MAINTENANCE= "on".equalsIgnoreCase(SYSTEM_MAINTENANCE_STR);
 			values.put(PROPERTY_SYSTEM_MAINTENANCE, SYSTEM_MAINTENANCE_STR+" ("+SYSTEM_MAINTENANCE+")");
