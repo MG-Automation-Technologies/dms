@@ -249,7 +249,7 @@ public class Config {
 	
 	private static String SYSTEM_DEMO_STR = "off";
 	public static boolean SYSTEM_DEMO = "on".equalsIgnoreCase(SYSTEM_DEMO_STR);
-	private static String SYSTEM_WEBDAV_STR = "on";
+	private static String SYSTEM_WEBDAV_STR = "off";
 	public static boolean SYSTEM_WEBDAV = "on".equalsIgnoreCase(SYSTEM_WEBDAV_STR);
 	private static String SYSTEM_MAINTENANCE_STR = "off";
 	public static boolean SYSTEM_MAINTENANCE = "on".equalsIgnoreCase(SYSTEM_MAINTENANCE_STR); 
