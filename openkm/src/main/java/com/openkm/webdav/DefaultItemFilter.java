@@ -26,7 +26,7 @@ public class DefaultItemFilter implements ItemFilter {
 
 	@Override
 	public boolean isFilteredItem(Item item) {
-		log.info("isFilteredItem({})", item);
+		log.debug("isFilteredItem({})", item);
 		
 		try {
 			if (item.isNode() && ((Node) item).isNodeType("okm:notes")) {
