@@ -221,23 +221,21 @@ public class ModelBuilder {
 			if (args.length == 11) {
 				testingFoder = sourceFolder + File.separator + args[10];
 			}
-			vocabularyFilePath = Config.HOME_DIR + File.separator + sourceFolder + File.separator
-					+ vocabularyFile;
+			vocabularyFilePath = sourceFolder + File.separator + vocabularyFile;
 			// Must change stopwords path used by stopwords class
-			WorkspaceHelper.KEA_STOPWORDS_PATH = Config.HOME_DIR + File.separator + sourceFolder
-					+ File.separator + stopwordsFile;
+			WorkspaceHelper.KEA_STOPWORDS_PATH = sourceFolder + File.separator + stopwordsFile;
 
-			log.info("* Source folder: " + Config.HOME_DIR + File.separator + sourceFolder);
-			log.info("* Training folder: " + Config.HOME_DIR + File.separator + trainingFilesPath);
+			log.info("* Source folder: " + sourceFolder);
+			log.info("* Training folder: " + trainingFilesPath);
 			log.info("* Vocabulary file: " + vocabularyFilePath);
 			log.info("* Vocabulary type: " + vocabularyType);
 			log.info("* Stopwords file: " + stopwordsFile);
-			log.info("* Model file: " + Config.HOME_DIR + File.separator + modelFilePath);
+			log.info("* Model file: " + modelFilePath);
 			log.info("* Stemmer class: " + stemerClassName);
 			log.info("* Stopword class: " + stopwordsClassName);
 			log.info("* Language: " + lang);
 			log.info("* Document encoding: " + documentEncoding);
-			log.info("* Testing folder: " + Config.HOME_DIR + File.separator + testingFoder);
+			log.info("* Testing folder: " + testingFoder);
 		}
 
 		ModelBuilder modelBuilder = new ModelBuilder();
