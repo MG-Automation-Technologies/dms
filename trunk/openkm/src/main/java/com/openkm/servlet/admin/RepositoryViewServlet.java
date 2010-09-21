@@ -150,7 +150,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		} else {
 			String lt = JCRUtils.getLockToken(node.getUUID());
 			session.addLockToken(lt);
-			node.unlock();	
+			node.unlock();
 			session.removeLockToken(lt);
 		}
 		
