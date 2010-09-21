@@ -155,7 +155,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_UNLOCK", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_UNLOCK", path, "");
 		log.debug("unlock: void");
 	}
 	
@@ -169,7 +169,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.checkin();
 
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_CHECKIN", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_CHECKIN", path, "");
 		log.debug("checkin: void");
 	}
 
@@ -188,7 +188,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_REMOVE_CONTENT", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CONTENT", path, "");
 		log.debug("removeCurrent: void");
 	}
 	
@@ -205,7 +205,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		parent.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_REMOVE_CURRENT", path, "");
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_CURRENT", path, "");
 		log.debug("removeCurrent: {}", path);
 		return parentPath;
 	}
@@ -222,7 +222,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.save();
 				
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_REMOVE_MIXIN", path, mixin);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_REMOVE_MIXIN", path, mixin);
 		log.debug("removeMixin: {}", path);
 	}
 	
@@ -247,7 +247,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_EDIT", path, property+" : "+value);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_EDIT", path, property+" : "+value);
 		
 		sc.setAttribute("node", node);
 		sc.setAttribute("property", prop);
@@ -285,7 +285,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		node.save();
 		
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_SAVE", path, property+" : "+value);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_SAVE", path, property+" : "+value);
 		log.debug("save: void");
 	}
 
@@ -335,7 +335,7 @@ public class RepositoryViewServlet extends BaseServlet {
 		}
 
 		// Activity log
-		UserActivity.log(session.getUserID(), "REPOSITORY_LIST", node.getPath(), null);
+		UserActivity.log(session.getUserID(), "ADMIN_REPOSITORY_LIST", node.getPath(), null);
 		
 		sc.setAttribute("contentInfo", ci);
 		sc.setAttribute("node", node);
