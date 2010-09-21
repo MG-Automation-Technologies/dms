@@ -35,7 +35,6 @@ import com.openkm.kea.stopwords.Stopwords;
  * described in readme
  * 
  * @author Olena Medelyan
- * 
  */
 public class ModelBuilder {
 
@@ -185,7 +184,6 @@ public class ModelBuilder {
 	 * 
 	 * @param args
 	 */
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		String sourceFolder = "";
 		String trainingFilesPath = "";
@@ -242,6 +240,7 @@ public class ModelBuilder {
 		Stemmer stemmer = null;
 		if (stemerClassName != null) {
 			try {
+				@SuppressWarnings("rawtypes")
 				Class clazz = Class.forName(stemerClassName);
 				stemmer = (Stemmer) clazz.newInstance();
 			} catch (Exception e) {
@@ -252,6 +251,7 @@ public class ModelBuilder {
 		Stopwords stopwords = null;
 		if (stopwordsClassName != null) {
 			try {
+				@SuppressWarnings("rawtypes")
 				Class clazz = Class.forName(stopwordsClassName);
 				stopwords = (Stopwords) clazz.newInstance();
 			} catch (Exception e) {
