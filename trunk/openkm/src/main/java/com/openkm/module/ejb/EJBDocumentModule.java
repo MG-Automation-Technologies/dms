@@ -229,4 +229,10 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
 }

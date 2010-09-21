@@ -229,6 +229,15 @@ public class OKMDocument implements DocumentModule {
 		dm.unlock(token, docPath);
 		log.debug("unlock: void");
 	}
+	
+	@Override
+	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("forceUnlock({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.forceUnlock(token, docPath);
+		log.debug("forceUnlock: void");
+	}
 
 	@Override
 	public boolean isLocked(String token, String docPath) throws PathNotFoundException, RepositoryException,
