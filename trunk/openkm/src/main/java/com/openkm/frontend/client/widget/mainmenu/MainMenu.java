@@ -120,6 +120,7 @@ public class MainMenu extends Composite {
 					private MenuItem portuguese;
 					private MenuItem arabic;
 					private MenuItem thai;
+					private MenuItem euskera;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -277,6 +278,7 @@ public class MainMenu extends Composite {
 						usa = new MenuItem(Util.menuHTML("img/icon/menu/us.gif", "English - Usa"), true, setLangEnglishUSA);
 						spanish = new MenuItem(Util.menuHTML("img/icon/menu/es.gif", "Español"), true, setLangSpanish);
 						colombian = new MenuItem(Util.menuHTML("img/icon/menu/co.gif", "Español Colombia"), true, setLangColombian);
+						euskera = new MenuItem(Util.menuHTML("img/icon/menu/eu.gif", "Euskera"), true, setLangEuskera);
 						farsi = new MenuItem(Util.menuHTML("img/icon/menu/ir.gif", "Farsi"), true, setLangFarsi);
 						french = new MenuItem(Util.menuHTML("img/icon/menu/fr.gif", "Français"), true, setLangFrench);
 						gallego = new MenuItem(Util.menuHTML("img/icon/menu/gl.gif", "Gallego"), true, setLangGallego);
@@ -308,6 +310,7 @@ public class MainMenu extends Composite {
 						usa.addStyleName("okm-MainMenuItem");
 						spanish.addStyleName("okm-MainMenuItem");
 						colombian.addStyleName("okm-MainMenuItem");
+						euskera.addStyleName("okm-MainMenuItem");
 						farsi.addStyleName("okm-MainMenuItem");
 						french.addStyleName("okm-MainMenuItem");
 						gallego.addStyleName("okm-MainMenuItem");
@@ -339,6 +342,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(usa);
 					subMenuLanguage.addItem(spanish);
 					subMenuLanguage.addItem(colombian);
+					subMenuLanguage.addItem(euskera);
 					subMenuLanguage.addItem(farsi);
 					subMenuLanguage.addItem(french);
 					subMenuLanguage.addItem(gallego);
@@ -660,6 +664,13 @@ public class MainMenu extends Composite {
 	Command setLangColombian = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_co_ES);
+		}
+	};
+	
+	// Command menu to set Euskera lang
+	Command setLangEuskera = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_eu_ES);
 		}
 	};
 	

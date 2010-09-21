@@ -31,6 +31,7 @@
     langs.put("English USA", Lang.LANG_en_US);
     langs.put("Español", Lang.LANG_es_ES);
     langs.put("Español Colombia", Lang.LANG_co_ES);
+    langs.put("Euskera",Lang.LANG_eu_ES);
     langs.put("Farsi", Lang.LANG_fa_FA);
     langs.put("Français", Lang.LANG_fr_FR);
     langs.put("Gallego", Lang.LANG_gl_ES);
