@@ -56,8 +56,8 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
-import com.openkm.util.impexp.HTMLInfoDecorator;
 import com.openkm.util.impexp.RepositoryExporter;
+import com.openkm.util.impexp.TextInfoDecorator;
 
 /**
  * Servlet Class
@@ -261,7 +261,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(path, tmp, out, new HTMLInfoDecorator(0));
+			RepositoryExporter.exportDocuments(path, tmp, out, new TextInfoDecorator(path));
 			out.close();
 			
 			// Zip files
