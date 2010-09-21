@@ -154,7 +154,8 @@ public class DirectSearchModule implements SearchModule {
 
 	/**
 	 * Escape XPath string
-	 *  
+	 * 
+	 * @see org.apache.jackrabbit.util.Text.escapeIllegalXpathSearchChars(String s)
 	 * @param str The String to be escaped.
 	 * @return The escaped String.
 	 */
