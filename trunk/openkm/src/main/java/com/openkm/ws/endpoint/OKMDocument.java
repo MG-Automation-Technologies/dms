@@ -206,6 +206,16 @@ public class OKMDocument {
 	}
 	
 	@WebMethod
+	public void forceCancelCheckout(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+		log.debug("forceCancelCheckout({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.forceCancelCheckout(token, docPath);
+		log.debug("forceCancelCheckout: void");
+	}
+	
+	@WebMethod
 	public Version checkin(@WebParam(name = "token") String token,
 			@WebParam(name = "docPath") String docPath,
 			@WebParam(name = "comment") String comment) throws LockException, VersionException,

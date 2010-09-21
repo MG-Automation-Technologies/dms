@@ -171,6 +171,15 @@ public class OKMDocument implements DocumentModule {
 	}
 	
 	@Override
+	public void forceCancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("forceCancelCheckout({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.forceCancelCheckout(token, docPath);
+		log.debug("forceCancelCheckout: void");
+	}
+	
+	@Override
 	public boolean isCheckedOut(String token, String docPath) throws PathNotFoundException,
 			RepositoryException, DatabaseException {
 		log.debug("isCheckedOut({}, {})", token, docPath);

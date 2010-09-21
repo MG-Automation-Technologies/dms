@@ -1050,6 +1050,85 @@ public class DirectDocumentModule implements DocumentModule {
 
 		log.debug("cancelCheckout: void");
 	}
+	
+	@Override
+	public void forceCancelCheckout(String token, String docPath) throws AccessDeniedException,
+			RepositoryException, PathNotFoundException, LockException, DatabaseException {
+		log.debug("forceCancelCheckout({}, {})", token, docPath);
+		Transaction t = null;
+		XASession session = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+
+		try {
+			if (token == null) {
+				session = (XASession) JCRUtils.getSession();
+			} else {
+				session = (XASession) JcrSessionManager.getInstance().get(token);
+			}
+			
+			if (!session.getUserID().equals(Config.ADMIN_USER)) {
+				throw new AccessDeniedException("Only administrator use allowed");
+			}
+			
+			t = new Transaction(session);
+			t.start();
+			
+			JCRUtils.loadLockTokens(session);
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			Node contentNode = documentNode.getNode(Document.CONTENT);
+			javax.jcr.lock.Lock lock = documentNode.getLock();
+			contentNode.restore(contentNode.getBaseVersion(), true);
+			
+			if (lock.getLockOwner().equals(session.getUserID())) {
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
+			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
+				session.addLockToken(lt);
+				documentNode.unlock();
+				LockTokenDAO.remove(lock.getLockOwner(), lt);
+			}
+			
+			t.end();
+			t.commit();
+
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_CANCEL_CHECKOUT", null);
+
+			// Check scripting
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_CANCEL_CHECKOUT_DOCUMENT");
+
+			// Activity log
+			UserActivity.log(session.getUserID(), "FORCE_CANCEL_CHECKOUT_DOCUMENT", docPath, null);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			t.rollback();
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw new LockException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			t.rollback();
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			t.rollback();
+			throw e;
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+
+		log.debug("forceCancelCheckout: void");
+	}
 
 	@Override
 	public boolean isCheckedOut(String token, String docPath) throws RepositoryException,
