@@ -48,6 +48,7 @@
     langs.put("Romanian", Lang.LANG_ro_RO);
     langs.put("Russian", Lang.LANG_ru_RU);
     langs.put("Serbian", Lang.LANG_sr_BA);
+    langs.put("Slovack", Lang.LANG_sk_SK);
     langs.put("Swedish", Lang.LANG_sv_SE);
     langs.put("Thai", Lang.LANG_th_TH);
     langs.put("Turkish", Lang.LANG_tr_TR);

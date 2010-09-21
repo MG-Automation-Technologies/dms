@@ -121,6 +121,7 @@ public class MainMenu extends Composite {
 					private MenuItem arabic;
 					private MenuItem thai;
 					private MenuItem euskera;
+					private MenuItem slovack;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -296,6 +297,7 @@ public class MainMenu extends Composite {
 						romanian = new MenuItem(Util.menuHTML("img/icon/menu/ro.gif", "Romanian"), true, setRomanian);
 						russian = new MenuItem(Util.menuHTML("img/icon/menu/ru.gif", "Russian"), true, setRussian);
 						serbian = new MenuItem(Util.menuHTML("img/icon/menu/rs.gif", "Serbian"), true, setLangSerbian);
+						slovack = new MenuItem(Util.menuHTML("img/icon/menu/sk.gif", "Slovack"), true, setLangSlovack);
 						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
 						thai = new MenuItem(Util.menuHTML("img/icon/menu/th.gif", "Thai"), true, setLangThai);
 						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
@@ -328,6 +330,7 @@ public class MainMenu extends Composite {
 						romanian.addStyleName("okm-MainMenuItem");
 						russian.addStyleName("okm-MainMenuItem");
 						serbian.addStyleName("okm-MainMenuItem");
+						slovack.addStyleName("okm-MainMenuItem");
 						swedish.addStyleName("okm-MainMenuItem");
 						thai.addStyleName("okm-MainMenuItem");
 						turkish.addStyleName("okm-MainMenuItem");
@@ -360,6 +363,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(romanian);
 					subMenuLanguage.addItem(russian);
 					subMenuLanguage.addItem(serbian);
+					subMenuLanguage.addItem(slovack);
 					subMenuLanguage.addItem(swedish);
 					subMenuLanguage.addItem(turkish);
 				// Submenu language
@@ -798,6 +802,13 @@ public class MainMenu extends Composite {
 	Command setLangSerbian = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_sr_BA);
+		}
+	};
+	
+	// Command menu to set Slovack
+	Command setLangSlovack = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_sk_SK);
 		}
 	};
 	
