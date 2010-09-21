@@ -44,7 +44,6 @@ namespace MSOpenKMCore.form
                 this.application = application;
                 this.configXML = configXML;
                 imageList = new ImageUtil();
-                initServices();
 
                 // Initialize component
                 InitializeComponent();
@@ -141,6 +140,12 @@ namespace MSOpenKMCore.form
         {
             try
             {
+                // Refreshing config file
+                configXML.ReadConfig();
+
+                // Init services
+                initServices();
+
                 // Default buttons enabled
                 enableDefaultButtons();
 
