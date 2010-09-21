@@ -48,7 +48,6 @@ namespace MSOpenKMCore.form
                 imageList = new ImageUtil();
                 this.configXML = configXML;
                 this.documentXML = docXML;
-                initServices();
 
                 // Initialize component
                 InitializeComponent();
@@ -281,6 +280,12 @@ namespace MSOpenKMCore.form
         {
             try
             {
+                // Refreshing config file
+                configXML.ReadConfig();
+
+                // Init services
+                initServices();
+
                 // Default buttons enabled
                 enableDefaultButtons();
 
@@ -326,11 +331,11 @@ namespace MSOpenKMCore.form
             }
             catch (Exception ex)
             {
+                String errorMsg = "ExplorerForm - (startUp)\n" + ex.Message;
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 if (!token.Equals(""))
                 {
-                    String errorMsg = "ExplorerForm - (startUp)\n" + ex.Message;
-                    MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
                     // Logout OpenKM
                     authService.logout(token);
                     token = "";

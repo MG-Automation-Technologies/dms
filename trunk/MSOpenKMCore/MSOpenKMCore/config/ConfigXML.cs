@@ -53,7 +53,7 @@ namespace MSOpenKMCore.config
             ReadConfig();
         }
 
-        private void ReadConfig()
+        public void ReadConfig()
         {
             XmlTextReader reader = new XmlTextReader(configFilename);
 

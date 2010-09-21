@@ -21,6 +21,7 @@ namespace MSOpenKMCore.form
         private Button buttonAccept;
         private ComponentResourceManager resources = null;
 
+
         public ConfigurationForm()
         {
             resources = new ComponentResourceManager(typeof(ConfigurationForm));

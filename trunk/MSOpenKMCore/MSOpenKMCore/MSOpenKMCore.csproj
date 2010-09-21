@@ -91,6 +91,7 @@
     <Compile Include="util\ImageUtil.cs" />
     <Compile Include="util\RegistryUtil.cs" />
     <Compile Include="util\Util.cs" />
+    <Compile Include="ws\Bean.cs" />
     <Compile Include="ws\OKMAuthService.cs" />
     <Compile Include="ws\OKMDocumentService.cs" />
     <Compile Include="ws\OKMFolderService.cs" />
