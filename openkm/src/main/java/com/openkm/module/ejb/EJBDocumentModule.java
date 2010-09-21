@@ -235,4 +235,10 @@ public class EJBDocumentModule implements com.openkm.module.DocumentModule {
 			AccessDeniedException, RepositoryException, DatabaseException {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void forceCancelCheckout(String token, String docPath) throws LockException,
+			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
+		// TODO Auto-generated method stub
+	}
 }

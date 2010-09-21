@@ -212,6 +212,19 @@ public interface DocumentModule {
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
+	 * Force to cancel a previous checked out state in a document.
+	 * 
+	 * @param docPath The path that identifies an unique document.
+	 * @throws LockException A locked document can't be modified.
+	 * @throws PathNotFoundException If there is no document in this repository path.
+	 * @throws AccessDeniedException If there is any security problem: you can't modify
+	 * the document because of lack of permissions.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public void forceCancelCheckout(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
+	
+	/**
 	 * Test if a node has been already checked out.
 	 * 
 	 * @param docPath The path that identifies an unique document.
