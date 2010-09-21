@@ -277,6 +277,20 @@ public interface DocumentModule {
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
+	 * For document unlock, so will be editable for other users. This action need to be perfomed by 
+	 * and administrator.
+	 * 
+	 * @param docPath The path that identifies an unique document.
+	 * @throws LockException If the node is not locked.
+	 * @throws PathNotFoundException If there is no document in this repository path.
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't modify the document because of lack of permissions.
+	 * @throws RepositoryException If there is any general repository problem.
+	 */
+	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException;
+	
+	/**
 	 * Tell if a document is locked.
 	 * 
 	 * @param docPath The path that identifies an unique document.

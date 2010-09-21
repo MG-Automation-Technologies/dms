@@ -263,6 +263,16 @@ public class OKMDocument {
 		dm.unlock(token, docPath);
 		log.debug("unlock: void");
 	}
+	
+	@WebMethod
+	public void forceUnlock(@WebParam(name = "token") String token,
+			@WebParam(name = "docPath") String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("forceUnlock({}, {})", token, docPath);
+		DocumentModule dm = ModuleManager.getDocumentModule();
+		dm.forceUnlock(token, docPath);
+		log.debug("forceUnlock: void");
+	}
 
 	@WebMethod
 	public void purge(@WebParam(name = "token") String token,

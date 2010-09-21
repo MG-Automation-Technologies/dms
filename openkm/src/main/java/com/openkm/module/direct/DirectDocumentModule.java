@@ -83,6 +83,7 @@ import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VersionException;
 import com.openkm.core.VirusDetectedException;
 import com.openkm.core.VirusDetection;
+import com.openkm.dao.LockTokenDAO;
 import com.openkm.dao.MimeTypeDAO;
 import com.openkm.dao.UserConfigDAO;
 import com.openkm.dao.bean.ProfileMisc;
@@ -1341,6 +1342,71 @@ public class DirectDocumentModule implements DocumentModule {
 		}
 		
 		log.debug("unlock: void");
+	}
+	
+	@Override
+	public void forceUnlock(String token, String docPath) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("forceUnlock({}, {})", token, docPath);
+		Session session = null;
+		
+		if (Config.SYSTEM_READONLY) {
+			throw new AccessDeniedException("System is in read-only mode");
+		}
+
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			if (!session.getUserID().equals(Config.ADMIN_USER)) {
+				throw new AccessDeniedException("Only administrator use allowed");
+			}
+			
+			JCRUtils.loadLockTokens(session);
+			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
+			javax.jcr.lock.Lock lock = documentNode.getLock();
+			
+			if (lock.getLockOwner().equals(session.getUserID())) {
+				documentNode.unlock();
+				JCRUtils.removeLockToken(session, documentNode);
+			} else {
+				String lt = JCRUtils.getLockToken(documentNode.getUUID());
+				session.addLockToken(lt);
+				documentNode.unlock();
+				LockTokenDAO.remove(lock.getLockOwner(), lt);
+			}
+
+			// Check subscriptions
+			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "FORCE_UNLOCK", null);
+			
+			// Check scripting
+			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "FORCE_UNLOCK_DOCUMENT");
+
+			// Activity log
+			UserActivity.log(session.getUserID(), "FORCE_UNLOCK_DOCUMENT", docPath, null);
+		} catch (javax.jcr.lock.LockException e) {
+			log.error(e.getMessage(), e);
+			throw new LockException(e.getMessage(), e);
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			throw new PathNotFoundException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			log.error(e.getMessage(), e);
+			throw e;
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+		
+		log.debug("forceUnlock: void");
 	}
 
 	@Override
