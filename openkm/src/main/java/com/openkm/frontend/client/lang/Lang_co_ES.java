@@ -391,7 +391,7 @@ public class Lang_co_ES {
 	    lang.put("confirm.delete.user.news", "¿Seguro que desea eliminar la novedad de usuario?");
 	    lang.put("confirm.delete.mail", "¿Seguro que desea eliminar el correo electrónico?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Seguro que desea asignarse esta tarea ?");
-	    lang.put("confirm.force.unlock","¿ Seguro que desea forzar la cancelación del documento bloqueado ?)");
+	    lang.put("confirm.force.unlock","¿ Seguro que desea forzar la cancelación del documento bloqueado )");
 	    lang.put("confirm.force.cancel.checkout","¿ Seguro que desea forzar la cancelación del documento editado ?");
 	    
 	    // Search

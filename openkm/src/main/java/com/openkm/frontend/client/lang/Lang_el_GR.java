@@ -392,7 +392,7 @@ public class Lang_el_GR {
 	    lang.put("confirm.delete.user.news", "Είστε σίγουροι ότι θέλετε να διαγράψετε τις ειδήσεις χρήστη ?");
 	    lang.put("confirm.delete.mail", " Είστε σίγουροι ότι θέλετε να διαγράψετε e-mail ?");
 	    lang.put("confirm.get.pooled.workflow.task","Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
 	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs

@@ -392,7 +392,7 @@ public class Lang_ca_ES {
 	    lang.put("confirm.delete.user.news", "Estau segurs que voleu eliminar la novetat d'usuari ?");
 	    lang.put("confirm.delete.mail", "Estau segurs que voleu eliminar el correu electrònic ?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Estau segurs que us voleu assignar aquesta tasca ?");
-	    lang.put("confirm.force.unlock","¿ Estau segurs que voleu forçar la cancelació del bloqueig del document ?)");
+	    lang.put("confirm.force.unlock","¿ Estau segurs que voleu forçar la cancelació del bloqueig del document");
 	    lang.put("confirm.force.cancel.checkout","¿ Estau segurs que voleu forçar la cancelació de la edició del document ?");
 	    
 	    // Search

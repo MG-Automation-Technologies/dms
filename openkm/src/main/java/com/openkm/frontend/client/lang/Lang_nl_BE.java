@@ -392,7 +392,7 @@ public class Lang_nl_BE {
 	    lang.put("confirm.delete.user.news", "¿ Wilt u echt dit gebruikers nieuws verwijderen ?");
 	    lang.put("confirm.delete.mail", "¿ Wilt u echt deze mail verwijderen ?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
 	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs

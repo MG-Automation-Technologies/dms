@@ -391,7 +391,7 @@ public class Lang_ar_PS {
 	    lang.put("confirm.delete.user.news", "¿ هل تريد حقا ان تحذف اخبار المستخدم ؟");
 	    lang.put("confirm.delete.mail", "¿ هل تريد حقا ان تحذف البريد؟");
 	    lang.put("confirm.get.pooled.workflow.task","¿ هل ترغب في إسناد هذه المهمة لك؟");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
 	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs

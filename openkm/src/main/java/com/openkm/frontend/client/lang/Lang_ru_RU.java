@@ -396,7 +396,7 @@ public class Lang_ru_RU {
 	    lang.put("confirm.delete.user.news", "Вы действительно хотите удалить новости пользователя?");
 	    lang.put("confirm.delete.mail", "Вы действительно хотите удалить почтовое сообщение?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
 	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs
