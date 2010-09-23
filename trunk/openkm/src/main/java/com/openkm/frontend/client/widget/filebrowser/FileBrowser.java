@@ -676,6 +676,23 @@ public class FileBrowser extends Composite implements OriginPanel {
 	};
 	
 	/**
+	 * Document force cancel checkout
+	 */
+	final AsyncCallback<Object> callbackForceCancelCheckOut = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {	
+			mantainSelectedRow();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
+			refresh(fldId);
+			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
+			Main.get().showError("Force CancelCheckOut", caught);
+		}
+	};
+	
+	/**
 	 * Document lock
 	 */
 	final AsyncCallback<Object> callbackLock = new AsyncCallback<Object>() {
@@ -706,6 +723,23 @@ public class FileBrowser extends Composite implements OriginPanel {
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagUnLock();
 			Main.get().showError("UnLock", caught);
+		}
+	};
+	
+	/**
+	 * Document force cancel lock
+	 */
+	final AsyncCallback<Object> callbackForceUnLock = new AsyncCallback<Object>() {
+		public void onSuccess(Object result) {
+			mantainSelectedRow();
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagUnLock();
+			refresh(fldId);
+			Main.get().mainPanel.dashboard.userDashboard.getUserLockedDocuments();
+		}
+
+		public void onFailure(Throwable caught) {
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagUnLock();
+			Main.get().showError("Force UnLock", caught);
 		}
 	};
 	
@@ -1229,6 +1263,18 @@ public class FileBrowser extends Composite implements OriginPanel {
 	}
 	
 	/**
+	 * Document cancel checkout
+	 */
+	public void forceCancelCheckout(){
+		if (table.isDocumentSelected() && table.getDocument() != null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagCheckout();
+			documentService.forceCancelCheckout(table.getDocument().getPath(), callbackForceCancelCheckOut);
+		}
+	}
+	
+	/**
 	 * Document lock
 	 */
 	public void lock(){
@@ -1249,6 +1295,18 @@ public class FileBrowser extends Composite implements OriginPanel {
 			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagUnLock();
 			documentService.unlock(table.getDocument().getPath(), callbackUnLock);
+		}
+	}
+	
+	/**
+	 * Document force unlock
+	 */
+	public void forceUnlock() {
+		if (table.isDocumentSelected() && table.getDocument() != null) {
+			ServiceDefTarget endPoint = (ServiceDefTarget) documentService;
+			endPoint.setServiceEntryPoint(Config.OKMDocumentService);
+			Main.get().mainPanel.desktop.browser.fileBrowser.status.setFlagUnLock();
+			documentService.forceUnlock(table.getDocument().getPath(), callbackForceUnLock);
 		}
 	}
 	

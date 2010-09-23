@@ -384,14 +384,16 @@ public class Lang_nl_BE {
 	    lang.put("confirm.delete.trash", "Wilt u echt de prullenbak leegmaken ?");
 	    lang.put("confirm.purge.folder", "Wilt u echt deze map verwijderen ?");
 	    lang.put("confirm.purge.document", "Wilt u echt dit bestand verwijderen ?");
-	    lang.put("confirm.delete.propety.group", "� Wilt u echt deze property groep verwijderen ?");
-	    lang.put("confirm.purge.version.history.document", "� Wilt u echt deze document geschiedenis verwijderen ?");
-	    lang.put("confirm.purge.restore.document", "� Wilt u echt deze document geschiedenis terughalen ?");
-	    lang.put("confirm.set.default.home", "� Wilt u echt de standaard thuismap veranderen ?");
-	    lang.put("confirm.delete.saved.search", "� Wilt u echt deze opgeslagen zoekopdracht verwijderen ?");
-	    lang.put("confirm.delete.user.news", "� Wilt u echt dit gebruikers nieuws verwijderen ?");
-	    lang.put("confirm.delete.mail", "� Wilt u echt deze mail verwijderen ?");
+	    lang.put("confirm.delete.propety.group", "¿ Wilt u echt deze property groep verwijderen ?");
+	    lang.put("confirm.purge.version.history.document", "¿ Wilt u echt deze document geschiedenis verwijderen ?");
+	    lang.put("confirm.purge.restore.document", "¿ Wilt u echt deze document geschiedenis terughalen ?");
+	    lang.put("confirm.set.default.home", "¿ Wilt u echt de standaard thuismap veranderen ?");
+	    lang.put("confirm.delete.saved.search", "¿ Wilt u echt deze opgeslagen zoekopdracht verwijderen ?");
+	    lang.put("confirm.delete.user.news", "¿ Wilt u echt dit gebruikers nieuws verwijderen ?");
+	    lang.put("confirm.delete.mail", "¿ Wilt u echt deze mail verwijderen ?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");

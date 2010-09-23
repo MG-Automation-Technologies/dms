@@ -57,6 +57,8 @@ public class ConfirmPopup extends DialogBox {
 	public static final int CONFIRM_DELETE_MAIL		 				= 12;
 	public static final int CONFIRM_PURGE_MAIL  					= 13;
 	public static final int CONFIRM_GET_POOLED_WORKFLOW_TASK		= 14;
+	public static final int CONFIRM_FORCE_UNLOCK					= 15;
+	public static final int CONFIRM_FORCE_CANCEL_CHECKOUT			= 16;
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -208,6 +210,14 @@ public class ConfirmPopup extends DialogBox {
 			case CONFIRM_GET_POOLED_WORKFLOW_TASK:
 				Main.get().mainPanel.dashboard.workflowDashboard.setTaskInstanceActorId();
 				break;
+				
+			case CONFIRM_FORCE_UNLOCK :
+				Main.get().mainPanel.desktop.browser.fileBrowser.forceUnlock();
+				break;
+				
+			case CONFIRM_FORCE_CANCEL_CHECKOUT:
+				Main.get().mainPanel.desktop.browser.fileBrowser.forceCancelCheckout();
+				break;
 		}
 		
 		action = NO_ACTION; // Resets action value
@@ -272,6 +282,14 @@ public class ConfirmPopup extends DialogBox {
 				
 			case CONFIRM_GET_POOLED_WORKFLOW_TASK:
 				text.setHTML(Main.i18n("confirm.get.pooled.workflow.task"));
+				break;
+				
+			case CONFIRM_FORCE_UNLOCK :
+				text.setHTML(Main.i18n("confirm.force.unlock"));
+				break;
+				
+			case CONFIRM_FORCE_CANCEL_CHECKOUT:
+				text.setHTML(Main.i18n("confirm.force.cancel.checkout"));
 				break;
 		}
 	}
