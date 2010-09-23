@@ -40,6 +40,7 @@
 - okm:author (string) mandatory
 - okm:name (string) mandatory
 - okm:language (string)
+// - okm:title (String) mandatory # Activate in OpenKM 6
 - okm:keywords (string) multiple mandatory
 - okm:categories (reference) multiple mandatory
 + okm:content (okm:resource) primary mandatory
