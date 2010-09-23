@@ -276,7 +276,7 @@ public class Config {
 	// Schedule
 	private static String SCHEDULE_REPOSITORY_INFO_STR = "1440"; // 24*60 min = 24 hours
 	public static long SCHEDULE_REPOSITORY_INFO = Long.parseLong(SCHEDULE_REPOSITORY_INFO_STR) * 60 * 1000;
-	private static String SCHEDULE_MAIL_IMPORTER_STR = "60"; // 60 min = 1 hour
+	private static String SCHEDULE_MAIL_IMPORTER_STR = "0"; // 60 min = 1 hour
 	public static long SCHEDULE_MAIL_IMPORTER = Long.parseLong(SCHEDULE_MAIL_IMPORTER_STR) * 60 * 1000;
 	private static String SCHEDULE_SESSION_KEEPALIVE_STR = "15"; // 15 min = 1/4 hour
 	public static long SCHEDULE_SESSION_KEEPALIVE = Long.parseLong(SCHEDULE_SESSION_KEEPALIVE_STR) * 60 * 1000;
