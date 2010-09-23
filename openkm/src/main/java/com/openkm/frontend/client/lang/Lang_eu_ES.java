@@ -390,9 +390,9 @@ public class Lang_eu_ES {
 	    lang.put("confirm.delete.saved.search", "Ziur gordetako kontsulta ezabatu nahi duzula?");
 	    lang.put("confirm.delete.user.news", "Ziur erabiltzailearen berria ezabatu nahi duzula?");
 	    lang.put("confirm.delete.mail", "Ziur mezu elektronikoa ezabatu nahi duzula?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Seguro que desea asignarse esta tarea ?");
-	    lang.put("confirm.force.unlock","¿ Seguro que desea forzar la cancelación del documetno bloqueado )");
-	    lang.put("confirm.force.cancel.checkout","¿ Seguro que desea forzar la cancelación del documento editado ?");
+	    lang.put("confirm.get.pooled.workflow.task", "¿Seguro que desea asignarse esta tarea?");
+	    lang.put("confirm.force.unlock", "¿Seguro que desea forzar el desbloqueo del documento?");
+	    lang.put("confirm.force.cancel.checkout", "¿Seguro que desea forzar la cancelación del documento editado?");
 	    
 	    // Search
 	    lang.put("search.context", "Testuinguru");

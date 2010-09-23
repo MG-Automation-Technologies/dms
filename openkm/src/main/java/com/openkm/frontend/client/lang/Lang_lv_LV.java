@@ -389,10 +389,10 @@ public class Lang_lv_LV {
 	    lang.put("confirm.set.default.home", "¿ vai jūs tiešām gribat uzstādīt noklusētās mājas ?");
 	    lang.put("confirm.delete.saved.search", "¿ Vai tiešām vēlaties izdzēst saglabātās meklēšanas ?");
 	    lang.put("confirm.delete.user.news", "¿ Vai tiešām vēlaties izdzēst lietotāja jaunumus ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Konteksts");

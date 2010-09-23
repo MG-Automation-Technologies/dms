@@ -379,21 +379,21 @@ public class Lang_ca_ES {
 	    
 	    // Confirm
 	    lang.put("confirm.label", "Confirmació");
-	    lang.put("confirm.delete.folder", "Estau segurs que voleu eliminar la carpeta ?");
-	    lang.put("confirm.delete.document", "Estau segurs que voleu eliminar el document ?");
-	    lang.put("confirm.delete.trash", "Estau segurs que voleu buidar la paperera ?");
-	    lang.put("confirm.purge.folder", "Estau segurs que voleu eliminar la carpeta ?");
-	    lang.put("confirm.purge.document", "Estau segurs que voleu eliminar el document ?");
-	    lang.put("confirm.delete.propety.group", "Estau segurs que voleu eliminar el grup de propietats ?");
-	    lang.put("confirm.purge.version.history.document", "Estau segurs que voleu eliminar l'històric del document ?");
-	    lang.put("confirm.purge.restore.document", "Estau segurs que voleu resturar aquesta versió del document ?");
-	    lang.put("confirm.set.default.home", "Estau segurs que voleu establir l'inici per defecte ?");
-	    lang.put("confirm.delete.saved.search", "Estau segurs que voleu eliminar la consulta emmagatzemanda ?");
-	    lang.put("confirm.delete.user.news", "Estau segurs que voleu eliminar la novetat d'usuari ?");
-	    lang.put("confirm.delete.mail", "Estau segurs que voleu eliminar el correu electrònic ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Estau segurs que us voleu assignar aquesta tasca ?");
-	    lang.put("confirm.force.unlock","¿ Estau segurs que voleu forçar la cancelació del bloqueig del document");
-	    lang.put("confirm.force.cancel.checkout","¿ Estau segurs que voleu forçar la cancelació de la edició del document ?");
+	    lang.put("confirm.delete.folder", "¿ Estau segurs que voleu eliminar la carpeta ?");
+	    lang.put("confirm.delete.document", "¿ Estau segurs que voleu eliminar el document ?");
+	    lang.put("confirm.delete.trash", "¿ Estau segurs que voleu buidar la paperera ?");
+	    lang.put("confirm.purge.folder", "¿ Estau segurs que voleu eliminar la carpeta ?");
+	    lang.put("confirm.purge.document", "¿ Estau segurs que voleu eliminar el document ?");
+	    lang.put("confirm.delete.propety.group", "¿ Estau segurs que voleu eliminar el grup de propietats ?");
+	    lang.put("confirm.purge.version.history.document", "¿ Estau segurs que voleu eliminar l'històric del document ?");
+	    lang.put("confirm.purge.restore.document", "¿ Estau segurs que voleu resturar aquesta versió del document ?");
+	    lang.put("confirm.set.default.home", "¿ Estau segurs que voleu establir l'inici per defecte ?");
+	    lang.put("confirm.delete.saved.search", "¿ Estau segurs que voleu eliminar la consulta emmagatzemanda ?");
+	    lang.put("confirm.delete.user.news", "¿ Estau segurs que voleu eliminar la novetat d'usuari ?");
+	    lang.put("confirm.delete.mail", "¿ Estau segurs que voleu eliminar el correu electrònic ?");
+	    lang.put("confirm.get.pooled.workflow.task", "¿ Estau segurs que us voleu assignar aquesta tasca ?");
+	    lang.put("confirm.force.unlock", "¿ Estau segurs que voleu forçar el desbloqueig del document");
+	    lang.put("confirm.force.cancel.checkout", "¿ Estau segurs que voleu forçar la cancelació de la edició del document ?");
 	    
 	    // Search
 	    lang.put("search.context", "Contexte");

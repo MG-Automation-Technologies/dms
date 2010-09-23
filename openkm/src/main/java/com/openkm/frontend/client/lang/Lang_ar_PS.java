@@ -390,9 +390,9 @@ public class Lang_ar_PS {
 	    lang.put("confirm.delete.saved.search", "¿ هل تريد حقا حذف عملية البحث المحفوظة؟");
 	    lang.put("confirm.delete.user.news", "¿ هل تريد حقا ان تحذف اخبار المستخدم ؟");
 	    lang.put("confirm.delete.mail", "¿ هل تريد حقا ان تحذف البريد؟");
-	    lang.put("confirm.get.pooled.workflow.task","¿ هل ترغب في إسناد هذه المهمة لك؟");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.get.pooled.workflow.task", "¿ هل ترغب في إسناد هذه المهمة لك؟");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "السياق");

@@ -388,12 +388,12 @@ public class Lang_ro_RO {
 	    lang.put("confirm.purge.version.history.document", "¿ Sunteti sigur ca doriti stergerea istoricului documentului ?");
 	    lang.put("confirm.purge.restore.document", "¿ Sunteti sigur ca doriti restaurarea acestei versiuni ?");
 	    lang.put("confirm.set.default.home", "¿ Sunteti sigur ca doriti stabilirea ca pagina de pornire ?");
-	    lang.put("confirm.delete.saved.search", "¿ Do you really want to delete saved search ?");
-	    lang.put("confirm.delete.user.news", "¿ Do you really want to delete user news ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.saved.search", "Do you really want to delete saved search ?");
+	    lang.put("confirm.delete.user.news", "Do you really want to delete user news ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 
 	    // Search inputs
 	    lang.put("search.context", "Context");

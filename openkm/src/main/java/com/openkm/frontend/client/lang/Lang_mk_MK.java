@@ -388,11 +388,11 @@ public class Lang_mk_MK {
 	    lang.put("confirm.purge.restore.document", "¿ Дали навистина сакате да се вратите на оваа верзија на документот ?");
 	    lang.put("confirm.set.default.home", "¿ Дали навистина сакате да поставите стандардна почетна папка ?");
 	    lang.put("confirm.delete.saved.search", "¿ Дали навистина сакате да ги избришете зачуваните пребарувања ?");
-	    lang.put("confirm.delete.user.news", "¿  Дали навистина сакате да ги избришете вестите за корисниците ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.user.news", "¿ Дали навистина сакате да ги избришете вестите за корисниците ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Контекст");
