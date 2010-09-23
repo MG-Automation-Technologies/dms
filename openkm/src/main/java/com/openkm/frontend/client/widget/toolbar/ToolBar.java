@@ -1080,14 +1080,22 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 				} else {
 					if (doc.isCheckedOut()) {
 						if (doc.getLockInfo().getOwner().equals(user) || Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
-							enableCheckin();
+							if (doc.getLockInfo().getOwner().equals(user)) {
+								enableCheckin();
+								enableAddPropertyGroup();
+								enableRemovePropertyGroup();
+								enableAddNote();
+							} else {
+								disableCheckin();
+								disableAddPropertyGroup();
+								disableRemovePropertyGroup();
+								disableAddNote();
+							}
 							enableCancelCheckout();
 							disableCheckout();
 							disableLock();
 							disableUnlock();
-							enableAddPropertyGroup();
-							enableRemovePropertyGroup();
-							enableAddNote();
+							
 						} else {
 							disable = true;
 						}
