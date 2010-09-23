@@ -115,6 +115,12 @@ public class DirectDocumentModule implements DocumentModule {
 
 		// Properties
 		doc.setAuthor(documentNode.getProperty(Document.AUTHOR).getString());
+		
+		// TODO Remove this check in OpenKM 6
+		// if (documentNode.hasProperty(Document.TITLE)) {
+		// 	doc.setTitle(documentNode.getProperty(Document.TITLE).getPath());		
+		// }
+		
 		doc.setPath(documentNode.getPath());
 		doc.setLocked(documentNode.isLocked());
 		doc.setUuid(documentNode.getUUID());
@@ -241,18 +247,21 @@ public class DirectDocumentModule implements DocumentModule {
 	}
 
 	/**
-	 * Create a new document 
+	 * Create a new document
+	 * 
+	 * TODO Parameter title to be used in OpenKM 6
 	 */
-	public Node create(Session session, Node parentNode, String name, String mimeType, String[] keywords,
-			InputStream is) throws javax.jcr.ItemExistsException, javax.jcr.PathNotFoundException,
-			javax.jcr.AccessDeniedException, javax.jcr.RepositoryException, IOException, DatabaseException,
-			UserQuotaExceededException {
+	public Node create(Session session, Node parentNode, String name, String title, String mimeType,
+			String[] keywords, InputStream is) throws javax.jcr.ItemExistsException,
+			javax.jcr.PathNotFoundException, javax.jcr.AccessDeniedException, javax.jcr.RepositoryException,
+			IOException, DatabaseException, UserQuotaExceededException {
 		// Create and add a new file node
 		Node documentNode = parentNode.addNode(name, Document.TYPE);
 		documentNode.setProperty(Property.KEYWORDS, keywords);
 		documentNode.setProperty(Property.CATEGORIES, new String[]{}, PropertyType.REFERENCE);
 		documentNode.setProperty(Document.AUTHOR, session.getUserID());
 		documentNode.setProperty(Document.NAME, name);
+		// documentNode.setProperty(Document.TITLE, title == null ? "" : title);
 		long size = is.available();
 		
 		// Check user quota
@@ -430,7 +439,8 @@ public class DirectDocumentModule implements DocumentModule {
 	        // Ends KEA
 	        
 			parentNode = session.getRootNode().getNode(parent.substring(1));
-			Node documentNode = create(session, parentNode, name, mimeType, keywords.toArray(new String[keywords.size()]), is);
+			Node documentNode = create(session, parentNode, name, null /* doc.getTitle() */, mimeType,
+					keywords.toArray(new String[keywords.size()]), is);
 			
 			// Set returned document properties
 			newDocument = getProperties(session, doc.getPath());
@@ -885,6 +895,9 @@ public class DirectDocumentModule implements DocumentModule {
 			
 			// Update document keyword cache
 			//UserKeywordsManager.put(session.getUserID(), documentNode.getUUID(), doc.getKeywords());
+			
+			// Update document title
+			// documentNode.setProperty(Document.TITLE, doc.getTitle() == null ? "" : doc.getTitle());
 
 			// Check subscriptions
 			DirectNotificationModule.checkSubscriptions(documentNode, session.getUserID(), "SET_PROPERTIES", null);
@@ -1800,8 +1813,9 @@ public class DirectDocumentModule implements DocumentModule {
 		
 		Node srcDocumentContentNode = srcDocumentNode.getNode(Document.CONTENT);
 		String mimeType = srcDocumentContentNode.getProperty("jcr:mimeType").getString();
+		// String title = srcDocumentContentNode.getProperty(Document.TITLE).getString();
 		InputStream is = srcDocumentContentNode.getProperty("jcr:data").getStream();
-		create(session, dstFolderNode, srcDocumentNode.getName(), mimeType, new String[]{}, is);
+		create(session, dstFolderNode, srcDocumentNode.getName(), null /* title */, mimeType, new String[]{}, is);
 		is.close();
 		
 		log.debug("copy: void");

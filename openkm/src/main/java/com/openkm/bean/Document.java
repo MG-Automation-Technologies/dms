@@ -43,8 +43,10 @@ public class Document implements Serializable {
 	public static final String AUTHOR = "okm:author";
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
+	// public static final String TITLE = "okm:title";
 	
 	private String path;
+	// private String title = "";
 	private String language = "";
 	private String author;
 	private Calendar created;
@@ -127,6 +129,14 @@ public class Document implements Serializable {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
+	// public String getTitle() {
+	// 	return title;
+	// }
+
+	// public void setTitle(String title) {
+	// 	this.title = title;
+	// }
 	
 	public boolean isCheckedOut() {
 		return checkedOut;
@@ -220,6 +230,7 @@ public class Document implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("path="); sb.append(path);
+		// sb.append(", title="); sb.append(title);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
 		sb.append(", permissions="); sb.append(permissions);
