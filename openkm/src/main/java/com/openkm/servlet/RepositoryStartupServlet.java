@@ -164,9 +164,13 @@ public class RepositoryStartupServlet extends HttpServlet {
         ri = new RepositoryInfo();
         timer.schedule(ri, 60*1000, Config.SCHEDULE_REPOSITORY_INFO); // First in 1 min, next each X minutes
         
-        log.info("*** Activating user mail importer ***");
-        umi = new UserMailImporter();
-        timer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
+        if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
+        	log.info("*** Activating user mail importer ***");
+        	umi = new UserMailImporter();
+        	timer.schedule(umi, 5*60*1000, Config.SCHEDULE_MAIL_IMPORTER); // First in 5 mins, next each X minutes
+        } else {
+        	log.info("*** User mail importer disabled ***");
+        }
         
         if (hasConfiguredDataStore) {
         	log.info("*** Activating datastore garbage collection ***");
@@ -217,9 +221,11 @@ public class RepositoryStartupServlet extends HttpServlet {
         	dsgc.cancel();
         }
         
-        if (log == null) log("*** Shutting down user mail importer ***");
-        else log.info("*** Shutting down user mail importer ***");
-        umi.cancel();
+        if (Config.SCHEDULE_MAIL_IMPORTER > 0) {
+        	if (log == null) log("*** Shutting down user mail importer ***");
+        	else log.info("*** Shutting down user mail importer ***");
+        	umi.cancel();
+        }
         
         if (log == null) log("*** Shutting down repository info... ***");
         else log.info("*** Shutting down repository info... ***");
