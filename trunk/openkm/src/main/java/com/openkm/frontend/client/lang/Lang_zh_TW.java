@@ -388,10 +388,10 @@ public class Lang_zh_TW {
 		lang.put("confirm.set.default.home", "確定要設定預設首頁書籤?");
 	    lang.put("confirm.delete.saved.search", "確定要刪除已儲存的搜尋條件?");
 	    lang.put("confirm.delete.user.news", "確定要刪除使用者新進文件?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "範圍");

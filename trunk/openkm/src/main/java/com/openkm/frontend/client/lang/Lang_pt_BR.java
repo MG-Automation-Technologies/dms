@@ -383,16 +383,16 @@ public class Lang_pt_BR {
 	    lang.put("confirm.delete.trash", "Tem certeza que deseja esvaziar a lixeira ?");
 	    lang.put("confirm.purge.folder", "Tem certeza que deseja eliminar a pasta ?");
 	    lang.put("confirm.purge.document", "Tem certeza que deseja eliminar o documento ?");
-	    lang.put("confirm.delete.propety.group", "¿ Do you really want to delete propety group ?");
-	    lang.put("confirm.purge.version.history.document", "¿ Do you really want to delete document history ?");
-	    lang.put("confirm.purge.restore.document", "¿ Do you really want to restore to this document version ?");
-	    lang.put("confirm.set.default.home", "¿ Do you really want to set default home ?");
-	    lang.put("confirm.delete.saved.search", "¿ Do you really want to delete saved search ?");
-	    lang.put("confirm.delete.user.news", "¿ Do you really want to delete user news ?");
-	    lang.put("confirm.delete.mail", "¿ Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.propety.group", "Do you really want to delete propety group ?");
+	    lang.put("confirm.purge.version.history.document", "Do you really want to delete document history ?");
+	    lang.put("confirm.purge.restore.document", "Do you really want to restore to this document version ?");
+	    lang.put("confirm.set.default.home", "Do you really want to set default home ?");
+	    lang.put("confirm.delete.saved.search", "Do you really want to delete saved search ?");
+	    lang.put("confirm.delete.user.news", "Do you really want to delete user news ?");
+	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");

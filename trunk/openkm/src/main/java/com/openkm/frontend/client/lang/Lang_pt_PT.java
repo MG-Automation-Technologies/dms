@@ -390,9 +390,9 @@ public class Lang_pt_PT {
 	    lang.put("confirm.delete.saved.search", "Tem certeza que deseja eliminar a pesquisa guardada?");
 	    lang.put("confirm.delete.user.news", "Tem certeza que deseja eliminar a notícia?");
 	    lang.put("confirm.delete.mail", "Tem certeza que deseja eliminar a mensagem?");
-	    lang.put("confirm.get.pooled.workflow.task","Tem certeza que deseja atribuir a tarefa?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.get.pooled.workflow.task", "Tem certeza que deseja atribuir a tarefa?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Contexto");

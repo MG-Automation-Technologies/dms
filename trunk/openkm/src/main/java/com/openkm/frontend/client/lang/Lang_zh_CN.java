@@ -386,12 +386,12 @@ public class Lang_zh_CN {
         lang.put("confirm.purge.version.history.document", "你真的想删除文档历史?");
 	    lang.put("confirm.purge.restore.document", "你真的想恢复这个文档版本?");
 	    lang.put("confirm.set.default.home", "你真的想设为默认根目录?");
-	    lang.put("confirm.delete.saved.search", "你真的想删除查询条件吗？");//¿ Do you really want to delete saved search ?
-	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？");//¿ Do you really want to delete user news ?
-	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？");//¿ Do you really want to delete mail ?
-	    lang.put("confirm.get.pooled.workflow.task","你真的想接收这个任务吗？");//¿ Do you want to assign this task to you ?
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.delete.saved.search", "你真的想删除查询条件吗？"); // Do you really want to delete saved search ?
+	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？"); // Do you really want to delete user news ?
+	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？"); // Do you really want to delete mail ?
+	    lang.put("confirm.get.pooled.workflow.task", "你真的想接收这个任务吗？"); // Do you want to assign this task to you ?
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "范围");

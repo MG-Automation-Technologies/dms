@@ -390,9 +390,9 @@ public class Lang_es_ES {
 	    lang.put("confirm.delete.saved.search", "¿Seguro que desea eliminar la consulta almacenada?");
 	    lang.put("confirm.delete.user.news", "¿Seguro que desea eliminar la novedad de usuario?");
 	    lang.put("confirm.delete.mail", "¿Seguro que desea eliminar el correo electrónico?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ Seguro que desea asignarse esta tarea ?");
-	    lang.put("confirm.force.unlock","¿ Seguro que desea forzar la cancelación del documento bloqueado )");
-	    lang.put("confirm.force.cancel.checkout","¿ Seguro que desea forzar la cancelación del documento editado ?");
+	    lang.put("confirm.get.pooled.workflow.task", "¿Seguro que desea asignarse esta tarea?");
+	    lang.put("confirm.force.unlock", "¿Seguro que desea forzar el desbloquear del documento?");
+	    lang.put("confirm.force.cancel.checkout", "¿Seguro que desea forzar la cancelación del documento editado?");
 	    
 	    // Search
 	    lang.put("search.context", "Contexto");

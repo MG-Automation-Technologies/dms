@@ -390,9 +390,9 @@ public class Lang_th_TH {
 	    lang.put("confirm.delete.saved.search", "¿ คุณยังต้องการลบรูปแบบการสืบค้นที่ได้เก็บไว้หรือไม่ ?");
 	    lang.put("confirm.delete.user.news", "¿ คุณยังต้องการลบข่าวสารของผู้ใช้งานหรือไม่ ?");
 	    lang.put("confirm.delete.mail", "¿ คุณยังคงต้องการลบเมล ?");
-	    lang.put("confirm.get.pooled.workflow.task","¿ คุณยังคงต้องการมอบงานนี้ให้กับคุณเอง ?");
-	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document");
-	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
+	    lang.put("confirm.get.pooled.workflow.task", "¿ คุณยังคงต้องการมอบงานนี้ให้กับคุณเอง ?");
+	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
+	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Context");
