@@ -1093,14 +1093,15 @@ public class DirectDocumentModule implements DocumentModule {
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			Node contentNode = documentNode.getNode(Document.CONTENT);
 			javax.jcr.lock.Lock lock = documentNode.getLock();
-			contentNode.restore(contentNode.getBaseVersion(), true);
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
+				contentNode.restore(contentNode.getBaseVersion(), true);
 				documentNode.unlock();
 				JCRUtils.removeLockToken(session, documentNode);
 			} else {
 				String lt = JCRUtils.getLockToken(documentNode.getUUID());
 				session.addLockToken(lt);
+				contentNode.restore(contentNode.getBaseVersion(), true);
 				documentNode.unlock();
 				LockTokenDAO.remove(lock.getLockOwner(), lt);
 			}
