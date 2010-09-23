@@ -391,6 +391,8 @@ public class Lang_id_ID {
 	    lang.put("confirm.delete.user.news", "¿ Anda yakin ingin hapus berita untuk user ?");
 	    lang.put("confirm.delete.mail", "¿ Anda yakin ingin hapus mail ?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Anda yakin ingin meng-assign tugas ini ke anda sendiri ?");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Konteks");

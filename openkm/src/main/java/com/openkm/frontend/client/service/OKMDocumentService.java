@@ -50,4 +50,6 @@ public interface OKMDocumentService extends RemoteService {
 	public Boolean isValid(String docPath) throws OKMException;
 	public Long getVersionHistorySize(String docPath) throws OKMException;
 	public void purgeVersionHistory(String docPath) throws OKMException;
+	public void forceUnlock(String docPath) throws OKMException;
+	public void forceCancelCheckout(String docPath) throws OKMException;
 }

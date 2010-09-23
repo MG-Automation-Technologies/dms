@@ -147,6 +147,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setChatEnabled(up.getChat().isChatEnabled());
 		workspace.setChatAutoLogin(up.getChat().isAutoLoginEnabled());
 		
+		// Is admin
+		workspace.setAdminRole(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+		
 		// Setting web skin
 		workspace.setWebSkin(up.getMisc().getWebSkin());
 		

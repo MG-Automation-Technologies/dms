@@ -188,7 +188,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.unLockOption) {
-				executeUnlock();
+				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+				if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser())) {
+					executeUnlock();
+				} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
+					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_UNLOCK); 
+					Main.get().confirmPopup.show();
+				}
 			}
 		}
 	};
@@ -342,7 +348,13 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 		@Override
 		public void onClick(ClickEvent event) {
 			if (toolBarOption.cancelCheckoutOption) {
-				executeCancelCheckout();
+				GWTDocument doc = Main.get().mainPanel.desktop.browser.fileBrowser.getDocument();
+				if (doc.getLockInfo().getOwner().equals(Main.get().workspaceUserProperties.getUser())) {
+					executeCancelCheckout();
+				} else if (Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
+					Main.get().confirmPopup.setConfirm(ConfirmPopup.CONFIRM_FORCE_CANCEL_CHECKOUT); 
+					Main.get().confirmPopup.show();
+				}
 			}
 		}
 	};
@@ -1067,7 +1079,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 					}
 				} else {
 					if (doc.isCheckedOut()) {
-						if (doc.getLockInfo().getOwner().equals(user)) {
+						if (doc.getLockInfo().getOwner().equals(user) || Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
 							enableCheckin();
 							enableCancelCheckout();
 							disableCheckout();
@@ -1080,7 +1092,7 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 							disable = true;
 						}
 					} else {
-						if (doc.getLockInfo().getOwner().equals(user)) {
+						if (doc.getLockInfo().getOwner().equals(user) || Main.get().workspaceUserProperties.getWorkspace().isAdminRole()) {
 							enableUnlock();
 							disableCheckin();
 							disableCancelCheckout();

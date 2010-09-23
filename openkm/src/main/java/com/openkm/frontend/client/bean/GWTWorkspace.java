@@ -46,6 +46,7 @@ public class GWTWorkspace implements IsSerializable {
 	private boolean changePassword = true;
 	private String email = "";
 	private String webSkin = "";
+	private boolean adminRole = false;
 
 	// System wide
 	private String appVersion = "";
@@ -597,5 +598,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setWebSkin(String webSkin) {
 		this.webSkin = webSkin;
+	}
+	
+	public boolean isAdminRole() {
+		return adminRole;
+	}
+
+	public void setAdminRole(boolean adminRole) {
+		this.adminRole = adminRole;
 	}
 }

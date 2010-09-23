@@ -391,6 +391,8 @@ public class Lang_bs_BA {
 	    lang.put("confirm.delete.user.news", "¿ Dali stvarno želite da izbrišete korisničke obavijesti ?");
 	    lang.put("confirm.delete.mail", "¿ Dali stvarno želite da izbrišete poštu ?");
 	    lang.put("confirm.get.pooled.workflow.task","¿ Do you want to assign this task to you ?");
+	    lang.put("confirm.force.unlock","¿ Are you sure you want to force canceling locked document ?)");
+	    lang.put("confirm.force.cancel.checkout","¿ Are you sure you want to force cancelling chekcout document ?");
 	    
 	    // Search inputs
 	    lang.put("search.context", "Dodatak");
