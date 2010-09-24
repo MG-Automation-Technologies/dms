@@ -137,6 +137,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
 	public static final String PROPERTY_SYSTEM_LOGIN_LOWERCASE = "system.login.lowercase";
+	public static final String PROPERTY_SYSTEM_PREVIEW = "system.preview";
 	
 	public static final String PROPERTY_UPDATE_INFO = "update.info";
 	public static final String PROPERTY_APPLICATION_URL = "application.url";
@@ -262,6 +263,7 @@ public class Config {
 	public static String SYSTEM_ANTIVIR = "";
 	private static String SYSTEM_LOGIN_LOWERCASE_STR = "off";
 	public static boolean SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
+	public static String SYSTEM_PREVIEW = "zviewer"; // flexpaper
 	
 	private static String UPDATE_INFO_STR = "on";
 	public static boolean UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
@@ -519,6 +521,8 @@ public class Config {
 			SYSTEM_LOGIN_LOWERCASE_STR = config.getProperty(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR);
 			SYSTEM_LOGIN_LOWERCASE = "on".equalsIgnoreCase(SYSTEM_LOGIN_LOWERCASE_STR);
 			values.put(PROPERTY_SYSTEM_LOGIN_LOWERCASE, SYSTEM_LOGIN_LOWERCASE_STR+" ("+SYSTEM_LOGIN_LOWERCASE+")");
+			SYSTEM_PREVIEW = config.getProperty(PROPERTY_SYSTEM_PREVIEW, SYSTEM_PREVIEW);
+			values.put(PROPERTY_SYSTEM_PREVIEW, SYSTEM_PREVIEW);
 			
 			UPDATE_INFO_STR = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO_STR);
 			UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
