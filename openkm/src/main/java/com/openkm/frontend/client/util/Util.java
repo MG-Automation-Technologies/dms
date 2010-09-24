@@ -240,10 +240,46 @@ public class Util {
     	$wnd.swfobject.embedSWF("/OpenKM/js/mediaplayer/player.swf", "mediaplayercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {file:mediaUrl,provider:mediaProvider,autostart:"true",width:width,height:height}, {allowscriptaccess:"always",allowfullscreen: "true"}, {id:"jsmediaplayer",name:"jsmediaplayer"});
     }-*/;
     
-    public static native void createPDFViewer(String pdfUrl, String width, String height) /*-{
+    public static native void createPDFViewerZviewer(String pdfUrl, String width, String height) /*-{
     	pdfUrl = encodeURIComponent(pdfUrl);
 		$wnd.swfobject.embedSWF("/OpenKM/js/zviewer/zviewer.swf", "pdfviewercontainer", width, height, "9.0.0", "/OpenKM/js/mediaplayer/expressinstall.swf", {doc_url:pdfUrl}, {allowFullScreen:"true",menu:"false",bgcolor:"#efefef"}, {id:"jspdfviewer",name:"jspdfviewer"});
 	}-*/;
+    
+    public static native void createPDFViewerFlexPaper(String pdfUrl, String width, String height) /*-{
+	pdfUrl = encodeURIComponent(pdfUrl);
+	$wnd.swfobject.embedSWF("/OpenKM/js/flexpaper/FlexPaperViewer.swf", "pdfviewercontainer",width, height,"10.0.0", "playerProductInstall.swf",
+                  {
+            		SwfFile : pdfUrl,
+				  	Scale : 0.6, 
+				  	ZoomTransition : "easeOut",
+				  	ZoomTime : 0.5,
+  				  	ZoomInterval : 0.1,
+  				  	FitPageOnLoad : false,
+  				  	FitWidthOnLoad : true,
+  				  	PrintEnabled : true,
+  				  	FullScreenAsMaxWindow : false,
+  				  	ProgressiveLoading : true,
+  				  
+  				  	PrintToolsVisible : true,
+  				  	ViewModeToolsVisible : true,
+  				  	ZoomToolsVisible : true,
+  				  	FullScreenVisible : true,
+  				  	NavToolsVisible : true,
+  				  	CursorToolsVisible : true,
+  				  	SearchToolsVisible : true,
+  				    localeChain: "en_US"
+  	  			  }, 
+  	  			  {
+  	  	  			quality:"high",
+  	  	  			bgcolor:"#ffffff",
+  	  	  			allowscriptaccess:"sameDomain",
+  	  	  			allowfullscreen:"true"
+  	  	  	  	  }, 
+  	  	  	  	  {
+  	  	  	  	  	id:"FlexPaperViewer",
+  	  	  	  	    name:"FlexPaperViewer"
+  	  	  	  	  });
+}-*/;
     
     public static native String[] getJREs() /*-{
 		return $wnd.deployJava.getJREs();
