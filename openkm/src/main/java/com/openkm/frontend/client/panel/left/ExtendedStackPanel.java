@@ -122,7 +122,7 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					if (refresh) {
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
-					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
+					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
 					break;
 					
 				case PanelDefinition.NAVIGATOR_THESAURUS:
