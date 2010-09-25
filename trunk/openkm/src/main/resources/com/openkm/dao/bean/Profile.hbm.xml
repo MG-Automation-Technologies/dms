@@ -82,6 +82,9 @@
       <property name="dashboardVisible" not-null="true">
         <column name="PRF_TAB_DASHBOARD_VISIBLE" default="true"/>
       </property>
+      <property name="administrationVisible" not-null="true">
+        <column name="PRF_TAB_ADMINISTRATION_VISIBLE" default="true"/>
+      </property>
       
       <!-- TAB DOCUMENT -->
       <component name="document" class="com.openkm.dao.bean.ProfileTabDocument">
