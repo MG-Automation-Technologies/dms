@@ -28,6 +28,7 @@ public class ProfileTab implements Serializable {
 	private boolean desktopVisible;
 	private boolean searchVisible;
 	private boolean dashboardVisible;
+	private boolean administrationVisible;
 	private ProfileTabFolder folder = new ProfileTabFolder();
 	private ProfileTabDocument document = new ProfileTabDocument();
 	private ProfileTabMail mail = new ProfileTabMail();
@@ -54,6 +55,14 @@ public class ProfileTab implements Serializable {
 
 	public void setDashboardVisible(boolean dashboardVisible) {
 		this.dashboardVisible = dashboardVisible;
+	}
+	
+	public boolean isAdministrationVisible() {
+		return administrationVisible;
+	}
+
+	public void setAdministrationVisible(boolean administrationVisible) {
+		this.administrationVisible = administrationVisible;
 	}
 
 	public ProfileTabFolder getFolder() {
@@ -86,6 +95,7 @@ public class ProfileTab implements Serializable {
 		sb.append("desktopVisible="); sb.append(desktopVisible);
 		sb.append(", searchVisible="); sb.append(searchVisible);
 		sb.append(", dashboardVisible="); sb.append(dashboardVisible);
+		sb.append(", administrationVisible="); sb.append(administrationVisible);
 		sb.append(", document="); sb.append(document);
 		sb.append(", folder="); sb.append(folder);
 		sb.append(", mail="); sb.append(mail);
