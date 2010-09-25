@@ -277,6 +277,7 @@ public class ProfileServlet extends BaseServlet {
 		prf.getTab().setDesktopVisible(WebUtil.getBoolean(request, "prf_tab_desktop_visible"));
 		prf.getTab().setSearchVisible(WebUtil.getBoolean(request, "prf_tab_search_visible"));
 		prf.getTab().setDashboardVisible(WebUtil.getBoolean(request, "prf_tab_dashboard_visible"));
+		prf.getTab().setAdministrationVisible(WebUtil.getBoolean(request, "prf_tab_administration_visible"));
 		
 		// Tab Document
 		prf.getTab().getDocument().setPropertiesVisible(WebUtil.getBoolean(request, "prf_tab_document_properties_visible"));
