@@ -73,6 +73,8 @@ public class DirectNotificationModule implements NotificationModule {
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
+		Session systemSession = null;
+		String lt = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -85,9 +87,11 @@ public class DirectNotificationModule implements NotificationModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Session systemSession = DirectRepositoryModule.getSystemSession();
+			systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
+			lt = JCRUtils.getLockToken(node.getUUID());
+			systemSession.addLockToken(lt);
 			
 			// Perform subscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -130,6 +134,7 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
+			if (lt != null) systemSession.removeLockToken(lt);
 			if (token == null) JCRUtils.logout(session);
 		}
 		
@@ -143,6 +148,8 @@ public class DirectNotificationModule implements NotificationModule {
 		Node node = null;
 		Node sNode = null;
 		Session session = null;
+		Session systemSession = null;
+		String lt = null;
 		
 		if (Config.SYSTEM_READONLY) {
 			throw new AccessDeniedException("System is in read-only mode");
@@ -155,9 +162,11 @@ public class DirectNotificationModule implements NotificationModule {
 				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			Session systemSession = DirectRepositoryModule.getSystemSession();
+			systemSession = DirectRepositoryModule.getSystemSession();
 			node = session.getRootNode().getNode(nodePath.substring(1));
 			sNode = systemSession.getNodeByUUID(node.getUUID());
+			lt = JCRUtils.getLockToken(node.getUUID());
+			systemSession.addLockToken(lt);
 
 			// Perform unsubscription
 			if (node.isNodeType(Notification.TYPE)) {
@@ -194,6 +203,7 @@ public class DirectNotificationModule implements NotificationModule {
 			JCRUtils.discardsPendingChanges(sNode);
 			throw new RepositoryException(e.getMessage(), e);
 		} finally {
+			if (lt != null) systemSession.removeLockToken(lt);
 			if (token == null) JCRUtils.logout(session);
 		}
 
