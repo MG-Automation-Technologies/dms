@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.openkm.core.Config;
 
 /**
  * GWTWorkspace
