@@ -84,7 +84,11 @@ public class Preview extends Composite {
 		if (previewAvailable) {
 			String url = Config.OKMDownloadServlet +"?toSwf&inline&uuid=" + URL.encodeComponent(Uuid);
 			text.setHTML("<div id=\"pdfviewercontainer\"></div>\n"); // needed for rewriting purpose
-			Util.createPDFViewerFlexPaper(url, ""+width, ""+height);
+			if (Main.get().workspaceUserProperties.getWorkspace().getPreviewer().equals("flexpaper")) {
+				Util.createPDFViewerFlexPaper(url, ""+width, ""+height);
+			} else {
+				Util.createPDFViewerZviewer(url, ""+width, ""+height);
+			}
 		} else {
 			text.setHTML("<div id=\"pdfviewercontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n"); // needed for rewriting purpose
 		}
