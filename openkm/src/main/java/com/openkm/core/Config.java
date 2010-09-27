@@ -253,7 +253,7 @@ public class Config {
 	private static String SYSTEM_WEBDAV_STR = "off";
 	public static boolean SYSTEM_WEBDAV = "on".equalsIgnoreCase(SYSTEM_WEBDAV_STR);
 	private static String SYSTEM_MAINTENANCE_STR = "off";
-	public static boolean SYSTEM_MAINTENANCE = "on".equalsIgnoreCase(SYSTEM_MAINTENANCE_STR); 
+	public static boolean SYSTEM_MAINTENANCE = "on".equalsIgnoreCase(SYSTEM_MAINTENANCE_STR);
 	private static String SYSTEM_READONLY_STR = "off";
 	public static boolean SYSTEM_READONLY = "on".equalsIgnoreCase(SYSTEM_READONLY_STR);
 	public static String SYSTEM_OCR = "";
