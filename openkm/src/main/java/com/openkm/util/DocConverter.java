@@ -21,10 +21,12 @@
 
 package com.openkm.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 
@@ -168,17 +170,19 @@ public class DocConverter {
 	 * Convert document to PDF.
 	 */
 	public void doc2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.info("** Convert from {} to PDF **", mimeType);
+		log.debug("** Convert from {} to PDF **", mimeType);
 		File tmp = File.createTempFile("okm", ".doc");
 		FileOutputStream fos = null;
 		
 		try {
+			long start = System.currentTimeMillis();
 			fos = new FileOutputStream(tmp);
 			IOUtils.copy(is, fos);
 			fos.flush();
 			fos.close();
 			
 			convert(tmp, mimeType, output);
+			log.debug("Elapse doc2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			log.error("Error in {} to PDF conversion", mimeType, e);
 			output.delete();
@@ -193,11 +197,13 @@ public class DocConverter {
 	 * Convert document to TXT.
 	 */
 	public void doc2txt(InputStream input, String mimeType, File output) throws IOException {
-		log.info("** Convert from {} to TXT **", mimeType);
+		log.debug("** Convert from {} to TXT **", mimeType);
 		File tmp = File.createTempFile(input.toString(), ".cnv");
 		FileOutputStream fos = new FileOutputStream(tmp);
 		
 		try {
+			long start = System.currentTimeMillis();
+			
 			if (PDF.equals(mimeType)) {
 				Reader r = new PdfTextExtractor().extractText(input, mimeType, "utf-8");
 				fos.close();
@@ -209,6 +215,8 @@ public class DocConverter {
 				fos.close();
 				convert(tmp, mimeType, output);
 			}
+			
+			log.debug("Elapse doc2txt time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			log.error("Error in {} to TXT conversion", mimeType, e);
 			output.delete();
@@ -225,12 +233,13 @@ public class DocConverter {
 	 * [0] => http://www.rubblewebs.co.uk/imagemagick/psd.php
 	 */
 	public void img2pdf(InputStream is, String mimeType, File output) throws IOException {
-		log.info("** Convert from {} to PDF **", mimeType);
+		log.debug("** Convert from {} to PDF **", mimeType);
 		File tmp = File.createTempFile("okm", ".img");
 		String inputFile = tmp.getPath()+"[0]";
 		FileOutputStream fos = null;
 		
 		try {
+			long start = System.currentTimeMillis();
 			fos = new FileOutputStream(tmp);
 			IOUtils.copy(is, fos);
 			fos.flush();
@@ -246,6 +255,8 @@ public class DocConverter {
 			if (process.exitValue() == 1) {
 				log.warn(info);
 			}
+			
+			log.debug("Elapse img2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			log.error("Error in IMG to PDF conversion", e);
 			output.delete();
@@ -261,24 +272,39 @@ public class DocConverter {
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
 		log.debug("** Convert from PDF to SWF **");
-		String cmd = Config.SYSTEM_PDF2SWF+" "+input.getPath()+" -o "+output.getPath();
-		
+		String cmd = Config.SYSTEM_PDF2SWF+" -f -T 9 -t -G -s storeallcharacters "+input.getPath()+" -o "+output.getPath();
+		log.debug("Command: {}", cmd);
+		BufferedReader stdout = null;
+	    String line;
+	    
 		try {
+			long start = System.currentTimeMillis();
 			ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
 			Process process = pb.start();
-			process.waitFor();
-			String info = IOUtils.toString(process.getInputStream());
-			process.destroy();
-		
-			// Check return code
-			if (process.exitValue() == 1) {
-				log.warn(info);
+			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			
+			while ((line = stdout.readLine()) != null) {
+				log.debug("STDOUT: {}", line);
 			}
+			
+			process.waitFor();	
+			
+			// Check return code
+			if (process.exitValue() != 0) {
+				log.warn("Abnormal program termination: {}" + process.exitValue());
+				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
+			} else {
+				log.debug("Normal program termination");
+			}
+			
+			log.debug("Elapse pdf2swf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			log.error(cmd);
 			log.error("Error in PDF to SWF conversion", e);
 			output.delete();
 			throw new IOException("Error in PDF to SWF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(stdout);
 		}
 	}
 }
