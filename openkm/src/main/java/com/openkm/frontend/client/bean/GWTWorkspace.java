@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.openkm.core.Config;
 
 /**
  * GWTWorkspace
@@ -47,6 +48,7 @@ public class GWTWorkspace implements IsSerializable {
 	private String email = "";
 	private String webSkin = "";
 	private boolean adminRole = false;
+	private String previewer = "";
 
 	// System wide
 	private String appVersion = "";
@@ -606,5 +608,13 @@ public class GWTWorkspace implements IsSerializable {
 
 	public void setAdminRole(boolean adminRole) {
 		this.adminRole = adminRole;
+	}
+	
+	public String getPreviewer() {
+		return previewer;
+	}
+
+	public void setPreviewer(String previewer) {
+		this.previewer = previewer;
 	}
 }

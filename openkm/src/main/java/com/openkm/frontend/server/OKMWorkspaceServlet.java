@@ -134,6 +134,9 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 			JCRUtils.logout(session);
 		}
 		
+		// Previewer
+		workspace.setPreviewer(Config.SYSTEM_PREVIEWER);
+		
 		// Advanced filters ( used when there a lot of users and groups )
 		workspace.setAdvancedFilters(up.getMisc().isAdvancedFilters());
 		
@@ -177,7 +180,7 @@ public class OKMWorkspaceServlet extends OKMRemoteServiceServlet implements OKMW
 		workspace.setTabDesktopVisible(up.getTab().isDesktopVisible());
 		workspace.setTabSearchVisible(up.getTab().isSearchVisible());
 		workspace.setTabDashboardVisible(up.getTab().isDashboardVisible());
-		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE));
+		workspace.setTabAdminVisible(getThreadLocalRequest().isUserInRole(Config.DEFAULT_ADMIN_ROLE) && up.getTab().isAdministrationVisible());
 		
 		// Tab document visibility
 		workspace.setTabDocumentPropertiesVisible(up.getTab().getDocument().isPropertiesVisible());
