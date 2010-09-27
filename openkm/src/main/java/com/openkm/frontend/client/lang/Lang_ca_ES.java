@@ -37,7 +37,7 @@ public class Lang_ca_ES {
 	    lang = new HashMap<String, String>();
 	    
 	    // General configuration
-	    lang.put("general.date.pattern", "dd/MM/yyyy hh:mm:ss");
+	    lang.put("general.date.pattern", "dd/MM/yyyy HH:mm:ss");
 	    lang.put("general.day.pattern", "dd/MM/yyyy");
 	    lang.put("general.hour.pattern", "HH:mm:ss");
 	    
