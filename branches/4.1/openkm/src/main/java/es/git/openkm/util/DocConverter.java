@@ -19,10 +19,12 @@
 
 package es.git.openkm.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -223,22 +225,40 @@ public class DocConverter {
 	 * Convert PDF to SWF (for document preview feature).
 	 */
 	public void pdf2swf(File input, File output) throws IOException {
-		log.info("** Convert from PDF to SWF **");
+		log.debug("** Convert from PDF to SWF **");
+		String cmd = Config.SYSTEM_PDF2SWF+" -f -T 9 -t -G -s storeallcharacters "+input.getPath()+" -o "+output.getPath();
+		log.debug("Command: {}", cmd);
+		BufferedReader stdout = null;
+	    String line;
+	    
 		try {
-			ProcessBuilder pb = new ProcessBuilder(Config.SYSTEM_PDF2SWF, input.getPath(), "-o", output.getPath());
+			long start = System.currentTimeMillis();
+			ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
 			Process process = pb.start();
-			process.waitFor();
-			String info = IOUtils.toString(process.getInputStream());
-			process.destroy();
-		
-			// Check return code
-			if (process.exitValue() == 1) {
-				log.warn(info);
+			stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			
+			while ((line = stdout.readLine()) != null) {
+				log.debug("STDOUT: {}", line);
 			}
+			
+			process.waitFor();	
+			
+			// Check return code
+			if (process.exitValue() != 0) {
+				log.warn("Abnormal program termination: {}" + process.exitValue());
+				log.warn("STDERR: {}", IOUtils.toString(process.getErrorStream()));
+			} else {
+				log.debug("Normal program termination");
+			}
+			
+			log.debug("Elapse pdf2swf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
+			log.error(cmd);
 			log.error("Error in PDF to SWF conversion", e);
 			output.delete();
 			throw new IOException("Error in PDF to SWF conversion", e);
+		} finally {
+			IOUtils.closeQuietly(stdout);
 		}
 	}
 }
