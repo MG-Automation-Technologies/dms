@@ -44,9 +44,11 @@ public class Document implements Serializable {
 	public static final String VERSION_COMMENT = "okm:versionComment";
 	public static final String NAME = "okm:name";
 	// public static final String TITLE = "okm:title";
+	// public static final String TITLE = "okm:description";
 	
 	private String path;
 	// private String title = "";
+	// private String description = "";
 	private String language = "";
 	private String author;
 	private Calendar created;
@@ -231,6 +233,7 @@ public class Document implements Serializable {
 		sb.append("{");
 		sb.append("path="); sb.append(path);
 		// sb.append(", title="); sb.append(title);
+		// sb.append(", description="); sb.append(description);
 		sb.append(", mimeType="); sb.append(mimeType);
 		sb.append(", author="); sb.append(author);
 		sb.append(", permissions="); sb.append(permissions);
