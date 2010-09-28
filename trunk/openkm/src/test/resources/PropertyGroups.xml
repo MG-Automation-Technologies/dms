@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 1.0//EN"
-                                 "http://www.openkm.com/dtd/property-groups-1.0.dtd">
+<!DOCTYPE property-groups PUBLIC "-//OpenKM//DTD Property Groups 1.1//EN"
+                                 "http://www.openkm.com/dtd/property-groups-1.1.dtd">
 <property-groups>
   <property-group label="Consulting" name="okg:consulting">
-    <input label="Name" type="text" name="okp:consulting.name" value="Joel" />
-    <textarea label="Comment" name="okp:consulting.comment" value=""/>
+    <input label="Name" type="text" name="okp:consulting.name"/>
+    <textarea label="Comment" name="okp:consulting.comment"/>
   </property-group>
   <property-group label="Technology" name="okg:technology">
     <select label="Language" name="okp:technology.language" type="simple">
@@ -12,7 +12,7 @@
       <option label="Python" value="python" />
       <option label="PHP" value="php" />
     </select>
-    <input label="Comment" name="okp:technology.comment" value="10"/>
-    <textarea label="Description" name="okp:technology.description" value=""/>
+    <input label="Comment" name="okp:technology.comment"/>
+    <textarea label="Description" name="okp:technology.description"/>
   </property-group>
 </property-groups>
