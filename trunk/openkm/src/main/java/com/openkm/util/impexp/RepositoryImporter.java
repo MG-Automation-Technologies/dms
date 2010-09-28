@@ -24,12 +24,14 @@ package com.openkm.util.impexp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.openkm.bean.Document;
 import com.openkm.bean.Folder;
 import com.openkm.core.AccessDeniedException;
@@ -41,6 +43,7 @@ import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
 import com.openkm.core.UserQuotaExceededException;
 import com.openkm.core.VirusDetectedException;
+import com.openkm.module.DocumentModule;
 import com.openkm.module.ModuleManager;
 
 public class RepositoryImporter {
@@ -51,15 +54,15 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository.
 	 */
-	public static ImpExpStats importDocuments(File fs, String fldPath, Writer out, InfoDecorator deco) 
-			throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException,
-			IOException, DatabaseException {
-		log.debug("importDocuments({}, {}, {})", new Object[] { fs, fldPath, deco });
+	public static ImpExpStats importDocuments(File fs, String fldPath, boolean metadata, Writer out,
+			InfoDecorator deco) throws PathNotFoundException, ItemExistsException, AccessDeniedException,
+			RepositoryException, IOException, DatabaseException {
+		log.debug("importDocuments({}, {}, {}, {}, {})", new Object[] { fs, fldPath, metadata, out, deco });
 		ImpExpStats stats;
 		
 		try {
 			if (fs.exists()) {
-				stats = importDocumentsHelper(fs, fldPath, out, deco);
+				stats = importDocumentsHelper(fs, fldPath, metadata, out, deco);
 			} else  {
 				throw new FileNotFoundException(fs.getPath());
 			}
@@ -93,10 +96,10 @@ public class RepositoryImporter {
 	/**
 	 * Import documents from filesystem into document repository (recursive).
 	 */
-	private static ImpExpStats importDocumentsHelper(File fs, String fldPath, Writer out, InfoDecorator deco)
-			throws FileNotFoundException, PathNotFoundException, AccessDeniedException, ItemExistsException,
-			RepositoryException, IOException, DatabaseException {
-		log.debug("importDocumentsHelper({}, {}, {}, {})", new Object[] { fs, fldPath, out, deco });
+	private static ImpExpStats importDocumentsHelper(File fs, String fldPath, boolean metadata, Writer out,
+			InfoDecorator deco) throws FileNotFoundException, PathNotFoundException, AccessDeniedException,
+			ItemExistsException, RepositoryException, IOException, DatabaseException {
+		log.debug("importDocumentsHelper({}, {}, {}, {}, {})", new Object[] { fs, fldPath, metadata, out, deco });
 		File[] files = fs.listFiles();
 		ImpExpStats stats = new ImpExpStats();
 		
@@ -107,7 +110,7 @@ public class RepositoryImporter {
 				
 				try {
 					ModuleManager.getFolderModule().create(null, fld);
-					ImpExpStats tmp = importDocumentsHelper(files[i], fld.getPath(), out, deco);
+					ImpExpStats tmp = importDocumentsHelper(files[i], fld.getPath(), metadata, out, deco);
 					
 					// Stats
 					stats.setOk(stats.isOk() && tmp.isOk());
@@ -128,7 +131,19 @@ public class RepositoryImporter {
 				boolean docOk = true;
 				
 				try {
-					ModuleManager.getDocumentModule().create(null, doc, fisContent);
+					DocumentModule dm = ModuleManager.getDocumentModule();
+					dm.create(null, doc, fisContent);
+					
+					// Metadata
+					Gson gson = new Gson();
+					File jsFile = new File(files[i].getPath() + ".json");
+					
+					if (jsFile.exists() && jsFile.canRead()) {
+						FileReader fr = new FileReader(jsFile);
+						Document jsDoc = gson.fromJson(fr, Document.class);
+						
+						fr.close();
+					}
 					
 					// Stats
 					stats.setSize(stats.getSize() + size);
