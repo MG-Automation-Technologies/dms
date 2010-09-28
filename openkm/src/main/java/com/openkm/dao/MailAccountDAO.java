@@ -342,7 +342,7 @@ public class MailAccountDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			FilterRule fr = (FilterRule) session.load(MailFilter.class, frId);
+			FilterRule fr = (FilterRule) session.load(FilterRule.class, frId);
 			session.delete(fr);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
