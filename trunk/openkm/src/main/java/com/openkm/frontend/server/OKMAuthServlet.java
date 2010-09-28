@@ -352,7 +352,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			OKMAuth oKMAuth = OKMAuth.getInstance();
 			oKMAuth.revokeUser(null, path, user, Permission.READ, recursive);
 			oKMAuth.revokeUser(null, path, user, Permission.WRITE, recursive);
-			//oKMAuth.revokeUser(path, user, Permission.REMOVE);
+			oKMAuth.revokeUser(null, path, user, Permission.DELETE, recursive);
+			oKMAuth.revokeUser(null, path, user, Permission.SECURITY, recursive);
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMAuthService, ErrorCode.CAUSE_PathNotFound), e.getMessage());		 
@@ -437,7 +438,8 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 				OKMAuth oKMAuth = OKMAuth.getInstance();
 				oKMAuth.revokeRole(null, path, role, Permission.READ, recursive);
 				oKMAuth.revokeRole(null, path, role, Permission.WRITE, recursive);
-				//oKMAuth.revokeRole(path, user, Permission.REMOVE);
+				oKMAuth.revokeRole(null, path, role, Permission.DELETE, recursive);
+				oKMAuth.revokeRole(null, path, role, Permission.SECURITY, recursive);
 			}
 		} catch (PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
