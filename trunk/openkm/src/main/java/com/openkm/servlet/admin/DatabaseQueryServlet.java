@@ -170,8 +170,11 @@ public class DatabaseQueryServlet extends BaseServlet {
 				
 				sc.setAttribute("columns", columns);
 				sc.setAttribute("results", results);
+				sc.setAttribute("rows", null);
 			} else {
 				int rows = stmt.executeUpdate(qs);
+				sc.setAttribute("columns", null);
+				sc.setAttribute("results", null);
 				sc.setAttribute("rows", rows);
 			}
 		} finally {
