@@ -297,6 +297,7 @@ public class DocConverter {
 				log.debug("Normal program termination");
 			}
 			
+			process.destroy();
 			log.debug("Elapse pdf2swf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			log.error(cmd);
