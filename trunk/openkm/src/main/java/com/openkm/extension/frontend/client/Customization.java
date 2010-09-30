@@ -25,8 +25,6 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.openkm.extension.frontend.client.widget.tabdocument.stapling.Stapling;
-
 /**
  * Customization
  * 
@@ -55,7 +53,7 @@ public class Customization {
 // 	    OPENKM PROPIETARY EXTENSIONS		
 //		extensions.add(new DownloadButton().getButton());
 //		extensions.add(new DownloadPdfButton().getButton());
-		extensions.addAll(new Stapling().getExtensions());
+//		extensions.addAll(new Stapling().getExtensions());
 //		extensions.addAll(new MetromUsa().getExtensions());
 		
 		return extensions;
