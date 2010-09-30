@@ -1,4 +1,3 @@
-
 /**
  *  OpenKM, Open Document Management System (http://www.openkm.com)
  *  Copyright (c) 2006-2010  Paco Avila & Josep Llort
@@ -20,44 +19,46 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.extension.frontend.client;
+package com.openkm.frontend.client.bean.extension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.openkm.extension.frontend.client.widget.tabdocument.stapling.Stapling;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Customization
+ * GWTStaplingGroup
  * 
  * @author jllort
  *
  */
-public class Customization {
+public class GWTStaplingGroup implements IsSerializable {
 	
-	/**
-	 * getExtensionWidgets
-	 * 
-	 * @return
-	 */
-	public static List<Object> getExtensionWidgets() {
-		List<Object> extensions = new ArrayList<Object>();
-		
-		// add here your widget extensions
-//		extensions.add(new HelloWorld());
-//		extensions.add(new ToolBarButtonExample().getButton());
-//		extensions.add(new TabFolderExample());
-//		extensions.add(new TabWorkspaceExample());
-//		extensions.add(new MainMenuExample().getNewMenu());
-//		extensions.add(new HandlersTest());
-//		extensions.add(new ToolBarBoxExample().getToolBarBox());
-		
-// 	    OPENKM PROPIETARY EXTENSIONS		
-//		extensions.add(new DownloadButton().getButton());
-//		extensions.add(new DownloadPdfButton().getButton());
-		extensions.addAll(new Stapling().getExtensions());
-//		extensions.addAll(new MetromUsa().getExtensions());
-		
-		return extensions;
+	private int id;
+	private String username;
+	private List<GWTStapling> staplingList = new ArrayList<GWTStapling>();
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public List<GWTStapling> getStaplingList() {
+		return staplingList;
+	}
+
+	public void setStaplingList(List<GWTStapling> staplingList) {
+		this.staplingList = staplingList;
 	}
 }

@@ -249,12 +249,10 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.CheckEmailServlet</servlet-class>
   </servlet>
-        
-  <!-- Extension Servlets 
   <servlet>
-    <servlet-name>StaplingServlet</servlet-name>
-    <servlet-class>com.openkm.extension.frontend.server.StaplingServlet</servlet-class>
-  </servlet> -->
+    <servlet-name>OKMStaplingServlet</servlet-name>
+    <servlet-class>com.openkm.frontend.server.extension.OKMStaplingServlet</servlet-class>
+  </servlet>
     
   <!-- WebServices -->
   <servlet>
@@ -411,6 +409,10 @@
     <servlet-name>OKMNoteServlet</servlet-name>
     <url-pattern>/OKMNoteServlet</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMStaplingServlet</servlet-name>
+    <url-pattern>/OKMStaplingServlet</url-pattern>
+  </servlet-mapping> 
   
   <!-- Misc servlets mappings -->
   <servlet-mapping>
@@ -519,12 +521,6 @@
     <servlet-name>CheckEmailServlet</servlet-name>
     <url-pattern>/admin/CheckEmail</url-pattern>
   </servlet-mapping>
-
-  <!-- Extension Servlet Mappings 
-  <servlet-mapping>
-    <servlet-name>StaplingServlet</servlet-name>
-    <url-pattern>/extension/Stapling</url-pattern>
-  </servlet-mapping> -->
 
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
