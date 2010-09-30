@@ -126,8 +126,11 @@ public class DatabaseQueryServlet extends BaseServlet {
 			
 			sc.setAttribute("columns", columns);
 			sc.setAttribute("results", results);
+			sc.setAttribute("rows", null);
 		} else {
 			int rows = session.createQuery(qs).executeUpdate();
+			sc.setAttribute("columns", null);
+			sc.setAttribute("results", null);
 			sc.setAttribute("rows", rows);
 		}
 		
