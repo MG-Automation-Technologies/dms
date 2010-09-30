@@ -131,11 +131,11 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
 							log.info("Import zip file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(path, is);
-							log.warn("erroMsg: {}", erroMsg);
 							
 							if (erroMsg == null) {
 								out.print(returnOKMessage);
 							} else {
+								log.warn("erroMsg: {}", erroMsg);
 								out.print(erroMsg);
 							}
 						} else {
