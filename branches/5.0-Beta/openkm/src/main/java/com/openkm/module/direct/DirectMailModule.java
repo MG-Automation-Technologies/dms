@@ -700,4 +700,37 @@ public class DirectMailModule implements MailModule {
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
+	
+	@Override
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
+		String path = null;
+		Session session = null;
+		
+		try {
+			if (token == null) {
+				session = JCRUtils.getSession();
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
+			}
+			
+			Node node = session.getNodeByUUID(uuid);
+
+			if (node.isNodeType(Mail.TYPE)) {
+				path = node.getPath();
+			}
+		} catch (javax.jcr.AccessDeniedException e) {
+			log.warn(e.getMessage(), e);
+			throw new AccessDeniedException(e.getMessage(), e);
+		} catch (javax.jcr.RepositoryException e) {
+			log.error(e.getMessage(), e);
+			throw new RepositoryException(e.getMessage(), e);
+		} finally {
+			if (token == null) JCRUtils.logout(session);
+		}
+
+		log.debug("getPath: {}", path);
+		return path;
+	}
 }
