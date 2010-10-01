@@ -145,4 +145,15 @@ public class OKMFolder {
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
+	
+	@WebMethod
+	public String getPath(@WebParam(name = "token") String token,
+			@WebParam(name = "uuid") String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
+		FolderModule fm = ModuleManager.getFolderModule();
+		String path = fm.getPath(token, uuid);
+		log.debug("getPath: {}", path);
+		return path;
+	}
 }
