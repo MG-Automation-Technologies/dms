@@ -140,4 +140,14 @@ public class OKMMail implements MailModule {
 		log.debug("isValid: {}", valid);
 		return valid;
 	}
+	
+	@Override
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({})", uuid);
+		MailModule mm = ModuleManager.getMailModule();
+		String path = mm.getPath(token, uuid);
+		log.debug("getPath: {}", path);
+		return path;
+	}
 }
