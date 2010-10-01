@@ -124,4 +124,26 @@ public class OKMMail {
 		log.debug("getChilds: {}", result);
 		return result;
 	}
+	
+	@WebMethod
+	public boolean isValid(@WebParam(name = "token") String token,
+			@WebParam(name = "mailPath") String mailPath) throws PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("isValid({}, {})", token, mailPath);
+		MailModule mm = ModuleManager.getMailModule();
+		boolean valid = mm.isValid(token, mailPath);
+		log.debug("isValid: {}", valid);
+		return valid;
+	}
+	
+	@WebMethod
+	public String getPath(@WebParam(name = "token") String token,
+			@WebParam(name = "uuid") String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException {
+		log.debug("getPath({}, {})", token, uuid);
+		MailModule mm = ModuleManager.getMailModule();
+		String path = mm.getPath(token, uuid);
+		log.debug("getPath: {}", path);
+		return path;
+	}
 }
