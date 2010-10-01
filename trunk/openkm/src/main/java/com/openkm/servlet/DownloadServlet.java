@@ -22,6 +22,7 @@
 package com.openkm.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.jcr.Credentials;
@@ -39,11 +40,11 @@ import org.apache.jackrabbit.server.CredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Document;
+import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtil;
-import com.sun.syndication.feed.synd.SyndImage;
-import com.sun.syndication.feed.synd.SyndImageImpl;
-import com.sun.syndication.io.SyndFeedOutput;
 
 /**
  * Download Servlet
@@ -66,20 +67,21 @@ public class DownloadServlet extends HttpServlet {
 		try {
 			session = getSession(request);
 			
-			// Now an document can be located by UUID
-			if (uuid != null && !uuid.equals("")) {
+			if (!uuid.equals("")) {
 				path = session.getNodeByUUID(uuid).getPath();
 			}
 			
-			if (path != null) {
-				response.setContentType("application/xml; charset=UTF-8");
-				SyndFeedOutput output = new SyndFeedOutput();
-				SyndImage img = new SyndImageImpl();
-				//output.output(feed, response.getWriter());
+			if (!path.equals("")) {
+				Document doc = new DirectDocumentModule().getProperties(session, path);
+				String fileName = FileUtils.getName(doc.getPath());
+				log.info("Download {} by {}", path, session.getUserID());
+				InputStream is = new DirectDocumentModule().getContent(session, path, false);
+				WebUtil.sendFile(request, response, fileName, doc.getMimeType(), true, is);
+				is.close();
 			} else {
 				response.setContentType("text/plain; charset=UTF-8");
 				PrintWriter out = response.getWriter();
-				out.println("Unknown syndicantion feed");
+				out.println("Missing document reference");
 				out.close();
 			}
 		} catch (LoginException e) {
