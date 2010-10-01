@@ -44,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
-import com.openkm.bean.Folder;
 import com.openkm.bean.Mail;
 import com.openkm.bean.Permission;
 import com.openkm.bean.Repository;
@@ -718,7 +717,7 @@ public class DirectMailModule implements MailModule {
 			
 			Node node = session.getNodeByUUID(uuid);
 
-			if (node.isNodeType(Folder.TYPE)) {
+			if (node.isNodeType(Mail.TYPE)) {
 				path = node.getPath();
 			}
 		} catch (javax.jcr.AccessDeniedException e) {
