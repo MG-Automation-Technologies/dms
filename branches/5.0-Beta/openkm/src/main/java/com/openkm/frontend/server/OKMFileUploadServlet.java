@@ -256,7 +256,8 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			fos.close();
 			
 			// Unzip files
-			new File(tmpIn).archiveCopyAllTo(tmpOut);
+			File fileTmpIn = new File(tmpIn);
+			fileTmpIn.archiveCopyAllTo(tmpOut);
 			
 			// Import files
 			StringWriter out = new StringWriter();
@@ -270,6 +271,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			throw e;
 		} finally {
 			if (tmpIn != null) {
+				File.umount();
 				org.apache.commons.io.FileUtils.deleteQuietly(tmpIn);
 			}
 
