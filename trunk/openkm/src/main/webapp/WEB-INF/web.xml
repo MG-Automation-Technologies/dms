@@ -152,6 +152,10 @@
     <servlet-class>com.openkm.servlet.SyndicationServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>DownloadServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.DownloadServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>MimeIconServlet</servlet-name>
     <servlet-class>com.openkm.servlet.MimeIconServlet</servlet-class>
   </servlet>
@@ -422,6 +426,10 @@
   <servlet-mapping>
     <servlet-name>SyndicationServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownloadServlet</servlet-name>
+    <url-pattern>/Download</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>MimeIconServlet</servlet-name>
