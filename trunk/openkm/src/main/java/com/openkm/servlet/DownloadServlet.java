@@ -26,7 +26,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.jcr.Credentials;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.LoginException;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -41,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
+import com.openkm.core.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.FileUtils;
@@ -62,37 +65,58 @@ public class DownloadServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String path = WebUtil.getString(request, "path");
 		String uuid = WebUtil.getString(request, "uuid");
+		String token = WebUtil.getString(request, "token");
 		Session session = null;
 		
 		try {
-			session = getSession(request);
-			
-			if (!uuid.equals("")) {
-				path = session.getNodeByUUID(uuid).getPath();
+			if (token.equals("")) {
+				session = getSession(request);
+			} else {
+				session = JcrSessionManager.getInstance().get(token);
 			}
 			
-			if (!path.equals("")) {
-				Document doc = new DirectDocumentModule().getProperties(session, path);
-				String fileName = FileUtils.getName(doc.getPath());
-				log.info("Download {} by {}", path, session.getUserID());
-				InputStream is = new DirectDocumentModule().getContent(session, path, false);
-				WebUtil.sendFile(request, response, fileName, doc.getMimeType(), true, is);
-				is.close();
+			if (session != null) {
+				if (!uuid.equals("")) {
+					path = session.getNodeByUUID(uuid).getPath();
+				}
+				
+				if (!path.equals("")) {
+					Document doc = new DirectDocumentModule().getProperties(session, path);
+					String fileName = FileUtils.getName(doc.getPath());
+					log.info("Download {} by {}", path, session.getUserID());
+					InputStream is = new DirectDocumentModule().getContent(session, path, false);
+					WebUtil.sendFile(request, response, fileName, doc.getMimeType(), true, is);
+					is.close();
+				} else {
+					response.setContentType("text/plain; charset=UTF-8");
+					PrintWriter out = response.getWriter();
+					out.println("Missing document reference");
+					out.close();
+				}
 			} else {
 				response.setContentType("text/plain; charset=UTF-8");
 				PrintWriter out = response.getWriter();
-				out.println("Missing document reference");
+				out.println("Missing user credentials");
 				out.close();
 			}
 		} catch (LoginException e) {
+			log.warn(e.getMessage(), e);
 			response.setHeader("WWW-Authenticate", "Basic realm=\"OpenKM Download Server\"");
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		} catch (ItemNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ItemNotFoundException: "+e.getMessage());
+		} catch (PathNotFoundException e) {
+			log.warn(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "PathNotFoundException: "+e.getMessage());
 		} catch (RepositoryException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			log.warn(e.getMessage(), e);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "RepositoryException: "+e.getMessage());
 		} catch (Exception e) {
+			log.warn(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		} finally {
-			if (session != null) {
+			if (token.equals("") && session != null) {
 				session.logout();
 			}
 		}
