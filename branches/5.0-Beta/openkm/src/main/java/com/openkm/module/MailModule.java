@@ -162,4 +162,16 @@ public interface MailModule {
 	 */
 	public boolean isValid(String token, String mailPath) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
+	
+	/**
+	 * Get the mail path from a UUID
+	 * 
+	 * @param uuid The unique mail id.
+	 * @return The mail path
+	 * @throws AccessDeniedException If there is any security problem: 
+	 * you can't access this folder because of lack of permissions.
+	 * @throws RepositoryException If there is any problem.
+	 */
+	public String getPath(String token, String uuid) throws AccessDeniedException, RepositoryException,
+			DatabaseException;
 }
