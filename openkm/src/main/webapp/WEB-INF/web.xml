@@ -174,6 +174,10 @@
     <servlet-class>com.openkm.servlet.admin.RepositoryBackupServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>RepositoryCheckerServlet</servlet-name>
+    <servlet-class>com.openkm.servlet.admin.RepositoryCheckerServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>WorkflowGraphServlet</servlet-name>
     <servlet-class>com.openkm.servlet.admin.WorkflowGraphServlet</servlet-class>
   </servlet>
@@ -448,6 +452,10 @@
   <servlet-mapping>
     <servlet-name>RepositoryBackupServlet</servlet-name>
     <url-pattern>/admin/RepositoryBackup</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RepositoryCheckerServlet</servlet-name>
+    <url-pattern>/admin/RepositoryChecker</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>WorkflowGraphServlet</servlet-name>
