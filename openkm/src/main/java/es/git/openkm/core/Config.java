@@ -41,6 +41,7 @@ public class Config {
 	// Default directories
 	public static final String HOME_DIR = getHomeDir();
 	public static final String TMP_DIR = getTempDir();
+	public static final String NULL_DEVICE = getNullDevice();
 	public static final boolean IN_SERVER = inServer(); 
 	
 	// Preview cache
@@ -253,6 +254,21 @@ public class Config {
 			return dir;
 		} else {
 			return "";
+		}
+	}
+	
+	/**
+	 * Guess the system null device
+	 */
+	private static String getNullDevice() {
+		String os = System.getProperty("os.name").toLowerCase();
+		
+		if (os.contains("linux") || os.contains("mac os")) {
+			return "/dev/null";
+		} else if (os.contains("windows")) {
+			return "NUL:";
+		} else {
+			return null;
 		}
 	}
 	
