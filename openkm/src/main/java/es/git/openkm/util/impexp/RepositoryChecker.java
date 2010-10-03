@@ -94,17 +94,23 @@ public class RepositoryChecker {
 		for (Iterator<Document> it = dm.getChilds(token, fldPath).iterator(); it.hasNext();) {
 			Document docChild = it.next();
 			
-			FileOutputStream fos = new FileOutputStream(fsPath);
-			InputStream is = dm.getContent(token, docChild.getPath(), false);
-			IOUtils.copy(is, fos);
-			is.close();
-			fos.close();
-			out.write(deco.print(docChild.getPath(), null));
-			out.flush();
-			
-			// Stats
-			stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
-			stats.setDocuments(stats.getDocuments() + 1);
+			try {
+				FileOutputStream fos = new FileOutputStream(fsPath);
+				InputStream is = dm.getContent(token, docChild.getPath(), false);
+				IOUtils.copy(is, fos);
+				is.close();
+				fos.close();
+				out.write(deco.print(docChild.getPath(), null));
+				out.flush();
+				
+				// Stats
+				stats.setSize(stats.getSize() + docChild.getActualVersion().getSize());
+				stats.setDocuments(stats.getDocuments() + 1);
+			} catch (RepositoryException e) {
+				log.error(e.getMessage());
+				out.write(deco.print(docChild.getPath(), e.getMessage()));
+				out.flush();
+			}
 		}
 
 		FolderModule fm = ModuleManager.getFolderModule();
