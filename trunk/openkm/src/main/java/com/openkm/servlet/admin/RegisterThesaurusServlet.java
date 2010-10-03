@@ -22,7 +22,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.PrintWriter;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -44,27 +44,29 @@ public class RegisterThesaurusServlet extends BaseServlet {
 				.parseInt(request.getParameter("level"))
 				: 0;
 		updateSessionManager(request);
-		Writer out = response.getWriter();
+		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		out.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-		out.write("<HTML>");
-		out.write("<HEAD>");
-		out.write("<STYLE type=\"text/css\">");
-		out.write("body, td, a, div, .p { font-family:verdana,arial,sans-serif; font-size:10px; }");
-		out.write("</STYLE>");
-		out.write("<BODY>");
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\" />");
+		out.println("<body>");
+		out.println("<h1>Register thesaurus</h1>");
 		out.flush();
 
 		if (!Config.KEA_THESAURUS_OWL_FILE.equals("")) {
-			out.write("<b>Starting thesaurus creation, this could take some hours.</b><br>");
-			out.write("<b>Don't close this window meanwhile OpenKM is creating thesaurus.</b><br>");
-			out.write("It'll be displayed creation information while creating nodes until level "
+			out.println("<b>Starting thesaurus creation, this could take some hours.</b><br>");
+			out.println("<b>Don't close this window meanwhile OpenKM is creating thesaurus.</b><br>");
+			out.println("It'll be displayed creation information while creating nodes until level "
 					+ (level + 1) + ", please be patient because tree deep level could be big.<br><br>");
 			out.flush();
 			KEATree.generateTree(level, "/okm:thesaurus", new Vector<String>(), out);
-			out.write("<br><b>Finished thesaurus creation.</b><br>");
+			out.println("<br><b>Finished thesaurus creation.</b><br>");
 		} else {
-			out.write("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");
+			out.println("<b>Error - there's no thesaurus file defined in OpenKM.cfg</b>");
 		}
 
 		try {
@@ -73,8 +75,8 @@ public class RegisterThesaurusServlet extends BaseServlet {
 			e.printStackTrace();
 		}
 
-		out.write("</BODY>");
-		out.write("</HTML>");
+		out.println("</body>");
+		out.println("</html>");
 		out.flush();
 	}
 }

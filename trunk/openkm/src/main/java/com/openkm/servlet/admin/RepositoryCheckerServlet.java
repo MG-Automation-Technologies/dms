@@ -22,7 +22,7 @@
 package com.openkm.servlet.admin;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -51,15 +51,17 @@ public class RepositoryCheckerServlet extends BaseServlet {
 		log.debug("doGet({}, {})", request, response);
 		String repoPath = WebUtil.getString(request, "repoPath", "/okm:root");
 		updateSessionManager(request);
-		Writer out = response.getWriter();
+		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		out.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-		out.write("<HTML>");
-		out.write("<HEAD>");
-		out.write("<STYLE type=\"text/css\">");
-		out.write("body, td, a, div, .p { font-family:verdana,arial,sans-serif; font-size:10px; }");
-		out.write("</STYLE>");
-		out.write("<BODY>");
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		out.println("<link rel=\"Shortcut icon\" href=\"favicon.ico\" />");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\" />");
+		out.println("<body>");
+		out.println("<h1>Repository checker</h1>");
 		out.flush();
 		
 		try {
@@ -68,19 +70,19 @@ public class RepositoryCheckerServlet extends BaseServlet {
 				long begin = System.currentTimeMillis();
 				ImpExpStats stats = RepositoryChecker.checkDocuments(repoPath, out,	new HTMLInfoDecorator((int)cInfo.getDocuments()));
 				long end = System.currentTimeMillis();
-				out.write("<hr/>");
-				out.write("<div class=\"ok\">Folder '"+repoPath+"'</div>");
-				out.write("<br/>");
-				out.write("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
-				out.write("<b>Folders:</b> "+stats.getFolders()+"<br/>");
-				out.write("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
-				out.write("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
+				out.println("<hr/>");
+				out.println("<div class=\"ok\">Folder '"+repoPath+"'</div>");
+				out.println("<br/>");
+				out.println("<b>Documents:</b> "+stats.getDocuments()+"<br/>");
+				out.println("<b>Folders:</b> "+stats.getFolders()+"<br/>");
+				out.println("<b>Size:</b> "+FormatUtil.formatSize(stats.getSize())+"<br/>");
+				out.println("<b>Time:</b> "+FormatUtil.formatSeconds(end - begin)+"<br/>");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			out.write("</BODY>");
-			out.write("</HTML>");
+			out.println("</body>");
+			out.println("</html>");
 			out.flush();
 		}
 	}
