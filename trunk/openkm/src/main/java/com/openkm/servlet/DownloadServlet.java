@@ -25,38 +25,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
-import javax.jcr.Credentials;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.LoginException;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.jackrabbit.server.BasicCredentialsProvider;
-import org.apache.jackrabbit.server.CredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.openkm.bean.Document;
 import com.openkm.core.JcrSessionManager;
 import com.openkm.module.direct.DirectDocumentModule;
-import com.openkm.module.direct.DirectRepositoryModule;
+import com.openkm.servlet.BasicSecuredServlet;
 import com.openkm.util.FileUtils;
 import com.openkm.util.WebUtil;
 
 /**
  * Download Servlet
  */
-public class DownloadServlet extends HttpServlet {
+public class DownloadServlet extends BasicSecuredServlet {
 	private static Logger log = LoggerFactory.getLogger(DownloadServlet.class);
 	private static final long serialVersionUID = 1L;
-	private CredentialsProvider cp = new BasicCredentialsProvider(null);
-
+	
 	/**
 	 * 
 	 */
@@ -119,21 +113,6 @@ public class DownloadServlet extends HttpServlet {
 			if (token.equals("") && session != null) {
 				session.logout();
 			}
-		}
-	}
-
-	/**
-	 * Get JCR session
-	 */
-	private synchronized Session getSession(HttpServletRequest request)	throws LoginException,
-			javax.jcr.RepositoryException, ServletException {
-		Credentials creds = cp.getCredentials(request);
-		Repository rep = DirectRepositoryModule.getRepository();
-
-		if (creds == null) {
-			return rep.login();
-		} else {
-			return rep.login(creds);
 		}
 	}
 }
