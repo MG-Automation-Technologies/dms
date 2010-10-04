@@ -65,6 +65,7 @@ public class Lang {
 	public static final String LANG_th_TH = "th-TH";
 	public static final String LANG_eu_ES = "eu-ES";
 	public static final String LANG_sk_SK = "sk-SK";
+	public static final String LANG_zh_VN = "zh-VN";
 	
 	public static HashMap<String, String> getLang(String lang) {
 		HashMap<String, String> hLang = new HashMap<String, String>();
@@ -147,7 +148,9 @@ public class Lang {
 			hLang = Lang_th_TH.lang;
 		} else if (LANG_sk_SK.equalsIgnoreCase(lang) || LANG_sk_SK.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
 			hLang = Lang_sk_SK.lang;
-		} else {
+		} else if (LANG_zh_VN.equalsIgnoreCase(lang) || LANG_zh_VN.substring(0, 2).equalsIgnoreCase(lang.substring(0, 2))) {
+			hLang = Lang_zh_VN.lang;
+		}else {
 			hLang = Lang_en_GB.lang;
 		}
 		
