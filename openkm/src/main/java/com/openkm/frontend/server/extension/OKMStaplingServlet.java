@@ -31,11 +31,11 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
-import com.openkm.dao.bean.extension.Stapling;
-import com.openkm.dao.bean.extension.StaplingGroup;
-import com.openkm.dao.extension.StaplingGroupDAO;
+import com.openkm.dao.bean.extension.Staple;
+import com.openkm.dao.bean.extension.StapleGroup;
+import com.openkm.dao.extension.StapleGroupDAO;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTStaplingGroup;
+import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.service.extension.OKMStaplingService;
 import com.openkm.frontend.server.OKMRemoteServiceServlet;
@@ -56,22 +56,24 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 	private static final long serialVersionUID = 395857404418870245L;
 	
 	@Override
-	public String create(String username, String uuid, String uuid2) throws OKMException {
-		StaplingGroup staplingGroup = new StaplingGroup();
-		staplingGroup.setUsername(username);
+	public String create(String username, String uuid, String type, String uuid2, String type2) throws OKMException {
+		StapleGroup stapleGroup = new StapleGroup();
+		stapleGroup.setUsername(username);
 		try {
 			// Creating stapling group
-			int id = StaplingGroupDAO.create(staplingGroup);
+			int id = StapleGroupDAO.create(stapleGroup);
 			
 			// Adding stapling elements
-			staplingGroup = StaplingGroupDAO.findByPk(id);
-			Stapling stapling = new Stapling();
-			stapling.setUuid(uuid);
-			staplingGroup.getStaplings().add(stapling); // Added first
-			stapling = new Stapling();
-			stapling.setUuid(uuid2);
-			staplingGroup.getStaplings().add(stapling); // Added second
-			StaplingGroupDAO.update(staplingGroup); 	// Updating
+			stapleGroup = StapleGroupDAO.findByPk(id);
+			Staple staple = new Staple();
+			staple.setUuid(uuid);
+			staple.setType(type2);
+			stapleGroup.getStaples().add(staple); // Added first
+			staple = new Staple();
+			staple.setUuid(uuid2);
+			staple.setType(type2);
+			stapleGroup.getStaples().add(staple); // Added second
+			StapleGroupDAO.update(stapleGroup); 	// Updating
 			return String.valueOf(id);
 		} catch (DatabaseException e) {
 			log.warn(e.getMessage(), e);
@@ -80,13 +82,24 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 	}
 	
 	@Override
-	public void add(String id, String uuid) throws OKMException {
+	public void add(String id, String uuid, String type) throws OKMException {
 		try {
-			StaplingGroup staplingGroup = StaplingGroupDAO.findByPk(Integer.valueOf(id));
-			Stapling stapling = new Stapling();
-			stapling.setUuid(uuid);
-			staplingGroup.getStaplings().add(stapling); // Added first
-			StaplingGroupDAO.update(staplingGroup); 	// Updating
+			StapleGroup stapleGroup = StapleGroupDAO.findByPk(Integer.valueOf(id));
+			boolean found = false;
+			for (Staple st : stapleGroup.getStaples()) {
+				if (st.getUuid().equals(uuid)) {
+					found = true;
+					break;
+				}
+			}
+			// Only we add if document not exists
+			if (!found) {
+				Staple staple = new Staple();
+				staple.setUuid(uuid);
+				staple.setType(type);
+				stapleGroup.getStaples().add(staple); // Added first
+				StapleGroupDAO.update(stapleGroup); 	// Updating
+			}
 		} catch (NumberFormatException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
@@ -97,10 +110,10 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 	}
 	
 	@Override
-	public List<GWTStaplingGroup> getAll(String uuid) throws OKMException {
-		List<GWTStaplingGroup> stapList = new ArrayList<GWTStaplingGroup>();
+	public List<GWTStapleGroup> getAll(String uuid) throws OKMException {
+		List<GWTStapleGroup> stapList = new ArrayList<GWTStapleGroup>();
 		try {
-			for (StaplingGroup sg : StaplingGroupDAO.findAll(uuid)) {
+			for (StapleGroup sg : StapleGroupDAO.findAll(uuid)) {
 				stapList.add(Util.copy(sg));
 			}
 		} catch (DatabaseException e) {
@@ -123,7 +136,20 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 	@Override
 	public void remove(String id) throws OKMException {
 		try {
-			StaplingGroupDAO.delete(Integer.parseInt(id));
+			StapleGroupDAO.delete(Integer.parseInt(id));
+		} catch (NumberFormatException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
+		} catch (DatabaseException e) {
+			log.warn(e.getMessage(), e);
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_DatabaseException), e.getMessage());
+		}
+	}
+
+	@Override
+	public void removeStaple(String id) throws OKMException {
+		try {
+			StapleGroupDAO.deleteStaple(Integer.parseInt(id));
 		} catch (NumberFormatException e) {
 			log.warn(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormatException), e.getMessage());
