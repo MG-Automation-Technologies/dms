@@ -19,22 +19,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.openkm.frontend.client.service;
-
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.RemoteService;
-
-import com.openkm.frontend.client.bean.GWTFileUploadingStatus;
-import com.openkm.frontend.client.bean.GWTTestImap;
+package com.openkm.frontend.client.extension;
 
 /**
+ * HasExtension
+ * 
  * @author jllort
  *
  */
-public interface OKMGeneralService extends RemoteService {
+public interface HasExtension {
 	
-	public GWTFileUploadingStatus getFileUploadStatus();
-	public GWTTestImap testImapConnection(String host, String user, String password, String imapFolder);
-	public List<String> getEnabledExtensions();
+	public abstract String getExtensionUUID();
+	
 }
