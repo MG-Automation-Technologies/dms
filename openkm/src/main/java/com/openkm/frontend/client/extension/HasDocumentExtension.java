@@ -28,7 +28,7 @@ package com.openkm.frontend.client.extension;
  * @author jllort
  *
  */
-public interface HasDocumentExtension {
+public interface HasDocumentExtension extends HasExtension {
 	
 	public abstract String getTabText();
 	
