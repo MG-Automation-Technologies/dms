@@ -33,17 +33,18 @@ import org.slf4j.LoggerFactory;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.HibernateUtil;
-import com.openkm.dao.bean.extension.StaplingGroup;
+import com.openkm.dao.bean.extension.Staple;
+import com.openkm.dao.bean.extension.StapleGroup;
 
-public class StaplingGroupDAO {
-	private static Logger log = LoggerFactory.getLogger(StaplingGroupDAO.class);
+public class StapleGroupDAO {
+	private static Logger log = LoggerFactory.getLogger(StapleGroupDAO.class);
 
-	private StaplingGroupDAO() {}
+	private StapleGroupDAO() {}
 	
 	/**
 	 * Create
 	 */
-	public static int create(StaplingGroup sg) throws DatabaseException {
+	public static int create(StapleGroup sg) throws DatabaseException {
 		log.debug("create({})", sg);
 		Session session = null;
 		Transaction tx = null;
@@ -74,8 +75,32 @@ public class StaplingGroupDAO {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			StaplingGroup sg = (StaplingGroup) session.load(StaplingGroup.class, sgId);
+			StapleGroup sg = (StapleGroup) session.load(StapleGroup.class, sgId);
 			session.delete(sg);
+			HibernateUtil.commit(tx);
+		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+		
+		log.debug("delete: void");
+	}
+	
+	/**
+	 * Delete
+	 */
+	public static void deleteStaple(int stId) throws DatabaseException {
+		log.debug("delete({})", stId);
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			Staple st = (Staple) session.load(Staple.class, stId);
+			session.delete(st);
 			HibernateUtil.commit(tx);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
@@ -91,10 +116,10 @@ public class StaplingGroupDAO {
 	 * Find all stapling groups
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<StaplingGroup> findAll(String uuid) throws DatabaseException,
+	public static List<StapleGroup> findAll(String uuid) throws DatabaseException,
 			RepositoryException {
 		log.debug("findAll({}, {})", uuid);
-		String qs = "select sg from StaplingGroup sg, Stapling st where st.uuid=:uuid and st in elements(sg.staplings)";		
+		String qs = "select sg from StapleGroup sg, Staple st where st.uuid=:uuid and st in elements(sg.staples)";		
 		Session session = null;
 		Transaction tx = null;
 		
@@ -102,7 +127,7 @@ public class StaplingGroupDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setString("uuid", uuid);
-			List<StaplingGroup> ret = q.list();
+			List<StapleGroup> ret = q.list();
 
 			log.debug("findAll: {}", ret);
 			return ret;
@@ -117,16 +142,16 @@ public class StaplingGroupDAO {
 	/**
 	 * Find by pk
 	 */
-	public static StaplingGroup findByPk(int sgId) throws DatabaseException {
+	public static StapleGroup findByPk(int sgId) throws DatabaseException {
 		log.debug("findByPk({})", sgId);
-		String qs = "from StaplingGroup sg where sg.id=:id";
+		String qs = "from StapleGroup sg where sg.id=:id";
 		Session session = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", sgId);
-			StaplingGroup ret = (StaplingGroup) q.setMaxResults(1).uniqueResult();
+			StapleGroup ret = (StapleGroup) q.setMaxResults(1).uniqueResult();
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
@@ -139,9 +164,9 @@ public class StaplingGroupDAO {
 	/**
 	 * Update
 	 */
-	public static void update(StaplingGroup sg) throws DatabaseException {
+	public static void update(StapleGroup sg) throws DatabaseException {
 		log.debug("update({})", sg);
-		String qs = "select sg.username from StaplingGroup sg where sg.id=:id";
+		String qs = "select sg.username from StapleGroup sg where sg.id=:id";
 		Session session = null;
 		Transaction tx = null;
 		
