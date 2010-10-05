@@ -23,6 +23,8 @@ package com.openkm.frontend.client.bean.extension;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
+import com.openkm.frontend.client.bean.GWTMail;
 
 /**
  * GWTStapling
@@ -30,11 +32,18 @@ import com.openkm.frontend.client.bean.GWTDocument;
  * @author jllort
  *
  */
-public class GWTStapling implements IsSerializable {
+public class GWTStaple implements IsSerializable {
+	
+	public static final String STAPLE_DOCUMENT	= "okm:document";
+	public static final String STAPLE_FOLDER 	= "okm:folder";
+	public static final String STAPLE_MAIL 		= "okm:mail";
 	
 	private int id;
+	private GWTFolder folder;
+	private GWTMail mail;
 	private GWTDocument doc;
-	
+	private String type;
+
 	public int getId() {
 		return id;
 	}
@@ -43,11 +52,35 @@ public class GWTStapling implements IsSerializable {
 		this.id = id;
 	}
 	
+	public GWTFolder getFolder() {
+		return folder;
+	}
+
+	public void setFolder(GWTFolder folder) {
+		this.folder = folder;
+	}
+
+	public GWTMail getMail() {
+		return mail;
+	}
+
+	public void setMail(GWTMail mail) {
+		this.mail = mail;
+	}
+
 	public GWTDocument getDoc() {
 		return doc;
 	}
 	
 	public void setDoc(GWTDocument doc) {
 		this.doc = doc;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

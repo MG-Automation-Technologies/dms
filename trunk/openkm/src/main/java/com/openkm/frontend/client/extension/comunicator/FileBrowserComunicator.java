@@ -82,4 +82,13 @@ public class FileBrowserComunicator {
 		return Main.get().mainPanel.desktop.browser.fileBrowser.getMail();
 	}
 	
+	/**
+	 * isPanelSelected
+	 * 
+	 * @return
+	 */
+	public static boolean isPanelSelected() {
+		return Main.get().mainPanel.desktop.browser.fileBrowser.isPanelSelected();
+	}
+	
 }
