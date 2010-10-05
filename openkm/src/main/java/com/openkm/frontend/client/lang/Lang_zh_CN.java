@@ -145,7 +145,7 @@ public class Lang_zh_CN {
     			lang.put("general.menu.tools.skin.default2", "默认2");
     			lang.put("general.menu.tools.skin.mediumfont", "中号字体");
     			lang.put("general.menu.tools.skin.bigfont", "大号字体");
-    		lang.put("general.menu.debug.console", "调试命令行");
+    		lang.put("general.menu.debug.console", "调试控制台");
     		lang.put("general.menu.administration", "显示管理");
     		lang.put("general.menu.tools.preferences", "Preferences首选项");
     			lang.put("general.menu.tools.user.preferences", "用户配置");
@@ -331,7 +331,7 @@ public class Lang_zh_CN {
 	    lang.put("version.created", "日期");
 	    lang.put("version.author", "作者");
 	    lang.put("version.size", "大小");
-	    lang.put("version.purge.document", "压缩的历史");
+	    lang.put("version.purge.document", "版本压缩");
 	    lang.put("version.comment", "评论");
 	    
 	    // Security
@@ -390,8 +390,8 @@ public class Lang_zh_CN {
 	    lang.put("confirm.delete.user.news", "你真的想删除用户信息吗？"); // Do you really want to delete user news ?
 	    lang.put("confirm.delete.mail", "你真的想删除邮件吗？"); // Do you really want to delete mail ?
 	    lang.put("confirm.get.pooled.workflow.task", "你真的想接收这个任务吗？"); // Do you want to assign this task to you ?
-	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
-	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
+	    lang.put("confirm.force.unlock", "你想强制解锁吗？");//Do you really want to force the document unlock ?
+	    lang.put("confirm.force.cancel.checkout", "你想强制取消签出吗？");//Do you really want to force the document cancel checkout ?
 	    
 	    // Search inputs
 	    lang.put("search.context", "范围");
@@ -525,7 +525,7 @@ public class Lang_zh_CN {
 	    
 	    // Debug console
 	    lang.put("debug.console.label", "调试控制器");
-	    lang.put("debug.enable.disable", "CTRL+Z 切换允许或不允许调试模式");
+	    lang.put("debug.enable.disable", "CTRL+Z 打开或者关闭调试模式");
 
 	    // Dashboard tab
 	    lang.put("dashboard.tab.general", "公共信息");//General
@@ -586,10 +586,10 @@ public class Lang_zh_CN {
 	    
 	    // User configuration
 	    lang.put("user.preferences.label", "用户信息配置");//User configuration
-	    lang.put("user.preferences.user", "用户名"); //User
-	    lang.put("user.preferences.password", "密码");//Password
-	    lang.put("user.preferences.mail", "E-mail");//E-mail
-	    lang.put("user.preferences.roles","Roles");
+	    lang.put("user.preferences.user", "用户名称"); //User
+	    lang.put("user.preferences.password", "用户密码");//Password
+	    lang.put("user.preferences.mail", "邮箱地址");//E-mail
+	    lang.put("user.preferences.roles","拥有角色");//Roles
 	    lang.put("user.preferences.imap.host", "IMAP服务器");//IMAP server
 	    lang.put("user.preferences.imap.user", "IMAP用户名");//IMAP user name
 	    lang.put("user.preferences.imap.user.password", "IMAP用户密码");//IMAP user password
