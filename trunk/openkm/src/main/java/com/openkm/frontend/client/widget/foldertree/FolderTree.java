@@ -984,7 +984,7 @@ public class FolderTree extends Composite implements OriginPanel {
 		String path = ((GWTFolder) actualItem.getUserObject()).getPath();
 		getChilds(path);
 
-		// Case not resets always musy show tabfolder properties
+		// Case not resets always must show tabfolder properties
 		if (!reset) {
 			// Case exists a selected row must mantain other case mus show
 			// folder properties on tab
@@ -1301,6 +1301,14 @@ public class FolderTree extends Composite implements OriginPanel {
 		} else {
 			removeStyleName("okm-PanelSelected");
 		}
+	}
+	
+	/**
+	 * Used only on changing stack
+	 */
+	public void forceSetSelectedPanel() {
+		panelSelected = false;
+		setSelectedPanel(true);
 	}
 
 	/**

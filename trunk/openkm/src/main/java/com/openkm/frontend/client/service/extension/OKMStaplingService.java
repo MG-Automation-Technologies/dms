@@ -25,15 +25,16 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.openkm.frontend.client.OKMException;
-import com.openkm.frontend.client.bean.extension.GWTStaplingGroup;
+import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 
 /**
  * @author jllort
  *
  */
 public interface OKMStaplingService extends RemoteService {
-	public String create(String username, String uuid, String uuid2) throws OKMException;
-	public void add(String id, String uuid) throws OKMException;
+	public String create(String username, String uuid, String type, String uuid2, String type2) throws OKMException;
+	public void add(String id, String uuid, String type) throws OKMException;
 	public void remove(String id) throws OKMException;
-	public List<GWTStaplingGroup> getAll(String uuid) throws OKMException;
+	public void removeStaple(String id) throws OKMException;
+	public List<GWTStapleGroup> getAll(String uuid) throws OKMException;
 }

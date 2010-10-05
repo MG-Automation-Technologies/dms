@@ -1554,6 +1554,8 @@ public class FileBrowser extends Composite implements OriginPanel {
 		if (selected){
 			switch (actualView) {
 				case PanelDefinition.NAVIGATOR_TAXONOMY:
+				case PanelDefinition.NAVIGATOR_CATEGORIES:
+				case PanelDefinition.NAVIGATOR_THESAURUS:
 				case PanelDefinition.NAVIGATOR_TEMPLATES:
 				case PanelDefinition.NAVIGATOR_PERSONAL:
 				case PanelDefinition.NAVIGATOR_MAIL:
