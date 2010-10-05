@@ -32,11 +32,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author jllort
  *
  */
-public class GWTStaplingGroup implements IsSerializable {
+public class GWTStapleGroup implements IsSerializable {
 	
 	private int id;
 	private String username;
-	private List<GWTStapling> staplingList = new ArrayList<GWTStapling>();
+	private List<GWTStaple> staples = new ArrayList<GWTStaple>();
 
 	public int getId() {
 		return id;
@@ -54,11 +54,11 @@ public class GWTStaplingGroup implements IsSerializable {
 		this.username = username;
 	}
 	
-	public List<GWTStapling> getStaplingList() {
-		return staplingList;
+	public List<GWTStaple> getStaples() {
+		return staples;
 	}
 
-	public void setStaplingList(List<GWTStapling> staplingList) {
-		this.staplingList = staplingList;
+	public void setStaples(List<GWTStaple> staples) {
+		this.staples = staples;
 	}
 }
