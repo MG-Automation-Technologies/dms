@@ -25,13 +25,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class StaplingGroup implements Serializable {
+public class StapleGroup implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private int id = -1;
 	private String username = "";
-	private Set<Stapling> staplings = new HashSet<Stapling>();
+	private Set<Staple> staples = new HashSet<Staple>();
 	
 	public String getUsername() {
 		return username;
@@ -41,12 +41,12 @@ public class StaplingGroup implements Serializable {
 		this.username = username;
 	}
 
-	public Set<Stapling> getStaplings() {
-		return staplings;
+	public Set<Staple> getStaples() {
+		return staples;
 	}
 
-	public void setStaplings(Set<Stapling> staplings) {
-		this.staplings = staplings;
+	public void setStaples(Set<Staple> staples) {
+		this.staples = staples;
 	}
 
 	public int getId() {
@@ -70,7 +70,7 @@ public class StaplingGroup implements Serializable {
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", username="); sb.append(username);
-		sb.append(", staplings="); sb.append(staplings);
+		sb.append(", staples="); sb.append(staples);
 		sb.append("}");
 		return sb.toString();
 	}

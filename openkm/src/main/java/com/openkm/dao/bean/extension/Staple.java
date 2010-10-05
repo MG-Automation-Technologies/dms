@@ -23,12 +23,17 @@ package com.openkm.dao.bean.extension;
 
 import java.io.Serializable;
 
-public class Stapling implements Serializable {
+public class Staple implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	public static final String STAPLE_DOCUMENT	= "okm:document";
+	public static final String STAPLE_FOLDER 	= "okm:folder";
+	public static final String STAPLE_MAIL 		= "okm:mail";
+	
 	private int id;
 	private String uuid;
+	private String type;
 
 	public int getId() {
 		return id;
@@ -46,11 +51,20 @@ public class Stapling implements Serializable {
 		this.uuid = uuid;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", uuid="); sb.append(uuid);
+		sb.append(", type="); sb.append(type);
 		sb.append("}");
 		return sb.toString();
 	}
