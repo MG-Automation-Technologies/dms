@@ -24,15 +24,16 @@ package com.openkm.frontend.client.service.extension;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.openkm.frontend.client.bean.extension.GWTStaplingGroup;
+import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 
 /**
  * @author jllort
  *
  */
 public interface OKMStaplingServiceAsync {
-	public void create(String username, String uuid, String uuid2, AsyncCallback<String> callback);
-	public void add(String id, String uuid, AsyncCallback<?> callback);
+	public void create(String username, String uuid, String type, String uuid2, String type2, AsyncCallback<String> callback);
+	public void add(String id, String uuid, String type, AsyncCallback<?> callback);
 	public void remove(String id, AsyncCallback<?> callback);
-	public void getAll(String uuid, AsyncCallback<List<GWTStaplingGroup>> callback);
+	public void removeStaple(String id, AsyncCallback<?> callback);
+	public void getAll(String uuid, AsyncCallback<List<GWTStapleGroup>> callback);
 }
