@@ -298,7 +298,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		activeFolderTree = mainPanel.desktop.navigator.taxonomyTree;
 		
 		// Start extensions
-		ExtensionManager.start(Customization.getExtensionWidgets());
+		//ExtensionManager.start(Customization.getExtensionWidgets());
 		
 		// Initialize on startup when all objects are created sequentially
 		startUpPopup.show();
