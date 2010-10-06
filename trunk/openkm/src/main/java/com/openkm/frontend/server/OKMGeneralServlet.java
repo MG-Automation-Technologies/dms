@@ -99,7 +99,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 	@Override
 	public List<String> getEnabledExtensions() {
 		List<String> extensions = new ArrayList<String>();
-
+		
 		//extensions.add("9f84b330-d096-11df-bd3b-0800200c9a66"); // ToolBarButtonExample
 		//extensions.add("44f94470-d097-11df-bd3b-0800200c9a66"); // TabWorkspaceExample		
 		//extensions.add("d95e01a0-d097-11df-bd3b-0800200c9a66"); // TabFolderExample
