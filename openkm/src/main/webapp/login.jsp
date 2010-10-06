@@ -109,7 +109,7 @@
   
   <% if (Config.SYSTEM_MAINTENANCE) { %>
     <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
-      <tr><td class="demo_alert">System Under Maintenance</td></tr>
+      <tr><td class="demo_alert">System under maintenance</td></tr>
       <tr><td class="demo_title">User login not allowed</td></tr>
     </table>
   <% } %>
