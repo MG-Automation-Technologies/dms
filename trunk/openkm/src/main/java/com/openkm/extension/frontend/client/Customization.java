@@ -25,11 +25,6 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
-import com.openkm.extension.frontend.client.widget.stapling.Stapling;
-import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
-import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
-
 /**
  * Customization
  * 
