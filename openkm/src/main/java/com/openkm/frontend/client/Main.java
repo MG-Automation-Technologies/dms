@@ -36,9 +36,11 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.openkm.extension.frontend.client.Customization;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
+import com.openkm.frontend.client.extension.ExtensionManager;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
@@ -296,7 +298,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		activeFolderTree = mainPanel.desktop.navigator.taxonomyTree;
 		
 		// Start extensions
-		//ExtensionManager.start(Customization.getExtensionWidgets());
+		ExtensionManager.start(Customization.getExtensionWidgets());
 		
 		// Initialize on startup when all objects are created sequentially
 		startUpPopup.show();

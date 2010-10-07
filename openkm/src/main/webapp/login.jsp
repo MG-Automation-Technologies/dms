@@ -52,7 +52,6 @@
     langs.put("Swedish", Lang.LANG_sv_SE);
     langs.put("Thai", Lang.LANG_th_TH);
     langs.put("Turkish", Lang.LANG_tr_TR);
-    langs.put("Vietnamese", Lang.LANG_zh_VN);
     Locale locale = request.getLocale();
     Cookie[] cookies = request.getCookies();
     String preset = null;
@@ -106,13 +105,6 @@
       </form>
     </div>
   </div>
-  
-  <% if (Config.SYSTEM_MAINTENANCE) { %>
-    <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
-      <tr><td class="demo_alert">System under maintenance</td></tr>
-      <tr><td class="demo_title">User login not allowed</td></tr>
-    </table>
-  <% } %>
 
   <% if (Config.SYSTEM_DEMO) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>

@@ -140,14 +140,5 @@ public class GeneralComunicator {
 	public static List<String> getUserRoleList() {
 		return Main.get().workspaceUserProperties.getWorkspace().getRoleList();
 	}
-	
-	/**
-	 * getUser
-	 * 
-	 * @return
-	 */
-	public static String getUser() {
-		return Main.get().workspaceUserProperties.getUser();
-	}
 
 }

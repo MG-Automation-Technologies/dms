@@ -1,16 +1,12 @@
 package com.openkm.api;
 
-import java.io.File;
-
 import junit.framework.TestCase;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.openkm.core.Config;
-
 public class AuthTest extends TestCase {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(AuthTest.class);
 
 	public AuthTest(String name) {
@@ -18,10 +14,10 @@ public class AuthTest extends TestCase {
 	}
 
 	public static void main(String[] args) throws Exception {
-		AuthTest test = new AuthTest("main");
-		test.setUp();
+		//AuthTest test = new AuthTest("main");
+		//test.setUp();
 		//test.testLogin();
-		test.tearDown();
+		//test.tearDown();
 	}
 
 	@Override

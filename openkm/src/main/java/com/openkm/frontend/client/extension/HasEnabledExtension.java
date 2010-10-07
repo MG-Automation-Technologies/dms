@@ -27,7 +27,7 @@ package com.openkm.frontend.client.extension;
  * @author jllort
  *
  */
-public interface HasEnabledExtension extends HasExtension {
+public interface HasEnabledExtension {
 	
 	public abstract boolean isEnabled();
 	
