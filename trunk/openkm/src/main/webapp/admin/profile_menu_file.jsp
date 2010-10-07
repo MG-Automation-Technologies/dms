@@ -10,7 +10,7 @@
             <input name="prf_menu_file_create_folder_visible" type="checkbox" checked="checked"/>
           </c:when>
           <c:otherwise>
-            <input name="prf_menu_file_folder_visible" type="checkbox"/>
+            <input name="prf_menu_file_create_folder_visible" type="checkbox"/>
           </c:otherwise>
         </c:choose>
       </td>
