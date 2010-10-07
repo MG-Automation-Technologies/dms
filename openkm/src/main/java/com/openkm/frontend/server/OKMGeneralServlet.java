@@ -22,8 +22,6 @@
 package com.openkm.frontend.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,17 +92,5 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		
 		log.debug("testImapConnection: {}", test);
 		return test;
-	}
-	
-	@Override
-	public List<String> getEnabledExtensions() {
-		List<String> extensions = new ArrayList<String>();
-		
-		//extensions.add("9f84b330-d096-11df-bd3b-0800200c9a66"); // ToolBarButtonExample
-		//extensions.add("44f94470-d097-11df-bd3b-0800200c9a66"); // TabWorkspaceExample		
-		//extensions.add("d95e01a0-d097-11df-bd3b-0800200c9a66"); // TabFolderExample
-		//extensions.add("d9dab640-d098-11df-bd3b-0800200c9a66"); // HelloWorld
-		
-		return extensions;
 	}
 }

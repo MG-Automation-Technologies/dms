@@ -131,11 +131,11 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 						if (importZip && FilenameUtils.getExtension(fileName).equalsIgnoreCase("zip")) {
 							log.info("Import zip file '{}' into '{}'", fileName, path);
 							String erroMsg = importZip(path, is);
+							log.warn("erroMsg: {}", erroMsg);
 							
 							if (erroMsg == null) {
 								out.print(returnOKMessage);
 							} else {
-								log.warn("erroMsg: {}", erroMsg);
 								out.print(erroMsg);
 							}
 						} else {
@@ -246,7 +246,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
         java.io.File tmpIn = null;
         java.io.File tmpOut = null;
         String errorMsg = null;
-       	
+       						
 		try {
 			// Create temporal
 			tmpIn = File.createTempFile("okm", ".zip");
@@ -261,7 +261,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(tmpOut, path, false, out, new TextInfoDecorator(tmpOut));
+			ImpExpStats stats = RepositoryImporter.importDocuments(tmpOut, path, out, new TextInfoDecorator(tmpOut));
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}

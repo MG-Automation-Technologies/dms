@@ -38,40 +38,23 @@ public class Customization {
 	 * 
 	 * @return
 	 */
-	public static List<Object> getExtensionWidgets(List<String> uuidList) {
+	public static List<Object> getExtensionWidgets() {
 		List<Object> extensions = new ArrayList<Object>();
 		
 		// add here your widget extensions
-//		if (uuidList.contains("d9dab640-d098-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new HelloWorld());
-//		} 
-//		if (uuidList.contains("9f84b330-d096-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new ToolBarButtonExample().getButton());
-//		} 
-//		if (uuidList.contains("d95e01a0-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabFolderExample());
-//		} 
-//		if (uuidList.contains("44f94470-d097-11df-bd3b-0800200c9a66")) {
-//			extensions.add(new TabWorkspaceExample());
-//		}
-		
+//		extensions.add(new HelloWorld());
+//		extensions.add(new ToolBarButtonExample().getButton());
+//		extensions.add(new TabFolderExample());
+//		extensions.add(new TabWorkspaceExample());
 //		extensions.add(new MainMenuExample().getNewMenu());
 //		extensions.add(new HandlersTest());
 //		extensions.add(new ToolBarBoxExample().getToolBarBox());
 		
-		// OPENKM PROPIETARY EXTENSIONS		
-/*		if (DownloadButton.isRegistered(uuidList)) {
-			extensions.add(new DownloadButton(uuidList).getButton());
-		}
-		if (DownloadPdfButton.isRegistered(uuidList)) { 
-			extensions.add(new DownloadPdfButton(uuidList).getButton());
-		}
-		if (Stapling.isRegistered(uuidList)) {
-			extensions.addAll(new Stapling(uuidList).getExtensions());
-		}
-		if (MetromUsa.isRegistered(uuidList)) {
-			extensions.addAll(new MetromUsa(uuidList).getExtensions());
-		} */
+// 	    OPENKM PROPIETARY EXTENSIONS		
+//		extensions.add(new DownloadButton().getButton());
+//		extensions.add(new DownloadPdfButton().getButton());
+//		extensions.addAll(new Stapling().getExtensions());
+//		extensions.addAll(new MetromUsa().getExtensions());
 		
 		return extensions;
 	}

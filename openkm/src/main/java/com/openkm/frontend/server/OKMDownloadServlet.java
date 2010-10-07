@@ -28,8 +28,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 
+import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,7 +56,6 @@ import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.util.DocConverter;
 import com.openkm.util.FileUtils;
-import com.openkm.util.WebUtil;
 import com.openkm.util.impexp.RepositoryExporter;
 import com.openkm.util.impexp.TextInfoDecorator;
 
@@ -124,7 +126,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			// Send document
 			if (export) {
 				String fileName = FileUtils.getName(path)+".zip";
-				WebUtil.sendFile(request, response, fileName, "application/zip", inline, is);
+				sendFile(request, response, fileName, "application/zip", inline, is);
 				is.close();
 				tmp.delete();
 			} else if (doc != null) {
@@ -177,7 +179,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 					fileName = FileUtils.getFileName(fileName)+".swf";
 				}
 				
-				WebUtil.sendFile(request, response, fileName, doc.getMimeType(), inline, is);
+				sendFile(request, response, fileName, doc.getMimeType(), inline, is);
 				is.close();
 			}
 		} catch (PathNotFoundException e) {
@@ -203,6 +205,49 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 	}
 	
 	/**
+	 * Send file to client browser
+	 * @throws IOException If there is a communication error.
+	 */
+	private void sendFile(HttpServletRequest req, HttpServletResponse resp, 
+			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[] {req, resp, fileName, mimeType, inline, is});
+		String agent = req.getHeader("USER-AGENT");
+		
+		// Disable browser cache
+		resp.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
+		resp.setHeader("Cache-Control", "max-age=0, must-revalidate");
+		resp.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		
+		// Set MIME type
+		resp.setContentType(mimeType);
+		
+		if (null != agent && -1 != agent.indexOf("MSIE")) {
+			log.debug("Agent: Explorer");
+			fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+		} else if (null != agent && -1 != agent.indexOf("Mozilla"))	{
+			log.debug("Agent: Mozilla");
+			fileName = MimeUtility.encodeText(fileName, "UTF-8", "B");
+		} else {
+			log.debug("Agent: Unknown");
+		}
+		
+		if (inline) {
+			resp.setHeader("Content-disposition", "inline; filename=\""+fileName+"\"");
+		} else {
+			resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
+		}
+
+		// Set length
+		resp.setContentLength(is.available());
+		log.debug("File: {}, Length: {}", fileName, is.available());
+		
+		ServletOutputStream sos = resp.getOutputStream();
+		IOUtils.copy(is, sos);
+		sos.flush();
+		sos.close();
+	}
+	
+	/**
 	 * Generate a zip file from a repository folder path   
 	 */
 	private void exportZip(String path, OutputStream os) throws PathNotFoundException, AccessDeniedException,
@@ -216,7 +261,7 @@ public class OKMDownloadServlet extends OKMHttpServlet {
 			
 			// Export files
 			StringWriter out = new StringWriter();
-			RepositoryExporter.exportDocuments(path, tmp, false, out, new TextInfoDecorator(path));
+			RepositoryExporter.exportDocuments(path, tmp, out, new TextInfoDecorator(path));
 			out.close();
 			
 			// Zip files

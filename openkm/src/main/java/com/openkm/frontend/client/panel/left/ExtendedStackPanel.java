@@ -100,7 +100,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TAXONOMY);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TAXONOMY,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
@@ -111,7 +110,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TRASH);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TRASH,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(false);
@@ -122,7 +120,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_CATEGORIES);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_CATEGORIES,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
@@ -133,7 +130,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_THESAURUS);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_THESAURUS,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtonsOnlyDocuments();
@@ -144,7 +140,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_TEMPLATES);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_TEMPLATES,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
@@ -155,7 +150,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_PERSONAL);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_PERSONAL,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);
@@ -166,7 +160,6 @@ public class ExtendedStackPanel extends StackPanel implements HasNavigatorEvent,
 					Main.get().mainPanel.desktop.browser.fileBrowser.changeView(PanelDefinition.NAVIGATOR_MAIL);
 					Main.get().mainPanel.topPanel.toolBar.changeView(PanelDefinition.NAVIGATOR_MAIL,ExtendedDockPanel.DESKTOP);
 					if (refresh) {
-						Main.get().activeFolderTree.forceSetSelectedPanel();
 						Main.get().activeFolderTree.refresh(true); // When opening a path document must not refreshing
 					}
 					Main.get().mainPanel.desktop.browser.tabMultiple.setVisibleButtons(true);

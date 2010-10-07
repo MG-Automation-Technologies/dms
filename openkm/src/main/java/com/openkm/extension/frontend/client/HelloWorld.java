@@ -101,10 +101,5 @@ public class HelloWorld extends TabDocumentExtension implements DocumentHandlerE
 			Window.alert("language changed");
 		} 
 	}
-
-	@Override
-	public String getExtensionUUID() {
-		return String.valueOf("d9dab640-d098-11df-bd3b-0800200c9a66");
-	}
 }
 

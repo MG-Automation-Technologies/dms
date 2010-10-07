@@ -31,7 +31,7 @@ import com.openkm.frontend.client.bean.GWTMail;
  * @author jllort
  *
  */
-public interface HasPermissionsExtension extends HasExtension {
+public interface HasPermissionsExtension {
 	
 	public abstract void checkPermissions(GWTFolder folder, GWTFolder folderParent, int originPanel);
 	

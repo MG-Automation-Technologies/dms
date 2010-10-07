@@ -71,9 +71,4 @@ public class TabFolderExample extends TabFolderExtension implements FolderHandle
 			Window.alert("tab changed - " + event.getType());
 		}
 	}
-
-	@Override
-	public String getExtensionUUID() {
-		return String.valueOf("d95e01a0-d097-11df-bd3b-0800200c9a66");
-	}
 }

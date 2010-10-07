@@ -221,12 +221,12 @@ public class SearchIn extends Composite {
 				switch (calendarFired) {
 					case CALENDAR_FIRED_START:
 						startDate.setText(dtf.format(calendar.getDate()));
-						modifyDateFrom = (Date)calendar.getDate().clone();
+						modifyDateFrom = calendar.getDate();
 						break;
 					
 					case CALENDAR_FIRED_END:
 						endDate.setText(dtf.format(calendar.getDate()));
-						modifyDateTo = (Date)calendar.getDate().clone();
+						modifyDateTo = calendar.getDate();
 						break;
 				}
 				calendarFired = CALENDAR_FIRED_NONE;
