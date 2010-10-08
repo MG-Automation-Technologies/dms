@@ -60,7 +60,6 @@ import com.openkm.core.DatabaseException;
 import com.openkm.dao.HibernateUtil;
 import com.openkm.dao.ReportDAO;
 import com.openkm.dao.bean.Report;
-import com.openkm.util.DocConverter;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.ReportUtil;
 import com.openkm.util.UserActivity;
@@ -242,6 +241,7 @@ public class ReportServlet extends BaseServlet {
 		}
 		
 		sc.setAttribute("reports", list);
+		sc.setAttribute("ReportUtil", new ReportUtil());
 		sc.getRequestDispatcher("/admin/report_list.jsp").forward(request, response);
 		log.debug("list: void");
 	}
@@ -253,6 +253,7 @@ public class ReportServlet extends BaseServlet {
 			IOException, DatabaseException, JRException, EvalError {
 		log.debug("execute({}, {}, {})", new Object[] { session, request, response });
 		int rpId = WebUtil.getInt(request, "rp_id");
+		int out = WebUtil.getInt(request, "out",  ReportUtil.PDF_OUTPUT);
 		Report rp = ReportDAO.findByPk(rpId);
 		String agent = request.getHeader("USER-AGENT");
 		
@@ -263,8 +264,8 @@ public class ReportServlet extends BaseServlet {
 		response.setHeader("Pragma", "no-cache");
 		
 		// Set MIME type
-		response.setContentType(DocConverter.PDF);
-		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ".pdf"; 
+		response.setContentType(ReportUtil.FILE_MIME[out]);
+		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtil.FILE_EXTENSION[out]; 
 		
 		if (null != agent && -1 != agent.indexOf("MSIE")) {
 			log.debug("Agent: Explorer");
@@ -295,9 +296,9 @@ public class ReportServlet extends BaseServlet {
 			
 			if (Report.SQL.equals(rp.getType())) {
 				dbSession = HibernateUtil.getSessionFactory().openSession();
-				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT, dbSession.connection());
+				ReportUtil.generateReport(baos, bais, parameters, out, dbSession.connection());
 			} else if (Report.SCRIPT.equals(rp.getType())) {
-				ReportUtil.generateReport(baos, bais, parameters, ReportUtil.PDF_OUTPUT);
+				ReportUtil.generateReport(baos, bais, parameters, out);
 			}
 			
 			// Send back to browser
