@@ -43,6 +43,8 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
+import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,16 +67,20 @@ public class ReportUtil {
 	public static final int HTML_OUTPUT = 1;
 	public static final int PDF_OUTPUT = 2;
 	public static final int RTF_OUTPUT = 3;
-	public static final int CSV_OUTPUT = 4;	
+	public static final int CSV_OUTPUT = 4;
+	public static final int ODT_OUTPUT = 5;
+	public static final int DOCX_OUTPUT = 6;
 	
 	public static final String TEXT_MIME = "text/plain"; 
 	public static final String HTML_MIME = "text/html";
 	public static final String PDF_MIME = "application/pdf";
 	public static final String RTF_MIME = "application/rtf";
 	public static final String CSV_MIME = "text/csv";
+	public static final String ODT_MIME = "application/vnd.oasis.opendocument.text";
+	public static final String DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 	
-	public static final String[] FILE_MIME = { TEXT_MIME, HTML_MIME, PDF_MIME, RTF_MIME, CSV_MIME};
-	public static final String[] FILE_EXTENSION = { ".txt", ".html", ".pdf", ".rtf", ".csv"};
+	public static final String[] FILE_MIME = { TEXT_MIME, HTML_MIME, PDF_MIME, RTF_MIME, CSV_MIME, ODT_MIME, DOCX_MIME };
+	public static final String[] FILE_EXTENSION = { ".txt", ".html", ".pdf", ".rtf", ".csv", ".odt", ".docx" };
 
 	/**
 	 * Generates a report based on a map collection (from file)
@@ -211,6 +217,7 @@ public class ReportUtil {
 			
 		case RTF_OUTPUT:
 			JRRtfExporter rtfExp = new JRRtfExporter();
+			rtfExp.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
 			rtfExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			rtfExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			rtfExp.exportReport();
@@ -222,6 +229,20 @@ public class ReportUtil {
 			csvExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
 			csvExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
 			csvExp.exportReport();
+			break;
+			
+		case ODT_OUTPUT:
+			JROdtExporter odtExp = new JROdtExporter();
+			odtExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			odtExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+			odtExp.exportReport();
+			break;
+			
+		case DOCX_OUTPUT:
+			JRDocxExporter docxExp = new JRDocxExporter();
+			docxExp.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			docxExp.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+			docxExp.exportReport();
 			break;
 		}
 	}
