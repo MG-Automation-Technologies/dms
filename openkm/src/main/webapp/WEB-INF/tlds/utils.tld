@@ -60,4 +60,24 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+  <tag>
+    <name>constantsMap</name>
+    <tag-class>com.openkm.util.tags.ConstantsMapTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+        <name>className</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
 </taglib>
