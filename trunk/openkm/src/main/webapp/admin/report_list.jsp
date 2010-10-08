@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.openkm.core.Config" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.openkm.com/tags/utils" prefix="u" %>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,13 +13,14 @@
 </head>
 <body>
   <c:set var="isAdmin"><%=request.isUserInRole(Config.DEFAULT_ADMIN_ROLE)%></c:set>
+  <u:constantsMap className="com.openkm.util.ReportUtil" var="ReportUtil"/>
   <c:choose>
     <c:when test="${isAdmin}">
       <h1>Reports</h1>
       <table class="results" width="70%">
         <tr>
           <th>Name</th><th>Type</th><th>File Name</th><th>Active</th>
-          <th width="75px">
+          <th width="130px">
             <c:url value="Report" var="urlCreate">
               <c:param name="action" value="create"/>
             </c:url>
@@ -34,9 +36,20 @@
             <c:param name="action" value="delete"/>
             <c:param name="rp_id" value="${rp.id}"/>
           </c:url>
-          <c:url value="Report" var="urlExecute">
+          <c:url value="Report" var="urlExecutePdf">
             <c:param name="action" value="execute"/>
             <c:param name="rp_id" value="${rp.id}"/>
+            <c:param name="out" value="${ReportUtil.PDF_OUTPUT}"/>
+          </c:url>
+          <c:url value="Report" var="urlExecuteRtf">
+            <c:param name="action" value="execute"/>
+            <c:param name="rp_id" value="${rp.id}"/>
+            <c:param name="out" value="${ReportUtil.RTF_OUTPUT}"/>
+          </c:url>
+          <c:url value="Report" var="urlExecuteCsv">
+            <c:param name="action" value="execute"/>
+            <c:param name="rp_id" value="${rp.id}"/>
+            <c:param name="out" value="${ReportUtil.CSV_OUTPUT}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
             <td>${rp.name}</td><td>${rp.type}</td><td>${rp.fileName}</td>
@@ -55,7 +68,11 @@
               &nbsp;
               <a href="${urlDelete}"><img src="img/action/delete.png" alt="Delete" title="Delete"/></a>
               &nbsp;
-              <a href="${urlExecute}"><img src="img/action/signal.png" alt="Execute" title="Execute"/></a>
+              <a href="${urlExecutePdf}"><img src="img/action/pdf.png" alt="Generate PDF" title="Generate PDF"/></a>
+              &nbsp;
+              <a href="${urlExecuteRtf}"><img src="img/action/rtf.png" alt="Generate RTF" title="Generate RTF"/></a>
+              &nbsp;
+              <a href="${urlExecuteCsv}"><img src="img/action/csv.png" alt="Generate CSV" title="Generate CSV"/></a>
             </td>
           </tr>
         </c:forEach>
