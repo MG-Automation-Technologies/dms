@@ -88,6 +88,10 @@ public class DirectAuthModule implements AuthModule {
 				Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
 				token = UUIDGenerator.generate(this);
 				JcrSessionManager.getInstance().add(token, session);
+				
+				// Activity log
+				UserActivity.log(session.getUserID(), "LOGIN", null, token);
+								
 				return token;
 			}
 		} catch (LoginException e) {
@@ -112,7 +116,7 @@ public class DirectAuthModule implements AuthModule {
 			
 			if (session != null) {
 				// Activity log
-				UserActivity.log(session.getUserID(), "LOGOUT", null, null);
+				UserActivity.log(session.getUserID(), "LOGOUT", token, null);
 				
 				JcrSessionManager.getInstance().remove(token);
 				session.logout();
