@@ -85,6 +85,10 @@ public class DirectAuthModule implements AuthModule {
 			Session session = r.login(new SimpleCredentials(user, password.toCharArray()), null);
 			token = UUIDGenerator.generate(this);
 			JcrSessionManager.getInstance().add(token, session);
+			
+			// Activity log
+			UserActivity.log(session.getUserID(), "LOGIN", null, token);
+			
 			return token;
 		} catch (LoginException e) {
 			log.error(e.getMessage(), e);
