@@ -61,6 +61,7 @@ function selectAllOptions(selStr) {
 	for (var i=0; i<sel.options.length; i++) {
 		sel.options[i].selected = true;
 	}
+}
 
 /**
  * window.scroll(0, document.height);
