@@ -56,6 +56,7 @@ import com.openkm.dao.HibernateUtil;
 import com.openkm.kea.RDFREpository;
 import com.openkm.module.direct.DirectRepositoryModule;
 import com.openkm.util.DocConverter;
+import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 import com.openkm.util.cl.ClassLoaderUtils;
 import com.openkm.util.cl.JarClassLoader;
@@ -194,7 +195,7 @@ public class RepositoryStartupServlet extends HttpServlet {
         try {
         	log.info("*** Start OpenOffice manager ***");
         	DocConverter.getInstance().start();
-        } catch (Exception e) {
+        } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
         
@@ -202,18 +203,25 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.info("*** Ejecute start script ***");
         	runScript(Config.START_SCRIPT);
         	runJar(Config.START_JAR);
-        } catch (Exception e) {
+        } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        // Activity log
+		UserActivity.log(Config.SYSTEM_USER, "OPENKM_START", null, null);
     }
 
 	@Override
     public void destroy() {
         super.destroy();
 
-        if (log == null) log("*** Shutting down OpenOffice manager ***");
-        else log.info("*** Shutting down OpenOffice manager ***");
-        DocConverter.getInstance().stop();
+        try {
+        	if (log == null) log("*** Shutting down OpenOffice manager ***");
+        	else log.info("*** Shutting down OpenOffice manager ***");
+        	DocConverter.getInstance().stop();
+        } catch (Throwable e) {
+        	log.warn(e.getMessage(), e);
+        }
         
         if (hasConfiguredDataStore) {
         	if (log == null) log("*** Shutting down datastore garbage collection... ***");
@@ -259,8 +267,12 @@ public class RepositoryStartupServlet extends HttpServlet {
         	log.warn(e.getMessage(), e);
         }
         
-        // Preserve system user config
-        DirectRepositoryModule.shutdown();
+        try {
+        	// Preserve system user config
+        	DirectRepositoryModule.shutdown();
+        } catch (Exception e) {
+        	log.error(e.getMessage(), e);
+        }
         
         if (log == null) log("*** Repository shutted down ***");
         else log.info("*** Repository shutted down ***");
@@ -270,9 +282,12 @@ public class RepositoryStartupServlet extends HttpServlet {
         	else log.info("*** Ejecute stop script ***");
         	runScript(Config.STOP_SCRIPT);
         	runJar(Config.STOP_JAR);
-        } catch (Exception e) {
+        } catch (Throwable e) {
         	log.warn(e.getMessage(), e);
         }
+        
+        // Activity log
+		UserActivity.log(Config.SYSTEM_USER, "OPENKM_STOP", null, null);
     }
     
     /**
