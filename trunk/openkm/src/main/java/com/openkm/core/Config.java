@@ -540,6 +540,11 @@ public class Config {
 			SYSTEM_PREVIEWER = config.getProperty(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
 			values.put(PROPERTY_SYSTEM_PREVIEWER, SYSTEM_PREVIEWER);
 			
+			// Modify default admin user if login lowercase is active
+			if (SYSTEM_LOGIN_LOWERCASE) {
+				ADMIN_USER = ADMIN_USER.toLowerCase();
+			}
+			
 			UPDATE_INFO_STR = config.getProperty(PROPERTY_UPDATE_INFO, UPDATE_INFO_STR);
 			UPDATE_INFO = "on".equalsIgnoreCase(UPDATE_INFO_STR);
 			values.put(PROPERTY_UPDATE_INFO, UPDATE_INFO_STR+" ("+UPDATE_INFO+")");
