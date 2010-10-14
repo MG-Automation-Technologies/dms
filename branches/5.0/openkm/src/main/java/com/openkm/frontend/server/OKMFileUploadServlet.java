@@ -37,6 +37,8 @@ import com.openkm.core.JcrSessionManager;
 import com.openkm.core.PathNotFoundException;
 import com.openkm.core.RepositoryException;
 import com.openkm.core.UnsupportedMimeTypeException;
+import com.openkm.core.VersionException;
+import com.openkm.core.VirusDetectedException;
 import com.openkm.frontend.client.config.ErrorCode;
 import com.openkm.frontend.client.widget.upload.FancyFileUpload;
 import com.openkm.util.FileUtils;
@@ -212,6 +214,12 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 		} catch (FileSizeExceededException e) {
 			log.warn(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_FileSizeExceeded));
+		} catch (VirusDetectedException e) {
+			log.warn(e.getMessage(), e);
+			out.print(VirusDetectedException.class.getSimpleName() + " : "+ e.getMessage());
+		} catch (VersionException e) {
+			log.warn(e.getMessage(), e);
+			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Version));
 		} catch (RepositoryException e) {
 			log.error(e.getMessage(), e);
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_Repository));
@@ -223,7 +231,7 @@ public class OKMFileUploadServlet extends OKMHttpServlet {
 			out.print(ErrorCode.get(ErrorCode.ORIGIN_OKMUploadService, ErrorCode.CAUSE_IOException));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			out.print("Exception: "+e.toString());
+			out.print(e.toString());
 		} finally {
 			IOUtils.closeQuietly(is);
 			out.flush();
