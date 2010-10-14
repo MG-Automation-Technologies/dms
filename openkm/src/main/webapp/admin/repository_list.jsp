@@ -41,6 +41,13 @@
               </c:url>
               - <a href="${urlUnlock}">Unlock</a>
             </c:if>
+            <c:if test="${isDocumentContent && node.checkedOut}">
+              <c:url value="RepositoryView" var="urlCheckin">
+                <c:param name="path" value="${node.path}"/>
+                <c:param name="action" value="checkin"/>
+              </c:url>
+              - <a href="${urlCheckin}">Checkin</a>
+            </c:if>
             <c:if test="${isFolder}">
               <c:choose>
                 <c:when test="${contentInfo != null}">
@@ -137,9 +144,9 @@
             <c:param name="path" value="${child.path}"/>
           </c:url>
           <tr class="${row.index % 2 == 0 ? 'even' : 'odd'}">
-            <td>${fn:toUpperCase(child.primaryNodeType.name)}</td>
-            <td><c:if test="${child.locked}"><img src="img/true.png"/></c:if></td>
-            <td><c:if test="${isDocumentContent && child.checkedOut}"><img src="img/true.png"/></c:if></td>
+            <td>${fn:toUpperCase(child.primaryNodeType)}</td>
+            <td align="center"><c:if test="${child.locked}"><img src="img/true.png"/></c:if></td>
+            <td align="center"><c:if test="${child.checkedOut}"><img src="img/true.png"/></c:if></td>
             <td><a href="${urlList}">${child.name}</a></td>
           </tr>
         </c:forEach>
