@@ -26,10 +26,12 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.jcr.LoginException;
@@ -43,7 +45,6 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -143,12 +144,11 @@ public class RepositoryViewServlet extends BaseServlet {
 			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
 		log.debug("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
-		Lock lock = node.getLock();
+		String lt = JCRUtils.getLockToken(node.getUUID());
 		
-		if (lock.getLockOwner().equals(session.getUserID())) {
+		if (Arrays.asList(session.getLockTokens()).contains(lt)) {
 			node.unlock();
 		} else {
-			String lt = JCRUtils.getLockToken(node.getUUID());
 			session.addLockToken(lt);
 			node.unlock();
 			session.removeLockToken(lt);
@@ -372,12 +372,31 @@ public class RepositoryViewServlet extends BaseServlet {
 	/**
 	 * Get children from node
 	 */
-	private Collection<Node> getChildren(Node node) throws RepositoryException {
-		ArrayList<Node> al = new ArrayList<Node>();
-
+	private Collection<Map<String, Object>> getChildren(Node node) throws RepositoryException {
+		ArrayList<Map<String, Object>> al = new ArrayList<Map<String, Object>>();
+		Map<String, Object> hm = new HashMap<String, Object>();
+		
 		for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
 			Node child = ni.nextNode();
-			al.add(child);
+			hm = new HashMap<String, Object>();
+			
+			if (child.isNodeType(Document.TYPE)) {
+				Node contentNode = child.getNode(Document.CONTENT);
+				contentNode.isCheckedOut();
+				hm.put("checkedOut", contentNode.isCheckedOut());
+			} else if (child.isNodeType(Document.CONTENT_TYPE)) {
+				hm.put("checkedOut", child.isCheckedOut());
+			}
+						
+			hm.put("name", child.getName());
+			hm.put("path", child.getPath());
+			hm.put("locked", child.isLocked());
+			hm.put("locked", child.isLocked());
+			hm.put("primaryNodeType", child.getPrimaryNodeType().getName());
+			hm.put("isFolder", child.isNodeType(Folder.TYPE));
+			hm.put("isDocument", child.isNodeType(Document.TYPE));
+			hm.put("isDocumentContent", child.isNodeType(Document.CONTENT_TYPE));
+			al.add(hm);
 		}
 		
 		Collections.sort(al, new ChildCmp());
@@ -387,14 +406,10 @@ public class RepositoryViewServlet extends BaseServlet {
 	/**
 	 * Make child node comparable
 	 */
-	protected class ChildCmp implements Comparator<Node> {
+	protected class ChildCmp implements Comparator<Map<String, Object>> {
 		@Override
-		public int compare(Node arg0, Node arg1) {
-			try {
-				return arg0.getName().compareTo(arg1.getName());
-			} catch (RepositoryException e) {
-				return 0;
-			}
+		public int compare(Map<String, Object> arg0, Map<String, Object> arg1) {
+			return ((String) arg0.get("name")).compareTo((String) arg1.get("name"));
 		}
 	}
 	
