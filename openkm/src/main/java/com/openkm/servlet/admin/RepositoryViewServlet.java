@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +44,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
+import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -65,6 +65,7 @@ import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.PathNotFoundException;
+import com.openkm.dao.LockTokenDAO;
 import com.openkm.util.FormatUtil;
 import com.openkm.util.JCRUtils;
 import com.openkm.util.UserActivity;
@@ -141,17 +142,21 @@ public class RepositoryViewServlet extends BaseServlet {
 	 * Unlock node
 	 */
 	private void unlock(Session session, String path, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException {
+			throws ServletException, IOException, javax.jcr.PathNotFoundException, RepositoryException,
+			DatabaseException {
 		log.debug("unlock({}, {}, {}, {})", new Object[] { session, path, request, response });
 		Node node = session.getRootNode().getNode(path.substring(1));
-		String lt = JCRUtils.getLockToken(node.getUUID());
+		Lock lock = node.getLock();
 		
-		if (Arrays.asList(session.getLockTokens()).contains(lt)) {
+		if (lock.getLockOwner().equals(session.getUserID())) {
+			JCRUtils.loadLockTokens(session);
 			node.unlock();
+			JCRUtils.removeLockToken(session, node);
 		} else {
+			String lt = JCRUtils.getLockToken(node.getUUID());
 			session.addLockToken(lt);
 			node.unlock();
-			session.removeLockToken(lt);
+			LockTokenDAO.remove(lock.getLockOwner(), lt);
 		}
 		
 		// Activity log
