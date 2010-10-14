@@ -71,6 +71,7 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 	 * upload.
 	 */
 	private static final String returnOKMessage = "OKM_OK";
+	private static final String returnErrorMessage = "OKM-";
 
 	/**
 	 * Initial State of the widget.
@@ -336,14 +337,18 @@ public class FancyFileUpload extends Composite implements HasText, HasChangeHand
 				progressBar.setMaxProgress(100);
 				progressBar.setProgress(100);
 			}
+			
 			if (importZip.getValue()) {
-				statusZipNotify.setHTML(msg.replaceAll("\n","<br>"));
+				statusZipNotify.setHTML(msg.replaceAll("\n", "<br/>"));
 				statusZipNotifyScroll.setVisible(true);
 				pendingPanel.setVisible(true);
 				status.setText(Main.i18n("fileupload.label.error.importing.zip"));
+			} else if (msg.contains(returnErrorMessage)) {
+				status.setHTML(Main.i18n(msg.substring(msg.indexOf("OKM"), msg.indexOf("OKM") + 10)));
 			} else {
-				status.setHTML(Main.i18n(msg.substring(msg.indexOf("OKM"),msg.indexOf("OKM")+10)));
+				status.setHTML(msg);
 			}
+			
 			pendingPanel.setStyleName("fancyfileupload-failed");
 			widgetState = FAILED_STATE;
 			fileUplodingStartedFlag = false;
