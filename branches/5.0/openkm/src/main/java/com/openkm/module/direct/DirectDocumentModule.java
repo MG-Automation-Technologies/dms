@@ -1458,11 +1458,11 @@ public class DirectDocumentModule implements DocumentModule {
 				throw new AccessDeniedException("Only administrator use allowed");
 			}
 			
-			JCRUtils.loadLockTokens(session);
 			Node documentNode = session.getRootNode().getNode(docPath.substring(1));
 			javax.jcr.lock.Lock lock = documentNode.getLock();
 			
 			if (lock.getLockOwner().equals(session.getUserID())) {
+				JCRUtils.loadLockTokens(session);
 				documentNode.unlock();
 				JCRUtils.removeLockToken(session, documentNode);
 			} else {
