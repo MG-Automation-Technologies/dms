@@ -91,10 +91,11 @@ public class DocConverter {
 		if (instance == null) {
 			instance = new DocConverter();
 			
-			if (!Config.SYSTEM_OPENOFFICE.equals("")) {
+			if (!Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 				log.info("*** Build Office Manager ***");
 				officeManager = new DefaultOfficeManagerConfiguration()
-					.setOfficeHome(Config.SYSTEM_OPENOFFICE)
+					.setOfficeHome(Config.SYSTEM_OPENOFFICE_PATH)
+					.setMaxTasksPerProcess(Config.SYSTEM_OPENOFFICE_TASKS)
 					.buildOfficeManager();
 			}
 		}
@@ -124,7 +125,7 @@ public class DocConverter {
 	 * Test if a MIME document can be converted to PDF
 	 */
 	public boolean convertibleToPdf(String from) {
-		if (!Config.SYSTEM_OPENOFFICE.equals("") && validOpenOffice.contains(from)) {
+		if (!Config.SYSTEM_OPENOFFICE_PATH.equals("") && validOpenOffice.contains(from)) {
 			return true;
 		} else if (!Config.SYSTEM_IMG2PDF.equals("") && validImageMagick.contains(from)) {
 			return true;
@@ -150,7 +151,7 @@ public class DocConverter {
 	public void convert(File inputFile, String mimeType, File outputFile) throws IOException {
 		log.debug("convert({}, {}, {})", new Object[] { inputFile, mimeType, outputFile });
 
-		if (Config.SYSTEM_OPENOFFICE.equals("")) {
+		if (Config.SYSTEM_OPENOFFICE_PATH.equals("")) {
 			throw new IOException("system.openoffice not configured");
 		}
 
