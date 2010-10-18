@@ -52,6 +52,7 @@
     langs.put("Swedish", Lang.LANG_sv_SE);
     langs.put("Thai", Lang.LANG_th_TH);
     langs.put("Turkish", Lang.LANG_tr_TR);
+    langs.put("Vietnamese", Lang.LANG_zh_VN);
     Locale locale = request.getLocale();
     Cookie[] cookies = request.getCookies();
     String preset = null;
