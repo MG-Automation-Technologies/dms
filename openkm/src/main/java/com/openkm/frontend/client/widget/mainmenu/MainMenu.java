@@ -122,6 +122,7 @@ public class MainMenu extends Composite {
 					private MenuItem thai;
 					private MenuItem euskera;
 					private MenuItem slovack;
+					private MenuItem vietnamese;
 				private MenuBar subMenuSkin;
 					private MenuItem skinDefault;
 					private MenuItem skinTest;
@@ -301,6 +302,7 @@ public class MainMenu extends Composite {
 						swedish = new MenuItem(Util.menuHTML("img/icon/menu/se.gif", "Swedish"), true, setLangSwedish);
 						thai = new MenuItem(Util.menuHTML("img/icon/menu/th.gif", "Thai"), true, setLangThai);
 						turkish = new MenuItem(Util.menuHTML("img/icon/menu/tr.gif", "Turkish"), true, setLangTurkish);
+						vietnamese  = new MenuItem(Util.menuHTML("img/icon/menu/vn.gif", "Vietnamese"), true, setLangVietnamese);
 						arabic.addStyleName("okm-MainMenuItem");
 						bosnian.addStyleName("okm-MainMenuItem");
 						catalan.addStyleName("okm-MainMenuItem");
@@ -334,6 +336,7 @@ public class MainMenu extends Composite {
 						swedish.addStyleName("okm-MainMenuItem");
 						thai.addStyleName("okm-MainMenuItem");
 						turkish.addStyleName("okm-MainMenuItem");
+						vietnamese.addStyleName("okm-MainMenuItem");
 					subMenuLanguage.addItem(arabic);
 					subMenuLanguage.addItem(bosnian);
 					subMenuLanguage.addItem(catalan);
@@ -366,6 +369,7 @@ public class MainMenu extends Composite {
 					subMenuLanguage.addItem(slovack);
 					subMenuLanguage.addItem(swedish);
 					subMenuLanguage.addItem(turkish);
+					subMenuLanguage.addItem(vietnamese);
 				// Submenu language
 				language = new MenuItem(Util.menuHTML("img/icon/menu/language.gif", Main.i18n("general.menu.tools.languages")), true, subMenuLanguage);
 				language.addStyleName("okm-MainMenuItem");
@@ -844,6 +848,13 @@ public class MainMenu extends Composite {
 	Command setLangTurkish = new Command() {
 		public void execute() {
 			Main.get().refreshLang(Lang.LANG_tr_TR);
+		}
+	};
+	
+	// Command menu to set Vietnamese
+	Command setLangVietnamese = new Command() {
+		public void execute() {
+			Main.get().refreshLang(Lang.LANG_zh_VN);
 		}
 	};
 	
