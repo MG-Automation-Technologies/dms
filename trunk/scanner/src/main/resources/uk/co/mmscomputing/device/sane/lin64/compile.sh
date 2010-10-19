@@ -6,6 +6,6 @@ JAVA_HOME="/usr/lib/jvm/java-6-sun"
 #	-o libjsane.so jsane.cpp jdesc.cpp jnu.cpp \
 #	-I $JAVA_HOME/include -I $JAVA_HOME/include/linux
 
-g++ -g3 -gdwarf-2 -shared -m64 -fPIC \
+g++ -gdwarf-2 -shared -m64 -fPIC \
 	-o libjsane.so jsane.cpp jdesc.cpp jnu.cpp \
 	-I $JAVA_HOME/include -I $JAVA_HOME/include/linux
