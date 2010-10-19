@@ -65,6 +65,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.xml.ws.WebServiceException;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
 @SuppressWarnings("serial")
@@ -252,6 +253,9 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				// Refresh file list
 				win.call("refresh", new Object[] {});
 			}
+		} catch (JSException e) {
+			// TODO Investigate why occurs but js method is executed
+			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
 		} catch (ClassNotFoundException e) {
 			log.log(Level.SEVERE, "ClassNotFoundException: " + e.getMessage(), e);
 		} catch (UnsupportedFlavorException e) {
