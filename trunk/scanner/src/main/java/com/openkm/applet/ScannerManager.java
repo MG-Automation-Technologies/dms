@@ -32,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
@@ -114,6 +115,9 @@ public class ScannerManager implements ScannerListener {
 				}
 				
 				win.call("refresh", new Object[] {});
+			} catch (JSException e) {
+				// TODO Investigate why occurs but js method is executed
+				log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
