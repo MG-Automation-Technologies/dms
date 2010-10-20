@@ -65,6 +65,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.xml.ws.WebServiceException;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 
 @SuppressWarnings("serial")
@@ -250,7 +251,14 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				dtde.dropComplete(true);
 
 				// Refresh file list
-				win.call("refresh", new Object[] {});
+				win.call("refreshFolder", null);
+			}
+		} catch (JSException e) {
+			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+			
+			// TODO Investigate why occurs but js method is executed
+			if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (ClassNotFoundException e) {
 			log.log(Level.SEVERE, "ClassNotFoundException: " + e.getMessage(), e);
