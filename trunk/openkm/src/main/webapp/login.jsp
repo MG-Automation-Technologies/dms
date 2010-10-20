@@ -89,7 +89,7 @@
           <input name="j_username" id="j_username" type="hidden" value="<%=Config.SYSTEM_LOGIN_LOWERCASE?Config.ADMIN_USER.toLowerCase():Config.ADMIN_USER%>"/><br/>
         <% } else { %>
           <label for="j_username">User</label><br/>
-          <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onkeyup=\"makeLowercase();\"":""%>/><br/><br/>
+          <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onchange=\"makeLowercase();\"":""%>/><br/><br/>
         <% } %>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
@@ -113,9 +113,14 @@
       </form>
     </div>
   </div>
-
+  
   <% if (Config.SYSTEM_DEMO) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>
+  <% } else if (!Config.HIBERNATE_HBM2DDL.equals("none")) { %>
+    <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
+      <tr><td class="demo_title">WARNING</td></tr>
+      <tr><td class="demo_alert"><%=Config.PROPERTY_HIBERNATE_HBM2DDL%> = <%=Config.HIBERNATE_HBM2DDL%></td></tr>
+    </table>
   <% } %>
   
   <script type="text/javascript">
