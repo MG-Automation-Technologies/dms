@@ -251,11 +251,15 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				dtde.dropComplete(true);
 
 				// Refresh file list
-				win.call("refresh", new Object[] {});
+				win.call("refresh", null);
 			}
 		} catch (JSException e) {
-			// TODO Investigate why occurs but js method is executed
 			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+			
+			// TODO Investigate why occurs but js method is executed
+			if (!"JavaScript error while calling \"refresh\"".equals(e.getMessage())) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+			}
 		} catch (ClassNotFoundException e) {
 			log.log(Level.SEVERE, "ClassNotFoundException: " + e.getMessage(), e);
 		} catch (UnsupportedFlavorException e) {
