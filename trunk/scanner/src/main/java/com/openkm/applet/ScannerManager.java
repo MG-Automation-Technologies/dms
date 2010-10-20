@@ -38,8 +38,8 @@ import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
-import uk.co.mmscomputing.device.scanner.ScannerListener;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata.Type;
+import uk.co.mmscomputing.device.scanner.ScannerListener;
 
 public class ScannerManager implements ScannerListener {
 	private static Logger log = Logger.getLogger(ScannerManager.class.getName());
