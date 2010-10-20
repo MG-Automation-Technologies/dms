@@ -403,14 +403,6 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 		return ret;
 	}
 	
-	/**
-	 * Called from scanner applet
-	 */
-	public static String refresh() {
-		Main.get().mainPanel.topPanel.toolBar.executeRefresh();
-		return "";
-	}
-	
 	@Override
 	public void addLanguageHandlerExtension(LanguageHandlerExtension handlerExtension) {
 		langHandlerExtensionList.add(handlerExtension);
