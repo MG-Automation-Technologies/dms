@@ -83,7 +83,7 @@
     <div id="form">
       <form name="login" method="post" action="j_security_check" onsubmit="setCookie()">
         <label for="j_username">User</label><br/>
-        <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onkeyup=\"makeLowercase();\"":""%>/><br/><br/>
+        <input name="j_username" id="j_username" type="text" <%=Config.SYSTEM_LOGIN_LOWERCASE?"onchange=\"makeLowercase();\"":""%>/><br/><br/>
         <label for="j_password">Password</label><br/>
         <input name="j_password" id="j_password" type="password"/><br/><br/>
         <% if (!FormatUtil.isMobile(request)) { %> 
@@ -109,6 +109,11 @@
 
   <% if (Config.SYSTEM_DEMO) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>
+  <% } else if (!Config.HIBERNATE_HBM2DDL.equals("none")) { %>
+    <table border="0" cellpadding="2" cellspacing="0" align="center" class="demo">
+      <tr><td class="demo_title">WARNING</td></tr>
+      <tr><td class="demo_alert"><%=Config.PROPERTY_HIBERNATE_HBM2DDL%> = <%=Config.HIBERNATE_HBM2DDL%></td></tr>
+    </table>
   <% } %>
   
   <script type="text/javascript">
