@@ -32,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
@@ -113,7 +114,14 @@ public class ScannerManager implements ScannerListener {
 					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
 				}
 				
-				win.call("refresh", new Object[] {});
+				win.call("refreshFolder", null);
+			} catch (JSException e) {
+				log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+				
+				// TODO Investigate why occurs but js method is executed
+				if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
+					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+				}
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
 				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
