@@ -2686,8 +2686,6 @@ public class ToolBar extends Composite implements OriginPanel, HasToolBarEvent, 
 	public native void initJavaScriptApi(ToolBar toolBar) /*-{
 	    $wnd.destroyScannerApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyScannerApplet();
 	    $wnd.destroyUploaderApplet = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::destroyUploaderApplet();
-	    $wnd.refresh = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
+	    $wnd.refreshFolder = toolBar.@com.openkm.frontend.client.widget.toolbar.ToolBar::executeRefresh();
 	}-*/;
-
-	
 }
