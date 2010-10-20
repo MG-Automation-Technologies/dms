@@ -114,18 +114,20 @@ public class ScannerManager implements ScannerListener {
 					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
 				}
 				
-				win.call("refresh", new Object[] {});
+				win.call("refresh", null);
 			} catch (JSException e) {
-				// TODO Investigate why occurs but js method is executed
 				log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
+				
+				// TODO Investigate why occurs but js method is executed
+				if (!"JavaScript error while calling \"refresh\"".equals(e.getMessage())) {
+					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+				}
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "IOException: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			} catch (Throwable e) { // Catch java.lang.OutOfMemeoryException
 				log.log(Level.SEVERE, "Throwable: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (type.equals(ScannerIOMetadata.STATECHANGE)) {
 			log.fine("***** STATECHANGE: " + metadata.getStateStr() + " *****");
