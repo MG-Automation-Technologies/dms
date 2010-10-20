@@ -8,7 +8,7 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -102,11 +102,11 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public MainFrame(String token, String path, String url, JSObject win) {
 		super("Uploader");
-		
+
 		try {
 			logo = ImageIO.read(MainFrame.class.getResource("openkm.png"));
 		} catch (IOException e) {
@@ -140,7 +140,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void initGUI() {
 		try {
@@ -238,7 +238,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 				dtde.dropComplete(true);
 
 				// Refresh file list
-				win.call("refresh", new Object[] {});
+				win.call("refreshFolder", null);
 			} else if (tr.isDataFlavorSupported(windows)) {
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 
@@ -255,7 +255,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 			}
 		} catch (JSException e) {
 			log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
-			
+
 			// TODO Investigate why occurs but js method is executed
 			if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
@@ -276,7 +276,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static void createDocumentHelper(String token, String path, String url, File fs)
 			throws IOException {
@@ -295,14 +295,14 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 					log.log(Level.SEVERE, "Error: " + response);
 					ErrorCode.displayError(response, path+"/"+fs.getName());
 				}
-				
+
 				File[] files = fs.listFiles();
 				for (int i = 0; i < files.length; i++) {
 					createDocumentHelper(token, path + "/" + fs.getName(), url, files[i]);
 				}
 			} else {
 				log.log(Level.WARNING, "Unknown file type");
-				JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type", 
+				JOptionPane.showMessageDialog(null, fs.getPath(), "Unknown file type",
 						JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (IOException e) {
@@ -329,7 +329,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	class PopupListener extends MouseAdapter {
 		@Override
@@ -350,7 +350,7 @@ public class MainFrame extends JFrame implements DropTargetListener, ActionListe
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	class WindowListener extends WindowAdapter {
 		@Override
