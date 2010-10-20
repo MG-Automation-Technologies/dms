@@ -114,12 +114,12 @@ public class ScannerManager implements ScannerListener {
 					ErrorCode.displayError(response, path+"/"+fileName+"."+fileType);
 				}
 				
-				win.call("refresh", null);
+				win.call("refreshFolder", null);
 			} catch (JSException e) {
 				log.log(Level.WARNING, "JSException: " + e.getMessage(), e);
 				
 				// TODO Investigate why occurs but js method is executed
-				if (!"JavaScript error while calling \"refresh\"".equals(e.getMessage())) {
+				if (!"JavaScript error while calling \"refreshFolder\"".equals(e.getMessage())) {
 					JOptionPane.showMessageDialog(bScan.getParent(), e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
 				}
 			} catch (IOException e) {
