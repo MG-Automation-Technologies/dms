@@ -106,7 +106,7 @@
       </form>
     </div>
   </div>
-
+  
   <% if (Config.SYSTEM_DEMO) { %>
     <jsp:include flush="true" page="login_demo_users.jsp"/>
   <% } else if (!Config.HIBERNATE_HBM2DDL.equals("none")) { %>
