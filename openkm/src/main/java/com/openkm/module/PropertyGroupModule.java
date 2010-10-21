@@ -76,6 +76,7 @@ public interface PropertyGroupModule {
 	 * 
 	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
+	 * @return A list with all groups assigned to the document.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
 	 * @throws RepositoryException If there is any general repository problem.
@@ -87,6 +88,7 @@ public interface PropertyGroupModule {
 	 * Get all groups defined in the system.
 	 * 
 	 * @param token The session authorization token.
+	 * @return A list with all groups registered in the system.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public List<PropertyGroup> getAllGroups(String token) throws IOException, ParseException,
@@ -98,6 +100,7 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
+	 * @return A list with all properties defined in the group and its actual values.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
@@ -113,7 +116,7 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
-	 * @param propName The category property name.
+	 * @param properties The property values.
 	 * @throws NoSuchPropertyException If there is no such registered category property.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws LockException Can't modify a locked document. 
@@ -144,6 +147,7 @@ public interface PropertyGroupModule {
 	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique node.
 	 * @param grpName The group name previously registered in the system.
+	 * @return True if the document has the given property group assigned, and false otherwise.
 	 * @throws NoSuchGroupException If there is no such registered group name.
 	 * @throws PathNotFoundException If there is no document in this 
 	 * repository path.
