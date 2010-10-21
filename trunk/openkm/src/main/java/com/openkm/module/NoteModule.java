@@ -34,25 +34,28 @@ public interface NoteModule {
 	/**
 	 * Add a note to a document
 	 * 
+	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique document.
 	 * @param text The message text
+	 * @return A note object with the new created note properties.
 	 * @throws LockException A locked document can't be modified.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this folder because of lack of permissions.
+	 * you can't access this document because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public Note add(String token, String nodePath, String comment) throws LockException,
+	public Note add(String token, String nodePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
 	 * Remove a note from a document
 	 * 
+	 * @param token The session authorization token.
 	 * @param notePath The path that identifies an unique document.
 	 * @throws LockException A locked document can't be modified.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this folder because of lack of permissions.
+	 * you can't access this document because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
 	public void remove(String token, String notePath) throws LockException, PathNotFoundException,
@@ -61,11 +64,12 @@ public interface NoteModule {
 	/**
 	 * Get note from document
 	 * 
+	 * @param token The session authorization token.
 	 * @param notePath The path that identifies an unique document.
 	 * @throws LockException A locked document can't be modified.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this folder because of lack of permissions.
+	 * you can't access this document because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
 	public Note get(String token, String notePath) throws LockException, PathNotFoundException,
@@ -74,22 +78,25 @@ public interface NoteModule {
 	/**
 	 * Set note to document
 	 * 
+	 * @param token The session authorization token.
 	 * @param notePath The path that identifies an unique document.
+	 * @param text The message text
 	 * @throws LockException A locked document can't be modified.
-	 * @throws PathNotFoundException If there is no folder in the repository with this path.
+	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
-	 * you can't access this folder because of lack of permissions.
+	 * you can't access this document because of lack of permissions.
 	 * @throws RepositoryException If there is any problem.
 	 */
-	public void set(String token, String notePath, String comment) throws LockException,
+	public void set(String token, String notePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
 	 * Retrieve a list of notes from a document.
 	 * 
+	 * @param token The session authorization token.
 	 * @param nodePath The path that identifies an unique document.
-	 * @return A Collection with the child documents.
-	 * @throws PathNotFoundException If there is no folder in this repository path.
+	 * @return A Collection with the document notes.
+	 * @throws PathNotFoundException If there is no document in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public List<Note> list(String token, String nodePath) throws PathNotFoundException,
