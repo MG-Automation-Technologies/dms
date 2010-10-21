@@ -56,12 +56,12 @@ public class OKMNote {
 	
 	@WebMethod
 	public Note add(@WebParam(name = "token") String token,
-			@WebParam(name = "nodePath") String docPath,
+			@WebParam(name = "nodePath") String nodePath,
 			@WebParam(name = "text") String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("add({}, {}, {})", new Object[] {  token, docPath, text });
+		log.debug("add({}, {}, {})", new Object[] {  token, nodePath, text });
 		NoteModule nm = ModuleManager.getNoteModule();
-		Note ret = nm.add(token, docPath, text);
+		Note ret = nm.add(token, nodePath, text);
 		log.debug("addNote: {}", ret);
 		return ret;
 	}
@@ -100,11 +100,11 @@ public class OKMNote {
 	
 	@WebMethod
 	public Note[] list(@WebParam(name = "token") String token,
-			@WebParam(name = "nodePath") String notePath) throws LockException,
+			@WebParam(name = "nodePath") String nodePath) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("list({}, {})", token, notePath);
+		log.debug("list({}, {})", token, nodePath);
 		NoteModule nm = ModuleManager.getNoteModule();
-		List<Note> col = nm.list(token, notePath);
+		List<Note> col = nm.list(token, nodePath);
 		Note[] result = (Note[]) col.toArray(new Note[col.size()]);
 		log.debug("list: {}", result);
 		return result;
