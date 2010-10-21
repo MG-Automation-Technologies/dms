@@ -42,7 +42,7 @@ public interface NoteModule {
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this document because of lack of permissions.
-	 * @throws RepositoryException If there is any problem.
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Note add(String token, String nodePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
@@ -56,7 +56,7 @@ public interface NoteModule {
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this document because of lack of permissions.
-	 * @throws RepositoryException If there is any problem.
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void remove(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
@@ -66,11 +66,12 @@ public interface NoteModule {
 	 * 
 	 * @param token The session authorization token.
 	 * @param notePath The path that identifies an unique document note.
+	 * @return The required note associated to the document.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this document because of lack of permissions.
-	 * @throws RepositoryException If there is any problem.
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public Note get(String token, String notePath) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException;
@@ -85,7 +86,7 @@ public interface NoteModule {
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
 	 * you can't access this document because of lack of permissions.
-	 * @throws RepositoryException If there is any problem.
+	 * @throws RepositoryException If there is any general repository problem.
 	 */
 	public void set(String token, String notePath, String text) throws LockException,
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
