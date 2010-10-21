@@ -51,7 +51,7 @@ public interface NoteModule {
 	 * Remove a note from a document
 	 * 
 	 * @param token The session authorization token.
-	 * @param notePath The path that identifies an unique document.
+	 * @param notePath The path that identifies an unique document note.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -65,7 +65,7 @@ public interface NoteModule {
 	 * Get note from document
 	 * 
 	 * @param token The session authorization token.
-	 * @param notePath The path that identifies an unique document.
+	 * @param notePath The path that identifies an unique document note.
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
 	 * @throws AccessDeniedException If there is any security problem: 
@@ -79,7 +79,7 @@ public interface NoteModule {
 	 * Set note to document
 	 * 
 	 * @param token The session authorization token.
-	 * @param notePath The path that identifies an unique document.
+	 * @param notePath The path that identifies an unique document note.
 	 * @param text The message text
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no document in the repository with this path.
