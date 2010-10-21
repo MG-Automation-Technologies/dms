@@ -59,7 +59,7 @@ public interface NoteModule {
 			AccessDeniedException, RepositoryException, DatabaseException;
 	
 	/**
-	 * Get a note from a document
+	 *  Get note from document
 	 * 
 	 * @param notePath The path that identifies an unique document.
 	 * @throws LockException A locked document can't be modified.
@@ -72,7 +72,7 @@ public interface NoteModule {
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
-	 * Set a note from a document
+	 * Set note to document
 	 * 
 	 * @param notePath The path that identifies an unique document.
 	 * @throws LockException A locked document can't be modified.
