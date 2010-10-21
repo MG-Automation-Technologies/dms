@@ -77,7 +77,7 @@ public interface NoteModule {
 			AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
-	 * Set note to document
+	 * Set a new text to document note.
 	 * 
 	 * @param token The session authorization token.
 	 * @param notePath The path that identifies an unique document note.
