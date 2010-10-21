@@ -34,7 +34,7 @@ public interface NoteModule {
 	/**
 	 * Add a note to a document
 	 * 
-	 * @param docPath The path that identifies an unique document.
+	 * @param nodePath The path that identifies an unique document.
 	 * @param text The message text
 	 * @throws LockException A locked document can't be modified.
 	 * @throws PathNotFoundException If there is no folder in the repository with this path.
@@ -85,9 +85,9 @@ public interface NoteModule {
 			PathNotFoundException, AccessDeniedException, RepositoryException, DatabaseException;
 
 	/**
-	 * Retrieve a list of child documents from an existing folder.
+	 * Retrieve a list of notes from a document.
 	 * 
-	 * @param fldPath The path that identifies an unique folder.
+	 * @param nodePath The path that identifies an unique document.
 	 * @return A Collection with the child documents.
 	 * @throws PathNotFoundException If there is no folder in this repository path.
 	 * @throws RepositoryException If there is any general repository problem.
