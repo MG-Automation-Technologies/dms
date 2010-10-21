@@ -162,15 +162,19 @@ public class MimeTypeDAO {
 		log.debug("findByPk({})", mtId);
 		String qs = "from MimeType mt where mt.id=:id";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setInteger("id", mtId);
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
+			HibernateUtil.commit(tx);
 			log.debug("findByPk: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -185,14 +189,18 @@ public class MimeTypeDAO {
 		log.debug("findAll()");
 		String qs = "from MimeType mt order by mt.name";
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			List<MimeType> ret = q.list();
+			HibernateUtil.commit(tx);
 			log.debug("findAll: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
@@ -207,9 +215,11 @@ public class MimeTypeDAO {
 		String qs = "from MimeType mt where mt.name=:name " +
 			(filterByActive?"and mt.active=:active":"");
 		Session session = null;
+		Transaction tx = null;
 		
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 			Query q = session.createQuery(qs);
 			q.setString("name", name);
 			
@@ -218,9 +228,11 @@ public class MimeTypeDAO {
 			}
 			
 			MimeType ret = (MimeType) q.setMaxResults(1).uniqueResult();
+			HibernateUtil.commit(tx);
 			log.debug("findByName: {}", ret);
 			return ret;
 		} catch (HibernateException e) {
+			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
 			HibernateUtil.close(session);
