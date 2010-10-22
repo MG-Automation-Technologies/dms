@@ -185,6 +185,7 @@ public class Config {
 	public static final String PROPERTY_HIBERNATE_DIALECT = "hibernate.dialect";
 	public static final String PROPERTY_HIBERNATE_DATASOURCE = "hibernate.datasource";
 	public static final String PROPERTY_HIBERNATE_HBM2DDL = "hibernate.hbm2ddl";
+	public static final String PROPERTY_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 	
 	/**
 	 *  Default values
@@ -327,6 +328,7 @@ public class Config {
 	public static String HIBERNATE_DIALECT = "org.hibernate.dialect.HSQLDialect";
 	public static String HIBERNATE_DATASOURCE = "java:/OpenKMDS";
 	public static String HIBERNATE_HBM2DDL = "create";
+	public static String HIBERNATE_SHOW_SQL = "false";
 	
 	// Chat
 	private static String CHAT_ENABLED_STR = "on";
@@ -639,6 +641,8 @@ public class Config {
 			values.put(PROPERTY_HIBERNATE_DATASOURCE, HIBERNATE_DATASOURCE);
 			HIBERNATE_HBM2DDL = config.getProperty(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
 			values.put(PROPERTY_HIBERNATE_HBM2DDL, HIBERNATE_HBM2DDL);
+			HIBERNATE_SHOW_SQL = config.getProperty(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
+			values.put(PROPERTY_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
 			
 			fis.close();
 		} catch (FileNotFoundException e) {
