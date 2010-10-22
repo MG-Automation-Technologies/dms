@@ -44,19 +44,14 @@ import com.openkm.core.Config;
 public class HibernateUtil {
 	private static Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 	private static final SessionFactory sessionFactory;
-	private static final boolean SHOW_SQL = false;
 	
 	static {
 		try {
 			Configuration cfg = new Configuration().configure();
-			
-			if (SHOW_SQL) {
-				cfg.setProperty("hibernate.show_sql", "true");
-			}
-			
 			cfg.setProperty("hibernate.dialect", Config.HIBERNATE_DIALECT);
 			cfg.setProperty("hibernate.connection.datasource", Config.HIBERNATE_DATASOURCE);
 			cfg.setProperty("hibernate.hbm2ddl.auto", Config.HIBERNATE_HBM2DDL);
+			cfg.setProperty("hibernate.show_sql", Config.HIBERNATE_SHOW_SQL);
 			sessionFactory = cfg.buildSessionFactory();
 		} catch (HibernateException e) {
 			log.error(e.getMessage(), e);
