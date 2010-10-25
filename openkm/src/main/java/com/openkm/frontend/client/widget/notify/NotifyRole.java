@@ -104,6 +104,13 @@ public class NotifyRole extends Composite {
 	}
 	
 	/**
+	 * resetAvailableRoles
+	 */
+	public void resetAvailableRolesTable() {
+		rolesTable.reset();
+	}
+	
+	/**
 	 * langRefresh
 	 */
 	public void langRefresh() {
@@ -171,7 +178,7 @@ public class NotifyRole extends Composite {
 	public void getFilteredAllRoles(String filter) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
-		authService.getFilteredAllRoles(filter, callbackAllRoles);
+		authService.getFilteredAllRoles(filter, notifyRolesTable.getRolesToNotifyList() ,callbackAllRoles);
 	}
 	
 	/**

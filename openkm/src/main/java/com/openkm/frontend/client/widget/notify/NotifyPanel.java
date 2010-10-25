@@ -101,8 +101,8 @@ public class NotifyPanel extends Composite {
 		checkBoxFilter.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				notifyUser.reset();
-				notifyRole.reset();
+				notifyUser.resetAvailableUsersTable();
+				notifyRole.resetAvailableRolesTable();
 				Widget sender = (Widget) event.getSource();
 				if (((CheckBox) sender).getValue()) {
 					filter.setText("");
@@ -136,18 +136,18 @@ public class NotifyPanel extends Composite {
 					int selected = tabBar.getSelectedTab();
 					switch(selected) {
 						case TAB_USERS:
-							notifyUser.reset();
+							notifyUser.resetAvailableUsersTable();
 							notifyUser.getFilteredAllUsers(filter.getText());
 							break;
 							
 						case TAB_GROUPS:
-							notifyRole.reset();
+							notifyRole.resetAvailableRolesTable();
 							notifyRole.getFilteredAllRoles(filter.getText());
 							break;
 					}
 				} else {
-					notifyUser.reset();
-					notifyRole.reset();
+					notifyUser.resetAvailableUsersTable();
+					notifyRole.resetAvailableRolesTable();
 				}
 			}
 		});

@@ -104,6 +104,13 @@ public class NotifyUser extends Composite {
 	}
 	
 	/**
+	 * resetAvailableUsersTable
+	 */
+	public void resetAvailableUsersTable() {
+		userTable.reset();
+	}
+	
+	/**
 	 * langRefresh
 	 */
 	public void langRefresh() {
@@ -162,7 +169,7 @@ public class NotifyUser extends Composite {
 	public void getAllUsers() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
-		authService.getAllUsers( callbackAllUsers);
+		authService.getAllUsers(callbackAllUsers);
 	}
 	
 	/**
@@ -171,7 +178,7 @@ public class NotifyUser extends Composite {
 	public void getFilteredAllUsers(String filter) {
 		ServiceDefTarget endPoint = (ServiceDefTarget) authService;
 		endPoint.setServiceEntryPoint(Config.OKMAuthService);	
-		authService.getFilteredAllUsers(filter, callbackAllUsers);
+		authService.getFilteredAllUsers(filter, notifyUsersTable.getUsersToNotifyList(), callbackAllUsers);
 	}
 	
 	/**
