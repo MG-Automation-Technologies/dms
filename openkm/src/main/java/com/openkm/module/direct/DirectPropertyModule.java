@@ -49,10 +49,10 @@ public class DirectPropertyModule implements PropertyModule {
 	private static Logger log = LoggerFactory.getLogger(DirectPropertyModule.class);
 
 	@Override
-	public void addCategory(String token, String nodePath, String category) throws VersionException,
+	public void addCategory(String token, String nodePath, String catId) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
+		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, catId });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -77,13 +77,13 @@ public class DirectPropertyModule implements PropertyModule {
 				for (int i=0; i<property.length; i++) {
 					newProperty[i] = property[i];
 					
-					if (property[i].getString().equals(category)) {
+					if (property[i].getString().equals(catId)) {
 						alreadyAdded = true;
 					}
 				}
 				
 				if (!alreadyAdded) {
-					Node reference = session.getNodeByUUID(category);
+					Node reference = session.getNodeByUUID(catId);
 					newProperty[newProperty.length-1] = session.getValueFactory().createValue(reference);
 					documentNode.setProperty(Property.CATEGORIES, newProperty, PropertyType.REFERENCE);
 					documentNode.save();
@@ -97,7 +97,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "ADD_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, category);
+			UserActivity.log(session.getUserID(), "ADD_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
@@ -126,10 +126,10 @@ public class DirectPropertyModule implements PropertyModule {
 	}
 
 	@Override
-	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+	public void removeCategory(String token, String nodePath, String catId) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
+		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, catId });
 		Node documentNode = null;
 		Session session = null;
 		
@@ -152,7 +152,7 @@ public class DirectPropertyModule implements PropertyModule {
 				ArrayList<Value> newProperty = new ArrayList<Value>();
 				
 				for (int i=0; i<property.length; i++) {
-					if (!property[i].getString().equals(category)) {
+					if (!property[i].getString().equals(catId)) {
 						newProperty.add(property[i]);
 					} else {
 						removed = true;
@@ -172,7 +172,7 @@ public class DirectPropertyModule implements PropertyModule {
 			DirectScriptingModule.checkScripts(session, documentNode, documentNode, "REMOVE_CATEGORY");
 
 			// Activity log
-			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, category);
+			UserActivity.log(session.getUserID(), "REMOVE_CATEGORY", nodePath, catId);
 		} catch (javax.jcr.PathNotFoundException e) {
 			log.warn(e.getMessage(), e);
 			JCRUtils.discardsPendingChanges(documentNode);
