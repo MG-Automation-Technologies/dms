@@ -443,7 +443,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 								Timer downloadTimer = new Timer() {
 									@Override
 									public void run() {
-										downloadDocument(false);
+										if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
+											downloadDocument(false);
+										}
 									}
 								};
 								downloadTimer.schedule(200);
