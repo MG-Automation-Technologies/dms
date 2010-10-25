@@ -49,6 +49,6 @@ public interface OKMAuthService extends RemoteService {
 	public void keepAlive() throws OKMException;
 	public List<String> getAllUsers() throws OKMException;
 	public List<String> getAllRoles() throws OKMException;
-	public List<String> getFilteredAllUsers(String filter) throws OKMException;
-	public List<String> getFilteredAllRoles(String filter) throws OKMException;
+	public List<String> getFilteredAllUsers(String filter, List<String> selectedUsers) throws OKMException;
+	public List<String> getFilteredAllRoles(String filter, List<String> selectedRoles) throws OKMException;
 }

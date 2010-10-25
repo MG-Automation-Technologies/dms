@@ -48,6 +48,6 @@ public interface OKMAuthServiceAsync {
 	public void keepAlive(AsyncCallback<?> callback);
 	public void getAllUsers(AsyncCallback<List<String>> callback);
 	public void getAllRoles(AsyncCallback<List<String>> callback);
-	public void getFilteredAllUsers(String filter, AsyncCallback<List<String>> callback);
-	public void getFilteredAllRoles(String filter, AsyncCallback<List<String>> callback);
+	public void getFilteredAllUsers(String filter, List<String> selectedUsers, AsyncCallback<List<String>> callback);
+	public void getFilteredAllRoles(String filter, List<String> selectedRoles, AsyncCallback<List<String>> callback);
 }
