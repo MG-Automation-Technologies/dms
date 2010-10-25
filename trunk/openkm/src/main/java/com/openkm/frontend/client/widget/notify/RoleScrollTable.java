@@ -21,6 +21,9 @@
 
 package com.openkm.frontend.client.widget.notify;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
@@ -40,7 +43,7 @@ import com.openkm.frontend.client.Main;
  */
 public class RoleScrollTable extends Composite {
 	
-	public static final int NUMBER_OF_COLUMNS	= 1;
+	public static final int NUMBER_OF_COLUMNS = 1;
 	
 	private ScrollTable table;
 	private FixedWidthFlexTable headerTable;
@@ -199,6 +202,23 @@ public class RoleScrollTable extends Composite {
 		}
 		
 		return roles;
+	}
+	
+	/**
+	 * Gets the users list to notify
+	 * 
+	 * @return The users list
+	 */
+	public List<String> getRolesToNotifyList() {
+		List<String> rolesList = new ArrayList<String>();
+		
+		if (dataTable.getRowCount()>0) {
+			for (int i = 0; i<dataTable.getRowCount(); i++){
+				rolesList.add(dataTable.getText(i,0));
+			}
+		}
+		
+		return rolesList;
 	}
 	
 	/**

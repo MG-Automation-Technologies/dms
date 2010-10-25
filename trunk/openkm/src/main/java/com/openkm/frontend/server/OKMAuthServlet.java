@@ -571,7 +571,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	}
 	
 	@Override
-	public List<String> getFilteredAllUsers(String filter) throws OKMException {
+	public List<String> getFilteredAllUsers(String filter, List<String> selectedUsers) throws OKMException {
 		log.debug("getFilteredAllUsers()");
 		List<String> userList = new ArrayList<String>();
 		updateSessionManager();
@@ -581,7 +581,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String user = it.next();
-				if (user.toLowerCase().startsWith(filter.toLowerCase())) {
+				if (user.toLowerCase().startsWith(filter.toLowerCase()) && !selectedUsers.contains(user)) {
 					userList.add(user);
 				}
 			}
@@ -600,7 +600,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 	}
 	
 	@Override
-	public List<String> getFilteredAllRoles(String filter) throws OKMException {
+	public List<String> getFilteredAllRoles(String filter, List<String> selectedRoles) throws OKMException {
 		log.debug("getFilteredAllRoles()");
 		List<String> roleList = new ArrayList<String>();
 		updateSessionManager();
@@ -611,7 +611,7 @@ public class OKMAuthServlet extends OKMRemoteServiceServlet implements OKMAuthSe
 			for (Iterator<String> it = col.iterator(); it.hasNext();){
 				String rol = it.next();
 				if (!rol.equals(Config.DEFAULT_USER_ROLE) && !rol.equals(Config.DEFAULT_ADMIN_ROLE) &&
-					rol.toLowerCase().startsWith(filter.toLowerCase())) {
+					rol.toLowerCase().startsWith(filter.toLowerCase()) && !selectedRoles.contains(rol)) {
 					roleList.add(rol);
 				}
 			}
