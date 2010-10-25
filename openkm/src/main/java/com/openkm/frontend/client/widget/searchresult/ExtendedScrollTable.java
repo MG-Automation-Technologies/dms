@@ -102,7 +102,7 @@ public class ExtendedScrollTable extends ScrollTable {
 			// Two time entry onCellClicked before entry on onBrowserEvent and disbles the
 			// Tree onCellClicked that produces inconsistence error refreshing
 			DOM.eventCancelBubble(event, true);
-			if (isDocumentSelected() || isAttachmentSelected()) {
+			if ((isDocumentSelected() || isAttachmentSelected()) && Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
 				Main.get().mainPanel.search.searchBrowser.searchResult.downloadDocument();
 			}
 
