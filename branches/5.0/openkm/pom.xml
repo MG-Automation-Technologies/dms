@@ -50,7 +50,7 @@
     <gwt.version>2.0.4</gwt.version>
 
     <!-- Using this Jackrabbit version -->
-    <jcr.version>1.6.1</jcr.version>
+    <jcr.version>1.6.4</jcr.version>
 
     <!-- Tell the compiler we can use 1.6 -->
     <java.compiler>1.6</java.compiler>
