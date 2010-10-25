@@ -42,7 +42,7 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void addCategory(String token, String nodePath, String category) throws VersionException,
+	public void addCategory(String token, String nodePath, String catId) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException;
 
@@ -58,7 +58,7 @@ public interface PropertyModule {
 	 * you can't modify the node because of lack of permissions.
 	 * @throws RepositoryException If there is any general repository problem.
 	 */
-	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+	public void removeCategory(String token, String nodePath, String catId) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException;
 	
