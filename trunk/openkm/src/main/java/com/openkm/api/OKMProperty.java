@@ -48,22 +48,22 @@ public class OKMProperty implements PropertyModule {
 	}
 
 	@Override
-	public void addCategory(String token, String nodePath, String category)	throws VersionException,
+	public void addCategory(String token, String nodePath, String catId)	throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, category });
+		log.debug("addCategory({}, {}, {})", new Object[] { token, nodePath, catId });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.addCategory(token, nodePath, category);
+		pm.addCategory(token, nodePath, catId);
 		log.debug("addCategory: void");
 	}
 
 	@Override
-	public void removeCategory(String token, String nodePath, String category) throws VersionException,
+	public void removeCategory(String token, String nodePath, String catId) throws VersionException,
 			LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, category });
+		log.debug("removeCategory({}, {}, {})", new Object[] { token, nodePath, catId });
 		PropertyModule pm = ModuleManager.getPropertyModule();
-		pm.removeCategory(token, nodePath, category);
+		pm.removeCategory(token, nodePath, catId);
 		log.debug("removeCategory: void");
 	}
 
