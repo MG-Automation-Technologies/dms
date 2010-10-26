@@ -114,7 +114,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 	private int actualView = PanelDefinition.NAVIGATOR_TAXONOMY; // Used to indicate the actual view
 	private HashMap<String, String> viewValues;
 	private boolean createdFromTemplate = false;
-	private boolean pendingChekoutFile = false;
 	private int numberOfFolders = 0;
 	private int numberOfDocuments = 0;
 	private int numberOfMails = 0;
@@ -277,34 +276,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 	}
 	
 	/**
-	 * Donwload a pending checkout file
-	 */
-	private void pendingCheckoutFile() {
-		if (pendingChekoutFile) {
-			if (!Main.get().mainPanel.dashboard.userDashboard.isPendingCheckoutDocumentFlag() &&
-				!Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
-				Timer timer = new Timer() {
-					@Override
-					public void run() {
-						table.downloadDocument(true);
-						pendingChekoutFile = false;
-					}
-				};
-				timer.schedule(200); // Time to ensure finishing last method call is really finished
-			} else {
-				// After 200ms returns validating RPC userDashboard finished
-				Timer timer = new Timer() {
-					@Override
-					public void run() {
-						pendingCheckoutFile();
-					}
-				};
-				timer.schedule(200); // Time to finishing last method call
-			}
-		}
-	}
-	
-	/**
 	 * Refresh the panel
 	 * 
 	 * @param fldId The path id
@@ -424,7 +395,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 				getMailChilds(fldId);
 			} else {
 				selectSelectedRowInTable();
-				pendingCheckoutFile();
 			}
 		}
 
@@ -458,7 +428,6 @@ public class FileBrowser extends Composite implements OriginPanel {
 			
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
 			Main.get().startUp.nextStatus(StartUp.STARTUP_LOADING_CATEGORIES);
-			pendingCheckoutFile();
 		}
 		public void onFailure(Throwable caught) {
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagMailChilds();
@@ -643,11 +612,10 @@ public class FileBrowser extends Composite implements OriginPanel {
 	final AsyncCallback<Object> callbackCheckOut = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {	
 			mantainSelectedRow();
-			pendingChekoutFile = true; // Sets that there's a pending checkout file to be donwloaded
 			Main.get().mainPanel.desktop.browser.fileBrowser.status.unsetFlagCheckout();
 			Main.get().mainPanel.dashboard.userDashboard.setPendingCheckoutDocumentFlag(); // Marks flag to ensure all rpc calls has finished before downloading document
 			Main.get().mainPanel.dashboard.userDashboard.getUserCheckedOutDocuments();
-			pendingChekoutFile = true;
+			table.downloadDocument(true);
 			refresh(fldId); // downloading document is made after finising refresh althought there's RPC call in getUserCheckedOutDocuments
 			                // we suppose refresh it'll be more slower, and downloading must be done after last RPC call is finished
 		}
