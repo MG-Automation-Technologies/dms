@@ -264,28 +264,16 @@
     
   <!-- WebServices -->
   <servlet>
-    <servlet-name>OKMDocument</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMDocument</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>OKMAuth</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMAuth</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMPropertyGroup</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMPropertyGroup</servlet-class>
+    <servlet-name>OKMBookmark</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMBookmark</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMNotification</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMNotification</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMSearch</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMSearch</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>OKMRepository</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMRepository</servlet-class>
+    <servlet-name>OKMDocument</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMDocument</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>OKMFolder</servlet-name>
@@ -296,12 +284,32 @@
     <servlet-class>com.openkm.ws.endpoint.OKMMail</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>OKMWorkflow</servlet-name>
-    <servlet-class>com.openkm.ws.endpoint.OKMWorkflow</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>OKMNote</servlet-name>
     <servlet-class>com.openkm.ws.endpoint.OKMNote</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMNotification</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMNotification</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMProperty</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMProperty</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMPropertyGroup</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMPropertyGroup</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMRepository</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMRepository</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMSearch</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMSearch</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OKMWorkflow</servlet-name>
+    <servlet-class>com.openkm.ws.endpoint.OKMWorkflow</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>OKMTest</servlet-name>
@@ -540,12 +548,16 @@
 
   <!-- WebServices Servlet Mappings -->
   <servlet-mapping>
-    <servlet-name>OKMDocument</servlet-name>
-    <url-pattern>/OKMDocument</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>OKMAuth</servlet-name>
     <url-pattern>/OKMAuth</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMBookmark</servlet-name>
+    <url-pattern>/OKMBookmark</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMDocument</servlet-name>
+    <url-pattern>/OKMDocument</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMFolder</servlet-name>
@@ -556,28 +568,32 @@
     <url-pattern>/OKMMail</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMPropertyGroup</servlet-name>
-    <url-pattern>/OKMPropertyGroup</url-pattern>
+    <servlet-name>OKMNote</servlet-name>
+    <url-pattern>/OKMNote</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMNotification</servlet-name>
     <url-pattern>/OKMNotification</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMSearch</servlet-name>
-    <url-pattern>/OKMSearch</url-pattern>
+    <servlet-name>OKMProperty</servlet-name>
+    <url-pattern>/OKMProperty</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OKMPropertyGroup</servlet-name>
+    <url-pattern>/OKMPropertyGroup</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMRepository</servlet-name>
     <url-pattern>/OKMRepository</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMWorkflow</servlet-name>
-    <url-pattern>/OKMWorkflow</url-pattern>
+    <servlet-name>OKMSearch</servlet-name>
+    <url-pattern>/OKMSearch</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>OKMNote</servlet-name>
-    <url-pattern>/OKMNote</url-pattern>
+    <servlet-name>OKMWorkflow</servlet-name>
+    <url-pattern>/OKMWorkflow</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>OKMTest</servlet-name>
