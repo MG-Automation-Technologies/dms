@@ -135,6 +135,7 @@ public class Config {
 	public static final String PROPERTY_SYSTEM_OCR = "system.ocr";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_PATH = "system.openoffice.path";
 	public static final String PROPERTY_SYSTEM_OPENOFFICE_TASKS = "system.openoffice.tasks";
+	public static final String PROPERTY_SYSTEM_OPENOFFICE_PORT = "system.openoffice.port";
 	public static final String PROPERTY_SYSTEM_IMG2PDF = "system.img2pdf";
 	public static final String PROPERTY_SYSTEM_PDF2SWF = "system.pdf2swf";
 	public static final String PROPERTY_SYSTEM_ANTIVIR = "system.antivir";
@@ -263,6 +264,8 @@ public class Config {
 	public static String SYSTEM_OPENOFFICE_PATH = "";
 	private static String SYSTEM_OPENOFFICE_TASKS_STR = "200";
 	public static int SYSTEM_OPENOFFICE_TASKS = Integer.parseInt(SYSTEM_OPENOFFICE_TASKS_STR);
+	private static String SYSTEM_OPENOFFICE_PORT_STR = "2002";
+	public static int SYSTEM_OPENOFFICE_PORT = Integer.parseInt(SYSTEM_OPENOFFICE_PORT_STR);
 	public static String SYSTEM_IMG2PDF = "";
 	public static String SYSTEM_PDF2SWF = "";
 	public static String SYSTEM_ANTIVIR = "";
@@ -535,6 +538,8 @@ public class Config {
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_PATH, SYSTEM_OPENOFFICE_PATH);
 			SYSTEM_OPENOFFICE_TASKS_STR = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE_TASKS, SYSTEM_OPENOFFICE_TASKS_STR);
 			SYSTEM_OPENOFFICE_TASKS = Integer.parseInt(SYSTEM_OPENOFFICE_TASKS_STR);
+			SYSTEM_OPENOFFICE_PORT_STR = config.getProperty(PROPERTY_SYSTEM_OPENOFFICE_PORT, SYSTEM_OPENOFFICE_PORT_STR);
+			SYSTEM_OPENOFFICE_PORT = Integer.parseInt(SYSTEM_OPENOFFICE_PORT_STR);
 			values.put(PROPERTY_SYSTEM_OPENOFFICE_TASKS, SYSTEM_OPENOFFICE_TASKS_STR+" ("+SYSTEM_OPENOFFICE_TASKS+")");
 			SYSTEM_IMG2PDF = config.getProperty(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
 			values.put(PROPERTY_SYSTEM_IMG2PDF, SYSTEM_IMG2PDF);
