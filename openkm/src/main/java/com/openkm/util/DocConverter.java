@@ -96,6 +96,7 @@ public class DocConverter {
 				officeManager = new DefaultOfficeManagerConfiguration()
 					.setOfficeHome(Config.SYSTEM_OPENOFFICE_PATH)
 					.setMaxTasksPerProcess(Config.SYSTEM_OPENOFFICE_TASKS)
+					.setPortNumber(Config.SYSTEM_OPENOFFICE_PORT)
 					.buildOfficeManager();
 			}
 		}
