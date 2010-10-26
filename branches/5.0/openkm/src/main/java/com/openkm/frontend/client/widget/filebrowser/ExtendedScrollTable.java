@@ -436,19 +436,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 						// We come here before executing click ( click is always executed ) 
 						if (enableOpen) {
-							if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
-								refreshDownloadTimer();
-							} else {
-								// We doing and extra time, because when Status unsetGroup is fired in TabDocument needs some extra time to finishing method
-								Timer downloadTimer = new Timer() {
-									@Override
-									public void run() {
-										if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
-											downloadDocument(false);
-										}
-									}
-								};
-								downloadTimer.schedule(200);
+							if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing() && 
+								Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
+								downloadDocument(false);
 							}
 						} 
 					}
@@ -952,32 +942,5 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	public boolean hasRows() {
 		return dataTable.getRowCount()>0;
 	}
-	
-	/**
-	 * refreshDownloadTimer
-	 * 
-	 * @return
-	 */
-	private void refreshDownloadTimer() {
-		timer = new Timer() {
-			@Override
-			public void run() {
-				// While status is visible must continue evaluating
-				if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing()) {
-					timer.schedule(500);
-				} else {
-					timer.cancel();
-					// We doing and extra time, because when Status unsetGroup is fired in TabDocument needs some extra time to finishing method
-					Timer downloadTimer = new Timer() {
-						@Override
-						public void run() {
-							downloadDocument(false);
-						}
-					};
-					downloadTimer.schedule(200);
-				}
-			}
-		};
-		timer.schedule(500);
-	}
+
 }
