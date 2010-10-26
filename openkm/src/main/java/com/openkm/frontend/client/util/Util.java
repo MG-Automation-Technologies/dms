@@ -22,7 +22,9 @@
 package com.openkm.frontend.client.util;
 
 import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.config.Config;
 
 public class Util {
@@ -168,7 +170,9 @@ public class Util {
 		if (!params.equals("") && !params.endsWith("&")) {
 			params += "&";
 		}
-		Window.open(Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path), "_self", "");
+		final Element downloadIframe = RootPanel.get("__download").getElement(); 
+		String url = Config.OKMDownloadServlet + "?" + params + "id=" + URL.encodeComponent(path);
+		DOM.setElementAttribute(downloadIframe, "src", url); 
 	}
 	
 	/**
