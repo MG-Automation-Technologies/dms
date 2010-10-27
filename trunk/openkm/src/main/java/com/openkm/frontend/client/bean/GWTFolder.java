@@ -22,7 +22,7 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -42,19 +42,19 @@ public class GWTFolder implements IsSerializable {
 	private boolean subscribed;
 	private String uuid;
 	
-	private List<String> subscriptors;
+	private Set<String> subscriptors;
 	
 	/**
 	 * @return Returns the subscriptors.
 	 */
-	public List<String> getSubscriptors() {
+	public Set<String> getSubscriptors() {
 		return subscriptors;
 	}
 
 	/**
 	 * @param subscriptors The subscriptors to set.
 	 */
-	public void setSubscriptors(List<String> subscriptors) {
+	public void setSubscriptors(Set<String> subscriptors) {
 		this.subscriptors = subscriptors;
 	}
 
