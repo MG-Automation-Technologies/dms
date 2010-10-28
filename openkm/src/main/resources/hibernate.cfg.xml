@@ -233,6 +233,8 @@
     <mapping resource="com/openkm/dao/bean/QueryParams.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/TwitterAccount.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
+    <!-- <mapping resource="com/openkm/dao/bean/SharedQueryParams.hbm.xml"/> -->
+    <mapping resource="com/openkm/dao/bean/ProposedSubscription.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/extension/Staple.hbm.xml"/>
