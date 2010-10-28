@@ -29,15 +29,17 @@ public class Message implements Serializable {
 	private int id;
 	private String from;
 	private String to;
+	private String user;
+	private String uuid;
 	private String subject;
 	private String content;
-	private boolean seen;
+	private Calendar seenDate;
 	private Calendar sentDate;
 	
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -45,60 +47,78 @@ public class Message implements Serializable {
 	public String getFrom() {
 		return from;
 	}
-
+	
 	public void setFrom(String from) {
 		this.from = from;
 	}
-
+	
 	public String getTo() {
 		return to;
 	}
-
+	
 	public void setTo(String to) {
 		this.to = to;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	public String getUuid() {
+		return uuid;
+	}
+	
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 	
 	public String getSubject() {
 		return subject;
 	}
-
+	
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
+	
 	public String getContent() {
 		return content;
 	}
-
+	
 	public void setContent(String content) {
 		this.content = content;
 	}
 	
-	public boolean isSeen() {
-		return seen;
+	public Calendar getSeenDate() {
+		return seenDate;
 	}
-
-	public void setSeen(boolean seen) {
-		this.seen = seen;
+	
+	public void setSeenDate(Calendar seenDate) {
+		this.seenDate = seenDate;
 	}
-
+	
 	public Calendar getSentDate() {
 		return sentDate;
 	}
-
+	
 	public void setSentDate(Calendar sentDate) {
 		this.sentDate = sentDate;
 	}
-
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
+		sb.append(", user="); sb.append(user);
+		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
-		sb.append(", seen="); sb.append(seen);
+		sb.append(", seenDate="); sb.append(seenDate==null?null:seenDate.getTime());
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
 		return sb.toString();
