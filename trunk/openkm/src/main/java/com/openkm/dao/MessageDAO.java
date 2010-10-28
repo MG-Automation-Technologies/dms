@@ -21,6 +21,7 @@
 
 package com.openkm.dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -112,9 +113,9 @@ public class MessageDAO {
 	 * Find by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Message> findByUser(String user) throws  DatabaseException {
+	public static List<Message> findByUser(String user) throws DatabaseException {
 		log.debug("findByUser({})", user);
-		String qs = "from Message msg where msg.to=:user order by msg.id";
+		String qs = "from Message msg where msg.user=:user order by msg.id";
 		Session session = null;
 		
 		try {
@@ -173,5 +174,27 @@ public class MessageDAO {
 		} finally {
 			HibernateUtil.close(session);
 		}
-	}	
+	}
+	
+	/**
+	 * Mark message as seen
+	 */
+	public static void markSeen(int msgId) throws DatabaseException {
+		log.debug("markSeen({})", msgId);
+		String qs = "update Message msg set msg.seenDate=:seenDate where msg.id=:id";
+		Session session = null;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			Query q = session.createQuery(qs);
+			q.setInteger("id", msgId);
+			q.setCalendar("seenDate", Calendar.getInstance());
+			q.executeUpdate();
+			log.debug("markSeen: void");
+		} catch (HibernateException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} finally {
+			HibernateUtil.close(session);
+		}
+	}
 }
