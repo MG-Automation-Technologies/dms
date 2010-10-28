@@ -59,7 +59,8 @@ import com.openkm.frontend.client.service.OKMPropertyGroupServiceAsync;
  */
 public class TabDocument extends Composite implements HasDocumentEvent, HasDocumentHandlerExtension, HasPropertyGroupHandlerExtension {
 	
-	public int TAB_PREVIEW = -1;
+	public int PREVIEW_TAB = -1;
+	private int SECURITY_TAB = -1;
 	
 	private final OKMPropertyGroupServiceAsync propertyGroupService = (OKMPropertyGroupServiceAsync) GWT.create(OKMPropertyGroupService.class);
 
@@ -109,10 +110,13 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				final int tabIndex = event.getSelectedItem().intValue();
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupProperty(tabIndex));
 				selectedTab = tabIndex;
+				if (tabIndex==SECURITY_TAB) {
+					security.fillWidth(); // Always when shows fires fill width
+				}
 				Timer previewTimer = new Timer() {
 					@Override
 					public void run() {
-						if (tabIndex == TAB_PREVIEW) {
+						if (tabIndex == PREVIEW_TAB) {
 							previewDocument(false);
 						}
 					}
@@ -163,7 +167,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			}
 		}
 
-		if (selectedTab == TAB_PREVIEW) {
+		if (selectedTab == PREVIEW_TAB) {
 			previewDocument(true);
 		}
 		
@@ -453,6 +457,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showSecurity() {
 		tabPanel.add(security, Main.i18n("tab.document.security"));
 		securityVisible = true;
+		SECURITY_TAB = tabPanel.getTabBar().getTabCount()-1; // starts at 0
 	}
 	
 	/**
@@ -461,7 +466,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	public void showPreview() {
 		tabPanel.add(preview, Main.i18n("tab.document.preview"));
 		previewVisible = true;
-		TAB_PREVIEW = tabPanel.getTabBar().getTabCount()-1; // starts at 0
+		PREVIEW_TAB = tabPanel.getTabBar().getTabCount()-1; // starts at 0
 	}
 	
 	public void showPropertyGroups() {
