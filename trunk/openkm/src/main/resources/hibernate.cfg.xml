@@ -222,6 +222,7 @@
     <mapping resource="com/openkm/dao/bean/Role.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Report.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Profile.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/Message.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Bookmark.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/Activity.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/MimeType.hbm.xml"/>
