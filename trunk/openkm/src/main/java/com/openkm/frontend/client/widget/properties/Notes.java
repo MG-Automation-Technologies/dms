@@ -409,7 +409,7 @@ public class Notes extends Composite {
 		richTextArea.setText("");
 		textArea.setText("");
 		add.setHTML(Main.i18n("button.add"));
-		if (visibleButtons || addNoteOption) {
+		if (visibleButtons) {
 			add.setVisible(true);
 		}
 		update.setVisible(false);
