@@ -8,6 +8,7 @@
     <property name="to" column="MSG_TO" not-null="true" length="127"/>
     <property name="subject" column="MSG_SUBJECT" not-null="true"/>
     <property name="content" column="MSG_CONTENT" type="text"/>
+    <property name="seen" column="MSG_SEEN" not-null="true"/>
     <property name="sentDate" column="MSG_SENT_DATE" not-null="true"/>
   </class>
 </hibernate-mapping>
