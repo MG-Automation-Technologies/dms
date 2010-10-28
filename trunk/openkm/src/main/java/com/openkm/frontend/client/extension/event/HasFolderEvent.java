@@ -44,6 +44,7 @@ public interface HasFolderEvent {
 		static final int EVENT_TAB_CHANGED    		= 3;
 		static final int EVENT_SECURITY_CHANGED 	= 4;
 		static final int EVENT_SET_VISIBLE_BUTTON 	= 5;
+		static final int EVENT_NOTE_ADDED 			= 6;
 		
 		private int type = 0;
 		
@@ -66,6 +67,7 @@ public interface HasFolderEvent {
 	FolderEventConstant TAB_CHANGED = new FolderEventConstant(FolderEventConstant.EVENT_TAB_CHANGED);
 	FolderEventConstant SECURITY_CHANGED = new FolderEventConstant(FolderEventConstant.EVENT_SECURITY_CHANGED);
 	FolderEventConstant SET_VISIBLE_BUTTON = new FolderEventConstant(FolderEventConstant.EVENT_SET_VISIBLE_BUTTON);
+	FolderEventConstant NOTE_ADDED = new FolderEventConstant(FolderEventConstant.EVENT_NOTE_ADDED);
 	
 	/**
 	 * @param event
