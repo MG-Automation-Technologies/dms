@@ -50,6 +50,7 @@ import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
+import com.openkm.frontend.client.extension.event.HasFolderEvent;
 import com.openkm.frontend.client.service.OKMNoteService;
 import com.openkm.frontend.client.service.OKMNoteServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
@@ -348,6 +349,12 @@ public class Notes extends Composite {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 			} else if (folder!=null) {
 				folder.getNotes().add(result);
+				// If is added first note must adding some icon on filebrowser
+				if (!folder.isHasNotes()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
+					folder.setHasNotes(true);
+				}
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.fireEvent(HasFolderEvent.NOTE_ADDED);
 			}
 		}
 
@@ -452,7 +459,10 @@ public class Notes extends Composite {
 						document.setHasNotes(false);
 					}
 				} else if (folder!=null) {
-					folder.setHasNotes(false);
+					if (notes.isEmpty()) {
+						Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
+						folder.setHasNotes(false);
+					}
 				}
 			}
 			
