@@ -31,6 +31,7 @@ public class Message implements Serializable {
 	private String to;
 	private String subject;
 	private String content;
+	private boolean seen;
 	private Calendar sentDate;
 	
 	public int getId() {
@@ -72,6 +73,14 @@ public class Message implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	public boolean isSeen() {
+		return seen;
+	}
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
+	}
 
 	public Calendar getSentDate() {
 		return sentDate;
@@ -89,6 +98,7 @@ public class Message implements Serializable {
 		sb.append(", to="); sb.append(to);
 		sb.append(", subject="); sb.append(subject);
 		sb.append(", content="); sb.append(content);
+		sb.append(", seen="); sb.append(seen);
 		sb.append(", sentDate="); sb.append(sentDate==null?null:sentDate.getTime());
 		sb.append("}");
 		return sb.toString();
