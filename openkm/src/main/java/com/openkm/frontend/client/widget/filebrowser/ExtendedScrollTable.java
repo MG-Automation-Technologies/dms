@@ -32,7 +32,6 @@ import com.google.gwt.gen2.table.client.SelectionGrid;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.openkm.frontend.client.Main;
@@ -71,7 +70,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	private int rowAction = ACTION_NONE;
 	
 	private boolean dragged = false;
-	private Timer timer = null;
 	
 	/**
 	 * @param dataTable
@@ -142,6 +140,10 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 			dataTable.setHTML(row, 0, Util.imageItemHTML("img/icon/subscribed.gif"));
 		} else {
 			dataTable.setHTML(row, 0, "&nbsp;");
+		}
+		
+		if (folder.isHasNotes()) {
+			dataTable.setHTML(row, 0, dataTable.getHTML(row,0) + Util.imageItemHTML("img/icon/note.gif"));
 		}
 		
 		// Looks if must change icon on parent if now has no childs and properties with user security atention
