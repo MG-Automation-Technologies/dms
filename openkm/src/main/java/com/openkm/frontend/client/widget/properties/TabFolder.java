@@ -60,6 +60,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public TabPanel tabPanel;
 	private Folder folder;
 	private SecurityScrollTable security;
+	public Notes notes;
 	private VerticalPanel panel;
 	private List<TabFolderExtension> widgetExtensionList;
 	private List<FolderHandlerExtension> folderHandlerExtensionList;
@@ -69,6 +70,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	private int width = 0;
 	private boolean propertiesVisible = false;
 	private boolean securityVisible = false;
+	private boolean notesVisible = false;
 	
 	public TabFolder() {
 		widgetExtensionList = new ArrayList<TabFolderExtension>();
@@ -76,6 +78,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		tabPanel = new TabPanel();
 		folder = new Folder();
 		security = new SecurityScrollTable();
+		notes = new Notes();
 		panel = new VerticalPanel();
 		
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
@@ -93,6 +96,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		
 		tabPanel.setWidth("100%");
 		folder.setSize("100%", "100%");
+		notes.setSize("100%", "100%");
 		panel.setSize("100%", "100%");
 		
 		tabPanel.setStyleName("okm-DisableSelect");
@@ -115,6 +119,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 		tabPanel.setSize(""+width, ""+height);
 		folder.setPixelSize(width,height-20); // Substract tab height
 		security.setPixelSize(width-2,height-22); // Substract tab height
+		notes.setPixelSize(width,height-20); // Substract tab height
 		security.fillWidth();
 		
 		// Setting size to extension
@@ -131,6 +136,8 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void setProperties(GWTFolder folder) {
 		this.folder.set(folder); // Used by tabFolderCommunicator
+		notes.set(folder);	   	 // Used by TabFolderCommunicator
+		
 		if (securityVisible) {
 			security.setPath(folder.getPath());
 			security.GetGrants();
@@ -180,6 +187,10 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 			tabPanel.add(folder, Main.i18n("tab.folder.properties"));
 			folder.langRefresh();
 		}
+		if (notesVisible) {
+			tabPanel.add(notes, Main.i18n("tab.folder.notes"));
+			notes.langRefresh();
+		} 
 		if (securityVisible) {
 			tabPanel.add(security, Main.i18n("tab.folder.security"));
 			security.langRefresh();
@@ -228,6 +239,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void setVisibleButtons(boolean visible) {
 		this.visibleButton = visible;
 		security.setVisibleButtons(visible);
+		notes.setVisibleButtons(visible);
 		
 		fireEvent(HasFolderEvent.SET_VISIBLE_BUTTON);
 	}
@@ -303,6 +315,14 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	public void showProperties() {
 		tabPanel.add(folder, Main.i18n("tab.folder.properties"));
 		propertiesVisible = true;
+	}
+	
+	/**
+	 * showNotes
+	 */
+	public void showNotes() {
+		tabPanel.add(notes, Main.i18n("tab.document.notes"));
+		notesVisible = true;
 	}
 	
 	/**
