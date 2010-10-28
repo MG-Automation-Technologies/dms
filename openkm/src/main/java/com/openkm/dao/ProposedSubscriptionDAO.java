@@ -93,7 +93,7 @@ public class ProposedSubscriptionDAO {
 	public static List<ProposedSubscription> findByUser(String usrId) throws DatabaseException,
 			RepositoryException {
 		log.debug("findByUser({})", usrId);
-		String qs = "from ProposedSubscription ps where ps.user=:user order by ps.id";
+		String qs = "from ProposedSubscription ps where ps.to=:user order by ps.id";
 		Session session = null;
 		Transaction tx = null;
 		
