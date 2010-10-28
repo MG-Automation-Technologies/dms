@@ -221,6 +221,13 @@ public class Util {
 		gWTFolder.setAuthor(fld.getAuthor());
 		gWTFolder.setSubscribed(fld.isSubscribed());
 		gWTFolder.setSubscriptors(fld.getSubscriptors());
+		gWTFolder.setNotes(copy(fld.getNotes()));
+		for (Iterator<Note> it = fld.getNotes().iterator(); it.hasNext() && !gWTFolder.isHasNotes();) {
+			Note note = it.next();
+			if (!note.getUser().equals(Config.SYSTEM_USER)) {
+				gWTFolder.setHasNotes(true);
+			}
+		}
 		
 		log.debug("copy: "+gWTFolder);
 		return gWTFolder;

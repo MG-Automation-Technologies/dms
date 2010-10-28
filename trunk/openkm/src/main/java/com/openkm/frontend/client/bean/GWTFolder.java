@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -41,7 +42,8 @@ public class GWTFolder implements IsSerializable {
 	private byte permissions;
 	private boolean subscribed;
 	private String uuid;
-	
+	private boolean hasNotes = false;	
+	private List<GWTNote> notes;
 	private Set<String> subscriptors;
 	
 	/**
@@ -138,5 +140,21 @@ public class GWTFolder implements IsSerializable {
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+	
+	public boolean isHasNotes() {
+		return hasNotes;
+	}
+
+	public void setHasNotes(boolean hasNotes) {
+		this.hasNotes = hasNotes;
+	}
+	
+	public List<GWTNote> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<GWTNote> notes) {
+		this.notes = notes;
 	}
 }

@@ -21,8 +21,10 @@
 
 package com.openkm.frontend.client.widget.properties;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,6 +46,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTNote;
 import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasDocumentEvent;
@@ -64,6 +67,7 @@ public class Notes extends Composite {
 	
 	private FlexTable tableNotes;
 	private GWTDocument document;
+	private GWTFolder folder;
 	private Button add;
 	private Button update;
 	private Button cancel;
@@ -81,7 +85,6 @@ public class Notes extends Composite {
 	int editedNoteRow = 0;
 	
 	public Notes () {
-		document = new GWTDocument();
 		tableNotes = new FlexTable();
 		scrollPanel = new ScrollPanel(tableNotes);
 		newNotePanel = new VerticalPanel(); 
@@ -175,6 +178,27 @@ public class Notes extends Composite {
 		}
 		
 		for (Iterator<GWTNote> it = doc.getNotes().iterator(); it.hasNext();) {
+			writeNote(it.next());
+		}
+		
+		writeAddNote();
+	}
+	
+	/**
+	 * Sets the folder values
+	 * 
+	 * @param doc The folder object
+	 */
+	public void set(GWTFolder folder) {
+		reset();
+		this.folder = folder;
+		richTextArea.setText("");
+		
+		while (tableNotes.getRowCount()>0) {
+			tableNotes.removeRow(0);
+		}
+		
+		for (Iterator<GWTNote> it = folder.getNotes().iterator(); it.hasNext();) {
 			writeNote(it.next());
 		}
 		
@@ -306,7 +330,7 @@ public class Notes extends Composite {
 	}
 	
 	/**
-	 * Callback addNote document
+	 * Callback addNote 
 	 */
 	final AsyncCallback<GWTNote> callbackAddNote = new AsyncCallback<GWTNote>() {
 		public void onSuccess(GWTNote result) {	
@@ -314,13 +338,17 @@ public class Notes extends Composite {
 			writeNote(result);
 			writeAddNote();
 			reset();
-			document.getNotes().add(result);
-			// If is added first note must adding some icon on filebrowser
-			if (!document.isHasNotes()) {
-				Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
-				document.setHasNotes(true);
+			if (document!=null) {
+				document.getNotes().add(result);
+				// If is added first note must adding some icon on filebrowser
+				if (!document.isHasNotes()) {
+					Main.get().mainPanel.desktop.browser.fileBrowser.addNoteIconToSelectedRow();
+					document.setHasNotes(true);
+				}
+				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
+			} else if (folder!=null) {
+				folder.getNotes().add(result);
 			}
-			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.fireEvent(HasDocumentEvent.NOTE_ADDED);
 		}
 
 		public void onFailure(Throwable caught) {
@@ -329,12 +357,18 @@ public class Notes extends Composite {
 	};
 	
 	/**
-	 * addNote document
+	 * addNote
 	 */
 	private void addNote() {
 		ServiceDefTarget endPoint = (ServiceDefTarget) noteService;
 		endPoint.setServiceEntryPoint(Config.OKMNoteService);
-		noteService.add(document.getPath(), getTextNote(), callbackAddNote);
+		String path = "";
+		if (document!=null) {
+			path = document.getPath();
+		} else if (folder!=null) {
+			path = folder.getPath();
+		}
+		noteService.add(path, getTextNote(), callbackAddNote);
 	}
 	
 	/**
@@ -397,17 +431,28 @@ public class Notes extends Composite {
 				tableNotes.removeRow(row); // row + 1;
 				tableNotes.removeRow(row); // row + 2
 				
-				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
+				List<GWTNote> notes = new ArrayList<GWTNote>();
+				if (document!=null) {
+					notes = document.getNotes();
+				} else if (folder!=null) {
+					notes = folder.getNotes();
+				}
+				
+				for (Iterator<GWTNote> it = notes.iterator(); it.hasNext(); ) {
 					GWTNote note = it.next();
 					if (note.getPath().equals(notePath)) {
-						document.getNotes().remove(note);
+						notes.remove(note);
 						break;
 					}
 				}
 				
-				if (document.getNotes().isEmpty()) {
-					Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
-					document.setHasNotes(false);
+				if (document!=null) {
+					if (notes.isEmpty()) {
+						Main.get().mainPanel.desktop.browser.fileBrowser.deleteNoteIconToSelectedRow();
+						document.setHasNotes(false);
+					}
+				} else if (folder!=null) {
+					folder.setHasNotes(false);
 				}
 			}
 			
@@ -432,7 +477,14 @@ public class Notes extends Composite {
 			@Override
 			public void onSuccess(Object result) {
 				tableNotes.setHTML(row, 0, text);
-				for (Iterator<GWTNote> it = document.getNotes().iterator(); it.hasNext(); ) {
+				
+				List<GWTNote> notes = new ArrayList<GWTNote>();
+				if (document!=null) {
+					notes = document.getNotes();
+				} else if (folder!=null) {
+					notes = folder.getNotes();
+				}
+				for (Iterator<GWTNote> it = notes.iterator(); it.hasNext(); ) {
 					GWTNote note = it.next();
 					if (note.getPath().equals(editedNotePath)) {
 						note.setText(text);
@@ -454,6 +506,12 @@ public class Notes extends Composite {
 	 * @return
 	 */
 	public Collection<GWTNote> getNotes() {
-		return document.getNotes();
+		if (document!=null) {
+			return document.getNotes();
+		} else if (folder!=null) {
+			return folder.getNotes();
+		} else {
+			return null;
+		}
 	}
 }
