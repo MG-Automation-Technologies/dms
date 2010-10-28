@@ -26,7 +26,8 @@ import java.io.Serializable;
 public class ProposedSubscription implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String user;
+	private String from;
+	private String to;
 	private String uuid;
 	private String type;
 	
@@ -37,13 +38,21 @@ public class ProposedSubscription implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getUser() {
-		return user;
+	
+	public String getFrom() {
+		return from;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public void setTo(String to) {
+		this.to = to;
 	}
 
 	public String getUuid() {
@@ -66,7 +75,8 @@ public class ProposedSubscription implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("id="); sb.append(id);
-		sb.append(", user="); sb.append(user);
+		sb.append(", from="); sb.append(from);
+		sb.append(", to="); sb.append(to);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", type="); sb.append(type);
 		sb.append("}");
