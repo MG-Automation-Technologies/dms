@@ -171,7 +171,7 @@ public class BookmarkDAO {
 	 */
 	public static Bookmark findByPk(javax.jcr.Session jcrSession, int bmId) throws DatabaseException,
 			RepositoryException {
-		log.debug("findByPk({})", bmId);
+		log.debug("findByPk({}, {})", jcrSession, bmId);
 		String qs = "from Bookmark bm where bm.id=:id";
 		Session session = null;
 		Transaction tx = null;

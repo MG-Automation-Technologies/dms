@@ -23,6 +23,8 @@ package com.openkm.dao;
 
 import java.util.List;
 
+import javax.jcr.Node;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -30,9 +32,12 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.bean.Folder;
+import com.openkm.bean.Repository;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.ProposedSubscription;
+import com.openkm.util.JCRUtils;
 
 public class ProposedSubscriptionDAO {
 	private static Logger log = LoggerFactory.getLogger(ProposedSubscriptionDAO.class);
@@ -90,9 +95,9 @@ public class ProposedSubscriptionDAO {
 	 * Finde by user
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<ProposedSubscription> findByUser(String usrId) throws DatabaseException,
-			RepositoryException {
-		log.debug("findByUser({})", usrId);
+	public static List<ProposedSubscription> findByUser(javax.jcr.Session jcrSession, String usrId) throws 
+			DatabaseException, RepositoryException {
+		log.debug("findByUser({}, {})", jcrSession, usrId);
 		String qs = "from ProposedSubscription ps where ps.to=:user order by ps.id";
 		Session session = null;
 		Transaction tx = null;
@@ -103,9 +108,33 @@ public class ProposedSubscriptionDAO {
 			Query q = session.createQuery(qs);
 			q.setString("user", usrId);
 			List<ProposedSubscription> ret = q.list();
+			
+			for (ProposedSubscription ps : ret) {
+				try {
+					Node node = jcrSession.getNodeByUUID(ps.getUuid());
+					String nType = JCRUtils.getNodeType(node);
+					ps.setPath(node.getPath());
+					
+					if (!nType.equals(ps.getType())) {
+						ps.setType(JCRUtils.getNodeType(node));
+						session.update(ps);
+					}
+				} catch (javax.jcr.ItemNotFoundException e) {
+					// If user bookmark is missing, set a default
+					Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+					ps.setPath(okmRoot.getPath());
+					ps.setUuid(okmRoot.getUUID());
+					ps.setType(Folder.TYPE);
+					session.save(ps);
+				}
+			}
+			
 			HibernateUtil.commit(tx);
 			log.debug("findByUser: {}", ret);
 			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			HibernateUtil.rollback(tx);
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
@@ -117,9 +146,9 @@ public class ProposedSubscriptionDAO {
 	/**
 	 * Find by pk
 	 */
-	public static ProposedSubscription findByPk(int psId) throws DatabaseException,
+	public static ProposedSubscription findByPk(javax.jcr.Session jcrSession, int psId) throws DatabaseException,
 			RepositoryException {
-		log.debug("findByPk({})", psId);
+		log.debug("findByPk({}, {})", jcrSession, psId);
 		String qs = "from ProposedSubscription ps where ps.id=:id";
 		Session session = null;
 		Transaction tx = null;
@@ -130,9 +159,31 @@ public class ProposedSubscriptionDAO {
 			Query q = session.createQuery(qs);
 			q.setInteger("id", psId);
 			ProposedSubscription ret = (ProposedSubscription) q.setMaxResults(1).uniqueResult();
+			
+			try {
+				Node node = jcrSession.getNodeByUUID(ret.getUuid());
+				String nType = JCRUtils.getNodeType(node);
+				ret.setPath(node.getPath());
+				
+				if (!nType.equals(ret.getType())) {
+					ret.setType(JCRUtils.getNodeType(node));
+					session.update(ret);
+				}
+			} catch (javax.jcr.ItemNotFoundException e) {
+				// If user bookmark is missing, set a default
+				Node okmRoot = jcrSession.getRootNode().getNode(Repository.ROOT);
+				ret.setPath(okmRoot.getPath());
+				ret.setUuid(okmRoot.getUUID());
+				ret.setType(Folder.TYPE);
+				session.save(ret);
+			}
+			
 			HibernateUtil.commit(tx);
 			log.debug("findByPk: {}", ret);
 			return ret;
+		} catch (javax.jcr.RepositoryException e) {
+			HibernateUtil.rollback(tx);
+			throw new RepositoryException(e.getMessage(), e);
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
