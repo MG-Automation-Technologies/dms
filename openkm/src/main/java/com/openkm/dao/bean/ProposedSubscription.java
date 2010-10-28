@@ -28,6 +28,7 @@ public class ProposedSubscription implements Serializable {
 	private int id;
 	private String from;
 	private String to;
+	private String path;
 	private String uuid;
 	private String type;
 	
@@ -54,6 +55,14 @@ public class ProposedSubscription implements Serializable {
 	public void setTo(String to) {
 		this.to = to;
 	}
+	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 
 	public String getUuid() {
 		return uuid;
@@ -77,6 +86,7 @@ public class ProposedSubscription implements Serializable {
 		sb.append("id="); sb.append(id);
 		sb.append(", from="); sb.append(from);
 		sb.append(", to="); sb.append(to);
+		sb.append(", path="); sb.append(path);
 		sb.append(", uuid="); sb.append(uuid);
 		sb.append(", type="); sb.append(type);
 		sb.append("}");
