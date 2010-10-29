@@ -438,8 +438,7 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 						Main.get().mainPanel.topPanel.toolBar.checkToolButtomPermissions(doc,Main.get().activeFolderTree.getFolder());
 						// We come here before executing click ( click is always executed ) 
 						if (enableOpen) {
-							if (Main.get().mainPanel.desktop.browser.tabMultiple.status.isPanelRefreshing() && 
-								Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
+							if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isDownloadOption()) {
 								downloadDocument(false);
 							}
 						} 
