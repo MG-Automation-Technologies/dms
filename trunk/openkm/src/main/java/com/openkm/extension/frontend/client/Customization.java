@@ -25,6 +25,11 @@ package com.openkm.extension.frontend.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.openkm.extension.frontend.client.widget.client.metromusa.MetromUsa;
+import com.openkm.extension.frontend.client.widget.stapling.Stapling;
+import com.openkm.extension.frontend.client.widget.toolbar.downloadButton.DownloadButton;
+import com.openkm.extension.frontend.client.widget.toolbar.downloadPdfButton.DownloadPdfButton;
+
 /**
  * Customization
  * 
@@ -60,7 +65,7 @@ public class Customization {
 //		extensions.add(new ToolBarBoxExample().getToolBarBox());
 		
 		// OPENKM PROPIETARY EXTENSIONS		
-/*		if (DownloadButton.isRegistered(uuidList)) {
+		if (DownloadButton.isRegistered(uuidList)) {
 			extensions.add(new DownloadButton(uuidList).getButton());
 		}
 		if (DownloadPdfButton.isRegistered(uuidList)) { 
@@ -71,7 +76,7 @@ public class Customization {
 		}
 		if (MetromUsa.isRegistered(uuidList)) {
 			extensions.addAll(new MetromUsa(uuidList).getExtensions());
-		} */
+		}
 		
 		return extensions;
 	}
