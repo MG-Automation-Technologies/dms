@@ -12,7 +12,7 @@
   <scm>
     <url>http://openkm.svn.sourceforge.net/viewvc/openkm/trunk</url>
     <connection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/trunk</connection>
-    <developerConnection>scm:svn:https://openkm.svn.sourceforge.net/svnroot/openkm/trunk</developerConnection>
+    <developerConnection>scm:svn:https://openkm.svn.sourceforge.net/gwtsvnroot/openkm/trunk</developerConnection>
   </scm>
 
   <licenses>
@@ -379,7 +379,7 @@
       <artifactId>gwt-dev</artifactId>
       <version>${gwt.version}</version>
       <scope>provided</scope>
-    </dependency>-->
+    </dependency>--> 
 
     <!-- GWT Maven plugin -->
     <dependency>
@@ -463,13 +463,11 @@
     </dependency>
     
     <!-- OpenKM extensions -->
-    <!--
     <dependency>
       <groupId>com.openkm.extension</groupId>
       <artifactId>sample-full</artifactId>
       <version>1.0</version>
     </dependency>
-    -->
   </dependencies>
 
   <build>
