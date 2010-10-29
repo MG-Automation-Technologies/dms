@@ -45,11 +45,11 @@ public class Administration extends Composite {
 		DOM.setElementProperty(iframe.getElement(), "frameborder", "0");
 		DOM.setElementProperty(iframe.getElement(), "marginwidth", "0");
 		DOM.setElementProperty(iframe.getElement(), "marginheight", "0");
-		//DOM.setElementProperty(iframe.getElement(), "allowtransparency", "true"); // Commented because on IE show clear if allowtransparency=true
+		DOM.setElementProperty(iframe.getElement(), "allowtransparency", "false"); // Commented because on IE show clear if allowtransparency=true
 		DOM.setElementProperty(iframe.getElement(), "scrolling", "no");
 		
 		iframe.setUrl("/OpenKM"+Config.INSTALL+"/admin/index.jsp");
-		iframe.setStyleName("okm-Input");
+		iframe.setStyleName("okm-Iframe");
 		
 		initWidget(iframe);
 	}
