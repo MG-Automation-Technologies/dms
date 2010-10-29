@@ -270,10 +270,10 @@ a:active {
 	font-size: 4px;
 }
 
-/* Solution to IE transparent popup <iframe> problem  */
+/* Solution to IE transparent popup <iframe> problem  
 iframe {
 	filter: progid : DXImageTransform . Microsoft . Alpha(opacity = 0);
-}
+} */
 
 /* HorizontalBar */
 .okm-HorizontalBar {
