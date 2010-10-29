@@ -51,6 +51,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMBrowser 					= "018";
 	public static final String ORIGIN_OKMUserCopyService 			= "019";
 	public static final String ORIGIN_OKMNoteService				= "020";
+	public static final String ORIGIN_OKMStaplingService			= "021";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
@@ -80,6 +81,7 @@ public class ErrorCode {
 	public static final String CAUSE_PrincipalAdapterException	= "025";
 	public static final String CAUSE_WorkflowException			= "026";
 	public static final String CAUSE_DocumentNameMismatch		= "027";
+	public static final String CAUSE_NumberFormatException		= "028";
 
 	/**
 	 * Gets the error
