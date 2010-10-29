@@ -45,11 +45,11 @@ public class Lang_zh_TW {
 	    lang.put("startup.openkm", "載入OpenKM");
 		lang.put("startup.starting.loading", "開始載入OpenKM");
 		lang.put("startup.taxonomy", "正在取得分類根節點");
-		lang.put("startup.categories", "Getting categories root node");
-		lang.put("startup.thesaurus", "Getting thesaurus root node");
+		lang.put("startup.categories", "正在取得categories根節點");
+		lang.put("startup.thesaurus", "正在取得thesaurus根節點");
 		lang.put("startup.template", "正在取得樣板根節點");
 		lang.put("startup.personal", "正在取得個人根節點");
-		lang.put("startup.mail", "Getting e-mail root node");
+		lang.put("startup.mail", "正在取得電子郵件根節點");
 		lang.put("startup.trash", "正在取得回收筒根節點");
 		lang.put("startup.user.home", "正在取得使用者根節點");
 		lang.put("startup.bookmarks", "正在取得書籤");
@@ -59,16 +59,16 @@ public class Lang_zh_TW {
 		lang.put("startup.loading.taxonomy.open.path", "正在載入分類 - 開啟路徑");
 		lang.put("startup.loading.taxonomy.getting.filebrowser.folders", "正在載入分類 - 正在取得資料夾");
 		lang.put("startup.loading.taxonomy.getting.filebrowser.documents", "正在載入分類 - 正在取得文件");
-		lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "Loading taxonomy - getting mails");
+		lang.put("startup.loading.taxonomy.getting.filebrowser.mails", "正在載入分類 - 正在取得電子郵件");
 		lang.put("startup.loading.personal", "正在取得個人化資料");
-		lang.put("startup.loading.mail", "Loading e-mails");
-		lang.put("startup.loading.categories", "Loading categories");
-		lang.put("startup.loading.thesaurus", "Loading thesaurus");
+		lang.put("startup.loading.mail", "正在取得電子郵件");
+		lang.put("startup.loading.categories", "正在取得categories");
+		lang.put("startup.loading.thesaurus", "正在取得thesaurus");
 		lang.put("startup.loading.templates", "正在取得樣板");
 		lang.put("startup.loading.trash", "正在取得回收筒");
 		lang.put("startup.loading.history.search", "正在取得歷史搜尋");
 		lang.put("startup.loading.user.values", "正在取得使用者資料");
-		lang.put("startup.keep.alive", "Loading keep alive");
+		lang.put("startup.keep.alive", "正在取得keep alive");
 	    
 	    // Update notification
 	    lang.put("openkm.update.available", "OpenKM更新成功");
@@ -76,14 +76,14 @@ public class Lang_zh_TW {
 	    // Left Panel
 	    lang.put("leftpanel.label.taxonomy", "分類");
 	    lang.put("leftpanel.label.trash", "回收筒");
-	    lang.put("leftpanel.label.mail", "E-mail");
+	    lang.put("leftpanel.label.mail", "電子郵件");
 		lang.put("leftpanel.label.stored.search", "已儲存的搜尋");
 		lang.put("leftpanel.label.categories", "Categories");
 		lang.put("leftpanel.label.thesaurus", "Thesaurus");
 	    lang.put("leftpanel.label.templates", "樣板");
 	    lang.put("leftpanel.label.my.documents", "我的文件");
 	    lang.put("leftpanel.label.user.search", "使用者新進文件");
-	    lang.put("leftpanel.label.all.repository", "All repository");
+	    lang.put("leftpanel.label.all.repository", "全部儲存庫");
 	    
 	    // Tree
 	    lang.put("tree.menu.directory.create", "建立資料夾");
@@ -107,10 +107,10 @@ public class Lang_zh_TW {
 	    lang.put("tree.status.refresh.add.subscription", "新增訂閱");
 	    lang.put("tree.status.refresh.remove.subscription", "移除訂閱");
 		lang.put("tree.status.refresh.get.root", "正在重新整理資料夾根目錄結構");
-		lang.put("tree.status.refresh.get.keywords", "Refreshing keywords");
+		lang.put("tree.status.refresh.get.keywords", "在重新整理關鍵字");
 		lang.put("tree.status.refresh.get.user.home", "正在取得使用者首頁書籤");
 	    lang.put("tree.status.refresh.purge.trash", "正在清除回收筒");
-	    lang.put("tree.menu.directory.find.folder","Find folder");
+	    lang.put("tree.menu.directory.find.folder","搜尋資料夾");
 	    
 	    // Trash
 	    lang.put("trash.menu.directory.restore", "重新載入");
@@ -127,7 +127,7 @@ public class Lang_zh_TW {
 			lang.put("general.menu.file.download.document", "下載文件");
 			lang.put("general.menu.file.download.document.pdf", "以PDF格式下載文件");
 			lang.put("general.menu.file.send.link", "文件通知");
-			lang.put("general.menu.file.send.attachment", "Send document attachment");
+			lang.put("general.menu.file.send.attachment", "寄送文件附件");
 			lang.put("general.menu.file.lock", "鎖定");
 			lang.put("general.menu.file.unlock", "解除鎖定");
 			lang.put("general.menu.file.add.document", "新增文件");
@@ -136,8 +136,8 @@ public class Lang_zh_TW {
 			lang.put("general.menu.file.cancel.checkout", "取消簽出");
 			lang.put("general.menu.file.delete", "刪除");
 			lang.put("general.menu.file.refresh", "重新整理");
-			lang.put("general.menu.file.scanner", "Scanner");
-			lang.put("general.menu.file.uploader", "File uploader");
+			lang.put("general.menu.file.scanner", "掃瞄器");
+			lang.put("general.menu.file.uploader", "檔案上載");
 	    lang.put("general.menu.tools", "工具");
 	    	lang.put("general.menu.tools.languages", "語系");
 	    	lang.put("general.menu.tools.skin", "外觀");
@@ -147,7 +147,7 @@ public class Lang_zh_TW {
     			lang.put("general.menu.tools.skin.bigfont", "大型字");
     		lang.put("general.menu.debug.console", "除錯控制台");
     		lang.put("general.menu.administration", "顯示管理平台");
-    		lang.put("general.menu.tools.preferences", "Preferences");
+    		lang.put("general.menu.tools.preferences", "系統偏好");
     	lang.put("general.menu.bookmark", "書籤");
 		lang.put("general.menu.bookmark.home", "首頁書籤");
 		lang.put("general.menu.bookmark.default.home", "設為預設首頁書籤");
@@ -193,7 +193,7 @@ public class Lang_zh_TW {
 	    lang.put("filebrowser.menu.image.viewer", "圖示檢視");
 	    lang.put("filebrowser.status.refresh.folder", "正在更新資料夾清單");
 		lang.put("filebrowser.status.refresh.document", "正在更新文件清單");
-		lang.put("filebrowser.status.refresh.mail", "Updating mail list");
+		lang.put("filebrowser.status.refresh.mail", "正在更新郵件清單");
 	    lang.put("filebrowser.status.refresh.delete.folder", "正在刪除資料夾");
 	    lang.put("filebrowser.status.refresh.delete.document", "正在刪除文件");
 	    lang.put("filebrowser.status.refresh.checkout", "正在簽出文件");
@@ -206,52 +206,52 @@ public class Lang_zh_TW {
 		lang.put("filebrowser.status.refresh.folder.get", "正在更新資料夾");
 		lang.put("filebrowser.status.refresh.document.get", "正在更新文件");
 	    lang.put("filebrowser.status.refresh.add.subscription", "正在新增訂閱");
-	    lang.put("filebrowser.status.refresh.remove.subscription", "鄭在移除訂閱");
+	    lang.put("filebrowser.status.refresh.remove.subscription", "正在移除訂閱");
 		lang.put("filebrowser.status.refresh.get.user.home", "正在取得使用者首頁書籤");
-		lang.put("filebrowser.status.refresh.delete.mail", "Deleting mail");
-		lang.put("filebrowser.status.refresh.mail.purge", "Deleting mail");
+		lang.put("filebrowser.status.refresh.delete.mail", "正在刪除郵件");
+		lang.put("filebrowser.status.refresh.mail.purge", "正在刪除郵件");
 	    
 	    // File Upload
 	    lang.put("fileupload.send", "傳送");
 	    lang.put("fileupload.status.sending", "正在更新檔案...");
-	    lang.put("fileupload.status.indexing", "Indexing file...");
+	    lang.put("fileupload.status.indexing", "正在建立檔案索引...");
 	    lang.put("fileupload.status.ok", "檔案上傳無誤");
 	    lang.put("fileupload.upload.status", "上傳狀態");
 	    lang.put("fileupload.upload.uploaded", "上傳");
 	    lang.put("fileupload.upload.completed", "上傳完成");
-	    lang.put("fileupload.upload.runtime", "Runtime");
-	    lang.put("fileupload.upload.remaining", "Remaining");
+	    lang.put("fileupload.upload.runtime", "執行端");
+	    lang.put("fileupload.upload.remaining", "剩餘");
 	    lang.put("fileupload.button.close", "關閉");
 	    lang.put("fileupload.button.add.other.file", "新增其他檔案");
 	    lang.put("fileupload.status.move.file", "正在移動檔案...");
-	    lang.put("fileupload.status.move.mail", "Moving mail...");
+	    lang.put("fileupload.status.move.mail", "正在移動郵件...");
 	    lang.put("fileupload.status.copy.file", "正在複製檔案...");
-	    lang.put("fileupload.status.copy.mail", "Coping mail...");
+	    lang.put("fileupload.status.copy.mail", "正在複製郵件...");
 	    lang.put("fileupload.status.restore.file", "正在重新載入檔案...");
-	    lang.put("fileupload.status.restore.mail", "Restoring mail...");
+	    lang.put("fileupload.status.restore.mail", "正在重新載入郵件...");
 		lang.put("fileupload.status.move.folder", "正在移動資料夾...");
 		lang.put("fileupload.status.copy.folder", "正在複製資料夾...");
 		lang.put("fileupload.status.restore.folder", "正在重新載入資料夾...");
 	    lang.put("fileupload.status.create.from.template", "正在從樣板建立檔案...");
-	    lang.put("fileupload.status.of", "of");
+	    lang.put("fileupload.status.of", "的");
 	    lang.put("fileupload.label.insert", "新增文件");
 	    lang.put("fileupload.label.update", "更新文件");
 	    lang.put("fileupload.label.users.notify", "通知使用者");
 		lang.put("fileupload.label.comment", "註解");
 	    lang.put("fileupload.label.users.to.notify",  "被通知的使用者");
 	    lang.put("fileupload.label.users",  "使用者");
-	    lang.put("fileupload.label.groups.to.notify","Groups to notify");
-	    lang.put("fileupload.label.groups","Groups");
+	    lang.put("fileupload.label.groups.to.notify","被通知的群組");
+	    lang.put("fileupload.label.groups","群組");
 	    lang.put("fileupload.label.must.select.users",  "需選擇要通知的使用者");
 	    lang.put("fileupload.label.importZip", "匯入ZIP文件");
 		lang.put("fileupload.label.notify.comment", "通知訊息");
 	    lang.put("fileupload.label.error.importing.zip", "匯入檔案錯誤");
 	    lang.put("fileupload.label.error.move.file", "移動檔案錯誤");
-	    lang.put("fileupload.label.error.move.mail", "Error moving mail");
+	    lang.put("fileupload.label.error.move.mail", "移動郵件錯誤");
 	    lang.put("fileupload.label.error.copy.file", "複製檔案錯誤");
-	    lang.put("fileupload.label.error.copy.mail", "Error coping mail");
+	    lang.put("fileupload.label.error.copy.mail", "複製郵件錯誤");
 	    lang.put("fileupload.label.error.restore.file", "重新載入檔案錯誤");
-	    lang.put("fileupload.label.error.restore.mail", "Error restoring mail");
+	    lang.put("fileupload.label.error.restore.mail", "重新載入郵件錯誤");
 		lang.put("fileupload.label.error.move.folder", "移動資料夾錯誤");
 		lang.put("fileupload.label.error.copy.folder", "複製資料夾錯誤");
 		lang.put("fileupload.label.error.restore.folder", "重新載入資料夾錯誤");
@@ -269,12 +269,12 @@ public class Lang_zh_TW {
 		lang.put("tab.status.security.user", "正在更新權限使用者");
 	    lang.put("tab.document.status.group.properties", "正在更新屬性群組");
 	    lang.put("tab.document.status.set.keywords", "正在設定關鍵字");
-	    lang.put("tab.document.status.set.categories", "Updating categories");
+	    lang.put("tab.document.status.set.categories", "正在設定categories");
 		lang.put("tab.document.status.get.version.history.size", "正在重新整理文件歷史大小");
 		lang.put("tab.document.status.purge.version.history", "正在壓縮文件歷史");
 	    lang.put("tab.document.status.restore.version", "正在重新載入文件版本");
 	    lang.put("tab.document.security", "安全");
-	    lang.put("tab.document.preview", "Preview");
+	    lang.put("tab.document.preview", "預覽");
 	    lang.put("tab.folder.properties", "屬性");
 	    lang.put("tab.folder.security", "安全");
 	    
@@ -306,7 +306,7 @@ public class Lang_zh_TW {
 	    lang.put("document.url", "網址");
 	    lang.put("document.webdav", "WebDAV");
 	    lang.put("document.add.note", "新增日誌");
-	    lang.put("document.keywords.cloud", "Keywords cloud");
+	    lang.put("document.keywords.cloud", "雲端關鍵字");
 	    lang.put("document.categories", "Categories");
 	    
 	    // Folder
@@ -321,9 +321,9 @@ public class Lang_zh_TW {
 		lang.put("folder.subscribed.users", "已訂閱使用者");
 		lang.put("folder.url", "URL");
 		lang.put("folder.webdav", "WebDAV");
-		lang.put("folder.number.folders", "Folders");
-	    lang.put("folder.number.documents", "Documents");
-	    lang.put("folder.number.mails", "Mails");
+		lang.put("folder.number.folders", "資料夾");
+	    lang.put("folder.number.documents", "文件");
+	    lang.put("folder.number.mails", "郵件");
 	    
 	    // Version
 	    lang.put("version.name", "版本");
@@ -338,29 +338,29 @@ public class Lang_zh_TW {
 	    lang.put("security.group.name", "群組");
 	    lang.put("security.group.permission.read", "讀");
 	    lang.put("security.group.permission.write", "寫");
-	    lang.put("security.group.permission.delete", "Delete");
-	    lang.put("security.group.permission.security", "Security");
+	    lang.put("security.group.permission.delete", "刪除");
+	    lang.put("security.group.permission.security", "安全");
 	    lang.put("security.user.name", "使用者");
 		lang.put("security.user.permission.read", "讀");
 		lang.put("security.user.permission.write", "寫");
-		lang.put("security.user.permission.delete", "Delete");
-		lang.put("security.user.permission.security", "Security");
-		lang.put("security.user.permission.security", "Security");
+		lang.put("security.user.permission.delete", "刪除");
+		lang.put("security.user.permission.security", "安全");
+		lang.put("security.user.permission.security", "安全");
 	    lang.put("security.users", "使用者");
 	    lang.put("security.groups", "群組");
-	    lang.put("security.recursive", "Recursive permission changes");
-	    lang.put("secutiry.filter.by.users","Users filter");
-	    lang.put("secutiry.filter.by.groups","Groups filter");
-	    lang.put("security.status.updating","Updating security");
+	    lang.put("security.recursive", "循環權限變更");
+	    lang.put("secutiry.filter.by.users","依使用者過濾");
+	    lang.put("secutiry.filter.by.groups","依群組過濾");
+	    lang.put("security.status.updating","正在更新安全");
 	    
 	    // Preview
-	    lang.put("preview.unavailable", "Preview unavailable");
+	    lang.put("preview.unavailable", "無法取得預覽");
 
 	    // Mail
-	    lang.put("mail.from", "From");
-	    lang.put("mail.reply", "Reply to");
-	    lang.put("mail.to", "To");
-	    lang.put("mail.subject", "Subject");
+	    lang.put("mail.from", "從");
+	    lang.put("mail.reply", "回覆給");
+	    lang.put("mail.to", "給");
+	    lang.put("mail.subject", "郵件主旨");
 	    
 	    // Error
 	    lang.put("error.label", "系統發生一項錯誤");
@@ -388,27 +388,27 @@ public class Lang_zh_TW {
 		lang.put("confirm.set.default.home", "確定要設定預設首頁書籤?");
 	    lang.put("confirm.delete.saved.search", "確定要刪除已儲存的搜尋條件?");
 	    lang.put("confirm.delete.user.news", "確定要刪除使用者新進文件?");
-	    lang.put("confirm.delete.mail", "Do you really want to delete mail ?");
-	    lang.put("confirm.get.pooled.workflow.task", "Do you want to assign this task to you ?");
-	    lang.put("confirm.force.unlock", "Do you really want to force the document unlock ?");
-	    lang.put("confirm.force.cancel.checkout", "Do you really want to force the document cancel checkout ?");
+	    lang.put("confirm.delete.mail", "你確定要刪除郵件？");
+	    lang.put("confirm.get.pooled.workflow.task", "你確定要把這個任務轉給自己？");
+	    lang.put("confirm.force.unlock", "你確定要強行把這個文件解鎖？");
+	    lang.put("confirm.force.cancel.checkout", "你確定要強行取消這個文件的簽出？");
 	    
 	    // Search inputs
 	    lang.put("search.context", "範圍");
 	    lang.put("search.content", "內容");
 	    lang.put("search.name", "名稱");
 	    lang.put("search.keywords", "關鍵字");
-	    lang.put("search.folder", "Folder");
+	    lang.put("search.folder", "資料夾");
 	    lang.put("search.category", "Category");
 	    lang.put("search.results", "結果");
 	    lang.put("search.to", "至");
 	    lang.put("search.page.results", "每頁顯示結果");
 	    lang.put("search.add.property.group", "新增屬性群組");
 	    lang.put("search.mimetype", "Mime 類型");
-	    lang.put("search.type", "Type");
-	    lang.put("search.type.document", "Document");
-	    lang.put("search.type.folder", "Folder");
-	    lang.put("search.type.mail", "Mail");
+	    lang.put("search.type", "類型");
+	    lang.put("search.type.document", "文件");
+	    lang.put("search.type.folder", "檔案夾");
+	    lang.put("search.type.mail", "電子郵件");
 	    lang.put("search.advanced", "進階搜尋");
 	    lang.put("search.user", "使用者");
 	    lang.put("search.date.and", "至");
@@ -416,8 +416,8 @@ public class Lang_zh_TW {
 	    lang.put("search.save.as.news", "儲存成使用者新進文件");
 
 	    // search folder filter popup
-	    lang.put("search.folder.filter", "Filter by folder");
-	    lang.put("search.category.filter", "Filter by category");
+	    lang.put("search.folder.filter", "依檔案夾過濾");
+	    lang.put("search.category.filter", "依category過濾");
 	    
 	    // Search results
 	    lang.put("search.result.name", "名稱");
@@ -429,7 +429,7 @@ public class Lang_zh_TW {
 	    lang.put("search.result.path", "路徑");
 	    lang.put("search.result.menu.download", "下載");
 	    lang.put("search.result.menu.go.folder", "直接到所屬資料夾");
-	    lang.put("search.result.menu.go.document", "Go to document");
+	    lang.put("search.result.menu.go.document", "直接到所屬文件");
 	    lang.put("search.result.status.findPaginated", "正在更新搜尋條件");
 	    lang.put("search.result.status.runsearch", "正在更新已儲存的搜尋條件");
 	    
@@ -462,9 +462,9 @@ public class Lang_zh_TW {
 	    lang.put("button.memory", "更新");
 	    lang.put("button.copy.clipboard", "複製到剪貼簿");	
 	    lang.put("button.start", "開始");
-	    lang.put("button.select", "Select");
-	    lang.put("button.test", "Test");
-	    lang.put("button.next", "Next");
+	    lang.put("button.select", "選擇");
+	    lang.put("button.test", "測試");
+	    lang.put("button.next", "下一步");
 	    
 	    // Group
 	    lang.put("group.label", "新增屬性群組");
@@ -482,7 +482,7 @@ public class Lang_zh_TW {
 	    
 	    // Notify
 		lang.put("notify.label", "文件通知");
-		lang.put("notify.label.attachment", "Send document attachment");
+		lang.put("notify.label.attachment", "寄送文件附件");
 	    
 	    // Status
 	    lang.put("status.document.copied", "文件已被複製");
@@ -492,7 +492,7 @@ public class Lang_zh_TW {
 	    lang.put("status.keep.alive.error", "偵測到與主機連線中斷");
 	    lang.put("status.debug.enabled", "啟動除錯");
 	    lang.put("status.debug.disabled", "取消除錯");
-	    lang.put("status.network.error.detected", "Network error detected");
+	    lang.put("status.network.error.detected", "發現網路錯誤");
 	    
 	    // Calendar
 	    lang.put("calendar.day.sunday", "星期日");
@@ -532,8 +532,8 @@ public class Lang_zh_TW {
 	    lang.put("dashboard.tab.news", "新進文件");
 	    lang.put("dashboard.tab.user", "使用者");
 	    lang.put("dashboard.tab.workflow", "簽核");
-	    lang.put("dashboard.tab.mail", "Mail");
-	    lang.put("dashboard.tab.keymap", "Keyword map");
+	    lang.put("dashboard.tab.mail", "電子郵件");
+	    lang.put("dashboard.tab.keymap", "關鍵字庫");
 	    
 	    // Dahboard general
 	    lang.put("dashboard.new.items", "新進");
@@ -550,7 +550,7 @@ public class Lang_zh_TW {
 		lang.put("dashboard.general.last.month.top.modified.documents", "最近一個月被修改多次的文件");
 		lang.put("dashboard.general.last.uploaded.documents", "最新上傳文件");
 	    lang.put("dashboard.workflow.pending.tasks", "Pending作業");
-	    lang.put("dashboard.workflow.pending.tasks.unassigned", "Unassigned pending tasks");
+	    lang.put("dashboard.workflow.pending.tasks.unassigned", "取銷未執行任務的任命");
 	    lang.put("dashboard.workflow.task", "作業");
 	    lang.put("dashboard.workflow.task.id", "ID");
 	    lang.put("dashboard.workflow.task.name", "名稱");
@@ -559,78 +559,78 @@ public class Lang_zh_TW {
 	    lang.put("dashboard.workflow.task.duedate", "到期日");
 	    lang.put("dashboard.workflow.task.end", "結束日期");
 	    lang.put("dashboard.workflow.task.description", "說明");
-	    lang.put("dashboard.workflow.task.process.instance", "Process instance");
+	    lang.put("dashboard.workflow.task.process.instance", "流程實例");
 	    lang.put("dashboard.workflow.task.process.id", "ID");
 	    lang.put("dashboard.workflow.task.process.version", "版本");
 	    lang.put("dashboard.workflow.task.process.name", "名稱");
 		lang.put("dashboard.workflow.task.process.description", "說明");
 		lang.put("dashboard.workflow.task.process.data", "日期");
-		lang.put("dashboard.workflow.comments", "Comments");
-	    lang.put("dashboard.workflow.task.process.forms", "Form");
-	    lang.put("dashboard.workflow.add.comment","Add comment");
+		lang.put("dashboard.workflow.comments", "註解");
+	    lang.put("dashboard.workflow.task.process.forms", "表單");
+	    lang.put("dashboard.workflow.add.comment","新增註解");
 	    lang.put("dashboard.workflow.task.process.definition", "流程定義");
 	    lang.put("dashboard.workflow.task.process.path", "路徑");
 	    lang.put("dashboard.refreshing", "重新整理");
-	    lang.put("dashboard.keyword", "Keywords");
-	    lang.put("dashboard.keyword.suggest", "Type the keyword");
-	    lang.put("dashboard.keyword.all", "All keywords");
-	    lang.put("dashboard.keyword.top", "Top keywords");
-	    lang.put("dashboard.keyword.related", "Related keywords");
-	    lang.put("dashboard.keyword.goto.document", "Go to document");
-	    lang.put("dashboard.keyword.clean.keywords", "Clean keywords");
-	    lang.put("dashboard.mail.last.imported.mails", "Electronic mails");
-	    lang.put("dashboard.mail.last.imported.attached.documents", "Attachments");
+	    lang.put("dashboard.keyword", "關鍵字");
+	    lang.put("dashboard.keyword.suggest", "輸入關鍵字");
+	    lang.put("dashboard.keyword.all", "所有關鍵字");
+	    lang.put("dashboard.keyword.top", "常用關鍵字");
+	    lang.put("dashboard.keyword.related", "相關的關鍵字");
+	    lang.put("dashboard.keyword.goto.document", "移至文件");
+	    lang.put("dashboard.keyword.clean.keywords", "清除關鍵字");
+	    lang.put("dashboard.mail.last.imported.mails", "電子郵件");
+	    lang.put("dashboard.mail.last.imported.attached.documents", "附件");
 	    
 	    // Workflow
 		lang.put("workflow.label", "開始流程");
 		
 		// User configuration
-	    lang.put("user.preferences.label", "User configuration");
-	    lang.put("user.preferences.user", "User");
-	    lang.put("user.preferences.password", "Password");
-	    lang.put("user.preferences.mail", "E-mail");
-	    lang.put("user.preferences.roles","Roles");
-	    lang.put("user.preferences.imap.host", "IMAP server");
-	    lang.put("user.preferences.imap.user", "IMAP user name");
-	    lang.put("user.preferences.imap.user.password", "IMAP user password");
-	    lang.put("user.preferences.imap.folder", "IMAP folder");
-	    lang.put("user.preferences.password.error", "Error: passwords are diferent");
-	    lang.put("user.preferences.user.data", "User account");
-	    lang.put("user.preferences.mail.data", "Mail account");
-	    lang.put("user.preferences.imap.error", "All fields are obligatory to set the mail configurations");
-	    lang.put("user.preferences.imap.password.error.void", "Password must not be empty on IMAP mail creation");
-	    lang.put("user.preferences.imap.test.error","IMAP configuration error");
-	    lang.put("user.preferences.imap.test.ok","IMAP configuration ok");
+	    lang.put("user.preferences.label", "使用者配置");
+	    lang.put("user.preferences.user", "使用者");
+	    lang.put("user.preferences.password", "密碼");
+	    lang.put("user.preferences.mail", "電子郵件");
+	    lang.put("user.preferences.roles","角色");
+	    lang.put("user.preferences.imap.host", "IMAP伺服器");
+	    lang.put("user.preferences.imap.user", "IMAP用戶名");
+	    lang.put("user.preferences.imap.user.password", "IMAP用戶密碼");
+	    lang.put("user.preferences.imap.folder", "IMAP資料夾");
+	    lang.put("user.preferences.password.error", "錯誤:密碼不一致");
+	    lang.put("user.preferences.user.data", "使用者帳號");
+	    lang.put("user.preferences.mail.data", "電子郵件帳號");
+	    lang.put("user.preferences.imap.error", "電子郵件配置的全部欄位為必填");
+	    lang.put("user.preferences.imap.password.error.void", "IMAP郵件創建時密碼不得為空");
+	    lang.put("user.preferences.imap.test.error","IMAP配置錯誤");
+	    lang.put("user.preferences.imap.test.ok","IMAP配置完成");
 
 	    // Thesaurus
-	    lang.put("thesaurus.directory.select.label", "Add thesaurus keyword");
-	    lang.put("thesaurus.tab.tree", "Tree");
-	    lang.put("thesaurus.tab.keywords", "Keywords");
+	    lang.put("thesaurus.directory.select.label", "新增thesaurus關鍵字");
+	    lang.put("thesaurus.tab.tree", "目錄樹");
+	    lang.put("thesaurus.tab.keywords", "關鍵字");
 	    
 	    // Categories
-	    lang.put("categories.folder.select.label", "Add category");
-	    lang.put("categories.folder.error.delete", "Cannot delete category with documents");
+	    lang.put("categories.folder.select.label", "新增category");
+	    lang.put("categories.folder.error.delete", "無法刪除具備文件的category");
 	    
 	    // Wizard
-	    lang.put("wizard.document.uploading", "Document wizard");
+	    lang.put("wizard.document.uploading", "文件精靈");
 	    
 	    // User info
-	    lang.put("user.info.chat.connect", "Connect to chat");
-	    lang.put("user.info.chat.disconnect", "Disconnet chat");
-	    lang.put("user.info.chat.new.room", "Net chat room");
-	    lang.put("user.info.locked.actual", "Locked documents");
-	    lang.put("user.info.checkout.actual", "Checkout documents");
-	    lang.put("user.info.subscription.actual", "Actual subscriptions");
-	    lang.put("user.info.news.new", "News");
-	    lang.put("user.info.workflow.pending", "Pending workflows");
-	    lang.put("user.info.user.quota", "Used quota");
+	    lang.put("user.info.chat.connect", "連接到聊天室");
+	    lang.put("user.info.chat.disconnect", "離開聊天室");
+	    lang.put("user.info.chat.new.room", "下一個聊天室");
+	    lang.put("user.info.locked.actual", "上鎖的文件");
+	    lang.put("user.info.checkout.actual", "簽出文件");
+	    lang.put("user.info.subscription.actual", "實際上訂閱者");
+	    lang.put("user.info.news.new", "新聞");
+	    lang.put("user.info.workflow.pending", "未處理的工作流程");
+	    lang.put("user.info.user.quota", "以使用配額");
 	    
 	    // Users online popup
-	    lang.put("user.online", "Users online");
+	    lang.put("user.online", "線上使用者");
 	    
 	    // Chat room
-	    lang.put("chat.room", "Chat");
-	    lang.put("chat.users.in.room", "Users");
+	    lang.put("chat.room", "聊天室");
+	    lang.put("chat.users.in.room", "使用者");
 	    
 	    // Errors
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_AccessDenied, "文件存取失敗");
@@ -638,68 +638,68 @@ public class Lang_zh_TW {
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_ItemExists, "文件已經存在");
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_Lock, "文件鎖定失敗");
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMDocumentService + ErrorCode.CAUSE_UnLock, "文件需要解除鎖定");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "Application internal error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_General, "應用程式內部錯誤");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_PathNotFound, "找不到文件路徑");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDocumentService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMFolderService + ErrorCode.CAUSE_AccessDenied, "資料夾存取失敗");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemNotFound, "找不到資料夾");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_ItemExists, "資料夾已經存在");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_General, "Repository internal error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_General, "儲存庫內部錯誤");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_PathNotFound, "找不到資料夾路徑");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMFolderService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_AccessDenied, "項目存取失敗");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_ItemNotFound, "找不到項目");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_General, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_General, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMAuthService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_ItemNotFound, "找不到文件");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_General, "Repository internal error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMPropertyGroupService+ErrorCode.CAUSE_General, "儲存庫內部錯誤");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_UnsupportedMimeType, "檔案類型不支援");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_ItemExists, "文件已經存在");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_FileSizeExceeded, "超過可接受文件大小");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_DocumentNameMismatch, "Document name is diferent");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMUploadService+ErrorCode.CAUSE_DocumentNameMismatch, "文件名不一致");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "Session closed");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_Repository, "Session已經關閉");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDownloadService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 	    
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_Repository, "執行查詢時發生錯誤");
 	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMSearchService+ErrorCode.CAUSE_ItemExists, "欲儲存的查詢條件名稱必須唯一");
 
 		lang.put("OKM-" + ErrorCode.ORIGIN_OKMBookmarkService + ErrorCode.CAUSE_ItemExists, "書籤名稱必須唯一");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRemoteService+ErrorCode.CAUSE_SessionLost , "Session lost");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMRemoteService+ErrorCode.CAUSE_SessionLost , "Session已遺失");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMDashboardService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_IOException, "Error on I/O");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkspaceService+ErrorCode.CAUSE_IOException, "I/O錯誤");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMWorkflowService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "Error in browser configuration");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "Error user quota exceed, contact with adminitrator");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_Configuration, "瀏覽器配置錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMBrowser+ErrorCode.CAUSE_QuotaExceed, "超出使用者配額錯誤, 請聯繫系統管理員");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "Document access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "Document not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "Document already exists");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "Document lock denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "Application internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "Document path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "Database error");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_AccessDenied, "禁止文件存取");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemNotFound, "未發現文件");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_ItemExists, "已經存在相同文件");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Lock, "禁止文件鎖定");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_General, "應用程式內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_PathNotFound, "未發現文件路徑");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMMailService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
 	    
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "Path not found");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "Access denied");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "Repository internal error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "Database error");
-	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "Application internal error"); 
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_PathNotFound, "未發現路徑");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_AccessDenied, "禁止存取");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_Repository, "儲存庫內部錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_DatabaseException, "資料庫錯誤");
+	    lang.put("OKM-"+ErrorCode.ORIGIN_OKMNotifyService+ErrorCode.CAUSE_General, "應用程式內部錯誤"); 
 	  }
 }
