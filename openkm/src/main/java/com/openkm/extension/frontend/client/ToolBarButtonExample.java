@@ -22,6 +22,8 @@
 
 package com.openkm.extension.frontend.client;
 
+import java.io.Serializable;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -74,8 +76,8 @@ public class ToolBarButtonExample  {
 	 * @author jllort
 	 *
 	 */
-	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension {
-		
+	private class ToolBarButton extends ToolBarButtonExtension implements ToolBarHandlerExtension, LanguageHandlerExtension, Serializable {
+
 		public ToolBarButton(Image image, String title, ClickHandler handler) {
 			super(image, title, handler);
 		}
@@ -122,6 +124,11 @@ public class ToolBarButtonExample  {
 			if (event.equals(HasLanguageEvent.LANGUAGE_CHANGED)) {
 				Window.alert("language changed");
 			}
+		}
+
+		@Override
+		public String getExtensionUUID() {
+			return String.valueOf("9f84b330-d096-11df-bd3b-0800200c9a66");
 		}
 	}
 }
