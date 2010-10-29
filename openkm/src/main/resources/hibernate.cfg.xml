@@ -235,6 +235,8 @@
     <mapping resource="com/openkm/dao/bean/DashboardStats.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserItems.hbm.xml"/>
     <mapping resource="com/openkm/dao/bean/cache/UserDocumentKeyword.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/Staple.hbm.xml"/>
+    <mapping resource="com/openkm/dao/bean/extension/StapleGroup.hbm.xml"/>
 
     <!-- ################################### -->
     <!-- # cache settings                  # -->

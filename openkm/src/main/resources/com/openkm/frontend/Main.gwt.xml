@@ -53,7 +53,7 @@
   <servlet path="/OpenKM/OKMUserConfigServlet" class="com.openkm.frontend.server.OKMUserConfigServlet"/>
   <servlet path="/OpenKM/OKMNoteServlet" class="com.openkm.frontend.server.OKMNoteServlet"/>
   
-  <!-- Frontend servlets extensions 
-  <servlet path="/OpenKM/extension/Stapling" class="com.openkm.extension.frontend.servlet.StaplingServlet"/> -->
+  <!-- Frontend servlets extensions -->
+  <servlet path="/OpenKM/OKMStaplingServlet" class="com.openkm.frontend.servlet.extension.OKMStaplingServlet"/> 
 
 </module>

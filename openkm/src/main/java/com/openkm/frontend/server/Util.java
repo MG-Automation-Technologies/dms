@@ -36,7 +36,9 @@ import org.apache.jackrabbit.util.ISO8601;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
+import com.openkm.api.OKMMail;
 import com.openkm.api.OKMPropertyGroup;
 import com.openkm.api.OKMRepository;
 import com.openkm.bean.DashboardDocumentResult;
@@ -64,6 +66,7 @@ import com.openkm.bean.workflow.ProcessInstance;
 import com.openkm.bean.workflow.TaskInstance;
 import com.openkm.bean.workflow.Token;
 import com.openkm.bean.workflow.Transition;
+import com.openkm.core.AccessDeniedException;
 import com.openkm.core.Config;
 import com.openkm.core.DatabaseException;
 import com.openkm.core.ParseException;
@@ -72,6 +75,8 @@ import com.openkm.core.RepositoryException;
 import com.openkm.dao.bean.Bookmark;
 import com.openkm.dao.bean.QueryParams;
 import com.openkm.dao.bean.UserConfig;
+import com.openkm.dao.bean.extension.Staple;
+import com.openkm.dao.bean.extension.StapleGroup;
 import com.openkm.frontend.client.bean.GWTBookmark;
 import com.openkm.frontend.client.bean.GWTButton;
 import com.openkm.frontend.client.bean.GWTCheckBox;
@@ -102,6 +107,8 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.GWTValidator;
 import com.openkm.frontend.client.bean.GWTVersion;
 import com.openkm.frontend.client.bean.GWTWorkflowComment;
+import com.openkm.frontend.client.bean.extension.GWTStaple;
+import com.openkm.frontend.client.bean.extension.GWTStapleGroup;
 
 public class Util {
 	private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -1037,5 +1044,43 @@ public class Util {
 		gWTUserConfig.setUser(userCopy.getUser());
 		
 		return gWTUserConfig;
+	}
+	
+	/**
+	 * Copy the StaplingGroup data to GWTStapleGroup data.
+	 * 
+	 * @param doc The original StaplingGroup object.
+	 * @return A GWTStaplingGroup object with the data from 
+	 * the original StaplingGroup.
+	 * 
+	 * @throws DatabaseException 
+	 * @throws RepositoryException 
+	 * @throws AccessDeniedException 
+	 * @throws PathNotFoundException 
+	 */
+	public static GWTStapleGroup copy (StapleGroup sg) throws AccessDeniedException, RepositoryException, 
+																  DatabaseException, PathNotFoundException {
+		GWTStapleGroup gsg = new GWTStapleGroup();
+		gsg.setId(sg.getId());
+		gsg.setUsername(sg.getUsername());
+		for (Staple st: sg.getStaples()) {
+			GWTStaple gst = new GWTStaple();
+			gst.setId(st.getId());
+			gst.setType(st.getType());
+			
+			// Getting document / folder / mail properties 
+			if (st.getType().equals(Staple.STAPLE_DOCUMENT)) {
+				String path = OKMDocument.getInstance().getPath(null, st.getUuid());
+				gst.setDoc(copy(OKMDocument.getInstance().getProperties(null, path)));
+			} else if (st.getType().equals(Staple.STAPLE_FOLDER)) {
+				String path = OKMFolder.getInstance().getPath(null, st.getUuid());
+				gst.setFolder(copy(OKMFolder.getInstance().getProperties(null, path)));
+			} else if (st.getType().equals(Staple.STAPLE_MAIL)) {
+				String path = OKMMail.getInstance().getPath(null, st.getUuid());
+				gst.setMail(Util.copy(OKMMail.getInstance().getProperties(null, path)));
+			}
+			gsg.getStaples().add(gst);
+		}
+		return gsg;
 	}
 }
