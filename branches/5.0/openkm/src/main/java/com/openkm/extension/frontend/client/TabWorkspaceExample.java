@@ -50,4 +50,9 @@ public class TabWorkspaceExample extends TabWorkspaceExtension {
 	public String getTabText() {
 		return "tab workspace";
 	}
+
+	@Override
+	public String getExtensionUUID() {
+		return String.valueOf("44f94470-d097-11df-bd3b-0800200c9a66");
+	}
 }

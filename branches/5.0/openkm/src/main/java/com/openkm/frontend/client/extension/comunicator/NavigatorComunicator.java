@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.extension.comunicator;
 
 import com.openkm.frontend.client.Main;
+import com.openkm.frontend.client.panel.PanelDefinition;
 
 
 
@@ -42,4 +43,66 @@ public class NavigatorComunicator {
 		return Main.get().mainPanel.desktop.navigator.getStackIndex();
 	}
 	
+	/**
+	 * isTaxonomyShown
+	 * 
+	 * @return
+	 */
+	public static boolean isTaxonomyShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TAXONOMY;
+	}
+	
+	/**
+	 * isCategoriesShown
+	 * 
+	 * @return
+	 */
+	public static boolean isCategoriesShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_CATEGORIES;
+	}
+	
+	/**
+	 * isThesaurusShown
+	 * 
+	 * @return
+	 */
+	public static boolean isThesaurusShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_THESAURUS;
+	}
+	
+	/**
+	 * isTemplatesShown
+	 * 
+	 * @return
+	 */
+	public static boolean isTemplatesShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TEMPLATES;
+	}
+	
+	/**
+	 * isPersonalShown
+	 * 
+	 * @return
+	 */
+	public static boolean isPersonalShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_PERSONAL;
+	}
+	
+	/**
+	 * isMailShown
+	 * 
+	 * @return
+	 */
+	public static boolean isMailShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_MAIL;
+	}
+	
+	/**
+	 * isTrashShown
+	 * 
+	 * @return
+	 */
+	public static boolean isTrashShown() {
+		return Main.get().mainPanel.desktop.navigator.getStackIndex()==PanelDefinition.NAVIGATOR_TRASH;
+	}
 }

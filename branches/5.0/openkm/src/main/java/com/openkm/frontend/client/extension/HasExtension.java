@@ -21,20 +21,14 @@
 
 package com.openkm.frontend.client.extension;
 
-import com.openkm.frontend.client.bean.GWTFolder;
-
 /**
- * HasFolderExtension
+ * HasExtension
  * 
  * @author jllort
  *
  */
-public interface HasFolderExtension extends HasExtension {
+public interface HasExtension {
 	
-	public abstract String getTabText();
-	
-	public abstract void set(GWTFolder doc);
-	
-	public abstract void setVisibleButtons(boolean visible);
+	public abstract String getExtensionUUID();
 	
 }
