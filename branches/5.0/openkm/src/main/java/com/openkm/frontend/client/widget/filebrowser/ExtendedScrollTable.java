@@ -71,7 +71,6 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 	private int rowAction = ACTION_NONE;
 	
 	private boolean dragged = false;
-	private Timer timer = null;
 	
 	/**
 	 * @param dataTable
@@ -452,7 +451,9 @@ public class ExtendedScrollTable extends ScrollTable implements OriginPanel {
 		            
 		            // On trash drag is disabled
 					if (isSelectedRow() && Main.get().mainPanel.desktop.browser.fileBrowser.fileBrowserAction==noAction &&
-						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH ){					
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_CATEGORIES &&
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_THESAURUS && 
+						Main.get().mainPanel.desktop.navigator.getStackIndex()!=PanelDefinition.NAVIGATOR_TRASH){				
 						Main.get().dragable.show(dataTable.getHTML(getSelectedRow(),1)+dataTable.getHTML(getSelectedRow(),2), OriginPanel.FILE_BROWSER);
 					}
 					unsetDraged(); 

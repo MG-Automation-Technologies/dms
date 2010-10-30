@@ -967,8 +967,10 @@ public class FolderTree extends Composite implements OriginPanel {
 		// rename or folder creation
 		// and root item is not dragable
 		// On trash drag and drop is always disabled
-		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem)
-				&& Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
+		if (tree.isDragged() && folderAction == ACTION_NONE && !actualItem.equals(rootItem) &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_CATEGORIES &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_THESAURUS &&
+			Main.get().mainPanel.desktop.navigator.getStackIndex() != PanelDefinition.NAVIGATOR_TRASH) {
 			Main.get().dragable.show(actualItem.getHTML(), OriginPanel.TREE_ROOT);
 			tree.unsetDraged();
 		}
