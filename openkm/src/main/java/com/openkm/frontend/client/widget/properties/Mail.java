@@ -167,7 +167,7 @@ public class Mail extends Composite {
 	public void set(GWTMail mail) {
 		this.mail = mail;
 		Anchor hFrom = new Anchor();
-		final String mailFrom = mail.getFrom().substring(mail.getFrom().indexOf("<")+1, mail.getFrom().indexOf(">"));
+		final String mailFrom = mail.getFrom().contains("<")?mail.getFrom().substring(mail.getFrom().indexOf("<")+1, mail.getFrom().indexOf(">")):mail.getFrom();
 		hFrom.setHTML(mail.getFrom().replace("<", "&lt;").replace(">", "&gt;"));
 		hFrom.setTitle("mailto:"+mailFrom);
 		hFrom.setStyleName("okm-Mail-Link");
@@ -183,7 +183,7 @@ public class Mail extends Composite {
 		VerticalPanel replyPanel = new VerticalPanel();
 		for (int i=0; i<mail.getReply().length; i++) {
 			Anchor hReply = new Anchor();
-			final String mailReply = mail.getReply()[i].substring(mail.getReply()[i].indexOf("<")+1, mail.getReply()[i].indexOf(">"));
+			final String mailReply = mail.getReply()[i].contains("<")?mail.getReply()[i].substring(mail.getReply()[i].indexOf("<")+1, mail.getReply()[i].indexOf(">")):mail.getReply()[i];
 			hReply.setHTML(mail.getReply()[i].replace("<", "&lt;").replace(">", "&gt;"));
 			hReply.setTitle("mailto:"+mailReply);
 			hReply.setStyleName("okm-Mail-Link");
@@ -201,7 +201,7 @@ public class Mail extends Composite {
 		VerticalPanel toPanel = new VerticalPanel();
 		for (int i=0; i<mail.getTo().length; i++) {
 			Anchor hTo = new Anchor();
-			final String mailTo = mail.getTo()[i].substring(mail.getTo()[i].indexOf("<")+1, mail.getTo()[i].indexOf(">"));
+			final String mailTo = mail.getTo()[i].contains("<")?mail.getTo()[i].substring(mail.getTo()[i].indexOf("<")+1, mail.getTo()[i].indexOf(">")):mail.getTo()[i];
 			hTo.setHTML(mail.getTo()[i].replace("<", "&lt;").replace(">", "&gt;"));
 			hTo.setTitle("mailto:"+mailTo);
 			hTo.setStyleName("okm-Mail-Link");
