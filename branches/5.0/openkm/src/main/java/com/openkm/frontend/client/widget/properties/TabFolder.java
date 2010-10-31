@@ -131,6 +131,7 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void setProperties(GWTFolder folder) {
 		this.folder.set(folder); // Used by tabFolderCommunicator
+		
 		if (securityVisible) {
 			security.setPath(folder.getPath());
 			security.GetGrants();
@@ -315,6 +316,16 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	}
 	
 	/**
+	 * showExtensions
+	 */
+	public void showExtensions() {
+		for (TabFolderExtension extension : widgetExtensionList){
+			tabPanel.add(extension, extension.getTabText());
+			extension.setPixelSize(width,height-20);
+		}
+	}
+	
+	/**
 	 * init
 	 */
 	public void init() {
@@ -341,9 +352,6 @@ public class TabFolder extends Composite implements HasFolderEvent, HasFolderHan
 	 */
 	public void addFolderExtension(TabFolderExtension extension) {
 		widgetExtensionList.add(extension);
-		
-		tabPanel.add(extension, extension.getTabText());
-		extension.setPixelSize(width,height-20);
 	}
 	
 	@Override

@@ -469,8 +469,21 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		PREVIEW_TAB = tabPanel.getTabBar().getTabCount()-1; // starts at 0
 	}
 	
+	/**
+	 * showPropertyGroups
+	 */
 	public void showPropertyGroups() {
 		propertyGroupsVisible = true;
+	}
+	
+	/**
+	 * showExtensions
+	 */
+	public void showExtensions() {
+		for (TabDocumentExtension extension : widgetExtensionList) {
+			tabPanel.add(extension, extension.getTabText());
+			extension.setPixelSize(width, height-20); // Substract tab height
+		}
 	}
 	
 	/**
@@ -518,9 +531,6 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public void addDocumentExtension(TabDocumentExtension extension) {
 		widgetExtensionList.add(extension);
-		
-		tabPanel.add(extension, extension.getTabText());
-		extension.setPixelSize(width, height-20); // Substract tab height
 	}
 	
 	/**

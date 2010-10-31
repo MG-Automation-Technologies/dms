@@ -21,17 +21,24 @@
 
 package com.openkm.frontend.client.widget.properties;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTMail;
 import com.openkm.frontend.client.bean.GWTPermission;
+import com.openkm.frontend.client.extension.event.HasMailEvent;
+import com.openkm.frontend.client.extension.event.handler.MailHandlerExtension;
+import com.openkm.frontend.client.extension.event.hashandler.HasMailHandlerExtension;
+import com.openkm.frontend.client.extension.widget.TabMailExtension;
 
 /**
  * The tab mail
@@ -39,22 +46,28 @@ import com.openkm.frontend.client.bean.GWTPermission;
  * @author jllort
  *
  */
-public class TabMail extends Composite {
+public class TabMail extends Composite implements HasMailEvent, HasMailHandlerExtension {
 	private int SECURITY_TAB = -1;
 	
 	public TabPanel tabPanel;
 	public Mail mail;
 	public SecurityScrollTable security;
 	private VerticalPanel panel;
+	private List<TabMailExtension> widgetExtensionList;
+	private List<MailHandlerExtension> mailHandlerExtensionList;
 	private int selectedTab = 0; // Used to determine selected tab to mantain on change document, because not all documents
 								 // have the same numeber of tabs ( document group properties are variable ) 
 	private boolean propertiesVisible = false;
 	private boolean securityVisible = false;
+	private int height = 0;
+	private int width = 0;
 	
 	/**
 	 * The Document tab
 	 */
 	public TabMail() {
+		widgetExtensionList = new ArrayList<TabMailExtension>();
+		mailHandlerExtensionList = new ArrayList<MailHandlerExtension>();
 		tabPanel = new TabPanel();
 		mail = new Mail();
 		security = new SecurityScrollTable();
@@ -69,6 +82,7 @@ public class TabMail extends Composite {
 					security.fillWidth(); // Always when shows fires fill width
 				}
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemoveGroupProperty(isSelectedTabGroupPropety(event.getSelectedItem().intValue()));
+				fireEvent(HasMailEvent.TAB_CHANGED);
 			}
 		});
 		
@@ -89,10 +103,19 @@ public class TabMail extends Composite {
 	 * @param height Height of the widget
 	 */
 	public void setSize(int width, int height) {
+		this.height = height;
+		this.width = width;
 		tabPanel.setPixelSize(width, height);
 		mail.setPixelSize(width,height-20); // Substract tab height
 		security.setPixelSize(width-2,height-22); // Substract tab height
 		security.fillWidth();
+		
+		// Setting size to extension
+		for (Iterator<TabMailExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().setPixelSize(width,height-20);
+		}
+		
+		fireEvent(HasMailEvent.PANEL_RESIZED);
 	}
 	
 	/**
@@ -117,12 +140,20 @@ public class TabMail extends Composite {
 		}
 		
 		mail.set(gWTMail);
+		
+		// Setting folder object to extensions
+		for (Iterator<TabMailExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			it.next().set(gWTMail);
+		}
+		
+		fireEvent(HasMailEvent.MAIL_CHANGED);
 	}
 	
 	/**
 	 * Refresh security values
 	 */
 	public void securityRefresh() {
+		fireEvent(HasMailEvent.SECURITY_CHANGED);
 		Main.get().mainPanel.desktop.browser.fileBrowser.securityRefresh();
 	}
 	
@@ -146,6 +177,12 @@ public class TabMail extends Composite {
 			security.langRefresh();
 		}
 		
+		// Adding extensions
+		for (Iterator<TabMailExtension> it = widgetExtensionList.iterator(); it.hasNext();) {
+			TabMailExtension extension = it.next();
+			tabPanel.add(extension, extension.getTabText());
+		}
+		
 		tabPanel.selectTab(selectedTab);
 		
 		resizingIncubatorWidgets();
@@ -158,6 +195,7 @@ public class TabMail extends Composite {
 	 */
 	public void setVisibleButtons(boolean visible){
 		security.setVisibleButtons(visible);
+		fireEvent(HasMailEvent.SET_VISIBLE_BUTTONS);
 	}
 	
 	/**
@@ -187,6 +225,16 @@ public class TabMail extends Composite {
 	}
 	
 	/**
+	 * showExtensions
+	 */
+	public void showExtensions() {
+		for (TabMailExtension extension : widgetExtensionList) {
+			tabPanel.add(extension, extension.getTabText());
+			extension.setPixelSize(width,height-20);
+		}
+	}
+	
+	/**
 	 * init
 	 */
 	public void init() {
@@ -209,12 +257,33 @@ public class TabMail extends Composite {
 	}
 	
 	/**
+	 * addMailExtension
+	 * 
+	 * @param extension
+	 */
+	public void addMailExtension(TabMailExtension extension) {
+		widgetExtensionList.add(extension);
+	}
+	
+	/**
 	 * resizingIncubatorWidgets 
 	 * 
-	 * Needs resizing if not widgets disapears
+	 * Needs resizing if not widgets disappears
 	 */
 	public void resizingIncubatorWidgets() {
 		security.setPixelSize(getOffsetWidth()-2, getOffsetHeight()-22); // Substract tab height
 		security.fillWidth();
+	}
+	
+	@Override
+	public void addMailHandlerExtension(MailHandlerExtension handlerExtension) {
+		mailHandlerExtensionList.add(handlerExtension);
+	}
+
+	@Override
+	public void fireEvent(MailEventConstant event) {
+		for (MailHandlerExtension handlerExtension : mailHandlerExtensionList) {
+			handlerExtension.onChange(event);
+		}
 	}
 }
