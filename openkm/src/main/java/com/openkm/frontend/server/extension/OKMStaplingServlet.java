@@ -67,7 +67,7 @@ public class OKMStaplingServlet extends OKMRemoteServiceServlet implements OKMSt
 			stapleGroup = StapleGroupDAO.findByPk(id);
 			Staple staple = new Staple();
 			staple.setUuid(uuid);
-			staple.setType(type2);
+			staple.setType(type);
 			stapleGroup.getStaples().add(staple); // Added first
 			staple = new Staple();
 			staple.setUuid(uuid2);
