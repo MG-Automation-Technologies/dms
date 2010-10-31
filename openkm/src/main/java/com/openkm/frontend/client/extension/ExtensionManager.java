@@ -28,6 +28,7 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.extension.event.handler.DocumentHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.FolderHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
+import com.openkm.frontend.client.extension.event.handler.MailHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.PropertyGroupHandlerExtension;
 import com.openkm.frontend.client.extension.event.handler.ToolBarHandlerExtension;
@@ -35,6 +36,7 @@ import com.openkm.frontend.client.extension.event.handler.WorkspaceHandlerExtens
 import com.openkm.frontend.client.extension.widget.MenuItemExtension;
 import com.openkm.frontend.client.extension.widget.TabDocumentExtension;
 import com.openkm.frontend.client.extension.widget.TabFolderExtension;
+import com.openkm.frontend.client.extension.widget.TabMailExtension;
 import com.openkm.frontend.client.extension.widget.TabWorkspaceExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarBoxExtension;
 import com.openkm.frontend.client.extension.widget.ToolBarButtonExtension;
@@ -56,6 +58,8 @@ public class ExtensionManager {
 				addTabDocumentExtension((TabDocumentExtension) obj);
 			} else if (obj instanceof TabFolderExtension) {
 				addTabFolderExtension((TabFolderExtension) obj);
+			} else if (obj instanceof TabMailExtension) {
+				addTabMailExtension((TabMailExtension) obj);
 			} else if (obj instanceof ToolBarButtonExtension) {
 				addToolBarButtonExtension((ToolBarButtonExtension) obj);
 			} else if (obj instanceof MenuItemExtension) {
@@ -72,6 +76,9 @@ public class ExtensionManager {
 			}
 			if (obj instanceof FolderHandlerExtension) {
 				addFolderHandlerExtension((FolderHandlerExtension) obj);
+			}
+			if (obj instanceof MailHandlerExtension) {
+				addMailHandlerExtension((MailHandlerExtension) obj);
 			}
 			if (obj instanceof ToolBarHandlerExtension) {
 				addToolBarHandlerExtension((ToolBarHandlerExtension) obj);
@@ -107,6 +114,15 @@ public class ExtensionManager {
 	 */
 	private static void addTabFolderExtension(TabFolderExtension extension) {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderExtension(extension);
+	}
+	
+	/**
+	 * addTabMailExtension
+	 * 
+	 * @param extension
+	 */
+	private static void addTabMailExtension(TabMailExtension extension) {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.addMailExtension(extension);
 	}
 	
 	/**
@@ -163,7 +179,14 @@ public class ExtensionManager {
 		Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.addFolderHandlerExtension(handlerExtension);
 	}
 	
-	
+	/**
+	 * addMailHandlerExtension
+	 * 
+	 * @param handlerExtension
+	 */
+	private static void addMailHandlerExtension(MailHandlerExtension handlerExtension) {
+		Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.addMailHandlerExtension(handlerExtension);
+	}
 	
 	/**
 	 * addToolBarHandlerExtension
