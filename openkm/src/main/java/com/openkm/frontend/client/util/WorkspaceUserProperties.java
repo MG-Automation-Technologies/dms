@@ -229,6 +229,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabDocumentPropertyGroupsVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showPropertyGroups();
 			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabDocument.init();
 			
 			// Folder tabs
@@ -241,6 +242,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabFolderSecurityVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showSecurity();
 			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabFolder.init();
 			
 			// Mail tabs
@@ -250,6 +252,7 @@ public class WorkspaceUserProperties {
 			if (workspace.isTabMailSecurityVisible()) {
 				Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showSecurity();
 			}
+			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.showExtensions();
 			Main.get().mainPanel.desktop.browser.tabMultiple.tabMail.init();
 			
 			// Show / hide dashboard tools
