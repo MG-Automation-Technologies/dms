@@ -22,6 +22,7 @@
 package com.openkm.frontend.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,8 +35,8 @@ import com.openkm.frontend.client.bean.GWTTestImap;
  *
  */
 public interface OKMGeneralServiceAsync {
-	
 	public void getFileUploadStatus(AsyncCallback<GWTFileUploadingStatus> callback);
 	public void testImapConnection(String host, String user, String password, String imapFolder, AsyncCallback<GWTTestImap> callback);
 	public void getEnabledExtensions(AsyncCallback<List<String>> callback);
+	public void getFrontEndTranslations(String lang, AsyncCallback<Map<String,String>> callback);
 }

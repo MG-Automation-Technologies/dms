@@ -22,28 +22,32 @@
 package com.openkm.frontend.client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.InvocationException;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.openkm.frontend.client.bean.GWTFolder;
 import com.openkm.frontend.client.bean.GWTUserConfig;
 import com.openkm.frontend.client.bean.RepositoryContext;
+import com.openkm.frontend.client.config.Config;
 import com.openkm.frontend.client.extension.event.HasLanguageEvent;
 import com.openkm.frontend.client.extension.event.handler.LanguageHandlerExtension;
 import com.openkm.frontend.client.extension.event.hashandler.HasLanguageHandlerExtension;
-import com.openkm.frontend.client.lang.Lang;
 import com.openkm.frontend.client.panel.ExtendedDockPanel;
+import com.openkm.frontend.client.service.OKMGeneralService;
+import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
 import com.openkm.frontend.client.util.Location;
 import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.util.WindowUtils;
@@ -78,6 +82,7 @@ import com.openkm.frontend.client.widget.wizard.WizardPopup;
 public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasLanguageEvent {
 	
 	private static Main singleton;
+	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
 	
 	/**
 	 * @return singleton Main instance 
@@ -115,7 +120,7 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	
 	// Language declarations
 	private String lang;
-	private HashMap<String, String> hI18n;
+	private Map<String, String> hI18n;
 	public Map<String,String> hPropertyGroupI18n;
 	
 	// The nodePath parameter
@@ -180,8 +185,28 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 			// First we initialize language values
 			lang = Util.getBrowserLanguage();
 		}
-		hI18n = Lang.getLang(lang);
 		
+		// Getting language
+		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
+		generalService.getFrontEndTranslations(Main.get().getLang(), new AsyncCallback<Map<String,String>>() {
+			@Override
+			public void onSuccess(Map<String, String> result) {
+				hI18n = result;
+				onModuleLoad2(); // continues normal loading
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Severe error getting language translations");
+			}
+		});
+	}
+	
+	/**
+	 * onModuleLoad2
+	 */
+	public void onModuleLoad2() {
 		// Initialize workspace properties
 		workspaceUserProperties = new WorkspaceUserProperties();
 		
@@ -315,39 +340,62 @@ public final class Main implements EntryPoint, HasLanguageHandlerExtension, HasL
 	 */
 	public void refreshLang(String lang) {
 		this.lang = lang;
-		hI18n = Lang.getLang(lang);
-		fireEvent(HasLanguageEvent.LANGUAGE_CHANGED);
-		mainPanel.desktop.navigator.langRefresh();
-		mainPanel.topPanel.langRefresh();
-		mainPanel.desktop.browser.langRefresh();
-		mainPanel.search.historySearch.langRefresh();
-		mainPanel.search.searchBrowser.langRefresh();
-		mainPanel.bottomPanel.langRefresh();
-		mainPanel.dashboard.langRefresh();
-		fileUpload.langRefresh();
-		logoutPopup.langRefresh();
-		securityPopup.langRefresh();
-		aboutPopup.langRefresh();
-		userPopup.langRefresh();
-		confirmPopup.langRefresh();
-		msgPopup.langRefresh();
-		errorPopup.langRefresh();
-		errorPopupLogout.langRefresh();
-		externalURLPopup.langRefresh();
-		groupPopup.langRefresh();
-		workflowPopup.langRefresh();
-		notifyPopup.langRefresh();
-		debugConsolePopup.langRefresh();
-		findFolderSelectPopup.langRefresh();
-		wizardPopup.langRefresh();
-		onlineUsersPopup.langRefresh();
-		// Refreshing all menus on tabs not only the active
-		mainPanel.desktop.navigator.taxonomyTree.langRefresh();
-		mainPanel.desktop.navigator.thesaurusTree.langRefresh();
-		mainPanel.desktop.navigator.personalTree.langRefresh();
-		mainPanel.desktop.navigator.templateTree.langRefresh();
-		mainPanel.desktop.navigator.trashTree.langRefresh();
-		mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
+		ServiceDefTarget endPoint = (ServiceDefTarget) generalService;
+		endPoint.setServiceEntryPoint(Config.OKMGeneralService);
+		generalService.getFrontEndTranslations(lang, new AsyncCallback<Map<String,String>>() {
+			@Override
+			public void onSuccess(Map<String, String> result) {
+				hI18n = result;
+				fireEvent(HasLanguageEvent.LANGUAGE_CHANGED);
+				mainPanel.desktop.navigator.langRefresh();
+				mainPanel.topPanel.langRefresh();
+				mainPanel.desktop.browser.langRefresh();
+				mainPanel.search.historySearch.langRefresh();
+				mainPanel.search.searchBrowser.langRefresh();
+				mainPanel.bottomPanel.langRefresh();
+				mainPanel.dashboard.langRefresh();
+				fileUpload.langRefresh();
+				logoutPopup.langRefresh();
+				securityPopup.langRefresh();
+				aboutPopup.langRefresh();
+				userPopup.langRefresh();
+				confirmPopup.langRefresh();
+				msgPopup.langRefresh();
+				errorPopup.langRefresh();
+				errorPopupLogout.langRefresh();
+				externalURLPopup.langRefresh();
+				groupPopup.langRefresh();
+				workflowPopup.langRefresh();
+				notifyPopup.langRefresh();
+				debugConsolePopup.langRefresh();
+				findFolderSelectPopup.langRefresh();
+				wizardPopup.langRefresh();
+				onlineUsersPopup.langRefresh();
+				// Refreshing all menus on tabs not only the active
+				mainPanel.desktop.navigator.taxonomyTree.langRefresh();
+				mainPanel.desktop.navigator.thesaurusTree.langRefresh();
+				mainPanel.desktop.navigator.personalTree.langRefresh();
+				mainPanel.desktop.navigator.templateTree.langRefresh();
+				mainPanel.desktop.navigator.trashTree.langRefresh();
+				mainPanel.desktop.navigator.thesaurusTree.thesaurusSelectPopup.langRefresh();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Main.get().showError("getFrontEndTranslations", caught);
+			}
+		});
+		
+		
+	}
+	
+	/**
+	 * Sets the lang map values
+	 * 
+	 * @param hI18n
+	 */
+	public void setLangMap(Map<String,String> hI18n) {
+		this.hI18n = hI18n;
 	}
 	
 	/**

@@ -52,6 +52,7 @@ public class ErrorCode {
 	public static final String ORIGIN_OKMUserCopyService 			= "019";
 	public static final String ORIGIN_OKMNoteService				= "020";
 	public static final String ORIGIN_OKMStaplingService			= "021";
+	public static final String ORIGIN_OKMGeneralService				= "022";
 	
 	// Cause code error is XXX digits
 	public static final String CAUSE_Repository 				= "001";
