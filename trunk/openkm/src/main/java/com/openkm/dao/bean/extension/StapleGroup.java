@@ -25,6 +25,12 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * StapleGroup
+ * 
+ * @author jllort
+ *
+ */
 public class StapleGroup implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
