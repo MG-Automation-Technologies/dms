@@ -112,7 +112,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 		//extensions.add("44f94470-d097-11df-bd3b-0800200c9a66"); // TabWorkspaceExample		
 		//extensions.add("d95e01a0-d097-11df-bd3b-0800200c9a66"); // TabFolderExample
 		//extensions.add("d9dab640-d098-11df-bd3b-0800200c9a66"); // HelloWorld
-		extensions.add("25af39c0-580f-431c-8852-0b6430b4dc1d");
+		
 		
 		return extensions;
 	}
@@ -125,7 +125,7 @@ public class OKMGeneralServlet extends OKMRemoteServiceServlet implements OKMGen
 			Language language = LanguageDAO.findByPk(lang);
 			if (language!=null) {
 				for (Translation translation : language.getTranslations()) {
-					if (translation.getModule().equals(Translation.MODULE_FRONTEND)) {
+					if (translation.getModule().equals(Translation.MODULE_FRONTEND) || translation.getModule().equals(Translation.MODULE_EXTENSION)) {
 						translations.put(translation.getKey(), translation.getText());
 					}
 				}
