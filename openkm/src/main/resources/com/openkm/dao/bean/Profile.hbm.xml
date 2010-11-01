@@ -116,6 +116,9 @@
         <property name="securityVisible" not-null="true">
           <column name="PRF_TAB_FOLDER_SECURITY_VISIBLE" default="true"/>
         </property>
+        <property name="notesVisible" not-null="true">
+          <column name="PRF_TAB_FOLDER_NOTES_VISIBLE" default="true"/>
+        </property>
       </component> 
 
       <!-- TAB MAIL -->
